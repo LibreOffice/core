@@ -2390,7 +2390,7 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, weld::ComboBox&, i_rBox, void )
     {
         maFirstPageSize = Size();
 
-        css::uno::Sequence<bool> aChoicesDisabled{
+        cpo::uno::Sequence<bool> aChoicesDisabled{
             false, // Original size
             false, // Fit to printable page
             (nVal == 2) /*Notes*/ ? true : false, // disable/enable Multiple sheets of paper

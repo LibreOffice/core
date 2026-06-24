@@ -27,7 +27,7 @@ void lcl_DumpTableColumnSeparators(const cpo::uno::Any& rTableColumnSeparators);
 #ifdef DBG_UTIL
 void lcl_DumpPropertyValues(css::beans::PropertyValues const& rValues);
 
-void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> const& rPropValSeq);
+void lcl_DumpPropertyValueSeq(cpo::uno::Sequence<css::beans::PropertyValues> const& rPropValSeq);
 #endif // DBG_UTIL
 }
 

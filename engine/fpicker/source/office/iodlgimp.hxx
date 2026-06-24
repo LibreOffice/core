@@ -105,7 +105,7 @@ private:
     const SvtFileDialogFilter_Impl* m_pCurFilter;
     OUString                        m_sCurrentFilterDisplayName;    // may differ from m_pCurFilter->GetName in case it is a cached entry
 
-    css::uno::Sequence< OUString > m_aDenyList;
+    cpo::uno::Sequence< OUString > m_aDenyList;
 
 public:
     SvtFileDialogFilterList_Impl    m_aFilter;
@@ -153,8 +153,8 @@ public:
     explicit SvtExpFileDlg_Impl();
     ~SvtExpFileDlg_Impl();
 
-    void             SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) { m_aDenyList = rDenyList; }
-    const css::uno::Sequence< OUString >& GetDenyList() const { return m_aDenyList; }
+    void             SetDenyList( const cpo::uno::Sequence< OUString >& rDenyList ) { m_aDenyList = rDenyList; }
+    const cpo::uno::Sequence< OUString >& GetDenyList() const { return m_aDenyList; }
 
     // access to the filter listbox only as weld::Widget* - we want to maintain the entries/userdata ourself
     weld::Widget* GetFilterListControl() { return m_xLbFilter.get(); }

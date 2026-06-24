@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
@@ -714,7 +714,7 @@ void ScFormulaCfg::SetOptions( const ScFormulaOptions& rNew )
     SetModified();
 }
 
-void ScFormulaCfg::Notify( const css::uno::Sequence< OUString >& rNames)
+void ScFormulaCfg::Notify( const cpo::uno::Sequence< OUString >& rNames)
 {
     UpdateFromProperties( rNames );
 }

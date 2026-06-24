@@ -203,7 +203,7 @@ void XSecController::createXSecComponent( )
      */
         return;
 
-    css::uno::Sequence <cpo::uno::Any> arg{ cpo::uno::Any(
+    cpo::uno::Sequence <cpo::uno::Any> arg{ cpo::uno::Any(
         uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper)) };
     m_xSAXEventKeeper->initialize(arg);
 
@@ -327,7 +327,7 @@ void XSecController::chainOff()
             css::uno::Reference< css::lang::XInitialization > xInitialization
                 (m_xPreviousNodeOnSAXChain, css::uno::UNO_QUERY);
 
-            css::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(
+            cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(
                 uno::Reference<xml::sax::XDocumentHandler>()) };
             xInitialization->initialize(aArgs);
         }

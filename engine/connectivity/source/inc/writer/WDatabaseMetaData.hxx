@@ -29,7 +29,7 @@ class OWriterDatabaseMetaData : public component::OComponentDatabaseMetaData
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getTables(const cpo::uno::Any& catalog, const OUString& schemaPattern,
                            const OUString& tableNamePattern,
-                           const css::uno::Sequence<OUString>& types) override;
+                           const cpo::uno::Sequence<OUString>& types) override;
 
 protected:
     ~OWriterDatabaseMetaData() override;

@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace
 {
@@ -448,7 +448,7 @@ std::vector< DialogModel::tSeriesWithChartTypeByName >
 
 namespace {
 
-void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const uno::Sequence<OUString>& rRoles)
+void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const cpo::uno::Sequence<OUString>& rRoles)
 {
     for(OUString const & role : rRoles)
     {
@@ -665,7 +665,7 @@ void DialogModel::detectArguments(
 {
     try
     {
-        uno::Sequence< sal_Int32 > aSequenceMapping;//todo YYYX
+        cpo::uno::Sequence< sal_Int32 > aSequenceMapping;//todo YYYX
 
         // Note: unused data is currently not supported in being passed to detectRangeSegmentation
         if( m_xChartDocument.is())

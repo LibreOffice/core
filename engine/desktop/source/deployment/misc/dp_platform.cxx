@@ -191,7 +191,7 @@ bool platform_fits( std::u16string_view platform_string )
     return false;
 }
 
-bool hasValidPlatform( css::uno::Sequence<OUString> const & platformStrings)
+bool hasValidPlatform( cpo::uno::Sequence<OUString> const & platformStrings)
 {
     bool ret = false;
     for (const OUString& s : platformStrings)

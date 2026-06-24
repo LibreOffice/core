@@ -65,8 +65,8 @@ class SfxVersionTableDtor
 private:
     std::vector<std::unique_ptr<SfxVersionInfo>> aTableList;
 public:
-    explicit                SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
-    explicit                SfxVersionTableDtor( const uno::Sequence < document::CmisVersion > & rInfo );
+    explicit                SfxVersionTableDtor( const cpo::uno::Sequence < util::RevisionTag >& rInfo );
+    explicit                SfxVersionTableDtor( const cpo::uno::Sequence < document::CmisVersion > & rInfo );
                             SfxVersionTableDtor(const SfxVersionTableDtor&) = delete;
     SfxVersionTableDtor&    operator=(const SfxVersionTableDtor&) = delete;
 
@@ -77,7 +77,7 @@ public:
                             { return aTableList[ i ].get(); }
 };
 
-SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo )
+SfxVersionTableDtor::SfxVersionTableDtor( const cpo::uno::Sequence < util::RevisionTag >& rInfo )
 {
     for ( const auto& rItem : rInfo )
     {
@@ -91,7 +91,7 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTa
     }
 }
 
-SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < document::CmisVersion >& rInfo )
+SfxVersionTableDtor::SfxVersionTableDtor( const cpo::uno::Sequence < document::CmisVersion >& rInfo )
 {
     for ( const auto& rItem : rInfo )
     {
@@ -211,7 +211,7 @@ void SfxVersionDialog::Init_Impl()
 {
     SfxObjectShell *pObjShell = m_pViewFrame->GetObjectShell();
     SfxMedium* pMedium = pObjShell->GetMedium();
-    uno::Sequence < util::RevisionTag > aVersions = pMedium->GetVersionList( true );
+    cpo::uno::Sequence < util::RevisionTag > aVersions = pMedium->GetVersionList( true );
     m_pTable.reset(new SfxVersionTableDtor( aVersions ));
     m_xVersionBox->freeze();
     for (size_t n = 0; n < m_pTable->size(); ++n)
@@ -264,7 +264,7 @@ void SfxVersionDialog::Open_Impl()
     SfxStringItem aReferer( SID_REFERER, u"private:user"_ustr );
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
 
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
     if ( GetEncryptionData_Impl( &pObjShell->GetMedium()->GetItemSet(), aEncryptionData ) )
     {
         // there is a password, it should be used during the opening
@@ -450,7 +450,7 @@ SfxCmisVersionsDialog::~SfxCmisVersionsDialog()
 void SfxCmisVersionsDialog::LoadVersions()
 {
     SfxObjectShell *pObjShell = m_pViewFrame->GetObjectShell();
-    uno::Sequence < document::CmisVersion > aVersions = pObjShell->GetCmisVersions( );
+    cpo::uno::Sequence < document::CmisVersion > aVersions = pObjShell->GetCmisVersions( );
     m_pTable.reset(new SfxVersionTableDtor( aVersions ));
     for (size_t n = 0; n < m_pTable->size(); ++n)
     {

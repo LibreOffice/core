@@ -42,7 +42,7 @@ class ResourceMenuController : public cppu::ImplInheritanceHelper< svt::PopupMen
 {
 public:
     ResourceMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                            const css::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer );
+                            const cpo::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer );
 
     // XPopupMenuController
     virtual void SAL_CALL updatePopupMenu() override;
@@ -64,7 +64,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     OUString m_aMenuURL;
@@ -76,7 +76,7 @@ private:
     css::uno::Reference< css::frame::XDispatchProvider > m_xDispatchProvider;
     css::uno::Reference< css::container::XIndexAccess > m_xMenuContainer;
     css::uno::Reference< css::ui::XUIConfigurationManager > m_xConfigManager, m_xModuleConfigManager;
-    void addVerbs( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbs );
+    void addVerbs( const cpo::uno::Sequence< css::embed::VerbDescriptor >& rVerbs );
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
 protected:
@@ -84,7 +84,7 @@ protected:
 };
 
 ResourceMenuController::ResourceMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                const css::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer ) :
+                                                const cpo::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer ) :
     ImplInheritanceHelper( rxContext ),
     m_bContextMenu( false ),
     m_bInToolbar( false ),
@@ -245,12 +245,12 @@ void ResourceMenuController::updatePopupMenu()
 
 void ResourceMenuController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
-    css::uno::Sequence< css::embed::VerbDescriptor > aVerbs;
+    cpo::uno::Sequence< css::embed::VerbDescriptor > aVerbs;
     if ( rEvent.IsEnabled && ( rEvent.State >>= aVerbs ) )
         addVerbs( aVerbs );
 }
 
-void ResourceMenuController::addVerbs( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbs )
+void ResourceMenuController::addVerbs( const cpo::uno::Sequence< css::embed::VerbDescriptor >& rVerbs )
 {
     // Check if the document is read-only.
     css::uno::Reference< css::frame::XController > xController( m_xFrame->getController() );
@@ -359,7 +359,7 @@ OUString ResourceMenuController::getImplementationName()
     return u"com.sun.star.comp.framework.ResourceMenuController"_ustr;
 }
 
-css::uno::Sequence< OUString > ResourceMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ResourceMenuController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.PopupMenuController"_ustr };
 }
@@ -368,7 +368,7 @@ class SaveAsMenuController : public ResourceMenuController
 {
 public:
     SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
-                          const css::uno::Sequence< cpo::uno::Any >& rArgs );
+                          const cpo::uno::Sequence< cpo::uno::Any >& rArgs );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -378,7 +378,7 @@ private:
 };
 
 SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
-                                            const css::uno::Sequence< cpo::uno::Any >& rArgs )
+                                            const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
     : ResourceMenuController( rContext, rArgs, false )
 {
 }
@@ -412,7 +412,7 @@ class WindowListMenuController : public ResourceMenuController
 {
 public:
     WindowListMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                              const css::uno::Sequence< cpo::uno::Any >& rxArgs )
+                              const cpo::uno::Sequence< cpo::uno::Any >& rxArgs )
         : ResourceMenuController(rxContext, rxArgs, false) {}
 
     // XMenuListener
@@ -550,7 +550,7 @@ OUString WindowListMenuController::getImplementationName()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ResourceMenuController_get_implementation(
     css::uno::XComponentContext* context,
-    css::uno::Sequence< cpo::uno::Any > const & args )
+    cpo::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new ResourceMenuController( context, args, false ) );
 }
@@ -558,7 +558,7 @@ com_sun_star_comp_framework_ResourceMenuController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
     css::uno::XComponentContext* context,
-    css::uno::Sequence< cpo::uno::Any > const & args )
+    cpo::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new ResourceMenuController( context, args, true ) );
 }
@@ -566,7 +566,7 @@ com_sun_star_comp_framework_ToolbarAsMenuController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_WindowListMenuController_get_implementation(
     css::uno::XComponentContext* context,
-    css::uno::Sequence< cpo::uno::Any > const & args )
+    cpo::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new WindowListMenuController( context, args ) );
 }
@@ -574,7 +574,7 @@ com_sun_star_comp_framework_WindowListMenuController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SaveAsMenuController_get_implementation(
     css::uno::XComponentContext* context,
-    css::uno::Sequence< cpo::uno::Any > const & args )
+    cpo::uno::Sequence< cpo::uno::Any > const & args )
 {
     return cppu::acquire( new SaveAsMenuController( context, args ) );
 }

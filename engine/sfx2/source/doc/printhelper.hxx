@@ -27,7 +27,7 @@
 
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XPrintJobBroadcaster.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -47,17 +47,17 @@ public:
     SfxPrintHelper() ;
     virtual ~SfxPrintHelper() override ;
 
-    void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
     virtual void SAL_CALL addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
     virtual void SAL_CALL removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter() override;
-    virtual void SAL_CALL setPrinter( const css::uno::Sequence< css::beans::PropertyValue >& seqPrinter ) override;
-    virtual void SAL_CALL print( const css::uno::Sequence< css::beans::PropertyValue >& seqOptions ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter() override;
+    virtual void SAL_CALL setPrinter( const cpo::uno::Sequence< css::beans::PropertyValue >& seqPrinter ) override;
+    virtual void SAL_CALL print( const cpo::uno::Sequence< css::beans::PropertyValue >& seqOptions ) override;
 
 private:
 
     std::unique_ptr<IMPL_PrintListener_DataContainer> m_pData ;
-    void impl_setPrinter(const css::uno::Sequence< css::beans::PropertyValue >& rPrinter,
+    void impl_setPrinter(const cpo::uno::Sequence< css::beans::PropertyValue >& rPrinter,
                          VclPtr<SfxPrinter>& pPrinter,
                          SfxPrinterChangeFlags& nChangeFlags,
                          SfxViewShell*& pViewSh);

@@ -374,7 +374,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf115005)
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 
     // check that the document contains original vector images
-    const uno::Sequence<OUString> names = xNameAccess->getElementNames();
+    const cpo::uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSVMFiles = 0;
     for (OUString const& s : names)
     {
@@ -401,7 +401,7 @@ int SdOOXMLExportTest3::testTdf115005_FallBack_Images(bool bAddReplacementImages
         = packages::zip::ZipFileAccess::createWithURL(m_xContext, maTempFile.GetURL());
 
     // check that the document contains original vector images
-    const uno::Sequence<OUString> names = xNameAccess->getElementNames();
+    const cpo::uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSVMFiles = 0;
     int nPNGFiles = 0;
     for (OUString const& n : names)
@@ -441,7 +441,7 @@ SvgPngCounts
 countSvgAndPngInPictures(const css::uno::Reference<css::packages::zip::XZipFileAccess2>& xZip)
 {
     SvgPngCounts aCounts;
-    const uno::Sequence<OUString> aNames = xZip->getElementNames();
+    const cpo::uno::Sequence<OUString> aNames = xZip->getElementNames();
     for (OUString const& rName : aNames)
     {
         if (!rName.startsWith("Pictures/"))
@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf100348_convert_Fontwork2TextWarp
     // TextPath makes a custom shape to a Fontwork shape, so must exist
     uno::Reference<beans::XPropertySet> xShapeWavePropSet(getShapeFromPage(0, 0));
     auto aGeomPropSeq = xShapeWavePropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                            .get<uno::Sequence<beans::PropertyValue>>();
+                            .get<cpo::uno::Sequence<beans::PropertyValue>>();
     auto aGeomPropVec
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
     OUString sName = u"TextPath"_ustr;
@@ -657,7 +657,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf100348_convert_Fontwork2TextWarp
         aGeomPropVec.begin(), aGeomPropVec.end(),
         [sName](const beans::PropertyValue& rValue) { return rValue.Name == sName; });
     CPPUNIT_ASSERT_MESSAGE("No AdjustmentValues", aIterator3 != aGeomPropVec.end());
-    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjValueSeq;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjValueSeq;
     aIterator3->Value >>= aAdjValueSeq;
     double fAdj1;
     aAdjValueSeq[0].Value >>= fAdj1;
@@ -866,7 +866,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf118836)
 static double getAdjustmentValue(const uno::Reference<beans::XPropertySet>& xSet)
 {
     auto aGeomPropSeq = xSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                            .get<uno::Sequence<beans::PropertyValue>>();
+                            .get<cpo::uno::Sequence<beans::PropertyValue>>();
     auto aGeomPropVec
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
 
@@ -876,7 +876,7 @@ static double getAdjustmentValue(const uno::Reference<beans::XPropertySet>& xSet
 
     if (aIterator != aGeomPropVec.end())
     {
-        uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment;
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment;
         double fResult = 0.0;
         aIterator->Value >>= aAdjustment;
         aAdjustment[0].Value >>= fResult;
@@ -891,7 +891,7 @@ static bool getScaleXValue(const uno::Reference<beans::XPropertySet>& xSet)
     bool bScaleX = false;
 
     auto aGeomPropSeq = xSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                            .get<uno::Sequence<beans::PropertyValue>>();
+                            .get<cpo::uno::Sequence<beans::PropertyValue>>();
     auto aGeomPropVec
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
 
@@ -901,7 +901,7 @@ static bool getScaleXValue(const uno::Reference<beans::XPropertySet>& xSet)
 
     if (aIterator != aGeomPropVec.end())
     {
-        uno::Sequence<beans::PropertyValue> aTextPathProperties;
+        cpo::uno::Sequence<beans::PropertyValue> aTextPathProperties;
         aIterator->Value >>= aTextPathProperties;
         auto aIterator2 = std::find_if(
             std::cbegin(aTextPathProperties), std::cend(aTextPathProperties),

@@ -34,6 +34,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::connection;
 using namespace ::com::sun::star::io;
+using namespace ::cpo::uno;
 
 
 namespace io_acceptor

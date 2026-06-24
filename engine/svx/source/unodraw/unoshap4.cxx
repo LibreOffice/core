@@ -232,7 +232,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
                     if ( aLnk.GetType() == GfxLinkType::NativeWmf )
                     {
                         bIsWMF = true;
-                        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const *>(aLnk.GetData()), static_cast<sal_Int32>(aLnk.GetDataSize()));
+                        cpo::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const *>(aLnk.GetData()), static_cast<sal_Int32>(aLnk.GetDataSize()));
                         rValue <<= aSeq;
                     }
                 }
@@ -242,7 +242,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
                     GDIMetaFile aMtf(pGraphic->GetGDIMetaFile());
                     SvMemoryStream aDestStrm( 65535, 65535 );
                     ConvertGDIMetaFileToWMF( aMtf, aDestStrm, nullptr, false );
-                    const uno::Sequence<sal_Int8> aSeq(
+                    const cpo::uno::Sequence<sal_Int8> aSeq(
                         static_cast< const sal_Int8* >(aDestStrm.GetData()),
                         aDestStrm.GetEndOfData());
                     rValue <<= aSeq;
@@ -443,7 +443,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
 
     ::comphelper::IEmbeddedHelper* pPersist = GetSdrObject()->getSdrModelFromSdrObject().GetPersist();
 
-    uno::Sequence< beans::PropertyValue > aMediaDescr{
+    cpo::uno::Sequence< beans::PropertyValue > aMediaDescr{
         comphelper::makePropertyValue(u"URL"_ustr, aLinkURL),
         comphelper::makePropertyValue(u"Referer"_ustr, m_referer)
     };
@@ -568,7 +568,7 @@ void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, c
     resetModifiedState();
 }
 
-void SAL_CALL SvxPluginShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& rValues )
+void SAL_CALL SvxPluginShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& rValues )
 {
     SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
@@ -650,7 +650,7 @@ void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, co
     resetModifiedState();
 }
 
-void SAL_CALL SvxFrameShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& rValues )
+void SAL_CALL SvxFrameShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& rValues )
 {
     SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();

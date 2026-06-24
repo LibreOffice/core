@@ -30,7 +30,7 @@ TextUnderlinePopup::TextUnderlinePopup(
 
 TextUnderlinePopup::~TextUnderlinePopup() {}
 
-void TextUnderlinePopup::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
+void TextUnderlinePopup::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -67,14 +67,14 @@ OUString TextUnderlinePopup::getImplementationName()
     return u"com.sun.star.comp.svx.UnderlineToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> TextUnderlinePopup::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> TextUnderlinePopup::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_UnderlineToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* rContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new TextUnderlinePopup(rContext));
 }

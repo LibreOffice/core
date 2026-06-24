@@ -445,12 +445,12 @@ DomainMapperTableManager::IntVectorPtr const & DomainMapperTableManager::getCurr
     return m_aCellWidths.back( );
 }
 
-uno::Sequence<beans::PropertyValue> DomainMapperTableManager::getCurrentTablePosition( )
+cpo::uno::Sequence<beans::PropertyValue> DomainMapperTableManager::getCurrentTablePosition( )
 {
     if ( !m_aTablePositions.empty( ) && m_aTablePositions.back() )
         return m_aTablePositions.back( )->getTablePosition();
     else
-        return uno::Sequence< beans::PropertyValue >();
+        return cpo::uno::Sequence< beans::PropertyValue >();
 }
 
 const TableParagraphVectorPtr & DomainMapperTableManager::getCurrentParagraphs( )
@@ -733,7 +733,7 @@ void DomainMapperTableManager::endOfRowAction()
                 }
             }
         }
-        uno::Sequence< text::TableColumnSeparator > aSeparators( getCurrentGridBefore() + m_nCell.back() - 1 );
+        cpo::uno::Sequence< text::TableColumnSeparator > aSeparators( getCurrentGridBefore() + m_nCell.back() - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         double nLastRelPos = 0.0;
         sal_uInt32 nBorderGridIndex = 0;
@@ -784,7 +784,7 @@ void DomainMapperTableManager::endOfRowAction()
                     aMoved == getPropertyName( PROP_TABLE_ROW_DELETE )
                         ? oox::XML_tableRowDelete
                         : oox::XML_tableRowInsert );
-            uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
+            cpo::uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
             pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , cpo::uno::Any( aTableRedlineProperties ));
         }
 
@@ -802,7 +802,7 @@ void DomainMapperTableManager::endOfRowAction()
         // then use the cell widths to calculate the column separators.
         // Also handle autofit tables with incomplete grids, when rows can have
         // different widths and last cells can be wider, than their values.
-        uno::Sequence< text::TableColumnSeparator > aSeparators(pCellWidths->size() - 1);
+        cpo::uno::Sequence< text::TableColumnSeparator > aSeparators(pCellWidths->size() - 1);
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nSum = 0;
         sal_uInt32 nPos = 0;

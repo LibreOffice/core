@@ -52,7 +52,7 @@ public:
     virtual void SAL_CALL loadDefaultCalendar(const css::lang::Locale& rLocale) override;
     virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const css::lang::Locale& rLocale) override;
     virtual css::i18n::Calendar SAL_CALL getLoadedCalendar() override;
-    virtual css::uno::Sequence < OUString > SAL_CALL getAllCalendars(const css::lang::Locale& rLocale) override;
+    virtual cpo::uno::Sequence < OUString > SAL_CALL getAllCalendars(const css::lang::Locale& rLocale) override;
     virtual OUString SAL_CALL getUniqueID() override;
     virtual void SAL_CALL setDateTime(double fTimeInDays) override;
     virtual double SAL_CALL getDateTime() override;
@@ -66,8 +66,8 @@ public:
     virtual sal_Int16 SAL_CALL getMinimumNumberOfDaysForFirstWeek() override;
     virtual sal_Int16 SAL_CALL getNumberOfMonthsInYear() override;
     virtual sal_Int16 SAL_CALL getNumberOfDaysInWeek() override;
-    virtual css::uno::Sequence < css::i18n::CalendarItem > SAL_CALL getMonths() override;
-    virtual css::uno::Sequence < css::i18n::CalendarItem > SAL_CALL getDays() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem > SAL_CALL getMonths() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem > SAL_CALL getDays() override;
     virtual OUString SAL_CALL getDisplayName(sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType) override;
 
     // Methods in XExtendedCalendar
@@ -75,10 +75,10 @@ public:
 
     // XCalendar3
     virtual css::i18n::Calendar2 SAL_CALL getLoadedCalendar2() override;
-    virtual css::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getDays2() override;
-    virtual css::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getMonths2() override;
-    virtual css::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getGenitiveMonths2() override;
-    virtual css::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getPartitiveMonths2() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getDays2() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getMonths2() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getGenitiveMonths2() override;
+    virtual cpo::uno::Sequence < css::i18n::CalendarItem2 > SAL_CALL getPartitiveMonths2() override;
 
     // XCalendar4
     virtual void SAL_CALL setLocalDateTime(double TimeInDays) override;
@@ -89,7 +89,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     struct lookupTableItem {

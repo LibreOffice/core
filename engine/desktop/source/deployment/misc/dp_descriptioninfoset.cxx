@@ -40,7 +40,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -357,7 +357,7 @@ void DescriptionInfoset::checkDenylist() const
     if (currentversion.getLength() == 0)
         return;  // nothing to check
 
-    css::uno::Sequence<cpo::uno::Any> args(comphelper::InitAnyPropertySequence(
+    cpo::uno::Sequence<cpo::uno::Any> args(comphelper::InitAnyPropertySequence(
     {
         {"nodepath", cpo::uno::Any(u"/org.openoffice.Office.ExtensionDependencies/Extensions"_ustr)}
     }));
@@ -375,7 +375,7 @@ void DescriptionInfoset::checkDenylist() const
 
     cpo::uno::Any anyValue = extProps->getPropertyValue(u"Versions"_ustr);
 
-    css::uno::Sequence< OUString > blversions;
+    cpo::uno::Sequence< OUString > blversions;
     anyValue >>= blversions;
 
     // check if the current version requires further dependency checks from the denylist
@@ -394,7 +394,7 @@ void DescriptionInfoset::checkDenylist() const
         m_context->getServiceManager()->createInstanceWithContext(u"com.sun.star.xml.dom.DocumentBuilder"_ustr, m_context),
         css::uno::UNO_QUERY_THROW);
 
-    css::uno::Sequence< sal_Int8 > byteSeq(reinterpret_cast<const sal_Int8*>(xmlDependencies.getStr()), xmlDependencies.getLength());
+    cpo::uno::Sequence< sal_Int8 > byteSeq(reinterpret_cast<const sal_Int8*>(xmlDependencies.getStr()), xmlDependencies.getLength());
 
     css::uno::Reference< css::io::XInputStream> inputstream( css::io::SequenceInputStream::createStreamFromSequence(m_context, byteSeq),
                                                              css::uno::UNO_QUERY_THROW);
@@ -434,7 +434,7 @@ void DescriptionInfoset::checkDenylist() const
 
 bool DescriptionInfoset::checkDenylistVersion(
     std::u16string_view currentversion,
-    css::uno::Sequence< OUString > const & versions)
+    cpo::uno::Sequence< OUString > const & versions)
 {
     sal_Int32 nLen = versions.getLength();
     for (sal_Int32 i=0; i<nLen; i++) {
@@ -450,7 +450,7 @@ OUString DescriptionInfoset::getVersion() const
     return getNodeValueFromExpression( u"desc:version/@value"_ustr );
 }
 
-css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlatforms() const
+cpo::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlatforms() const
 {
     //When there is no description.xml then we assume that we support all platforms
     if (! m_element.is())
@@ -498,15 +498,15 @@ DescriptionInfoset::getDependencies() const {
     return new EmptyNodeList;
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 DescriptionInfoset::getUpdateInformationUrls() const {
     return getUrls(u"desc:update-information/desc:src/@xlink:href"_ustr);
 }
 
 OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
 {
-    css::uno::Sequence< OUString > aStrList = getUrls( u"desc:icon/desc:default/@xlink:href"_ustr );
-    css::uno::Sequence< OUString > aStrListHC = getUrls( u"desc:icon/desc:high-contrast/@xlink:href"_ustr );
+    cpo::uno::Sequence< OUString > aStrList = getUrls( u"desc:icon/desc:default/@xlink:href"_ustr );
+    cpo::uno::Sequence< OUString > aStrListHC = getUrls( u"desc:icon/desc:high-contrast/@xlink:href"_ustr );
 
     if ( bHighContrast && aStrListHC.hasElements() && !aStrListHC[0].isEmpty() )
         return aStrListHC[0];
@@ -533,7 +533,7 @@ OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
         : ::std::optional< OUString >();
 }
 
-css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
+cpo::uno::Sequence< OUString > DescriptionInfoset::getUrls(
     OUString const & expression) const
 {
     css::uno::Reference< css::xml::dom::XNodeList > ns;
@@ -544,7 +544,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
             // ignore
         }
     }
-    css::uno::Sequence< OUString > urls(ns.is() ? ns->getLength() : 0);
+    cpo::uno::Sequence< OUString > urls(ns.is() ? ns->getLength() : 0);
     auto urlsRange = asNonConstRange(urls);
     for (::sal_Int32 i = 0; i < urls.getLength(); ++i) {
         urlsRange[i] = getNodeValue(ns->item(i));

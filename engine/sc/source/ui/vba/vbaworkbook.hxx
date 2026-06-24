@@ -28,8 +28,8 @@ typedef cppu::ImplInheritanceHelper< VbaDocumentBase, ov::excel::XWorkbook > ScV
 
 class ScVbaWorkbook : public ScVbaWorkbook_BASE
 {
-    static css::uno::Sequence< sal_Int32 > ColorData;
-    static bool setFilterPropsFromFormat( sal_Int32 nFormat, css::uno::Sequence< css::beans::PropertyValue >& rProps );
+    static cpo::uno::Sequence< sal_Int32 > ColorData;
+    static bool setFilterPropsFromFormat( sal_Int32 nFormat, cpo::uno::Sequence< css::beans::PropertyValue >& rProps );
     void init();
 
     rtl::Reference< ScModelObj > mxModel;
@@ -40,7 +40,7 @@ protected:
 public:
     ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             rtl::Reference< ScModelObj > const & xModel );
-    ScVbaWorkbook(  css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    ScVbaWorkbook(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     // Attributes
     virtual bool SAL_CALL getProtectStructure() override;
@@ -73,10 +73,10 @@ public:
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     // XUnoTunnel
-    virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) override;
+    virtual ::sal_Int64 SAL_CALL getSomething(const cpo::uno::Sequence<sal_Int8 >& rId ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

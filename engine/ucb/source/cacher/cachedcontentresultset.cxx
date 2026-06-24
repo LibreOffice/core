@@ -392,8 +392,8 @@ public:
         noexcept override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XPropertySetInfo
     virtual Sequence< css::beans::Property > SAL_CALL
@@ -918,7 +918,7 @@ bool SAL_CALL CachedContentResultSet::supportsService( const OUString& ServiceNa
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL CachedContentResultSet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSet::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedContentResultSet"_ustr };
 }
@@ -1838,7 +1838,7 @@ double SAL_CALL CachedContentResultSet
 Sequence< sal_Int8 > SAL_CALL CachedContentResultSet
     ::getBytes( sal_Int32 columnIndex )
 {
-    return rowOriginGet< css::uno::Sequence<sal_Int8> >(
+    return rowOriginGet< cpo::uno::Sequence<sal_Int8> >(
         &css::sdbc::XRow::getBytes, columnIndex);
 }
 
@@ -1997,7 +1997,7 @@ bool SAL_CALL CachedContentResultSetFactory::supportsService( const OUString& Se
 {
     return cppu::supportsService( this, ServiceName );
 }
-css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSetFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedContentResultSetFactory"_ustr };
 }
@@ -2008,7 +2008,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetFactory::getSuppor
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_CachedContentResultSetFactory_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CachedContentResultSetFactory(context));
 }

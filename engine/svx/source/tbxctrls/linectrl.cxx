@@ -149,7 +149,7 @@ void SAL_CALL SvxLineStyleToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     }
 }
 
-void SvxLineStyleToolBoxControl::initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments )
+void SvxLineStyleToolBoxControl::initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
 
@@ -207,7 +207,7 @@ OUString SvxLineStyleToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.svx.LineStyleToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> SvxLineStyleToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SvxLineStyleToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -215,7 +215,7 @@ css::uno::Sequence<OUString> SvxLineStyleToolBoxControl::getSupportedServiceName
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_LineStyleToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<cpo::uno::Any> const & )
+    cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxLineStyleToolBoxControl( rContext ) );
 }
@@ -228,11 +228,11 @@ public:
     explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
 
@@ -496,7 +496,7 @@ void SAL_CALL SvxLineEndToolBoxControl::execute(sal_Int16 /*KeyModifier*/)
     }
 }
 
-void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments )
+void SvxLineEndToolBoxControl::initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments )
 {
     svt::PopupWindowController::initialize( rArguments );
 
@@ -534,7 +534,7 @@ OUString SvxLineEndToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.svx.LineEndToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -542,7 +542,7 @@ css::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_LineEndToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<cpo::uno::Any> const & )
+    cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire( new SvxLineEndToolBoxControl( rContext ) );
 }

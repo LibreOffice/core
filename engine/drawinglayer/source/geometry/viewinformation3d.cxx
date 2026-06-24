@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/geometry/AffineMatrix3D.hpp>
 #include <basegfx/utils/canvastools.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <utility>
 
 
@@ -67,7 +67,7 @@ namespace drawinglayer::geometry
             double                                      mfViewTime;
 
             // the extra PropertyValues; does not contain the transformations
-            uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
+            cpo::uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
             // the local UNO API strings
             static constexpr OUString OBJECT_TRANSFORMATION = u"ObjectTransformation"_ustr;
@@ -82,7 +82,7 @@ namespace drawinglayer::geometry
 
             // a central PropertyValue parsing method to allow transportation of
             // all ViewParameters using UNO API
-            void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)
+            void impInterpretPropertyValues(const cpo::uno::Sequence< beans::PropertyValue >& rViewParameters)
             {
                 if(!rViewParameters.hasElements())
                     return;
@@ -181,7 +181,7 @@ namespace drawinglayer::geometry
                 basegfx::B3DHomMatrix aProjection,
                 basegfx::B3DHomMatrix aDeviceToView,
                 double fViewTime,
-                const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
+                const cpo::uno::Sequence< beans::PropertyValue >& rExtendedParameters)
             :   maObjectTransformation(std::move(aObjectTransformation)),
                 maOrientation(std::move(aOrientation)),
                 maProjection(std::move(aProjection)),
@@ -191,7 +191,7 @@ namespace drawinglayer::geometry
                 impInterpretPropertyValues(rExtendedParameters);
             }
 
-            explicit ImpViewInformation3D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
+            explicit ImpViewInformation3D(const cpo::uno::Sequence< beans::PropertyValue >& rViewParameters)
             :   mfViewTime()
             {
                 impInterpretPropertyValues(rViewParameters);
@@ -220,7 +220,7 @@ namespace drawinglayer::geometry
                 return maObjectToView;
             }
 
-            const uno::Sequence< beans::PropertyValue >& getExtendedInformationSequence() const
+            const cpo::uno::Sequence< beans::PropertyValue >& getExtendedInformationSequence() const
             {
                 return mxExtendedInformation;
             }
@@ -255,14 +255,14 @@ namespace drawinglayer::geometry
             const basegfx::B3DHomMatrix& rProjection,
             const basegfx::B3DHomMatrix& rDeviceToView,
             double fViewTime,
-            const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
+            const cpo::uno::Sequence< beans::PropertyValue >& rExtendedParameters)
         :   mpViewInformation3D(ImpViewInformation3D(
                 rObjectObjectTransformation, rOrientation, rProjection,
                 rDeviceToView, fViewTime, rExtendedParameters))
         {
         }
 
-        ViewInformation3D::ViewInformation3D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
+        ViewInformation3D::ViewInformation3D(const cpo::uno::Sequence< beans::PropertyValue >& rViewParameters)
         :   mpViewInformation3D(ImpViewInformation3D(rViewParameters))
         {
         }
@@ -322,7 +322,7 @@ namespace drawinglayer::geometry
             return mpViewInformation3D->getViewTime();
         }
 
-        const uno::Sequence< beans::PropertyValue >& ViewInformation3D::getExtendedInformationSequence() const
+        const cpo::uno::Sequence< beans::PropertyValue >& ViewInformation3D::getExtendedInformationSequence() const
         {
             return mpViewInformation3D->getExtendedInformationSequence();
         }

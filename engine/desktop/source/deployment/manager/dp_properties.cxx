@@ -63,7 +63,7 @@ ExtensionProperties::ExtensionProperties(
 //Writing the file
 ExtensionProperties::ExtensionProperties(
     std::u16string_view urlExtension,
-    uno::Sequence<css::beans::NamedValue> const & properties,
+    cpo::uno::Sequence<css::beans::NamedValue> const & properties,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     Reference<uno::XComponentContext> const & xContext) :
     m_xCmdEnv(xCmdEnv), m_xContext(xContext)

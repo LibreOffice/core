@@ -16,7 +16,7 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -33,7 +33,7 @@ void Shape::testShapePropertiesAnchor()
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(getXSheetDocument(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
-    uno::Sequence<OUString> sheetNames = xSheets->getElementNames();
+    cpo::uno::Sequence<OUString> sheetNames = xSheets->getElementNames();
     uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByName(sheetNames[0]), UNO_QUERY_THROW);
     uno::Reference<table::XCell> xCell(xSheet->getCellByPosition(0, 0), UNO_SET_THROW);
 

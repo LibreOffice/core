@@ -111,7 +111,7 @@ public:
         remove( const OUString& aWord ) override;
     virtual bool SAL_CALL
         isFull() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionaryEntry > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionaryEntry > > SAL_CALL
         getEntries() override;
     virtual void SAL_CALL
         clear() override;
@@ -131,10 +131,10 @@ public:
         store() override;
     virtual void SAL_CALL
         storeAsURL( const OUString& aURL,
-                const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual void SAL_CALL
         storeToURL( const OUString& aURL,
-                const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
 };
 
 

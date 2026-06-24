@@ -57,7 +57,7 @@ class SpellAlternatives final
         css::linguistic2::XSetSpellAlternatives
     >
 {
-    css::uno::Sequence< OUString >  aAlt;   // list of alternatives, may be empty.
+    cpo::uno::Sequence< OUString >  aAlt;   // list of alternatives, may be empty.
     OUString                        aWord;
     sal_Int16                       nType;          // type of failure
     LanguageType                    nLanguage;
@@ -65,7 +65,7 @@ class SpellAlternatives final
 public:
     UNLESS_MERGELIBS(LNG_DLLPUBLIC) SpellAlternatives();
     SpellAlternatives(OUString aWord, LanguageType nLang,
-                      const css::uno::Sequence< OUString > &rAlternatives );
+                      const cpo::uno::Sequence< OUString > &rAlternatives );
     virtual ~SpellAlternatives() override;
     SpellAlternatives(const SpellAlternatives&) = delete;
     SpellAlternatives& operator=( const SpellAlternatives& ) = delete;
@@ -75,18 +75,18 @@ public:
     virtual css::lang::Locale SAL_CALL getLocale(  ) override;
     virtual ::sal_Int16 SAL_CALL getFailureType(  ) override;
     virtual ::sal_Int16 SAL_CALL getAlternativesCount(  ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAlternatives(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAlternatives(  ) override;
 
     // XSetSpellAlternatives
-    virtual void SAL_CALL setAlternatives( const css::uno::Sequence< OUString >& aAlternatives ) override;
+    virtual void SAL_CALL setAlternatives( const cpo::uno::Sequence< OUString >& aAlternatives ) override;
     virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) override;
 
     // non-interface specific functions
     void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetWordLanguage(const OUString &rWord, LanguageType nLang);
     void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetFailureType(sal_Int16 nTypeP);
-    void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetAlternatives( const css::uno::Sequence< OUString > &rAlt );
+    void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetAlternatives( const cpo::uno::Sequence< OUString > &rAlt );
     static css::uno::Reference < css::linguistic2::XSpellAlternatives > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateSpellAlternatives(
-        const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const css::uno::Sequence< OUString > &rAlt );
+        const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const cpo::uno::Sequence< OUString > &rAlt );
 };
 
 }   // namespace linguistic

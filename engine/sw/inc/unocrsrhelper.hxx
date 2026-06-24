@@ -99,7 +99,7 @@ namespace SwUnoCursorHelper
     /// @throws css::uno::RuntimeException
     void                        InsertFile(SwUnoCursor* pUnoCursor,
                                     const OUString& rURL,
-                                    const css::uno::Sequence< css::beans::PropertyValue >& rOptions);
+                                    const cpo::uno::Sequence< css::beans::PropertyValue >& rOptions);
 
     void                        getNumberingProperty(
                                     SwPaM& rPam,
@@ -120,17 +120,17 @@ namespace SwUnoCursorHelper
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     void    makeRedline( SwPaM const & rPaM, std::u16string_view RedlineType,
-            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
+            const cpo::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     void    makeTableRowRedline( SwTableLine& rTableLine, std::u16string_view RedlineType,
-            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
+            const cpo::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     SW_DLLPUBLIC void    makeTableCellRedline( SwTableBox& rTableBox, std::u16string_view RedlineType,
-            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
+            const cpo::uno::Sequence< css::beans::PropertyValue >& RedlineProperties );
 
     /// @param bTableMode: attributes should be applied to a table selection
     void SetCursorAttr(SwPaM & rPam, const SfxItemSet & rSet,
@@ -145,10 +145,10 @@ namespace SwUnoCursorHelper
     void SelectPam(SwPaM & rPam, const bool bExpand);
     void SetString(SwCursor & rCursor, std::u16string_view aString);
 
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
            CreateSortDescriptor(const bool bFromTable);
     bool ConvertSortProperties(
-            const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor,
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor,
             SwSortOptions & rSortOpt);
 
     /// @throws css::beans::UnknownPropertyException
@@ -170,7 +170,7 @@ namespace SwUnoCursorHelper
     void SetPropertyValues(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
-            const css::uno::Sequence< css::beans::PropertyValue > &
+            const cpo::uno::Sequence< css::beans::PropertyValue > &
             rPropertyValues,
             const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
     void SetPropertyValues(
@@ -187,10 +187,10 @@ namespace SwUnoCursorHelper
             std::u16string_view rPropertyName);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::beans::PropertyState > GetPropertyStates(
+    cpo::uno::Sequence< css::beans::PropertyState > GetPropertyStates(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
-            const css::uno::Sequence< OUString >&
+            const cpo::uno::Sequence< OUString >&
                 rPropertyNames,
             const SwGetPropertyStatesCaller eCaller =
                 SW_PROPERTY_STATE_CALLER_DEFAULT);

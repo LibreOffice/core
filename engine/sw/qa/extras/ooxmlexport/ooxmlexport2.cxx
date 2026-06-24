@@ -162,7 +162,7 @@ DECLARE_OOXMLEXPORT_TEST(testKeywords, "tdf143175.docx")
         mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties
         = xDocumentPropertiesSupplier->getDocumentProperties();
-    uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
+    cpo::uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aKeywords.getLength());
     CPPUNIT_ASSERT_EQUAL(u"One"_ustr, aKeywords[0]);
     CPPUNIT_ASSERT_EQUAL(u"Two"_ustr, aKeywords[1]);
@@ -206,7 +206,7 @@ CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles( u"ParagraphStyles"_ustr );
-    uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence< style::TabStop > >(
+    cpo::uno::Sequence< style::TabStop > stops = getProperty< cpo::uno::Sequence< style::TabStop > >(
         paragraphStyles->getByName( u"Standard"_ustr ), u"ParaTabStops"_ustr );
 // There actually be one tab stop, but it will be the default.
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(1), stops.getLength());
@@ -515,7 +515,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
         u"RightBorder"_ustr,
     };
 
-    uno::Sequence<OUString> const cells = xTextTable->getCellNames();
+    cpo::uno::Sequence<OUString> const cells = xTextTable->getCellNames();
     sal_Int32 nLength = cells.getLength();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(cellBorders.size()), nLength);
 
@@ -714,7 +714,7 @@ DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
     // w:numPicBullet was ignored, leading to missing graphic bullet in numbering.
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     uno::Reference<awt::XBitmap> xBitmap;
@@ -774,7 +774,7 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
     // 1st problem: last character was missing
     CPPUNIT_ASSERT_EQUAL(u"SAMPLE"_ustr, xShape->getString());
 
-    const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr);
+    const cpo::uno::Sequence<beans::PropertyValue> aProps = getProperty< cpo::uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr);
     bool bFound = false;
     for (beans::PropertyValue const & prop : aProps)
         if (prop.Name == "TextPath")
@@ -1002,7 +1002,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
     // and when saved back to DOCX were saved with level=1 (so hidden bullets became visible)
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     for (beans::PropertyValue const& rProp : aProps)
@@ -1153,7 +1153,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67737, "fdo67737.docx")
 {
     // The problem was that imported shapes did not import and render the 'flip:x' and 'flip:y' attributes
     uno::Reference<drawing::XShape> xArrow = getShape(1);
-    const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xArrow, u"CustomShapeGeometry"_ustr);
+    const cpo::uno::Sequence<beans::PropertyValue> aProps = getProperty< cpo::uno::Sequence<beans::PropertyValue> >(xArrow, u"CustomShapeGeometry"_ustr);
     for (beans::PropertyValue const & rProp : aProps)
     {
         if (rProp.Name == "MirroredY")

@@ -118,10 +118,10 @@ namespace dlgprov
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XDialogProvider
         virtual css::uno::Reference < css::awt::XDialog > SAL_CALL createDialog(
@@ -134,7 +134,7 @@ namespace dlgprov
 
         virtual css::uno::Reference < css::awt::XDialog > SAL_CALL createDialogWithArguments(
             const OUString& URL,
-            const css::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
+            const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
 
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createContainerWindow(
             const OUString& URL, const OUString& WindowType,

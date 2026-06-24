@@ -44,7 +44,7 @@ public:
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ XComponent ____
     virtual void SAL_CALL dispose() override;
@@ -53,7 +53,7 @@ public:
 
 protected:
     // ____ WrappedPropertySet ____
-    virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;
+    virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 

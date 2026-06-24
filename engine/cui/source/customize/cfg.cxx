@@ -112,7 +112,7 @@ void printPropertySet(
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
         xPropSet->getPropertySetInfo();
 
-    const uno::Sequence< beans::Property >& aPropDetails =
+    const cpo::uno::Sequence< beans::Property >& aPropDetails =
         xPropSetInfo->getProperties();
 
     SAL_WARN("cui", "printPropertySet: " << aPropDetails.getLength() << " properties" );
@@ -141,7 +141,7 @@ void printPropertySet(
 
 void printProperties(
     const OUString& prefix,
-    const uno::Sequence< beans::PropertyValue >& aProp )
+    const cpo::uno::Sequence< beans::PropertyValue >& aProp )
 {
     for (beans::PropertyValue const & aPropVal : aProp)
     {
@@ -496,7 +496,7 @@ void SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& 
                 if ( aLabel.isEmpty() )
                 {
                     bUseDefaultLabel = true;
-                    uno::Sequence< beans::PropertyValue > aPropSeq;
+                    cpo::uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
                         OUString aMenuLabel;
@@ -615,7 +615,7 @@ void MenuSaveInData::Apply(
 
     for (auto const& entryData : *GetEntries())
     {
-        uno::Sequence< beans::PropertyValue > aPropValueSeq =
+        cpo::uno::Sequence< beans::PropertyValue > aPropValueSeq =
             SvxConfigPageHelper::ConvertSvxConfigEntry(entryData);
 
         uno::Reference< container::XIndexContainer > xSubMenuBar(
@@ -644,7 +644,7 @@ void SaveInData::ApplyMenu(
     {
         if (entry->IsPopup())
         {
-            uno::Sequence< beans::PropertyValue > aPropValueSeq =
+            cpo::uno::Sequence< beans::PropertyValue > aPropValueSeq =
                 SvxConfigPageHelper::ConvertSvxConfigEntry(entry);
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
@@ -670,7 +670,7 @@ void SaveInData::ApplyMenu(
         }
         else
         {
-            uno::Sequence< beans::PropertyValue > aPropValueSeq =
+            cpo::uno::Sequence< beans::PropertyValue > aPropValueSeq =
                 SvxConfigPageHelper::ConvertSvxConfigEntry(entry);
             rMenuBar->insertByIndex(
                 rMenuBar->getCount(), cpo::uno::Any( aPropValueSeq ));
@@ -723,7 +723,7 @@ OUString ContextMenuSaveInData::GetUIName( const OUString& rResourceURL )
 {
     if ( m_xPersistentWindowState.is() )
     {
-        css::uno::Sequence< css::beans::PropertyValue > aProps;
+        cpo::uno::Sequence< css::beans::PropertyValue > aProps;
         try
         {
             m_xPersistentWindowState->getByName( rResourceURL ) >>= aProps;
@@ -751,7 +751,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
         std::unordered_map< OUString, bool > aMenuInfo;
 
         m_pRootEntry.reset( new SvxConfigEntry( u"ContextMenus"_ustr, OUString(), true, /*bParentData*/false ) );
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aElementsInfo;
+        cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > aElementsInfo;
         try
         {
             aElementsInfo = GetConfigManager()->getUIElementsInfo( css::ui::UIElementType::POPUPMENU );
@@ -798,7 +798,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
 
         // Retrieve also the parent menus, to make it possible to configure module menus and save them into the document.
         css::uno::Reference< css::ui::XUIConfigurationManager > xParentCfgMgr = GetParentConfigManager();
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aParentElementsInfo;
+        cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > aParentElementsInfo;
         try
         {
             if ( xParentCfgMgr.is() )
@@ -1194,7 +1194,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
         {
             // Load configuration for other open documents which have
             // same module type
-            uno::Sequence< uno::Reference< frame::XFrame > > aFrameList;
+            cpo::uno::Sequence< uno::Reference< frame::XFrame > > aFrameList;
             try
             {
                 uno::Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create(
@@ -2008,7 +2008,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
     {
         try
         {
-            uno::Sequence< beans::PropertyValue > aProps;
+            cpo::uno::Sequence< beans::PropertyValue > aProps;
             cpo::uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
 
             if ( a >>= aProps )
@@ -2097,7 +2097,7 @@ void ToolbarSaveInData::SetSystemStyle(
 
     try
     {
-        uno::Sequence< beans::PropertyValue > aProps;
+        cpo::uno::Sequence< beans::PropertyValue > aProps;
 
         cpo::uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
 
@@ -2135,7 +2135,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
     {
         try
         {
-            uno::Sequence< beans::PropertyValue > aProps;
+            cpo::uno::Sequence< beans::PropertyValue > aProps;
             cpo::uno::Any a( m_xPersistentWindowState->getByName( rResourceURL ) );
 
             if ( a >>= aProps )
@@ -2164,7 +2164,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
         {
             a = m_xCommandToLabelMap->getByName( rResourceURL );
 
-            uno::Sequence< beans::PropertyValue > aPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue > aPropSeq;
             if ( a >>= aPropSeq )
             {
                 for (beans::PropertyValue const& prop : aPropSeq)
@@ -2196,11 +2196,11 @@ SvxEntries* ToolbarSaveInData::GetEntries()
 
         pRootEntry.reset( new SvxConfigEntry( u"MainToolbars"_ustr, OUString(), true, /*bParentData*/false) );
 
-        const uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
+        const cpo::uno::Sequence< cpo::uno::Sequence < beans::PropertyValue > > info =
             GetConfigManager()->getUIElementsInfo(
                 css::ui::UIElementType::TOOLBAR );
 
-        for ( uno::Sequence<beans::PropertyValue> const & props : info )
+        for ( cpo::uno::Sequence<beans::PropertyValue> const & props : info )
         {
             OUString url;
             OUString systemname;
@@ -2270,11 +2270,11 @@ SvxEntries* ToolbarSaveInData::GetEntries()
             // Retrieve also the parent toolbars to make it possible
             // to configure module toolbars and save them into the document
             // config manager.
-            const uno::Sequence< uno::Sequence < beans::PropertyValue > > info_ =
+            const cpo::uno::Sequence< cpo::uno::Sequence < beans::PropertyValue > > info_ =
                 xParentCfgMgr->getUIElementsInfo(
                     css::ui::UIElementType::TOOLBAR );
 
-            for ( uno::Sequence<beans::PropertyValue> const & props : info_ )
+            for ( cpo::uno::Sequence<beans::PropertyValue> const & props : info_ )
             {
                 OUString url;
                 OUString systemname;
@@ -2431,7 +2431,7 @@ void ToolbarSaveInData::ApplyToolbar(
     {
         if (entry->IsPopup())
         {
-            uno::Sequence< beans::PropertyValue > aPropValueSeq =
+            cpo::uno::Sequence< beans::PropertyValue > aPropValueSeq =
                 SvxConfigPageHelper::ConvertToolbarEntry(entry);
 
             uno::Reference< container::XIndexContainer > xSubMenuBar(
@@ -2455,7 +2455,7 @@ void ToolbarSaveInData::ApplyToolbar(
         }
         else
         {
-            uno::Sequence< beans::PropertyValue > aPropValueSeq =
+            cpo::uno::Sequence< beans::PropertyValue > aPropValueSeq =
                 SvxConfigPageHelper::ConvertToolbarEntry(entry);
 
             rToolbarBar->insertByIndex(
@@ -2601,7 +2601,7 @@ void ToolbarSaveInData::RestoreToolbar( SvxConfigEntry* pToolbar )
 
         // After reloading, ensure that the icon is reset of each entry
         // in the toolbar
-        uno::Sequence< OUString > aURLSeq( 1 );
+        cpo::uno::Sequence< OUString > aURLSeq( 1 );
         auto pURLSeq = aURLSeq.getArray();
         for (auto const& entry : *pToolbar->GetEntries())
         {
@@ -2666,7 +2666,7 @@ void ToolbarSaveInData::LoadToolbar(
                 if ( aLabel.isEmpty() )
                 {
                     bUseDefaultLabel = true;
-                    uno::Sequence< beans::PropertyValue > aPropSeq;
+                    cpo::uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
                         for (beans::PropertyValue const& prop : aPropSeq)
@@ -2786,13 +2786,13 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
           css::embed::FileSystemStorageFactory::create( xComponentContext ) );
 
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aDirectory),
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aDirectory),
                                      cpo::uno::Any(css::embed::ElementModes::READWRITE) };
 
     uno::Reference< css::embed::XStorage > xStorage(
         xStorageFactory->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
 
-    uno::Sequence<cpo::uno::Any> aProp(comphelper::InitAnyPropertySequence(
+    cpo::uno::Sequence<cpo::uno::Any> aProp(comphelper::InitAnyPropertySequence(
     {
         {"UserConfigStorage", cpo::uno::Any(xStorage)},
         {"OpenMode", cpo::uno::Any(css::embed::ElementModes::READWRITE)}
@@ -2803,17 +2803,17 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     ImageInfo aImageInfo1;
     if ( m_xImportedImageManager.is() )
     {
-        const uno::Sequence< OUString > names = m_xImportedImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
+        const cpo::uno::Sequence< OUString > names = m_xImportedImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
         for (auto const & name : names )
             aImageInfo1.emplace( name, false );
     }
 
-    uno::Sequence< OUString > name( 1 );
+    cpo::uno::Sequence< OUString > name( 1 );
     auto pname = name.getArray();
     for (auto const& elem : aImageInfo1)
     {
         pname[ 0 ] = elem.first;
-        uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
+        cpo::uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( SvxConfigPageHelper::GetImageType(), name );
         if ( graphics.hasElements() )
         {
             m_aGraphics.push_back(graphics[0]);
@@ -2826,12 +2826,12 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
 
     if ( m_xParentImageManager.is() )
     {
-        const uno::Sequence< OUString > names = m_xParentImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
+        const cpo::uno::Sequence< OUString > names = m_xParentImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
         for ( auto const & i : names )
             aImageInfo.emplace( i, false );
     }
 
-    const uno::Sequence< OUString > names = m_xImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
+    const cpo::uno::Sequence< OUString > names = m_xImageManager->getAllImageNames( SvxConfigPageHelper::GetImageType() );
     for ( auto const & i : names )
     {
         ImageInfo::iterator pIter = aImageInfo.find( i );
@@ -2846,7 +2846,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     {
         pname[ 0 ] = elem.first;
 
-        uno::Sequence< uno::Reference< graphic::XGraphic> > graphics;
+        cpo::uno::Sequence< uno::Reference< graphic::XGraphic> > graphics;
         try
         {
             if (elem.second)
@@ -2939,7 +2939,7 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, ImportHdl, weld::Button&, void)
 
     if ( ERRCODE_NONE == aImportDialog.Execute() )
     {
-        uno::Sequence< OUString > paths = aImportDialog.GetSelectedFiles();
+        cpo::uno::Sequence< OUString > paths = aImportDialog.GetSelectedFiles();
         ImportGraphics ( paths );
     }
 }
@@ -2956,7 +2956,7 @@ IMPL_LINK_NOARG(SvxIconSelectorDialog, DeleteHdl, weld::Button&, void)
 
     sal_uInt16 nId = m_xTbSymbol->GetSelectedItemId();
 
-    uno::Sequence<OUString> URLs { m_xTbSymbol->GetItemText(nId) };
+    cpo::uno::Sequence<OUString> URLs { m_xTbSymbol->GetItemText(nId) };
     m_xTbSymbol->RemoveItem(nId);
     m_xImportedImageManager->removeImages( SvxConfigPageHelper::GetImageType(), URLs );
     if ( m_xImportedImageManager->isModified() )
@@ -2969,7 +2969,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     const OUString& aURL )
 {
     uno::Reference< graphic::XGraphic > xGraphic;
-    uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(u"URL"_ustr, aURL) };
+    cpo::uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(u"URL"_ustr, aURL) };
 
     css::awt::Size aSize;
     bool bOK = false;
@@ -3070,7 +3070,7 @@ namespace
 }
 
 void SvxIconSelectorDialog::ImportGraphics(
-    const uno::Sequence< OUString >& rPaths )
+    const cpo::uno::Sequence< OUString >& rPaths )
 {
     std::vector<OUString> rejected;
 
@@ -3129,7 +3129,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 {
     bool result = false;
 
-    uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(u"URL"_ustr, aURL) };
+    cpo::uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(u"URL"_ustr, aURL) };
 
     try
     {
@@ -3160,8 +3160,8 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 m_aGraphics.push_back(Graphic(aImage.GetBitmap()).GetXGraphic());
                 m_xTbSymbol->InsertItem(m_aGraphics.size(), aImage, aURL);
 
-                uno::Sequence<OUString> aImportURL { aURL };
-                uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph{ xGraphic };
+                cpo::uno::Sequence<OUString> aImportURL { aURL };
+                cpo::uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph{ xGraphic };
                 m_xImportedImageManager->insertImages( SvxConfigPageHelper::GetImageType(), aImportURL, aImportGraph );
                 if ( m_xImportedImageManager->isModified() )
                 {

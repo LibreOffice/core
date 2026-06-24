@@ -14,7 +14,7 @@
 #include <com/sun/star/table/XTableChart.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -48,7 +48,7 @@ void XTableChart::testGetSetRanges()
 {
     uno::Reference<table::XTableChart> xTC(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aCRA = xTC->getRanges();
+    cpo::uno::Sequence<table::CellRangeAddress> aCRA = xTC->getRanges();
     aCRA.getArray()[0].EndRow = 1;
 
     xTC->setRanges(aCRA);

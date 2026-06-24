@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108943)
         getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     sal_Int32 nListtabStopPosition = 0;
@@ -346,7 +346,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49692)
         getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     for (int i = 0; i < aProps.getLength(); ++i)
@@ -464,16 +464,17 @@ CPPUNIT_TEST_FIXTURE(Test, testInk)
      * msgbox oSegments(1).Count ' was 0x2000 | 10, should be 10
      * msgbox oShape.Surround ' was 2, should be 1
      */
-    uno::Sequence<beans::PropertyValue> aProps = getProperty<uno::Sequence<beans::PropertyValue>>(
-        getShape(1), u"CustomShapeGeometry"_ustr);
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps
+        = getProperty<cpo::uno::Sequence<beans::PropertyValue>>(getShape(1),
+                                                                u"CustomShapeGeometry"_ustr);
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (int i = 0; i < aProps.getLength(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
             rProp.Value >>= aPathProps;
     }
-    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
     for (int i = 0; i < aPathProps.getLength(); ++i)
     {
         const beans::PropertyValue& rProp = aPathProps[i];
@@ -520,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo55525)
     // Cell width of A1 was 3332 (e.g. not set, 30% percent of total width)
     uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(896),
-                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                         getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                              xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0]
                              .Position);
 }
@@ -559,7 +560,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo59953)
     // Cell width of A1 was 4998 (e.g. not set / not wide enough, ~50% of total width)
     uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(7649),
-                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                         getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                              xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0]
                              .Position);
 }
@@ -659,22 +660,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf96326)
 CPPUNIT_TEST_FIXTURE(Test, testN823655)
 {
     createSwDoc("n823655.rtf");
-    uno::Sequence<beans::PropertyValue> aProps = getProperty<uno::Sequence<beans::PropertyValue>>(
-        getShape(1), u"CustomShapeGeometry"_ustr);
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps
+        = getProperty<cpo::uno::Sequence<beans::PropertyValue>>(getShape(1),
+                                                                u"CustomShapeGeometry"_ustr);
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (int i = 0; i < aProps.getLength(); ++i)
     {
         const beans::PropertyValue& rProp = aProps[i];
         if (rProp.Name == "Path")
-            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+            aPathProps = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
     }
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
     for (int i = 0; i < aPathProps.getLength(); ++i)
     {
         const beans::PropertyValue& rProp = aPathProps[i];
         if (rProp.Name == "Coordinates")
             aCoordinates
-                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+                = rProp.Value.get<cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
     }
     // The first coordinate pair of this freeform shape was 286,0 instead of 0,286.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(286), aCoordinates[0].Second.Value.get<sal_Int32>());
@@ -687,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN823675)
         getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
     awt::FontDescriptor aFont;
 
@@ -724,8 +726,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo81033)
 {
     createSwDoc("fdo81033.rtf");
     // Number of tabstops in the paragraph should be 2, was 3.
-    uno::Sequence<style::TabStop> tabs(
-        getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), u"ParaTabStops"_ustr));
+    cpo::uno::Sequence<style::TabStop> tabs(
+        getProperty<cpo::uno::Sequence<style::TabStop>>(getParagraph(1), u"ParaTabStops"_ustr));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), tabs.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5808), tabs[0].Position);
     CPPUNIT_ASSERT_EQUAL(style::TabAlign_LEFT, tabs[0].Alignment);
@@ -767,7 +769,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo66565)
     // Cell width of A2 was 554, should be 453/14846*10000
     uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(304),
-                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                         getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                              xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0]
                              .Position);
 }
@@ -784,7 +786,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo67365)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xRows->getCount());
     // This was 4999, i.e. the two cells of the row had equal widths instead of a larger and a smaller cell.
     CPPUNIT_ASSERT_EQUAL(sal_Int16(5290),
-                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                         getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                              xRows->getByIndex(2), u"TableColumnSeparators"_ustr)[0]
                              .Position);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
@@ -969,7 +971,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo74823)
     // Cell width of C2 was too large / column separator being 3749 too small (e.g. not set, around 3/7 of total width)
     uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(5391),
-                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                         getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                              xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[2]
                              .Position);
 }

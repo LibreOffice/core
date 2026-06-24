@@ -3490,13 +3490,13 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
 
     // put required flags into grab bag of the first node in TOC
     {
-        uno::Sequence<beans::PropertyValue> aDocPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aDocPropertyValues(comphelper::InitPropertySequence(
         {
             {"ooxml:CT_SdtDocPart_docPartGallery", cpo::uno::Any(u"Table of Contents"_ustr)},
             {"ooxml:CT_SdtDocPart_docPartUnique",  cpo::uno::Any(u"true"_ustr)},
         }));
 
-        uno::Sequence<beans::PropertyValue> aSdtPrPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aSdtPrPropertyValues(comphelper::InitPropertySequence(
         {
             {"ooxml:CT_SdtPr_docPartObj", cpo::uno::Any(aDocPropertyValues)},
         }));

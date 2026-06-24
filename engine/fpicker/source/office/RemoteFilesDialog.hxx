@@ -17,7 +17,7 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 
 #include <vector>
@@ -55,8 +55,8 @@ public:
     virtual SvtFileView* GetView() override;
 
     virtual void SetHasFilename( bool ) override;
-    virtual void SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) override;
-    virtual const css::uno::Sequence< OUString >& GetDenyList() const override;
+    virtual void SetDenyList( const cpo::uno::Sequence< OUString >& rDenyList ) override;
+    virtual const cpo::uno::Sequence< OUString >& GetDenyList() const override;
     virtual void SetPath( const OUString& rNewURL ) override;
     virtual const OUString& GetPath() override;
     virtual std::vector<OUString> GetPathList() const override;
@@ -68,7 +68,7 @@ public:
 
     virtual void AddFilter( const OUString& rFilter, const OUString& rType ) override;
     virtual void AddFilterGroup( const OUString& _rFilter,
-                                const css::uno::Sequence< css::beans::StringPair >& rFilters ) override;
+                                const cpo::uno::Sequence< css::beans::StringPair >& rFilters ) override;
     virtual OUString GetCurFilter() const override;
     virtual void SetCurFilter( const OUString& rFilter ) override;
     virtual void FilterSelect() override;
@@ -112,7 +112,7 @@ private:
 
     ::rtl::Reference< ::svt::AsyncPickerAction > m_pCurrentAsyncAction;
 
-    css::uno::Sequence< OUString > m_aDenyList;
+    cpo::uno::Sequence< OUString > m_aDenyList;
 
     std::unique_ptr<weld::Button> m_xOk_btn;
     std::unique_ptr<weld::Button> m_xCancel_btn;

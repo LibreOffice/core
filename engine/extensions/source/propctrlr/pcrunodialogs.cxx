@@ -66,7 +66,7 @@ using namespace cpo::uno;
 
     Sequence<sal_Int8> SAL_CALL OTabOrderDialog::getImplementationId(  )
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
     OUString SAL_CALL OTabOrderDialog::getImplementationName()
@@ -75,7 +75,7 @@ using namespace cpo::uno;
     }
 
 
-    css::uno::Sequence<OUString> SAL_CALL OTabOrderDialog::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> SAL_CALL OTabOrderDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.form.ui.TabOrderDialog"_ustr, u"com.sun.star.form.TabOrderDialog"_ustr };
     }
@@ -135,7 +135,7 @@ using namespace cpo::uno;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propcrltr_OTabOrderDialog_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::OTabOrderDialog(context));
 }

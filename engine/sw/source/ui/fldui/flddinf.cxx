@@ -103,7 +103,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 {
     Init(); // general initialisation
 
-    uno::Sequence<beans::Property> aCustomProperties;
+    cpo::uno::Sequence<beans::Property> aCustomProperties;
     if (m_xCustomPropertySet.is())
     {
         uno::Reference<beans::XPropertySetInfo> xSetInfo = m_xCustomPropertySet->getPropertySetInfo();

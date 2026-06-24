@@ -47,7 +47,7 @@ namespace {
 class ControlArrayWrapper : public ::cppu::WeakImplHelper< container::XNameAccess, container::XIndexAccess >
 {
     uno::Reference< awt::XControlContainer > mxDialog;
-    uno::Sequence< OUString > msNames;
+    cpo::uno::Sequence< OUString > msNames;
     std::vector< uno::Reference< awt::XControl > > mControls;
     ControlIndexMap mIndices;
 
@@ -74,7 +74,7 @@ public:
         try
         {
             mxDialog.set( xDialog, uno::UNO_QUERY_THROW );
-            uno::Sequence< uno::Reference< awt::XControl > > sXControls = mxDialog->getControls();
+            cpo::uno::Sequence< uno::Reference< awt::XControl > > sXControls = mxDialog->getControls();
 
             msNames.realloc( sXControls.getLength() );
             for ( sal_Int32 i = 0; i < sXControls.getLength(); ++i )
@@ -118,7 +118,7 @@ public:
         return getByIndex( mIndices[ aName ] );
     }
 
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return msNames;
     }
@@ -384,9 +384,9 @@ cpo::uno::Any SAL_CALL ScVbaControls::Add( const cpo::uno::Any& Object, const cp
             {
                 uno::Reference< script::XInvocation > xControlInvoke( xNewControl, uno::UNO_QUERY_THROW );
 
-                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aComServiceName) };
-                uno::Sequence< sal_Int16 > aOutIDDummy;
-                uno::Sequence< cpo::uno::Any > aOutDummy;
+                cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aComServiceName) };
+                cpo::uno::Sequence< sal_Int16 > aOutIDDummy;
+                cpo::uno::Sequence< cpo::uno::Any > aOutDummy;
                 xControlInvoke->invoke( u"SOAddAXControl"_ustr , aArgs, aOutIDDummy, aOutDummy );
             }
             catch (const uno::Exception&)

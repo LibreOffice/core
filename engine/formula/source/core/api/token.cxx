@@ -350,7 +350,7 @@ bool FormulaTokenArray::AddFormulaToken(
 }
 
 bool FormulaTokenArray::Fill(
-    const uno::Sequence<sheet::FormulaToken>& rSequence,
+    const cpo::uno::Sequence<sheet::FormulaToken>& rSequence,
     svl::SharedStringPool& rSPool, ExternalReferenceHelper* pExtRef )
 {
     bool bError = false;

@@ -38,7 +38,7 @@ using namespace cpo::uno;
     using ::com::sun::star::sdb::tools::XTableName;
     using ::com::sun::star::sdb::tools::XObjectNames;
     using ::com::sun::star::sdb::tools::XDataSourceMetaData;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
     using ::cpo::uno::Any;
     using ::com::sun::star::sdbc::XConnection;
@@ -127,7 +127,7 @@ using namespace cpo::uno;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbaccess_ConnectionTools_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new sdbtools::ConnectionTools(context));
 }

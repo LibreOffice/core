@@ -26,7 +26,7 @@ namespace comphelper
 
 
     using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::lang::XTypeProvider;
     using ::cpo::uno::Any;
     using ::com::sun::star::uno::cpp_queryInterface;
@@ -49,7 +49,7 @@ namespace comphelper
     }
 
 
-    css::uno::Sequence<css::uno::Type> OPropertyStateHelper::getTypes()
+    cpo::uno::Sequence<css::uno::Type> OPropertyStateHelper::getTypes()
     {
         return {
             cppu::UnoType<css::beans::XPropertySet>::get(),
@@ -110,15 +110,15 @@ namespace comphelper
     }
 
 
-    css::uno::Sequence< css::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  css::uno::Sequence< OUString >& _rPropertyNames)
+    cpo::uno::Sequence< css::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  cpo::uno::Sequence< OUString >& _rPropertyNames)
     {
         sal_Int32 nLen = _rPropertyNames.getLength();
-        css::uno::Sequence< css::beans::PropertyState> aRet(nLen);
+        cpo::uno::Sequence< css::beans::PropertyState> aRet(nLen);
         css::beans::PropertyState* pValues = aRet.getArray();
 
         cppu::IPropertyArrayHelper& rHelper = getInfoHelper();
 
-        css::uno::Sequence< css::beans::Property> aProps = rHelper.getProperties();
+        cpo::uno::Sequence< css::beans::Property> aProps = rHelper.getProperties();
         auto it = aProps.begin();
         const auto end = aProps.end();
 
@@ -192,7 +192,7 @@ namespace comphelper
 
     Sequence< sal_Int8 > SAL_CALL OStatefulPropertySet::getImplementationId()
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
 

@@ -21,7 +21,7 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include "pickercallbacks.hxx"
 
 class SvtFileView;
@@ -67,8 +67,8 @@ public:
     virtual SvtFileView* GetView() = 0;
 
     virtual void SetHasFilename( bool bHasFilename ) = 0;
-    virtual void SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) = 0;
-    virtual const css::uno::Sequence< OUString >& GetDenyList() const = 0;
+    virtual void SetDenyList( const cpo::uno::Sequence< OUString >& rDenyList ) = 0;
+    virtual const cpo::uno::Sequence< OUString >& GetDenyList() const = 0;
     virtual void SetPath( const OUString& rNewURL ) = 0;
     virtual const OUString& GetPath() = 0;
     virtual std::vector<OUString> GetPathList() const = 0;
@@ -79,7 +79,7 @@ public:
 
     virtual void AddFilter( const OUString& rFilter, const OUString& rType ) = 0;
     virtual void AddFilterGroup( const OUString& _rFilter,
-                                const css::uno::Sequence< css::beans::StringPair >& rFilters ) = 0;
+                                const cpo::uno::Sequence< css::beans::StringPair >& rFilters ) = 0;
     virtual OUString GetCurFilter() const = 0;
     virtual void SetCurFilter( const OUString& rFilter ) = 0;
     virtual void FilterSelect() = 0;

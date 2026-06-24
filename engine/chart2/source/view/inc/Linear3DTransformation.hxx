@@ -34,7 +34,7 @@ public:
     virtual css::drawing::Position3D transform(
         const css::drawing::Position3D& rSourceValues ) const override;
     virtual css::drawing::Position3D transform(
-        const css::uno::Sequence< double >& rSourceValues ) const override;
+        const cpo::uno::Sequence< double >& rSourceValues ) const override;
 
 private:
     css::drawing::HomogenMatrix    m_Matrix;

@@ -81,7 +81,7 @@ OdtExportThread::OdtExportThread(const uno::Reference<lang::XComponent>& xCompon
 void OdtExportThread::run()
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue("FilterName", OUString("writer8")),
     };
     xStorable->storeToURL(maURL, aStoreProperties);
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
 
     DBG_TESTSOLARMUTEX();
     OUString aURL = createFileURL(u"reqif-ole2.xhtml");
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aLoadProperties = {
         comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
         comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
     };

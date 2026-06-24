@@ -49,7 +49,7 @@ bool SAL_CALL DispatchRecorder::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DispatchRecorder::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DispatchRecorder::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.DispatchRecorder"_ustr };
 }
@@ -115,13 +115,13 @@ void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::
 }
 
 void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
-                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+                                                const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     m_aStatements.emplace_back(aURL.Complete, OUString(), lArguments, 0, false);
 }
 
 void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
-                                                          const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+                                                          const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     // last parameter must be set to true -> it's a comment
     m_aStatements.emplace_back(aURL.Complete, OUString(), lArguments, 0, true);
@@ -181,9 +181,9 @@ void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuff
     else if (aValue.getValueTypeClass() == css::uno::TypeClass_SEQUENCE )
     {
         // convert to "Sequence of any"
-        css::uno::Sequence < cpo::uno::Any > aSeq;
+        cpo::uno::Sequence < cpo::uno::Any > aSeq;
         cpo::uno::Any aNew;
-        try { aNew = m_xConverter->convertTo( aValue, cppu::UnoType<css::uno::Sequence < cpo::uno::Any >>::get() ); }
+        try { aNew = m_xConverter->convertTo( aValue, cppu::UnoType<cpo::uno::Sequence < cpo::uno::Any >>::get() ); }
         catch (const css::uno::Exception&) {}
 
         aNew >>= aSeq;
@@ -288,7 +288,7 @@ void DispatchRecorder::AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuff
 }
 
 void DispatchRecorder::implts_recordMacro( std::u16string_view aURL,
-                                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                                                    const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                                           bool bAsComment, OUStringBuffer& aScriptBuffer )
 {
     OUStringBuffer aArgumentBuffer(1000);
@@ -424,7 +424,7 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const cpo::uno::An
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_DispatchRecorder_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::DispatchRecorder(context));
 }

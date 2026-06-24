@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <tools/color.hxx>
 #include <o3tl/string_view.hxx>
@@ -289,7 +289,7 @@ namespace oox::ppt {
                         sal_Int32 nA = o3tl::toInt32(o3tl::getToken(aString, 0, ',', index));
                         sal_Int32 nB = o3tl::toInt32(o3tl::getToken(aString, 0, ',', index));
                         sal_Int32 nC = o3tl::toInt32(o3tl::getToken(aString, 0, ',', index));
-                        css::uno::Sequence<double> aHSL
+                        cpo::uno::Sequence<double> aHSL
                         {
                             nA * 360.0 / 255.0,
                             nB / 255.0,

@@ -54,7 +54,7 @@ DECLARE_ODFEXPORT_TEST(testTdf100492, "tdf100492.odt")
 
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
             { "OutputStream", cpo::uno::Any(xOutputStream) },
             { "FilterName", cpo::uno::Any(u"SVG"_ustr) }
         }));

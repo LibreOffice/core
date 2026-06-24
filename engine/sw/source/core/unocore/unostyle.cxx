@@ -678,7 +678,7 @@ OUString SAL_CALL SwXStyleFamily::getImplementationName()
 bool SAL_CALL SwXStyleFamily::supportsService(const OUString& rServiceName)
 { return cppu::supportsService(this, rServiceName); };
 
-uno::Sequence< OUString > SAL_CALL SwXStyleFamily::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SwXStyleFamily::getSupportedServiceNames()
 { return { u"com.sun.star.style.StyleFamily"_ustr }; }
 
 OUString SwXStyleFamilies::getImplementationName()
@@ -689,7 +689,7 @@ bool SwXStyleFamilies::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXStyleFamilies::getSupportedServiceNames()
     { return { u"com.sun.star.style.StyleFamilies"_ustr }; }
 
 SwXStyleFamilies::SwXStyleFamilies(SwDocShell& rDocShell) :
@@ -738,10 +738,10 @@ rtl::Reference<SwXStyleFamily> SwXStyleFamilies::GetNumberingStyles()
     return GetStylesByName(u"NumberingStyles"_ustr);
 }
 
-uno::Sequence< OUString > SwXStyleFamilies::getElementNames()
+cpo::uno::Sequence< OUString > SwXStyleFamilies::getElementNames()
 {
     auto& entries(lcl_GetStyleFamilyEntries());
-    uno::Sequence<OUString> aNames(entries.size());
+    cpo::uno::Sequence<OUString> aNames(entries.size());
     std::transform(entries.begin(), entries.end(),
             aNames.getArray(), [] (const StyleFamilyEntry& e) { return e.name(); });
     return aNames;
@@ -789,7 +789,7 @@ bool SwXStyleFamilies::hasElements()
     { return true; }
 
 void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
-    const uno::Sequence< beans::PropertyValue >& aOptions)
+    const cpo::uno::Sequence< beans::PropertyValue >& aOptions)
 {
     SolarMutexGuard aGuard;
     if(!IsValid() || rURL.isEmpty())
@@ -833,7 +833,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         throw io::IOException();
 }
 
-uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
+cpo::uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
 {
     const cpo::uno::Any aVal(true);
     return comphelper::InitPropertySequence({
@@ -1009,7 +1009,7 @@ rtl::Reference<SwXBaseStyle> SwXStyleFamily::getStyle(const SfxStyleSheetBase* p
     return xStyle;
 }
 
-uno::Sequence<OUString> SwXStyleFamily::getElementNames()
+cpo::uno::Sequence<OUString> SwXStyleFamily::getElementNames()
 {
     SolarMutexGuard aGuard;
     if(!m_pBasePool)
@@ -1243,19 +1243,19 @@ static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum(SfxStyleFamily eFamily)
     return SwGetPoolIdFromName::ChrFmt;
 }
 
-const uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
+const cpo::uno::Sequence<sal_Int8>& SwXStyle::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theSwXStyleUnoTunnelId;
     return theSwXStyleUnoTunnelId.getSeq();
 }
 
-sal_Int64 SAL_CALL SwXStyle::getSomething(const uno::Sequence<sal_Int8>& rId)
+sal_Int64 SAL_CALL SwXStyle::getSomething(const cpo::uno::Sequence<sal_Int8>& rId)
 {
     return comphelper::getSomethingImpl(rId, this);
 }
 
 
-uno::Sequence< OUString > SwXStyle::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXStyle::getSupportedServiceNames()
 {
     tools::Long nCount = 1;
     if(SfxStyleFamily::Para == m_rEntry.family())
@@ -1268,7 +1268,7 @@ uno::Sequence< OUString > SwXStyle::getSupportedServiceNames()
         nCount = 5;
     else if(SfxStyleFamily::Page == m_rEntry.family())
         nCount = 3;
-    uno::Sequence< OUString > aRet(nCount);
+    cpo::uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     pArray[0] = u"com.sun.star.style.Style"_ustr;
     switch(m_rEntry.family())
@@ -1881,7 +1881,7 @@ template<>
 void SwXStyle::SetPropertyValue<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, const cpo::uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     static_assert(COND_COMMAND_COUNT == 28, "invalid size of command count?");
-    using expectedarg_t = uno::Sequence<beans::NamedValue>;
+    using expectedarg_t = cpo::uno::Sequence<beans::NamedValue>;
     if(!rValue.has<expectedarg_t>() || !m_pBasePool)
         throw lang::IllegalArgumentException();
     SwCondCollItem aCondItem;
@@ -2107,7 +2107,7 @@ void SwXStyle::SetPropertyValues_Impl(std::span<const OUString> rPropertyNames, 
         aBaseImpl.getNewBase()->SetItemSet(aBaseImpl.GetItemSet());
 }
 
-void SwXStyle::setPropertyValues(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<cpo::uno::Any>& rValues)
+void SwXStyle::setPropertyValues(const cpo::uno::Sequence<OUString>& rPropertyNames, const cpo::uno::Sequence<cpo::uno::Any>& rValues)
 {
     SolarMutexGuard aGuard;
     // workaround for bad designed API
@@ -2282,7 +2282,7 @@ cpo::uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const Sfx
 {
     PrepareStyleBase(rBase);
     static_assert(COND_COMMAND_COUNT == 28, "invalid size of command count?");
-    uno::Sequence<beans::NamedValue> aSeq(COND_COMMAND_COUNT);
+    cpo::uno::Sequence<beans::NamedValue> aSeq(COND_COMMAND_COUNT);
     sal_uInt16 nIndex = 0;
     for(auto& rNV : asNonConstRange(aSeq))
     {
@@ -2559,7 +2559,7 @@ void SwXStyle::getToggleAttributes(
     aResult >>= rbCharStyleHidden;
 }
 
-uno::Sequence<cpo::uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUString>& rPropertyNames)
+cpo::uno::Sequence<cpo::uno::Any> SwXStyle::getPropertyValues(const cpo::uno::Sequence<OUString>& rPropertyNames)
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
@@ -2569,7 +2569,7 @@ uno::Sequence<cpo::uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUS
     sal_uInt16 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.propMapType();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     SwStyleBase_Impl aBase(*m_pDoc, m_sStyleUIName, &m_pDoc->GetDfltTextFormatColl()->GetAttrSet()); // add pDfltTextFormatColl as parent
-    uno::Sequence<cpo::uno::Any> aValues(rPropertyNames.getLength());
+    cpo::uno::Sequence<cpo::uno::Any> aValues(rPropertyNames.getLength());
     auto aValuesRange = asNonConstRange(aValues);
     // workaround for bad designed API
     try
@@ -2595,24 +2595,24 @@ uno::Sequence<cpo::uno::Any> SwXStyle::getPropertyValues(const uno::Sequence<OUS
 void SwXStyle::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
-    const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
-    const uno::Sequence<cpo::uno::Any> aValues(&rValue, 1);
+    const cpo::uno::Sequence<OUString> aProperties(&rPropertyName, 1);
+    const cpo::uno::Sequence<cpo::uno::Any> aValues(&rValue, 1);
     SetPropertyValues_Impl(aProperties, aValues, /*bIgnoreUnknown*/false);
 }
 
 void SwXStyle::setPropertyValueIgnoreUnknown(const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
-    const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
-    const uno::Sequence<cpo::uno::Any> aValues(&rValue, 1);
+    const cpo::uno::Sequence<OUString> aProperties(&rPropertyName, 1);
+    const cpo::uno::Sequence<cpo::uno::Any> aValues(&rValue, 1);
     SetPropertyValues_Impl(aProperties, aValues, /*bIgnoreUnknown*/true);
 }
 
 beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aNames{rPropertyName};
-    uno::Sequence<beans::PropertyState> aStates = getPropertyStates(aNames);
+    cpo::uno::Sequence<OUString> aNames{rPropertyName};
+    cpo::uno::Sequence<beans::PropertyState> aStates = getPropertyStates(aNames);
     return aStates.getConstArray()[0];
 }
 
@@ -2631,10 +2631,10 @@ static const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxSt
         return nullptr;
     return &pSetItem->GetItemSet();
 }
-uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Sequence<OUString>& rPropertyNames)
+cpo::uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const cpo::uno::Sequence<OUString>& rPropertyNames)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<beans::PropertyState> aRet(rPropertyNames.getLength());
+    cpo::uno::Sequence<beans::PropertyState> aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
 
     if(!m_pBasePool)
@@ -2744,7 +2744,7 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
 
 void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
 {
-    const uno::Sequence<OUString> aSequence(&rPropertyName, 1);
+    const cpo::uno::Sequence<OUString> aSequence(&rPropertyName, 1);
     setPropertiesToDefault(aSequence);
 }
 
@@ -2769,7 +2769,7 @@ static SwFormat* lcl_GetFormatForStyle(SwDoc const * pDoc, const rtl::Reference<
     return nullptr;
 }
 
-void SAL_CALL SwXStyle::setPropertiesToDefault(const uno::Sequence<OUString>& aPropertyNames)
+void SAL_CALL SwXStyle::setPropertiesToDefault(const cpo::uno::Sequence<OUString>& aPropertyNames)
 {
     SolarMutexGuard aGuard;
     const rtl::Reference<SwDocStyleSheet> xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(GetStyleSheetBase())));
@@ -2903,11 +2903,11 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault()
         pTargetFormat->ResetAllFormatAttr();
 }
 
-uno::Sequence<cpo::uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::Sequence<OUString>& aPropertyNames)
+cpo::uno::Sequence<cpo::uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const cpo::uno::Sequence<OUString>& aPropertyNames)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = aPropertyNames.getLength();
-    uno::Sequence<cpo::uno::Any> aRet(nCount);
+    cpo::uno::Sequence<cpo::uno::Any> aRet(nCount);
     if(!nCount)
         return aRet;
     auto pRet = aRet.getArray();
@@ -2946,7 +2946,7 @@ uno::Sequence<cpo::uno::Any> SAL_CALL SwXStyle::getPropertyDefaults(const uno::S
 
 cpo::uno::Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
 {
-    const uno::Sequence<OUString> aSequence(&rPropertyName, 1);
+    const cpo::uno::Sequence<OUString> aSequence(&rPropertyName, 1);
     return getPropertyDefaults(aSequence)[0];
 }
 
@@ -3009,7 +3009,7 @@ void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet
     rBaseImpl.GetItemSet().Put(std::move(pNewSetItem));
 }
 
-void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<cpo::uno::Any>& rValues)
+void SwXPageStyle::SetPropertyValues_Impl(const cpo::uno::Sequence<OUString>& rPropertyNames, const cpo::uno::Sequence<cpo::uno::Any>& rValues)
 {
     if(!GetDoc())
         throw uno::RuntimeException();
@@ -3220,7 +3220,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
     }
 }
 
-void SwXPageStyle::setPropertyValues(const uno::Sequence<OUString>& rPropertyNames, const uno::Sequence<cpo::uno::Any>& rValues)
+void SwXPageStyle::setPropertyValues(const cpo::uno::Sequence<OUString>& rPropertyNames, const cpo::uno::Sequence<cpo::uno::Any>& rValues)
 {
     SolarMutexGuard aGuard;
 
@@ -3255,7 +3255,7 @@ static rtl::Reference<SwXHeadFootText> lcl_makeHeaderFooter(const sal_uInt16 nRe
     return SwXHeadFootText::CreateXHeadFootText(*pHeadFootFormat, bHeader);
 }
 
-uno::Sequence<cpo::uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNames)
+cpo::uno::Sequence<cpo::uno::Any> SwXPageStyle::GetPropertyValues_Impl(const cpo::uno::Sequence<OUString>& rPropertyNames)
 {
     SolarMutexGuard aGuard;
 
@@ -3263,7 +3263,7 @@ uno::Sequence<cpo::uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Seq
         throw uno::RuntimeException();
 
     sal_Int32 nLength = rPropertyNames.getLength();
-    uno::Sequence<cpo::uno::Any> aRet (nLength);
+    cpo::uno::Sequence<cpo::uno::Any> aRet (nLength);
     auto aRetRange = asNonConstRange(aRet);
     if(!m_pBasePool)
     {
@@ -3450,7 +3450,7 @@ uno::Sequence<cpo::uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Seq
     return aRet;
 }
 
-uno::Sequence<cpo::uno::Any> SwXPageStyle::getPropertyValues(const uno::Sequence<OUString>& rPropertyNames)
+cpo::uno::Sequence<cpo::uno::Any> SwXPageStyle::getPropertyValues(const cpo::uno::Sequence<OUString>& rPropertyNames)
 {
     // workaround for bad designed API
     try
@@ -3473,15 +3473,15 @@ uno::Sequence<cpo::uno::Any> SwXPageStyle::getPropertyValues(const uno::Sequence
 
 cpo::uno::Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName)
 {
-    const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
+    const cpo::uno::Sequence<OUString> aProperties(&rPropertyName, 1);
     return GetPropertyValues_Impl(aProperties)[0];
 }
 
 void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const cpo::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
-    const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
-    const uno::Sequence<cpo::uno::Any> aValues(&rValue, 1);
+    const cpo::uno::Sequence<OUString> aProperties(&rPropertyName, 1);
+    const cpo::uno::Sequence<cpo::uno::Any> aValues(&rValue, 1);
 
     // Trick: if the Domain Mapper changes the props of shared header/footer,
     // store the old ones in time for later use.
@@ -3653,9 +3653,9 @@ cpo::uno::Any SwXAutoStyles::getByName(const OUString& Name)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXAutoStyles::getElementNames()
+cpo::uno::Sequence< OUString > SwXAutoStyles::getElementNames()
 {
-    uno::Sequence< OUString > aNames(AUTOSTYLE_FAMILY_COUNT);
+    cpo::uno::Sequence< OUString > aNames(AUTOSTYLE_FAMILY_COUNT);
     OUString* pNames = aNames.getArray();
     pNames[0] = u"CharacterStyles"_ustr;
     pNames[1] = u"RubyStyles"_ustr;
@@ -3692,7 +3692,7 @@ void SwXAutoStyleFamily::Notify(const SfxHint& rHint)
 
 std::shared_ptr<SfxItemSet>
 PropValuesToAutoStyleItemSet(SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFamily,
-                             const uno::Sequence<beans::PropertyValue>& Values, SwAttrSet& aSet)
+                             const cpo::uno::Sequence<beans::PropertyValue>& Values, SwAttrSet& aSet)
 {
     const SfxItemPropertySet* pPropSet = nullptr;
     switch( eFamily )
@@ -3893,7 +3893,7 @@ PropValuesToAutoStyleItemSet(SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFamil
 }
 
 uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
-    const uno::Sequence< beans::PropertyValue >& Values )
+    const cpo::uno::Sequence< beans::PropertyValue >& Values )
 {
     if (!m_pDocShell)
     {
@@ -4095,7 +4095,7 @@ void SwXAutoStyle::setPropertyValue( const OUString& /*rPropertyName*/, const cp
 
 cpo::uno::Any SwXAutoStyle::getPropertyValue( const OUString& rPropertyName )
 {
-    const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
+    const cpo::uno::Sequence<OUString> aProperties(&rPropertyName, 1);
     return GetPropertyValues_Impl(aProperties)[0];
 }
 
@@ -4120,13 +4120,13 @@ void SwXAutoStyle::removeVetoableChangeListener( const OUString& /*PropertyName*
 }
 
 void SwXAutoStyle::setPropertyValues(
-        const uno::Sequence< OUString >& /*aPropertyNames*/,
-        const uno::Sequence< cpo::uno::Any >& /*aValues*/ )
+        const cpo::uno::Sequence< OUString >& /*aPropertyNames*/,
+        const cpo::uno::Sequence< cpo::uno::Any >& /*aValues*/ )
 {
 }
 
-uno::Sequence< cpo::uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
-        const uno::Sequence< OUString > & rPropertyNames )
+cpo::uno::Sequence< cpo::uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
+        const cpo::uno::Sequence< OUString > & rPropertyNames )
 {
     SolarMutexGuard aGuard;
 
@@ -4150,7 +4150,7 @@ uno::Sequence< cpo::uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
     const OUString* pNames = rPropertyNames.getConstArray();
 
     const sal_Int32 nLen(rPropertyNames.getLength());
-    uno::Sequence< cpo::uno::Any > aRet( nLen );
+    cpo::uno::Sequence< cpo::uno::Any > aRet( nLen );
     cpo::uno::Any* pValues = aRet.getArray();
     const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == meFamily);
 
@@ -4254,8 +4254,8 @@ uno::Sequence< cpo::uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
     return aRet;
 }
 
-uno::Sequence< cpo::uno::Any > SwXAutoStyle::getPropertyValues (
-        const uno::Sequence< OUString >& rPropertyNames )
+cpo::uno::Sequence< cpo::uno::Any > SwXAutoStyle::getPropertyValues (
+        const cpo::uno::Sequence< OUString >& rPropertyNames )
 {
     // workaround for bad designed API
     try
@@ -4275,7 +4275,7 @@ uno::Sequence< cpo::uno::Any > SwXAutoStyle::getPropertyValues (
 }
 
 void SwXAutoStyle::addPropertiesChangeListener(
-        const uno::Sequence< OUString >& /*aPropertyNames*/,
+        const cpo::uno::Sequence< OUString >& /*aPropertyNames*/,
         const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 {
 }
@@ -4286,7 +4286,7 @@ void SwXAutoStyle::removePropertiesChangeListener(
 }
 
 void SwXAutoStyle::firePropertiesChangeEvent(
-        const uno::Sequence< OUString >& /*aPropertyNames*/,
+        const cpo::uno::Sequence< OUString >& /*aPropertyNames*/,
         const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 {
 }
@@ -4295,8 +4295,8 @@ beans::PropertyState SwXAutoStyle::getPropertyState( const OUString& rPropertyNa
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< OUString > aNames { rPropertyName };
-    uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aNames);
+    cpo::uno::Sequence< OUString > aNames { rPropertyName };
+    cpo::uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aNames);
     return aStates.getConstArray()[0];
 }
 
@@ -4306,12 +4306,12 @@ void SwXAutoStyle::setPropertyToDefault( const OUString& /*PropertyName*/ )
 
 cpo::uno::Any SwXAutoStyle::getPropertyDefault( const OUString& rPropertyName )
 {
-    const uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
+    const cpo::uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
     return getPropertyDefaults ( aSequence ).getConstArray()[0];
 }
 
-uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
-        const uno::Sequence< OUString >& rPropertyNames )
+cpo::uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
+        const cpo::uno::Sequence< OUString >& rPropertyNames )
 {
     if (!mpSet)
     {
@@ -4319,7 +4319,7 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
     }
 
     SolarMutexGuard aGuard;
-    uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
+    cpo::uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     const OUString* pNames = rPropertyNames.getConstArray();
 
@@ -4399,17 +4399,17 @@ void SwXAutoStyle::setAllPropertiesToDefault(  )
 }
 
 void SwXAutoStyle::setPropertiesToDefault(
-        const uno::Sequence< OUString >& /*rPropertyNames*/ )
+        const cpo::uno::Sequence< OUString >& /*rPropertyNames*/ )
 {
 }
 
-uno::Sequence< cpo::uno::Any > SwXAutoStyle::getPropertyDefaults(
-        const uno::Sequence< OUString >& /*aPropertyNames*/ )
+cpo::uno::Sequence< cpo::uno::Any > SwXAutoStyle::getPropertyDefaults(
+        const cpo::uno::Sequence< OUString >& /*aPropertyNames*/ )
 {
     return { };
 }
 
-uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
+cpo::uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
 {
     if( !mpSet )
         throw uno::RuntimeException();
@@ -4450,7 +4450,7 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
     }
 
     const sal_Int32 nCount = aPropertyVector.size();
-    uno::Sequence< beans::PropertyValue > aRet( nCount );
+    cpo::uno::Sequence< beans::PropertyValue > aRet( nCount );
     beans::PropertyValue* pProps = aRet.getArray();
 
     for ( int i = 0; i < nCount; ++i, pProps++ )
@@ -4713,7 +4713,7 @@ cpo::uno::Any SAL_CALL SwXTextTableStyle::getByName(const OUString& rName)
     return cpo::uno::Any(uno::Reference(cppu::getXWeak(m_aCellStyles[nIdx].get())));
 }
 
-css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getElementNames()
 {
     return comphelper::mapKeysToSequence(GetCellStyleNameMap());
 }
@@ -4789,7 +4789,7 @@ bool SAL_CALL SwXTextTableStyle::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceNames()
 {
     return {u"com.sun.star.style.Style"_ustr};
 }
@@ -5391,15 +5391,15 @@ void SAL_CALL SwXTextCellStyle::removeVetoableChangeListener( const OUString& /*
 css::beans::PropertyState SAL_CALL SwXTextCellStyle::getPropertyState(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aNames { rPropertyName };
-    uno::Sequence<beans::PropertyState> aStates = getPropertyStates(aNames);
+    cpo::uno::Sequence<OUString> aNames { rPropertyName };
+    cpo::uno::Sequence<beans::PropertyState> aStates = getPropertyStates(aNames);
     return aStates.getConstArray()[0];
 }
 
-css::uno::Sequence<css::beans::PropertyState> SAL_CALL SwXTextCellStyle::getPropertyStates(const css::uno::Sequence<OUString>& aPropertyNames)
+cpo::uno::Sequence<css::beans::PropertyState> SAL_CALL SwXTextCellStyle::getPropertyStates(const cpo::uno::Sequence<OUString>& aPropertyNames)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
+    cpo::uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     const SwAutoFormatProps& rDefaultBoxProps = SwTableAutoFormat::GetDefaultBoxFormat().GetProps();
     const SfxItemPropertyMap& rMap = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertyMap();
@@ -5768,7 +5768,7 @@ bool SAL_CALL SwXTextCellStyle::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL SwXTextCellStyle::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SwXTextCellStyle::getSupportedServiceNames()
 {
     return {u"com.sun.star.style.Style"_ustr};
 }

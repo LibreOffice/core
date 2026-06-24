@@ -64,8 +64,8 @@ protected:
     // ____ XPropertyState ____
     virtual css::beans::PropertyState SAL_CALL getPropertyState(
         const OUString& PropertyName ) override;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates(
-        const css::uno::Sequence< OUString >& aPropertyName ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates(
+        const cpo::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault(
         const OUString& PropertyName ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault(

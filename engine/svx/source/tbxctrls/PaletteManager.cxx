@@ -184,8 +184,8 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     if( mnCurrentPalette == 0)
     {
         rColorSet.Clear();
-        css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
-        css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
+        cpo::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
+        cpo::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
         int nIx = 1;
         for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
@@ -244,8 +244,8 @@ void PaletteManager::ReloadColorSet(weld::IconView &pIconView)
     if( mnCurrentPalette == 0)
     {
         pIconView.clear();
-        css::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
-        css::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
+        cpo::uno::Sequence< sal_Int32 > CustomColorList( officecfg::Office::Common::UserColors::CustomColor::get() );
+        cpo::uno::Sequence< OUString > CustomColorNameList( officecfg::Office::Common::UserColors::CustomColorName::get() );
         ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
         for (int i = 0; i < CustomColorList.getLength(); ++i)
         {
@@ -311,8 +311,8 @@ void PaletteManager::ReloadRecentColorSet(weld::IconView& pIconView)
 {
     maRecentColors.clear();
     pIconView.clear();
-    css::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
-    css::uno::Sequence< OUString > ColorNamelist(officecfg::Office::Common::UserColors::RecentColorName::get());
+    cpo::uno::Sequence< sal_Int32 > Colorlist(officecfg::Office::Common::UserColors::RecentColor::get());
+    cpo::uno::Sequence< OUString > ColorNamelist(officecfg::Office::Common::UserColors::RecentColorName::get());
     int nIx = 0;
     const bool bHasColorNames = Colorlist.getLength() == ColorNamelist.getLength();
     ScopedVclPtr<VirtualDevice> pVDev = SvxColorIconView::createColorDevice();
@@ -410,8 +410,8 @@ std::vector<NamedColor> PaletteManager::GetColors() const
     std::vector<NamedColor> colors;
 
     if (mnCurrentPalette == 0) {
-        css::uno::Sequence<sal_Int32> CustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
-        css::uno::Sequence<OUString> CustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+        cpo::uno::Sequence<sal_Int32> CustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
+        cpo::uno::Sequence<OUString> CustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
 
         for (int i = 0; i < CustomColorList.getLength(); ++i) {
             Color aColor(ColorTransparency, CustomColorList[i]);
@@ -467,9 +467,9 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
         maRecentColors.emplace_front(rRecentColor, rName);
     else
         maRecentColors.emplace_back(rRecentColor, rName);
-    css::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
+    cpo::uno::Sequence< sal_Int32 > aColorList(maRecentColors.size());
     auto aColorListRange = asNonConstRange(aColorList);
-    css::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
+    cpo::uno::Sequence< OUString > aColorNameList(maRecentColors.size());
     auto aColorNameListRange = asNonConstRange(aColorNameList);
     for (size_t i = 0; i < maRecentColors.size(); ++i)
     {

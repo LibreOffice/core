@@ -1855,7 +1855,7 @@ void SdrModel::ReadUserDataSequenceValue(const beans::PropertyValue* pValue)
     }
 }
 
-void SdrModel::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rValues)
+void SdrModel::WriteUserDataSequence(cpo::uno::Sequence <beans::PropertyValue>& rValues)
 {
     std::vector< std::pair< OUString, cpo::uno::Any > > aUserData
     {
@@ -1988,7 +1988,7 @@ void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-const uno::Sequence<sal_Int8>& SdrModel::getUnoTunnelId()
+const cpo::uno::Sequence<sal_Int8>& SdrModel::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theSdrModelUnoTunnelImplementationId;
     return theSdrModelUnoTunnelImplementationId.getSeq();

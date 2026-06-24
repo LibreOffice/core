@@ -106,7 +106,7 @@ SlidesPage::SlidesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog
     mxClearNodes->connect_toggled(LINK(this, SlidesPage, DeleteNotesActionPerformed));
 }
 
-void SlidesPage::Init(const css::uno::Sequence<OUString>& rCustomShowList)
+void SlidesPage::Init(const cpo::uno::Sequence<OUString>& rCustomShowList)
 {
     mxComboBox->clear();
     for (const auto& a : rCustomShowList)
@@ -386,7 +386,7 @@ void OptimizerDialog::UpdateControlStates( sal_Int16 nPage )
     }
 }
 
-void OptimizerDialog::UpdateStatus( const css::uno::Sequence< css::beans::PropertyValue >& rStatus )
+void OptimizerDialog::UpdateStatus( const cpo::uno::Sequence< css::beans::PropertyValue >& rStatus )
 {
     maStats.InitializeStatusValues( rStatus );
     const Any* pVal( maStats.GetStatusValue( TK_Status ) );

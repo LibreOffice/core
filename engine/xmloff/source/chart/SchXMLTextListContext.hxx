@@ -26,7 +26,7 @@ class SchXMLTextListContext : public SvXMLImportContext
 {
 public:
     SchXMLTextListContext( SvXMLImport& rImport,
-                            css::uno::Sequence< OUString>& rTextList );
+                            cpo::uno::Sequence< OUString>& rTextList );
     virtual ~SchXMLTextListContext() override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
@@ -35,7 +35,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
-    css::uno::Sequence< OUString>& m_rTextList;
+    cpo::uno::Sequence< OUString>& m_rTextList;
     std::vector< OUString> m_aTextVector;
 };
 

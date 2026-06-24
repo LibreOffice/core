@@ -32,7 +32,7 @@ public:
 
     void SAL_CALL loadModule( css::i18n::TransliterationModules modName, const css::lang::Locale& rLocale ) override;
 
-    css::uno::Sequence< OUString > SAL_CALL transliterateRange(
+    cpo::uno::Sequence< OUString > SAL_CALL transliterateRange(
         const OUString& str1, const OUString& str2 ) override;
 
     bool SAL_CALL equals(

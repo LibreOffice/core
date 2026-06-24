@@ -176,7 +176,7 @@ void ScXMLSourceDlg::SelectSourceFile()
         // File picker dialog cancelled.
         return;
 
-    uno::Sequence<OUString> aFiles = aDlgHelper.GetSelectedFiles();
+    cpo::uno::Sequence<OUString> aFiles = aDlgHelper.GetSelectedFiles();
     if (!aFiles.hasElements())
         return;
 

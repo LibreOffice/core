@@ -4234,7 +4234,7 @@ class PDFStreamIf : public cppu::WeakImplHelper< css::io::XOutputStream >
     public:
     explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
 
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override
+    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override
     {
         if( m_bWrite && aData.hasElements() )
         {
@@ -5057,7 +5057,7 @@ static void lcl_assignMeta(std::u16string_view aValue, OString& aMeta)
     }
 }
 
-static void lcl_assignMeta(const css::uno::Sequence<OUString>& rValues, std::vector<OString>& rMeta)
+static void lcl_assignMeta(const cpo::uno::Sequence<OUString>& rValues, std::vector<OString>& rMeta)
 {
     if (!rValues.hasElements())
         return;

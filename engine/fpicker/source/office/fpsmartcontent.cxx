@@ -262,7 +262,7 @@ using namespace cpo::uno;
         bool bRet = false;
         try
         {
-            const css::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_oContent->queryCreatableContentsInfo();
+            const cpo::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_oContent->queryCreatableContentsInfo();
             for ( auto const& rInfo : aContentsInfo )
             {
                 // Simply look for the first KIND_FOLDER...
@@ -291,7 +291,7 @@ using namespace cpo::uno;
         {
             OUString sFolderType;
 
-            const css::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_oContent->queryCreatableContentsInfo();
+            const cpo::uno::Sequence<css::ucb::ContentInfo> aContentsInfo = m_oContent->queryCreatableContentsInfo();
             for ( auto const& rInfo : aContentsInfo )
             {
                 // Simply look for the first KIND_FOLDER...

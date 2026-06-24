@@ -697,7 +697,7 @@ OUString SAL_CALL NavElementToolBoxControl::getImplementationName()
     return u"lo.writer.NavElementToolBoxController"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL NavElementToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL NavElementToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -790,7 +790,7 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_NavElementToolBoxController_get_implementation(
     css::uno::XComponentContext *rxContext,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new NavElementToolBoxControl( rxContext ) );
 }
@@ -808,7 +808,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
@@ -841,7 +841,7 @@ bool SAL_CALL PrevNextScrollToolboxController::supportsService( const OUString& 
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL PrevNextScrollToolboxController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PrevNextScrollToolboxController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -878,7 +878,7 @@ void SAL_CALL PrevNextScrollToolboxController::statusChanged( const css::frame::
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_PreviousScrollToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new PrevNextScrollToolboxController( context, PrevNextScrollToolboxController::PREVIOUS ) );
 }
@@ -886,7 +886,7 @@ lo_writer_PreviousScrollToolboxController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_NextScrollToolboxController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire( new PrevNextScrollToolboxController( context, PrevNextScrollToolboxController::NEXT ) );
 }

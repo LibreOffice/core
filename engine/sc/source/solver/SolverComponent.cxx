@@ -114,7 +114,7 @@ SolverComponent::~SolverComponent()
 
 cppu::IPropertyArrayHelper* SolverComponent::createArrayHelper() const
 {
-    uno::Sequence<beans::Property> aProps;
+    cpo::uno::Sequence<beans::Property> aProps;
     describeProperties( aProps );
     return new cppu::OPropertyArrayHelper( aProps );
 }
@@ -192,22 +192,22 @@ void SAL_CALL SolverComponent::setObjective( const table::CellAddress& _objectiv
     maObjective = _objective;
 }
 
-uno::Sequence<table::CellAddress> SAL_CALL SolverComponent::getVariables()
+cpo::uno::Sequence<table::CellAddress> SAL_CALL SolverComponent::getVariables()
 {
     return maVariables;
 }
 
-void SAL_CALL SolverComponent::setVariables( const uno::Sequence<table::CellAddress>& _variables )
+void SAL_CALL SolverComponent::setVariables( const cpo::uno::Sequence<table::CellAddress>& _variables )
 {
     maVariables = _variables;
 }
 
-uno::Sequence<sheet::SolverConstraint> SAL_CALL SolverComponent::getConstraints()
+cpo::uno::Sequence<sheet::SolverConstraint> SAL_CALL SolverComponent::getConstraints()
 {
     return maConstraints;
 }
 
-void SAL_CALL SolverComponent::setConstraints( const uno::Sequence<sheet::SolverConstraint>& _constraints )
+void SAL_CALL SolverComponent::setConstraints( const cpo::uno::Sequence<sheet::SolverConstraint>& _constraints )
 {
     maConstraints = _constraints;
 }
@@ -234,7 +234,7 @@ double SAL_CALL SolverComponent::getResultValue()
     return mfResultValue;
 }
 
-uno::Sequence<double> SAL_CALL SolverComponent::getSolution()
+cpo::uno::Sequence<double> SAL_CALL SolverComponent::getSolution()
 {
     return maSolution;
 }
@@ -246,7 +246,7 @@ bool SAL_CALL SolverComponent::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL SolverComponent::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SolverComponent::getSupportedServiceNames()
 {
     return { u"com.sun.star.sheet.Solver"_ustr };
 }

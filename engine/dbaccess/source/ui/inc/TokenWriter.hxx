@@ -49,7 +49,7 @@ namespace dbaui
     class ODatabaseImportExport : public ::cppu::WeakImplHelper< css::lang::XEventListener>
     {
     protected:
-        css::uno::Sequence< cpo::uno::Any>                    m_aSelection;
+        cpo::uno::Sequence< cpo::uno::Any>                    m_aSelection;
         bool                                                  m_bBookmarkSelection;
         SvStream*                                             m_pStream;
         css::awt::FontDescriptor                              m_aFont;

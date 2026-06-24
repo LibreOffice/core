@@ -29,7 +29,7 @@ using namespace ::xmloff::token;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 constexpr OUString gsEventType(u"EventType"_ustr);
 constexpr OUString gsScript(u"Script"_ustr);

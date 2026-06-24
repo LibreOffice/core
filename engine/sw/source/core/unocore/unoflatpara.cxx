@@ -82,8 +82,8 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXFlatParagraph::getPropertySetInfo()
 {
     static const comphelper::PropertyMapEntry s_Entries[] = {
-        { u"FieldPositions"_ustr, -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { u"FootnotePositions"_ustr, -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"FieldPositions"_ustr, -1, ::cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { u"FootnotePositions"_ustr, -1, ::cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
         { u"SortedTextId"_ustr, -1, ::cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0 },
         { u"DocumentElementsCount"_ustr, -1, ::cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
@@ -261,7 +261,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
 }
 
 // text::XFlatParagraph:
-void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes)
+void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const cpo::uno::Sequence< css::beans::PropertyValue > & aAttributes)
 {
     SolarMutexGuard aGuard;
 
@@ -295,7 +295,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 }
 
 // text::XFlatParagraph:
-void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes)
+void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const cpo::uno::Sequence< css::beans::PropertyValue > & aAttributes)
 {
     SolarMutexGuard aGuard;
 
@@ -324,9 +324,9 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 }
 
 // text::XFlatParagraph:
-css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions()
+cpo::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions()
 {
-    return css::uno::Sequence< ::sal_Int32>();
+    return cpo::uno::Sequence< ::sal_Int32>();
 }
 
 SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType, bool bAutomatic )

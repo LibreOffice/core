@@ -60,7 +60,7 @@ namespace svxform
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::beans::XPropertySet;
 

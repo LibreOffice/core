@@ -53,7 +53,7 @@ public:
     PDFSignatureHelper();
     bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
     bool ReadAndVerifySignatureSvStream(SvStream& rStream);
-    css::uno::Sequence<css::security::DocumentSignatureInformation>
+    cpo::uno::Sequence<css::security::DocumentSignatureInformation>
     GetDocumentSignatureInformations(
         const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
     SignatureInformations const& GetSignatureInformations() const;

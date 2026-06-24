@@ -310,7 +310,7 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 
         Reference< XPropertySet > xPropSet( GetStyle(), UNO_QUERY );
 
-        uno::Sequence< beans::NamedValue > aSeq( m_pConditions->size() );
+        cpo::uno::Sequence< beans::NamedValue > aSeq( m_pConditions->size() );
         auto aSeqRange = asNonConstRange(aSeq);
 
         for (std::vector<rtl::Reference<SwXMLConditionContext_Impl>>::size_type i = 0;

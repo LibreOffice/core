@@ -73,7 +73,7 @@ public:
     // XNumberText implementation
     virtual OUString SAL_CALL getNumberText(const OUString& aText,
                                             const ::css::lang::Locale& rLocale) override;
-    virtual css::uno::Sequence<css::lang::Locale> SAL_CALL getAvailableLanguages() override;
+    virtual cpo::uno::Sequence<css::lang::Locale> SAL_CALL getAvailableLanguages() override;
 };
 }
 
@@ -136,7 +136,7 @@ OUString SAL_CALL NumberText_Impl::getNumberText(const OUString& rText, const Lo
     return aResult;
 }
 
-uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
+cpo::uno::Sequence<Locale> SAL_CALL NumberText_Impl::getAvailableLanguages()
 {
     std::scoped_lock aGuard(GetNumberTextMutex());
     // TODO
@@ -161,7 +161,7 @@ Sequence<OUString> SAL_CALL NumberText_Impl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_NumberText_get_implementation(css::uno::XComponentContext*,
-                                             css::uno::Sequence<cpo::uno::Any> const&)
+                                             cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new NumberText_Impl());
 }

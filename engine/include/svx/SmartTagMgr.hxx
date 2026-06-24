@@ -21,7 +21,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <svx/svxdllapi.h>
@@ -170,8 +170,8 @@ public:
             Output parameter
     */
     void GetActionSequences( std::vector< OUString >& rSmartTagTypes,
-                             css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
-                             css::uno::Sequence < css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence ) const;
+                             cpo::uno::Sequence < cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
+                             cpo::uno::Sequence < cpo::uno::Sequence< sal_Int32 > >& rActionIndicesSequence ) const;
 
     /** Returns the caption for a smart tag type.
 

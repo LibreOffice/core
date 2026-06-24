@@ -58,7 +58,7 @@ namespace svgio::svgreader
             XSvgParser& operator=(const XSvgParser&) = delete;
 
             // XSvgParser
-            virtual uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
+            virtual cpo::uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
                 const uno::Reference< ::io::XInputStream >& xSVGStream,
                 const OUString& aAbsolutePath) override;
 
@@ -69,7 +69,7 @@ namespace svgio::svgreader
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
             virtual bool SAL_CALL supportsService(const OUString&) override;
-            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
 
         }
@@ -96,7 +96,7 @@ namespace svgio::svgreader
                 // that use entities to define XML namespaces.
                 uno::Reference<lang::XInitialization> const xInit(xParser,
                         uno::UNO_QUERY_THROW);
-                uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(u"DoSmeplease"_ustr) };
+                cpo::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(u"DoSmeplease"_ustr) };
                 xInit->initialize(args);
 
                 // connect parser and filter
@@ -118,7 +118,7 @@ namespace svgio::svgreader
             return true;
         }
 
-        uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XSvgParser::getDecomposition(
+        cpo::uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XSvgParser::getDecomposition(
             const uno::Reference< ::io::XInputStream >& xSVGStream,
             const OUString& aAbsolutePath )
         {
@@ -185,7 +185,7 @@ namespace svgio::svgreader
             return cppu::supportsService(this, rServiceName);
         }
 
-        uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames()
+        cpo::uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames()
         {
             return { u"com.sun.star.graphic.SvgTools"_ustr };
         }
@@ -194,7 +194,7 @@ namespace svgio::svgreader
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 svgio_XSvgParser_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new svgio::svgreader::XSvgParser(context));
 }

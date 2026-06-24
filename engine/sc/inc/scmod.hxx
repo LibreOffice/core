@@ -43,7 +43,7 @@ class SvtUserOptions;
 namespace svtools { class ColorConfig; }
 namespace ooo::vba { class XSinkCaller; }
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 class ScRange;
 class ScDocument;
@@ -241,7 +241,7 @@ public:
     SC_DLLPUBLIC std::shared_ptr<SfxDialogController> Find1RefWindow(sal_uInt16 nSlotId, const weld::Window *pWndAncestor);
 
     SC_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
-    SC_DLLPUBLIC void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments);
+    SC_DLLPUBLIC void CallAutomationApplicationEventSinks(const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments);
 
     static auto get() { return static_cast<ScModule*>(SfxApplication::GetModule(SfxToolsModule::Calc)); }
 };

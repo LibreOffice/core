@@ -21,12 +21,12 @@
 
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 // Used by the OutlineToImpress functionality that copies an outline from writer to impress.
 class SVL_DLLPUBLIC SfxLockBytesItem final : public SfxPoolItem
 {
-    css::uno::Sequence< sal_Int8 > mxVal;
+    cpo::uno::Sequence< sal_Int8 > mxVal;
 
 public:
                             static SfxPoolItem* CreateDefault();
@@ -42,7 +42,7 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxLockBytesItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
-    const css::uno::Sequence< sal_Int8 > & GetValue() const { return mxVal; }
+    const cpo::uno::Sequence< sal_Int8 > & GetValue() const { return mxVal; }
 
     virtual bool            PutValue  ( const cpo::uno::Any& rVal,
                                         sal_uInt8 nMemberId ) override;

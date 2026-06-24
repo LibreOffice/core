@@ -430,7 +430,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs )
     {
         if (rVal.Name == "UserData")
         {
-            css::uno::Sequence<OUString> aUserDataSeq;
+            cpo::uno::Sequence<OUString> aUserDataSeq;
             rVal.Value >>= aUserDataSeq;
             if (comphelper::findValue(aUserDataSeq, "macro-enabled") != -1)
                 mxImpl->mbExportVBA = true;

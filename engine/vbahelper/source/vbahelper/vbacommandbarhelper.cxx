@@ -184,7 +184,7 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
     if( !sResourceUrl.isEmpty() )
         return sResourceUrl;
 
-    const uno::Sequence< OUString > allNames = xNameAccess->getElementNames();
+    const cpo::uno::Sequence< OUString > allNames = xNameAccess->getElementNames();
     auto pName = std::find_if(allNames.begin(), allNames.end(),
         [this, &sName](const OUString& rName) {
             return rName.startsWith( ITEM_TOOLBAR_URL )
@@ -205,7 +205,7 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
 sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, std::u16string_view sName, bool bMenu )
 {
     sal_Int32 nCount = xIndexAccess->getCount();
-    css::uno::Sequence< css::beans::PropertyValue > aProps;
+    cpo::uno::Sequence< css::beans::PropertyValue > aProps;
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
         OUString sLabel;

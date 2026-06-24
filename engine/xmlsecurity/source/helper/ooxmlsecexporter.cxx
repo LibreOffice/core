@@ -270,10 +270,10 @@ void OOXMLSecExporter::Impl::writeRelationshipTransform(const OUString& rURI)
                                          uno::Reference<xml::sax::XAttributeList>(pAttributeList));
     }
 
-    const uno::Sequence<uno::Sequence<beans::StringPair>> aRelationsInfo
+    const cpo::uno::Sequence<cpo::uno::Sequence<beans::StringPair>> aRelationsInfo
         = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, rURI,
                                                                m_xComponentContext);
-    for (const uno::Sequence<beans::StringPair>& rPairs : aRelationsInfo)
+    for (const cpo::uno::Sequence<beans::StringPair>& rPairs : aRelationsInfo)
     {
         OUString aId;
         OUString aType;

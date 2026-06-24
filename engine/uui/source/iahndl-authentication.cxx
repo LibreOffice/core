@@ -135,7 +135,7 @@ executeLoginDialog(
 }
 
 void getRememberModes(
-    uno::Sequence< ucb::RememberAuthentication > const & rRememberModes,
+    cpo::uno::Sequence< ucb::RememberAuthentication > const & rRememberModes,
     ucb::RememberAuthentication & rPreferredMode,
     ucb::RememberAuthentication & rAlternateMode )
 {
@@ -192,7 +192,7 @@ handleAuthenticationRequest_(
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     uno::Reference< uno::XComponentContext > const & xContext,
     ucb::AuthenticationRequest const & rRequest,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     const OUString & rURL)
 {
@@ -330,7 +330,7 @@ handleAuthenticationRequest_(
                   if (!aPwContainerHelper.addRecord(
                           !rURL.isEmpty() ? rURL : rRequest.ServerName,
                           OUString(), // empty u/p -> sys creds
-                          uno::Sequence< OUString >(),
+                          cpo::uno::Sequence< OUString >(),
                           xIH,
                           ePreferredRememberMode
                               == ucb::RememberAuthentication_PERSISTENT))
@@ -345,7 +345,7 @@ handleAuthenticationRequest_(
                   if (!aPwContainerHelper.addRecord(
                           !rURL.isEmpty() ? rURL : rRequest.ServerName,
                           OUString(), // empty u/p -> sys creds
-                          uno::Sequence< OUString >(),
+                          cpo::uno::Sequence< OUString >(),
                           xIH,
                           false /* SESSION */))
                   {
@@ -357,7 +357,7 @@ handleAuthenticationRequest_(
           // Empty user name can not be valid:
           else if (!aInfo.GetUserName().isEmpty())
           {
-              uno::Sequence< OUString >
+              cpo::uno::Sequence< OUString >
                   aPassList(aInfo.GetAccount().isEmpty() ? 1 : 2);
               auto pPassList = aPassList.getArray();
               pPassList[0] = aInfo.GetPassword();
@@ -470,7 +470,7 @@ void
 handleMasterPasswordRequest_(
     weld::Window * pParent,
     task::PasswordRequestMode nMode,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
 {
     uno::Reference< task::XInteractionRetry > xRetry;
@@ -571,7 +571,7 @@ void
 handlePasswordRequest_(
     weld::Window * pParent,
     task::PasswordRequestMode nMode,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     const OUString& aDocumentName,
     sal_uInt16 nMaxPasswordLen,
@@ -682,7 +682,7 @@ UUIInteractionHelper::handlePasswordRequest(
     // parameters to be filled for the call to handlePasswordRequest_
     uno::Reference<awt::XWindow> xParent = getParentXWindow();
     task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const aContinuations = rRequest->getContinuations();
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const aContinuations = rRequest->getContinuations();
     OUString aDocumentName;
     sal_uInt16 nMaxPasswordLen  = 0;        // any length
     bool bIsPasswordToModify    = false;
@@ -765,7 +765,7 @@ UUIInteractionHelper::handlePasswordRequest(
 void
 UUIInteractionHelper::handleAuthFallbackRequest( const OUString & instructions,
         const OUString & url,
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
+        cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations )
 {
     OUString code;
     if (url.indexOf(OAUTH2_REDIRECT_URI_PREFIX) >= 0)

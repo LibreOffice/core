@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 namespace canvas
 {
-    uno::Sequence<OUString> ParametricPolyPolygon::getAvailableServiceNames()
+    cpo::uno::Sequence<OUString> ParametricPolyPolygon::getAvailableServiceNames()
     {
         return {u"LinearGradient"_ustr,
                 u"EllipticalGradient"_ustr,
@@ -43,16 +43,16 @@ namespace canvas
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::create(
         const uno::Reference< rendering::XGraphicDevice >& rDevice,
         std::u16string_view rServiceName,
-        const uno::Sequence< cpo::uno::Any >& rArgs )
+        const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
     {
         double fAspectRatio=1.0;
 
         // defaults
-        uno::Sequence< uno::Sequence< double > > colorSequence{
+        cpo::uno::Sequence< cpo::uno::Sequence< double > > colorSequence{
             rDevice->getDeviceColorSpace()->convertFromRGB({ rendering::RGBColor(0,0,0) }),
             rDevice->getDeviceColorSpace()->convertFromRGB({ rendering::RGBColor(1,1,1) })
         };
-        uno::Sequence< double > colorStops{ 0, 1 };
+        cpo::uno::Sequence< double > colorStops{ 0, 1 };
 
         // extract args
         for( const cpo::uno::Any& rArg : rArgs )
@@ -109,8 +109,8 @@ namespace canvas
 
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createLinearHorizontalGradient(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const uno::Sequence< uno::Sequence< double > >&     colors,
-        const uno::Sequence< double >&                      stops )
+        const cpo::uno::Sequence< cpo::uno::Sequence< double > >&     colors,
+        const cpo::uno::Sequence< double >&                      stops )
     {
         // TODO(P2): hold gradient brush statically, and only setup
         // the colors
@@ -119,8 +119,8 @@ namespace canvas
 
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createEllipticalGradient(
         const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const uno::Sequence< uno::Sequence< double > >&     colors,
-        const uno::Sequence< double >&                      stops,
+        const cpo::uno::Sequence< cpo::uno::Sequence< double > >&     colors,
+        const cpo::uno::Sequence< double >&                      stops,
         double                                              fAspectRatio )
     {
         // TODO(P2): hold gradient polygon statically, and only setup
@@ -134,8 +134,8 @@ namespace canvas
     }
 
     rtl::Reference<ParametricPolyPolygon> ParametricPolyPolygon::createRectangularGradient( const uno::Reference< rendering::XGraphicDevice >& rDevice,
-                                                                             const uno::Sequence< uno::Sequence< double > >&    colors,
-                                                                             const uno::Sequence< double >&                     stops,
+                                                                             const cpo::uno::Sequence< cpo::uno::Sequence< double > >&    colors,
+                                                                             const cpo::uno::Sequence< double >&                     stops,
                                                                              double                                             fAspectRatio )
     {
         // TODO(P2): hold gradient polygon statically, and only setup
@@ -159,16 +159,16 @@ namespace canvas
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getColor( double /*t*/ )
+    cpo::uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getColor( double /*t*/ )
     {
         // TODO(F1): color NYI
-        return uno::Sequence< double >();
+        return cpo::uno::Sequence< double >();
     }
 
-    uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getPointColor( const geometry::RealPoint2D& /*point*/ )
+    cpo::uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getPointColor( const geometry::RealPoint2D& /*point*/ )
     {
         // TODO(F1): point color NYI
-        return uno::Sequence< double >();
+        return cpo::uno::Sequence< double >();
     }
 
     uno::Reference< rendering::XColorSpace > SAL_CALL ParametricPolyPolygon::getColorSpace()
@@ -189,7 +189,7 @@ namespace canvas
         return cppu::supportsService(this, ServiceName);
     }
 
-    uno::Sequence< OUString > SAL_CALL ParametricPolyPolygon::getSupportedServiceNames(  )
+    cpo::uno::Sequence< OUString > SAL_CALL ParametricPolyPolygon::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.rendering.ParametricPolyPolygon"_ustr };
     }
@@ -201,8 +201,8 @@ namespace canvas
     ParametricPolyPolygon::ParametricPolyPolygon( uno::Reference< rendering::XGraphicDevice >           xDevice,
                                                   const ::basegfx::B2DPolygon&                          rGradientPoly,
                                                   GradientType                                          eType,
-                                                  const uno::Sequence< uno::Sequence< double > >&       rColors,
-                                                  const uno::Sequence< double >&                        rStops,
+                                                  const cpo::uno::Sequence< cpo::uno::Sequence< double > >&       rColors,
+                                                  const cpo::uno::Sequence< double >&                        rStops,
                                                   double                                                nAspectRatio ) :
         mxDevice(std::move( xDevice )),
         maValues( rGradientPoly,
@@ -215,8 +215,8 @@ namespace canvas
 
     ParametricPolyPolygon::ParametricPolyPolygon( uno::Reference< rendering::XGraphicDevice >           xDevice,
                                                   GradientType                                          eType,
-                                                  const uno::Sequence< uno::Sequence< double > >&       rColors,
-                                                  const uno::Sequence< double >&                        rStops ) :
+                                                  const cpo::uno::Sequence< cpo::uno::Sequence< double > >&       rColors,
+                                                  const cpo::uno::Sequence< double >&                        rStops ) :
         mxDevice(std::move( xDevice )),
         maValues( ::basegfx::B2DPolygon(),
                   rColors,

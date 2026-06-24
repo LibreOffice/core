@@ -417,7 +417,7 @@ public:
     {
     }
 
-    uno::Sequence < sal_Int32 > GetSelSequence();
+    cpo::uno::Sequence < sal_Int32 > GetSelSequence();
 
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt ) override;
     virtual ~SwAccAllTableSelHandler_Impl();
@@ -429,10 +429,10 @@ SwAccAllTableSelHandler_Impl::~SwAccAllTableSelHandler_Impl()
 {
 }
 
-uno::Sequence < sal_Int32 > SwAccAllTableSelHandler_Impl::GetSelSequence()
+cpo::uno::Sequence < sal_Int32 > SwAccAllTableSelHandler_Impl::GetSelSequence()
 {
     OSL_ENSURE( m_nCount >= 0, "underflow" );
-    uno::Sequence < sal_Int32 > aRet( m_nCount );
+    cpo::uno::Sequence < sal_Int32 > aRet( m_nCount );
     sal_Int32 *pRet = aRet.getArray();
     sal_Int32 nPos = 0;
     size_t nSize = m_aSelected.size();
@@ -820,7 +820,7 @@ uno::Reference< XAccessibleTable > SAL_CALL
     return pTableColHeaders;
 }
 
-uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()
+cpo::uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows()
 {
     SolarMutexGuard aGuard;
 
@@ -839,11 +839,11 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleRows
     }
     else
     {
-        return uno::Sequence< sal_Int32 >( 0 );
+        return cpo::uno::Sequence< sal_Int32 >( 0 );
     }
 }
 
-uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColumns()
+cpo::uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColumns()
 {
     SolarMutexGuard aGuard;
 
@@ -861,7 +861,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SwAccessibleTable::getSelectedAccessibleColu
     }
     else
     {
-        return uno::Sequence< sal_Int32 >( 0 );
+        return cpo::uno::Sequence< sal_Int32 >( 0 );
     }
 }
 

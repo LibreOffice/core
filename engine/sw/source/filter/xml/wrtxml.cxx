@@ -143,7 +143,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
               ::cppu::UnoType<sal_Int32>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { u"WrittenNumberStyles"_ustr, 0,
-              cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
+              cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { u"UsePrettyPrinting"_ustr, 0,
               cppu::UnoType<bool>::get(),

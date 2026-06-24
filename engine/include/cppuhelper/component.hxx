@@ -72,11 +72,11 @@ public:
     /** @attention
         XTypeProvider::getImplementationId() has to be implemented separately!
     */
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE = 0;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE = 0;
     /** @attention
         XTypeProvider::getTypes() has to be re-implemented!
     */
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE;
 
     // XComponent
     virtual void SAL_CALL dispose() SAL_OVERRIDE;

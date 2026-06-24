@@ -37,14 +37,14 @@ class PDFDialog final:
     public ::comphelper::OPropertyArrayUsageHelper< PDFDialog >
 {
 private:
-    css::uno::Sequence< css::beans::PropertyValue >   maMediaDescriptor;
-    css::uno::Sequence< css::beans::PropertyValue >   maFilterData;
+    cpo::uno::Sequence< css::beans::PropertyValue >   maMediaDescriptor;
+    cpo::uno::Sequence< css::beans::PropertyValue >   maFilterData;
     css::uno::Reference< css::lang::XComponent >     mxSrcDoc;
 
     // OGenericUnoDialog
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
     virtual void executedDialog( sal_Int16 nExecutionResult ) override;
     virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
@@ -58,9 +58,9 @@ private:
 
     // XPropertyAccess
     using OPropertySetHelper::getPropertyValues;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
     using OPropertySetHelper::setPropertyValues;
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;

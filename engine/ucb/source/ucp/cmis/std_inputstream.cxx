@@ -59,7 +59,7 @@ namespace cmis
         OWeakObject::release();
     }
 
-    sal_Int32 SAL_CALL StdInputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+    sal_Int32 SAL_CALL StdInputStream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
     {
         std::scoped_lock aGuard( m_aMutex );
 
@@ -84,7 +84,7 @@ namespace cmis
         return nRead;
     }
 
-    sal_Int32 SAL_CALL StdInputStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
+    sal_Int32 SAL_CALL StdInputStream::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead )
     {
         std::scoped_lock aGuard( m_aMutex );

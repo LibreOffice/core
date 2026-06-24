@@ -44,7 +44,7 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
     OUString elementUsage = mapElementUsageShortToString(formatUsage);
 
     std::scoped_lock g(maMutex);
-    const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
+    const cpo::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     auto pFormat = std::find_if(aFormatSeq.begin(), aFormatSeq.end(),
         [&elementType, &elementUsage](const css::i18n::FormatElement& rFormat) {
@@ -68,7 +68,7 @@ css::i18n::NumberFormatCode SAL_CALL
 NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::Locale& rLocale )
 {
     std::scoped_lock g(maMutex);
-    const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
+    const cpo::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     auto pFormat = std::find_if(aFormatSeq.begin(), aFormatSeq.end(),
         [formatIndex](const css::i18n::FormatElement& rFormat) { return rFormat.formatIndex == formatIndex; });
@@ -85,11 +85,11 @@ NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::L
 }
 
 
-css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
+cpo::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
 NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang::Locale& rLocale )
 {
     std::scoped_lock g(maMutex);
-    const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
+    const cpo::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     std::vector<css::i18n::NumberFormatCode> aVec;
     aVec.reserve(aFormatSeq.getLength());
@@ -110,11 +110,11 @@ NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang
 }
 
 
-css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
+cpo::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
 NumberFormatCodeMapper::getAllFormatCodes( const css::lang::Locale& rLocale )
 {
     std::scoped_lock g(maMutex);
-    const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
+    const cpo::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
 
     std::vector<css::i18n::NumberFormatCode> aVec;
     aVec.reserve(aFormatSeq.getLength());
@@ -135,7 +135,7 @@ NumberFormatCodeMapper::getAllFormatCodes( const css::lang::Locale& rLocale )
 
 // --- private implementation -----------------------------------------
 
-const css::uno::Sequence< css::i18n::FormatElement >& NumberFormatCodeMapper::getFormats( const css::lang::Locale& rLocale )
+const cpo::uno::Sequence< css::i18n::FormatElement >& NumberFormatCodeMapper::getFormats( const css::lang::Locale& rLocale )
 {
     /* Find the FormatElement Sequence in the cache */
     for (const FormatElementCacheItem& item : m_aFormatElementCache)
@@ -145,7 +145,7 @@ const css::uno::Sequence< css::i18n::FormatElement >& NumberFormatCodeMapper::ge
     }
 
     /* Not found; Get the FormatElement Sequence for the given Locale */
-    css::uno::Sequence< css::i18n::FormatElement > aFormatElementSequence;
+    cpo::uno::Sequence< css::i18n::FormatElement > aFormatElementSequence;
     if ( m_xLocaleData.is() )
         aFormatElementSequence = m_xLocaleData->getAllFormats( rLocale );
 
@@ -248,7 +248,7 @@ bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceNa
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 NumberFormatCodeMapper::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.NumberFormatMapper"_ustr };
@@ -257,7 +257,7 @@ NumberFormatCodeMapper::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_NumberFormatCodeMapper_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new NumberFormatCodeMapper(context));
 }

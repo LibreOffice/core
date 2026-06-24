@@ -46,7 +46,7 @@ std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL,
         uno::Reference< io::XInputStream > xStream = xFileAccess->openFileRead( rURL );
 
         const sal_Int32 BUF_LEN = 8000;
-        uno::Sequence< sal_Int8 > buffer( BUF_LEN );
+        cpo::uno::Sequence< sal_Int8 > buffer( BUF_LEN );
 
         sal_Int32 nRead = 0;
         while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )

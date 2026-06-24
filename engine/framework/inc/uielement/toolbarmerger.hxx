@@ -64,10 +64,10 @@ class ToolBarMerger
     public:
         static bool       IsCorrectContext( std::u16string_view aContext, std::u16string_view aModuleIdentifier );
 
-        static void       ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
+        static void       ConvertSeqSeqToVector( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                                  AddonToolbarItemContainer& rContainer );
 
-        static void       ConvertSequenceToValues( const css::uno::Sequence< css::beans::PropertyValue >& rSequence,
+        static void       ConvertSequenceToValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rSequence,
                                                    OUString& rCommandURL,
                                                    OUString& rLabel,
                                                    OUString& rTarget,

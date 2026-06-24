@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGShapeAsOLE)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // When exporting to XHTML:
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
     sal_Int32 nDPI = 600;
 
     // When exporting to XHTML:
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ShapeDPI"_ustr, nDPI),
     };
@@ -203,13 +203,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOleBmpTransparent)
 {
     // Given a document with a transparent image:
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"transparent.png")),
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
     // When exporting to reqif with ExportImagesAsOLE=true:
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
@@ -411,7 +411,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
     pWrtShell->Insert(u"thi \t rd"_ustr);
 
     // When exporting to HTML, using LeadingTabWidth=2:
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"LeadingTabWidth"_ustr, static_cast<sal_Int32>(2)),
     };
@@ -438,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
     pWrtShell->Insert(u"\t test"_ustr);
 
     // When exporting to plain HTML, using LeadingTabWidth=2:
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"LeadingTabWidth"_ustr, static_cast<sal_Int32>(2)),
     };
     save(TestFilter::HTML_WRITER, aStoreProperties);
@@ -820,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSingleOleExport)
     xController->select(xDrawPage->getByIndex(0));
 
     // Store only the selection
-    css::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"RTFOLEMimeType"_ustr, u"text/rtf"_ustr),
         comphelper::makePropertyValue(u"SelectionOnly"_ustr, true),
@@ -1163,7 +1163,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
     createSwDoc("embedded_formula.fodt");
 
     // When exporting to reqif with ExportFormulasAsPDF=true:
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportFormulasAsPDF"_ustr, true),
     };
@@ -1174,7 +1174,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
     assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[2]/reqif-xhtml:object",
                 "type", u"application/pdf");
 
-    css::uno::Sequence<css::beans::PropertyValue> descr{
+    cpo::uno::Sequence<css::beans::PropertyValue> descr{
         comphelper::makePropertyValue(u"URL"_ustr, GetObjectPath(u".pdf"_ustr)),
     };
 
@@ -1530,10 +1530,10 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_162282)
     // - Actual  : 111260
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(220), aEmfStream.TellEnd());
 
-    css::uno::Sequence<sal_Int8> emfData(220);
+    cpo::uno::Sequence<sal_Int8> emfData(220);
     aEmfStream.ReadBytes(emfData.getArray(), emfData.getLength());
 
-    const css::uno::Sequence<sal_Int8> correctData{
+    const cpo::uno::Sequence<sal_Int8> correctData{
         0x01,  0x00, 0x00,  0x00, 0x6C,  0x00, 0x00,  0x00, 0x00,  0x00, 0x00,  0x00, 0x00, 0x00,
         0x00,  0x00, -0xC,  0x01, 0x00,  0x00, -0xC,  0x01, 0x00,  0x00, 0x00,  0x00, 0x00, 0x00,
         0x00,  0x00, 0x00,  0x00, -0x78, 0x13, 0x00,  0x00, -0x78, 0x13, 0x00,  0x00, 0x20, 0x45,

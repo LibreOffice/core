@@ -75,7 +75,7 @@ public:
                      GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;
     virtual void     SetCurrentString(
                         const OUString& _rNewString,
-                        const css::uno::Sequence< OUString >& _rSuggestions,
+                        const cpo::uno::Sequence< OUString >& _rSuggestions,
                         bool _bOriginatesFromDocument = true )=0;
     virtual OUString GetCurrentString( ) const =0;
     virtual editeng::HangulHanjaConversion::ConversionFormat

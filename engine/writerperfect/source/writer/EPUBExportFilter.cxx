@@ -56,12 +56,12 @@ sal_Int32 EPUBExportFilter::GetDefaultLayoutMethod()
     return libepubgen::EPUB_LAYOUT_METHOD_REFLOWABLE;
 }
 
-bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+bool EPUBExportFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     sal_Int32 nVersion = EPUBExportFilter::GetDefaultVersion();
     sal_Int32 nSplitMethod = EPUBExportFilter::GetDefaultSplitMethod();
     sal_Int32 nLayoutMethod = EPUBExportFilter::GetDefaultLayoutMethod();
-    uno::Sequence<beans::PropertyValue> aFilterData;
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData;
     OUString aFilterOptions;
     for (const auto& rProp : rDescriptor)
     {
@@ -173,7 +173,7 @@ void EPUBExportFilter::CreateMetafiles(std::vector<exp::FixedLayoutPage>& rPageM
         SvmWriter aWriter(aMemoryStream);
         aWriter.Write(rGDIMetaFile);
         exp::FixedLayoutPage aPage;
-        aPage.aMetafile = uno::Sequence<sal_Int8>(
+        aPage.aMetafile = cpo::uno::Sequence<sal_Int8>(
             static_cast<const sal_Int8*>(aMemoryStream.GetData()), aMemoryStream.Tell());
         aPage.aCssPixels = aCss;
         aPage.aChapterNames = aRenderer.getChapterNames();
@@ -200,15 +200,15 @@ bool EPUBExportFilter::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> EPUBExportFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> EPUBExportFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { u"com.sun.star.document.ExportFilter"_ustr };
+    cpo::uno::Sequence<OUString> aRet = { u"com.sun.star.document.ExportFilter"_ustr };
     return aRet;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_EPUBExportFilter_get_implementation(
-    uno::XComponentContext* pContext, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pContext, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new EPUBExportFilter(pContext));
 }

@@ -25,10 +25,10 @@
 
 namespace writerfilter::dmapper {
 
-typedef css::uno::Sequence< css::uno::Reference< css::text::XTextRange > > CellSequence_t;
-typedef css::uno::Sequence<CellSequence_t> RowSequence_t;
+typedef cpo::uno::Sequence< css::uno::Reference< css::text::XTextRange > > CellSequence_t;
+typedef cpo::uno::Sequence<CellSequence_t> RowSequence_t;
 
-typedef css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValues> >  CellPropertyValuesSeq_t;
+typedef cpo::uno::Sequence< cpo::uno::Sequence<css::beans::PropertyValues> >  CellPropertyValuesSeq_t;
 
 typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
@@ -71,7 +71,7 @@ class DomainMapperTableHandler final : public virtual SvRefBase
                     std::vector<css::beans::PropertyValue>& rFrameProperties,
                     bool bConvertToFloating);
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges);
-    css::uno::Sequence<css::beans::PropertyValues> endTableGetRowProperties();
+    cpo::uno::Sequence<css::beans::PropertyValues> endTableGetRowProperties();
 
 public:
     typedef tools::SvRef<DomainMapperTableHandler> Pointer_t;

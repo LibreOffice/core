@@ -55,7 +55,7 @@ public:
         return cppu::supportsService(this, rServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.task.InteractionHandler"_ustr,
         // added to indicate support for configuration.backend.MergeRecoveryRequest
@@ -64,7 +64,7 @@ public:
                  u"com.sun.star.uui.InteractionHandler"_ustr };
     }
 
-    virtual void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any> const & /*rArguments*/) override
+    virtual void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any> const & /*rArguments*/) override
     {}
 
     virtual void SAL_CALL handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override
@@ -76,7 +76,7 @@ public:
     {
         mbPasswordRequested = false;
 
-        css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> const aContinuations = rRequest->getContinuations();
+        cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> const aContinuations = rRequest->getContinuations();
         cpo::uno::Any const aRequest(rRequest->getRequest());
 
         if (handlePasswordRequest(aContinuations, aRequest))
@@ -92,7 +92,7 @@ public:
         return true;
     }
 
-    bool handlePasswordRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations,
+    bool handlePasswordRequest(const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations,
                                const cpo::uno::Any& rRequest)
     {
         bool bPasswordRequestFound = false;

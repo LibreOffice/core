@@ -512,9 +512,9 @@ css::awt::Size ScannerManager::getSize()
     return aRet;
 }
 
-css::uno::Sequence<sal_Int8> ScannerManager::getDIB()
+cpo::uno::Sequence<sal_Int8> ScannerManager::getDIB()
 {
-    css::uno::Sequence<sal_Int8> aRet;
+    cpo::uno::Sequence<sal_Int8> aRet;
 
     if (mpData)
     {
@@ -550,7 +550,7 @@ css::uno::Sequence<sal_Int8> ScannerManager::getDIB()
                     break;
             }
 
-            aRet = css::uno::Sequence<sal_Int8>(sizeof(BITMAPFILEHEADER) + nDIBSize);
+            aRet = cpo::uno::Sequence<sal_Int8>(sizeof(BITMAPFILEHEADER) + nDIBSize);
 
             sal_Int8* pBuf = aRet.getArray();
             SvMemoryStream* pMemStm
@@ -572,10 +572,10 @@ css::uno::Sequence<sal_Int8> ScannerManager::getDIB()
     return aRet;
 }
 
-css::uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners()
+cpo::uno::Sequence<ScannerContext> SAL_CALL ScannerManager::getAvailableScanners()
 {
     osl::MutexGuard aGuard(maProtector);
-    css::uno::Sequence<ScannerContext> aRet(1);
+    cpo::uno::Sequence<ScannerContext> aRet(1);
 
     aRet.getArray()[0].ScannerName = "TWAIN";
     aRet.getArray()[0].InternalData = 0;

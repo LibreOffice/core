@@ -94,7 +94,7 @@ void SwDoc::disposeXForms( )
         return;
 
     // iterate over all models
-    const uno::Sequence<OUString> aNames = mxXForms->getElementNames();
+    const cpo::uno::Sequence<OUString> aNames = mxXForms->getElementNames();
     for( const OUString& rName : aNames )
     {
         Reference< xforms::XModel > xModel(

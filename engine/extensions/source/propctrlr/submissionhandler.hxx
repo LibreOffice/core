@@ -73,14 +73,14 @@ namespace pcr
     protected:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XPropertyHandler overriables
         virtual cpo::uno::Any               SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                             SAL_CALL getActuatingProperties( ) override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                             SAL_CALL getSupersededProperties( ) override;
         virtual css::inspection::LineDescriptor
                                             SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
@@ -89,7 +89,7 @@ namespace pcr
         virtual cpo::uno::Any               SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
 
         // PropertyHandler overridables
-        virtual css::uno::Sequence< css::beans::Property >
+        virtual cpo::uno::Sequence< css::beans::Property >
                                             doDescribeSupportedProperties() const override;
         virtual void onNewComponent() override;
 

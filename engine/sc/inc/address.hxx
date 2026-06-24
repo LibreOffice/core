@@ -36,7 +36,7 @@
 #include <o3tl/underlyingenumvalue.hxx>
 
 namespace com::sun::star::sheet { struct ExternalLinkInfo; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 class ScDocument;
 class ScRangeList;
@@ -369,7 +369,7 @@ public:
                     const OUString&, const ScDocument&,
                     const Details& rDetails = detailsOOOa1,
                     ExternalInfo* pExtInfo = nullptr,
-                    const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
+                    const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                     sal_Int32* pSheetEndPos = nullptr,
                     const OUString* pErrRef = nullptr );
 
@@ -533,7 +533,7 @@ public:
     ScRefFlags Parse( const OUString&, const ScDocument&,
                                    const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                                    ScAddress::ExternalInfo* pExtInfo = nullptr,
-                                   const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
+                                   const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                    const OUString* pErrRef = nullptr );
 
     ScRefFlags ParseAny( const OUString&, const ScDocument&,
@@ -570,7 +570,7 @@ public:
                                         OUString& rExternDocName, OUString& rStartTabName,
                                         OUString& rEndTabName, ScRefFlags& nFlags,
                                         bool bOnlyAcceptSingle,
-                                        const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
+                                        const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
                                         const OUString* pErrRef = nullptr );
 
     /** Returns string with formatted cell range from aStart to aEnd,

@@ -100,17 +100,17 @@ public:
     virtual sal_Int32 SAL_CALL getLongValue(  ) override;
     virtual void SAL_CALL setLongValue( sal_Int32 value ) override;
     virtual Sequence< sal_Int32 > SAL_CALL getLongListValue(  ) override;
-    virtual void SAL_CALL setLongListValue( const css::uno::Sequence< sal_Int32 >& seqValue ) override;
+    virtual void SAL_CALL setLongListValue( const cpo::uno::Sequence< sal_Int32 >& seqValue ) override;
     virtual OUString SAL_CALL getAsciiValue(  ) override;
     virtual void SAL_CALL setAsciiValue( const OUString& value ) override;
     virtual Sequence< OUString > SAL_CALL getAsciiListValue(  ) override;
-    virtual void SAL_CALL setAsciiListValue( const css::uno::Sequence< OUString >& seqValue ) override;
+    virtual void SAL_CALL setAsciiListValue( const cpo::uno::Sequence< OUString >& seqValue ) override;
     virtual OUString SAL_CALL getStringValue(  ) override;
     virtual void SAL_CALL setStringValue( const OUString& value ) override;
     virtual Sequence< OUString > SAL_CALL getStringListValue(  ) override;
-    virtual void SAL_CALL setStringListValue( const css::uno::Sequence< OUString >& seqValue ) override;
+    virtual void SAL_CALL setStringListValue( const cpo::uno::Sequence< OUString >& seqValue ) override;
     virtual Sequence< sal_Int8 > SAL_CALL getBinaryValue(  ) override;
-    virtual void SAL_CALL setBinaryValue( const css::uno::Sequence< sal_Int8 >& value ) override;
+    virtual void SAL_CALL setBinaryValue( const cpo::uno::Sequence< sal_Int8 >& value ) override;
     virtual Reference< XRegistryKey > SAL_CALL openKey( const OUString& aKeyName ) override;
     virtual Reference< XRegistryKey > SAL_CALL createKey( const OUString& aKeyName ) override;
     virtual void SAL_CALL closeKey(  ) override;
@@ -1179,7 +1179,7 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString&, const OUString& )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_NestedRegistry_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new NestedRegistryImpl);
 }

@@ -33,7 +33,7 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>

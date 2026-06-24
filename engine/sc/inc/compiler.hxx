@@ -35,7 +35,7 @@
 #include <memory>
 #include <unordered_set>
 #include <set>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <formula/FormulaCompiler.hxx>
@@ -219,7 +219,7 @@ public:
          */
         virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
                 const ScDocument& rDoc,
-                const css::uno::Sequence< css::sheet::ExternalLinkInfo>* pExternalLinks ) const = 0;
+                const cpo::uno::Sequence< css::sheet::ExternalLinkInfo>* pExternalLinks ) const = 0;
 
         virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& rFile,
                 const OUString& rName ) const = 0;
@@ -282,7 +282,7 @@ private:
     sal_Int32   mnCurrentSheetEndPos;   // position after current sheet name if parsed
 
     // For CONV_XL_OOX, may be set via API by MOOXML filter.
-    css::uno::Sequence<css::sheet::ExternalLinkInfo> maExternalLinks;
+    cpo::uno::Sequence<css::sheet::ExternalLinkInfo> maExternalLinks;
 
     sal_Unicode cSymbol[MAXSTRLEN+1];               // current Symbol + 0
     OUString    aFormula;                           // formula source code
@@ -483,7 +483,7 @@ public:
 
     /// Set external link info for ScAddress::CONV_XL_OOX.
     void SetExternalLinks(
-        const css::uno::Sequence<
+        const cpo::uno::Sequence<
             css::sheet::ExternalLinkInfo>& rLinks )
     {
         maExternalLinks = rLinks;

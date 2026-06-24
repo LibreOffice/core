@@ -5096,7 +5096,7 @@ public:
             // seen here was rawhide == nullptr and length set to -1
             if (rawdata)
             {
-                css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
+                cpo::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(rawdata), length);
                 aRet <<= aSeq;
             }
         }
@@ -6166,7 +6166,7 @@ void GtkInstDragSource::setActiveDragSource()
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-std::vector<GtkTargetEntry> GtkInstDragSource::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+std::vector<GtkTargetEntry> GtkInstDragSource::FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
 {
     return m_aConversionHelper.FormatsToGtk(rFormats);
 }

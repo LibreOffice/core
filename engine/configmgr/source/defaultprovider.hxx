@@ -21,13 +21,13 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace configmgr::default_provider
 {
 OUString getImplementationName();
 
-css::uno::Sequence<OUString> getSupportedServiceNames();
+cpo::uno::Sequence<OUString> getSupportedServiceNames();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,7 @@
 #include "com/sun/star/uno/NamingService.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
+#include "cpo/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/uri/ExternalUriReferenceTranslator.hpp"
@@ -83,7 +83,7 @@ public:
         context_(context) {}
 
     virtual ::sal_Int32 SAL_CALL run(
-        css::uno::Sequence< ::rtl::OUString > const &);
+        cpo::uno::Sequence< ::rtl::OUString > const &);
 
 private:
     Service(Service &); // not defined
@@ -98,7 +98,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 
-::sal_Int32 Service::run(css::uno::Sequence< ::rtl::OUString > const &) {
+::sal_Int32 Service::run(cpo::uno::Sequence< ::rtl::OUString > const &) {
     osl_getThreadIdentifier(0); // check for sal
     (new salhelper::SimpleReferenceObject)->release(); // check for salhelper
     css::uno::getCurrentContext(); // check for cppu
@@ -211,8 +211,8 @@ rtl::OUString getImplementationName() {
     return rtl::OUString("test.cpp.cppmain.Component");
 }
 
-css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {
-    return css::uno::Sequence< ::rtl::OUString >();
+cpo::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {
+    return cpo::uno::Sequence< ::rtl::OUString >();
 }
 
 }

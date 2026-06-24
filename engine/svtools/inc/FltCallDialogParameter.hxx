@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/fldunit.hxx>
 
@@ -35,7 +35,7 @@ struct FltCallDialogParameter
     OUString aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData;
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData;
 
     FltCallDialogParameter(weld::Window* pW, FieldUnit eFiUni)
         : pWindow(pW)

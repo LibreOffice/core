@@ -71,7 +71,7 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
             if (rStream.is())
             {
                 sal_Int32 nStreamSize = rStream->GetSize();
-                uno::Sequence< sal_Int8 > oData;
+                cpo::uno::Sequence< sal_Int8 > oData;
                 oData.realloc(nStreamSize);
                 sal_Int32 nReadBytes = rStream->ReadBytes(oData.getArray(), nStreamSize);
                 if (nStreamSize == nReadBytes)
@@ -86,7 +86,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
     rtl::Reference<SotStorage> aNewStorage;
 
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
-    uno::Sequence< cpo::uno::Any > aArguments;
+    cpo::uno::Sequence< cpo::uno::Any > aArguments;
     const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference< packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -102,7 +102,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
     lcl_getListOfStreams(rStorage.get(), aStreamsData, u"");
 
     try {
-        uno::Sequence<beans::NamedValue> aStreams = aStreamsData.getAsConstNamedValueList();
+        cpo::uno::Sequence<beans::NamedValue> aStreams = aStreamsData.getAsConstNamedValueList();
         if (!xPackageEncryption->readEncryptionInfo(aStreams))
         {
             // We failed with decryption
@@ -132,7 +132,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
         aNewStorage = new SotStorage(*rNewStorageStrm);
 
         // Set the media descriptor data
-        uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
+        cpo::uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
         rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, cpo::uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
@@ -265,7 +265,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         SvStream* pMedStrm, bool bBiff8, rtl_TextEncoding eNach )
 {
     uno::Reference< packages::XPackageEncryption > xPackageEncryption;
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
     const SfxUnoAnyItem* pEncryptionDataItem = rMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
     SvStream* pOriginalMediaStrm = pMedStrm;
     std::shared_ptr<SvStream> pMediaStrm;
@@ -277,7 +277,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         if (sCryptoType.getLength())
         {
             const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
-            uno::Sequence<cpo::uno::Any> aArguments{
+            cpo::uno::Sequence<cpo::uno::Any> aArguments{
                 cpo::uno::Any(beans::NamedValue(u"Binary"_ustr, cpo::uno::Any(true))) };
             xPackageEncryption.set(
                 xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -351,7 +351,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         xPackageEncryption->setupEncryption(aEncryptionData);
 
         uno::Reference<io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(pMedStrm, false));
-        uno::Sequence<beans::NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
+        cpo::uno::Sequence<beans::NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
 
         rtl::Reference<SotStorage> xEncryptedRootStrg = new SotStorage(pOriginalMediaStrm, false);
         for (const beans::NamedValue& aStreamData : aStreams)
@@ -389,7 +389,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
                 eRet = ERRCODE_IO_GENERAL;
                 break;
             }
-            uno::Sequence<sal_Int8> aStreamContent;
+            cpo::uno::Sequence<sal_Int8> aStreamContent;
             aStreamData.Value >>= aStreamContent;
             size_t nBytesWritten = pStream->WriteBytes(aStreamContent.getConstArray(), aStreamContent.getLength());
             if (nBytesWritten != static_cast<size_t>(aStreamContent.getLength()))

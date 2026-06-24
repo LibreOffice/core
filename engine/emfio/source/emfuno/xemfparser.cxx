@@ -56,16 +56,16 @@ namespace emfio::emfreader
             XEmfParser& operator=(const XEmfParser&) = delete;
 
             // XEmfParser
-            virtual uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
+            virtual cpo::uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
                 const uno::Reference< ::io::XInputStream >& xEmfStream,
                 const OUString& aAbsolutePath,
-                const uno::Sequence< ::beans::PropertyValue >& rProperties) override;
+                const cpo::uno::Sequence< ::beans::PropertyValue >& rProperties) override;
             void SAL_CALL setSizeHint(const geometry::RealPoint2D& rSize) override;
 
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
             virtual bool SAL_CALL supportsService(const OUString&) override;
-            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
 
         }
@@ -76,10 +76,10 @@ namespace emfio::emfreader
         {
         }
 
-        uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XEmfParser::getDecomposition(
+        cpo::uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XEmfParser::getDecomposition(
             const uno::Reference< ::io::XInputStream >& xEmfStream,
             const OUString& /*aAbsolutePath*/,
-            const uno::Sequence< ::beans::PropertyValue >& rProperties)
+            const cpo::uno::Sequence< ::beans::PropertyValue >& rProperties)
         {
             drawinglayer::primitive2d::Primitive2DContainer aRetval;
 
@@ -179,7 +179,7 @@ namespace emfio::emfreader
                             aMtf));
 
                     // // force to use decomposition directly to get rid of the metafile
-                    // const css::uno::Sequence< css::beans::PropertyValue > aViewParameters;
+                    // const cpo::uno::Sequence< css::beans::PropertyValue > aViewParameters;
                     // drawinglayer::primitive2d::MetafilePrimitive2D aMetafilePrimitive2D(
                     //     aMetafileTransform,
                     //     aMtf);
@@ -220,7 +220,7 @@ namespace emfio::emfreader
             return cppu::supportsService(this, rServiceName);
         }
 
-        uno::Sequence< OUString > SAL_CALL XEmfParser::getSupportedServiceNames()
+        cpo::uno::Sequence< OUString > SAL_CALL XEmfParser::getSupportedServiceNames()
         {
             return { u"com.sun.star.graphic.EmfTools"_ustr };
         }
@@ -231,7 +231,7 @@ namespace emfio::emfreader
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 emfio_emfreader_XEmfParser_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new emfio::emfreader::XEmfParser(context));
 }

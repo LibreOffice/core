@@ -23,7 +23,7 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::com::sun::star::beans::PropertyValue;
 

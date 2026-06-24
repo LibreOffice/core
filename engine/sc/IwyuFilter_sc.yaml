@@ -660,7 +660,7 @@ excludelist:
     - stringutil.hxx
     sc/source/core/data/dpresfilter.cxx:
     # Actually used
-    - com/sun/star/uno/Sequence.hxx
+    - cpo/uno/Sequence.hxx
     sc/source/core/data/dpoutputgeometry.cxx:
     # Actually used
     - vector

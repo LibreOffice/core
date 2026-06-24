@@ -27,7 +27,7 @@ basic/source/runtime/methods.cxx:3122
     const short defaultValue
     0
 canvas/inc/parametricpolypolygon.hxx:138
-    void canvas::ParametricPolyPolygon::ParametricPolyPolygon(class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice>,enum canvas::ParametricPolyPolygon::GradientType,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<double> > &,const class com::sun::star::uno::Sequence<double> &)
+    void canvas::ParametricPolyPolygon::ParametricPolyPolygon(class com::sun::star::uno::Reference<class com::sun::star::rendering::XGraphicDevice>,enum canvas::ParametricPolyPolygon::GradientType,const class cpo::uno::Sequence<class cpo::uno::Sequence<double> > &,const class cpo::uno::Sequence<double> &)
     enum canvas::ParametricPolyPolygon::GradientType eType
     0
 canvas/inc/spriteredrawmanager.hxx:109
@@ -715,7 +715,7 @@ include/comphelper/parallelsort.hxx:286
     _Bool bThreaded
     1
 include/comphelper/property.hxx:52
-    void ModifyPropertyAttributes(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,const class rtl::OUString &,short,short)
+    void ModifyPropertyAttributes(class cpo::uno::Sequence<struct com::sun::star::beans::Property> &,const class rtl::OUString &,short,short)
     short _nAddAttrib
     0
 include/comphelper/random.hxx:35
@@ -919,7 +919,7 @@ include/formula/vectortoken.hxx:50
     enum formula::VectorRefArray::InitInvalid 
     0
 include/i18nutil/widthfolding.hxx:48
-    class rtl::OUString i18nutil::widthfolding::compose_ja_voiced_sound_marks(const class rtl::OUString &,int,int,class com::sun::star::uno::Sequence<int> *,int)
+    class rtl::OUString i18nutil::widthfolding::compose_ja_voiced_sound_marks(const class rtl::OUString &,int,int,class cpo::uno::Sequence<int> *,int)
     int startPos
     0
 include/linguistic/misc.hxx:131
@@ -1051,7 +1051,7 @@ include/opencl/openclwrapper.hxx:86
     int nPos
     0
 include/package/Deflater.hxx:45
-    int ZipUtils::Deflater::doDeflateBytes(class com::sun::star::uno::Sequence<signed char> &,int,int)
+    int ZipUtils::Deflater::doDeflateBytes(class cpo::uno::Sequence<signed char> &,int,int)
     int nNewOffset
     0
 include/package/Deflater.hxx:49
@@ -1091,7 +1091,7 @@ include/sfx2/docfile.hxx:182
     _Bool bDisableFileSync
     1
 include/sfx2/event.hxx:241
-    void SfxPrintingHint::SfxPrintingHint(enum com::sun::star::view::PrintableState,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,class SfxObjectShell *,const class com::sun::star::uno::Reference<class com::sun::star::frame::XController2> &)
+    void SfxPrintingHint::SfxPrintingHint(enum com::sun::star::view::PrintableState,const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,class SfxObjectShell *,const class com::sun::star::uno::Reference<class com::sun::star::frame::XController2> &)
     enum com::sun::star::view::PrintableState nState
     0
 include/sfx2/fcontnr.hxx:109
@@ -1143,7 +1143,7 @@ include/sfx2/passwd.hxx:132
     _Bool bShow
     0
 include/sfx2/request.hxx:60
-    void SfxRequest::SfxRequest(const class SfxSlot *,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,enum SfxCallMode,class SfxItemPool &)
+    void SfxRequest::SfxRequest(const class SfxSlot *,const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,enum SfxCallMode,class SfxItemPool &)
     enum SfxCallMode nCallMode
     1
 include/sfx2/request.hxx:63
@@ -1651,7 +1651,7 @@ include/unotools/historyoptions.hxx:88
     enum EHistoryType eHistory
     0
 include/unotools/mediadescriptor.hxx:260
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::NamedValue> utl::MediaDescriptor::requestAndVerifyDocPassword(class comphelper::IDocPasswordVerifier &,enum comphelper::DocPasswordRequestType,const class std::vector<class rtl::OUString> *)
+    class cpo::uno::Sequence<struct com::sun::star::beans::NamedValue> utl::MediaDescriptor::requestAndVerifyDocPassword(class comphelper::IDocPasswordVerifier &,enum comphelper::DocPasswordRequestType,const class std::vector<class rtl::OUString> *)
     enum comphelper::DocPasswordRequestType eRequestType
     1
 include/unotools/nativenumberwrapper.hxx:46
@@ -1691,7 +1691,7 @@ include/unotools/ucbstreamhelper.hxx:47
     _Bool bUseSimpleFileAccessInteraction
     1
 include/vbahelper/vbaeventshelperbase.hxx:89
-    void VbaEventsHelperBase::checkArgumentType(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int)
+    void VbaEventsHelperBase::checkArgumentType(const class cpo::uno::Sequence<class cpo::uno::Any> &,int)
     int nIndex
     0
 include/vbahelper/vbahelper.hxx:118
@@ -2591,7 +2591,7 @@ sc/inc/rangeutl.hxx:202
     _Bool bAppendStr
     0
 sc/inc/rangeutl.hxx:217
-    void ScRangeStringConverter::GetStringFromRangeList(class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::table::CellRangeAddress> &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t)
+    void ScRangeStringConverter::GetStringFromRangeList(class rtl::OUString &,const class cpo::uno::Sequence<struct com::sun::star::table::CellRangeAddress> &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t)
     enum formula::FormulaGrammar::AddressConvention eConv
     0
 sc/inc/scabstdlg.hxx:298
@@ -2887,7 +2887,7 @@ sc/source/filter/inc/formulabase.hxx:640
     _Bool bAbsolute
     0
 sc/source/filter/inc/formulabase.hxx:763
-    void oox::xls::FormulaProcessorBase::convertStringToStringList(class com::sun::star::uno::Sequence<struct com::sun::star::sheet::FormulaToken> &,char16_t,_Bool) const
+    void oox::xls::FormulaProcessorBase::convertStringToStringList(class cpo::uno::Sequence<struct com::sun::star::sheet::FormulaToken> &,char16_t,_Bool) const
     _Bool bTrimLeadingSpaces
     1
 sc/source/filter/inc/ftools.hxx:199
@@ -3279,23 +3279,23 @@ sc/source/ui/vba/vbacondition.hxx:43
     _Bool _bIncludeFormulaValue
     1
 sc/source/ui/vba/vbaeventshelper.hxx:53
-    _Bool ScVbaEventsHelper::isSelectionChanged(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int)
+    _Bool ScVbaEventsHelper::isSelectionChanged(const class cpo::uno::Sequence<class cpo::uno::Any> &,int)
     int nIndex
     0
 sc/source/ui/vba/vbaeventshelper.hxx:59
-    class cpo::uno::Any ScVbaEventsHelper::createWorksheet(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int) const
+    class cpo::uno::Any ScVbaEventsHelper::createWorksheet(const class cpo::uno::Sequence<class cpo::uno::Any> &,int) const
     int nIndex
     0
 sc/source/ui/vba/vbaeventshelper.hxx:64
-    class cpo::uno::Any ScVbaEventsHelper::createRange(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int) const
+    class cpo::uno::Any ScVbaEventsHelper::createRange(const class cpo::uno::Sequence<class cpo::uno::Any> &,int) const
     int nIndex
     0
 sc/source/ui/vba/vbaeventshelper.hxx:69
-    class cpo::uno::Any ScVbaEventsHelper::createHyperlink(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int) const
+    class cpo::uno::Any ScVbaEventsHelper::createHyperlink(const class cpo::uno::Sequence<class cpo::uno::Any> &,int) const
     int nIndex
     0
 sc/source/ui/vba/vbaeventshelper.hxx:74
-    class cpo::uno::Any ScVbaEventsHelper::createWindow(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int) const
+    class cpo::uno::Any ScVbaEventsHelper::createWindow(const class cpo::uno::Sequence<class cpo::uno::Any> &,int) const
     int nIndex
     0
 sc/source/ui/vba/vbarange.hxx:112
@@ -4223,19 +4223,19 @@ ucb/source/ucp/webdav-curl/DAVTypes.hxx:171
     _Bool HeadAllowed
     0
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:36
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,_Bool)
+    class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,_Bool)
     _Bool isVisible
     1
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:36
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,_Bool)
+    class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateMenuItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,_Bool)
     _Bool isEnabled
     1
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:43
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,int)
+    class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,int)
     _Bool isVisible
     1
 vbahelper/source/vbahelper/vbacommandbarcontrols.hxx:43
-    class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,int)
+    class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> ScVbaCommandBarControls::CreateToolbarItemData(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,unsigned short,const class cpo::uno::Any &,_Bool,int)
     int nStyle
     0
 vcl/backendtest/outputdevice/common.cxx:59

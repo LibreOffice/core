@@ -62,7 +62,7 @@ bool SvxZoomSliderItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case 0 :
             {
-                css::uno::Sequence< css::beans::PropertyValue > aSeq{
+                cpo::uno::Sequence< css::beans::PropertyValue > aSeq{
                     comphelper::makePropertyValue(ZOOMSLIDER_PARAM_CURRENTZOOM, sal_Int32( GetValue() )),
                     comphelper::makePropertyValue(ZOOMSLIDER_PARAM_SNAPPINGPOINTS, maValues),
                     comphelper::makePropertyValue(ZOOMSLIDER_PARAM_MINZOOM, mnMinZoom),
@@ -108,11 +108,11 @@ bool SvxZoomSliderItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId
     {
         case 0 :
             {
-                css::uno::Sequence< css::beans::PropertyValue > aSeq;
+                cpo::uno::Sequence< css::beans::PropertyValue > aSeq;
                 if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOMSLIDER_PARAMS ))
                 {
                     sal_Int32 nCurrentZoom( 0 );
-                    css::uno::Sequence < sal_Int32 > aValues;
+                    cpo::uno::Sequence < sal_Int32 > aValues;
 
                     bool bAllConverted( true );
                     sal_Int16 nConvertedCount( 0 );
@@ -170,7 +170,7 @@ bool SvxZoomSliderItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId
 
         case MID_ZOOMSLIDER_SNAPPINGPOINTS:
             {
-                css::uno::Sequence < sal_Int32 > aValues;
+                cpo::uno::Sequence < sal_Int32 > aValues;
                 if ( rVal >>= aValues )
                 {
                     maValues = std::move(aValues);

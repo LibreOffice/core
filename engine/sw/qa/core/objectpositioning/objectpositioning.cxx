@@ -501,7 +501,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertShapeOnAsCharImg_tdf16890)
     SwDoc* pDoc = getSwDoc();
 
     // Insert a shape over it
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:BasicShapes.rectangle"_ustr, aArgs);
 

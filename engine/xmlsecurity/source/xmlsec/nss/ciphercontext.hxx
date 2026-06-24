@@ -37,8 +37,8 @@ private:
     PK11Context* m_pContext;
 
     sal_Int32 m_nBlockSize;
-    css::uno::Sequence< sal_Int8 > m_aLastBlock;
-    css::uno::Sequence<sal_Int8> m_AESGCMIV;
+    cpo::uno::Sequence< sal_Int8 > m_aLastBlock;
+    cpo::uno::Sequence<sal_Int8> m_AESGCMIV;
 
     bool m_bEncryption;
     bool m_bPadding;
@@ -71,11 +71,11 @@ public:
         Dispose();
     }
 
-    static css::uno::Reference< css::xml::crypto::XCipherContext > Create( CK_MECHANISM_TYPE nNSSCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding );
+    static css::uno::Reference< css::xml::crypto::XCipherContext > Create( CK_MECHANISM_TYPE nNSSCipherID, const cpo::uno::Sequence< ::sal_Int8 >& aKey, const cpo::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding );
 
     // XCipherContext
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const css::uno::Sequence< ::sal_Int8 >& aData ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

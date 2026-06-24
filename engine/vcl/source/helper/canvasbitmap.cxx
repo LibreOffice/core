@@ -330,7 +330,7 @@ uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( 
 }
 
 // XIntegerReadOnlyBitmap
-uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
+cpo::uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
                                                              const geometry::IntegerRectangle2D& rect )
 {
     SolarMutexGuard aGuard;
@@ -339,7 +339,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
 
     const ::tools::Rectangle aRequestedArea( vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
     if( aRequestedArea.IsEmpty() )
-        return uno::Sequence< sal_Int8 >();
+        return cpo::uno::Sequence< sal_Int8 >();
 
     // Invalid/empty bitmap: no data available
     if( !m_pBmpAcc )
@@ -352,7 +352,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
         throw lang::IndexOutOfBoundsException();
     }
 
-    uno::Sequence< sal_Int8 > aRet;
+    cpo::uno::Sequence< sal_Int8 > aRet;
     tools::Rectangle aRequestedBytes( aRequestedArea );
 
     // adapt to byte boundaries
@@ -422,7 +422,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
+cpo::uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
                                                               const geometry::IntegerPoint2D&   pos )
 {
     SolarMutexGuard aGuard;
@@ -439,7 +439,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
         throw lang::IndexOutOfBoundsException();
     }
 
-    uno::Sequence< sal_Int8 > aRet((m_nBitsPerOutputPixel + 7)/8);
+    cpo::uno::Sequence< sal_Int8 > aRet((m_nBitsPerOutputPixel + 7)/8);
     sal_Int8* pOutBuf = aRet.getArray();
 
     // copy stuff to output sequence
@@ -514,7 +514,7 @@ sal_Int32 SAL_CALL VclCanvasBitmap::getNumberOfEntries()
     return m_pBmpAcc->HasPalette() ? m_pBmpAcc->GetPaletteEntryCount() : 0 ;
 }
 
-bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, sal_Int32 nIndex )
+bool SAL_CALL VclCanvasBitmap::getIndex( cpo::uno::Sequence< double >& o_entry, sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -535,7 +535,7 @@ bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, sal_I
     return true; // no palette transparency here.
 }
 
-bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, bool, sal_Int32 nIndex )
+bool SAL_CALL VclCanvasBitmap::setIndex( const cpo::uno::Sequence< double >&, bool, sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
 
@@ -563,7 +563,7 @@ sal_Int8 SAL_CALL VclCanvasBitmap::getType(  )
     return rendering::ColorSpaceType::RGB;
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::getComponentTags(  )
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::getComponentTags(  )
 {
     SolarMutexGuard aGuard;
     return m_aComponentTags;
@@ -574,22 +574,22 @@ sal_Int8 SAL_CALL VclCanvasBitmap::getRenderingIntent(  )
     return rendering::RenderingIntent::PERCEPTUAL;
 }
 
-uno::Sequence< ::beans::PropertyValue > SAL_CALL VclCanvasBitmap::getProperties(  )
+cpo::uno::Sequence< ::beans::PropertyValue > SAL_CALL VclCanvasBitmap::getProperties(  )
 {
-    return uno::Sequence< ::beans::PropertyValue >();
+    return cpo::uno::Sequence< ::beans::PropertyValue >();
 }
 
-uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertColorSpace( const uno::Sequence< double >& deviceColor,
+cpo::uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertColorSpace( const cpo::uno::Sequence< double >& deviceColor,
                                                                      const uno::Reference< ::rendering::XColorSpace >& targetColorSpace )
 {
     // TODO(P3): if we know anything about target
     // colorspace, this can be greatly sped up
-    uno::Sequence<rendering::ARGBColor> aIntermediate(
+    cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
         convertToARGB(deviceColor));
     return targetColorSpace->convertFromARGB(aIntermediate);
 }
 
-uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertToRGB( const uno::Sequence< double >& deviceColor )
+cpo::uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertToRGB( const cpo::uno::Sequence< double >& deviceColor )
 {
     SolarMutexGuard aGuard;
 
@@ -599,7 +599,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertToRGB( const
                          "number of channels no multiple of pixel element count",
                          static_cast<rendering::XBitmapPalette*>(this), 01);
 
-    uno::Sequence< rendering::RGBColor > aRes(nLen/nComponentsPerPixel);
+    cpo::uno::Sequence< rendering::RGBColor > aRes(nLen/nComponentsPerPixel);
     rendering::RGBColor* pOut( aRes.getArray() );
 
     if( m_bPalette )
@@ -638,7 +638,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertToRGB( const
     return aRes;
 }
 
-uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToARGB( const uno::Sequence< double >& deviceColor )
+cpo::uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToARGB( const cpo::uno::Sequence< double >& deviceColor )
 {
     SolarMutexGuard aGuard;
 
@@ -648,7 +648,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToARGB( con
                          "number of channels no multiple of pixel element count",
                          static_cast<rendering::XBitmapPalette*>(this), 01);
 
-    uno::Sequence< rendering::ARGBColor > aRes(nLen/nComponentsPerPixel);
+    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/nComponentsPerPixel);
     rendering::ARGBColor* pOut( aRes.getArray() );
 
     if( m_bPalette )
@@ -691,7 +691,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToARGB( con
     return aRes;
 }
 
-uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToPARGB( const uno::Sequence< double >& deviceColor )
+cpo::uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToPARGB( const cpo::uno::Sequence< double >& deviceColor )
 {
     SolarMutexGuard aGuard;
 
@@ -701,7 +701,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToPARGB( co
                          "number of channels no multiple of pixel element count",
                          static_cast<rendering::XBitmapPalette*>(this), 01);
 
-    uno::Sequence< rendering::ARGBColor > aRes(nLen/nComponentsPerPixel);
+    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/nComponentsPerPixel);
     rendering::ARGBColor* pOut( aRes.getArray() );
 
     if( m_bPalette )
@@ -744,14 +744,14 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToPARGB( co
     return aRes;
 }
 
-uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromRGB( const uno::Sequence<rendering::RGBColor>& rgbColor )
+cpo::uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromRGB( const cpo::uno::Sequence<rendering::RGBColor>& rgbColor )
 {
     SolarMutexGuard aGuard;
 
     const std::size_t nLen( rgbColor.getLength() );
     const sal_Int32 nComponentsPerPixel(m_aComponentTags.getLength());
 
-    uno::Sequence< double > aRes(nLen*nComponentsPerPixel);
+    cpo::uno::Sequence< double > aRes(nLen*nComponentsPerPixel);
     double* pColors=aRes.getArray();
 
     if( m_bPalette )
@@ -784,14 +784,14 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromRGB( const uno::Seq
     return aRes;
 }
 
-uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromARGB( const uno::Sequence<rendering::ARGBColor>& rgbColor )
+cpo::uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromARGB( const cpo::uno::Sequence<rendering::ARGBColor>& rgbColor )
 {
     SolarMutexGuard aGuard;
 
     const std::size_t nLen( rgbColor.getLength() );
     const sal_Int32 nComponentsPerPixel(m_aComponentTags.getLength());
 
-    uno::Sequence< double > aRes(nLen*nComponentsPerPixel);
+    cpo::uno::Sequence< double > aRes(nLen*nComponentsPerPixel);
     double* pColors=aRes.getArray();
 
     if( m_bPalette )
@@ -824,14 +824,14 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromARGB( const uno::Se
     return aRes;
 }
 
-uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromPARGB( const uno::Sequence<rendering::ARGBColor>& rgbColor )
+cpo::uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromPARGB( const cpo::uno::Sequence<rendering::ARGBColor>& rgbColor )
 {
     SolarMutexGuard aGuard;
 
     const std::size_t nLen( rgbColor.getLength() );
     const sal_Int32 nComponentsPerPixel(m_aComponentTags.getLength());
 
-    uno::Sequence< double > aRes(nLen*nComponentsPerPixel);
+    cpo::uno::Sequence< double > aRes(nLen*nComponentsPerPixel);
     double* pColors=aRes.getArray();
 
     if( m_bPalette )
@@ -871,7 +871,7 @@ sal_Int32 SAL_CALL VclCanvasBitmap::getBitsPerPixel(  )
     return m_nBitsPerOutputPixel;
 }
 
-uno::Sequence< ::sal_Int32 > SAL_CALL VclCanvasBitmap::getComponentBitCounts(  )
+cpo::uno::Sequence< ::sal_Int32 > SAL_CALL VclCanvasBitmap::getComponentBitCounts(  )
 {
     return m_aComponentBitCounts;
 }
@@ -881,7 +881,7 @@ sal_Int8 SAL_CALL VclCanvasBitmap::getEndianness(  )
     return util::Endianness::LITTLE;
 }
 
-uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+cpo::uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                               const uno::Reference< ::rendering::XColorSpace >& targetColorSpace )
 {
     if( dynamic_cast<VclCanvasBitmap*>(targetColorSpace.get()) )
@@ -894,7 +894,7 @@ uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( co
                              "number of channels no multiple of pixel element count",
                              static_cast<rendering::XBitmapPalette*>(this), 01);
 
-        uno::Sequence<double> aRes(nLen);
+        cpo::uno::Sequence<double> aRes(nLen);
         double* pOut( aRes.getArray() );
 
         if( m_bPalette )
@@ -939,13 +939,13 @@ uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( co
     {
         // TODO(P3): if we know anything about target
         // colorspace, this can be greatly sped up
-        uno::Sequence<rendering::ARGBColor> aIntermediate(
+        cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
             convertIntegerToARGB(deviceColor));
         return targetColorSpace->convertFromARGB(aIntermediate);
     }
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertToIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                   const uno::Reference< ::rendering::XIntegerBitmapColorSpace >& targetColorSpace )
 {
     if( dynamic_cast<VclCanvasBitmap*>(targetColorSpace.get()) )
@@ -957,13 +957,13 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertToIntegerColorSpace
     {
         // TODO(P3): if we know anything about target
         // colorspace, this can be greatly sped up
-        uno::Sequence<rendering::ARGBColor> aIntermediate(
+        cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
             convertIntegerToARGB(deviceColor));
         return targetColorSpace->convertIntegerFromARGB(aIntermediate);
     }
 }
 
-uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor )
+cpo::uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor )
 {
     SolarMutexGuard aGuard;
 
@@ -971,7 +971,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB
     const std::size_t nLen( deviceColor.getLength() );
     const sal_Int32 nNumColors((nLen*8 + m_nBitsPerOutputPixel-1)/m_nBitsPerOutputPixel);
 
-    uno::Sequence< rendering::RGBColor > aRes(nNumColors);
+    cpo::uno::Sequence< rendering::RGBColor > aRes(nNumColors);
     rendering::RGBColor* pOut( aRes.getArray() );
 
     BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
@@ -1011,7 +1011,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB
     return aRes;
 }
 
-uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor )
+cpo::uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor )
 {
     SolarMutexGuard aGuard;
 
@@ -1019,7 +1019,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
     const std::size_t nLen( deviceColor.getLength() );
     const sal_Int32 nNumColors((nLen*8 + m_nBitsPerOutputPixel-1)/m_nBitsPerOutputPixel);
 
-    uno::Sequence< rendering::ARGBColor > aRes(nNumColors);
+    cpo::uno::Sequence< rendering::ARGBColor > aRes(nNumColors);
     rendering::ARGBColor* pOut( aRes.getArray() );
 
     BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
@@ -1060,7 +1060,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
     return aRes;
 }
 
-uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor )
+cpo::uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor )
 {
     SolarMutexGuard aGuard;
 
@@ -1068,7 +1068,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
     const std::size_t nLen( deviceColor.getLength() );
     const sal_Int32 nNumColors((nLen*8 + m_nBitsPerOutputPixel-1)/m_nBitsPerOutputPixel);
 
-    uno::Sequence< rendering::ARGBColor > aRes(nNumColors);
+    cpo::uno::Sequence< rendering::ARGBColor > aRes(nNumColors);
     rendering::ARGBColor* pOut( aRes.getArray() );
 
     BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
@@ -1110,14 +1110,14 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
     return aRes;
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( const uno::Sequence<rendering::RGBColor>& rgbColor )
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( const cpo::uno::Sequence<rendering::RGBColor>& rgbColor )
 {
     SolarMutexGuard aGuard;
 
     const std::size_t nLen( rgbColor.getLength() );
     const sal_Int32 nNumBytes((nLen*m_nBitsPerOutputPixel+7)/8);
 
-    uno::Sequence< sal_Int8 > aRes(nNumBytes);
+    cpo::uno::Sequence< sal_Int8 > aRes(nNumBytes);
     sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
     BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
 
@@ -1152,14 +1152,14 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromRGB( con
     return aRes;
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( const uno::Sequence<rendering::ARGBColor>& rgbColor )
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( const cpo::uno::Sequence<rendering::ARGBColor>& rgbColor )
 {
     SolarMutexGuard aGuard;
 
     const std::size_t nLen( rgbColor.getLength() );
     const sal_Int32 nNumBytes((nLen*m_nBitsPerOutputPixel+7)/8);
 
-    uno::Sequence< sal_Int8 > aRes(nNumBytes);
+    cpo::uno::Sequence< sal_Int8 > aRes(nNumBytes);
     sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
     BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
 
@@ -1194,14 +1194,14 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromARGB( co
     return aRes;
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( const uno::Sequence<rendering::ARGBColor>& rgbColor )
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( const cpo::uno::Sequence<rendering::ARGBColor>& rgbColor )
 {
     SolarMutexGuard aGuard;
 
     const std::size_t nLen( rgbColor.getLength() );
     const sal_Int32 nNumBytes((nLen*m_nBitsPerOutputPixel+7)/8);
 
-    uno::Sequence< sal_Int8 > aRes(nNumBytes);
+    cpo::uno::Sequence< sal_Int8 > aRes(nNumBytes);
     sal_uInt8* pColors=reinterpret_cast<sal_uInt8*>(aRes.getArray());
     BitmapScopedReadAccess& pBmpAcc = getBitmapReadAccess();
 

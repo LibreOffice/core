@@ -71,7 +71,7 @@ class IFrameObject : public ::cppu::WeakImplHelper <
 public:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    IFrameObject(css::uno::Reference < css::uno::XComponentContext> xContext, const css::uno::Sequence< cpo::uno::Any >& aArguments);
+    IFrameObject(css::uno::Reference < css::uno::XComponentContext> xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -83,13 +83,13 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.SpecialEmbeddedObject"_ustr };
+        cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.SpecialEmbeddedObject"_ustr };
         return aSeq;
     }
 
-    virtual bool SAL_CALL load( const css::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
+    virtual bool SAL_CALL load( const cpo::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
             const css::uno::Reference < css::frame::XFrame >& xFrame ) override;
     virtual void SAL_CALL cancel() override;
     virtual void SAL_CALL close( bool bDeliverOwnership ) override;
@@ -149,7 +149,7 @@ std::span<const SfxItemPropertyMapEntry> lcl_GetIFramePropertyMap_Impl()
     return aIFramePropertyMap_Impl;
 }
 
-IFrameObject::IFrameObject(uno::Reference < uno::XComponentContext > xContext, const css::uno::Sequence< cpo::uno::Any >& aArguments)
+IFrameObject::IFrameObject(uno::Reference < uno::XComponentContext > xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments)
     : mxContext(std::move( xContext ))
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
@@ -158,7 +158,7 @@ IFrameObject::IFrameObject(uno::Reference < uno::XComponentContext > xContext, c
 }
 
 bool SAL_CALL IFrameObject::load(
-    const uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
+    const cpo::uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
     const uno::Reference < frame::XFrame >& xFrame )
 {
     if ( officecfg::Office::Common::Misc::PluginsEnabled::get() )
@@ -222,7 +222,7 @@ bool SAL_CALL IFrameObject::load(
         }
 
         uno::Reference<task::XInteractionHandler> xInteractionHandler(task::InteractionHandler::createWithParent(mxContext, xParentWindow));
-        uno::Sequence < beans::PropertyValue > aProps{
+        cpo::uno::Sequence < beans::PropertyValue > aProps{
             comphelper::makePropertyValue(u"PluginMode"_ustr, sal_Int16(2)),
             comphelper::makePropertyValue(u"ReadOnly"_ustr, true),
             comphelper::makePropertyValue(u"InteractionHandler"_ustr, xInteractionHandler),
@@ -446,7 +446,7 @@ void SAL_CALL IFrameObject::setTitle( const OUString& )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_IFrameObject_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new IFrameObject(context, arguments));
 }

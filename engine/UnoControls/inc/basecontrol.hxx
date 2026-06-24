@@ -56,7 +56,7 @@ public:
 
     virtual OUString getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString > getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     //  XComponent
 

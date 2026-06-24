@@ -91,9 +91,9 @@ static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet> const & xSou
         xSourceProperties->getPropertyValue(u"URL"_ustr) >>= sDBURL;
         if (sDBURL.startsWith("sdbc:flat:"))
         {
-            uno::Sequence<OUString> aFilters;
+            cpo::uno::Sequence<OUString> aFilters;
             xSourceProperties->getPropertyValue(u"TableFilter"_ustr) >>= aFilters;
-            uno::Sequence<PropertyValue> aInfo;
+            cpo::uno::Sequence<PropertyValue> aInfo;
             xSourceProperties->getPropertyValue(u"Info"_ustr) >>= aInfo;
             if(aFilters.getLength() == 1 && aInfo.hasElements() )
             {
@@ -172,7 +172,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
     SwDBConfig aDb;
     const OUString sBibliography = aDb.GetBibliographySource().sDataSource;
-    const uno::Sequence< OUString> aNames = m_xDBContext->getElementNames();
+    const cpo::uno::Sequence< OUString> aNames = m_xDBContext->getElementNames();
     for(const OUString& rName : aNames)
     {
         if ( rName == sBibliography )
@@ -354,10 +354,10 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
         const OUString sDBURL("sdbc:flat:" + aTempURL.GetMainURL(INetURLObject::DecodeMechanism::NONE));
         xDataProperties->setPropertyValue(u"URL"_ustr, Any(sDBURL));
         //set the filter to the file name without extension
-        uno::Sequence<OUString> aFilters { sNewName };
+        cpo::uno::Sequence<OUString> aFilters { sNewName };
         xDataProperties->setPropertyValue(u"TableFilter"_ustr, Any(aFilters));
 
-        uno::Sequence<PropertyValue> aInfo
+        cpo::uno::Sequence<PropertyValue> aInfo
         {
             comphelper::makePropertyValue(u"FieldDelimiter"_ustr, OUString('\t')),
             comphelper::makePropertyValue(u"StringDelimiter"_ustr, OUString('"')),
@@ -489,8 +489,8 @@ void SwAddressListDialog::DetectTablesAndQueries(
         if(pUserData->xConnection.is())
         {
             sal_Int32 nTables = 0;
-            uno::Sequence<OUString> aTables;
-            uno::Sequence<OUString> aQueries;
+            cpo::uno::Sequence<OUString> aTables;
+            cpo::uno::Sequence<OUString> aQueries;
             uno::Reference<XTablesSupplier> xTSupplier(pUserData->xConnection, UNO_QUERY);
             if(xTSupplier.is())
             {

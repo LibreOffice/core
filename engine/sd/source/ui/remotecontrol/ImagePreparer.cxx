@@ -79,7 +79,7 @@ void ImagePreparer::Invoke()
 void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
 {
     sal_uInt64 aSize;
-    uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, 320, 240,
+    cpo::uno::Sequence<sal_Int8> aImageData = preparePreview( aSlideNumber, 320, 240,
         aSize );
     if ( !xController->isRunning() )
         return;
@@ -99,7 +99,7 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
 
 }
 
-uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
+cpo::uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
     sal_uInt32 aSlideNumber, sal_uInt32 aWidth, sal_uInt32 aHeight,
     sal_uInt64 &rSize )
 {
@@ -110,7 +110,7 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
         drawing::GraphicExportFilter::create( ::comphelper::getProcessComponentContext() );
 
     if ( !xController->isRunning() )
-        return uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
 
     uno::Reference< lang::XComponent > xSourceDoc(
         xController->getSlideByIndex( aSlideNumber ),
@@ -118,13 +118,13 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
 
     xFilter->setSourceDocument( xSourceDoc );
 
-    uno::Sequence< beans::PropertyValue > aFilterData{
+    cpo::uno::Sequence< beans::PropertyValue > aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, aWidth),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, aHeight),
         comphelper::makePropertyValue(u"ColorMode"_ustr, sal_Int32(0)) // 0: Color, 1: B&W
     };
 
-    uno::Sequence< beans::PropertyValue > aProps{
+    cpo::uno::Sequence< beans::PropertyValue > aProps{
         comphelper::makePropertyValue(u"MediaType"_ustr, u"image/png"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, aFileURL),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -134,12 +134,12 @@ uno::Sequence<sal_Int8> ImagePreparer::preparePreview(
 
     File aFile(aFileURL);
     if (aFile.open(0) != osl::File::E_None)
-        return uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
 
     sal_uInt64 aRead;
     rSize = 0;
     aFile.getSize( rSize );
-    uno::Sequence<sal_Int8> aContents( rSize );
+    cpo::uno::Sequence<sal_Int8> aContents( rSize );
 
     aFile.read( aContents.getArray(), rSize, aRead );
     if (aRead != rSize)

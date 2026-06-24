@@ -380,7 +380,7 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
 
 }
 
-OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
+OUString SAL_CALL TypeDetection::queryTypeByDescriptor(cpo::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                               bool                                         bAllowDeep )
 {
     // make the descriptor more usable :-)
@@ -664,8 +664,8 @@ bool TypeDetection::impl_getPreselectionForType(
 
         // otherwise we must know, if it matches to the given URL really.
         // especially if it matches by its extension or pattern registration.
-        const css::uno::Sequence<OUString> lExtensions = aType[PROPNAME_EXTENSIONS].get<css::uno::Sequence<OUString> >();
-        const css::uno::Sequence<OUString> lURLPattern = aType[PROPNAME_URLPATTERN].get<css::uno::Sequence<OUString> >();
+        const cpo::uno::Sequence<OUString> lExtensions = aType[PROPNAME_EXTENSIONS].get<cpo::uno::Sequence<OUString> >();
+        const cpo::uno::Sequence<OUString> lURLPattern = aType[PROPNAME_URLPATTERN].get<cpo::uno::Sequence<OUString> >();
 
         for (auto const& extension : lExtensions)
         {
@@ -860,7 +860,7 @@ static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStrea
                 {
                 }
             });
-        css::uno::Sequence<sal_Int8> magic(2);
+        cpo::uno::Sequence<sal_Int8> magic(2);
         xStream->readBytes(magic, 2);
         if (magic.getLength() < 2 || magic[0] != 'P' || magic[1] != 'K')
             return false;
@@ -1134,7 +1134,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
                 Because it's used as an in out parameter. And in case of a temp. used object
                 we will run into memory corruptions!
         */
-        css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
+        cpo::uno::Sequence< css::beans::PropertyValue > lDescriptor;
         rDescriptor >> lDescriptor;
         sDeepType = xDetector->detect(lDescriptor);
         rDescriptor << lDescriptor;
@@ -1307,7 +1307,7 @@ bool TypeDetection::impl_validateAndSetFilterOnDescriptor( comphelper::SequenceA
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_TypeDetection_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::TypeDetection(context));
 }

@@ -131,7 +131,7 @@ void SAL_CALL SignatureCreatorImpl::removeSignatureCreationResultListener(
 }
 
 /* XInitialization */
-void SAL_CALL SignatureCreatorImpl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SignatureCreatorImpl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -152,7 +152,7 @@ OUString SignatureCreatorImpl_getImplementationName ()
     return u"com.sun.star.xml.security.framework.SignatureCreatorImpl"_ustr;
 }
 
-css::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  )
 {
     return { u"com.sun.star.xml.crypto.sax.SignatureCreator"_ustr };
 }
@@ -168,7 +168,7 @@ bool SAL_CALL SignatureCreatorImpl::supportsService( const OUString& rServiceNam
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL SignatureCreatorImpl::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SignatureCreatorImpl::getSupportedServiceNames(  )
 {
     return SignatureCreatorImpl_getSupportedServiceNames();
 }

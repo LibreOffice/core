@@ -38,7 +38,7 @@ namespace com::sun::star::security
 {
 enum class CertificateKind;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class E> class Sequence;
 }
@@ -58,7 +58,7 @@ GetDNForCertDetailsView(std::u16string_view rRawString);
 COMPHELPER_DLLPUBLIC OUString GetContentPart(const OUString& _rRawString,
                                              const css::security::CertificateKind& rKind);
 
-COMPHELPER_DLLPUBLIC OUString GetHexString(const css::uno::Sequence<sal_Int8>& _rSeq,
+COMPHELPER_DLLPUBLIC OUString GetHexString(const cpo::uno::Sequence<sal_Int8>& _rSeq,
                                            const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF);
 
 COMPHELPER_DLLPUBLIC css::uno::Reference<css::security::XCertificate> FindCertInContext(

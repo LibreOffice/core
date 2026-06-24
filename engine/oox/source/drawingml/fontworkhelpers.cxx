@@ -93,7 +93,7 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     // binary MS Office. Therefore all adjustment values need to be adapted.
     const OUString sFontworkType = PresetGeometryTypeNames::GetFontworkType(sMSPresetType);
     auto aAdjGdList = pCustomShapePropertiesPtr->getAdjustmentGuideList();
-    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment(
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment(
         !aAdjGdList.empty() ? aAdjGdList.size() : 1);
     auto pAdjustment = aAdjustment.getArray();
     int nIndex = 0;
@@ -151,7 +151,7 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     xDefaulter->createCustomShapeDefaults(sFontworkType);
 
     auto aGeomPropSeq = xSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                            .get<uno::Sequence<beans::PropertyValue>>();
+                            .get<cpo::uno::Sequence<beans::PropertyValue>>();
     auto aGeomPropVec
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
 
@@ -178,7 +178,7 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     }
 
     // Apply new properties
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         { { sTextPath, cpo::uno::Any(true) },
           { u"TextPathMode"_ustr, cpo::uno::Any(drawing::EnhancedCustomShapeTextPathMode_PATH) },
           { u"ScaleX"_ustr, cpo::uno::Any(bScaleX) } }));
@@ -1654,7 +1654,7 @@ void FontworkHelpers::applyUpdatesToCharInteropGrabBag(
                 continue;
 
             // Now apply the updates to the CharInteropGrabBag of this run
-            uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
+            cpo::uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
             if (xRunPropSetInfo->hasPropertyByName(u"CharInteropGrabBag"_ustr))
                 xRunPropSet->getPropertyValue(u"CharInteropGrabBag"_ustr)
                     >>= aCharInteropGrabBagSeq;

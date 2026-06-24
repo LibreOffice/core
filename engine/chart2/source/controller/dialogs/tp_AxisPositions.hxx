@@ -40,7 +40,7 @@ public:
     void SetNumFormatter(SvNumberFormatter* pFormatter);
 
     void SetCrossingAxisIsCategoryAxis(bool bCrossingAxisIsCategoryAxis);
-    void SetCategories(const css::uno::Sequence<OUString>& rCategories);
+    void SetCategories(const cpo::uno::Sequence<OUString>& rCategories);
 
     void SupportAxisPositioning(bool bSupportAxisPositioning);
     void SupportCategoryPositioning(bool bSupportCategoryPositioning);
@@ -53,7 +53,7 @@ private: //member:
     SvNumberFormatter* m_pNumFormatter;
 
     bool m_bCrossingAxisIsCategoryAxis;
-    css::uno::Sequence<OUString> m_aCategories;
+    cpo::uno::Sequence<OUString> m_aCategories;
 
     bool m_bSupportAxisPositioning;
     bool m_bSupportCategoryPositioning;

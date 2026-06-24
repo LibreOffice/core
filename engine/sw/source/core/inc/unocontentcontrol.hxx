@@ -85,7 +85,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
     void SAL_CALL dispose() override;

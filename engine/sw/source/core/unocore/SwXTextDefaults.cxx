@@ -223,7 +223,7 @@ bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.text.Defaults"_ustr,
              u"com.sun.star.style.CharacterProperties"_ustr,

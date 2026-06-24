@@ -46,7 +46,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
 
     //Simulate a user editing the char background color of the paragraph 2 marker (CR)
     uno::Reference<beans::XPropertySet> properties(getParagraph(2), uno::UNO_QUERY);
-    uno::Sequence<beans::NamedValue> aListAutoFormat;
+    cpo::uno::Sequence<beans::NamedValue> aListAutoFormat;
     CPPUNIT_ASSERT(properties->getPropertyValue(u"ListAutoFormat"_ustr) >>= aListAutoFormat);
     comphelper::SequenceAsHashMap aMap(properties->getPropertyValue(u"ListAutoFormat"_ustr));
     // change the background color to RES_CHRATR_BACKGROUND.
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightEdit_numbering)
     // so clear any potential highlight set earlier, or override any coming via a style.
     aMap[u"CharHighlight"_ustr] <<= static_cast<sal_Int32>(COL_TRANSPARENT);
 
-    uno::Sequence<beans::PropertyValue> aGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
     aMap[u"CharInteropGrabBag"_ustr] >>= aGrabBag;
     for (beans::PropertyValue& rProp : asNonConstRange(aGrabBag))
     {
@@ -134,7 +134,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124367, "tdf124367.docx")
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // it was 2761 at the first import, and 2760 at the second import, due to incorrect rounding
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2762),
-                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                         getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                              xTableRows->getByIndex(2), u"TableColumnSeparators"_ustr)[0]
                              .Position);
 }

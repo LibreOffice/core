@@ -21,7 +21,7 @@
 #include <osl/file.h>
 #include "smplmailmsg.hxx"
 
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 
 using namespace cppu;
 

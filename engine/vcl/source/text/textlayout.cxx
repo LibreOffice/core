@@ -254,7 +254,7 @@ namespace vcl
 
         SAL_WARN_IF( nSoftBreak >= nLen, "vcl", "Break?!" );
 
-        css::i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, css::uno::Sequence <css::beans::PropertyValue>(), 1 );
+        css::i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, cpo::uno::Sequence <css::beans::PropertyValue>(), 1 );
         css::i18n::LineBreakUserOptions aUserOptions;
         css::i18n::LineBreakResults aLBR = xBI->getLineBreak( rStr, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
 
@@ -285,7 +285,7 @@ namespace vcl
         sal_Int32 nMinTrail = nWordEnd-nSoftBreak+1;  //+1: Before the "broken off" char
         css::uno::Reference< css::linguistic2::XHyphenatedWord > xHyphWord;
         if (xHyph.is())
-            xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.getLength() - nMinTrail, css::uno::Sequence< css::beans::PropertyValue >() );
+            xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.getLength() - nMinTrail, cpo::uno::Sequence< css::beans::PropertyValue >() );
 
         if (!xHyphWord.is())
             return { nBreakPos, GetTextWidth(rStr, nPos, nBreakPos - nPos) };

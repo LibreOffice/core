@@ -130,7 +130,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.frame.Frame"_ustr};
     }
@@ -141,7 +141,7 @@ public:
             const OUString& sURL,
             const OUString& sTargetFrameName,
             sal_Int32 nSearchFlags,
-            const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     //  XFramesSupplier
 
@@ -188,8 +188,8 @@ public:
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(const css::util::URL & aURL,
             const OUString & sTargetFrameName,
             sal_Int32 nSearchFlags) override;
-    virtual css::uno::Sequence < css::uno::Reference < css::frame::XDispatch > > SAL_CALL queryDispatches(
-            const css::uno::Sequence < css::frame::DispatchDescriptor > & lDescriptor) override;
+    virtual cpo::uno::Sequence < css::uno::Reference < css::frame::XDispatch > > SAL_CALL queryDispatches(
+            const cpo::uno::Sequence < css::frame::DispatchDescriptor > & lDescriptor) override;
 
     //  XDispatchProviderInterception
 
@@ -200,8 +200,8 @@ public:
 
     //  XDispatchInformationProvider
 
-    virtual css::uno::Sequence < sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
-    virtual css::uno::Sequence < css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup) override;
+    virtual cpo::uno::Sequence < sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
+    virtual cpo::uno::Sequence < css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup) override;
 
     //  XWindowListener
     //  Attention: only windowResized() and windowShown() are implemented! All others are empty!
@@ -293,7 +293,7 @@ public:
             const css::uno::Reference < css::beans::XVetoableChangeListener > & xListener) override;
 
     // XPropertySetInfo
-    virtual css::uno::Sequence < css::beans::Property > SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence < css::beans::Property > SAL_CALL getProperties() override;
 
     virtual css::beans::Property SAL_CALL getPropertyByName(const OUString & sName) override;
 
@@ -567,7 +567,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL XFrameImpl::loadComponentF
         const OUString& sURL,
         const OUString& sTargetFrameName,
         sal_Int32 nSearchFlags,
-        const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+        const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     checkDisposed();
 
@@ -1984,14 +1984,14 @@ void SAL_CALL XFrameImpl::removeVetoableChangeListener(
     m_lVetoChangeListener.removeInterface(sProperty, xListener);
 }
 
-css::uno::Sequence< css::beans::Property > SAL_CALL XFrameImpl::getProperties()
+cpo::uno::Sequence< css::beans::Property > SAL_CALL XFrameImpl::getProperties()
 {
     checkDisposed();
 
     SolarMutexGuard g;
 
     sal_Int32 c = static_cast<sal_Int32>(m_lProps.size());
-    css::uno::Sequence< css::beans::Property > lProps(c);
+    cpo::uno::Sequence< css::beans::Property > lProps(c);
     auto lPropsRange = asNonConstRange(lProps);
     for (auto const& elem : m_lProps)
     {
@@ -2340,8 +2340,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL XFrameImpl::queryDispatch(
 
     @onerror    An empty list is returned.
 *//*-*****************************************************************************************************/
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL XFrameImpl::queryDispatches(
-        const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL XFrameImpl::queryDispatches(
+        const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     // Don't check incoming parameters here! Our helper does it for us and it is not a good idea to do it more than once!
 
@@ -2411,12 +2411,12 @@ void SAL_CALL XFrameImpl::releaseDispatchProviderInterceptor(
     @short      provides information about all possible dispatch functions
                 inside the current frame environment
 *//*-*****************************************************************************************************/
-css::uno::Sequence< sal_Int16 > SAL_CALL XFrameImpl::getSupportedCommandGroups()
+cpo::uno::Sequence< sal_Int16 > SAL_CALL XFrameImpl::getSupportedCommandGroups()
 {
     return m_xDispatchInfoHelper->getSupportedCommandGroups();
 }
 
-css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL XFrameImpl::getConfigurableDispatchInformation(
+cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL XFrameImpl::getConfigurableDispatchInformation(
         sal_Int16 nCommandGroup)
 {
     return m_xDispatchInfoHelper->getConfigurableDispatchInformation(nCommandGroup);
@@ -2556,7 +2556,7 @@ void SAL_CALL XFrameImpl::windowClosing( const css::lang::EventObject& )
 
     css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_SELF, 0);
     if (xCloser.is())
-        xCloser->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+        xCloser->dispatch(aURL, cpo::uno::Sequence< css::beans::PropertyValue >());
 
     // Attention: if this dispatch works synchronously and fulfills its job,
     // this line of code will never be reached.
@@ -3321,7 +3321,7 @@ void XFrameImpl::impl_checkMenuCloser()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_Frame_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<XFrameImpl> inst = new XFrameImpl(context);
     css::uno::XInterface *acquired_inst = cppu::acquire(inst.get());

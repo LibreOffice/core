@@ -123,7 +123,7 @@ using namespace ::svx;
 // SbaTableQueryBrowser
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_ODatasourceBrowser_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     SolarMutexGuard aGuard;
     return cppu::acquire(new ::dbaui::SbaTableQueryBrowser(context));
@@ -154,7 +154,7 @@ OUString SAL_CALL SbaTableQueryBrowser::getImplementationName()
     return u"org.openoffice.comp.dbu.ODatasourceBrowser"_ustr;
 }
 
-css::uno::Sequence<OUString> SAL_CALL SbaTableQueryBrowser::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SbaTableQueryBrowser::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.DataSourceBrowser"_ustr };
 }
@@ -225,7 +225,7 @@ Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  )
 
 Sequence< sal_Int8 > SAL_CALL SbaTableQueryBrowser::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL SbaTableQueryBrowser::disposing()

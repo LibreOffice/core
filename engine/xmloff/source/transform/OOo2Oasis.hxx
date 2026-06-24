@@ -51,24 +51,24 @@ public:
     virtual ~OOo2OasisTransformer() noexcept override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel(  ) override;
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    void Initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments );
+    void Initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
 
     // css::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument() override;

@@ -25,7 +25,7 @@
 #include <optional>
 #include <forward_list>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <formula/formuladllapi.h>
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
@@ -179,12 +179,12 @@ public:
         void putExternalSoftly( const OUString & rSymbol, const OUString & rAddIn );
 
         /// Core implementation of XFormulaOpCodeMapper::getMappings()
-        css::uno::Sequence< css::sheet::FormulaToken >
+        cpo::uno::Sequence< css::sheet::FormulaToken >
             createSequenceOfFormulaTokens(const FormulaCompiler& _rCompiler,
-                    const css::uno::Sequence< OUString >& rNames ) const;
+                    const cpo::uno::Sequence< OUString >& rNames ) const;
 
         /// Core implementation of XFormulaOpCodeMapper::getAvailableMappings()
-        css::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
+        cpo::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
             createSequenceOfAvailableMappings( const FormulaCompiler& _rCompiler,const sal_Int32 nGroup ) const;
 
         /** The value used in createSequenceOfAvailableMappings() and thus in
@@ -259,7 +259,7 @@ public:
             Use English number parser / formatter instead of native.
      */
     static OpCodeMapPtr CreateOpCodeMap(
-            const css::uno::Sequence< const css::sheet::FormulaOpCodeMapEntry > & rMapping,
+            const cpo::uno::Sequence< const css::sheet::FormulaOpCodeMapEntry > & rMapping,
             bool bEnglish );
 
     /** Get current OpCodeMap in effect. */

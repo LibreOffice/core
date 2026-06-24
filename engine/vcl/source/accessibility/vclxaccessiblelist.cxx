@@ -439,7 +439,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
     {
         if (m_pListBoxHelper && (m_pListBoxHelper->GetStyle() & WB_DROPDOWN ) != WB_DROPDOWN)
         {
-            uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pBox->GetAccessible() };
+            cpo::uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pBox->GetAccessible() };
             rRelationSet.AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType_MEMBER_OF, aSequence ) );
         }
     }

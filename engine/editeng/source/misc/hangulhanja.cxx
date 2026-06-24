@@ -23,7 +23,7 @@
 
 #include <set>
 #include <map>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
@@ -52,6 +52,7 @@ namespace editeng
     using namespace ::com::sun::star::i18n;
     using namespace ::com::sun::star::i18n::TextConversionOption;
     using namespace ::com::sun::star::i18n::TextConversionType;
+    using namespace ::cpo::uno;
 
     class HangulHanjaConversion_Impl
     {

@@ -361,16 +361,16 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.UIElementFactoryManager"_ustr};
     }
 
     // XUIElementFactory
-    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) override;
+    virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 
     // XUIElementFactoryRegistration
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRegisteredFactories(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRegisteredFactories(  ) override;
     virtual css::uno::Reference< css::ui::XUIElementFactory > SAL_CALL getFactory( const OUString& ResourceURL, const OUString& ModuleIdentifier ) override;
     virtual void SAL_CALL registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier, const OUString& aFactoryImplementationName ) override;
     virtual void SAL_CALL deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier ) override;
@@ -545,7 +545,7 @@ void SAL_CALL UIElementFactoryManager::deregisterFactory( const OUString& aType,
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_UIElementFactoryManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UIElementFactoryManager(context));
 }

@@ -1518,7 +1518,7 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
     m_pWrtShell->EnableSmooth( true );
 }
 
-void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >& rSequence )
+void SwView::ReadUserDataSequence ( const cpo::uno::Sequence < beans::PropertyValue >& rSequence )
 {
     if(GetDocShell()->IsPreview()||m_bIsPreviewDoubleClick)
         return;
@@ -1744,7 +1744,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
 
 }
 
-void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence )
+void SwView::WriteUserDataSequence ( cpo::uno::Sequence < beans::PropertyValue >& rSequence )
 {
     const SwRect& rRect = m_pWrtShell->GetCharRect();
     const tools::Rectangle& rVis = GetVisArea();

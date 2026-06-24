@@ -48,7 +48,7 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
 namespace
@@ -350,7 +350,7 @@ void SchXMLTableContext::endFastElement(sal_Int32 )
     }
 }
 
-void SchXMLTableContext::setRowPermutation( const uno::Sequence< sal_Int32 > & rPermutation )
+void SchXMLTableContext::setRowPermutation( const cpo::uno::Sequence< sal_Int32 > & rPermutation )
 {
     maRowPermutation = rPermutation;
     mbHasRowPermutation = rPermutation.hasElements();
@@ -362,7 +362,7 @@ void SchXMLTableContext::setRowPermutation( const uno::Sequence< sal_Int32 > & r
     }
 }
 
-void SchXMLTableContext::setColumnPermutation( const uno::Sequence< sal_Int32 > & rPermutation )
+void SchXMLTableContext::setColumnPermutation( const cpo::uno::Sequence< sal_Int32 > & rPermutation )
 {
     maColumnPermutation = rPermutation;
     mbHasColumnPermutation = rPermutation.hasElements();
@@ -930,7 +930,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                     {
                         bool bHasUnhiddenColumns = false;
                         OUString aRange;
-                        const uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences() );
+                        const cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences() );
                         for( const auto& xLabeledSequence : aSequences )
                         {
                             if(!xLabeledSequence.is())

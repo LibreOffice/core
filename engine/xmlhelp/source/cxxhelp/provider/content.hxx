@@ -50,14 +50,14 @@ namespace chelp
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL
         getImplementationName() override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
         // XContent
@@ -82,15 +82,15 @@ namespace chelp
 
         // private methods
 
-        virtual css::uno::Sequence< css::beans::Property >
+        virtual cpo::uno::Sequence< css::beans::Property >
         getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
-        virtual css::uno::Sequence< css::ucb::CommandInfo >
+        virtual cpo::uno::Sequence< css::ucb::CommandInfo >
         getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
         virtual OUString getParentURL() override { return OUString(); }
 
         css::uno::Reference< css::sdbc::XRow >
-        getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
+        getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties );
     };
 
 }

@@ -23,9 +23,9 @@ DispatchDisabler::DispatchDisabler(const uno::Reference< uno::XComponentContext 
 }
 
 // XInitialization
-void SAL_CALL DispatchDisabler::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL DispatchDisabler::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
-    uno::Sequence< OUString > aDisabledURLs;
+    cpo::uno::Sequence< OUString > aDisabledURLs;
     if( aArguments.hasElements() &&
         ( aArguments[0] >>= aDisabledURLs ) )
     {
@@ -48,10 +48,10 @@ DispatchDisabler::queryDispatch( const util::URL& rURL,
         return mxSlave->queryDispatch(rURL, rTargetFrameName, nSearchFlags);
 }
 
-uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
-DispatchDisabler::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& rRequests )
+cpo::uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
+DispatchDisabler::queryDispatches( const cpo::uno::Sequence< frame::DispatchDescriptor >& rRequests )
 {
-    uno::Sequence< uno::Reference< frame::XDispatch > > aResult(rRequests.getLength());
+    cpo::uno::Sequence< uno::Reference< frame::XDispatch > > aResult(rRequests.getLength());
     auto aResultRange = asNonConstRange(aResult);
     for( sal_Int32 i = 0; i < rRequests.getLength(); ++i )
         aResultRange[i] = queryDispatch(rRequests[i].FeatureURL,
@@ -84,10 +84,10 @@ DispatchDisabler::setMasterDispatchProvider( const uno::Reference< frame::XDispa
 }
 
 // XInterceptorInfo
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
     DispatchDisabler::getInterceptedURLs()
 {
-    uno::Sequence< OUString > aDisabledURLs(maDisabledURLs.size());
+    cpo::uno::Sequence< OUString > aDisabledURLs(maDisabledURLs.size());
     auto aDisabledURLsRange = asNonConstRange(aDisabledURLs);
     sal_Int32 n = 0;
     for (auto const& disabledURL : maDisabledURLs)
@@ -113,7 +113,7 @@ cpo::uno::Any SAL_CALL DispatchDisabler::getByName( const OUString& )
     return cpo::uno::Any();
 }
 
-uno::Sequence< OUString > SAL_CALL DispatchDisabler::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL DispatchDisabler::getElementNames()
 {
     return getInterceptedURLs();
 }
@@ -155,14 +155,14 @@ bool SAL_CALL DispatchDisabler::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DispatchDisabler::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DispatchDisabler::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.DispatchDisabler"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_DispatchDisabler_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::DispatchDisabler(context));
 }

@@ -10,6 +10,7 @@
 #include "XBufferedThreadedStream.hxx"
 
 using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace {
 

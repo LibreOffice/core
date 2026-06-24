@@ -967,7 +967,7 @@ TextpathModel::TextpathModel()
 
 static beans::PropertyValue lcl_createTextpathProps()
 {
-    uno::Sequence<beans::PropertyValue> aTextpathPropSeq( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aTextpathPropSeq( comphelper::InitPropertySequence({
             { "TextPath", cpo::uno::Any(true) },
             { "TextPathMode", cpo::uno::Any(drawing::EnhancedCustomShapeTextPathMode_SHAPE) },
             { "ScaleX", cpo::uno::Any(false) },
@@ -990,7 +990,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         xTextRange->setString(moString.value());
 
         uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aGeomPropSeq = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr).get< uno::Sequence<beans::PropertyValue> >();
+        cpo::uno::Sequence<beans::PropertyValue> aGeomPropSeq = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr).get< cpo::uno::Sequence<beans::PropertyValue> >();
         bool bFound = false;
         for (beans::PropertyValue& rProp : asNonConstRange(aGeomPropSeq))
         {

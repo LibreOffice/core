@@ -105,7 +105,7 @@ public:
 
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
@@ -2623,7 +2623,7 @@ void SbUserFormModule::InitObject()
             m_xDialog = xProvider->createDialog( sDialogUrl );
 
             // create vba api object
-            uno::Sequence< cpo::uno::Any > aArgs
+            cpo::uno::Sequence< cpo::uno::Any > aArgs
             {
                 cpo::uno::Any(),
                 Any(m_xDialog),

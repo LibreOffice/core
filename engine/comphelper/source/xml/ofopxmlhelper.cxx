@@ -48,12 +48,12 @@ class OFOPXMLHelper_Impl
 {
     sal_uInt16 const m_nFormat; // which format to parse
 
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > m_aResultSeq;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > m_aResultSeq;
     std::vector< OUString > m_aElementsSeq; // stack of elements being parsed
 
 
 public:
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > const & GetParsingResult() const;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > const & GetParsingResult() const;
 
     explicit OFOPXMLHelper_Impl( sal_uInt16 nFormat ); // must not be created directly
 
@@ -73,12 +73,12 @@ public:
 namespace OFOPXMLHelper {
 
 /// @throws css::uno::Exception
-static uno::Sequence<uno::Sequence< beans::StringPair>> ReadSequence_Impl(
+static cpo::uno::Sequence<cpo::uno::Sequence< beans::StringPair>> ReadSequence_Impl(
     const uno::Reference<io::XInputStream>& xInStream,
     const OUString& aStringID, sal_uInt16 nFormat,
     const uno::Reference<uno::XComponentContext>& xContext);
 
-uno::Sequence< uno::Sequence< beans::StringPair > > ReadRelationsInfoSequence(
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > ReadRelationsInfoSequence(
         const uno::Reference< io::XInputStream >& xInStream,
         std::u16string_view aStreamName,
         const uno::Reference< uno::XComponentContext >& rContext )
@@ -88,7 +88,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadRelationsInfoSequence(
 }
 
 
-uno::Sequence< uno::Sequence< beans::StringPair > > ReadContentTypeSequence(
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > ReadContentTypeSequence(
         const uno::Reference< io::XInputStream >& xInStream,
         const uno::Reference< uno::XComponentContext >& rContext )
 {
@@ -96,7 +96,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadContentTypeSequence(
 }
 
 OUString GetContentTypeByName(
-                const css::uno::Sequence<css::uno::Sequence<css::beans::StringPair>>& rContentTypes,
+                const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::StringPair>>& rContentTypes,
                 const OUString& rFilename)
 {
     if (rContentTypes.getLength() < 2)
@@ -104,8 +104,8 @@ OUString GetContentTypeByName(
         return OUString();
     }
 
-    const uno::Sequence<beans::StringPair>& rDefaults = rContentTypes[0];
-    const uno::Sequence<beans::StringPair>& rOverrides = rContentTypes[1];
+    const cpo::uno::Sequence<beans::StringPair>& rDefaults = rContentTypes[0];
+    const cpo::uno::Sequence<beans::StringPair>& rOverrides = rContentTypes[1];
 
     // Find the extension and use it to get the type.
     const sal_Int32 nDotOffset = rFilename.lastIndexOf('.');
@@ -130,7 +130,7 @@ OUString GetContentTypeByName(
 
 void WriteRelationsInfoSequence(
         const uno::Reference< io::XOutputStream >& xOutStream,
-        const uno::Sequence< uno::Sequence< beans::StringPair > >& aSequence,
+        const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >& aSequence,
         const uno::Reference< uno::XComponentContext >& rContext )
 {
     if ( !xOutStream.is() )
@@ -182,8 +182,8 @@ void WriteRelationsInfoSequence(
 
 void WriteContentSequence(
         const uno::Reference< io::XOutputStream >& xOutStream,
-        const uno::Sequence< beans::StringPair >& aDefaultsSequence,
-        const uno::Sequence< beans::StringPair >& aOverridesSequence,
+        const cpo::uno::Sequence< beans::StringPair >& aDefaultsSequence,
+        const cpo::uno::Sequence< beans::StringPair >& aOverridesSequence,
         const uno::Reference< uno::XComponentContext >& rContext )
 {
     if ( !xOutStream.is() )
@@ -236,7 +236,7 @@ void WriteContentSequence(
 
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > ReadSequence_Impl(
         const uno::Reference< io::XInputStream >& xInStream,
         const OUString& aStringID, sal_uInt16 nFormat,
         const uno::Reference< uno::XComponentContext >& rContext )
@@ -274,7 +274,7 @@ OFOPXMLHelper_Impl::OFOPXMLHelper_Impl( sal_uInt16 nFormat )
 {
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > const & OFOPXMLHelper_Impl::GetParsingResult() const
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > const & OFOPXMLHelper_Impl::GetParsingResult() const
 {
     if ( !m_aElementsSeq.empty() )
         throw uno::RuntimeException(); // the parsing has still not finished!

@@ -21,7 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <tools/ref.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -95,7 +95,7 @@ struct RedlineParams : public SvRefBase
     sal_Int32 m_nToken;
 
     // This can hold properties of runs that had formatted 'track changes' properties
-    css::uno::Sequence< css::beans::PropertyValue > m_aRevertProperties;
+    cpo::uno::Sequence< css::beans::PropertyValue > m_aRevertProperties;
 };
 
 typedef tools::SvRef< RedlineParams > RedlineParamsPtr;

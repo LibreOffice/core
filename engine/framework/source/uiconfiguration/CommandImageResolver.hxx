@@ -11,7 +11,7 @@
 
 #include <vcl/image.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include "ImageList.hxx"
 
@@ -41,7 +41,7 @@ public:
     CommandImageResolver();
     ~CommandImageResolver();
 
-    void registerCommands(const css::uno::Sequence<OUString>& aCommandSequence);
+    void registerCommands(const cpo::uno::Sequence<OUString>& aCommandSequence);
     Image getImageFromCommandURL(ImageType nImageType, ImageWritingDirection nImageDir,
                                  const OUString& rCommandURL);
 

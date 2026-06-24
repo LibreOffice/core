@@ -25,7 +25,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::XInterface;
@@ -43,9 +43,9 @@ OPatternControl::OPatternControl(const Reference<XComponentContext>& _rxFactory)
 {
 }
 
-css::uno::Sequence<OUString> OPatternControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OPatternControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -89,9 +89,9 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OPatternModel::createClone
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OPatternModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OPatternModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 3);
 
     OUString*pArray = aSupported.getArray();
@@ -222,14 +222,14 @@ void OPatternModel::resetNoBroadcast()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OPatternModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OPatternModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OPatternControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OPatternControl(component));
 }

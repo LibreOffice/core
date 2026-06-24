@@ -46,7 +46,7 @@ public:
     virtual void SAL_CALL setShadow( bool _shadow ) override;
 
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBABORDERS_HXX

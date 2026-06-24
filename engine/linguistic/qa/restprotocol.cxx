@@ -28,6 +28,7 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace
 {

@@ -167,14 +167,14 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
             xFactory->createInstance( u"com.sun.star.document.TypeDetection"_ustr ), uno::UNO_QUERY_THROW );
 
         OUString aActualFilterTypeName;
-        uno::Sequence< beans::PropertyValue > aActuralFilterData;
+        cpo::uno::Sequence< beans::PropertyValue > aActuralFilterData;
         xFilterFactory->getByName( aActualFilter ) >>= aActuralFilterData;
         for (const auto& rProp : aActuralFilterData)
             if ( rProp.Name == "Type" )
                 rProp.Value >>= aActualFilterTypeName;
         ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
-        uno::Sequence< OUString > aAllExt =
-            aProps1.getUnpackedValueOrDefault(u"Extensions"_ustr, uno::Sequence< OUString >() );
+        cpo::uno::Sequence< OUString > aAllExt =
+            aProps1.getUnpackedValueOrDefault(u"Extensions"_ustr, cpo::uno::Sequence< OUString >() );
         //To-do: check if aAllExt is empty first
         const OUString aExt = DEF_TPL_STR + aAllExt[0];
 
@@ -202,7 +202,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
             OUString aFilterName =
                 aProps2.getUnpackedValueOrDefault(u"PreferredFilter"_ustr, OUString() );
 
-            uno::Sequence< beans::PropertyValue > aArgs{
+            cpo::uno::Sequence< beans::PropertyValue > aArgs{
                 comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName),
                 comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
                 comphelper::makePropertyValue(u"URL"_ustr, rTemplateName)

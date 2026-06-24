@@ -31,7 +31,7 @@ namespace detail {
 
 sal_Int32 findPos(
     const OUString& aStr,
-    const css::uno::Sequence< OUString >& rList)
+    const cpo::uno::Sequence< OUString >& rList)
 {
     const OUString* pResult = ::std::lower_bound(rList.begin(), rList.end(), aStr);
     if ((pResult != rList.end()) && (*pResult == aStr))

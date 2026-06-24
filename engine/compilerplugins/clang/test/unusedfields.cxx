@@ -16,7 +16,7 @@
 #include <vector>
 #include <ostream>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
 
@@ -232,7 +232,7 @@ struct ReadOnlyAnalysis4
 {
     std::vector<int> m_readonly;
     std::vector<int> m_writeonly;
-    css::uno::Sequence<sal_Int32> m_readonlyCss;
+    cpo::uno::Sequence<sal_Int32> m_readonlyCss;
 
     void func1()
     {

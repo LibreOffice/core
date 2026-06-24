@@ -19,7 +19,7 @@
 
 #include <xltracer.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <address.hxx>
 
 XclTracer::XclTracer(std::u16string_view /*rDocUrl*/)

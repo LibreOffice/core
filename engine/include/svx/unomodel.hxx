@@ -56,7 +56,7 @@ private:
     css::uno::Reference< css::uno::XInterface > mxTransGradientTable;
     css::uno::Reference< css::uno::XInterface > mxMarkerTable;
 
-    css::uno::Sequence< css::uno::Type > maTypeSequence;
+    cpo::uno::Sequence< css::uno::Type > maTypeSequence;
 
 protected:
     // SvxUnoDrawMSFactory
@@ -81,20 +81,20 @@ public:
     virtual bool SAL_CALL hasControllersLocked(  ) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XDrawPagesSupplier
     virtual css::uno::Reference< css::drawing::XDrawPages > SAL_CALL getDrawPages(  ) override;
 
     // XMultiServiceFactory ( SvxFmMSFactory )
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XAnyCompareFactory
     virtual css::uno::Reference< css::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) override;

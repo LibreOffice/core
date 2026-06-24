@@ -46,7 +46,7 @@ CollatorWrapper::compareString (const OUString& s1, const OUString& s2) const
     return 0;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale) const
 {
     try
@@ -59,7 +59,7 @@ CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale) const
         SAL_WARN( "unotools.i18n","CollatorWrapper: listCollatorAlgorithms failed");
     }
 
-    return uno::Sequence< OUString > ();
+    return cpo::uno::Sequence< OUString > ();
 }
 
 sal_Int32

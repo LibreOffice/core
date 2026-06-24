@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/Pair.hpp>
 namespace starmathdatabase
 {
@@ -39,14 +39,14 @@ constexpr sal_Int32 STARMATH_MATHMLHTML_ENTITY_NUMBER = 2125;
   * Entity names for mathml. Example: &infin -> \u221E;
   * These ones are to be used on import.
   */
-const extern ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+const extern ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
     icustomMathmlHtmlEntities;
 
 /**
   * Entity names for mathml. Example: "\u221E"; -> &infin;
   * These ones are to be used on file export.
   */
-const extern ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+const extern ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
     icustomMathmlHtmlEntitiesExport;
 };
 

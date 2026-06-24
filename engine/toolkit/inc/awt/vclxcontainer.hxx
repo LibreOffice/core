@@ -36,12 +36,12 @@ public:
     // css::awt::XVclContainer
     void SAL_CALL addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) override;
     void SAL_CALL removeVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) override;
-    css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > SAL_CALL getWindows(  ) override;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > > SAL_CALL getWindows(  ) override;
 
     // css::awt::XVclContainerPeer
     void SAL_CALL enableDialogControl( bool bEnable ) override;
-    void SAL_CALL setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& WindowOrder, const css::uno::Sequence< cpo::uno::Any >& Tabs, bool GroupControl ) override;
-    void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Windows ) override;
+    void SAL_CALL setTabOrder( const cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& WindowOrder, const cpo::uno::Sequence< cpo::uno::Any >& Tabs, bool GroupControl ) override;
+    void SAL_CALL setGroup( const cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Windows ) override;
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;

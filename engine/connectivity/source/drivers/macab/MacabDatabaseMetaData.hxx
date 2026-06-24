@@ -160,7 +160,7 @@ namespace connectivity::macab
         virtual bool SAL_CALL dataDefinitionIgnoredInTransactions(  ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedures( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedureColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern, const OUString& columnNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const cpo::uno::Sequence< OUString >& types ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getSchemas(  ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getCatalogs(  ) override;
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTableTypes(  ) override;
@@ -187,7 +187,7 @@ namespace connectivity::macab
         virtual bool SAL_CALL deletesAreDetected( sal_Int32 setType ) override;
         virtual bool SAL_CALL insertsAreDetected( sal_Int32 setType ) override;
         virtual bool SAL_CALL supportsBatchUpdates(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types ) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const cpo::uno::Sequence< sal_Int32 >& types ) override;
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
     };
 }

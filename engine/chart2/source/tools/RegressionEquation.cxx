@@ -27,7 +27,7 @@
 #include <unonames.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -247,13 +247,13 @@ void RegressionEquation::fireModifyEvent()
 }
 
 // ____ XTitle ____
-uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
+cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL RegressionEquation::getText()
 {
     MutexGuard aGuard( m_aMutex );
     return m_aStrings;
 }
 
-void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
+void SAL_CALL RegressionEquation::setText( const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
 {
     MutexGuard aGuard( m_aMutex );
     ModifyListenerHelper::removeListenerFromAllElements(
@@ -276,7 +276,7 @@ bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceName 
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL RegressionEquation::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL RegressionEquation::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.RegressionEquation"_ustr,
              u"com.sun.star.beans.PropertySet"_ustr,
@@ -293,7 +293,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( RegressionEquation, RegressionEquation_Base, ::pr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_RegressionEquation_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::RegressionEquation);
 }

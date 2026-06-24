@@ -479,7 +479,7 @@ void Test::testPolyStruct() {
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
          getValueTypeName()));
 
-    css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >
+    cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
         aEmptySequence;
 
     CPPUNIT_ASSERT_EQUAL(
@@ -489,7 +489,7 @@ void Test::testPolyStruct() {
 }
 
 void Test::testExceptions() {
-    css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >
+    cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
         aEmptySequence;
 
     test::codemaker::cppumaker::TestException1 e11(

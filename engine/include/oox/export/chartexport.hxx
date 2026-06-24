@@ -24,7 +24,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <oox/dllapi.h>
 #include <oox/export/drawingml.hxx>
@@ -177,7 +177,7 @@ private:
 private:
     sal_Int32 getChartType();
 
-    css::uno::Sequence< css::uno::Sequence< rtl::OUString > > getSplitCategoriesList(const OUString& rRange);
+    cpo::uno::Sequence< cpo::uno::Sequence< rtl::OUString > > getSplitCategoriesList(const OUString& rRange);
 
     OUString parseFormula( const OUString& rRange );
     void InitPlotArea();
@@ -198,8 +198,8 @@ private:
                           bool bIsChartex);
     void exportTitle( const css::uno::Reference< css::drawing::XShape >& xShape,
                         bool bIsChartex,
-                          const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedSubTitle =
-                          css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >() );
+                          const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedSubTitle =
+                          cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >() );
     void exportPlotArea( const css::uno::Reference<
                              css::chart::XChartDocument >& rChartDoc,
                              bool bIsChartex);
@@ -228,7 +228,7 @@ private:
     void exportRadarChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportScatterChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportScatterChartSeries( const css::uno::Reference< css::chart2::XChartType >& xChartType,
-            const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>>* pSeries);
+            const cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>>* pSeries);
     void exportStockChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportSurfaceChart( const css::uno::Reference< css::chart2::XChartType >& xChartType );
     void exportHiLowLines();
@@ -236,15 +236,15 @@ private:
 
     void exportAllSeries(const css::uno::Reference<css::chart2::XChartType>& xChartType, bool& rPrimaryAxes);
     void exportSeries_chart(const css::uno::Reference< css::chart2::XChartType >& xChartType,
-            const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq,
+            const cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq,
             bool& rPrimaryAxes);
     void exportSeries_chartex(const css::uno::Reference< css::chart2::XChartType >& xChartType,
-            const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq,
+            const cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq,
             const char* sTypeName);
 
     void exportVaryColors(const css::uno::Reference<css::chart2::XChartType>& xChartType);
     void exportCandleStickSeries(
-        const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>>& aSeriesSeq,
+        const cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>>& aSeriesSeq,
         bool& rPrimaryAxes);
 
     void exportSeriesText(

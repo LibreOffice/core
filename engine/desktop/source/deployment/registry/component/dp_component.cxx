@@ -318,7 +318,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -560,7 +560,7 @@ bool BackendImpl::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > BackendImpl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > BackendImpl::getSupportedServiceNames()
 {
     return { BACKEND_SERVICE_NAME };
 }
@@ -1114,7 +1114,7 @@ void extractComponentData(
     if (!registryName.endsWith("/")) {
         prefix += RTL_CONSTASCII_LENGTH("/");
     }
-    const css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    const cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
         keys(registry->openKeys());
     css::uno::Reference< css::lang::XMultiComponentFactory > smgr(
         context->getServiceManager(), css::uno::UNO_SET_THROW);
@@ -1126,7 +1126,7 @@ void extractComponentData(
         if (singletons.is()) {
             sal_Int32 prefix2 = key->getKeyName().getLength() +
                 RTL_CONSTASCII_LENGTH("/UNO/SINGLETONS/");
-            const css::uno::Sequence<
+            const cpo::uno::Sequence<
                 css::uno::Reference< css::registry::XRegistryKey > >
                 singletonKeys(singletons->openKeys());
             for (css::uno::Reference< css::registry::XRegistryKey > const & singletonKey : singletonKeys) {
@@ -1662,7 +1662,7 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             }
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
-            css::uno::Sequence< css::beans::NamedValue > args
+            cpo::uno::Sequence< css::beans::NamedValue > args
             {
                 { u"uri"_ustr, cpo::uno::Any(expandUnoRcUrl(url)) },
                 { u"component-context"_ustr, cpo::uno::Any(context) }
@@ -1678,7 +1678,7 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
         if (!startup) {
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
-            css::uno::Sequence< css::beans::NamedValue > args { { u"uri"_ustr, cpo::uno::Any(expandUnoRcUrl(url)) } };
+            cpo::uno::Sequence< css::beans::NamedValue > args { { u"uri"_ustr, cpo::uno::Any(expandUnoRcUrl(url)) } };
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
                 css::uno::UNO_QUERY_THROW);
@@ -1705,7 +1705,7 @@ BackendImpl::ComponentsPackageImpl::ComponentsPackageImpl(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_component_PackageRegistryBackend_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new dp_registry::backend::component::BackendImpl(args, context));
 }

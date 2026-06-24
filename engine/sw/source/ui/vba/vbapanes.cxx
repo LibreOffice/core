@@ -111,10 +111,10 @@ SwVbaPanes::getServiceImplName()
     return u"SwVbaPanes"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaPanes::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Panes"_ustr
     };

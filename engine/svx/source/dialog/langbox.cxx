@@ -51,6 +51,7 @@
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 OUString GetDicInfoStr( std::u16string_view rName, const LanguageType nLang, bool bNeg )
 {
@@ -348,8 +349,8 @@ void SvxLanguageBox::SetLanguageList(SvxLanguageListFlags nLangList, bool bHasLa
         Reference< XSpellChecker > xTmp1 = LinguMgr::GetSpellChecker();
         if (xTmp1.is())
         {
-            css::uno::Sequence<css::lang::Locale> aLocales = xTmp1->getLocales();
-            aSpellUsedLang = css::uno::Sequence<sal_Int16>(aLocales.getLength());
+            cpo::uno::Sequence<css::lang::Locale> aLocales = xTmp1->getLocales();
+            aSpellUsedLang = cpo::uno::Sequence<sal_Int16>(aLocales.getLength());
             for (int i=0; i < aLocales.getLength(); ++i)
                 aSpellUsedLang.getArray()[i] = static_cast<sal_Int16>(LanguageTag::convertToLanguageType(aLocales[i]).get());
         }
@@ -456,7 +457,7 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
             Reference<XSpellChecker> xSpell = LinguMgr::GetSpellChecker();
             if (xSpell.is())
             {
-                css::uno::Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
+                cpo::uno::Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
                 m_xSpellUsedLang.reset(new Sequence<sal_Int16>(aLocales.getLength()));
                 for (int i=0; i < aLocales.getLength(); ++i)
                     m_xSpellUsedLang->getArray()[i] = static_cast<sal_Int16>(LanguageTag::convertToLanguageType(aLocales[i]).get());

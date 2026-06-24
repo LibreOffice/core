@@ -45,6 +45,7 @@
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 CertificateViewer::CertificateViewer(weld::Window* _pParent,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,

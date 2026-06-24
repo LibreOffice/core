@@ -21,7 +21,7 @@
 
 #include "dp_misc_api.hxx"
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
 namespace dp_misc
@@ -35,7 +35,7 @@ bool platform_fits(std::u16string_view platform_string);
 
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool hasValidPlatform(css::uno::Sequence<OUString> const& platformStrings);
+bool hasValidPlatform(cpo::uno::Sequence<OUString> const& platformStrings);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

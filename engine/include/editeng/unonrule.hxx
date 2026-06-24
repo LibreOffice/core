@@ -65,14 +65,14 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // internal
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence<css::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const;
+    cpo::uno::Sequence<css::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const;
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void setNumberingRuleByIndex(const css::uno::Sequence<css::beans::PropertyValue>& rProperties, sal_Int32 nIndex);
+    void setNumberingRuleByIndex(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties, sal_Int32 nIndex);
 
     static sal_Int16 Compare( const cpo::uno::Any& rAny1, const cpo::uno::Any& rAny2 );
 

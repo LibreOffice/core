@@ -414,7 +414,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Setup 2 views
     ScTestViewCallback aView1;
@@ -471,7 +471,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     // Setup 2 views
@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetView)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     // Setup views
@@ -619,7 +619,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_DefaultVi
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     // Setup views
@@ -681,7 +681,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewOperationRestrictions_SheetView
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     // Setup views
@@ -741,7 +741,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_ODF)
 {
     // Check if sheet view holder table is saved into the ODF document
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     createNewSheetViewInCurrentView();
 
@@ -756,7 +756,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCheckIfSheetViewIsSavedInDocument_OOXML)
 {
     // Check if sheet view holder table is saved into the OOXML document
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     createNewSheetViewInCurrentView();
 
@@ -773,7 +773,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     // After that, delete the sheet and the 2 sheet view holder tables should also be deleted.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     // Setup views
@@ -781,7 +781,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     ScTabViewShell* pTabView1 = aView1.getTabViewShell();
 
     // Insert a new sheet - "NewTab"
-    uno::Sequence<beans::PropertyValue> aArgsInsert(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgsInsert(comphelper::InitPropertySequence(
         { { "Name", cpo::uno::Any(u"NewTab"_ustr) }, { "Index", cpo::uno::Any(sal_Int16(1)) } }));
 
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgsInsert);
@@ -845,7 +845,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveTableWithSheetViews)
     }
 
     // Delete the table - index 0
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
 
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
@@ -865,7 +865,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewSheetViewKeepsOthersUnchanged)
     // wrong sheet.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -911,7 +911,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRedoNewSheetViewKeepsOthersUnchanged)
     // old tab number and silently desync from the document.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -963,7 +963,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testUndoRedoPreservesSheetViewIdentity)
     // original identity becomes stale across a single undo and redo.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -1026,7 +1026,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testDeleteDefaultTabViaDocFuncRemovesSheetVi
     // survive as invisible orphans with stale state.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -1065,7 +1065,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewFallsBackToSourceSheet)
     // sheet.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -1116,7 +1116,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testCreateSheetViewRejectsHolderTab)
     // holder's own unused manager and corrupt state.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -1150,7 +1150,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSetValueCellsSyncsToSheetView)
     // redirect to the default tab and sync back.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
@@ -1206,7 +1206,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSetFormulaCellsSyncsToSheetView)
     // redirect to the default tab and sync back.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
@@ -1273,7 +1273,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testApplyStyleSyncsToSheetView)
     // redirect to the default tab and sync back.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
@@ -1356,7 +1356,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testUnmergeCellsSyncsToSheetView)
     // must redirect to the default tab and sync back.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     CPPUNIT_ASSERT(pDocShell);
@@ -1424,7 +1424,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testInsertRowsOnSheetViewSyncsToDefault)
     // every sheet view holder.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -1473,7 +1473,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testDeleteRowsOnSheetViewSyncsToDefault)
     // operation.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -1523,7 +1523,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testTableGetSheetViewManagerNullOnHolder)
     // callers to add second-order sheet views to it by mistake.
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
@@ -1549,7 +1549,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
     // Delete the sheet view holder table directly
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     // Setup views
@@ -1605,19 +1605,19 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewHolderTable)
 
     // Unhide the sheet view holder tables (or they won't be deleted)
     {
-        uno::Sequence<beans::PropertyValue> aArgs(
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(
             comphelper::InitPropertySequence({ { "aTableName", cpo::uno::Any(u"Hoja1_3"_ustr) } }));
         dispatchCommand(mxComponent, u".uno:Show"_ustr, aArgs);
     }
     {
-        uno::Sequence<beans::PropertyValue> aArgs(
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(
             comphelper::InitPropertySequence({ { "aTableName", cpo::uno::Any(u"Hoja1_2"_ustr) } }));
         dispatchCommand(mxComponent, u".uno:Show"_ustr, aArgs);
     }
 
     // Delete the table
     {
-        uno::Sequence<beans::PropertyValue> aArgs(
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(
             comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(2)) } }));
 
         dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
@@ -1655,7 +1655,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_DefaultViewSort)
 
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Setup views
     ScTestViewCallback aSheetView;
@@ -1744,7 +1744,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SheetViewSort)
 
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Setup views
     ScTestViewCallback aSheetView;
@@ -1816,7 +1816,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncAfterSorting_SortInDefaultAndSheetVi
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Setup views
     ScTestViewCallback aSheetView;
@@ -1893,7 +1893,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSyncAfterSorting_SortInDefaultAndSheetView_Fo
     // This test checks if the sorting of the document behaves the same
     // for formulas as values.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Formulas.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     setupViews();
 
@@ -1957,7 +1957,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSyncAfterSorting_SortInDefaultView_Attributes
 {
     // Instead of the number, we set the attribute
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -2044,7 +2044,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSyncAfterSorting_SortInDefaultAndSheetView_At
 {
     // Instead of the number, we set the attribute
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -2122,7 +2122,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteCellOperation)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -2165,7 +2165,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteCellOperation)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -2204,7 +2204,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_DeleteContentOperation)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -2247,7 +2247,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_DeleteContentOperation)
 {
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -2288,7 +2288,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testCreateAndDeleteSheetView)
     // works without an issue.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -2328,7 +2328,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSorting_NonAutoFilterRange)
     // current view and don't sync.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Extended.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     setupViews();
@@ -2400,14 +2400,14 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testRemoveSheetViewAndSwitchTab)
     // and switching back shows the correct data (not an empty sheet).
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument& rDocument = *pModelObj->GetDocument();
 
     ScTestViewCallback aView1;
     ScTabViewShell* pTabView1 = aView1.getTabViewShell();
 
     // Insert a second sheet
-    uno::Sequence<beans::PropertyValue> aArgsInsert(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgsInsert(comphelper::InitPropertySequence(
         { { "Name", cpo::uno::Any(u"Sheet2"_ustr) }, { "Index", cpo::uno::Any(sal_Int16(2)) } }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgsInsert);
 
@@ -2451,7 +2451,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewViewOpensInDefaultView)
     // view on the default tab, not on the sheet view tab.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Setup first view
     ScTestViewCallback aView1;
@@ -2484,7 +2484,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testNewViewOpensInDefaultView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_ClearItemsOperation)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
@@ -2535,7 +2535,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DefaultView_ClearItemsOperation)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_ClearItemsOperation)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
@@ -2585,7 +2585,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SheetView_ClearItemsOperation)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_AutoFormat_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
@@ -2663,7 +2663,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_AutoFormat_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MultipleOps_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument* pDocument = pModelObj->GetDocument();
 
@@ -2743,7 +2743,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MultipleOps_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplaceNote_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument* pDocument = pModelObj->GetDocument();
 
@@ -2812,7 +2812,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplaceNote_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MoveBlock_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument* pDocument = pModelObj->GetDocument();
 
@@ -2938,7 +2938,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MoveBlock_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_EnterMatrix_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
     setupViews();
@@ -2999,7 +2999,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_EnterMatrix_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillSimple_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
     setupViews();
@@ -3063,7 +3063,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillSimple_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillSeries_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
     setupViews();
@@ -3128,7 +3128,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillSeries_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -3224,7 +3224,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_FillAuto_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_TransliterateText_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Extended.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
@@ -3274,7 +3274,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_TransliterateText_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ConvertFormulaToValue_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
@@ -3321,7 +3321,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ConvertFormulaToValue_DefaultAndSheetVie
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SetNoteText_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
@@ -3367,7 +3367,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SetNoteText_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeIndent_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
@@ -3418,7 +3418,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_DeleteContent)
     // After undo, both views should be consistent.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -3531,7 +3531,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_ClearItems)
 {
     // Test undo of ClearItems (bold removal) from the default view with a sheet view present.
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
@@ -3661,7 +3661,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_FillSeries)
     // Test undo of FillSeries from default view with a sheet view present.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
 
     setupViews();
@@ -3727,7 +3727,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testUndo_DefaultView_FillSeries)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_MergeCells_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument* pDocument = pModelObj->GetDocument();
 
@@ -3791,7 +3791,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertNameList_DefaultAndSheetView)
     // Insert name list inserts the list of the named ranges into the sheet.
     // We should sync that to all sheet views
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument* pDocument = pModelObj->GetDocument();
 
@@ -3847,7 +3847,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertNameList_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_SubTotals_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument* pDocument = pModelObj->GetDocument();
 
@@ -3935,7 +3935,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DrawObject_DefaultAndSheetView)
     // Checks that draw objects are synchronized between the default view and sheet views.
     // This checks inserting, moving and deleting draw objects.
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocument* pDocument = pModelObj->GetDocument();
 
     setupViews();
@@ -4115,7 +4115,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DrawObject_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertSparklines_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4169,7 +4169,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertSparklines_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeSparkline_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4229,7 +4229,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeSparkline_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteSparkline_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4286,7 +4286,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteSparkline_DefaultAndSheetView)
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_GroupUngroupSparklines_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4391,7 +4391,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_GroupUngroupSparklines_DefaultAndSheetVi
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeSparklineGroupAttributes_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4434,7 +4434,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ChangeSparklineGroupAttributes_DefaultAn
 CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteSparklineGroup_DefaultAndSheetView)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4494,7 +4494,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertCells_DefaultAndSheetView)
     // Test sync to sheet view when inserting rows
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4592,7 +4592,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoInsertCells_SheetViewSortData)
     // Test that undoing insert rows restores sheet view sort data
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4669,7 +4669,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoOnSheetViewDoesNotSwitchTab)
     // view to the default view tab.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     setupViews();
 
@@ -4718,7 +4718,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_AutoFilterRangeExpansionFromDefaultView)
     // expected.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -4977,7 +4977,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_AutoFilterRangeExpansionFromSheetView)
     for (auto const& rTestCase : aTestCases)
     {
         ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-        pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+        pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
         ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
         ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -5224,7 +5224,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoDeleteCells_SheetViewSortData)
     // Test that undoing delete rows restores sheet view sort data
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -5300,7 +5300,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_InsertDeleteColumns_SheetViewSortData)
     // adjusts sheet view sort ranges and that undo/redo restores them.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter_Extended.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -5472,7 +5472,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_DeleteCells_DefaultAndSheetView)
     // Test sync to sheet view when deleting rows
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -5584,7 +5584,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnSheetView)
     // Verify SheetView has correct sort data on each undo step
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -5675,7 +5675,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_UndoSortOnDefaultView)
     // - verify sheet view sync
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -5751,7 +5751,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_RemoveAutoFilter_DefaultAndSheetView)
     // and resets the sort data in SheetView and SheetViewManager
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
 
@@ -5871,7 +5871,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_PivotTable_DefaultAndSheetView)
     // Test sync to sheet view when creating and updating the pivot table
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
     setupPivotTableSourceData(rDocument);
@@ -6031,7 +6031,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_ReplacePivotTable_DefaultAndSheetView)
     // Test sync to sheet view when replacing a pivot table via DataPilotUpdate
 
     ScModelObj* pModelObj = createDoc("empty.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
     ScDocument& rDocument = pDocShell->GetDocument();
     setupPivotTableSourceData(rDocument);
@@ -6128,7 +6128,7 @@ CPPUNIT_TEST_FIXTURE(SyncTest, testSync_OperationInvalidatesOtherView)
     // default view tab.
 
     ScModelObj* pModelObj = createDoc("SheetView_AutoFilter.ods");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     comphelper::COKit::setPartInInvalidation(true);
     comphelper::ScopeGuard aPartInvalidationGuard(

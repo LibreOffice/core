@@ -318,8 +318,8 @@ public:
     // Working set
     virtual void                WriteUserData( OUString&, bool bBrowse = false );
     virtual void                ReadUserData( const OUString&, bool bBrowse = false );
-    virtual void                WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& );
-    virtual void                ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& );
+    virtual void                WriteUserDataSequence ( cpo::uno::Sequence < css::beans::PropertyValue >& );
+    virtual void                ReadUserDataSequence ( const cpo::uno::Sequence < css::beans::PropertyValue >& );
     virtual void                QueryObjAreaPixel( tools::Rectangle& rRect ) const;
 
     virtual SfxObjectShell*     GetObjectShell() override;
@@ -359,9 +359,9 @@ public:
                                                            const OUString& rMenuIdentifier,
                                                            css::ui::ContextMenuExecuteEvent aEvent);
 
-    void                        ExecPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
+    void                        ExecPrint( const cpo::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.
-    void                        StartPrint( const css::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
+    void                        StartPrint( const cpo::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     const std::shared_ptr< vcl::PrinterController >& GetPrinterController() const;
 
     void                        AddRemoveClipboardListener( const css::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );

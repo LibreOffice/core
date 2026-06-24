@@ -274,7 +274,7 @@ bool ScZoomSlider::MouseButtonDown( const MouseEvent& rMEvt )
     cpo::uno::Any  a;
     aZoomSliderItem.QueryValue( a );
 
-    css::uno::Sequence aArgs{ comphelper::makePropertyValue(u"ScalingFactor"_ustr, a) };
+    cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"ScalingFactor"_ustr, a) };
 
     SfxToolBoxControl::Dispatch( m_xDispatchProvider, u".uno:ScalingFactor"_ustr, aArgs );
 
@@ -309,7 +309,7 @@ bool ScZoomSlider::MouseMove( const MouseEvent& rMEvt )
             cpo::uno::Any a;
             aZoomSliderItem.QueryValue( a );
 
-            css::uno::Sequence aArgs{ comphelper::makePropertyValue(u"ScalingFactor"_ustr, a) };
+            cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"ScalingFactor"_ustr, a) };
 
             SfxToolBoxControl::Dispatch( m_xDispatchProvider, u".uno:ScalingFactor"_ustr, aArgs );
 
@@ -340,7 +340,7 @@ void ScZoomSlider::UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem)
             mnMaxZoom >= mnCurrentZoom &&
             mnMaxZoom > gnSliderCenter,
             "Looks like the zoom slider item is corrupted" );
-        const css::uno::Sequence < sal_Int32 >& rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
+        const cpo::uno::Sequence < sal_Int32 >& rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
         maSnappingPointOffsets.clear();
         maSnappingPointZooms.clear();
 

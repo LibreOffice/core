@@ -99,7 +99,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XComponent
@@ -164,7 +164,7 @@ class SwXFieldmarkParameters final
         virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
         // XNameAccess
         virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -207,7 +207,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL
+    virtual cpo::uno::Sequence<OUString> SAL_CALL
         getSupportedServiceNames() override;
 
     // XPropertySet

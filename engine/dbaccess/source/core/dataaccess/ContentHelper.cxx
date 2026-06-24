@@ -90,22 +90,22 @@ OUString SAL_CALL OContentHelper::getImplementationName()
     }
 bool SAL_CALL OContentHelper::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-css::uno::Sequence< OUString > SAL_CALL OContentHelper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OContentHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.Content"_ustr };
 }
 
 
-css::uno::Sequence<sal_Int8> OContentHelper::getImplementationId()
+cpo::uno::Sequence<sal_Int8> OContentHelper::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XContent

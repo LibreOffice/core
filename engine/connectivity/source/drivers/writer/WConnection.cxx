@@ -48,7 +48,7 @@ OWriterConnection::OWriterConnection(ODriver* _pDriver)
 OWriterConnection::~OWriterConnection() = default;
 
 void OWriterConnection::construct(const OUString& rURL,
-                                  const uno::Sequence<beans::PropertyValue>& rInfo)
+                                  const cpo::uno::Sequence<beans::PropertyValue>& rInfo)
 {
     //  open file
 
@@ -96,7 +96,7 @@ uno::Reference<text::XTextDocument> const& OWriterConnection::acquireDoc()
         return m_xDoc;
     }
     //  open read-only as long as updating isn't implemented
-    uno::Sequence<beans::PropertyValue> aArgs(m_sPassword.isEmpty() ? 2 : 3);
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(m_sPassword.isEmpty() ? 2 : 3);
     auto pArgs = aArgs.getArray();
     pArgs[0].Name = u"Hidden"_ustr;
     pArgs[0].Value <<= true;

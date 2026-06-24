@@ -35,7 +35,7 @@ class CommandBarEnumeration : public ::cppu::WeakImplHelper< container::XEnumera
     uno::Reference< XHelperInterface > m_xParent;
     uno::Reference< uno::XComponentContext > m_xContext;
     VbaCommandBarHelperRef m_pCBarHelper;
-    uno::Sequence< OUString > m_sNames;
+    cpo::uno::Sequence< OUString > m_sNames;
     sal_Int32 m_nCurrentPosition;
 public:
     /// @throws uno::RuntimeException
@@ -185,7 +185,7 @@ ScVbaCommandBars::getCount()
 {
     // Filter out all toolbars from the window collection
     sal_Int32 nCount = 1; // there is a Menubar in OOo
-    const uno::Sequence< ::OUString > allNames = m_xNameAccess->getElementNames();
+    const cpo::uno::Sequence< ::OUString > allNames = m_xNameAccess->getElementNames();
     nCount += std::count_if(allNames.begin(), allNames.end(),
         [](const OUString& rName) { return rName.indexOf( "private:resource/toolbar/" ) != -1; });
     return nCount;
@@ -223,10 +223,10 @@ ScVbaCommandBars::getServiceImplName()
     return u"ScVbaCommandBars"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaCommandBars::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.CommandBars"_ustr
     };

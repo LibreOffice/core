@@ -25,7 +25,7 @@
 #include <cstddef>
 
 #include "rtl/alloc.h"
-#include "com/sun/star/uno/Sequence.hxx"
+#include "cpo/uno/Sequence.hxx"
 #include "cppuhelper/cppuhelperdllapi.h"
 
 
@@ -37,34 +37,34 @@ namespace cppu
 */
 class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OTypeCollection
 {
-    css::uno::Sequence< css::uno::Type > _aTypes;
+    cpo::uno::Sequence< css::uno::Type > _aTypes;
 
 public:
     OTypeCollection(
         const css::uno::Type & rType1,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
         const css::uno::Type & rType3,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
         const css::uno::Type & rType3,
         const css::uno::Type & rType4,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
         const css::uno::Type & rType3,
         const css::uno::Type & rType4,
         const css::uno::Type & rType5,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
@@ -72,7 +72,7 @@ public:
         const css::uno::Type & rType4,
         const css::uno::Type & rType5,
         const css::uno::Type & rType6,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
@@ -81,7 +81,7 @@ public:
         const css::uno::Type & rType5,
         const css::uno::Type & rType6,
         const css::uno::Type & rType7,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
@@ -91,7 +91,7 @@ public:
         const css::uno::Type & rType6,
         const css::uno::Type & rType7,
         const css::uno::Type & rType8,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
@@ -102,7 +102,7 @@ public:
         const css::uno::Type & rType7,
         const css::uno::Type & rType8,
         const css::uno::Type & rType9,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
@@ -114,7 +114,7 @@ public:
         const css::uno::Type & rType8,
         const css::uno::Type & rType9,
         const css::uno::Type & rType10,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
@@ -127,7 +127,7 @@ public:
         const css::uno::Type & rType9,
         const css::uno::Type & rType10,
         const css::uno::Type & rType11,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
     OTypeCollection(
         const css::uno::Type & rType1,
         const css::uno::Type & rType2,
@@ -141,15 +141,15 @@ public:
         const css::uno::Type & rType10,
         const css::uno::Type & rType11,
         const css::uno::Type & rType12,
-        const css::uno::Sequence< css::uno::Type > & rAddTypes = css::uno::Sequence< css::uno::Type >() );
+        const cpo::uno::Sequence< css::uno::Type > & rAddTypes = cpo::uno::Sequence< css::uno::Type >() );
 
     /** Called upon XTypeProvider::getTypes().
 
         @return type collection
     */
-    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+    cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
         { return _aTypes; }
-    css::uno::Sequence< css::uno::Type > const & getTypes() const
+    cpo::uno::Sequence< css::uno::Type > const & getTypes() const
         { return _aTypes; }
 };
 

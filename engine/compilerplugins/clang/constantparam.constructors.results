@@ -23,7 +23,7 @@ chart2/source/controller/inc/CommandDispatchContainer.hxx:80
     const class o3tl::sorted_vector<class std::basic_string_view<char16_t> > & rChartCommands
     impl_getAvailableCommands()
 chart2/source/view/axes/VCartesianAxis.cxx:408
-    class rtl::OUString getTextLabelString(const class chart::FixedNumberFormatter &,const class com::sun::star::uno::Sequence<class rtl::OUString> *,const struct chart::TickInfo *,_Bool,class Color &,_Bool &)
+    class rtl::OUString getTextLabelString(const class chart::FixedNumberFormatter &,const class cpo::uno::Sequence<class rtl::OUString> *,const struct chart::TickInfo *,_Bool,class Color &,_Bool &)
     _Bool bComplexCat
     isComplexCategoryAxis()
 chart2/source/view/inc/ShapeFactory.hxx:81
@@ -227,11 +227,11 @@ extensions/source/update/check/updateprotocol.hxx:33
     const class com::sun::star::uno::Reference<class com::sun::star::deployment::XUpdateInformationProvider> & rxProvider
     createProvider()
 forms/source/component/ListBox.cxx:1549
-    class cpo::uno::Any lcl_getSingleSelectedEntryAny(const class com::sun::star::uno::Sequence<short> &,const class std::vector<class connectivity::ORowSetValue> &)
+    class cpo::uno::Any lcl_getSingleSelectedEntryAny(const class cpo::uno::Sequence<short> &,const class std::vector<class connectivity::ORowSetValue> &)
     const class std::vector<class connectivity::ORowSetValue> & _rStringList
     impl_getValues()
 forms/source/component/ListBox.cxx:1565
-    class com::sun::star::uno::Sequence<class cpo::uno::Any> lcl_getMultiSelectedEntriesAny(const class com::sun::star::uno::Sequence<short> &,const class std::vector<class connectivity::ORowSetValue> &)
+    class cpo::uno::Sequence<class cpo::uno::Any> lcl_getMultiSelectedEntriesAny(const class cpo::uno::Sequence<short> &,const class std::vector<class connectivity::ORowSetValue> &)
     const class std::vector<class connectivity::ORowSetValue> & _rStringList
     impl_getValues()
 forms/source/xforms/computedexpression.hxx:74
@@ -363,11 +363,11 @@ include/registry/registry.hxx:512
     const class rtl::OUString & keyName
     ""
 include/sfx2/dinfdlg.hxx:96
-    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class com::sun::star::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool,long)
+    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class cpo::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool,long)
     _Bool bUseUserData
     IsUseUserData()
 include/sfx2/dinfdlg.hxx:96
-    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class com::sun::star::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool,long)
+    void SfxDocumentInfoItem::SfxDocumentInfoItem(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::document::XDocumentProperties> &,const class cpo::uno::Sequence<struct com::sun::star::document::CmisProperty> &,_Bool,_Bool,long)
     _Bool bUseThumbnailSave
     IsUseThumbnailSave()
 include/sfx2/dinfdlg.hxx:439
@@ -639,8 +639,8 @@ sd/source/ui/slidesorter/cache/SlsRequestFactory.hxx:31
     class sd::slidesorter::cache::RequestQueue & rRequestQueue
     RequestFactory()
 sdext/source/pdfimport/inc/contentsink.hxx:154
-    void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool)
-    const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> & xBitmap
+    void pdfi::ContentSink::drawMask(const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool)
+    const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> & xBitmap
     readImageImpl()
 sfx2/source/inc/versdlg.hxx:52
     void SfxVersionDialog::SfxVersionDialog(class weld::Window *,class SfxViewFrame *,_Bool)
@@ -891,8 +891,8 @@ toolkit/inc/controls/table/tablecontrol.hxx:141
     _Bool _bIsColumnBar
     isColumnBar()
 toolkit/inc/helper/unopropertyarrayhelper.hxx:37
-    void UnoPropertyArrayHelper::UnoPropertyArrayHelper(const class com::sun::star::uno::Sequence<int> &)
-    const class com::sun::star::uno::Sequence<int> & rIDs
+    void UnoPropertyArrayHelper::UnoPropertyArrayHelper(const class cpo::uno::Sequence<int> &)
+    const class cpo::uno::Sequence<int> & rIDs
     ImplGetPropertyIds()
 ucb/source/ucp/file/filtask.hxx:194
     _Bool fileaccess::TaskManager::MyPropertyLess::operator()(const class fileaccess::TaskManager::MyProperty &,const class fileaccess::TaskManager::MyProperty &) const

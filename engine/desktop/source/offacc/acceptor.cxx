@@ -244,7 +244,7 @@ Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_Acceptor_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     if (!officecfg::Office::Security::Net::AllowInsecureUNORemoteProtocol::get())
     {

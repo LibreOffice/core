@@ -93,7 +93,7 @@ protected:
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(
         const css::util::URL& URL,
-        const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
     virtual void SAL_CALL addStatusListener(
         const css::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;

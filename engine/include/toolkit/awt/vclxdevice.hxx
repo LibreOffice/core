@@ -50,7 +50,7 @@ public:
     css::uno::Reference< css::awt::XGraphics >    SAL_CALL createGraphics(  ) override;
     css::uno::Reference< css::awt::XDevice >      SAL_CALL createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) override;
     css::awt::DeviceInfo                                       SAL_CALL getInfo() override;
-    css::uno::Sequence< css::awt::FontDescriptor > SAL_CALL getFontDescriptors(  ) override;
+    cpo::uno::Sequence< css::awt::FontDescriptor > SAL_CALL getFontDescriptors(  ) override;
     css::uno::Reference< css::awt::XFont >        SAL_CALL getFont( const css::awt::FontDescriptor& aDescriptor ) override;
     css::uno::Reference< css::awt::XBitmap >      SAL_CALL createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
     css::uno::Reference< css::awt::XDisplayBitmap > SAL_CALL createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& Bitmap ) override;

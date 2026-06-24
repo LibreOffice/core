@@ -49,7 +49,7 @@ ScPanelFactory::~ScPanelFactory()
 
 Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     const OUString& rsResourceURL,
-    const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+    const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     Reference<ui::XUIElement> xElement;
 
@@ -133,7 +133,7 @@ bool ScPanelFactory::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.UIElementFactory"_ustr };
 }
@@ -141,7 +141,7 @@ css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
 } // end of namespace sc::sidebar
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScPanelFactory_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
+ScPanelFactory_get_implementation(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sc::sidebar::ScPanelFactory());
 }

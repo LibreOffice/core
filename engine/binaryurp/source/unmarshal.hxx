@@ -23,7 +23,7 @@
 
 #include <vector>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <typelib/typedescription.hxx>
@@ -41,7 +41,7 @@ class Unmarshal {
 public:
     Unmarshal(
         rtl::Reference< Bridge > bridge, ReaderState & state,
-        css::uno::Sequence< sal_Int8 > const & buffer);
+        cpo::uno::Sequence< sal_Int8 > const & buffer);
 
     ~Unmarshal();
 
@@ -83,7 +83,7 @@ private:
 
     rtl::Reference< Bridge > bridge_;
     ReaderState & state_;
-    css::uno::Sequence< sal_Int8 > buffer_;
+    cpo::uno::Sequence< sal_Int8 > buffer_;
     sal_uInt8 const * data_;
     sal_uInt8 const * end_;
 };

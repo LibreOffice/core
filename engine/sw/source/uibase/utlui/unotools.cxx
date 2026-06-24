@@ -180,7 +180,7 @@ void SwOneExampleFrame::CreateControl()
         sTempURL = m_sArgumentURL;
 
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
             { "DocumentService", cpo::uno::Any(u"com.sun.star.text.TextDocument"_ustr) },
             { "OpenFlags", cpo::uno::Any(u"-RB"_ustr) },
             { "Referer", cpo::uno::Any(u"private:user"_ustr) },

@@ -32,7 +32,7 @@
 
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::xmloff::token::XML_STYLE_NAME;
 
@@ -94,7 +94,7 @@ void XMLIndexSimpleEntryContext::endFastElement(sal_Int32 )
 }
 
 void XMLIndexSimpleEntryContext::FillPropertyValues(
-    css::uno::Sequence<css::beans::PropertyValue> & rValues)
+    cpo::uno::Sequence<css::beans::PropertyValue> & rValues)
 {
     // due to the limited number of subclasses, we fill the values
     // directly into the slots. Subclasses will have to know they can

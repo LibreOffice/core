@@ -154,7 +154,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                                                                            const OUString&                                        sURL   ,
                                                                            const OUString&                                        sTarget,
                                                                                  sal_Int32                                               nSearchFlags ,
-                                                                           const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
+                                                                           const cpo::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
 {
     css::uno::Reference< css::lang::XComponent > xComponent;
     comphelper::ProfileZone aZone("loadComponentFromURL");
@@ -216,7 +216,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 
 namespace {
 
-comphelper::SequenceAsHashMap addModelArgs(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+comphelper::SequenceAsHashMap addModelArgs(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     comphelper::SequenceAsHashMap rResult(rDescriptor);
     uno::Reference<frame::XModel> xModel(rResult.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MODEL, uno::Reference<frame::XModel>()));
@@ -234,7 +234,7 @@ comphelper::SequenceAsHashMap addModelArgs(const uno::Sequence<beans::PropertyVa
 
 }
 
-void LoadEnv::startLoading(const OUString& sURL, const uno::Sequence<beans::PropertyValue>& lMediaDescriptor,
+void LoadEnv::startLoading(const OUString& sURL, const cpo::uno::Sequence<beans::PropertyValue>& lMediaDescriptor,
         const uno::Reference<frame::XFrame>& xBaseFrame, const OUString& sTarget,
         sal_Int32 nSearchFlags, LoadEnvFeatures eFeature)
 {
@@ -540,7 +540,7 @@ void LoadEnv::impl_setResult(bool bResult)
           parameter to stl-adapter?
 -----------------------------------------------*/
 LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                                 sURL            ,
-                                               const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
+                                               const cpo::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
 
     // (i) Filter some special well known URL protocols,
@@ -635,8 +635,8 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     //      Further it's not enough to search for types!
     //      Because there exist some types, which are referenced by
     //      other objects... but neither by filters nor frame loaders!
-    css::uno::Sequence< OUString > lTypesReg { sType };
-    css::uno::Sequence< css::beans::NamedValue >           lQuery
+    cpo::uno::Sequence< OUString > lTypesReg { sType };
+    cpo::uno::Sequence< css::beans::NamedValue >           lQuery
     {
         css::beans::NamedValue(PROP_TYPES, cpo::uno::Any(lTypesReg))
     };
@@ -673,7 +673,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
 
 namespace {
 
-bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescriptor, OUString& rType, OUString& rFilter)
+bool queryOrcusTypeAndFilter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor, OUString& rType, OUString& rFilter)
 {
     OUString aURL;
     sal_Int32 nSize = rDescriptor.getLength();
@@ -741,7 +741,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // Attention: Because our stl media descriptor is a copy of a uno sequence
     // we can't use as an in/out parameter here. Copy it before and don't forget to
     // update structure afterwards again!
-    css::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
+    cpo::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
     css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
 
     aReadLock.clear();
@@ -867,7 +867,7 @@ bool LoadEnv::impl_handleContent()
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
     // convert media descriptor and URL to right format for later interface call!
-    css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
+    cpo::uno::Sequence< css::beans::PropertyValue > lDescriptor;
     m_lMediaDescriptor >> lDescriptor;
     css::util::URL aURL = m_aURL;
 
@@ -878,9 +878,9 @@ bool LoadEnv::impl_handleContent()
     // <- SAFE -----------------------------------
 
     // query
-    css::uno::Sequence< OUString > lTypeReg { sType };
+    cpo::uno::Sequence< OUString > lTypeReg { sType };
 
-    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, cpo::uno::Any(lTypeReg) } };
+    cpo::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, cpo::uno::Any(lTypeReg) } };
 
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
@@ -971,7 +971,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
             rtl::Reference<comphelper::OInteractionAbort>   pAbort   = new comphelper::OInteractionAbort();
             rtl::Reference<comphelper::OInteractionApprove> pApprove = new comphelper::OInteractionApprove();
 
-            css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
+            cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
                 pAbort, pApprove
             };
 
@@ -1127,7 +1127,7 @@ bool LoadEnv::impl_loadContent()
         if (xHandler.is())
         {
             css::uno::Reference<css::awt::XWindow> xWindow = xTargetFrame->getContainerWindow();
-            uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
                 {"Parent", cpo::uno::Any(xWindow)}
             }));
@@ -1142,7 +1142,7 @@ bool LoadEnv::impl_loadContent()
     }
 
     // convert media descriptor and URL to right format for later interface call!
-    css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
+    cpo::uno::Sequence< css::beans::PropertyValue > lDescriptor;
     m_lMediaDescriptor >> lDescriptor;
     OUString sURL = m_aURL.Complete;
 
@@ -1220,9 +1220,9 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     aReadLock.clear();
     // <- SAFE -----------------------------------
 
-    css::uno::Sequence< OUString > lTypesReg { sType };
+    cpo::uno::Sequence< OUString > lTypesReg { sType };
 
-    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, cpo::uno::Any(lTypesReg) } };
+    cpo::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, cpo::uno::Any(lTypesReg) } };
 
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())

@@ -69,9 +69,9 @@ OUString IndexEntrySupplierWrapper::GetFollowingText( bool bMorePages ) const
     return sRet;
 }
 
-css::uno::Sequence< OUString > IndexEntrySupplierWrapper::GetAlgorithmList( const css::lang::Locale& rLcl ) const
+cpo::uno::Sequence< OUString > IndexEntrySupplierWrapper::GetAlgorithmList( const css::lang::Locale& rLcl ) const
 {
-    uno::Sequence< OUString > sRet;
+    cpo::uno::Sequence< OUString > sRet;
 
     try {
         sRet = m_xIES->getAlgorithmList( rLcl );

@@ -166,7 +166,7 @@ void BindDispatch_Impl::Release()
 }
 
 
-sal_Int16 BindDispatch_Impl::Dispatch( const css::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron )
+sal_Int16 BindDispatch_Impl::Dispatch( const cpo::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron )
 {
     sal_Int16 eRet = css::frame::DispatchResultState::DONTKNOW;
 
@@ -497,7 +497,7 @@ sal_Int16 SfxStateCache::Dispatch( const SfxItemSet* pSet, bool bForceSynchron )
 
     if ( mxDispatch.is() )
     {
-        uno::Sequence < beans::PropertyValue > aArgs;
+        cpo::uno::Sequence < beans::PropertyValue > aArgs;
         if (pSet)
             aArgs = TransformItems(nId, *pSet).getAsConstPropertyValueList();
 

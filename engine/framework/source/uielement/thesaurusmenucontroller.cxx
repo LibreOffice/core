@@ -43,7 +43,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void fillPopupMenu();
@@ -134,12 +134,12 @@ void ThesaurusMenuController::getMeanings( std::vector< OUString >& rSynonyms, c
 
     try
     {
-        const css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > aMeaningSeq(
-            m_xThesaurus->queryMeanings( rWord, rLocale, css::uno::Sequence< css::beans::PropertyValue >() ) );
+        const cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > aMeaningSeq(
+            m_xThesaurus->queryMeanings( rWord, rLocale, cpo::uno::Sequence< css::beans::PropertyValue >() ) );
 
         for ( const auto& xMeaning : aMeaningSeq )
         {
-            const css::uno::Sequence< OUString > aSynonymSeq( xMeaning->querySynonyms() );
+            const cpo::uno::Sequence< OUString > aSynonymSeq( xMeaning->querySynonyms() );
             for ( const auto& aSynonym : aSynonymSeq )
             {
                 rSynonyms.push_back( aSynonym );
@@ -156,7 +156,7 @@ void ThesaurusMenuController::getMeanings( std::vector< OUString >& rSynonyms, c
 
 OUString ThesaurusMenuController::getThesImplName( const css::lang::Locale& rLocale ) const
 {
-    css::uno::Sequence< OUString > aServiceNames =
+    cpo::uno::Sequence< OUString > aServiceNames =
         m_xLinguServiceManager->getConfiguredServices( u"com.sun.star.linguistic2.Thesaurus"_ustr, rLocale );
     SAL_WARN_IF( aServiceNames.getLength() > 1, "fwk.uielement", "Only one thesaurus is allowed per locale, but found more!" );
     if ( aServiceNames.getLength() == 1 )
@@ -170,7 +170,7 @@ OUString ThesaurusMenuController::getImplementationName()
     return u"com.sun.star.comp.framework.ThesaurusMenuController"_ustr;
 }
 
-css::uno::Sequence< OUString > ThesaurusMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ThesaurusMenuController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.PopupMenuController"_ustr };
 }
@@ -178,7 +178,7 @@ css::uno::Sequence< OUString > ThesaurusMenuController::getSupportedServiceNames
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ThesaurusMenuController_get_implementation(
     css::uno::XComponentContext* xContext,
-    css::uno::Sequence< cpo::uno::Any > const & )
+    cpo::uno::Sequence< cpo::uno::Any > const & )
 {
     return cppu::acquire( new ThesaurusMenuController( xContext ) );
 }

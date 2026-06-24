@@ -116,7 +116,7 @@ namespace connectivity
 
     private:
         css::uno::Reference< css::sdbc::XConnection> createNewConnection(const OUString& _rURL,
-                                const css::uno::Sequence< css::beans::PropertyValue >& _rInfo);
+                                const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo);
         css::uno::Reference< css::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator const & _rIter);
         // calculate the timeout and the corresponding ALiveCount
         void calculateTimeOuts();
@@ -133,7 +133,7 @@ namespace connectivity
         void clear(bool _bDispose);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info );
+        css::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info );
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
         // XPropertyChangeListener

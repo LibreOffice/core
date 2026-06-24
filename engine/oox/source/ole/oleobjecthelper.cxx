@@ -105,7 +105,7 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
     if (grabIt != aGrabBag.end())
         objectsList << grabIt->second;
 
-    uno::Sequence< beans::PropertyValue > aGrabBagAttribute{ comphelper::makePropertyValue(u"ProgID"_ustr,
+    cpo::uno::Sequence< beans::PropertyValue > aGrabBagAttribute{ comphelper::makePropertyValue(u"ProgID"_ustr,
                                                                                            rProgId) };
 
     // If we got an "old name", erase that first.

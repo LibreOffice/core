@@ -40,6 +40,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::cpo::uno;
 
 SwEnvPreview::SwEnvPreview()
     : m_pDialog(nullptr)

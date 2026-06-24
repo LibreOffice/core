@@ -201,7 +201,7 @@ OfficeInstallationDirectories::supportsService( const OUString& ServiceName )
 }
 
 // virtual
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.OfficeInstallationDirectories"_ustr };
@@ -238,7 +238,7 @@ void OfficeInstallationDirectories::initDirs()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_util_OfficeInstallationDirectories(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(
             new comphelper::OfficeInstallationDirectories(context));

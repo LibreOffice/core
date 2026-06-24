@@ -85,7 +85,7 @@ namespace dbaccess
         /** retrieve a table type filter to pass to <member scope="css::sdbc">XDatabaseMetaData::getTables</member>,
             according to the current data source settings
         */
-        void    getAllTableTypeFilter( css::uno::Sequence< OUString >& /* [out] */ _rFilter ) const;
+        void    getAllTableTypeFilter( cpo::uno::Sequence< OUString >& /* [out] */ _rFilter ) const;
 
     public:
         /** ctor of the container. The parent has to support the <type scope="css::sdbc">XConnection</type>
@@ -111,8 +111,8 @@ namespace dbaccess
             filters given (the connection is the parent object you passed in the ctor).
         */
         void construct(
-            const css::uno::Sequence< OUString >& _rTableFilter,
-            const css::uno::Sequence< OUString >& _rTableTypeFilter
+            const cpo::uno::Sequence< OUString >& _rTableFilter,
+            const cpo::uno::Sequence< OUString >& _rTableTypeFilter
             );
 
         /** late ctor. The container will fill itself with wrapper objects for the tables returned by the given
@@ -120,8 +120,8 @@ namespace dbaccess
         */
         void construct(
             const css::uno::Reference< css::container::XNameAccess >& _rxMasterContainer,
-            const css::uno::Sequence< OUString >& _rTableFilter,
-            const css::uno::Sequence< OUString >& _rTableTypeFilter
+            const cpo::uno::Sequence< OUString >& _rTableFilter,
+            const cpo::uno::Sequence< OUString >& _rTableTypeFilter
             );
 
         bool isInitialized() const { return m_bConstructed; }

@@ -40,14 +40,14 @@ bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rSe
     return cppu::supportsService( this, rServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.xml.wrapper.XMLElementWrapper"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_wrapper_XMLElementWrapper_get_implementation(
-    uno::XComponentContext* /*pCtx*/, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new XMLElementWrapper_XmlSecImpl(nullptr));
 }

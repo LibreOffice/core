@@ -262,7 +262,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitNodeSuperscriptCopy)
  *    // Given a document with a refmark:
  *    createSwDoc();
  *
- *    uno::Sequence<css::beans::PropertyValue> aArgs = {
+ *    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
  *        comphelper::makePropertyValue("TypeName", cpo::uno::Any(OUString("SetRef"))),
  *        comphelper::makePropertyValue(
  *            "Name", cpo::uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),

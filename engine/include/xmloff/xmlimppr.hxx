@@ -35,7 +35,7 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::container { class XNameContainer; }
 namespace cpo::uno { class Any; }
 namespace com::sun::star::uno { template <typename > class Reference; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
 #if defined __GNUC__ // gcc does not like visibility annotation on enum
 namespace com::sun::star::drawing { enum class FillStyle; }
@@ -127,7 +127,7 @@ public:
 
     void FillPropertySequence(
             const ::std::vector< XMLPropertyState >& aProperties,
-            css::uno::Sequence< css::beans::PropertyValue >& rValues )
+            cpo::uno::Sequence< css::beans::PropertyValue >& rValues )
             const;
 
     inline const rtl::Reference< XMLPropertySetMapper >&
@@ -177,8 +177,8 @@ public:
         const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         ContextID_Index_Pair* pSpecialContextIds,
-        css::uno::Sequence< OUString >& rNames,
-        css::uno::Sequence< cpo::uno::Any >& rValues);
+        cpo::uno::Sequence< OUString >& rNames,
+        cpo::uno::Sequence< cpo::uno::Any >& rValues);
 
 private:
     void importXMLAttribute(

@@ -140,16 +140,16 @@ class SwAccessibleParagraph :
 
     // #i63870#
     void _getDefaultAttributesImpl(
-            const css::uno::Sequence< OUString >& aRequestedAttributes,
+            const cpo::uno::Sequence< OUString >& aRequestedAttributes,
             tAccParaPropValMap& rDefAttrSeq,
             const bool bOnlyCharAttrs = false );
     void _getRunAttributesImpl(
             const sal_Int32 nIndex,
-            const css::uno::Sequence< OUString >& aRequestedAttributes,
+            const cpo::uno::Sequence< OUString >& aRequestedAttributes,
             tAccParaPropValMap& rRunAttrSeq );
 
     void _getSupplementalAttributesImpl(
-            const css::uno::Sequence< OUString >& aRequestedAttributes,
+            const cpo::uno::Sequence< OUString >& aRequestedAttributes,
             tAccParaPropValMap& rSupplementalAttrSeq );
 
     void _correctValues(
@@ -232,7 +232,7 @@ public:
 
     virtual bool HasCursor() override;   // required by map to remember that object
 
-    css::uno::Sequence< css::style::TabStop > GetCurrentTabStop( sal_Int32 nIndex  );
+    cpo::uno::Sequence< css::style::TabStop > GetCurrentTabStop( sal_Int32 nIndex  );
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
     // XAccessibleContext
@@ -262,7 +262,7 @@ public:
     virtual sal_Int32 SAL_CALL getCaretPosition() override;
     virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
     virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
     virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
     virtual sal_Int32 SAL_CALL getCharacterCount(  ) override;
     virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;
@@ -284,7 +284,7 @@ public:
     virtual bool SAL_CALL deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual bool SAL_CALL insertText( const OUString& sText, sal_Int32 nIndex ) override;
     virtual bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement ) override;
-    virtual bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::uno::Sequence< css::beans::PropertyValue >& aAttributeSet ) override;
+    virtual bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const cpo::uno::Sequence< css::beans::PropertyValue >& aAttributeSet ) override;
     virtual bool SAL_CALL setText( const OUString& sText ) override;
 
     // XAccessibleSelection
@@ -318,7 +318,7 @@ public:
             getTextMarkup( sal_Int32 nTextMarkupIndex,
                            sal_Int32 nTextMarkupType ) override;
 
-    virtual css::uno::Sequence< css::accessibility::TextSegment > SAL_CALL
+    virtual cpo::uno::Sequence< css::accessibility::TextSegment > SAL_CALL
             getTextMarkupAtIndex( sal_Int32 nCharIndex,
                                   sal_Int32 nTextMarkupType ) override;
 
@@ -348,8 +348,8 @@ public:
 
     // #i63870#
     // XAccessibleTextAttributes
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
 };
 
 #endif

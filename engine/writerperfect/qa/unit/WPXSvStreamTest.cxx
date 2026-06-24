@@ -69,7 +69,7 @@ shared_ptr<RVNGInputStream> lcl_createStream()
 {
     using comphelper::SequenceInputStream;
 
-    const css::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aText),
+    const cpo::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aText),
                                              sizeof aText);
     const uno::Reference<io::XInputStream> xInputStream(new SequenceInputStream(aData));
 

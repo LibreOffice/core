@@ -178,7 +178,7 @@ Any SAL_CALL OControl::queryAggregation( const Type& _rType )
 
 Sequence<sal_Int8> SAL_CALL OControl::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Sequence<Type> SAL_CALL OControl::getTypes()
@@ -417,7 +417,7 @@ void OBoundControl::disposing()
 // OControlModel
 Sequence<sal_Int8> SAL_CALL OControlModel::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Sequence<Type> SAL_CALL OControlModel::getTypes()
@@ -1525,7 +1525,7 @@ void SAL_CALL OBoundControlModel::disposing(const css::lang::EventObject& _rEven
 }
 
 // XServiceInfo
-css::uno::Sequence<OUString> SAL_CALL OBoundControlModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OBoundControlModel::getSupportedServiceNames()
 {
     return ::comphelper::combineSequences(
         getAggregateServiceNames(),

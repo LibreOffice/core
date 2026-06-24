@@ -1239,7 +1239,7 @@ const TextInfo aTextInfoArr[] =
     {AUTH_FIELD_CUSTOM5,         HID_AUTH_FIELD_CUSTOM5         }
 };
 
-static OUString lcl_FindColumnEntry(const uno::Sequence<beans::PropertyValue>& rFields, std::u16string_view rColumnTitle)
+static OUString lcl_FindColumnEntry(const cpo::uno::Sequence<beans::PropertyValue>& rFields, std::u16string_view rColumnTitle)
 {
     for(const auto& rField : rFields)
     {
@@ -1330,7 +1330,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, weld::ComboBox&, rBox, void)
             if(m_xBibAccess->hasByName(sEntry))
             {
                 cpo::uno::Any aEntry(m_xBibAccess->getByName(sEntry));
-                uno::Sequence<beans::PropertyValue> aFieldProps;
+                cpo::uno::Sequence<beans::PropertyValue> aFieldProps;
                 if(aEntry >>= aFieldProps)
                 {
                     auto nSize = std::min(static_cast<sal_Int32>(AUTH_FIELD_END), aFieldProps.getLength());
@@ -1485,7 +1485,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
             if(xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName(uPropName))
             {
                 cpo::uno::Any aNames = xPropSet->getPropertyValue(uPropName);
-                uno::Sequence<beans::PropertyValue> aSeq;
+                cpo::uno::Sequence<beans::PropertyValue> aSeq;
                 if( aNames >>= aSeq)
                 {
                     for (const beans::PropertyValue& rProp : aSeq)
@@ -1501,7 +1501,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, ChangeSourceHdl, weld::Toggleable&, void)
         }
         if(m_xBibAccess.is())
         {
-            const uno::Sequence<OUString> aIdentifiers = m_xBibAccess->getElementNames();
+            const cpo::uno::Sequence<OUString> aIdentifiers = m_xBibAccess->getElementNames();
             for(const OUString& rName : aIdentifiers)
                 m_xEntryLB->append_text(rName);
         }

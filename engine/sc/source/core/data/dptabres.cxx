@@ -56,7 +56,7 @@
 #include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace {
 
@@ -752,7 +752,7 @@ static ScSubTotalFunc lcl_GetForceFunc( const ScDPLevel* pLevel, tools::Long nFu
     {
         //TODO: direct access via ScDPLevel
 
-        uno::Sequence<sal_Int16> aSeq = pLevel->getSubTotals();
+        cpo::uno::Sequence<sal_Int16> aSeq = pLevel->getSubTotals();
         tools::Long nSequence = aSeq.getLength();
         if ( nSequence && aSeq[0] != sheet::GeneralFunction2::AUTO )
         {
@@ -1279,7 +1279,7 @@ tools::Long ScDPResultMember::GetSubTotalCount( tools::Long* pUserSubStart ) con
     {
         //TODO: direct access via ScDPLevel
 
-        uno::Sequence<sal_Int16> aSeq = pParentLevel->getSubTotals();
+        cpo::uno::Sequence<sal_Int16> aSeq = pParentLevel->getSubTotals();
         tools::Long nSequence = aSeq.getLength();
         if ( nSequence && aSeq[0] != sheet::GeneralFunction2::AUTO )
         {
@@ -1363,7 +1363,7 @@ static OUString lcl_parseSubtotalName(std::u16string_view rSubStr, std::u16strin
 }
 
 void ScDPResultMember::FillMemberResults(
-    uno::Sequence<sheet::MemberResult>* pSequences, tools::Long& rPos, tools::Long nMeasure, bool bRoot,
+    cpo::uno::Sequence<sheet::MemberResult>* pSequences, tools::Long& rPos, tools::Long nMeasure, bool bRoot,
     const OUString* pMemberName, const OUString* pMemberCaption )
 {
     //  IsVisible() test is in ScDPResultDimension::FillMemberResults
@@ -1559,7 +1559,7 @@ void ScDPResultMember::FillMemberResults(
                 //  data layout dimension is (direct/indirect) child of this.
                 //  data layout dimension must have name for all entries.
 
-                uno::Sequence<sheet::MemberResult>* pLayoutSeq = pSequences;
+                cpo::uno::Sequence<sheet::MemberResult>* pLayoutSeq = pSequences;
                 if (!bRoot)
                     ++pLayoutSeq;
                 ScDPResultDimension* pLayoutDim = pChildDimension.get();
@@ -1584,7 +1584,7 @@ void ScDPResultMember::FillMemberResults(
 
 void ScDPResultMember::FillDataResults(
     const ScDPResultMember* pRefMember,
-    ScDPResultFilterContext& rFilterCxt, uno::Sequence<uno::Sequence<sheet::DataResult> >& rSequence,
+    ScDPResultFilterContext& rFilterCxt, cpo::uno::Sequence<cpo::uno::Sequence<sheet::DataResult> >& rSequence,
     tools::Long nMeasure) const
 {
     std::unique_ptr<FilterStack> pFilterStack;
@@ -1678,7 +1678,7 @@ void ScDPResultMember::FillDataResults(
                 rFilterCxt.mnCol = 0;
                 if (pRefMember->IsVisible())
                 {
-                    uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rFilterCxt.mnRow];
+                    cpo::uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rFilterCxt.mnRow];
                     pDataRoot->FillDataRow(pRefMember, rFilterCxt, rSubSeq, nMemberMeasure, bHasChild, aSubState);
                 }
                 rFilterCxt.mnRow += 1;
@@ -2086,7 +2086,7 @@ const ScDPAggData* ScDPDataMember::GetConstAggData( tools::Long nMeasure, const 
 
 void ScDPDataMember::FillDataRow(
     const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
-    uno::Sequence<sheet::DataResult>& rSequence, tools::Long nMeasure, bool bIsSubTotalRow,
+    cpo::uno::Sequence<sheet::DataResult>& rSequence, tools::Long nMeasure, bool bIsSubTotalRow,
     const ScDPSubTotalState& rSubState) const
 {
     std::unique_ptr<FilterStack> pFilterStack;
@@ -3199,7 +3199,7 @@ void ScDPResultDimension::ProcessData( const std::vector< SCROW >& aMembers,
     OSL_FAIL("ProcessData: Member not found");
 }
 
-void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>* pSequences,
+void ScDPResultDimension::FillMemberResults( cpo::uno::Sequence<sheet::MemberResult>* pSequences,
                                                 tools::Long nStart, tools::Long nMeasure )
 {
     tools::Long nPos = nStart;
@@ -3228,7 +3228,7 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
 
 void ScDPResultDimension::FillDataResults(
     const ScDPResultMember* pRefMember, ScDPResultFilterContext& rFilterCxt,
-    uno::Sequence< uno::Sequence<sheet::DataResult> >& rSequence, tools::Long nMeasure) const
+    cpo::uno::Sequence< cpo::uno::Sequence<sheet::DataResult> >& rSequence, tools::Long nMeasure) const
 {
     FilterStack aFilterStack(rFilterCxt.maFilters);
     aFilterStack.pushDimName(GetName(), bIsDataLayout);
@@ -3764,7 +3764,7 @@ void ScDPDataDimension::ProcessData( const std::vector< SCROW >& aDataMembers, c
 
 void ScDPDataDimension::FillDataRow(
     const ScDPResultDimension* pRefDim, ScDPResultFilterContext& rFilterCxt,
-    uno::Sequence<sheet::DataResult>& rSequence, tools::Long nMeasure, bool bIsSubTotalRow,
+    cpo::uno::Sequence<sheet::DataResult>& rSequence, tools::Long nMeasure, bool bIsSubTotalRow,
     const ScDPSubTotalState& rSubState) const
 {
     OUString aDimName;

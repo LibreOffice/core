@@ -61,7 +61,7 @@ public:
 
     // XBrowseNode implementation
     virtual OUString SAL_CALL getName() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes() override;
     virtual bool SAL_CALL hasChildNodes() override;
     virtual sal_Int16 SAL_CALL getType() override;
     // XNameContainer
@@ -72,14 +72,14 @@ public:
     virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
 
     // XScriptProvider implementation
     virtual css::uno::Reference < css::script::provider::XScript > SAL_CALL
@@ -91,7 +91,7 @@ public:
      * @param args expected to contain a single OUString
      * containing the URI
      */
-    virtual void SAL_CALL initialize( const css::uno::Sequence < cpo::uno::Any > & args ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence < cpo::uno::Any > & args ) override;
 
     // returns context string for this provider, eg
     const OUString& getContextString() const { return m_sCtxString; }
@@ -106,7 +106,7 @@ private:
     css::uno::Reference< css::lang::XMultiComponentFactory >        m_xMgr;
     css::uno::Reference< css::frame::XModel >                       m_xModel;
     css::uno::Reference< css::document::XScriptInvocationContext >  m_xInvocationContext;
-    css::uno::Sequence< cpo::uno::Any >                             m_sAargs;
+    cpo::uno::Sequence< cpo::uno::Any >                             m_sAargs;
     OUString                                                 m_sNodeName;
 
     // This component supports XInitialization, it can be created

@@ -51,7 +51,7 @@ public:
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -71,8 +71,8 @@ public:
         getPropertySetInfo() override;
 
     // ____ XTitle ____
-    virtual css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > SAL_CALL getText() override;
-    virtual void SAL_CALL setText( const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& Strings ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > SAL_CALL getText() override;
+    virtual void SAL_CALL setText( const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& Strings ) override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
@@ -99,7 +99,7 @@ private:
 
     void fireModifyEvent();
 
-    css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
+    cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };

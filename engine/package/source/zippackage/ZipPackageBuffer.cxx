@@ -29,6 +29,7 @@ using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using com::sun::star::lang::IllegalArgumentException;
+using namespace ::cpo::uno;
 
 ZipPackageBuffer::ZipPackageBuffer()
 : m_nBufferSize (n_ConstBufferSize)

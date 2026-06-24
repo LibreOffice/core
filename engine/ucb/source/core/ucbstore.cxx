@@ -146,7 +146,7 @@ bool SAL_CALL UcbStore::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
-css::uno::Sequence< OUString > SAL_CALL UcbStore::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UcbStore::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.Store"_ustr };
 }
@@ -155,7 +155,7 @@ css::uno::Sequence< OUString > SAL_CALL UcbStore::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbStore_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UcbStore(context));
 }
@@ -224,7 +224,7 @@ bool SAL_CALL PropertySetRegistry::supportsService( const OUString& ServiceName 
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL PropertySetRegistry::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PropertySetRegistry::getSupportedServiceNames()
 {
     return {  u"com.sun.star.ucb.PropertySetRegistry"_ustr };
 }
@@ -1031,7 +1031,7 @@ bool SAL_CALL PersistentPropertySet::supportsService( const OUString& ServiceNam
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL PersistentPropertySet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PersistentPropertySet::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.PersistentPropertySet"_ustr };
 }

@@ -55,7 +55,7 @@ public:
     virtual cpo::uno::Any SAL_CALL ActivePane() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 private:
     rtl::Reference< SwXTextDocument > m_xModel;
 };

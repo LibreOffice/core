@@ -83,12 +83,12 @@ public:
 
     rtl::Reference< ::chart::Diagram > createDiagramByDataSource2(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments );
 
     // ____ XChartTypeTemplate ____
     virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL createDiagramByDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
     /// denotes if the chart needs categories at the first scale
     virtual bool SAL_CALL supportsCategories() override;
     virtual void SAL_CALL changeDiagram(
@@ -96,13 +96,13 @@ public:
     virtual void SAL_CALL changeDiagramData(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
     virtual bool SAL_CALL matchesTemplate(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
         bool bAdaptProperties ) override final;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getDataInterpreter() override final;
     virtual css::uno::Reference< ::css::chart2::XChartType > SAL_CALL getChartTypeForNewSeries(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;
+        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;
     virtual void SAL_CALL applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
@@ -116,7 +116,7 @@ public:
     void changeDiagramData(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments );
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments );
     virtual bool matchesTemplate2(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
         bool bAdaptProperties );

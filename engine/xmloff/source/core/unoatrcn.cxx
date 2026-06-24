@@ -101,11 +101,11 @@ cpo::uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
     return cpo::uno::Any(aData);
 }
 
-uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvUnoAttributeContainer::getElementNames()
 {
     const sal_uInt16 nAttrCount = mpContainer->GetAttrCount();
 
-    uno::Sequence< OUString > aElementNames( static_cast<sal_Int32>(nAttrCount) );
+    cpo::uno::Sequence< OUString > aElementNames( static_cast<sal_Int32>(nAttrCount) );
     OUString *pNames = aElementNames.getArray();
 
     for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
@@ -217,7 +217,7 @@ OUString SAL_CALL SvUnoAttributeContainer::getImplementationName()
     return u"SvUnoAttributeContainer"_ustr;
 }
 
-uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SvUnoAttributeContainer::getSupportedServiceNames()
 {
     return { u"com.sun.star.xml.AttributeContainer"_ustr };
 }

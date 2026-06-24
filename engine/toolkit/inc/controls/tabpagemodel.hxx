@@ -36,12 +36,12 @@ public:
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     // XInitialization
-    virtual void SAL_CALL initialize (const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize (const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -73,7 +73,7 @@ public:
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

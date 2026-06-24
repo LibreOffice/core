@@ -128,7 +128,7 @@ protected:
     /// @throws css::resource::MissingResourceException
     OUString implResolveString(std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID, LocaleItem* pLocaleItem);
     bool implHasEntryForId(std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID, LocaleItem* pLocaleItem);
-    css::uno::Sequence< OUString > implGetResourceIDs(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem);
+    cpo::uno::Sequence< OUString > implGetResourceIDs(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem);
     void implSetString( std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID,
         const OUString& Str, LocaleItem* pLocaleItem );
     /// @throws css::resource::MissingResourceException
@@ -148,7 +148,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -161,12 +161,12 @@ public:
     virtual bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
     virtual bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
         ( const css::lang::Locale& locale ) override;
     virtual css::lang::Locale SAL_CALL getCurrentLocale(  ) override;
     virtual css::lang::Locale SAL_CALL getDefaultLocale(  ) override;
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
 
     // XStringResourceManager
     virtual bool SAL_CALL isReadOnly() override;
@@ -197,7 +197,7 @@ protected:
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    void implInitializeCommonParameters( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< cpo::uno::Any >& aArguments );
+    void implInitializeCommonParameters( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
 
     // Scan locale properties files
     virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard);
@@ -210,7 +210,7 @@ protected:
 
     virtual void implLoadAllLocales(std::unique_lock<std::mutex>& rGuard) override;
 
-    void implScanLocaleNames( const css::uno::Sequence< OUString >& aContentSeq );
+    void implScanLocaleNames( const cpo::uno::Sequence< OUString >& aContentSeq );
     static OUString implGetFileNameForLocaleItem( LocaleItem const * pLocaleItem, const OUString& aNameBase );
     static OUString implGetPathForLocaleItem( LocaleItem const * pLocaleItem, const OUString& aNameBase,
         std::u16string_view aLocation, bool bDefaultFile=false );
@@ -276,7 +276,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -289,12 +289,12 @@ public:
     virtual bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
     virtual bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
         ( const css::lang::Locale& locale ) override;
     virtual css::lang::Locale SAL_CALL getCurrentLocale(  ) override;
     virtual css::lang::Locale SAL_CALL getDefaultLocale(  ) override;
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
 
     // XStringResourceManager
     virtual bool SAL_CALL isReadOnly() override;
@@ -320,8 +320,8 @@ public:
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
         const OUString& Comment, const css::uno::Reference
         < css::task::XInteractionHandler >& Handler ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
-    virtual void SAL_CALL importBinary( const css::uno::Sequence< ::sal_Int8 >& Data ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
+    virtual void SAL_CALL importBinary( const cpo::uno::Sequence< ::sal_Int8 >& Data ) override;
 };
 
 
@@ -345,10 +345,10 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -361,12 +361,12 @@ public:
     virtual bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
     virtual bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
         ( const css::lang::Locale& locale ) override;
     virtual css::lang::Locale SAL_CALL getCurrentLocale(  ) override;
     virtual css::lang::Locale SAL_CALL getDefaultLocale(  ) override;
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
 
     // XStringResourceManager
     virtual bool SAL_CALL isReadOnly() override;
@@ -392,8 +392,8 @@ public:
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
         const OUString& Comment, const css::uno::Reference
         < css::task::XInteractionHandler >& Handler ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
-    virtual void SAL_CALL importBinary( const css::uno::Sequence< ::sal_Int8 >& Data ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
+    virtual void SAL_CALL importBinary( const cpo::uno::Sequence< ::sal_Int8 >& Data ) override;
 
     // XStringResourceWithStorage
     virtual void SAL_CALL storeAsStorage
@@ -427,10 +427,10 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -443,12 +443,12 @@ public:
     virtual bool SAL_CALL hasEntryForId( const OUString& ResourceID ) override;
     virtual bool SAL_CALL hasEntryForIdAndLocale( const OUString& ResourceID,
         const css::lang::Locale& locale ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getResourceIDs(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getResourceIDsForLocale
         ( const css::lang::Locale& locale ) override;
     virtual css::lang::Locale SAL_CALL getCurrentLocale(  ) override;
     virtual css::lang::Locale SAL_CALL getDefaultLocale(  ) override;
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override;
 
     // XStringResourceManager
     virtual bool SAL_CALL isReadOnly() override;
@@ -474,8 +474,8 @@ public:
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
         const OUString& Comment, const css::uno::Reference
         < css::task::XInteractionHandler >& Handler ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
-    virtual void SAL_CALL importBinary( const css::uno::Sequence< ::sal_Int8 >& Data ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
+    virtual void SAL_CALL importBinary( const cpo::uno::Sequence< ::sal_Int8 >& Data ) override;
 
     // XStringResourceWithLocation
     virtual void SAL_CALL storeAsURL( const OUString& URL ) override;

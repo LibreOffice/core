@@ -192,7 +192,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 namespace
 {
 OUString lcl_RangeSequenceToString(
-    const uno::Sequence< OUString > & rRanges,
+    const cpo::uno::Sequence< OUString > & rRanges,
     const uno::Reference< chart2::data::XRangeXMLConversion > & xFormatConverter )
 {
     OUStringBuffer aResult;
@@ -243,61 +243,61 @@ OUString lcl_GetFormattedString(ScDocument& rDoc, const ScRefCellValue& rCell, c
 } // anonymous namespace
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLExporter"_ustr, SvXMLExportFlags::ALL));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLMetaExporter"_ustr, SvXMLExportFlags::META));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLStylesExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLStylesExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLStylesExporter"_ustr, SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLContentExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLContentExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLContentExporter"_ustr, SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLSettingsExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLSettingsExporter"_ustr, SvXMLExportFlags::SETTINGS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLOasisExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLOasisExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisExporter"_ustr, SvXMLExportFlags::ALL|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisMetaExporter"_ustr, SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLOasisStylesExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLOasisStylesExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisStylesExporter"_ustr, SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLOasisContentExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLOasisContentExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisContentExporter"_ustr, SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_XMLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScXMLExport(context, u"com.sun.star.comp.Calc.XMLOasisSettingsExporter"_ustr, SvXMLExportFlags::SETTINGS|SvXMLExportFlags::OASIS));
 }
@@ -440,7 +440,7 @@ void ScXMLExport::SetSourceStream( const uno::Reference<io::XInputStream>& xNewS
     const char pXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     sal_Int32 nLen = strlen(pXmlHeader);
 
-    uno::Sequence<sal_Int8> aFileStart(nLen);
+    cpo::uno::Sequence<sal_Int8> aFileStart(nLen);
     sal_Int32 nRead = xSourceStream->readBytes( aFileStart, nLen );
 
     if ( nRead != nLen || memcmp( aFileStart.getConstArray(), pXmlHeader, nLen ) != 0 )
@@ -641,7 +641,7 @@ void ScXMLExport::ExportMeta_()
     GetAutoStylePool()->ClearEntries();
     CollectSharedData(nTableCount, nShapesCount);
 
-    uno::Sequence<beans::NamedValue> stats
+    cpo::uno::Sequence<beans::NamedValue> stats
     {
         { u"TableCount"_ustr,  cpo::uno::Any(static_cast<sal_Int32>(nTableCount)) },
         { u"CellCount"_ustr,   cpo::uno::Any(nCellCount) },
@@ -1555,7 +1555,7 @@ void ScXMLExport::ExportFormatRanges(ScDocument& rDoc, const sal_Int32 nStartCol
                 assert(nMaxRows && "ScXMLExport::ExportFormatRanges cannot make progress with zero rows, something went wrong");
                 if (!nMaxRows)
                 {
-                    uno::Sequence<OUString> aEmptySeq;
+                    cpo::uno::Sequence<OUString> aEmptySeq;
                     SetError(XMLERROR_CANCEL|XMLERROR_FLAG_SEVERE, aEmptySeq);
                     break;
                 }
@@ -1641,7 +1641,7 @@ void ScXMLExport::GetColumnRowHeader(const ScDocument& rDoc, bool& rHasColumnHea
                               rTempColumnHeaderRange.EndColumn,
                               rTempColumnHeaderRange.EndRow,
                               rTempColumnHeaderRange.Sheet);
-    uno::Sequence< table::CellRangeAddress > aRangeList( xCurrentTable->getPrintAreas() );
+    cpo::uno::Sequence< table::CellRangeAddress > aRangeList( xCurrentTable->getPrintAreas() );
     ScRangeStringConverter::GetStringFromRangeList( rPrintRanges, aRangeList, &rDoc, FormulaGrammar::CONV_OOO );
 }
 
@@ -1687,7 +1687,7 @@ void ScXMLExport::SetBodyAttributes()
 
     AddAttribute(XML_NAMESPACE_TABLE, XML_STRUCTURE_PROTECTED, XML_TRUE);
     OUStringBuffer aBuffer;
-    uno::Sequence<sal_Int8> aPassHash;
+    cpo::uno::Sequence<sal_Int8> aPassHash;
     ScPasswordHash eHashUsed = PASSHASH_UNSPECIFIED;
     const ScDocProtection* p = pDoc->GetDocProtection();
     if (p)
@@ -1741,7 +1741,7 @@ static bool lcl_CopyStreamElement( const uno::Reference< io::XInputStream >& xIn
                             sal_Int64 nCount )
 {
     const sal_Int32 nBufSize = 16*1024;
-    uno::Sequence<sal_Int8> aSequence(nBufSize);
+    cpo::uno::Sequence<sal_Int8> aSequence(nBufSize);
 
     sal_Int64 nRemaining = nCount;
     bool bFirst = true;
@@ -1776,7 +1776,7 @@ static bool lcl_CopyStreamElement( const uno::Reference< io::XInputStream >& xIn
         {
             if ( nRead > 0 )
             {
-                uno::Sequence<sal_Int8> aTempBuf( aSequence.getConstArray(), nRead );
+                cpo::uno::Sequence<sal_Int8> aTempBuf( aSequence.getConstArray(), nRead );
                 xOutput->writeBytes( aTempBuf );
             }
             nRemaining = 0;
@@ -1823,7 +1823,7 @@ void ScXMLExport::CopySourceStream( sal_Int64 nStartOffset, sal_Int64 nEndOffset
     if ( getExportFlags() & SvXMLExportFlags::PRETTY )
     {
         static constexpr OString aOutStr("\n   "_ostr);
-        uno::Sequence<sal_Int8> aOutSeq( reinterpret_cast<sal_Int8 const *>(aOutStr.getStr()), aOutStr.getLength() );
+        cpo::uno::Sequence<sal_Int8> aOutSeq( reinterpret_cast<sal_Int8 const *>(aOutStr.getStr()), aOutStr.getLength() );
         xDestStream->writeBytes( aOutSeq );
     }
 
@@ -1837,7 +1837,7 @@ void ScXMLExport::CopySourceStream( sal_Int64 nStartOffset, sal_Int64 nEndOffset
         // If copying went wrong, set an error.
         // ScXMLImportWrapper then resets all stream flags, so the next save attempt will use normal saving.
 
-        uno::Sequence<OUString> aEmptySeq;
+        cpo::uno::Sequence<OUString> aEmptySeq;
         SetError(XMLERROR_CANCEL|XMLERROR_FLAG_SEVERE, aEmptySeq);
     }
     nSourceStreamPos = nEndOffset;
@@ -2127,7 +2127,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
             else
                 nIndex = pCellStyles->GetIndexOfStyleName(sName, XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX, bIsAutoStyle);
 
-            const uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+            const cpo::uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
             bool bGetMerge(true);
             for (table::CellRangeAddress const & address : aAddresses)
             {
@@ -2146,7 +2146,7 @@ void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& x
         pCellStyles->AddStyleName(sEncodedStyleName, nIndex, false);
         if ( !pOldName )
         {
-            const uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
+            const cpo::uno::Sequence<table::CellRangeAddress> aAddresses(xCellRanges->getRangeAddresses());
             bool bGetMerge(true);
             for (table::CellRangeAddress const & address : aAddresses)
             {
@@ -2868,7 +2868,7 @@ void ScXMLExport::WriteTable(ScDocument& rDoc, sal_Int32 nTable, const rtl::Refe
             else if (pProtect->hasPasswordHash(PASSHASH_XL, PASSHASH_SHA1))
             {
                 // Double-hash this by SHA1 on top of the legacy xls hash.
-                uno::Sequence<sal_Int8> aHash = pProtect->getPasswordHash(PASSHASH_XL, PASSHASH_SHA1);
+                cpo::uno::Sequence<sal_Int8> aHash = pProtect->getPasswordHash(PASSHASH_XL, PASSHASH_SHA1);
                 ::comphelper::Base64::encode(aBuffer, aHash);
                 eHashUsed = PASSHASH_XL;
             }
@@ -3497,7 +3497,7 @@ void ScXMLExport::ExportShape(const ScDocument& rDoc, const uno::Reference < dra
                             {
                                 // we have a chart that gets its data from Calc
                                 bIsChart = true;
-                                uno::Sequence< OUString > aRepresentations(
+                                cpo::uno::Sequence< OUString > aRepresentations(
                                     xReceiver->getUsedRangeRepresentations());
                                 rtl::Reference<comphelper::AttributeList> pAttrList;
                                 try
@@ -5304,7 +5304,7 @@ XMLPageExport* ScXMLExport::CreatePageExport()
 }
 
 //static
-void ScXMLExport::GetChangeTrackViewSettings(const ScDocument& rDoc, uno::Sequence<beans::PropertyValue>& rProps)
+void ScXMLExport::GetChangeTrackViewSettings(const ScDocument& rDoc, cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     ScChangeViewSettings* pViewSettings(rDoc.GetChangeViewSettings());
     if (!pViewSettings)
@@ -5314,7 +5314,7 @@ void ScXMLExport::GetChangeTrackViewSettings(const ScDocument& rDoc, uno::Sequen
     rProps.realloc(nChangePos + 1);
     beans::PropertyValue* pProps(rProps.getArray());
 
-    uno::Sequence<beans::PropertyValue> aChangeProps(SC_VIEWCHANGES_COUNT);
+    cpo::uno::Sequence<beans::PropertyValue> aChangeProps(SC_VIEWCHANGES_COUNT);
     beans::PropertyValue* pChangeProps(aChangeProps.getArray());
     pChangeProps[SC_SHOW_CHANGES].Name = u"ShowChanges"_ustr;
     pChangeProps[SC_SHOW_CHANGES].Value <<= pViewSettings->ShowChanges();
@@ -5349,7 +5349,7 @@ void ScXMLExport::GetChangeTrackViewSettings(const ScDocument& rDoc, uno::Sequen
     pProps[nChangePos].Value <<= aChangeProps;
 }
 
-void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
+void ScXMLExport::GetViewSettings(cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     if (!GetModel().is())
         return;
@@ -5385,7 +5385,7 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     GetChangeTrackViewSettings(*pDoc, rProps);
 }
 
-void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& rProps)
+void ScXMLExport::GetConfigurationSettings(cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     if (!GetModel().is())
         return;
@@ -5598,7 +5598,7 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
 }
 
 // XFilter
-bool SAL_CALL ScXMLExport::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
+bool SAL_CALL ScXMLExport::filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
 {
     SolarMutexGuard aGuard;
     ScDocument* pDoc = GetDocument();
@@ -5619,7 +5619,7 @@ void SAL_CALL ScXMLExport::cancel()
 }
 
 // XInitialization
-void SAL_CALL ScXMLExport::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL ScXMLExport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SolarMutexGuard aGuard;
     SvXMLExport::initialize(aArguments);

@@ -31,7 +31,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
-        { SC_UNONAME_HIDDENVALUES, 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), 0, 0 },
+        { SC_UNONAME_HIDDENVALUES, 0, cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(), 0, 0 },
         { SC_UNONAME_ROLE, 0, cppu::UnoType<css::chart2::data::DataSequenceRole>::get(), 0, 0 },
         { SC_UNONAME_INCLUDEHIDDENCELLS, 0, cppu::UnoType<bool>::get(), 0, 0 },
     };
@@ -65,14 +65,14 @@ void PivotTableDataSequence::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHin
     }
 }
 
-uno::Sequence<cpo::uno::Any> SAL_CALL PivotTableDataSequence::getData()
+cpo::uno::Sequence<cpo::uno::Any> SAL_CALL PivotTableDataSequence::getData()
 {
     SolarMutexGuard aGuard;
 
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    uno::Sequence<cpo::uno::Any> aSeq(m_aData.size());
+    cpo::uno::Sequence<cpo::uno::Any> aSeq(m_aData.size());
     auto pSeq = aSeq.getArray();
 
     size_t i = 0;
@@ -90,13 +90,13 @@ uno::Sequence<cpo::uno::Any> SAL_CALL PivotTableDataSequence::getData()
 
 // XNumericalDataSequence --------------------------------------------------
 
-uno::Sequence<double> SAL_CALL PivotTableDataSequence::getNumericalData()
+cpo::uno::Sequence<double> SAL_CALL PivotTableDataSequence::getNumericalData()
 {
     SolarMutexGuard aGuard;
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    uno::Sequence<double> aSeq(m_aData.size());
+    cpo::uno::Sequence<double> aSeq(m_aData.size());
     auto pSeq = aSeq.getArray();
 
     size_t i = 0;
@@ -110,13 +110,13 @@ uno::Sequence<double> SAL_CALL PivotTableDataSequence::getNumericalData()
 
 // XTextualDataSequence --------------------------------------------------
 
-uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::getTextualData()
+cpo::uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::getTextualData()
 {
     SolarMutexGuard aGuard;
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    uno::Sequence<OUString> aSeq(m_aData.size());
+    cpo::uno::Sequence<OUString> aSeq(m_aData.size());
     auto pSeq = aSeq.getArray();
 
     size_t i = 0;
@@ -134,13 +134,13 @@ OUString SAL_CALL PivotTableDataSequence::getSourceRangeRepresentation()
     return m_aID;
 }
 
-uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::generateLabel(chart2::data::LabelOrigin /*eOrigin*/)
+cpo::uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::generateLabel(chart2::data::LabelOrigin /*eOrigin*/)
 {
     SolarMutexGuard aGuard;
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    uno::Sequence<OUString> aSeq;
+    cpo::uno::Sequence<OUString> aSeq;
     return aSeq;
 }
 
@@ -228,7 +228,7 @@ cpo::uno::Any SAL_CALL PivotTableDataSequence::getPropertyValue(const OUString& 
         aReturn <<= false;
     else if (rPropertyName == SC_UNONAME_HIDDENVALUES)
     {
-        css::uno::Sequence<sal_Int32> aHiddenValues;
+        cpo::uno::Sequence<sal_Int32> aHiddenValues;
         aReturn <<= aHiddenValues;
     }
     else if (rPropertyName == SC_UNONAME_TIME_BASED)

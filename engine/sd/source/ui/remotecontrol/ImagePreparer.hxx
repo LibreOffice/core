@@ -32,7 +32,7 @@ private:
     virtual void Invoke() override;
 
     void sendPreview( sal_uInt32 aSlideNumber );
-    css::uno::Sequence<sal_Int8> preparePreview( sal_uInt32 aSlideNumber,
+    cpo::uno::Sequence<sal_Int8> preparePreview( sal_uInt32 aSlideNumber,
                 sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &rSize );
 
     void sendNotes( sal_uInt32 aSlideNumber );

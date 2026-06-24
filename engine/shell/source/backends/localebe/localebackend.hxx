@@ -45,7 +45,7 @@ class LocaleBackend final : public ::cppu::WeakImplHelper <
         virtual bool SAL_CALL
             supportsService( const OUString& aServiceName ) override ;
 
-        virtual uno::Sequence<OUString> SAL_CALL
+        virtual cpo::uno::Sequence<OUString> SAL_CALL
             getSupportedServiceNames(  ) override ;
 
         // XPropertySet

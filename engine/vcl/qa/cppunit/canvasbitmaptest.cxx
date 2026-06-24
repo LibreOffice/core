@@ -105,7 +105,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             xBmp->getScaledBitmap( geometry::RealSize2D(500,500), false ).is());
 
     rendering::IntegerBitmapLayout aLayout;
-    uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
+    cpo::uno::Sequence<sal_Int8> aPixelData = xBmp->getData(aLayout, geometry::IntegerRectangle2D(0,0,1,1));
 
     const sal_Int32 nExpectedBitsPerPixel(bHasPalette ? 8 : (aContainedBmp.HasAlpha() ? 32 : 24));
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "# scanlines not 1",
@@ -124,7 +124,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Palette existence does not conform to bitmap",
                             (nDepth <= 8), aLayout.Palette.is());
 
-    uno::Sequence<sal_Int8> aPixelData2 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(0,0) );
+    cpo::uno::Sequence<sal_Int8> aPixelData2 = xBmp->getPixel( aLayout, geometry::IntegerPoint2D(0,0) );
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "getData and getPixel did not return same amount of data",
                             aPixelData.getLength(), aPixelData2.getLength());
@@ -138,8 +138,8 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                             aLayout.ScanLineStride == (200*nExpectedBitsPerPixel+7)/8 ||
                             aLayout.ScanLineStride == -(200*nExpectedBitsPerPixel+7)/8);
 
-    const uno::Sequence<rendering::RGBColor> aRGBColors = xBmp->convertIntegerToRGB(aPixelData);
-    const uno::Sequence<rendering::ARGBColor> aARGBColors = xBmp->convertIntegerToARGB(aPixelData);
+    const cpo::uno::Sequence<rendering::RGBColor> aRGBColors = xBmp->convertIntegerToRGB(aPixelData);
+    const cpo::uno::Sequence<rendering::ARGBColor> aARGBColors = xBmp->convertIntegerToARGB(aPixelData);
 
     std::pair<const rendering::RGBColor*, const rendering::ARGBColor*> aRes
         = std::mismatch(aRGBColors.begin(), aRGBColors.end(), aARGBColors.begin());
@@ -201,7 +201,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
                                 xPal.is());
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Palette incorrect entry count",
                                 static_cast<sal_Int32>(1 << nOriginalDepth), xPal->getNumberOfEntries());
-        uno::Sequence<double> aIndex;
+        cpo::uno::Sequence<double> aIndex;
         CPPUNIT_ASSERT_MESSAGE( "Palette is not read-only",
                                 !xPal->setIndex(aIndex,true,0));
         CPPUNIT_ASSERT_MESSAGE( "Palette entry 0 is not opaque",
@@ -213,10 +213,10 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     if( nOriginalDepth <= 8 )
         return;
 
-    uno::Sequence<sal_Int8> aPixel3, aPixel4;
+    cpo::uno::Sequence<sal_Int8> aPixel3, aPixel4;
 
     const Color aCol(COL_GREEN);
-    uno::Sequence<rendering::ARGBColor> aARGBColor
+    cpo::uno::Sequence<rendering::ARGBColor> aARGBColor
     {
         {
             1.0,
@@ -233,7 +233,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
 
     if( !aContainedBmp.HasAlpha() )
     {
-        uno::Sequence<rendering::RGBColor>  aRGBColor
+        cpo::uno::Sequence<rendering::RGBColor>  aRGBColor
         {
             {
                 vcl::unotools::toDoubleColor(aCol.GetRed()),
@@ -254,8 +254,8 @@ class TestBitmap : public cppu::WeakImplHelper< rendering::XIntegerReadOnlyBitma
 {
 private:
     geometry::IntegerSize2D        maSize;
-    uno::Sequence<sal_Int8>        maComponentTags;
-    uno::Sequence<sal_Int32>       maComponentBitCounts;
+    cpo::uno::Sequence<sal_Int8>        maComponentTags;
+    cpo::uno::Sequence<sal_Int32>       maComponentBitCounts;
     rendering::IntegerBitmapLayout maLayout;
     const sal_Int32                mnBitsPerPixel;
 
@@ -266,7 +266,7 @@ private:
                                                                            bool ) override { return this; }
 
     // XIntegerReadOnlyBitmap
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getData( rendering::IntegerBitmapLayout&     bitmapLayout,
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getData( rendering::IntegerBitmapLayout&     bitmapLayout,
                                                           const geometry::IntegerRectangle2D& rect ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "X1 out of bounds", rect.X1 >= 0 );
@@ -279,7 +279,7 @@ private:
         const sal_Int32 nWidth  = rect.X2-rect.X1;
         const sal_Int32 nHeight = rect.Y2-rect.Y1;
         const sal_Int32 nScanlineLen = (nWidth * mnBitsPerPixel + 7)/8;
-        uno::Sequence<sal_Int8> aRes( nScanlineLen * nHeight );
+        cpo::uno::Sequence<sal_Int8> aRes( nScanlineLen * nHeight );
         sal_Int8* pOut = aRes.getArray();
 
         bitmapLayout.ScanLines     = nHeight;
@@ -311,11 +311,11 @@ private:
         return aRes;
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( rendering::IntegerBitmapLayout&,
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( rendering::IntegerBitmapLayout&,
                                                            const geometry::IntegerPoint2D&  ) override
     {
         CPPUNIT_ASSERT_MESSAGE("getPixel: method not implemented", false);
-        return uno::Sequence< sal_Int8 >();
+        return cpo::uno::Sequence< sal_Int8 >();
     }
 
     /// @throws uno::RuntimeException
@@ -351,7 +351,7 @@ private:
         return 255;
     }
 
-    virtual bool SAL_CALL getIndex( uno::Sequence< double >& entry,
+    virtual bool SAL_CALL getIndex( cpo::uno::Sequence< double >& entry,
                                           ::sal_Int32 nIndex ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "Got palette getIndex interface call without handing out palette",
@@ -368,7 +368,7 @@ private:
         return true; // no palette transparency here.
     }
 
-    virtual bool SAL_CALL setIndex( const uno::Sequence< double >&,
+    virtual bool SAL_CALL setIndex( const cpo::uno::Sequence< double >&,
                                           bool,
                                           ::sal_Int32 nIndex ) override
     {
@@ -396,7 +396,7 @@ private:
         return rendering::ColorSpaceType::RGB;
     }
 
-    virtual uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) override
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) override
     {
         return maComponentTags;
     }
@@ -406,53 +406,53 @@ private:
         return rendering::RenderingIntent::PERCEPTUAL;
     }
 
-    virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties() override
+    virtual cpo::uno::Sequence< beans::PropertyValue > SAL_CALL getProperties() override
     {
         CPPUNIT_ASSERT_MESSAGE("getProperties: method not implemented", false );
-        return uno::Sequence< ::beans::PropertyValue >();
+        return cpo::uno::Sequence< ::beans::PropertyValue >();
     }
 
-    virtual uno::Sequence< double > SAL_CALL convertColorSpace( const uno::Sequence< double >&,
+    virtual cpo::uno::Sequence< double > SAL_CALL convertColorSpace( const cpo::uno::Sequence< double >&,
                                                                 const uno::Reference< rendering::XColorSpace >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertColorSpace: method not implemented", false);
-        return uno::Sequence< double >();
+        return cpo::uno::Sequence< double >();
     }
 
-    virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& ) override
+    virtual cpo::uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const cpo::uno::Sequence< double >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertToRGB: method not implemented", false);
-        return uno::Sequence< rendering::RGBColor >();
+        return cpo::uno::Sequence< rendering::RGBColor >();
     }
 
-    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& ) override
+    virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const cpo::uno::Sequence< double >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertToARGB: method not implemented", false);
-        return uno::Sequence< rendering::ARGBColor >();
+        return cpo::uno::Sequence< rendering::ARGBColor >();
     }
 
-    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& ) override
+    virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const cpo::uno::Sequence< double >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertToPARGB: method not implemented", false);
-        return uno::Sequence< rendering::ARGBColor >();
+        return cpo::uno::Sequence< rendering::ARGBColor >();
     }
 
-    virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& ) override
+    virtual cpo::uno::Sequence< double > SAL_CALL convertFromRGB( const cpo::uno::Sequence< rendering::RGBColor >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertFromRGB: method not implemented", false);
-        return uno::Sequence< double >();
+        return cpo::uno::Sequence< double >();
     }
 
-    virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& ) override
+    virtual cpo::uno::Sequence< double > SAL_CALL convertFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertFromARGB: this method is not expected to be called!", false);
-        return uno::Sequence< double >();
+        return cpo::uno::Sequence< double >();
     }
 
-    virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& ) override
+    virtual cpo::uno::Sequence< double > SAL_CALL convertFromPARGB( const cpo::uno::Sequence< rendering::ARGBColor >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertFromPARGB: this method is not expected to be called!", false);
-        return uno::Sequence< double >();
+        return cpo::uno::Sequence< double >();
     }
 
     virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) override
@@ -460,7 +460,7 @@ private:
         return mnBitsPerPixel;
     }
 
-    virtual uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) override
+    virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) override
     {
         return maComponentBitCounts;
     }
@@ -470,24 +470,24 @@ private:
         return util::Endianness::LITTLE;
     }
 
-    virtual uno::Sequence< double > SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& ,
+    virtual cpo::uno::Sequence< double > SAL_CALL convertFromIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& ,
                                                                            const uno::Reference< rendering::XColorSpace >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertFromIntegerColorSpace: method not implemented", false);
-        return uno::Sequence< double >();
+        return cpo::uno::Sequence< double >();
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& ,
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& ,
                                                                              const uno::Reference< rendering::XIntegerBitmapColorSpace >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertToIntegerColorSpace: method not implemented", false);
-        return uno::Sequence< sal_Int8 >();
+        return cpo::uno::Sequence< sal_Int8 >();
     }
 
-    virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
+    virtual cpo::uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override
     {
-        const uno::Sequence< rendering::ARGBColor > aTemp( convertIntegerToARGB(deviceColor) );
-        uno::Sequence< rendering::RGBColor > aRes( aTemp.getLength() );
+        const cpo::uno::Sequence< rendering::ARGBColor > aTemp( convertIntegerToARGB(deviceColor) );
+        cpo::uno::Sequence< rendering::RGBColor > aRes( aTemp.getLength() );
         std::transform(aTemp.begin(), aTemp.end(), aRes.getArray(),
             [](const rendering::ARGBColor& rColor) {
                 return rendering::RGBColor(rColor.Red,
@@ -498,14 +498,14 @@ private:
         return aRes;
     }
 
-    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
+    virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override
     {
         const std::size_t  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("number of channels no multiple of pixel element count",
                                0, static_cast<int>(nLen%nBytesPerPixel));
 
-        uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
+        cpo::uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
 
         if( getPalette().is() )
         {
@@ -531,15 +531,15 @@ private:
         return aRes;
     }
 
-    virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB(
-        const uno::Sequence< ::sal_Int8 >& deviceColor) override
+    virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB(
+        const cpo::uno::Sequence< ::sal_Int8 >& deviceColor) override
     {
         const std::size_t  nLen( deviceColor.getLength() );
         const sal_Int32 nBytesPerPixel(mnBitsPerPixel == 8 ? 1 : 4);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("number of channels no multiple of pixel element count",
                                0, static_cast<int>(nLen%nBytesPerPixel));
 
-        uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
+        cpo::uno::Sequence< rendering::ARGBColor > aRes( nLen / nBytesPerPixel );
 
         if( getPalette().is() )
         {
@@ -566,23 +566,23 @@ private:
         return aRes;
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB(
-        const uno::Sequence< rendering::RGBColor >&) override
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB(
+        const cpo::uno::Sequence< rendering::RGBColor >&) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertIntegerFromRGB: method not implemented", false);
-        return uno::Sequence< sal_Int8 >();
+        return cpo::uno::Sequence< sal_Int8 >();
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& ) override
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertIntegerFromARGB: method not implemented", false);
-        return uno::Sequence< sal_Int8 >();
+        return cpo::uno::Sequence< sal_Int8 >();
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& ) override
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const cpo::uno::Sequence< rendering::ARGBColor >& ) override
     {
         CPPUNIT_ASSERT_MESSAGE("convertIntegerFromPARGB: method not implemented", false);
-        return uno::Sequence< sal_Int8 >();
+        return cpo::uno::Sequence< sal_Int8 >();
     }
 
 public:

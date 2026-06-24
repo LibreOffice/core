@@ -45,7 +45,7 @@ OUString SAL_CALL OIndex::getImplementationName(  )
     return u"com.sun.star.sdbcx.VIndex"_ustr;
 }
 
-css::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.IndexDescriptor"_ustr:u"com.sun.star.sdbcx.Index"_ustr };
 }

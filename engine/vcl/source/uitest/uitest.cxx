@@ -28,9 +28,9 @@ bool UITest::executeCommand(const OUString& rCommand)
 }
 
 bool UITest::executeCommandWithParameters(const OUString& rCommand,
-    const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
+    const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
-    css::uno::Sequence< css::beans::PropertyValue > lNewArgs =
+    cpo::uno::Sequence< css::beans::PropertyValue > lNewArgs =
         {{u"SynchronMode"_ustr, -1, cpo::uno::Any(true),
           css::beans::PropertyState_DIRECT_VALUE}};
 

@@ -661,7 +661,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                 else if ( nGluePointType == EnhancedCustomShapeGluePointType::SEGMENTS )
                                 {
                                     sal_uInt32 nPt = nC;
-                                    css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
+                                    cpo::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
                                     pAny = aGeometryItem.GetPropertyValueByName( sPath, u"Segments"_ustr );
                                     if ( pAny && (*pAny >>= aSegments) )
                                     {
@@ -713,7 +713,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                     pAny = aGeometryItem.GetPropertyValueByName( sPath, u"Coordinates"_ustr );
                                     if ( pAny )
                                     {
-                                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+                                        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
                                         *pAny >>= aCoordinates;
                                         if ( nPt < o3tl::make_unsigned(aCoordinates.getLength()) )
                                         {
@@ -723,7 +723,7 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                             if ( ( rPara.First.Value >>= nX ) && ( rPara.Second.Value >>= nY ) )
                                             {
                                                 static constexpr OUString sGluePoints( u"GluePoints"_ustr );
-                                                css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+                                                cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
                                                 pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
                                                 if ( pAny )
                                                     *pAny >>= aGluePoints;
@@ -1964,7 +1964,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         }
         if ( nNumElem <= 128 )
         {
-            uno::Sequence< OUString > aEquations( nNumElem );
+            cpo::uno::Sequence< OUString > aEquations( nNumElem );
             for ( auto& rEquation : asNonConstRange(aEquations) )
             {
                 sal_Int16 nP1(0), nP2(0), nP3(0);
@@ -2000,7 +2000,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         }
         if (bImport)
         {
-            uno::Sequence< beans::PropertyValues > aHandles( nNumElem );
+            cpo::uno::Sequence< beans::PropertyValues > aHandles( nNumElem );
             auto aHandlesRange = asNonConstRange(aHandles);
             for (sal_uInt32 i = 0; i < nNumElem; ++i)
             {
@@ -2205,7 +2205,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/Coordinates
         if ( IsProperty( DFF_Prop_pVertices ) )
         {
-            css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+            cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
             sal_uInt16 nNumElemVert = 0;
             sal_uInt16 nElemSizeVert = 8;
 
@@ -2265,7 +2265,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // Path/Segments
         if ( IsProperty( DFF_Prop_pSegmentInfo ) )
         {
-            css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
+            cpo::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
 
             sal_uInt16 nNumElemSeg = 0;
 
@@ -2427,7 +2427,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
             }
             if (bImport)
             {
-                css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
+                cpo::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrames( nNumElem );
                 for (auto& rTextFrame : asNonConstRange(aTextFrames))
                 {
                     sal_Int32 nLeft(0), nTop(0), nRight(0), nBottom(0);
@@ -2450,7 +2450,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         //Path/GluePoints
         if ( IsProperty( DFF_Prop_connectorPoints ) )
         {
-            css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+            cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aGluePoints;
             sal_uInt16 nNumElemVert = 0;
             sal_uInt16 nElemSizeVert = 8;
 
@@ -2579,7 +2579,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
     sal_Int32 nAdjustmentValues = ( i - DFF_Prop_adjustValue ) + 1;
     if ( nAdjustmentValues )
     {
-        uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq( nAdjustmentValues );
+        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq( nAdjustmentValues );
         auto pAdjustmentSeq = aAdjustmentSeq.getArray();
         while( --nAdjustmentValues >= 0 )
         {
@@ -2757,7 +2757,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
             sal_uInt32 nLen = rManager.pSecPropSet->GetPropertyValue( DFF_Prop_metroBlob, 0 );
             if ( nLen )
             {
-                css::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
+                cpo::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
                 rIn.ReadBytes(aXMLDataSeq.getArray(), nLen);
                 css::uno::Reference< css::io::XInputStream > xInputStream
                     ( new ::comphelper::SequenceInputStream( aXMLDataSeq ) );
@@ -2779,7 +2779,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                                 css::uno::Reference< css::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
                                 if ( xShapeXMLInputStream.is() )
                                 {
-                                    css::uno::Sequence< sal_Int8 > aSeq;
+                                    cpo::uno::Sequence< sal_Int8 > aSeq;
                                     sal_Int32 nBytesRead = xShapeXMLInputStream->readBytes( aSeq, 0x7fffffff );
                                     if ( nBytesRead )
                                     {    // for only one property I spare to use a XML parser at this point, this
@@ -4586,7 +4586,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         // when read from stream with this specific values.
                         double fStartAngle(-90.0);
                         double fEndAngle(0.0);
-                        css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
+                        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
                         const cpo::uno::Any* pAny = aGeometryItem.GetPropertyValueByName(sAdjustmentValues);
                         if (pAny && (*pAny >>= seqAdjustmentValues) && seqAdjustmentValues.getLength() > 1)
                         {
@@ -4615,7 +4615,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         // has an ellipse frame rectangle with LT(-21600,0) and
                         // RB(21600,43200) in this coordinate system.
                         basegfx::B2DRectangle aEllipseRect_MS(-21600.0, 0.0, 21600.0, 43200.0);
-                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
+                        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> seqCoordinates;
                         pAny = aGeometryItem.GetPropertyValueByName( sPath, u"Coordinates"_ustr );
                         if (pAny && (*pAny >>= seqCoordinates) && (seqCoordinates.getLength() >= 2))
                         {
@@ -4734,7 +4734,7 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                         sal_Int32 nTop   = static_cast<sal_Int32>((aPieRect_MS.getMinY() - aEllipseRect_MS.getMinY()) * fTextFrameScaleY );
                         sal_Int32 nRight = static_cast<sal_Int32>((aPieRect_MS.getMaxX() - aEllipseRect_MS.getMinX()) * fTextFrameScaleX );
                         sal_Int32 nBottom= static_cast<sal_Int32>((aPieRect_MS.getMaxY() - aEllipseRect_MS.getMinY()) * fTextFrameScaleY );
-                        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
+                        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aTextFrame( 1 );
                         auto pTextFrame = aTextFrame.getArray();
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pTextFrame[ 0 ].TopLeft.First,     nLeft );
                         EnhancedCustomShape2d::SetEnhancedCustomShapeParameter( pTextFrame[ 0 ].TopLeft.Second,    nTop );
@@ -7206,7 +7206,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             else
                 aFilterName = SvxMSDffManager::GetFilterNameFromClassID( aStgNm );
 
-            uno::Sequence<beans::PropertyValue> aMedium(aFilterName.isEmpty() ? 3 : 4);
+            cpo::uno::Sequence<beans::PropertyValue> aMedium(aFilterName.isEmpty() ? 3 : 4);
             auto pMedium = aMedium.getArray();
             pMedium[0].Name = u"InputStream"_ustr;
             uno::Reference < io::XInputStream > xStream = new ::utl::OSeekableInputStreamWrapper( aMemStream );
@@ -7631,7 +7631,7 @@ css::uno::Reference<css::xml::dom::XDocument> SvxMSDffManager::ParseMetroBlobSha
     sal_uInt32 nLen = pSecPropSet->GetPropertyValue(DFF_Prop_metroBlob, 0);
     if (!nLen)
         return {};
-    css::uno::Sequence<sal_Int8> aXMLDataSeq(nLen);
+    cpo::uno::Sequence<sal_Int8> aXMLDataSeq(nLen);
     rStream.ReadBytes(aXMLDataSeq.getArray(), nLen);
     css::uno::Reference<css::io::XInputStream> xInputStream(
         new ::comphelper::SequenceInputStream(aXMLDataSeq));

@@ -536,7 +536,7 @@ bool SwHTMLParser::InsertEmbed()
 
                     if (bOwnFormat)
                     {
-                        uno::Sequence<beans::PropertyValue> aMedium = comphelper::InitPropertySequence(
+                        cpo::uno::Sequence<beans::PropertyValue> aMedium = comphelper::InitPropertySequence(
                             { { "InputStream", cpo::uno::Any(xInStream) },
                               { "URL", cpo::uno::Any(u"private:stream"_ustr) },
                               { "DocumentBaseURL", cpo::uno::Any(m_sBaseURL) } });
@@ -609,9 +609,9 @@ bool SwHTMLParser::InsertEmbed()
     {
         // Request that the native data of the embedded object is not modified
         // during parsing.
-        uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue(u"StreamReadOnly"_ustr,
+        cpo::uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue(u"StreamReadOnly"_ustr,
                                                                                    true) };
-        uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aValues) };
+        cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
     }
 
@@ -623,9 +623,9 @@ bool SwHTMLParser::InsertEmbed()
                 &aFrameSet);
     if (xObjInitialization.is())
     {
-        uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue(u"StreamReadOnly"_ustr,
+        cpo::uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue(u"StreamReadOnly"_ustr,
                                                                                    false) };
-        uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aValues) };
+        cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
     }
 

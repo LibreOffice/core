@@ -239,8 +239,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         const css::uno::Reference< css::lang::XComponent > & xComponent,  /// the component we export
         const OUString& rStreamName,                                                                /// the stream name
         const OUString& rServiceName,                                                               /// service name of the component
-        const css::uno::Sequence< cpo::uno::Any> & rArguments,            /// the argument (XInitialization)
-        const css::uno::Sequence< css::beans::PropertyValue> & rMediaDesc,/// output descriptor
+        const cpo::uno::Sequence< cpo::uno::Any> & rArguments,            /// the argument (XInitialization)
+        const cpo::uno::Sequence< css::beans::PropertyValue> & rMediaDesc,/// output descriptor
         const css::uno::Reference< css::embed::XStorage >& _xStorageToSaveTo
     ) const;
 
@@ -250,8 +250,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         const css::uno::Reference< css::io::XOutputStream >& xOutputStream,
         const css::uno::Reference< css::lang::XComponent >& xComponent,
         const OUString& rServiceName,
-        const css::uno::Sequence< cpo::uno::Any >& rArguments,
-        const css::uno::Sequence< css::beans::PropertyValue> & rMediaDesc
+        const cpo::uno::Sequence< cpo::uno::Any >& rArguments,
+        const cpo::uno::Sequence< css::beans::PropertyValue> & rMediaDesc
     ) const;
 
     /** writes the content and settings
@@ -296,14 +296,14 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInterface
     virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XComponent
     virtual void SAL_CALL dispose(  ) override;
@@ -311,9 +311,9 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XModel
-    virtual bool SAL_CALL attachResource( const OUString& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override ;
+    virtual bool SAL_CALL attachResource( const OUString& URL, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override ;
     virtual OUString SAL_CALL getURL(  ) override ;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) override ;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) override ;
     virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
     virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
     virtual void SAL_CALL lockControllers(  ) override ;
@@ -325,21 +325,21 @@ public:
 
     // XModel2
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL getControllers(  ) override ;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableViewControllerNames(  ) override ;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableViewControllerNames(  ) override ;
     virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createDefaultViewController( const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
-    virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createViewController( const OUString& ViewName, const css::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
-    virtual void SAL_CALL setArgs(const css::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
+    virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createViewController( const OUString& ViewName, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
+    virtual void SAL_CALL setArgs(const cpo::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
 
     // XModel3
-    virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL getArgs2( const ::css::uno::Sequence< ::rtl::OUString >& requestedArgs ) override;
+    virtual ::cpo::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL getArgs2( const ::cpo::uno::Sequence< ::rtl::OUString >& requestedArgs ) override;
 
     // XStorable
     virtual bool SAL_CALL hasLocation(  ) override ;
     virtual OUString SAL_CALL getLocation(  ) override ;
     virtual bool SAL_CALL isReadonly(  ) override ;
     virtual void SAL_CALL store(  ) override ;
-    virtual void SAL_CALL storeAsURL( const OUString& sURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override ;
-    virtual void SAL_CALL storeToURL( const OUString& sURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override ;
+    virtual void SAL_CALL storeAsURL( const OUString& sURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override ;
+    virtual void SAL_CALL storeToURL( const OUString& sURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override ;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -359,9 +359,9 @@ public:
     virtual void SAL_CALL notifyDocumentEvent( const OUString& EventName, const css::uno::Reference< css::frame::XController2 >& ViewController, const cpo::uno::Any& Supplement ) override;
 
     // XPrintable
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter(  ) override ;
-    virtual void SAL_CALL setPrinter( const css::uno::Sequence< css::beans::PropertyValue >& aPrinter ) override ;
-    virtual void SAL_CALL print( const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override ;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPrinter(  ) override ;
+    virtual void SAL_CALL setPrinter( const cpo::uno::Sequence< css::beans::PropertyValue >& aPrinter ) override ;
+    virtual void SAL_CALL print( const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions ) override ;
 
     // XFormDocumentsSupplier
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getFormDocuments(  ) override;
@@ -379,14 +379,14 @@ public:
 
     // XDocumentSubStorageSupplier
     virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getDocumentSubStoragesNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getDocumentSubStoragesNames(  ) override;
 
     // XOfficeDatabaseDocument
     virtual css::uno::Reference< css::sdbc::XDataSource > SAL_CALL getDataSource() override;
 
     // XStorageBasedDocument
-    virtual void SAL_CALL loadFromStorage( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
-    virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
+    virtual void SAL_CALL loadFromStorage( const css::uno::Reference< css::embed::XStorage >& xStorage, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
+    virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
     virtual void SAL_CALL switchToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentStorage(  ) override;
     virtual void SAL_CALL addStorageChangeListener( const css::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
@@ -408,12 +408,12 @@ public:
 
     // XLoadable
     virtual void SAL_CALL initNew(  ) override;
-    virtual void SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+    virtual void SAL_CALL load( const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     // css.document.XDocumentRecovery
     virtual bool SAL_CALL wasModifiedSinceLastSave() override;
-    virtual void SAL_CALL storeToRecoveryFile( const OUString& i_TargetLocation, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
-    virtual void SAL_CALL recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
+    virtual void SAL_CALL storeToRecoveryFile( const OUString& i_TargetLocation, const cpo::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
+    virtual void SAL_CALL recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const cpo::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor ) override;
 
     // XTitle
     virtual OUString SAL_CALL getTitle(  ) override;
@@ -606,7 +606,7 @@ private:
     */
     void    impl_storeToStorage_throw(
                 const css::uno::Reference< css::embed::XStorage >& _rxTargetStorage,
-                const css::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
                 DocumentGuard& _rDocGuard
             ) const;
 
@@ -621,7 +621,7 @@ private:
     */
     bool    impl_attachResource(
                     const OUString& i_rLogicalDocumentURL,
-                    const css::uno::Sequence< css::beans::PropertyValue >& i_rMediaDescriptor,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& i_rMediaDescriptor,
                     DocumentGuard& _rDocGuard
                 );
 

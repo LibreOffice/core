@@ -35,7 +35,7 @@
 #include <cmath>
 #include <limits>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 

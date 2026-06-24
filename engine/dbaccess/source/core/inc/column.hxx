@@ -62,8 +62,8 @@ namespace dbaccess
         virtual ~OColumn() override;
 
     // css::lang::XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override = 0;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override = 0;
 
     // css::uno::XInterface
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -79,7 +79,7 @@ namespace dbaccess
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XNamed
         virtual OUString SAL_CALL getName(  ) override;
@@ -193,12 +193,12 @@ namespace dbaccess
         virtual void SAL_CALL acquire() noexcept override { OColumns_BASE::acquire(); }
         virtual void SAL_CALL release() noexcept override { OColumns_BASE::release(); }
         //XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // css::container::XChild
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;

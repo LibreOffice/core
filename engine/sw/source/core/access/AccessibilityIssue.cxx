@@ -424,7 +424,7 @@ void AccessibilityIssue::quickFixIssue() const
             if (m_sObjectID.isEmpty())
             {
                 // open the dialog "Tools/Options/Languages and Locales - General"
-                uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+                cpo::uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
                     u"Language"_ustr, u"*"_ustr) };
 
                 comphelper::dispatchCommand(u".uno:LanguageStatus"_ustr,
@@ -432,7 +432,7 @@ void AccessibilityIssue::quickFixIssue() const
             }
             else
             {
-                uno::Sequence<beans::PropertyValue> aArgs{
+                cpo::uno::Sequence<beans::PropertyValue> aArgs{
                     comphelper::makePropertyValue(u"Param"_ustr, m_sObjectID),
                     comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
                 };

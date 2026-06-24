@@ -29,7 +29,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
@@ -185,9 +185,9 @@ public:
             throw css::container::NoSuchElementException();
         return cpo::uno::Any( *cachePos );
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
-        css::uno::Sequence< OUString > sNames( mXNamedVec.size() );
+        cpo::uno::Sequence< OUString > sNames( mXNamedVec.size() );
         OUString* pString = sNames.getArray();
         typename XNamedVec::iterator it = mXNamedVec.begin();
         typename XNamedVec::iterator it_end = mXNamedVec.end();
@@ -247,7 +247,7 @@ protected:
 
         if( mbIgnoreCase )
         {
-            const css::uno::Sequence< OUString > sElementNames = m_xNameAccess->getElementNames();
+            const cpo::uno::Sequence< OUString > sElementNames = m_xNameAccess->getElementNames();
             for( const OUString& rName : sElementNames )
             {
                 if( rName.equalsIgnoreAsciiCase( sIndex ) )

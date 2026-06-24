@@ -27,7 +27,7 @@
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace svx
@@ -70,7 +70,7 @@ namespace svx
         ODataAccessDescriptor( const ODataAccessDescriptor& _rSource );
         ODataAccessDescriptor(ODataAccessDescriptor&& _rSource) noexcept;
         ODataAccessDescriptor( const css::uno::Reference< css::beans::XPropertySet >& _rValues );
-        ODataAccessDescriptor( const css::uno::Sequence< css::beans::PropertyValue >& _rValues );
+        ODataAccessDescriptor( const cpo::uno::Sequence< css::beans::PropertyValue >& _rValues );
 
         // allows to construct a descriptor from an Any containing either an XPropertySet or a property value sequence
         ODataAccessDescriptor( const cpo::uno::Any& _rValues );
@@ -84,7 +84,7 @@ namespace svx
             <p>If you call this method more than once, without writing any values between both calls, the same object
             is returned. If you wrote values, a new object is returned.</p>
         */
-        css::uno::Sequence< css::beans::PropertyValue > const &
+        cpo::uno::Sequence< css::beans::PropertyValue > const &
                     createPropertyValueSequence();
 
         /** initialized the descriptor from the property values given
@@ -92,7 +92,7 @@ namespace svx
             initializing with the new ones.
         */
         void        initializeFrom(
-                        const css::uno::Sequence< css::beans::PropertyValue >& _rValues);
+                        const cpo::uno::Sequence< css::beans::PropertyValue >& _rValues);
 
         /// checks whether or not a given property is present in the descriptor
         bool        has(DataAccessDescriptorProperty _eWhich) const;

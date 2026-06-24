@@ -1047,7 +1047,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetContentCon
         { UNO_NAME_CHECKED, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_CHECKED_STATE, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_UNCHECKED_STATE, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
-        { UNO_NAME_LIST_ITEMS, 0, cppu::UnoType<uno::Sequence<uno::Sequence<beans::PropertyValue>>>::get(), PROPERTY_NONE, 0 },
+        { UNO_NAME_LIST_ITEMS, 0, cppu::UnoType<cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>>>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_PICTURE, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_DATE, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_DATE_FORMAT, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },

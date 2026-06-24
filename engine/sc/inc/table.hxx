@@ -983,7 +983,7 @@ public:
     void        RemoveColBreak(SCCOL nCol, bool bPage, bool bManual);
     void        SetRowBreak(SCROW nRow, bool bPage, bool bManual);
     void        SetColBreak(SCCOL nCol, bool bPage, bool bManual);
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::sheet::TablePageBreakData> GetRowBreakData() const;
 
     void updateObjectsForColsChanged(SCCOL nStartCol, SCCOL nEndCol, bool bHidden, bool bChanged);

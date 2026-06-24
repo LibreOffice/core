@@ -149,7 +149,7 @@ SwXReferenceMark::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXReferenceMark::getSupportedServiceNames()
 {
     return {
@@ -489,7 +489,7 @@ public:
     virtual void SAL_CALL release() noexcept override { cppu::OWeakObject::release(); }
 
     // XTypeProvider
-    virtual uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() override;
 
     // XText
@@ -545,10 +545,10 @@ rtl::Reference< SwXTextCursor > SwXMetaText::createXTextCursor()
     return xRet;
 }
 
-uno::Sequence<sal_Int8> SAL_CALL
+cpo::uno::Sequence<sal_Int8> SAL_CALL
 SwXMetaText::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XText
@@ -811,7 +811,7 @@ SwXMeta::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXMeta::getSupportedServiceNames()
 {
     return {
@@ -1210,7 +1210,7 @@ SwXMetaField::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXMetaField::getSupportedServiceNames()
 {
     return {

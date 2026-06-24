@@ -105,7 +105,7 @@ public:
 
     /// Turn the attributes collected so far in m_aTableLook into a property and clear the container.
     void finishTableLook();
-    css::uno::Sequence<css::beans::PropertyValue> getCurrentTablePosition();
+    cpo::uno::Sequence<css::beans::PropertyValue> getCurrentTablePosition();
 
     virtual void cellProps(const TablePropertyMapPtr& pProps) override
     {

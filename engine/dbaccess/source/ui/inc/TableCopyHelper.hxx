@@ -140,7 +140,7 @@ namespace dbaui
             const OUString& i_rCommand,
             const sal_Int32 i_nCommandType,
             const css::uno::Reference< css::sdbc::XResultSet >& i_rSourceRows,
-            const css::uno::Sequence< cpo::uno::Any >& i_rSelection,
+            const cpo::uno::Sequence< cpo::uno::Any >& i_rSelection,
             const bool i_bBookmarkSelection,
             std::u16string_view i_rDestDataSource,
             const css::uno::Reference< css::sdbc::XConnection>& i_rDestConnection

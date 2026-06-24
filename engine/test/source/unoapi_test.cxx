@@ -316,7 +316,7 @@ void UnoApiTest::loadFromURL(OUString const& rURL, const char* pPassword)
 }
 
 void UnoApiTest::loadWithParams(OUString const& rURL,
-                                const uno::Sequence<beans::PropertyValue>& rParams)
+                                const cpo::uno::Sequence<beans::PropertyValue>& rParams)
 {
     if (mxComponent.is())
     {
@@ -336,11 +336,11 @@ OUString UnoApiTest::loadFromFile(std::u16string_view aFileBase, const char* pPa
 }
 
 cpo::uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
-                                       const uno::Sequence<cpo::uno::Any>& rParams)
+                                       const cpo::uno::Sequence<cpo::uno::Any>& rParams)
 {
     cpo::uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<cpo::uno::Any> aOutParam;
+    cpo::uno::Sequence<sal_Int16> aOutParamIndex;
+    cpo::uno::Sequence<cpo::uno::Any> aOutParam;
 
     ErrCode result = SfxObjectShell::CallXScript(mxComponent, rScriptURL, rParams, aRet,
                                                  aOutParamIndex, aOutParam);
@@ -349,7 +349,7 @@ cpo::uno::Any UnoApiTest::executeMacro(const OUString& rScriptURL,
     return aRet;
 }
 
-void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyValue>& rParams,
+void UnoApiTest::save(TestFilter eFilter, const cpo::uno::Sequence<beans::PropertyValue>& rParams,
                       const char* pPassword)
 {
     OUString aFilter(TestFilterNames.at(eFilter));
@@ -371,7 +371,7 @@ void UnoApiTest::save(TestFilter eFilter, const uno::Sequence<beans::PropertyVal
         else
         {
             OUString sPassword = OUString::createFromAscii(pPassword);
-            uno::Sequence<beans::NamedValue> aEncryptionData{
+            cpo::uno::Sequence<beans::NamedValue> aEncryptionData{
                 { u"CryptoType"_ustr, cpo::uno::Any(u"Standard"_ustr) },
                 { u"OOXPassword"_ustr, cpo::uno::Any(sPassword) }
             };

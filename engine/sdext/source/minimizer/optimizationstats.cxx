@@ -56,7 +56,7 @@ const cpo::uno::Any* OptimizationStats::GetStatusValue( const PPPOptimizerTokenE
 
 css::beans::PropertyValues OptimizationStats::GetStatusSequence()
 {
-    uno::Sequence< PropertyValue > aStatsSequence( maStats.size() );
+    cpo::uno::Sequence< PropertyValue > aStatsSequence( maStats.size() );
     std::transform(maStats.begin(), maStats.end(), aStatsSequence.getArray(),
                    [](const auto& rEntry)
                    { return comphelper::makePropertyValue(TKGet( rEntry.first ), rEntry.second); });
@@ -64,7 +64,7 @@ css::beans::PropertyValues OptimizationStats::GetStatusSequence()
 }
 
 
-void OptimizationStats::InitializeStatusValues( const uno::Sequence< PropertyValue >& rOptimizationStats )
+void OptimizationStats::InitializeStatusValues( const cpo::uno::Sequence< PropertyValue >& rOptimizationStats )
 {
     for( const auto& rStat : rOptimizationStats )
         maStats[ TKGet( rStat.Name ) ] = rStat.Value;

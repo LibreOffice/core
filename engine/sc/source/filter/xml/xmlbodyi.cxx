@@ -299,7 +299,7 @@ void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 nElement)
     ScDocProtection aProtection;
     aProtection.setProtected(true);
 
-    uno::Sequence<sal_Int8> aPass;
+    cpo::uno::Sequence<sal_Int8> aPass;
     if (!sPassword.isEmpty())
     {
         ::comphelper::Base64::decode(aPass, sPassword);

@@ -225,7 +225,7 @@ Any OPropertySetHelper2::queryInterface( const css::uno::Type & rType )
 /**
  * called from the derivee's XTypeProvider::getTypes implementation
  */
-css::uno::Sequence< css::uno::Type > OPropertySetHelper::getTypes()
+cpo::uno::Sequence< css::uno::Type > OPropertySetHelper::getTypes()
 {
     return {
         UnoType<css::beans::XPropertySet>::get(),

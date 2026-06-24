@@ -39,7 +39,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XOOXMLDocumentPropertiesImporter
     virtual void SAL_CALL importProperties(
@@ -49,7 +49,7 @@ public:
         const css::uno::Reference< css::embed::XStorage >& rxSource) override;
     virtual css::uno::Reference < css::io::XInputStream > SAL_CALL getExtendedPropertiesStream(
         const css::uno::Reference< css::embed::XStorage >& rxSource) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::io::XInputStream > > SAL_CALL getCustomPropertiesStreams(
+    virtual cpo::uno::Sequence< css::uno::Reference< css::io::XInputStream > > SAL_CALL getCustomPropertiesStreams(
         const css::uno::Reference< css::embed::XStorage >& rxSource) override;
 
 private:

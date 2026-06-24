@@ -133,7 +133,7 @@ void SvXMLMetaExport::MExport_()
     }
 
     //  keywords
-    const uno::Sequence< OUString > keywords = mxDocProps->getKeywords();
+    const cpo::uno::Sequence< OUString > keywords = mxDocProps->getKeywords();
     for (const auto& rKeyword : keywords) {
         SvXMLElementExport aKwElem( mrExport, XML_NAMESPACE_META, XML_KEYWORD,
                                     true, false );
@@ -234,7 +234,7 @@ void SvXMLMetaExport::MExport_()
     //  user defined fields
     uno::Reference< beans::XPropertyAccess > xUserDefined(
         mxDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-    const uno::Sequence< beans::PropertyValue > props =
+    const cpo::uno::Sequence< beans::PropertyValue > props =
         xUserDefined->getPropertyValues();
     for (const auto& rProp : props) {
         OUStringBuffer sValueBuffer;
@@ -251,7 +251,7 @@ void SvXMLMetaExport::MExport_()
         mrExport.Characters( sValueBuffer.makeStringAndClear() );
     }
 
-    const uno::Sequence< beans::NamedValue > aDocStatistic =
+    const cpo::uno::Sequence< beans::NamedValue > aDocStatistic =
             mxDocProps->getDocumentStatistics();
     // write document statistic if there is any provided
     if ( !aDocStatistic.hasElements() )

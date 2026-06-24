@@ -404,7 +404,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 {
                     uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
                     cpo::uno::Any aAny = propertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr);
-                    auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
+                    auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< cpo::uno::Sequence<beans::PropertyValue> >());
 
                     aGrabBag.push_back(comphelper::makePropertyValue(u"VML-Z-ORDER"_ustr, maTypeModel.maZIndex.toInt32()));
 
@@ -436,7 +436,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 {
                     if( maTypeModel.maZIndex.toInt32() )
                     {
-                        uno::Sequence<beans::PropertyValue> aGrabBag;
+                        cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                         uno::Reference<beans::XPropertySet> propertySet (xShape, uno::UNO_QUERY);
                         propertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                         sal_Int32 length;
@@ -1431,7 +1431,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                     embed::ElementModes::READ);
             SAL_WARN_IF(!xStorage.is(), "oox.vml", "No xStorage!");
 
-            const uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
+            const cpo::uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
                 = xSignatures->verifyScriptingContentSignatures(xStorage,
                                                                 uno::Reference<io::XInputStream>());
 
@@ -1589,7 +1589,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
         xPropertySet = uno::Reference<beans::XPropertySet>(xGroupShape, uno::UNO_QUERY);
     if (xPropertySet.is())
     {
-        uno::Sequence<beans::PropertyValue> aGrabBag;
+        cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
         xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
         sal_Int32 nLength = aGrabBag.getLength();
         aGrabBag.realloc(nLength + 1);

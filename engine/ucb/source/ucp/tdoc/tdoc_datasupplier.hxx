@@ -47,7 +47,7 @@ class ResultSetDataSupplier final : public ::ucbhelper::ResultSetDataSupplier
     std::vector< ResultListEntry >               m_aResults;
     rtl::Reference< Content >                    m_xContent;
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
-    std::optional<css::uno::Sequence< OUString > >    m_xNamesOfChildren;
+    std::optional<cpo::uno::Sequence< OUString > >    m_xNamesOfChildren;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;
 

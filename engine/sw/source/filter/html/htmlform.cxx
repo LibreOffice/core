@@ -395,16 +395,16 @@ public:
     // XImageConsumer
     virtual void SAL_CALL init( sal_Int32 Width, sal_Int32 Height) override;
     virtual void SAL_CALL setColorModel(
-            sal_Int16 BitCount, const uno::Sequence< sal_Int32 >& RGBAPal,
+            sal_Int16 BitCount, const cpo::uno::Sequence< sal_Int32 >& RGBAPal,
             sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask,
             sal_Int32 AlphaMask) override;
     virtual void SAL_CALL setPixelsByBytes(
             sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height,
-            const uno::Sequence< sal_Int8 >& ProducerData,
+            const cpo::uno::Sequence< sal_Int8 >& ProducerData,
             sal_Int32 Offset, sal_Int32 Scansize) override;
     virtual void SAL_CALL setPixelsByLongs(
             sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height,
-            const uno::Sequence< sal_Int32 >& ProducerData,
+            const cpo::uno::Sequence< sal_Int32 >& ProducerData,
             sal_Int32 Offset, sal_Int32 Scansize) override;
     virtual void SAL_CALL complete(
             sal_Int32 Status,

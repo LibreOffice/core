@@ -838,7 +838,7 @@ static void lcl_FormatAndInsertAuthorAndDatepara(SdrCaptionObj* pCaption, OUStri
 
     if (xBodyTextAppend.is())
     {
-        uno::Sequence< beans::PropertyValue > aArgs;
+        cpo::uno::Sequence< beans::PropertyValue > aArgs;
         if (bUserWithTrackText)
         {
             xBodyTextAppend->insertTextPortion(aUserData.makeStringAndClear(), aArgs, xText->getStart());

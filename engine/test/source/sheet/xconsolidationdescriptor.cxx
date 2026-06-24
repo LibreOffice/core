@@ -15,7 +15,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -48,7 +48,7 @@ void XConsolidationDescriptor::testGetSources()
     uno::Reference<sheet::XConsolidationDescriptor> xConsolidationDescriptor(init(),
                                                                              UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aSources = xConsolidationDescriptor->getSources();
+    cpo::uno::Sequence<table::CellRangeAddress> aSources = xConsolidationDescriptor->getSources();
     CPPUNIT_ASSERT_MESSAGE("Unable to get sources", !aSources.hasElements());
 }
 
@@ -57,7 +57,7 @@ void XConsolidationDescriptor::testSetSources()
     uno::Reference<sheet::XConsolidationDescriptor> xConsolidationDescriptor(init(),
                                                                              UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aSources{ table::CellRangeAddress(0, 1, 1, 5, 5) };
+    cpo::uno::Sequence<table::CellRangeAddress> aSources{ table::CellRangeAddress(0, 1, 1, 5, 5) };
     xConsolidationDescriptor->setSources(aSources);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set sources", table::CellRangeAddress(0, 1, 1, 5, 5),
                                  xConsolidationDescriptor->getSources()[0]);

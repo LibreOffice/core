@@ -30,8 +30,8 @@ public:
 
 protected:
     SdXImpressDocument* createDoc(const char* pName,
-                                  const css::uno::Sequence<css::beans::PropertyValue>& rArguments
-                                  = css::uno::Sequence<css::beans::PropertyValue>());
+                                  const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments
+                                  = cpo::uno::Sequence<css::beans::PropertyValue>());
     void setupCOKitViewCallback(SfxViewShell& pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);

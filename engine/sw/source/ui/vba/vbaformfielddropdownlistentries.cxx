@@ -14,9 +14,9 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static uno::Sequence<OUString> lcl_getListEntries(sw::mark::DropDownFieldmark& rDropDown)
+static cpo::uno::Sequence<OUString> lcl_getListEntries(sw::mark::DropDownFieldmark& rDropDown)
 {
-    uno::Sequence<OUString> aSeq;
+    cpo::uno::Sequence<OUString> aSeq;
     (*rDropDown.GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] >>= aSeq;
     return aSeq;
 }
@@ -153,9 +153,9 @@ OUString SwVbaFormFieldDropDownListEntries::getServiceImplName()
     return u"SwVbaFormFieldDropDownListEntries"_ustr;
 }
 
-uno::Sequence<OUString> SwVbaFormFieldDropDownListEntries::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaFormFieldDropDownListEntries::getServiceNames()
 {
-    static uno::Sequence<OUString> const sNames{ u"ooo.vba.word.ListEntries"_ustr };
+    static cpo::uno::Sequence<OUString> const sNames{ u"ooo.vba.word.ListEntries"_ustr };
     return sNames;
 }
 

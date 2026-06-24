@@ -355,7 +355,7 @@ using namespace cpo::uno;
                     OUString const sTmpName = xUri->getUriReference() + "/" + aStreamRelPath;
                     assert(pObjectShell);
                     uno::Reference<embed::XStorage> xStorage = pObjectShell->GetStorage();
-                    uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
+                    cpo::uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
                     {
                         {"TargetStorage", cpo::uno::Any(xStorage)},
                         {"StreamRelPath", cpo::uno::Any(aStreamRelPath)},

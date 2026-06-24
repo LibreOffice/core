@@ -137,7 +137,7 @@ StyleDispatcher::StyleDispatcher( const css::uno::Reference< css::frame::XFrame 
 }
 
 void StyleDispatcher::dispatch( const css::util::URL& rURL,
-                                const css::uno::Sequence< css::beans::PropertyValue >& rArguments )
+                                const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments )
 {
     if ( !m_xFrame.is() )
         return;

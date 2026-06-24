@@ -23,7 +23,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/numeric.hxx>
@@ -153,7 +153,7 @@ bool parseValue(xmlreader::Span const & text, OUString * value) {
 }
 
 bool parseValue(
-    xmlreader::Span const & text, css::uno::Sequence< sal_Int8 > * value)
+    xmlreader::Span const & text, cpo::uno::Sequence< sal_Int8 > * value)
 {
     assert(text.is() && value != nullptr);
     if ((text.length & 1) != 0) {
@@ -247,7 +247,7 @@ cpo::uno::Any parseValue(
     case TYPE_STRING:
         return parseSingleValue< OUString >(text);
     case TYPE_HEXBINARY:
-        return parseSingleValue< css::uno::Sequence< sal_Int8 > >(text);
+        return parseSingleValue< cpo::uno::Sequence< sal_Int8 > >(text);
     case TYPE_BOOLEAN_LIST:
         return parseListValue< bool >(separator, text);
     case TYPE_SHORT_LIST:
@@ -261,7 +261,7 @@ cpo::uno::Any parseValue(
     case TYPE_STRING_LIST:
         return parseListValue< OUString >(separator, text);
     case TYPE_HEXBINARY_LIST:
-        return parseListValue< css::uno::Sequence< sal_Int8 > >(
+        return parseListValue< cpo::uno::Sequence< sal_Int8 > >(
             separator, text);
     default:
         assert(false);
@@ -416,7 +416,7 @@ bool ValueParser::endElement() {
                     *pValue = convertItems< OUString >();
                     break;
                 case TYPE_HEXBINARY_LIST:
-                    *pValue = convertItems< css::uno::Sequence< sal_Int8 > >();
+                    *pValue = convertItems< cpo::uno::Sequence< sal_Int8 > >();
                     break;
                 default:
                     assert(false); // this cannot happen
@@ -462,7 +462,7 @@ void ValueParser::start(
 
 
 template< typename T > cpo::uno::Any ValueParser::convertItems() {
-    css::uno::Sequence< T > seq(items_.size());
+    cpo::uno::Sequence< T > seq(items_.size());
     auto seqRange = asNonConstRange(seq);
     for (sal_Int32 i = 0; i < seq.getLength(); ++i) {
         bool ok = (items_[i] >>= seqRange[i]);

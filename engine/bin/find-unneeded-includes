@@ -66,7 +66,7 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
     unoapi = {
         "cpo/uno/Any.hxx": "cpo/uno/Any.h",
         "com/sun/star/uno/Reference.hxx": "com/sun/star/uno/Reference.h",
-        "com/sun/star/uno/Sequence.hxx": "com/sun/star/uno/Sequence.h",
+        "cpo/uno/Sequence.hxx": "cpo/uno/Sequence.h",
         "com/sun/star/uno/Type.hxx": "com/sun/star/uno/Type.h",
         "rtl/bootstrap.hxx": "rtl/bootstrap.h",
         "rtl/byteseq.hxx": "rtl/byteseq.h",

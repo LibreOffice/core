@@ -467,7 +467,7 @@ void SvtMatchContext_Impl::doExecute()
                                 css::ucb::XUniversalContentBroker > ucb(
                                     css::ucb::UniversalContentBroker::create(
                                         ctx));
-                            css::uno::Sequence< css::beans::Property > prop{
+                            cpo::uno::Sequence< css::beans::Property > prop{
                                 { /* Name       */ u"IsFolder"_ustr,
                                   /* Handle     */ -1,
                                   /* Type       */ cppu::UnoType< bool >::get(),

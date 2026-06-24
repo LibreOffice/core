@@ -21,7 +21,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -77,7 +77,7 @@ getIdentifier(css::uno::Reference<css::reflection::XConstantTypeDescription> con
 }
 
 OUString
-dumpBitset(css::uno::Sequence<css::uno::Reference<css::reflection::XConstantTypeDescription>> const&
+dumpBitset(cpo::uno::Sequence<css::uno::Reference<css::reflection::XConstantTypeDescription>> const&
                constants,
            sal_uInt64 value)
 {
@@ -349,7 +349,7 @@ private:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_stoc_Dump_get_implementation(css::uno::XComponentContext* context,
-                                               css::uno::Sequence<cpo::uno::Any> const& arguments)
+                                               cpo::uno::Sequence<cpo::uno::Any> const& arguments)
 {
     SAL_WARN_IF(arguments.hasElements(), "stoc", "unexpected singleton arguments");
     return cppu::acquire(new Dump(context));

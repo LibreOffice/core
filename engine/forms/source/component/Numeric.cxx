@@ -42,9 +42,9 @@ ONumericControl::ONumericControl(const Reference<XComponentContext>& _rxFactory)
 }
 
 
-css::uno::Sequence<OUString> ONumericControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ONumericControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -86,9 +86,9 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL ONumericModel::createClone
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> ONumericModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ONumericModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
@@ -183,14 +183,14 @@ void ONumericModel::resetNoBroadcast()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_ONumericModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ONumericModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_ONumericControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ONumericControl(component));
 }

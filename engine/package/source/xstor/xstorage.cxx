@@ -68,7 +68,7 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
                             const uno::Reference< io::XStream >& xSource,
                             const uno::Reference< io::XStream >& xDest,
                             sal_Int32 nStorageType,
-                            const uno::Sequence< uno::Sequence< beans::StringPair > >& aRelInfo )
+                            const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >& aRelInfo )
 {
         uno::Reference< beans::XPropertySet > xSourceProps( xSource, uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xDestProps( xDest, uno::UNO_QUERY_THROW );
@@ -84,7 +84,7 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         // TODO: headers of encrypted streams should be copied also
         ::comphelper::OStorageHelper::CopyInputToOutput( xSourceInStream, xDestOutStream );
 
-        uno::Sequence<OUString> aPropNames { u"Compressed"_ustr, u"MediaType"_ustr,
+        cpo::uno::Sequence<OUString> aPropNames { u"Compressed"_ustr, u"MediaType"_ustr,
                                              u"UseCommonStoragePasswordEncryption"_ustr };
 
         if ( nStorageType == embed::StorageFormats::OFOPXML )
@@ -131,7 +131,7 @@ SotElement_Impl::SotElement_Impl(OUString aName, bool bStor, bool bNew)
 // most of properties are holt by the storage but are not used
 OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > const & xInputStream,
                                 sal_Int32 nMode,
-                                const uno::Sequence< beans::PropertyValue >& xProperties,
+                                const cpo::uno::Sequence< beans::PropertyValue >& xProperties,
                                 uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_xMutex( new comphelper::RefCountedMutex )
@@ -171,7 +171,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > const & xInpu
 // most of properties are holt by the storage but are not used
 OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
                                 sal_Int32 nMode,
-                                const uno::Sequence< beans::PropertyValue >& xProperties,
+                                const cpo::uno::Sequence< beans::PropertyValue >& xProperties,
                                 uno::Reference< uno::XComponentContext > const & xContext,
                                 sal_Int32 nStorageType )
 : m_xMutex( new comphelper::RefCountedMutex )
@@ -371,7 +371,7 @@ void OStorage_Impl::OpenOwnPackage()
     {
         if ( !m_xPackage.is() )
         {
-            uno::Sequence< cpo::uno::Any > aArguments( 2 );
+            cpo::uno::Sequence< cpo::uno::Any > aArguments( 2 );
             auto pArguments = aArguments.getArray();
             if ( m_nStorageMode & embed::ElementModes::WRITE )
                 pArguments[ 0 ] <<= css::uno::Reference< css::io::XStream >(m_xStream);
@@ -591,7 +591,7 @@ void OStorage_Impl::ReadContents()
     {
         // if a storage is truncated the relations information should be cleaned
         m_xNewRelInfoStream.clear();
-        m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+        m_aRelInfo = cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
         m_nRelInfoStatus = RELINFO_CHANGED;
     }
 
@@ -645,7 +645,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
                 {
                     xEncr->setEncryptionData( GetCommonRootEncryptionData().getAsConstNamedValueList() );
 
-                    uno::Sequence< beans::NamedValue > aAlgorithms;
+                    cpo::uno::Sequence< beans::NamedValue > aAlgorithms;
                     uno::Reference< beans::XPropertySet > xPackPropSet( m_xPackage, uno::UNO_QUERY_THROW );
                     xPackPropSet->getPropertyValue( ENCRYPTION_ALGORITHMS_PROPERTY )
                         >>= aAlgorithms;
@@ -731,8 +731,8 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
             if ( bDirect )
             {
                 // fill in the properties for the stream
-                uno::Sequence< beans::PropertyValue > aStrProps(0);
-                const uno::Sequence< beans::PropertyValue > aSrcPkgProps = pElement->m_xStream->GetStreamProperties();
+                cpo::uno::Sequence< beans::PropertyValue > aStrProps(0);
+                const cpo::uno::Sequence< beans::PropertyValue > aSrcPkgProps = pElement->m_xStream->GetStreamProperties();
                 sal_Int32 nNum = 0;
                 for ( const auto& rSrcPkgProp : aSrcPkgProps )
                 {
@@ -888,10 +888,10 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
     }
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > OStorage_Impl::GetAllRelationshipsIfAny()
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > OStorage_Impl::GetAllRelationshipsIfAny()
 {
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        return uno::Sequence< uno::Sequence< beans::StringPair > >();
+        return cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
 
     ReadRelInfoIfNecessary();
 
@@ -962,7 +962,7 @@ void OStorage_Impl::Commit()
     // it can be detected by m_bCommited flag ( root storage doesn't need temporary representation )
     if ( !m_bCommited && !m_bIsRoot )
     {
-        uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(true) };
+        cpo::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(true) };
         xNewPackageFolder.set( m_xPackage->createInstanceWithArguments( aSeq ),
                                uno::UNO_QUERY );
     }
@@ -1224,7 +1224,7 @@ void OStorage_Impl::Revert()
     {
         // currently the relations storage is changed only on commit
         m_xNewRelInfoStream.clear();
-        m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+        m_aRelInfo = cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
         m_nRelInfoStatus = RELINFO_NO_INIT;
     }
 }
@@ -1280,7 +1280,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException();
 
-    uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(false) };
+    cpo::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(false) };
     uno::Reference< uno::XInterface > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ) );
 
     SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new stream!" );
@@ -1318,7 +1318,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
     uno::Reference< io::XInputStream > xInStrToInsert = xSeek.is() ? xInStream :
                                                                      GetSeekableTempCopy( xInStream );
 
-    uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(false) };
+    cpo::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(false) };
     uno::Reference< uno::XInterface > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ) );
 
     SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new stream!" );
@@ -1345,7 +1345,7 @@ std::unique_ptr<OStorage_Impl> OStorage_Impl::CreateNewStorageImpl( sal_Int32 nS
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException();
 
-    uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(true) };
+    cpo::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(true) };
     uno::Reference< uno::XInterface > xNewElement( m_xPackage->createInstanceWithArguments( aSeq ) );
 
     SAL_WARN_IF( !xNewElement.is(), "package.xstor", "Not possible to create a new storage!" );
@@ -1453,7 +1453,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
     pElement->m_xStream.reset(new OWriteStream_Impl(this, xPackageSubStream, m_xPackage, m_xContext, false, m_nStorageType, false, GetRelInfoStreamForName(pElement->m_aOriginalName)));
 }
 
-uno::Sequence< OUString > OStorage_Impl::GetElementNames()
+cpo::uno::Sequence< OUString > OStorage_Impl::GetElementNames()
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
@@ -1467,7 +1467,7 @@ uno::Sequence< OUString > OStorage_Impl::GetElementNames()
                 nCnt++;
         }
 
-    uno::Sequence<OUString> aElementNames(nCnt);
+    cpo::uno::Sequence<OUString> aElementNames(nCnt);
     OUString* pArray = aElementNames.getArray();
     for ( const auto& pair : m_aChildrenMap )
         for (auto pElement : pair.second)
@@ -1697,7 +1697,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
         m_xNewRelInfoStream.clear();
         if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
         {
-            m_aRelInfo = uno::Sequence<uno::Sequence<beans::StringPair>>();
+            m_aRelInfo = cpo::uno::Sequence<cpo::uno::Sequence<beans::StringPair>>();
             m_nRelInfoStatus = RELINFO_NO_INIT;
         }
         else
@@ -1730,7 +1730,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
 
 OStorage::OStorage( uno::Reference< io::XInputStream > const & xInputStream,
                     sal_Int32 nMode,
-                    const uno::Sequence< beans::PropertyValue >& xProperties,
+                    const cpo::uno::Sequence< beans::PropertyValue >& xProperties,
                     uno::Reference< uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
@@ -1744,7 +1744,7 @@ OStorage::OStorage( uno::Reference< io::XInputStream > const & xInputStream,
 
 OStorage::OStorage( uno::Reference< io::XStream > const & xStream,
                     sal_Int32 nMode,
-                    const uno::Sequence< beans::PropertyValue >& xProperties,
+                    const cpo::uno::Sequence< beans::PropertyValue >& xProperties,
                     uno::Reference< uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
@@ -2079,7 +2079,7 @@ void SAL_CALL OStorage::release() noexcept
 }
 
 //  XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
 {
     if (! m_oTypeCollection)
     {
@@ -2144,7 +2144,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
     return m_oTypeCollection->getTypes() ;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
 {
     static const comphelper::UnoIdInit lcl_ImplId;
     return lcl_ImplId.getSeq();
@@ -3101,7 +3101,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
 
 //  XStorage2
 uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
-    const OUString& aStreamName, sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
+    const OUString& aStreamName, sal_Int32 nOpenMode, const cpo::uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
     osl::ClearableMutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -3187,7 +3187,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
 
 uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
     const OUString& aStreamName,
-    const uno::Sequence< beans::NamedValue >& aEncryptionData )
+    const cpo::uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -3805,7 +3805,7 @@ cpo::uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
     return aResult;
 }
 
-uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4028,7 +4028,7 @@ void SAL_CALL OStorage::removeEncryption()
     try
     {
         xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        cpo::uno::Any( uno::Sequence< beans::NamedValue >() ) );
+                                        cpo::uno::Any( cpo::uno::Sequence< beans::NamedValue >() ) );
 
         m_pImpl->m_bHasCommonEncryptionData = false;
         m_pImpl->m_aCommonEncryptionData.clear();
@@ -4047,7 +4047,7 @@ void SAL_CALL OStorage::removeEncryption()
 
 //  XEncryptionProtectedSource2
 
-void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValue >& aEncryptionData )
+void SAL_CALL OStorage::setEncryptionData( const cpo::uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4112,7 +4112,7 @@ bool SAL_CALL OStorage::hasEncryptionData()
 
 //  XEncryptionProtectedStorage
 
-void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::NamedValue >& aAlgorithms )
+void SAL_CALL OStorage::setEncryptionAlgorithms( const cpo::uno::Sequence< beans::NamedValue >& aAlgorithms )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4172,7 +4172,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
     }
 }
 
-void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< beans::NamedValue > >& aProps )
+void SAL_CALL OStorage::setGpgProperties( const cpo::uno::Sequence< cpo::uno::Sequence< beans::NamedValue > >& aProps )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4232,7 +4232,7 @@ void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< be
     }
 }
 
-uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
+cpo::uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4245,7 +4245,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
     if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException(); // the interface must be visible only for package storage
 
-    uno::Sequence< beans::NamedValue > aResult;
+    cpo::uno::Sequence< beans::NamedValue > aResult;
     SAL_WARN_IF( !m_pImpl->m_bIsRoot, "package.xstor", "getEncryptionAlgorithms() method is not available for nonroot storages!" );
     if ( m_pImpl->m_bIsRoot )
     {
@@ -4379,7 +4379,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const c
             }
 
             m_pImpl->m_xNewRelInfoStream = std::move(xInRelStream);
-            m_pImpl->m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+            m_pImpl->m_aRelInfo = cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
             m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
             m_pImpl->m_bBroadcastModified = true;
             m_pImpl->m_bIsModified = true;
@@ -4593,7 +4593,7 @@ bool SAL_CALL OStorage::hasByID(  const OUString& sID )
 namespace
 {
 
-const beans::StringPair* lcl_findPairByName(const uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
+const beans::StringPair* lcl_findPairByName(const cpo::uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
 {
     return std::find_if(rSeq.begin(), rSeq.end(), [&rName](const beans::StringPair& rPair) { return rPair.First == rName; });
 }
@@ -4613,7 +4613,7 @@ OUString SAL_CALL OStorage::getTargetByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Target"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
@@ -4634,7 +4634,7 @@ OUString SAL_CALL OStorage::getTypeByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Type"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
@@ -4642,7 +4642,7 @@ OUString SAL_CALL OStorage::getTypeByID(  const OUString& sID  )
     return OUString();
 }
 
-uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  const OUString& sID  )
+cpo::uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  const OUString& sID  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4656,11 +4656,11 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
-    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
 
     auto pRel = std::find_if(aSeq.begin(), aSeq.end(),
-        [&aIDRel](const uno::Sequence<beans::StringPair>& rRel) {
+        [&aIDRel](const cpo::uno::Sequence<beans::StringPair>& rRel) {
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
     if (pRel != aSeq.end())
         return *pRel;
@@ -4668,7 +4668,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
     throw container::NoSuchElementException();
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelationshipsByType(  const OUString& sType  )
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelationshipsByType(  const OUString& sType  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4682,12 +4682,12 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
-    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    std::vector< uno::Sequence< beans::StringPair > > aResult;
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    std::vector< cpo::uno::Sequence< beans::StringPair > > aResult;
     aResult.reserve(aSeq.getLength());
 
     std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResult),
-        [&sType](const uno::Sequence<beans::StringPair>& rRel) {
+        [&sType](const cpo::uno::Sequence<beans::StringPair>& rRel) {
             auto pRel = lcl_findPairByName(rRel, u"Type"_ustr);
             return pRel != rRel.end()
                 // the type is usually a URL, so the check should be case insensitive
@@ -4697,7 +4697,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
     return comphelper::containerToSequence(aResult);
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRelationships()
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRelationships()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4710,7 +4710,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Sequence< beans::StringPair > > aRet;
+    cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aRet;
     try
     {
         aRet = m_pImpl->GetAllRelationshipsIfAny();
@@ -4734,7 +4734,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
     return aRet;
 }
 
-void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, bool bReplace  )
+void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const cpo::uno::Sequence< beans::StringPair >& aEntry, bool bReplace  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4749,10 +4749,10 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
 
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
 
-    uno::Sequence<beans::StringPair>* pResult = nullptr;
+    cpo::uno::Sequence<beans::StringPair>* pResult = nullptr;
 
     // TODO/LATER: in future the unification of the ID could be checked
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
     {
         const auto& rRel = aSeq[nInd];
@@ -4797,10 +4797,10 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
     auto pRel = std::find_if(std::cbegin(aSeq), std::cend(aSeq),
-        [&aIDRel](const uno::Sequence< beans::StringPair >& rRel) {
+        [&aIDRel](const cpo::uno::Sequence< beans::StringPair >& rRel) {
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
     if (pRel != std::cend(aSeq))
     {
@@ -4818,7 +4818,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
     throw container::NoSuchElementException();
 }
 
-void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, bool bReplace  )
+void SAL_CALL OStorage::insertRelationships(  const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >& aEntries, bool bReplace  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -4832,18 +4832,18 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
         throw uno::RuntimeException();
 
     OUString aIDTag( u"Id"_ustr );
-    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    std::vector< uno::Sequence<beans::StringPair> > aResultVec;
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    std::vector< cpo::uno::Sequence<beans::StringPair> > aResultVec;
     aResultVec.reserve(aSeq.getLength() + aEntries.getLength());
 
     std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResultVec),
-        [&aIDTag, &aEntries, bReplace](const uno::Sequence<beans::StringPair>& rTargetRel) {
+        [&aIDTag, &aEntries, bReplace](const cpo::uno::Sequence<beans::StringPair>& rTargetRel) {
             auto pTargetPair = lcl_findPairByName(rTargetRel, aIDTag);
             if (pTargetPair == rTargetRel.end())
                 return false;
 
             bool bIsSourceSame = std::any_of(aEntries.begin(), aEntries.end(),
-                [&pTargetPair](const uno::Sequence<beans::StringPair>& rSourceEntry) {
+                [&pTargetPair](const cpo::uno::Sequence<beans::StringPair>& rSourceEntry) {
                     return std::find(rSourceEntry.begin(), rSourceEntry.end(), *pTargetPair) != rSourceEntry.end(); });
 
             if ( bIsSourceSame && !bReplace )
@@ -4854,7 +4854,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
         });
 
     std::transform(aEntries.begin(), aEntries.end(), std::back_inserter(aResultVec),
-        [&aIDTag](const uno::Sequence<beans::StringPair>& rEntry) -> uno::Sequence<beans::StringPair> {
+        [&aIDTag](const cpo::uno::Sequence<beans::StringPair>& rEntry) -> cpo::uno::Sequence<beans::StringPair> {
             auto pPair = lcl_findPairByName(rEntry, aIDTag);
             if (pPair == rEntry.end())
                 throw io::IOException(); // TODO: illegal relation ( no ID )
@@ -4902,7 +4902,7 @@ void SAL_CALL OStorage::insertRawNonEncrStreamElementDirect(
 void SAL_CALL OStorage::insertStreamElementDirect(
             const OUString& aStreamName,
             const uno::Reference< io::XInputStream >& xInStream,
-            const uno::Sequence< beans::PropertyValue >& aProps )
+            const cpo::uno::Sequence< beans::PropertyValue >& aProps )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -5428,7 +5428,7 @@ void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& a
 }
 
 // XHierarchicalStorageAccess2
-uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncryptedStreamByHierarchicalName( const OUString& aStreamPath, ::sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
+uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncryptedStreamByHierarchicalName( const OUString& aStreamPath, ::sal_Int32 nOpenMode, const cpo::uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 

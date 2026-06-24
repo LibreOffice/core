@@ -77,12 +77,12 @@ public:
     virtual OUString SAL_CALL getChartType() override = 0;
     virtual css::uno::Reference< css::chart2::XCoordinateSystem > SAL_CALL
         createCoordinateSystem( ::sal_Int32 DimensionCount ) final override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedMandatoryRoles() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedOptionalRoles() override;
     virtual OUString SAL_CALL getRoleOfSequenceForSeriesLabel() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedPropertyRoles() override;
 
     // ____ XDataSeriesContainer ____
@@ -90,9 +90,9 @@ public:
         const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries ) override;
     virtual void SAL_CALL removeDataSeries(
         const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > SAL_CALL getDataSeries() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > SAL_CALL getDataSeries() override;
     virtual void SAL_CALL setDataSeries(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aDataSeries ) override;
+        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aDataSeries ) override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(

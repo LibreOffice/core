@@ -118,7 +118,7 @@ public:
                     sProjectName =  mpDocShell->GetBasicManager()->GetName();
                 }
                 uno::Reference< container::XNameAccess > xLib( xLibContainer->getByName( sProjectName ), uno::UNO_QUERY_THROW );
-                const uno::Sequence< OUString > sModuleNames = xLib->getElementNames();
+                const cpo::uno::Sequence< OUString > sModuleNames = xLib->getElementNames();
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
 
                 auto pModuleName = std::find_if(sModuleNames.begin(), sModuleNames.end(), [&xVBAModuleInfo](const OUString& rName) {
@@ -188,7 +188,7 @@ public:
             throw container::NoSuchElementException();
         return cpo::uno::Any( mTemplateToProject.find( aName )->second );
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return comphelper::mapKeysToSequence( mTemplateToProject );
     }
@@ -250,16 +250,16 @@ public:
     {
         if ( !hasByName( aName ) )
              throw container::NoSuchElementException();
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference< uno::XInterface >()),
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference< uno::XInterface >()),
                                          cpo::uno::Any(mpDocShell->GetModel()) };
         uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
         SAL_INFO("sw.uno",
             "Creating Object ( ooo.vba.word.Document ) 0x" << xDocObj.get());
         return  cpo::uno::Any( xDocObj );
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
-        uno::Sequence< OUString > aNames;
+        cpo::uno::Sequence< OUString > aNames;
         return aNames;
     }
     // XElemenAccess
@@ -486,10 +486,10 @@ OUString SwXServiceProvider::GetProviderName(SwServiceType nObjectType)
     return sRet;
 }
 
-uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
+cpo::uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 {
     const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
-    uno::Sequence<OUString> aRet(nEntries);
+    cpo::uno::Sequence<OUString> aRet(nEntries);
     OUString* pArray = aRet.getArray();
     sal_uInt16 n = 0;
     for(const ProvNamesId_Type & i : aProvNamesId)
@@ -600,7 +600,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
                 BasicManager *pBasicMan = pShell->GetBasicManager();
                 if (pBasicMan && !pBasicMan->GetGlobalUNOConstant(u"VBAGlobals"_ustr, aGlobs))
                 {
-                    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(pShell->GetModel()) };
+                    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(pShell->GetModel()) };
                     aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.word.Globals"_ustr, aArgs );
                     pBasicMan->SetGlobalUNOConstant( u"VBAGlobals"_ustr, aGlobs );
                 }
@@ -924,11 +924,11 @@ rtl::Reference<SwXTextTable> SwXTextTables::getTextTableByName(std::u16string_vi
     return xTable;
 }
 
-uno::Sequence< OUString > SwXTextTables::getElementNames()
+cpo::uno::Sequence< OUString > SwXTextTables::getElementNames()
 {
     SolarMutexGuard aGuard;
     const size_t nCount = GetDoc().GetTableFrameFormatCount(true);
-    uno::Sequence<OUString> aSeq(static_cast<sal_Int32>(nCount));
+    cpo::uno::Sequence<OUString> aSeq(static_cast<sal_Int32>(nCount));
     if(nCount)
     {
         OUString* pArray = aSeq.getArray();
@@ -982,7 +982,7 @@ bool SwXTextTables::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.TextTables"_ustr };
 }
@@ -1209,7 +1209,7 @@ cpo::uno::Any SwXFrames::getByName(const OUString& rName)
     return lcl_UnoWrapFrame(const_cast<SwFrameFormat*>(pFormat), m_eType);
 }
 
-uno::Sequence<OUString> SwXFrames::getElementNames()
+cpo::uno::Sequence<OUString> SwXFrames::getElementNames()
 {
     SolarMutexGuard aGuard;
     const Reference<XEnumeration> xEnum = createEnumeration();
@@ -1424,7 +1424,7 @@ rtl::Reference<SwXTextSection> SwXTextSections::getSwTextSectionByName(const OUS
     return xSect;
 }
 
-uno::Sequence< OUString > SwXTextSections::getElementNames()
+cpo::uno::Sequence< OUString > SwXTextSections::getElementNames()
 {
     SolarMutexGuard aGuard;
     SwSectionFormats& rSectFormats = GetDoc().GetSections();
@@ -1435,7 +1435,7 @@ uno::Sequence< OUString > SwXTextSections::getElementNames()
             nCount--;
     }
 
-    uno::Sequence<OUString> aSeq(nCount);
+    cpo::uno::Sequence<OUString> aSeq(nCount);
     if(nCount)
     {
         OUString* pArray = aSeq.getArray();
@@ -1582,7 +1582,7 @@ cpo::uno::Any SwXBookmarks::getByName(const OUString& rName)
     return aRet;
 }
 
-uno::Sequence< OUString > SwXBookmarks::getElementNames()
+cpo::uno::Sequence< OUString > SwXBookmarks::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -1805,7 +1805,7 @@ cpo::uno::Any SwXReferenceMarks::getByName(const OUString& rName)
     throw NoSuchElementException();
 }
 
-uno::Sequence< OUString > SwXReferenceMarks::getElementNames()
+cpo::uno::Sequence< OUString > SwXReferenceMarks::getElementNames()
 {
     SolarMutexGuard aGuard;
 

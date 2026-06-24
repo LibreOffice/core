@@ -76,10 +76,10 @@ using namespace tdoc_ucp;
 
 
 #define MAKEPROPSEQUENCE( a ) \
-    uno::Sequence< beans::Property >( a, SAL_N_ELEMENTS(a) )
+    cpo::uno::Sequence< beans::Property >( a, SAL_N_ELEMENTS(a) )
 
 #define MAKECMDSEQUENCE( a ) \
-    uno::Sequence< ucb::CommandInfo >( a, SAL_N_ELEMENTS(a) )
+    cpo::uno::Sequence< ucb::CommandInfo >( a, SAL_N_ELEMENTS(a) )
 
 
 // IMPORTANT: If any property data ( name / type / ... ) are changed, then
@@ -87,7 +87,7 @@ using namespace tdoc_ucp;
 
 
 // virtual
-uno::Sequence< beans::Property > Content::getProperties(
+cpo::uno::Sequence< beans::Property > Content::getProperties(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -137,7 +137,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 u"CreatableContentsInfo"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
@@ -199,7 +199,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 u"CreatableContentsInfo"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
@@ -262,7 +262,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 u"CreatableContentsInfo"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
@@ -327,7 +327,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 u"CreatableContentsInfo"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             )
@@ -341,7 +341,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 
 // virtual
-uno::Sequence< ucb::CommandInfo > Content::getCommands(
+cpo::uno::Sequence< ucb::CommandInfo > Content::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -376,12 +376,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 ucb::CommandInfo(
                     u"getPropertyValues"_ustr,
                     -1,
-                    cppu::UnoType<uno::Sequence< beans::Property >>::get()
+                    cppu::UnoType<cpo::uno::Sequence< beans::Property >>::get()
                 ),
                 ucb::CommandInfo(
                     u"setPropertyValues"_ustr,
                     -1,
-                    cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
+                    cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get()
                 ),
 
                 // Optional standard commands
@@ -425,12 +425,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 u"getPropertyValues"_ustr,
                 -1,
-                cppu::UnoType< uno::Sequence< beans::Property >>::get()
+                cppu::UnoType< cpo::uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
                 u"setPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
+                cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get()
             ),
 
             // Optional standard commands
@@ -481,12 +481,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 u"getPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::Property >>::get()
+                cppu::UnoType<cpo::uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
                 u"setPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
+                cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get()
             ),
 
             // Optional standard commands
@@ -547,12 +547,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 u"getPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::Property >>::get()
+                cppu::UnoType<cpo::uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
                 u"setPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
+                cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get()
             ),
 
             // Optional standard commands
@@ -605,12 +605,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 u"getPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::Property >>::get()
+                cppu::UnoType<cpo::uno::Sequence< beans::Property >>::get()
             ),
             ucb::CommandInfo(
                 u"setPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
+                cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get()
             ),
 
             // Optional standard commands

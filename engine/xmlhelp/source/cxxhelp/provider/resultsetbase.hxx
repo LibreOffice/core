@@ -51,7 +51,7 @@ namespace chelp {
 
         ResultSetBase( css::uno::Reference< css::uno::XComponentContext > xContext,
                        css::uno::Reference< css::ucb::XContentProvider > xProvider,
-                       const css::uno::Sequence< css::beans::Property >& seq );
+                       const cpo::uno::Sequence< css::beans::Property >& seq );
 
         virtual ~ResultSetBase() override;
 
@@ -161,13 +161,13 @@ namespace chelp {
                 return double( 0 );
         }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
         getBytes( sal_Int32 columnIndex ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBytes( columnIndex );
             else
-                return css::uno::Sequence< sal_Int8 >();
+                return cpo::uno::Sequence< sal_Int8 >();
         }
 
         virtual css::util::Date SAL_CALL
@@ -385,7 +385,7 @@ namespace chelp {
         ItemSet                             m_aItems;
         std::vector<OUString>               m_aPath;
 
-        css::uno::Sequence< css::beans::Property >           m_sProperty;
+        cpo::uno::Sequence< css::beans::Property >           m_sProperty;
 
         std::mutex                         m_aMutex;
         comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aDisposeEventListeners;

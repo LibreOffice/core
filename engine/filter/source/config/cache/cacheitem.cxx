@@ -21,7 +21,7 @@
 #include "cacheitem.hxx"
 #include "constant.hxx"
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -77,12 +77,12 @@ void CacheItem::validateUINames(const OUString& sActLocale)
 }
 
 
-css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyValueList(bool bFinalized, bool bMandatory) const
+cpo::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyValueList(bool bFinalized, bool bMandatory) const
 {
     sal_Int32 c = static_cast<sal_Int32>(size());
     sal_Int32 i = 0;
 
-    css::uno::Sequence< css::beans::PropertyValue > lList(c+2);
+    cpo::uno::Sequence< css::beans::PropertyValue > lList(c+2);
     css::beans::PropertyValue*                      pList = lList.getArray();
 
     for (const_iterator pProp  = begin();
@@ -181,8 +181,8 @@ static bool isSubSet(const cpo::uno::Any& aSubSet,
 
             case css::uno::TypeClass_SEQUENCE :
             {
-                css::uno::Sequence< OUString > uno_s1;
-                css::uno::Sequence< OUString > uno_s2;
+                cpo::uno::Sequence< OUString > uno_s1;
+                cpo::uno::Sequence< OUString > uno_s2;
 
                 if (
                     (aSubSet >>= uno_s1) &&
@@ -202,8 +202,8 @@ static bool isSubSet(const cpo::uno::Any& aSubSet,
                     return true;
                 }
 
-                css::uno::Sequence< css::beans::PropertyValue > uno_p1;
-                css::uno::Sequence< css::beans::PropertyValue > uno_p2;
+                cpo::uno::Sequence< css::beans::PropertyValue > uno_p1;
+                cpo::uno::Sequence< css::beans::PropertyValue > uno_p2;
 
                 if (
                     (aSubSet >>= uno_p1) &&
@@ -228,8 +228,8 @@ static bool isSubSet(const cpo::uno::Any& aSubSet,
                     return true;
                 }
 
-                css::uno::Sequence< css::beans::NamedValue > uno_n1;
-                css::uno::Sequence< css::beans::NamedValue > uno_n2;
+                cpo::uno::Sequence< css::beans::NamedValue > uno_n1;
+                cpo::uno::Sequence< css::beans::NamedValue > uno_n2;
 
                 if (
                     (aSubSet >>= uno_n1) &&

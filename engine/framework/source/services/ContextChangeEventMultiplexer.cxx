@@ -74,7 +74,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService  (
         const OUString& rsServiceName) override;
-    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XEventListener
     virtual void SAL_CALL disposing (
@@ -290,10 +290,10 @@ bool SAL_CALL ContextChangeEventMultiplexer::supportsService ( const OUString& r
     return cppu::supportsService(this, rsServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ContextChangeEventMultiplexer::getSupportedServiceNames()
 {
     // it's a singleton, not a service
-    return css::uno::Sequence<OUString>();
+    return cpo::uno::Sequence<OUString>();
 }
 
 void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventObject& rEvent)
@@ -362,7 +362,7 @@ Hook g_hook;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ContextChangeEventMultiplexer());
 }

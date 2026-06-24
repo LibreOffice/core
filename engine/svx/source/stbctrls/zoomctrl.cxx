@@ -186,7 +186,7 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
             aZoom.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );
 
-            css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+            cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
                 aObj.GetURLPath(), a) };
             execute( aArgs );
         }
@@ -205,7 +205,7 @@ SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
     GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_FIT_SLIDE));
 }
 
-void SAL_CALL SvxZoomPageStatusBarControl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SvxZoomPageStatusBarControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // Call inherited initialize
     StatusbarController::initialize(aArguments);
@@ -241,7 +241,7 @@ bool SvxZoomPageStatusBarControl::MouseButtonDown(const MouseEvent&)
     aZoom.QueryValue( a );
     INetURLObject aObj( m_aCommandURL );
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
         aObj.GetURLPath(), a) };
     execute( aArgs );
 

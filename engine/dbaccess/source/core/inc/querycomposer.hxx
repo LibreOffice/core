@@ -57,8 +57,8 @@ namespace dbaccess
         OQueryComposer( const css::uno::Reference< css::sdbc::XConnection>& _xConnection );
 
         // css::lang::XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
         // css::uno::XInterface
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -67,13 +67,13 @@ namespace dbaccess
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         // XSQLQueryComposer
         virtual OUString SAL_CALL getQuery(  ) override;
         virtual void SAL_CALL setQuery( const OUString& command ) override;
         virtual OUString SAL_CALL getComposedQuery(  ) override;
         virtual OUString SAL_CALL getFilter(  ) override;
-        virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) override;
         virtual OUString SAL_CALL getOrder(  ) override;
         virtual void SAL_CALL appendFilterByColumn( const css::uno::Reference< css::beans::XPropertySet >& column ) override;
         virtual void SAL_CALL appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool ascending ) override;

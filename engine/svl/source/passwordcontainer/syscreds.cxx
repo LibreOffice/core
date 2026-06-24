@@ -29,13 +29,13 @@ SysCredentialsConfigItem::SysCredentialsConfigItem(
   m_bInited( false ),
   m_pOwner( pOwner )
 {
-    uno::Sequence<OUString> aNode { u"Office.Common/Passwords/AuthenticateUsingSystemCredentials"_ustr };
+    cpo::uno::Sequence<OUString> aNode { u"Office.Common/Passwords/AuthenticateUsingSystemCredentials"_ustr };
     EnableNotification( aNode );
 }
 
 //virtual
 void SysCredentialsConfigItem::Notify(
-    const uno::Sequence< OUString > & /*seqPropertyNames*/ )
+    const cpo::uno::Sequence< OUString > & /*seqPropertyNames*/ )
 {
     {
         std::unique_lock aGuard( m_aMutex );
@@ -51,21 +51,21 @@ void SysCredentialsConfigItem::ImplCommit()
     // does nothing
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SysCredentialsConfigItem::getSystemCredentialsURLs()
 {
     std::unique_lock aGuard(m_aMutex);
     return getSystemCredentialsURLs(aGuard);
 }
 
-const uno::Sequence< OUString > &
+const cpo::uno::Sequence< OUString > &
 SysCredentialsConfigItem::getSystemCredentialsURLs(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if ( !m_bInited )
     {
         // read config item
-        uno::Sequence<OUString> aPropNames { u"AuthenticateUsingSystemCredentials"_ustr };
-        uno::Sequence< cpo::uno::Any > aAnyValues(
+        cpo::uno::Sequence<OUString> aPropNames { u"AuthenticateUsingSystemCredentials"_ustr };
+        cpo::uno::Sequence< cpo::uno::Any > aAnyValues(
             utl::ConfigItem::GetProperties( aPropNames ) );
 
         OSL_ENSURE(
@@ -73,7 +73,7 @@ SysCredentialsConfigItem::getSystemCredentialsURLs(std::unique_lock<std::mutex>&
             "SysCredentialsConfigItem::getSystemCredentialsURLs: "
             "Error reading config item!" );
 
-        uno::Sequence< OUString > aValues;
+        cpo::uno::Sequence< OUString > aValues;
         if ( ( aAnyValues[ 0 ] >>= aValues ) ||
              ( !aAnyValues[ 0 ].hasValue() ) )
         {
@@ -85,11 +85,11 @@ SysCredentialsConfigItem::getSystemCredentialsURLs(std::unique_lock<std::mutex>&
 }
 
 void SysCredentialsConfigItem::setSystemCredentialsURLs(
-    const uno::Sequence< OUString > & seqURLList )
+    const cpo::uno::Sequence< OUString > & seqURLList )
 {
     // write config item.
-    uno::Sequence< OUString > aPropNames{ u"AuthenticateUsingSystemCredentials"_ustr };
-    uno::Sequence< cpo::uno::Any > aPropValues{ cpo::uno::Any(seqURLList) };
+    cpo::uno::Sequence< OUString > aPropNames{ u"AuthenticateUsingSystemCredentials"_ustr };
+    cpo::uno::Sequence< cpo::uno::Any > aPropValues{ cpo::uno::Any(seqURLList) };
 
     utl::ConfigItem::SetModified();
     utl::ConfigItem::PutProperties( aPropNames, aPropValues );
@@ -172,7 +172,7 @@ void SysCredentialsConfig::initCfg(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if ( !m_bCfgInited )
     {
-        const uno::Sequence< OUString > aURLs(
+        const cpo::uno::Sequence< OUString > aURLs(
             m_aConfigItem.getSystemCredentialsURLs() );
         m_aCfgContainer.insert( aURLs.begin(), aURLs.end() );
         m_bCfgInited = true;
@@ -233,13 +233,13 @@ void SysCredentialsConfig::remove( OUString const & rURL )
         writeCfg(aGuard);
 }
 
-uno::Sequence< OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
+cpo::uno::Sequence< OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
 {
     std::unique_lock aGuard(m_aMutex);
     initCfg(aGuard);
     sal_Int32 nCount = m_aCfgContainer.size()
                      + ( bOnlyPersistent ? 0 : m_aMemContainer.size() );
-    uno::Sequence< OUString > aResult( nCount );
+    cpo::uno::Sequence< OUString > aResult( nCount );
     auto aResultRange = asNonConstRange(aResult);
     sal_Int32 n = 0;
 

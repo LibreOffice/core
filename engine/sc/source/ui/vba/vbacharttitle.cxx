@@ -32,10 +32,10 @@ ScVbaChartTitle::getServiceImplName()
     return u"ScVbaChartTitle"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaChartTitle::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames = comphelper::concatSequences(
+    static cpo::uno::Sequence< OUString > const aServiceNames = comphelper::concatSequences(
         ChartTitleBase::getServiceNames(),
         std::initializer_list<OUString>{ u"ooo.vba.excel.Chart"_ustr } );
     return aServiceNames;

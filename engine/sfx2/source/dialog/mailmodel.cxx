@@ -117,13 +117,13 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     std::u16string_view rType,
     bool bModified,
     sal_Int32& rNumArgs,
-    css::uno::Sequence< css::beans::PropertyValue >& rArgs )
+    cpo::uno::Sequence< css::beans::PropertyValue >& rArgs )
 {
     SaveResult eRet( SAVE_ERROR );
 
     try
     {
-        uno::Sequence < beans::PropertyValue > aProps;
+        cpo::uno::Sequence < beans::PropertyValue > aProps;
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(
                     xSMGR->createInstance( u"com.sun.star.document.FilterFactory"_ustr ), uno::UNO_QUERY );
         css::uno::Reference< css::util::XModifiable > xModifiable( xModel, css::uno::UNO_QUERY );
@@ -157,13 +157,13 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 //add an internal property, used to tell the dialog we want to set a different
                                 //string for the ok button
                                 //used in filter/source/pdf/impdialog.cxx
-                                uno::Sequence< beans::PropertyValue > aFilterDataValue{
+                                cpo::uno::Sequence< beans::PropertyValue > aFilterDataValue{
                                     comphelper::makePropertyValue(u"_OkButtonString"_ustr,
                                                                   SfxResId(STR_PDF_EXPORT_SEND ))
                                 };
 
                                 //add to the filterdata property, the only one the PDF export filter dialog will care for
-                                uno::Sequence< beans::PropertyValue > aPropsForDialog{
+                                cpo::uno::Sequence< beans::PropertyValue > aPropsForDialog{
                                     comphelper::makePropertyValue(u"FilterData"_ustr, aFilterDataValue)
                                 };
 
@@ -177,7 +177,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                             if( xFilterDialog->execute() )
                             {
                                 //get the filter data
-                                const uno::Sequence< beans::PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
+                                const cpo::uno::Sequence< beans::PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
 
                                 //add them to the args
                                 auto pProp = std::find_if(aPropsFromDialog.begin(), aPropsFromDialog.end(),
@@ -305,7 +305,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             if ( bStoreTo )
             {
                 // Retrieve filter from type
-                css::uno::Sequence< css::beans::NamedValue > aQuery( bSendAsPDF ? 3 : 2 );
+                cpo::uno::Sequence< css::beans::NamedValue > aQuery( bSendAsPDF ? 3 : 2 );
                 auto pQuery = aQuery.getArray();
                 pQuery[0].Name  = u"Type"_ustr;
                 pQuery[0].Value <<= aTypeName;
@@ -412,9 +412,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     try
                     {
                         ::comphelper::SequenceAsHashMap aTypeNamePropsHM( xTypeDetection->getByName( aTypeName ) );
-                        uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
+                        cpo::uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
                                                         u"Extensions"_ustr,
-                                                        ::uno::Sequence< OUString >() );
+                                                        ::cpo::uno::Sequence< OUString >() );
                         if ( aExtensions.hasElements() )
                             aExtension = aExtensions[0];
                     }
@@ -460,7 +460,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             sal_Int32 nNumArgs(1);
             static constexpr OUString aPasswordPropName( u"Password"_ustr );
-            css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+            cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
                 u"FilterName"_ustr, aFilterName) };
 
             ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
@@ -519,7 +519,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     {
                         try
                         {
-                            css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
+                            cpo::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
                             xPrepareDispatch->dispatch( aPrepareURL, aDispatchArgs );
                         }
                         catch ( css::uno::RuntimeException& )
@@ -561,7 +561,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                             {
                                 try
                                 {
-                                    css::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
+                                    cpo::uno::Sequence< css::beans::PropertyValue > aDispatchArgs;
                                     xDispatch->dispatch( aURL, aDispatchArgs );
                                 }
                                 catch ( css::uno::RuntimeException& )

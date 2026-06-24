@@ -465,12 +465,12 @@ void SAL_CALL ODocumentDefinition::disposing()
     }
 }
 
-css::uno::Sequence<sal_Int8> ODocumentDefinition::getImplementationId()
+cpo::uno::Sequence<sal_Int8> ODocumentDefinition::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-css::uno::Sequence< css::uno::Type > ODocumentDefinition::getTypes()
+cpo::uno::Sequence< css::uno::Type > ODocumentDefinition::getTypes()
 {
     return  ::comphelper::concatSequences(
         OContentHelper::getTypes( ),
@@ -1322,7 +1322,7 @@ void ODocumentDefinition::saveAs()
                         rename(pDocuSave->getName());
                         updateDocumentTitle();
 
-                        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+                        cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
                         {
                             {PROPERTY_NAME, cpo::uno::Any(sOldName)}, // set as folder
                             {PROPERTY_PERSISTENT_NAME, cpo::uno::Any(sPersistentName)},

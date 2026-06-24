@@ -106,7 +106,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
@@ -124,7 +124,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScDataPilotFieldsObj;
@@ -220,7 +220,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScDataPilotTableObj final : public ScDataPilotDescriptorBase,
@@ -258,7 +258,7 @@ public:
     virtual void SAL_CALL   refresh() override;
 
                             // XDataPilotTable2
-    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
         SAL_CALL getDrillDownData(const css::table::CellAddress& aAddr) override;
 
     virtual css::sheet::DataPilotTablePositionData
@@ -273,13 +273,13 @@ public:
     virtual void SAL_CALL   removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
                             // XTypeProvider (override)
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 struct ScFieldIdentifier
@@ -350,7 +350,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
@@ -368,7 +368,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     SC_DLLPUBLIC rtl::Reference<ScDataPilotFieldObj>
     getScDataPilotFieldObjByIndex(sal_Int32 nIndex, bool bCalculated = false,
@@ -440,7 +440,7 @@ public:
     void setOrientation(css::sheet::DataPilotFieldOrientation Orientation);
     sal_Int16 getFunction() const;
     void setFunction(ScGeneralFunction Function);
-    css::uno::Sequence< sal_Int16 > getSubtotals() const;
+    cpo::uno::Sequence< sal_Int16 > getSubtotals() const;
     void setSubtotals(const std::vector< ScGeneralFunction >& rFunctions);
     void setCurrentPage(const OUString& sPage);
     void setUseCurrentPage(bool bUse);
@@ -463,14 +463,14 @@ public:
 
                             // XDataPilotFieldGrouping
     virtual css::uno::Reference < css::sheet::XDataPilotField > SAL_CALL
-        createNameGroup(const css::uno::Sequence< OUString >& aItems) override;
+        createNameGroup(const cpo::uno::Sequence< OUString >& aItems) override;
     virtual css::uno::Reference < css::sheet::XDataPilotField > SAL_CALL
         createDateGroup(const css::sheet::DataPilotFieldGroupInfo& rInfo) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     SC_DLLPUBLIC rtl::Reference< ScDataPilotFieldObj >
         createNameGroup(const std::vector< OUString >& aItems);
@@ -517,7 +517,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                                 // XNameReplace
@@ -544,7 +544,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // implementation
     /// @throws css::uno::RuntimeException
@@ -577,7 +577,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                                 // XNameReplace
@@ -608,7 +608,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     rtl::Reference<ScDataPilotFieldGroupsObj> mxParent;
@@ -635,7 +635,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     rtl::Reference<ScDataPilotFieldGroupObj> mxParent;
@@ -659,7 +659,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
@@ -677,7 +677,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     ScDataPilotItemObj* GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
@@ -724,7 +724,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     SfxItemPropertySet  maPropSet;

@@ -197,7 +197,7 @@ public:
 
 IMPL_LINK_NOARG(ExtraButton, CommandHdl, weld::Button&, void)
 {
-    comphelper::dispatchCommand(m_aCommand, css::uno::Sequence<css::beans::PropertyValue>());
+    comphelper::dispatchCommand(m_aCommand, cpo::uno::Sequence<css::beans::PropertyValue>());
 }
 
 SfxInfoBarWindow::SfxInfoBarWindow(vcl::Window* pParent, OUString sId,

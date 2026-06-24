@@ -38,7 +38,7 @@ OUString SAL_CALL OFormsCollection::getServiceName()
 
 Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Sequence<Type> SAL_CALL OFormsCollection::getTypes()
@@ -93,7 +93,7 @@ bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName )
     return cppu::supportsService(this, _rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL OFormsCollection::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OFormsCollection::getSupportedServiceNames()
 {
     return { u"com.sun.star.form.Forms"_ustr, u"com.sun.star.form.FormComponents"_ustr };
 }
@@ -133,7 +133,7 @@ css::uno::Reference<css::uno::XInterface>  OFormsCollection::getParent()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OFormsCollection_get_implementation(css::uno::XComponentContext* context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFormsCollection(context));
 }

@@ -46,7 +46,7 @@ protected:
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     void setAsMSObehavior();
     sal_Int32 getMargin( const OUString& sMarginType );
     void setMargin( const OUString& sMarginType, float fMargin );

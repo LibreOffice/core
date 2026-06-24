@@ -119,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHighlightOnInsContext)
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"CharBackColor"_ustr,
                                       cpo::uno::Any(static_cast<sal_Int32>(0xffff00))),
     };
@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFormatRedlineRecordOldCharStyle)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"x"_ustr);
     pWrtShell->SelAll();
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"Style"_ustr, cpo::uno::Any(u"Emphasis"_ustr)),
         comphelper::makePropertyValue(u"FamilyName"_ustr, cpo::uno::Any(u"CharacterStyles"_ustr)),
     };

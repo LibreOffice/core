@@ -45,7 +45,7 @@ VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
 {
 }
 
-cpo::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
+cpo::uno::Any VCLXSystemDependentWindow::getWindowHandle( const cpo::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {
     SolarMutexGuard aGuard;
 

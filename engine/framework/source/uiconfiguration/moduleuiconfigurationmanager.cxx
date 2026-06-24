@@ -84,7 +84,7 @@ class ModuleUIConfigurationManager : public cppu::WeakImplHelper<
 public:
     ModuleUIConfigurationManager(
             const css::uno::Reference< css::uno::XComponentContext >& xServiceManager,
-            const css::uno::Sequence< cpo::uno::Any >& aArguments);
+            const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString SAL_CALL getImplementationName() override
     {
@@ -96,7 +96,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.ModuleUIConfigurationManager"_ustr};
     }
@@ -112,7 +112,7 @@ public:
 
     // XUIConfigurationManager
     virtual void SAL_CALL reset() override;
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) override;
     virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL createSettings(  ) override;
     virtual bool SAL_CALL hasSettings( const OUString& ResourceURL ) override;
     virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, bool bWriteable ) override;
@@ -823,7 +823,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
 
 ModuleUIConfigurationManager::ModuleUIConfigurationManager(
         const Reference< XComponentContext >& xContext,
-        const css::uno::Sequence< cpo::uno::Any >& aArguments)
+        const cpo::uno::Sequence< cpo::uno::Any >& aArguments)
     : m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
@@ -1403,7 +1403,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
     {
         m_xModuleImageManager = new ImageManager( m_xContext, /*bForModule*/true );
 
-        uno::Sequence<cpo::uno::Any> aPropSeq(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
             {"UserConfigStorage", cpo::uno::Any(m_xUserConfigStorage)},
             {"ModuleIdentifier", cpo::uno::Any(m_aModuleIdentifier)},
@@ -1645,7 +1645,7 @@ void ModuleUIConfigurationManager::implts_notifyContainerListener( const ui::Con
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ModuleUIConfigurationManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new ModuleUIConfigurationManager(context, arguments));
 }

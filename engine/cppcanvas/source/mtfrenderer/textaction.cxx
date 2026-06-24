@@ -121,7 +121,7 @@ namespace cppcanvas::internal
 
                     o_rFont = rCanvas->getUNOCanvas()->createFont(
                         aFontRequest,
-                        uno::Sequence< beans::PropertyValue >(),
+                        cpo::uno::Sequence< beans::PropertyValue >(),
                         aFontMatrix );
                 }
 
@@ -151,19 +151,19 @@ namespace cppcanvas::internal
                                                        rTextTransform );
             }
 
-            void initLayoutWidth(double& rLayoutWidth, const uno::Sequence<double>& rOffsets)
+            void initLayoutWidth(double& rLayoutWidth, const cpo::uno::Sequence<double>& rOffsets)
             {
                 ENSURE_OR_THROW(rOffsets.hasElements(),
                                   "::cppcanvas::internal::initLayoutWidth(): zero-length array" );
                 rLayoutWidth = *(std::max_element(rOffsets.begin(), rOffsets.end()));
             }
 
-            uno::Sequence< double > setupDXArray( KernArraySpan    rCharWidths,
+            cpo::uno::Sequence< double > setupDXArray( KernArraySpan    rCharWidths,
                                                   sal_Int32          nLen,
                                                   const OutDevState& rState )
             {
                 // convert character widths from logical units
-                uno::Sequence< double > aCharWidthSeq( nLen );
+                cpo::uno::Sequence< double > aCharWidthSeq( nLen );
                 double*                 pOutputWidths( aCharWidthSeq.getArray() );
 
                 // #143885# maintain (nearly) full precision of DX
@@ -179,7 +179,7 @@ namespace cppcanvas::internal
                 return aCharWidthSeq;
             }
 
-            uno::Sequence< double > setupDXArray( const OUString&    rText,
+            cpo::uno::Sequence< double > setupDXArray( const OUString&    rText,
                                                   sal_Int32          nStartPos,
                                                   sal_Int32          nLen,
                                                   VirtualDevice const & rVDev,
@@ -196,7 +196,7 @@ namespace cppcanvas::internal
 
             ::basegfx::B2DPoint adaptStartPoint( const ::basegfx::B2DPoint&     rStartPoint,
                                                  const OutDevState&             rState,
-                                                 const uno::Sequence< double >& rOffsets )
+                                                 const cpo::uno::Sequence< double >& rOffsets )
             {
                 ::basegfx::B2DPoint aLocalPoint( rStartPoint );
 
@@ -228,8 +228,8 @@ namespace cppcanvas::internal
                                   const OUString&                    rText,
                                   sal_Int32                                 nStartPos,
                                   sal_Int32                                 nLen,
-                                  const uno::Sequence< double >&            rOffsets,
-                                  const uno::Sequence< bool >&          rKashidas,
+                                  const cpo::uno::Sequence< double >&            rOffsets,
+                                  const cpo::uno::Sequence< bool >&          rKashidas,
                                   const CanvasSharedPtr&                    rCanvas,
                                   const OutDevState&                        rState,
                                   const ::basegfx::B2DHomMatrix*            pTextTransform )
@@ -273,7 +273,7 @@ namespace cppcanvas::internal
                 return (rState.mapModeTransform * aSize).getWidth();
             }
 
-            uno::Sequence< double >
+            cpo::uno::Sequence< double >
                 calcSubsetOffsets( rendering::RenderState&                          io_rRenderState,
                                    double&                                          o_rMinPos,
                                    double&                                          o_rMaxPos,
@@ -284,7 +284,7 @@ namespace cppcanvas::internal
                 ENSURE_OR_THROW( rSubset.mnSubsetEnd > rSubset.mnSubsetBegin,
                                   "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
 
-                uno::Sequence< double > aOrigOffsets( rOrigTextLayout->queryLogicalAdvancements() );
+                cpo::uno::Sequence< double > aOrigOffsets( rOrigTextLayout->queryLogicalAdvancements() );
                 const double*           pOffsets( aOrigOffsets.getConstArray() );
 
                 ENSURE_OR_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
@@ -352,7 +352,7 @@ namespace cppcanvas::internal
 
 
                 const sal_Int32         nNewElements( rSubset.mnSubsetEnd - rSubset.mnSubsetBegin );
-                uno::Sequence< double > aAdaptedOffsets( nNewElements );
+                cpo::uno::Sequence< double > aAdaptedOffsets( nNewElements );
                 double*                 pAdaptedOffsets( aAdaptedOffsets.getArray() );
 
                 // move to new output position (subtract nMinPos,
@@ -459,8 +459,8 @@ namespace cppcanvas::internal
                                            io_rTextLayout,
                                            nLayoutWidth,
                                            rSubset ) );
-                    uno::Sequence< bool > aOrigKashidaPositions(io_rTextLayout->queryKashidaPositions());
-                    uno::Sequence< bool > aKashidaPositions(aOrigKashidaPositions.getArray() + rSubset.mnSubsetBegin,
+                    cpo::uno::Sequence< bool > aOrigKashidaPositions(io_rTextLayout->queryKashidaPositions());
+                    cpo::uno::Sequence< bool > aKashidaPositions(aOrigKashidaPositions.getArray() + rSubset.mnSubsetBegin,
                                                                 rSubset.mnSubsetEnd - rSubset.mnSubsetBegin);
                     xTextLayout->applyKashidaPositions(aKashidaPositions);
                 }
@@ -1022,8 +1022,8 @@ namespace cppcanvas::internal
                                  const OUString&         rString,
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
-                                 const uno::Sequence< double >& rOffsets,
-                                 const uno::Sequence< bool >& rKashidas,
+                                 const cpo::uno::Sequence< double >& rOffsets,
+                                 const cpo::uno::Sequence< bool >& rKashidas,
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState );
 
@@ -1031,8 +1031,8 @@ namespace cppcanvas::internal
                                  const OUString&         rString,
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
-                                 const uno::Sequence< double >& rOffsets,
-                                 const uno::Sequence< bool >& rKashidas,
+                                 const cpo::uno::Sequence< double >& rOffsets,
+                                 const cpo::uno::Sequence< bool >& rKashidas,
                                  const CanvasSharedPtr&         rCanvas,
                                  const OutDevState&             rState,
                                  const ::basegfx::B2DHomMatrix& rTextTransform );
@@ -1068,8 +1068,8 @@ namespace cppcanvas::internal
                                               const OUString&            rString,
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
-                                              const uno::Sequence< double >&    rOffsets,
-                                              const uno::Sequence< bool >&  rKashidas,
+                                              const cpo::uno::Sequence< double >&    rOffsets,
+                                              const cpo::uno::Sequence< bool >&  rKashidas,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState ) :
                 mpCanvas( rCanvas )
@@ -1092,8 +1092,8 @@ namespace cppcanvas::internal
                                               const OUString&            rString,
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
-                                              const uno::Sequence< double >&    rOffsets,
-                                              const uno::Sequence< bool >&  rKashidas,
+                                              const cpo::uno::Sequence< double >&    rOffsets,
+                                              const cpo::uno::Sequence< bool >&  rKashidas,
                                               const CanvasSharedPtr&            rCanvas,
                                               const OutDevState&                rState,
                                               const ::basegfx::B2DHomMatrix&    rTextTransform ) :
@@ -1217,8 +1217,8 @@ namespace cppcanvas::internal
                                        const OUString&           rText,
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
-                                       const uno::Sequence< double >&   rOffsets,
-                                       const uno::Sequence< bool >& rKashidas,
+                                       const cpo::uno::Sequence< double >&   rOffsets,
+                                       const cpo::uno::Sequence< bool >& rKashidas,
                                        VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState  );
@@ -1231,8 +1231,8 @@ namespace cppcanvas::internal
                                        const OUString&           rText,
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
-                                       const uno::Sequence< double >&   rOffsets,
-                                       const uno::Sequence< bool >& rKashidas,
+                                       const cpo::uno::Sequence< double >&   rOffsets,
+                                       const cpo::uno::Sequence< bool >& rKashidas,
                                        VirtualDevice const &            rVDev,
                                        const CanvasSharedPtr&           rCanvas,
                                        const OutDevState&               rState,
@@ -1286,8 +1286,8 @@ namespace cppcanvas::internal
                                                           const OUString&            rText,
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
-                                                          const uno::Sequence< double >&    rOffsets,
-                                                          const uno::Sequence< bool >&  rKashidas,
+                                                          const cpo::uno::Sequence< double >&    rOffsets,
+                                                          const cpo::uno::Sequence< bool >&  rKashidas,
                                                           VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState  ) :
@@ -1325,8 +1325,8 @@ namespace cppcanvas::internal
                                                           const OUString&            rText,
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
-                                                          const uno::Sequence< double >&    rOffsets,
-                                                          const uno::Sequence< bool >&  rKashidas,
+                                                          const cpo::uno::Sequence< double >&    rOffsets,
+                                                          const cpo::uno::Sequence< bool >&  rKashidas,
                                                           VirtualDevice const &             rVDev,
                                                           const CanvasSharedPtr&            rCanvas,
                                                           const OutDevState&                rState,
@@ -1596,7 +1596,7 @@ namespace cppcanvas::internal
                                uno::Reference< rendering::XPolyPolygon2D >          xFillPoly,
                                const ::basegfx::B2DRectangle&                       rOutlineBounds,
                                uno::Reference< rendering::XPolyPolygon2D >          xTextPoly,
-                               const uno::Sequence< double >&                       rOffsets,
+                               const cpo::uno::Sequence< double >&                       rOffsets,
                                VirtualDevice const &                                rVDev,
                                const CanvasSharedPtr&                               rCanvas,
                                const OutDevState&                                   rState  );
@@ -1609,7 +1609,7 @@ namespace cppcanvas::internal
                                uno::Reference< rendering::XPolyPolygon2D >          xFillPoly,
                                const ::basegfx::B2DRectangle&                       rOutlineBounds,
                                uno::Reference< rendering::XPolyPolygon2D >          xTextPoly,
-                               const uno::Sequence< double >&                       rOffsets,
+                               const cpo::uno::Sequence< double >&                       rOffsets,
                                VirtualDevice const &                                rVDev,
                                const CanvasSharedPtr&                               rCanvas,
                                const OutDevState&                                   rState,
@@ -1641,11 +1641,11 @@ namespace cppcanvas::internal
 
                 uno::Reference< rendering::XPolyPolygon2D >         mxTextPoly;
 
-                const uno::Sequence< double >                       maOffsets;
+                const cpo::uno::Sequence< double >                       maOffsets;
                 const CanvasSharedPtr                               mpCanvas;
                 rendering::RenderState                              maState;
                 double                                              mnOutlineWidth;
-                const uno::Sequence< double >                       maFillColor;
+                const cpo::uno::Sequence< double >                       maFillColor;
                 uno::Reference< rendering::XPolyPolygon2D >         mxBackgroundFillPoly;
                 const cppcanvastools::TextLineInfo                           maTextLineInfo;
                 ::basegfx::B2DSize                                  maLinesOverallSize;
@@ -1680,7 +1680,7 @@ namespace cppcanvas::internal
                                           uno::Reference< rendering::XPolyPolygon2D >           xFillPoly,
                                           const ::basegfx::B2DRectangle&                        rOutlineBounds,
                                           uno::Reference< rendering::XPolyPolygon2D >           xTextPoly,
-                                          const uno::Sequence< double >&                        rOffsets,
+                                          const cpo::uno::Sequence< double >&                        rOffsets,
                                           VirtualDevice const &                                 rVDev,
                                           const CanvasSharedPtr&                                rCanvas,
                                           const OutDevState&                                    rState  ) :
@@ -1726,7 +1726,7 @@ namespace cppcanvas::internal
                                           uno::Reference< rendering::XPolyPolygon2D >           xFillPoly,
                                           const ::basegfx::B2DRectangle&                        rOutlineBounds,
                                           uno::Reference< rendering::XPolyPolygon2D >           xTextPoly,
-                                          const uno::Sequence< double >&                        rOffsets,
+                                          const cpo::uno::Sequence< double >&                        rOffsets,
                                           VirtualDevice const &                                 rVDev,
                                           const CanvasSharedPtr&                                rCanvas,
                                           const OutDevState&                                    rState,
@@ -1894,7 +1894,7 @@ namespace cppcanvas::internal
                 }
 
             private:
-                const uno::Sequence< double >                       maFillColor;
+                const cpo::uno::Sequence< double >                       maFillColor;
                 double                                              mnOutlineWidth;
                 const uno::Reference< rendering::XCanvas >&         mrCanvas;
                 const uno::Reference< rendering::XPolyPolygon2D >&  mrTextPolygon;
@@ -2080,7 +2080,7 @@ namespace cppcanvas::internal
                     }
                 }
 
-                const uno::Sequence< double > aCharWidthSeq(
+                const cpo::uno::Sequence< double > aCharWidthSeq(
                     !pDXArray.empty() ?
                     setupDXArray( pDXArray, nLen, rState ) :
                     setupDXArray( rText,
@@ -2205,7 +2205,7 @@ namespace cppcanvas::internal
 
             // convert DX array to device coordinate system (and
             // create it in the first place, if pDXArray is NULL)
-            const uno::Sequence< double > aCharWidths(
+            const cpo::uno::Sequence< double > aCharWidths(
                 !pDXArray.empty() ?
                 setupDXArray( pDXArray, nLen, rState ) :
                 setupDXArray( rText,
@@ -2214,7 +2214,7 @@ namespace cppcanvas::internal
                               rVDev,
                               rState ));
 
-            const uno::Sequence< bool > aKashidas(pKashidaArray.data(), pKashidaArray.size());
+            const cpo::uno::Sequence< bool > aKashidas(pKashidaArray.data(), pKashidaArray.size());
 
             // determine type of text action to create
             // =======================================

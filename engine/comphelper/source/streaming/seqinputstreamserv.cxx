@@ -55,11 +55,11 @@ public:
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString & ServiceName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::io::XInputStream:
-    virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead ) override;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
     virtual ::sal_Int32 SAL_CALL available() override;
     virtual void SAL_CALL closeInput() override;
@@ -70,7 +70,7 @@ public:
     virtual ::sal_Int64 SAL_CALL getLength() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize( const uno::Sequence< cpo::uno::Any > & aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments ) override;
 
     // comphelper::ByteReader
     virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
@@ -99,13 +99,13 @@ bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serv
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames()
 {
     return { u"com.sun.star.io.SequenceInputStream"_ustr };
 }
 
 // css::io::XInputStream:
-::sal_Int32 SAL_CALL SequenceInputStreamService::readBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead )
+::sal_Int32 SAL_CALL SequenceInputStreamService::readBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -114,7 +114,7 @@ uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServi
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
 
-::sal_Int32 SAL_CALL SequenceInputStreamService::readSomeBytes( uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead )
+::sal_Int32 SAL_CALL SequenceInputStreamService::readSomeBytes( cpo::uno::Sequence< ::sal_Int8 > & aData, ::sal_Int32 nMaxBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xInputStream.is() )
@@ -189,7 +189,7 @@ void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
 }
 
 // css::lang::XInitialization:
-void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< cpo::uno::Any > & aArguments )
+void SAL_CALL SequenceInputStreamService::initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( m_bInitialized )
@@ -200,7 +200,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< cpo::
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
-    uno::Sequence< sal_Int8 > aSeq;
+    cpo::uno::Sequence< sal_Int8 > aSeq;
     if ( !(aArguments[0] >>= aSeq) )
         throw lang::IllegalArgumentException( u"Unexpected type of argument!"_ustr,
                                             static_cast< ::cppu::OWeakObject* >(this),
@@ -215,7 +215,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< cpo::
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_SequenceInputStreamService(
                                              css::uno::XComponentContext *,
-                                             css::uno::Sequence<cpo::uno::Any> const &)
+                                             cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SequenceInputStreamService());
 }

@@ -82,7 +82,7 @@ public:
     // XServiceInfo
     virtual OUString getImplementationName() override;
     virtual bool supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;

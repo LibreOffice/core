@@ -55,10 +55,10 @@ ScVbaMenu::getServiceImplName()
     return u"ScVbaMenu"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaMenu::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Menu"_ustr
     };

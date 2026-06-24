@@ -101,13 +101,13 @@ public:
      type exist will be contained in the returned types array.
    */
     NSArray* flavorSequenceToTypesArray(
-        const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors) const;
+        const cpo::uno::Sequence<css::datatransfer::DataFlavor>& flavors) const;
 
     /* Translate a NSArray of system types into a sequence of DataFlavors.
      Only those types for which a suitable mapping to a DataFlavor
      exist will be contained in the new DataFlavor Sequence.
   */
-    css::uno::Sequence<css::datatransfer::DataFlavor>
+    cpo::uno::Sequence<css::datatransfer::DataFlavor>
     typesArrayToFlavorSequence(NSArray* types) const;
 
 private:

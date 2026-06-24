@@ -295,7 +295,7 @@ namespace pcr
         virtual void SAL_CALL clearList(  ) override;
         virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) override;
         virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
 
         virtual void SetModifyHandler() override
         {
@@ -325,7 +325,7 @@ namespace pcr
         virtual void SAL_CALL clearList(  ) override;
         virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) override;
         virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
 
         virtual void SetModifyHandler() override
         {
@@ -364,8 +364,8 @@ namespace pcr
         void            SetTextValue(const OUString& rText);
         OUString        GetTextValue() const;
 
-        void            SetStringListValue( const css::uno::Sequence< OUString >& _rStrings );
-        css::uno::Sequence<OUString>
+        void            SetStringListValue( const cpo::uno::Sequence< OUString >& _rStrings );
+        cpo::uno::Sequence<OUString>
                         GetStringListValue() const;
 
         DECL_LINK(ButtonHandler, weld::Button&, void);

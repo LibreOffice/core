@@ -118,8 +118,8 @@ public:
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) override;
 
 // css::lang::XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 // css::uno::XInterface
     virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -129,7 +129,7 @@ public:
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -186,7 +186,7 @@ public:
     virtual css::uno::Reference< css::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 protected:
     // ModelDependentComponent overridables

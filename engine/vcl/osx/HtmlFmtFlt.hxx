@@ -19,20 +19,20 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 /* Transform plain HTML into the format expected by MS Office.
  */
-css::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(css::uno::Sequence<sal_Int8> const& aTextHtml);
+cpo::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(cpo::uno::Sequence<sal_Int8> const& aTextHtml);
 
 /* Transform the MS Office HTML format into plain HTML.
  */
-css::uno::Sequence<sal_Int8> HTMLFormatToTextHtml(const css::uno::Sequence<sal_Int8>& aHTMLFormat);
+cpo::uno::Sequence<sal_Int8> HTMLFormatToTextHtml(const cpo::uno::Sequence<sal_Int8>& aHTMLFormat);
 
 /* Detects whether the given byte sequence contains the MS Office Html format.
 
    @returns True if the MS Office Html format will be detected False otherwise.
  */
-bool isHTMLFormat(const css::uno::Sequence<sal_Int8>& aHtmlSequence);
+bool isHTMLFormat(const cpo::uno::Sequence<sal_Int8>& aHtmlSequence);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

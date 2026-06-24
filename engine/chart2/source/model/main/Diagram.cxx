@@ -72,7 +72,7 @@ using namespace ::com::sun::star::beans::PropertyAttribute;
 using namespace ::chart::SceneProperties;
 
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Any;
 using ::osl::MutexGuard;
@@ -624,7 +624,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
     fireModifyEvent();
 }
 
-uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
+cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
 {
     MutexGuard aGuard( m_aMutex );
     return comphelper::containerToSequence<uno::Reference< chart2::XCoordinateSystem >>( m_aCoordSystems );
@@ -852,7 +852,7 @@ bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL Diagram::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Diagram::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.Diagram"_ustr,
@@ -883,7 +883,7 @@ sal_Int32 Diagram::getCorrectedMissingValueTreatment(
             const rtl::Reference< ChartType >& xChartType )
 {
     sal_Int32 nResult = css::chart::MissingValueTreatment::LEAVE_GAP;
-    const uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
+    const cpo::uno::Sequence < sal_Int32 > aAvailableMissingValueTreatments(
                 ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
     if( getFastPropertyValue( PROP_DIAGRAM_MISSING_VALUE_TREATMENT ) >>= nResult )
@@ -2296,7 +2296,7 @@ void Diagram::switchRightAngledAxes( bool bRightAngledAxes )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_Diagram_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::Diagram(context));
 }

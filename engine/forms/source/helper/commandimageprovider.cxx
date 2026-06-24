@@ -37,7 +37,7 @@ namespace frm
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::ui::XUIConfigurationManagerSupplier;
@@ -87,7 +87,7 @@ namespace frm
     }
 
 
-    std::vector<Image> DocumentCommandImageProvider::getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, const bool _bLarge ) const
+    std::vector<Image> DocumentCommandImageProvider::getCommandImages( const cpo::uno::Sequence< OUString >& _rCommandURLs, const bool _bLarge ) const
     {
         const size_t nCommandCount = _rCommandURLs.getLength();
         std::vector<Image> aImages( nCommandCount );

@@ -36,7 +36,7 @@ enum class SfxCallMode : sal_uInt16;
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XDispatchRecorder; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace weld { class Window; }
 
 class SFX2_DLLPUBLIC SfxRequest final
@@ -57,7 +57,7 @@ private:
 public:
                         SfxRequest( SfxViewFrame&, sal_uInt16 nSlotId );
                         SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, SfxItemPool &rPool );
-                        SfxRequest( const SfxSlot* pSlot, const css::uno::Sequence < css::beans::PropertyValue >& rArgs,
+                        SfxRequest( const SfxSlot* pSlot, const cpo::uno::Sequence < css::beans::PropertyValue >& rArgs,
                                             SfxCallMode nCallMode, SfxItemPool &rPool );
                         SfxRequest(sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs);
                         SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs, const SfxAllItemSet& rSfxInternalArgs );

@@ -44,7 +44,7 @@ public:
 
     OUString GetFollowingText( bool bMorePages ) const;
 
-    css::uno::Sequence< OUString >
+    cpo::uno::Sequence< OUString >
     GetAlgorithmList( const css::lang::Locale& rLcl ) const;
 
     bool LoadAlgorithm( const css::lang::Locale& rLcl,

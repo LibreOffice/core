@@ -49,8 +49,8 @@ public:
     virtual bool SAL_CALL supportsService(const OUString&) override;
 
     // lang::XTypeProvider
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

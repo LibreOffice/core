@@ -81,14 +81,14 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OEditModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
     virtual void describeAggregateProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const override;
 
     // XEventListener
@@ -140,7 +140,7 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)
     virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -152,7 +152,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OEditControl"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 // css::form::XChangeBroadcaster
     virtual void SAL_CALL addChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;

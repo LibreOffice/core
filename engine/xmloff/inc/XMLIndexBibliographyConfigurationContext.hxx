@@ -22,7 +22,7 @@
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/languagetagodf.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustring.hxx>
 
@@ -43,7 +43,7 @@ class XMLIndexBibliographyConfigurationContext final : public SvXMLStyleContext
     bool bNumberedEntries;
     bool bSortByPosition;
 
-    ::std::vector< css::uno::Sequence< css::beans::PropertyValue> > aSortKeys;
+    ::std::vector< cpo::uno::Sequence< css::beans::PropertyValue> > aSortKeys;
 
 public:
 

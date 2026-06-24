@@ -41,7 +41,7 @@ public:
     virtual bool SAL_CALL Update() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 typedef CollTestImplHelper< ov::word::XFields > SwVbaFields_BASE;
@@ -71,7 +71,7 @@ public:
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif

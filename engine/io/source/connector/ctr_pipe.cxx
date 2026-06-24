@@ -29,6 +29,7 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::connection;
+using namespace ::cpo::uno;
 
 
 namespace stoc_connector {

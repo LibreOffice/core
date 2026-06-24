@@ -28,7 +28,7 @@
 using namespace ::com::sun::star;
 
 // static
-uno::Reference< xml::crypto::XCipherContext > BlowfishCFB8CipherContext::Create( const uno::Sequence< sal_Int8 >& aDerivedKey, const uno::Sequence< sal_Int8 >& aInitVector, bool bEncrypt )
+uno::Reference< xml::crypto::XCipherContext > BlowfishCFB8CipherContext::Create( const cpo::uno::Sequence< sal_Int8 >& aDerivedKey, const cpo::uno::Sequence< sal_Int8 >& aInitVector, bool bEncrypt )
 {
     ::rtl::Reference< BlowfishCFB8CipherContext > xResult = new BlowfishCFB8CipherContext();
     xResult->m_pCipher = rtl_cipher_create( rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream );
@@ -60,13 +60,13 @@ BlowfishCFB8CipherContext::~BlowfishCFB8CipherContext()
     }
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherContext( const uno::Sequence< ::sal_Int8 >& aData )
+cpo::uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherContext( const cpo::uno::Sequence< ::sal_Int8 >& aData )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_pCipher )
         throw lang::DisposedException();
 
-    uno::Sequence< sal_Int8 > aResult( aData.getLength() );
+    cpo::uno::Sequence< sal_Int8 > aResult( aData.getLength() );
     rtlCipherError nError = rtl_Cipher_E_None;
 
     if ( m_bEncrypt )
@@ -94,7 +94,7 @@ uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherC
     return aResult;
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::finalizeCipherContextAndDispose()
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::finalizeCipherContextAndDispose()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_pCipher )
@@ -103,7 +103,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::finalizeCipherCo
     rtl_cipher_destroy ( m_pCipher );
     m_pCipher = nullptr;
 
-    return uno::Sequence< sal_Int8 >();
+    return cpo::uno::Sequence< sal_Int8 >();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

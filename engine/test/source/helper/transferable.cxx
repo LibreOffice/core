@@ -38,7 +38,7 @@ OString OOO_DLLPUBLIC_TEST getTextSelection(
     if (mimeType == "text/plain;charset=utf-16")
         aFlavor.DataType = cppu::UnoType<OUString>::get();
     else
-        aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+        aFlavor.DataType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
 
     if (!xTransferable.is() || !xTransferable->isDataFlavorSupported(aFlavor))
         return OString();
@@ -70,7 +70,7 @@ OString OOO_DLLPUBLIC_TEST getTextSelection(
     }
     else
     {
-        uno::Sequence<sal_Int8> aSequence;
+        cpo::uno::Sequence<sal_Int8> aSequence;
         aAny >>= aSequence;
         aRet = OString(reinterpret_cast<char*>(aSequence.getArray()), aSequence.getLength());
     }

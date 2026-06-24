@@ -42,7 +42,7 @@ class GraphicExportFilter :
     css::uno::Reference< css::lang::XComponent >        mxDocument;
     css::uno::Reference< css::io::XOutputStream >       mxOutputStream;
 
-    css::uno::Sequence< css::beans::PropertyValue >     maFilterDataSequence;
+    cpo::uno::Sequence< css::beans::PropertyValue >     maFilterDataSequence;
 
     OUString    maFilterExtension;
     OUString    maFilterOptions;
@@ -50,10 +50,10 @@ class GraphicExportFilter :
     sal_Int32   mnTargetHeight;
     bool        mbSelectionOnly;
 
-    void gatherProperties( const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor );
+    void gatherProperties( const cpo::uno::Sequence< css::beans::PropertyValue > & rDescriptor );
     bool filterRenderDocument() const;
     bool filterExportShape(
-            const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
+            const cpo::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
             const css::uno::Reference< css::drawing::XShapes > & rxShapes,
             const css::uno::Reference< css::drawing::XShape > & rxShape ) const;
 
@@ -64,17 +64,17 @@ public:
     //  XServiceInfo
     virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XFilter
-    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor ) override;
+    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue > & rDescriptor ) override;
     virtual void SAL_CALL cancel( ) override;
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent > & xDocument ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any > & rArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any > & rArguments ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

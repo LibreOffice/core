@@ -80,11 +80,11 @@ namespace dbaccess
         DECLARE_XINTERFACE( )
 
         // css::lang::XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
         // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // css::container::XChild
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
@@ -116,7 +116,7 @@ namespace dbaccess
         OTableColumn(const OUString& _rName);
 
         // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -155,7 +155,7 @@ namespace dbaccess
         );
 
         // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -230,11 +230,11 @@ namespace dbaccess
             const bool _bPureWrap, const bool _bIsDescriptor );
 
     // css::lang::XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // OIdPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 nId) const override;
@@ -276,11 +276,11 @@ namespace dbaccess
                              const bool _bPureWrap );
 
     // css::lang::XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // OIdPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;

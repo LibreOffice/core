@@ -300,13 +300,13 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString
     return eRet;
 }
 
-uno::Sequence<beans::PropertyState> SAL_CALL ScDocDefaultsObj::getPropertyStates(
-                            const uno::Sequence<OUString>& aPropertyNames )
+cpo::uno::Sequence<beans::PropertyState> SAL_CALL ScDocDefaultsObj::getPropertyStates(
+                            const cpo::uno::Sequence<OUString>& aPropertyNames )
 {
     //  the simple way: call getPropertyState
 
     SolarMutexGuard aGuard;
-    uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
+    cpo::uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.getArray(),
         [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });
     return aRet;

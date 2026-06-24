@@ -189,7 +189,7 @@ bool SAL_CALL ScCellSearchObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames()
 {
     return {SCSEARCHDESCRIPTOR_SERVICE, SCREPLACEDESCRIPTOR_SERVICE};
 }

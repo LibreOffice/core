@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
 #include <defaultsoptions.hxx>
@@ -168,6 +168,6 @@ void ScDefaultsCfg::SetOptions( const ScDefaultsOptions& rNew )
     SetModified();
 }
 
-void ScDefaultsCfg::Notify( const css::uno::Sequence< OUString >& ) {}
+void ScDefaultsCfg::Notify( const cpo::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

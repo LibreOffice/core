@@ -53,7 +53,7 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext(
         css::uno::Reference< css::uno::XComponentContext > const & xContext ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext ) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext ) override;
 };
 
 void SingletonFactory::disposing()
@@ -68,11 +68,11 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWith
     cpo::uno::Any arg( css::beans::NamedValue( u"UnoVirtualMachine"_ustr, cpo::uno::Any( handle ) ) );
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.java.JavaVirtualMachine"_ustr,
-        css::uno::Sequence< cpo::uno::Any >( &arg, 1 ), xContext );
+        cpo::uno::Sequence< cpo::uno::Any >( &arg, 1 ), xContext );
 }
 
 css::uno::Reference< css::uno::XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext )
+    cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< css::uno::XComponentContext > const & xContext )
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.java.JavaVirtualMachine"_ustr,

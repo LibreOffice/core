@@ -227,7 +227,7 @@ cpo::uno::Any SAL_CALL SvxUnoNameItemTable::getByName( const OUString& aApiName 
     throw container::NoSuchElementException();
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
 {
     SolarMutexGuard aGuard;
 

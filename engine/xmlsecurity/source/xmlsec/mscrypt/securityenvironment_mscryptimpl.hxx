@@ -80,13 +80,13 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         virtual ~SecurityEnvironment_MSCryptImpl() override;
 
         //Methods from XSecurityEnvironment
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override
-        { return css::uno::Sequence< css::uno::Reference< css::security::XCertificate > >(); }
+        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override
+        { return cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > >(); }
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
             const OUString& issuerName,
-            const css::uno::Sequence< sal_Int8 >& serialNumber ) override;
+            const cpo::uno::Sequence< sal_Int8 >& serialNumber ) override;
 
         /// @throws css::uno::SecurityException
         /// @throws css::uno::RuntimeException
@@ -94,18 +94,18 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
             const OUString& issuerName,
             const OUString& serialNumber ) ;
 
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
+        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
             const css::uno::Reference< css::security::XCertificate >& beginCert ) override;
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw(
-            const css::uno::Sequence< sal_Int8 >& rawCertificate ) override;
+            const cpo::uno::Sequence< sal_Int8 >& rawCertificate ) override;
 
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii(
             const OUString& asciiCertificate ) override;
 
         virtual ::sal_Int32 SAL_CALL verifyCertificate(
             const css::uno::Reference< css::security::XCertificate >& xCert,
-            const css::uno::Sequence< css::uno::Reference<
+            const cpo::uno::Sequence< css::uno::Reference<
             css::security::XCertificate > >& intermediateCertificates) override;
 
         virtual ::sal_Int32 SAL_CALL getCertificateCharacters(
@@ -121,7 +121,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
             const OUString& ServiceName
         ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException

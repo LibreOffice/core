@@ -33,7 +33,7 @@ using namespace cpo::uno;
     ParameterSubstitution::ParameterSubstitution(css::uno::Reference< css::uno::XComponentContext > _xContext ) : m_xContext(std::move(_xContext))
     {
     }
-    void SAL_CALL ParameterSubstitution::initialize( const uno::Sequence< cpo::uno::Any >& _aArguments )
+    void SAL_CALL ParameterSubstitution::initialize( const cpo::uno::Sequence< cpo::uno::Any >& _aArguments )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         comphelper::SequenceAsHashMap aArgs(_aArguments);
@@ -99,7 +99,7 @@ using namespace cpo::uno;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_dbtools_ParameterSubstitution_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new connectivity::ParameterSubstitution(context));
 }

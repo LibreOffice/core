@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/document/XDocumentRevisionListPersistence.hpp>
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -32,11 +32,11 @@
 class XMLVersionListExport final : public SvXMLExport
 {
 private:
-    const css::uno::Sequence < css::util::RevisionTag >& maVersions;
+    const cpo::uno::Sequence < css::util::RevisionTag >& maVersions;
 public:
     XMLVersionListExport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Sequence < css::util::RevisionTag >& rVersions,
+        const cpo::uno::Sequence < css::util::RevisionTag >& rVersions,
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler > const &rHandler );
 
@@ -49,7 +49,7 @@ public:
 class XMLVersionListImport final : public SvXMLImport
 {
 private:
-    css::uno::Sequence < css::util::RevisionTag >& maVersions;
+    cpo::uno::Sequence < css::util::RevisionTag >& maVersions;
 
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
@@ -58,10 +58,10 @@ public:
 
     XMLVersionListImport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        css::uno::Sequence < css::util::RevisionTag >& rVersions );
+        cpo::uno::Sequence < css::util::RevisionTag >& rVersions );
     virtual ~XMLVersionListImport() noexcept override;
 
-    css::uno::Sequence < css::util::RevisionTag >&
+    cpo::uno::Sequence < css::util::RevisionTag >&
         GetList() { return maVersions; }
 };
 
@@ -99,14 +99,14 @@ public:
 class XMLVersionListPersistence final : public ::cppu::WeakImplHelper< css::document::XDocumentRevisionListPersistence, css::lang::XServiceInfo >
 {
 public:
-    virtual css::uno::Sequence< css::util::RevisionTag > SAL_CALL load( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual void SAL_CALL store( const css::uno::Reference< css::embed::XStorage >& Storage, const css::uno::Sequence< css::util::RevisionTag >& List ) override;
+    virtual cpo::uno::Sequence< css::util::RevisionTag > SAL_CALL load( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual void SAL_CALL store( const css::uno::Reference< css::embed::XStorage >& Storage, const cpo::uno::Sequence< css::util::RevisionTag >& List ) override;
 
     OUString SAL_CALL getImplementationName() override;
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

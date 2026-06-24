@@ -25,7 +25,7 @@
 #include <ucbhelper/content.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <o3tl/typed_flags_set.hxx>
@@ -81,8 +81,8 @@ static std::vector< OUString > GetMultiPaths_Impl(
     DictionaryPathFlags nPathFlags )
 {
     std::vector< OUString >     aRes;
-    uno::Sequence< OUString >   aInternalPaths;
-    uno::Sequence< OUString >   aUserPaths;
+    cpo::uno::Sequence< OUString >   aInternalPaths;
+    cpo::uno::Sequence< OUString >   aUserPaths;
     OUString                    aWritablePath;
 
     bool bSuccess = true;

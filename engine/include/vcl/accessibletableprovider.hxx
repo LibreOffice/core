@@ -75,8 +75,8 @@ public:
     /** @return  <TRUE/>, if the row is selected. */
     virtual bool                    IsRowSelected( sal_Int32 _nRow ) const = 0;
     virtual bool                    IsColumnSelected( sal_Int32 _nColumnPos ) const = 0;
-    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
-    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
+    virtual void                    GetAllSelectedRows( cpo::uno::Sequence< sal_Int32 >& _rRows ) const = 0;
+    virtual void                    GetAllSelectedColumns( cpo::uno::Sequence< sal_Int32 >& _rColumns ) const = 0;
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;

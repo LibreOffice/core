@@ -174,7 +174,7 @@ bool ScServerObject::GetData(
             OString aByteData;
             if( aObj.ExportByteString( aByteData, osl_getThreadTextEncoding(), SotClipboardFormatId::SYLK ) )
             {
-                rData <<= css::uno::Sequence< sal_Int8 >(
+                rData <<= cpo::uno::Sequence< sal_Int8 >(
                                         reinterpret_cast<const sal_Int8*>(aByteData.getStr()),
                                         aByteData.getLength() + 1 );
                 return true;

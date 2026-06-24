@@ -28,7 +28,7 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -42,7 +42,7 @@ using namespace com::sun::star::uno;
 namespace apitest
 {
 void XDocumentAuditing::dispatch(const uno::Reference<frame::XFrame>& xFrame,
-                                 const uno::Sequence<beans::PropertyValue>& rArguments)
+                                 const cpo::uno::Sequence<beans::PropertyValue>& rArguments)
 {
     const uno::Reference<uno::XComponentContext>& xContext
         = ::comphelper::getProcessComponentContext();
@@ -95,7 +95,7 @@ void XDocumentAuditing::testRefreshArrows()
     if (xDrawPage->hasElements())
         nDrawPageElementCount = xDrawPage->getCount();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValue{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValue{ comphelper::makePropertyValue(
         u"AutoRefreshArrows"_ustr, false) };
     uno::Reference<frame::XModel> xModel(xDocumentAuditing, UNO_QUERY_THROW);
     dispatch(xModel->getCurrentController()->getFrame(), aPropertyValue);

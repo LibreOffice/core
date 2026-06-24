@@ -31,7 +31,7 @@
 #include <optional>
 
 namespace com::sun::star::embed { struct VerbDescriptor; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 class SfxItemPool;
 class SfxPoolItem;
@@ -429,8 +429,8 @@ public:
     void                        PutItem( const SfxPoolItem& rItem );
 
     // TODO/CLEANUP: still needed?!
-    void SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >& aVerbs);
-    const css::uno::Sequence < css::embed::VerbDescriptor >& GetVerbs() const;
+    void SetVerbs(const cpo::uno::Sequence < css::embed::VerbDescriptor >& aVerbs);
+    const cpo::uno::Sequence < css::embed::VerbDescriptor >& GetVerbs() const;
     void                        VerbExec (SfxRequest&);
     static void                 VerbState (SfxItemSet&);
     SAL_DLLPRIVATE const SfxSlot* GetVerbSlot_Impl(sal_uInt16 nId) const;

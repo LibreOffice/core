@@ -41,7 +41,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
 {
     // Load a document and select the first shape.
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
         u"ReadOnly"_ustr, true) };
     loadWithParams(u"private:factory/simpress"_ustr, aArgs);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
         = m_directories.getURLFromWorkdir(u"CppunitTest/sfx2_doc.test.user/test%25C3%25Bf");
     osl::Directory::create(aTargetDir);
     OUString aTargetFile = aTargetDir + "/test.odt";
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
         u"FilterName"_ustr, u"writer8"_ustr) };
     pBaseModel->storeAsURL(aTargetFile, aArgs);
 
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
     loadFromURL(aTargetFile);
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     OUString aPdfTarget = aTargetDir + "/test.pdf";
-    css::uno::Sequence<css::beans::PropertyValue> aPdfArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<css::beans::PropertyValue> aPdfArgs{ comphelper::makePropertyValue(
         u"FilterName"_ustr, u"writer_pdf_Export"_ustr) };
     // Without the accompanying fix in place, this test would have failed on Windows with:
     // An uncaught exception of type com.sun.star.io.IOException
@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSetDocumentPropertiesUpdate)
     }
 }
 )json");
-    uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:SetDocumentProperties"_ustr, aArgs);
 
     // Then make sure that OTHER is still there and that ZOTERO_PREF_1 + ZOTERO_PREF_2 gets updated

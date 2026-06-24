@@ -51,13 +51,13 @@ public:
     virtual bool SAL_CALL
                         supportsService( const OUString& rService ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
                         getSupportedServiceNames() override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
 
     virtual void SAL_CALL initialize(
-                            const css::uno::Sequence< cpo::uno::Any >& rArgs ) override;
+                            const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
     // com.sun.star.sheet.XFilterFormulaParser interface ----------------------
 
@@ -66,14 +66,14 @@ public:
 
     // com.sun.star.sheet.XFormulaParser interface ----------------------------
 
-    virtual css::uno::Sequence< css::sheet::FormulaToken > SAL_CALL
+    virtual cpo::uno::Sequence< css::sheet::FormulaToken > SAL_CALL
                         parseFormula(
                             const OUString& rFormula,
                             const css::table::CellAddress& rReferencePos ) override;
 
     virtual OUString SAL_CALL
                         printFormula(
-                            const css::uno::Sequence< css::sheet::FormulaToken >& rTokens,
+                            const cpo::uno::Sequence< css::sheet::FormulaToken >& rTokens,
                             const css::table::CellAddress& rReferencePos ) override;
 
 private:

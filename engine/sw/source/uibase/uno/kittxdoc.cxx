@@ -626,7 +626,7 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             if (xTitle.is())
             {
                 OUStringBuffer aTitle;
-                const uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
+                const cpo::uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
                     = xTitle->getText();
                 for (auto const& fs : aFSSeq)
                     aTitle.append(fs->getString());
@@ -642,7 +642,7 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             if (xSubTitle.is())
             {
                 OUStringBuffer aSubTitle;
-                const uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
+                const cpo::uno::Sequence<uno::Reference<chart2::XFormattedString>> aFSSeq
                     = xSubTitle->getText();
                 for (auto const& fs : aFSSeq)
                     aSubTitle.append(fs->getString());
@@ -651,7 +651,7 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
         }
 
         {
-            uno::Sequence<OUString> aRowDesc = xDataArray->getRowDescriptions();
+            cpo::uno::Sequence<OUString> aRowDesc = xDataArray->getRowDescriptions();
             auto aRowDescNode = rJsonWriter.startArray("RowDescriptions");
             for (int j = 0; j < aRowDesc.getLength(); j++)
             {
@@ -659,7 +659,7 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             }
         }
         {
-            uno::Sequence<OUString> aColDesc = xDataArray->getColumnDescriptions();
+            cpo::uno::Sequence<OUString> aColDesc = xDataArray->getColumnDescriptions();
             auto aColDescNode = rJsonWriter.startArray("ColumnDescriptions");
             for (int j = 0; j < aColDesc.getLength(); j++)
             {
@@ -667,7 +667,7 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, const SwDocShell* pDo
             }
         }
         {
-            uno::Sequence<uno::Sequence<double>> aData = xDataArray->getData();
+            cpo::uno::Sequence<cpo::uno::Sequence<double>> aData = xDataArray->getData();
             auto aDataValuesNode = rJsonWriter.startArray("DataValues");
             for (int j = 0; j < aData.getLength(); j++)
             {
@@ -714,7 +714,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     OUString aDescription = xDocProps->getDescription();
     rJsonWriter.put("Description", aDescription);
 
-    uno::Sequence<OUString> aKeywords = xDocProps->getKeywords();
+    cpo::uno::Sequence<OUString> aKeywords = xDocProps->getKeywords();
     {
         auto aKeywordsNode = rJsonWriter.startArray("Keywords");
         for (int i = 0; i < aKeywords.getLength(); i++)
@@ -760,7 +760,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     OUString aDefaultTarget = xDocProps->getDefaultTarget();
     rJsonWriter.put("DefaultTarget", aDefaultTarget);
 
-    uno::Sequence<beans::NamedValue> aDocumentStatistics = xDocProps->getDocumentStatistics();
+    cpo::uno::Sequence<beans::NamedValue> aDocumentStatistics = xDocProps->getDocumentStatistics();
     {
         auto aDocumentStatisticsNode = rJsonWriter.startNode("DocumentStatistics");
         for (int i = 0; i < aDocumentStatistics.getLength(); i++)
@@ -780,7 +780,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     rJsonWriter.put("EditingDuration", aEditingDuration);
 
     //Properties from XDocumentProperties2
-    uno::Sequence<OUString> aContributor = xDocProps->getContributor();
+    cpo::uno::Sequence<OUString> aContributor = xDocProps->getContributor();
     {
         auto aContributorNode = rJsonWriter.startArray("Contributor");
         for (int i = 0; i < aContributor.getLength(); i++)
@@ -795,7 +795,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     OUString aIdentifier = xDocProps->getIdentifier();
     rJsonWriter.put("Identifier", aIdentifier);
 
-    uno::Sequence<OUString> aPublisher = xDocProps->getPublisher();
+    cpo::uno::Sequence<OUString> aPublisher = xDocProps->getPublisher();
     {
         auto aPublisherNode = rJsonWriter.startArray("Publisher");
         for (int i = 0; i < aPublisher.getLength(); i++)
@@ -804,7 +804,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
         }
     }
 
-    uno::Sequence<OUString> aRelation = xDocProps->getRelation();
+    cpo::uno::Sequence<OUString> aRelation = xDocProps->getRelation();
     {
         auto aRelationNode = rJsonWriter.startArray("Relation");
         for (int i = 0; i < aRelation.getLength(); i++)
@@ -830,7 +830,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     if (aUserDefinedPropertySet.is())
     {
         auto aRelationNode = rJsonWriter.startNode("UserDefinedProperties");
-        const uno::Sequence<beans::Property> aProperties
+        const cpo::uno::Sequence<beans::Property> aProperties
             = aUserDefinedPropertySet->getPropertySetInfo()->getProperties();
         for (const beans::Property& rProperty : aProperties)
         {
@@ -1072,7 +1072,7 @@ void GetDocStructureTrackChanges(tools::JsonWriter& rJsonWriter, SwDocShell* pDo
         }
         // UNO_NAME_REDLINE_IDENTIFIER: OUString (the value of a pointer, not persistent)
         // UNO_NAME_REDLINE_MOVED_ID: sal_uInt32; 0 == not moved, 1 == moved, but don't have its pair, 2+ == unique ID
-        // UNO_NAME_REDLINE_SUCCESSOR_DATA: uno::Sequence<beans::PropertyValue>
+        // UNO_NAME_REDLINE_SUCCESSOR_DATA: cpo::uno::Sequence<beans::PropertyValue>
         // UNO_NAME_IS_IN_HEADER_FOOTER: bool
         // UNO_NAME_MERGE_LAST_PARA: bool
     }

@@ -909,7 +909,7 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
     }
 }
 
-void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq)
+void ScPreviewShell::WriteUserDataSequence(cpo::uno::Sequence < beans::PropertyValue >& rSeq)
 {
     // tdf#130559: don't export preview view data if active
     if (comphelper::IsContextFlagActive(u"NoPreviewData"_ustr))
@@ -930,7 +930,7 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
         pDrawLayer->WriteUserDataSequence(rSeq);
 }
 
-void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq)
+void ScPreviewShell::ReadUserDataSequence(const cpo::uno::Sequence < beans::PropertyValue >& rSeq)
 {
     for (const auto& propval : rSeq)
     {

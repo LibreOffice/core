@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
 namespace
@@ -166,7 +166,7 @@ void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const OUString& /*
 
 //XMultiPropertySet
 //getPropertySetInfo() already declared in XPropertySet
-void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString >& rNameSeq, const uno::Sequence< cpo::uno::Any >& rValueSeq )
+void SAL_CALL UpDownBarWrapper::setPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq, const cpo::uno::Sequence< cpo::uno::Any >& rValueSeq )
 {
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
@@ -183,7 +183,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString
     }
     //todo: store unknown properties elsewhere
 }
-uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -198,7 +198,7 @@ uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( con
     }
     return aRetSeq;
 }
-void SAL_CALL UpDownBarWrapper::addPropertiesChangeListener( const uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void SAL_CALL UpDownBarWrapper::addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
@@ -206,7 +206,7 @@ void SAL_CALL UpDownBarWrapper::removePropertiesChangeListener( const uno::Refer
 {
     OSL_FAIL("not implemented");
 }
-void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
+void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
 }
@@ -222,7 +222,7 @@ beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const OUString
 
     return beans::PropertyState_DIRECT_VALUE;
 }
-uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropertyStates( const uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropertyStates( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< beans::PropertyState > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -267,14 +267,14 @@ void SAL_CALL UpDownBarWrapper::setAllPropertiesToDefault(  )
         setPropertyToDefault( prop.Name );
     }
 }
-void SAL_CALL UpDownBarWrapper::setPropertiesToDefault( const uno::Sequence< OUString >& rNameSeq )
+void SAL_CALL UpDownBarWrapper::setPropertiesToDefault( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     for(OUString const & s : rNameSeq)
     {
         setPropertyToDefault( s );
     }
 }
-uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const uno::Sequence< OUString >& rNameSeq )
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const cpo::uno::Sequence< OUString >& rNameSeq )
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.hasElements() )
@@ -300,7 +300,7 @@ bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL UpDownBarWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UpDownBarWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartArea"_ustr,

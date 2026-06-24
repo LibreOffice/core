@@ -23,7 +23,7 @@
 #include <unordered_map>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -34,8 +34,8 @@ namespace chart
 
 typedef std::unordered_map<OUString, OUString> tPropertyNameMap;
 typedef std::unordered_map<OUString, cpo::uno::Any> tPropertyNameValueMap;
-typedef css::uno::Sequence< OUString >                   tNameSequence;
-typedef css::uno::Sequence< cpo::uno::Any > tAnySequence;
+typedef cpo::uno::Sequence< OUString >                   tNameSequence;
+typedef cpo::uno::Sequence< cpo::uno::Any > tAnySequence;
 
 /**
  * PropertyMapper provides easy mapping of the property names of various
@@ -61,7 +61,7 @@ public:
      * a sequence of beans::PropertyValue. For use when passing
      * data to css::text::XTextPortionAppend.
      */
-    static css::uno::Sequence<css::beans::PropertyValue> getPropVals(
+    static cpo::uno::Sequence<css::beans::PropertyValue> getPropVals(
           const css::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap );
 

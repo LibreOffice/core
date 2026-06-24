@@ -37,7 +37,7 @@ enum SchXMLCellType
 struct SchXMLCell
 {
     OUString aString;
-    css::uno::Sequence< OUString > aComplexString;
+    cpo::uno::Sequence< OUString > aComplexString;
     double fValue;
     SchXMLCellType eType;
     OUString aRangeId;

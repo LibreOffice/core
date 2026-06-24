@@ -25,7 +25,7 @@
 #include <xmloff/xmlerror.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
@@ -39,7 +39,7 @@
 
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::xml::dom::DocumentBuilder;
@@ -188,7 +188,7 @@ void DomBuilderContext::HandleAttributes(
             break;
         }
     }
-    const css::uno::Sequence< css::xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
+    const cpo::uno::Sequence< css::xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
     for ( const auto& rUnknownAttrib : unknownAttribs )
     {
         // create attribute node and set value

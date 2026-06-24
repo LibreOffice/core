@@ -47,7 +47,7 @@ class TVFactory final : public cppu::WeakImplHelper <
         virtual bool SAL_CALL
         supportsService( const OUString& ServiceName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
         // XMultiServiceFactory
@@ -59,9 +59,9 @@ class TVFactory final : public cppu::WeakImplHelper <
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
             const OUString& ServiceSpecifier,
-            const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+            const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames( ) override;
 
     private:

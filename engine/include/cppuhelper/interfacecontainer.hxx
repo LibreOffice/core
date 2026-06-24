@@ -55,13 +55,13 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMu
 
 
 template< class key , class hashImpl , class equalImpl >
-inline css::uno::Sequence< key > OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainedTypes() const
+inline cpo::uno::Sequence< key > OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::getContainedTypes() const
 {
     ::osl::MutexGuard aGuard( rMutex );
     typename InterfaceMap::size_type nSize = m_pMap->size();
     if( nSize != 0 )
     {
-        css::uno::Sequence< key > aInterfaceTypes( nSize );
+        cpo::uno::Sequence< key > aInterfaceTypes( nSize );
         key * pArray = aInterfaceTypes.getArray();
 
         typename InterfaceMap::iterator iter = m_pMap->begin();
@@ -78,11 +78,11 @@ inline css::uno::Sequence< key > OMultiTypeInterfaceContainerHelperVar< key , ha
         }
         if( i != nSize ) {
             // may be empty container, reduce the sequence to the right size
-            aInterfaceTypes = css::uno::Sequence<key>( pArray, i );
+            aInterfaceTypes = cpo::uno::Sequence<key>( pArray, i );
         }
         return aInterfaceTypes;
     }
-    return css::uno::Sequence<key>();
+    return cpo::uno::Sequence<key>();
 }
 
 

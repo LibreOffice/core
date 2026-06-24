@@ -62,7 +62,7 @@ public:
 
     // ScVbaNames_BASE
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 };
 

@@ -313,7 +313,7 @@ static cpo::uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxIte
 
         case FN_UNO_ANCHOR_TYPES:
         {
-            uno::Sequence<text::TextContentAnchorType> aTypes{text::TextContentAnchorType_AT_PARAGRAPH};
+            cpo::uno::Sequence<text::TextContentAnchorType> aTypes{text::TextContentAnchorType_AT_PARAGRAPH};
             return cpo::uno::Any(aTypes);
         }
 
@@ -622,7 +622,7 @@ static void lcl_GetTableSeparators(cpo::uno::Any& rRet, SwTable const * pTable, 
     pTable->GetTabCols( aCols, pBox, false, bRow );
 
     const size_t nSepCount = aCols.Count();
-    uno::Sequence< text::TableColumnSeparator> aColSeq(nSepCount);
+    cpo::uno::Sequence< text::TableColumnSeparator> aColSeq(nSepCount);
     text::TableColumnSeparator* pArray = aColSeq.getArray();
     bool bError = false;
     for(size_t i = 0; i < nSepCount; ++i)
@@ -656,7 +656,7 @@ static void lcl_SetTableSeparators(const cpo::uno::Any& rVal, SwTable* pTable, S
         return;
 
     auto pSepSeq =
-                o3tl::tryAccess<uno::Sequence<text::TableColumnSeparator>>(rVal);
+                o3tl::tryAccess<cpo::uno::Sequence<text::TableColumnSeparator>>(rVal);
     if(!pSepSeq || static_cast<size_t>(pSepSeq->getLength()) != nOldCount)
         return;
     SwTabCols aCols(aOldCols);
@@ -754,7 +754,7 @@ SwXCell::~SwXCell()
     EndListeningAll();
 }
 
-uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  )
+cpo::uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  )
 {
     return comphelper::concatSequences(
             SwXCellBaseClass::getTypes(),
@@ -762,9 +762,9 @@ uno::Sequence< uno::Type > SAL_CALL SwXCell::getTypes(  )
         );
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwXCell::getImplementationId(  )
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SwXCell::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL SwXCell::acquire(  ) noexcept
@@ -965,7 +965,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const cpo::uno::An
     else if(rPropertyName == "TableRedlineParams")
     {
         // Get the table row properties
-        uno::Sequence<beans::PropertyValue> tableCellProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
+        cpo::uno::Sequence<beans::PropertyValue> tableCellProperties = aValue.get< cpo::uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap(tableCellProperties);
         OUString sRedlineType;
         if(!(aPropMap.getValue(u"RedlineType"_ustr) >>= sRedlineType))
@@ -1233,7 +1233,7 @@ OUString SwXCell::getImplementationName()
 bool SwXCell::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
-uno::Sequence< OUString > SwXCell::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXCell::getSupportedServiceNames()
     { return {u"com.sun.star.text.CellProperties"_ustr}; }
 
 OUString SwXTextTableRow::getImplementationName()
@@ -1242,7 +1242,7 @@ OUString SwXTextTableRow::getImplementationName()
 bool SwXTextTableRow::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
-uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextTableRow::getSupportedServiceNames()
     { return {u"com.sun.star.text.TextTableRow"_ustr}; }
 
 
@@ -1279,7 +1279,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const cpo:
     if  ( rPropertyName == "TableRedlineParams" )
     {
         // Get the table row properties
-        uno::Sequence< beans::PropertyValue > tableRowProperties = aValue.get< uno::Sequence< beans::PropertyValue > >();
+        cpo::uno::Sequence< beans::PropertyValue > tableRowProperties = aValue.get< cpo::uno::Sequence< beans::PropertyValue > >();
         comphelper::SequenceAsHashMap aPropMap( tableRowProperties );
         OUString sRedlineType;
         if( !(aPropMap.getValue(u"RedlineType"_ustr) >>= sRedlineType) )
@@ -1443,7 +1443,7 @@ SwDoc*              SwXTextTableCursor::GetDoc()        { return &GetFrameFormat
 const SwUnoCursor&    SwXTextTableCursor::GetCursor() const { return *m_pUnoCursor; }
 SwUnoCursor&          SwXTextTableCursor::GetCursor()       { return *m_pUnoCursor; }
 
-uno::Sequence<OUString> SwXTextTableCursor::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SwXTextTableCursor::getSupportedServiceNames()
     { return {u"com.sun.star.text.TextTableCursor"_ustr}; }
 
 SwXTextTableCursor::SwXTextTableCursor(SwFrameFormat* pFrameFormat, SwTableBox const* pBox)
@@ -2073,7 +2073,7 @@ rtl::Reference<SwXCell> SwXTextTable::getSwCellByName(const OUString& sCellName)
     return SwXCell::CreateXCell(pFormat, pBox);
 }
 
-uno::Sequence<OUString> SwXTextTable::getCellNames()
+cpo::uno::Sequence<OUString> SwXTextTable::getCellNames()
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat(GetFrameFormat());
@@ -2301,7 +2301,7 @@ uno::Reference<table::XCellRange> SwXTextTable::getCellRangeByName(const OUStrin
     return GetRangeByName(pFormat, pTable, sTLName, sBRName, aDesc);
 }
 
-uno::Sequence< uno::Sequence< cpo::uno::Any > > SAL_CALL SwXTextTable::getDataArray()
+cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > SAL_CALL SwXTextTable::getDataArray()
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2311,7 +2311,7 @@ uno::Sequence< uno::Sequence< cpo::uno::Any > > SAL_CALL SwXTextTable::getDataAr
     return xAllRange->getDataArray();
 }
 
-void SAL_CALL SwXTextTable::setDataArray(const uno::Sequence< uno::Sequence< cpo::uno::Any > >& rArray)
+void SAL_CALL SwXTextTable::setDataArray(const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& rArray)
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2321,7 +2321,7 @@ void SAL_CALL SwXTextTable::setDataArray(const uno::Sequence< uno::Sequence< cpo
     return xAllRange->setDataArray(rArray);
 }
 
-uno::Sequence< uno::Sequence< double > > SwXTextTable::getData()
+cpo::uno::Sequence< cpo::uno::Sequence< double > > SwXTextTable::getData()
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2333,7 +2333,7 @@ uno::Sequence< uno::Sequence< double > > SwXTextTable::getData()
     return xAllRange->getData();
 }
 
-void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData)
+void SwXTextTable::setData(const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rData)
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2347,7 +2347,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
     lcl_SendChartEvent(m_pImpl->m_Mutex, *this, m_pImpl->m_ChartListeners);
 }
 
-uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
+cpo::uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2359,7 +2359,7 @@ uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
     return xAllRange->getRowDescriptions();
 }
 
-void SwXTextTable::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
+void SwXTextTable::setRowDescriptions(const cpo::uno::Sequence<OUString>& rRowDesc)
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2371,7 +2371,7 @@ void SwXTextTable::setRowDescriptions(const uno::Sequence<OUString>& rRowDesc)
     xAllRange->setRowDescriptions(rRowDesc);
 }
 
-uno::Sequence<OUString> SwXTextTable::getColumnDescriptions()
+cpo::uno::Sequence<OUString> SwXTextTable::getColumnDescriptions()
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2383,7 +2383,7 @@ uno::Sequence<OUString> SwXTextTable::getColumnDescriptions()
     return xAllRange->getColumnDescriptions();
 }
 
-void SwXTextTable::setColumnDescriptions(const uno::Sequence<OUString>& rColumnDesc)
+void SwXTextTable::setColumnDescriptions(const cpo::uno::Sequence<OUString>& rColumnDesc)
 {
     SolarMutexGuard aGuard;
     std::pair<sal_uInt16, sal_uInt16> const RowsAndColumns(SwXTextTable::Impl::ThrowIfComplex(*this));
@@ -2425,14 +2425,14 @@ double SwXTextTable::getNotANumber()
     return DBL_MIN;
 }
 
-uno::Sequence< beans::PropertyValue > SwXTextTable::createSortDescriptor()
+cpo::uno::Sequence< beans::PropertyValue > SwXTextTable::createSortDescriptor()
 {
     SolarMutexGuard aGuard;
 
     return SwUnoCursorHelper::CreateSortDescriptor(true);
 }
 
-void SwXTextTable::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
+void SwXTextTable::sort(const cpo::uno::Sequence< beans::PropertyValue >& rDescriptor)
 {
     SolarMutexGuard aGuard;
     SwSortOptions aSortOpt;
@@ -3088,7 +3088,7 @@ OUString SAL_CALL SwXTextTable::getImplementationName()
 bool SwXTextTable::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
-uno::Sequence<OUString> SwXTextTable::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SwXTextTable::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.document.LinkTarget"_ustr,
@@ -3136,10 +3136,10 @@ public:
 
     std::tuple<sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32> GetLabelCoordinates(bool bRow);
 
-    uno::Sequence<OUString> GetLabelDescriptions(SwXCellRange & rThis, bool bRow);
+    cpo::uno::Sequence<OUString> GetLabelDescriptions(SwXCellRange & rThis, bool bRow);
 
     void SetLabelDescriptions(SwXCellRange & rThis,
-            const css::uno::Sequence<OUString>& rDesc, bool bRow);
+            const cpo::uno::Sequence<OUString>& rDesc, bool bRow);
 
     sal_Int32 GetRowCount() const;
     sal_Int32 GetColumnCount() const;
@@ -3154,7 +3154,7 @@ OUString SwXCellRange::getImplementationName()
 bool SwXCellRange::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
-uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SwXCellRange::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.text.CellRange"_ustr,
@@ -3522,7 +3522,7 @@ void SwXCellRange::removeVetoableChangeListener(const OUString& /*PropertyName*/
     { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
 ///@see SwXCellRange::getData
-uno::Sequence<uno::Sequence<cpo::uno::Any>> SAL_CALL SwXCellRange::getDataArray()
+cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> SAL_CALL SwXCellRange::getDataArray()
 {
     SolarMutexGuard aGuard;
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
@@ -3530,12 +3530,12 @@ uno::Sequence<uno::Sequence<cpo::uno::Any>> SAL_CALL SwXCellRange::getDataArray(
     if(!nRowCount || !nColCount)
         throw uno::RuntimeException(u"Table too complex"_ustr, getXWeak());
     lcl_EnsureCoreConnected(m_pImpl->GetFrameFormat(), this);
-    uno::Sequence< uno::Sequence< cpo::uno::Any > > aRowSeq(nRowCount);
+    cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > aRowSeq(nRowCount);
     auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(auto& rRow : asNonConstRange(aRowSeq))
     {
-        rRow = uno::Sequence< cpo::uno::Any >(nColCount);
+        rRow = cpo::uno::Sequence< cpo::uno::Any >(nColCount);
         for(auto& rCellAny : asNonConstRange(rRow))
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
@@ -3549,7 +3549,7 @@ uno::Sequence<uno::Sequence<cpo::uno::Any>> SAL_CALL SwXCellRange::getDataArray(
 }
 
 ///@see SwXCellRange::setData
-void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< cpo::uno::Any > >& rArray)
+void SAL_CALL SwXCellRange::setDataArray(const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& rArray)
 {
     SolarMutexGuard aGuard;
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
@@ -3583,7 +3583,7 @@ void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< cpo
     }
 }
 
-uno::Sequence<uno::Sequence<double>> SAL_CALL
+cpo::uno::Sequence<cpo::uno::Sequence<double>> SAL_CALL
 SwXCellRange::getData()
 {
     SolarMutexGuard aGuard;
@@ -3599,12 +3599,12 @@ SwXCellRange::getData()
             nColCount-1, nRowCount-1), uno::UNO_QUERY_THROW);
         return xDataRange->getData();
     }
-    uno::Sequence< uno::Sequence< double > > vRows(nRowCount);
+    cpo::uno::Sequence< cpo::uno::Sequence< double > > vRows(nRowCount);
     auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(auto& rRow : asNonConstRange(vRows))
     {
-        rRow = uno::Sequence<double>(nColCount);
+        rRow = cpo::uno::Sequence<double>(nColCount);
         for(auto& rValue : asNonConstRange(rRow))
         {
             if(!(*pCurrentCell))
@@ -3617,7 +3617,7 @@ SwXCellRange::getData()
 }
 
 void SAL_CALL
-SwXCellRange::setData(const uno::Sequence< uno::Sequence<double> >& rData)
+SwXCellRange::setData(const cpo::uno::Sequence< cpo::uno::Sequence<double> >& rData)
 {
     SolarMutexGuard aGuard;
     const sal_Int32 nRowCount = m_pImpl->GetRowCount();
@@ -3667,7 +3667,7 @@ SwXCellRange::Impl::GetLabelCoordinates(bool bRow)
     return std::make_tuple(nLeft, nTop, nRight, nBottom);
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwXCellRange::Impl::GetLabelDescriptions(SwXCellRange & rThis, bool bRow)
 {
     SolarMutexGuard aGuard;
@@ -3680,24 +3680,24 @@ SwXCellRange::Impl::GetLabelDescriptions(SwXCellRange & rThis, bool bRow)
         return {};  // without labels we have no descriptions
     auto xLabelRange(rThis.getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
     auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->GetCells());
-    uno::Sequence<OUString> vResult(vCells.size());
+    cpo::uno::Sequence<OUString> vResult(vCells.size());
     std::transform(vCells.begin(), vCells.end(), vResult.getArray(),
         [](uno::Reference<table::XCell> xCell) -> OUString { return uno::Reference<text::XText>(xCell, uno::UNO_QUERY_THROW)->getString(); });
     return vResult;
 }
 
-uno::Sequence<OUString> SAL_CALL SwXCellRange::getRowDescriptions()
+cpo::uno::Sequence<OUString> SAL_CALL SwXCellRange::getRowDescriptions()
 {
     return m_pImpl->GetLabelDescriptions(*this, true);
 }
 
-uno::Sequence<OUString> SAL_CALL SwXCellRange::getColumnDescriptions()
+cpo::uno::Sequence<OUString> SAL_CALL SwXCellRange::getColumnDescriptions()
 {
     return m_pImpl->GetLabelDescriptions(*this, false);
 }
 
 void SwXCellRange::Impl::SetLabelDescriptions(SwXCellRange & rThis,
-        const uno::Sequence<OUString>& rDesc, bool bRow)
+        const cpo::uno::Sequence<OUString>& rDesc, bool bRow)
 {
     SolarMutexGuard aGuard;
     lcl_EnsureCoreConnected(GetFrameFormat(), &rThis);
@@ -3719,13 +3719,13 @@ void SwXCellRange::Impl::SetLabelDescriptions(SwXCellRange & rThis,
 }
 
 void SAL_CALL SwXCellRange::setRowDescriptions(
-        const uno::Sequence<OUString>& rRowDesc)
+        const cpo::uno::Sequence<OUString>& rRowDesc)
 {
     m_pImpl->SetLabelDescriptions(*this, rRowDesc, true);
 }
 
 void SAL_CALL SwXCellRange::setColumnDescriptions(
-        const uno::Sequence<OUString>& rColumnDesc)
+        const cpo::uno::Sequence<OUString>& rColumnDesc)
 {
     m_pImpl->SetLabelDescriptions(*this, rColumnDesc, false);
 }
@@ -3752,13 +3752,13 @@ bool SwXCellRange::isNotANumber(double /*fNumber*/)
 double SwXCellRange::getNotANumber()
     { throw uno::RuntimeException(u"Not implemented"_ustr, getXWeak()); }
 
-uno::Sequence< beans::PropertyValue > SwXCellRange::createSortDescriptor()
+cpo::uno::Sequence< beans::PropertyValue > SwXCellRange::createSortDescriptor()
 {
     SolarMutexGuard aGuard;
     return SwUnoCursorHelper::CreateSortDescriptor(true);
 }
 
-void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
+void SAL_CALL SwXCellRange::sort(const cpo::uno::Sequence< beans::PropertyValue >& rDescriptor)
 {
     SolarMutexGuard aGuard;
     SwSortOptions aSortOpt;
@@ -3833,7 +3833,7 @@ OUString SwXTableRows::getImplementationName()
 bool SwXTableRows::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
-uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTableRows::getSupportedServiceNames()
     { return { u"com.sun.star.text.TableRows"_ustr }; }
 
 
@@ -4001,7 +4001,7 @@ OUString SwXTableColumns::getImplementationName()
 bool SwXTableColumns::supportsService(const OUString& rServiceName)
     { return cppu::supportsService(this, rServiceName); }
 
-uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTableColumns::getSupportedServiceNames()
     { return { u"com.sun.star.text.TableColumns"_ustr}; }
 
 

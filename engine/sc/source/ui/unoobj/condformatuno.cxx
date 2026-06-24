@@ -123,7 +123,7 @@ std::span<const SfxItemPropertyMapEntry> getColorScalePropSet()
 {
     static const SfxItemPropertyMapEntry aColorScalePropertyMap_Impl[] =
     {
-        {u"ColorScaleEntries"_ustr, ColorScaleEntries, cppu::UnoType<uno::Sequence< sheet::XColorScaleEntry >>::get(), 0, 0 },
+        {u"ColorScaleEntries"_ustr, ColorScaleEntries, cppu::UnoType<cpo::uno::Sequence< sheet::XColorScaleEntry >>::get(), 0, 0 },
     };
     return aColorScalePropertyMap_Impl;
 }
@@ -169,7 +169,7 @@ std::span<const SfxItemPropertyMapEntry> getDataBarPropSet()
         {u"Color"_ustr, DataBar_Color, cppu::UnoType<sal_Int32>::get(), 0, 0},
         {u"AxisColor"_ustr, AxisColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
         {u"NegativeColor"_ustr, NegativeColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {u"DataBarEntries"_ustr, DataBarEntries, cppu::UnoType<uno::Sequence< sheet::XDataBarEntry >>::get(), 0, 0 },
+        {u"DataBarEntries"_ustr, DataBarEntries, cppu::UnoType<cpo::uno::Sequence< sheet::XDataBarEntry >>::get(), 0, 0 },
         {u"MinimumLength"_ustr, MinimumLength, cppu::UnoType<double>::get(), 0, 0 },
         {u"MaximumLength"_ustr, MaximumLength, cppu::UnoType<double>::get(), 0, 0 },
     };
@@ -221,7 +221,7 @@ std::span<const SfxItemPropertyMapEntry> getIconSetPropSet()
         {u"Icons"_ustr, Icons, cppu::UnoType<decltype(sheet::IconSetType::ICONSET_3SYMBOLS)>::get(), 0, 0 },
         {u"Reverse"_ustr, Reverse, cppu::UnoType<bool>::get(), 0, 0 },
         {u"ShowValue"_ustr, ShowValue, cppu::UnoType<bool>::get(), 0, 0 },
-        {u"IconSetEntries"_ustr, IconSetEntries, cppu::UnoType<uno::Sequence< sheet::XIconSetEntry >>::get(), 0, 0 },
+        {u"IconSetEntries"_ustr, IconSetEntries, cppu::UnoType<cpo::uno::Sequence< sheet::XIconSetEntry >>::get(), 0, 0 },
     };
     return aIconSetPropertyMap_Impl;
 }
@@ -341,7 +341,7 @@ sal_Int32 ScCondFormatsObj::createByRange(const uno::Reference< sheet::XSheetCel
     if (!xRanges.is())
         throw lang::IllegalArgumentException();
 
-    const uno::Sequence<table::CellRangeAddress> aRanges =
+    const cpo::uno::Sequence<table::CellRangeAddress> aRanges =
         xRanges->getRangeAddresses();
 
     ScRangeList aCoreRange;
@@ -369,12 +369,12 @@ void ScCondFormatsObj::removeByID(const sal_Int32 nID)
     pFormatList->erase(nID);
 }
 
-uno::Sequence<uno::Reference<sheet::XConditionalFormat> > ScCondFormatsObj::getConditionalFormats()
+cpo::uno::Sequence<uno::Reference<sheet::XConditionalFormat> > ScCondFormatsObj::getConditionalFormats()
 {
     SolarMutexGuard aGuard;
     ScConditionalFormatList* pFormatList = getCoreObject();
     size_t n = pFormatList->size();
-    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > aCondFormats(n);
+    cpo::uno::Sequence<uno::Reference<sheet::XConditionalFormat> > aCondFormats(n);
     std::transform(pFormatList->begin(), pFormatList->end(), aCondFormats.getArray(),
                    [this](const auto& rFormat)
                    { return uno::Reference(new ScCondFormatObj(mpDocShell, this, rFormat->GetKey())); });
@@ -573,7 +573,7 @@ void SAL_CALL ScCondFormatObj::setPropertyValue(
             if (aValue >>= xRange)
             {
                 ScConditionalFormat* pFormat = getCoreObject();
-                const uno::Sequence<table::CellRangeAddress> aRanges =
+                const cpo::uno::Sequence<table::CellRangeAddress> aRanges =
                     xRange->getRangeAddresses();
                 ScRangeList aTargetRange;
                 for (const auto& rRange : aRanges)
@@ -913,7 +913,7 @@ void SAL_CALL ScColorScaleFormatObj::setPropertyValue(
     {
         case ColorScaleEntries:
         {
-            uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
+            cpo::uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
             if (!(aValue >>= aEntries))
                 throw lang::IllegalArgumentException();
 
@@ -949,7 +949,7 @@ cpo::uno::Any SAL_CALL ScColorScaleFormatObj::getPropertyValue( const OUString& 
     {
         case ColorScaleEntries:
         {
-            uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries(getCoreObject()->size());
+            cpo::uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries(getCoreObject()->size());
             auto aEntriesRange = asNonConstRange(aEntries);
             for (size_t i = 0; i < getCoreObject()->size(); ++i)
             {
@@ -1240,7 +1240,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
         break;
         case DataBarEntries:
         {
-            uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries;
+            cpo::uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries;
             if (!(aValue >>= aEntries))
                 throw lang::IllegalArgumentException();
 
@@ -1337,7 +1337,7 @@ cpo::uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPr
         break;
         case DataBarEntries:
         {
-            uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries
+            cpo::uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries
             {
                 new ScDataBarEntryObj(this, 0),
                 new ScDataBarEntryObj(this, 1)
@@ -1580,7 +1580,7 @@ void SAL_CALL ScIconSetFormatObj::setPropertyValue(
         break;
         case IconSetEntries:
         {
-            uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries;
+            cpo::uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries;
             if (!(aValue >>= aEntries))
                 throw lang::IllegalArgumentException();
 
@@ -1634,7 +1634,7 @@ cpo::uno::Any SAL_CALL ScIconSetFormatObj::getPropertyValue( const OUString& aPr
         case IconSetEntries:
         {
             size_t nSize = getCoreObject()->size();
-            uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries(nSize);
+            cpo::uno::Sequence<uno::Reference<sheet::XIconSetEntry> > aEntries(nSize);
             auto aEntriesRange = asNonConstRange(aEntries);
             for (size_t i = 0; i < nSize; ++i)
             {

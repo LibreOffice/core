@@ -142,8 +142,8 @@ private:
     // The ScDocument implementation behind mxDocument
     ScDocument* mpDocument = nullptr;
     table::CellAddress maObjective;
-    uno::Sequence<table::CellAddress> maVariables;
-    uno::Sequence<sheet::SolverConstraint> maConstraints;
+    cpo::uno::Sequence<table::CellAddress> maVariables;
+    cpo::uno::Sequence<sheet::SolverConstraint> maConstraints;
     bool mbMaximize;
 
     // set via XPropertySet
@@ -156,7 +156,7 @@ private:
     bool mbSuccess;
     double mfResultValue;
 
-    uno::Sequence<double> maSolution;
+    cpo::uno::Sequence<double> maSolution;
     OUString maStatus;
 
     std::vector<Bound> maBounds;
@@ -206,7 +206,7 @@ public:
     // OPropertyArrayUsageHelper
     virtual cppu::IPropertyArrayHelper* createArrayHelper() const override
     {
-        uno::Sequence<beans::Property> aProperties;
+        cpo::uno::Sequence<beans::Property> aProperties;
         describeProperties(aProperties);
         return new cppu::OPropertyArrayHelper(aProperties);
     }
@@ -237,21 +237,22 @@ public:
         maObjective = rObjective;
     }
 
-    virtual uno::Sequence<table::CellAddress> SAL_CALL getVariables() override
+    virtual cpo::uno::Sequence<table::CellAddress> SAL_CALL getVariables() override
     {
         return maVariables;
     }
-    virtual void SAL_CALL setVariables(const uno::Sequence<table::CellAddress>& rVariables) override
+    virtual void SAL_CALL
+    setVariables(const cpo::uno::Sequence<table::CellAddress>& rVariables) override
     {
         maVariables = rVariables;
     }
 
-    virtual uno::Sequence<sheet::SolverConstraint> SAL_CALL getConstraints() override
+    virtual cpo::uno::Sequence<sheet::SolverConstraint> SAL_CALL getConstraints() override
     {
         return maConstraints;
     }
     virtual void SAL_CALL
-    setConstraints(const uno::Sequence<sheet::SolverConstraint>& rConstraints) override
+    setConstraints(const cpo::uno::Sequence<sheet::SolverConstraint>& rConstraints) override
     {
         maConstraints = rConstraints;
     }
@@ -262,7 +263,7 @@ public:
     virtual bool SAL_CALL getSuccess() override { return mbSuccess; }
     virtual double SAL_CALL getResultValue() override { return mfResultValue; }
 
-    virtual uno::Sequence<double> SAL_CALL getSolution() override { return maSolution; }
+    virtual cpo::uno::Sequence<double> SAL_CALL getSolution() override { return maSolution; }
 
     virtual void SAL_CALL solve() override;
 
@@ -308,7 +309,7 @@ public:
         return cppu::supportsService(this, rServiceName);
     }
 
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.sheet.Solver"_ustr };
     }
@@ -847,7 +848,7 @@ void SAL_CALL SwarmSolver::solve()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Calc_SwarmSolver_get_implementation(uno::XComponentContext*,
-                                                      uno::Sequence<cpo::uno::Any> const&)
+                                                      cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SwarmSolver());
 }

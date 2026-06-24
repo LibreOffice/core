@@ -173,7 +173,7 @@ bool SAL_CALL QtDragSource::supportsService(OUString const& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL QtDragSource::getSupportedServiceNames()
 {
     return { u"com.sun.star.datatransfer.dnd.QtDragSource"_ustr };
 }
@@ -193,7 +193,7 @@ bool SAL_CALL QtDropTarget::supportsService(OUString const& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL QtDropTarget::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL QtDropTarget::getSupportedServiceNames()
 {
     return { u"com.sun.star.datatransfer.dnd.QtDropTarget"_ustr };
 }

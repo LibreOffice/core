@@ -34,9 +34,9 @@ using namespace ::ooo::vba;
 
 //ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
 
-ScVbaGlobals::ScVbaGlobals( uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "ExcelDocumentContext" )
+ScVbaGlobals::ScVbaGlobals( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "ExcelDocumentContext" )
 {
-    uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
+    cpo::uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
     auto pInitArgs = aInitArgs.getArray();
     pInitArgs[ 0 ].Name = u"Application"_ustr;
     pInitArgs[ 0 ].Value <<= getApplication();
@@ -221,10 +221,10 @@ ScVbaGlobals::MenuBars( const cpo::uno::Any& aIndex )
     return getApplication()->MenuBars(aIndex);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 ScVbaGlobals::getAvailableServiceNames(  )
 {
-    static const uno::Sequence< OUString > serviceNames = comphelper::concatSequences(
+    static const cpo::uno::Sequence< OUString > serviceNames = comphelper::concatSequences(
         ScVbaGlobals_BASE::getAvailableServiceNames(),
         std::initializer_list<OUString>
         {
@@ -245,10 +245,10 @@ ScVbaGlobals::getServiceImplName()
     return u"ScVbaGlobals"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaGlobals::getServiceNames()
 {
-        static uno::Sequence< OUString > aServiceNames
+        static cpo::uno::Sequence< OUString > aServiceNames
         {
             u"ooo.vba.excel.Globals"_ustr
         };
@@ -258,7 +258,7 @@ ScVbaGlobals::getServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 ScVbaGlobals_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new ScVbaGlobals(arguments, context));
 }

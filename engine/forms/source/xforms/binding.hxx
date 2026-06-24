@@ -257,7 +257,7 @@ public:
 
 
     // the ID for XUnoTunnel calls
-    static css::uno::Sequence<sal_Int8> getUnoTunnelId();
+    static cpo::uno::Sequence<sal_Int8> getUnoTunnelId();
 
 
 private:
@@ -316,7 +316,7 @@ private:
 
 public:
 
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getSupportedValueTypes() override;
+    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getSupportedValueTypes() override;
 
     virtual bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
 
@@ -332,7 +332,7 @@ public:
 
     virtual OUString SAL_CALL getListEntry( sal_Int32 nPosition ) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getAllListEntries() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getAllListEntries() override;
 
     virtual void SAL_CALL addListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& ) override;
 
@@ -390,7 +390,7 @@ public:
     // XUnoTunnel
 
 
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& ) override;
+    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence<sal_Int8>& ) override;
 
 
     // XCloneable

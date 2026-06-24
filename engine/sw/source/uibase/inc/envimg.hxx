@@ -72,7 +72,7 @@ class SwEnvCfgItem final : public utl::ConfigItem
 private:
     SwEnvItem m_aEnvItem;
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
@@ -82,7 +82,7 @@ public:
 
     SwEnvItem& GetItem() {return m_aEnvItem;}
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

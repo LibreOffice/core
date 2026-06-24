@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
@@ -38,8 +38,8 @@ public:
     CharacterAttributesHelper(const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor);
 
     std::vector<css::beans::PropertyValue> GetCharacterAttributes();
-    css::uno::Sequence<css::beans::PropertyValue>
-    GetCharacterAttributes(const css::uno::Sequence<OUString>& aRequestedAttributes);
+    cpo::uno::Sequence<css::beans::PropertyValue>
+    GetCharacterAttributes(const cpo::uno::Sequence<OUString>& aRequestedAttributes);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

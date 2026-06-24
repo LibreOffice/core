@@ -41,7 +41,7 @@ using namespace com::sun::star::uno;
 using namespace cpo::uno;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 SelectorListBox::SelectorListBox(vcl::Window* pParent)
     : InterimItemWindow(pParent, u"modules/schart/ui/combobox.ui"_ustr, u"ComboBox"_ustr)
@@ -242,7 +242,7 @@ bool SAL_CALL ElementSelectorToolbarController::supportsService( const OUString&
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -304,7 +304,7 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_ElementSelectorToolbarController_get_implementation(css::uno::XComponentContext *,
-                                                                            css::uno::Sequence<cpo::uno::Any> const &)
+                                                                            cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::ElementSelectorToolbarController );
 }

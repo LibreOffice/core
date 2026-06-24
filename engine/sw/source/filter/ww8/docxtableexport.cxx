@@ -295,8 +295,8 @@ void DocxAttributeOutput::TableDefinition(
         {
             rtl::Reference<FastAttributeList> pAttributeList
                 = FastSerializerHelper::createAttrList();
-            const uno::Sequence<beans::PropertyValue> aAttributeList
-                = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue>>();
+            const cpo::uno::Sequence<beans::PropertyValue> aAttributeList
+                = rGrabBagElement.second.get<cpo::uno::Sequence<beans::PropertyValue>>();
 
             for (const auto& rAttribute : aAttributeList)
             {
@@ -331,8 +331,8 @@ void DocxAttributeOutput::TableDefinition(
         {
             rtl::Reference<FastAttributeList> attrListTablePos
                 = FastSerializerHelper::createAttrList();
-            const uno::Sequence<beans::PropertyValue> aTablePosition
-                = rGrabBagElement.second.get<uno::Sequence<beans::PropertyValue>>();
+            const cpo::uno::Sequence<beans::PropertyValue> aTablePosition
+                = rGrabBagElement.second.get<cpo::uno::Sequence<beans::PropertyValue>>();
             // look for a surrounding frame and take it's position values
             const ww8::Frame* pFrame = m_rExport.GetFloatingTableFrame();
             if (pFrame)

@@ -24,7 +24,7 @@
 
 #include <string_view>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -62,7 +62,7 @@ private:
     css::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
 
     std::shared_ptr<ModelData_Impl> m_xModelData;
-    css::uno::Sequence< css::beans::PropertyValue > m_aArgsSequence;
+    cpo::uno::Sequence< css::beans::PropertyValue > m_aArgsSequence;
 
     css::uno::Reference< css::container::XNameAccess > const & GetFilterConfiguration();
     css::uno::Reference< css::container::XContainerQuery > const & GetFilterQuery();
@@ -77,10 +77,10 @@ private:
 
     static bool FinishGUIStoreModel(::comphelper::SequenceAsHashMap::const_iterator& aFileNameIter,
                              ModelData_Impl& aModelData, bool bRemote, sal_Int16 nStoreMode,
-                             const css::uno::Sequence< css::beans::PropertyValue >& aFilterProps,
+                             const cpo::uno::Sequence< css::beans::PropertyValue >& aFilterProps,
                              bool bSetStandardName, bool bPreselectPassword, bool bDialogUsed,
                              std::u16string_view aFilterFromMediaDescr, std::u16string_view aOldFilterName,
-                             css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
+                             cpo::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                              OUString aFilterName,
                              SignatureState nScriptingSignatureState);
 
@@ -92,7 +92,7 @@ public:
     bool GUIStoreModel(
                     const css::uno::Reference< css::frame::XModel2 >& xModel,
                     std::u16string_view aSlotName,
-                    css::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
+                    cpo::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
                     SignatureState nDocumentSignatureState,
                     SignatureState nScriptingSignatureState,

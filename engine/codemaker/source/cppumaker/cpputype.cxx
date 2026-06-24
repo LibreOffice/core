@@ -720,7 +720,7 @@ void CppuType::dumpType(
     }
     for (sal_Int32 i = 0; i != k; ++i) {
         out << (cppuUnoType
-                ? "::cppu::UnoSequenceType" : "::css::uno::Sequence")
+                ? "::cppu::UnoSequenceType" : "::cpo::uno::Sequence")
             << "< ";
     }
     switch (m_typeMgr->getSort(n)) {
@@ -3498,7 +3498,7 @@ void ServiceType::dumpHppFile(
           << name_.replaceAll(".", "_dot_")
           << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
-          << "(::css::uno::XComponentContext *, ::css::uno::Sequence< "
+          << "(::css::uno::XComponentContext *, ::cpo::uno::Sequence< "
           "::cpo::uno::Any > const &);\n#endif\n";
     }
     o << "\n";
@@ -3538,7 +3538,7 @@ void ServiceType::dumpHppFile(
                       "static_cast< ::css::uno::XInterface * >((*"
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
-                  << (")(the_context.get(), ::css::uno::Sequence<"
+                  << (")(the_context.get(), ::cpo::uno::Sequence<"
                       " ::cpo::uno::Any >())), ::SAL_NO_ACQUIRE),"
                       " ::css::uno::UNO_QUERY);\n#else\n")
                   << indent() << "the_instance = ::css::uno::Reference< "
@@ -3600,7 +3600,7 @@ void ServiceType::dumpHppFile(
                 o << indent() << "assert(the_context.is());\n";
                 if (!rest && !cons.parameters.empty()) {
                     o << indent()
-                      << "::css::uno::Sequence< ::cpo::uno::Any > the_arguments("
+                      << "::cpo::uno::Sequence< ::cpo::uno::Any > the_arguments("
                       << cons.parameters.size() << ");\n";
                     o << indent()
                       << "::cpo::uno::Any* the_arguments_array = the_arguments.getArray();\n";
@@ -3666,7 +3666,7 @@ void ServiceType::dumpHppFile(
                           u2b(cons.parameters.back().name), "param",
                           codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
-                    o << "::css::uno::Sequence< ::cpo::uno::Any >()";
+                    o << "::cpo::uno::Sequence< ::cpo::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
@@ -3676,7 +3676,7 @@ void ServiceType::dumpHppFile(
                   << indent() << "if (init.is()) {\n"
                   << indent() << "    init->initialize(";
                 if (cons.parameters.empty()) {
-                    o << "::css::uno::Sequence< ::cpo::uno::Any >()";
+                    o << "::cpo::uno::Sequence< ::cpo::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
@@ -3693,7 +3693,7 @@ void ServiceType::dumpHppFile(
                           u2b(cons.parameters.back().name), "param",
                           codemaker::cpp::IdentifierTranslationMode::NonGlobal);
                 } else if (cons.parameters.empty()) {
-                    o << "::css::uno::Sequence< ::cpo::uno::Any >()";
+                    o << "::cpo::uno::Sequence< ::cpo::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
@@ -3804,7 +3804,7 @@ void SingletonType::dumpHppFile(
       << name_.replaceAll(".", "_dot_")
       << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
-      << "(::css::uno::XComponentContext *, ::css::uno::Sequence< "
+      << "(::css::uno::XComponentContext *, ::cpo::uno::Sequence< "
       "::cpo::uno::Any > const &);\n#endif\n";
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
@@ -3834,7 +3834,7 @@ void SingletonType::dumpHppFile(
           "static_cast< ::css::uno::XInterface * >((*"
           "LO_URE_CTOR_FUN_")
       << name_.replaceAll(".", "_dot_")
-      << (")(the_context.get(), ::css::uno::Sequence<"
+      << (")(the_context.get(), ::cpo::uno::Sequence<"
           " ::cpo::uno::Any >())), ::SAL_NO_ACQUIRE),"
           " ::css::uno::UNO_QUERY);\n#else\n")
       << indent() << ("the_context->getValueByName("

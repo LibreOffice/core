@@ -92,7 +92,7 @@ vcl::Region VCLUnoHelper::GetRegion( const css::uno::Reference< css::awt::XRegio
         aRegion = pVCLRegion->GetRegion();
     else
     {
-        const css::uno::Sequence< css::awt::Rectangle > aRects = rxRegion->getRectangles();
+        const cpo::uno::Sequence< css::awt::Rectangle > aRects = rxRegion->getRectangles();
         for ( const auto& rRect : aRects )
             aRegion.Union(vcl::unohelper::ConvertToVCLRect(rRect));
     }
@@ -128,8 +128,8 @@ OutputDevice* VCLUnoHelper::GetOutputDevice( const css::uno::Reference< css::awt
     return pOutDev;
 }
 
-tools::Polygon VCLUnoHelper::CreatePolygon( const css::uno::Sequence< sal_Int32 >& DataX,
-                                            const css::uno::Sequence< sal_Int32 >& DataY )
+tools::Polygon VCLUnoHelper::CreatePolygon( const cpo::uno::Sequence< sal_Int32 >& DataX,
+                                            const cpo::uno::Sequence< sal_Int32 >& DataY )
 {
     sal_Int32 nLen = DataX.getLength();
     const sal_Int32* pDataX = DataX.getConstArray();

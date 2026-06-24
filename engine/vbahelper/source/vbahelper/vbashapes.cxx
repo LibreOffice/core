@@ -124,10 +124,10 @@ ScVbaShapes::getServiceImplName()
     return u"ScVbaShapes"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaShapes::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msform.Shapes"_ustr
     };
@@ -141,9 +141,9 @@ ScVbaShapes::getShapesByArrayIndices( const cpo::uno::Any& Index  )
         throw uno::RuntimeException();
 
     const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter(mxContext);
-    cpo::uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< cpo::uno::Any >>::get() );
+    cpo::uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Any >>::get() );
 
-    uno::Sequence< cpo::uno::Any > sIndices;
+    cpo::uno::Sequence< cpo::uno::Any > sIndices;
     aConverted >>= sIndices;
     XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec aShapes;
     for (const auto& rIndex : sIndices)
@@ -181,7 +181,7 @@ ScVbaShapes::Range( const cpo::uno::Any& shapes )
     else
     {
         // wrap single index into a sequence
-        uno::Sequence< cpo::uno::Any > sIndices { shapes };
+        cpo::uno::Sequence< cpo::uno::Any > sIndices { shapes };
         cpo::uno::Any aIndex;
         aIndex <<= sIndices;
         xShapes = getShapesByArrayIndices( aIndex );

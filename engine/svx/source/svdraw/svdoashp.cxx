@@ -30,7 +30,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <tools/helpers.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svddrgmt.hxx>
@@ -842,7 +842,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( pDefCustomShape )
         pDefData = pDefCustomShape->pDefData;
 
-    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> seqAdjustmentValues;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> seqAdjustmentValues;
 
 
     // AdjustmentValues
@@ -909,7 +909,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if (!pAny && pDefCustomShape && !pDefCustomShape->pVertices.empty())
     {
         sal_Int32 i, nCount = pDefCustomShape->pVertices.size();
-        uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates( nCount );
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates( nCount );
         auto pseqCoordinates = seqCoordinates.getArray();
         for ( i = 0; i < nCount; i++ )
         {
@@ -927,7 +927,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if (!pAny && pDefCustomShape && !pDefCustomShape->pGluePoints.empty())
     {
         sal_Int32 i, nCount = pDefCustomShape->pGluePoints.size();
-        uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints( nCount );
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints( nCount );
         auto pseqGluePoints = seqGluePoints.getArray();
         for ( i = 0; i < nCount; i++ )
         {
@@ -945,7 +945,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if ( !pAny && pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
     {
         sal_Int32 i, nCount = pDefCustomShape->nElements;
-        uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments( nCount );
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments( nCount );
         auto pseqSegments = seqSegments.getArray();
         for ( i = 0; i < nCount; i++ )
         {
@@ -992,7 +992,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if (!pAny && pDefCustomShape && !pDefCustomShape->pTextRect.empty())
     {
         sal_Int32 i, nCount = pDefCustomShape->pTextRect.size();
-        uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames( nCount );
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames( nCount );
         auto pseqTextFrames = seqTextFrames.getArray();
         for (i = 0; i < nCount; i++)
         {
@@ -1013,7 +1013,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if (!pAny && pDefCustomShape && !pDefCustomShape->pCalculation.empty() )
     {
         sal_Int32 i, nCount = pDefCustomShape->pCalculation.size();
-        uno::Sequence< OUString > seqEquations( nCount );
+        cpo::uno::Sequence< OUString > seqEquations( nCount );
         auto pseqEquations = seqEquations.getArray();
         for (i = 0; i < nCount; i++)
         {
@@ -1031,7 +1031,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     if  (!pAny && pDefCustomShape && !pDefCustomShape->pHandles.empty())
     {
         sal_Int32 i, nCount = pDefCustomShape->pHandles.size();
-        uno::Sequence<beans::PropertyValues> seqHandles( nCount );
+        cpo::uno::Sequence<beans::PropertyValues> seqHandles( nCount );
         auto pseqHandles = seqHandles.getArray();
         for (i = 0; i < nCount; i++)
         {
@@ -1052,7 +1052,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         // value by name, e.g. attribute RefX="adj". So the information is lost, when exporting
         // a pptx to odp, for example. This part reconstructs this information for the
         // ooxml preset shapes from their definition.
-        uno::Sequence<beans::PropertyValues> seqHandles;
+        cpo::uno::Sequence<beans::PropertyValues> seqHandles;
         *pAny >>= seqHandles;
         auto seqHandlesRange = asNonConstRange(seqHandles);
         bool bChanged(false);
@@ -1123,11 +1123,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, u"Coordinates"_ustr );
             if (pAny && pDefCustomShape && !pDefCustomShape->pVertices.empty())
             {
-                uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates1;
+                cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates1;
                 if ( *pAny >>= seqCoordinates1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->pVertices.size();
-                    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates2( nCount );
+                    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqCoordinates2( nCount );
                     auto pseqCoordinates2 = seqCoordinates2.getArray();
                     for ( i = 0; i < nCount; i++ )
                     {
@@ -1148,11 +1148,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, u"GluePoints"_ustr );
             if (pAny && pDefCustomShape && !pDefCustomShape->pGluePoints.empty())
             {
-                uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints1;
+                cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints1;
                 if ( *pAny >>= seqGluePoints1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->pGluePoints.size();
-                    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints2( nCount );
+                    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints2( nCount );
                     auto pseqGluePoints2 = seqGluePoints2.getArray();
                     for ( i = 0; i < nCount; i++ )
                     {
@@ -1174,7 +1174,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, u"Segments"_ustr );
             if ( pAny )
             {
-                uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments1;
+                cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments1;
                 if ( *pAny >>= seqSegments1 )
                 {
                     if ( pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
@@ -1182,7 +1182,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                         sal_Int32 i, nCount = pDefCustomShape->nElements;
                         if ( nCount )
                         {
-                            uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments2( nCount );
+                            cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> seqSegments2( nCount );
                             auto pseqSegments2 = seqSegments2.getArray();
                             for ( i = 0; i < nCount; i++ )
                             {
@@ -1252,11 +1252,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( u"Equations"_ustr );
             if (pAny && pDefCustomShape && !pDefCustomShape->pCalculation.empty())
             {
-                uno::Sequence<OUString> seqEquations1;
+                cpo::uno::Sequence<OUString> seqEquations1;
                 if ( *pAny >>= seqEquations1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->pCalculation.size();
-                    uno::Sequence<OUString> seqEquations2( nCount );
+                    cpo::uno::Sequence<OUString> seqEquations2( nCount );
                     auto pseqEquations2 = seqEquations2.getArray();
 
                     for (i = 0; i < nCount; i++)
@@ -1279,11 +1279,11 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
             pAny = rGeometryItem.GetPropertyValueByName( sPath, u"TextFrames"_ustr );
             if (pAny && pDefCustomShape && !pDefCustomShape->pTextRect.empty())
             {
-                uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames1;
+                cpo::uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames1;
                 if ( *pAny >>= seqTextFrames1 )
                 {
                     sal_Int32 i, nCount = pDefCustomShape->pTextRect.size();
-                    uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames2( nCount );
+                    cpo::uno::Sequence<drawing::EnhancedCustomShapeTextFrame> seqTextFrames2( nCount );
                     auto pseqTextFrames2 = seqTextFrames2.getArray();
                     for (i = 0; i < nCount; i++)
                     {

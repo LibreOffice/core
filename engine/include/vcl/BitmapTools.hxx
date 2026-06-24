@@ -64,7 +64,7 @@ VCL_DLLPUBLIC void DrawAlphaBitmapAndAlphaGradient(Bitmap & rBitmap, bool bFixed
 
 VCL_DLLPUBLIC void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitmap, Bitmap & aBmp, basegfx::B2DPolyPolygon const & rClipPath);
 
-VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);
+VCL_DLLPUBLIC cpo::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);
 
 /**
  * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
@@ -72,7 +72,7 @@ VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp);
  **/
 VCL_DLLPUBLIC void CanvasCairoExtractBitmapData( Bitmap const & rBitmap, unsigned char*& data, bool& bHasAlpha, tools::Long& rnWidth, tools::Long& rnHeight );
 
-VCL_DLLPUBLIC css::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(Bitmap const & rBitmap, const css::geometry::IntegerRectangle2D& rect);
+VCL_DLLPUBLIC cpo::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(Bitmap const & rBitmap, const css::geometry::IntegerRectangle2D& rect);
 
 // helper to construct historical 8x8 bitmaps with two colors
 

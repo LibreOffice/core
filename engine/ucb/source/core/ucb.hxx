@@ -55,7 +55,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
     virtual void SAL_CALL
@@ -68,7 +68,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XContentProviderManager
     virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
@@ -78,7 +78,7 @@ public:
     virtual void SAL_CALL
     deregisterContentProvider( const css::uno::Reference< css::ucb::XContentProvider >&  Provider,
                                const OUString& Scheme ) override;
-    virtual css::uno::Sequence< css::ucb::ContentProviderInfo > SAL_CALL
+    virtual cpo::uno::Sequence< css::ucb::ContentProviderInfo > SAL_CALL
     queryContentProviders() override;
     virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
     queryContentProvider( const OUString& Identifier ) override;
@@ -148,7 +148,7 @@ private:
     css::uno::Reference<
         css::util::XChangesNotifier > m_xNotifier;
 
-    css::uno::Sequence< cpo::uno::Any > m_aArguments;
+    cpo::uno::Sequence< cpo::uno::Any > m_aArguments;
     ProviderMap_Impl m_aProviders;
     osl::Mutex m_aMutex;
     std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pDisposeEventListeners;

@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
 namespace
@@ -333,7 +333,7 @@ bool PieChartTypeTemplate::matchesTemplate2(
                 xSeries->getPropertyValue( u"Offset"_ustr) >>= fOffset;
 
                 // "AttributedDataPoints"
-                uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+                cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
                 if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
                 {
                     for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
@@ -467,7 +467,7 @@ void PieChartTypeTemplate::applyStyle2(
             getFastPropertyValue( PROP_PIE_TEMPLATE_DEFAULT_OFFSET ) >>= fDefaultOffset;
             double fOffsetToSet = fDefaultOffset;
 
-            uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+            cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
             // "AttributedDataPoints"
             xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList;
 

@@ -70,12 +70,12 @@ bool SAL_CALL PopupMenuDispatcher::supportsService( const OUString& sServiceName
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
 {
     return { SERVICENAME_PROTOCOLHANDLER };
 }
 
-void SAL_CALL PopupMenuDispatcher::initialize( const css::uno::Sequence< cpo::uno::Any >& lArguments )
+void SAL_CALL PopupMenuDispatcher::initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments )
 {
     css::uno::Reference< css::frame::XFrame > xFrame;
 
@@ -155,12 +155,12 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
     return xDispatch;
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
 PopupMenuDispatcher::queryDispatches(
-    const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+    const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -262,7 +262,7 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_PopupMenuDispatcher_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::PopupMenuDispatcher(context));
 }

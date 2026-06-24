@@ -21,7 +21,7 @@
 #include <prtopt.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -110,7 +110,7 @@ SwPrintOptions::~SwPrintOptions()
 {
 }
 
-void SwPrintOptions::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwPrintOptions::Notify( const cpo::uno::Sequence< OUString >& ) {}
 
 void SwPrintOptions::ImplCommit()
 {

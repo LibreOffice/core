@@ -50,7 +50,7 @@ public:
         OUString SAL_CALL
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override;
+            sal_Int32 nTextConversionOptions, cpo::uno::Sequence< sal_Int32 >& offset ) override;
         bool SAL_CALL
         interactiveConversion( const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions ) override;
@@ -60,7 +60,7 @@ public:
         getImplementationName() override;
     bool SAL_CALL
         supportsService(const OUString& ServiceName) override;
-    css::uno::Sequence< OUString > SAL_CALL
+    cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 private:
     css::lang::Locale aLocale;

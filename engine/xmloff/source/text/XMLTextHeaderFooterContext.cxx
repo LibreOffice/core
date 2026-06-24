@@ -152,7 +152,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextHeaderFooterCon
                         xText, uno::UNO_QUERY_THROW);
                 uno::Reference<lang::XComponent> const xPara(
                     xAppend->finishParagraph(
-                        uno::Sequence<beans::PropertyValue>()),
+                        cpo::uno::Sequence<beans::PropertyValue>()),
                     uno::UNO_QUERY_THROW);
                 xPara->dispose();
             }

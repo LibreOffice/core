@@ -18,10 +18,11 @@
  */
 
 #include <i18nutil/widthfolding.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include "widthfolding_data.h"
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 
 namespace i18nutil {

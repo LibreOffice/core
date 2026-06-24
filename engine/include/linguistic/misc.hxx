@@ -20,7 +20,7 @@
 #ifndef INCLUDED_LINGUISTIC_MISC_HXX
 #define INCLUDED_LINGUISTIC_MISC_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -103,7 +103,7 @@ LNG_DLLPUBLIC bool LinguIsUnspecified( LanguageType nLanguage );
 LNG_DLLPUBLIC bool LinguIsUnspecified( std::u16string_view rBcp47 );
 
 std::vector< LanguageType >
-    LocaleSeqToLangVec( css::uno::Sequence< css::lang::Locale > const &rLocaleSeq );
+    LocaleSeqToLangVec( cpo::uno::Sequence< css::lang::Locale > const &rLocaleSeq );
 
 // checks if file pointed to by rURL is readonly
 // and may also check return if such a file exists or not

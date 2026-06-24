@@ -20,7 +20,7 @@
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;

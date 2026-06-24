@@ -148,7 +148,7 @@ private:
     mutable rtl::Reference<ChartView> mxChartView;
 
     OUString m_aResource;
-    css::uno::Sequence< css::beans::PropertyValue >   m_aMediaDescriptor;
+    cpo::uno::Sequence< css::beans::PropertyValue >   m_aMediaDescriptor;
     css::uno::Reference< css::document::XDocumentProperties > m_xDocumentProperties;
     ::rtl::Reference< UndoManager >                    m_pUndoManager;
 
@@ -225,15 +225,15 @@ private:
         impl_notifyStorageChangeListeners();
 
     void impl_store(
-        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
         const css::uno::Reference< css::embed::XStorage > & xStorage );
     void impl_load(
-        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
         const css::uno::Reference< css::embed::XStorage >& xStorage );
     void impl_loadGraphics(
         const css::uno::Reference< css::embed::XStorage >& xStorage );
     css::uno::Reference< css::document::XFilter >
-        impl_createFilter( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
+        impl_createFilter( const cpo::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
     rtl::Reference< ::chart::ChartTypeTemplate > impl_createDefaultChartTypeTemplate();
     css::uno::Reference< css::chart2::data::XDataSource > impl_createDefaultData();
@@ -253,21 +253,21 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::lang::XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // css::frame::XModel (required interface)
 
     virtual bool SAL_CALL
         attachResource( const OUString& rURL,
-                        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
+                        const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
     virtual OUString SAL_CALL
         getURL() override;
 
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL
         getArgs() override;
 
     virtual void SAL_CALL
@@ -317,7 +317,7 @@ public:
 
     // css::frame::XStorable2 (extension of XStorable)
     virtual void SAL_CALL storeSelf(
-        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
     // css::frame::XStorable (required interface)
     virtual bool SAL_CALL
@@ -334,11 +334,11 @@ public:
 
     virtual void SAL_CALL
         storeAsURL( const OUString& rURL,
-                    const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
     virtual void SAL_CALL
         storeToURL( const OUString& rURL,
-                    const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
     // css::util::XModifiable (required interface)
     virtual bool SAL_CALL
@@ -365,12 +365,12 @@ public:
     // ____ datatransferable::XTransferable ____
     virtual cpo::uno::Any SAL_CALL getTransferData(
         const css::datatransfer::DataFlavor& aFlavor ) override;
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported(
         const css::datatransfer::DataFlavor& aFlavor ) override;
 
     // lang::XTypeProvider (override method of WeakImplHelper)
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
         getTypes() override;
 
     // ____ document::XDocumentPropertiesSupplier ____
@@ -406,8 +406,8 @@ public:
     virtual void SAL_CALL
         attachDataProvider( const css::uno::Reference< css::chart2::data::XDataProvider >& xProvider ) override;
     virtual void SAL_CALL setArguments(
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getUsedRangeRepresentations() override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getUsedRangeRepresentations() override;
     virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL getUsedData() override;
     virtual void SAL_CALL attachNumberFormatsSupplier( const css::uno::Reference<
         css::util::XNumberFormatsSupplier >& xSupplier ) override;
@@ -423,7 +423,7 @@ public:
 
     // ____ XLoadable ____
     virtual void SAL_CALL initNew() override;
-    virtual void SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
+    virtual void SAL_CALL load( const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
@@ -444,17 +444,17 @@ public:
         createInstance( const OUString& aServiceSpecifier ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
         createInstanceWithArguments( const OUString& ServiceSpecifier
-                                   , const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+                                   , const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames() override;
 
     // ____ XStorageBasedDocument ____
     virtual void SAL_CALL loadFromStorage(
         const css::uno::Reference< css::embed::XStorage >& xStorage,
-        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
     virtual void SAL_CALL storeToStorage(
         const css::uno::Reference< css::embed::XStorage >& xStorage,
-        const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
     virtual void SAL_CALL switchToStorage(
         const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentStorage() override;
@@ -465,7 +465,7 @@ public:
 
     // for SvNumberFormatsSupplierObj
     // ____ XUnoTunnel ___
-    virtual ::sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< ::sal_Int8 >& aIdentifier ) override;
+    virtual ::sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< ::sal_Int8 >& aIdentifier ) override;
 
     // ____ XNumberFormatsSupplier ____
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getNumberFormatSettings() override;
@@ -477,7 +477,7 @@ public:
         const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // ____ XDataSource ____ allows access to the currently used data and data ranges
-    virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences() override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;

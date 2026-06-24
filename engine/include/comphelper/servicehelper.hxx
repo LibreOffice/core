@@ -22,7 +22,7 @@
 
 #include <rtl/uuid.h>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace comphelper {
 
@@ -31,13 +31,13 @@ namespace comphelper {
     class UnoIdInit
     {
     private:
-        css::uno::Sequence< sal_Int8 > m_aSeq;
+        cpo::uno::Sequence< sal_Int8 > m_aSeq;
     public:
         UnoIdInit() : m_aSeq(16)
         {
             rtl_createUuid(reinterpret_cast<sal_uInt8*>(m_aSeq.getArray()), nullptr, true);
         }
-        const css::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
+        const cpo::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
     };
 
     inline sal_Int64 getSomething_cast(void* p)
@@ -66,7 +66,7 @@ namespace comphelper {
     }
 
     template <typename T>
-    inline bool isUnoTunnelId(const css::uno::Sequence< sal_Int8 >& rId)
+    inline bool isUnoTunnelId(const cpo::uno::Sequence< sal_Int8 >& rId)
     {
         return rId.getLength() == 16
             && memcmp(T::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0;
@@ -74,7 +74,7 @@ namespace comphelper {
 
     template <class Base> struct FallbackToGetSomethingOf
     {
-        static sal_Int64 get(const css::uno::Sequence<sal_Int8>& rId, Base* p)
+        static sal_Int64 get(const cpo::uno::Sequence<sal_Int8>& rId, Base* p)
         {
             return p->Base::getSomething(rId);
         }
@@ -82,11 +82,11 @@ namespace comphelper {
 
     template <> struct FallbackToGetSomethingOf<void>
     {
-        static sal_Int64 get(const css::uno::Sequence<sal_Int8>&, void*) { return 0; }
+        static sal_Int64 get(const cpo::uno::Sequence<sal_Int8>&, void*) { return 0; }
     };
 
     template <class T, class Base = void>
-    sal_Int64 getSomethingImpl(const css::uno::Sequence<sal_Int8>& rId, T* pThis,
+    sal_Int64 getSomethingImpl(const cpo::uno::Sequence<sal_Int8>& rId, T* pThis,
         FallbackToGetSomethingOf<Base> = {})
     {
         if (isUnoTunnelId<T>(rId))
@@ -112,11 +112,11 @@ namespace comphelper {
         done by this macro.
 */
 #define UNO3_GETIMPLEMENTATION_DECL( classname ) \
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept; \
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId() noexcept; \
+    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
 #define UNO3_GETIMPLEMENTATION_BASE_IMPL( classname ) \
-const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() noexcept \
+const cpo::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() noexcept \
 { \
     static const comphelper::UnoIdInit aId; \
     return aId.getSeq(); \
@@ -124,14 +124,14 @@ const css::uno::Sequence< sal_Int8 > & classname::getUnoTunnelId() noexcept \
 
 #define UNO3_GETIMPLEMENTATION_IMPL( classname )\
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
-sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) \
+sal_Int64 SAL_CALL classname::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId ) \
 { \
     return comphelper::getSomethingImpl(rId, this); \
 }
 
 #define UNO3_GETIMPLEMENTATION2_IMPL( classname, baseclass )\
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
-sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) \
+sal_Int64 SAL_CALL classname::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId ) \
 { \
     return comphelper::getSomethingImpl(rId, this, comphelper::FallbackToGetSomethingOf<baseclass>{}); \
 }

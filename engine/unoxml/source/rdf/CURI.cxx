@@ -43,10 +43,10 @@ public:
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::rdf::XNode:
     virtual OUString SAL_CALL getStringValue() override;
@@ -80,7 +80,7 @@ bool SAL_CALL CURI::supportsService(OUString const & serviceName)
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames()
 {
     return { u"com.sun.star.rdf.URI"_ustr };
 }
@@ -710,7 +710,7 @@ void CURI::initFromConstant(const sal_Int16 i_Constant)
 }
 
 // css::lang::XInitialization:
-void SAL_CALL CURI::initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments)
+void SAL_CALL CURI::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     sal_Int32 len = aArguments.getLength();
     if ((len < 1) || (len > 2)) {
@@ -797,7 +797,7 @@ OUString SAL_CALL CURI::getLocalName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unoxml_CURI_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CURI());
 }

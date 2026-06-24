@@ -21,7 +21,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
@@ -43,7 +43,7 @@ class XMLSectionImportContext final : public SvXMLImportContext
     OUString sStyleName;
     OUString sName;
     OUString sCond;
-    css::uno::Sequence<sal_Int8> aSequence;
+    cpo::uno::Sequence<sal_Int8> aSequence;
     bool bProtect;
     bool bCondOK;
     bool bIsVisible;

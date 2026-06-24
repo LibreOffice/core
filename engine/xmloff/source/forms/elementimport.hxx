@@ -118,7 +118,7 @@ namespace xmloff
 
         // IEventAttacher
         virtual void registerEvents(
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             ) override;
 
         /** create the (uninitialized) element which is to represent the read data

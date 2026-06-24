@@ -33,7 +33,7 @@ namespace chart
 {
 InterpretedData HistogramDataInterpreter::interpretDataSource(
     const uno::Reference<chart2::data::XDataSource>& xSource,
-    const uno::Sequence<beans::PropertyValue>& /*aArguments*/,
+    const cpo::uno::Sequence<beans::PropertyValue>& /*aArguments*/,
     const std::vector<rtl::Reference<DataSeries>>& aSeriesToReUse)
 {
     if (!xSource.is())
@@ -109,7 +109,7 @@ HistogramDataInterpreter::reinterpretDataSeries(const InterpretedData& rInterpre
     std::vector<rtl::Reference<DataSeries>> aSeriesToReUse
         = FlattenSequence(rInterpretedData.Series);
 
-    uno::Sequence<beans::PropertyValue> aArguments;
+    cpo::uno::Sequence<beans::PropertyValue> aArguments;
     return interpretDataSource(xSource, aArguments, aSeriesToReUse);
 }
 
@@ -140,7 +140,7 @@ bool HistogramDataInterpreter::isDataCompatible(const InterpretedData& aInterpre
             {
                 try
                 {
-                    uno::Sequence<cpo::uno::Any> data = seq->getValues()->getData();
+                    cpo::uno::Sequence<cpo::uno::Any> data = seq->getValues()->getData();
                     if (!data.hasElements())
                         continue;
 

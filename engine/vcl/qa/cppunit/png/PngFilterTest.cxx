@@ -1718,7 +1718,7 @@ void PngFilterTest::testMsGifInPng()
         sal_uInt32 nGIFSize = aGIFStream.TellEnd();
         const char* const pHeader = "MSOFFICE9.0";
         auto nHeaderSize = strlen(pHeader);
-        uno::Sequence<sal_Int8> aGIFSequence(nHeaderSize + nGIFSize);
+        cpo::uno::Sequence<sal_Int8> aGIFSequence(nHeaderSize + nGIFSize);
         sal_Int8* pSequence = aGIFSequence.getArray();
         for (size_t i = 0; i < nHeaderSize; i++)
             *pSequence++ = pHeader[i];
@@ -1728,10 +1728,10 @@ void PngFilterTest::testMsGifInPng()
         beans::PropertyValue aChunkProperty, aFilterProperty;
         aChunkProperty.Name = u"msOG"_ustr;
         aChunkProperty.Value <<= aGIFSequence;
-        uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ aChunkProperty };
+        cpo::uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ aChunkProperty };
         aFilterProperty.Name = u"AdditionalChunks"_ustr;
         aFilterProperty.Value <<= aAdditionalChunkSequence;
-        uno::Sequence<beans::PropertyValue> aPNGParameters{ aFilterProperty };
+        cpo::uno::Sequence<beans::PropertyValue> aPNGParameters{ aFilterProperty };
         // Export the png with the chunk
         utl::TempFileNamed aTempFile(u"testPngExportMsGif", true, u".png");
         if (!bKeepTemp)

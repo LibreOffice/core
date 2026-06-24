@@ -25,21 +25,21 @@ EPUBExportUIComponent::EPUBExportUIComponent(uno::Reference<uno::XComponentConte
 {
 }
 
-uno::Sequence<beans::PropertyValue> EPUBExportUIComponent::getPropertyValues()
+cpo::uno::Sequence<beans::PropertyValue> EPUBExportUIComponent::getPropertyValues()
 {
     maMediaDescriptor[u"FilterData"_ustr] <<= maFilterData.getAsConstPropertyValueList();
     return maMediaDescriptor.getAsConstPropertyValueList();
 }
 
 void EPUBExportUIComponent::setPropertyValues(
-    const uno::Sequence<beans::PropertyValue>& rProperties)
+    const cpo::uno::Sequence<beans::PropertyValue>& rProperties)
 {
     maMediaDescriptor.clear();
     maMediaDescriptor << rProperties;
     auto it = maMediaDescriptor.find(u"FilterData"_ustr);
     if (it != maMediaDescriptor.end())
     {
-        uno::Sequence<beans::PropertyValue> aFilterData;
+        cpo::uno::Sequence<beans::PropertyValue> aFilterData;
         if (it->second >>= aFilterData)
         {
             maFilterData.clear();
@@ -58,15 +58,15 @@ bool EPUBExportUIComponent::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> EPUBExportUIComponent::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> EPUBExportUIComponent::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
+    cpo::uno::Sequence<OUString> aRet = { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
     return aRet;
 }
 
 void EPUBExportUIComponent::setTitle(const OUString& /*rTitle*/) {}
 
-void SAL_CALL EPUBExportUIComponent::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL EPUBExportUIComponent::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))
@@ -117,7 +117,7 @@ void SAL_CALL EPUBExportUIComponent::startExecuteModal(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_EPUBExportUIComponent_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new EPUBExportUIComponent(pCtx));
 }

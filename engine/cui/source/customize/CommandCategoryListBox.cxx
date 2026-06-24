@@ -125,7 +125,7 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
     {
         css::uno::Reference<css::frame::XDispatchInformationProvider> xProvider(
             m_xFrame, css::uno::UNO_QUERY_THROW);
-        css::uno::Sequence<sal_Int16> lGroups = xProvider->getSupportedCommandGroups();
+        cpo::uno::Sequence<sal_Int16> lGroups = xProvider->getSupportedCommandGroups();
 
         sal_Int32 nGroupsLength = lGroups.getLength();
 
@@ -212,7 +212,7 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
 }
 
 void CommandCategoryListBox::FillFunctionsList(
-    const css::uno::Sequence<css::frame::DispatchInformation>& xCommands,
+    const cpo::uno::Sequence<css::frame::DispatchInformation>& xCommands,
     CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm,
     SaveInData* pCurrentSaveInData)
 {
@@ -318,7 +318,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
 
                 if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
                 {
-                    css::uno::Sequence<css::frame::DispatchInformation> lCommands;
+                    cpo::uno::Sequence<css::frame::DispatchInformation> lCommands;
                     try
                     {
                         lCommands = xProvider->getConfigurableDispatchInformation(
@@ -339,7 +339,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
             sal_uInt16 nGroup = pInfo->nUniqueID;
             css::uno::Reference<css::frame::XDispatchInformationProvider> xProvider(
                 m_xFrame, css::uno::UNO_QUERY_THROW);
-            css::uno::Sequence<css::frame::DispatchInformation> lCommands
+            cpo::uno::Sequence<css::frame::DispatchInformation> lCommands
                 = xProvider->getConfigurableDispatchInformation(nGroup);
             FillFunctionsList(lCommands, pFunctionListBox, filterTerm, pCurrentSaveInData);
             break;
@@ -374,7 +374,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                     SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void*>(rootNode.get())));
 
                 // Add main macro groups
-                const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>>
+                const cpo::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>>
                     aChildNodes = rootNode->getChildNodes();
                 for (auto const& childGroup : aChildNodes)
                 {
@@ -522,7 +522,7 @@ void CommandCategoryListBox::addChildren(
     m_searchOptions.searchString = filterTerm;
     utl::TextSearch textSearch(m_searchOptions);
 
-    const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> aChildNodes
+    const cpo::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> aChildNodes
         = parentNode->getChildNodes();
     for (auto const& child : aChildNodes)
     {

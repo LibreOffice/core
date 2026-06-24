@@ -26,7 +26,7 @@
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -61,7 +61,7 @@ public:
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /// declare XInterface methods
     DECLARE_XINTERFACE()
@@ -77,19 +77,19 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // XDataSequence
-    css::uno::Sequence<cpo::uno::Any> SAL_CALL getData() override;
+    cpo::uno::Sequence<cpo::uno::Any> SAL_CALL getData() override;
     OUString SAL_CALL getSourceRangeRepresentation() override;
-    css::uno::Sequence<OUString>
+    cpo::uno::Sequence<OUString>
         SAL_CALL generateLabel(css::chart2::data::LabelOrigin nLabelOrigin) override;
     sal_Int32 SAL_CALL getNumberFormatKeyByIndex(sal_Int32 nIndex) override;
 
     // XNumericalDataSequence
     /// @see css::chart::data::XNumericalDataSequence
-    virtual css::uno::Sequence<double> SAL_CALL getNumericalData() override;
+    virtual cpo::uno::Sequence<double> SAL_CALL getNumericalData() override;
 
     // XTextualDataSequence
     /// @see css::chart::data::XTextualDataSequence
-    virtual css::uno::Sequence<OUString> SAL_CALL getTextualData() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getTextualData() override;
 
     // XCloneable
     /// @see css::util::XCloneable
@@ -109,8 +109,8 @@ private:
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
     OUString m_sRole;
-    css::uno::Sequence<OUString> mxLabels;
-    css::uno::Sequence<cpo::uno::Any> mxValues;
+    cpo::uno::Sequence<OUString> mxLabels;
+    cpo::uno::Sequence<cpo::uno::Any> mxValues;
     css::uno::Reference<css::chart2::data::XDataSequence> m_xRawData;
     bool m_bIsCategory;
     bool m_bIsDirty;

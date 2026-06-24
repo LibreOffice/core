@@ -58,7 +58,7 @@ OUString GetMimeType(std::u16string_view rExtension)
 
 /// Determines the base directory for cover images, XMP metadata, popup images.
 OUString FindMediaDir(const OUString& rDocumentBaseURL,
-                      const uno::Sequence<beans::PropertyValue>& rFilterData)
+                      const cpo::uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     OUString aMediaDir;
 
@@ -87,7 +87,7 @@ OUString FindMediaDir(const OUString& rDocumentBaseURL,
 
 /// Picks up a cover image from the base directory.
 OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
-                        const uno::Sequence<beans::PropertyValue>& rFilterData)
+                        const cpo::uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     OUString aRet;
 
@@ -135,7 +135,7 @@ OUString FindCoverImage(const OUString& rDocumentBaseURL, OUString& rMimeType,
 /// Picks up XMP metadata from the base directory.
 void FindXMPMetadata(const uno::Reference<uno::XComponentContext>& xContext,
                      const OUString& rDocumentBaseURL,
-                     const uno::Sequence<beans::PropertyValue>& rFilterData,
+                     const cpo::uno::Sequence<beans::PropertyValue>& rFilterData,
                      librevenge::RVNGPropertyList& rMetaData)
 {
     // See if filter data contains metadata explicitly.
@@ -286,9 +286,10 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage& rPage, bo
     if (!xSaxWriter.is())
         return;
 
-    // [-loplugin:redundantfcast] false positive:
-    uno::Sequence<cpo::uno::Any> aArguments = { cpo::uno::Any(uno::Sequence<beans::PropertyValue>(
-        { comphelper::makePropertyValue(u"DTDString"_ustr, false) })) };
+    cpo::uno::Sequence<cpo::uno::Any> aArguments
+        // [-loplugin:redundantfcast] false positive:
+        = { cpo::uno::Any(cpo::uno::Sequence<beans::PropertyValue>(
+            { comphelper::makePropertyValue(u"DTDString"_ustr, false) })) };
     uno::Reference<svg::XSVGWriter> xSVGWriter(
         xCtx->getServiceManager()->createInstanceWithArgumentsAndContext(
             u"com.sun.star.svg.SVGWriter"_ustr, aArguments, xCtx),
@@ -344,14 +345,14 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage& rPage, bo
 
 XMLImport::XMLImport(const uno::Reference<uno::XComponentContext>& xContext,
                      librevenge::RVNGTextInterface& rGenerator, const OUString& rURL,
-                     const uno::Sequence<beans::PropertyValue>& rDescriptor,
+                     const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor,
                      const std::vector<FixedLayoutPage>& rPageMetafiles)
     : mrGenerator(rGenerator)
     , mxContext(xContext)
     , mbIsInPageSpan(false)
     , mrPageMetafiles(rPageMetafiles)
 {
-    uno::Sequence<beans::PropertyValue> aFilterData;
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData;
     auto pDescriptor = std::find_if(
         rDescriptor.begin(), rDescriptor.end(),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterData"; });

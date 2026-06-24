@@ -89,7 +89,7 @@ public:
              override;
 
     // XNameAxcess (via XNameReplace)
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
                                                         getElementNames() override;
 
     // XNameAccess (via XNameReplace)
@@ -110,7 +110,7 @@ public:
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     // XServiceInfo
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
 protected:

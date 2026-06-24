@@ -136,9 +136,9 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { u"" UNO_NAME_PAGE_ORIENTATION ""_ustr,      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},
         { u"" UNO_NAME_PAGE_SPEED ""_ustr,            WID_PAGE_SPEED,     ::cppu::UnoType<presentation::AnimationSpeed>::get(), 0,  0},
         { u"" UNO_NAME_PAGE_WIDTH ""_ustr,            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_PREVIEW ""_ustr,          WID_PAGE_PREVIEW,   cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"" UNO_NAME_PAGE_PREVIEWBITMAP ""_ustr,    WID_PAGE_PREVIEWBITMAP, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"" UNO_NAME_PAGE_PREVIEWMETAFILE ""_ustr,  WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
+        { u"" UNO_NAME_PAGE_PREVIEW ""_ustr,          WID_PAGE_PREVIEW,   cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
+        { u"" UNO_NAME_PAGE_PREVIEWBITMAP ""_ustr,    WID_PAGE_PREVIEWBITMAP, cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
+        { u"" UNO_NAME_PAGE_PREVIEWMETAFILE ""_ustr,  WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
         { u"" UNO_NAME_PAGE_VISIBLE ""_ustr,          WID_PAGE_VISIBLE,   cppu::UnoType<bool>::get(),                        0, 0},
         { u"" UNO_NAME_OBJ_SOUNDFILE ""_ustr,         WID_PAGE_SOUNDFILE, cppu::UnoType<Any>::get(),              0, 0},
         { sUNO_Prop_IsBackgroundVisible,  WID_PAGE_BACKVIS,   cppu::UnoType<bool>::get(),                        0, 0},
@@ -210,9 +210,9 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
         { u"" UNO_NAME_PAGE_NUMBER ""_ustr,   WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},                                             \
         { u"" UNO_NAME_PAGE_ORIENTATION ""_ustr, WID_PAGE_ORIENT, ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},                                                                             \
         { u"" UNO_NAME_PAGE_WIDTH ""_ustr,    WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
-        { u"" UNO_NAME_PAGE_PREVIEW ""_ustr,  WID_PAGE_PREVIEW,   cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},    \
-        { u"" UNO_NAME_PAGE_PREVIEWBITMAP ""_ustr, WID_PAGE_PREVIEWBITMAP, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
-        { u"" UNO_NAME_PAGE_PREVIEWMETAFILE ""_ustr, WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
+        { u"" UNO_NAME_PAGE_PREVIEW ""_ustr,  WID_PAGE_PREVIEW,   cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},    \
+        { u"" UNO_NAME_PAGE_PREVIEWBITMAP ""_ustr, WID_PAGE_PREVIEWBITMAP, cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
+        { u"" UNO_NAME_PAGE_PREVIEWMETAFILE ""_ustr, WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},                          \
         { sUNO_Prop_BookmarkURL,          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},                                                                             \
         { u"IsBackgroundDark"_ustr,        WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},                                             \
@@ -289,7 +289,7 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
         { u"IsBackgroundDark"_ustr,             WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
         { sUNO_Prop_Theme, WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), 0,  0},
         // backwards compatible view of the theme for use in tests
-        { u"ThemeUnoRepresentation"_ustr, WID_PAGE_THEME_UNO_REPRESENTATION, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0,  0},
+        { u"ThemeUnoRepresentation"_ustr, WID_PAGE_THEME_UNO_REPRESENTATION, cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get(), 0,  0},
         { u"SlideLayout"_ustr,            WID_PAGE_SLIDE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0}
     };
 
@@ -331,13 +331,13 @@ static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKin
     return pRet;
 }
 
-const css::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() noexcept
+const cpo::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() noexcept
 {
     static const comphelper::UnoIdInit theSdGenericDrawPageUnoTunnelId;
     return theSdGenericDrawPageUnoTunnelId.getSeq();
 }
 
-sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     return comphelper::getSomethingImpl(rId, this,
                                         comphelper::FallbackToGetSomethingOf<SvxDrawPage>{});
@@ -1180,7 +1180,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                 {
                     SvMemoryStream aMemStream;
                     WriteDIB(aBitmap, aMemStream, false, false);
-                    uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aMemStream.GetData()), aMemStream.Tell() );
+                    cpo::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aMemStream.GetData()), aMemStream.Tell() );
                     aAny <<= aSeq;
                 }
             }
@@ -2148,7 +2148,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes()
 
 Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 OUString SdDrawPage::getPageApiName( SdPage const * pPage )
@@ -2752,7 +2752,7 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes()
 
 Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo
@@ -2868,7 +2868,7 @@ void SdMasterPage::setBackground( const Any& rValue )
                 Reference< beans::XPropertySetInfo > xInputSetInfo( xInputSet->getPropertySetInfo(), UNO_SET_THROW );
                 Reference< beans::XPropertySetInfo > xDestSetInfo( pBackground->getPropertySetInfo(), UNO_SET_THROW );
 
-                const uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
+                const cpo::uno::Sequence< beans::Property> aProperties( xDestSetInfo->getProperties() );
 
                 for( const beans::Property& rProp : aProperties )
                 {

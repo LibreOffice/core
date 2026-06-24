@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBiblioLocalCopy)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
         comphelper::makePropertyValue(u"Identifier"_ustr, u"ARJ00"_ustr),
         comphelper::makePropertyValue(u"Author"_ustr, u"Me"_ustr),
@@ -200,7 +200,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testViewCursorTextFrame)
 {
     // Given a document with a graphic and holding a reference to that graphic frame:
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aInsertArgs
+    cpo::uno::Sequence<beans::PropertyValue> aInsertArgs
         = { comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"graphic.png")) };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aInsertArgs);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -213,7 +213,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testViewCursorTextFrame)
 
     // When saving to ODT, then make sure the store doesn't fail:
     uno::Reference<frame::XStorable> xStorable(xModel, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreArgs
+    cpo::uno::Sequence<beans::PropertyValue> aStoreArgs
         = { comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr) };
     // Without the accompanying fix in place, this test would have failed with:
     // uno.RuntimeException: "SwXParagraph: disposed or invalid ..."
@@ -527,7 +527,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDropdown)
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
-        uno::Sequence<beans::PropertyValues> aListItems = {
+        cpo::uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
                 comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
@@ -764,7 +764,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlComboBox)
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
-        uno::Sequence<beans::PropertyValues> aListItems = {
+        cpo::uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
                 comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
@@ -1078,7 +1078,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testEmptyHeader)
 {
     // Empty header: IsContentEmpty is true.
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aInsertArgs
+    cpo::uno::Sequence<beans::PropertyValue> aInsertArgs
         = { comphelper::makePropertyValue(u"PageStyle"_ustr, SwResId(STR_POOLPAGE_STANDARD)) };
     dispatchCommand(mxComponent, u".uno:InsertPageHeader"_ustr, aInsertArgs);
     uno::Reference<beans::XPropertySet> xPageStyle(

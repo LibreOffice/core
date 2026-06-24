@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownInCell)
             uno::Reference<text::XTextContent> xContentControl;
             xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
             uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-            uno::Sequence<beans::PropertyValues> aListItems;
+            cpo::uno::Sequence<beans::PropertyValues> aListItems;
             xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
             CPPUNIT_ASSERT(aListItems.hasElements());
         }
@@ -338,7 +338,7 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
     uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
     cpo::uno::Any aValue = properties->getPropertyValue(u"ListAutoFormat"_ustr);
     CPPUNIT_ASSERT(aValue.hasValue());
-    uno::Sequence<beans::NamedValue> aListAutoFormat;
+    cpo::uno::Sequence<beans::NamedValue> aListAutoFormat;
     CPPUNIT_ASSERT(aValue >>= aListAutoFormat);
     auto it = std::find_if(std::cbegin(aListAutoFormat), std::cend(aListAutoFormat),
         [](const css::beans::NamedValue& val) { return val.Name == "CharFontName"; });
@@ -867,7 +867,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")
     // Numbering picture bullet was too large.
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     bool bFound = false;
@@ -916,7 +916,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf44986, "tdf44986.docx")
     uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
     // Check the first row of the table, it should have two cells (one separator).
     // This was 0: the first row had no separators, so it had only one cell, which was too wide.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< cpo::uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr).getLength());
     // Check content of cells, including the newly added gridAfter cell
     CPPUNIT_ASSERT_EQUAL(u"A1"_ustr, uno::Reference<text::XTextRange>(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY_THROW)->getString());
     CPPUNIT_ASSERT_EQUAL(u"A2"_ustr, uno::Reference<text::XTextRange>(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY_THROW)->getString());

@@ -81,7 +81,7 @@ static uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
 
     sal_uInt32 nSize = static_cast<sal_uInt32>(aStat.cbSize.QuadPart);
     sal_uInt32 nCopied = 0;
-    uno::Sequence< sal_Int8 > aBuffer( nConstBufferSize );
+    cpo::uno::Sequence< sal_Int8 > aBuffer( nConstBufferSize );
     try
     {
         sal_uInt32 nRead = 0;
@@ -137,7 +137,7 @@ static HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > const 
     hr = pStream->SetSize( aUZero );
     if ( FAILED( hr ) ) return E_FAIL;
 
-    uno::Sequence< sal_Int8 > aBuffer( nConstBufferSize );
+    cpo::uno::Sequence< sal_Int8 > aBuffer( nConstBufferSize );
     sal_uInt32 nReadBytes = 0;
 
     do
@@ -193,9 +193,9 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
     }
 }
 
-uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > const & xStream, DWORD /*nStreamMode*/, LPCOLESTR pFilePath )
+cpo::uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > const & xStream, DWORD /*nStreamMode*/, LPCOLESTR pFilePath )
 {
-    uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 3 : 2 );
+    cpo::uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 3 : 2 );
     auto pArgs = aArgs.getArray();
     pArgs[0].Name = "FilterName";
     pArgs[0].Value <<= getFilterNameFromGUID_Impl( m_guid );
@@ -232,9 +232,9 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
     return aArgs;
 }
 
-uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStoring_Impl( uno::Reference< io::XOutputStream > const & xStream)
+cpo::uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStoring_Impl( uno::Reference< io::XOutputStream > const & xStream)
 {
-    uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
+    cpo::uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
     auto pArgs = aArgs.getArray();
     pArgs[0].Name = "FilterName";
     pArgs[0].Value <<= getFilterNameFromGUID_Impl( m_guid );

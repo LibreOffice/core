@@ -12,7 +12,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -62,15 +62,15 @@ private:
     // Custom Shape Geometry information for export:
 
     // The adjusting values stored in this sequence:
-    css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue> m_AdjustmentValues;
+    cpo::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue> m_AdjustmentValues;
     // Shapes what have adjusting points, the range of these points
     // and the index of the value stored in this sequence:
-    css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> m_HandleValues;
+    cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>> m_HandleValues;
 
     //TODO:
     //css::awt::Rectangle m_ViewBox;
-    //css::uno::Sequence<css::beans::PropertyValue> m_Path;
-    //css::uno::Sequence<OUString> m_Equations;
+    //cpo::uno::Sequence<css::beans::PropertyValue> m_Path;
+    //cpo::uno::Sequence<OUString> m_Equations;
 
 public:
     DMLPresetShapeExporter() = delete;
@@ -105,10 +105,10 @@ private:
     // Returns with the shape type, like triangle for example
     const OUString& GetShapeType() const;
     // Returns with the handle points
-    const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>&
+    const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>&
     GetHandleValues() const;
     // Returns with the adjustment values
-    const css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>&
+    const cpo::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>&
     GetAdjustmentValues() const;
     // Returns with the raw value of the given property of the shape geometry.
     cpo::uno::Any GetHandleValueOfModificationPoint(sal_Int32 nPoint, std::u16string_view sType);
@@ -125,7 +125,7 @@ private:
     bool EndAVListWriting();
 
     // Finds the given value in the sequence
-    static cpo::uno::Any FindHandleValue(css::uno::Sequence<css::beans::PropertyValue> aValues,
+    static cpo::uno::Any FindHandleValue(cpo::uno::Sequence<css::beans::PropertyValue> aValues,
                                          std::u16string_view sKey);
     // Writes and converts the adjustment points from sdr to ooxml ones per shape type.
     bool WriteShapeWithAVlist();

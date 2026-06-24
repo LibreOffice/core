@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPaste)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     // Paste special as HTML
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::HTML)) } });
 
@@ -113,7 +113,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLInsert)
                                                                                  sizeof(html) } };
 
     // insert HTML file
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "InputStream", cpo::uno::Any(xStream) },
           { "Hidden", cpo::uno::Any(true) },
           { "FilterName", cpo::uno::Any(u"HTML (StarWriter)"_ustr) } });
@@ -159,7 +159,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPasteStyleOverride)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 15, /*bBasicCall=*/false);
 
     // Paste special as HTML
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::HTML)) } });
 
@@ -220,7 +220,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
     Scheduler::ProcessEventsToIdle();
 
     // Paste special as RTF
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
@@ -1369,7 +1369,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Paste special as RTF
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
@@ -1391,7 +1391,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Paste special as RTF
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
@@ -1412,7 +1412,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf156348)
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Delimiter", cpo::uno::Any(u"\t"_ustr) },
                                            { "WithHeader", cpo::uno::Any(false) },
                                            { "RepeatHeaderLines", cpo::uno::Any(sal_uInt16(0)) },
@@ -1431,7 +1431,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150845)
 
     // Insert text box with ctrl key
     // Without the fix in place, this test would have crashed here
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:Edit"_ustr, aArgs);
 
@@ -1471,7 +1471,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
 
     // set one to heading so there will be an entry in the tox
     pWrtShell->Up(false, 1);
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -1544,7 +1544,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf48459)
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 7, /*bBasicCall=*/false);
 
     // apply styles only on the selected word -> create inline heading
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -1591,7 +1591,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 
     // Paste special as RTF
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
@@ -1624,7 +1624,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Paste special as RTF
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
@@ -1647,7 +1647,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132596)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // Paste special as RTF
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
@@ -2842,7 +2842,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140061)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     // Paste special as RTF
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 

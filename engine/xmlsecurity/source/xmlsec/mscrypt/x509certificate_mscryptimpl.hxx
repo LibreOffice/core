@@ -50,28 +50,28 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         //Methods from XCertificate
         virtual sal_Int16 SAL_CALL getVersion() override;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSerialNumber() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getSerialNumber() override;
         virtual OUString SAL_CALL getIssuerName() override;
         virtual OUString SAL_CALL getSubjectName() override;
         virtual css::util::DateTime SAL_CALL getNotValidBefore() override;
         virtual css::util::DateTime SAL_CALL getNotValidAfter() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getIssuerUniqueID() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSubjectUniqueID() override;
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL getExtensions() override;
-        virtual css::uno::Reference< css::security::XCertificateExtension > SAL_CALL findCertificateExtension( const css::uno::Sequence< sal_Int8 >& oid ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getEncoded() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getIssuerUniqueID() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getSubjectUniqueID() override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL getExtensions() override;
+        virtual css::uno::Reference< css::security::XCertificateExtension > SAL_CALL findCertificateExtension( const cpo::uno::Sequence< sal_Int8 >& oid ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getEncoded() override;
         virtual OUString SAL_CALL getSubjectPublicKeyAlgorithm() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue() override;
         virtual OUString SAL_CALL getSignatureAlgorithm() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint() override;
         virtual css::security::CertificateKind SAL_CALL getCertificateKind() override;
 
 
         virtual sal_Int32 SAL_CALL getCertificateUsage( ) override;
 
         /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
-        virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
+        virtual cpo::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
 
         /// @see xmlsecurity::Certificate::getSignatureMethodAlgorithm().
         virtual svl::crypto::SignatureMethodAlgorithm getSignatureMethodAlgorithm() override;
@@ -80,12 +80,12 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         void setMswcryCert( const CERT_CONTEXT* cert ) ;
         const CERT_CONTEXT* getMswcryCert() const ;
         /// @throws css::uno::RuntimeException
-        void setRawCert( css::uno::Sequence< sal_Int8 > const & rawCert ) ;
+        void setRawCert( cpo::uno::Sequence< sal_Int8 > const & rawCert ) ;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 } ;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

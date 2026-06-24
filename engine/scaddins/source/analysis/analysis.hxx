@@ -89,7 +89,7 @@ public:
     virtual OUString SAL_CALL     getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) override;
 
                                 // XCompatibilityNames
-    virtual css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) override;
+    virtual cpo::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) override;
 
                                 // XLocalizable
     virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) override;
@@ -101,7 +101,7 @@ public:
                                 // XServiceInfo
     virtual OUString SAL_CALL     getImplementationName(  ) override;
     virtual bool SAL_CALL   supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL  getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL  getSupportedServiceNames(  ) override;
 
     //  methods from own interfaces start here
 
@@ -118,8 +118,8 @@ public:
     virtual sal_Int32 SAL_CALL  getIseven( sal_Int32 nVal ) override;
     virtual sal_Int32 SAL_CALL  getIsodd( sal_Int32 nVal ) override;
 
-    virtual double SAL_CALL     getMultinomial( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& aVLst, const css::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
-    virtual double SAL_CALL     getSeriessum( double fX, double fN, double fM, const css::uno::Sequence< css::uno::Sequence< double > >& aCoeffList ) override;
+    virtual double SAL_CALL     getMultinomial( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
+    virtual double SAL_CALL     getSeriessum( double fX, double fN, double fM, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aCoeffList ) override;
     virtual double SAL_CALL     getQuotient( double fNum, double fDenum ) override;
 
     virtual double SAL_CALL     getMround( double fNum, double fMult ) override;
@@ -127,8 +127,8 @@ public:
 
     virtual double SAL_CALL     getRandbetween( double fMin, double fMax ) override;
 
-    virtual double SAL_CALL     getGcd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< double > >& aVLst, const css::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
-    virtual double SAL_CALL     getLcm( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< double > >& aVLst, const css::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
+    virtual double SAL_CALL     getGcd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
+    virtual double SAL_CALL     getLcm( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
 
     virtual double SAL_CALL     getBesseli( double fNum, sal_Int32 nOrder ) override;
     virtual double SAL_CALL     getBesselj( double fNum, sal_Int32 nOrder ) override;
@@ -171,11 +171,11 @@ public:
     virtual OUString SAL_CALL     getImln( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImlog10( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImlog2( const OUString& aNum ) override;
-    virtual OUString SAL_CALL     getImproduct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< OUString > >& aNum1, const css::uno::Sequence< cpo::uno::Any >& aNumList ) override;
+    virtual OUString SAL_CALL     getImproduct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aNum1, const cpo::uno::Sequence< cpo::uno::Any >& aNumList ) override;
     virtual double SAL_CALL     getImreal( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImsin( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImsub( const OUString& aNum1, const OUString& aNum2 ) override;
-    virtual OUString SAL_CALL     getImsum( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< OUString > >& aNum1, const css::uno::Sequence< cpo::uno::Any >& aFollowingPars ) override;
+    virtual OUString SAL_CALL     getImsum( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aNum1, const cpo::uno::Sequence< cpo::uno::Any >& aFollowingPars ) override;
 
     virtual OUString SAL_CALL     getImsqrt( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImtan( const OUString& aNum ) override;
@@ -217,8 +217,8 @@ public:
     virtual double SAL_CALL     getOddfyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getOddlprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getOddlyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase) override;
-    virtual double SAL_CALL     getXirr( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates, const cpo::uno::Any& rGuess ) override;
-    virtual double SAL_CALL     getXnpv( double fRate, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates ) override;
+    virtual double SAL_CALL     getXirr( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates, const cpo::uno::Any& rGuess ) override;
+    virtual double SAL_CALL     getXnpv( double fRate, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates ) override;
     virtual double SAL_CALL     getIntrate( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fRedemp, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getCoupncd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getCoupdays( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
@@ -226,7 +226,7 @@ public:
     virtual double SAL_CALL     getCoupdaybs( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getCouppcd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getCoupnum( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getFvschedule( double fPrinc, const css::uno::Sequence< css::uno::Sequence< double > >& rSchedule ) override;
+    virtual double SAL_CALL     getFvschedule( double fPrinc, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rSchedule ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

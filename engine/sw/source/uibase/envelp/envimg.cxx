@@ -23,7 +23,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <editeng/paperinf.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/UnitConversion.hxx>
 #include <unotools/useroptions.hxx>
@@ -245,7 +245,7 @@ void SwEnvCfgItem::ImplCommit()
     PutProperties(aNames, aValues);
 }
 
-void SwEnvCfgItem::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwEnvCfgItem::Notify( const cpo::uno::Sequence< OUString >& ) {}
 
 Sequence<OUString> SwEnvCfgItem::GetPropertyNames()
 {

@@ -188,9 +188,9 @@ public:
     bool convertValueObject( const VARIANTARG *var, cpo::uno::Any& any);
     void dispatchExObject2Sequence( const VARIANTARG* pvar, cpo::uno::Any& anySeq, const css::uno::Type& type);
 
-    css::uno::Sequence<cpo::uno::Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, LONG* index,
+    cpo::uno::Sequence<cpo::uno::Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, LONG* index,
                                              VARTYPE type, const css::uno::Type& unotype);
-    css::uno::Sequence<cpo::uno::Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const css::uno::Type& unotype= css::uno::Type());
+    cpo::uno::Sequence<cpo::uno::Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const css::uno::Type& unotype= css::uno::Type());
 
 
     VARTYPE mapTypeClassToVartype( css::uno::TypeClass type);
@@ -202,13 +202,13 @@ public:
 
     static bool isJScriptArray(const VARIANT* pvar);
 
-    css::uno::Sequence<css::uno::Type> getImplementedInterfaces(IUnknown* pUnk);
+    cpo::uno::Sequence<css::uno::Type> getImplementedInterfaces(IUnknown* pUnk);
 
 protected:
-    css::uno::Reference<css::uno::XInterface> createAdapter(const css::uno::Sequence<css::uno::Type>& types, const css::uno::Reference<css::uno::XInterface>& receiver);
+    css::uno::Reference<css::uno::XInterface> createAdapter(const cpo::uno::Sequence<css::uno::Type>& types, const css::uno::Reference<css::uno::XInterface>& receiver);
 
     // helper function for Sequence conversion
-    void getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim, css::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc);
+    void getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim, cpo::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc);
     // helper function for Sequence conversion
     static bool incrementMultidimensionalIndex(sal_Int32 dimensions, const sal_Int32 * parDimensionLength,
                                     sal_Int32 * parMultidimensionalIndex);
@@ -263,7 +263,7 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
         {
             sal_Int8 arId[16];
             rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(arId));
-            css::uno::Sequence<sal_Int8> seqId( arId, 16);
+            cpo::uno::Sequence<sal_Int8> seqId( arId, 16);
             cpo::uno::Any anySource;
             anySource <<= xInt;
             cpo::uno::Any anyDisp = xSupplier->createBridge(
@@ -395,7 +395,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                     if ((var.vt & VT_ARRAY) != 0)
                     {
                         VARTYPE oleType = ::sal::static_int_cast< VARTYPE, int >( var.vt ^ VT_ARRAY );
-                        css::uno::Sequence<cpo::uno::Any> unoSeq = createOleArrayWrapper( var.parray, oleType, ptype);
+                        cpo::uno::Sequence<cpo::uno::Any> unoSeq = createOleArrayWrapper( var.parray, oleType, ptype);
                         css::uno::Reference<css::script::XTypeConverter> conv = getTypeConverter();
                         if (conv.is())
                         {
@@ -434,7 +434,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                 if( pArg->vt == VT_DISPATCH &&  isJScriptArray( pArg))
                 {
                     dispatchExObject2Sequence( pArg, rAny,
-                                               cppu::UnoType<css::uno::Sequence<cpo::uno::Any>>::get());
+                                               cppu::UnoType<cpo::uno::Sequence<cpo::uno::Any>>::get());
                 }
                 else if (pArg->vt == VT_DECIMAL)
                 {
@@ -1055,7 +1055,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const cpo::uno::
     for(sal_Int32 lastIndex=0;(lastIndex= sTypeName.indexOf( L'[', lastIndex)) != -1; lastIndex++,dims++);
 
     //get the maximum number of elements per dimensions and the typedescription of the elements
-    css::uno::Sequence<sal_Int32> seqElementCounts( dims);
+    cpo::uno::Sequence<sal_Int32> seqElementCounts( dims);
     css::uno::TypeDescription elementTypeDesc;
     getElementCountAndTypeOfSequence( rSeq, 1, seqElementCounts, elementTypeDesc );
 
@@ -1271,7 +1271,7 @@ size_t UnoConversionUtilities<T>::getOleElementSize( VARTYPE type)
 //                          Sequence< Sequence <Sequence <sal_Int32> > > - type is sal_Int32)
 template<class T>
 void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim,
-                                             css::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc)
+                                             cpo::uno::Sequence< sal_Int32 >& seqElementCounts, css::uno::TypeDescription& typeDesc)
 {
     sal_Int32 dimCount= (*static_cast<uno_Sequence* const *>(rSeq.getValue()))->nElements;
     if( dimCount > seqElementCounts[ dim-1])
@@ -1432,7 +1432,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rOb
     css::uno::Reference<css::lang::XSingleServiceFactory> xInvFactory= getInvocationFactory(rObj);
     if (xInvFactory.is())
     {
-        css::uno::Sequence<cpo::uno::Any> params(2);
+        cpo::uno::Sequence<cpo::uno::Any> params(2);
         params.getArray()[0] = rObj;
         params.getArray()[1] <<= OUString("FromOLE");
         css::uno::Reference<css::uno::XInterface> xInt2 = xInvFactory->createInstanceWithArguments(params);
@@ -1453,14 +1453,14 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rOb
                 params[0] <<= xInv;
                 params[1] <<= xInt;
                 params[2] <<= vartype;
-                xInitWrapper->initialize( css::uno::Sequence<cpo::uno::Any>(params, 3));
+                xInitWrapper->initialize( cpo::uno::Sequence<cpo::uno::Any>(params, 3));
             }
             else
             {
                 cpo::uno::Any params[2];
                 params[0] <<= xInv;
                 params[1] <<= vartype;
-                xInitWrapper->initialize( css::uno::Sequence<cpo::uno::Any>(params, 2));
+                xInitWrapper->initialize( cpo::uno::Sequence<cpo::uno::Any>(params, 2));
             }
 
             // put the newly created object into a map. If the same object will
@@ -1495,7 +1495,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, cpo::uno:
             {
                 VARTYPE oleTypeFlags = ::sal::static_int_cast< VARTYPE, int >( var.vt ^ VT_ARRAY );
 
-                css::uno::Sequence<cpo::uno::Any> unoSeq = createOleArrayWrapper(var.parray, oleTypeFlags);
+                cpo::uno::Sequence<cpo::uno::Any> unoSeq = createOleArrayWrapper(var.parray, oleTypeFlags);
                 rAny.setValue( &unoSeq, cppu::UnoType<decltype(unoSeq)>::get());
             }
             else
@@ -1773,7 +1773,7 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
             // No adapter available.
             //The COM component could be a UNO object. Then we need to provide
             // a proxy  that implements all interfaces
-            css::uno::Sequence<css::uno::Type> seqTypes= getImplementedInterfaces(spUnknown);
+            cpo::uno::Sequence<css::uno::Type> seqTypes= getImplementedInterfaces(spUnknown);
             css::uno::Reference<css::uno::XInterface> xIntAdapter;
             if (seqTypes.getLength() > 0)
             {
@@ -1809,11 +1809,11 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     }
     // No existing wrapper. Therefore create a new proxy.
     // If the object implements UNO interfaces then get the types.
-    css::uno::Sequence<css::uno::Type> seqTypes = getImplementedInterfaces(spUnknown);
+    cpo::uno::Sequence<css::uno::Type> seqTypes = getImplementedInterfaces(spUnknown);
     if (seqTypes.getLength() == 0 &&
         aType != VOID_TYPE && aType != cppu::UnoType<css::script::XInvocation>::get())
     {
-        seqTypes = css::uno::Sequence<css::uno::Type>( & aType, 1);
+        seqTypes = cpo::uno::Sequence<css::uno::Type>( & aType, 1);
     }
 
     //There is no existing wrapper, therefore we create one for the real COM object
@@ -1832,7 +1832,7 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     params[1] <<= (pVar->vt == VT_DISPATCH);
     params[2] <<= seqTypes;
 
-    xInit->initialize( css::uno::Sequence<cpo::uno::Any>( params, 3));
+    xInit->initialize( cpo::uno::Sequence<cpo::uno::Any>( params, 3));
     ComPtrToWrapperMap[reinterpret_cast<sal_uInt64>(spUnknown.p)] = xIntNewProxy;
 
     // we have a wrapper object
@@ -1852,7 +1852,7 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     return ret;
 }
 template<class T>
-css::uno::Reference<css::uno::XInterface> UnoConversionUtilities<T>::createAdapter(const css::uno::Sequence<css::uno::Type>& seqTypes,
+css::uno::Reference<css::uno::XInterface> UnoConversionUtilities<T>::createAdapter(const cpo::uno::Sequence<css::uno::Type>& seqTypes,
                                     const css::uno::Reference<css::uno::XInterface>& receiver)
 {
     css::uno::Reference< css::uno::XInterface> xIntAdapterFac;
@@ -2100,7 +2100,7 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
    it passes the element type which is []long.
 */
 template<class T>
-css::uno::Sequence<cpo::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray,
+cpo::uno::Sequence<cpo::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray,
               unsigned int dimCount, unsigned int actDim, LONG* index, VARTYPE type, const css::uno::Type& unotype)
 {
     LONG lBound;
@@ -2111,14 +2111,14 @@ css::uno::Sequence<cpo::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapp
     SafeArrayGetUBound(pArray, actDim, &uBound);
     nCountElements= uBound - lBound +1;
 
-    css::uno::Sequence<cpo::uno::Any>   anySeq(nCountElements);
+    cpo::uno::Sequence<cpo::uno::Any>   anySeq(nCountElements);
     cpo::uno::Any*            pUnoArray = anySeq.getArray();
 
     for (index[actDim - 1] = lBound; index[actDim - 1] <= uBound; index[actDim - 1]++)
     {
         if (actDim > 1 )
         {
-            css::uno::Sequence<cpo::uno::Any> element = createOleArrayWrapperOfDim(pArray, dimCount,
+            cpo::uno::Sequence<cpo::uno::Any> element = createOleArrayWrapperOfDim(pArray, dimCount,
                 actDim - 1, index, type, getElementTypeOfSequence(unotype));
 
             pUnoArray[index[actDim - 1] - lBound].setValue(&element, cppu::UnoType<decltype(element)>::get());
@@ -2213,11 +2213,11 @@ css::uno::Type UnoConversionUtilities<T>::getElementTypeOfSequence( const css::u
     return retValue;
 }
 template<class T>
-css::uno::Sequence<cpo::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const css::uno::Type& unoType)
+cpo::uno::Sequence<cpo::uno::Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const css::uno::Type& unoType)
 {
     sal_uInt32 dim = SafeArrayGetDim(pArray);
 
-    css::uno::Sequence<cpo::uno::Any> ret;
+    cpo::uno::Sequence<cpo::uno::Any> ret;
 
     if (dim > 0)
     {
@@ -2304,9 +2304,9 @@ VARTYPE UnoConversionUtilities<T>::mapTypeClassToVartype( css::uno::TypeClass ty
 }
 
 template<class T>
-css::uno::Sequence<css::uno::Type> UnoConversionUtilities<T>::getImplementedInterfaces(IUnknown* pUnk)
+cpo::uno::Sequence<css::uno::Type> UnoConversionUtilities<T>::getImplementedInterfaces(IUnknown* pUnk)
 {
-    css::uno::Sequence<css::uno::Type> seqTypes;
+    cpo::uno::Sequence<css::uno::Type> seqTypes;
     CComDispatchDriver disp( pUnk);
     if( disp)
     {
@@ -2321,8 +2321,8 @@ css::uno::Sequence<css::uno::Type> UnoConversionUtilities<T>::getImplementedInte
         {
             // we expect an array( SafeArray or IDispatch) of Strings.
             cpo::uno::Any anyNames;
-            variantToAny( &var, anyNames, cppu::UnoType<css::uno::Sequence<cpo::uno::Any>>::get());
-            css::uno::Sequence<cpo::uno::Any> seqAny;
+            variantToAny( &var, anyNames, cppu::UnoType<cpo::uno::Sequence<cpo::uno::Any>>::get());
+            cpo::uno::Sequence<cpo::uno::Any> seqAny;
             if( anyNames >>= seqAny)
             {
                 seqTypes.realloc( seqAny.getLength());

@@ -146,7 +146,7 @@ ContentProvider::supportsService(const OUString& s)
     return cppu::supportsService(this, s);
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ContentProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.PackageContentProvider"_ustr };
@@ -209,7 +209,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
     }
 
     // Create new package...
-    uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(rURL) };
+    cpo::uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(rURL) };
     uno::Reference< container::XHierarchicalNameAccess > xNameAccess;
     try
     {
@@ -245,7 +245,7 @@ void ContentProvider::removePackage( const OUString & rName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_package_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ContentProvider(context));
 }

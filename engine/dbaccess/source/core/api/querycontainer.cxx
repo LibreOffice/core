@@ -142,14 +142,14 @@ OUString SAL_CALL OQueryContainer::getImplementationName()
     }
 bool SAL_CALL OQueryContainer::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-css::uno::Sequence< OUString > SAL_CALL OQueryContainer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OQueryContainer::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_CONTAINER, SERVICE_SDB_QUERIES };
 }

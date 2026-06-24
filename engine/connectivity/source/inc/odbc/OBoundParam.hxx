@@ -76,7 +76,7 @@ namespace connectivity::odbc
             paramInputStreamLen = len;
         }
 
-        void setSequence(const css::uno::Sequence< sal_Int8 >& _aSequence)
+        void setSequence(const cpo::uno::Sequence< sal_Int8 >& _aSequence)
         {
             aSequence = _aSequence;
         }
@@ -114,7 +114,7 @@ namespace connectivity::odbc
                                  // data is in native format.
 
         css::uno::Reference< css::io::XInputStream> paramInputStream;
-        css::uno::Sequence< sal_Int8 > aSequence;
+        cpo::uno::Sequence< sal_Int8 > aSequence;
                                     // When an input stream is
                                     // bound to a parameter, a
                                     // reference to the input stream is saved

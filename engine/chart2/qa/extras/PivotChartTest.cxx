@@ -119,7 +119,7 @@ void lclModifyLayoutInfo(uno::Reference<sheet::XDataPilotDescriptor> const & xDe
 
 void lclModifySubtotals(uno::Reference<sheet::XDataPilotDescriptor> const & xDescriptor,
                         std::u16string_view sFieldName,
-                        uno::Sequence<sheet::GeneralFunction> const & rSubtotalFunctions)
+                        cpo::uno::Sequence<sheet::GeneralFunction> const & rSubtotalFunctions)
 {
     uno::Reference<container::XIndexAccess> xIndexAccess(xDescriptor->getDataPilotFields(), UNO_SET_THROW);
     sal_Int32 nCount = xIndexAccess->getCount();
@@ -150,7 +150,7 @@ void lclModifyRowGrandTotal(uno::Reference<sheet::XDataPilotDescriptor> const & 
 }
 
 void lclCheckSequence(std::vector<double> const & reference,
-                      uno::Sequence<cpo::uno::Any> const & values,
+                      cpo::uno::Sequence<cpo::uno::Any> const & values,
                       double delta)
 {
     CPPUNIT_ASSERT_EQUAL(reference.size(), size_t(values.getLength()));
@@ -165,7 +165,7 @@ void lclCheckCategories(std::vector<OUString> const & reference,
                         uno::Reference<chart2::data::XDataSequence> const & xSequence)
 {
     uno::Reference<chart2::data::XTextualDataSequence> xTextualDataSequence(xSequence, uno::UNO_QUERY_THROW);
-    uno::Sequence<OUString> aText = xTextualDataSequence->getTextualData();
+    cpo::uno::Sequence<OUString> aText = xTextualDataSequence->getTextualData();
 
     CPPUNIT_ASSERT_EQUAL(reference.size(), size_t(aText.getLength()));
     for (size_t i = 0; i < reference.size(); ++i)
@@ -174,10 +174,10 @@ void lclCheckCategories(std::vector<OUString> const & reference,
     }
 }
 
-uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>>
+cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>>
     lclGetCategories(Reference<chart2::XChartDocument> const & xChartDoc)
 {
-    uno::Sequence<beans::PropertyValue> aArguments( comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArguments( comphelper::InitPropertySequence(
             {{"CellRangeRepresentation", cpo::uno::Any(u"PT@categories"_ustr)}} ));
 
     uno::Reference<chart2::data::XDataProvider> xDataProvider(xChartDoc->getDataProvider(), uno::UNO_SET_THROW);
@@ -308,7 +308,7 @@ uno::Reference<sheet::XDataPilotTable> PivotChartTest::getPivotTableByName(sal_I
 
 void PivotChartTest::testRoundtrip()
 {
-    uno::Sequence<cpo::uno::Any> xSequence;
+    cpo::uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     std::vector<double> aReference1 { 10162.033139, 16614.523063, 27944.146101 };
@@ -371,7 +371,7 @@ void PivotChartTest::testRoundtrip()
 
 void PivotChartTest::testChangePivotTable()
 {
-    uno::Sequence<cpo::uno::Any> xSequence;
+    cpo::uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     loadFromFile(u"ods/PivotTableExample.ods");
@@ -563,7 +563,7 @@ void PivotChartTest::testPivotChartWithOneColumnField()
 
     // TEST
 
-    uno::Sequence<cpo::uno::Any> xSequence;
+    cpo::uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     // Check we have the Pivot Table
@@ -647,7 +647,7 @@ void PivotChartTest::testPivotChartWithOneRowField()
 
     // TEST
 
-    uno::Sequence<cpo::uno::Any> xSequence;
+    cpo::uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     // Check we have the Pivot Table
@@ -813,7 +813,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     xDataPilotTables->insertNewByName(sPivotTableName, table::CellAddress{1, 0, 0}, xDataPilotDescriptor);
 
     // TEST
-    uno::Sequence<cpo::uno::Any> xSequence;
+    cpo::uno::Sequence<cpo::uno::Any> xSequence;
     Reference<chart2::XChartDocument> xChartDoc;
 
     // Check we have the Pivot Table
@@ -864,7 +864,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
     // We don't expect any change in data as every extra subtotal row should be ignored
 
     // Enable subtotals - set to auto
-    uno::Sequence<sheet::GeneralFunction> aGeneralFunctionSequence{ sheet::GeneralFunction_AUTO };
+    cpo::uno::Sequence<sheet::GeneralFunction> aGeneralFunctionSequence{ sheet::GeneralFunction_AUTO };
     lclModifySubtotals(xDataPilotDescriptor, u"Country", aGeneralFunctionSequence);
     // Set Subtotals layout to bottom + add empty lines
     aLayoutInfoValue.AddEmptyLines = true;

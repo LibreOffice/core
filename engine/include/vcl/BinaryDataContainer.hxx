@@ -12,7 +12,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <tools/stream.hxx>
 #include <vcl/checksum.hxx>
@@ -46,7 +46,7 @@ public:
     size_t getSize() const;
     bool isEmpty() const;
     const sal_uInt8* getData() const;
-    SAL_DLLPRIVATE css::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
+    SAL_DLLPRIVATE cpo::uno::Sequence<sal_Int8> getCopyAsByteSequence() const;
 
     // Returns the data as a readonly stream open for reading
     SAL_DLLPRIVATE std::unique_ptr<SvStream> getAsStream() const;

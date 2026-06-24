@@ -30,7 +30,7 @@ class WordPerfectImportFilter
     css::uno::Reference<css::lang::XComponent> mxDoc;
 
     /// @throws css::uno::RuntimeException
-    bool importImpl(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor);
+    bool importImpl(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor);
 
 public:
     explicit WordPerfectImportFilter(css::uno::Reference<css::uno::XComponentContext> xContext)
@@ -40,7 +40,7 @@ public:
 
     // XFilter
     virtual bool SAL_CALL
-    filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
+    filter(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
     virtual void SAL_CALL cancel() override;
 
     // XImporter
@@ -49,15 +49,15 @@ public:
 
     //XExtendedFilterDetection
     virtual OUString SAL_CALL
-    detect(css::uno::Sequence<css::beans::PropertyValue>& Descriptor) override;
+    detect(cpo::uno::Sequence<css::beans::PropertyValue>& Descriptor) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& aArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

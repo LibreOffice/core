@@ -104,7 +104,7 @@ PageBackground::~PageBackground()
 {}
 
 // ____ XTypeProvider ____
-uno::Sequence< css::uno::Type > SAL_CALL PageBackground::getTypes()
+cpo::uno::Sequence< css::uno::Type > SAL_CALL PageBackground::getTypes()
 {
     return ::comphelper::concatSequences(
         impl::PageBackground_Base::getTypes(),
@@ -180,7 +180,7 @@ bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL PageBackground::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PageBackground::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.PageBackground"_ustr,
@@ -195,7 +195,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( PageBackground, PageBackground_Base, ::property::
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_PageBackground_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::PageBackground );
 }

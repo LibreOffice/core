@@ -141,7 +141,7 @@ namespace dbaccess
     // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(  ) override;
     // css::container::XNameAccess
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
 
     private:
         // OContentHelper overridables

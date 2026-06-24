@@ -168,7 +168,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
         // open the "active help" stream
         uno::Reference< io::XInputStream > xStream = aCnt.openStream();
         // and convert it to a String
-        uno::Sequence< sal_Int8 > lData;
+        cpo::uno::Sequence< sal_Int8 > lData;
         sal_Int32 nRead = xStream->readBytes( lData, 1024 );
         while ( nRead > 0 )
         {

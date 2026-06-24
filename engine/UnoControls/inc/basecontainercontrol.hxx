@@ -85,7 +85,7 @@ public:
         const OUString& sName
     ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl > > getControls() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > > getControls() override;
 
     //  XWindow
 

@@ -27,7 +27,7 @@
 
 #include "pyuno_impl.hxx"
 
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 using com::sun::star::uno::Reference;
 using cpo::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
@@ -102,7 +102,7 @@ static PyObject* PyUNOStruct_dir( PyObject *self )
     try
     {
         member_list = PyList_New( 0 );
-        const css::uno::Sequence<OUString> aMemberNames = me->members->xInvocation->getMemberNames();
+        const cpo::uno::Sequence<OUString> aMemberNames = me->members->xInvocation->getMemberNames();
         for( const auto& aMember : aMemberNames )
         {
             // setitem steals a reference

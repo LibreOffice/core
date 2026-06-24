@@ -42,7 +42,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OEnumerationByName final :
                          public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                           css::lang::XEventListener    >
 {
-    std::variant<css::uno::Sequence< OUString >, std::vector<OUString>> m_aNames;
+    std::variant<cpo::uno::Sequence< OUString >, std::vector<OUString>> m_aNames;
     css::uno::Reference< css::container::XNameAccess >  m_xAccess;
     sal_Int32                                           m_nPos;
     bool                                                m_bListening;
@@ -104,11 +104,11 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OAnyEnumeration final :
                                            public OAnyEnumeration_BASE
 {
     sal_Int32                         m_nPos;
-    css::uno::Sequence< cpo::uno::Any > m_lItems;
+    cpo::uno::Sequence< cpo::uno::Any > m_lItems;
     std::mutex m_aLock;
 
 public:
-    OAnyEnumeration(const css::uno::Sequence< cpo::uno::Any >& lItems);
+    OAnyEnumeration(const cpo::uno::Sequence< cpo::uno::Any >& lItems);
     virtual ~OAnyEnumeration() override;
 
     virtual bool SAL_CALL hasMoreElements(  ) override;

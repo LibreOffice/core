@@ -95,10 +95,10 @@ ScVbaChartObjects::removeByName(const OUString& _sChartName)
     xTableCharts->removeByName( _sChartName );
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaChartObjects::getChartObjectNames() const
 {
-    uno::Sequence< OUString > sChartNames;
+    cpo::uno::Sequence< OUString > sChartNames;
     try
     {
         // c++ hackery
@@ -114,11 +114,11 @@ ScVbaChartObjects::getChartObjectNames() const
         uno::Reference< sheet::XSpreadsheets > xSpreadsheets = pDocShell->GetModel()->getSheets();
         std::vector< OUString > aChartNamesVector;
 
-        const uno::Sequence< OUString > sSheetNames = xSpreadsheets->getElementNames();
+        const cpo::uno::Sequence< OUString > sSheetNames = xSpreadsheets->getElementNames();
         for (const auto& rSheetName : sSheetNames)
         {
             uno::Reference< table::XTableChartsSupplier > xLocTableChartsSupplier( xSpreadsheets->getByName(rSheetName), uno::UNO_QUERY_THROW );
-            const uno::Sequence< OUString > scurchartnames = xLocTableChartsSupplier->getCharts()->getElementNames();
+            const cpo::uno::Sequence< OUString > scurchartnames = xLocTableChartsSupplier->getCharts()->getElementNames();
             aChartNamesVector.insert( aChartNamesVector.end(), scurchartnames.begin(), scurchartnames.end() );
         }
         sChartNames = comphelper::containerToSequence( aChartNamesVector );
@@ -136,7 +136,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
 {
     try
     {
-        uno::Sequence< table::CellRangeAddress > aCellRangeAddress( 1 );
+        cpo::uno::Sequence< table::CellRangeAddress > aCellRangeAddress( 1 );
         awt::Rectangle aRectangle;
         aRectangle.X =  Millimeter::getInHundredthsOfOneMillimeter(_nX);
         aRectangle.Y = Millimeter::getInHundredthsOfOneMillimeter(_nY);
@@ -157,7 +157,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
 }
 void SAL_CALL ScVbaChartObjects::Delete(  )
 {
-    const uno::Sequence< OUString > sChartNames = xTableCharts->getElementNames();
+    const cpo::uno::Sequence< OUString > sChartNames = xTableCharts->getElementNames();
     for (const auto& rChartName : sChartNames)
         removeByName(rChartName);
 }
@@ -194,10 +194,10 @@ ScVbaChartObjects::getServiceImplName()
     return u"ScVbaChartObjects"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaChartObjects::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.excel.ChartObjects"_ustr
     };

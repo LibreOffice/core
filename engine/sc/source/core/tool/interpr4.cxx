@@ -3107,8 +3107,8 @@ void ScInterpreter::ScExternal()
                                 sal_Int32 nVal = GetInt32();
                                 if (nGlobalError == FormulaError::NONE)
                                 {
-                                    uno::Sequence<sal_Int32> aInner( &nVal, 1 );
-                                    uno::Sequence< uno::Sequence<sal_Int32> > aOuter( &aInner, 1 );
+                                    cpo::uno::Sequence<sal_Int32> aInner( &nVal, 1 );
+                                    cpo::uno::Sequence< cpo::uno::Sequence<sal_Int32> > aOuter( &aInner, 1 );
                                     aParam <<= aOuter;
                                 }
                             }
@@ -3139,8 +3139,8 @@ void ScInterpreter::ScExternal()
                         case svSingleRef:
                             {
                                 double fVal = GetDouble();
-                                uno::Sequence<double> aInner( &fVal, 1 );
-                                uno::Sequence< uno::Sequence<double> > aOuter( &aInner, 1 );
+                                cpo::uno::Sequence<double> aInner( &fVal, 1 );
+                                cpo::uno::Sequence< cpo::uno::Sequence<double> > aOuter( &aInner, 1 );
                                 aParam <<= aOuter;
                             }
                             break;
@@ -3170,8 +3170,8 @@ void ScInterpreter::ScExternal()
                         case svSingleRef:
                             {
                                 OUString aString = GetString().getString();
-                                uno::Sequence<OUString> aInner( &aString, 1 );
-                                uno::Sequence< uno::Sequence<OUString> > aOuter( &aInner, 1 );
+                                cpo::uno::Sequence<OUString> aInner( &aString, 1 );
+                                cpo::uno::Sequence< cpo::uno::Sequence<OUString> > aOuter( &aInner, 1 );
                                 aParam <<= aOuter;
                             }
                             break;
@@ -3221,8 +3221,8 @@ void ScInterpreter::ScExternal()
                                             aElem <<= GetCellValue(aAdr, aCell);
                                     }
                                 }
-                                uno::Sequence<cpo::uno::Any> aInner( &aElem, 1 );
-                                uno::Sequence< uno::Sequence<cpo::uno::Any> > aOuter( &aInner, 1 );
+                                cpo::uno::Sequence<cpo::uno::Any> aInner( &aElem, 1 );
+                                cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> > aOuter( &aInner, 1 );
                                 aParam <<= aOuter;
                             }
                             break;

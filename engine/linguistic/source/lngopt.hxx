@@ -54,7 +54,7 @@ public:
 
     static OUString    GetName( sal_Int32 nWID );
 
-    const css::uno::Sequence< OUString >&
+    const cpo::uno::Sequence< OUString >&
             GetActiveDics() const   { return pData->aActiveDics; }
 };
 
@@ -182,8 +182,8 @@ public:
     virtual cpo::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
 
     // XPropertyAccess
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
+    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
@@ -193,7 +193,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

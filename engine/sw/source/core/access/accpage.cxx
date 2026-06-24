@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-using uno::Sequence;
+using cpo::uno::Sequence;
 
 bool SwAccessiblePage::IsSelected()
 {

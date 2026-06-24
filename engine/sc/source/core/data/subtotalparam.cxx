@@ -15,7 +15,7 @@
 #include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/SubTotalColumn.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 ScSubTotalParam::SubtotalGroup::SubtotalGroup(const SubtotalGroup& r)
     : bActive(r.bActive)
@@ -148,7 +148,7 @@ void ScSubTotalParam::SubtotalGroup::AllocNumFmts(SCCOL n)
     }
 }
 
-void ScSubTotalParam::SubtotalGroup::SetSubtotals(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq)
+void ScSubTotalParam::SubtotalGroup::SetSubtotals(const cpo::uno::Sequence<css::sheet::SubTotalColumn>& seq)
 {
     AllocSubTotals(seq.getLength());
     for (SCCOL i = 0; i < nSubTotals; ++i)
@@ -156,12 +156,12 @@ void ScSubTotalParam::SubtotalGroup::SetSubtotals(const css::uno::Sequence<css::
                           ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(seq[i].Function)) };
 }
 
-//void ScSubTotalParam::SubtotalGroup::SetCustFuncs(const css::uno::Sequence<css::sheet::SubTotalColumn>& /*seq*/)
+//void ScSubTotalParam::SubtotalGroup::SetCustFuncs(const cpo::uno::Sequence<css::sheet::SubTotalColumn>& /*seq*/)
 //{
 // TODO UNO::API: SubTotalColumn has no token array member
 //}
 
-//void ScSubTotalParam::SubtotalGroup::SetSublabels(const css::uno::Sequence<css::sheet::SubTotalColumn>& /*seq*/)
+//void ScSubTotalParam::SubtotalGroup::SetSublabels(const cpo::uno::Sequence<css::sheet::SubTotalColumn>& /*seq*/)
 //{
 // TODO UNO::API: SubTotalColumn has no LabelName member
 //}

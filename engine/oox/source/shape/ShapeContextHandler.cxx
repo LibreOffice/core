@@ -665,7 +665,7 @@ void ShapeContextHandler::setDocumentProperties(const uno::Reference<document::X
     mxShapeFilterBase->checkDocumentProperties(mxDocumentProperties);
 }
 
-void ShapeContextHandler::setMediaDescriptor(const uno::Sequence<beans::PropertyValue>& rMediaDescriptor)
+void ShapeContextHandler::setMediaDescriptor(const cpo::uno::Sequence<beans::PropertyValue>& rMediaDescriptor)
 {
     maMediaDescriptor = rMediaDescriptor;
 }

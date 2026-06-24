@@ -187,7 +187,7 @@ void SdTPAction::Construct()
         if ( xObj.is() )
         {
             bOLEAction = true;
-            uno::Sequence < embed::VerbDescriptor > aVerbs;
+            cpo::uno::Sequence < embed::VerbDescriptor > aVerbs;
             try
             {
                 aVerbs = xObj->getSupportedVerbs();

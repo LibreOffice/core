@@ -73,12 +73,12 @@ void lcl_AddPropertiesToVector(std::vector<beans::Property>& rOutProperties)
         beans::PropertyAttribute::BOUND | beans::PropertyAttribute::MAYBEDEFAULT);
 
     rOutProperties.emplace_back("OverlapSequence", PROP_HISTOGRAMCHARTTYPE_OVERLAP_SEQUENCE,
-                                cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
+                                cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);
 
     rOutProperties.emplace_back("GapwidthSequence", PROP_HISTOGRAMCHARTTYPE_GAPWIDTH_SEQUENCE,
-                                cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
+                                cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),
                                 beans::PropertyAttribute::BOUND
                                     | beans::PropertyAttribute::MAYBEDEFAULT);
 
@@ -282,14 +282,14 @@ OUString SAL_CALL HistogramChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM;
 }
 
-uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedMandatoryRoles()
+cpo::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedMandatoryRoles()
 {
     return { u"label"_ustr, u"values-y"_ustr };
 }
 
-uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedOptionalRoles() { return {}; }
+cpo::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedOptionalRoles() { return {}; }
 
-uno::Sequence<OUString> HistogramChartType::getSupportedPropertyRoles()
+cpo::uno::Sequence<OUString> HistogramChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
@@ -304,7 +304,7 @@ void HistogramChartType::GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny)
 {
     static const ::chart::tPropertyValueMap aStaticDefaults = []() {
         ::chart::tPropertyValueMap aTmp;
-        uno::Sequence<sal_Int32> aSeq{ 0 }; // No gap for histogram
+        cpo::uno::Sequence<sal_Int32> aSeq{ 0 }; // No gap for histogram
 
         ::chart::PropertyHelper::setPropertyValueDefault(aTmp, PROP_HISTOGRAMCHARTTYPE_BINWIDTH,
                                                          2.0);
@@ -361,7 +361,7 @@ bool SAL_CALL HistogramChartType::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_HISTOGRAM, u"com.sun.star.chart2.ChartType"_ustr };
 }
@@ -370,7 +370,7 @@ css::uno::Sequence<OUString> SAL_CALL HistogramChartType::getSupportedServiceNam
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_chart_HistogramChartType_get_implementation(
-    css::uno::XComponentContext* /*context*/, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* /*context*/, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::chart::HistogramChartType());
 }

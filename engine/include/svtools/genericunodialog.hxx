@@ -79,13 +79,13 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
         virtual cpo::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override = 0;
+        virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override = 0;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override = 0;
         virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
         // OPropertySetHelper
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
@@ -96,7 +96,7 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
         virtual sal_Int16 SAL_CALL execute(  ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     protected:
         /** create the concrete dialog instance. Note that m_aMutex is not locked when this method get called,

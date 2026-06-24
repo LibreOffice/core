@@ -51,7 +51,7 @@ public:
         virtual OUString SAL_CALL
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override = 0;
+            sal_Int32 nTextConversionOptions, cpo::uno::Sequence< sal_Int32 >& offset ) override = 0;
         virtual bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions ) override = 0;
@@ -61,7 +61,7 @@ public:
         getImplementationName() override;
     bool SAL_CALL
         supportsService(const OUString& ServiceName) override;
-    css::uno::Sequence< OUString > SAL_CALL
+    cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 private:
     const char* implementationName;
@@ -93,7 +93,7 @@ public:
         OUString SAL_CALL
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override;
+            sal_Int32 nTextConversionOptions, cpo::uno::Sequence< sal_Int32 >& offset ) override;
         bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
@@ -106,7 +106,7 @@ private:
         css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
         sal_Int32 maxLeftLength;
         sal_Int32 maxRightLength;
-        static css::uno::Sequence< OUString >
+        static cpo::uno::Sequence< OUString >
             getCharConversions(std::u16string_view aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toHanja);
 };
 
@@ -130,7 +130,7 @@ public:
         OUString SAL_CALL
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override;
+            sal_Int32 nTextConversionOptions, cpo::uno::Sequence< sal_Int32 >& offset ) override;
         bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
@@ -139,7 +139,7 @@ private:
         // user defined dictionary list
         css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
         OUString getWordConversion(std::u16string_view aText,
-            sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions, css::uno::Sequence <sal_Int32>& offset);
+            sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions, cpo::uno::Sequence <sal_Int32>& offset);
         static OUString getCharConversion(std::u16string_view aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions);
         css::lang::Locale aLocale;
 };

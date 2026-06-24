@@ -77,12 +77,12 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
         sal_Int32 SAL_CALL
         readBytes(
-            css::uno::Sequence< sal_Int8 >& aData,
+            cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nBytesToRead ) override;
 
         sal_Int32 SAL_CALL
         readSomeBytes(
-            css::uno::Sequence< sal_Int8 >& aData,
+            cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead ) override;
 
 
@@ -110,7 +110,7 @@ class XStream_impl :  public cppu::WeakImplHelper<
         // XOutputStream
 
         void SAL_CALL
-        writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+        writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
 
 
         void SAL_CALL

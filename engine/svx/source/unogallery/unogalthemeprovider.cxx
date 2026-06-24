@@ -49,11 +49,11 @@ protected:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -61,11 +61,11 @@ protected:
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XGalleryThemeProvider
     virtual css::uno::Reference< css::gallery::XGalleryTheme > SAL_CALL insertNewByName( const OUString& ThemeName ) override;
@@ -93,15 +93,15 @@ bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& ServiceName
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSeq { u"com.sun.star.gallery.GalleryThemeProvider"_ustr };
+    cpo::uno::Sequence<OUString> aSeq { u"com.sun.star.gallery.GalleryThemeProvider"_ustr };
     return aSeq;
 }
 
-uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
 {
-    static const uno::Sequence aTypes {
+    static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<lang::XInitialization>::get(),
@@ -112,14 +112,14 @@ uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
     return aTypes;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< cpo::uno::Any >& rArguments )
+void SAL_CALL GalleryThemeProvider::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
-    uno::Sequence< beans::PropertyValue >   aParams;
+    cpo::uno::Sequence< beans::PropertyValue >   aParams;
 
     for( const auto& rArgument : rArguments )
     {
@@ -165,11 +165,11 @@ cpo::uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
 {
     const SolarMutexGuard aGuard;
     sal_uInt32                          i = 0, nCount = ( mpGallery ? mpGallery->GetThemeCount() : 0 ), nRealCount = 0;
-    uno::Sequence< OUString >    aSeq( nCount );
+    cpo::uno::Sequence< OUString >    aSeq( nCount );
     auto aSeqRange = asNonConstRange(aSeq);
 
     for( ; i < nCount; ++i )
@@ -232,7 +232,7 @@ void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_gallery_GalleryThemeProvider_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new GalleryThemeProvider);
 }

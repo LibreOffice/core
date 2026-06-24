@@ -509,7 +509,7 @@ void PPTWriter::ImplCreateDocumentSummaryInformation()
         'A',0,'1',0,'E',0,'F',0,'-',0,'0',0,'0',0,'6',0,'0',0,'9',0,
         '7',0,'D',0,'A',0,'5',0,'6',0,'8',0,'9',0,'}',0
     };
-    uno::Sequence<sal_Int8> aGuidSeq(aGuid, 0x52);
+    cpo::uno::Sequence<sal_Int8> aGuidSeq(aGuid, 0x52);
 
     SvMemoryStream  aHyperBlob;
     ImplCreateHyperBlob( aHyperBlob );
@@ -521,10 +521,10 @@ void PPTWriter::ImplCreateDocumentSummaryInformation()
 
     if ( mnCnvrtFlags & 0x8000 )
     {
-        uno::Sequence<sal_Int8> aThumbSeq;
+        cpo::uno::Sequence<sal_Int8> aThumbSeq;
         if ( GetPageByIndex( 0, NORMAL ) && ImplGetPropertyValue( mXPagePropSet, u"PreviewBitmap"_ustr ) )
         {
-            aThumbSeq = *o3tl::doAccess<uno::Sequence<sal_Int8>>(mAny);
+            aThumbSeq = *o3tl::doAccess<cpo::uno::Sequence<sal_Int8>>(mAny);
         }
         sfx2::SaveOlePropertySet( xDocProps, mrStg.get(),
                 &aThumbSeq, &aGuidSeq, &aHyperSeq);
@@ -838,7 +838,7 @@ bool PPTWriter::ImplCreateDocument()
             css::uno::Reference< css::container::XNameContainer > aXCont( mXModel->getCustomPresentations() );
             if ( aXCont.is() )
             {
-                const css::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
+                const cpo::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
                 if ( aNameSeq.hasElements() )
                 {
                     mpPptEscherEx->OpenContainer( EPP_NamedShows );

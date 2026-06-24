@@ -36,7 +36,7 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShapeEngine
                                                             SdrObject* pRenderedShape);
 
 public:
-    EnhancedCustomShapeEngine(const css::uno::Sequence<cpo::uno::Any>& aArguments);
+    EnhancedCustomShapeEngine(const cpo::uno::Sequence<cpo::uno::Any>& aArguments);
     EnhancedCustomShapeEngine(SdrObjCustomShape& rShape);
 
     // XInterface
@@ -46,7 +46,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XCustomShapeEngine
     virtual css::uno::Reference<css::drawing::XShape> SAL_CALL render() override;

@@ -52,7 +52,7 @@ private:
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
     css::uno::Reference< css::frame::XModel > m_xModel;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::drawing::XShapes > const & getShapes() ;
 public:

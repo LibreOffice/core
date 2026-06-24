@@ -33,7 +33,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 private:
     /// @throws css::uno::RuntimeException
     static void checkParameterRangeInDouble( double nRange, double nMin, double nMax );

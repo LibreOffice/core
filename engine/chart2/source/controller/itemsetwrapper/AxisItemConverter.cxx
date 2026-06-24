@@ -161,7 +161,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
     const chart2::ScaleData      aScale( m_xAxis->getScaleData() );
     const chart2::IncrementData& rIncrement( aScale.IncrementData );
-    const uno::Sequence< chart2::SubIncrement >& rSubIncrements( aScale.IncrementData.SubIncrements );
+    const cpo::uno::Sequence< chart2::SubIncrement >& rSubIncrements( aScale.IncrementData.SubIncrements );
     const TimeIncrement& rTimeIncrement( aScale.TimeIncrement );
     bool bDateAxis = (aScale.AxisType == chart2::AxisType::DATE);
     if( m_pExplicitScale )

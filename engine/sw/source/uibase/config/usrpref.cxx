@@ -27,7 +27,7 @@
 
 #include <usrpref.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #if defined(__GNUC__) && !defined(__clang__)
@@ -453,7 +453,7 @@ void SwLayoutViewConfig::Load()
     }
 }
 
-void SwLayoutViewConfig::Notify(const css::uno::Sequence<OUString>&)
+void SwLayoutViewConfig::Notify(const cpo::uno::Sequence<OUString>&)
 {
     Load();
 }
@@ -548,7 +548,7 @@ void SwGridConfig::Load()
     m_rParent.SetSnapSize(aSnap);
 }
 
-void SwGridConfig::Notify( const css::uno::Sequence< OUString >& )
+void SwGridConfig::Notify( const cpo::uno::Sequence< OUString >& )
 {
     Load();
 }
@@ -630,7 +630,7 @@ void SwCursorConfig::Load()
     }
 }
 
-void SwCursorConfig::Notify(const css::uno::Sequence<OUString>& )
+void SwCursorConfig::Notify(const cpo::uno::Sequence<OUString>& )
 {
     Load();
 }
@@ -704,7 +704,7 @@ void SwFmtAidsAutoComplConfig::Load()
     }
 }
 
-void SwFmtAidsAutoComplConfig::Notify(const css::uno::Sequence<OUString>&)
+void SwFmtAidsAutoComplConfig::Notify(const cpo::uno::Sequence<OUString>&)
 {
     Load();
 }
@@ -737,7 +737,7 @@ void SwWebColorConfig::ImplCommit()
     PutProperties(m_aPropNames, aValues);
 }
 
-void SwWebColorConfig::Notify(const css::uno::Sequence<OUString>&)
+void SwWebColorConfig::Notify(const cpo::uno::Sequence<OUString>&)
 {
     Load();
 }

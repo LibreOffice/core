@@ -801,7 +801,7 @@ void MarkdownReader::SetupFilterOptions(SwDoc& rDoc)
         return;
     }
 
-    uno::Sequence<beans::PropertyValue> aFilterData;
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData;
     try
     {
         std::vector<beans::PropertyValue> aData
@@ -834,7 +834,7 @@ void MarkdownReader::SetupFilterOptions(SwDoc& rDoc)
     // Go via filter detection so non-ODF templates work, too.
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
-    uno::Sequence<css::beans::PropertyValue> aTemplateArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aTemplateArgs = {
         comphelper::makePropertyValue(u"Hidden"_ustr, true),
     };
     uno::Reference<lang::XComponent> xTemplateComponent

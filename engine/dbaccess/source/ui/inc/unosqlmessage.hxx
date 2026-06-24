@@ -39,11 +39,11 @@ public:
     OSQLMessageDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
     // XTypeProvider
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
@@ -53,7 +53,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
 private:
-    virtual void SAL_CALL initialize(css::uno::Sequence< cpo::uno::Any > const & args) override;
+    virtual void SAL_CALL initialize(cpo::uno::Sequence< cpo::uno::Any > const & args) override;
 
 // OPropertySetHelper overridables
     // (overwriting these three, because we have some special handling for our property)

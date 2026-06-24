@@ -42,7 +42,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>
@@ -307,8 +307,8 @@ void Test::testEmpty2(
     CPPUNIT_ASSERT_EQUAL(
         static_cast< sal_Int32 >(0), empty2a->getPropertyValues().getLength());
     empty2a->setPropertyValues(
-        css::uno::Sequence< css::beans::PropertyValue >());
-    css::uno::Sequence< css::beans::PropertyValue > vs(2);
+        cpo::uno::Sequence< css::beans::PropertyValue >());
+    cpo::uno::Sequence< css::beans::PropertyValue > vs(2);
     vs[0].Name = OUString("any1");
     vs[0].Handle = -1;
     vs[0].State = css::beans::PropertyState_DIRECT_VALUE;
@@ -516,7 +516,7 @@ void Test::testFull(
     css::uno::Reference< css::beans::XPropertyAccess > fulla(
         full, css::uno::UNO_QUERY);
     CPPUNIT_ASSERT(fulla.is());
-    css::uno::Sequence< css::beans::PropertyValue > vs(
+    cpo::uno::Sequence< css::beans::PropertyValue > vs(
         fulla->getPropertyValues());
     CPPUNIT_ASSERT_EQUAL(static_cast< sal_Int32 >(2), vs.getLength());
     CPPUNIT_ASSERT_EQUAL(

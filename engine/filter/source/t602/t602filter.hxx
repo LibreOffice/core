@@ -90,12 +90,12 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
     // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XPropertyAccess
-        virtual css::uno::Sequence< css::beans::PropertyValue >
+        virtual cpo::uno::Sequence< css::beans::PropertyValue >
                             SAL_CALL getPropertyValues() override;
-        virtual void SAL_CALL   setPropertyValues( const css::uno::Sequence<
+        virtual void SAL_CALL   setPropertyValues( const cpo::uno::Sequence<
                                     css::beans::PropertyValue >& aProps ) override;
 
 public:
@@ -210,7 +210,7 @@ private:
     void wrtfnt();
 
     /// @throws css::uno::RuntimeException
-    bool importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
+    bool importImpl( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
     public:
         explicit T602ImportFilter(css::uno::Reference<css::uno::XComponentContext > x );
@@ -218,7 +218,7 @@ private:
         virtual ~T602ImportFilter() override;
 
     // XFilter
-        virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+        virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
         virtual void SAL_CALL cancel(  ) override {};
 
     // XImporter
@@ -226,15 +226,15 @@ private:
 
     // XExtendedTypeDetection
         virtual OUString SAL_CALL detect(
-            css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
+            cpo::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 
     // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         void test();
 };

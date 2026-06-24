@@ -114,7 +114,7 @@ IMPLEMENT_FORWARD_XINTERFACE3( ScAccessibleCell, ScAccessibleCellBase, Accessibl
 
     //=====  XTypeProvider  ===================================================
 
-css::uno::Sequence< css::uno::Type > SAL_CALL ScAccessibleCell::getTypes()
+cpo::uno::Sequence< css::uno::Type > SAL_CALL ScAccessibleCell::getTypes()
 {
     return ::comphelper::concatSequences(
         ScAccessibleCellBase::getTypes(),
@@ -439,7 +439,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
         return;
     }
 
-    uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aTargetSet(nCount);
+    cpo::uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aTargetSet(nCount);
     uno::Reference <css::accessibility::XAccessible>* pTargetSet = aTargetSet.getArray();
     sal_uInt32 nPos(0);
     for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Row()); ++nRow)
@@ -508,11 +508,11 @@ OUString SAL_CALL ScAccessibleCell::getExtendedAttributes()
 }
 
 // cell has its own ParaIndent property, so when calling character attributes on cell, the ParaIndent should replace the ParaLeftMargin if its value is not zero.
-uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< beans::PropertyValue > aAttribs = AccessibleStaticTextBase::getCharacterAttributes( nIndex, aRequestedAttributes );
+    cpo::uno::Sequence< beans::PropertyValue > aAttribs = AccessibleStaticTextBase::getCharacterAttributes( nIndex, aRequestedAttributes );
 
     sal_uInt16 nParaIndent = mpDoc->GetAttr( maCellAddress, ATTR_INDENT ).GetValue();
     if (nParaIndent > 0)

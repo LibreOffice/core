@@ -13,7 +13,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
 
-using css::uno::Sequence;
+using cpo::uno::Sequence;
 
 namespace vcl
 {

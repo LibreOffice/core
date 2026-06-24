@@ -38,7 +38,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
         OString sMessage = "PropertyValue " + propName.toUtf8();
         cpo::uno::Any aOrigValue(origValue), aNewValue(newValue);
 
-        css::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(
+        cpo::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(
             css::beans::NamedValue(u"nodepath"_ustr, cpo::uno::Any(regNodeName))) };
         css::uno::Reference<beans::XPropertySet> xRegNodeRO(
             configProvider->createInstanceWithArguments(
@@ -124,7 +124,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
                                  aStatusBarFunction);
 
     propName = u"UserLists"_ustr;
-    uno::Sequence<OUString> aSeq{
+    cpo::uno::Sequence<OUString> aSeq{
         u"Sun,Mon,Tue,Wed,Thu,Fri,Sat"_ustr,
         u"Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday"_ustr,
         u"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"_ustr,
@@ -133,7 +133,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
         u"Nissan,Iyar,Sivan,Tammuz,Av,Elul,Tishri,Heshvan,Kislev,Tevet,Shevat,Adar,Adar B"_ustr
     };
 
-    uno::Sequence<OUString> aUserLists;
+    cpo::uno::Sequence<OUString> aUserLists;
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aUserLists);
     for (auto i = 0; i < aUserLists.getLength(); i++)
     {
@@ -142,7 +142,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
                                      aSeq[i], aUserLists[i]);
     }
 
-    aNewValue <<= uno::Sequence<OUString>();
+    aNewValue <<= cpo::uno::Sequence<OUString>();
     xGlobalSheetSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xGlobalSheetSettings->getPropertyValue(propName) >>= aUserLists);
     CPPUNIT_ASSERT_MESSAGE("Unable to set PropertyValue UserLists", !aUserLists.hasElements());

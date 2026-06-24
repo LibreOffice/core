@@ -94,10 +94,10 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
         /* interface XServiceInfo */
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // css.task.XJob
-        virtual cpo::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments) override;
+        virtual cpo::uno::Any SAL_CALL execute(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments) override;
 
         // css.lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
@@ -118,7 +118,7 @@ class HelpOnStartup final : public ::cppu::WeakImplHelper< css::lang::XServiceIn
                     a module identifier ... or an empty value if no model could be located ...
                     or if it could not be classified successfully.
          */
-        OUString its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments);
+        OUString its_getModuleIdFromEnv(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments);
 
         /** @short  tries to locate the open help module and return
                     the url of the currently shown help content.

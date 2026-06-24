@@ -83,7 +83,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTextboxRoundedCorners)
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         uno::Reference<drawing::XShape> xShape = getShape(1);
         comphelper::SequenceAsHashMap aCustomShapeGeometry(
-            getProperty<uno::Sequence<beans::PropertyValue>>(xShape, u"CustomShapeGeometry"_ustr));
+            getProperty<cpo::uno::Sequence<beans::PropertyValue>>(xShape,
+                                                                  u"CustomShapeGeometry"_ustr));
 
         // Test that the shape is a rounded rectangle.
         CPPUNIT_ASSERT_EQUAL(u"round-rectangle"_ustr,
@@ -1252,13 +1253,13 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedPdf)
     saveAndReload(TestFilter::ODT);
     verify();
 
-    uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
+    cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(
         m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
                                                  aArgs),
         uno::UNO_QUERY);
     bool bHasBitmap = false;
-    const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+    const cpo::uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
     for (const auto& rElementName : aNames)
     {
         if (rElementName.startsWith("Pictures") && rElementName.endsWith("png"))
@@ -1277,21 +1278,21 @@ CPPUNIT_TEST_FIXTURE(Test, testWebpImageRoundtrip)
     // The saved zip must carry the picture as .webp, and the reloaded
     // shape's graphic must report image/webp.
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aInsertArgs{
+    cpo::uno::Sequence<beans::PropertyValue> aInsertArgs{
         comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"image.webp")),
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aInsertArgs);
 
     saveAndReload(TestFilter::ODT);
 
-    uno::Sequence<cpo::uno::Any> aZipArgs{ cpo::uno::Any(maTempFile.GetURL()) };
+    cpo::uno::Sequence<cpo::uno::Any> aZipArgs{ cpo::uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(
         m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
                                                  aZipArgs),
         uno::UNO_QUERY);
     bool bHasWebp = false;
     bool bHasPng = false;
-    const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+    const cpo::uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
     for (const auto& rElementName : aNames)
     {
         if (!rElementName.startsWith("Pictures"))

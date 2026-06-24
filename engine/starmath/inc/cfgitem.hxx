@@ -95,7 +95,7 @@ class SmMathConfig final : public utl::ConfigItem, public SfxBroadcaster
     std::unique_ptr<SmCfgOther> pOther;
     std::unique_ptr<SmFontFormatList> pFontFormatList;
     std::unique_ptr<SmSymbolManager> pSymbolMgr;
-    css::uno::Sequence<OUString> m_sUserDefinedNames;
+    cpo::uno::Sequence<OUString> m_sUserDefinedNames;
     bool bIsOtherModified;
     bool bIsFormatModified;
     SmFontPickList vFontPickList[8];
@@ -156,7 +156,7 @@ public:
     virtual ~SmMathConfig() override;
 
     // utl::ConfigItem
-    virtual void Notify(const css::uno::Sequence<OUString>& rPropertyNames) override;
+    virtual void Notify(const cpo::uno::Sequence<OUString>& rPropertyNames) override;
 
     SmSymbolManager& GetSymbolManager();
     void GetSymbols(std::vector<SmSym>& rSymbols) const;
@@ -165,7 +165,7 @@ public:
     const SmFormat& GetStandardFormat() const;
     void SetStandardFormat(const SmFormat& rFormat, bool bSaveFontFormatList = false);
 
-    const css::uno::Sequence<OUString>& LoadUserDefinedNames();
+    const cpo::uno::Sequence<OUString>& LoadUserDefinedNames();
     void GetUserDefinedFormula(std::u16string_view sName, OUString& sFormula);
     bool HasUserDefinedFormula(std::u16string_view sName);
     void SaveUserDefinedFormula(std::u16string_view sName, const OUString& sElement);

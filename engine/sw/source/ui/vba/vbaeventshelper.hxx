@@ -28,20 +28,20 @@ class SwVbaEventsHelper : public VbaEventsHelperBase
 {
 public:
     SwVbaEventsHelper(
-        const css::uno::Sequence< cpo::uno::Any >& rArgs,
+        const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~SwVbaEventsHelper() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
-    virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const css::uno::Sequence< cpo::uno::Any >& rArgs ) override;
-    virtual css::uno::Sequence< cpo::uno::Any > implBuildArgumentList( const EventHandlerInfo& rInfo, const css::uno::Sequence< cpo::uno::Any >& rArgs ) override;
+    virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > implBuildArgumentList( const EventHandlerInfo& rInfo, const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
     virtual void implPostProcessEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, bool bCancel ) override;
-    virtual OUString implGetDocumentModuleName( const EventHandlerInfo& rInfo, const css::uno::Sequence< cpo::uno::Any >& rArgs ) const override;
+    virtual OUString implGetDocumentModuleName( const EventHandlerInfo& rInfo, const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) const override;
 };
 
 #endif

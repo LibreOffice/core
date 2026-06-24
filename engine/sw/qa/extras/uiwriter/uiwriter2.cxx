@@ -1912,7 +1912,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
 
-    auto aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(
+    auto aSeq = getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
         xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr);
     sal_Int16 nOrigCol2Pos = aSeq[0].Position;
     sal_Int16 nOrigCol3Pos = aSeq[1].Position;
@@ -1922,8 +1922,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
 
     dispatchCommand(mxComponent, u".uno:DistributeColumns"_ustr, {});
 
-    aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
-                                                                  u"TableColumnSeparators"_ustr);
+    aSeq = getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
+        xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Second column should shrink", nOrigCol2Pos < aSeq[0].Position);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Last column shouldn't change", nOrigCol3Pos, aSeq[1].Position);
 }
@@ -1939,7 +1939,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144317)
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
 
-    auto aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(
+    auto aSeq = getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
         xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr);
     sal_Int16 nOrigCol1Pos = aSeq[0].Position;
 
@@ -1953,8 +1953,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144317)
 
     dispatchCommand(mxComponent, u".uno:SetMinimalColumnWidth"_ustr, {});
 
-    aSeq = getProperty<uno::Sequence<text::TableColumnSeparator>>(xTableRows->getByIndex(0),
-                                                                  u"TableColumnSeparators"_ustr);
+    aSeq = getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
+        xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr);
     CPPUNIT_ASSERT_MESSAGE("First column should shrink", aSeq[0].Position < nOrigCol1Pos);
 }
 
@@ -2181,7 +2181,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -2216,7 +2216,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -2249,7 +2249,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
     CPPUNIT_ASSERT_EQUAL(u"3"_ustr,
                          getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues2 = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues2 = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 2"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -2299,7 +2299,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -2332,7 +2332,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     CPPUNIT_ASSERT_EQUAL(u"3"_ustr,
                          getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues2 = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues2 = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 2"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -2385,7 +2385,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_custom_outline)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });

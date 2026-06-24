@@ -76,7 +76,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/proparrhlp.hxx>

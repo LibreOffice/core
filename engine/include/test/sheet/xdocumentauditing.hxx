@@ -15,7 +15,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -35,7 +35,7 @@ private:
     bool hasRightAmountOfShapes(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage,
                                 sal_Int32 nElementCount, sal_Int32 nShapes);
     static void dispatch(const css::uno::Reference<css::frame::XFrame>& xFrame,
-                         const css::uno::Sequence<css::beans::PropertyValue>& rArguments);
+                         const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments);
     css::awt::Point m_Position;
 };
 } // namespace apitest

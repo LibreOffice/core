@@ -342,7 +342,7 @@ lcl_SetNodeNumStart(SwPaM & rCursor, cpo::uno::Any const& rValue)
 static bool
 lcl_setCharFormatSequence(SwPaM & rPam, cpo::uno::Any const& rValue)
 {
-    uno::Sequence<OUString> aCharStyles;
+    cpo::uno::Sequence<OUString> aCharStyles;
     if (!(rValue >>= aCharStyles))
     {
         return false;
@@ -514,7 +514,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
             else if (FN_UNO_PARA_NUM_AUTO_FORMAT == rEntry.nWID)
             {
                 std::shared_ptr<SfxItemSet> pAutoStyle;
-                if (uno::Sequence<beans::NamedValue> props; rValue >>= props)
+                if (cpo::uno::Sequence<beans::NamedValue> props; rValue >>= props)
                 {
                     // TODO create own map for this, it contains UNO_NAME_DISPLAY_NAME? or make property readable so ODF export can map it to a automatic style?
                     SfxItemPropertySet const& rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
@@ -950,7 +950,7 @@ bool SAL_CALL SwXTextCursor::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXTextCursor::getSupportedServiceNames()
 {
     return {
@@ -1911,7 +1911,7 @@ static bool propertyCausesSideEffectsInNodes(sal_uInt16 nWID)
 
 void SwUnoCursorHelper::SetPropertyValues(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
-    const uno::Sequence< beans::PropertyValue > &rPropertyValues,
+    const cpo::uno::Sequence< beans::PropertyValue > &rPropertyValues,
     const SetAttrMode nAttrMode)
 {
     SetPropertyValues(rPaM, rPropSet,
@@ -2007,14 +2007,14 @@ namespace
     }
 }
 
-uno::Sequence< beans::PropertyState >
+cpo::uno::Sequence< beans::PropertyState >
 SwUnoCursorHelper::GetPropertyStates(
             SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
-            const uno::Sequence< OUString >& rPropertyNames,
+            const cpo::uno::Sequence< OUString >& rPropertyNames,
             const SwGetPropertyStatesCaller eCaller)
 {
     const OUString* pNames = rPropertyNames.getConstArray();
-    uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
+    cpo::uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     const SfxItemPropertyMap &rMap = rPropSet.getPropertyMap();
     std::optional<SfxItemSet> oSet;
@@ -2117,8 +2117,8 @@ beans::PropertyState SwUnoCursorHelper::GetPropertyState(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName)
 {
-    uno::Sequence< OUString > aStrings { rPropertyName };
-    uno::Sequence< beans::PropertyState > aSeq =
+    cpo::uno::Sequence< OUString > aStrings { rPropertyName };
+    cpo::uno::Sequence< beans::PropertyState > aSeq =
         GetPropertyStates(rPaM, rPropSet, aStrings,
                 SW_PROPERTY_STATE_CALLER_SINGLE_VALUE_ONLY );
     return aSeq[0];
@@ -2223,7 +2223,7 @@ SwXTextCursor::getPropertySetInfo()
         const rtl::Reference< SfxItemPropertySetInfo >  xInfo =
             m_rPropSet.getPropertySetInfo();
         // extend PropertySetInfo!
-        const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
+        const cpo::uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         return rtl::Reference<SfxExtItemPropertySetInfo>(new SfxExtItemPropertySetInfo(
             aCursorExtMap_Impl,
             aPropSeq ));
@@ -2280,7 +2280,7 @@ SwXTextCursor::setPropertyValue(
         // from the paragraph to not lose their values when creating complex properties
         // like SvxULSpaceItem, when only part of the properties stored there is passed;
         // and apply it to the paragraph.
-        uno::Sequence<beans::PropertyValue> def;
+        cpo::uno::Sequence<beans::PropertyValue> def;
         if (!(rValue >>= def))
             throw lang::IllegalArgumentException();
 
@@ -2400,9 +2400,9 @@ SwXTextCursor::getPropertyState(const OUString& rPropertyName)
     return eRet;
 }
 
-uno::Sequence< beans::PropertyState > SAL_CALL
+cpo::uno::Sequence< beans::PropertyState > SAL_CALL
 SwXTextCursor::getPropertyStates(
-        const uno::Sequence< OUString >& rPropertyNames)
+        const cpo::uno::Sequence< OUString >& rPropertyNames)
 {
     SolarMutexGuard aGuard;
 
@@ -2416,7 +2416,7 @@ void SAL_CALL
 SwXTextCursor::setPropertyToDefault(const OUString& rPropertyName)
 {
     // forward: need no solar mutex here
-    uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
+    cpo::uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
     setPropertiesToDefault ( aSequence );
 }
 
@@ -2424,13 +2424,13 @@ cpo::uno::Any SAL_CALL
 SwXTextCursor::getPropertyDefault(const OUString& rPropertyName)
 {
     // forward: need no solar mutex here
-    const uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
+    const cpo::uno::Sequence < OUString > aSequence ( &rPropertyName, 1 );
     return getPropertyDefaults ( aSequence ).getConstArray()[0];
 }
 
 void SAL_CALL SwXTextCursor::setPropertyValues(
-    const uno::Sequence< OUString >& aPropertyNames,
-    const uno::Sequence< cpo::uno::Any >& aValues )
+    const cpo::uno::Sequence< OUString >& aPropertyNames,
+    const cpo::uno::Sequence< cpo::uno::Any >& aValues )
 {
     if( aValues.getLength() != aPropertyNames.getLength() )
     {
@@ -2443,7 +2443,7 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
     SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     // a little lame to have to copy into this.
-    uno::Sequence< beans::PropertyValue > aPropertyValues( aValues.getLength() );
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues( aValues.getLength() );
     auto aPropertyValuesRange = asNonConstRange(aPropertyValues);
     for ( sal_Int32 i = 0; i < aPropertyNames.getLength(); i++ )
     {
@@ -2470,18 +2470,18 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
     }
 }
 
-uno::Sequence< cpo::uno::Any > SAL_CALL
-SwXTextCursor::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
+SwXTextCursor::getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     // a banal implementation for now
-    uno::Sequence< cpo::uno::Any > aValues( aPropertyNames.getLength() );
+    cpo::uno::Sequence< cpo::uno::Any > aValues( aPropertyNames.getLength() );
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aValues.getArray(),
         [this](const OUString& rName) -> cpo::uno::Any { return getPropertyValue( rName ); });
     return aValues;
 }
 
 void SAL_CALL SwXTextCursor::addPropertiesChangeListener(
-        const uno::Sequence< OUString >& /* aPropertyNames */,
+        const cpo::uno::Sequence< OUString >& /* aPropertyNames */,
         const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("SwXTextCursor::addPropertiesChangeListener(): not implemented");
@@ -2493,7 +2493,7 @@ void SAL_CALL SwXTextCursor::removePropertiesChangeListener(
 }
 
 void SAL_CALL SwXTextCursor::firePropertiesChangeEvent(
-        const uno::Sequence< OUString >& /* aPropertyNames */,
+        const cpo::uno::Sequence< OUString >& /* aPropertyNames */,
         const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("SwXTextCursor::firePropertiesChangeEvent(): not implemented");
@@ -2556,7 +2556,7 @@ SwXTextCursor::setAllPropertiesToDefault()
 
 void SAL_CALL
 SwXTextCursor::setPropertiesToDefault(
-        const uno::Sequence< OUString >& rPropertyNames)
+        const cpo::uno::Sequence< OUString >& rPropertyNames)
 {
     SolarMutexGuard aGuard;
 
@@ -2617,16 +2617,16 @@ SwXTextCursor::setPropertiesToDefault(
     }
 }
 
-uno::Sequence< cpo::uno::Any > SAL_CALL
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
 SwXTextCursor::getPropertyDefaults(
-        const uno::Sequence< OUString >& rPropertyNames)
+        const cpo::uno::Sequence< OUString >& rPropertyNames)
 {
     SolarMutexGuard aGuard;
 
     SwUnoCursor & rUnoCursor( GetCursorOrThrow() );
 
     const sal_Int32 nCount = rPropertyNames.getLength();
-    uno::Sequence< cpo::uno::Any > aRet(nCount);
+    cpo::uno::Sequence< cpo::uno::Any > aRet(nCount);
     if ( nCount )
     {
         SwDoc& rDoc = rUnoCursor.GetDoc();
@@ -2697,7 +2697,7 @@ void SAL_CALL SwXTextCursor::invalidateMarkings(::sal_Int32 nType)
 void SAL_CALL
 SwXTextCursor::makeRedline(
     const OUString& rRedlineType,
-    const uno::Sequence< beans::PropertyValue >& rRedlineProperties)
+    const cpo::uno::Sequence< beans::PropertyValue >& rRedlineProperties)
 {
     SolarMutexGuard aGuard;
 
@@ -2707,7 +2707,7 @@ SwXTextCursor::makeRedline(
 }
 
 void SAL_CALL SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
-    const uno::Sequence< beans::PropertyValue >& rOptions)
+    const cpo::uno::Sequence< beans::PropertyValue >& rOptions)
 {
     SolarMutexGuard aGuard;
 
@@ -2716,10 +2716,10 @@ void SAL_CALL SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
     SwUnoCursorHelper::InsertFile(&rUnoCursor, rURL, rOptions);
 }
 
-uno::Sequence< beans::PropertyValue >
+cpo::uno::Sequence< beans::PropertyValue >
 SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
 {
-    uno::Sequence< beans::PropertyValue > aRet(5);
+    cpo::uno::Sequence< beans::PropertyValue > aRet(5);
     beans::PropertyValue* pArray = aRet.getArray();
 
     cpo::uno::Any aVal;
@@ -2741,7 +2741,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
 
     lang::Locale aLang( SvtSysLocale().GetLanguageTag().getLocale());
     // get collator algorithm to be used for the locale
-    uno::Sequence< OUString > aSeq(
+    cpo::uno::Sequence< OUString > aSeq(
             GetAppCollator().listCollatorAlgorithms( aLang ) );
     const bool bHasElements = aSeq.hasElements();
     OSL_ENSURE( bHasElements, "list of collator algorithms is empty!");
@@ -2751,7 +2751,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
         aCollAlg = aSeq.getConstArray()[0];
     }
 
-    uno::Sequence< table::TableSortField > aFields
+    cpo::uno::Sequence< table::TableSortField > aFields
     {
         // Field, IsAscending, IsCaseSensitive, FieldType, CollatorLocale, CollatorAlgorithm
         { 1, true, false, table::TableSortFieldType_ALPHANUMERIC, aLang, aCollAlg },
@@ -2766,7 +2766,7 @@ SwUnoCursorHelper::CreateSortDescriptor(const bool bFromTable)
     return aRet;
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL
 SwXTextCursor::createSortDescriptor()
 {
     SolarMutexGuard aGuard;
@@ -2775,7 +2775,7 @@ SwXTextCursor::createSortDescriptor()
 }
 
 bool SwUnoCursorHelper::ConvertSortProperties(
-    const uno::Sequence< beans::PropertyValue >& rDescriptor,
+    const cpo::uno::Sequence< beans::PropertyValue >& rDescriptor,
     SwSortOptions& rSortOpt)
 {
     bool bRet = true;
@@ -2969,7 +2969,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
         else if ( rPropName == "SortFields" )
         {
             bNewSortdescriptor = true;
-            uno::Sequence < table::TableSortField > aFields;
+            cpo::uno::Sequence < table::TableSortField > aFields;
             if (aValue >>= aFields)
             {
                 sal_Int32 nCount(aFields.getLength());
@@ -3026,7 +3026,7 @@ bool SwUnoCursorHelper::ConvertSortProperties(
 }
 
 void SAL_CALL
-SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
+SwXTextCursor::sort(const cpo::uno::Sequence< beans::PropertyValue >& rDescriptor)
 {
     SolarMutexGuard aGuard;
 
@@ -3115,10 +3115,10 @@ bool SAL_CALL SwXTextCursor::hasElements()
     return true;
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXTextCursor::getAvailableServiceNames()
 {
-    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextContent"_ustr };
+    cpo::uno::Sequence<OUString> aRet { u"com.sun.star.text.TextContent"_ustr };
     return aRet;
 }
 

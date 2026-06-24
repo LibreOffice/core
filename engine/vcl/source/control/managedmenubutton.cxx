@@ -71,7 +71,7 @@ void ManagedMenuButton::PrepareExecute()
     catch( const css::uno::Exception& )
     {}
 
-    css::uno::Sequence<cpo::uno::Any> aArgs {
+    cpo::uno::Sequence<cpo::uno::Any> aArgs {
         cpo::uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, aModuleName)),
         cpo::uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, cpo::uno::Any(xFrame))),
         cpo::uno::Any(comphelper::makePropertyValue(u"InToolbar"_ustr, cpo::uno::Any(true)))

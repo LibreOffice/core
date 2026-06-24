@@ -491,7 +491,7 @@ void DiagramHelper_oox::TextInformationChange()
     uno::Reference<beans::XPropertySet> xPropSet(accessRootShape(), uno::UNO_QUERY);
     if (xPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
         xPropSet->setPropertyValue(u"InteropGrabBag"_ustr,
-                                   cpo::uno::Any(uno::Sequence<beans::PropertyValue>()));
+                                   cpo::uno::Any(cpo::uno::Sequence<beans::PropertyValue>()));
 }
 
 DiagramDataStatePtr DiagramHelper_oox::extractDiagramDataState() const

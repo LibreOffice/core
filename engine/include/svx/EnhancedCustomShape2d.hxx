@@ -25,7 +25,7 @@
 #include <svx/svdotext.hxx>
 #include <tools/degree.hxx>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <svl/itemset.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -109,17 +109,17 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
             double fValue = 0;
             mutable std::shared_ptr< EnhancedCustomShape::ExpressionNode > xNode;
         };
-        css::uno::Sequence< OUString >                                                       m_seqEquations;
+        cpo::uno::Sequence< OUString >                                                       m_seqEquations;
         std::vector< EquationResult >                                                        m_vEquationResults;
 
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >            m_seqSegments;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       m_seqCoordinates;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame >          m_seqTextFrames;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       m_seqGluePoints;
-        css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >    m_seqAdjustmentValues;
-        css::uno::Sequence< css::beans::PropertyValues >                          m_seqHandles;
-        css::uno::Sequence< css::awt::Size >                                      m_seqSubViewSize;
-        css::uno::Sequence< double >                                              m_seqGluePointLeavingDirections;
+        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >            m_seqSegments;
+        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       m_seqCoordinates;
+        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame >          m_seqTextFrames;
+        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair>       m_seqGluePoints;
+        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >    m_seqAdjustmentValues;
+        cpo::uno::Sequence< css::beans::PropertyValues >                          m_seqHandles;
+        cpo::uno::Sequence< css::awt::Size >                                      m_seqSubViewSize;
+        cpo::uno::Sequence< double >                                              m_seqGluePointLeavingDirections;
 
         bool                    m_bFilled         : 1;
         bool                    m_bStroked        : 1;

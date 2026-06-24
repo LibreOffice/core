@@ -1021,14 +1021,14 @@ beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const OUString& aPro
     return eRet;
 }
 
-uno::Sequence<beans::PropertyState> SAL_CALL ScShapeObj::getPropertyStates(
-                                const uno::Sequence<OUString>& aPropertyNames )
+cpo::uno::Sequence<beans::PropertyState> SAL_CALL ScShapeObj::getPropertyStates(
+                                const cpo::uno::Sequence<OUString>& aPropertyNames )
 {
     SolarMutexGuard aGuard;
 
     //  simple loop to get own and aggregated states
 
-    uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
+    cpo::uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.getArray(),
         [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });
     return aRet;
@@ -1367,11 +1367,11 @@ void SAL_CALL ScShapeObj::setParent( const uno::Reference< uno::XInterface >& )
 
 // XTypeProvider
 
-uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes()
+cpo::uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes()
 {
-    uno::Sequence< uno::Type > aBaseTypes( ScShapeObj_Base::getTypes() );
+    cpo::uno::Sequence< uno::Type > aBaseTypes( ScShapeObj_Base::getTypes() );
 
-    uno::Sequence< uno::Type > aTextTypes;
+    cpo::uno::Sequence< uno::Type > aTextTypes;
     if ( bIsTextShape )
         aTextTypes = ScShapeObj_TextBase::getTypes();
 
@@ -1380,16 +1380,16 @@ uno::Sequence<uno::Type> SAL_CALL ScShapeObj::getTypes()
         mxShapeAgg->queryAggregation( cppu::UnoType<lang::XTypeProvider>::get()) >>= xBaseProvider;
     OSL_ENSURE( xBaseProvider.is(), "ScShapeObj: No XTypeProvider from aggregated shape!" );
 
-    uno::Sequence< uno::Type > aAggTypes;
+    cpo::uno::Sequence< uno::Type > aAggTypes;
     if( xBaseProvider.is() )
         aAggTypes = xBaseProvider->getTypes();
 
     return ::comphelper::concatSequences( aBaseTypes, aTextTypes, aAggTypes );
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 SdrObject* ScShapeObj::GetSdrObject() const noexcept
@@ -1423,7 +1423,7 @@ public:
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
-        uno::Sequence< beans::PropertyValue > aProperties;
+        cpo::uno::Sequence< beans::PropertyValue > aProperties;
         aElement >>= aProperties;
         bool isEventType = false;
         for (const beans::PropertyValue& rProperty : aProperties)
@@ -1451,7 +1451,7 @@ public:
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
-        uno::Sequence< beans::PropertyValue > aProperties;
+        cpo::uno::Sequence< beans::PropertyValue > aProperties;
         ScMacroInfo* pInfo = getInfo(false);
 
         if ( aName != SC_EVENTACC_ONCLICK )
@@ -1469,9 +1469,9 @@ public:
         return cpo::uno::Any( aProperties );
     }
 
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames() override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override
     {
-        uno::Sequence<OUString> aSeq { SC_EVENTACC_ONCLICK };
+        cpo::uno::Sequence<OUString> aSeq { SC_EVENTACC_ONCLICK };
         return aSeq;
     }
 
@@ -1483,7 +1483,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override
     {
-        return cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get();
+        return cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get();
     }
 
     virtual bool SAL_CALL hasElements() override
@@ -1509,13 +1509,13 @@ bool SAL_CALL ScShapeObj::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  )
 {
     uno::Reference<lang::XServiceInfo> xSI;
     if ( mxShapeAgg.is() )
         mxShapeAgg->queryAggregation( cppu::UnoType<lang::XServiceInfo>::get() ) >>= xSI;
 
-    uno::Sequence< OUString > aSupported;
+    cpo::uno::Sequence< OUString > aSupported;
     if ( xSI.is() )
         aSupported = xSI->getSupportedServiceNames();
 

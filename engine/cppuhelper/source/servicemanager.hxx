@@ -48,11 +48,11 @@ namespace cppuhelper {
 extern "C" {
 
 typedef css::uno::XInterface * ImplementationConstructorFn(
-    css::uno::XComponentContext *, css::uno::Sequence<cpo::uno::Any> const &);
+    css::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const &);
 
 }
 
-typedef std::function<css::uno::XInterface * (css::uno::XComponentContext *, css::uno::Sequence<cpo::uno::Any> const&)> WrapperConstructorFn;
+typedef std::function<css::uno::XInterface * (css::uno::XComponentContext *, cpo::uno::Sequence<cpo::uno::Any> const&)> WrapperConstructorFn;
 
 typedef WeakComponentImplHelper2<
     css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
@@ -111,7 +111,7 @@ public:
                 css::uno::Reference<css::uno::XComponentContext> const &
                     context,
                 bool singletonRequest,
-                css::uno::Sequence<cpo::uno::Any> const & arguments);
+                cpo::uno::Sequence<cpo::uno::Any> const & arguments);
 
             bool shallDispose() const { return isSingleInstance || !singletons.empty(); }
 
@@ -156,7 +156,7 @@ public:
 
             css::uno::Reference<css::uno::XInterface> doCreateInstanceWithArguments(
                 css::uno::Reference<css::uno::XComponentContext> const & context,
-                css::uno::Sequence<cpo::uno::Any> const & arguments);
+                cpo::uno::Sequence<cpo::uno::Any> const & arguments);
 
             void updateDisposeInstance(
                 bool singletonRequest,
@@ -225,7 +225,7 @@ private:
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
@@ -234,9 +234,9 @@ private:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
-        css::uno::Sequence< cpo::uno::Any > const & Arguments) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getAvailableServiceNames() override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
@@ -247,7 +247,7 @@ private:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
         OUString const & ServiceSpecifier,
-        css::uno::Sequence< cpo::uno::Any > const & Arguments,
+        cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -295,7 +295,7 @@ private:
         css::uno::Reference< css::beans::XVetoableChangeListener > const &
             aListener) override;
 
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
 
     virtual css::beans::Property SAL_CALL getPropertyByName(
         OUString const & aName) override;
@@ -305,7 +305,7 @@ private:
     virtual void SAL_CALL disposing(css::lang::EventObject const & Source) override;
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence<cpo::uno::Any> const & aArguments)
+        cpo::uno::Sequence<cpo::uno::Any> const & aArguments)
         override;
 
     void removeEventListenerFromComponent(

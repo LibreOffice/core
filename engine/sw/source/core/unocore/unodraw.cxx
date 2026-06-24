@@ -521,7 +521,7 @@ namespace
             //XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
             virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-            virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+            virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 }
 
@@ -563,7 +563,7 @@ bool SwXShapesEnumeration::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames()
 {
     return { u"com.sun.star.container.XEnumeration"_ustr };
 }
@@ -585,7 +585,7 @@ bool SwFmDrawPage::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwFmDrawPage::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwFmDrawPage::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.GenericDrawPage"_ustr };
 }
@@ -880,13 +880,13 @@ void SwFmDrawPage::InvalidateSwDoc()
     m_pDoc = nullptr;
 }
 
-const uno::Sequence< sal_Int8 > & SwXShape::getUnoTunnelId()
+const cpo::uno::Sequence< sal_Int8 > & SwXShape::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theSwXShapeUnoTunnelId;
     return theSwXShapeUnoTunnelId.getSeq();
 }
 
-sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL SwXShape::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     if( comphelper::isUnoTunnelId<SwXShape>(rId) )
     {
@@ -1012,9 +1012,9 @@ cpo::uno::Any SwXShape::queryInterface( const uno::Type& aType )
     return aRet;
 }
 
-uno::Sequence< uno::Type > SwXShape::getTypes(  )
+cpo::uno::Sequence< uno::Type > SwXShape::getTypes(  )
 {
-    uno::Sequence< uno::Type > aRet = SwXShapeBaseClass::getTypes();
+    cpo::uno::Sequence< uno::Type > aRet = SwXShapeBaseClass::getTypes();
     if(m_xShapeAgg.is())
     {
         cpo::uno::Any aProv = m_xShapeAgg->queryAggregation(cppu::UnoType<XTypeProvider>::get());
@@ -1028,9 +1028,9 @@ uno::Sequence< uno::Type > SwXShape::getTypes(  )
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  )
+cpo::uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
@@ -1047,7 +1047,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
             {
                 uno::Reference< beans::XPropertySetInfo >  xInfo = (*xPrSet)->getPropertySetInfo();
                 // Expand PropertySetInfo!
-                const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
+                const cpo::uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
                 mxPropertySetInfo = new SfxExtItemPropertySetInfo( m_pPropertyMapEntries, aPropSeq );
             }
         }
@@ -1822,17 +1822,17 @@ cpo::uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
 beans::PropertyState SwXShape::getPropertyState( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aNames { rPropertyName };
-    uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aNames);
+    cpo::uno::Sequence< OUString > aNames { rPropertyName };
+    cpo::uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aNames);
     return aStates.getConstArray()[0];
 }
 
-uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
-    const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
+    const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
-    uno::Sequence< beans::PropertyState > aRet(aPropertyNames.getLength());
+    cpo::uno::Sequence< beans::PropertyState > aRet(aPropertyNames.getLength());
     if(!m_xShapeAgg.is())
         throw uno::RuntimeException();
 
@@ -2227,9 +2227,9 @@ bool SwXShape::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq;
+    cpo::uno::Sequence< OUString > aSeq;
     if (SvxShape* pSvxShape = GetSvxShape())
         aSeq = pSvxShape->getSupportedServiceNames();
     return comphelper::concatSequences(

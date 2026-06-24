@@ -282,7 +282,7 @@ void SfxObjectShell::PrintState_Impl(SfxItemSet &rSet)
 }
 
 bool SfxObjectShell::APISaveAs_Impl(std::u16string_view aFileName, SfxItemSet& rItemSet,
-                                    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+                                    const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     bool bOk = false;
 
@@ -406,7 +406,7 @@ void SfxObjectShell::CheckIn( )
     }
 }
 
-uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) const
+cpo::uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) const
 {
     try
     {
@@ -422,7 +422,7 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( ) const
             xBox->run();
         }
     }
-    return uno::Sequence< document::CmisVersion > ( );
+    return cpo::uno::Sequence< document::CmisVersion > ( );
 }
 
 bool SfxObjectShell::IsSignPDF() const
@@ -464,7 +464,7 @@ static void sendErrorToKit(const ErrCodeMsg& error)
 namespace
 {
 void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
-                      const uno::Sequence<beans::PropertyValue>& rUpdatedProperties)
+                      const cpo::uno::Sequence<beans::PropertyValue>& rUpdatedProperties)
 {
     comphelper::SequenceAsHashMap aMap(rUpdatedProperties);
     OUString aNamePrefix;
@@ -474,7 +474,7 @@ void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
         it->second >>= aNamePrefix;
     }
 
-    uno::Sequence<beans::PropertyValue> aUserDefinedProperties;
+    cpo::uno::Sequence<beans::PropertyValue> aUserDefinedProperties;
     it = aMap.find(u"UserDefinedProperties"_ustr);
     if (it != aMap.end())
     {
@@ -486,7 +486,7 @@ void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
     {
         uno::Reference<beans::XPropertySet> xSet(xUDP, UNO_QUERY);
         uno::Reference<beans::XPropertySetInfo> xSetInfo = xSet->getPropertySetInfo();
-        const uno::Sequence<beans::Property> aProperties = xSetInfo->getProperties();
+        const cpo::uno::Sequence<beans::Property> aProperties = xSetInfo->getProperties();
         for (const auto& rProperty : aProperties)
         {
             if (!rProperty.Name.startsWith(aNamePrefix))
@@ -615,7 +615,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if (pSignatureValue)
                 {
                     OUString aSignatureValue = pSignatureValue->GetValue();
-                    uno::Sequence<sal_Int8> aBytes;
+                    cpo::uno::Sequence<sal_Int8> aBytes;
                     comphelper::Base64::decode(aBytes, aSignatureValue);
                     aSigningContext.m_aSignatureValue.assign(
                         aBytes.getArray(), aBytes.getArray() + aBytes.getLength());
@@ -710,7 +710,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
             else if (const SfxUnoAnyItem* pItem = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_1))
             {
-                uno::Sequence<beans::PropertyValue> aUpdatedProperties;
+                cpo::uno::Sequence<beans::PropertyValue> aUpdatedProperties;
                 pItem->GetValue() >>= aUpdatedProperties;
                 SetDocProperties(getDocProperties(), aUpdatedProperties);
             }
@@ -733,7 +733,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 const OUString aURL( HasName() ? GetMedium()->GetName() : GetFactory().GetFactoryURL() );
 
                 Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
+                cpo::uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
 
                 SfxDocumentInfoItem aDocInfoItem( aURL, getDocProperties(), aCmisProperties,
                     IsUseUserData(), IsUseThumbnailSave(), nFileSize );
@@ -762,7 +762,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         {
                             // user has done some changes to DocumentInfo
                             pDocInfoItem->UpdateDocumentInfo(getDocProperties());
-                            const uno::Sequence< document::CmisProperty >& aNewCmisProperties =
+                            const cpo::uno::Sequence< document::CmisProperty >& aNewCmisProperties =
                                 pDocInfoItem->GetCmisProperties( );
                             if ( aNewCmisProperties.hasElements( ) )
                                 xCmisDoc->updateCmisProperties( aNewCmisProperties );
@@ -1123,7 +1123,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                       || (IsLoadReadonly()
                           && (GetModifyPasswordHash() || GetModifyPasswordInfo().hasElements()));
 
-                uno::Sequence< beans::PropertyValue > aDispatchArgs;
+                cpo::uno::Sequence< beans::PropertyValue > aDispatchArgs;
                 if ( rReq.GetArgs() )
                     aDispatchArgs = TransformItems(nId, *rReq.GetArgs()).getAsConstPropertyValueList();
 
@@ -1450,7 +1450,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 {
                     bool bShow = false;
                     Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                    const uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
+                    const cpo::uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties();
 
                     if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
                     {
@@ -1461,7 +1461,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         {
                             if ( rCmisProperty.Id == "cmis:isVersionSeriesCheckedOut" )
                             {
-                                uno::Sequence< bool > bTmp;
+                                cpo::uno::Sequence< bool > bTmp;
                                 rCmisProperty.Value >>= bTmp;
                                 bCheckedOut = bTmp[0];
                             }
@@ -1486,7 +1486,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 {
                     bool bShow = false;
                     Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
-                    const uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
+                    const cpo::uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
 
                     if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
                     {
@@ -1496,7 +1496,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                             [](const document::CmisProperty& rProp) { return rProp.Id == "cmis:isVersionSeriesCheckedOut"; });
                         if (pProp != aCmisProperties.end())
                         {
-                            uno::Sequence< bool > bTmp;
+                            cpo::uno::Sequence< bool > bTmp;
                             pProp->Value >>= bTmp;
                             bCheckedOut = bTmp[0];
                         }
@@ -1947,9 +1947,9 @@ static bool HasSignatureStream(const uno::Reference<embed::XStorage>& xStorage)
     return xStorage->hasByName(u"_xmlsignatures"_ustr);
 }
 
-uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocumentSignatureInformation( bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
+cpo::uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::GetDocumentSignatureInformation( bool bScriptingContent, const uno::Reference< security::XDocumentDigitalSignatures >& xSigner )
 {
-    uno::Sequence< security::DocumentSignatureInformation > aResult;
+    cpo::uno::Sequence< security::DocumentSignatureInformation > aResult;
     uno::Reference< security::XDocumentDigitalSignatures > xLocSigner = xSigner;
 
     bool bSupportsSigning = GetMedium() && GetMedium()->GetFilter() && GetMedium()->GetFilter()->GetSupportsSigning();
@@ -2023,7 +2023,7 @@ void SfxObjectShell::SetRememberCurrentSignature(bool bRemember)
     }
     else
     {
-        rSignatureInfosRemembered = uno::Sequence<security::DocumentSignatureInformation>();
+        rSignatureInfosRemembered = cpo::uno::Sequence<security::DocumentSignatureInformation>();
         bRememberSignature = false;
     }
 }
@@ -2036,7 +2036,7 @@ SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
     {
         *pState = SignatureState::NOSIGNATURES;
 
-        uno::Sequence< security::DocumentSignatureInformation > aInfos = GetDocumentSignatureInformation( bScriptingContent );
+        cpo::uno::Sequence< security::DocumentSignatureInformation > aInfos = GetDocumentSignatureInformation( bScriptingContent );
         *pState = DocumentSignatures::getSignatureState(aInfos);
 
         // repaired package cannot be trusted
@@ -2267,7 +2267,7 @@ void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent, const std:
     });
 }
 
-bool SfxObjectShell::ResignDocument(uno::Sequence< security::DocumentSignatureInformation >& rSignaturesInfo)
+bool SfxObjectShell::ResignDocument(cpo::uno::Sequence< security::DocumentSignatureInformation >& rSignaturesInfo)
 {
     bool bSignSuccess = true;
 
@@ -2425,19 +2425,19 @@ void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent, const std
     });
 }
 
-const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
+const cpo::uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theSfxObjectShellUnoTunnelId;
     return theSfxObjectShellUnoTunnelId.getSeq();
 }
 
-uno::Sequence< beans::PropertyValue > SfxObjectShell::GetDocumentProtectionFromGrabBag() const
+cpo::uno::Sequence< beans::PropertyValue > SfxObjectShell::GetDocumentProtectionFromGrabBag() const
 {
     uno::Reference<frame::XModel> xModel = GetBaseModel();
 
     if (!xModel.is())
     {
-        return uno::Sequence< beans::PropertyValue>();
+        return cpo::uno::Sequence< beans::PropertyValue>();
     }
 
     uno::Reference< beans::XPropertySet > xPropSet( xModel, uno::UNO_QUERY_THROW );
@@ -2445,20 +2445,20 @@ uno::Sequence< beans::PropertyValue > SfxObjectShell::GetDocumentProtectionFromG
     const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
     {
-        uno::Sequence< beans::PropertyValue > propList;
+        cpo::uno::Sequence< beans::PropertyValue > propList;
         xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
         for (const auto& rProp : propList)
         {
             if (rProp.Name == "DocumentProtection")
             {
-                uno::Sequence< beans::PropertyValue > rAttributeList;
+                cpo::uno::Sequence< beans::PropertyValue > rAttributeList;
                 rProp.Value >>= rAttributeList;
                 return rAttributeList;
             }
         }
     }
 
-    return uno::Sequence< beans::PropertyValue>();
+    return cpo::uno::Sequence< beans::PropertyValue>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

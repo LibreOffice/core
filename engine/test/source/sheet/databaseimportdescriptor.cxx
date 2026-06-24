@@ -15,7 +15,7 @@
 #include <com/sun/star/util/XImportable.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -29,7 +29,8 @@ void DatabaseImportDescriptor::testDatabaseImportDescriptorProperties()
 {
     uno::Reference<beans::XPropertySet> xDatabaseImportDescriptor(init(), UNO_QUERY_THROW);
     uno::Reference<util::XImportable> xImportable(getXImportable(), UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aPropValues = xImportable->createImportDescriptor(true);
+    cpo::uno::Sequence<beans::PropertyValue> aPropValues
+        = xImportable->createImportDescriptor(true);
 
     for (auto& rPropValue : asNonConstRange(aPropValues))
     {

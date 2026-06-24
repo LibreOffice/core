@@ -54,7 +54,7 @@ namespace fileaccess {
 
         // XCommandInfo
 
-        virtual css::uno::Sequence< css::ucb::CommandInfo > SAL_CALL
+        virtual cpo::uno::Sequence< css::ucb::CommandInfo > SAL_CALL
         getCommands() override;
 
         virtual css::ucb::CommandInfo SAL_CALL

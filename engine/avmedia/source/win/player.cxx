@@ -642,7 +642,7 @@ awt::Size Player::getPreferredPlayerWindowSize(  )
     return awt::Size(mnFrameWidth, mnFrameHeight);
 }
 
-uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const uno::Sequence< cpo::uno::Any >& aArguments )
+uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -700,7 +700,7 @@ bool Player::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > Player::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > Player::getSupportedServiceNames(  )
 {
     return { AVMEDIA_WIN_PLAYER_SERVICENAME };
 }

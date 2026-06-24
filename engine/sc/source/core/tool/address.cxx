@@ -430,7 +430,7 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
     name is not numeric.
  */
 static bool lcl_XL_getExternalDoc(const sal_Unicode** ppErrRet, OUString& rExternDocName,
-                                  const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                                  const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
                                   bool& bMissingPath)
 {
     // 1-based, sequence starts with an empty element.
@@ -490,7 +490,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                                 OUString& rEndTabName,
                                 ScRefFlags& nFlags,
                                 bool bOnlyAcceptSingle,
-                                const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                                const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
                                 const OUString* pErrRef )
 {
     const sal_Unicode* startTabs, *start = p;
@@ -1043,7 +1043,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
                                            const ScDocument& rDoc,
                                            bool bOnlyAcceptSingle,
                                            ScAddress::ExternalInfo* pExtInfo,
-                                           const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                                           const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
                                            sal_Int32* pSheetEndPos,
                                            const OUString* pErrRef )
 {
@@ -1516,7 +1516,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
 static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, const ScDocument& rDoc, ScAddress& rAddr,
                                         const ScAddress::Details& rDetails,
                                         ScAddress::ExternalInfo* pExtInfo,
-                                        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                                        const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
                                         sal_Int32* pSheetEndPos,
                                         const OUString* pErrRef )
 {
@@ -1603,7 +1603,7 @@ bool ConvertDoubleRef( const ScDocument& rDoc, const OUString& rRefString, SCTAB
 ScRefFlags ScAddress::Parse( const OUString& r, const ScDocument& rDoc,
                              const Details& rDetails,
                              ExternalInfo* pExtInfo,
-                             const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                             const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
                              sal_Int32* pSheetEndPos,
                              const OUString* pErrRef )
 {
@@ -1797,7 +1797,7 @@ static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
 ScRefFlags ScRange::Parse( const OUString& rString, const ScDocument& rDoc,
                            const ScAddress::Details& rDetails,
                            ScAddress::ExternalInfo* pExtInfo,
-                           const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                           const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
                            const OUString* pErrRef )
 {
     if (rString.isEmpty())

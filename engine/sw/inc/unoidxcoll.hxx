@@ -40,7 +40,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XElementAccess
@@ -54,7 +54,7 @@ public:
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName(
             const OUString& rName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getElementNames() override;
     virtual bool SAL_CALL hasByName(const OUString& rName) override;
 

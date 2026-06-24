@@ -423,7 +423,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
     if (n < k) {
         k = n;
     }
-    css::uno::Sequence<sal_Int8> s(header.size() + k);
+    cpo::uno::Sequence<sal_Int8> s(header.size() + k);
     assert(!header.empty());
     std::memcpy(s.getArray(), header.data(), header.size());
     for (;;) {

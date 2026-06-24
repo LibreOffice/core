@@ -43,9 +43,9 @@ OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactor
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL OCheckBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OCheckBoxControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -88,9 +88,9 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OCheckBoxModel::createClon
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OCheckBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OCheckBoxModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
@@ -276,14 +276,14 @@ bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OCheckBoxModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OCheckBoxModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OCheckBoxControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OCheckBoxControl(component));
 }

@@ -186,7 +186,7 @@ using namespace cpo::uno;
         m_bFocusEntry = _bFocusEntry;
     }
 
-    void OControlTransferData::addHiddenControlsFormat(const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces)
+    void OControlTransferData::addHiddenControlsFormat(const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces)
     {
         m_aHiddenControlModels = seqInterfaces;
     }
@@ -200,7 +200,7 @@ using namespace cpo::uno;
             return;
 
         m_aControlPaths.realloc(nEntryCount);
-        css::uno::Sequence<sal_uInt32>* pAllPaths = m_aControlPaths.getArray();
+        cpo::uno::Sequence<sal_uInt32>* pAllPaths = m_aControlPaths.getArray();
         for (const auto& rCurrentEntry : m_aSelectedEntries)
         {
             // first we collect the path in an array
@@ -214,7 +214,7 @@ using namespace cpo::uno;
                 assert(bLoop && "OControlTransferData::buildPathFormat: invalid root or entry !"); (void)bLoop;
             }
 
-            // then we can transfer it into css::uno::Sequence
+            // then we can transfer it into cpo::uno::Sequence
             Sequence<sal_uInt32>& rCurrentPath = *pAllPaths;
             sal_Int32 nDepth = aCurrentPath.size();
 
@@ -231,7 +231,7 @@ using namespace cpo::uno;
     {
         ListBoxEntrySet().swap(m_aSelectedEntries);
 
-        for (const css::uno::Sequence<sal_uInt32>& rPaths : m_aControlPaths)
+        for (const cpo::uno::Sequence<sal_uInt32>& rPaths : m_aControlPaths)
         {
             std::unique_ptr<weld::TreeIter> xSearch(pTreeBox->make_iterator(pRoot));
             for (const sal_uInt32 nThisPath : rPaths)

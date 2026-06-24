@@ -32,7 +32,7 @@
 #include <config_vclplug.h>
 
 #include <o3tl/typed_flags_set.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <memory>
 
@@ -649,7 +649,7 @@ public:
     /**
      * Retrieves the color model data we need for the XImageConsumer stuff.
      */
-    void                GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
+    void                GetColorModel(cpo::uno::Sequence< sal_Int32 >& rRGBPalette,
                             sal_uInt32& rnRedMask, sal_uInt32& rnGreenMask, sal_uInt32& rnBlueMask, sal_uInt32& rnAlphaMask, sal_uInt32& rnTransparencyIndex,
                             sal_uInt32& rnWidth, sal_uInt32& rnHeight, sal_uInt8& rnBitCount);
 

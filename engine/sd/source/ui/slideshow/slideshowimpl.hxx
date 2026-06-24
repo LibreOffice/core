@@ -62,7 +62,7 @@ struct PresentationSettingsEx : public PresentationSettings
     explicit PresentationSettingsEx( PresentationSettings const & );
 
     /// @throws css::lang::IllegalArgumentException
-    void SetArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
+    void SetArguments( const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments );
 
     /// @throws css::lang::IllegalArgumentException
     void SetPropertyValue( std::u16string_view rProperty, const cpo::uno::Any& rValue );

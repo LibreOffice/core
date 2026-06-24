@@ -36,7 +36,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <cppu/unotype.hxx>
@@ -375,7 +375,7 @@ void Test::testReadCommands()
             u"/org.openoffice.Office.UI.GenericCommands/UserInterface/"
                      "Commands"_ustr),
         css::uno::UNO_QUERY_THROW);
-    const css::uno::Sequence< OUString > names(access->getElementNames());
+    const cpo::uno::Sequence< OUString > names(access->getElementNames());
 
     /*CPPUNIT_ASSERT_EQUAL(749, names.getLength());*/
     // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
@@ -505,7 +505,7 @@ css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
                 cpo::uno::Any(path)));
     return provider_->createInstanceWithArguments(
         u"com.sun.star.configuration.ConfigurationAccess"_ustr,
-        css::uno::Sequence< cpo::uno::Any >(&arg, 1));
+        cpo::uno::Sequence< cpo::uno::Any >(&arg, 1));
 }
 
 css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
@@ -517,7 +517,7 @@ css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
                 cpo::uno::Any(path)));
     return provider_->createInstanceWithArguments(
         u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
-        css::uno::Sequence< cpo::uno::Any >(&arg, 1));
+        cpo::uno::Sequence< cpo::uno::Any >(&arg, 1));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

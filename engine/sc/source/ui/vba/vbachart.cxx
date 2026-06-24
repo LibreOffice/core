@@ -618,10 +618,10 @@ ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange 
     }
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaChart::getDefaultSeriesDescriptions( sal_Int32 _nCount )
 {
-    uno::Sequence< OUString > sDescriptions ( _nCount );
+    cpo::uno::Sequence< OUString > sDescriptions ( _nCount );
     std::generate_n(sDescriptions.getArray(), _nCount,
         [i = 1]() mutable -> OUString { return u"Series"_ustr + OUString::number(i++); });
     return sDescriptions;
@@ -1041,10 +1041,10 @@ ScVbaChart::getServiceImplName()
     return u"ScVbaChart"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaChart::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Chart"_ustr
     };

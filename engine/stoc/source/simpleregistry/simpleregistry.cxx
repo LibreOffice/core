@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -94,10 +94,10 @@ private:
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > names { u"com.sun.star.registry.SimpleRegistry"_ustr };
+        cpo::uno::Sequence< OUString > names { u"com.sun.star.registry.SimpleRegistry"_ustr };
         return names;
     }
 
@@ -132,33 +132,33 @@ private:
 
     virtual void SAL_CALL setLongValue(sal_Int32 value) override;
 
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getLongListValue() override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getLongListValue() override;
 
     virtual void SAL_CALL setLongListValue(
-        css::uno::Sequence< sal_Int32 > const & seqValue) override;
+        cpo::uno::Sequence< sal_Int32 > const & seqValue) override;
 
     virtual OUString SAL_CALL getAsciiValue() override;
 
     virtual void SAL_CALL setAsciiValue(OUString const & value) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getAsciiListValue() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAsciiListValue() override;
 
     virtual void SAL_CALL setAsciiListValue(
-        css::uno::Sequence< OUString > const & seqValue) override;
+        cpo::uno::Sequence< OUString > const & seqValue) override;
 
     virtual OUString SAL_CALL getStringValue() override;
 
     virtual void SAL_CALL setStringValue(OUString const & value) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getStringListValue() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getStringListValue() override;
 
     virtual void SAL_CALL setStringListValue(
-        css::uno::Sequence< OUString > const & seqValue) override;
+        cpo::uno::Sequence< OUString > const & seqValue) override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBinaryValue() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinaryValue() override;
 
     virtual void SAL_CALL setBinaryValue(
-        css::uno::Sequence< sal_Int8 > const & value) override;
+        cpo::uno::Sequence< sal_Int8 > const & value) override;
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL openKey(
         OUString const & aKeyName) override;
@@ -171,10 +171,10 @@ private:
     virtual void SAL_CALL deleteKey(OUString const & rKeyName) override;
 
     virtual
-    css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
     SAL_CALL openKeys() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getKeyNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getKeyNames() override;
 
     virtual bool SAL_CALL createLink(
         OUString const & aLinkName, OUString const & aLinkTarget) override;
@@ -286,7 +286,7 @@ void Key::setLongValue(sal_Int32 value)
     }
 }
 
-css::uno::Sequence< sal_Int32 > Key::getLongListValue()
+cpo::uno::Sequence< sal_Int32 > Key::getLongListValue()
 {
     std::scoped_lock guard(registry_->mutex_);
     RegistryValueList< sal_Int32 > list;
@@ -295,7 +295,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue()
     case RegError::NO_ERROR:
         break;
     case RegError::VALUE_NOT_EXISTS:
-        return css::uno::Sequence< sal_Int32 >();
+        return cpo::uno::Sequence< sal_Int32 >();
     case RegError::INVALID_VALUE:
         throw css::registry::InvalidValueException(
             u"com.sun.star.registry.SimpleRegistry key getLongListValue:"
@@ -315,7 +315,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue()
             " underlying RegistryKey::getLongListValue() too large"_ustr,
             getXWeak());
     }
-    css::uno::Sequence< sal_Int32 > value(static_cast< sal_Int32 >(n));
+    cpo::uno::Sequence< sal_Int32 > value(static_cast< sal_Int32 >(n));
     auto aValueRange = asNonConstRange(value);
     for (sal_uInt32 i = 0; i < n; ++i) {
         aValueRange[static_cast< sal_Int32 >(i)] = list.getElement(i);
@@ -323,7 +323,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue()
     return value;
 }
 
-void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
+void Key::setLongListValue(cpo::uno::Sequence< sal_Int32 > const & seqValue)
 {
     std::scoped_lock guard(registry_->mutex_);
     RegError err = key_->setLongListValue(
@@ -425,7 +425,7 @@ void Key::setAsciiValue(OUString const & value)
     }
 }
 
-css::uno::Sequence< OUString > Key::getAsciiListValue()
+cpo::uno::Sequence< OUString > Key::getAsciiListValue()
 {
     std::scoped_lock guard(registry_->mutex_);
     RegistryValueList< char * > list;
@@ -434,7 +434,7 @@ css::uno::Sequence< OUString > Key::getAsciiListValue()
     case RegError::NO_ERROR:
         break;
     case RegError::VALUE_NOT_EXISTS:
-        return css::uno::Sequence< OUString >();
+        return cpo::uno::Sequence< OUString >();
     case RegError::INVALID_VALUE:
         throw css::registry::InvalidValueException(
             u"com.sun.star.registry.SimpleRegistry key"
@@ -456,7 +456,7 @@ css::uno::Sequence< OUString > Key::getAsciiListValue()
             " RegistryKey::getStringListValue() too large"_ustr,
             getXWeak());
     }
-    css::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
+    cpo::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
     auto aValueRange = asNonConstRange(value);
     for (sal_uInt32 i = 0; i < n; ++i) {
         char * el = list.getElement(i);
@@ -479,7 +479,7 @@ css::uno::Sequence< OUString > Key::getAsciiListValue()
 }
 
 void Key::setAsciiListValue(
-    css::uno::Sequence< OUString > const & seqValue)
+    cpo::uno::Sequence< OUString > const & seqValue)
 {
     std::scoped_lock guard(registry_->mutex_);
     std::vector< OString > list;
@@ -580,7 +580,7 @@ void Key::setStringValue(OUString const & value)
     }
 }
 
-css::uno::Sequence< OUString > Key::getStringListValue()
+cpo::uno::Sequence< OUString > Key::getStringListValue()
 {
     std::scoped_lock guard(registry_->mutex_);
     RegistryValueList< sal_Unicode * > list;
@@ -589,7 +589,7 @@ css::uno::Sequence< OUString > Key::getStringListValue()
     case RegError::NO_ERROR:
         break;
     case RegError::VALUE_NOT_EXISTS:
-        return css::uno::Sequence< OUString >();
+        return cpo::uno::Sequence< OUString >();
     case RegError::INVALID_VALUE:
         throw css::registry::InvalidValueException(
             u"com.sun.star.registry.SimpleRegistry key"
@@ -611,7 +611,7 @@ css::uno::Sequence< OUString > Key::getStringListValue()
             " RegistryKey::getUnicodeListValue() too large"_ustr,
             getXWeak());
     }
-    css::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
+    cpo::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
     auto aValueRange = asNonConstRange(value);
     for (sal_uInt32 i = 0; i < n; ++i) {
         aValueRange[static_cast< sal_Int32 >(i)] = list.getElement(i);
@@ -620,7 +620,7 @@ css::uno::Sequence< OUString > Key::getStringListValue()
 }
 
 void Key::setStringListValue(
-    css::uno::Sequence< OUString > const & seqValue)
+    cpo::uno::Sequence< OUString > const & seqValue)
 {
     std::scoped_lock guard(registry_->mutex_);
     std::vector< sal_Unicode * > list;
@@ -638,7 +638,7 @@ void Key::setStringListValue(
     }
 }
 
-css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
+cpo::uno::Sequence< sal_Int8 > Key::getBinaryValue()
 {
     std::scoped_lock guard(registry_->mutex_);
     RegValueType type;
@@ -662,7 +662,7 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
             " underlying RegistryKey size too large"_ustr,
             getXWeak());
     }
-    css::uno::Sequence< sal_Int8 > value(static_cast< sal_Int32 >(size));
+    cpo::uno::Sequence< sal_Int8 > value(static_cast< sal_Int32 >(size));
     err = key_->getValue(OUString(), value.getArray());
     if (err != RegError::NO_ERROR) {
         throw css::registry::InvalidRegistryException(
@@ -673,7 +673,7 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
     return value;
 }
 
-void Key::setBinaryValue(css::uno::Sequence< sal_Int8 > const & value)
+void Key::setBinaryValue(cpo::uno::Sequence< sal_Int8 > const & value)
 {
     std::scoped_lock guard(registry_->mutex_);
     RegError err = key_->setValue(
@@ -750,7 +750,7 @@ void Key::deleteKey(OUString const & rKeyName)
     }
 }
 
-css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
 Key::openKeys()
 {
     std::scoped_lock guard(registry_->mutex_);
@@ -769,7 +769,7 @@ Key::openKeys()
             " underlying RegistryKey::getKeyNames() too large"_ustr,
             getXWeak());
     }
-    css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
         keys(static_cast< sal_Int32 >(n));
     auto aKeysRange = asNonConstRange(keys);
     for (sal_uInt32 i = 0; i < n; ++i) {
@@ -779,7 +779,7 @@ Key::openKeys()
     return keys;
 }
 
-css::uno::Sequence< OUString > Key::getKeyNames()
+cpo::uno::Sequence< OUString > Key::getKeyNames()
 {
     std::scoped_lock guard(registry_->mutex_);
     RegistryKeyNames list;
@@ -797,7 +797,7 @@ css::uno::Sequence< OUString > Key::getKeyNames()
             " underlying RegistryKey::getKeyNames() too large"_ustr,
             getXWeak());
     }
-    css::uno::Sequence< OUString > names(static_cast< sal_Int32 >(n));
+    cpo::uno::Sequence< OUString > names(static_cast< sal_Int32 >(n));
     auto aNamesRange = asNonConstRange(names);
     for (sal_uInt32 i = 0; i < n; ++i) {
         aNamesRange[static_cast< sal_Int32 >(i)] = list.getElement(i);
@@ -924,7 +924,7 @@ void SimpleRegistry::mergeKey(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_SimpleRegistry_get_implementation(
     SAL_UNUSED_PARAMETER css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SimpleRegistry);
 }

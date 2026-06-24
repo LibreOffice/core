@@ -89,15 +89,15 @@ public:
     const OUString& GetDecimalSymbol() const;
     const OUString& GetListSeparator() const;
 
-    css::uno::Sequence<css::beans::PropertyValue> const& GetThemeFontLangProperties() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> const& GetThemeFontLangProperties() const;
 
-    css::uno::Sequence<css::beans::PropertyValue> const& GetStylePaneFormatFilterProperties() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> const& GetStylePaneFormatFilterProperties() const;
 
-    css::uno::Sequence<css::beans::PropertyValue> GetCompatSettings();
+    cpo::uno::Sequence<css::beans::PropertyValue> GetCompatSettings();
 
-    css::uno::Sequence<css::beans::PropertyValue> GetDocumentProtectionSettings() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> GetDocumentProtectionSettings() const;
 
-    css::uno::Sequence<css::beans::PropertyValue> GetWriteProtectionSettings() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> GetWriteProtectionSettings() const;
 
     void ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc);
 
@@ -159,11 +159,11 @@ private:
     OUString m_sListSeparator;
     std::vector<std::pair<OUString, OUString>> m_aDocVars;
 
-    css::uno::Sequence<css::beans::PropertyValue> m_pThemeFontLangProps;
-    css::uno::Sequence<css::beans::PropertyValue> m_pStylePaneFormatFilterProps;
+    cpo::uno::Sequence<css::beans::PropertyValue> m_pThemeFontLangProps;
+    cpo::uno::Sequence<css::beans::PropertyValue> m_pStylePaneFormatFilterProps;
 
     std::vector<css::beans::PropertyValue> m_aCompatSettings;
-    css::uno::Sequence<css::beans::PropertyValue> m_pCurrentCompatSetting;
+    cpo::uno::Sequence<css::beans::PropertyValue> m_pCurrentCompatSetting;
     OUString m_aCurrentCompatSettingName;
     OUString m_aCurrentCompatSettingUri;
     OUString m_aCurrentCompatSettingValue;

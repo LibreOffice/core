@@ -93,7 +93,7 @@ public:
     //  XController2
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() override;
     virtual OUString SAL_CALL getViewControllerName() override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() override;
 
     virtual css::uno::Reference< css::ui::XSidebarProvider > SAL_CALL getSidebar() override;
 
@@ -123,7 +123,7 @@ public:
                                                                                   const   OUString &   sTargetFrameName,
                                                                                   sal_Int32            eSearchFlags    ) override ;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
 
 
     //  XControllerBorder
@@ -153,8 +153,8 @@ public:
 
 
     //  XDispatchInformationProvider
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
-    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) override;
+    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
+    virtual cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) override;
 
     // css::frame::XTitle
     virtual OUString SAL_CALL getTitle(  ) override;
@@ -165,13 +165,13 @@ public:
     virtual void SAL_CALL removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
 
     // css::lang::XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XInfobarProvider
     virtual void SAL_CALL
     appendInfobar(const OUString& sId, const OUString& sPrimaryMessage,
                   const OUString& sSecondaryMessage, sal_Int32 aInfobarType,
-                  const css::uno::Sequence<css::beans::StringPair>& actionButtons,
+                  const cpo::uno::Sequence<css::beans::StringPair>& actionButtons,
                   bool bShowCloseButton) override;
     virtual void SAL_CALL updateInfobar(const OUString& sId, const OUString& sPrimaryMessage,
                                         const OUString& sSecondaryMessage,
@@ -185,7 +185,7 @@ public:
     SAL_DLLPRIVATE bool HandleEvent_Impl( NotifyEvent const & rEvent );
     SAL_DLLPRIVATE bool HasKeyListeners_Impl() const;
     SAL_DLLPRIVATE bool HasMouseClickListeners_Impl() const;
-    SAL_DLLPRIVATE void SetCreationArguments_Impl( const css::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs );
+    SAL_DLLPRIVATE void SetCreationArguments_Impl( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs );
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
 
 protected:

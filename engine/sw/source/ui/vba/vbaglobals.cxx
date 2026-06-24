@@ -30,10 +30,10 @@ using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
 using namespace ::ooo::vba;
 
-SwVbaGlobals::SwVbaGlobals(  uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
+SwVbaGlobals::SwVbaGlobals(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
     SAL_INFO("sw.vba", "SwVbaGlobals::SwVbaGlobals()");
-    uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
+    cpo::uno::Sequence< beans::PropertyValue > aInitArgs( aArgs.hasElements() ? 2 : 1 );
     auto pInitArgs = aInitArgs.getArray();
     pInitArgs[ 0 ].Name = u"Application"_ustr;
     pInitArgs[ 0 ].Value <<= getApplication();
@@ -197,18 +197,18 @@ SwVbaGlobals::getServiceImplName()
     return u"SwVbaGlobals"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaGlobals::getServiceNames()
 {
     return { u"ooo.vba.word.Globals"_ustr };
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaGlobals::getAvailableServiceNames(  )
 {
-    static const uno::Sequence<OUString> serviceNames = comphelper::concatSequences(
+    static const cpo::uno::Sequence<OUString> serviceNames = comphelper::concatSequences(
         SwVbaGlobals_BASE::getAvailableServiceNames(),
-        uno::Sequence<OUString>{ u"ooo.vba.word.Document"_ustr,
+        cpo::uno::Sequence<OUString>{ u"ooo.vba.word.Document"_ustr,
                                  // "ooo.vba.word.Globals",
                                  // "ooo.vba.word.WrapFormat",
                                  u"com.sun.star.script.vba.VBATextEventProcessor"_ustr });
@@ -217,7 +217,7 @@ SwVbaGlobals::getAvailableServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwVbaGlobals_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SwVbaGlobals(args, context));
 }

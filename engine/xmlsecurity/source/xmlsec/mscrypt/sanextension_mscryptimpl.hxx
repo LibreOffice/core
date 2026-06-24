@@ -39,10 +39,10 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper<
 {
     private:
         bool m_critical ;
-        css::uno::Sequence< sal_Int8 > m_xExtnId ;
-        css::uno::Sequence< sal_Int8 > m_xExtnValue ;
+        cpo::uno::Sequence< sal_Int8 > m_xExtnId ;
+        cpo::uno::Sequence< sal_Int8 > m_xExtnValue ;
 
-        css::uno::Sequence< css::security::CertAltNameEntry > m_Entries;
+        cpo::uno::Sequence< css::security::CertAltNameEntry > m_Entries;
 
     public:
         SanExtensionImpl() ;
@@ -51,13 +51,13 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper<
         //Methods from XCertificateExtension
         virtual bool SAL_CALL isCritical() override;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() override;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() override;
 
         //Methods from XSanExtension
 
-        virtual css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL getAlternativeNames() override;
+        virtual cpo::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL getAlternativeNames() override;
 
         //Helper method
         void setCertExtn( unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical ) ;

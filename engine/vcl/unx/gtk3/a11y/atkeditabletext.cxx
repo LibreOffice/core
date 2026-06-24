@@ -59,7 +59,7 @@ editable_text_wrapper_set_run_attributes( AtkEditableText  *text,
             pEditableText = getEditableText( text );
         if( pEditableText.is() )
         {
-            uno::Sequence< beans::PropertyValue > aAttributeList;
+            cpo::uno::Sequence< beans::PropertyValue > aAttributeList;
 
             if( attribute_set_map_to_property_values( attribute_set, aAttributeList ) )
                 return pEditableText->setAttributes(nStartOffset, nEndOffset, aAttributeList);

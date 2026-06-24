@@ -625,7 +625,7 @@ bool lcl_UpdateParagraphClassificationField(SwDoc* pDoc,
     return lcl_DoUpdateParagraphSignatureField(*pDoc, xField, sDisplayText);
 }
 
-void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTextContent>& xParagraph, const bool updateDontRemove, const uno::Sequence<uno::Reference<css::rdf::XURI>>& rGraphNames)
+void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTextContent>& xParagraph, const bool updateDontRemove, const cpo::uno::Sequence<uno::Reference<css::rdf::XURI>>& rGraphNames)
 {
     SwDocShell* pDocShell = rDoc.GetDocShell();
     if (!pDocShell)
@@ -779,7 +779,7 @@ static void equaliseNumberOfParagraph(std::vector<svx::ClassificationResult> con
     while (getNumberOfParagraphs(xText) < nNumberOfParagraphs)
     {
         uno::Reference<text::XParagraphAppend> xParagraphAppend(xText, uno::UNO_QUERY);
-        xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
+        xParagraphAppend->finishParagraph(cpo::uno::Sequence<beans::PropertyValue>());
     }
 }
 
@@ -1105,7 +1105,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
     uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
-    const uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
+    const cpo::uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
     for (const OUString& rPageStyleName : aStyles)
     {
@@ -1586,9 +1586,9 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
     xDefaulter->createCustomShapeDefaults(u"fontwork-plain-text"_ustr);
 
-    auto aGeomPropSeq = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr).get< uno::Sequence<beans::PropertyValue> >();
+    auto aGeomPropSeq = xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr).get< cpo::uno::Sequence<beans::PropertyValue> >();
     auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"TextPath", cpo::uno::Any(true)},
     }));
@@ -1623,7 +1623,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
     uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
-    const uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
+    const cpo::uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
 
     for (const OUString& rPageStyleName : aStyles)
     {
@@ -1792,7 +1792,7 @@ void SwEditShell::SignParagraph()
         security::DocumentDigitalSignatures::createDefault(
             comphelper::getProcessComponentContext()));
 
-    uno::Sequence<css::beans::PropertyValue> aProperties;
+    cpo::uno::Sequence<css::beans::PropertyValue> aProperties;
     uno::Reference<security::XCertificate> xCertificate = xSigner->chooseCertificateWithProps(aProperties);
     if (!xCertificate.is())
         return;
@@ -1857,7 +1857,7 @@ void SwEditShell::ValidateParagraphSignatures(SwTextNode* pNode, bool updateDont
     if (!pDocShell)
         return;
 
-    uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(pDocShell->GetBaseModel(), MetaNS);
+    cpo::uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(pDocShell->GetBaseModel(), MetaNS);
     rtl::Reference<SwXParagraph> xParentText = SwXParagraph::CreateXParagraph(*GetDoc(), pNode, nullptr);
     lcl_ValidateParagraphSignatures(*GetDoc(), xParentText, updateDontRemove, aGraphNames);
 }
@@ -1893,7 +1893,7 @@ void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
     rtl::Reference<SwXParagraphEnumeration> xParagraphs = xParent->createParagraphEnumeration();
     if (!xParagraphs.is())
         return;
-    uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(pDocShell->GetBaseModel(), MetaNS);
+    cpo::uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(pDocShell->GetBaseModel(), MetaNS);
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
@@ -1948,7 +1948,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 
     static constexpr OUString sBlank(u""_ustr);
     const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-    uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(xModel, MetaNS);
+    cpo::uno::Sequence<uno::Reference<css::rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(xModel, MetaNS);
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParaOrTable(xParagraphs->nextElement(), uno::UNO_QUERY);

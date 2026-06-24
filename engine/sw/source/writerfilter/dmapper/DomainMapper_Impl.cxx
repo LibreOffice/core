@@ -193,7 +193,7 @@ static void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >
         rxFieldProps->setPropertyValue( u"Name"_ustr, cpo::uno::Any( pFFDataHandler->getName() ) );
 
     const FFDataHandler::DropDownEntries_t& rEntries = pFFDataHandler->getDropDownEntries();
-    uno::Sequence< OUString > sItems( rEntries.size() );
+    cpo::uno::Sequence< OUString > sItems( rEntries.size() );
     ::std::copy( rEntries.begin(), rEntries.end(), sItems.getArray());
     if ( sItems.hasElements() )
         rxFieldProps->setPropertyValue( u"Items"_ustr, cpo::uno::Any( sItems ) );
@@ -478,7 +478,7 @@ OUString DomainMapper_Impl::GetUnusedPageStyleName()
     static const char DEFAULT_STYLE[] = "Converted";
     if (!m_xNextUnusedPageStyleNo)
     {
-        const uno::Sequence< OUString > aPageStyleNames = GetPageStyles()->getElementNames();
+        const cpo::uno::Sequence< OUString > aPageStyleNames = GetPageStyles()->getElementNames();
         sal_Int32         nMaxIndex       = 0;
         // find the highest number x in each style with the name "DEFAULT_STYLE+x" and
         // return an incremented name
@@ -524,7 +524,7 @@ OUString DomainMapper_Impl::GetUnusedCharacterStyleName()
     if (!m_xNextUnusedCharacterStyleNo)
     {
         //search for all character styles with the name sListLabel + <index>
-        const uno::Sequence< OUString > aCharacterStyleNames = GetCharacterStyles()->getElementNames();
+        const cpo::uno::Sequence< OUString > aCharacterStyleNames = GetCharacterStyles()->getElementNames();
         sal_Int32         nMaxIndex       = 0;
         for ( const auto& rStyleName : aCharacterStyleNames )
         {
@@ -704,7 +704,7 @@ void DomainMapper_Impl::AddDummyParaForTableInSection()
     uno::Reference< text::XTextAppend > xTextAppend = m_aTextAppendStack.top().xTextAppend;
     if (xTextAppend.is())
     {
-        xTextAppend->finishParagraph(  uno::Sequence< beans::PropertyValue >() );
+        xTextAppend->finishParagraph(  cpo::uno::Sequence< beans::PropertyValue >() );
         SetIsDummyParaAddedForTableInSection(true);
     }
 }
@@ -768,7 +768,7 @@ static void reanchorObjects(const uno::Reference<uno::XInterface>& xFrom,
         try
         {
             // See SwXParagraph::Impl::GetPropertyValues_Impl
-            uno::Sequence<uno::Reference<text::XTextContent>> aSeq;
+            cpo::uno::Sequence<uno::Reference<text::XTextContent>> aSeq;
             xProps->getPropertyValue(u"OOXMLImport_AnchoredShapes"_ustr) >>= aSeq;
             aShapes.insert(aShapes.end(), aSeq.begin(), aSeq.end());
             bFastPathDone = true;
@@ -1242,7 +1242,7 @@ void DomainMapper_Impl::PopSdt()
         std::vector<OUString>& rValues = m_pSdtHelper->getDropDownItems();
         if (rDisplayTexts.size() == rValues.size())
         {
-            uno::Sequence<beans::PropertyValues> aItems(rValues.size());
+            cpo::uno::Sequence<beans::PropertyValues> aItems(rValues.size());
             beans::PropertyValues* pItems = aItems.getArray();
             for (size_t i = 0; i < rValues.size(); ++i)
             {
@@ -1473,7 +1473,7 @@ bool DomainMapper_Impl::HasTopAnchoredObjects() const
     return !m_aTextAppendStack.empty() && !m_aTextAppendStack.top().m_aAnchoredObjects.empty();
 }
 
-void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
+void DomainMapper_Impl::InitTabStopFromStyle( const cpo::uno::Sequence< style::TabStop >& rInitTabStops )
 {
     OSL_ENSURE(m_aCurrentTabStops.empty(), "tab stops already initialized");
     for( const auto& rTabStop : rInitTabStops)
@@ -1499,7 +1499,7 @@ void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
 }
 
 
-uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
+cpo::uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 {
     std::vector<style::TabStop> aRet;
     for (const DeletableTabStop& rStop : m_aCurrentTabStops)
@@ -2138,7 +2138,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion(bool bPreventOverlap)
     aFrameProperties.push_back(comphelper::makePropertyValue(
         getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
 
-    uno::Sequence<beans::PropertyValue> aGrabBag(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag(comphelper::InitPropertySequence(
         { { "ParaFrameProperties", cpo::uno::Any(true) } }));
     aFrameProperties.push_back(comphelper::makePropertyValue(u"FrameInteropGrabBag"_ustr, aGrabBag));
 
@@ -2807,7 +2807,7 @@ void DomainMapper_Impl::finishParagraph( const ParagraphPropertyMapPtr& pParaCon
                             && (aCurrentNumberingName == aPreviousNumberingName
                                 || !isNumberingViaRule))
                         {
-                            uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
+                            cpo::uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
                             m_StreamStateStack.top().xPreviousParagraph->getPropertyValue(u"ParaInteropGrabBag"_ustr) >>= aPrevPropertiesSeq;
                             const auto & rPrevProperties = aPrevPropertiesSeq;
                             bool bParaAutoBefore = m_StreamStateStack.top().bParaAutoBefore
@@ -3554,7 +3554,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
     {
         applyToggleAttributes(pPropertyMap);
         // If we are in comments, then disable CharGrabBag, comment text doesn't support that.
-        uno::Sequence<beans::PropertyValue> aValues = comphelper::containerToSequence(pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!IsInComments()));
+        cpo::uno::Sequence<beans::PropertyValue> aValues = comphelper::containerToSequence(pPropertyMap->GetPropertyValues(/*bCharGrabBag=*/!IsInComments()));
 
         if (IsInTOC() || m_bStartIndex || m_bStartBibliography)
             for( auto& rValue : asNonConstRange(aValues) )
@@ -3662,7 +3662,7 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
 
 void DomainMapper_Impl::appendTextContent(
     const uno::Reference< text::XTextContent >& xContent,
-    const uno::Sequence< beans::PropertyValue >& xPropertyValues
+    const cpo::uno::Sequence< beans::PropertyValue >& xPropertyValues
     )
 {
     SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text append stack");
@@ -3786,7 +3786,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
         if (!m_aTextAppendStack.empty())
             m_aTextAppendStack.pop();
 
-        appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
+        appendTextContent( xOLE, cpo::uno::Sequence< beans::PropertyValue >() );
 
         if (!aCLSID.isEmpty())
             pOLEHandler->importStream(m_xComponentContext, GetTextDocument(), xOLE);
@@ -3844,7 +3844,7 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
                 cpo::uno::Any(text::TextContentAnchorType_AS_CHARACTER));
         // mimic the treatment of graphics here... it seems anchoring as character
         // gives a better ( visually ) result
-        appendTextContent(xStarMath, uno::Sequence<beans::PropertyValue>());
+        appendTextContent(xStarMath, cpo::uno::Sequence<beans::PropertyValue>());
     }
     catch( const uno::Exception& )
     {
@@ -3885,7 +3885,7 @@ static void copyAllProps(const css::uno::Reference<css::uno::XInterface>& from,
     css::uno::Reference<css::beans::XPropertySet> xFromProps(from, css::uno::UNO_QUERY_THROW);
     css::uno::Reference<css::beans::XPropertySetInfo> xFromInfo(xFromProps->getPropertySetInfo(),
                                                                 css::uno::UNO_SET_THROW);
-    css::uno::Sequence<css::beans::Property> rawProps(xFromInfo->getProperties());
+    cpo::uno::Sequence<css::beans::Property> rawProps(xFromInfo->getProperties());
     std::vector<OUString> props;
     props.reserve(rawProps.getLength());
     for (const auto& prop : rawProps)
@@ -4332,7 +4332,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
                 xFootnote = m_xTextDocument->createEndnote();
         }
         pTopContext->SetFootnote(xFootnote, sFootnoteCharStyleName);
-        uno::Sequence< beans::PropertyValue > aFontProperties;
+        cpo::uno::Sequence< beans::PropertyValue > aFontProperties;
         if (GetTopContextOfType(CONTEXT_CHARACTER))
             aFontProperties = comphelper::containerToSequence(GetTopContextOfType(CONTEXT_CHARACTER)->GetPropertyValues());
         appendTextContent( xFootnote, aFontProperties );
@@ -4834,7 +4834,7 @@ void DomainMapper_Impl::PopAnnotation()
         // See if the annotation will be a single position or a range.
         if (m_nAnnotationId == -1 || !m_aAnnotationPositions[m_nAnnotationId].m_xStart.is() || !m_aAnnotationPositions[m_nAnnotationId].m_xEnd.is())
         {
-            uno::Sequence< beans::PropertyValue > aEmptyProperties;
+            cpo::uno::Sequence< beans::PropertyValue > aEmptyProperties;
             appendTextContent( m_xAnnotationField, aEmptyProperties );
         }
         else
@@ -5021,7 +5021,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             }
 
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
-            uno::Sequence<beans::PropertyValue> aGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
             xShapePropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
 
             for (const auto& rProp : aGrabBag)
@@ -5064,7 +5064,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             // So that the original bitmap-only shape will be replaced by the embedded object.
             m_vAnchoredStack.back().bToRemove = true;
             m_aTextAppendStack.pop();
-            appendTextContent(m_StreamStateStack.top().xEmbedded, uno::Sequence<beans::PropertyValue>());
+            appendTextContent(m_StreamStateStack.top().xEmbedded, cpo::uno::Sequence<beans::PropertyValue>());
         }
         else
         {
@@ -5097,7 +5097,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 SetIsTextFrameInserted(true);
                 // Extract the special "btLr text frame" mode, requested by oox, if needed.
                 // Extract vml ZOrder from FrameInteropGrabBag
-                uno::Sequence<beans::PropertyValue> aGrabBag;
+                cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
 
                 for (const auto& rProp : aGrabBag)
@@ -5144,7 +5144,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             }
             else
             {
-                uno::Sequence<beans::PropertyValue> aGrabBag;
+                cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                 xShapePropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                 for (const auto& rProp : aGrabBag)
                 {
@@ -5178,7 +5178,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         xPropSetInfo = xShapePropertySet->getPropertySetInfo();
                         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"InteropGrabBag"_ustr))
                         {
-                            uno::Sequence<beans::PropertyValue> aShapeGrabBag( comphelper::InitPropertySequence({
+                            cpo::uno::Sequence<beans::PropertyValue> aShapeGrabBag( comphelper::InitPropertySequence({
                                 { "SdtEndBefore", cpo::uno::Any(true) }
                             }));
                             xShapePropertySet->setPropertyValue(u"InteropGrabBag"_ustr,cpo::uno::Any(aShapeGrabBag));
@@ -5252,7 +5252,7 @@ void DomainMapper_Impl::PopShapeContext()
     uno::Reference<text::XTextContent> xObj = m_vAnchoredStack.back().xTextContent;
     try
     {
-        appendTextContent( xObj, uno::Sequence< beans::PropertyValue >() );
+        appendTextContent( xObj, cpo::uno::Sequence< beans::PropertyValue >() );
     }
     catch ( const uno::RuntimeException& )
     {
@@ -5313,7 +5313,7 @@ bool DomainMapper_Impl::IsSdtEndBefore()
     {
         if (rCurrentCharProp.Name == "CharInteropGrabBag")
         {
-            uno::Sequence<beans::PropertyValue> aCharGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aCharGrabBag;
             rCurrentCharProp.Value >>= aCharGrabBag;
             for (const auto& rProp : aCharGrabBag)
             {
@@ -5454,7 +5454,7 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
         {
             xSectionStartingRange = pSectionContext->GetStartingRange();
         }
-        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
             { "InputStream", cpo::uno::Any(xInputStream) },
             { "InsertMode", cpo::uno::Any(true) },
             { "TextInsertModeRange", cpo::uno::Any(xInsertTextRange) },
@@ -6042,7 +6042,7 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     }
 }
 
-static cpo::uno::Any lcl_getGrabBagValue( const uno::Sequence<beans::PropertyValue>& grabBag, OUString const & name )
+static cpo::uno::Any lcl_getGrabBagValue( const cpo::uno::Sequence<beans::PropertyValue>& grabBag, OUString const & name )
 {
     auto pProp = std::find_if(grabBag.begin(), grabBag.end(),
         [&name](const beans::PropertyValue& rProp) { return rProp.Name == name; });
@@ -6082,7 +6082,7 @@ void DomainMapper_Impl::ChainTextFrames()
             uno::Reference<beans::XPropertySetInfo> xPropertySetInfo;
             if( xPropertySet.is() )
                 xPropertySetInfo = xPropertySet->getPropertySetInfo();
-            uno::Sequence<beans::PropertyValue> aGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
             uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
 
             TextFramesForChaining aChainStruct;
@@ -6296,7 +6296,7 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(const css::uno::Reference<cs
             sTextBoxName = xTextBox->getName();
 
         // Try to get the grabbag
-        uno::Sequence<beans::PropertyValue> aOldGrabBagSeq;
+        cpo::uno::Sequence<beans::PropertyValue> aOldGrabBagSeq;
         if (xProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
             xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aOldGrabBagSeq;
 
@@ -7204,8 +7204,8 @@ void DomainMapper_Impl::handleDocProperty
     }
 }
 
-static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
-                                   const uno::Sequence< beans::PropertyValues >& aLevel, const std::optional<style::TabStop> numtab,
+static cpo::uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
+                                   const cpo::uno::Sequence< beans::PropertyValues >& aLevel, const std::optional<style::TabStop> numtab,
                                    bool bSkipPageNumberAndTab)
 {
     //create a copy of the level and add new entries
@@ -7642,7 +7642,7 @@ void DomainMapper_Impl::handleToc
                 {
                     TOCStyleMap::iterator aTOCStyleIter = aMap.lower_bound( nLevel );
 
-                    uno::Sequence< OUString> aStyles( nLevelCount );
+                    cpo::uno::Sequence< OUString> aStyles( nLevelCount );
                     for ( auto& rStyle : asNonConstRange(aStyles) )
                     {
                         // tdf#153083 must map w:styleId to w:name
@@ -7672,7 +7672,7 @@ void DomainMapper_Impl::handleToc
                         //start with level 1, 0 is the header level
         for( sal_Int32 nLevel = 1; nLevel < nLevelCount; ++nLevel)
         {
-            uno::Sequence< beans::PropertyValues > aLevel;
+            cpo::uno::Sequence< beans::PropertyValues > aLevel;
             xLevelFormats->getByIndex( nLevel ) >>= aLevel;
 
             // Get the tab stops coming from the styles; store to the level definitions
@@ -7681,7 +7681,7 @@ void DomainMapper_Impl::handleToc
             {
                 // This relies on the chapter numbering rules already defined
                 // (see ListDef::CreateNumberingRules)
-                uno::Sequence<beans::PropertyValue> props =
+                cpo::uno::Sequence<beans::PropertyValue> props =
                     xChapterNumberingRules->getRuleByIndex(nLevel - 1);
                 bool bHasNumbering = false;
                 bool bUseTabStop = false;
@@ -7708,7 +7708,7 @@ void DomainMapper_Impl::handleToc
                             if (xPropState->getPropertyState(u"ParaTabStops"_ustr)
                                 == beans::PropertyState_DIRECT_VALUE)
                             {
-                                if (uno::Sequence<style::TabStop> tabStops;
+                                if (cpo::uno::Sequence<style::TabStop> tabStops;
                                     xStyle->getPropertyValue(u"ParaTabStops"_ustr) >>= tabStops)
                                 {
                                     // If the style only has one tab stop, Word uses it for
@@ -7730,7 +7730,7 @@ void DomainMapper_Impl::handleToc
                 }
             }
             bool bSkipPageNumberAndTab = nLevel >= nStartNoPageNumber && nLevel <= nEndNoPageNumber;
-            uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
+            cpo::uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
                                                 bHyperlinks, sChapterNoSeparator,
                                                 aLevel, numTab, bSkipPageNumberAndTab);
             xLevelFormats->replaceByIndex( nLevel, cpo::uno::Any( aNewLevel ) );
@@ -7752,10 +7752,10 @@ void DomainMapper_Impl::handleToc
         {
             uno::Reference< container::XIndexReplace> xLevelFormats;
             xTOC->getPropertyValue(getPropertyName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
-            uno::Sequence< beans::PropertyValues > aLevel;
+            cpo::uno::Sequence< beans::PropertyValues > aLevel;
             xLevelFormats->getByIndex( 1 ) >>= aLevel;
 
-            uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
+            cpo::uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
                                                 bHyperlinks, sChapterNoSeparator,
                                                 aLevel, {}, /*SkipPageNumberAndTab=*/false);
             xLevelFormats->replaceByIndex( 1, cpo::uno::Any( aNewLevel ) );
@@ -7825,7 +7825,7 @@ void DomainMapper_Impl::handleBibliography
     pContext->SetTOC( xTOC );
     m_StreamStateStack.top().bParaHadField = false;
 
-    appendTextContent(xTOC, uno::Sequence< beans::PropertyValue >() );
+    appendTextContent(xTOC, cpo::uno::Sequence< beans::PropertyValue >() );
 }
 
 void DomainMapper_Impl::handleIndex
@@ -7867,7 +7867,7 @@ void DomainMapper_Impl::handleIndex
     pContext->SetTOC( xTOC );
     m_StreamStateStack.top().bParaHadField = false;
 
-    appendTextContent(xTOC, uno::Sequence< beans::PropertyValue >() );
+    appendTextContent(xTOC, cpo::uno::Sequence< beans::PropertyValue >() );
 
     if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
     {
@@ -8669,7 +8669,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                         if (xTextAppend.is())
                         {
-                            uno::Sequence<beans::PropertyValue> aValues(bHasFont ? 4 : 3);
+                            cpo::uno::Sequence<beans::PropertyValue> aValues(bHasFont ? 4 : 3);
                             beans::PropertyValue aCharSetVal;
                             aCharSetVal.Name = getPropertyName(PROP_CHAR_FONT_CHAR_SET);
                             aCharSetVal.Value <<= awt::CharSet::SYMBOL;
@@ -8793,7 +8793,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                               OUString::createFromAscii(aIt->second.cFieldServiceName));
                     OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText including the index e.g. CITATION Kra06 \l 1033
                     if( !sCmd.isEmpty()){
-                        uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
+                        cpo::uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
                             { "Identifier", cpo::uno::Any(sCmd) }
                         }));
                         xFieldInterface->setPropertyValue(u"Fields"_ustr, cpo::uno::Any(aValues));
@@ -9021,7 +9021,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                     if( bIsSetbiblio )
                     {
                         cpo::uno::Any aProperty  = xFieldProperties->getPropertyValue(u"Fields"_ustr);
-                        uno::Sequence<beans::PropertyValue> aValues ;
+                        cpo::uno::Sequence<beans::PropertyValue> aValues ;
                         aProperty >>= aValues;
                         beans::PropertyValue propertyVal;
                         sal_Int32 nTitleFoundIndex = -1;
@@ -9710,7 +9710,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
     {
         if(xPropertySet.is() && bHasGrabBag)
         {
-            uno::Sequence<beans::PropertyValue> aFrameGrabBag( comphelper::InitPropertySequence({
+            cpo::uno::Sequence<beans::PropertyValue> aFrameGrabBag( comphelper::InitPropertySequence({
                 { "SdtEndBefore", cpo::uno::Any(true) }
             }));
             xPropertySet->setPropertyValue(u"FrameInteropGrabBag"_ustr,cpo::uno::Any(aFrameGrabBag));
@@ -9771,7 +9771,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
                     xCrsr->gotoEnd(false);
                     PropertyMapPtr pEmpty(new PropertyMap());
                     appendTextPortion(u"​"_ustr, pEmpty);
-                    appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
+                    appendTextContent( xTextContent, cpo::uno::Sequence< beans::PropertyValue >() );
                     bAppend = false;
                     xCrsr->gotoEnd(false);
                     appendTextPortion(u"​"_ustr, pEmpty);
@@ -9786,7 +9786,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         }
 
         if ( bAppend )
-            appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
+            appendTextContent( xTextContent, cpo::uno::Sequence< beans::PropertyValue >() );
 
         if (m_eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR && !m_aTextAppendStack.empty())
         {
@@ -10138,7 +10138,7 @@ void DomainMapper_Impl::ApplySettingsTable()
         {
             xSettings->setPropertyValue(u"GutterAtTop"_ustr, cpo::uno::Any(true));
         }
-        uno::Sequence<beans::PropertyValue> aWriteProtection
+        cpo::uno::Sequence<beans::PropertyValue> aWriteProtection
                 = m_pSettingsTable->GetWriteProtectionSettings();
         if (aWriteProtection.hasElements())
                 xSettings->setPropertyValue(u"ModifyPasswordInfo"_ustr, cpo::uno::Any(aWriteProtection));
@@ -10232,7 +10232,7 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
         pProp->second >>= nNumberingLevel;
     if (xNumberingRules.is())
     {
-        uno::Sequence<beans::PropertyValue> aProps;
+        cpo::uno::Sequence<beans::PropertyValue> aProps;
         xNumberingRules->getByIndex(nNumberingLevel) >>= aProps;
         auto pPropVal = std::find_if(std::cbegin(aProps), std::cend(aProps),
             [&aProp](const beans::PropertyValue& rProp) { return rProp.Name == aProp; });

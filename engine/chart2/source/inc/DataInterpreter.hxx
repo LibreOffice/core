@@ -52,7 +52,7 @@ public:
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // convenience methods
     static  OUString GetRole( const css::uno::Reference< css::chart2::data::XDataSequence > & xSeq );
@@ -62,15 +62,15 @@ public:
         const OUString & rRole );
 
     static cpo::uno::Any GetProperty(
-        const css::uno::Sequence<css::beans::PropertyValue > & aArguments,
+        const cpo::uno::Sequence<css::beans::PropertyValue > & aArguments,
         std::u16string_view rName );
 
     static bool HasCategories(
-        const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
+        const cpo::uno::Sequence< css::beans::PropertyValue > & rArguments,
         const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rData );
 
     static bool UseCategoriesAsX(
-        const css::uno::Sequence< css::beans::PropertyValue > & rArguments );
+        const cpo::uno::Sequence< css::beans::PropertyValue > & rArguments );
 
     static std::vector<css::uno::Reference< css::chart2::data::XLabeledDataSequence >> getDataSequences(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource);
@@ -96,7 +96,7 @@ public:
      */
     virtual InterpretedData interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments,
         const std::vector< rtl::Reference< ::chart::DataSeries > >& aSeriesToReUse );
 
     /** Re-interprets the data given in <code>aInterpretedData</code>

@@ -45,7 +45,7 @@ class TOOLKIT_DLLPUBLIC UnoControlContainer : public UnoControlContainer_Base
 {
 private:
     std::unique_ptr<UnoControlHolderList>   mpControls;
-    css::uno::Sequence< css::uno::Reference< css::awt::XTabController > >    maTabControllers;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XTabController > >    maTabControllers;
     ContainerListenerMultiplexer            maCListeners;
 
 protected:
@@ -76,7 +76,7 @@ public:
 
     // css::container::XIdentifierAccess
     virtual cpo::uno::Any SAL_CALL getByIdentifier( ::sal_Int32 Identifier ) override;
-    virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getIdentifiers(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getIdentifiers(  ) override;
 
     // css::container::XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -84,14 +84,14 @@ public:
 
     // css::awt::XControlContainer
     void SAL_CALL setStatusText( const OUString& StatusText ) override;
-    css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls(  ) override;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls(  ) override;
     css::uno::Reference< css::awt::XControl > SAL_CALL getControl( const OUString& aName ) override;
     void SAL_CALL addControl( const OUString& Name, const css::uno::Reference< css::awt::XControl >& Control ) override;
     void SAL_CALL removeControl( const css::uno::Reference< css::awt::XControl >& Control ) override;
 
     // css::awt::XUnoControlContainer
-    void SAL_CALL setTabControllers( const css::uno::Sequence< css::uno::Reference< css::awt::XTabController > >& TabControllers ) override;
-    css::uno::Sequence< css::uno::Reference< css::awt::XTabController > > SAL_CALL getTabControllers(  ) override;
+    void SAL_CALL setTabControllers( const cpo::uno::Sequence< css::uno::Reference< css::awt::XTabController > >& TabControllers ) override;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XTabController > > SAL_CALL getTabControllers(  ) override;
     void SAL_CALL addTabController( const css::uno::Reference< css::awt::XTabController >& TabController ) override;
     void SAL_CALL removeTabController( const css::uno::Reference< css::awt::XTabController >& TabController ) override;
 
@@ -103,7 +103,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 protected:
     virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;

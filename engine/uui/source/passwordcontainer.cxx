@@ -225,7 +225,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
 bool PasswordContainerHelper::addRecord(
     OUString const & rURL,
     OUString const & rUsername,
-    uno::Sequence< OUString > const & rPasswords,
+    cpo::uno::Sequence< OUString > const & rPasswords,
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     bool bPersist )
 {
@@ -304,7 +304,7 @@ PasswordContainerInteractionHandler::supportsService(
 
 
 // virtual
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 PasswordContainerInteractionHandler::getSupportedServiceNames()
 {
     return { u"com.sun.star.task.PasswordContainerInteractionHandler"_ustr };
@@ -341,7 +341,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
     if ( aAnyRequest >>= aURLAuthenticationRequest )
         aURL = aURLAuthenticationRequest.URL;
 
-    const uno::Sequence< uno::Reference< task::XInteractionContinuation > >
+    const cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >
         rContinuations = rRequest->getContinuations();
 
     uno::Reference< ucb::XInteractionSupplyAuthentication >
@@ -380,7 +380,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_uui_PasswordContainerInteractionHandler_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new uui::PasswordContainerInteractionHandler(context));
 }

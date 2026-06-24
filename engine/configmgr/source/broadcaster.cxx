@@ -90,7 +90,7 @@ void Broadcaster::addPropertyChangeNotification(
 void Broadcaster::addPropertiesChangeNotification(
     css::uno::Reference< css::beans::XPropertiesChangeListener > const &
         listener,
-    css::uno::Sequence< css::beans::PropertyChangeEvent > const & event)
+    cpo::uno::Sequence< css::beans::PropertyChangeEvent > const & event)
 {
     propertiesChangeNotifications_.emplace_back(listener, event);
 }
@@ -218,7 +218,7 @@ Broadcaster::PropertyChangeNotification::PropertyChangeNotification(
 Broadcaster::PropertiesChangeNotification::PropertiesChangeNotification(
     css::uno::Reference< css::beans::XPropertiesChangeListener > const &
         theListener,
-    css::uno::Sequence< css::beans::PropertyChangeEvent > const & theEvent):
+    cpo::uno::Sequence< css::beans::PropertyChangeEvent > const & theEvent):
     listener(theListener), event(theEvent)
 {
     assert(theListener.is());

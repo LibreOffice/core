@@ -53,15 +53,15 @@ uno::Reference<drawing::XShape> GluePointTest::getShape(sal_uInt8 nShapeIndex)
 // Glue points from custom shape geometry. Values are relative to viewBox.
 // Usable if values are constant and not calculated by formula.
 bool lcl_getGeometryGluePoints(
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
     const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
     cpo::uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
-    uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
+    cpo::uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aCustomShapeGeometry)
     {
         if (rProp.Name == "Path")
@@ -88,7 +88,7 @@ bool lcl_getGeometryGluePoints(
 CPPUNIT_TEST_FIXTURE(GluePointTest, testTdf157543_5PointStar)
 {
     loadFromFile(u"tdf157543_5PointStar.ppt");
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
     CPPUNIT_ASSERT(lcl_getGeometryGluePoints(aGluePoints, getShape(0)));
     // Without fix only two glue points exist.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aGluePoints.getLength());

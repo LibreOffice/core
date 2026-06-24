@@ -100,7 +100,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
         try {
             uno::Reference < frame::XDesktop2 > xDocumentLoader = frame::Desktop::create(m_xContext);
 
-            uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
+            cpo::uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.isEmpty() ? 4 : 5 );
             auto pArgs = aArgs.getArray();
 
             pArgs[0].Name = u"URL"_ustr;
@@ -190,7 +190,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
         aTypeName = xTypeDetection->queryTypeByURL( aURLToAnalyze );
     }
 
-    uno::Sequence< beans::PropertyValue > aArgs( aTypeName.isEmpty() ? 2 : 3 );
+    cpo::uno::Sequence< beans::PropertyValue > aArgs( aTypeName.isEmpty() ? 2 : 3 );
     auto pArgs = aArgs.getArray();
     pArgs[0].Name = u"URL"_ustr;
     pArgs[0].Value <<= u"private:stream"_ustr;
@@ -213,7 +213,7 @@ OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
     {
         // get the default filter name for the type
         uno::Reference< container::XNameAccess > xNameAccess( xTypeDetection, uno::UNO_QUERY_THROW );
-        uno::Sequence< beans::PropertyValue > aTypes;
+        cpo::uno::Sequence< beans::PropertyValue > aTypes;
 
         if ( xNameAccess.is() && ( xNameAccess->getByName( aTypeName ) >>= aTypes ) )
         {
@@ -261,7 +261,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
 
     if ( bParseHeader )
     {
-        uno::Sequence< sal_Int8 > aReadSeq( 4 );
+        cpo::uno::Sequence< sal_Int8 > aReadSeq( 4 );
         // read the complete size of the Object Package
         if ( xInStream->readBytes( aReadSeq, 4 ) != 4 )
             return false;
@@ -338,7 +338,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
                 xNativeOutTemp->writeBytes( aReadSeq );
             else
             {
-                uno::Sequence< sal_Int8 > aToWrite( aReadSeq );
+                cpo::uno::Sequence< sal_Int8 > aToWrite( aReadSeq );
                 aToWrite.realloc( nLocalRead );
                 xNativeOutTemp->writeBytes( aToWrite );
             }
@@ -348,7 +348,7 @@ bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io::XI
     }
     else
     {
-        uno::Sequence< sal_Int8 > aData( 8 );
+        cpo::uno::Sequence< sal_Int8 > aData( 8 );
         if ( xInStream->readBytes( aData, 8 ) == 8
           && aData[0] == -1 && aData[1] == -1 && aData[2] == -1 && aData[3] == -1
           && ( aData[4] == 2 || aData[4] == 3 ) && aData[5] == 0 && aData[6] == 0 && aData[7] == 0 )
@@ -392,7 +392,7 @@ void OwnView_Impl::CreateNative()
         if ( !xInStream.is() )
             throw uno::RuntimeException();
 
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xInStream) };
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xInStream) };
         uno::Reference< container::XNameAccess > xNameAccess(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         u"com.sun.star.embed.OLESimpleStorage"_ustr,
@@ -401,13 +401,13 @@ void OwnView_Impl::CreateNative()
 
         static constexpr OUString aSubStreamName(u"\1Ole10Native"_ustr);
         uno::Reference< embed::XClassifiedObject > xStor( xNameAccess, uno::UNO_QUERY_THROW );
-        uno::Sequence< sal_Int8 > aStorClassID = xStor->getClassID();
+        cpo::uno::Sequence< sal_Int8 > aStorClassID = xStor->getClassID();
 
         if ( xNameAccess->hasByName( aSubStreamName ) )
         {
             sal_uInt8 const aClassID[] =
                 { 0x00, 0x03, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 };
-            uno::Sequence< sal_Int8 > aPackageClassID( reinterpret_cast<sal_Int8 const *>(aClassID), 16 );
+            cpo::uno::Sequence< sal_Int8 > aPackageClassID( reinterpret_cast<sal_Int8 const *>(aClassID), 16 );
 
             uno::Reference< io::XStream > xSubStream;
             xNameAccess->getByName( aSubStreamName ) >>= xSubStream;

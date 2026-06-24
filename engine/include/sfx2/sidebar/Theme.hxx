@@ -118,7 +118,7 @@ public:
         const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
 
     // beans::XPropertySetInfo
-    virtual css::uno::Sequence<css::beans::Property> SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence<css::beans::Property> SAL_CALL getProperties() override;
     virtual css::beans::Property SAL_CALL getPropertyByName (const OUString& rsName) override;
     virtual bool SAL_CALL hasPropertyByName (const OUString& rsName) override;
 

@@ -394,37 +394,37 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(const uno::Refe
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"AdjustmentValues"_ustr);
-        uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
+        cpo::uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
         if(anotherAny >>= aAdjustmentValues)
             dumpAdjustmentValuesAsElement(aAdjustmentValues);
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"Extrusion"_ustr);
-        uno::Sequence< beans::PropertyValue > aExtrusion;
+        cpo::uno::Sequence< beans::PropertyValue > aExtrusion;
         if(anotherAny >>= aExtrusion)
             dumpExtrusionAsElement(aExtrusion);
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"Path"_ustr);
-        uno::Sequence< beans::PropertyValue > aPath;
+        cpo::uno::Sequence< beans::PropertyValue > aPath;
         if(anotherAny >>= aPath)
             dumpPathAsElement(aPath);
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"TextPath"_ustr);
-        uno::Sequence< beans::PropertyValue > aTextPath;
+        cpo::uno::Sequence< beans::PropertyValue > aTextPath;
         if(anotherAny >>= aTextPath)
             dumpTextPathAsElement(aTextPath);
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"Equations"_ustr);
-        uno::Sequence< OUString > aEquations;
+        cpo::uno::Sequence< OUString > aEquations;
         if(anotherAny >>= aEquations)
             dumpEquationsAsElement(aEquations);
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"Handles"_ustr);
-        uno::Sequence< beans::PropertyValues > aHandles;
+        cpo::uno::Sequence< beans::PropertyValues > aHandles;
         if(anotherAny >>= aHandles)
             dumpHandlesAsElement(aHandles);
     }
@@ -466,7 +466,7 @@ void EnhancedShapeDumper::dumpTextRotateAngleAsAttribute(double aTextRotateAngle
     (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textRotateAngle"), "%f", aTextRotateAngle);
 }
 
-void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues)
+void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(const cpo::uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "AdjustmentValues" ));
     for (const auto& i : aAdjustmentValues)
@@ -546,7 +546,7 @@ void EnhancedShapeDumper::dumpPropertyValueAsElement(const beans::PropertyValue&
     (void)xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpExtrusionAsElement(const uno::Sequence< beans::PropertyValue >& aExtrusion)
+void EnhancedShapeDumper::dumpExtrusionAsElement(const cpo::uno::Sequence< beans::PropertyValue >& aExtrusion)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Extrusion" ));
     for (const auto& i : aExtrusion)
@@ -556,7 +556,7 @@ void EnhancedShapeDumper::dumpExtrusionAsElement(const uno::Sequence< beans::Pro
     (void)xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpPathAsElement(const uno::Sequence< beans::PropertyValue >& aPath)
+void EnhancedShapeDumper::dumpPathAsElement(const cpo::uno::Sequence< beans::PropertyValue >& aPath)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Path" ));
     for (const auto& i : aPath)
@@ -566,7 +566,7 @@ void EnhancedShapeDumper::dumpPathAsElement(const uno::Sequence< beans::Property
     (void)xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpTextPathAsElement(const uno::Sequence< beans::PropertyValue >& aTextPath)
+void EnhancedShapeDumper::dumpTextPathAsElement(const cpo::uno::Sequence< beans::PropertyValue >& aTextPath)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextPath" ));
     for (const auto& i : aTextPath)
@@ -576,7 +576,7 @@ void EnhancedShapeDumper::dumpTextPathAsElement(const uno::Sequence< beans::Prop
     (void)xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpEquationsAsElement(const uno::Sequence< OUString >& aEquations)
+void EnhancedShapeDumper::dumpEquationsAsElement(const cpo::uno::Sequence< OUString >& aEquations)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Equations" ));
     for (const auto& i : aEquations)
@@ -590,13 +590,13 @@ void EnhancedShapeDumper::dumpEquationsAsElement(const uno::Sequence< OUString >
 // PropertyValues specifies a sequence of PropertyValue instances.
 // so in this case it's a Sequence of a Sequence of a PropertyValue instances.
 // Welcome to Sequenception again.
-void EnhancedShapeDumper::dumpHandlesAsElement(const uno::Sequence< beans::PropertyValues >& aHandles)
+void EnhancedShapeDumper::dumpHandlesAsElement(const cpo::uno::Sequence< beans::PropertyValues >& aHandles)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Handles" ));
     for (const auto& i : aHandles)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValues" ));
-        uno::Sequence< beans::PropertyValue > propertyValueSequence = i;
+        cpo::uno::Sequence< beans::PropertyValue > propertyValueSequence = i;
         for (const auto& j : propertyValueSequence)
         {
             dumpPropertyValueAsElement(j);
@@ -825,13 +825,13 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(const uno::Referenc
 {
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"Coordinates"_ustr);
-        uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+        cpo::uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
         if(anotherAny >>= aCoordinates)
             dumpCoordinatesAsElement(aCoordinates);
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"Segments"_ustr);
-        uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
+        cpo::uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
         if(anotherAny >>= aSegments)
             dumpSegmentsAsElement(aSegments);
     }
@@ -849,19 +849,19 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(const uno::Referenc
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"TextFrames"_ustr);
-        uno::Sequence< drawing::EnhancedCustomShapeTextFrame > aTextFrames;
+        cpo::uno::Sequence< drawing::EnhancedCustomShapeTextFrame > aTextFrames;
         if(anotherAny >>= aTextFrames)
             dumpTextFramesAsElement(aTextFrames);
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"GluePoints"_ustr);
-        uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aGluePoints;
+        cpo::uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aGluePoints;
         if(anotherAny >>= aGluePoints)
             dumpGluePointsAsElement(aGluePoints);
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"GluePointLeavingDirections"_ustr);
-        uno::Sequence< double > aGluePointLeavingDirections;
+        cpo::uno::Sequence< double > aGluePointLeavingDirections;
         if(anotherAny >>= aGluePointLeavingDirections)
             dumpGluePointLeavingDirectionsAsElement(aGluePointLeavingDirections);
     }
@@ -891,13 +891,13 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapePathService(const uno::Referenc
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"SubViewSize"_ustr);
-        uno::Sequence< awt::Size > aSubViewSize;
+        cpo::uno::Sequence< awt::Size > aSubViewSize;
         if(anotherAny >>= aSubViewSize)
             dumpSubViewSizeAsElement(aSubViewSize);
     }
 }
 
-void EnhancedShapeDumper::dumpCoordinatesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeParameterPair >& aCoordinates)
+void EnhancedShapeDumper::dumpCoordinatesAsElement(const cpo::uno::Sequence< drawing::EnhancedCustomShapeParameterPair >& aCoordinates)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Coordinates" ));
     for (const auto& i : aCoordinates)
@@ -909,7 +909,7 @@ void EnhancedShapeDumper::dumpCoordinatesAsElement(const uno::Sequence< drawing:
     (void)xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpSegmentsAsElement(const uno::Sequence< drawing::EnhancedCustomShapeSegment >& aSegments)
+void EnhancedShapeDumper::dumpSegmentsAsElement(const cpo::uno::Sequence< drawing::EnhancedCustomShapeSegment >& aSegments)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Segments" ));
     for (const auto& i : aSegments)
@@ -934,7 +934,7 @@ void EnhancedShapeDumper::dumpStretchYAsAttribute(sal_Int32 aStretchY)
     (void)xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("stretchY"), "%" SAL_PRIdINT32, aStretchY);
 }
 
-void EnhancedShapeDumper::dumpTextFramesAsElement(const uno::Sequence< drawing::EnhancedCustomShapeTextFrame >& aTextFrames)
+void EnhancedShapeDumper::dumpTextFramesAsElement(const cpo::uno::Sequence< drawing::EnhancedCustomShapeTextFrame >& aTextFrames)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "TextFrames" ));
     for (const auto& i : aTextFrames)
@@ -954,7 +954,7 @@ void EnhancedShapeDumper::dumpTextFramesAsElement(const uno::Sequence< drawing::
     (void)xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpGluePointsAsElement(const uno::Sequence< drawing::EnhancedCustomShapeParameterPair >& aGluePoints)
+void EnhancedShapeDumper::dumpGluePointsAsElement(const cpo::uno::Sequence< drawing::EnhancedCustomShapeParameterPair >& aGluePoints)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePoints" ));
     for (const auto& i : aGluePoints)
@@ -966,7 +966,7 @@ void EnhancedShapeDumper::dumpGluePointsAsElement(const uno::Sequence< drawing::
     (void)xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpGluePointLeavingDirectionsAsElement(const uno::Sequence< double >& aGluePointLeavingDirections)
+void EnhancedShapeDumper::dumpGluePointLeavingDirectionsAsElement(const cpo::uno::Sequence< double >& aGluePointLeavingDirections)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "GluePointLeavingDirections" ));
     for (const auto& i : aGluePointLeavingDirections)
@@ -1005,7 +1005,7 @@ void EnhancedShapeDumper::dumpTextPathAllowedAsAttribute(bool bTextPathAllowed)
         (void)xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("textPathAllowed"), "%s", "false");
 }
 
-void EnhancedShapeDumper::dumpSubViewSizeAsElement(const uno::Sequence< awt::Size >& aSubViewSize)
+void EnhancedShapeDumper::dumpSubViewSizeAsElement(const cpo::uno::Sequence< awt::Size >& aSubViewSize)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "SubViewSize" ));
     for (const auto& i : aSubViewSize)

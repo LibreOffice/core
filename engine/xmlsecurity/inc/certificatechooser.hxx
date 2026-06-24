@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
 #include <unotools/resmgr.hxx>
 #include <unordered_map>
@@ -73,7 +73,7 @@ private:
     std::unique_ptr<weld::Button>   m_xReloadBtn;
 
     std::unordered_map<css::uno::Reference< css::xml::crypto::XXMLSecurityContext>,
-        css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > > xMemCerts;
+        cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > > xMemCerts;
 
     DECL_LINK(ReloadButtonHdl, weld::Button&, void);
     DECL_LINK(ViewButtonHdl, weld::Button&, void);
@@ -111,7 +111,7 @@ public:
     void BeforeRun();
     short run() override;
 
-    css::uno::Sequence<css::uno::Reference< css::security::XCertificate > > GetSelectedCertificates();
+    cpo::uno::Sequence<css::uno::Reference< css::security::XCertificate > > GetSelectedCertificates();
     css::uno::Reference< css::xml::crypto::XXMLSecurityContext > GetSelectedSecurityContext() const;
     /// Gets the description string provided when selecting the certificate.
     OUString GetDescription() const;

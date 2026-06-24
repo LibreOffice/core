@@ -65,7 +65,7 @@ public:
         css::uno::Reference< css::frame::XModel > xModel )  ;
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaWorksheet( css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    ScVbaWorksheet( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     virtual ~ScVbaWorksheet() override;
 
@@ -73,7 +73,7 @@ public:
     { return mxModel; }
     const css::uno::Reference< css::sheet::XSpreadsheet >& getSheet() const
     { return mxSheet; }
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static const cpo::uno::Sequence<sal_Int8>& getUnoTunnelId();
     css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( const OUString& );
     css::uno::Reference< ov::excel::XWorksheet > createSheetCopy(css::uno::Reference< ov::excel::XWorksheet> const & xSheet, bool bAfter);
 
@@ -144,7 +144,7 @@ public:
     virtual void SAL_CALL ShowDataForm(  ) override;
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
-    virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< cpo::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+    virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
     virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
@@ -160,9 +160,9 @@ public:
         const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish, const cpo::uno::Any& FixedFormatExtClassPtr) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     // XUnoTunnel
-    virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) override;
+    virtual ::sal_Int64 SAL_CALL getSomething(const cpo::uno::Sequence<sal_Int8 >& rId ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

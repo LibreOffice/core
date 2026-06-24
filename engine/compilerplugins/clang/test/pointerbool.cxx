@@ -8,7 +8,7 @@
  */
 
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #define FALSE 0
 

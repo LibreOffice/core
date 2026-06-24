@@ -69,7 +69,7 @@ using PropertyImplBase = MakeImplBase<Base, css::beans::XPropertySet, css::beans
 /// XPropertySetInfo implementation shared by all OPropertyImplHelper instantiations.
 class PropertyImplHelperInfo : public comphelper::WeakImplHelper<css::beans::XPropertySetInfo>
 {
-    css::uno::Sequence<css::beans::Property> m_aProperties;
+    cpo::uno::Sequence<css::beans::Property> m_aProperties;
 
 public:
     explicit PropertyImplHelperInfo(cppu::IPropertyArrayHelper& rHelper)
@@ -77,7 +77,7 @@ public:
     {
     }
 
-    css::uno::Sequence<css::beans::Property> SAL_CALL getProperties() override
+    cpo::uno::Sequence<css::beans::Property> SAL_CALL getProperties() override
     {
         return m_aProperties;
     }
@@ -219,14 +219,14 @@ public:
 
     // XMultiPropertySet
 
-    void SAL_CALL setPropertyValues(const css::uno::Sequence<OUString>& PropertyNames,
-                                    const css::uno::Sequence<cpo::uno::Any>& Values) override;
+    void SAL_CALL setPropertyValues(const cpo::uno::Sequence<OUString>& PropertyNames,
+                                    const cpo::uno::Sequence<cpo::uno::Any>& Values) override;
 
-    css::uno::Sequence<cpo::uno::Any> SAL_CALL
-    getPropertyValues(const css::uno::Sequence<OUString>& PropertyNames) override final;
+    cpo::uno::Sequence<cpo::uno::Any> SAL_CALL
+    getPropertyValues(const cpo::uno::Sequence<OUString>& PropertyNames) override final;
 
     void SAL_CALL addPropertiesChangeListener(
-        const css::uno::Sequence<OUString>&,
+        const cpo::uno::Sequence<OUString>&,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final
     {
         std::unique_lock aGuard(this->m_aMutex);
@@ -241,7 +241,7 @@ public:
     }
 
     void SAL_CALL firePropertiesChangeEvent(
-        const css::uno::Sequence<OUString>& PropertyNames,
+        const cpo::uno::Sequence<OUString>& PropertyNames,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     // Utilities
@@ -537,8 +537,8 @@ void OPropertyImplHelper<BaseClass, Ifc...>::setFastPropertyValueImpl(
 
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::setPropertyValues(
-    const css::uno::Sequence<OUString>& rPropertyNames,
-    const css::uno::Sequence<cpo::uno::Any>& rValues)
+    const cpo::uno::Sequence<OUString>& rPropertyNames,
+    const cpo::uno::Sequence<cpo::uno::Any>& rValues)
 {
     sal_Int32 nSeqLen = rPropertyNames.getLength();
     if (nSeqLen != rValues.getLength())
@@ -554,12 +554,12 @@ void OPropertyImplHelper<BaseClass, Ifc...>::setPropertyValues(
 }
 
 template <IsUnoImplBase BaseClass, typename... Ifc>
-css::uno::Sequence<cpo::uno::Any> OPropertyImplHelper<BaseClass, Ifc...>::getPropertyValues(
-    const css::uno::Sequence<OUString>& rPropertyNames)
+cpo::uno::Sequence<cpo::uno::Any> OPropertyImplHelper<BaseClass, Ifc...>::getPropertyValues(
+    const cpo::uno::Sequence<OUString>& rPropertyNames)
 {
     sal_Int32 nSeqLen = rPropertyNames.getLength();
     auto pHandles = std::make_unique<sal_Int32[]>(nSeqLen);
-    css::uno::Sequence<cpo::uno::Any> aValues(nSeqLen);
+    cpo::uno::Sequence<cpo::uno::Any> aValues(nSeqLen);
 
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     rPH.fillHandles(pHandles.get(), rPropertyNames);
@@ -574,7 +574,7 @@ css::uno::Sequence<cpo::uno::Any> OPropertyImplHelper<BaseClass, Ifc...>::getPro
 
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::firePropertiesChangeEvent(
-    const css::uno::Sequence<OUString>& rPropertyNames,
+    const cpo::uno::Sequence<OUString>& rPropertyNames,
     const css::uno::Reference<css::beans::XPropertiesChangeListener>& rListener)
 {
     sal_Int32 nLen = rPropertyNames.getLength();
@@ -586,7 +586,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::firePropertiesChangeEvent(
         = std::count_if(pHandles.get(), pHandles.get() + nLen, [](sal_Int32 h) { return h != -1; });
     if (nFireLen)
     {
-        css::uno::Sequence<css::beans::PropertyChangeEvent> aChanges(nFireLen);
+        cpo::uno::Sequence<css::beans::PropertyChangeEvent> aChanges(nFireLen);
         css::beans::PropertyChangeEvent* pChanges = aChanges.getArray();
         std::unique_lock aGuard(this->m_aMutex);
         css::uno::Reference<css::uno::XInterface> xSource(
@@ -708,7 +708,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::fire(std::unique_lock<std::mutex>& 
     if (!nHandles)
         return;
 
-    css::uno::Sequence<css::beans::PropertyChangeEvent> aEvts(nHandles);
+    cpo::uno::Sequence<css::beans::PropertyChangeEvent> aEvts(nHandles);
     css::beans::PropertyChangeEvent* pEvts = aEvts.getArray();
     css::uno::Reference<css::uno::XInterface> xSource(static_cast<css::beans::XPropertySet*>(this),
                                                       css::uno::UNO_QUERY);

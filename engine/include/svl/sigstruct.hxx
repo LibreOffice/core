@@ -24,7 +24,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <set>
 #include <vector>
@@ -147,7 +147,7 @@ struct SignatureInformation
     /// Signature Line Id, used to map signatures to their respective signature line images.
     OUString ouSignatureLineId;
     /// A full OOXML signature for unchanged roundtrip, empty for ODF.
-    css::uno::Sequence<sal_Int8> aSignatureBytes;
+    cpo::uno::Sequence<sal_Int8> aSignatureBytes;
     /// For PDF: digest format, from css::xml::crypto::DigestID
     sal_Int32 nDigestID;
     /// For PDF: has id-aa-signingCertificateV2 as a signed attribute.

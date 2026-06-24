@@ -1966,7 +1966,7 @@ void SwWW8ImplReader::ImportDop()
             case 3:  nZoomType = sal_Int16(SvxZoomType::OPTIMAL);   break;
             default: nZoomType = sal_Int16(SvxZoomType::PERCENT);   break;
         }
-        uno::Sequence<beans::PropertyValue> aViewProps( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aViewProps( comphelper::InitPropertySequence({
                 { "ZoomFactor", cpo::uno::Any(sal_Int16(m_xWDop->wScaleSaved)) },
                 { "VisibleBottom", cpo::uno::Any(sal_Int32(0)) },
                 { "ZoomType", cpo::uno::Any(nZoomType) }
@@ -2055,13 +2055,13 @@ void SwWW8ImplReader::ImportDop()
 
         // for the benefit of DOCX - if this is ever saved in that format.
         comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
-        uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
                 { "name", cpo::uno::Any(u"compatibilityMode"_ustr) },
                 { "uri", cpo::uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
                 { "val", cpo::uno::Any(u"11"_ustr) }  //11: Use features specified in MS-DOC.
         }));
 
-        uno::Sequence< beans::PropertyValue > aValue(comphelper::InitPropertySequence({
+        cpo::uno::Sequence< beans::PropertyValue > aValue(comphelper::InitPropertySequence({
             { "compatSetting", cpo::uno::Any(aCompatSetting) }
         }));
 
@@ -4840,7 +4840,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( std::u16string_view sCreatedFr
 
     SvtPathOptions aPathOpt;
     const OUString& aAddinPath = aPathOpt.GetAddinPath();
-    uno::Sequence< OUString > sGlobalTemplates;
+    cpo::uno::Sequence< OUString > sGlobalTemplates;
 
     // first get the autoload addins in the directory STARTUP
     uno::Reference<ucb::XSimpleFileAccess3> xSFA(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
@@ -5132,7 +5132,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
 
             // Create and insert Word vba Globals
             cpo::uno::Any aGlobs;
-            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(m_pDocShell->GetModel()) };
+            cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(m_pDocShell->GetModel()) };
             try
             {
                 aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.word.Globals"_ustr, aArgs );
@@ -5497,9 +5497,9 @@ namespace
         return aPassw;
     }
 
-    uno::Sequence< beans::NamedValue > InitXorWord95Codec( ::msfilter::MSCodec_XorWord95& rCodec, SfxMedium& rMedium, WW8Fib const * pWwFib )
+    cpo::uno::Sequence< beans::NamedValue > InitXorWord95Codec( ::msfilter::MSCodec_XorWord95& rCodec, SfxMedium& rMedium, WW8Fib const * pWwFib )
     {
-        uno::Sequence< beans::NamedValue > aEncryptionData;
+        cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
         const SfxUnoAnyItem* pEncryptionData = rMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
             aEncryptionData.realloc( 0 );
@@ -5547,9 +5547,9 @@ namespace
         return aEncryptionData;
     }
 
-    uno::Sequence< beans::NamedValue > Init97Codec(msfilter::MSCodec97& rCodec, sal_uInt8 const pDocId[16], SfxMedium& rMedium)
+    cpo::uno::Sequence< beans::NamedValue > Init97Codec(msfilter::MSCodec97& rCodec, sal_uInt8 const pDocId[16], SfxMedium& rMedium)
     {
-        uno::Sequence< beans::NamedValue > aEncryptionData;
+        cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
         const SfxUnoAnyItem* pEncryptionData = rMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
             aEncryptionData.realloc( 0 );
@@ -5696,7 +5696,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                 case XOR:
                 {
                     msfilter::MSCodec_XorWord95 aCtx;
-                    uno::Sequence< beans::NamedValue > aEncryptionData = InitXorWord95Codec(aCtx, *pMedium, m_xWwFib.get());
+                    cpo::uno::Sequence< beans::NamedValue > aEncryptionData = InitXorWord95Codec(aCtx, *pMedium, m_xWwFib.get());
 
                     // if initialization has failed the EncryptionData should be empty
                     if (aEncryptionData.hasElements() && aCtx.VerifyKey(m_xWwFib->m_nKey, m_xWwFib->m_nHash))
@@ -5760,7 +5760,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                     }
 
                     // if initialization has failed the EncryptionData should be empty
-                    uno::Sequence< beans::NamedValue > aEncryptionData;
+                    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
                     if (bCouldReadHeaders)
                         aEncryptionData = Init97Codec(*xCtx, info.verifier.salt, *pMedium);
                     else
@@ -6258,7 +6258,7 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
             if (rStream.is())
             {
                 sal_Int32 nStreamSize = rStream->GetSize();
-                css::uno::Sequence< sal_Int8 > oData;
+                cpo::uno::Sequence< sal_Int8 > oData;
                 oData.realloc(nStreamSize);
                 sal_Int32 nReadBytes = rStream->ReadBytes(oData.getArray(), nStreamSize);
                 if (nStreamSize == nReadBytes)
@@ -6271,7 +6271,7 @@ static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHa
 ErrCode WW8Reader::DecryptDRMPackage()
 {
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
-    uno::Sequence< cpo::uno::Any > aArguments;
+    cpo::uno::Sequence< cpo::uno::Any > aArguments;
     const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference< packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -6287,7 +6287,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
     lcl_getListOfStreams(m_pStorage.get(), aStreamsData, u"");
 
     try {
-        uno::Sequence<beans::NamedValue> aStreams = aStreamsData.getAsConstNamedValueList();
+        cpo::uno::Sequence<beans::NamedValue> aStreams = aStreamsData.getAsConstNamedValueList();
         if (!xPackageEncryption->readEncryptionInfo(aStreams))
         {
             // We failed with decryption
@@ -6317,7 +6317,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
         m_pStorage = new SotStorage(*mDecodedStream);
 
         // Set the media descriptor data
-        uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
+        cpo::uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData(u""_ustr);
         m_pMedium->GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, cpo::uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)

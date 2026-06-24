@@ -22,22 +22,22 @@ class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) InflateZstd : public Inflater
 private:
     bool bFinished;
     sal_Int32 nLastInflateError;
-    css::uno::Sequence<sal_Int8> sInBuffer;
+    cpo::uno::Sequence<sal_Int8> sInBuffer;
     ZSTD_DCtx* pDCtx;
     ZSTD_inBuffer inBuffer;
     bool bStreamInitialized;
 
-    sal_Int32 doInflateBytes(css::uno::Sequence<sal_Int8>& rBuffer, sal_Int32 nNewOffset,
+    sal_Int32 doInflateBytes(cpo::uno::Sequence<sal_Int8>& rBuffer, sal_Int32 nNewOffset,
                              sal_Int32 nNewLength);
 
 public:
     explicit InflateZstd(bool bNoWrap = false);
     virtual ~InflateZstd() override;
 
-    virtual void setInput(const css::uno::Sequence<sal_Int8>& rBuffer) override;
+    virtual void setInput(const cpo::uno::Sequence<sal_Int8>& rBuffer) override;
     virtual bool needsDictionary() const override { return false; }
     virtual bool finished() const override { return bFinished; }
-    virtual sal_Int32 doInflateSegment(css::uno::Sequence<sal_Int8>& rBuffer, sal_Int32 nNewOffset,
+    virtual sal_Int32 doInflateSegment(cpo::uno::Sequence<sal_Int8>& rBuffer, sal_Int32 nNewOffset,
                                        sal_Int32 nNewLength) override;
     virtual void end() override final;
     virtual sal_Int32 getLastInflateError() const override { return nLastInflateError; }

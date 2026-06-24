@@ -205,7 +205,7 @@ awt::Size QtPlayer::getPreferredPlayerWindowSize()
 }
 
 uno::Reference<::media::XPlayerWindow>
-QtPlayer::createPlayerWindow(const uno::Sequence<cpo::uno::Any>& rArguments)
+QtPlayer::createPlayerWindow(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -300,7 +300,7 @@ bool QtPlayer::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> QtPlayer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> QtPlayer::getSupportedServiceNames()
 {
     return { u"com.sun.star.media.Player_Qt"_ustr };
 }

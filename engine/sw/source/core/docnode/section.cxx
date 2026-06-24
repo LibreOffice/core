@@ -1380,7 +1380,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
     }
 
     // Only create DDE if Shell is available!
-    uno::Sequence< sal_Int8 > aSeq;
+    cpo::uno::Sequence< sal_Int8 > aSeq;
     if( pRead && rValue.hasValue() && ( rValue >>= aSeq ) )
     {
         if( pESh )

@@ -58,12 +58,12 @@ public:
 
     virtual bool SAL_CALL supportsService(OUString const & rServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual void SAL_CALL
     initialize(
-        css::uno::Sequence< cpo::uno::Any > const & rArguments) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & rArguments) override;
 
     virtual void SAL_CALL
     handle(css::uno::Reference< css::task::XInteractionRequest > const & rRequest) override;
@@ -146,7 +146,7 @@ UUIInteractionHandler::supportsService(OUString const & rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 UUIInteractionHandler::getSupportedServiceNames()
 {
     return { u"com.sun.star.task.InteractionHandler"_ustr,
@@ -158,7 +158,7 @@ UUIInteractionHandler::getSupportedServiceNames()
 
 void SAL_CALL
 UUIInteractionHandler::initialize(
-    uno::Sequence< cpo::uno::Any > const & rArguments)
+    cpo::uno::Sequence< cpo::uno::Any > const & rArguments)
 {
     // The old-style InteractionHandler service supported a sequence of
     // PropertyValue, while the new-style service now uses constructors to pass
@@ -221,7 +221,7 @@ bool SAL_CALL UUIInteractionHandler::handleInteractionRequest(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_uui_UUIInteractionHandler_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UUIInteractionHandler(context));
 }

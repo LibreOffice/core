@@ -125,7 +125,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                         {
                             //  initialize dialog
                             weld::Window* pWindow = rReq.GetFrameWeld();
-                            uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                            cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                             {
                                 {"ParentWindow", pWindow ? cpo::uno::Any(pWindow->GetXWindow()) : cpo::uno::Any(Reference<awt::XWindow>())}
                             }));

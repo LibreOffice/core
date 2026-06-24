@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_FLDDROPDOWN_HXX
 #define INCLUDED_SW_INC_FLDDROPDOWN_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include "swdllapi.h"
 #include "fldbas.hxx"
 
@@ -167,14 +167,14 @@ public:
 
        @param rItems the new items
     */
-    void SetItems(const css::uno::Sequence<OUString>& rItems);
+    void SetItems(const cpo::uno::Sequence<OUString>& rItems);
 
     /**
         Returns the items of the dropdown box.
 
         @return the items of the dropdown box
     */
-    css::uno::Sequence<OUString> GetItemSequence() const;
+    cpo::uno::Sequence<OUString> GetItemSequence() const;
 
     /**
        Returns the selected item.

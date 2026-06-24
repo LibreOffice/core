@@ -102,8 +102,8 @@ public:
     uno::Reference<frame::XDispatch> SAL_CALL queryDispatch(const util::URL& rURL,
                                                             const OUString& rTargetFrameName,
                                                             sal_Int32 SearchFlags) override;
-    uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL
-    queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
+    cpo::uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL
+    queryDispatches(const cpo::uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
 
     int GetGraphicDialogs() const;
 };
@@ -143,8 +143,8 @@ GraphicDialogInterceptor::queryDispatch(const util::URL& rURL, const OUString& r
     return m_xSlave->queryDispatch(rURL, rTargetFrameName, nSearchFlags);
 }
 
-uno::Sequence<uno::Reference<frame::XDispatch>> GraphicDialogInterceptor::queryDispatches(
-    const uno::Sequence<frame::DispatchDescriptor>& /*rRequests*/)
+cpo::uno::Sequence<uno::Reference<frame::XDispatch>> GraphicDialogInterceptor::queryDispatches(
+    const cpo::uno::Sequence<frame::DispatchDescriptor>& /*rRequests*/)
 {
     return {};
 }
@@ -255,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
 
     // Given a document with a redline:
     createSwDoc();
-    getSwTextDoc()->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    getSwTextDoc()->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     TooltipCallback aCallback;
     TestKitCallbackWrapper aCallbackWrapper(&TooltipCallback::callback, &aCallback);

@@ -388,7 +388,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIConfigElementWrap
     return xInfo;
 }
 
-css::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::impl_getStaticPropertyDescriptor()
+cpo::uno::Sequence< css::beans::Property > UIConfigElementWrapperBase::impl_getStaticPropertyDescriptor()
 {
     // Create property array to initialize sequence!
     // Table of all predefined properties of this class. It's used from OPropertySetHelper-class!

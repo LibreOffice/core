@@ -43,7 +43,7 @@ OTempFileService::~OTempFileService ()
 
 //  XTypeProvider
 
-css::uno::Sequence< css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
+cpo::uno::Sequence< css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 {
     static ::cppu::OTypeCollection ourTypeCollection(
                 cppu::UnoType<css::beans::XPropertySet>::get()
@@ -105,7 +105,7 @@ OUString SAL_CALL OTempFileService::getResourceName()
 
 // XInputStream
 
-sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OTempFileService::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
@@ -126,7 +126,7 @@ sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& 
 
     return nRead;
 }
-sal_Int32 SAL_CALL OTempFileService::readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OTempFileService::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     {
         std::unique_lock aGuard( maMutex );
@@ -204,7 +204,7 @@ void SAL_CALL OTempFileService::closeInput(  )
 
 // XOutputStream
 
-void SAL_CALL OTempFileService::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
+void SAL_CALL OTempFileService::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )
@@ -411,7 +411,7 @@ void OTempFileService::setFastPropertyValue( ::sal_Int32 nHandle, const ::cpo::u
     throw css::beans::UnknownPropertyException(OUString::number(nHandle));
 }
 // XPropertyAccess
-::css::uno::Sequence< ::css::beans::PropertyValue > OTempFileService::getPropertyValues()
+::cpo::uno::Sequence< ::css::beans::PropertyValue > OTempFileService::getPropertyValues()
 {
     return {
         css::beans::PropertyValue(u"Uri"_ustr, PROPERTY_HANDLE_URI, cpo::uno::Any(getUri()), css::beans::PropertyState_DEFAULT_VALUE),
@@ -419,7 +419,7 @@ void OTempFileService::setFastPropertyValue( ::sal_Int32 nHandle, const ::cpo::u
         css::beans::PropertyValue(u"ResourceName"_ustr, PROPERTY_HANDLE_RESOURCE_NAME, cpo::uno::Any(getResourceName()), css::beans::PropertyState_DEFAULT_VALUE)
     };
 }
-void OTempFileService::setPropertyValues( const ::css::uno::Sequence< ::css::beans::PropertyValue >& aProps )
+void OTempFileService::setPropertyValues( const ::cpo::uno::Sequence< ::css::beans::PropertyValue >& aProps )
 {
     for ( auto const & rPropVal : aProps )
         setPropertyValue( rPropVal.Name, rPropVal.Value );
@@ -434,14 +434,14 @@ OUString OTempFileService::getImplementationName()
 {
     return u"com.sun.star.io.comp.TempFile"_ustr;
 }
-css::uno::Sequence< OUString > OTempFileService::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > OTempFileService::getSupportedServiceNames()
 {
     return { u"com.sun.star.io.TempFile"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unotools_OTempFileService_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OTempFileService(context));
 }

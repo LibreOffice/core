@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <framework/fwkdllapi.h>
 #include <memory>
 
@@ -52,7 +52,7 @@ struct FWK_DLLPUBLIC MergeMenuInstruction
     OUString     aMergeCommandParameter;
     OUString     aMergeFallback;
     OUString     aMergeContext;
-    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeMenu;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > aMergeMenu;
 };
 typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
 
@@ -64,7 +64,7 @@ struct FWK_DLLPUBLIC MergeToolbarInstruction
     OUString     aMergeCommandParameter;
     OUString     aMergeFallback;
     OUString     aMergeContext;
-    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeToolbarItems;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > aMergeToolbarItems;
 };
 
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
@@ -77,7 +77,7 @@ struct FWK_DLLPUBLIC MergeNotebookBarInstruction
     OUString     aMergeCommandParameter;
     OUString     aMergeFallback;
     OUString     aMergeContext;
-    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeNotebookBarItems;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > aMergeNotebookBarItems;
 };
 
 typedef ::std::vector< MergeNotebookBarInstruction >    MergeNotebookBarInstructionContainer;
@@ -88,7 +88,7 @@ struct FWK_DLLPUBLIC MergeStatusbarInstruction
     OUString     aMergeCommand;
     OUString     aMergeCommandParameter;
     OUString     aMergeContext;
-    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeStatusbarItems;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > aMergeStatusbarItems;
 };
 
 typedef ::std::vector< MergeStatusbarInstruction > MergeStatusbarInstructionContainer;
@@ -147,7 +147,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @onerror    We return an empty list.
         *//*-*****************************************************************************************************/
 
-        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsMenu() const;
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& GetAddonsMenu() const;
 
         /*-****************************************************************************************************
             @short      Gets the menu bar part of all addon components registered
@@ -156,7 +156,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @onerror    We return false
         *//*-*****************************************************************************************************/
 
-        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
 
         /*-****************************************************************************************************
             @short      Gets a toolbar part of a single addon
@@ -165,7 +165,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @onerror    We return false
         *//*-*****************************************************************************************************/
 
-        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& GetAddonsToolBarPart( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
             @short      Gets a unique toolbar resource name of a single addon
@@ -183,7 +183,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
             @onerror    We return false
         *//*-*****************************************************************************************************/
 
-        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsNotebookBarPart( sal_uInt32 nIndex ) const;
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& GetAddonsNotebookBarPart( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************
             @short      Gets a unique NotebookBar resource name of a single addon
@@ -225,7 +225,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
 
             @onerror    We return false
         *//*-*****************************************************************************************************/
-        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& GetAddonsHelpMenu() const;
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& GetAddonsHelpMenu() const;
 
         const MergeStatusbarInstructionContainer& GetMergeStatusbarInstructions() const;
 

@@ -189,7 +189,7 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
         //per document, rather than the current reuse of "the last thing
         //selected, regardless of the document"
         aViewSettings.GetUserItem(TG_SETTING_LASTMARK) >>= sLastSelectedMark;
-        uno::Sequence<OUString> aTmp;
+        cpo::uno::Sequence<OUString> aTmp;
         aViewSettings.GetUserItem(TG_SETTING_LASTPATH) >>= aTmp;
         aLastSelectedPath = comphelper::sequenceToContainer< std::deque<OUString> >(aTmp);
     }
@@ -253,7 +253,7 @@ bool SvxHlinkDlgMarkWnd::RefreshFromDoc(const OUString& aURL)
         {
             try
             {
-                uno::Sequence< beans::PropertyValue > aArg { comphelper::makePropertyValue(u"Hidden"_ustr, true) };
+                cpo::uno::Sequence< beans::PropertyValue > aArg { comphelper::makePropertyValue(u"Hidden"_ustr, true) };
                 xComp = xDesktop->loadComponentFromURL( aURL, u"_blank"_ustr, 0, aArg );
             }
             catch( const io::IOException& )
@@ -506,7 +506,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
             bEntry = mxLbTree->iter_parent(*xEntry);
         }
 
-        uno::Sequence< beans::NamedValue > aSettings
+        cpo::uno::Sequence< beans::NamedValue > aSettings
         {
             { TG_SETTING_LASTMARK, cpo::uno::Any(sLastSelectedMark) },
             { TG_SETTING_LASTPATH, cpo::uno::Any(comphelper::containerToSequence(aLastSelectedPath)) }

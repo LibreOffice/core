@@ -107,7 +107,7 @@ namespace connectivity
 
     // XDriverManager
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) override;
         virtual sal_Int32 SAL_CALL getLoginTimeout(  ) override;
 
@@ -116,7 +116,7 @@ namespace connectivity
     // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

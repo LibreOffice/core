@@ -18,7 +18,7 @@
 
 #include <dconf/dconf.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -350,7 +350,7 @@ bool getString(
 
 bool getHexbinaryValue(
     OString const & key, GVariantHolder const & variant,
-    css::uno::Sequence<sal_Int8> * value)
+    cpo::uno::Sequence<sal_Int8> * value)
 {
     assert(value != nullptr);
     if (std::strcmp(g_variant_get_type_string(variant.get()), "ay") != 0) {
@@ -379,7 +379,7 @@ bool getHexbinary(
     OString const & key, GVariantHolder const & variant, cpo::uno::Any * value)
 {
     assert(value != nullptr);
-    css::uno::Sequence<sal_Int8> v;
+    cpo::uno::Sequence<sal_Int8> v;
     if (!getHexbinaryValue(key, variant, &v)) {
         return false;
     }
@@ -406,7 +406,7 @@ bool getBooleanList(
         SAL_WARN("configmgr.dconf", "too long boolean list for key " << key);
         return false;
     }
-    css::uno::Sequence<bool> v(static_cast<sal_Int32>(n));
+    cpo::uno::Sequence<bool> v(static_cast<sal_Int32>(n));
     static_assert(sizeof (bool) == sizeof (guchar), "size mismatch");
     std::memcpy(v.getArray(), p, n * sizeof (guchar));
         // assuming that n * sizeof (guchar) is small enough for std::size_t
@@ -433,7 +433,7 @@ bool getShortList(
         SAL_WARN("configmgr.dconf", "too long short list for key " << key);
         return false;
     }
-    css::uno::Sequence<sal_Int16> v(static_cast<sal_Int32>(n));
+    cpo::uno::Sequence<sal_Int16> v(static_cast<sal_Int32>(n));
     static_assert(sizeof (sal_Int16) == sizeof (gint16), "size mismatch");
     std::memcpy(v.getArray(), p, n * sizeof (gint16));
         // assuming that n * sizeof (gint16) is small enough for std::size_t
@@ -460,7 +460,7 @@ bool getIntList(
         SAL_WARN("configmgr.dconf", "too long int list for key " << key);
         return false;
     }
-    css::uno::Sequence<sal_Int32> v(static_cast<sal_Int32>(n));
+    cpo::uno::Sequence<sal_Int32> v(static_cast<sal_Int32>(n));
     static_assert(sizeof (sal_Int32) == sizeof (gint32), "size mismatch");
     std::memcpy(v.getArray(), p, n * sizeof (gint32));
         // assuming that n * sizeof (gint32) is small enough for std::size_t
@@ -487,7 +487,7 @@ bool getLongList(
         SAL_WARN("configmgr.dconf", "too long long list for key " << key);
         return false;
     }
-    css::uno::Sequence<sal_Int64> v(static_cast<sal_Int32>(n));
+    cpo::uno::Sequence<sal_Int64> v(static_cast<sal_Int32>(n));
     static_assert(sizeof (sal_Int64) == sizeof (gint64), "size mismatch");
     std::memcpy(v.getArray(), p, n * sizeof (gint64));
         // assuming that n * sizeof (gint64) is small enough for std::size_t
@@ -514,7 +514,7 @@ bool getDoubleList(
         SAL_WARN("configmgr.dconf", "too long double list for key " << key);
         return false;
     }
-    css::uno::Sequence<double> v(static_cast<sal_Int32>(n));
+    cpo::uno::Sequence<double> v(static_cast<sal_Int32>(n));
     static_assert(std::is_same<double, gdouble>::value, "type mismatch");
     std::memcpy(v.getArray(), p, n * sizeof (gdouble));
         // assuming that n * sizeof (gdouble) is small enough for std::size_t
@@ -539,7 +539,7 @@ bool getStringList(
         SAL_WARN("configmgr.dconf", "too long string list for key " << key);
         return false;
     }
-    css::uno::Sequence<OUString> v(static_cast<sal_Int32>(n));
+    cpo::uno::Sequence<OUString> v(static_cast<sal_Int32>(n));
     for (gsize i = 0; i != n; ++i) {
         GVariantHolder c(g_variant_get_child_value(variant.get(), i));
         if (!getStringValue(key, c, v.getArray() + i)) {
@@ -567,7 +567,7 @@ bool getHexbinaryList(
         SAL_WARN("configmgr.dconf", "too long hexbinary list for key " << key);
         return false;
     }
-    css::uno::Sequence<css::uno::Sequence<sal_Int8>> v(
+    cpo::uno::Sequence<cpo::uno::Sequence<sal_Int8>> v(
         static_cast<sal_Int32>(n));
     for (gsize i = 0; i != n; ++i) {
         GVariantHolder c(g_variant_get_child_value(variant.get(), i));
@@ -1167,8 +1167,8 @@ bool addProperty(
             break;
         case TYPE_HEXBINARY:
             {
-                css::uno::Sequence<sal_Int8> seq(
-                    value.get<css::uno::Sequence<sal_Int8>>());
+                cpo::uno::Sequence<sal_Int8> seq(
+                    value.get<cpo::uno::Sequence<sal_Int8>>());
                 static_assert(
                     sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
@@ -1182,8 +1182,8 @@ bool addProperty(
             }
         case TYPE_BOOLEAN_LIST:
             {
-                css::uno::Sequence<bool> seq(
-                    value.get<css::uno::Sequence<bool>>());
+                cpo::uno::Sequence<bool> seq(
+                    value.get<cpo::uno::Sequence<bool>>());
                 static_assert(
                     sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
@@ -1196,8 +1196,8 @@ bool addProperty(
             }
         case TYPE_SHORT_LIST:
             {
-                css::uno::Sequence<sal_Int16> seq(
-                    value.get<css::uno::Sequence<sal_Int16>>());
+                cpo::uno::Sequence<sal_Int16> seq(
+                    value.get<cpo::uno::Sequence<sal_Int16>>());
                 static_assert(
                     sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
@@ -1212,8 +1212,8 @@ bool addProperty(
             }
         case TYPE_INT_LIST:
             {
-                css::uno::Sequence<sal_Int32> seq(
-                    value.get<css::uno::Sequence<sal_Int32>>());
+                cpo::uno::Sequence<sal_Int32> seq(
+                    value.get<cpo::uno::Sequence<sal_Int32>>());
                 static_assert(
                     sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
@@ -1228,8 +1228,8 @@ bool addProperty(
             }
         case TYPE_LONG_LIST:
             {
-                css::uno::Sequence<sal_Int64> seq(
-                    value.get<css::uno::Sequence<sal_Int64>>());
+                cpo::uno::Sequence<sal_Int64> seq(
+                    value.get<cpo::uno::Sequence<sal_Int64>>());
                 static_assert(
                     sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
@@ -1244,8 +1244,8 @@ bool addProperty(
             }
         case TYPE_DOUBLE_LIST:
             {
-                css::uno::Sequence<double> seq(
-                    value.get<css::uno::Sequence<double>>());
+                cpo::uno::Sequence<double> seq(
+                    value.get<cpo::uno::Sequence<double>>());
                 static_assert(
                     sizeof(sal_Int32) <= sizeof(gsize),
                     "G_MAXSIZE too small");
@@ -1260,8 +1260,8 @@ bool addProperty(
             }
         case TYPE_STRING_LIST:
             {
-                const css::uno::Sequence<OUString> seq(
-                    value.get<css::uno::Sequence<OUString>>());
+                const cpo::uno::Sequence<OUString> seq(
+                    value.get<cpo::uno::Sequence<OUString>>());
                 std::vector<GVariant *> vs;
                 for (OUString const & s : seq) {
                     children.emplace_front(
@@ -1283,11 +1283,11 @@ bool addProperty(
             }
         case TYPE_HEXBINARY_LIST:
             {
-                const css::uno::Sequence<css::uno::Sequence<sal_Int8>> seqSeq(
+                const cpo::uno::Sequence<cpo::uno::Sequence<sal_Int8>> seqSeq(
                     value.get<
-                        css::uno::Sequence<css::uno::Sequence<sal_Int8>>>());
+                        cpo::uno::Sequence<cpo::uno::Sequence<sal_Int8>>>());
                 std::vector<GVariant *> vs;
-                for (css::uno::Sequence<sal_Int8> const & seq : seqSeq) {
+                for (cpo::uno::Sequence<sal_Int8> const & seq : seqSeq) {
                     static_assert(
                         sizeof(sal_Int32) <= sizeof(gsize),
                         "G_MAXSIZE too small");

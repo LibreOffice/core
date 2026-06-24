@@ -90,7 +90,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
     public:
 
         // XAcceleratorConfiguration
-        virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents() override;
+        virtual cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents() override;
 
         virtual OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
@@ -99,9 +99,9 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
         virtual void SAL_CALL removeKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
-        virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand) override;
+        virtual cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand) override;
 
-        virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList) override;
 
         virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand) override;
 
@@ -228,7 +228,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
     public:
 
         // XAcceleratorConfiguration
-        virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents() override;
+        virtual cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents() override;
 
         virtual OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
@@ -237,9 +237,9 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
         virtual void SAL_CALL removeKeyEvent(const css::awt::KeyEvent& aKeyEvent) override;
 
-        virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand) override;
+        virtual cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand) override;
 
-        virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList) override;
 
         virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand) override;
 

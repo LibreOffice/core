@@ -42,7 +42,7 @@ BaseContainer::~BaseContainer()
 
 
 void BaseContainer::init(const OUString&                                        sImplementationName,
-                         const css::uno::Sequence< OUString >&                  lServiceNames      ,
+                         const cpo::uno::Sequence< OUString >&                  lServiceNames      ,
                                FilterCache::EItemType                                  eType              )
 {
     m_sImplementationName = sImplementationName;
@@ -111,7 +111,7 @@ bool SAL_CALL BaseContainer::supportsService(const OUString& sServiceName)
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL BaseContainer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL BaseContainer::getSupportedServiceNames()
 {
     return m_lServiceNames;
 }
@@ -234,9 +234,9 @@ cpo::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
 {
-    css::uno::Sequence< OUString > lNames;
+    cpo::uno::Sequence< OUString > lNames;
 
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -291,7 +291,7 @@ css::uno::Type SAL_CALL BaseContainer::getElementType()
 {
     // no lock necessary - because the type of our items
     // is fix! no internal call or member needed ...
-    return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
+    return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
 }
 
 
@@ -329,7 +329,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 }
 
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
+css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
 {
     std::vector<OUString>                               lKeys;
 

@@ -25,7 +25,7 @@
 #include "com/sun/star/lang/XTypeProvider.hpp"
 #include "cpo/uno/Any.h"
 #include "com/sun/star/uno/Reference.h"
-#include "com/sun/star/uno/Sequence.h"
+#include "cpo/uno/Sequence.h"
 #include "com/sun/star/uno/Type.h"
 #include "cppuhelper/compbase_ex.hxx"
 #include "cppuhelper/implbase.hxx"
@@ -87,11 +87,11 @@ public:
         SAL_OVERRIDE
     { WeakComponentImplHelperBase::dispose(); }
 
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() SAL_OVERRIDE
+    cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() SAL_OVERRIDE
     { return WeakComponentImplHelper_getTypes(cd::get()); }
 
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() SAL_OVERRIDE
-    { return css::uno::Sequence<sal_Int8>(); }
+    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() SAL_OVERRIDE
+    { return cpo::uno::Sequence<sal_Int8>(); }
 };
 
 /** Implementation helper implementing interfaces

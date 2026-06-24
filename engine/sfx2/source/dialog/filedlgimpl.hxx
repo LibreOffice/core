@@ -173,11 +173,11 @@ namespace sfx2
                                     sal_Int16 nDialog,
                                     weld::Window* pFrameWeld,
                                     const OUString& sPreselectedDir = OUString(),
-                                    const css::uno::Sequence< OUString >&   rDenyList = css::uno::Sequence< OUString >()
+                                    const cpo::uno::Sequence< OUString >&   rDenyList = cpo::uno::Sequence< OUString >()
                                 );
         virtual                 ~FileDialogHelper_Impl() override;
 
-        ErrCode                 execute( css::uno::Sequence<OUString>& rpURLList,
+        ErrCode                 execute( cpo::uno::Sequence<OUString>& rpURLList,
                                          std::optional<SfxAllItemSet>& rpSet,
                                          OUString&       rFilter,
                                          SignatureState nScriptingSignatureState);

@@ -71,7 +71,7 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const cpo::uno:
 {
     if( aSystemWorkWindowToken.hasValue() )
     {
-        css::uno::Sequence< sal_Int8 > aSeq;
+        cpo::uno::Sequence< sal_Int8 > aSeq;
         aSystemWorkWindowToken >>= aSeq;
         SystemParentData* pData = reinterpret_cast<SystemParentData*>(aSeq.getArray());
         SAL_WARN_IF( aSeq.getLength() != sizeof( SystemParentData ) || pData->nSize != sizeof( SystemParentData ), "vcl", "WorkWindow::WorkWindow( vcl::Window*, const Any&, WinBits ) called with invalid Any" );

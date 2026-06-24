@@ -198,10 +198,10 @@ ScVbaAxes::getServiceImplName()
     return u"ScVbaAxes"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaAxes::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Axes"_ustr
     };

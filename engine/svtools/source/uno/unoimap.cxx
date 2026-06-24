@@ -321,9 +321,9 @@ void SAL_CALL SvUnoImageMapObject::release() noexcept
     OWeakObject::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
 {
-    static const uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< uno::Type > aTypes {
         cppu::UnoType<XEventsSupplier>::get(),
         cppu::UnoType<XServiceInfo>::get(),
         cppu::UnoType<XPropertySet>::get(),
@@ -332,9 +332,9 @@ uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
     return aTypes;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

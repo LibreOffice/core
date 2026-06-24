@@ -104,9 +104,9 @@ public:
         uno::Reference< text::XTextTable > xTable( *m_cachePos, uno::UNO_SET_THROW );
         return cpo::uno::Any( xTable );
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
-        uno::Sequence< OUString > sNames( mxTables.size() );
+        cpo::uno::Sequence< OUString > sNames( mxTables.size() );
         OUString* pString = sNames.getArray();
         for ( const auto& rxTable : mxTables )
         {
@@ -225,10 +225,10 @@ SwVbaTables::getElementType()
     return  cppu::UnoType<word::XTable>::get();
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaTables::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Tables"_ustr
     };

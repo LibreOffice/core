@@ -41,14 +41,14 @@ static void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& xI
                             const uno::Reference< io::XOutputStream >& xOut )
 {
     sal_Int32 nRead;
-    uno::Sequence< sal_Int8 > aSequence( nConstBufferSize );
+    cpo::uno::Sequence< sal_Int8 > aSequence( nConstBufferSize );
 
     do
     {
         nRead = xIn->readBytes( aSequence, nConstBufferSize );
         if ( nRead < nConstBufferSize )
         {
-            uno::Sequence< sal_Int8 > aTempBuf( aSequence.getConstArray(), nRead );
+            cpo::uno::Sequence< sal_Int8 > aTempBuf( aSequence.getConstArray(), nRead );
             xOut->writeBytes( aTempBuf );
         }
         else
@@ -121,7 +121,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
 
 // XInputStream
 
-sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -134,7 +134,7 @@ sal_Int32 SAL_CALL OSeekableInputWrapper::readBytes( uno::Sequence< sal_Int8 >& 
 }
 
 
-sal_Int32 SAL_CALL OSeekableInputWrapper::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OSeekableInputWrapper::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 

@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <svl/memberid.h>
@@ -38,7 +38,7 @@ bool SvxStatusItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
     {
         case 0:
         {
-            css::uno::Sequence<css::beans::PropertyValue> aSeq{
+            cpo::uno::Sequence<css::beans::PropertyValue> aSeq{
                 comphelper::makePropertyValue(STATUS_PARAM_VALUE, GetValue()),
                 comphelper::makePropertyValue(STATUS_PARAM_TYPE,
                                               static_cast<sal_Int16>(m_eCategory))
@@ -68,7 +68,7 @@ bool SvxStatusItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
     {
         case 0:
         {
-            css::uno::Sequence<css::beans::PropertyValue> aSeq;
+            cpo::uno::Sequence<css::beans::PropertyValue> aSeq;
             if ((rVal >>= aSeq) && (aSeq.getLength() == STATUS_PARAMS))
             {
                 OUString sValueTmp;

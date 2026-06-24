@@ -62,7 +62,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageManagerFactory
     virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
@@ -89,7 +89,7 @@ bool PackageManagerFactoryImpl::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > PackageManagerFactoryImpl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PackageManagerFactoryImpl::getSupportedServiceNames()
 {
     // a private one:
     return { u"com.sun.star.comp.deployment.PackageManagerFactory"_ustr };
@@ -179,7 +179,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_PackageManagerFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new dp_manager::factory::PackageManagerFactoryImpl(context));
 }

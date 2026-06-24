@@ -94,12 +94,12 @@ private:
                             const css::uno::Reference<css::io::XInputStream>& xSignStream,
                             DocumentSignatureMode eMode, bool bReadOnly);
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence<css::security::DocumentSignatureInformation>
+    cpo::uno::Sequence<css::security::DocumentSignatureInformation>
     ImplVerifySignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
                          const css::uno::Reference<css::io::XInputStream>& xSignStream,
                          DocumentSignatureMode eMode);
 
-    css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
+    cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
     chooseCertificatesImpl(SfxViewShell* pViewShell, std::map<OUString, OUString>& rProperties, const CertificateChooserUserAction eAction,
                            const CertificateKind certificateKind=CertificateKind_NONE);
 
@@ -115,13 +115,13 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rxCtx);
 
     //XInitialization
-    void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& aArguments) override;
+    void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
 
     OUString SAL_CALL getImplementationName() override;
 
     bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XDocumentDigitalSignatures
     bool SAL_CALL signSignatureLine(
@@ -131,7 +131,7 @@ public:
         const Reference<css::graphic::XGraphic>& xValidGraphic,
         const Reference<css::graphic::XGraphic>& xInvalidGraphic,
         const OUString& aComment) override;
-    css::uno::Sequence<css::security::DocumentSignatureInformation>
+    cpo::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyDocumentContentSignatures(
             const css::uno::Reference<css::embed::XStorage>& xStorage,
             const css::uno::Reference<css::io::XInputStream>& xSignInStream) override;
@@ -139,7 +139,7 @@ public:
         const css::uno::Reference<css::embed::XStorage>& xStorage,
         const css::uno::Reference<css::io::XInputStream>& xSignInStream) override;
     OUString SAL_CALL getDocumentContentSignatureDefaultStreamName() override;
-    css::uno::Sequence<css::security::DocumentSignatureInformation>
+    cpo::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyScriptingContentSignatures(
             const css::uno::Reference<css::embed::XStorage>& xStorage,
             const css::uno::Reference<css::io::XInputStream>& xSignInStream) override;
@@ -166,10 +166,10 @@ public:
     css::uno::Reference<css::security::XCertificate>
         SAL_CALL selectSigningCertificateWithType(const CertificateKind certificateKind,
                                                   OUString& rDescription) override;
-    css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
+    cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
         SAL_CALL chooseEncryptionCertificate(const CertificateKind certificateKind) override;
     css::uno::Reference<css::security::XCertificate> SAL_CALL chooseCertificateWithProps(
-        css::uno::Sequence<css::beans::PropertyValue>& Properties) override;
+        cpo::uno::Sequence<css::beans::PropertyValue>& Properties) override;
 
     bool SAL_CALL signDocumentWithCertificate(
                             css::uno::Reference<css::security::XCertificate> const & xCertificate,
@@ -267,7 +267,7 @@ bool DocumentDigitalSignatures::supportsService(
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 DocumentDigitalSignatures::getSupportedServiceNames()
 {
     Sequence<OUString> aRet{ u"com.sun.star.security.DocumentDigitalSignatures"_ustr };
@@ -645,7 +645,7 @@ bool DocumentDigitalSignatures::isAuthorTrusted(
         });
 }
 
-uno::Sequence<Reference<css::security::XCertificate>>
+cpo::uno::Sequence<Reference<css::security::XCertificate>>
 DocumentDigitalSignatures::chooseCertificatesImpl(SfxViewShell* pViewShell,
                                                   std::map<OUString, OUString>& rProperties,
                                                   const CertificateChooserUserAction eAction,
@@ -667,7 +667,7 @@ DocumentDigitalSignatures::chooseCertificatesImpl(SfxViewShell* pViewShell,
     if (aChooser->run() != RET_OK)
         return { Reference< css::security::XCertificate >(nullptr) };
 
-    uno::Sequence< Reference< css::security::XCertificate > >  xCerts = aChooser->GetSelectedCertificates();
+    cpo::uno::Sequence< Reference< css::security::XCertificate > >  xCerts = aChooser->GetSelectedCertificates();
     rProperties[u"Description"_ustr] = aChooser->GetDescription();
     rProperties[u"Usage"_ustr] = aChooser->GetUsageText();
 
@@ -719,15 +719,15 @@ DocumentDigitalSignatures::SelectSigningCertificateWithType(SfxViewShell* pViewS
     return xCert;
 }
 
-css::uno::Sequence<Reference<css::security::XCertificate>>
+cpo::uno::Sequence<Reference<css::security::XCertificate>>
 DocumentDigitalSignatures::chooseEncryptionCertificate(const CertificateKind certificateKind)
 {
     std::map<OUString, OUString> aProperties;
-    uno::Sequence< Reference< css::security::XCertificate > > aCerts=
+    cpo::uno::Sequence< Reference< css::security::XCertificate > > aCerts=
         chooseCertificatesImpl( nullptr, aProperties, CertificateChooserUserAction::Encrypt , certificateKind );
     if (aCerts.getLength() == 1 && !aCerts[0].is())
         // our error case contract is: empty sequence, so map that!
-        return uno::Sequence< Reference< css::security::XCertificate > >();
+        return cpo::uno::Sequence< Reference< css::security::XCertificate > >();
     else
         return aCerts;
 }
@@ -893,7 +893,7 @@ bool DocumentDigitalSignatures::signWithCertificateImpl(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_security_DocumentDigitalSignatures_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new DocumentDigitalSignatures(uno::Reference<uno::XComponentContext>(pCtx)));

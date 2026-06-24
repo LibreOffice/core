@@ -743,9 +743,9 @@ void SwVbaContentControl::Ungroup() { SAL_INFO("sw.vba", "SwVbaContentControl::U
 
 OUString SwVbaContentControl::getServiceImplName() { return u"SwVbaContentControl"_ustr; }
 
-uno::Sequence<OUString> SwVbaContentControl::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaContentControl::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.ContentControl"_ustr };
+    static cpo::uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.ContentControl"_ustr };
     return aServiceNames;
 }
 

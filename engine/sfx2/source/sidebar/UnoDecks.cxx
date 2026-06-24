@@ -49,14 +49,14 @@ cpo::uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
 {
     SolarMutexGuard aGuard;
 
     SidebarController* pSidebarController = getSidebarController();
 
     ResourceManager::DeckContextDescriptorContainer aDecks;
-    css::uno::Sequence< OUString > deckList(aDecks.size());
+    cpo::uno::Sequence< OUString > deckList(aDecks.size());
 
     if (pSidebarController)
     {
@@ -107,7 +107,7 @@ sal_Int32 SAL_CALL SfxUnoDecks::getCount()
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< OUString > decks = getElementNames();
+    cpo::uno::Sequence< OUString > decks = getElementNames();
     return decks.getLength();
 }
 
@@ -116,7 +116,7 @@ cpo::uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
     SolarMutexGuard aGuard;
     cpo::uno::Any aRet;
 
-    uno::Sequence< OUString > decks = getElementNames();
+    cpo::uno::Sequence< OUString > decks = getElementNames();
 
     if (Index > decks.getLength()-1 || Index < 0)
         throw lang::IndexOutOfBoundsException();
@@ -137,7 +137,7 @@ bool SAL_CALL SfxUnoDecks::hasElements()
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< OUString > decks = getElementNames();
+    cpo::uno::Sequence< OUString > decks = getElementNames();
     return decks.hasElements();
 }
 

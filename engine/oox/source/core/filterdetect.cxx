@@ -573,7 +573,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_oox_FormatDetector_get_implementation(uno::XComponentContext* pCtx,
-                                                        uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                                        cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new oox::core::FilterDetect(pCtx));
 }

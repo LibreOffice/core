@@ -42,7 +42,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -337,7 +337,7 @@ void getJavaPropsFromJavaSettings(
             u"javavm.cxx: couldn't get ConfigurationProvider"_ustr, nullptr);
 
     css::beans::NamedValue aPath(u"nodepath"_ustr, cpo::uno::Any(u"org.openoffice.Office.Java/VirtualMachine"_ustr));
-    css::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aPath) };
+    cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aPath) };
 
     css::uno::Reference<css::container::XNameAccess> xConfigAccess(xConfigProvider->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationAccess"_ustr,
@@ -356,7 +356,7 @@ void getJavaPropsFromJavaSettings(
         {
             OUString sScheme(u"vnd.sun.star.expand:"_ustr);
             css::uno::Reference<css::util::XMacroExpander> exp = css::util::theMacroExpander::get(xCtx);
-            css::uno::Sequence<OUString> aAgents = xAgentAccess->getElementNames();
+            cpo::uno::Sequence<OUString> aAgents = xAgentAccess->getElementNames();
             for (auto const & sAgent : aAgents)
             {
                 css::uno::Reference<css::container::XNameAccess> xAgent;
@@ -499,7 +499,7 @@ JavaVirtualMachine::JavaVirtualMachine(
 {}
 
 void SAL_CALL
-JavaVirtualMachine::initialize(css::uno::Sequence< cpo::uno::Any > const &
+JavaVirtualMachine::initialize(cpo::uno::Sequence< cpo::uno::Any > const &
                                    rArguments)
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -566,20 +566,20 @@ JavaVirtualMachine::supportsService(OUString const & rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 JavaVirtualMachine::getSupportedServiceNames()
 {
     return { u"com.sun.star.java.JavaVirtualMachine"_ustr };
 }
 
 cpo::uno::Any SAL_CALL
-JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
+JavaVirtualMachine::getJavaVM(cpo::uno::Sequence< sal_Int8 > const & rProcessId)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
             u""_ustr, getXWeak());
-    css::uno::Sequence< sal_Int8 > aId(16);
+    cpo::uno::Sequence< sal_Int8 > aId(16);
     rtl_getGlobalProcessId(reinterpret_cast< sal_uInt8 * >(aId.getArray()));
     enum ReturnType {
         RETURN_JAVAVM, RETURN_VIRTUALMACHINE, RETURN_UNOVIRTUALMACHINE };
@@ -589,7 +589,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         : rProcessId.getLength() == 17 && rProcessId[16] == 1
         ? RETURN_UNOVIRTUALMACHINE
         : RETURN_JAVAVM;
-    css::uno::Sequence< sal_Int8 > aProcessId(rProcessId);
+    cpo::uno::Sequence< sal_Int8 > aProcessId(rProcessId);
     if (returnType != RETURN_JAVAVM)
         aProcessId.realloc(16);
     if (aId != aProcessId)
@@ -1071,7 +1071,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
         {
             // We register this instance as listener to changes in org.openoffice.Inet/Settings
             // arguments for ConfigurationAccess
-            css::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
                 {"nodepath", cpo::uno::Any(u"org.openoffice.Inet/Settings"_ustr)},
                 {"depth", cpo::uno::Any(sal_Int32(-1))}
@@ -1318,7 +1318,7 @@ void JavaVirtualMachine::handleJniException(JNIEnv * environment) {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stoc_JavaVM_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new JavaVirtualMachine(context));
 }

@@ -141,7 +141,7 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
         ++i;
     if (nAlgoLength)
         ++i;
-    uno::Sequence <beans::PropertyValue> aSortDescriptor(8 + i);
+    cpo::uno::Sequence <beans::PropertyValue> aSortDescriptor(8 + i);
     auto pSortDescriptor = aSortDescriptor.getArray();
     pSortDescriptor[0].Name = SC_UNONAME_BINDFMT;
     pSortDescriptor[0].Value <<= bBindFormatsToContent;

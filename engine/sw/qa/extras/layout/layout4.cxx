@@ -58,10 +58,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testHiddenSectionPageDescs)
 
         // hide these just so that the height of the section is what is expected;
         // otherwise height depends on which tests run previously
-        uno::Sequence<beans::PropertyValue> argsSH(
+        cpo::uno::Sequence<beans::PropertyValue> argsSH(
             comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
-        uno::Sequence<beans::PropertyValue> args(
+        cpo::uno::Sequence<beans::PropertyValue> args(
             comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
@@ -350,7 +350,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf145826)
     // Something weird going on here. If I run this unit test by itself, it passes fine.
     // But when run as part of the test suite, it needs the following dispatchCommand
     // in order to pass.
-    uno::Sequence<beans::PropertyValue> argsSH(
+    cpo::uno::Sequence<beans::PropertyValue> argsSH(
         comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(true) } }));
     dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
     Scheduler::ProcessEventsToIdle();
@@ -1016,7 +1016,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf147666)
                                         .toInt32();
 
     // Insert image below the end of the paragraph on page one
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"tdf147666.png")),
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);

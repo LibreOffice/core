@@ -27,7 +27,7 @@ namespace com::sun::star::chart2::data { class XDataProvider; }
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 namespace chart { class DataSeries; }
 
 namespace chart::StatisticsHelper
@@ -36,13 +36,13 @@ namespace chart::StatisticsHelper
 
         @see http://mathworld.wolfram.com/Variance.html
      */
-    double getVariance( const css::uno::Sequence< double > & rData );
+    double getVariance( const cpo::uno::Sequence< double > & rData );
 
     // square root of the variance
-    double getStandardDeviation( const css::uno::Sequence< double > & rData );
+    double getStandardDeviation( const cpo::uno::Sequence< double > & rData );
 
     // also called "Standard deviation of the mean (SDOM)"
-    double getStandardError( const css::uno::Sequence< double > & rData );
+    double getStandardError( const cpo::uno::Sequence< double > & rData );
 
     css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getErrorLabeledDataSequenceFromDataSource(

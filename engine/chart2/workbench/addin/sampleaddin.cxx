@@ -46,7 +46,7 @@ bool SAL_CALL component_writeInfo(
             uno::Reference< registry::XRegistryKey> xNewKey(
                 reinterpret_cast<registry::XRegistryKey*>( pRegistryKey )->createKey( aImpl ) );
 
-            uno::Sequence< OUString > aSequ = SampleAddIn::getSupportedServiceNames_Static();
+            cpo::uno::Sequence< OUString > aSequ = SampleAddIn::getSupportedServiceNames_Static();
             const OUString * pArray = aSequ.getConstArray();
             for( sal_Int32 i = 0; i < aSequ.(); i++ )
                 xNewKey->createKey( pArray[i] );
@@ -155,7 +155,7 @@ OUString SampleAddIn::getImplementationName_Static()
     return "SampleAddIn";
 }
 
-uno::Sequence< OUString > SampleAddIn::getSupportedServiceNames_Static()
+cpo::uno::Sequence< OUString > SampleAddIn::getSupportedServiceNames_Static()
 {
     return {
         "com.sun.star.chart.ChartAxisXSupplier",
@@ -176,7 +176,7 @@ uno::Reference< uno::XInterface > SAL_CALL SampleAddIn_CreateInstance(
 // implementation of interface methods
 
 // XInitialization
-void SAL_CALL SampleAddIn::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SampleAddIn::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
     throw( uno::Exception, uno::RuntimeException )
 {
     // first argument should be the XChartDocument
@@ -314,7 +314,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                 // get the array. Note: the first dimension is the length
                 // of each series and the second one is the number of series
                 // this should be changed in the future
-                uno::Sequence< uno::Sequence< double > > aData;
+                cpo::uno::Sequence< cpo::uno::Sequence< double > > aData;
                 uno::Reference< chart::XChartData > xData = mxChartDoc->getData();
                 uno::Reference< chart::XChartDataArray > xDataArray( xData, uno::UNO_QUERY );
                 if( xDataArray.is())
@@ -337,7 +337,7 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
                     awt::Point aEnd = aPos;
                     aEnd.X += aSize.Width;
 
-                    uno::Sequence< uno::Sequence< awt::Point > > aPtSeq( 1 );
+                    cpo::uno::Sequence< cpo::uno::Sequence< awt::Point > > aPtSeq( 1 );
                     aPtSeq[ 0 ].realloc( 2 );
                     aPtSeq[ 0 ][ 0 ] = aPos;
                     aPtSeq[ 0 ][ 1 ] = aEnd;
@@ -630,7 +630,7 @@ bool SAL_CALL SampleAddIn::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SampleAddIn::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SampleAddIn::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();

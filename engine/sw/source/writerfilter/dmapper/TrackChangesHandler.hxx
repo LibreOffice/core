@@ -33,7 +33,7 @@ public:
     virtual ~TrackChangesHandler() override;
 
     /// Compute the UNO properties for the track changes object based on the received tokens.
-    css::uno::Sequence<css::beans::PropertyValue> getRedlineProperties() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> getRedlineProperties() const;
 };
 }
 

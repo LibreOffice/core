@@ -123,7 +123,7 @@ namespace connectivity::ado
          ADORecordset* getTables( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view tableNamePattern,
-                                              const css::uno::Sequence< OUString >& types );
+                                              const cpo::uno::Sequence< OUString >& types );
          ADORecordset* getColumns( const cpo::uno::Any& catalog,
                                               const OUString& schemaPattern,
                                               std::u16string_view tableNamePattern,

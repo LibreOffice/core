@@ -37,7 +37,7 @@ public:
     Text2UnicodeConverter( const OString & sEncoding );
     ~Text2UnicodeConverter();
 
-    css::uno::Sequence < sal_Unicode > convert( const css::uno::Sequence<sal_Int8> & );
+    cpo::uno::Sequence < sal_Unicode > convert( const cpo::uno::Sequence<sal_Int8> & );
     bool canContinue() const { return m_bCanContinue; }
 
 private:
@@ -47,7 +47,7 @@ private:
     rtl_TextToUnicodeContext     m_contextText2Unicode;
     bool                         m_bCanContinue;
     bool                         m_bInitialized;
-    css::uno::Sequence<sal_Int8> m_seqSource;
+    cpo::uno::Sequence<sal_Int8> m_seqSource;
 };
 
 /*----------------------------------------
@@ -61,12 +61,12 @@ public:
     Unicode2TextConverter( rtl_TextEncoding encoding );
     ~Unicode2TextConverter();
 
-    css::uno::Sequence<sal_Int8> convert( const sal_Unicode * , sal_Int32 nLength );
+    cpo::uno::Sequence<sal_Int8> convert( const sal_Unicode * , sal_Int32 nLength );
 
 private:
     rtl_UnicodeToTextConverter      m_convUnicode2Text;
     rtl_UnicodeToTextContext        m_contextUnicode2Text;
-    css::uno::Sequence<sal_Unicode> m_seqSource;
+    cpo::uno::Sequence<sal_Unicode> m_seqSource;
 };
 
 
@@ -92,23 +92,23 @@ public:
     /// @throws css::io::NotConnectedException
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::uno::RuntimeException
-    sal_Int32 readAndConvert( css::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead );
+    sal_Int32 readAndConvert( cpo::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead );
 
 private:
 
     // Called only on first Sequence of bytes. Tries to figure out file format and encoding information.
     // @return TRUE, when encoding information could be retrieved
     // @return FALSE, when no encoding information was found in file
-    bool scanForEncoding( css::uno::Sequence<sal_Int8> &seq );
+    bool scanForEncoding( cpo::uno::Sequence<sal_Int8> &seq );
 
     // Called only on first Sequence of bytes. Tries to figure out
     // if enough data is available to scan encoding
     // @return TRUE, when encoding is retrievable
     // @return FALSE, when more data is needed
-    static bool isEncodingRecognizable( const css::uno::Sequence< sal_Int8 > & seq );
+    static bool isEncodingRecognizable( const cpo::uno::Sequence< sal_Int8 > & seq );
 
     // When encoding attribute is within the text (in the first line), it is removed.
-    static void removeEncoding( css::uno::Sequence<sal_Int8> &seq );
+    static void removeEncoding( cpo::uno::Sequence<sal_Int8> &seq );
 
     // Initializes decoding depending on m_sEncoding setting
     void initializeDecoding();

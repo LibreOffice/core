@@ -20,13 +20,14 @@
 
 #include <biginteger.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <xmlsec/xmlsec.h>
 #include <xmlsec/bn.h>
 
 #include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star::uno ;
+using namespace ::cpo::uno;
 
 namespace xmlsecurity
 {

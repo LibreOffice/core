@@ -86,7 +86,7 @@ public:
 
     // Methods XNameAccess
     cpo::uno::Any getByName(const OUString& aName);
-    css::uno::Sequence<OUString> getElementNames();
+    cpo::uno::Sequence<OUString> getElementNames();
     bool hasByName(const OUString& aName);
 
     // Methods XNameReplace
@@ -354,7 +354,7 @@ public:
 
     // Methods XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Members XStorageBasedLibraryContainer
@@ -393,7 +393,7 @@ public:
     virtual void SAL_CALL loadLibrary( const OUString& Name ) override;
 
     // Methods XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence<
         cpo::uno::Any >& aArguments ) override;
 
     // Methods XLibraryContainerPassword
@@ -416,7 +416,7 @@ public:
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( ) override = 0;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override = 0;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override = 0;
     // Methods XVBACompatibility
     virtual bool SAL_CALL getVBACompatibilityMode() override;
     virtual void SAL_CALL setVBACompatibilityMode( bool _vbacompatmodeon ) override;
@@ -549,7 +549,7 @@ public:
 
     // Methods XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
@@ -585,7 +585,7 @@ class ScriptSubPackageIterator
     bool m_bIsValid;
     bool m_bIsBundle;
 
-    css::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aSubPkgSeq;
+    cpo::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aSubPkgSeq;
     sal_Int32 m_nSubPkgCount;
     sal_Int32 m_iNextSubPkg;
 
@@ -624,13 +624,13 @@ private:
         END_REACHED
     } m_eState;
 
-    css::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aUserPackagesSeq;
+    cpo::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aUserPackagesSeq;
     bool m_bUserPackagesLoaded;
 
-    css::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aSharedPackagesSeq;
+    cpo::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aSharedPackagesSeq;
     bool m_bSharedPackagesLoaded;
 
-    css::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aBundledPackagesSeq;
+    cpo::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aBundledPackagesSeq;
     bool m_bBundledPackagesLoaded;
 
     int m_iUserPackage;

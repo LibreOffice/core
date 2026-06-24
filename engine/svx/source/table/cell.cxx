@@ -100,7 +100,7 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         { u"LeftBorder"_ustr,                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
         { u"RightBorder"_ustr,                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
         { u"RotateAngle"_ustr,                  SDRATTR_TABLE_TEXT_ROTATION,    cppu::UnoType<sal_Int32>::get(), 0, 0 },
-        { u"CellInteropGrabBag"_ustr,           SDRATTR_TABLE_CELL_GRABBAG,     cppu::UnoType<css::uno::Sequence<css::beans::PropertyValue>>::get(), 0, 0 },
+        { u"CellInteropGrabBag"_ustr,           SDRATTR_TABLE_CELL_GRABBAG,     cppu::UnoType<cpo::uno::Sequence<css::beans::PropertyValue>>::get(), 0, 0 },
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -851,7 +851,7 @@ Sequence< Type > SAL_CALL Cell::getTypes(  )
 
 Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XLayoutConstrains
@@ -1200,7 +1200,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName )
             return aGrabBagSequence;
         }
         else
-            return Any{css::uno::Sequence<css::beans::PropertyValue>()};
+            return Any{cpo::uno::Sequence<css::beans::PropertyValue>()};
     }
     default:
     {

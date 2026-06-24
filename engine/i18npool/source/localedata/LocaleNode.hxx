@@ -23,7 +23,7 @@
 #include <vector>
 #include <memory>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star::xml::sax { class XAttributeList; }
 
@@ -62,8 +62,8 @@ private:
 };
 
 class Attr {
-    css::uno::Sequence <OUString> name;
-    css::uno::Sequence <OUString> value;
+    cpo::uno::Sequence <OUString> name;
+    cpo::uno::Sequence <OUString> value;
 
 public:
     explicit Attr (const css::uno::Reference< css::xml::sax::XAttributeList > & attr);

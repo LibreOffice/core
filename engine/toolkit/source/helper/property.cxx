@@ -39,7 +39,7 @@
 #include <unordered_map>
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::FontDescriptor;

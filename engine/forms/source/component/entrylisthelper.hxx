@@ -51,7 +51,7 @@ namespace frm
                         m_xListSource;      /// our external list source
         std::vector< OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
-        css::uno::Sequence< cpo::uno::Any >
+        cpo::uno::Sequence< cpo::uno::Any >
                         m_aTypedItems;      /// "overridden" TypedItemList property value
         ::comphelper::OInterfaceContainerHelper3<css::util::XRefreshListener>
                         m_aRefreshListeners;
@@ -67,7 +67,7 @@ namespace frm
                     getStringItemList() const { return m_aStringItems; }
 
         /// returns the current typed item list
-        const css::uno::Sequence< cpo::uno::Any >&
+        const cpo::uno::Sequence< cpo::uno::Any >&
                     getTypedItemList() const { return m_aTypedItems; }
 
         /// determines whether we actually have an external list source

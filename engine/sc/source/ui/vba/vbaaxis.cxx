@@ -650,10 +650,10 @@ ScVbaAxis::getServiceImplName()
     return u"ScVbaAxis"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaAxis::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Axis"_ustr
     };

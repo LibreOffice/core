@@ -56,6 +56,7 @@ namespace cssu = css::uno;
 namespace cssl = css::lang;
 
 using namespace com::sun::star;
+using namespace ::cpo::uno;
 
 #define ROOT_CERTS "Root Certs for OpenOffice.org"
 
@@ -244,7 +245,7 @@ const OUString & ONSSInitializer::getMozillaCurrentProfile(const css::uno::Refer
     return m_sNSSPath;
 }
 
-css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNSSProfiles()
+cpo::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNSSProfiles()
 {
     ONSSInitializer::getMozillaCurrentProfile(m_xContext);
 
@@ -265,7 +266,7 @@ css::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL ONSSInitializer::getNS
     {
         for (auto const productTypeIter : productTypes)
         {
-            uno::Sequence<OUString> aProductProfileList;
+            cpo::uno::Sequence<OUString> aProductProfileList;
             xMozillaBootstrap->getProfileList(productTypeIter, aProductProfileList);
             for (const auto& sProfile : aProductProfileList)
                 aProfileList.push_back({sProfile, xMozillaBootstrap->getProfilePath(productTypeIter, sProfile), productTypeIter});
@@ -539,7 +540,7 @@ bool ONSSInitializer::initNSS( const css::uno::Reference< css::uno::XComponentCo
     return gbInitialized;
 }
 
-css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer::getDigestContext( ::sal_Int32 nDigestID, const css::uno::Sequence< css::beans::NamedValue >& aParams )
+css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer::getDigestContext( ::sal_Int32 nDigestID, const cpo::uno::Sequence< css::beans::NamedValue >& aParams )
 {
     SECOidTag nNSSDigestID = SEC_OID_UNKNOWN;
     sal_Int32 nDigestLength = 0;
@@ -581,7 +582,7 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
     return new ODigestContext( pContext, nDigestLength, b1KData );
 }
 
-css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer::getCipherContext( ::sal_Int32 nCipherID, const css::uno::Sequence< ::sal_Int8 >& aKey, const css::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, const css::uno::Sequence< css::beans::NamedValue >& aParams )
+css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer::getCipherContext( ::sal_Int32 nCipherID, const cpo::uno::Sequence< ::sal_Int8 >& aKey, const cpo::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, const cpo::uno::Sequence< css::beans::NamedValue >& aParams )
 {
     CK_MECHANISM_TYPE nNSSCipherID = 0;
     bool bW3CPadding = false;
@@ -628,7 +629,7 @@ bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
 {
     return { NSS_SERVICE_NAME };
 }
@@ -636,7 +637,7 @@ cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  
 #ifndef XMLSEC_CRYPTO_NSS
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_NSSInitializer_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new ONSSInitializer(pCtx));
 }

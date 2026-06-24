@@ -117,7 +117,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
     }
     //no double value is contained
     //is there any text?
-    uno::Sequence< OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
+    cpo::uno::Sequence< OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
     sal_Int32 nTextCount = aStrings.getLength();
     for( sal_Int32 j = 0; j < nTextCount; ++j )
     {
@@ -493,7 +493,7 @@ void VDataSeries::getMinMaxXValue(double& fMin, double& fMax) const
     fMax = std::numeric_limits<double>::quiet_NaN();
     fMin = std::numeric_limits<double>::quiet_NaN();
 
-    uno::Sequence< double > aValuesX = getAllX();
+    cpo::uno::Sequence< double > aValuesX = getAllX();
 
     if(!aValuesX.hasElements())
         return;
@@ -602,7 +602,7 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const rtl::Refe
         if( xPointProps.is() )
             xPointProps->getPropertyValue(u"LabelPlacement"_ustr) >>= nLabelPlacement;
 
-        const uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+        const cpo::uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                 xChartType, bSwapXAndY, m_xDataSeries ) );
 
         for( sal_Int32 n : aAvailablePlacements )
@@ -757,7 +757,7 @@ double VDataSeries::getMaximumofAllDifferentYValues( sal_Int32 index ) const
     return fMax;
 }
 
-uno::Sequence< double > const & VDataSeries::getAllX() const
+cpo::uno::Sequence< double > const & VDataSeries::getAllX() const
 {
     if(!m_aValues_X.is() && !m_aValues_X.getLength() && m_nPointCount)
     {
@@ -771,7 +771,7 @@ uno::Sequence< double > const & VDataSeries::getAllX() const
     return m_aValues_X.m_aValues;
 }
 
-uno::Sequence< double > const & VDataSeries::getAllY() const
+cpo::uno::Sequence< double > const & VDataSeries::getAllY() const
 {
     if(!m_aValues_Y.is() && !m_aValues_Y.getLength() && m_nPointCount)
     {
@@ -790,7 +790,7 @@ double VDataSeries::getXMeanValue() const
     if( std::isnan( m_fXMeanValue ) )
     {
         rtl::Reference< RegressionCurveCalculator > xCalculator( RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( u"com.sun.star.chart2.MeanValueRegressionCurve" ) );
-        uno::Sequence< double > aXValuesDummy;
+        cpo::uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllX() );
         m_fXMeanValue = xCalculator->getCurveValue( 1.0 );
     }
@@ -803,7 +803,7 @@ double VDataSeries::getYMeanValue() const
     {
         rtl::Reference< RegressionCurveCalculator > xCalculator(
             RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(u"com.sun.star.chart2.MeanValueRegressionCurve"));
-        uno::Sequence< double > aXValuesDummy;
+        cpo::uno::Sequence< double > aXValuesDummy;
         xCalculator->recalculateRegression( aXValuesDummy, getAllY() );
         m_fYMeanValue = xCalculator->getCurveValue( 1.0 );
     }

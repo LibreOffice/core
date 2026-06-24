@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <osl/mutex.hxx>
 #include <verifyinput.hxx>
@@ -222,7 +222,7 @@ namespace canvas
             strokeTexturedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
                                        const css::rendering::ViewState&                               viewState,
                                        const css::rendering::RenderState&                             renderState,
-                                       const css::uno::Sequence< css::rendering::Texture >&           textures,
+                                       const cpo::uno::Sequence< css::rendering::Texture >&           textures,
                                        const css::rendering::StrokeAttributes&                        strokeAttributes ) override
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState, strokeAttributes,
@@ -240,7 +240,7 @@ namespace canvas
             strokeTextureMappedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&  xPolyPolygon,
                                             const css::rendering::ViewState&                              viewState,
                                             const css::rendering::RenderState&                            renderState,
-                                            const css::uno::Sequence< css::rendering::Texture >&          textures,
+                                            const cpo::uno::Sequence< css::rendering::Texture >&          textures,
                                             const css::uno::Reference< css::geometry::XMapping2D >&       xMapping,
                                             const css::rendering::StrokeAttributes&                       strokeAttributes ) override
         {
@@ -292,7 +292,7 @@ namespace canvas
             fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                     const css::rendering::ViewState&                             viewState,
                                     const css::rendering::RenderState&                           renderState,
-                                    const css::uno::Sequence< css::rendering::Texture >&         textures) override
+                                    const cpo::uno::Sequence< css::rendering::Texture >&         textures) override
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
                               __func__,
@@ -309,7 +309,7 @@ namespace canvas
             fillTextureMappedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
                                           const css::rendering::ViewState&                                viewState,
                                           const css::rendering::RenderState&                              renderState,
-                                          const css::uno::Sequence< css::rendering::Texture >&            textures,
+                                          const cpo::uno::Sequence< css::rendering::Texture >&            textures,
                                           const css::uno::Reference< css::geometry::XMapping2D >&         xMapping ) override
         {
             canvastools::verifyArgs(xPolyPolygon, viewState, renderState, textures, xMapping,
@@ -326,7 +326,7 @@ namespace canvas
 
         virtual css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL
             createFont( const css::rendering::FontRequest&                                     fontRequest,
-                        const css::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
+                        const cpo::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
                         const css::geometry::Matrix2D&                                         fontMatrix ) override
         {
             canvastools::verifyArgs(fontRequest,
@@ -342,9 +342,9 @@ namespace canvas
         }
 
 
-        virtual css::uno::Sequence< css::rendering::FontInfo > SAL_CALL
+        virtual cpo::uno::Sequence< css::rendering::FontInfo > SAL_CALL
             queryAvailableFonts( const css::rendering::FontInfo&                          aFilter,
-                                 const css::uno::Sequence< css::beans::PropertyValue >&   aFontProperties ) override
+                                 const cpo::uno::Sequence< css::beans::PropertyValue >&   aFontProperties ) override
         {
             canvastools::verifyArgs(aFilter,
                               __func__,

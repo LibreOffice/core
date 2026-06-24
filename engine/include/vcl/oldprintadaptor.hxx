@@ -43,7 +43,7 @@ namespace vcl
         void EndPage();
 
         virtual int  getPageCount() const override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > getPageParameters( int i_nPage ) const override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > getPageParameters( int i_nPage ) const override;
         virtual void printPage( int i_nPage ) const override;
     };
 }

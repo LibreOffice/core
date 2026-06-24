@@ -329,7 +329,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                 comphelper::SequenceAsHashMap aThemesHashMap;
 
                 // create current theme
-                uno::Sequence<beans::PropertyValue> aCurrentTheme(PredefinedClrSchemeId::Count);
+                cpo::uno::Sequence<beans::PropertyValue> aCurrentTheme(PredefinedClrSchemeId::Count);
                 auto pCurrentTheme = aCurrentTheme.getArray();
 
                 ClrScheme rClrScheme = pThemePtr->getClrScheme();
@@ -347,7 +347,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                 }
 
 
-                uno::Sequence<beans::PropertyValue> aTheme{
+                cpo::uno::Sequence<beans::PropertyValue> aTheme{
                     // add new theme to the sequence
                     // Export code uses the master slide's index to find the right theme
                     // so use the same index in the grabbag.
@@ -409,7 +409,7 @@ void PresentationFragmentHandler::saveColorMapToGrabBag(const oox::drawingml::Cl
                         comphelper::makePropertyValue(OUString::number(i), nToken));
                 }
 
-                uno::Sequence<beans::PropertyValue> aClrMapPropValue{ comphelper::makePropertyValue(
+                cpo::uno::Sequence<beans::PropertyValue> aClrMapPropValue{ comphelper::makePropertyValue(
                     u"OOXColorMap"_ustr,
                     cpo::uno::Any(comphelper::containerToSequence(aClrMapList))) };
 
@@ -471,7 +471,7 @@ void PresentationFragmentHandler::saveSections()
                 }
             }
 
-            uno::Sequence<beans::PropertyValue> aSectionProps{
+            cpo::uno::Sequence<beans::PropertyValue> aSectionProps{
                 comphelper::makePropertyValue(u"Name"_ustr, rSection.maName),
                 comphelper::makePropertyValue(u"Id"_ustr, rSection.maId),
                 comphelper::makePropertyValue(u"SlideNameList"_ustr,
@@ -937,7 +937,7 @@ void PresentationFragmentHandler::finalizeImport()
 
             if (!sAlgorithmName.isEmpty())
             {
-                uno::Sequence<beans::PropertyValue> aResult{
+                cpo::uno::Sequence<beans::PropertyValue> aResult{
                     comphelper::makePropertyValue(u"algorithm-name"_ustr, sAlgorithmName),
                     comphelper::makePropertyValue(u"salt"_ustr, sSalt),
                     comphelper::makePropertyValue(u"iteration-count"_ustr, nSpinCount),

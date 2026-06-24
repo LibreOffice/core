@@ -233,23 +233,23 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf157216)
 {
     createSdImpressDoc("pptx/tdf157216.pptx");
     uno::Reference<beans::XPropertySet> xFlowchartShape(getShapeFromPage(0, 0));
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xFlowchartShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aProps;
 
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
-            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+            aPathProps = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
     }
 
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
     for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "GluePoints")
         {
             seqGluePoints
-                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+                = rProp.Value.get<cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
         }
     }
 
@@ -331,23 +331,23 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFreeformShapeGluePoints)
 {
     createSdImpressDoc("pptx/tdf156829.pptx");
     uno::Reference<beans::XPropertySet> xFreeformShape(getShapeFromPage(0, 0));
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xFreeformShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aProps;
 
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
-            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+            aPathProps = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
     }
 
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
     for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "GluePoints")
         {
             seqGluePoints
-                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+                = rProp.Value.get<cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
         }
     }
 
@@ -529,7 +529,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf148965)
     uno::Reference<beans::XPropertySet> xShape1(getShapeFromPage(0, 1));
     uno::Reference<document::XEventsSupplier> xEventsSupplier1(xShape1, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xEvents1(xEventsSupplier1->getEvents());
-    uno::Sequence<beans::PropertyValue> props1;
+    cpo::uno::Sequence<beans::PropertyValue> props1;
     xEvents1->getByName(u"OnClick"_ustr) >>= props1;
     comphelper::SequenceAsHashMap map1(props1);
     auto iter1(map1.find(u"Bookmark"_ustr));
@@ -538,7 +538,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf148965)
     uno::Reference<beans::XPropertySet> xShape2(getShapeFromPage(1, 1));
     uno::Reference<document::XEventsSupplier> xEventsSupplier2(xShape2, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xEvents2(xEventsSupplier2->getEvents());
-    uno::Sequence<beans::PropertyValue> props2;
+    cpo::uno::Sequence<beans::PropertyValue> props2;
     xEvents2->getByName(u"OnClick"_ustr) >>= props2;
     comphelper::SequenceAsHashMap map2(props2);
     auto iter2(map2.find(u"Bookmark"_ustr));
@@ -584,17 +584,17 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testGluePointLeavingDirections)
 {
     createSdImpressDoc("pptx/glue_point_leaving_directions.pptx");
     uno::Reference<beans::XPropertySet> xEllipseShape(getShapeFromPage(0, 0));
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xEllipseShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aProps;
 
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
-            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+            aPathProps = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
     }
 
-    uno::Sequence<double> seqGluePointLeavingDirections;
+    cpo::uno::Sequence<double> seqGluePointLeavingDirections;
     for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "GluePointLeavingDirections")
@@ -612,23 +612,23 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf147459)
 {
     createSdImpressDoc("pptx/tdf147459.pptx");
     uno::Reference<beans::XPropertySet> xTriangleShape(getShapeFromPage(0, 0));
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xTriangleShape->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aProps;
 
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
-            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+            aPathProps = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
     }
 
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
     for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "GluePoints")
         {
             seqGluePoints
-                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+                = rProp.Value.get<cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
         }
     }
 
@@ -658,7 +658,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf144918)
     uno::Reference<beans::XPropertySet> xShape1(getShapeFromPage(0, 1));
     uno::Reference<document::XEventsSupplier> xEventsSupplier1(xShape1, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xEvents1(xEventsSupplier1->getEvents());
-    uno::Sequence<beans::PropertyValue> props1;
+    cpo::uno::Sequence<beans::PropertyValue> props1;
     xEvents1->getByName(u"OnClick"_ustr) >>= props1;
     comphelper::SequenceAsHashMap map1(props1);
     auto iter1(map1.find(u"Bookmark"_ustr));
@@ -667,7 +667,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf144918)
     uno::Reference<beans::XPropertySet> xShape2(getShapeFromPage(1, 1));
     uno::Reference<document::XEventsSupplier> xEventsSupplier2(xShape2, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xEvents2(xEventsSupplier2->getEvents());
-    uno::Sequence<beans::PropertyValue> props2;
+    cpo::uno::Sequence<beans::PropertyValue> props2;
     xEvents2->getByName(u"OnClick"_ustr) >>= props2;
     comphelper::SequenceAsHashMap map2(props2);
     auto iter2(map2.find(u"Bookmark"_ustr));
@@ -683,7 +683,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf144917)
     uno::Reference<beans::XPropertySet> xShape(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
     uno::Reference<document::XEventsSupplier> xEventsSupplier(xShape, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xEvents(xEventsSupplier->getEvents());
-    uno::Sequence<beans::PropertyValue> props;
+    cpo::uno::Sequence<beans::PropertyValue> props;
     xEvents->getByName(u"OnClick"_ustr) >>= props;
     comphelper::SequenceAsHashMap map(props);
     auto iter(map.find(u"Bookmark"_ustr));
@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testHyperlinkOnImage)
     uno::Reference<beans::XPropertySet> xShape1(getShapeFromPage(1, 0));
     uno::Reference<document::XEventsSupplier> xEventsSupplier1(xShape1, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xEvents1(xEventsSupplier1->getEvents());
-    uno::Sequence<beans::PropertyValue> props1;
+    cpo::uno::Sequence<beans::PropertyValue> props1;
     xEvents1->getByName(u"OnClick"_ustr) >>= props1;
     comphelper::SequenceAsHashMap map1(props1);
     auto iter1(map1.find(u"ClickAction"_ustr));
@@ -707,7 +707,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testHyperlinkOnImage)
     uno::Reference<beans::XPropertySet> xShape2(getShapeFromPage(1, 1));
     uno::Reference<document::XEventsSupplier> xEventsSupplier2(xShape2, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xEvents2(xEventsSupplier2->getEvents());
-    uno::Sequence<beans::PropertyValue> props2;
+    cpo::uno::Sequence<beans::PropertyValue> props2;
     xEvents2->getByName(u"OnClick"_ustr) >>= props2;
     comphelper::SequenceAsHashMap map2(props2);
     auto iter2(map2.find(u"ClickAction"_ustr));
@@ -735,7 +735,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf141704)
         uno::Reference<document::XEventsSupplier> xEventsSupplier(xShape, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xEvents(xEventsSupplier->getEvents());
 
-        uno::Sequence<beans::PropertyValue> props;
+        cpo::uno::Sequence<beans::PropertyValue> props;
         xEvents->getByName(u"OnClick"_ustr) >>= props;
         comphelper::SequenceAsHashMap map(props);
         auto iter(map.find(u"ClickAction"_ustr));
@@ -829,7 +829,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testCustomSlideShow)
     css::uno::Reference<css::presentation::XCustomPresentationSupplier> aXCPSup(
         mxComponent, css::uno::UNO_QUERY);
     css::uno::Reference<css::container::XNameContainer> aXCont(aXCPSup->getCustomPresentations());
-    const css::uno::Sequence<OUString> aNameSeq(aXCont->getElementNames());
+    const cpo::uno::Sequence<OUString> aNameSeq(aXCont->getElementNames());
 
     // In the document, there are two custom presentations.
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(2), aNameSeq.size());
@@ -1322,17 +1322,17 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo71075)
 
     uno::Reference<chart2::XCoordinateSystemContainer> xBCooSysCnt(xChart2Doc->getFirstDiagram(),
                                                                    uno::UNO_QUERY);
-    uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> aCooSysSeq(
+    cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> aCooSysSeq(
         xBCooSysCnt->getCoordinateSystems());
     uno::Reference<chart2::XChartTypeContainer> xCTCnt(aCooSysSeq[0], uno::UNO_QUERY);
 
     uno::Reference<chart2::XDataSeriesContainer> xDSCnt(xCTCnt->getChartTypes()[0], uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("failed to load data series", xDSCnt.is());
-    uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
+    cpo::uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", static_cast<sal_Int32>(1),
                                  aSeriesSeq.getLength());
     uno::Reference<chart2::data::XDataSource> xSource(aSeriesSeq[0], uno::UNO_QUERY);
-    uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aSeqCnt(
+    cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aSeqCnt(
         xSource->getDataSequences());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", static_cast<sal_Int32>(1),
                                  aSeqCnt.getLength());
@@ -1341,7 +1341,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testFdo71075)
                                  static_cast<sal_Int32>(SAL_N_ELEMENTS(values)),
                                  xValueSeq->getData().getLength());
     uno::Reference<chart2::data::XNumericalDataSequence> xNumSeq(xValueSeq, uno::UNO_QUERY);
-    uno::Sequence<double> aValues(xNumSeq->getNumericalData());
+    cpo::uno::Sequence<double> aValues(xNumSeq->getNumericalData());
     for (sal_Int32 i = 0; i < xValueSeq->getData().getLength(); i++)
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", values[i], aValues[i]);
 }
@@ -2311,7 +2311,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testLinkedOLEExport)
     // verify the linked OLE survives. Use FULL_UPDATE so the linked OLE
     // is created during load (the default NO_UPDATE in test mode would
     // leave the link deferred).
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::FULL_UPDATE)),
     };
@@ -2338,7 +2338,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawObjectLinkDeferred)
     // (which fetches the URL) during import. The link is deferred until the
     // user confirms link updates. Uses non-routable 192.0.2.1 so that an
     // actual fetch would hang/timeout.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -2358,7 +2358,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDrawImageRemoteNotFetched)
     // draw:image with a remote xlink:href must not fetch the URL during
     // import. Uses non-routable 192.0.2.1 so that an actual fetch would
     // hang/timeout causing this test to fail.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };

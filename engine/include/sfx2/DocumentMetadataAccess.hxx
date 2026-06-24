@@ -102,17 +102,17 @@ public:
             const css::beans::StringPair & i_rReference) override;
     virtual css::uno::Reference< css::rdf::XMetadatable > SAL_CALL
         getElementByURI(const css::uno::Reference< css::rdf::XURI > & i_xURI) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::rdf::XURI > > SAL_CALL getMetadataGraphsWithType(
+    virtual cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > SAL_CALL getMetadataGraphsWithType(
             const css::uno::Reference< css::rdf::XURI > & i_xType) override;
     virtual css::uno::Reference< css::rdf::XURI> SAL_CALL
         addMetadataFile(const OUString & i_rFileName,
-            const css::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
+            const cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
     virtual css::uno::Reference< css::rdf::XURI> SAL_CALL
         importMetadataFile(::sal_Int16 i_Format,
             const css::uno::Reference< css::io::XInputStream > & i_xInStream,
             const OUString & i_rFileName,
             const css::uno::Reference< css::rdf::XURI > & i_xBaseURI,
-            const css::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
+            const cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
     virtual void SAL_CALL removeMetadataFile(
             const css::uno::Reference<
                 css::rdf::XURI > & i_xGraphName) override;
@@ -132,10 +132,10 @@ public:
             const css::uno::Reference<
                 css::embed::XStorage > & i_xStorage) override;
     virtual void SAL_CALL loadMetadataFromMedium(
-            const css::uno::Sequence<
+            const cpo::uno::Sequence<
                 css::beans::PropertyValue > & i_rMedium) override;
     virtual void SAL_CALL storeMetadataToMedium(
-            const css::uno::Sequence<
+            const cpo::uno::Sequence<
                 css::beans::PropertyValue > & i_rMedium) override;
 
 private:

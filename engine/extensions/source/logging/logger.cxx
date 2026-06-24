@@ -44,7 +44,7 @@ namespace logging
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::WeakReference;
     using ::com::sun::star::logging::XLogHandler;
@@ -259,7 +259,7 @@ namespace logging
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_LoggerPool(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new logging::LoggerPool(context));
 }

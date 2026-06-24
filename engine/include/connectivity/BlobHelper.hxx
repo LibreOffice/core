@@ -27,14 +27,14 @@ namespace connectivity
 {
     class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) BlobHelper final : public ::cppu::WeakImplHelper< css::sdbc::XBlob >
     {
-        css::uno::Sequence< sal_Int8 > m_aValue;
+        cpo::uno::Sequence< sal_Int8 > m_aValue;
     public:
-        BlobHelper(const css::uno::Sequence< sal_Int8 >& _val);
+        BlobHelper(const cpo::uno::Sequence< sal_Int8 >& _val);
     private:
         virtual ::sal_Int64 SAL_CALL length(  ) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getBytes( ::sal_Int64 pos, ::sal_Int32 length ) override;
+        virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getBytes( ::sal_Int64 pos, ::sal_Int32 length ) override;
         virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream(  ) override;
-        virtual ::sal_Int64 SAL_CALL position( const css::uno::Sequence< ::sal_Int8 >& pattern, ::sal_Int64 start ) override;
+        virtual ::sal_Int64 SAL_CALL position( const cpo::uno::Sequence< ::sal_Int8 >& pattern, ::sal_Int64 start ) override;
         virtual ::sal_Int64 SAL_CALL positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& pattern, ::sal_Int64 start ) override;
     };
 }

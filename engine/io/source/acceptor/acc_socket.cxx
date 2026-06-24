@@ -53,9 +53,9 @@ namespace io_acceptor {
     public:
         explicit SocketConnection( OUString sConnectionDescription );
 
-        virtual sal_Int32 SAL_CALL read( css::uno::Sequence< sal_Int8 >& aReadBytes,
+        virtual sal_Int32 SAL_CALL read( cpo::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead ) override;
-        virtual void SAL_CALL write( const css::uno::Sequence< sal_Int8 >& aData ) override;
+        virtual void SAL_CALL write( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
         virtual void SAL_CALL flush(  ) override;
         virtual void SAL_CALL close(  ) override;
         virtual OUString SAL_CALL getDescription(  ) override;

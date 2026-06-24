@@ -28,7 +28,7 @@ using namespace com::sun::star;
 namespace writerperfect
 {
 EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
-                         const uno::Sequence<beans::PropertyValue>& rDescriptor)
+                         const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
     : mxContext(std::move(xContext))
 {
     // Extract the output stream from the descriptor.
@@ -45,8 +45,8 @@ EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
                            u"mimetype"_ustr, embed::ElementModes::READWRITE),
                        uno::UNO_QUERY);
     static constexpr OString aMimeType("application/epub+zip"_ostr);
-    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aMimeType.getStr()),
-                                  aMimeType.getLength());
+    cpo::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aMimeType.getStr()),
+                                       aMimeType.getLength());
     mxOutputStream->writeBytes(aData);
     uno::Reference<embed::XTransactedObject> xTransactedObject(mxOutputStream, uno::UNO_QUERY);
     xTransactedObject->commit();
@@ -146,8 +146,8 @@ void EPUBPackage::insertRule(const librevenge::RVNGString& rSelector,
 
     aStream << "}\n";
     std::string aString = aStream.str();
-    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aString.c_str()),
-                                  aString.size());
+    cpo::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aString.c_str()),
+                                       aString.size());
     mxOutputStream->writeBytes(aData);
 }
 
@@ -177,8 +177,8 @@ void EPUBPackage::insertBinaryData(const librevenge::RVNGBinaryData& rData)
     if (rData.empty())
         return;
 
-    uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(rData.getDataBuffer()),
-                                  rData.size());
+    cpo::uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(rData.getDataBuffer()),
+                                       rData.size());
     mxOutputStream->writeBytes(aData);
 }
 

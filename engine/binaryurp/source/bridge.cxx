@@ -37,7 +37,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/thread.hxx>
@@ -764,7 +764,7 @@ void Bridge::handleCommitChangeRequest(
     bool bExc = false;
     BinaryAny ret;
     assert(inArguments.size() == 1);
-    css::uno::Sequence< css::bridge::ProtocolProperty > s;
+    cpo::uno::Sequence< css::bridge::ProtocolProperty > s;
     [[maybe_unused]] bool ok = (mapBinaryToCppAny(inArguments[0]) >>= s);
     assert(ok);
     for (const auto & pp : s) {
@@ -946,7 +946,7 @@ void Bridge::removeEventListener(
 
 void Bridge::sendCommitChangeRequest() {
     assert(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
-    css::uno::Sequence< css::bridge::ProtocolProperty > s(1);
+    cpo::uno::Sequence< css::bridge::ProtocolProperty > s(1);
     s.getArray()[0].Name = u"CurrentContext"_ustr;
     std::vector< BinaryAny > a { mapCppToBinaryAny(cpo::uno::Any(s)) };
     sendProtPropRequest(OutgoingRequest::KIND_COMMIT_CHANGE, a);

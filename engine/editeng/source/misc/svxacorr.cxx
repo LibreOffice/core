@@ -517,7 +517,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
             uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
                 = i18n::OrdinalSuffix::create(comphelper::getProcessComponentContext());
 
-            uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
+            cpo::uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
 
             // add extra suffixes for languages not handled by i18npool/ICU
             if ( primary(eLang) == primary(LANGUAGE_PORTUGUESE) &&

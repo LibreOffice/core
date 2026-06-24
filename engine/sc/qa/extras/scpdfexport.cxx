@@ -170,7 +170,7 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
     }
 
     // init special pdf export params
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Selection"_ustr, xCellRange),
         comphelper::makePropertyValue(u"Printing"_ustr, sal_Int32(2)),
         comphelper::makePropertyValue(u"ViewPDFAfterExport"_ustr, true),
@@ -178,7 +178,7 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
     };
 
     // init set of params for storeToURL() call
-    css::uno::Sequence<css::beans::PropertyValue> seqArguments{
+    cpo::uno::Sequence<css::beans::PropertyValue> seqArguments{
         comphelper::makePropertyValue(u"FilterData"_ustr,
                                       comphelper::concatSequences(aFilterData, params)),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"calc_pdf_Export"_ustr),
@@ -193,17 +193,17 @@ void ScPDFExportTest::exportToPDF(const uno::Reference<frame::XModel>& xModel, c
 
 void ScPDFExportTest::exportToPDFWithUnoCommands(const OUString& rRange)
 {
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "ToPoint", cpo::uno::Any(rRange) } });
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 
     dispatchCommand(mxComponent, u".uno:DefinePrintArea"_ustr, {});
 
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "ViewPDFAfterExport", cpo::uno::Any(true) },
                                            { "Printing", cpo::uno::Any(sal_Int32(2)) } }));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(
         comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc_pdf_Export"_ustr) },
                                            { "FilterData", cpo::uno::Any(aFilterData) },
                                            { "URL", cpo::uno::Any(maTempFile.GetURL()) } }));
@@ -801,7 +801,7 @@ void ScPDFExportTest::testTdf120190()
 
     xSheet0->getCellByPosition(0, 0)->setFormula(u"=5&CHAR(10)&6"_ustr);
 
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "ToPoint", cpo::uno::Any(u"A1"_ustr) } });
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aArgs);
 

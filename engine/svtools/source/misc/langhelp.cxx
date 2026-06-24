@@ -46,7 +46,7 @@ void localizeWebserviceURI( OUString& rURI )
     rURI += aLang;
 }
 
-OUString getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & installed, OUString const & locale)
+OUString getInstalledLocaleForLanguage(cpo::uno::Sequence<OUString> const & installed, OUString const & locale)
 {
     if (locale.isEmpty())
         return OUString();  // do not attempt to resolve anything
@@ -103,7 +103,7 @@ public:
 
 }
 
-OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString>& rLocaleElementNames, bool bRequestInstallIfMissing, const OUString& rPreferredLocale)
+OUString getInstalledLocaleForSystemUILanguage(const cpo::uno::Sequence<OUString>& rLocaleElementNames, bool bRequestInstallIfMissing, const OUString& rPreferredLocale)
 {
     OUString wantedLocale(rPreferredLocale);
     if (wantedLocale.isEmpty())

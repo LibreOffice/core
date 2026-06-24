@@ -55,14 +55,14 @@ namespace pcr
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XPropertyControlObserver
         virtual void SAL_CALL focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
         virtual void SAL_CALL valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // Service constructors
         void    create( const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxUI );

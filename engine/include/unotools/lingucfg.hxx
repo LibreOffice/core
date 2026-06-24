@@ -21,7 +21,7 @@
 #define INCLUDED_UNOTOOLS_LINGUCFG_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
@@ -35,8 +35,8 @@ class SvtLinguConfigItem;
 
 struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 {
-    css::uno::Sequence< OUString >    aActiveDics;
-    css::uno::Sequence< OUString >    aActiveConvDics;
+    cpo::uno::Sequence< OUString >    aActiveDics;
+    cpo::uno::Sequence< OUString >    aActiveConvDics;
 
     bool                              bROActiveDics;
     bool                              bROActiveConvDics;
@@ -130,11 +130,11 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
 {
     // the URL's pointing to the location of the files the dictionary consists of
-    css::uno::Sequence< OUString >  aLocations;
+    cpo::uno::Sequence< OUString >  aLocations;
     // the name of the dictionary format implement
     OUString                                   aFormatName;
     // the list of languages (ISO names) the dictionary can be used for
-    css::uno::Sequence< OUString >  aLocaleNames;
+    cpo::uno::Sequence< OUString >  aLocaleNames;
 };
 
 class UNOTOOLS_DLLPUBLIC SvtLinguConfig final : public utl::detail::Options
@@ -158,17 +158,17 @@ public:
 
     // borrowed from utl::ConfigItem
 
-    css::uno::Sequence< OUString >
+    cpo::uno::Sequence< OUString >
         GetNodeNames( const OUString &rNode ) const;
 
-    css::uno::Sequence< cpo::uno::Any >
+    cpo::uno::Sequence< cpo::uno::Any >
         GetProperties(
-            const css::uno::Sequence< OUString > &rNames ) const;
+            const cpo::uno::Sequence< OUString > &rNames ) const;
 
     bool
         ReplaceSetProperties(
             const OUString &rNode,
-            const css::uno::Sequence< css::beans::PropertyValue >& rValues );
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rValues );
 
     cpo::uno::Any
             GetProperty( std::u16string_view rPropertyName ) const;
@@ -188,15 +188,15 @@ public:
     //! the following functions work on the 'ServiceManager' sub node of the
     //! linguistic configuration only
     //!
-    bool GetElementNamesFor( const OUString &rNodeName, css::uno::Sequence< OUString > &rElementNames ) const;
+    bool GetElementNamesFor( const OUString &rNodeName, cpo::uno::Sequence< OUString > &rElementNames ) const;
 
-    bool GetSupportedDictionaryFormatsFor( const OUString &rSetName, const OUString &rSetEntry, css::uno::Sequence< OUString > &rFormatList ) const;
+    bool GetSupportedDictionaryFormatsFor( const OUString &rSetName, const OUString &rSetEntry, cpo::uno::Sequence< OUString > &rFormatList ) const;
 
     bool GetDictionaryEntry( const OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
 
-    bool GetLocaleListFor( const OUString &rSetName, const OUString &rSetEntry, css::uno::Sequence< OUString > &rLocaleList ) const;
+    bool GetLocaleListFor( const OUString &rSetName, const OUString &rSetEntry, cpo::uno::Sequence< OUString > &rLocaleList ) const;
 
-    css::uno::Sequence< OUString > GetDisabledDictionaries() const;
+    cpo::uno::Sequence< OUString > GetDisabledDictionaries() const;
 
     std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( std::u16string_view rFormatName ) const;
 

@@ -64,7 +64,7 @@ protected:
     /// @throws css::uno::RuntimeException
     void removeShapesListener();
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException

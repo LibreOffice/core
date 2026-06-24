@@ -22,7 +22,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/string.hxx>
 #include <sal/types.h>
@@ -60,8 +60,8 @@ public:
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm );
     virtual             ~InputStream() override;
 
-    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
     virtual sal_Int32 SAL_CALL available() override;
     virtual void SAL_CALL closeInput() override;
@@ -80,8 +80,8 @@ private:
 private:
     css::uno::Reference< css::io::XTextInputStream2 >
                         mxTextStrm;
-    css::uno::Sequence< sal_Unicode > maOpeningBracket;
-    css::uno::Sequence< sal_Unicode > maClosingBracket;
+    cpo::uno::Sequence< sal_Unicode > maOpeningBracket;
+    cpo::uno::Sequence< sal_Unicode > maClosingBracket;
     OString             maBuffer;
     sal_Int32           mnBufferPos;
 };

@@ -124,17 +124,17 @@ namespace comphelper
     //= forwarding/merging XTypeProvider functionality
 
     #define DECLARE_XTYPEPROVIDER( )    \
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override; \
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override; \
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     #define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
-        css::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) \
+        cpo::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) \
         { \
-            return css::uno::Sequence<sal_Int8>(); \
+            return cpo::uno::Sequence<sal_Int8>(); \
         }
 
     #define IMPLEMENT_FORWARD_XTYPEPROVIDER2( classname, baseclass1, baseclass2 ) \
-        css::uno::Sequence< css::uno::Type > SAL_CALL classname::getTypes(  ) \
+        cpo::uno::Sequence< css::uno::Type > SAL_CALL classname::getTypes(  ) \
         { \
             return ::comphelper::concatSequences( \
                 baseclass1::getTypes(), \

@@ -162,7 +162,7 @@ private:
 
     void GetGraphicSource();
     void GetGraphicStream();
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
         GetFilterData( bool bUpdateConfig );
 
     sal_uInt32 GetRawFileSize() const;

@@ -33,7 +33,7 @@ namespace comphelper {
 
 bool dispatchCommand(const OUString& rCommand,
                      const uno::Reference<frame::XDispatchProvider>& xDispatchProvider,
-                     const uno::Sequence<beans::PropertyValue>& rArguments,
+                     const cpo::uno::Sequence<beans::PropertyValue>& rArguments,
                      const uno::Reference<frame::XDispatchResultListener>& xListener)
 {
     if (!xDispatchProvider.is())
@@ -67,7 +67,7 @@ bool dispatchCommand(const OUString& rCommand,
 
 bool dispatchCommand(const OUString& rCommand,
                      const uno::Reference<frame::XFrame>& xFrame,
-                     const uno::Sequence<beans::PropertyValue>& rArguments,
+                     const cpo::uno::Sequence<beans::PropertyValue>& rArguments,
                      const uno::Reference<frame::XDispatchResultListener>& xListener)
 {
     return dispatchCommand(rCommand, xFrame.query<frame::XDispatchProvider>(), rArguments, xListener);
@@ -75,14 +75,14 @@ bool dispatchCommand(const OUString& rCommand,
 
 bool dispatchCommand(const OUString& rCommand,
                      const uno::Reference<frame::XController>& xController,
-                     const uno::Sequence<beans::PropertyValue>& rArguments,
+                     const cpo::uno::Sequence<beans::PropertyValue>& rArguments,
                      const uno::Reference<frame::XDispatchResultListener>& xListener)
 {
     return dispatchCommand(rCommand, xController.query<frame::XDispatchProvider>(), rArguments, xListener);
 }
 
 bool dispatchCommand(const OUString& rCommand,
-                     const uno::Sequence<beans::PropertyValue>& rArguments,
+                     const cpo::uno::Sequence<beans::PropertyValue>& rArguments,
                      const uno::Reference<frame::XDispatchResultListener>& xListener)
 {
     // Target where we will execute the .uno: command

@@ -157,7 +157,7 @@ void SvxCharView::InsertCharToDoc()
     if (GetText().isEmpty())
         return;
 
-    uno::Sequence<beans::PropertyValue> aArgs{
+    cpo::uno::Sequence<beans::PropertyValue> aArgs{
         comphelper::makePropertyValue(u"Symbols"_ustr, GetText()),
         comphelper::makePropertyValue(u"FontName"_ustr, maFont.GetFamilyName())
     };

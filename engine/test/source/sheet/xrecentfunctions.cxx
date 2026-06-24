@@ -13,7 +13,7 @@
 
 #include <com/sun/star/sheet/XRecentFunctions.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -26,7 +26,7 @@ void XRecentFunctions::testGetRecentFunctionIds()
 {
     uno::Reference<sheet::XRecentFunctions> xRecentFunctions(init(), UNO_QUERY_THROW);
 
-    uno::Sequence<sal_Int32> aIds = xRecentFunctions->getRecentFunctionIds();
+    cpo::uno::Sequence<sal_Int32> aIds = xRecentFunctions->getRecentFunctionIds();
     const sal_Int32 nNumber = aIds.getLength();
     CPPUNIT_ASSERT_MESSAGE("Recent IDs greater the max number",
                            nNumber <= xRecentFunctions->getMaxRecentFunctions());
@@ -42,7 +42,7 @@ void XRecentFunctions::testSetRecentFunctionIds()
     const sal_Int32 nMaxNumber = xRecentFunctions->getMaxRecentFunctions();
 
     // empty list
-    uno::Sequence<sal_Int32> aIds;
+    cpo::uno::Sequence<sal_Int32> aIds;
     xRecentFunctions->setRecentFunctionIds(aIds);
 
     aIds = xRecentFunctions->getRecentFunctionIds();

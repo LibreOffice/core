@@ -72,8 +72,8 @@ protected:
         @param      _rAggregateProps    out parameter to be filled with the properties of your aggregate.
     */
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const = 0;
 
     /** creates an OPropertyArrayAggregationHelper filled with properties for which's initialization
@@ -124,8 +124,8 @@ template <class TYPE>
 template <class TYPE> inline
 ::cppu::IPropertyArrayHelper* OAggregationArrayUsageHelper<TYPE>::createArrayHelper() const
 {
-    css::uno::Sequence< css::beans::Property > aProps;
-    css::uno::Sequence< css::beans::Property > aAggregateProps;
+    cpo::uno::Sequence< css::beans::Property > aProps;
+    cpo::uno::Sequence< css::beans::Property > aAggregateProps;
     fillProperties(aProps, aAggregateProps);
     OSL_ENSURE(aProps.hasElements(), "OAggregationArrayUsageHelper::createArrayHelper : fillProperties returned nonsense !");
     return new OPropertyArrayAggregationHelper(aProps, aAggregateProps, nullptr, DEFAULT_AGGREGATE_PROPERTY_ID);

@@ -57,7 +57,7 @@ namespace {
 
 void handleReloadEditableRequest_(
     weld::Window* pParent, const OUString& aDocumentURL,
-    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const& rContinuations)
+    cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>> const& rContinuations)
 {
     uno::Reference<task::XInteractionApprove> xApprove;
     uno::Reference<task::XInteractionAbort> xAbort;
@@ -89,7 +89,7 @@ handleLockedDocumentRequest_(
     weld::Window * pParent,
     const OUString& aDocumentURL,
     const OUString& aInfo,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     sal_uInt16 nMode )
 {
@@ -168,7 +168,7 @@ handleLockedDocumentRequest_(
 void
 handleChangedByOthersRequest_(
     weld::Window * pParent,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations )
 {
     uno::Reference< task::XInteractionApprove > xApprove;
@@ -197,7 +197,7 @@ const sal_uInt16  UUI_DOC_CorruptErrDlg = 1;
 void
 handleLockFileProblemRequest_(
     weld::Window * pParent,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations, sal_uInt16 nWhichDlg )
 {
     uno::Reference< task::XInteractionApprove > xApprove;

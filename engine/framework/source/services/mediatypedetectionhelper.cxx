@@ -51,7 +51,7 @@ bool SAL_CALL MediaTypeDetectionHelper::supportsService( const OUString& sServic
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL MediaTypeDetectionHelper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL MediaTypeDetectionHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.MediaTypeDetectionHelper"_ustr };
 }
@@ -59,7 +59,7 @@ css::uno::Sequence< OUString > SAL_CALL MediaTypeDetectionHelper::getSupportedSe
 
 //   XStringMapping
 
-bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rSeq)
+bool SAL_CALL MediaTypeDetectionHelper::mapStrings(cpo::uno::Sequence< OUString >& rSeq)
 {
     bool bModified = false;
     auto rSeqRange = asNonConstRange(rSeq);
@@ -84,7 +84,7 @@ bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rS
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_MediaTypeDetectionHelper_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::MediaTypeDetectionHelper());
 }

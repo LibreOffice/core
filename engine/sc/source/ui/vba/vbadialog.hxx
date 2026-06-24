@@ -33,7 +33,7 @@ public:
     virtual OUString mapIndexToName( sal_Int32 nIndex ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     virtual css::uno::Reference< css::frame::XModel > getModel() const override { return m_xModel; }
 private:

@@ -140,7 +140,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
         uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(cppu::getXWeak(m_pDocShell->GetModel()), uno::UNO_QUERY);
         xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
 
-        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
                     { "CellRangeRepresentation", cpo::uno::Any(rDataPilotName) },
                     { "HasCategories", cpo::uno::Any(true) },
                     { "DataRowSource", cpo::uno::Any(chart::ChartDataRowSource_COLUMNS) }
@@ -244,7 +244,7 @@ cpo::uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
     return cpo::uno::Any(xChart);
 }
 
-uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()
 {
     SolarMutexGuard aGuard;
 

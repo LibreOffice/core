@@ -29,7 +29,7 @@ static uno::Reference< container::XIndexAccess > createVariablesAccess( const un
 {
     // FIXME: the performance is poor?
     XNamedObjectCollectionHelper< word::XVariable >::XNamedVec aVariables;
-    const uno::Sequence< beans::PropertyValue > props = xUserDefined->getPropertyValues();
+    const cpo::uno::Sequence< beans::PropertyValue > props = xUserDefined->getPropertyValues();
     sal_Int32 nCount = props.getLength();
     aVariables.reserve( nCount );
     std::transform(props.begin(), props.end(), std::back_inserter(aVariables),
@@ -82,10 +82,10 @@ SwVbaVariables::getServiceImplName()
     return u"SwVbaVariables"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaVariables::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Variables"_ustr
     };

@@ -64,7 +64,7 @@ SwVbaVariable::setValue( const cpo::uno::Any& rValue )
 sal_Int32 SAL_CALL
 SwVbaVariable::getIndex()
 {
-    const uno::Sequence< beans::PropertyValue > props = mxUserDefined->getPropertyValues();
+    const cpo::uno::Sequence< beans::PropertyValue > props = mxUserDefined->getPropertyValues();
     auto pProp = std::find_if(props.begin(), props.end(),
         [this](const beans::PropertyValue& rProp) { return rProp.Name == maVariableName; });
     if (pProp != props.end())
@@ -79,10 +79,10 @@ SwVbaVariable::getServiceImplName()
     return u"SwVbaVariable"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaVariable::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Variable"_ustr
     };

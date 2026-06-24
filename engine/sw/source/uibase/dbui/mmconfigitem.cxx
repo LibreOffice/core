@@ -118,7 +118,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     std::vector< OUString>           m_aNeutralGreetingLines;
     sal_Int32                               m_nCurrentNeutralGreeting;
     OUString                         m_sFemaleGenderValue;
-    uno::Sequence< OUString>         m_aSavedDocuments;
+    cpo::uno::Sequence< OUString>         m_aSavedDocuments;
 
     bool                                m_bIsGreetingLineInMail;
     bool                                m_bIsIndividualGreetingLineInMail;
@@ -164,16 +164,16 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 public:
     SwMailMergeConfigItem_Impl();
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     Sequence< OUString> GetAddressBlocks(bool bConvertToConfig = false) const;
     void                SetAddressBlocks(
                                 const Sequence< OUString>& rBlocks,
                                 bool bConvertFromConfig = false);
-    uno::Sequence< OUString>
+    cpo::uno::Sequence< OUString>
                         GetGreetings(SwMailMergeConfigItem::Gender eType,
                                         bool bConvertToConfig = false) const;
     void                SetGreetings(SwMailMergeConfigItem::Gender eType,
-                                    const uno::Sequence< OUString>& rBlocks,
+                                    const cpo::uno::Sequence< OUString>& rBlocks,
                                     bool bConvertFromConfig = false);
 
     void                SetCurrentAddressBlockIndex( sal_Int32 nSet );
@@ -335,7 +335,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     if(!m_aSavedDocuments.hasElements())
         return;
 
-    uno::Sequence< OUString > aTempDocuments(m_aSavedDocuments.getLength());
+    cpo::uno::Sequence< OUString > aTempDocuments(m_aSavedDocuments.getLength());
     auto begin = aTempDocuments.getArray();
     OUString* pTempDocuments = std::copy_if(std::cbegin(m_aSavedDocuments), std::cend(m_aSavedDocuments), begin,
         [](const OUString& rDoc) { return SWUnoHelper::UCB_IsFile( rDoc ); });
@@ -465,7 +465,7 @@ const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
     return aNames;
 }
 
-void SwMailMergeConfigItem_Impl::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwMailMergeConfigItem_Impl::Notify( const cpo::uno::Sequence< OUString >& ) {}
 
 void  SwMailMergeConfigItem_Impl::ImplCommit()
 {
@@ -994,7 +994,7 @@ void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
         m_aExcludedRecords.erase(nRecord);
 }
 
-uno::Sequence<cpo::uno::Any> SwMailMergeConfigItem::GetSelection() const
+cpo::uno::Sequence<cpo::uno::Any> SwMailMergeConfigItem::GetSelection() const
 {
     if(!m_pImpl->m_xResultSet.is())
         GetResultSet();
@@ -1010,7 +1010,7 @@ uno::Sequence<cpo::uno::Any> SwMailMergeConfigItem::GetSelection() const
 }
 
 
-const uno::Sequence< OUString>&
+const cpo::uno::Sequence< OUString>&
                     SwMailMergeConfigItem::GetSavedDocuments() const
 {
     return m_pImpl->m_aSavedDocuments;
@@ -1619,7 +1619,7 @@ public:
         m_rParent.stopDBChangeListening();
     }
 
-    virtual void SAL_CALL dispatch(const css::util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& /*rArgs*/) override
+    virtual void SAL_CALL dispatch(const css::util::URL& rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& /*rArgs*/) override
     {
         if (rURL.Complete.equalsAscii(SwXDispatch::GetDBChangeURL()))
             m_rParent.updateCurrentDBDataFromDocument();

@@ -20,16 +20,17 @@
 #include <gridcols.hxx>
 #include <tools/debug.hxx>
 #include <fmservs.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 
-static const css::uno::Sequence<OUString>& getColumnTypes()
+static const cpo::uno::Sequence<OUString>& getColumnTypes()
 {
-    static css::uno::Sequence<OUString> aColumnTypes = []()
+    static cpo::uno::Sequence<OUString> aColumnTypes = []()
     {
-        css::uno::Sequence<OUString> tmp(10);
+        cpo::uno::Sequence<OUString> tmp(10);
         OUString* pNames = tmp.getArray();
         pNames[TYPE_CHECKBOX] = FM_COL_CHECKBOX;
         pNames[TYPE_COMBOBOX] = FM_COL_COMBOBOX;
@@ -94,7 +95,7 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
             ? aModelName.copy(aModelPrefix.getLength())
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 
-        const css::uno::Sequence<OUString>& rColumnTypes = getColumnTypes();
+        const cpo::uno::Sequence<OUString>& rColumnTypes = getColumnTypes();
         nTypeId = lcl_findPos(aColumnType, rColumnTypes);
     }
     return nTypeId;

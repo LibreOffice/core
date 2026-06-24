@@ -480,10 +480,10 @@ SwVbaApplication::getServiceImplName()
     return u"SwVbaApplication"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaApplication::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Application"_ustr
     };
@@ -505,7 +505,7 @@ SwVbaApplication::getCurrentSwDocument()
 // XSinkCaller
 
 void SAL_CALL
-SwVbaApplication::CallSinks( const OUString& Method, uno::Sequence< cpo::uno::Any >& Arguments )
+SwVbaApplication::CallSinks( const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
     for (auto& i : mvSinks)
     {

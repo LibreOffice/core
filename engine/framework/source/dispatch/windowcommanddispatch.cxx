@@ -143,7 +143,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, VclWindowEvent&, rEvent, vo
 
         css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aCommand, SPECIALTARGET_SELF, 0);
         if (xDispatch.is())
-            xDispatch->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
+            xDispatch->dispatch(aCommand, cpo::uno::Sequence< css::beans::PropertyValue >());
     }
     catch(const css::uno::Exception&)
     {}

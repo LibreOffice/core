@@ -108,7 +108,7 @@ namespace writerfilter
     void TagLogger::unoPropertySet(const uno::Reference<beans::XPropertySet>& rPropSet)
     {
         uno::Reference<beans::XPropertySetInfo> xPropSetInfo(rPropSet->getPropertySetInfo());
-        const uno::Sequence<beans::Property> aProps(xPropSetInfo->getProperties());
+        const cpo::uno::Sequence<beans::Property> aProps(xPropSetInfo->getProperties());
 
         startElement( "unoPropertySet" );
 

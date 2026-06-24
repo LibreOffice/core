@@ -43,7 +43,7 @@ CopiedTempStream::CopiedTempStream(const css::uno::Reference<css::io::XInputStre
     SvStream* pDest = maTemp.GetStream(StreamMode::WRITE);
 
     const sal_Int32 nBytes = 1024 * 32;
-    css::uno::Sequence<sal_Int8> aSeq(nBytes);
+    cpo::uno::Sequence<sal_Int8> aSeq(nBytes);
 
     for (bool bEnd = false; !bEnd;)
     {

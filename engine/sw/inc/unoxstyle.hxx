@@ -100,11 +100,11 @@ public:
              const UIName& rStyleName);
     virtual ~SwXStyle() override;
 
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static const cpo::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL
-    getSomething(const css::uno::Sequence<sal_Int8>& aIdentifier) override;
+    getSomething(const cpo::uno::Sequence<sal_Int8>& aIdentifier) override;
 
     //XNamed
     virtual OUString SAL_CALL getName() override;
@@ -145,38 +145,38 @@ public:
 
     //XMultiPropertySet
     virtual void SAL_CALL
-    setPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames,
-                      const css::uno::Sequence<cpo::uno::Any>& aValues) override;
-    virtual css::uno::Sequence<cpo::uno::Any>
-        SAL_CALL getPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames) override;
+    setPropertyValues(const cpo::uno::Sequence<OUString>& aPropertyNames,
+                      const cpo::uno::Sequence<cpo::uno::Any>& aValues) override;
+    virtual cpo::uno::Sequence<cpo::uno::Any>
+        SAL_CALL getPropertyValues(const cpo::uno::Sequence<OUString>& aPropertyNames) override;
     virtual void SAL_CALL addPropertiesChangeListener(
-        const css::uno::Sequence<OUString>&,
+        const cpo::uno::Sequence<OUString>&,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
     virtual void SAL_CALL removePropertiesChangeListener(
         const css::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
     virtual void SAL_CALL firePropertiesChangeEvent(
-        const css::uno::Sequence<OUString>&,
+        const cpo::uno::Sequence<OUString>&,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL
     getPropertyState(const OUString& PropertyName) override;
-    virtual css::uno::Sequence<css::beans::PropertyState>
-        SAL_CALL getPropertyStates(const css::uno::Sequence<OUString>& aPropertyName) override;
+    virtual cpo::uno::Sequence<css::beans::PropertyState>
+        SAL_CALL getPropertyStates(const cpo::uno::Sequence<OUString>& aPropertyName) override;
     virtual void SAL_CALL setPropertyToDefault(const OUString& PropertyName) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault(const OUString& aPropertyName) override;
 
     //XMultiPropertyStates
     virtual void SAL_CALL setAllPropertiesToDefault() override;
     virtual void SAL_CALL
-    setPropertiesToDefault(const css::uno::Sequence<OUString>& aPropertyNames) override;
-    virtual css::uno::Sequence<cpo::uno::Any>
-        SAL_CALL getPropertyDefaults(const css::uno::Sequence<OUString>& aPropertyNames) override;
+    setPropertiesToDefault(const cpo::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual cpo::uno::Sequence<cpo::uno::Any>
+        SAL_CALL getPropertyDefaults(const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     //SfxListener
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
@@ -248,10 +248,10 @@ public:
 class SW_DLLPUBLIC SwXPageStyle final : public SwXStyle
 {
 protected:
-    void SetPropertyValues_Impl(const css::uno::Sequence<OUString>& aPropertyNames,
-                                const css::uno::Sequence<cpo::uno::Any>& aValues);
-    css::uno::Sequence<cpo::uno::Any>
-    GetPropertyValues_Impl(const css::uno::Sequence<OUString>& aPropertyNames);
+    void SetPropertyValues_Impl(const cpo::uno::Sequence<OUString>& aPropertyNames,
+                                const cpo::uno::Sequence<cpo::uno::Any>& aValues);
+    cpo::uno::Sequence<cpo::uno::Any>
+    GetPropertyValues_Impl(const cpo::uno::Sequence<OUString>& aPropertyNames);
 
 public:
     SwXPageStyle(SfxStyleSheetBasePool& rPool, SwDocShell* pDocSh, const UIName& rStyleName);
@@ -262,10 +262,10 @@ public:
     virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
 
     virtual void SAL_CALL
-    setPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames,
-                      const css::uno::Sequence<cpo::uno::Any>& aValues) override;
-    virtual css::uno::Sequence<cpo::uno::Any>
-        SAL_CALL getPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames) override;
+    setPropertyValues(const cpo::uno::Sequence<OUString>& aPropertyNames,
+                      const cpo::uno::Sequence<cpo::uno::Any>& aValues) override;
+    virtual cpo::uno::Sequence<cpo::uno::Any>
+        SAL_CALL getPropertyValues(const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

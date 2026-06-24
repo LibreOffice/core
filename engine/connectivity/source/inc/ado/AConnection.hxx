@@ -72,11 +72,11 @@ namespace connectivity::ado
         OConnection(ODriver*        _pDriver);
         //  OConnection(const SQLHANDLE _pConnectionHandle);
         ~OConnection() override;
-        void construct(std::u16string_view url,const css::uno::Sequence< css::beans::PropertyValue >& info);
+        void construct(std::u16string_view url,const cpo::uno::Sequence< css::beans::PropertyValue >& info);
 
         //XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
+        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        static cpo::uno::Sequence< sal_Int8 > getUnoTunnelId();
         // XServiceInfo
         DECLARE_SERVICE_INFO();
         // OComponentHelper

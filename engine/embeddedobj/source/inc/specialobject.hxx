@@ -30,7 +30,7 @@ private:
 public:
     OSpecialEmbeddedObject(
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        const css::uno::Sequence< css::beans::NamedValue >& aObjectProps );
+        const cpo::uno::Sequence< css::beans::NamedValue >& aObjectProps );
 
     // XInterface
     virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override ;
@@ -51,13 +51,13 @@ public:
 // XCommonEmbedPersist
 
     virtual void SAL_CALL reload(
-                const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

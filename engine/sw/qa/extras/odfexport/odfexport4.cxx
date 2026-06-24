@@ -320,7 +320,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf57317_autoListName)
 
     uno::Reference<container::XIndexAccess> xLevels(xPara->getPropertyValue(u"NumberingRules"_ustr),
                                                     uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps;
     for (beans::PropertyValue const& rProp : aProps)
     {

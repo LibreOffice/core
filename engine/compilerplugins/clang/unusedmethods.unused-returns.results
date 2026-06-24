@@ -1,7 +1,7 @@
 connectivity/source/inc/java/lang/Object.hxx:109
     int connectivity::java_lang_Object::callIntMethodWithIntArg_ThrowRuntime(const char *,struct _jmethodID *&,int) const
 connectivity/source/inc/odbc/OConnection.hxx:75
-    short connectivity::odbc::OConnection::Construct(const rtl::OUString &,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
+    short connectivity::odbc::OConnection::Construct(const rtl::OUString &,const cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 connectivity/source/inc/odbc/OFunctions.hxx:88
     short connectivity::odbc::Functions::SetEnvAttr(void *,int,void *,int) const
 connectivity/source/inc/odbc/OFunctions.hxx:101
@@ -49,9 +49,9 @@ extensions/source/scanner/sanedlg.hxx:101
 formula/source/ui/dlg/funcpage.hxx:103
     _Bool formula::FuncPage::UpdateFavouritesList()
 framework/source/fwe/classes/addonsoptions.cxx:281
-    _Bool framework::AddonsOptions_Impl::ReadToolBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
+    _Bool framework::AddonsOptions_Impl::ReadToolBarItemSet(const rtl::OUString &,cpo::uno::Sequence<cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
 framework/source/fwe/classes/addonsoptions.cxx:283
-    _Bool framework::AddonsOptions_Impl::ReadNotebookBarItemSet(const rtl::OUString &,com::sun::star::uno::Sequence<com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
+    _Bool framework::AddonsOptions_Impl::ReadNotebookBarItemSet(const rtl::OUString &,cpo::uno::Sequence<cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> > &)
 i18nlangtag/source/languagetag/languagetag.cxx:304
     const rtl::OUString & LanguageTagImpl::getBcp47() const
 include/avmedia/mediaitem.hxx:121
@@ -947,9 +947,9 @@ include/tools/urlobj.hxx:428
 include/tools/urlobj.hxx:735
     _Bool INetURLObject::SetParam(std::basic_string_view<char16_t>,enum INetURLObject::EncodeMechanism,unsigned short)
 include/unotools/lingucfg.hxx:191
-    _Bool SvtLinguConfig::GetElementNamesFor(const rtl::OUString &,com::sun::star::uno::Sequence<rtl::OUString> &) const
+    _Bool SvtLinguConfig::GetElementNamesFor(const rtl::OUString &,cpo::uno::Sequence<rtl::OUString> &) const
 include/unotools/localedatawrapper.hxx:169
-    const com::sun::star::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
+    const cpo::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
 include/vcl/abstdlg.hxx:116
     _Bool AbstractSecurityOptionsDialog::SetSecurityOptions()
 include/vcl/alpha.hxx:90
@@ -975,7 +975,7 @@ include/vcl/filter/SvmWriter.hxx:37
 include/vcl/formatter.hxx:247
     _Bool Formatter::SetFormat(const rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
 include/vcl/graphicfilter.hxx:254
-    ErrCode GraphicFilter::ExportGraphic(const Graphic &,const INetURLObject &,unsigned short,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
+    ErrCode GraphicFilter::ExportGraphic(const Graphic &,const INetURLObject &,unsigned short,const cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
 include/vcl/GraphicNativeMetadata.hxx:34
     _Bool GraphicNativeMetadata::read(SvStream &)
 include/vcl/GraphicNativeTransform.hxx:33
@@ -1165,7 +1165,7 @@ sw/source/writerfilter/dmapper/TagLogger.hxx:59
 ucb/source/core/ucbstore.hxx:97
     const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> & PropertySetRegistry::getConfigProvider(std::unique_lock<std::mutex> &)
 ucb/source/ucp/webdav-curl/ContentProperties.hxx:160
-    _Bool http_dav_ucp::CachableContentProperties::containsAllNames(const com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,std::vector<rtl::OUString> &) const
+    _Bool http_dav_ucp::CachableContentProperties::containsAllNames(const cpo::uno::Sequence<struct com::sun::star::beans::Property> &,std::vector<rtl::OUString> &) const
 unotools/source/ucbhelper/ucblockbytes.hxx:108
     _Bool utl::UcbLockBytes::setInputStream(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream> &)
 vcl/inc/font/FeatureCollector.hxx:44

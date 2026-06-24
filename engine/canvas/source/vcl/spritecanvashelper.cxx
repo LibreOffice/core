@@ -167,7 +167,7 @@ namespace vclcanvas
     }
 
     uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps(
-        const uno::Sequence< uno::Reference< rendering::XBitmap > >& ,
+        const cpo::uno::Sequence< uno::Reference< rendering::XBitmap > >& ,
         sal_Int8                                                      )
     {
         return uno::Reference< rendering::XAnimatedSprite >();

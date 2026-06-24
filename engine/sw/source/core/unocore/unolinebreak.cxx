@@ -131,7 +131,7 @@ bool SAL_CALL SwXLineBreak::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL SwXLineBreak::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SwXLineBreak::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.LineBreak"_ustr };
 }

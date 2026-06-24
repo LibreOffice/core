@@ -84,8 +84,8 @@ public:
     void SAL_CALL release() noexcept override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::awt::XMenu
     virtual void SAL_CALL addMenuListener( const css::uno::Reference< css::awt::XMenuListener >& xListener ) override;
@@ -133,7 +133,7 @@ public:
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXMenuBar final : public VCLXMenu

@@ -189,7 +189,7 @@ public:
         }
         else if ("Keywords" == rPropName)
         {
-            uno::Sequence<OUString> keywords;
+            cpo::uno::Sequence<OUString> keywords;
             if (aValue >>= keywords)
             {
                 m_xDocProps->setKeywords(keywords);
@@ -315,7 +315,7 @@ public:
         }
         else
         {
-            uno::Sequence< beans::NamedValue > const stats(
+            cpo::uno::Sequence< beans::NamedValue > const stats(
                 m_xDocProps->getDocumentStatistics());
 
             auto pStat = std::find_if(stats.begin(), stats.end(),
@@ -330,7 +330,7 @@ public:
 
     virtual void setPropertyValue( const OUString& rPropName, const cpo::uno::Any& aValue ) override
     {
-        uno::Sequence< beans::NamedValue > stats(
+        cpo::uno::Sequence< beans::NamedValue > stats(
                 m_xDocProps->getDocumentStatistics());
 
         auto [begin, end] = asNonConstRange(stats);
@@ -463,7 +463,7 @@ public:
     virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 class SwVbaCustomDocumentProperty : public SwVbaBuiltInDocumentProperty
@@ -622,10 +622,10 @@ SwVbaBuiltInDocumentProperty::getServiceImplName()
     return u"SwVbaBuiltinDocumentProperty"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaBuiltInDocumentProperty::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.DocumentProperty"_ustr
     };
@@ -705,9 +705,9 @@ protected:
         return cpo::uno::Any( it->second );
 
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
-        uno::Sequence< OUString > aNames( getCount() );
+        cpo::uno::Sequence< OUString > aNames( getCount() );
         OUString* pName = aNames.getArray();
         for (const auto& rEntry : mNamedDocProps)
         {
@@ -784,10 +784,10 @@ SwVbaBuiltinDocumentProperties::getServiceImplName()
     return u"SwVbaBuiltinDocumentProperties"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaBuiltinDocumentProperties::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.DocumentProperties"_ustr
     };
@@ -824,7 +824,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
-        uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
+        cpo::uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
         if ( Index >= aProps.getLength() )
             throw lang::IndexOutOfBoundsException();
         // How to determine type e.g Date? ( com.sun.star.util.DateTime )
@@ -841,10 +841,10 @@ public:
         return cpo::uno::Any( uno::Reference< XDocumentProperty >( new SwVbaCustomDocumentProperty( m_xParent, m_xContext, aPropInfo ) ) );
     }
 
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
-        const uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
-        uno::Sequence< OUString > aNames( aProps.getLength() );
+        const cpo::uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
+        cpo::uno::Sequence< OUString > aNames( aProps.getLength() );
         std::transform(aProps.begin(), aProps.end(), aNames.getArray(),
             [](const beans::Property& rProp) -> OUString { return rProp.Name; });
         return aNames;

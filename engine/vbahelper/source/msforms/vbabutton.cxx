@@ -115,10 +115,10 @@ VbaButton::getServiceImplName()
     return u"VbaButton"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 VbaButton::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.Button"_ustr
     };

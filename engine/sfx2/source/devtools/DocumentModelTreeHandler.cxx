@@ -131,7 +131,7 @@ protected:
         if (!xNameAccess.is())
             return;
 
-        const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+        const cpo::uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
         for (auto const& rName : aNames)
         {
             uno::Reference<uno::XInterface> xObject(xNameAccess->getByName(rName), uno::UNO_QUERY);
@@ -422,7 +422,7 @@ public:
         if (!xStyleFamilies.is())
             return;
 
-        const uno::Sequence<OUString> aNames = xStyleFamilies->getElementNames();
+        const cpo::uno::Sequence<OUString> aNames = xStyleFamilies->getElementNames();
         for (auto const& rFamilyName : aNames)
         {
             uno::Reference<uno::XInterface> xStyleFamily(xStyleFamilies->getByName(rFamilyName),

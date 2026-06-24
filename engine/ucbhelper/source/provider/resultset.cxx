@@ -88,7 +88,7 @@ class PropertySetInfo :
         public lang::XTypeProvider,
         public beans::XPropertySetInfo
 {
-    uno::Sequence< beans::Property >  m_aProps;
+    cpo::uno::Sequence< beans::Property >  m_aProps;
 
 private:
     bool queryProperty(
@@ -107,11 +107,11 @@ public:
         noexcept override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XPropertySetInfo
-    virtual uno::Sequence< beans::Property > SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< beans::Property > SAL_CALL getProperties() override;
     virtual beans::Property SAL_CALL getPropertyByName(
             const OUString& aName ) override;
     virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
@@ -139,7 +139,7 @@ struct ResultSet_Impl
     uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
     rtl::Reference< PropertySetInfo >               m_xPropSetInfo;
     rtl::Reference< ResultSetMetaData >             m_xMetaData;
-    uno::Sequence< beans::Property >                m_aProperties;
+    cpo::uno::Sequence< beans::Property >                m_aProperties;
     rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
     std::mutex                          m_aMutex;
     comphelper::OInterfaceContainerHelper4<lang::XEventListener> m_aDisposeEventListeners;
@@ -150,14 +150,14 @@ struct ResultSet_Impl
 
     inline ResultSet_Impl(
         uno::Reference< uno::XComponentContext > xContext,
-        const uno::Sequence< beans::Property >& rProperties,
+        const cpo::uno::Sequence< beans::Property >& rProperties,
         rtl::Reference< ResultSetDataSupplier > xDataSupplier,
         uno::Reference< css::ucb::XCommandEnvironment > xEnv );
 };
 
 inline ResultSet_Impl::ResultSet_Impl(
     uno::Reference< uno::XComponentContext > xContext,
-    const uno::Sequence< beans::Property >& rProperties,
+    const cpo::uno::Sequence< beans::Property >& rProperties,
     rtl::Reference< ResultSetDataSupplier > xDataSupplier,
     uno::Reference< css::ucb::XCommandEnvironment > xEnv )
 : m_xContext(std::move( xContext )),
@@ -176,7 +176,7 @@ inline ResultSet_Impl::ResultSet_Impl(
 
 ResultSet::ResultSet(
     const uno::Reference< uno::XComponentContext >& rxContext,
-    const uno::Sequence< beans::Property >& rProperties,
+    const cpo::uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier )
 : m_pImpl( new ResultSet_Impl(
                rxContext,
@@ -190,7 +190,7 @@ ResultSet::ResultSet(
 
 ResultSet::ResultSet(
     const uno::Reference< uno::XComponentContext >& rxContext,
-    const uno::Sequence< beans::Property >& rProperties,
+    const cpo::uno::Sequence< beans::Property >& rProperties,
     const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
     const uno::Reference< css::ucb::XCommandEnvironment >& rxEnv )
 : m_pImpl( new ResultSet_Impl( rxContext, rProperties, rDataSupplier, rxEnv ) )
@@ -217,7 +217,7 @@ bool SAL_CALL ResultSet::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL ResultSet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ResultSet::getSupportedServiceNames()
 {
     return { RESULTSET_SERVICE_NAME };
 }
@@ -892,7 +892,7 @@ double SAL_CALL ResultSet::getDouble( sal_Int32 columnIndex )
 
 
 // virtual
-uno::Sequence< sal_Int8 > SAL_CALL
+cpo::uno::Sequence< sal_Int8 > SAL_CALL
 ResultSet::getBytes( sal_Int32 columnIndex )
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
@@ -912,7 +912,7 @@ ResultSet::getBytes( sal_Int32 columnIndex )
 
     m_pImpl->m_bWasNull = true;
     m_pImpl->m_xDataSupplier->validate();
-    return uno::Sequence< sal_Int8 >();
+    return cpo::uno::Sequence< sal_Int8 >();
 }
 
 
@@ -1400,7 +1400,7 @@ void ResultSet::rowCountFinal(std::unique_lock<std::mutex>& rGuard)
 }
 
 
-const uno::Sequence< beans::Property >& ResultSet::getProperties() const
+const cpo::uno::Sequence< beans::Property >& ResultSet::getProperties() const
 {
     return m_pImpl->m_aProperties;
 }
@@ -1482,7 +1482,7 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 
 
 // virtual
-uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
+cpo::uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 {
     return m_aProps;
 }

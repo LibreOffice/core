@@ -36,7 +36,7 @@
 
 namespace logging
 {
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::logging::LogRecord;
 
     namespace {
@@ -79,7 +79,7 @@ namespace logging
         bool m_LogTimestamp;
         bool m_LogSource;
         bool m_MultiColumn;
-        css::uno::Sequence< OUString > m_Columnnames;
+        cpo::uno::Sequence< OUString > m_Columnnames;
     };
 
     }
@@ -311,7 +311,7 @@ namespace logging
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_CsvFormatter(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new logging::CsvFormatter());
 }

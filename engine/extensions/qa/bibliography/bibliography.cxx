@@ -28,7 +28,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBibliographyLoader)
     // Given a bibliography provider:
     uno::Reference<container::XNameAccess> xBibAccess = frame::Bibliography::create(m_xContext);
     uno::Reference<beans::XPropertySet> xPropSet(xBibAccess, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aSeq;
 
     // When getting the column names:
     xPropSet->getPropertyValue(u"BibliographyDataFieldNames"_ustr) >>= aSeq;

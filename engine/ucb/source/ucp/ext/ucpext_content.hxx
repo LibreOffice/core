@@ -58,13 +58,13 @@ namespace ucb::ucp::ext
         static css::uno::Reference< css::sdbc::XRow >
             getArtificialNodePropertyValues(
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                const css::uno::Sequence< css::beans::Property >& rProperties,
+                const cpo::uno::Sequence< css::beans::Property >& rProperties,
                 const OUString& rTitle
             );
 
         css::uno::Reference< css::sdbc::XRow >
             getPropertyValues(
-                const css::uno::Sequence< css::beans::Property >& rProperties,
+                const cpo::uno::Sequence< css::beans::Property >& rProperties,
                 const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv
             );
 
@@ -87,7 +87,7 @@ namespace ucb::ucp::ext
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XContent
         virtual OUString SAL_CALL getContentType() override;
@@ -106,12 +106,12 @@ namespace ucb::ucp::ext
                 ) override;
 
     private:
-        virtual css::uno::Sequence< css::beans::Property > getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
-        virtual css::uno::Sequence< css::ucb::CommandInfo > getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
+        virtual cpo::uno::Sequence< css::beans::Property > getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
+        virtual cpo::uno::Sequence< css::ucb::CommandInfo > getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
 
-        css::uno::Sequence< cpo::uno::Any >
+        cpo::uno::Sequence< cpo::uno::Any >
             setPropertyValues(
-                const css::uno::Sequence< css::beans::PropertyValue >& rValues
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rValues
             );
 
         static bool denotesRootContent( std::u16string_view i_rContentIdentifier );

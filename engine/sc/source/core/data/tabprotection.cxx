@@ -34,7 +34,7 @@ constexpr OUString URI_SHA256_ODF12 = u"http://www.w3.org/2000/09/xmldsig#sha256
 constexpr OUString URI_XLS_LEGACY = u"http://docs.oasis-open.org/office/ns/table/legacy-hash-excel"_ustr;
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2)
 {
@@ -122,11 +122,11 @@ public:
     bool isPasswordEmpty() const { return mbEmptyPass;}
     bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const;
     void setPassword(const OUString& aPassText);
-    css::uno::Sequence<sal_Int8> getPasswordHash(
+    cpo::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2) const;
     const ScOoxPasswordHash& getPasswordHash() const;
     void setPasswordHash(
-        const css::uno::Sequence<sal_Int8>& aPassword,
+        const cpo::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2);
     void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount );
@@ -143,7 +143,7 @@ public:
 
 private:
     OUString maPassText;
-    css::uno::Sequence<sal_Int8>   maPassHash;
+    cpo::uno::Sequence<sal_Int8>   maPassHash;
     std::vector<bool> maOptions;
     bool mbEmptyPass;
     bool mbProtected;
@@ -314,7 +314,7 @@ const ScOoxPasswordHash& ScTableProtectionImpl::getPasswordHash() const
 }
 
 void ScTableProtectionImpl::setPasswordHash(
-    const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
+    const cpo::uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
     sal_Int32 nLen = aPassword.getLength();
     mbEmptyPass = nLen <= 0;
@@ -335,7 +335,7 @@ void ScTableProtectionImpl::setPasswordHash( const OUString& rAlgorithmName, con
     if (!rHashValue.isEmpty())
     {
         // Invalidate the other hashes.
-        setPasswordHash( uno::Sequence<sal_Int8>(), PASSHASH_UNSPECIFIED, PASSHASH_UNSPECIFIED);
+        setPasswordHash( cpo::uno::Sequence<sal_Int8>(), PASSHASH_UNSPECIFIED, PASSHASH_UNSPECIFIED);
 
         // We don't know whether this is an empty password (or would
         // unnecessarily have to try to verify an empty password), assume it is
@@ -573,7 +573,7 @@ void ScDocProtection::setPassword(const OUString& aPassText)
     mpImpl->setPassword(aPassText);
 }
 
-uno::Sequence<sal_Int8> ScDocProtection::getPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
+cpo::uno::Sequence<sal_Int8> ScDocProtection::getPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {
     return mpImpl->getPasswordHash(eHash, eHash2);
 }
@@ -584,7 +584,7 @@ const ScOoxPasswordHash& ScDocProtection::getPasswordHash() const
 }
 
 void ScDocProtection::setPasswordHash(
-    const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
+    const cpo::uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
     mpImpl->setPasswordHash(aPassword, eHash, eHash2);
 }
@@ -669,7 +669,7 @@ const ScOoxPasswordHash& ScTableProtection::getPasswordHash() const
 }
 
 void ScTableProtection::setPasswordHash(
-    const uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
+    const cpo::uno::Sequence<sal_Int8>& aPassword, ScPasswordHash eHash, ScPasswordHash eHash2)
 {
     mpImpl->setPasswordHash(aPassword, eHash, eHash2);
 }

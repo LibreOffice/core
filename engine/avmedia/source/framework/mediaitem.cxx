@@ -19,7 +19,7 @@
 
 #include <avmedia/mediaitem.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -139,7 +139,7 @@ bool MediaItem::GetPresentation( SfxItemPresentation,
 
 bool MediaItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
-    uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(m_pImpl->m_URL),
+    cpo::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(m_pImpl->m_URL),
                                     cpo::uno::Any(static_cast<sal_uInt32>(m_pImpl->m_nMaskSet)),
                                     cpo::uno::Any(static_cast< sal_Int32 >( m_pImpl->m_eState )),
                                     cpo::uno::Any(m_pImpl->m_fTime),
@@ -158,7 +158,7 @@ bool MediaItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 
 bool MediaItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
-    uno::Sequence< cpo::uno::Any >   aSeq;
+    cpo::uno::Sequence< cpo::uno::Any >   aSeq;
     bool                        bRet = false;
 
     if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 10 ) )

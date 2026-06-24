@@ -45,7 +45,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
     virtual ~SpinningProgressControlModel() override;
@@ -121,7 +121,7 @@ protected:
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_SpinningProgressControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SpinningProgressControlModel(context));
 }

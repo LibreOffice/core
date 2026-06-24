@@ -39,13 +39,13 @@ public:
     virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
 
     // XInitialize
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any>& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any>& aArguments ) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 }

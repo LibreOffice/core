@@ -147,12 +147,12 @@ public:
 
     // XBridgeSupplier2
     virtual cpo::uno::Any SAL_CALL createBridge(const cpo::uno::Any& modelDepObject,
-                                const css::uno::Sequence<sal_Int8>& ProcessId,
+                                const cpo::uno::Sequence<sal_Int8>& ProcessId,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // IUnoObjectWrapper
     STDMETHOD( getWrapperXInterface)( css::uno::Reference<css::uno::XInterface>* pXInt) override;
@@ -170,20 +170,20 @@ public:
 
 protected:
     virtual HRESULT doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarResult,
-                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString & name, css::uno::Sequence<cpo::uno::Any>& params);
+                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString & name, cpo::uno::Sequence<cpo::uno::Any>& params);
 
     virtual HRESULT doGetProperty( DISPPARAMS * pdispparams, VARIANT * pvarResult,
                                         EXCEPINFO * pexcepinfo, OUString & name );
 
     virtual HRESULT doSetProperty( DISPPARAMS * pdispparams, VARIANT * pvarResult,
-                                        EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString & name, css::uno::Sequence<cpo::uno::Any> const & params);
+                                        EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString & name, cpo::uno::Sequence<cpo::uno::Any> const & params);
 
     virtual HRESULT InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * puArgErr, bool& bHandled);
 
     void convertDispparamsArgs( DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams,
-                            css::uno::Sequence<cpo::uno::Any>& rSeq);
+                            cpo::uno::Sequence<cpo::uno::Any>& rSeq);
 
     bool getInvocationInfoForCall(DISPID id, css::script::InvocationInfo& info);
 
@@ -239,7 +239,7 @@ public:
 protected:
 
     static HRESULT methodInvoke( DISPID dispidMember, DISPPARAMS * pdispparams, VARIANT * pvarResult,
-                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, css::uno::Sequence<cpo::uno::Any> const & params);
+                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, cpo::uno::Sequence<cpo::uno::Any> const & params);
     // In GetIDsOfNames are blindly passed out, that is without verifying
     // the name. If two names are passed in during different calls to
     // GetIDsOfNames and the names differ only in their cases then different

@@ -45,6 +45,7 @@ using namespace css::text;
 using namespace css::graphic;
 using namespace css::security;
 using namespace css::ui::dialogs;
+using namespace ::cpo::uno;
 
 SignSignatureLineDialog::SignSignatureLineDialog(weld::Widget* pParent, Reference<XModel> xModel)
     : SignatureLineDialogBase(pParent, std::move(xModel), u"cui/ui/signsignatureline.ui"_ustr,

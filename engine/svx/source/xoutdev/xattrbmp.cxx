@@ -211,7 +211,7 @@ bool XFillBitmapItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
     {
         // member-id 0 => complete item (e.g. for toolbars)
         DBG_ASSERT( nMemberId == 0, "invalid member-id" );
-        uno::Sequence< beans::PropertyValue > aPropSeq{
+        cpo::uno::Sequence< beans::PropertyValue > aPropSeq{
             comphelper::makePropertyValue(u"Name"_ustr, aInternalName),
             comphelper::makePropertyValue(u"Bitmap"_ustr, xBmp)
         };
@@ -258,7 +258,7 @@ bool XFillBitmapItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
     else
     {
         DBG_ASSERT( nMemberId == 0, "invalid member-id" );
-        uno::Sequence< beans::PropertyValue >   aPropSeq;
+        cpo::uno::Sequence< beans::PropertyValue >   aPropSeq;
         if( rVal >>= aPropSeq )
         {
             for (const auto& rProp : aPropSeq)

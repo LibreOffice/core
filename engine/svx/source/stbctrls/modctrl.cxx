@@ -33,7 +33,7 @@
 #include "modctrl_internal.hxx"
 #include <bitmaps.hlst>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);

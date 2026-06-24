@@ -49,7 +49,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
     const SfxItemPropertySet*   mpPropSet;
     sal_Int32                   mnServiceId;
     std::unique_ptr<SvxUnoFieldData_Impl>        mpImpl;
-    css::uno::Sequence< css::uno::Type > maTypeSequence;
+    cpo::uno::Sequence< css::uno::Type > maTypeSequence;
 
 public:
     SvxUnoTextField( sal_Int32 nServiceId ) noexcept;
@@ -66,8 +66,8 @@ public:
     virtual void SAL_CALL release() noexcept override;
 
     // css::lang::XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XTextField
     virtual OUString SAL_CALL getPresentation( bool bShowCommand ) override;
@@ -96,7 +96,7 @@ public:
     // XServiceInfo
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif

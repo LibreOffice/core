@@ -50,12 +50,12 @@ public:
         sal_Int32 nMovingType) override;
 
     virtual void SAL_CALL recalculateRegression(
-        const css::uno::Sequence< double >& aXValues,
-        const css::uno::Sequence< double >& aYValues ) override = 0;
+        const cpo::uno::Sequence< double >& aXValues,
+        const cpo::uno::Sequence< double >& aYValues ) override = 0;
 
     virtual double SAL_CALL getCurveValue( double x ) override = 0;
 
-    virtual css::uno::Sequence< css::geometry::RealPoint2D > SAL_CALL getCurveValues(
+    virtual cpo::uno::Sequence< css::geometry::RealPoint2D > SAL_CALL getCurveValues(
         double min,
         double max,
         sal_Int32 nPointCount,

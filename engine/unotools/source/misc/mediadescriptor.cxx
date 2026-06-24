@@ -473,8 +473,8 @@ void setComponentDataEntry(comphelper::SequenceAsHashMap& rMediaDescriptor,
         // get or create the 'ComponentData' property entry
         cpo::uno::Any& rCompDataAny = rMediaDescriptor[PROP_COMPONENTDATA];
         // insert the value (retain sequence type, create NamedValue elements by default)
-        bool bHasNamedValues = !rCompDataAny.hasValue() || rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
-        bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
+        bool bHasNamedValues = !rCompDataAny.hasValue() || rCompDataAny.has< cpo::uno::Sequence< css::beans::NamedValue > >();
+        bool bHasPropValues = rCompDataAny.has< cpo::uno::Sequence< css::beans::PropertyValue > >();
         OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::setComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
         if( bHasNamedValues || bHasPropValues )
         {
@@ -500,8 +500,8 @@ void clearComponentDataEntry(comphelper::SequenceAsHashMap& rMediaDescriptor,
         return;
 
     cpo::uno::Any& rCompDataAny = aPropertyIter->second;
-    bool bHasNamedValues = rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
-    bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
+    bool bHasNamedValues = rCompDataAny.has< cpo::uno::Sequence< css::beans::NamedValue > >();
+    bool bHasPropValues = rCompDataAny.has< cpo::uno::Sequence< css::beans::PropertyValue > >();
     OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
     if( bHasNamedValues || bHasPropValues )
     {
@@ -516,14 +516,14 @@ void clearComponentDataEntry(comphelper::SequenceAsHashMap& rMediaDescriptor,
     }
 }
 
-css::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
+cpo::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
         comphelper::SequenceAsHashMap& rMediaDescriptor,
         comphelper::IDocPasswordVerifier& rVerifier,
         comphelper::DocPasswordRequestType eRequestType,
         const ::std::vector< OUString >* pDefaultPasswords )
 {
     auto aMediaEncData = rMediaDescriptor.getUnpackedValueOrDefault(
-        PROP_ENCRYPTIONDATA, css::uno::Sequence< css::beans::NamedValue >() );
+        PROP_ENCRYPTIONDATA, cpo::uno::Sequence< css::beans::NamedValue >() );
     OUString aMediaPassword = rMediaDescriptor.getUnpackedValueOrDefault(
         PROP_PASSWORD, OUString() );
     auto xInteractHandler = rMediaDescriptor.getUnpackedValueOrDefault(
@@ -532,7 +532,7 @@ css::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
         PROP_URL, OUString() );
 
     bool bIsDefaultPassword = false;
-    css::uno::Sequence< css::beans::NamedValue > aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+    cpo::uno::Sequence< css::beans::NamedValue > aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
         rVerifier, aMediaEncData, aMediaPassword, xInteractHandler, aDocumentName, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
 
     rMediaDescriptor.erase(PROP_PASSWORD);

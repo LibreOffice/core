@@ -52,6 +52,9 @@ class XDrawPage;
 namespace com::sun::star::uno
 {
 template <class interface_type> class Reference;
+}
+namespace cpo::uno
+{
 template <typename> class Sequence;
 }
 
@@ -189,7 +192,7 @@ public:
 };
 
 DRAWINGLAYERCORE_DLLPUBLIC ViewInformation2D
-createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
+createViewInformation2D(const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
 
 } // end of namespace drawinglayer::geometry
 

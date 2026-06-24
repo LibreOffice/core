@@ -51,9 +51,9 @@ public:
     virtual                 ~ScFilterOptionsObj() override;
 
                             // XPropertyAccess
-    virtual css::uno::Sequence< css::beans::PropertyValue >
+    virtual cpo::uno::Sequence< css::beans::PropertyValue >
                             SAL_CALL getPropertyValues() override;
-    virtual void SAL_CALL   setPropertyValues( const css::uno::Sequence<
+    virtual void SAL_CALL   setPropertyValues( const cpo::uno::Sequence<
                                     css::beans::PropertyValue >& aProps ) override;
 
                             // XExecutableDialog
@@ -67,12 +67,12 @@ public:
     virtual void SAL_CALL   setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
                             // XInitialization
-    virtual void SAL_CALL   initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL   initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

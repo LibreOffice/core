@@ -187,11 +187,11 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // LinguDispatcher
-    virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;
-    virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
+    virtual void SetServiceList( const css::lang::Locale &rLocale, const cpo::uno::Sequence< OUString > &rSvcImplNames ) override;
+    virtual cpo::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
 
     // comphelper::COKit::ThreadJoinable
     virtual bool joinThreads() override;

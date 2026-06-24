@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
                                                                uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xParagraphProperties->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     bool bBulletFound=false;
@@ -483,8 +483,8 @@ class SwHtmlOptionsImportTest : public SwModelTestBase
 
 CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
 {
-    uno::Sequence<OUString> aTypes = { u"test/rtf"_ustr };
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+    cpo::uno::Sequence<OUString> aTypes = { u"test/rtf"_ustr };
+    cpo::uno::Sequence<beans::PropertyValue> aLoadProperties = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"HTML (StarWriter)"_ustr),
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"AllowedRTFOLEMimeTypes"_ustr, aTypes),
@@ -711,7 +711,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testNestedListMixedType)
         if (nLevel < 0)
             continue;
 
-        uno::Sequence<beans::PropertyValue> aRuleProps;
+        cpo::uno::Sequence<beans::PropertyValue> aRuleProps;
         xLevels->getByIndex(nLevel) >>= aRuleProps;
         sal_Int16 nNumberingType = -1;
         for (const auto& rProp : aRuleProps)

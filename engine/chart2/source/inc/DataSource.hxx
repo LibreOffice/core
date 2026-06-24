@@ -36,7 +36,7 @@ class DataSource final : public
 public:
     explicit DataSource();
     explicit DataSource(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
+        const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
     explicit DataSource(
         const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence >  > & rSequences );
 
@@ -45,17 +45,17 @@ public:
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ XDataSource ____
-    virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL
         getDataSequences() override;
 
     // ____ XDataSink ____
-    virtual void SAL_CALL setData( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
+    virtual void SAL_CALL setData( const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
 
 private:
-    css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+    cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
         m_aDataSeq;
 };
 

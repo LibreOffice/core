@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -353,7 +353,7 @@ protected:
     /// Output the media (including copying a video from vnd.sun.star.Package: to the output if necessary).
     void WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape);
 
-    void WriteStyleProperties( sal_Int32 nTokenId, const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
+    void WriteStyleProperties( sal_Int32 nTokenId, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
     OUString GetComponentDir() const;
     OUString GetRelationCompPrefix() const;
@@ -369,7 +369,7 @@ protected:
                                   const bool bReplaceGeoWidth, const bool bReplaceGeoHeight);
     bool WriteCustomGeometrySegment(
         const sal_Int16 eCommand, const sal_Int32 nCount,
-        const css::uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
+        const cpo::uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
         sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
         const EnhancedCustomShape2d& rCustomShape2d,
         const bool bReplaceGeoWidth, const bool bReplaceGeoHeight);
@@ -404,9 +404,9 @@ public:
     OOX_DLLPUBLIC OUString writeImageRelToStorage(const Graphic &rGraphic);
 
     void WriteColor( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteColor( const ::Color nColor, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteColorTransformations( const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteColor( const OUString& sColorSchemeName, const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteColor( const ::Color nColor, const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteColorTransformations( const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteGradientStop(double fOffset, const basegfx::BColor& rColor, const basegfx::BColor& rAlpha);
     void WriteLineArrow( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, bool bLineStart );
     void WriteConnectorConnections( sal_Int32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID );
@@ -415,8 +415,8 @@ public:
     bool WriteSchemeColor(OUString const& rPropertyName, const css::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors = false);
 
     void WriteSolidFill( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteSolidFill( const OUString& sSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteSolidFill( const ::Color nColor, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteSolidFill( const OUString& sSchemeName, const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
+    void WriteSolidFill( const ::Color nColor, const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OOX_DLLPUBLIC void WriteGradientFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
@@ -430,7 +430,7 @@ public:
         const basegfx::BGradient* pColorGradient, sal_Int32 nFixColor,
         const basegfx::BGradient* pTransparenceGradient, double fFixTransparence = 0.0);
 
-    void WriteGrabBagGradientFill( const css::uno::Sequence< css::beans::PropertyValue >& aGradientStops, const basegfx::BGradient& rGradient);
+    void WriteGrabBagGradientFill( const cpo::uno::Sequence< css::beans::PropertyValue >& aGradientStops, const basegfx::BGradient& rGradient);
 
     void WriteBlipOrNormalFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                                const OUString& rURLPropName, const css::awt::Size& rSize = {});
@@ -531,21 +531,21 @@ public:
                    const css::awt::Size& rSize = {});
     void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OOX_DLLPUBLIC void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
-    void WriteShapeEffect( std::u16string_view sName, const css::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
+    void WriteShapeEffect( std::u16string_view sName, const cpo::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
     /** Populates scene3d tag
         @param rXPropSet Prop set
         @param bIsText True if the 3D effects are for a text body, false if it is for a shape
      */
     OOX_DLLPUBLIC void Write3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
     void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
-    OString WriteWdpPicture( const OUString& rFileId, const css::uno::Sequence< sal_Int8 >& rPictureData );
+    OString WriteWdpPicture( const OUString& rFileId, const cpo::uno::Sequence< sal_Int8 >& rPictureData );
 
     // Diagram helpers
     OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
-    void writeDiagramImageRels(const css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>& xRelSeq,
+    void writeDiagramImageRels(const cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& xRelSeq,
                                const css::uno::Reference<css::io::XOutputStream>& xOutStream);
-    void writeDiagramHlinkRels(const css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>& xRelSeq,
+    void writeDiagramHlinkRels(const cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& xRelSeq,
                                const css::uno::Reference<css::io::XOutputStream>& xOutStream);
 
     static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,

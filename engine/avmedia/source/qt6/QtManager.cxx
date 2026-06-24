@@ -42,7 +42,7 @@ bool QtManager::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> QtManager::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> QtManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.media.Manager"_ustr };
 }
@@ -51,7 +51,7 @@ css::uno::Sequence<OUString> QtManager::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_media_Manager_Qt_get_implementation(css::uno::XComponentContext*,
-                                                      css::uno::Sequence<cpo::uno::Any> const&)
+                                                      cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new avmedia::qt::QtManager());
 }

@@ -44,7 +44,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <comphelper/sharedmutex.hxx>
@@ -260,7 +260,7 @@ namespace dbaui
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId , const css::uno::Sequence< css::beans::PropertyValue>& aArgs);
+        virtual void            Execute(sal_uInt16 nId , const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs);
 
         /** describes a feature supported by the controller
 
@@ -333,7 +333,7 @@ namespace dbaui
 
         void ImplBroadcastFeatureState(const OUString& _rFeature, const css::uno::Reference< css::frame::XStatusListener > & xListener, bool _bIgnoreCache);
 
-        void executeUserDefinedFeatures( const css::util::URL& _rFeatureURL, const css::uno::Sequence< css::beans::PropertyValue>& _rArgs );
+        void executeUserDefinedFeatures( const css::util::URL& _rFeatureURL, const cpo::uno::Sequence< css::beans::PropertyValue>& _rArgs );
 
         // link methods
         DECL_DLLPRIVATE_LINK(OnAsyncInvalidateAll, void*, void);
@@ -370,7 +370,7 @@ namespace dbaui
         static css::uno::Reference< css::frame::XLayoutManager > getLayoutManager(const css::uno::Reference< css::frame::XFrame >& _xFrame);
 
         // IController
-        virtual void executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
+        virtual void executeChecked(const css::util::URL& _rCommand, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
         virtual bool isDataSourceReadOnly() const override;
         virtual css::uno::Reference< css::frame::XController > getXController() override;
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) override;
@@ -388,7 +388,7 @@ namespace dbaui
         // css::frame::XController2
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() override;
         virtual OUString SAL_CALL getViewControllerName() override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() override;
 
         virtual css::uno::Reference< css::ui::XSidebarProvider > SAL_CALL getSidebar() override;
 
@@ -403,7 +403,7 @@ namespace dbaui
         virtual css::uno::Reference< css::frame::XFrame >  SAL_CALL getFrame() override;
 
         // css::frame::XDispatch
-        virtual void        SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
+        virtual void        SAL_CALL dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
         virtual void        SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) override;
         virtual void        SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) override;
 
@@ -415,7 +415,7 @@ namespace dbaui
 
         // css::frame::XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > SAL_CALL queryDispatches(const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > SAL_CALL queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
 
         // css::lang::XComponent
         virtual void SAL_CALL dispose() override; //LLA: need solar mutex {OGenericUnoController_COMPBASE::dispose(); }
@@ -426,16 +426,16 @@ namespace dbaui
         // css::frame::XFrameActionListener
         virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
         // lang::XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override = 0;
         virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override = 0;
+        virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
         // XDispatchInformationProvider
-        virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
-        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 ) override;
+        virtual cpo::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
+        virtual cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 ) override;
 
         // XTitle
         virtual OUString SAL_CALL getTitle(  ) override;

@@ -1123,7 +1123,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                                 xTmpStor,
                                                                 u"DummyName"_ustr ,
-                                                                uno::Sequence< beans::PropertyValue >() );
+                                                                cpo::uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
                         // for example whether the object should be an iconified one
@@ -1373,7 +1373,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     if (pPickObj && ShouldTry(SotClipboardFormatId::XFA))
     {
         cpo::uno::Any const data(rDataHelper.GetAny(SotClipboardFormatId::XFA, u""_ustr));
-        uno::Sequence<beans::NamedValue> props;
+        cpo::uno::Sequence<beans::NamedValue> props;
         if (data >>= props)
         {
             if( IsUndoEnabled() )

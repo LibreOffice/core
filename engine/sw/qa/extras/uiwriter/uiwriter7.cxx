@@ -112,10 +112,10 @@ public:
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testExportToPicture)
 {
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PixelWidth", cpo::uno::Any(sal_Int32(610)) },
                                            { "PixelHeight", cpo::uno::Any(sal_Int32(610)) } }));
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         { { "FilterName", cpo::uno::Any(u"writer_png_Export"_ustr) },
           { "FilterData", cpo::uno::Any(aFilterData) } }));
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -258,11 +258,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
     uno::Reference<util::XSearchDescriptor> xSearchDes = xSearch->createSearchDescriptor();
     uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
     //setting some properties
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         { { "CharWeight", cpo::uno::Any(css::awt::FontWeight::BOLD) } }));
     xProp->setSearchAttributes(aDescriptor);
     //receiving the defined properties and asserting them with expected values, covering UNO
-    uno::Sequence<beans::PropertyValue> aPropVal2(xProp->getSearchAttributes());
+    cpo::uno::Sequence<beans::PropertyValue> aPropVal2(xProp->getSearchAttributes());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aPropVal2.getLength());
     CPPUNIT_ASSERT_EQUAL(u"CharWeight"_ustr, aPropVal2[0].Name);
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(css::awt::FontWeight::BOLD), aPropVal2[0].Value);
@@ -279,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTextSearch)
     uno::Reference<util::XPropertyReplace> xProp2(xReplaceDes, uno::UNO_QUERY);
     xProp2->setReplaceAttributes(aDescriptor);
     //checking that the proper attributes are there or not
-    uno::Sequence<beans::PropertyValue> aRepProp(xProp2->getReplaceAttributes());
+    cpo::uno::Sequence<beans::PropertyValue> aRepProp(xProp2->getReplaceAttributes());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRepProp.getLength());
     CPPUNIT_ASSERT_EQUAL(u"CharWeight"_ustr, aRepProp[0].Name);
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(css::awt::FontWeight::BOLD), aRepProp[0].Value);
@@ -1612,7 +1612,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf97601)
     xEmbeddedObjects->getByName(u"myChart"_ustr) >>= xChart;
     uno::Reference<chart2::data::XDataSource> xChartComponent;
     xChart->getPropertyValue(u"Component"_ustr) >>= xChartComponent;
-    uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aDataSequences
+    cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aDataSequences
         = xChartComponent->getDataSequences();
     uno::Reference<document::XEmbeddedObjectSupplier2> xChartState(xChart, uno::UNO_QUERY);
     xChartState->getExtendedControlOverEmbeddedObject()->changeState(1);
@@ -1862,7 +1862,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf151605)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::STRING)) } });
 
@@ -2307,7 +2307,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testDde)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"asdf"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
-    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues;
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, aPropertyValues);
 
     // Go before the selection and paste as a DDE link.
@@ -2380,7 +2380,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnicodeNotationToggle)
     OUString sOriginalDocString;
     OUString sDocString;
     OUString sExpectedString;
-    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues;
 
     pWrtShell->EndPara();
     sOriginalDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();

@@ -53,16 +53,16 @@ bool VCLXPointer::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> VCLXPointer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> VCLXPointer::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         u"com.sun.star.awt.Pointer"_ustr, u"stardiv.vcl.Pointer"_ustr};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXPointer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXPointer());
 }

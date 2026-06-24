@@ -44,7 +44,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using std::vector;
 
 ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< BaseCoordinateSystem >& xCooSysModel
@@ -96,7 +96,7 @@ void ExplicitCategoriesProvider::implInitSplit()
 
     const bool bFirstCellAsLabel = false;
     const bool bHasCategories = false;
-    const uno::Sequence< sal_Int32 > aSequenceMapping;
+    const cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
 
     uno::Reference< data::XDataSource > xColumnCategoriesSource( xDataProvider->createDataSource(
                 DataSourceHelper::createArguments( aCategoriesRange, aSequenceMapping, true /*bUseColumns*/
@@ -183,7 +183,7 @@ static std::vector<sal_Int32> lcl_getLimitingBorders( const std::vector< Complex
     return aLimitingBorders;
 }
 
-void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUString >& rOutTexts, const uno::Sequence< cpo::uno::Any >& rInAnys, ChartModel& rModel )
+void ExplicitCategoriesProvider::convertCategoryAnysToText( cpo::uno::Sequence< OUString >& rOutTexts, const cpo::uno::Sequence< cpo::uno::Any >& rInAnys, ChartModel& rModel )
 {
     sal_Int32 nCount = rInAnys.getLength();
     if(!nCount)
@@ -245,7 +245,7 @@ public:
     {}
 
     virtual sal_Int32 getLevelCount() const override;
-    virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
+    virtual cpo::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
 
 private:
     const std::vector< Reference< data::XLabeledDataSequence> >& m_rSplitCategoriesList;
@@ -259,9 +259,9 @@ sal_Int32 SplitCategoriesProvider_ForLabeledDataSequences::getLevelCount() const
 {
     return m_rSplitCategoriesList.size();
 }
-uno::Sequence< OUString > SplitCategoriesProvider_ForLabeledDataSequences::getStringsForLevel( sal_Int32 nLevel ) const
+cpo::uno::Sequence< OUString > SplitCategoriesProvider_ForLabeledDataSequences::getStringsForLevel( sal_Int32 nLevel ) const
 {
-    uno::Sequence< OUString > aRet;
+    cpo::uno::Sequence< OUString > aRet;
     Reference< data::XLabeledDataSequence > xLabeledDataSequence( m_rSplitCategoriesList[nLevel] );
     if( xLabeledDataSequence.is() )
     {
@@ -273,7 +273,7 @@ uno::Sequence< OUString > SplitCategoriesProvider_ForLabeledDataSequences::getSt
 }
 
 static std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
-    const uno::Sequence< OUString >& rStrings
+    const cpo::uno::Sequence< OUString >& rStrings
     , const std::vector<sal_Int32>& rLimitingBorders, bool bCreateSingleCategories )
 {
     std::vector< ComplexCategory > aResult;
@@ -413,7 +413,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
 
     if( xDataSequence.is() )
     {
-        uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
+        cpo::uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
         sal_Int32 nCount = aValues.getLength();
         rDateCategories.reserve(nCount);
         Reference< util::XNumberFormats > xNumberFormats( rModel.getNumberFormats() );

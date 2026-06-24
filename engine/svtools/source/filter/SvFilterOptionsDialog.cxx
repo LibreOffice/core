@@ -31,7 +31,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <cpo/uno/Any.h>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -56,9 +56,9 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
 {
     const uno::Reference< uno::XComponentContext >
         mxContext;
-    uno::Sequence< beans::PropertyValue >
+    cpo::uno::Sequence< beans::PropertyValue >
         maMediaDescriptor;
-    uno::Sequence< beans::PropertyValue >
+    cpo::uno::Sequence< beans::PropertyValue >
         maFilterDataSequence;
     uno::Reference< lang::XComponent >
         mxSourceDocument;
@@ -77,16 +77,16 @@ public:
     virtual void SAL_CALL release() noexcept override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const uno::Sequence< cpo::uno::Any > & aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPropertyAccess
-    virtual uno::Sequence< beans::PropertyValue > SAL_CALL getPropertyValues() override;
-    virtual void SAL_CALL setPropertyValues( const uno::Sequence< beans::PropertyValue > & aProps ) override;
+    virtual cpo::uno::Sequence< beans::PropertyValue > SAL_CALL getPropertyValues() override;
+    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< beans::PropertyValue > & aProps ) override;
 
     // XExecuteDialog
     virtual sal_Int16 SAL_CALL execute() override;
@@ -117,7 +117,7 @@ void SAL_CALL SvFilterOptionsDialog::release() noexcept
 }
 
 // XInitialization
-void SAL_CALL SvFilterOptionsDialog::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL SvFilterOptionsDialog::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     for(const cpo::uno::Any& rArgument : rArguments)
     {
@@ -141,13 +141,13 @@ bool SAL_CALL SvFilterOptionsDialog::supportsService( const OUString& rServiceNa
 {
     return cppu::supportsService(this, rServiceName);
 }
-uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvFilterOptionsDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr };
 }
 
 // XPropertyAccess
-uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
+cpo::uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
 {
     auto pProp = std::find_if(std::cbegin(maMediaDescriptor), std::cend(maMediaDescriptor),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "FilterData"; });
@@ -163,7 +163,7 @@ uno::Sequence< beans::PropertyValue > SvFilterOptionsDialog::getPropertyValues()
     return maMediaDescriptor;
 }
 
-void SvFilterOptionsDialog::setPropertyValues( const uno::Sequence< beans::PropertyValue > & aProps )
+void SvFilterOptionsDialog::setPropertyValues( const cpo::uno::Sequence< beans::PropertyValue > & aProps )
 {
     maMediaDescriptor = aProps;
 
@@ -283,7 +283,7 @@ void SvFilterOptionsDialog::setSourceDocument( const uno::Reference< lang::XComp
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svtools_SvFilterOptionsDialog_get_implementation(
     css::uno::XComponentContext * context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvFilterOptionsDialog(context));
 }

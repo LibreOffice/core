@@ -132,9 +132,9 @@ void OEditControl::disposing()
 
 // XServiceInfo
 
-css::uno::Sequence<OUString>  OEditControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString>  OEditControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 3);
 
     OUString*pArray = aSupported.getArray();
@@ -312,9 +312,9 @@ OUString SAL_CALL OEditModel::getServiceName()
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OEditModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OEditModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
@@ -702,14 +702,14 @@ Any OEditModel::getDefaultForReset() const
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OEditModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OEditModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OEditControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OEditControl(component));
 }

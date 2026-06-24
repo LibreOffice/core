@@ -37,7 +37,7 @@ private:
         sal_Int32 aPeriod,
         sal_Int32 nMovingType) override;
 
-    virtual css::uno::Sequence<css::geometry::RealPoint2D> SAL_CALL getCurveValues(
+    virtual cpo::uno::Sequence<css::geometry::RealPoint2D> SAL_CALL getCurveValues(
         double min,
         double max,
         sal_Int32 nPointCount,

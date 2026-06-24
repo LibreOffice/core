@@ -64,7 +64,7 @@ Any HandleGetListValue(const NSControl* pControl, const sal_Int16 nControlAction
         case ControlActions::GET_ITEMS:
         {
             SAL_INFO("fpicker.aqua","GET_ITEMS");
-            uno::Sequence< OUString > aItemList;
+            cpo::uno::Sequence< OUString > aItemList;
 
             int nItems = [rMenu numberOfItems];
             if (nItems > 0) {
@@ -670,7 +670,7 @@ void ControlHelper::HandleSetListValue(const NSControl* pControl, const sal_Int1
         case ControlActions::ADD_ITEMS:
         {
             SAL_INFO("fpicker.aqua","ADD_ITEMS");
-            uno::Sequence< OUString > aStringList;
+            cpo::uno::Sequence< OUString > aStringList;
             rValue >>= aStringList;
             sal_Int32 nItemCount = aStringList.getLength();
             for (sal_Int32 i = 0; i < nItemCount; ++i)

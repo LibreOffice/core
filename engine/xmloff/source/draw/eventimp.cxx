@@ -245,7 +245,7 @@ void SdXMLEventContextData::ApplyProperties()
             break;
 
         OUString sAPIEventName;
-        uno::Sequence< beans::PropertyValue > aProperties;
+        cpo::uno::Sequence< beans::PropertyValue > aProperties;
 
         sAPIEventName = u"OnClick"_ustr;
 

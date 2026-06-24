@@ -193,7 +193,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testPrintArea)
     uno::Reference<sheet::XPrintAreas> xPrintAreas(xSheet, uno::UNO_QUERY_THROW);
 
     {
-        const uno::Sequence<table::CellRangeAddress> aSequence = xPrintAreas->getPrintAreas();
+        const cpo::uno::Sequence<table::CellRangeAddress> aSequence = xPrintAreas->getPrintAreas();
         CPPUNIT_ASSERT_EQUAL(false, aSequence.hasElements());
     }
 
@@ -201,7 +201,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testPrintArea)
                  "location=document"_ustr);
 
     {
-        const uno::Sequence<table::CellRangeAddress> aSequence = xPrintAreas->getPrintAreas();
+        const cpo::uno::Sequence<table::CellRangeAddress> aSequence = xPrintAreas->getPrintAreas();
         CPPUNIT_ASSERT_EQUAL(true, aSequence.hasElements());
     }
 }
@@ -402,7 +402,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
     osl::FileBase::getSystemPathFromFileURL(sTempDirURL, sTempDir);
     sTempDir += OUStringChar(SAL_PATHDELIMITER);
     OUString sTestFileName(u"My Test WorkBook.xls"_ustr);
-    uno::Sequence<cpo::uno::Any> aParams;
+    cpo::uno::Sequence<cpo::uno::Any> aParams;
     for (const auto& rTestInfo : testInfo)
     {
         OUString aFileName = loadFromFile(rTestInfo.sFileBaseName);
@@ -679,7 +679,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
 
     for (auto & [ nXlSpecialCellsValue, sRange ] : aTestParams)
     {
-        uno::Sequence<cpo::uno::Any> aParams = { cpo::uno::Any(nXlSpecialCellsValue) };
+        cpo::uno::Sequence<cpo::uno::Any> aParams = { cpo::uno::Any(nXlSpecialCellsValue) };
         aRet = executeMacro(
             u"vnd.sun.Star.script:VBAProject.Module1.testXlSpecialCellsValuesConstants?"
             "language=Basic&location=document"_ustr,
@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
     utl::TempFileNamed aTempFile(u"testWindowsActivate", true, u".ods");
     aTempFile.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> descSaveAs(
+    cpo::uno::Sequence<beans::PropertyValue> descSaveAs(
         comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 
@@ -729,8 +729,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
                       "End Function\n"_ustr));
 
     cpo::uno::Any aRet;
-    uno::Sequence<sal_Int16> aOutParamIndex;
-    uno::Sequence<cpo::uno::Any> aOutParam;
+    cpo::uno::Sequence<sal_Int16> aOutParamIndex;
+    cpo::uno::Sequence<cpo::uno::Any> aOutParam;
 
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
@@ -757,7 +757,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
     utl::TempFileNamed aTempFile(u"testVBA_PDF_Export", true, u".ods");
     aTempFile.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> descSaveAs(
+    cpo::uno::Sequence<beans::PropertyValue> descSaveAs(
         comphelper::InitPropertySequence({ { "FilterName", cpo::uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 

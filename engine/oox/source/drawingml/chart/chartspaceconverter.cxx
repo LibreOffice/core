@@ -113,7 +113,7 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
         if (!xDSrc.is())
             return false;
 
-        const uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        const cpo::uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
         for (const auto& rDataSeq : aDataSeqs)
         {
             Reference<chart2::data::XDataSequence> xValues = rDataSeq->getValues();
@@ -127,7 +127,7 @@ static bool lcl_useWorkaroundForNoGapInOOXML( Reference< chart2::XChartDocument 
             xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == "values-y")
             {
-                const uno::Sequence<cpo::uno::Any> aData = xValues->getData();
+                const cpo::uno::Sequence<cpo::uno::Any> aData = xValues->getData();
                 for (const auto& rVal : aData)
                 {
                     double fVal;

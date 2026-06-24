@@ -247,7 +247,7 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
     try
     {
         Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxContext );
-        uno::Sequence<cpo::uno::Any> aCreationArguments(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aCreationArguments(comphelper::InitAnyPropertySequence(
         {
             {"nodepath",  cpo::uno::Any(GetPathToConfigurationRoot())}
         }));

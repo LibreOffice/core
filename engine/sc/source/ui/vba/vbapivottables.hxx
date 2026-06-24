@@ -28,7 +28,7 @@ typedef CollTestImplHelper< ov::excel::XPivotTables > ScVbaPivotTables_BASE;
 
 class ScVbaPivotTables : public ScVbaPivotTables_BASE
 {
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 public:
     ScVbaPivotTables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );

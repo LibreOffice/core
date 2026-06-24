@@ -54,7 +54,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
 namespace
@@ -197,7 +197,7 @@ OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries,
         {
             try
             {
-                uno::Sequence<cpo::uno::Any> aCalcData = xCalculatedSeq->getValues()->getData();
+                cpo::uno::Sequence<cpo::uno::Any> aCalcData = xCalculatedSeq->getValues()->getData();
                 if (nPointIndex >= 0 && nPointIndex < aCalcData.getLength())
                 {
                     double fCalculatedValue = 0.0;

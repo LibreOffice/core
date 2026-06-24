@@ -82,7 +82,7 @@ private:
     typedef std::map<OUString, ODatabaseModelImpl*> ObjectCache;
     ObjectCache     m_aDatabaseObjects;
 
-    typedef std::map< OUString, css::uno::Sequence< css::beans::PropertyValue > > PropertyCache;
+    typedef std::map< OUString, cpo::uno::Sequence< css::beans::PropertyValue > > PropertyCache;
     PropertyCache   m_aDatasourceProperties;
         // as we hold our data sources weak, we have to cache all properties on the data sources which are
         // transient but stored as long as the session lasts. The database context is the session (as it lives
@@ -102,12 +102,12 @@ public:
 
     // XSingleServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< cpo::uno::Any >& _rArguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -118,7 +118,7 @@ public:
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XNamingService
@@ -128,7 +128,7 @@ public:
 
     // XDatabaseRegistrations
     virtual bool SAL_CALL hasRegisteredDatabase( const OUString& Name ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getRegistrationNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getRegistrationNames() override;
     virtual OUString SAL_CALL getDatabaseLocation( const OUString& Name ) override;
     virtual void SAL_CALL registerDatabaseLocation( const OUString& Name, const OUString& Location ) override;
     virtual void SAL_CALL revokeDatabaseLocation( const OUString& Name ) override;

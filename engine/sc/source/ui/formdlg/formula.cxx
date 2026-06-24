@@ -690,7 +690,7 @@ table::CellAddress ScFormulaDlg::getReferencePosition() const
     return table::CellAddress(m_CursorPos.Tab(), m_CursorPos.Col(), m_CursorPos.Row());
 }
 
-::std::unique_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
+::std::unique_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const cpo::uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::unique_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray(*m_pDoc));
     pArray->Fill(_aTokenList, m_pDoc->GetSharedStringPool(), m_pDoc->GetExternalRefManager());

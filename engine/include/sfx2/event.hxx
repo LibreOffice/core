@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
 #include <utility>
@@ -236,11 +236,11 @@ public:
 class SfxPrintingHint final : public SfxViewEventHint
 {
     css::view::PrintableState mnPrintableState;
-    css::uno::Sequence < css::beans::PropertyValue > aOpts;
+    cpo::uno::Sequence < css::beans::PropertyValue > aOpts;
 public:
         SfxPrintingHint(
                 css::view::PrintableState nState,
-                const css::uno::Sequence < css::beans::PropertyValue >& rOpts,
+                const cpo::uno::Sequence < css::beans::PropertyValue >& rOpts,
                 SfxObjectShell *pObj,
                 const css::uno::Reference< css::frame::XController2 >& xController )
         : SfxViewEventHint(
@@ -262,7 +262,7 @@ public:
         {}
 
     css::view::PrintableState GetWhich() const { return mnPrintableState; }
-    const css::uno::Sequence < css::beans::PropertyValue >& GetOptions() const { return aOpts; }
+    const cpo::uno::Sequence < css::beans::PropertyValue >& GetOptions() const { return aOpts; }
 };
 
 #endif

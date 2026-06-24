@@ -90,7 +90,7 @@ public:
     SetDefaultLanguageDialog(weld::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr);
     virtual ~SetDefaultLanguageDialog() override;
 
-    css::uno::Sequence< css::lang::Locale >   GetLocales() const;
+    cpo::uno::Sequence< css::lang::Locale >   GetLocales() const;
 };
 
 } // namespace basctl

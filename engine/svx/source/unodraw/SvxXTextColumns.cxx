@@ -79,9 +79,9 @@ public:
     virtual sal_Int32 SAL_CALL getReferenceValue() override;
     virtual sal_Int16 SAL_CALL getColumnCount() override;
     virtual void SAL_CALL setColumnCount(sal_Int16 nColumns) override;
-    virtual css::uno::Sequence<css::text::TextColumn> SAL_CALL getColumns() override;
+    virtual cpo::uno::Sequence<css::text::TextColumn> SAL_CALL getColumns() override;
     virtual void SAL_CALL
-    setColumns(const css::uno::Sequence<css::text::TextColumn>& Columns) override;
+    setColumns(const cpo::uno::Sequence<css::text::TextColumn>& Columns) override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo>
@@ -105,11 +105,11 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     sal_Int32 m_nReference = USHRT_MAX;
-    css::uno::Sequence<css::text::TextColumn> m_aTextColumns;
+    cpo::uno::Sequence<css::text::TextColumn> m_aTextColumns;
     bool m_bIsAutomaticWidth = true;
     sal_Int32 m_nAutoDistance = 0;
 
@@ -134,7 +134,7 @@ bool SvxXTextColumns::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SvxXTextColumns::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SvxXTextColumns::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.TextColumns"_ustr };
 }
@@ -172,13 +172,13 @@ void SvxXTextColumns::setColumnCount(sal_Int16 nColumns)
     pCols[nColumns - 1].Width += nDiff;
 }
 
-css::uno::Sequence<css::text::TextColumn> SvxXTextColumns::getColumns()
+cpo::uno::Sequence<css::text::TextColumn> SvxXTextColumns::getColumns()
 {
     SolarMutexGuard aGuard;
     return m_aTextColumns;
 }
 
-void SvxXTextColumns::setColumns(const css::uno::Sequence<css::text::TextColumn>& rColumns)
+void SvxXTextColumns::setColumns(const cpo::uno::Sequence<css::text::TextColumn>& rColumns)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nReferenceTemp = std::accumulate(
@@ -331,7 +331,7 @@ css::uno::Reference<css::uno::XInterface> SvxXTextColumns_createInstance() noexc
 
 extern "C" SVXCORE_DLLPUBLIC css::uno::XInterface*
 com_sun_star_comp_svx_TextColumns_get_implementation(css::uno::XComponentContext*,
-                                                     css::uno::Sequence<cpo::uno::Any> const&)
+                                                     cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvxXTextColumns);
 }

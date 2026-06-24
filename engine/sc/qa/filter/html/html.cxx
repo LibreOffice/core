@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdAsText)
     OUString aURL = createFileURL(u"text.html");
 
     // When loading that document to Calc:
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"DocumentService"_ustr,
                                       u"com.sun.star.sheet.SpreadsheetDocument"_ustr),
     };
@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132770_inserted_text)
     OUString aURL = createFileURL(u"tdf132770_inserted_text.html");
 
     // When loading that document to Calc:
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"DocumentService"_ustr,
                                       u"com.sun.star.sheet.SpreadsheetDocument"_ustr),
     };
@@ -389,11 +389,11 @@ CPPUNIT_TEST_FIXTURE(Test, testHTMLEmbeddedImagePaste)
             if (!isDataFlavorSupported(aFlavor))
                 return {};
             SvFileStream aStream(m_aFileURL, StreamMode::READ);
-            uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
+            cpo::uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
             aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
             return cpo::uno::Any(bytes);
         }
-        uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+        cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
         {
             return { getHTMLFlavor() };
         }

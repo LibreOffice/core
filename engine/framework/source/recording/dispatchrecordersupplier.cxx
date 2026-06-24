@@ -38,7 +38,7 @@ bool SAL_CALL DispatchRecorderSupplier::supportsService( const OUString& sServic
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DispatchRecorderSupplier::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DispatchRecorderSupplier::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.DispatchRecorderSupplier"_ustr };
 }
@@ -116,7 +116,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSu
     @change     09.04.2002 by Andreas Schluens
  */
 void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&                                  aURL        ,
-                                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments  ,
+                                                           const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments  ,
                                                            const css::uno::Reference< css::frame::XDispatch >&    xDispatcher )
 {
     SolarMutexClearableGuard aReadLock;
@@ -153,7 +153,7 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_DispatchRecorderSupplier_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::DispatchRecorderSupplier());
 }

@@ -1090,7 +1090,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const cpo::uno::Any& rE
     if(nIndex < 0 || MAXLEVEL <= nIndex)
         throw lang::IndexOutOfBoundsException();
 
-    auto rProperties = o3tl::tryAccess<uno::Sequence<beans::PropertyValue>>(
+    auto rProperties = o3tl::tryAccess<cpo::uno::Sequence<beans::PropertyValue>>(
         rElement);
     if(!rProperties)
         throw lang::IllegalArgumentException();
@@ -1175,13 +1175,13 @@ cpo::uno::Any SwXNumberingRules::getPropertyByIndex(sal_Int32 nIndex, const OUSt
 
 cpo::uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
 {
-    uno::Sequence<beans::PropertyValue> aRet = getRuleByIndex(nIndex);
+    cpo::uno::Sequence<beans::PropertyValue> aRet = getRuleByIndex(nIndex);
     cpo::uno::Any aVal;
     aVal <<= aRet;
     return aVal;
 }
 
-uno::Sequence<beans::PropertyValue> SwXNumberingRules::getRuleByIndex(sal_Int32 nIndex)
+cpo::uno::Sequence<beans::PropertyValue> SwXNumberingRules::getRuleByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     if(nIndex < 0 || MAXLEVEL <= nIndex)
@@ -1205,7 +1205,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getRuleByIndex(sal_Int32 
 
 uno::Type SwXNumberingRules::getElementType()
 {
-    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
+    return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
 bool SwXNumberingRules::hasElements()
@@ -1227,7 +1227,7 @@ const TranslateId STR_POOLCOLL_HEADLINE_ARY[]
     STR_POOLCOLL_HEADLINE10
 };
 
-uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
+cpo::uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 const SwNumRule& rNumRule, sal_Int32 nIndex) const
 {
     SolarMutexGuard aGuard;
@@ -1353,7 +1353,7 @@ cpo::uno::Any SwXNumberingRules::GetNumberingRuleByIndex(
 
 }
 
-uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat(
+cpo::uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat(
         const SwNumFormat& rFormat, UIName const& rCharFormatName,
         ProgName const*const pHeadingStyleName, OUString const & referer)
 {
@@ -1697,7 +1697,7 @@ cpo::uno::Any SwXNumberingRules::GetPropertyForNumFormat(
 
 void SwXNumberingRules::SetNumberingRuleByIndex(
             SwNumRule& rNumRule,
-            const uno::Sequence<beans::PropertyValue>& rProperties, sal_Int32 nIndex)
+            const cpo::uno::Sequence<beans::PropertyValue>& rProperties, sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     OSL_ENSURE( 0 <= nIndex && nIndex < MAXLEVEL, "index out of range" );
@@ -1758,7 +1758,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
         OUString *const pParagraphStyleName,
         SwDoc *const pDoc,
         SwDocShell *const pDocShell,
-        const uno::Sequence<beans::PropertyValue>& rProperties)
+        const cpo::uno::Sequence<beans::PropertyValue>& rProperties)
 {
     assert(pDoc == nullptr || pDocShell == nullptr); // can't be both ordinary and chapter numbering
 

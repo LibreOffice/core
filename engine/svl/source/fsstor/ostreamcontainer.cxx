@@ -133,7 +133,7 @@ void SAL_CALL OFSStreamContainer::release()
 }
 
 //  XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_aTypes.hasElements() )
@@ -160,9 +160,9 @@ uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
     return m_aTypes;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL OFSStreamContainer::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL OFSStreamContainer::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XStream
@@ -289,7 +289,7 @@ sal_Int64 SAL_CALL OFSStreamContainer::getLength()
 
 
 // XInputStream
-sal_Int32 SAL_CALL OFSStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OFSStreamContainer::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -302,7 +302,7 @@ sal_Int32 SAL_CALL OFSStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aDa
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
 
-sal_Int32 SAL_CALL OFSStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OFSStreamContainer::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -365,7 +365,7 @@ void SAL_CALL OFSStreamContainer::closeInput()
 }
 
 // XOutputStream
-void SAL_CALL OFSStreamContainer::writeBytes( const uno::Sequence< sal_Int8 >& aData )
+void SAL_CALL OFSStreamContainer::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     std::scoped_lock aGuard( m_aMutex );
 

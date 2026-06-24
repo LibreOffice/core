@@ -33,6 +33,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
+using namespace ::cpo::uno;
 
 constexpr OUString gsFullPathProperty             ( u"FullPath"_ustr );
 constexpr OUString gsMediaTypeProperty            ( u"MediaType"_ustr );
@@ -113,7 +114,7 @@ void ManifestImport::doEncryptedCipherValue()
     if ( aKeyInfoSequence.size() == 3 )
     {
         aKeyInfoSequence[2].Name = u"CipherValue"_ustr;
-        uno::Sequence < sal_Int8 > aDecodeBuffer;
+        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[2].Value <<= aDecodeBuffer;
         aCurrentCharacters.setLength(0); // consumed
@@ -127,7 +128,7 @@ void ManifestImport::doEncryptedKeyId()
     if ( aKeyInfoSequence.size() == 3 )
     {
         aKeyInfoSequence[0].Name = u"KeyId"_ustr;
-        uno::Sequence < sal_Int8 > aDecodeBuffer;
+        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[0].Value <<= aDecodeBuffer;
         aCurrentCharacters.setLength(0); // consumed
@@ -141,7 +142,7 @@ void ManifestImport::doEncryptedKeyPacket()
     if ( aKeyInfoSequence.size() == 3 )
     {
         aKeyInfoSequence[1].Name = u"KeyPacket"_ustr;
-        uno::Sequence < sal_Int8 > aDecodeBuffer;
+        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
         aKeyInfoSequence[1].Value <<= aDecodeBuffer;
         aCurrentCharacters.setLength(0); // consumed
@@ -170,7 +171,7 @@ void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
 
     if (aSequence[PKG_MNFST_DIGESTALG].Value.hasValue()) {
         aString = rConvertedAttribs[ATTRIBUTE_CHECKSUM];
-        uno::Sequence < sal_Int8 > aDecodeBuffer;
+        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aString);
         aSequence[PKG_MNFST_DIGEST].Name = gsDigestProperty;
         aSequence[PKG_MNFST_DIGEST].Value <<= aDecodeBuffer;
@@ -221,7 +222,7 @@ void ManifestImport::doAlgorithm(StringHashMap &rConvertedAttribs)
 
     if ( !bIgnoreEncryptData ) {
         aString = rConvertedAttribs[ATTRIBUTE_INITIALISATION_VECTOR];
-        uno::Sequence < sal_Int8 > aDecodeBuffer;
+        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aString);
         aSequence[PKG_MNFST_INIVECTOR].Name = gsInitialisationVectorProperty;
         aSequence[PKG_MNFST_INIVECTOR].Value <<= aDecodeBuffer;
@@ -257,7 +258,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
             if (0 < t && 0 < m && 0 < p)
             {
                 aSequence[PKG_MNFST_ARGON2ARGS].Name = u"Argon2Args"_ustr;
-                aSequence[PKG_MNFST_ARGON2ARGS].Value <<= uno::Sequence{t,m,p};
+                aSequence[PKG_MNFST_ARGON2ARGS].Value <<= cpo::uno::Sequence{t,m,p};
             }
             else
             {
@@ -275,7 +276,7 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
         }
 
         aString = rConvertedAttribs[ATTRIBUTE_SALT];
-        uno::Sequence < sal_Int8 > aDecodeBuffer;
+        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
         ::comphelper::Base64::decode(aDecodeBuffer, aString);
         aSequence[PKG_MNFST_SALT].Name = gsSaltProperty;
         aSequence[PKG_MNFST_SALT].Value <<= aDecodeBuffer;

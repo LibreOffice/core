@@ -71,7 +71,7 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
         createSwDoc(pName);
 
     SwXTextDocument* pTextDocument = getSwTextDoc();
-    pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     return pTextDocument;
 }
 
@@ -94,7 +94,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         case KIT_CALLBACK_INVALIDATE_TILES:
         {
             tools::Rectangle aInvalidation;
-            uno::Sequence<OUString> aSeq
+            cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
             if (std::string_view("EMPTY") == pPayload)
             {
@@ -117,7 +117,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         break;
         case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
         {
-            uno::Sequence<OUString> aSeq
+            cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeq.getLength());
             m_aDocumentSize.setWidth(aSeq[0].toInt32());
@@ -189,7 +189,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
                 m_sHyperlinkLink = OString(aChild.get("link", ""));
 
                 OString aRectangle(aTree.get_child("rectangle").get_value<std::string>());
-                uno::Sequence<OUString> aSeq
+                cpo::uno::Sequence<OUString> aSeq
                     = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRectangle));
                 CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
                 m_aCursorRectangle = tools::Rectangle(Point(aSeq[0].toInt32(), aSeq[1].toInt32()),

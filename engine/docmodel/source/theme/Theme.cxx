@@ -81,7 +81,7 @@ void Theme::ToAny(cpo::uno::Any& rVal) const
 }
 
 static std::shared_ptr<model::ColorSet> makeColorSet(const OUString& name,
-                                                     const uno::Sequence<util::Color>& colors)
+                                                     const cpo::uno::Sequence<util::Color>& colors)
 {
     auto colorset = std::make_shared<model::ColorSet>(name);
     for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
@@ -129,8 +129,8 @@ std::shared_ptr<Theme> Theme::FromAny(const cpo::uno::Any& rVal)
         it->second >>= aColorSchemeName;
 
         pTheme->setColorSet(makeColorSet(
-            aColorSchemeName,
-            aMap.getUnpackedValueOrDefault(u"ColorScheme"_ustr, uno::Sequence<util::Color>{})));
+            aColorSchemeName, aMap.getUnpackedValueOrDefault(u"ColorScheme"_ustr,
+                                                             cpo::uno::Sequence<util::Color>{})));
     }
 
     return pTheme;

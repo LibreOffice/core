@@ -27,7 +27,7 @@
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ref.hxx>
@@ -92,7 +92,7 @@ std::vector< BinaryAny >::iterator copyMemberValues(
 
 Unmarshal::Unmarshal(
     rtl::Reference< Bridge > bridge, ReaderState & state,
-    css::uno::Sequence< sal_Int8 > const & buffer):
+    cpo::uno::Sequence< sal_Int8 > const & buffer):
     bridge_(std::move(bridge)), state_(state), buffer_(buffer)
 {
     data_ = reinterpret_cast< sal_uInt8 const * >(buffer_.getConstArray());
@@ -227,10 +227,10 @@ rtl::ByteSequence Unmarshal::readTid() {
         *static_cast< sal_Sequence * const * >(
             readSequence(
                 css::uno::TypeDescription(
-                    cppu::UnoType< css::uno::Sequence< sal_Int8 > >::get())).
+                    cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get())).
             getValue(
                 css::uno::TypeDescription(
-                    cppu::UnoType< css::uno::Sequence< sal_Int8 > >::get()))));
+                    cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get()))));
     sal_uInt16 idx = readCacheIndex();
     if (tid.getLength() == 0) {
         if (idx == cache::ignore || state_.tidCache[idx].getLength() == 0) {

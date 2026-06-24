@@ -167,7 +167,7 @@ protected:
         @param  _rProps
             initial property sequence which is to be extended
     */
-    void    describeProperties(css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps) const;
+    void    describeProperties(cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps) const;
 
     /** retrieves the description for a registered property
         @throw  css::beans::UnknownPropertyException

@@ -62,7 +62,7 @@ bool Manager::supportsService( const OUString& ServiceName )
 }
 
 
-uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
 {
     return { "com.sun.star.media.Manager" };
 }
@@ -71,7 +71,7 @@ uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 avmedia_Manager_DirectX_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new avmedia::win::Manager());
 }

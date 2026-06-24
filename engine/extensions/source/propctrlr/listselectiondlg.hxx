@@ -48,9 +48,9 @@ namespace pcr
         void    initialize( );
         void    commitSelection();
 
-        void    fillEntryList   ( const css::uno::Sequence< OUString >& _rListEntries );
+        void    fillEntryList   ( const cpo::uno::Sequence< OUString >& _rListEntries );
 
-        void    selectEntries   ( const css::uno::Sequence< sal_Int16 >& /* [in ] */ _rSelection );
+        void    selectEntries   ( const cpo::uno::Sequence< sal_Int16 >& /* [in ] */ _rSelection );
         std::vector<sal_Int16> collectSelection() const;
     };
 

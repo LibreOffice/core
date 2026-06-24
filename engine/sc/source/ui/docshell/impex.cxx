@@ -298,7 +298,7 @@ bool ScImportExport::ExportData( std::u16string_view rMimeType,
         else
         {
             aStrm.WriteUChar(0);
-            rValue <<= css::uno::Sequence<sal_Int8>(static_cast<sal_Int8 const*>(aStrm.GetData()),
+            rValue <<= cpo::uno::Sequence<sal_Int8>(static_cast<sal_Int8 const*>(aStrm.GetData()),
                                                     aStrm.TellEnd());
         }
         return true;
@@ -1319,7 +1319,7 @@ static bool lcl_PutString(
             if (!nMonth)
             {
                 static constexpr OUString aSepShortened = u"SEP"_ustr;
-                uno::Sequence< i18n::CalendarItem2 > xMonths;
+                cpo::uno::Sequence< i18n::CalendarItem2 > xMonths;
                 sal_Int32 i, nMonthCount;
                 //  first test all month names from local international
                 xMonths = rCalendar.getMonths();

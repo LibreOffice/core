@@ -100,21 +100,21 @@ OUString SAL_CALL
 }
 
 
-css::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString> SAL_CALL
     AccessibleGraphicShape::getSupportedServiceNames()
 {
     ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleGraphicShape"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleGraphicShape"_ustr };
     return comphelper::concatSequences(AccessibleShape::getSupportedServiceNames(), vals);
 }
 
 // XTypeProvider
-uno::Sequence<uno::Type> SAL_CALL
+cpo::uno::Sequence<uno::Type> SAL_CALL
     AccessibleGraphicShape::getTypes()
 {
     // Get list of types from the context base implementation...
     return comphelper::concatSequences(AccessibleShape::getTypes(),
-            uno::Sequence { cppu::UnoType<XAccessibleImage>::get() });
+            cpo::uno::Sequence { cppu::UnoType<XAccessibleImage>::get() });
 }
 
 

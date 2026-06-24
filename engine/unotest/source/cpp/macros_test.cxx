@@ -48,7 +48,7 @@ MacrosTest::~MacrosTest() = default;
 
 uno::Reference<css::lang::XComponent>
 MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService,
-                            const uno::Sequence<beans::PropertyValue>& rExtraArgs)
+                            const cpo::uno::Sequence<beans::PropertyValue>& rExtraArgs)
 {
     CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
     std::vector<beans::PropertyValue> args;
@@ -82,7 +82,7 @@ MacrosTest::loadFromDesktop(const OUString& rURL, const OUString& rDocService,
 cpo::uno::Any
 MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
                             const OUString& rCommand,
-                            const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+                            const cpo::uno::Sequence<beans::PropertyValue>& rPropertyValues)
 {
     uno::Reference<frame::XController> xController
         = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
@@ -321,7 +321,7 @@ struct Valid
     DateTime now;
     OUString subjectName;
     const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env;
-    Valid(const css::uno::Sequence<css::beans::PropertyValue>& rFilterData,
+    Valid(const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData,
           const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& rEnv)
         : now(DateTime::SYSTEM)
         , env(rEnv)
@@ -353,9 +353,9 @@ bool MacrosTest::IsValid(const css::uno::Reference<css::security::XCertificate>&
 }
 
 css::uno::Reference<css::security::XCertificate> MacrosTest::GetValidCertificate(
-    const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
+    const cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
     const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env,
-    const css::uno::Sequence<css::beans::PropertyValue>& rFilterData)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData)
 {
     if (auto it = std::find_if(certs.begin(), certs.end(), Valid(rFilterData, env));
         it != certs.end())

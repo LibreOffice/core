@@ -322,14 +322,14 @@ bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
 {
     return { "com.sun.star.configuration.backend.WinInetBackend" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_WinInetBackend_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new WinInetBackend);
 }

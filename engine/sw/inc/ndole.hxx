@@ -103,7 +103,7 @@ class SW_DLLPUBLIC SwOLENode final: public SwNoTextNode
 
     // Stored when a linked OLE object is deferred during import until link
     // updates are allowed
-    css::uno::Sequence<css::beans::PropertyValue> maDeferredMediaDescriptor;
+    cpo::uno::Sequence<css::beans::PropertyValue> maDeferredMediaDescriptor;
 
     SwOLENode(  const SwNode& rWhere,
                 const svt::EmbeddedObjectRef&,
@@ -162,7 +162,7 @@ public:
     // allowed, and create the the actual embedded object when the user allows
     // link updating.
     void SetDeferredLink(const OUString& rLinkURL,
-                         const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
+                         const cpo::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
     bool CompleteDeferredLink();
     bool HasDeferredLink() const { return maDeferredMediaDescriptor.hasElements(); }
 

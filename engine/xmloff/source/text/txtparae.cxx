@@ -370,7 +370,7 @@ namespace
         if (!events || !rOther.events)
             return false;
 
-        const css::uno::Sequence<OUString> aNames = events->getElementNames();
+        const cpo::uno::Sequence<OUString> aNames = events->getElementNames();
         if (aNames != rOther.events->getElementNames())
             return false;
         for (const auto& rName : aNames)
@@ -1356,7 +1356,7 @@ struct XMLTextParagraphExport::DocumentListNodes
     {
         // Sequence of nodes, each of them represented by three-element sequence,
         // corresponding to NodeData members
-        css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>> nodes;
+        cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> nodes;
         if (auto xPropSet = xModel.query<css::beans::XPropertySet>())
         {
             try
@@ -2121,7 +2121,7 @@ void XMLTextParagraphExport::exportParagraph(
 
                     if ( rPropSetHelper.hasProperty( PARA_OUTLINE_CONTENT_VISIBLE ) )
                     {
-                        uno::Sequence<beans::PropertyValue> propList;
+                        cpo::uno::Sequence<beans::PropertyValue> propList;
                         bool bIsOutlineContentVisible = true;
                         if( xMultiPropSet.is() )
                             rPropSetHelper.getValue(
@@ -4250,7 +4250,7 @@ void XMLTextParagraphExport::ExportContentControl(
     if (bExport)
     {
         // Export list items of dropdowns.
-        uno::Sequence<beans::PropertyValues> aListItems;
+        cpo::uno::Sequence<beans::PropertyValues> aListItems;
         xPropertySet->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
         for (const auto& rListItem : aListItems)
         {

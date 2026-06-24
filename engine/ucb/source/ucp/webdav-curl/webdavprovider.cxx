@@ -87,7 +87,7 @@ ContentProvider::getImplementationName()
     return u"com.sun.star.comp.WebDAVContentProvider"_ustr;
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ContentProvider::getSupportedServiceNames()
 {
     return { WEBDAV_CONTENT_PROVIDER_SERVICE_NAME };
@@ -166,7 +166,7 @@ ContentProvider::queryContent(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_webdav_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ContentProvider(context));
 }

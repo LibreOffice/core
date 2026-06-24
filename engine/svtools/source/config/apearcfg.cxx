@@ -26,7 +26,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 static bool bInitialized = false;
 

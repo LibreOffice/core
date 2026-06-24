@@ -444,7 +444,7 @@ void ViewInformation2D::setGlobalAntiAliasing(bool bAntiAliasing, bool bTemporar
 bool ViewInformation2D::getGlobalAntiAliasing() { return globalAntiAliasing(); }
 
 ViewInformation2D
-createViewInformation2D(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
+createViewInformation2D(const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
 {
     if (!rViewParameters.hasElements())
         return ViewInformation2D();

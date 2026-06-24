@@ -322,7 +322,7 @@ void lcl_FillNumberFormats( std::unique_ptr<sal_uInt32[]>& rFormats, sal_Int32& 
     //  xLevRes is from the data layout dimension
     //TODO: use result sequence from ScDPOutLevelData!
 
-    uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
+    cpo::uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
 
     tools::Long nSize = aResult.getLength();
     if (!nSize)
@@ -421,7 +421,7 @@ sal_uInt32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAcces
     return 0;       // none found
 }
 
-bool lcl_MemberEmpty( const uno::Sequence<sheet::MemberResult>& rSeq )
+bool lcl_MemberEmpty( const cpo::uno::Sequence<sheet::MemberResult>& rSeq )
 {
     //  used to skip levels that have no members
 
@@ -434,21 +434,21 @@ bool lcl_MemberEmpty( const uno::Sequence<sheet::MemberResult>& rSeq )
  * Get visible page dimension members as results, except that, if all
  * members are visible, then this function returns empty result.
  */
-uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Reference<uno::XInterface>& xLevel )
+cpo::uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Reference<uno::XInterface>& xLevel )
 {
     if (!xLevel.is())
-        return uno::Sequence<sheet::MemberResult>();
+        return cpo::uno::Sequence<sheet::MemberResult>();
 
     uno::Reference<sheet::XMembersSupplier> xMSupplier(xLevel, uno::UNO_QUERY);
     if (!xMSupplier.is())
-        return uno::Sequence<sheet::MemberResult>();
+        return cpo::uno::Sequence<sheet::MemberResult>();
 
     uno::Reference<sheet::XMembersAccess> xNA = xMSupplier->getMembers();
     if (!xNA.is())
-        return uno::Sequence<sheet::MemberResult>();
+        return cpo::uno::Sequence<sheet::MemberResult>();
 
     std::vector<sheet::MemberResult> aRes;
-    const uno::Sequence<OUString> aNames = xNA->getElementNames();
+    const cpo::uno::Sequence<OUString> aNames = xNA->getElementNames();
     for (const OUString& rName : aNames)
     {
         xNA->getByName(rName);
@@ -472,7 +472,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
 
     if (o3tl::make_unsigned(aNames.getLength()) == aRes.size())
         // All members are visible.  Return empty result.
-        return uno::Sequence<sheet::MemberResult>();
+        return cpo::uno::Sequence<sheet::MemberResult>();
 
     return comphelper::containerToSequence(aRes);
 }
@@ -577,7 +577,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                                 {
                                     case sheet::DataPilotFieldOrientation_COLUMN:
                                     {
-                                        uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
+                                        cpo::uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
                                         if (!lcl_MemberEmpty(aResult))
                                         {
                                             mpColFields.emplace_back(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
@@ -587,7 +587,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                                     break;
                                     case sheet::DataPilotFieldOrientation_ROW:
                                     {
-                                        uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
+                                        cpo::uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
                                         ++mnRowDims;
                                         // We want only to remove the DATA column if it is empty
                                         // and not any other empty columns (to still show the
@@ -615,7 +615,7 @@ ScDPOutput::ScDPOutput(ScDocument* pDocument, uno::Reference<sheet::XDimensionsS
                                     break;
                                     case sheet::DataPilotFieldOrientation_PAGE:
                                     {
-                                        uno::Sequence<sheet::MemberResult> aResult = getVisiblePageMembersAsResults(xLevel);
+                                        cpo::uno::Sequence<sheet::MemberResult> aResult = getVisiblePageMembersAsResults(xLevel);
                                         // no check on results for page fields
                                         mpPageFields.emplace_back(nDim, nHierarchy, nLev, nDimPos, nNumFmt, aResult, aName,
                                                                   aCaption, bHasHiddenMember, false, true);
@@ -877,7 +877,7 @@ void ScDPOutput::CalcSizes()
     //TODO: allow different sizes (and clear following areas) ???
 
     mnRowCount = maData.getLength();
-    const uno::Sequence<sheet::DataResult>* pRowAry = maData.getConstArray();
+    const cpo::uno::Sequence<sheet::DataResult>* pRowAry = maData.getConstArray();
     mnColCount = mnRowCount ? ( pRowAry[0].getLength() ) : 0;
 
     mnHeaderSize = 1;
@@ -977,7 +977,7 @@ void ScDPOutput::outputPageFields(SCTAB nTab)
         SCCOL nFieldCol = nHeaderCol + 1;
 
         OUString aPageValue = ScResId(SCSTR_ALL);
-        const uno::Sequence<sheet::MemberResult>& rRes = mpPageFields[nField].maResult;
+        const cpo::uno::Sequence<sheet::MemberResult>& rRes = mpPageFields[nField].maResult;
         sal_Int32 n = rRes.getLength();
         if (n == 1)
         {
@@ -1016,7 +1016,7 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
         }
 
         SCROW nRowPos = mnMemberStartRow + SCROW(nField); //TODO: check for overflow
-        const uno::Sequence<sheet::MemberResult> rMemberSequence = mpColFields[nField].maResult;
+        const cpo::uno::Sequence<sheet::MemberResult> rMemberSequence = mpColFields[nField].maResult;
         const sheet::MemberResult* pMemberArray = rMemberSequence.getConstArray();
         tools::Long nThisColCount = rMemberSequence.getLength();
         OSL_ENSURE(nThisColCount == mnColCount, "count mismatch"); //TODO: ???
@@ -1090,7 +1090,7 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
             MultiFieldCell(nHdrCol, nHdrRow, nTab, true /* bRowField */);
 
         SCCOL nColPos = mnMemberStartCol + SCCOL(nFieldColOffset); //TODO: check for overflow
-        const uno::Sequence<sheet::MemberResult> rMemberSequence = mpRowFields[nField].maResult;
+        const cpo::uno::Sequence<sheet::MemberResult> rMemberSequence = mpRowFields[nField].maResult;
         const sheet::MemberResult* pMemberArray = rMemberSequence.getConstArray();
         sal_Int32 nThisRowCount = rMemberSequence.getLength();
         OSL_ENSURE(nThisRowCount == mnRowCount, "count mismatch");     //TODO: ???
@@ -1172,7 +1172,7 @@ void ScDPOutput::outputRowHeader(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
 
 void ScDPOutput::outputDataResults(SCTAB nTab)
 {
-    const uno::Sequence<sheet::DataResult>* pRowAry = maData.getConstArray();
+    const cpo::uno::Sequence<sheet::DataResult>* pRowAry = maData.getConstArray();
 
     for (sal_Int32 nRow = 0; nRow < mnRowCount; nRow++)
     {
@@ -1335,7 +1335,7 @@ sal_Int32 ScDPOutput::GetHeaderRows() const
 
 namespace
 {
-    void insertNames(ScDPUniqueStringSet& rNames, const uno::Sequence<sheet::MemberResult>& rMemberResults)
+    void insertNames(ScDPUniqueStringSet& rNames, const cpo::uno::Sequence<sheet::MemberResult>& rMemberResults)
     {
         for (const sheet::MemberResult& rMemberResult : rMemberResults)
         {
@@ -1520,7 +1520,7 @@ sal_Int32 ScDPOutput::GetRowFieldCompact(SCCOL nColQuery, SCROW nRowQuery) const
 
     for (sal_Int32 nField = nEndField - 1; nField >= nStartField; --nField)
     {
-        const uno::Sequence<sheet::MemberResult> rSequence = mpRowFields[nField].maResult;
+        const cpo::uno::Sequence<sheet::MemberResult> rSequence = mpRowFields[nField].maResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         sal_Int32 nThisRowCount = rSequence.getLength();
         SCROW nRow = nRowQuery - mnDataStartRow;
@@ -1588,7 +1588,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, sheet::DataPilotTablePos
 
             if (mpColFields.size() < o3tl::make_unsigned(nField) + 1 )
                 break;
-            const uno::Sequence<sheet::MemberResult> rSequence = mpColFields[nField].maResult;
+            const cpo::uno::Sequence<sheet::MemberResult> rSequence = mpColFields[nField].maResult;
             if (!rSequence.hasElements())
                 break;
             const sheet::MemberResult* pArray = rSequence.getConstArray();
@@ -1619,7 +1619,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, sheet::DataPilotTablePos
 
             if (mpRowFields.size() < o3tl::make_unsigned(nField) + 1 )
                 break;
-            const uno::Sequence<sheet::MemberResult> rSequence = mpRowFields[nField].maResult;
+            const cpo::uno::Sequence<sheet::MemberResult> rSequence = mpRowFields[nField].maResult;
             if (!rSequence.hasElements())
                 break;
             const sheet::MemberResult* pArray = rSequence.getConstArray();
@@ -1695,7 +1695,7 @@ bool ScDPOutput::GetDataResultPositionData(std::vector<sheet::DataPilotFieldFilt
         sheet::DataPilotFieldFilter filter;
         filter.FieldName = mpColFields[nColField].maName;
 
-        const uno::Sequence<sheet::MemberResult> rSequence = mpColFields[nColField].maResult;
+        const cpo::uno::Sequence<sheet::MemberResult> rSequence = mpColFields[nColField].maResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
 
         OSL_ENSURE(mnDataStartCol + rSequence.getLength() - 1 == mnTabEndCol, "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
@@ -1719,7 +1719,7 @@ bool ScDPOutput::GetDataResultPositionData(std::vector<sheet::DataPilotFieldFilt
         sheet::DataPilotFieldFilter filter;
         filter.FieldName = mpRowFields[nRowField].maName;
 
-        const uno::Sequence<sheet::MemberResult> rSequence = mpRowFields[nRowField].maResult;
+        const cpo::uno::Sequence<sheet::MemberResult> rSequence = mpRowFields[nRowField].maResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
 
         OSL_ENSURE(mnDataStartRow + rSequence.getLength() - 1 == mnTabEndRow, "ScDPOutput::GetDataFieldCellData: error in geometric assumption");

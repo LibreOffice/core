@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_DIGITGROUPINGITERATOR_HXX
 #define INCLUDED_UNOTOOLS_DIGITGROUPINGITERATOR_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <sal/log.hxx>
 
 namespace utl {
@@ -60,7 +60,7 @@ namespace utl {
 
 class DigitGroupingIterator
 {
-    const css::uno::Sequence< sal_Int32 > maGroupings;
+    const cpo::uno::Sequence< sal_Int32 > maGroupings;
 
     sal_Int32   mnGroup;        // current active grouping
     sal_Int32   mnDigits;       // current active digits per group
@@ -121,7 +121,7 @@ class DigitGroupingIterator
 
 public:
 
-    explicit DigitGroupingIterator( const css::uno::Sequence< sal_Int32 > & rGroupings )
+    explicit DigitGroupingIterator( const cpo::uno::Sequence< sal_Int32 > & rGroupings )
         : maGroupings( rGroupings)
     {
         initGrouping();
@@ -164,14 +164,14 @@ public:
         digit. For example, for grouping in thousands and nIntegerDigits==7 the
         sequence returned would be {1,0,0,1,0,0,0} so the caller would add a
         separator after the 1st and the 4th digit. */
-    static css::uno::Sequence< bool > createForwardSequence(
+    static cpo::uno::Sequence< bool > createForwardSequence(
             sal_Int32 nIntegerDigits,
-            const css::uno::Sequence< sal_Int32 > & rGroupings )
+            const cpo::uno::Sequence< sal_Int32 > & rGroupings )
     {
         if (nIntegerDigits <= 0)
-            return css::uno::Sequence< bool >();
+            return cpo::uno::Sequence< bool >();
         DigitGroupingIterator aIterator( rGroupings);
-        css::uno::Sequence< bool > aSeq( nIntegerDigits);
+        cpo::uno::Sequence< bool > aSeq( nIntegerDigits);
         bool* pArr = aSeq.getArray();
         for (sal_Int32 j = 0; --nIntegerDigits >= 0; ++j)
         {

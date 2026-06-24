@@ -27,7 +27,7 @@
 
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { template <typename> class Sequence; }
+namespace cpo::uno { template <typename> class Sequence; }
 
 namespace comphelper{
 
@@ -80,19 +80,19 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
         SequenceAsHashMap(const cpo::uno::Any& aSource);
 
 
-        /** @see    operator<<(const css::uno::Sequence< cpo::uno::Any >&)
+        /** @see    operator<<(const cpo::uno::Sequence< cpo::uno::Any >&)
          */
-        SequenceAsHashMap(const css::uno::Sequence< cpo::uno::Any >& lSource);
+        SequenceAsHashMap(const cpo::uno::Sequence< cpo::uno::Any >& lSource);
 
 
-        /** @see    operator<<(const css::uno::Sequence< css::beans::PropertyValue >&)
+        /** @see    operator<<(const cpo::uno::Sequence< css::beans::PropertyValue >&)
          */
-        SequenceAsHashMap(const css::uno::Sequence< css::beans::PropertyValue >& lSource);
+        SequenceAsHashMap(const cpo::uno::Sequence< css::beans::PropertyValue >& lSource);
 
 
-        /** @see    operator<<(const css::uno::Sequence< css::beans::NamedValue >&)
+        /** @see    operator<<(const cpo::uno::Sequence< css::beans::NamedValue >&)
          */
-        SequenceAsHashMap(const css::uno::Sequence< css::beans::NamedValue >& lSource);
+        SequenceAsHashMap(const cpo::uno::Sequence< css::beans::NamedValue >& lSource);
 
 
         /** @short  fill this map from the given
@@ -127,7 +127,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
                     is thrown, if the given Any sequence
                     uses wrong types for its items. VOID Any will be ignored!
          */
-        void operator<<(const css::uno::Sequence< cpo::uno::Any >& lSource);
+        void operator<<(const cpo::uno::Sequence< cpo::uno::Any >& lSource);
 
 
         /** @short  fill this map from the given
@@ -136,7 +136,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @param  lSource
                     contains the new items for this map.
          */
-        void operator<<(const css::uno::Sequence< css::beans::PropertyValue >& lSource);
+        void operator<<(const cpo::uno::Sequence< css::beans::PropertyValue >& lSource);
 
 
         /** @short  fill this map from the given
@@ -145,7 +145,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @param  lSource
                     contains the new items for this map.
          */
-        void operator<<(const css::uno::Sequence< css::beans::NamedValue >& lSource);
+        void operator<<(const cpo::uno::Sequence< css::beans::NamedValue >& lSource);
 
 
         /** @short  converts this map instance to an
@@ -154,7 +154,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @param  lDestination
                     target sequence for converting.
          */
-        void operator>>(css::uno::Sequence< css::beans::PropertyValue >& lDestination) const;
+        void operator>>(cpo::uno::Sequence< css::beans::PropertyValue >& lDestination) const;
 
 
         /** @short  converts this map instance to an
@@ -163,7 +163,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @param  lDestination
                     target sequence for converting.
          */
-        void operator>>(css::uno::Sequence< css::beans::NamedValue >& lDestination) const;
+        void operator>>(cpo::uno::Sequence< css::beans::NamedValue >& lDestination) const;
 
 
         /** @short  return this map instance as an
@@ -195,7 +195,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @return A const sequence of type NamedValue, which
                     contains all items of this map.
          */
-        css::uno::Sequence< css::beans::NamedValue > getAsConstNamedValueList() const;
+        cpo::uno::Sequence< css::beans::NamedValue > getAsConstNamedValueList() const;
 
 
         /** @short  return this map instance to as a
@@ -209,7 +209,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
             @return A const sequence of type PropertyValue, which
                     contains all items of this map.
          */
-        css::uno::Sequence< css::beans::PropertyValue > getAsConstPropertyValueList() const;
+        cpo::uno::Sequence< css::beans::PropertyValue > getAsConstPropertyValueList() const;
 
 
         /** @short  check if the specified item exists

@@ -60,7 +60,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -100,7 +100,7 @@ struct Data: public salhelper::SimpleReferenceObject {
 protected:
     void initProperties(
         css::uno::Reference< css::reflection::XTypeDescription > const & type,
-        css::uno::Sequence< OUString > const & absentOptional,
+        cpo::uno::Sequence< OUString > const & absentOptional,
         std::vector< OUString > * handleNames)
     {
         std::set<OUString> seen;
@@ -110,7 +110,7 @@ protected:
 private:
     void initProperties(
         css::uno::Reference< css::reflection::XTypeDescription > const & type,
-        css::uno::Sequence< OUString > const & absentOptional,
+        cpo::uno::Sequence< OUString > const & absentOptional,
         std::vector< OUString > * handleNames, std::set<OUString> * seen);
 
     static css::uno::Reference< css::reflection::XTypeDescription >
@@ -131,7 +131,7 @@ Data::PropertyMap::const_iterator Data::get(
 
 void Data::initProperties(
     css::uno::Reference< css::reflection::XTypeDescription > const & type,
-    css::uno::Sequence< OUString > const & absentOptional,
+    cpo::uno::Sequence< OUString > const & absentOptional,
     std::vector< OUString > * handleNames, std::set<OUString> * seen)
 {
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
@@ -139,13 +139,13 @@ void Data::initProperties(
     if (!seen->insert(ifc->getName()).second)
         return;
 
-    const css::uno::Sequence<
+    const cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > bases(
         ifc->getBaseTypes());
     for (const auto & i : bases) {
         initProperties(i, absentOptional, handleNames, seen);
     }
-    const css::uno::Sequence<
+    const cpo::uno::Sequence<
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > members(
         ifc->getMembers());
@@ -165,7 +165,7 @@ void Data::initProperties(
                 attrAttribs |= css::beans::PropertyAttribute::READONLY;
                 bSetUnknown = true;
             }
-            css::uno::Sequence<
+            cpo::uno::Sequence<
             css::uno::Reference<
             css::reflection::XCompoundTypeDescription > > excs(
                 attr->getGetExceptions());
@@ -219,7 +219,7 @@ void Data::initProperties(
                     break;
                 }
                 attrAttribs |= n;
-                const css::uno::Sequence<
+                const cpo::uno::Sequence<
                 css::uno::Reference< css::reflection::XTypeDescription > >
                     args(
                         css::uno::Reference<
@@ -274,7 +274,7 @@ class Info: public cppu::WeakImplHelper< css::beans::XPropertySetInfo > {
 public:
     explicit Info(Data * data): m_data(data) {}
 
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
 
     virtual css::beans::Property SAL_CALL getPropertyByName(
         OUString const & name) override;
@@ -285,10 +285,10 @@ private:
     rtl::Reference< Data > m_data;
 };
 
-css::uno::Sequence< css::beans::Property > Info::getProperties()
+cpo::uno::Sequence< css::beans::Property > Info::getProperties()
 {
     assert(m_data->properties.size() <= SAL_MAX_INT32);
-    css::uno::Sequence< css::beans::Property > s(
+    cpo::uno::Sequence< css::beans::Property > s(
         static_cast< sal_Int32 >(m_data->properties.size()));
     auto r = asNonConstRange(s);
     sal_Int32 n = 0;
@@ -353,7 +353,7 @@ public:
     Impl(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         Implements theImplements,
-        css::uno::Sequence< OUString > const & absentOptional,
+        cpo::uno::Sequence< OUString > const & absentOptional,
         css::uno::Type const & type);
 
     OUString const & translateHandle(
@@ -371,7 +371,7 @@ public:
         OUString const & name, css::beans::PropertyState * state) const;
 
     PropertySetMixinImpl::Implements implements;
-    css::uno::Sequence< OUString > handleMap;
+    cpo::uno::Sequence< OUString > handleMap;
 
     typedef std::map< OUString, BoundListenerBag > BoundListenerMap;
 
@@ -405,7 +405,7 @@ private:
 PropertySetMixinImpl::Impl::Impl(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Implements theImplements,
-    css::uno::Sequence< OUString > const & absentOptional,
+    cpo::uno::Sequence< OUString > const & absentOptional,
     css::uno::Type const & type):
     implements(theImplements), disposed(false), m_context(context),
     m_type(type)
@@ -826,7 +826,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
 PropertySetMixinImpl::PropertySetMixinImpl(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Implements implements,
-    css::uno::Sequence< OUString > const & absentOptional,
+    cpo::uno::Sequence< OUString > const & absentOptional,
     css::uno::Type const & type)
 {
     m_impl = new Impl(context, implements, absentOptional, type);
@@ -1088,10 +1088,10 @@ cpo::uno::Any PropertySetMixinImpl::getFastPropertyValue(sal_Int32 handle)
         nullptr);
 }
 
-css::uno::Sequence< css::beans::PropertyValue >
+cpo::uno::Sequence< css::beans::PropertyValue >
 PropertySetMixinImpl::getPropertyValues()
 {
-    css::uno::Sequence< css::beans::PropertyValue > s(
+    cpo::uno::Sequence< css::beans::PropertyValue > s(
         m_impl->handleMap.getLength());
     auto r = asNonConstRange(s);
     sal_Int32 n = 0;
@@ -1116,7 +1116,7 @@ PropertySetMixinImpl::getPropertyValues()
 }
 
 void PropertySetMixinImpl::setPropertyValues(
-    css::uno::Sequence< css::beans::PropertyValue > const & props)
+    cpo::uno::Sequence< css::beans::PropertyValue > const & props)
 {
     for (const auto & p : props) {
         if (p.Handle != -1

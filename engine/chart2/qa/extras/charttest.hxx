@@ -90,10 +90,10 @@ public:
     getDataSequenceFromDocByRole(css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
                                  std::u16string_view rRole, sal_Int32 nDataSeries = 0,
                                  sal_Int32 nChartType = 0);
-    css::uno::Sequence<OUString> getWriterChartColumnDescriptions();
+    cpo::uno::Sequence<OUString> getWriterChartColumnDescriptions();
     std::vector<std::vector<double>>
     getDataSeriesYValuesFromChartType(const css::uno::Reference<css::chart2::XChartType>& xCT);
-    std::vector<css::uno::Sequence<cpo::uno::Any>>
+    std::vector<cpo::uno::Sequence<cpo::uno::Any>>
     getDataSeriesLabelsFromChartType(const css::uno::Reference<css::chart2::XChartType>& xCT);
     css::uno::Reference<css::chart::XChartDocument> getChartDocFromDrawImpress(sal_Int32 nPage,
                                                                      sal_Int32 nShape);
@@ -194,12 +194,12 @@ css::uno::Reference< css::chart2::XChartType > ChartTest::getChartTypeFromDoc( c
 
     css::uno::Reference< css::chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, css::uno::UNO_QUERY_THROW );
 
-    css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+    cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
     CPPUNIT_ASSERT( xCooSysSequence.getLength() > nCooSys );
 
     css::uno::Reference< css::chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[nCooSys], css::uno::UNO_QUERY_THROW );
 
-    css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
+    cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
     CPPUNIT_ASSERT( xChartTypeSequence.getLength() > nChartType );
 
     return xChartTypeSequence[nChartType];
@@ -213,7 +213,7 @@ css::uno::Reference<css::chart2::XAxis> ChartTest::getAxisFromDoc(
 
     css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, css::uno::UNO_QUERY_THROW);
 
-    css::uno::Sequence<css::uno::Reference<css::chart2::XCoordinateSystem> > xCooSysSequence = xCooSysContainer->getCoordinateSystems();
+    cpo::uno::Sequence<css::uno::Reference<css::chart2::XCoordinateSystem> > xCooSysSequence = xCooSysContainer->getCoordinateSystems();
     CPPUNIT_ASSERT(xCooSysSequence.getLength() > nCooSys);
 
     css::uno::Reference<css::chart2::XCoordinateSystem> xCoord = xCooSysSequence[nCooSys];
@@ -231,7 +231,7 @@ sal_Int32 ChartTest::getNumberOfDataSeries(css::uno::Reference<css::chart2::XCha
     css::uno::Reference<css::chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, nChartType, nCooSys);
     css::uno::Reference<css::chart2::XDataSeriesContainer> xDataSeriesContainer(xChartType, css::uno::UNO_QUERY_THROW);
 
-    css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>> xSeriesSequence(xDataSeriesContainer->getDataSeries());
+    cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>> xSeriesSequence(xDataSeriesContainer->getDataSeries());
     return xSeriesSequence.getLength();
 }
 
@@ -242,7 +242,7 @@ css::uno::Reference< css::chart2::XDataSeries > ChartTest::getDataSeriesFromDoc(
     css::uno::Reference< css::chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, nChartType, nCooSys );
     css::uno::Reference< css::chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, css::uno::UNO_QUERY_THROW );
 
-    css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > xSeriesSequence( xDataSeriesContainer->getDataSeries() );
+    cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > xSeriesSequence( xDataSeriesContainer->getDataSeries() );
     CPPUNIT_ASSERT( xSeriesSequence.getLength() > nDataSeries );
 
     css::uno::Reference< css::chart2::XDataSeries > xSeries = xSeriesSequence[nDataSeries];
@@ -258,7 +258,7 @@ css::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getLabelDataS
         getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType );
     CPPUNIT_ASSERT(xDataSeries.is());
     css::uno::Reference< css::chart2::data::XDataSource > xDataSource( xDataSeries, css::uno::UNO_QUERY_THROW );
-    const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > xDataSequences =
+    const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > xDataSequences =
         xDataSource->getDataSequences();
     for(auto const & lds : xDataSequences)
     {
@@ -280,7 +280,7 @@ css::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getDataSequen
         getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType );
     CPPUNIT_ASSERT(xDataSeries.is());
     css::uno::Reference< css::chart2::data::XDataSource > xDataSource( xDataSeries, css::uno::UNO_QUERY_THROW );
-    const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > xDataSequences =
+    const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > xDataSequences =
         xDataSource->getDataSequences();
     for(auto const & lds : xDataSequences)
     {
@@ -298,7 +298,7 @@ css::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getDataSequen
     return css::uno::Reference< css::chart2::data::XDataSequence > ();
 }
 
-css::uno::Sequence < OUString > ChartTest::getWriterChartColumnDescriptions()
+cpo::uno::Sequence < OUString > ChartTest::getWriterChartColumnDescriptions()
 {
     css::uno::Reference<css::drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, css::uno::UNO_QUERY);
     css::uno::Reference<css::drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -310,7 +310,7 @@ css::uno::Sequence < OUString > ChartTest::getWriterChartColumnDescriptions()
     CPPUNIT_ASSERT( xChartDoc.is() );
     CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
     css::uno::Reference< css::chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), css::uno::UNO_QUERY_THROW );
-    css::uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
+    cpo::uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
     return seriesList;
 }
 
@@ -318,14 +318,14 @@ std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( 
 {
     css::uno::Reference<css::chart2::XDataSeriesContainer> xDSCont(xCT, css::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
-    const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
     std::vector<std::vector<double> > aRet;
     for (css::uno::Reference<css::chart2::XDataSeries> const & ds : aDataSeriesSeq)
     {
         css::uno::Reference<css::chart2::data::XDataSource> xDSrc(ds, css::uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDSrc.is());
-        const css::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        const cpo::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
         for (auto const & lds : aDataSeqs)
         {
             css::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();
@@ -338,7 +338,7 @@ std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( 
             xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == "values-y")
             {
-                const css::uno::Sequence<cpo::uno::Any> aData = xValues->getData();
+                const cpo::uno::Sequence<cpo::uno::Any> aData = xValues->getData();
                 std::vector<double> aValues;
                 aValues.reserve(aData.getLength());
                 for (cpo::uno::Any const & any : aData)
@@ -357,20 +357,20 @@ std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( 
     return aRet;
 }
 
-std::vector<css::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFromChartType( const css::uno::Reference<css::chart2::XChartType>& xCT )
+std::vector<cpo::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFromChartType( const css::uno::Reference<css::chart2::XChartType>& xCT )
 {
     OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
 
     css::uno::Reference<css::chart2::XDataSeriesContainer> xDSCont(xCT, css::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
-    const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
-    std::vector<css::uno::Sequence<cpo::uno::Any> > aRet;
+    std::vector<cpo::uno::Sequence<cpo::uno::Any> > aRet;
     for (auto const & ds : aDataSeriesSeq)
     {
         css::uno::Reference<css::chart2::data::XDataSource> xDSrc(ds, css::uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDSrc.is());
-        const css::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        const cpo::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
         for (auto const & lds : aDataSeqs)
         {
             css::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();
@@ -387,7 +387,7 @@ std::vector<css::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFr
                 CPPUNIT_ASSERT(xLabel.is());
                 css::uno::Reference<css::chart2::data::XDataSequence> xDS2 = xLabel->getLabel();
                 CPPUNIT_ASSERT(xDS2.is());
-                css::uno::Sequence<cpo::uno::Any> aData = xDS2->getData();
+                cpo::uno::Sequence<cpo::uno::Any> aData = xDS2->getData();
                 aRet.push_back(aData);
             }
         }
@@ -446,7 +446,7 @@ OUString ChartTest::getTitleString( const css::uno::Reference<css::chart2::XTitl
 {
     css::uno::Reference<css::chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
-    const css::uno::Sequence<css::uno::Reference<css::chart2::XFormattedString> > aFSSeq = xTitle->getText();
+    const cpo::uno::Sequence<css::uno::Reference<css::chart2::XFormattedString> > aFSSeq = xTitle->getText();
     OUStringBuffer aText;
     for (auto const & fs : aFSSeq)
         aText.append(fs->getString());

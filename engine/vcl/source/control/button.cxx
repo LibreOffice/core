@@ -619,7 +619,7 @@ void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         SvMemoryStream aOStm(6535, 6535);
         if(GraphicConverter::Export(aOStm, GetModeImage().GetBitmap(), ConvertDataFormat::PNG) == ERRCODE_NONE)
         {
-            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+            cpo::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
             OStringBuffer aBuffer("data:image/png;base64,");
             ::comphelper::Base64::encode(aBuffer, aSeq);
             rJsonWriter.put("image", aBuffer);
@@ -648,7 +648,7 @@ IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )
     if (pButton == nullptr)
         return;
 
-    comphelper::dispatchCommand(pButton->maCommand, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(pButton->maCommand, cpo::uno::Sequence<beans::PropertyValue>());
 }
 
 void PushButton::ImplInitPushButtonData()
@@ -3016,7 +3016,7 @@ void RadioButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
         SvMemoryStream aOStm(6535, 6535);
         if(GraphicConverter::Export(aOStm, maImage.GetBitmap(), ConvertDataFormat::PNG) == ERRCODE_NONE)
         {
-            css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+            cpo::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
             OStringBuffer aBuffer("data:image/png;base64,");
             ::comphelper::Base64::encode(aBuffer, aSeq);
             rJsonWriter.put("image", aBuffer);

@@ -8,7 +8,7 @@
  */
 
 #include "appearance.hxx"
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <dialmgr.hxx>
 #include <editeng/editids.hrc>
 #include <officecfg/Office/Common.hxx>
@@ -133,7 +133,7 @@ SvxAppearanceTabPage::SvxAppearanceTabPage(weld::Container* pPage,
 void SvxAppearanceTabPage::LoadSchemeList()
 {
     m_xSchemeList->clear();
-    css::uno::Sequence<OUString> aSchemeNames = pColorConfig->GetSchemeNames();
+    cpo::uno::Sequence<OUString> aSchemeNames = pColorConfig->GetSchemeNames();
 
     // insert auto, light, dark themes first
     m_xSchemeList->insert(0, CuiResId(RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC),

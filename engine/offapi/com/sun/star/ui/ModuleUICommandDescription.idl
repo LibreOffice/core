@@ -36,7 +36,7 @@ service ModuleUICommandDescription
     /** provides access to user interface commands of an installed module.
 
         <p>
-        An implementation must provide a com::sun::star::uno::Sequence which
+        An implementation must provide a cpo::uno::Sequence which
         has com::sun::star::beans::PropertyValue as entries. The following
         entries a defined:
         <ul>

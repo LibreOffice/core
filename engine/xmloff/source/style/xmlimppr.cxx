@@ -139,7 +139,7 @@ void SvXMLImportPropertyMapper::importXML(
             sAttrName, aNamespaceURI, sValue);
     }
 
-    const css::uno::Sequence< css::xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
+    const cpo::uno::Sequence< css::xml::Attribute > unknownAttribs = xAttrList->getUnknownAttributes();
     for (const css::xml::Attribute& rAttribute : unknownAttribs)
     {
         int nSepIndex = rAttribute.Name.indexOf(SvXMLImport::aNamespaceSeparator);
@@ -388,7 +388,7 @@ bool SvXMLImportPropertyMapper::handleSpecialItem(
 
 void SvXMLImportPropertyMapper::FillPropertySequence(
             const ::std::vector< XMLPropertyState >& rProperties,
-            css::uno::Sequence< css::beans::PropertyValue >& rValues )
+            cpo::uno::Sequence< css::beans::PropertyValue >& rValues )
             const
 {
     sal_Int32 nCount = rProperties.size();

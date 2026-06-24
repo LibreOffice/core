@@ -18,7 +18,7 @@
  */
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/script/Converter.hpp>
 
 #include <osl/diagnose.h>
@@ -62,10 +62,10 @@ bool SfxGlobalNameItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
     css::uno::Reference < css::script::XTypeConverter > xConverter
             ( css::script::Converter::create( ::comphelper::getProcessComponentContext() ));
-    css::uno::Sequence< sal_Int8 > aSeq;
+    cpo::uno::Sequence< sal_Int8 > aSeq;
     cpo::uno::Any aNew;
 
-    try { aNew = xConverter->convertTo( rVal, cppu::UnoType<css::uno::Sequence < sal_Int8 >>::get() ); }
+    try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < sal_Int8 >>::get() ); }
     catch (css::uno::Exception&) {}
     aNew >>= aSeq;
     if ( aSeq.getLength() == 16 )
@@ -81,7 +81,7 @@ bool SfxGlobalNameItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 // virtual
 bool SfxGlobalNameItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
-    css::uno::Sequence< sal_Int8 > aSeq( 16 );
+    cpo::uno::Sequence< sal_Int8 > aSeq( 16 );
     void const * pData = &m_aName.GetCLSID();
     memcpy( aSeq.getArray(), pData, 16 );
     rVal <<= aSeq;

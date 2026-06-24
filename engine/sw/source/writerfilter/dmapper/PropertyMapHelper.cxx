@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 void lcl_DumpTableColumnSeparators(const cpo::uno::Any& rTableColumnSeparators)
 {
 #ifdef DBG_UTIL
-    uno::Sequence<text::TableColumnSeparator> aSeq;
+    cpo::uno::Sequence<text::TableColumnSeparator> aSeq;
     rTableColumnSeparators >>= aSeq;
 
     TagLogger::getInstance().startElement("property.TableColumnSeparators");
@@ -81,7 +81,7 @@ void lcl_DumpPropertyValues(beans::PropertyValues const& rValues)
     TagLogger::getInstance().endElement();
 }
 
-void lcl_DumpPropertyValueSeq(css::uno::Sequence<css::beans::PropertyValues> const& rPropValSeq)
+void lcl_DumpPropertyValueSeq(cpo::uno::Sequence<css::beans::PropertyValues> const& rPropValSeq)
 {
     TagLogger::getInstance().startElement("PropertyValueSeq");
 

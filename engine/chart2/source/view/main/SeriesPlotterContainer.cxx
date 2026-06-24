@@ -51,7 +51,7 @@ using namespace ::css;
 using namespace ::css::chart2;
 
 using ::css::uno::Reference;
-using ::css::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
 SeriesPlotterContainer::SeriesPlotterContainer(
@@ -350,7 +350,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     if (m_aSeriesPlotterList.empty())
         return;
 
-    uno::Sequence<OUString> aSeriesNames;
+    cpo::uno::Sequence<OUString> aSeriesNames;
     bool bSeriesNamesInitialized = false;
     for (auto& pVCooSys : m_rVCooSysList)
     {

@@ -47,7 +47,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
 {
     const SvObjectServerList* m_pServers;
 
-    css::uno::Sequence< sal_Int8 > m_aIconMetaFile;
+    cpo::uno::Sequence< sal_Int8 > m_aIconMetaFile;
     OUString m_aIconMediaType;
 
     std::unique_ptr<weld::RadioButton> m_xRbNewObject;

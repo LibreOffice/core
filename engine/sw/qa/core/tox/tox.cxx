@@ -38,7 +38,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityLinkClick)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
         comphelper::makePropertyValue(u"Identifier"_ustr, u"ARJ00"_ustr),
         comphelper::makePropertyValue(u"Author"_ustr, u"Ar, J"_ustr),
@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryURL)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
         comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
         comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryClick)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
         comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
         comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryRelClick)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr),
     };
     xStorable->storeAsURL(maTempFile.GetURL(), aArgs);
@@ -175,7 +175,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableEntryRelClick)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
         comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
         comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
@@ -222,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTableURLDeduplication)
         uno::Reference<beans::XPropertySet> xField(
             xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr),
             uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aFields = {
+        cpo::uno::Sequence<beans::PropertyValue> aFields = {
             comphelper::makePropertyValue(u"BibiliographicType"_ustr,
                                           text::BibliographyDataType::WWW),
             comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),

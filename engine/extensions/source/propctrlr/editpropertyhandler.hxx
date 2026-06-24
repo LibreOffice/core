@@ -42,17 +42,17 @@ namespace pcr
     protected:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XPropertyHandler overriables
         virtual cpo::uno::Any                   SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                            SAL_CALL setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
-        virtual css::uno::Sequence< OUString >  SAL_CALL getSupersededProperties( ) override;
-        virtual css::uno::Sequence< OUString >  SAL_CALL getActuatingProperties( ) override;
+        virtual cpo::uno::Sequence< OUString >  SAL_CALL getSupersededProperties( ) override;
+        virtual cpo::uno::Sequence< OUString >  SAL_CALL getActuatingProperties( ) override;
         virtual void                            SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
 
         // PropertyHandler overridables
-        virtual css::uno::Sequence< css::beans::Property >
+        virtual cpo::uno::Sequence< css::beans::Property >
                                                 doDescribeSupportedProperties() const override;
     private:
         bool    implHaveBothScrollBarProperties() const;

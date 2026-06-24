@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <comphelper/propertyvalue.hxx>
@@ -71,7 +71,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableConditionalEntryEnumerat
     xSheet0->getCellByPosition(1, 4)->setValue(10);
     xSheet0->getCellByPosition(2, 0)->setValue(-5.15);
 
-    uno::Sequence<beans::PropertyValue> aConditions{
+    cpo::uno::Sequence<beans::PropertyValue> aConditions{
         comphelper::makePropertyValue(u"StyleName"_ustr, u"Result2"_ustr),
         comphelper::makePropertyValue(u"Formula1"_ustr, u"$Sheet1.$B$5"_ustr),
         comphelper::makePropertyValue(u"Formula2"_ustr, u""_ustr),

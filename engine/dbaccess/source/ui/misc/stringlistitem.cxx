@@ -22,6 +22,7 @@
 namespace dbaui
 {
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 // OStringListItem
 OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence<OUString>& _rList)

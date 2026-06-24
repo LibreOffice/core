@@ -35,7 +35,7 @@ namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::io { class XInputStreamProvider; }
 namespace com::sun::star::script { class XStorageBasedLibraryContainer; }
 namespace com::sun::star::task { class XStatusIndicator; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
@@ -247,7 +247,7 @@ namespace basctl
 
         /** returns the names of the modules in a given script or dialog library of the document
         */
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
                     getObjectNames( LibraryContainerType _eType, const OUString& _rLibName ) const;
 
         /** retrieves a name for a newly to be created module or dialog
@@ -259,7 +259,7 @@ namespace basctl
         void        loadLibraryIfExists( LibraryContainerType _eType, const OUString& _rLibrary );
 
         /// retrieves the (combined) names of all script and dialog libraries
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
                     getLibraryNames() const;
 
         /** removes a given script module from the document

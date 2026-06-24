@@ -681,7 +681,7 @@ SvxTableToolBoxControl::SvxTableToolBoxControl(const css::uno::Reference<css::un
 {
 }
 
-void SvxTableToolBoxControl::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
+void SvxTableToolBoxControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
@@ -721,7 +721,7 @@ OUString SvxTableToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.svx.TableToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> SvxTableToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SvxTableToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -729,7 +729,7 @@ css::uno::Sequence<OUString> SvxTableToolBoxControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_TableToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<cpo::uno::Any> const & )
+    cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new SvxTableToolBoxControl(rContext));
 }
@@ -739,7 +739,7 @@ SvxColumnsToolBoxControl::SvxColumnsToolBoxControl(const css::uno::Reference<css
 {
 }
 
-void SvxColumnsToolBoxControl::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
+void SvxColumnsToolBoxControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
@@ -779,7 +779,7 @@ OUString SvxColumnsToolBoxControl::getImplementationName()
     return u"com.sun.star.comp.svx.ColumnsToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> SvxColumnsToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SvxColumnsToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -787,7 +787,7 @@ css::uno::Sequence<OUString> SvxColumnsToolBoxControl::getSupportedServiceNames(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_ColumnsToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<cpo::uno::Any> const & )
+    cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new SvxColumnsToolBoxControl(rContext));
 }

@@ -42,20 +42,20 @@ LoadDispatcher::~LoadDispatcher()
 }
 
 void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
-                                                       const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
+                                                       const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     impl_dispatch( aURL, lArguments, xListener );
 }
 
 void SAL_CALL LoadDispatcher::dispatch(const css::util::URL&                                  aURL      ,
-                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
+                                       const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
     impl_dispatch( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
 }
 
 cpo::uno::Any SAL_CALL LoadDispatcher::dispatchWithReturnValue( const css::util::URL& rURL,
-                                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+                                                                const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     return impl_dispatch( rURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
@@ -71,7 +71,7 @@ void SAL_CALL LoadDispatcher::removeStatusListener(const css::uno::Reference< cs
 }
 
 cpo::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
-                                             const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                                             const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                              const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // Attention: May be nobody outside hold such temp. dispatch object alive (because

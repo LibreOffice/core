@@ -25,7 +25,7 @@
 
 namespace com::sun::star::lang { struct Locale; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace vcl { class Font; }
 namespace weld { class Widget; }
 
@@ -251,7 +251,7 @@ namespace editeng
                             const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd,
                             const OUString& _rOrigText,
                             const OUString& _rReplaceWith,
-                            const css::uno::Sequence< sal_Int32 > &_rOffsets,
+                            const cpo::uno::Sequence< sal_Int32 > &_rOffsets,
                             ReplacementAction _eAction,
                             LanguageType *pNewUnitLanguage
                         ) = 0;

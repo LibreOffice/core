@@ -30,6 +30,7 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::container;
+    using namespace ::cpo::uno;
 
     //= OFormEventsImportContext
     OFormEventsImportContext::OFormEventsImportContext(SvXMLImport& _rImport, IEventAttacher& _rEventAttacher)

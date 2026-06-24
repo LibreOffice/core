@@ -86,7 +86,7 @@ uno::Reference<uno::XInterface> ScDDELinkObj::init()
     uno::Reference<beans::XPropertySet> xPropSet(xDoc, UNO_QUERY_THROW);
     cpo::uno::Any aDDELinks = xPropSet->getPropertyValue(u"DDELinks"_ustr);
     uno::Reference<container::XNameAccess> xNA(aDDELinks, UNO_QUERY_THROW);
-    uno::Sequence<OUString> sLinkNames = xNA->getElementNames();
+    cpo::uno::Sequence<OUString> sLinkNames = xNA->getElementNames();
     uno::Reference<sheet::XDDELink> xDDELink(xNA->getByName(sLinkNames[0]), UNO_QUERY_THROW);
     return xDDELink;
 }

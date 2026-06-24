@@ -555,9 +555,9 @@ bool LinkManager::GetGraphicFromAny(std::u16string_view rMimeType,
         rGraphic.setOriginURL(sURL);
         return true;
     }
-    else if (rValue.has<css::uno::Sequence<sal_Int8>>())
+    else if (rValue.has<cpo::uno::Sequence<sal_Int8>>())
     {
-        auto aSeq = rValue.get<css::uno::Sequence<sal_Int8>>();
+        auto aSeq = rValue.get<cpo::uno::Sequence<sal_Int8>>();
 
         SvMemoryStream aMemStm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
                                 StreamMode::READ );

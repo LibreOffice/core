@@ -142,7 +142,7 @@ tools::Rectangle KitChartHelper::GetChartBoundingBox()
 }
 
 void KitChartHelper::Dispatch(const OUString& cmd,
-                              const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const
+                              const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const
 {
     comphelper::dispatchCommand(cmd, GetXController(), rArguments);
 }
@@ -304,7 +304,7 @@ bool KitChartHelper::setTextSelection(int nType, int nX, int nY)
 
         // no scale here the chart controller expects twips
         // that are converted to hmm
-        uno::Sequence< beans::PropertyValue > aArgs{
+        cpo::uno::Sequence< beans::PropertyValue > aArgs{
             comphelper::makePropertyValue({}, static_cast<sal_Int32>(nType)), // Why no name?
             comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinX)),
             comphelper::makePropertyValue({}, static_cast<sal_Int32>(nChartWinY))

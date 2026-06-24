@@ -221,7 +221,7 @@ void ImageProducer::ImplInitConsumer( const Graphic& rGraphic )
     sal_uInt32 nWidth = 0;
     sal_uInt32 nHeight = 0;
     sal_uInt8 nBitCount = 0;
-    css::uno::Sequence< sal_Int32 > aRGBPal;
+    cpo::uno::Sequence< sal_Int32 > aRGBPal;
     rGraphic.GetBitmap().GetColorModel(aRGBPal, nRMask, nGMask, nBMask, nAMask, mnTransIndex, nWidth, nHeight, nBitCount);
 
     // create temporary list to hold interfaces
@@ -261,7 +261,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     {
         if( mnTransIndex < 256 )
         {
-            css::uno::Sequence<sal_Int8>   aData( nPartWidth * nPartHeight );
+            cpo::uno::Sequence<sal_Int8>   aData( nPartWidth * nPartHeight );
             sal_Int8*                                   pTmp = aData.getArray();
 
             for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
@@ -277,7 +277,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
         }
         else
         {
-            css::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
+            cpo::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
             sal_Int32*                                  pTmp = aData.getArray();
 
             for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
@@ -294,7 +294,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     }
     else
     {
-        css::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
+        cpo::uno::Sequence<sal_Int32>  aData( nPartWidth * nPartHeight );
         sal_Int32*                                  pTmp = aData.getArray();
 
         for( tools::Long nY = nStartY; nY <= nEndY; nY++ )
@@ -320,7 +320,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 }
 
 
-void ImageProducer::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void ImageProducer::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     if ( aArguments.getLength() == 1 )
     {
@@ -340,14 +340,14 @@ bool ImageProducer::supportsService(OUString const & ServiceName) {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> ImageProducer::getSupportedServiceNames() {
+cpo::uno::Sequence<OUString> ImageProducer::getSupportedServiceNames() {
     return {u"com.sun.star.awt.ImageProducer"_ustr};
 }
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_ImageProducer_get_implementation(css::uno::XComponentContext*,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ImageProducer());
 }

@@ -42,7 +42,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OFixedTextModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 // XPersistObject
     virtual OUString SAL_CALL    getServiceName() override;
@@ -53,7 +53,7 @@ public:
 
     // OControlModel's property handling
     virtual void describeAggregateProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
 protected:

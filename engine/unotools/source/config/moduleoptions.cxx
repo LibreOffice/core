@@ -30,7 +30,7 @@
 #include <o3tl/enumarray.hxx>
 #include <o3tl/string_view.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -119,12 +119,12 @@ struct FactoryInfo
         // returns list of properties, which has changed only!
         // We use given value of sNodeBase to build full qualified paths ...
         // Last sign of it must be "/". because we use it directly, without any additional things!
-        css::uno::Sequence< css::beans::PropertyValue > getChangedProperties( std::u16string_view sNodeBase )
+        cpo::uno::Sequence< css::beans::PropertyValue > getChangedProperties( std::u16string_view sNodeBase )
         {
             // a) reserve memory for max. count of changed properties
             // b) add names and values of changed ones only and count it
             // c) resize return list by using count
-            css::uno::Sequence< css::beans::PropertyValue > lProperties   ( 4 );
+            cpo::uno::Sequence< css::beans::PropertyValue > lProperties   ( 4 );
             auto plProperties = lProperties.getArray();
             sal_Int8                                        nRealyChanged = 0;
 
@@ -249,12 +249,12 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
 
         //  override methods of baseclass
 
-        virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames ) override;
+        virtual void Notify( const cpo::uno::Sequence< OUString >& lPropertyNames ) override;
 
         //  public interface
 
         bool            IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
-        css::uno::Sequence < OUString > GetAllServiceNames();
+        cpo::uno::Sequence < OUString > GetAllServiceNames();
         OUString const & GetFactoryName           (       SvtModuleOptions::EFactory    eFactory   ) const;
         OUString const & GetFactoryStandardTemplate(      SvtModuleOptions::EFactory    eFactory   ) const;
         static OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   );
@@ -272,8 +272,8 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     //  private methods
 
     private:
-        static css::uno::Sequence< OUString > impl_ExpandSetNames ( const css::uno::Sequence< OUString >& lSetNames );
-        void impl_Read ( const css::uno::Sequence< OUString >& lSetNames );
+        static cpo::uno::Sequence< OUString > impl_ExpandSetNames ( const cpo::uno::Sequence< OUString >& lSetNames );
+        void impl_Read ( const cpo::uno::Sequence< OUString >& lSetNames );
 
         virtual void ImplCommit() override;
 
@@ -303,7 +303,7 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
 
     // Get name list of all existing set node names in configuration to read her properties in impl_Read().
     // These list is a list of long names of our factories.
-    const css::uno::Sequence< OUString > lFactories = GetNodeNames( OUString() );
+    const cpo::uno::Sequence< OUString > lFactories = GetNodeNames( OUString() );
     impl_Read( lFactories );
 
     // Enable notification for changes by using configuration directly.
@@ -332,7 +332,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
     @param      "lNames" is the list of set node entries which should be updated.
     @threadsafe no
 *//*-*************************************************************************************************************/
-void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
+void SvtModuleOptions_Impl::Notify( const cpo::uno::Sequence< OUString >& )
 {
     OSL_FAIL( "SvtModuleOptions_Impl::Notify() Not implemented yet!" );
 }
@@ -354,7 +354,7 @@ void SvtModuleOptions_Impl::ImplCommit()
     // Reserve memory for ALL possible factory properties!
     // Step over all factories and get her really changed values only.
     // Build list of these ones and use it for commit.
-    css::uno::Sequence< css::beans::PropertyValue > lCommitProperties( FACTORYCOUNT*PROPERTYCOUNT );
+    cpo::uno::Sequence< css::beans::PropertyValue > lCommitProperties( FACTORYCOUNT*PROPERTYCOUNT );
     sal_Int32                                       nRealCount       = 0;
     OUString                                 sBasePath;
     for( FactoryInfo & rInfo : m_lFactories )
@@ -363,7 +363,7 @@ void SvtModuleOptions_Impl::ImplCommit()
         // See pInfo->getChangedProperties() for further information
         sBasePath  = PATHSEPARATOR + rInfo.getFactory() + PATHSEPARATOR;
 
-        const css::uno::Sequence< css::beans::PropertyValue > lChangedProperties = rInfo.getChangedProperties ( sBasePath );
+        const cpo::uno::Sequence< css::beans::PropertyValue > lChangedProperties = rInfo.getChangedProperties ( sBasePath );
         std::copy(lChangedProperties.begin(), lChangedProperties.end(), std::next(lCommitProperties.getArray(), nRealCount));
         nRealCount += lChangedProperties.getLength();
     }
@@ -422,7 +422,7 @@ bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eModule
     return false;
 }
 
-css::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
+cpo::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
 {
     std::vector<OUString> aVec;
 
@@ -561,10 +561,10 @@ void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFa
     @onerror    List will be empty.
     @threadsafe no
 *//*-*************************************************************************************************************/
-css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const css::uno::Sequence< OUString >& lSetNames )
+cpo::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const cpo::uno::Sequence< OUString >& lSetNames )
 {
     sal_Int32 nCount     = lSetNames.getLength();
-    css::uno::Sequence< OUString > lPropNames ( nCount*PROPERTYCOUNT );
+    cpo::uno::Sequence< OUString > lPropNames ( nCount*PROPERTYCOUNT );
     OUString* pPropNames = lPropNames.getArray();
     sal_Int32 nPropStart = 0;
 
@@ -681,12 +681,12 @@ bool SvtModuleOptions_Impl::ClassifyFactoryByName( std::u16string_view sName, Sv
     @onerror    We do nothing.
     @threadsafe no
 *//*-*************************************************************************************************************/
-void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFactories )
+void SvtModuleOptions_Impl::impl_Read( const cpo::uno::Sequence< OUString >& lFactories )
 {
     // Expand every set node name in lFactories to full qualified paths to its properties
     // and get right values from configuration.
-    const css::uno::Sequence< OUString > lProperties = impl_ExpandSetNames( lFactories  );
-    const css::uno::Sequence< cpo::uno::Any >   lValues     = GetProperties( lProperties );
+    const cpo::uno::Sequence< OUString > lProperties = impl_ExpandSetNames( lFactories  );
+    const cpo::uno::Sequence< cpo::uno::Any >   lValues     = GetProperties( lProperties );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
@@ -737,11 +737,11 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     if (m_bReadOnlyStatesWellKnown)
         return;
 
-    css::uno::Sequence< OUString > lFactories = GetNodeNames(OUString());
+    cpo::uno::Sequence< OUString > lFactories = GetNodeNames(OUString());
     for (OUString& rFactory : asNonConstRange(lFactories))
         rFactory += PATHSEPARATOR PROPERTYNAME_DEFAULTFILTER;
 
-    css::uno::Sequence< bool > lReadonlyStates = GetReadOnlyStates(lFactories);
+    cpo::uno::Sequence< bool > lReadonlyStates = GetReadOnlyStates(lFactories);
     sal_Int32 c = lFactories.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {
@@ -951,7 +951,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(std::u
 }
 
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString&                                 sURL            ,
-                                                                  const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
+                                                                  const cpo::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
     const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
@@ -1031,7 +1031,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     if (!xInfo.is())
         return EFactory::UNKNOWN_FACTORY;
 
-    const css::uno::Sequence< OUString > lServices = xInfo->getSupportedServiceNames();
+    const cpo::uno::Sequence< OUString > lServices = xInfo->getSupportedServiceNames();
 
     for (const OUString& rService : lServices)
     {
@@ -1043,7 +1043,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     return EFactory::UNKNOWN_FACTORY;
 }
 
-css::uno::Sequence < OUString > SvtModuleOptions::GetAllServiceNames()
+cpo::uno::Sequence < OUString > SvtModuleOptions::GetAllServiceNames()
 {
     std::unique_lock aGuard( impl_GetOwnStaticMutex() );
     return m_pImpl->GetAllServiceNames();

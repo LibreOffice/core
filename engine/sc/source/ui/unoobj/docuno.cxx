@@ -205,7 +205,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
         { SC_UNO_REFERENCEDEVICE,         0, cppu::UnoType<awt::XDevice>::get(),                    beans::PropertyAttribute::READONLY, 0},
         {u"BuildId"_ustr,                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
         { SC_UNO_CODENAME,                0, cppu::UnoType<OUString>::get(),                  0, 0},
-        { SC_UNO_INTEROPGRABBAG,          0, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0, 0},
+        { SC_UNO_INTEROPGRABBAG,          0, cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get(), 0, 0},
     };
     return aDocOptPropertyMap_Impl;
 }
@@ -297,11 +297,11 @@ ScPrintUIOptions::ScPrintUIOptions()
                                                       aPrintRangeOpt);
 
     // create a choice for the content to create
-    uno::Sequence< OUString > aChoices{
+    cpo::uno::Sequence< OUString > aChoices{
         ScResId( SCSTR_PRINTOPT_ALLSHEETS ),
         ScResId( SCSTR_PRINTOPT_SELECTEDSHEETS ),
         ScResId( SCSTR_PRINTOPT_SELECTEDCELLS )};
-    uno::Sequence< OUString > aHelpIds{
+    cpo::uno::Sequence< OUString > aHelpIds{
         u".HelpID:vcl:PrintDialog:PrintContent:ListBox"_ustr};
     m_aUIProperties[nIdx++].Value = setChoiceListControlOpt( u"printextrabox"_ustr, OUString(),
                                                     aHelpIds, u"PrintContent"_ustr,
@@ -318,7 +318,7 @@ ScPrintUIOptions::ScPrintUIOptions()
     aChoices = { ScResId( SCSTR_PRINTOPT_PRINTALLPAGES ), ScResId( SCSTR_PRINTOPT_PRINTPAGES ) };
     aHelpIds = { u".HelpID:vcl:PrintDialog:PrintRange:RadioButton:0"_ustr,
                  u".HelpID:vcl:PrintDialog:PrintRange:RadioButton:1"_ustr };
-    uno::Sequence< OUString > aWidgetIds{ u"rbAllPages"_ustr, u"rbRangePages"_ustr };
+    cpo::uno::Sequence< OUString > aWidgetIds{ u"rbAllPages"_ustr, u"rbRangePages"_ustr };
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds,
                                                     aPrintRangeName,
@@ -334,11 +334,11 @@ ScPrintUIOptions::ScPrintUIOptions()
     vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, 0, true);
     m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt(u"evenoddbox"_ustr,
                                                            OUString(),
-                                                           uno::Sequence<OUString>(),
+                                                           cpo::uno::Sequence<OUString>(),
                                                            u"EvenOdd"_ustr,
-                                                           uno::Sequence<OUString>(),
+                                                           cpo::uno::Sequence<OUString>(),
                                                            0,
-                                                           uno::Sequence< bool >(),
+                                                           cpo::uno::Sequence< bool >(),
                                                            aEvenOddOpt);
 
     assert(nIdx == nNumProps);
@@ -354,7 +354,7 @@ void ScPrintUIOptions::SetDefaults()
 
     for (beans::PropertyValue & rPropValue : m_aUIProperties)
     {
-        uno::Sequence<beans::PropertyValue> aUIProp;
+        cpo::uno::Sequence<beans::PropertyValue> aUIProp;
         if ( rPropValue.Value >>= aUIProp )
         {
             for (auto& rProp : asNonConstRange(aUIProp))
@@ -1634,7 +1634,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
     }
 }
 
-void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+void ScModelObj::initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -1686,7 +1686,7 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     // if we know what theme the user wants, then we can dispatch that now early
     if (!sThemeName.isEmpty())
     {
-        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             { "NewTheme", cpo::uno::Any(sThemeName) }
         }));
@@ -1694,7 +1694,7 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
     }
     if (!sBackgroundThemeName.isEmpty())
     {
-        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             { "NewTheme", cpo::uno::Any(sBackgroundThemeName) }
         }));
@@ -1752,11 +1752,11 @@ void SAL_CALL ScModelObj::release() noexcept
     SfxBaseModel::release();
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
+cpo::uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
 {
-    static const uno::Sequence<uno::Type> aTypes = [&]()
+    static const cpo::uno::Sequence<uno::Type> aTypes = [&]()
     {
-        uno::Sequence<uno::Type> aAggTypes;
+        cpo::uno::Sequence<uno::Type> aAggTypes;
         if ( GetFormatter().is() )
         {
             const uno::Type& rProvType = cppu::UnoType<lang::XTypeProvider>::get();
@@ -1770,7 +1770,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
         return comphelper::concatSequences(
             SfxBaseModel::getTypes(),
             aAggTypes,
-            uno::Sequence<uno::Type>
+            cpo::uno::Sequence<uno::Type>
             {
                 cppu::UnoType<sheet::XSpreadsheetDocument>::get(),
                 cppu::UnoType<document::XActionLockable>::get(),
@@ -1793,9 +1793,9 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes()
     return aTypes;
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScModelObj::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL ScModelObj::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -1885,7 +1885,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScModelObj::getStyleFamilies()
 
 // XRenderable
 
-static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rOptions )
+static OutputDevice* lcl_GetRenderDevice( const cpo::uno::Sequence<beans::PropertyValue>& rOptions )
 {
     OutputDevice* pRet = nullptr;
     for (const beans::PropertyValue& rProp : rOptions)
@@ -1989,7 +1989,7 @@ static bool lcl_ParseTarget( const OUString& rTarget, ScRange& rTargetRange, too
     return bRangeValid;
 }
 
-static Printer* lcl_GetPrinter(const uno::Sequence<beans::PropertyValue>& rOptions)
+static Printer* lcl_GetPrinter(const cpo::uno::Sequence<beans::PropertyValue>& rOptions)
 {
     Printer* pPrinter = nullptr;
     OutputDevice* pDev = lcl_GetRenderDevice(rOptions);
@@ -2006,7 +2006,7 @@ static Size lcl_GetPrintPageSize(Size aSize)
 }
 
 bool ScModelObj::FillRenderMarkData( const cpo::uno::Any& aSelection,
-                                     const uno::Sequence< beans::PropertyValue >& rOptions,
+                                     const cpo::uno::Sequence< beans::PropertyValue >& rOptions,
                                      ScMarkData& rMark,
                                      ScPrintSelectionStatus& rStatus, OUString& rPagesStr,
                                      bool& rbRenderToGraphic ) const
@@ -2148,7 +2148,7 @@ bool ScModelObj::FillRenderMarkData( const cpo::uno::Any& aSelection,
     uno::Reference<sheet::XSelectedSheetsSupplier> xSelectedSheets(xView, uno::UNO_QUERY);
     if (bSelectedSheetsOnly && pDocShell && xSelectedSheets.is())
     {
-        const uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
+        const cpo::uno::Sequence<sal_Int32> aSelected = xSelectedSheets->getSelectedSheets();
         ScMarkData::MarkedTabsType aSelectedTabs;
         SCTAB nMaxTab = pDocShell->GetDocument().GetTableCount() -1;
         for (const auto& rSelected : aSelected)
@@ -2175,7 +2175,7 @@ bool ScModelObj::FillRenderMarkData( const cpo::uno::Any& aSelection,
 }
 
 sal_Int32 SAL_CALL ScModelObj::getRendererCount(const cpo::uno::Any& aSelection,
-    const uno::Sequence<beans::PropertyValue>& rOptions)
+    const cpo::uno::Sequence<beans::PropertyValue>& rOptions)
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
@@ -2284,8 +2284,8 @@ static bool lcl_renderSelectionToGraphic( bool bRenderToGraphic, const ScPrintSe
     return bRenderToGraphic && rStatus.GetMode() == ScPrintSelectionMode::Range;
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nSelRenderer,
-                                    const cpo::uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& rOptions  )
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nSelRenderer,
+                                    const cpo::uno::Any& aSelection, const cpo::uno::Sequence<beans::PropertyValue>& rOptions  )
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
@@ -2351,7 +2351,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
             aPageSize.Height = convertTwipToMm100(aTwips.Height());
         }
 
-        uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
             { SC_UNONAME_PAGESIZE, cpo::uno::Any(aPageSize) }
         }));
 
@@ -2400,7 +2400,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         const awt::Size aPageSize(aMMRect.GetWidth(), aMMRect.GetHeight());
         const awt::Point aCalcPagePos(aMMRect.Left(), aMMRect.Top());
 
-        uno::Sequence<beans::PropertyValue> aSequence
+        cpo::uno::Sequence<beans::PropertyValue> aSequence
         {
             comphelper::makePropertyValue(SC_UNONAME_PAGESIZE, aPageSize),
             // #i111158# all positions are relative to the whole page, including non-printable area
@@ -2511,7 +2511,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     }
 
     tools::Long nPropCount = bWasCellRange ? 5 : 4;
-    uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
+    cpo::uno::Sequence<beans::PropertyValue> aSequence(nPropCount);
     beans::PropertyValue* pArray = aSequence.getArray();
     pArray[0].Name = SC_UNONAME_PAGESIZE;
     pArray[0].Value <<= aPageSize;
@@ -2865,7 +2865,7 @@ static void lcl_PDFExportMediaShapeScreen(const OutputDevice* pDev, const std::u
 }
 
 void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const cpo::uno::Any& aSelection,
-                                    const uno::Sequence<beans::PropertyValue>& rOptions )
+                                    const cpo::uno::Sequence<beans::PropertyValue>& rOptions )
 {
     SolarMutexGuard aGuard;
     if (!pDocShell)
@@ -3407,7 +3407,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
             pDocShell->GetDocument().GetName( pDocShell->GetDocument().GetVisibleTab(), sName );
             SCCOL nPosLeft = pDocShell->GetDocument().GetPosLeft();
             SCROW nPosTop = pDocShell->GetDocument().GetPosTop();
-            uno::Sequence< beans::PropertyValue > aSeq{
+            cpo::uno::Sequence< beans::PropertyValue > aSeq{
                 comphelper::makePropertyValue(SC_ACTIVETABLE, sName),
                 comphelper::makePropertyValue(SC_POSITIONLEFT, nPosLeft),
                 comphelper::makePropertyValue(SC_POSITIONTOP, nPosTop)
@@ -3798,7 +3798,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScModelObj )
 
 css::uno::Reference<css::uno::XInterface> ScModelObj::create(
     OUString const & aServiceSpecifier,
-    css::uno::Sequence<cpo::uno::Any> const * arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const * arguments)
 {
     using ServiceType = ScServiceProvider::Type;
 
@@ -3889,7 +3889,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
 
 uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments(
                                 const OUString& ServiceSpecifier,
-                                const uno::Sequence<cpo::uno::Any>& aArgs )
+                                const cpo::uno::Sequence<cpo::uno::Any>& aArgs )
 {
     //! distinguish between own services and those of drawing layer?
 
@@ -3908,7 +3908,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments
     return xInt;
 }
 
-uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 {
     SolarMutexGuard aGuard;
 
@@ -3930,7 +3930,7 @@ bool SAL_CALL ScModelObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
 {
     return {SCMODELOBJ_SERVICE, SCDOCSETTINGS_SERVICE, SCDOC_SERVICE};
 }
@@ -3938,7 +3938,7 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getSupportedServiceNames()
 // XUnoTunnel
 
 sal_Int64 SAL_CALL ScModelObj::getSomething(
-                const uno::Sequence<sal_Int8 >& rId )
+                const cpo::uno::Sequence<sal_Int8 >& rId )
 {
     if ( comphelper::isUnoTunnelId<ScModelObj>(rId) )
     {
@@ -3971,7 +3971,7 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
     return 0;
 }
 
-const uno::Sequence<sal_Int8>& ScModelObj::getUnoTunnelId()
+const cpo::uno::Sequence<sal_Int8>& ScModelObj::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theScModelObjUnoTunnelId;
     return theScModelObjUnoTunnelId.getSeq();
@@ -4039,7 +4039,7 @@ void lcl_dataAreaInvalidation(ScModelObj* pModel,
 };
 
 void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& rRanges,
-    const uno::Sequence< beans::PropertyValue >& rProperties )
+    const cpo::uno::Sequence< beans::PropertyValue >& rProperties )
 {
     OUString aOperation = rOperation;
     bool bIsDataAreaInvalidateType = aOperation == "data-area-invalidate";
@@ -4148,11 +4148,11 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
                     else
                         xTarget.set( cppu::getXWeak( new ScCellRangesObj( pDocShell, aTabRanges ) ) );
 
-                    uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(xTarget) };
+                    cpo::uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(xTarget) };
 
                     cpo::uno::Any aRet;
-                    uno::Sequence<sal_Int16> aOutArgsIndex;
-                    uno::Sequence<cpo::uno::Any> aOutArgs;
+                    cpo::uno::Sequence<sal_Int16> aOutArgsIndex;
+                    cpo::uno::Sequence<cpo::uno::Any> aOutArgs;
 
                     /*ErrCode eRet =*/ pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
                 }
@@ -4181,9 +4181,9 @@ void ScModelObj::HandleCalculateEvents()
                     if (const OUString* pScript = pEvents->GetScript(ScSheetEventId::CALCULATE))
                     {
                         cpo::uno::Any aRet;
-                        uno::Sequence<cpo::uno::Any> aParams;
-                        uno::Sequence<sal_Int16> aOutArgsIndex;
-                        uno::Sequence<cpo::uno::Any> aOutArgs;
+                        cpo::uno::Sequence<cpo::uno::Any> aParams;
+                        cpo::uno::Sequence<sal_Int16> aOutArgsIndex;
+                        cpo::uno::Sequence<cpo::uno::Any> aOutArgs;
                         pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
                     }
                 }
@@ -4191,7 +4191,7 @@ void ScModelObj::HandleCalculateEvents()
                 try
                 {
                     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
-                    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(nTab) };
+                    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(nTab) };
                     xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::CALCULATE ), aArgs );
                 }
                 catch( uno::Exception& )
@@ -4307,15 +4307,15 @@ sal_Int32 ScModelObj::getDeviceID()
 #endif
 }
 
-uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
+cpo::uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
 {
 #if !HAVE_FEATURE_OPENCL
-    return uno::Sequence<sheet::opencl::OpenCLPlatform>();
+    return cpo::uno::Sequence<sheet::opencl::OpenCLPlatform>();
 #else
     std::vector<OpenCLPlatformInfo> aPlatformInfo;
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
 
-    uno::Sequence<sheet::opencl::OpenCLPlatform> aRet(aPlatformInfo.size());
+    cpo::uno::Sequence<sheet::opencl::OpenCLPlatform> aRet(aPlatformInfo.size());
     auto aRetRange = asNonConstRange(aRet);
     for(size_t i = 0; i < aPlatformInfo.size(); ++i)
     {
@@ -4744,10 +4744,10 @@ uno::Reference< table::XCellRange > SAL_CALL ScTableSheetsObj::getCellRangeByPos
     return xSheet->getCellRangeByPosition(nLeft, nTop, nRight, nBottom);
 }
 
-uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj::getCellRangesByName( const OUString& aRange )
+cpo::uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj::getCellRangesByName( const OUString& aRange )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence < uno::Reference < table::XCellRange > > xRet;
+    cpo::uno::Sequence < uno::Reference < table::XCellRange > > xRet;
 
     ScRangeList aRangeList;
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -4827,7 +4827,7 @@ rtl::Reference<ScTableSheetObj> ScTableSheetsObj::GetSheetByName( const OUString
     return xSheet;
 }
 
-uno::Sequence<OUString> SAL_CALL ScTableSheetsObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScTableSheetsObj::getElementNames()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -4835,7 +4835,7 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetsObj::getElementNames()
         ScDocument& rDoc = pDocShell->GetDocument();
         SCTAB nCount = rDoc.GetTableCount();
         OUString aName;
-        uno::Sequence<OUString> aSeq(nCount);
+        cpo::uno::Sequence<OUString> aSeq(nCount);
         OUString* pAry = aSeq.getArray();
         for (SCTAB i=0; i<nCount; i++)
         {
@@ -4844,7 +4844,7 @@ uno::Sequence<OUString> SAL_CALL ScTableSheetsObj::getElementNames()
         }
         return aSeq;
     }
-    return uno::Sequence<OUString>();
+    return cpo::uno::Sequence<OUString>();
 }
 
 bool SAL_CALL ScTableSheetsObj::hasByName( const OUString& aName )
@@ -4999,11 +4999,11 @@ cpo::uno::Any SAL_CALL ScTableColumnsObj::getByName( const OUString& aName )
     return cpo::uno::Any(uno::Reference<table::XCellRange>(xColumn));
 }
 
-uno::Sequence<OUString> SAL_CALL ScTableColumnsObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScTableColumnsObj::getElementNames()
 {
     SolarMutexGuard aGuard;
     SCCOL nCount = nEndCol - nStartCol + 1;
-    uno::Sequence<OUString> aSeq(nCount);
+    cpo::uno::Sequence<OUString> aSeq(nCount);
     OUString* pAry = aSeq.getArray();
     for (SCCOL i=0; i<nCount; i++)
         pAry[i] = ::ScColToAlpha( nStartCol + i );
@@ -5626,7 +5626,7 @@ rtl::Reference<ScTableSheetObj> ScScenariosObj::GetObjectByName_Impl(std::u16str
 }
 
 void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
-                                const uno::Sequence<table::CellRangeAddress>& aRanges,
+                                const cpo::uno::Sequence<table::CellRangeAddress>& aRanges,
                                 const OUString& aComment )
 {
     SolarMutexGuard aGuard;
@@ -5721,11 +5721,11 @@ cpo::uno::Any SAL_CALL ScScenariosObj::getByName( const OUString& aName )
     return cpo::uno::Any(uno::Reference<sheet::XScenario>(xScen));
 }
 
-uno::Sequence<OUString> SAL_CALL ScScenariosObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScScenariosObj::getElementNames()
 {
     SolarMutexGuard aGuard;
     SCTAB nCount = static_cast<SCTAB>(getCount());
-    uno::Sequence<OUString> aSeq(nCount);
+    cpo::uno::Sequence<OUString> aSeq(nCount);
 
     if ( pDocShell )    // otherwise Count = 0
     {

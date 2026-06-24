@@ -455,7 +455,7 @@ void UpdateSections(const SfxRequest& rReq, SwWrtShell& rWrtSh)
         aSectionNamePrefix = pSectionNamePrefix->GetValue();
     }
 
-    uno::Sequence<beans::PropertyValues> aSections;
+    cpo::uno::Sequence<beans::PropertyValues> aSections;
     const SfxUnoAnyItem* pSections = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_2);
     if (pSections)
     {
@@ -570,7 +570,7 @@ void UpdateBookmarks(const SfxRequest& rReq, SwWrtShell& rWrtSh)
         aBookmarkNamePrefix = pBookmarkNamePrefix->GetValue();
     }
 
-    uno::Sequence<beans::PropertyValues> aBookmarks;
+    cpo::uno::Sequence<beans::PropertyValues> aBookmarks;
     const SfxUnoAnyItem* pBookmarks = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_2);
     if (pBookmarks)
     {
@@ -657,7 +657,7 @@ void UpdateBookmark(const SfxRequest& rReq, SwWrtShell& rWrtSh)
         aBookmarkNamePrefix = pBookmarkNamePrefix->GetValue();
     }
 
-    uno::Sequence<beans::PropertyValue> aBookmark;
+    cpo::uno::Sequence<beans::PropertyValue> aBookmark;
     const SfxUnoAnyItem* pBookmarks = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_2);
     if (pBookmarks)
     {
@@ -831,7 +831,7 @@ bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xC
     uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
     if (!xCooSysContainer.is())
         return false;
-    uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSequence(
+    cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSequence(
         xCooSysContainer->getCoordinateSystems());
     if (xCooSysSequence.getLength() <= 0)
         return false;
@@ -839,7 +839,7 @@ bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xC
                                                                     uno::UNO_QUERY);
     if (!xChartTypeContainer.is())
         return false;
-    uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSequence(
+    cpo::uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSequence(
         xChartTypeContainer->getChartTypes());
     if (xChartTypeSequence.getLength() <= 0)
         return false;
@@ -853,7 +853,7 @@ bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xC
     if (!xIDataProvider.is())
         return false;
 
-    uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSContainer->getDataSeries());
+    cpo::uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSContainer->getDataSeries());
 
     int nSeriesCount = aSeriesSeq.getLength();
 
@@ -2333,7 +2333,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             linguistic2::ProofreadingResult aGrammarCheckRes;
             sal_Int32 nErrorInResult = -1;
-            uno::Sequence< OUString > aSuggestions;
+            cpo::uno::Sequence< OUString > aSuggestions;
             sal_Int32 nErrorPosInText = -1;
             SwRect aToFill;
             bool bCorrectionRes = rWrtSh.GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, nullptr, aToFill );
@@ -2602,7 +2602,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                 }
                                 else if (aItem3.first == "Keywords")
                                 {
-                                    uno::Sequence<OUString> aStringSeq(aItem3.second.size());
+                                    cpo::uno::Sequence<OUString> aStringSeq(aItem3.second.size());
                                     auto aStringArray = aStringSeq.getArray();
                                     int nId = 0;
                                     for (const auto& aItem4 : aItem3.second)
@@ -2692,7 +2692,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                 }
                                 else if (aItem3.first == "DocumentStatistics")
                                 {
-                                    uno::Sequence<beans::NamedValue> aNamedValueSeq(
+                                    cpo::uno::Sequence<beans::NamedValue> aNamedValueSeq(
                                         aItem3.second.size());
                                     auto aNamedValueArray = aNamedValueSeq.getArray();
                                     int nId = 0;
@@ -2719,7 +2719,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                 }
                                 else if (aItem3.first == "Contributor")
                                 {
-                                    uno::Sequence<OUString> aStringSeq(aItem3.second.size());
+                                    cpo::uno::Sequence<OUString> aStringSeq(aItem3.second.size());
                                     auto aStringArray = aStringSeq.getArray();
                                     int nId = 0;
                                     for (const auto& aItem4 : aItem3.second)
@@ -2744,7 +2744,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                 }
                                 else if (aItem3.first == "Publisher")
                                 {
-                                    uno::Sequence<OUString> aStringSeq(aItem3.second.size());
+                                    cpo::uno::Sequence<OUString> aStringSeq(aItem3.second.size());
                                     auto aStringArray = aStringSeq.getArray();
                                     int nId = 0;
                                     for (const auto& aItem4 : aItem3.second)
@@ -2757,7 +2757,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                 }
                                 else if (aItem3.first == "Relation")
                                 {
-                                    uno::Sequence<OUString> aStringSeq(aItem3.second.size());
+                                    cpo::uno::Sequence<OUString> aStringSeq(aItem3.second.size());
                                     auto aStringArray = aStringSeq.getArray();
                                     int nId = 0;
                                     for (const auto& aItem4 : aItem3.second)
@@ -2956,7 +2956,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 continue;
 
                                             OUString aTitle;
-                                            const uno::Sequence<
+                                            const cpo::uno::Sequence<
                                                 uno::Reference<chart2::XFormattedString>>
                                                 aFSSeq = xTitle->getText();
                                             for (auto const& fs : aFSSeq)
@@ -2984,7 +2984,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 continue;
 
                                             OUString aSubTitle;
-                                            const uno::Sequence<
+                                            const cpo::uno::Sequence<
                                                 uno::Reference<chart2::XFormattedString>>
                                                 aFSSeq = xSubTitle->getText();
                                             for (auto const& fs : aFSSeq)
@@ -3004,7 +3004,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                                     // Check if the InternalDataProvider is row or column based.
                                     bool bChartUseColumns = false;
-                                    uno::Sequence<beans::PropertyValue> aArguments(
+                                    cpo::uno::Sequence<beans::PropertyValue> aArguments(
                                         xDataProvider->detectArguments(nullptr));
                                     for (sal_Int32 j = 0; j < aArguments.getLength(); ++j)
                                     {
@@ -3073,9 +3073,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                             // set values also, if needed
                                             if (!bDelete && aItem3.second.size() > 0)
                                             {
-                                                uno::Sequence<uno::Sequence<double>> aData
+                                                cpo::uno::Sequence<cpo::uno::Sequence<double>> aData
                                                     = xDataArray->getData();
-                                                uno::Sequence<double>* pRows = aData.getArray();
+                                                cpo::uno::Sequence<double>* pRows = aData.getArray();
 
                                                 int nIndex = 0;
                                                 int nX = nId;
@@ -3129,7 +3129,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                         else if (aItem3.first.starts_with("setrowdesc"))
                                         {
                                             // set row descriptions
-                                            uno::Sequence<OUString> aRowDesc
+                                            cpo::uno::Sequence<OUString> aRowDesc
                                                 = xDataArray->getRowDescriptions();
                                             OUString* aRowdata = aRowDesc.getArray();
 
@@ -3173,7 +3173,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                         else if (aItem3.first.starts_with("setcolumndesc"))
                                         {
                                             // set column descriptions
-                                            uno::Sequence<OUString> aColDesc
+                                            cpo::uno::Sequence<OUString> aColDesc
                                                 = xDataArray->getColumnDescriptions();
                                             OUString* aColdata = aColDesc.getArray();
 
@@ -3232,14 +3232,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 if (!lcl_ResizeChartColumns(xChartDoc, nX))
                                                     continue;
 
-                                                uno::Sequence<uno::Sequence<double>> aData
+                                                cpo::uno::Sequence<cpo::uno::Sequence<double>> aData
                                                     = xDataArray->getData();
                                                 if (aData.getLength() != nY)
                                                     aData.realloc(nY);
 
                                                 for (sal_Int32 j = 0; j < nY; ++j)
                                                 {
-                                                    uno::Sequence<double>* pRows = aData.getArray();
+                                                    cpo::uno::Sequence<double>* pRows = aData.getArray();
                                                     // resize row if needed
                                                     if (pRows[j].getLength() != nX)
                                                     {
@@ -3258,7 +3258,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                         else if (aItem3.first.starts_with("data"))
                                         {
                                             // set table data values
-                                            uno::Sequence<uno::Sequence<double>> aData
+                                            cpo::uno::Sequence<cpo::uno::Sequence<double>> aData
                                                 = xDataArray->getData();
 
                                             // set only 1 cell data
@@ -3270,7 +3270,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 bool bValidIndex = false;
                                                 if (nY < aData.getLength() && nY >= 0)
                                                 {
-                                                    uno::Sequence<double>* pRows = aData.getArray();
+                                                    cpo::uno::Sequence<double>* pRows = aData.getArray();
                                                     if (nX < pRows[nY].getLength() && nX >= 0)
                                                     {
                                                         double* pCols = pRows[nY].getArray();
@@ -3315,7 +3315,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                     sal_Int32 nY = 0;
                                                     for (const auto& aItem4 : aItem3.second)
                                                     {
-                                                        uno::Sequence<double>* pRows
+                                                        cpo::uno::Sequence<double>* pRows
                                                             = aData.getArray();
                                                         // resize row if needed
                                                         if (pRows[nY].getLength() != nColsCount)
@@ -3643,7 +3643,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
 
                 // build sequence for status value
-                uno::Sequence< OUString > aSeq{ aCurrentLang,
+                cpo::uno::Sequence< OUString > aSeq{ aCurrentLang,
                                                 aScriptTypesInUse,
                                                 aKeyboardLang,
                                                 SwLangHelper::GetTextForLanguageGuessing( rSh ) };
@@ -3903,7 +3903,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     uno::Reference< XNameAccess > xFamilies = xSupplier->getStyleFamilies();
                     if (xFamilies->getByName(u"PageStyles"_ustr) >>= xContainer)
                     {
-                        const uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
+                        const cpo::uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
                         for (const auto& rName : aSeqNames)
                         {
                             aStyleName = rName;
@@ -4141,15 +4141,15 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case  SID_OPEN_SMARTTAGMENU:
             {
                  std::vector< OUString > aSmartTagTypes;
-                 uno::Sequence< uno::Reference< container::XStringKeyMap > > aStringKeyMaps;
+                 cpo::uno::Sequence< uno::Reference< container::XStringKeyMap > > aStringKeyMaps;
                  uno::Reference<text::XTextRange> xRange;
 
                  rSh.GetSmartTagTerm( aSmartTagTypes, aStringKeyMaps, xRange );
 
                  if ( xRange.is() && !aSmartTagTypes.empty() )
                  {
-                     uno::Sequence < uno::Sequence< uno::Reference< smarttags::XSmartTagAction > > > aActionComponentsSequence;
-                     uno::Sequence < uno::Sequence< sal_Int32 > > aActionIndicesSequence;
+                     cpo::uno::Sequence < cpo::uno::Sequence< uno::Reference< smarttags::XSmartTagAction > > > aActionComponentsSequence;
+                     cpo::uno::Sequence < cpo::uno::Sequence< sal_Int32 > > aActionIndicesSequence;
 
                      const SmartTagMgr& rSmartTagMgr = SwSmartTagMgr::Get();
                      rSmartTagMgr.GetActionSequences( aSmartTagTypes,
@@ -4257,7 +4257,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 std::vector<OUString> aBullets;
                 std::copy(aBulletsSet.begin(), aBulletsSet.end(), std::back_inserter(aBullets));
                 SfxStringListItem aItem(FN_BUL_GET_DOC_BULLETS);
-                uno::Sequence<OUString> aSeq(aBullets.data(),
+                cpo::uno::Sequence<OUString> aSeq(aBullets.data(),
                                              static_cast<sal_Int32>(aBullets.size()));
                 aItem.SetStringList(aSeq);
                 rSet.Put(aItem);

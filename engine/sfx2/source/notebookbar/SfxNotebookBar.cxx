@@ -109,7 +109,7 @@ public:
 
 static void NotebookbarAddonValues(
     std::vector<Image>& aImageValues,
-    std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>&
+    std::vector<cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>>&
         aExtensionValues)
 {
     if (comphelper::COKit::isActive())
@@ -119,9 +119,9 @@ static void NotebookbarAddonValues(
 
     for (int nIdx = 0; nIdx < aAddonsItems.GetAddonsNotebookBarCount(); nIdx++)
     {
-        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& aExtension
+        const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>& aExtension
             = aAddonsItems.GetAddonsNotebookBarPart(nIdx);
-        for (const css::uno::Sequence<css::beans::PropertyValue>& rExtensionVal : aExtension)
+        for (const cpo::uno::Sequence<css::beans::PropertyValue>& rExtensionVal : aExtension)
         {
             Image aImage;
             bool isBigImage = true;
@@ -474,7 +474,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
             //Addons For Notebookbar
             std::vector<Image> aImageValues;
-            std::vector<css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
+            std::vector<cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > > aExtensionValues;
             std::unique_ptr<NotebookBarAddonsItem> pNotebookBarAddonsItem;
             if (!bIsKit)
             {

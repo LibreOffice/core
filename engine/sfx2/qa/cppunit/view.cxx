@@ -132,7 +132,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperCommandValuesSignature)
     it = aTree.find("digest");
     CPPUNIT_ASSERT(it != aTree.not_found());
     auto aDigest = OUString::fromUtf8(it->second.get_value<std::string>());
-    uno::Sequence<sal_Int8> aBytes;
+    cpo::uno::Sequence<sal_Int8> aBytes;
     comphelper::Base64::decode(aBytes, aDigest);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(32), aBytes.getLength());
 #endif
@@ -192,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testSignatureSerialize)
     SvFileStream aSigStream(aSigUrl, StreamMode::READ);
     auto aSigValue
         = OUString::fromUtf8(read_uInt8s_ToOString(aSigStream, aSigStream.remainingSize()));
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"SignatureTime"_ustr, u"1643201995722"_ustr),
         comphelper::makePropertyValue(u"SignatureValue"_ustr, aSigValue),
     };

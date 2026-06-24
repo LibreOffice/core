@@ -58,7 +58,7 @@ public:
 
 protected:
     // ____ XRangeHighlighter ____
-    virtual css::uno::Sequence< css::chart2::data::HighlightedRange > SAL_CALL getSelectedRanges() override;
+    virtual cpo::uno::Sequence< css::chart2::data::HighlightedRange > SAL_CALL getSelectedRanges() override;
     virtual void SAL_CALL addSelectionChangeListener(
         const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener(
@@ -94,7 +94,7 @@ private:
     rtl::Reference< ::chart::ChartModel > m_xChartModel;
     css::uno::Reference< css::view::XSelectionChangeListener >
         m_xListener;
-    css::uno::Sequence< css::chart2::data::HighlightedRange >
+    cpo::uno::Sequence< css::chart2::data::HighlightedRange >
         m_aSelectedRanges;
     sal_Int32 m_nAddedListenerCount;
     bool m_bIncludeHiddenCells;

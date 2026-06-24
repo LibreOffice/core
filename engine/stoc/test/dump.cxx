@@ -37,15 +37,15 @@ public:
     void testSequence()
     {
         CPPUNIT_ASSERT_EQUAL(u"[]"_ustr,
-                             dump_->dumpValue(cpo::uno::Any(css::uno::Sequence<sal_Int32>{})));
+                             dump_->dumpValue(cpo::uno::Any(cpo::uno::Sequence<sal_Int32>{})));
         CPPUNIT_ASSERT_EQUAL(u"[1]"_ustr,
-                             dump_->dumpValue(cpo::uno::Any(css::uno::Sequence<sal_Int32>{ 1 })));
+                             dump_->dumpValue(cpo::uno::Any(cpo::uno::Sequence<sal_Int32>{ 1 })));
         CPPUNIT_ASSERT_EQUAL(u"[1, 2, 3]"_ustr, dump_->dumpValue(cpo::uno::Any(
-                                                    css::uno::Sequence<sal_Int32>{ 1, 2, 3 })));
+                                                    cpo::uno::Sequence<sal_Int32>{ 1, 2, 3 })));
         CPPUNIT_ASSERT_EQUAL(u"[[long: 1], [string: \"2\"], [[]long: [1, 2]]]"_ustr,
-                             (dump_->dumpValue(cpo::uno::Any(css::uno::Sequence<cpo::uno::Any>{
+                             (dump_->dumpValue(cpo::uno::Any(cpo::uno::Sequence<cpo::uno::Any>{
                                  cpo::uno::Any(sal_Int32(1)), cpo::uno::Any(u"2"_ustr),
-                                 cpo::uno::Any(css::uno::Sequence<sal_Int32>{ 1, 2 }) }))));
+                                 cpo::uno::Any(cpo::uno::Sequence<sal_Int32>{ 1, 2 }) }))));
     }
 
     void testEnum()

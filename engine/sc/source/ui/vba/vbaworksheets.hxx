@@ -58,7 +58,7 @@ public:
     // ScVbaWorksheets_BASE
     virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& Index2 ) override;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException

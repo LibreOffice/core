@@ -18,7 +18,7 @@
  */
 
 #include <osl/diagnose.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <wrtsh.hxx>
 #include <barcfg.hxx>
 
@@ -120,6 +120,6 @@ void SwToolbarConfigItem::ImplCommit()
     PutProperties(aNames, aValues);
 }
 
-void SwToolbarConfigItem::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwToolbarConfigItem::Notify( const cpo::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

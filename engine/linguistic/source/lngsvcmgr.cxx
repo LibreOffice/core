@@ -55,20 +55,20 @@
 using namespace com::sun::star;
 using namespace linguistic;
 
-uno::Sequence< OUString > static GetLangSvcList( const cpo::uno::Any &rVal );
-uno::Sequence< OUString > static GetLangSvc( const cpo::uno::Any &rVal );
+cpo::uno::Sequence< OUString > static GetLangSvcList( const cpo::uno::Any &rVal );
+cpo::uno::Sequence< OUString > static GetLangSvc( const cpo::uno::Any &rVal );
 
-static bool lcl_SeqHasString( const uno::Sequence< OUString > &rSeq, const OUString &rText )
+static bool lcl_SeqHasString( const cpo::uno::Sequence< OUString > &rSeq, const OUString &rText )
 {
     return !rText.isEmpty()
         && comphelper::findValue(rSeq, rText) != -1;
 }
 
 
-static uno::Sequence< lang::Locale > GetAvailLocales(
-        const uno::Sequence< OUString > &rSvcImplNames )
+static cpo::uno::Sequence< lang::Locale > GetAvailLocales(
+        const cpo::uno::Sequence< OUString > &rSvcImplNames )
 {
-    uno::Sequence< lang::Locale > aRes;
+    cpo::uno::Sequence< lang::Locale > aRes;
 
     const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     if( rSvcImplNames.hasElements() )
@@ -76,7 +76,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
         std::set< LanguageType > aLanguages;
 
         // All of these services only use one arg, but need two args for compat reasons
-        uno::Sequence< cpo::uno::Any > aArgs(2);
+        cpo::uno::Sequence< cpo::uno::Any > aArgs(2);
         aArgs.getArray()[0] <<= GetLinguProperties();
 
         // check all services for the supported languages and new
@@ -98,7 +98,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
 
             if (xSuppLoc.is())
             {
-                const uno::Sequence< lang::Locale > aLoc( xSuppLoc->getLocales() );
+                const cpo::uno::Sequence< lang::Locale > aLoc( xSuppLoc->getLocales() );
                 for (const lang::Locale& rLoc : aLoc)
                 {
                     LanguageType nLang = LinguLocaleToLanguage( rLoc );
@@ -403,7 +403,7 @@ LngSvcMgr::LngSvcMgr()
     bDisposing = false;
 
     // request notify events when properties (i.e. something in the subtree) changes
-    uno::Sequence< OUString > aNames{
+    cpo::uno::Sequence< OUString > aNames{
         u"ServiceManager/SpellCheckerList"_ustr,
         u"ServiceManager/GrammarCheckerList"_ustr,
         u"ServiceManager/HyphenatorList"_ustr,
@@ -529,7 +529,7 @@ namespace
 {
     using lang::Locale;
     using cpo::uno::Any;
-    using uno::Sequence;
+    using cpo::uno::Sequence;
 
     bool lcl_FindEntry( const OUString &rEntry, const Sequence< OUString > &rCfgSvcs )
     {
@@ -623,7 +623,7 @@ void LngSvcMgr::UpdateAll()
 {
     using beans::PropertyValue;
     using lang::Locale;
-    using uno::Sequence;
+    using cpo::uno::Sequence;
 
     typedef std::map< OUString, Sequence< OUString > > list_entry_map_t;
 
@@ -721,20 +721,20 @@ void LngSvcMgr::UpdateAll()
     //and Notify applies the new settings.
 }
 
-void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
+void LngSvcMgr::Notify( const cpo::uno::Sequence< OUString > &rPropertyNames )
 {
     static constexpr OUString aSpellCheckerList( u"ServiceManager/SpellCheckerList"_ustr );
     static constexpr OUString aGrammarCheckerList( u"ServiceManager/GrammarCheckerList"_ustr );
     static constexpr OUString aHyphenatorList( u"ServiceManager/HyphenatorList"_ustr );
     static constexpr OUString aThesaurusList( u"ServiceManager/ThesaurusList"_ustr );
 
-    const uno::Sequence< OUString > aSpellCheckerListEntries( GetNodeNames( aSpellCheckerList ) );
-    const uno::Sequence< OUString > aGrammarCheckerListEntries( GetNodeNames( aGrammarCheckerList ) );
-    const uno::Sequence< OUString > aHyphenatorListEntries( GetNodeNames( aHyphenatorList ) );
-    const uno::Sequence< OUString > aThesaurusListEntries( GetNodeNames( aThesaurusList ) );
+    const cpo::uno::Sequence< OUString > aSpellCheckerListEntries( GetNodeNames( aSpellCheckerList ) );
+    const cpo::uno::Sequence< OUString > aGrammarCheckerListEntries( GetNodeNames( aGrammarCheckerList ) );
+    const cpo::uno::Sequence< OUString > aHyphenatorListEntries( GetNodeNames( aHyphenatorList ) );
+    const cpo::uno::Sequence< OUString > aThesaurusListEntries( GetNodeNames( aThesaurusList ) );
 
-    uno::Sequence< cpo::uno::Any > aValues;
-    uno::Sequence< OUString > aNames( 1 );
+    cpo::uno::Sequence< cpo::uno::Any > aValues;
+    cpo::uno::Sequence< OUString > aNames( 1 );
     OUString *pNames = aNames.getArray();
 
     for (const OUString& rName : rPropertyNames)
@@ -759,7 +759,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             {
                 pNames[0] = aSpellCheckerList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
-                uno::Sequence< OUString > aSvcImplNames;
+                cpo::uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
                     aSvcImplNames = GetLangSvcList(aValues[0]);
 
@@ -782,7 +782,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             {
                 pNames[0] = aGrammarCheckerList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
-                uno::Sequence< OUString > aSvcImplNames;
+                cpo::uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
                     aSvcImplNames = GetLangSvc(aValues[0]);
 
@@ -808,7 +808,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             {
                 pNames[0] = aHyphenatorList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
-                uno::Sequence< OUString > aSvcImplNames;
+                cpo::uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
                     aSvcImplNames = GetLangSvc(aValues[0]);
 
@@ -831,7 +831,7 @@ void LngSvcMgr::Notify( const uno::Sequence< OUString > &rPropertyNames )
             {
                 pNames[0] = aThesaurusList + "/" + aKeyText;
                 aValues = /*aCfg.*/GetProperties( aNames );
-                uno::Sequence< OUString > aSvcImplNames;
+                cpo::uno::Sequence< OUString > aSvcImplNames;
                 if (aValues.hasElements())
                     aSvcImplNames = GetLangSvcList(aValues[0]);
 
@@ -976,7 +976,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
             if (xInfo.is())
                 aImplName = xInfo->getImplementationName();
             SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-            uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+            cpo::uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
             aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
             pAvailSpellSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
@@ -1020,7 +1020,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
             if (xInfo.is())
                 aImplName = xInfo->getImplementationName();
             SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-            uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+            cpo::uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
             aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
             pAvailGrammarSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
@@ -1064,7 +1064,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
             if (xInfo.is())
                 aImplName = xInfo->getImplementationName();
             SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-            uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+            cpo::uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
             aLanguages = LocaleSeqToLangVec( aLocaleSequence );
             pAvailHyphSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
         }
@@ -1116,7 +1116,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
                 if (xInfo.is())
                     aImplName = xInfo->getImplementationName();
                 SAL_WARN_IF( aImplName.isEmpty(), "linguistic", "empty implementation name" );
-                uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
+                cpo::uno::Sequence<lang::Locale> aLocaleSequence(xSvc->getLocales());
                 aLanguages = LocaleSeqToLangVec( aLocaleSequence );
 
                 pAvailThesSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
@@ -1135,7 +1135,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Spell" );
 
     OUString aNode(u"ServiceManager/SpellCheckerList"_ustr);
-    uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
+    cpo::uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
 
     // append path prefix need for 'GetProperties' call below
     OUString aPrefix = aNode + "/";
@@ -1144,14 +1144,14 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
         name = aPrefix + name;
     }
 
-    const uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
+    const cpo::uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (!(aNames.hasElements()  &&  aNames.getLength() == aValues.getLength()))
         return;
 
     const OUString *pNames = aNames.getConstArray();
     for (const cpo::uno::Any& rValue : aValues)
     {
-        uno::Sequence< OUString > aSvcImplNames;
+        cpo::uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
         {
             OUString aLocaleStr( *pNames++ );
@@ -1168,7 +1168,7 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Grammar" );
 
     OUString aNode(u"ServiceManager/GrammarCheckerList"_ustr);
-    uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
+    cpo::uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
 
     // append path prefix need for 'GetProperties' call below
     OUString aPrefix = aNode  + "/";
@@ -1177,14 +1177,14 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
         name = aPrefix + name;
     }
 
-    const uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
+    const cpo::uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (!(aNames.hasElements()  &&  aNames.getLength() == aValues.getLength()))
         return;
 
     const OUString *pNames = aNames.getConstArray();
     for (const cpo::uno::Any& rValue : aValues)
     {
-        uno::Sequence< OUString > aSvcImplNames;
+        cpo::uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
         {
             // there should only be one grammar checker in use per language...
@@ -1205,7 +1205,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Hyph" );
 
     OUString aNode(u"ServiceManager/HyphenatorList"_ustr);
-    uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
+    cpo::uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
 
     // append path prefix need for 'GetProperties' call below
     OUString aPrefix = aNode + "/";
@@ -1214,14 +1214,14 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
         name = aPrefix + name;
     }
 
-    const uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
+    const cpo::uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (!(aNames.hasElements()  &&  aNames.getLength() == aValues.getLength()))
         return;
 
     const OUString *pNames = aNames.getConstArray();
     for (const cpo::uno::Any& rValue : aValues)
     {
-        uno::Sequence< OUString > aSvcImplNames;
+        cpo::uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
         {
             // there should only be one hyphenator in use per language...
@@ -1242,7 +1242,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::SetCfgServiceLists - Thes" );
 
     OUString aNode(u"ServiceManager/ThesaurusList"_ustr);
-    uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
+    cpo::uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
 
     // append path prefix need for 'GetProperties' call below
     OUString aPrefix = aNode + "/";
@@ -1251,14 +1251,14 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
         name = aPrefix + name;
     }
 
-    const uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
+    const cpo::uno::Sequence< cpo::uno::Any > aValues( /*aCfg.*/GetProperties( aNames ) );
     if (!(aNames.hasElements()  &&  aNames.getLength() == aValues.getLength()))
         return;
 
     const OUString *pNames = aNames.getConstArray();
     for (const cpo::uno::Any& rValue : aValues)
     {
-        uno::Sequence< OUString > aSvcImplNames;
+        cpo::uno::Sequence< OUString > aSvcImplNames;
         if (rValue >>= aSvcImplNames)
         {
             OUString aLocaleStr( *pNames++ );
@@ -1358,14 +1358,14 @@ bool SAL_CALL
 }
 
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getAvailableServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aRes;
+    cpo::uno::Sequence< OUString > aRes;
     const SvcInfoArray *pInfoArray = nullptr;
 
     if (rServiceName == SN_SPELLCHECKER)
@@ -1411,15 +1411,15 @@ uno::Sequence< OUString > SAL_CALL
 }
 
 
-uno::Sequence< lang::Locale > SAL_CALL
+cpo::uno::Sequence< lang::Locale > SAL_CALL
     LngSvcMgr::getAvailableLocales(
             const OUString& rServiceName )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< lang::Locale > aRes;
+    cpo::uno::Sequence< lang::Locale > aRes;
 
-    uno::Sequence< lang::Locale >  *pAvailLocales     = nullptr;
+    cpo::uno::Sequence< lang::Locale >  *pAvailLocales     = nullptr;
     if (rServiceName == SN_SPELLCHECKER)
         pAvailLocales       = &aAvailSpellLocales;
     else if (rServiceName == SN_GRAMMARCHECKER)
@@ -1441,8 +1441,8 @@ uno::Sequence< lang::Locale > SAL_CALL
     return aRes;
 }
 
-static bool IsEqSvcList( const uno::Sequence< OUString > &rList1,
-                         const uno::Sequence< OUString > &rList2 )
+static bool IsEqSvcList( const cpo::uno::Sequence< OUString > &rList1,
+                         const cpo::uno::Sequence< OUString > &rList2 )
 {
     // returns true if both sequences are equal
     return rList1.getLength() == rList2.getLength()
@@ -1454,7 +1454,7 @@ void SAL_CALL
     LngSvcMgr::setConfiguredServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale,
-            const uno::Sequence< OUString >& rServiceImplNames )
+            const cpo::uno::Sequence< OUString >& rServiceImplNames )
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::setConfiguredServices" );
 
@@ -1537,7 +1537,7 @@ bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
     bool bRes = false;
 
     LinguDispatcher *pDsp = nullptr;
-    uno::Sequence< lang::Locale > aLocales;
+    cpo::uno::Sequence< lang::Locale > aLocales;
 
     if (rServiceName == SN_SPELLCHECKER)
     {
@@ -1570,7 +1570,7 @@ bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
 
     if (pDsp  &&  aLocales.hasElements())
     {
-        uno::Sequence< beans::PropertyValue > aValues( aLocales.getLength() );
+        cpo::uno::Sequence< beans::PropertyValue > aValues( aLocales.getLength() );
         beans::PropertyValue *pValue = aValues.getArray();
 
         // get node name to be used
@@ -1591,7 +1591,7 @@ bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
 
         for (const lang::Locale& rLocale : aLocales)
         {
-            uno::Sequence< OUString > aSvcImplNames = pDsp->GetServiceList( rLocale );
+            cpo::uno::Sequence< OUString > aSvcImplNames = pDsp->GetServiceList( rLocale );
 
             // build value to be written back to configuration
             cpo::uno::Any aCfgAny;
@@ -1616,9 +1616,9 @@ bool LngSvcMgr::SaveCfgSvcs( std::u16string_view rServiceName )
 }
 
 
-static uno::Sequence< OUString > GetLangSvcList( const cpo::uno::Any &rVal )
+static cpo::uno::Sequence< OUString > GetLangSvcList( const cpo::uno::Any &rVal )
 {
-    uno::Sequence< OUString > aRes;
+    cpo::uno::Sequence< OUString > aRes;
 
     if (rVal.hasValue())
     {
@@ -1635,9 +1635,9 @@ static uno::Sequence< OUString > GetLangSvcList( const cpo::uno::Any &rVal )
 }
 
 
-static uno::Sequence< OUString > GetLangSvc( const cpo::uno::Any &rVal )
+static cpo::uno::Sequence< OUString > GetLangSvc( const cpo::uno::Any &rVal )
 {
-    uno::Sequence< OUString > aRes;
+    cpo::uno::Sequence< OUString > aRes;
     if (!rVal.hasValue())
         return aRes;
 
@@ -1669,24 +1669,24 @@ static uno::Sequence< OUString > GetLangSvc( const cpo::uno::Any &rVal )
 }
 
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getConfiguredServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSvcImplNames;
+    cpo::uno::Sequence< OUString > aSvcImplNames;
 
     OUString aCfgLocale( LanguageTag::convertToBcp47( rLocale) );
 
-    uno::Sequence< cpo::uno::Any > aValues;
-    uno::Sequence< OUString > aNames( 1 );
+    cpo::uno::Sequence< cpo::uno::Any > aValues;
+    cpo::uno::Sequence< OUString > aNames( 1 );
     OUString *pNames = aNames.getArray();
     if ( rServiceName == SN_SPELLCHECKER )
     {
         OUString aNode( u"ServiceManager/SpellCheckerList"_ustr);
-        const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
+        const cpo::uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
             pNames[0] = aNode + "/" + aCfgLocale;
@@ -1698,7 +1698,7 @@ uno::Sequence< OUString > SAL_CALL
     else if ( rServiceName == SN_GRAMMARCHECKER )
     {
         OUString aNode( u"ServiceManager/GrammarCheckerList"_ustr);
-        const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
+        const cpo::uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
             pNames[0] = aNode + "/" + aCfgLocale;
@@ -1710,7 +1710,7 @@ uno::Sequence< OUString > SAL_CALL
     else if ( rServiceName == SN_HYPHENATOR )
     {
         OUString aNode( u"ServiceManager/HyphenatorList"_ustr);
-        const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
+        const cpo::uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
             pNames[0] = aNode + "/" + aCfgLocale;
@@ -1722,7 +1722,7 @@ uno::Sequence< OUString > SAL_CALL
     else if ( rServiceName == SN_THESAURUS )
     {
         OUString aNode( u"ServiceManager/ThesaurusList"_ustr);
-        const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
+        const cpo::uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
             pNames[0] = aNode + "/" + aCfgLocale;
@@ -1807,7 +1807,7 @@ bool SAL_CALL
 }
 
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getSupportedServiceNames()
 {
     return { u"com.sun.star.linguistic2.LinguServiceManager"_ustr };
@@ -1815,7 +1815,7 @@ uno::Sequence< OUString > SAL_CALL
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_LngSvcMgr_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LngSvcMgr());
 }

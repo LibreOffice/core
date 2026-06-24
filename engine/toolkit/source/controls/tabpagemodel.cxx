@@ -61,9 +61,9 @@ OUString SAL_CALL UnoControlTabPageModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlTabPageModel"_ustr;
 }
 
-css::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UnoControlTabPageModel::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > aNames = ControlModelContainerBase::getSupportedServiceNames( );
+    cpo::uno::Sequence< OUString > aNames = ControlModelContainerBase::getSupportedServiceNames( );
     aNames.realloc( aNames.getLength() + 1 );
     aNames.getArray()[ aNames.getLength() - 1 ] = u"com.sun.star.awt.tab.UnoControlTabPageModel"_ustr;
     return aNames;
@@ -182,7 +182,7 @@ bool SAL_CALL UnoControlTabPage::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.tab.UnoControlTabPage"_ustr };
 }
@@ -280,7 +280,7 @@ void SAL_CALL UnoControlTabPage::windowHidden( const css::lang::EventObject& ) {
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPageModel(context));
 }
@@ -288,7 +288,7 @@ stardiv_Toolkit_UnoControlTabPageModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPage_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPage(context));
 }

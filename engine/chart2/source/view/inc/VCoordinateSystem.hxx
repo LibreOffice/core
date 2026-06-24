@@ -23,7 +23,7 @@
 #include "VSeriesPlotter.hxx"
 #include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
@@ -64,7 +64,7 @@ public:
     const css::drawing::HomogenMatrix& getTransformationSceneToScreen() const { return m_aMatrixSceneToScreen;}
 
     //better performance for big data
-    virtual css::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const css::awt::Size& rPageSize
+    virtual cpo::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const css::awt::Size& rPageSize
                                     , const css::awt::Size& rPageResolution );
 
     ExplicitScaleData getExplicitScale( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
@@ -133,7 +133,7 @@ public:
     sal_Int32 getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex ) const;
 
     bool needSeriesNamesForAxis() const;
-    void setSeriesNamesForAxis( const css::uno::Sequence< OUString >& rSeriesNames );
+    void setSeriesNamesForAxis( const cpo::uno::Sequence< OUString >& rSeriesNames );
 
 protected: //methods
     VCoordinateSystem( rtl::Reference< ::chart::BaseCoordinateSystem > xCooSys );
@@ -178,7 +178,7 @@ protected: //member
      */
     MergedMinimumAndMaximumSupplier m_aMergedMinMaxSupplier;
 
-    css::uno::Sequence< OUString > m_aSeriesNamesForZAxis;
+    cpo::uno::Sequence< OUString > m_aSeriesNamesForZAxis;
 
     typedef std::map< tFullAxisIndex, std::shared_ptr< VAxisBase > > tVAxisMap;
 

@@ -29,7 +29,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -54,7 +54,7 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content& rContent, std::u
 {
     uno::Reference<io::XInputStream> xInputStream;
 
-    uno::Sequence<OUString> lPropNames{ u"Title"_ustr };
+    cpo::uno::Sequence<OUString> lPropNames{ u"Title"_ustr };
     try
     {
         const uno::Reference<sdbc::XResultSet> xResultSet(

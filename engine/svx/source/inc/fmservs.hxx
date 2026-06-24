@@ -86,7 +86,7 @@ namespace svxform
 
     OUString OAddConditionDialog_GetImplementationName();
 
-    css::uno::Sequence<OUString>
+    cpo::uno::Sequence<OUString>
     OAddConditionDialog_GetSupportedServiceNames();
 }
 

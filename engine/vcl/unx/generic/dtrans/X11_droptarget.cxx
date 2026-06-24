@@ -26,6 +26,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
+using namespace ::cpo::uno;
 
 X11DropTarget::X11DropTarget()
     : m_aTargetWindow(None)

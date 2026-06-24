@@ -435,7 +435,7 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
     return true;
 }
 
-void PngImageWriter::setParameters(css::uno::Sequence<css::beans::PropertyValue> const& rParameters)
+void PngImageWriter::setParameters(cpo::uno::Sequence<css::beans::PropertyValue> const& rParameters)
 {
     for (auto const& rValue : rParameters)
     {
@@ -452,7 +452,7 @@ void PngImageWriter::setParameters(css::uno::Sequence<css::beans::PropertyValue>
         }
         else if (rValue.Name == "AdditionalChunks")
         {
-            css::uno::Sequence<css::beans::PropertyValue> aAdditionalChunkSequence;
+            cpo::uno::Sequence<css::beans::PropertyValue> aAdditionalChunkSequence;
             if (rValue.Value >>= aAdditionalChunkSequence)
             {
                 for (const auto& rAdditionalChunk : aAdditionalChunkSequence)
@@ -466,7 +466,7 @@ void PngImageWriter::setParameters(css::uno::Sequence<css::beans::PropertyValue>
                         }
                         aChunk.name[4] = '\0';
 
-                        css::uno::Sequence<sal_Int8> aByteSeq;
+                        cpo::uno::Sequence<sal_Int8> aByteSeq;
                         if (rAdditionalChunk.Value >>= aByteSeq)
                         {
                             sal_uInt32 nChunkSize = aByteSeq.getLength();

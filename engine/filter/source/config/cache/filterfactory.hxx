@@ -67,9 +67,9 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sFilter) override;
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const OUString&                     sFilter   ,
-                                                                                                 const css::uno::Sequence< cpo::uno::Any >& lArguments) override;
+                                                                                                 const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
 
         // XContainerQuery
@@ -95,7 +95,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
         /** TODO document me
          */
-        static css::uno::Sequence<OUString> impl_getListOfInstalledModules();
+        static cpo::uno::Sequence<OUString> impl_getListOfInstalledModules();
 
 
         /** @short  implement the container string query:

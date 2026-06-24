@@ -66,7 +66,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XTextContent
     void SAL_CALL attach(const css::uno::Reference<css::text::XTextRange>& xTextRange) override;

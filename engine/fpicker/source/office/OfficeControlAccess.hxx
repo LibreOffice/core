@@ -72,8 +72,8 @@ namespace svt
         cpo::uno::Any  getControlProperty( std::u16string_view rControlName, const OUString& rControlProperty );
 
         // XControlInformation implementation
-        css::uno::Sequence< OUString >  getSupportedControls(  ) const;
-        css::uno::Sequence< OUString >  getSupportedControlProperties( std::u16string_view rControlName );
+        cpo::uno::Sequence< OUString >  getSupportedControls(  ) const;
+        cpo::uno::Sequence< OUString >  getSupportedControlProperties( std::u16string_view rControlName );
         static bool                     isControlSupported( std::u16string_view rControlName );
         bool                            isControlPropertySupported( std::u16string_view rControlName, const OUString& rControlProperty );
 

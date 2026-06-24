@@ -2455,7 +2455,7 @@ void RTFDocumentImpl::resetAttributes()
     m_aStates.top().getParagraphAttributes().clear();
 }
 
-static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties,
+static bool lcl_containsProperty(const cpo::uno::Sequence<beans::Property>& rProperties,
                                  std::u16string_view rName)
 {
     return std::any_of(rProperties.begin(), rProperties.end(),
@@ -3455,9 +3455,9 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                     xClipboardPropertyContainer, uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xDocumentPropertySet(xDocumentPropertyContainer,
                                                                          uno::UNO_QUERY);
-                const uno::Sequence<beans::Property> aClipboardProperties
+                const cpo::uno::Sequence<beans::Property> aClipboardProperties
                     = xClipboardPropertySet->getPropertySetInfo()->getProperties();
-                uno::Sequence<beans::Property> aDocumentProperties
+                cpo::uno::Sequence<beans::Property> aDocumentProperties
                     = xDocumentPropertySet->getPropertySetInfo()->getProperties();
 
                 for (const beans::Property& rProperty : aClipboardProperties)

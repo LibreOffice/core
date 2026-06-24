@@ -45,7 +45,7 @@ using css::uno::Exception;
 using css::uno::UNO_QUERY;
 using css::uno::UNO_QUERY_THROW;
 using cpo::uno::Any;
-using css::uno::Sequence;
+using cpo::uno::Sequence;
 using css::awt::grid::XGridSelectionListener;
 using css::style::VerticalAlignment;
 using css::style::VerticalAlignment_TOP;

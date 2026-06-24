@@ -366,7 +366,7 @@ void SdXMLShapeContext::endFastElement(sal_Int32 )
         {
             Reference< XNameReplace > xEvents( xEventsSupplier->getEvents(), UNO_SET_THROW );
 
-            uno::Sequence< beans::PropertyValue > aProperties{
+            cpo::uno::Sequence< beans::PropertyValue > aProperties{
                 { /* Name   */ u"EventType"_ustr,
                   /* Handle */ -1,
                   /* Value  */ cpo::uno::Any(u"Presentation"_ustr),
@@ -520,7 +520,7 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
     catch(const uno::Exception& e)
     {
         TOOLS_WARN_EXCEPTION("xmloff", "AddShape " << serviceName);
-        uno::Sequence<OUString> aSeq { serviceName };
+        cpo::uno::Sequence<OUString> aSeq { serviceName };
         GetImport().SetError( XMLERROR_FLAG_ERROR | XMLERROR_API,
                               aSeq, e.Message, nullptr );
     }
@@ -3697,7 +3697,7 @@ void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
     if ( !maCustomShapeGeometry.empty() )
     {
         // converting the vector to a sequence
-        uno::Sequence< beans::PropertyValue > aSeq( comphelper::containerToSequence(maCustomShapeGeometry) );
+        cpo::uno::Sequence< beans::PropertyValue > aSeq( comphelper::containerToSequence(maCustomShapeGeometry) );
 
         try
         {

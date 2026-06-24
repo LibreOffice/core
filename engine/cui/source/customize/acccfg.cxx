@@ -1037,7 +1037,7 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
     }
 
     // Assign all commands to its shortcuts - reading the accelerator config.
-    uno::Sequence<awt::KeyEvent> lKeys = xAccMgr->getAllKeyEvents();
+    cpo::uno::Sequence<awt::KeyEvent> lKeys = xAccMgr->getAllKeyEvents();
     sal_Int32 c2 = lKeys.getLength();
     sal_Int32 i2 = 0;
 
@@ -1339,8 +1339,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
         // don't forget to release the storage afterwards!
         uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
             embed::StorageFactory::create(m_xContext));
-        uno::Sequence<cpo::uno::Any> lArgs{ cpo::uno::Any(sCfgName),
-                                            cpo::uno::Any(css::embed::ElementModes::READ) };
+        cpo::uno::Sequence<cpo::uno::Any> lArgs{ cpo::uno::Any(sCfgName),
+                                                 cpo::uno::Any(css::embed::ElementModes::READ) };
 
         xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
         uno::Reference<embed::XStorage> xUIConfig
@@ -1409,8 +1409,8 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
     {
         uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
             embed::StorageFactory::create(m_xContext));
-        uno::Sequence<cpo::uno::Any> lArgs{ cpo::uno::Any(sCfgName),
-                                            cpo::uno::Any(embed::ElementModes::WRITE) };
+        cpo::uno::Sequence<cpo::uno::Any> lArgs{ cpo::uno::Any(sCfgName),
+                                                 cpo::uno::Any(embed::ElementModes::WRITE) };
 
         xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
 

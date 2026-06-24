@@ -135,7 +135,7 @@ public:
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows = false, bool bIsColumns = false );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaRange( css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    ScVbaRange( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     /// @throws css::uno::RuntimeException
     ScDocument& getScDocument();
@@ -287,7 +287,7 @@ public:
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Previous() override;
     virtual void SAL_CALL RemoveSubtotal(  ) override;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL MergeArea() override;
-    virtual void SAL_CALL Subtotal( ::sal_Int32 GroupBy, ::sal_Int32 Function, const css::uno::Sequence< ::sal_Int32 >& TotalList, const cpo::uno::Any& Replace, const cpo::uno::Any& PageBreaks, const cpo::uno::Any& SummaryBelowData ) override;
+    virtual void SAL_CALL Subtotal( ::sal_Int32 GroupBy, ::sal_Int32 Function, const cpo::uno::Sequence< ::sal_Int32 >& TotalList, const cpo::uno::Any& Replace, const cpo::uno::Any& PageBreaks, const cpo::uno::Any& SummaryBelowData ) override;
     virtual void SAL_CALL ExportAsFixedFormat(const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
         const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& IgnorePrintAreas, const cpo::uno::Any& From,
         const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish, const cpo::uno::Any& FixedFormatExtClassPtr) override;
@@ -322,7 +322,7 @@ public:
     virtual bool SAL_CALL hasError(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 /// @throws css::uno::RuntimeException

@@ -63,7 +63,7 @@ class FontHeightToolBoxControl : public FontHeightToolBoxControl_Base
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // WeakComponentImplHelperBase
         using FontHeightToolBoxControl_Base::disposing;
@@ -79,7 +79,7 @@ class FontHeightToolBoxControl : public FontHeightToolBoxControl_Base
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
         virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
 
-        void dispatchCommand( const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
+        void dispatchCommand( const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs );
         using svt::ToolboxController::dispatchCommand;
 
     private:
@@ -217,7 +217,7 @@ void SvxFontSizeBox_Base::Select()
     sal_Int64 nSelVal = m_xWidget->get_value();
     float fSelVal     = float( nSelVal ) / 10;
 
-    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"FontHeight.Height"_ustr,
+    cpo::uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"FontHeight.Height"_ustr,
                                                                                fSelVal) };
 
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -368,7 +368,7 @@ OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
     return u"com.sun.star.svx.FontHeightToolBoxController"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -485,7 +485,7 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
 }
 
 void FontHeightToolBoxControl::dispatchCommand(
-    const uno::Sequence< beans::PropertyValue >& rArgs )
+    const cpo::uno::Sequence< beans::PropertyValue >& rArgs )
 {
     uno::Reference< frame::XDispatchProvider > xDispatchProvider( m_xFrame, uno::UNO_QUERY );
     if ( xDispatchProvider.is() )
@@ -507,7 +507,7 @@ void FontHeightToolBoxControl::dispatchCommand(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_svx_FontHeightToolBoxController_get_implementation(
     css::uno::XComponentContext *rxContext,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FontHeightToolBoxControl(rxContext));
 }

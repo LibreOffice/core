@@ -227,7 +227,7 @@ protected:
             std::abs(aExpectedTransform.Line3.Column3 - rTransform.Line3.Column3) < fEPS);
     }
 
-    OUString sequenceToOneLineString(const uno::Sequence<OUString>& rSeq)
+    OUString sequenceToOneLineString(const cpo::uno::Sequence<OUString>& rSeq)
     {
         OUStringBuffer aBuffer;
         for (const OUString& seqItem : rSeq)
@@ -322,13 +322,13 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
 
         // Check column labels
         uno::Reference< chart::XChartDataArray > xChartData(xChartDoc->getData(), UNO_QUERY_THROW);
-        uno::Sequence < OUString > aColumnLabels = xChartData->getColumnDescriptions();
+        cpo::uno::Sequence < OUString > aColumnLabels = xChartData->getColumnDescriptions();
         CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aColumnLabels.getLength());
         OUString sColumnLabels = sequenceToOneLineString(aColumnLabels);
         CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(sColumnLabels);
 
         // Check row labels
-        uno::Sequence< OUString > aRowLabels = xChartData->getRowDescriptions();
+        cpo::uno::Sequence< OUString > aRowLabels = xChartData->getRowDescriptions();
         CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aRowLabels.getLength());
         OUString sRowLabels = sequenceToOneLineString(aRowLabels);
         CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(sRowLabels);

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cmath>
 #include <utility>
@@ -38,8 +38,8 @@ typedef std::pair< std::vector< double >, std::vector< double > > tDoubleVectorP
  */
 template< class Pred >
 tDoubleVectorPair
-    cleanup( const css::uno::Sequence< double > & rXValues,
-             const css::uno::Sequence< double > & rYValues,
+    cleanup( const cpo::uno::Sequence< double > & rXValues,
+             const cpo::uno::Sequence< double > & rYValues,
              Pred aPred )
 {
     tDoubleVectorPair aResult;

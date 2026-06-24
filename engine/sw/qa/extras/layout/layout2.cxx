@@ -1283,7 +1283,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170140)
     if (!xSpell.is() || !xSpell->hasLocale(aLocale))
         return;
 
-    uno::Sequence<beans::PropertyValue> aProperties;
+    cpo::uno::Sequence<beans::PropertyValue> aProperties;
 
     // correct non-ASCII apostrophe
     OUString sWord(u"d’Arc"_ustr);
@@ -1303,7 +1303,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40277)
     if (!xSpell.is() || !xSpell->hasLocale(aLocale))
         return;
 
-    uno::Sequence<beans::PropertyValue> aProperties;
+    cpo::uno::Sequence<beans::PropertyValue> aProperties;
 
     // check Hunspell dictionary
     OUString sWord(u"based"_ustr);

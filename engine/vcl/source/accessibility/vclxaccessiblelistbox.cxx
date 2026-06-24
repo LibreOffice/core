@@ -22,6 +22,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 VCLXAccessibleListBox::VCLXAccessibleListBox(ListBox* pListBox)
     : VCLXAccessibleBox(pListBox, VCLXAccessibleBox::LISTBOX, false)

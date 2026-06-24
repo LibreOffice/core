@@ -250,7 +250,7 @@ void ComboboxToolbarController::executeControlCommand( const css::frame::Control
                     m_pComboBox->append_text(rName);
 
                 // send notification
-                uno::Sequence< beans::NamedValue > aInfo { { u"List"_ustr, cpo::uno::Any(aList) } };
+                cpo::uno::Sequence< beans::NamedValue > aInfo { { u"List"_ustr, cpo::uno::Any(aList) } };
                 addNotifyInfo( u"ListChanged"_ustr,
                                getDispatchFromCommand( m_aCommandURL ),
                                aInfo );

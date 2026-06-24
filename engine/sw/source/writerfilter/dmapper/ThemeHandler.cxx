@@ -368,7 +368,7 @@ OUString resolveSupplementalFontList(model::FontScheme const& rFontSheme, const 
 } // end anonymous namespace
 
 ThemeHandler::ThemeHandler(oox::drawingml::ThemePtr const& pTheme,
-                           const css::uno::Sequence<css::beans::PropertyValue>& rLangProperties)
+                           const cpo::uno::Sequence<css::beans::PropertyValue>& rLangProperties)
     : mpTheme(pTheme)
 {
     for (const auto& rProperty : rLangProperties)

@@ -54,7 +54,7 @@ namespace toolkit
         // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() override;
 
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     private:
         virtual ~UnoControlFormattedFieldModel() override;
@@ -63,7 +63,7 @@ namespace toolkit
         void SAL_CALL dispose() override;
 
         // XPropertySet
-        void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values ) override;
+        void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
 
         // UnoControlModel
         virtual void ImplNormalizePropertySequence(
@@ -114,7 +114,7 @@ namespace toolkit
         // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() override;
 
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 
 

@@ -302,7 +302,7 @@ bool SvtViewOptions::HasVisible() const
     return GetVisible() != STATE_NONE;
 }
 
-css::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
+cpo::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
 {
     try
     {
@@ -314,9 +314,9 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
             xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
         {
-            const css::uno::Sequence<OUString> lNames = xUserData->getElementNames();
+            const cpo::uno::Sequence<OUString> lNames = xUserData->getElementNames();
             sal_Int32 c = lNames.getLength();
-            css::uno::Sequence< css::beans::NamedValue > lUserData(c);
+            cpo::uno::Sequence< css::beans::NamedValue > lUserData(c);
 
             std::transform(lNames.begin(), lNames.end(), lUserData.getArray(),
                 [&xUserData](const OUString& rName) -> css::beans::NamedValue {
@@ -330,10 +330,10 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
             TOOLS_WARN_EXCEPTION("unotools", "Unexpected exception");
         }
 
-    return css::uno::Sequence< css::beans::NamedValue >();
+    return cpo::uno::Sequence< css::beans::NamedValue >();
 }
 
-void SvtViewOptions::SetUserData( const css::uno::Sequence< css::beans::NamedValue >& lData )
+void SvtViewOptions::SetUserData( const cpo::uno::Sequence< css::beans::NamedValue >& lData )
 {
     try
     {

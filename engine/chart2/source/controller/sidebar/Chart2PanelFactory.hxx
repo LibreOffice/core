@@ -42,13 +42,13 @@ public:
     // XUIElementFactory
     virtual css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
         const OUString& rsResourceURL,
-        const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
+        const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 } // end of namespace chart::sidebar

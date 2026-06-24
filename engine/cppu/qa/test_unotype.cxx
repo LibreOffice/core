@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -151,7 +151,7 @@ void Test::testUnoType() {
     t = cppu::UnoType<cppu::UnoSequenceType<sal_Int8>>::get();
     CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(u"[]byte"_ustr, t.getTypeName());
-    CPPUNIT_ASSERT(bool(cppu::UnoType<css::uno::Sequence<sal_Int8>>::get() == t));
+    CPPUNIT_ASSERT(bool(cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get() == t));
     t = cppu::UnoType<cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get();
     CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(u"[]unsigned short"_ustr, t.getTypeName());
@@ -163,7 +163,7 @@ void Test::testUnoType() {
     CPPUNIT_ASSERT_EQUAL(css::uno::TypeClass_SEQUENCE, t.getTypeClass());
     CPPUNIT_ASSERT_EQUAL(u"[][]byte"_ustr, t.getTypeName());
     CPPUNIT_ASSERT_EQUAL(
-        cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int8>>>::get(),
+        cppu::UnoType<cpo::uno::Sequence<cpo::uno::Sequence<sal_Int8>>>::get(),
         t);
     t = cppu::UnoType<
         cppu::UnoSequenceType<
@@ -288,7 +288,7 @@ void Test::testGetTypeFavourUnsigned() {
             cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
-            static_cast<css::uno::Sequence<sal_uInt16> *>(nullptr)),
+            static_cast<cpo::uno::Sequence<sal_uInt16> *>(nullptr)),
         cppu::UnoType<
             cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get());
     CPPUNIT_ASSERT_EQUAL(
@@ -303,19 +303,19 @@ void Test::testGetTypeFavourUnsigned() {
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
             static_cast<
-                css::uno::Sequence<css::uno::Sequence<sal_uInt16>> *>(nullptr)),
+                cpo::uno::Sequence<cpo::uno::Sequence<sal_uInt16>> *>(nullptr)),
         cppu::UnoType<
             cppu::UnoSequenceType<
                 cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
-            static_cast<css::uno::Sequence<sal_Unicode> *>(nullptr)),
+            static_cast<cpo::uno::Sequence<sal_Unicode> *>(nullptr)),
         cppu::UnoType<cppu::UnoSequenceType<cppu::UnoCharType>>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourUnsigned(
             static_cast<
-                css::uno::Sequence<
-                    css::uno::Sequence<sal_Unicode>> *>(nullptr)),
+                cpo::uno::Sequence<
+                    cpo::uno::Sequence<sal_Unicode>> *>(nullptr)),
         cppu::UnoType<
             cppu::UnoSequenceType<
                 cppu::UnoSequenceType<cppu::UnoCharType>>>::get());
@@ -453,7 +453,7 @@ void Test::testGetTypeFavourChar() {
             cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
-            static_cast<css::uno::Sequence<sal_uInt16> *>(nullptr)),
+            static_cast<cpo::uno::Sequence<sal_uInt16> *>(nullptr)),
         cppu::UnoType<
             cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>::get());
     CPPUNIT_ASSERT_EQUAL(
@@ -468,19 +468,19 @@ void Test::testGetTypeFavourChar() {
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<
-                css::uno::Sequence<css::uno::Sequence<sal_uInt16>> *>(nullptr)),
+                cpo::uno::Sequence<cpo::uno::Sequence<sal_uInt16>> *>(nullptr)),
         cppu::UnoType<
             cppu::UnoSequenceType<
                 cppu::UnoSequenceType<cppu::UnoUnsignedShortType>>>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
-            static_cast<css::uno::Sequence<sal_Unicode> *>(nullptr)),
+            static_cast<cpo::uno::Sequence<sal_Unicode> *>(nullptr)),
         cppu::UnoType<cppu::UnoSequenceType<cppu::UnoCharType>>::get());
     CPPUNIT_ASSERT_EQUAL(
         cppu::getTypeFavourChar(
             static_cast<
-                css::uno::Sequence<
-                    css::uno::Sequence<sal_Unicode>> *>(nullptr)),
+                cpo::uno::Sequence<
+                    cpo::uno::Sequence<sal_Unicode>> *>(nullptr)),
         cppu::UnoType<
             cppu::UnoSequenceType<
                 cppu::UnoSequenceType<cppu::UnoCharType>>>::get());

@@ -60,7 +60,7 @@ class ToggleButtonToolbarController final : public ComplexToolbarController
 
     private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;
-        virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const override;
 
         DECL_LINK( MenuSelectHdl, Menu *, bool);
 

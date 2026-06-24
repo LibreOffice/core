@@ -40,10 +40,10 @@ bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
 }
 
 #define SC_SIMPLE_SERVICE_INFO_NAME( ClassName, ServiceAscii ) \
-css::uno::Sequence< OUString >                                 \
+cpo::uno::Sequence< OUString >                                 \
     SAL_CALL ClassName::getSupportedServiceNames()             \
 {                                                              \
-    css::uno::Sequence< OUString > aRet { ServiceAscii };      \
+    cpo::uno::Sequence< OUString > aRet { ServiceAscii };      \
     return aRet;                                               \
 }
 
@@ -51,10 +51,10 @@ css::uno::Sequence< OUString >                                 \
 // continue to ask aRet[0] if it doesn't iterate; new code can iterate over the
 // sequence. This mostly should be used by supportsService() iterating anyway.
 #define SC_SIMPLE_SERVICE_INFO_TYPO( ClassName, ServiceAscii, ServiceAsciiMistyped ) \
-css::uno::Sequence< OUString >                                                       \
+cpo::uno::Sequence< OUString >                                                       \
     SAL_CALL ClassName::getSupportedServiceNames()                                   \
 {                                                                                    \
-    css::uno::Sequence< OUString > aRet { ServiceAsciiMistyped, ServiceAscii };      \
+    cpo::uno::Sequence< OUString > aRet { ServiceAsciiMistyped, ServiceAscii };      \
     return aRet;                                                                     \
 }
 
@@ -103,7 +103,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 //  new (uno 3) variant
@@ -113,7 +113,7 @@ class SC_DLLPUBLIC ScNameToIndexAccess final : public cppu::WeakImplHelper<
 {
 private:
     css::uno::Reference<css::container::XNameAccess> xNameAccess;
-    css::uno::Sequence<OUString> aNames;
+    cpo::uno::Sequence<OUString> aNames;
 
 public:
                             ScNameToIndexAccess(
@@ -131,7 +131,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 class SC_DLLPUBLIC ScUnoHelpFunctions

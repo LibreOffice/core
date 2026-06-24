@@ -103,7 +103,7 @@ void ScConditionalFormatTest::testCondFormatListFormats()
     uno::Reference<sheet::XConditionalFormats> xCondFormatList =
         getConditionalFormatList(init());
 
-    const uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+    const cpo::uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
         xCondFormatList->getConditionalFormats();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xCondFormats.getLength());
     for (auto const & cf : xCondFormats)
@@ -117,7 +117,7 @@ void ScConditionalFormatTest::testCondFormatProperties()
     uno::Reference<sheet::XConditionalFormats> xCondFormatList =
         getConditionalFormatList(init(1));
 
-    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+    cpo::uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
         xCondFormatList->getConditionalFormats();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCondFormats.getLength());
 
@@ -128,7 +128,7 @@ void ScConditionalFormatTest::testCondFormatProperties()
     uno::Reference<sheet::XSheetCellRanges> xCellRanges;
     CPPUNIT_ASSERT(aAny >>= xCellRanges);
     CPPUNIT_ASSERT(xCellRanges.is());
-    uno::Sequence<table::CellRangeAddress> aRanges = xCellRanges->getRangeAddresses();
+    cpo::uno::Sequence<table::CellRangeAddress> aRanges = xCellRanges->getRangeAddresses();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRanges.getLength());
     table::CellRangeAddress aRange = aRanges[0];
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aRange.Sheet);
@@ -143,7 +143,7 @@ void ScConditionalFormatTest::testCondFormatXIndex()
     uno::Reference<sheet::XConditionalFormats> xCondFormatList =
         getConditionalFormatList(init(1));
 
-    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+    cpo::uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
         xCondFormatList->getConditionalFormats();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCondFormats.getLength());
 
@@ -234,7 +234,7 @@ void testDataBarEntries(uno::Reference<beans::XPropertySet> const & xPropSet,
         const OUString& rExpectedMaxString, sal_Int32 nExpectedMaxType)
 {
     cpo::uno::Any aAny = xPropSet->getPropertyValue(u"DataBarEntries"_ustr);
-    uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries;
+    cpo::uno::Sequence<uno::Reference<sheet::XDataBarEntry> > aEntries;
     CPPUNIT_ASSERT(aAny >>= aEntries);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEntries.getLength());
@@ -256,7 +256,7 @@ void ScConditionalFormatTest::testDataBarProperties()
     uno::Reference<sheet::XConditionalFormats> xCondFormatList =
         getConditionalFormatList(init(2));
 
-    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+    cpo::uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
         xCondFormatList->getConditionalFormats();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCondFormats.getLength());
 
@@ -369,7 +369,7 @@ void testColorScaleEntries(uno::Reference<beans::XPropertySet> const & xPropSet,
 {
     cpo::uno::Any aAny = xPropSet->getPropertyValue(u"ColorScaleEntries"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
-    uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
+    cpo::uno::Sequence<uno::Reference<sheet::XColorScaleEntry> > aEntries;
     CPPUNIT_ASSERT(aAny >>= aEntries);
 
     CPPUNIT_ASSERT_EQUAL(nEntries, aEntries.getLength());
@@ -390,7 +390,7 @@ void ScConditionalFormatTest::testColorScaleProperties()
     uno::Reference<sheet::XConditionalFormats> xCondFormatList =
         getConditionalFormatList(init(3));
 
-    uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
+    cpo::uno::Sequence<uno::Reference<sheet::XConditionalFormat> > xCondFormats =
         xCondFormatList->getConditionalFormats();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xCondFormats.getLength());
 

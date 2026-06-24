@@ -147,7 +147,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTabStopImportCon
 void SvxXMLTabStopImportContext::endFastElement(sal_Int32 nElement)
 {
     sal_uInt16 nCount = maTabStops.size();
-    uno::Sequence< style::TabStop> aSeq( nCount );
+    cpo::uno::Sequence< style::TabStop> aSeq( nCount );
 
     if( nCount )
     {

@@ -95,9 +95,9 @@ namespace vcl::unohelper {
         return cpo::uno::Any(maText);
     }
 
-    uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors(  )
+    cpo::uno::Sequence< datatransfer::DataFlavor > TextDataObject::getTransferDataFlavors(  )
     {
-        uno::Sequence< datatransfer::DataFlavor > aDataFlavors(1);
+        cpo::uno::Sequence< datatransfer::DataFlavor > aDataFlavors(1);
         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[0] );
         return aDataFlavors;
     }

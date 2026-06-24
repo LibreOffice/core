@@ -64,7 +64,7 @@ public:
 
     SVGExport( const css::uno::Reference< css::uno::XComponentContext >& rContext,
                 const css::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler,
-                const css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rFilterData );
 
     virtual ~SVGExport() override;
 
@@ -188,7 +188,7 @@ private:
     // #i124608# explicit ShapeSelection for export when export of the selection is wanted
     css::uno::Reference< css::drawing::XShapes > maShapeSelection;
     bool                                mbExportShapeSelection;
-    css::uno::Sequence< css::beans::PropertyValue > maFilterData;
+    cpo::uno::Sequence< css::beans::PropertyValue > maFilterData;
     css::uno::Reference< css::drawing::XDrawPage > mxDefaultPage;
     css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
     std::vector< css::uno::Reference< css::drawing::XDrawPage > > mSelectedPages;
@@ -220,7 +220,7 @@ private:
     Link<EditFieldInfo*,void>           maNewFieldHdl;
 
     /// @throws css::uno::RuntimeException
-    bool                            implExport( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
+    bool                            implExport( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
     bool                            implExportImpressOrDraw( const css::uno::Reference< css::io::XOutputStream >& rxOStm );
     bool                            implExportWriterOrCalc( const css::uno::Reference< css::io::XOutputStream >& rxOStm );
     bool                            implExportWriterTextGraphic( const css::uno::Reference< css::view::XSelectionSupplier >& xSelectionSupplier );
@@ -273,8 +273,8 @@ private:
                                                                 const css::uno::Reference< css::beans::XPropertySetInfo > & rxPropSetInfo );
     DECL_LINK( CalcFieldHdl, EditFieldInfo*, void );
 
-    bool filterImpressOrDraw( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
-    bool filterWriterOrCalc( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
+    bool filterImpressOrDraw( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
+    bool filterWriterOrCalc( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
 
     css::uno::Reference<css::frame::XController> getSourceController() const;
     css::uno::Reference<css::frame::XController> fillDrawImpressSelectedPages();
@@ -282,7 +282,7 @@ private:
 protected:
 
     // XFilter
-    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
+    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
     virtual void SAL_CALL cancel( ) override;
 
     // XImporter
@@ -292,7 +292,7 @@ protected:
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& io_rDescriptor ) override;
+    virtual OUString SAL_CALL detect( cpo::uno::Sequence< css::beans::PropertyValue >& io_rDescriptor ) override;
 
 public:
 
@@ -302,7 +302,7 @@ public:
     //  XServiceInfo
     virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

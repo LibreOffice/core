@@ -64,9 +64,9 @@ public:
     void SetFolder(const bool bSetFolder) { mbIsFolder = bSetFolder; }
 
     virtual bool saveChild( const OUString &rPath,
-                            std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
+                            std::vector < cpo::uno::Sequence < css::beans::PropertyValue > > &rManList,
                             ZipOutputStream & rZipOut,
-                            const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
+                            const cpo::uno::Sequence < sal_Int8 >& rEncryptionKey,
                             ::std::optional<sal_Int32> oPBKDF2IterationCount,
                             ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) = 0;
 

@@ -68,10 +68,10 @@ namespace
  * For this method to properly return the ordinal suffix for other locales
  * than english ones, ICU 4.2+ has to be used.
  */
-uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_Int32 nNumber,
+cpo::uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_Int32 nNumber,
         const lang::Locale &rLocale )
 {
-    uno::Sequence< OUString > retValue;
+    cpo::uno::Sequence< OUString > retValue;
 
     // Get the value from ICU
     UErrorCode nCode = U_ZERO_ERROR;
@@ -157,7 +157,7 @@ Sequence< OUString > SAL_CALL OrdinalSuffixService::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_OrdinalSuffix_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new i18npool::OrdinalSuffixService());
 }

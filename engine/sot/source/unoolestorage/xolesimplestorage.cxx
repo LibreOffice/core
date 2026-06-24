@@ -44,7 +44,7 @@ const sal_Int32 nBytesCount = 32000;
 
 OLESimpleStorage::OLESimpleStorage(
         css::uno::Reference<css::uno::XComponentContext> xContext,
-        css::uno::Sequence<cpo::uno::Any> const &aArguments)
+        cpo::uno::Sequence<cpo::uno::Any> const &aArguments)
 : m_bDisposed( false )
 , m_xContext(std::move( xContext ))
 , m_bNoTemporaryCopy( false )
@@ -191,7 +191,7 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, c
 
     try
     {
-        uno::Sequence< sal_Int8 > aData( nBytesCount );
+        cpo::uno::Sequence< sal_Int8 > aData( nBytesCount );
         sal_Int32 nRead = 0;
         do
         {
@@ -230,7 +230,7 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, co
 
     try
     {
-        const uno::Sequence< OUString > aElements = xNameAccess->getElementNames();
+        const cpo::uno::Sequence< OUString > aElements = xNameAccess->getElementNames();
         for ( const auto& rElement : aElements )
         {
             uno::Reference< io::XInputStream > xInputStream;
@@ -415,7 +415,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
                 throw io::IOException(); // TODO
             }
 
-            uno::Sequence< sal_Int8 > aData( nBytesCount );
+            cpo::uno::Sequence< sal_Int8 > aData( nBytesCount );
             sal_Int32 nSize = nBytesCount;
             sal_Int32 nRead = 0;
             while( 0 != ( nRead = pStream->Read( aData.getArray(), nSize ) ) )
@@ -455,7 +455,7 @@ cpo::uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -474,7 +474,7 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
         throw uno::RuntimeException(); // TODO:
     }
 
-    uno::Sequence< OUString > aSeq( aList.size() );
+    cpo::uno::Sequence< OUString > aSeq( aList.size() );
     auto aSeqRange = asNonConstRange(aSeq);
     for ( size_t nInd = 0; nInd < aList.size(); nInd++ )
         aSeqRange[nInd] = aList[nInd].GetName();
@@ -641,7 +641,7 @@ void SAL_CALL OLESimpleStorage::revert()
 //  XClassifiedObject
 
 
-uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -659,7 +659,7 @@ OUString SAL_CALL OLESimpleStorage::getClassName()
     return OUString();
 }
 
-void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& /*aClassID*/,
+void SAL_CALL OLESimpleStorage::setClassInfo( const cpo::uno::Sequence< sal_Int8 >& /*aClassID*/,
                             const OUString& /*sClassName*/ )
 {
     throw lang::NoSupportException();
@@ -676,7 +676,7 @@ bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.OLESimpleStorage"_ustr };
 }
@@ -684,7 +684,7 @@ uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_embed_OLESimpleStorage(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new OLESimpleStorage(context, arguments));
 }

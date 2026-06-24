@@ -40,8 +40,8 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     // and asserts that the title doesn't change.
 
     // Load document
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
-                                                                                 false) };
+    cpo::uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
+        u"Hidden"_ustr, false) };
     loadWithParams(u"private:factory/swriter"_ustr, aLoadArgs);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
 
 CPPUNIT_TEST_FIXTURE(Test, checkTitleSuggestedFileName)
 {
-    uno::Sequence<beans::PropertyValue> aArguments
+    cpo::uno::Sequence<beans::PropertyValue> aArguments
         = { comphelper::makePropertyValue(u"SuggestedSaveAsName"_ustr, u"suggestedname.odt"_ustr),
             comphelper::makePropertyValue(u"Hidden"_ustr, false) };
     loadWithParams(u"private:factory/swriter"_ustr, aArguments);
@@ -101,8 +101,8 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
     // Set the frame title, then cycle through default and print preview. Close the window
     // and check for infinite recursion.
 
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
-                                                                                 false) };
+    cpo::uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
+        u"Hidden"_ustr, false) };
     loadWithParams(u"private:factory/swriter"_ustr, aLoadArgs);
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

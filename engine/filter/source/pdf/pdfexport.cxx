@@ -312,7 +312,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                 beans::NamedValue aPathProp;
                 aPathProp.Name = u"nodepath"_ustr;
                 aPathProp.Value <<= u"/org.openoffice.Setup/Office/Factories/"_ustr;
-                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aPathProp) };
+                cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aPathProp) };
 
                 Reference< container::XNameAccess > xSOFConfig(
                     xConfigProvider->createInstanceWithArguments(
@@ -1249,7 +1249,7 @@ public:
 
     // XInteractionRequest
     virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
 
 
@@ -1269,9 +1269,9 @@ cpo::uno::Any SAL_CALL PDFErrorRequest::getRequest()
 }
 
 
-uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFErrorRequest::getContinuations()
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFErrorRequest::getContinuations()
 {
-    return uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
+    return cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
 }
 
 } // end anonymous namespace

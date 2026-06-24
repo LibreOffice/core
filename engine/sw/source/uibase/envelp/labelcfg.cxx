@@ -163,7 +163,7 @@ SwLabelConfig::~SwLabelConfig()
 // the config item is not writable ?:
 void SwLabelConfig::ImplCommit() {}
 
-void SwLabelConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwLabelConfig::Notify( const cpo::uno::Sequence< OUString >& ) {}
 
 static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, std::u16string_view rMeasure, const OUString& rManufacturer)
 {

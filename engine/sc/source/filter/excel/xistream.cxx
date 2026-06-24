@@ -62,14 +62,14 @@ XclImpDecrypterRef XclImpDecrypter::Clone() const
     return xNewDecr;
 }
 
-::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
+::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyPassword( const OUString& rPassword, cpo::uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
     o_rEncryptionData = OnVerifyPassword( rPassword );
     mnError = o_rEncryptionData.hasElements() ? ERRCODE_NONE : ERRCODE_ABORT;
     return o_rEncryptionData.hasElements() ? ::comphelper::DocPasswordVerifierResult::OK : ::comphelper::DocPasswordVerifierResult::WrongPassword;
 }
 
-::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
+::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyEncryptionData( const cpo::uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
     bool bValid = OnVerifyEncryptionData( rEncryptionData );
     mnError = bValid ? ERRCODE_NONE : ERRCODE_ABORT;
@@ -128,7 +128,7 @@ XclImpBiff5Decrypter* XclImpBiff5Decrypter::OnClone() const
     return new XclImpBiff5Decrypter( *this );
 }
 
-uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const OUString& rPassword )
+cpo::uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const OUString& rPassword )
 {
     maEncryptionData.realloc( 0 );
 
@@ -154,7 +154,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
                     ++nInd;
                 });
 
-            uno::Sequence< sal_Int8 > aDocId = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
+            cpo::uno::Sequence< sal_Int8 > aDocId = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
             OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the sequence!" );
 
             ::msfilter::MSCodec_Std97 aCodec97;
@@ -170,7 +170,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
     return maEncryptionData;
 }
 
-bool XclImpBiff5Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
+bool XclImpBiff5Decrypter::OnVerifyEncryptionData( const cpo::uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
     maEncryptionData.realloc( 0 );
 
@@ -245,7 +245,7 @@ XclImpBiff8CryptoAPIDecrypter* XclImpBiff8CryptoAPIDecrypter::OnClone() const
     return new XclImpBiff8CryptoAPIDecrypter(*this);
 }
 
-uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const OUString& rPassword )
+cpo::uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const OUString& rPassword )
 {
     maEncryptionData.realloc( 0 );
 
@@ -270,7 +270,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const
     return maEncryptionData;
 }
 
-bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
+bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const cpo::uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
     maEncryptionData.realloc( 0 );
 

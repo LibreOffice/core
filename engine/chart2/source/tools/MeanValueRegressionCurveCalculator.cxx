@@ -39,8 +39,8 @@ MeanValueRegressionCurveCalculator::~MeanValueRegressionCurveCalculator()
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
-    const uno::Sequence< double >& /*aXValues*/,
-    const uno::Sequence< double >& aYValues )
+    const cpo::uno::Sequence< double >& /*aXValues*/,
+    const cpo::uno::Sequence< double >& aYValues )
 {
     sal_Int32 nMax = aYValues.getLength();
     double fSumY = 0.0;
@@ -86,7 +86,7 @@ double SAL_CALL MeanValueRegressionCurveCalculator::getCurveValue( double /*x*/ 
     return m_fMeanValue;
 }
 
-uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,
@@ -95,7 +95,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculat
     if( bMaySkipPointsInCalculation )
     {
         // optimize result
-        uno::Sequence< geometry::RealPoint2D > aResult{ { min, m_fMeanValue },
+        cpo::uno::Sequence< geometry::RealPoint2D > aResult{ { min, m_fMeanValue },
                                                         { max, m_fMeanValue } };
 
         return aResult;

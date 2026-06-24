@@ -82,7 +82,7 @@ public:
     bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
     Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
 
-    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
+    virtual OUString SAL_CALL detect( cpo::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 };
 
 }
@@ -92,7 +92,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContex
 {
 }
 
-OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor )
+OUString SAL_CALL DBTypeDetection::detect( cpo::uno::Sequence< css::beans::PropertyValue >& Descriptor )
 {
     try
     {
@@ -175,7 +175,7 @@ Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbflt_DBTypeDetection_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaxml::DBTypeDetection(context));
 }
@@ -405,7 +405,7 @@ void DBContentLoader::cancel()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbflt_DBContentLoader2_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaxml::DBContentLoader(context));
 }

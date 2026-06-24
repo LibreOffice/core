@@ -21,7 +21,7 @@
 #include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
 #include <algorithm>
@@ -112,7 +112,7 @@ struct ToString
 
 template <class Container, class Func> auto convertToSequence(const Container& container, Func f)
 {
-    css::uno::Sequence<decltype(f(container[0]))> result(container.size());
+    cpo::uno::Sequence<decltype(f(container[0]))> result(container.size());
     std::transform(container.begin(), container.end(), result.getArray(), f);
     return result;
 }

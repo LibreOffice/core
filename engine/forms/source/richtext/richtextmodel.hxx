@@ -111,7 +111,7 @@ namespace frm
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual ::cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XPersistObject
         virtual OUString SAL_CALL getServiceName() override;
@@ -123,8 +123,8 @@ namespace frm
         virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
         // XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence<sal_Int8> & getUnoTunnelId();
+        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        static const cpo::uno::Sequence<sal_Int8> & getUnoTunnelId();
 
         // XModifyBroadcaster
         virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
@@ -139,10 +139,10 @@ namespace frm
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const override;
         virtual void describeAggregateProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
         // prevent method hiding

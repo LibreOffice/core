@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include "document.hxx"
 #include "attr.hxx"
@@ -53,6 +53,7 @@ using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 using namespace css::xml::sax;
+using namespace ::cpo::uno;
 
 namespace DOM
 {

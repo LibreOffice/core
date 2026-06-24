@@ -36,7 +36,7 @@ namespace frm
     public:
         DocumentCommandImageProvider( const css::uno::Reference<css::uno::XComponentContext>& _rContext, const css::uno::Reference< css::frame::XModel >& _rxDocument );
 
-        std::vector<Image> getCommandImages( const css::uno::Sequence< OUString >& _rCommandURLs, bool _bLarge ) const;
+        std::vector<Image> getCommandImages( const cpo::uno::Sequence< OUString >& _rCommandURLs, bool _bLarge ) const;
 
     private:
         css::uno::Reference< css::ui::XImageManager >    m_xDocumentImageManager;

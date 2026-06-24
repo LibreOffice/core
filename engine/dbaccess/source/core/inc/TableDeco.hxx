@@ -123,8 +123,8 @@ namespace dbaccess
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -144,8 +144,8 @@ namespace dbaccess
         virtual OUString SAL_CALL getName() override;
         virtual void SAL_CALL setName( const OUString& aName ) override;
         // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
         // XColumnsSupplier
         virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;

@@ -29,10 +29,10 @@ private:
 public:
             ScAddInCfg();
 
-    virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
+    virtual void    Notify( const cpo::uno::Sequence<OUString>& aPropertyNames ) override;
 
-    css::uno::Sequence< cpo::uno::Any>
-            GetProperties(const css::uno::Sequence< OUString >& rNames)
+    cpo::uno::Sequence< cpo::uno::Any>
+            GetProperties(const cpo::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
 
     using ConfigItem::GetNodeNames;

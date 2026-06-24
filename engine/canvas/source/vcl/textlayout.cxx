@@ -100,7 +100,7 @@ namespace vclcanvas
     }
 
     // XTextLayout
-    uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  )
+    cpo::uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  )
     {
         SolarMutexGuard aGuard;
 
@@ -117,7 +117,7 @@ namespace vclcanvas
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(1,0,0,0,1,0),
             nullptr,
-            uno::Sequence<double>(4),
+            cpo::uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
         KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, aViewState, aRenderState));
@@ -148,7 +148,7 @@ namespace vclcanvas
         return comphelper::containerToSequence(aOutlineSequence);
     }
 
-    uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryInkMeasures(  )
+    cpo::uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryInkMeasures(  )
     {
         SolarMutexGuard aGuard;
 
@@ -166,11 +166,11 @@ namespace vclcanvas
         rendering::RenderState aRenderState (
             geometry::AffineMatrix2D(1,0,0,0,1,0),
             nullptr,
-            uno::Sequence<double>(4),
+            cpo::uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
         std::vector< ::tools::Rectangle > aMetricVector;
-        uno::Sequence<geometry::RealRectangle2D> aBoundingBoxes;
+        cpo::uno::Sequence<geometry::RealRectangle2D> aBoundingBoxes;
         if (pVDev->GetGlyphBoundRects(
             Point(0,0),
             maText.Text,
@@ -193,20 +193,20 @@ namespace vclcanvas
         return aBoundingBoxes;
     }
 
-    uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryMeasures(  )
+    cpo::uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryMeasures(  )
     {
         // TODO(F1)
-        return uno::Sequence< geometry::RealRectangle2D >();
+        return cpo::uno::Sequence< geometry::RealRectangle2D >();
     }
 
-    uno::Sequence< double > SAL_CALL TextLayout::queryLogicalAdvancements(  )
+    cpo::uno::Sequence< double > SAL_CALL TextLayout::queryLogicalAdvancements(  )
     {
         SolarMutexGuard aGuard;
 
         return maLogicalAdvancements;
     }
 
-    void SAL_CALL TextLayout::applyLogicalAdvancements( const uno::Sequence< double >& aAdvancements )
+    void SAL_CALL TextLayout::applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements )
     {
         SolarMutexGuard aGuard;
 
@@ -216,14 +216,14 @@ namespace vclcanvas
         maLogicalAdvancements = aAdvancements;
     }
 
-    uno::Sequence< bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    cpo::uno::Sequence< bool > SAL_CALL TextLayout::queryKashidaPositions(  )
     {
         SolarMutexGuard aGuard;
 
         return maKashidaPositions;
     }
 
-    void SAL_CALL TextLayout::applyKashidaPositions( const uno::Sequence< bool >& aPositions )
+    void SAL_CALL TextLayout::applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions )
     {
         SolarMutexGuard aGuard;
 
@@ -277,7 +277,7 @@ namespace vclcanvas
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >&,
+    double SAL_CALL TextLayout::combinedJustify( const cpo::uno::Sequence< uno::Reference< rendering::XTextLayout > >&,
                                                  double )
     {
         // TODO(F1)
@@ -412,7 +412,7 @@ namespace vclcanvas
     }
 
     KernArray TextLayout::setupTextOffsets(
-                                       const uno::Sequence< double >&   inputOffsets,
+                                       const cpo::uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
     {
@@ -440,7 +440,7 @@ namespace vclcanvas
         return cppu::supportsService( this, ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()
     {
         return { u"com.sun.star.rendering.TextLayout"_ustr };
     }

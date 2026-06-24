@@ -2408,14 +2408,14 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         // values from InteropGrabBag. This affects images and custom shapes.
         if (xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         {
-            uno::Sequence<beans::PropertyValue> aGrabBagProps;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBagProps;
             xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBagProps;
             auto p3DEffectProps = std::find_if(
                 std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
                 [](const PropertyValue& rProp) { return rProp.Name == "3DEffectProperties"; });
             if (p3DEffectProps != std::cend(aGrabBagProps))
             {
-                uno::Sequence<beans::PropertyValue> a3DEffectProps;
+                cpo::uno::Sequence<beans::PropertyValue> a3DEffectProps;
                 p3DEffectProps->Value >>= a3DEffectProps;
                 // We have imported a scene3d.
                 if (rXShape->getShapeType() == "com.sun.star.drawing.CustomShape")
@@ -2442,7 +2442,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
                         [](const PropertyValue& rProp) { return rProp.Name == "Camera"; });
                     if (pCameraProps != std::cend(a3DEffectProps))
                     {
-                        uno::Sequence<beans::PropertyValue> aCameraProps;
+                        cpo::uno::Sequence<beans::PropertyValue> aCameraProps;
                         pCameraProps->Value >>= aCameraProps;
                         auto pZRotationProp = std::find_if(
                             std::cbegin(aCameraProps), std::cend(aCameraProps),
@@ -3441,9 +3441,9 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
 
 void DrawingML::WriteParagraphTabStops(const Reference<XPropertySet>& rXPropSet)
 {
-    css::uno::Sequence<css::style::TabStop> aTabStops;
+    cpo::uno::Sequence<css::style::TabStop> aTabStops;
     if (GetProperty(rXPropSet, u"ParaTabStops"_ustr))
-        aTabStops = *o3tl::doAccess<css::uno::Sequence<css::style::TabStop>>(mAny);
+        aTabStops = *o3tl::doAccess<cpo::uno::Sequence<css::style::TabStop>>(mAny);
 
     if (aTabStops.getLength() > 0)
         mpFS->startElementNS(XML_a, XML_tabLst);
@@ -3950,7 +3950,7 @@ bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertyS
         if (GetProperty(rXShapePropSet, u"CustomShapeGeometry"_ustr))
         {
             mAny >>= aCustomShapeGeometryProps;
-            uno::Sequence<beans::PropertyValue> aTextPathSeq;
+            cpo::uno::Sequence<beans::PropertyValue> aTextPathSeq;
             for (const auto& rProp : aCustomShapeGeometryProps)
             {
                 if (rProp.Name == "TextPath")
@@ -4007,7 +4007,7 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
 
     // read values from CustomShapeGeometry
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
-    uno::Sequence<beans::PropertyValue> aTextPathSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aTextPathSeq;
     bool bScaleX(false);
     OUString sShapeType(u"non-primitive"_ustr);
     OUString sMSWordPresetTextWarp;
@@ -4091,7 +4091,7 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
     std::optional<OString> isUpright;
     if (rXPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
-        uno::Sequence<beans::PropertyValue> aGrabBag;
+        cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
         rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
         for (const auto& aProp : aGrabBag)
         {
@@ -4826,7 +4826,7 @@ namespace // helpers for DrawingML::WriteCustomGeometry
 {
 sal_Int32
 FindNextCommandEndSubpath(const sal_Int32 nStart,
-                          const uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments)
+                          const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments)
 {
     sal_Int32 i = nStart < 0 ? 0 : nStart;
     while (i < rSegments.getLength() && rSegments[i].Command != ENDSUBPATH)
@@ -4835,7 +4835,7 @@ FindNextCommandEndSubpath(const sal_Int32 nStart,
 }
 
 bool HasCommandInSubPath(const sal_Int16 nCommand, const sal_Int32 nFirst, const sal_Int32 nLast,
-                         const uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments)
+                         const cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments)
 {
     for (sal_Int32 i = nFirst < 0 ? 0 : nFirst; i <= nLast && i < rSegments.getLength(); i++)
     {
@@ -5068,8 +5068,8 @@ OUString GetFormula(const OUString& sEquation)
 }
 
 void prepareGluePoints(std::vector<Guide>& rGuideList,
-                       const css::uno::Sequence<OUString>& aEquations,
-                       const uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
+                       const cpo::uno::Sequence<OUString>& aEquations,
+                       const cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rGluePoints,
                        const bool /*bIsOOXML*/, const sal_Int32 nWidth, const sal_Int32 nHeight)
 {
     if (rGluePoints.hasElements())
@@ -5157,7 +5157,7 @@ bool DrawingML::WriteCustomGeometry(
         return false;
     }
 
-    auto pGeometrySeq = o3tl::tryAccess<uno::Sequence<beans::PropertyValue>>(aAny);
+    auto pGeometrySeq = o3tl::tryAccess<cpo::uno::Sequence<beans::PropertyValue>>(aAny);
     if (!pGeometrySeq)
         return false;
 
@@ -5166,7 +5166,7 @@ bool DrawingML::WriteCustomGeometry(
     if (pPathProp == std::cend(*pGeometrySeq))
         return false;
 
-    uno::Sequence<beans::PropertyValue> aPathProp;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProp;
     pPathProp->Value >>= aPathProp;
 
     auto pShapeType = std::find_if(std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
@@ -5184,16 +5184,16 @@ bool DrawingML::WriteCustomGeometry(
         = std::find_if(std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
                        [](const PropertyValue& rProp) { return rProp.Name == "Equations"; });
 
-    css::uno::Sequence<OUString> aEquationSeq;
+    cpo::uno::Sequence<OUString> aEquationSeq;
     if (pEquationsProp != std::cend(*pGeometrySeq))
     {
         pEquationsProp->Value >>= aEquationSeq;
     }
 
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
-    uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-    uno::Sequence<awt::Size> aPathSize;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+    cpo::uno::Sequence<awt::Size> aPathSize;
     bool bReplaceGeoWidth = false;
     bool bReplaceGeoHeight = false;
     for (const beans::PropertyValue& rPathProp : aPathProp)
@@ -5217,7 +5217,7 @@ bool DrawingML::WriteCustomGeometry(
 
     if ( !aSegments.hasElements() )
     {
-        aSegments = uno::Sequence<drawing::EnhancedCustomShapeSegment>
+        aSegments = cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>
             {
                 { MOVETO, 1 },
                 { LINETO,
@@ -5449,7 +5449,7 @@ bool DrawingML::WriteCustomGeometry(
 
 bool DrawingML::WriteCustomGeometrySegment(
     const sal_Int16 eCommand, const sal_Int32 nCount,
-    const uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
+    const cpo::uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
     sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
     const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
     const bool bReplaceGeoHeight)
@@ -6113,7 +6113,7 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
         if( rEffectProp.Name == "Attribs" )
         {
             // read tag attributes
-            uno::Sequence< beans::PropertyValue > aOuterShdwProps;
+            cpo::uno::Sequence< beans::PropertyValue > aOuterShdwProps;
             rEffectProp.Value >>= aOuterShdwProps;
             for (const auto& rOuterShdwProp : aOuterShdwProps)
             {
@@ -6471,9 +6471,9 @@ void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPrope
     if (!nRad)
         return;
 
-    css::uno::Sequence<css::beans::PropertyValue> aAttribs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<css::beans::PropertyValue> aAttribs{ comphelper::makePropertyValue(
         u"rad"_ustr, oox::drawingml::convertHmmToEmu(nRad)) };
-    css::uno::Sequence<css::beans::PropertyValue> aProps{ comphelper::makePropertyValue(u"Attribs"_ustr,
+    cpo::uno::Sequence<css::beans::PropertyValue> aProps{ comphelper::makePropertyValue(u"Attribs"_ustr,
                                                                                         aAttribs) };
 
     WriteShapeEffect(u"softEdge", aProps);
@@ -7078,15 +7078,15 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
             u"application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"_ustr);
         writer->setOutputStream(xDataOutputStream);
         serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-                            uno::Sequence<beans::StringPair>());
+                            cpo::uno::Sequence<beans::StringPair>());
 
         // get originally imported OOXDataImageRels
-        uno::Sequence<uno::Sequence<cpo::uno::Any>> xDataImageRelSeq;
+        cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> xDataImageRelSeq;
         rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataImageRels)
             >>= xDataImageRelSeq;
 
         // get originally imported OOXDataHlinkRels
-        uno::Sequence<uno::Sequence<cpo::uno::Any>> xDataHlinkRelSeq;
+        cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> xDataHlinkRelSeq;
         rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDataHlinkRels)
             >>= xDataHlinkRelSeq;
 
@@ -7101,7 +7101,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         sDir + "/" + layoutFileName,
         u"application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml"_ustr));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-                          uno::Sequence<beans::StringPair>());
+                          cpo::uno::Sequence<beans::StringPair>());
 
     // write style file
     serializer.set(styleDom, uno::UNO_QUERY);
@@ -7109,7 +7109,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         sDir + "/" + styleFileName,
         u"application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml"_ustr));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-                          uno::Sequence<beans::StringPair>());
+                          cpo::uno::Sequence<beans::StringPair>());
 
     // write color file
     serializer.set(colorDom, uno::UNO_QUERY);
@@ -7117,7 +7117,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         sDir + "/" + colorFileName,
         u"application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml"_ustr));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-                          uno::Sequence<beans::StringPair>());
+                          cpo::uno::Sequence<beans::StringPair>());
 
     if (drawingDom.is())
     {
@@ -7128,15 +7128,15 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
         writer->setOutputStream(xDrawingOutputStream);
         serializer->serialize(
             uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-            uno::Sequence<beans::StringPair>());
+            cpo::uno::Sequence<beans::StringPair>());
 
         // get originally imported OOXDrawingImageRels
-        uno::Sequence<uno::Sequence<cpo::uno::Any>> xDrawingImageRelSeq;
+        cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> xDrawingImageRelSeq;
         rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingImageRels)
             >>= xDrawingImageRelSeq;
 
                 // get originally imported OOXDataHlinkRels
-        uno::Sequence<uno::Sequence<cpo::uno::Any>> xDrawingHlinkRelSeq;
+        cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> xDrawingHlinkRelSeq;
         rIDiagramHelper->getOOXDomValue(svx::diagram::DomMapFlag::OOXDrawingHlinkRels)
             >>= xDrawingHlinkRelSeq;
 
@@ -7146,7 +7146,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     }
 }
 
-void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<cpo::uno::Any>>& xRelSeq,
+void DrawingML::writeDiagramImageRels(const cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& xRelSeq,
                                       const uno::Reference<io::XOutputStream>& xOutStream)
 {
     // add image relationships of OOXData, SmartArtDiagram
@@ -7160,7 +7160,7 @@ void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<cpo::uno
     {
         // diagramDataRelTuple[0] => RID,
         // diagramDataRelTuple[1] => XGraphic
-        const uno::Sequence<cpo::uno::Any>& diagramDataRelTuple = xRelSeq[j];
+        const cpo::uno::Sequence<cpo::uno::Any>& diagramDataRelTuple = xRelSeq[j];
 
         OUString sRelId;
         diagramDataRelTuple[0] >>= sRelId;
@@ -7187,7 +7187,7 @@ void DrawingML::writeDiagramImageRels(const uno::Sequence<uno::Sequence<cpo::uno
     }
 }
 
-void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<cpo::uno::Any>>& xRelSeq,
+void DrawingML::writeDiagramHlinkRels(const cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& xRelSeq,
                                       const uno::Reference<io::XOutputStream>& xOutStream)
 {
     uno::Reference<xml::sax::XWriter> xWriter
@@ -7200,7 +7200,7 @@ void DrawingML::writeDiagramHlinkRels(const uno::Sequence<uno::Sequence<cpo::uno
         // diagramDataRelTuple[0] => RID,
         // diagramDataRelTuple[1] => Target
         // diagramDataRelTuple[2] => Type
-        const uno::Sequence<cpo::uno::Any>& diagramDataRelTuple = xRelSeq[j];
+        const cpo::uno::Sequence<cpo::uno::Any>& diagramDataRelTuple = xRelSeq[j];
 
         OUString sRelId;
         OUString sTarget;

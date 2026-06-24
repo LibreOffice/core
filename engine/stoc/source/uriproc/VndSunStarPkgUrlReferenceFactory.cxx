@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.hpp>
@@ -55,7 +55,7 @@ public:
 
     virtual bool SAL_CALL supportsService(OUString const & serviceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
@@ -78,9 +78,9 @@ bool Factory::supportsService(OUString const & serviceName)
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Factory::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { u"com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"_ustr };
+    cpo::uno::Sequence< OUString > s { u"com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"_ustr };
     return s;
 }
 
@@ -112,7 +112,7 @@ Factory::createVndSunStarPkgUrlReference(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation(css::uno::XComponentContext* rxContext,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return ::cppu::acquire(new Factory(rxContext));
 }

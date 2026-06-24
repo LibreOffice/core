@@ -54,12 +54,12 @@ public:
 
     // XDataProvider
     virtual bool SAL_CALL
-        createDataSourcePossible(const css::uno::Sequence<css::beans::PropertyValue>& aArguments) override;
+        createDataSourcePossible(const cpo::uno::Sequence<css::beans::PropertyValue>& aArguments) override;
 
     virtual css::uno::Reference<css::chart2::data::XDataSource> SAL_CALL
-        createDataSource(const css::uno::Sequence<css::beans::PropertyValue>& aArguments) override;
+        createDataSource(const cpo::uno::Sequence<css::beans::PropertyValue>& aArguments) override;
 
-    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL
         detectArguments(const css::uno::Reference<css::chart2::data::XDataSource>& xDataSource) override;
 
     virtual bool SAL_CALL
@@ -136,7 +136,7 @@ public:
 
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
 

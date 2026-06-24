@@ -221,10 +221,10 @@ SwVbaStyle::getServiceImplName()
     return u"SwVbaStyle"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaStyle::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.XStyle"_ustr
     };

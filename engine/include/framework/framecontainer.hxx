@@ -78,7 +78,7 @@ class FrameContainer final
         css::uno::Reference< css::frame::XFrame > operator[]( sal_uInt32 nIndex ) const;
 
         /// replacement for deprecated index access
-        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > getAllElements() const;
+        cpo::uno::Sequence< css::uno::Reference< css::frame::XFrame > > getAllElements() const;
 
         /// special helper for Frame::findFrame()
         css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const OUString& sName ) const;

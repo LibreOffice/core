@@ -278,7 +278,7 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
                 currentDocTitle = comphelper::DocumentInfo::getDocumentTitle(xModel);
         }
 
-        const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> children
+        const cpo::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> children
             = xNode->getChildNodes();
         for (css::uno::Reference<css::script::browse::XBrowseNode> const& theChild : children)
         {
@@ -320,7 +320,7 @@ void ScriptContainersListBox::Fill(const weld::TreeIter* pEntryIter)
 
             if (theChild->hasChildNodes())
             {
-                const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>>
+                const cpo::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>>
                     grandchildren = theChild->getChildNodes();
                 for (const auto& rxNode : grandchildren)
                 {
@@ -452,7 +452,7 @@ void ScriptContainersListBox::ScriptContainerSelected()
         {
             if (xBrowseNode->hasChildNodes())
             {
-                const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>>
+                const cpo::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>>
                     children = xBrowseNode->getChildNodes();
 
                 for (const css::uno::Reference<css::script::browse::XBrowseNode>& childNode :
@@ -1606,9 +1606,9 @@ IMPL_LINK(MacroManagerDialog, ClickHdl, weld::Button&, rButton, void)
         if (xInv.is())
         {
             m_xDialog->response(RET_CANCEL);
-            css::uno::Sequence<cpo::uno::Any> args(0);
-            css::uno::Sequence<cpo::uno::Any> outArgs(0);
-            css::uno::Sequence<sal_Int16> outIndex;
+            cpo::uno::Sequence<cpo::uno::Any> args(0);
+            cpo::uno::Sequence<cpo::uno::Any> outArgs(0);
+            cpo::uno::Sequence<sal_Int16> outIndex;
             try
             {
                 // ISSUE need code to run script here
@@ -2069,9 +2069,9 @@ void MacroManagerDialog::ScriptingFrameworkScriptsRenameEntry(weld::TreeView& rT
 
         aNewName = aNameDialog.GetName();
 
-        css::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(aNewName) };
-        css::uno::Sequence<cpo::uno::Any> outArgs;
-        css::uno::Sequence<sal_Int16> outIndex;
+        cpo::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(aNewName) };
+        cpo::uno::Sequence<cpo::uno::Any> outArgs;
+        cpo::uno::Sequence<sal_Int16> outIndex;
         try
         {
             cpo::uno::Any aResult = xInv->invoke(u"Renamable"_ustr, args, outIndex, outArgs);
@@ -2142,7 +2142,7 @@ OUString MacroManagerDialog::getListOfChildren(
     {
         if (node->hasChildNodes())
         {
-            const css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> children
+            const cpo::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> children
                 = node->getChildNodes();
             for (const css::uno::Reference<css::script::browse::XBrowseNode>& n : children)
             {
@@ -2178,9 +2178,9 @@ void MacroManagerDialog::ScriptingFrameworkScriptsDeleteEntry(weld::TreeView& rT
     css::uno::Reference<css::script::XInvocation> xInv(node, css::uno::UNO_QUERY);
     if (xInv.is())
     {
-        css::uno::Sequence<cpo::uno::Any> args(0);
-        css::uno::Sequence<cpo::uno::Any> outArgs(0);
-        css::uno::Sequence<sal_Int16> outIndex;
+        cpo::uno::Sequence<cpo::uno::Any> args(0);
+        cpo::uno::Sequence<cpo::uno::Any> outArgs(0);
+        cpo::uno::Sequence<sal_Int16> outIndex;
         try
         {
             cpo::uno::Any aResult = xInv->invoke(u"Deletable"_ustr, args, outIndex, outArgs);
@@ -2246,7 +2246,7 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
         bool bValid = false;
         sal_Int32 i = 1;
 
-        css::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> childNodes;
+        cpo::uno::Sequence<css::uno::Reference<css::script::browse::XBrowseNode>> childNodes;
         // no children => ok to create Parcel1 or Script1 without checking ?
         try
         {
@@ -2351,9 +2351,9 @@ void MacroManagerDialog::ScriptingFrameworkScriptsCreateEntry(InputDialogMode eI
         // open up parent node (which ensures it's loaded)
         rTreeView.expand_row(*xSelectedIter);
 
-        css::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(aNewName) };
-        css::uno::Sequence<cpo::uno::Any> outArgs;
-        css::uno::Sequence<sal_Int16> outIndex;
+        cpo::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(aNewName) };
+        cpo::uno::Sequence<cpo::uno::Any> outArgs;
+        cpo::uno::Sequence<sal_Int16> outIndex;
         try
         {
             cpo::uno::Any aResult = xInv->invoke(u"Creatable"_ustr, args, outIndex, outArgs);

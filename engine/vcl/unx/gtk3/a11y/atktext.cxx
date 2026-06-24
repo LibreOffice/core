@@ -515,17 +515,17 @@ text_wrapper_get_run_attributes( AtkText        *text,
             = getText( text );
         if( pText.is())
         {
-            uno::Sequence< beans::PropertyValue > aAttributeList;
+            cpo::uno::Sequence< beans::PropertyValue > aAttributeList;
 
             css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
                 pTextAttributes = getTextAttributes( text );
             if(pTextAttributes.is()) // Text attributes are available for paragraphs only
             {
-                aAttributeList = pTextAttributes->getRunAttributes( offset, uno::Sequence< OUString > () );
+                aAttributeList = pTextAttributes->getRunAttributes( offset, cpo::uno::Sequence< OUString > () );
             }
             else // For other text objects use character attributes
             {
-                aAttributeList = pText->getCharacterAttributes( offset, uno::Sequence< OUString > () );
+                aAttributeList = pText->getCharacterAttributes( offset, cpo::uno::Sequence< OUString > () );
             }
 
             pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
@@ -605,8 +605,8 @@ text_wrapper_get_default_attributes( AtkText *text )
             pTextAttributes = getTextAttributes( text );
         if( pTextAttributes.is() )
         {
-            uno::Sequence< beans::PropertyValue > aAttributeList =
-                pTextAttributes->getDefaultAttributes( uno::Sequence< OUString > () );
+            cpo::uno::Sequence< beans::PropertyValue > aAttributeList =
+                pTextAttributes->getDefaultAttributes( cpo::uno::Sequence< OUString > () );
 
             pSet = attribute_set_new_from_property_values( aAttributeList, false, text );
         }

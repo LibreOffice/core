@@ -86,7 +86,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
     uno::Reference<uno::XInterface> xInterface
         = xFactory->createInstance(u"com.sun.star.frame.Desktop"_ustr);
     uno::Reference<frame::XComponentLoader> xComponentLoader(xInterface, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
+    cpo::uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
                                                                                  true) };
     mxComponent = xComponentLoader->loadComponentFromURL(maTempFile.GetURL(), u"_default"_ustr, 0,
                                                          aLoadArgs);
@@ -97,7 +97,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateAllObjectReplacements)
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(
         xModel->getCurrentController()->getFrame(), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aNoArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aNoArgs;
     xDispatchHelper->executeDispatch(xDispatchProvider, u".uno:UpdateAll"_ustr, OUString(), 0,
                                      aNoArgs);
     uno::Reference<frame::XStorable2> xStorable(mxComponent, uno::UNO_QUERY);
@@ -183,8 +183,8 @@ public:
     uno::Reference<frame::XDispatch> SAL_CALL queryDispatch(const util::URL& rURL,
                                                             const OUString& rTargetFrameName,
                                                             sal_Int32 SearchFlags) override;
-    uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL
-    queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
+    cpo::uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL
+    queryDispatches(const cpo::uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
 };
 }
 
@@ -241,8 +241,8 @@ uno::Reference<frame::XDispatch> ImageInterceptor::queryDispatch(const util::URL
     return m_xSlave->queryDispatch(rURL, rTargetFrameName, nSearchFlags);
 }
 
-uno::Sequence<uno::Reference<frame::XDispatch>>
-ImageInterceptor::queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& /*rRequests*/)
+cpo::uno::Sequence<uno::Reference<frame::XDispatch>>
+ImageInterceptor::queryDispatches(const cpo::uno::Sequence<frame::DispatchDescriptor>& /*rRequests*/)
 {
     return {};
 }
@@ -600,7 +600,7 @@ void ViewCallback::callbackImpl(int nType, const char* pPayload)
             {
                 break;
             }
-            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(aPayload);
+            cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(aPayload);
             // x y w h part mode
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aSeq.getLength());
             m_aInvalidationModes.insert(static_cast<SwRedlineRenderMode>(aSeq[5].toInt32()));

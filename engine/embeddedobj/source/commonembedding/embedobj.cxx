@@ -269,7 +269,7 @@ awt::Rectangle GetRectangleInterception( const awt::Rectangle& aRect1, const awt
 
 namespace
 {
-    using IntermediateStatesMap = std::array<std::array<uno::Sequence< sal_Int32 >, NUM_SUPPORTED_STATES>, NUM_SUPPORTED_STATES>;
+    using IntermediateStatesMap = std::array<std::array<cpo::uno::Sequence< sal_Int32 >, NUM_SUPPORTED_STATES>, NUM_SUPPORTED_STATES>;
     const IntermediateStatesMap & getIntermediateStatesMap()
     {
         static const IntermediateStatesMap map = [] () {
@@ -308,9 +308,9 @@ namespace
     }
 
     // accepted states
-    const css::uno::Sequence< sal_Int32 > & getAcceptedStates()
+    const cpo::uno::Sequence< sal_Int32 > & getAcceptedStates()
     {
-        static const css::uno::Sequence< sal_Int32 > states {
+        static const cpo::uno::Sequence< sal_Int32 > states {
             /* [0] */ embed::EmbedStates::LOADED,
                           /* [1] */ embed::EmbedStates::RUNNING,
                           /* [2] */ embed::EmbedStates::INPLACE_ACTIVE,
@@ -474,7 +474,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 else
                 {
                     // objects without persistence will be initialized internally
-                    uno::Sequence < cpo::uno::Any > aArgs{ cpo::uno::Any(
+                    cpo::uno::Sequence < cpo::uno::Any > aArgs{ cpo::uno::Any(
                         uno::Reference < embed::XEmbeddedObject >( this )) };
                     uno::Reference< util::XCloseable > xDocument(
                             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( GetDocumentServiceName(), aArgs, m_xContext),
@@ -640,7 +640,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 }
 
 
-uno::Sequence< sal_Int32 > const & OCommonEmbeddedObject::GetIntermediateStatesSequence_Impl( sal_Int32 nNewState )
+cpo::uno::Sequence< sal_Int32 > const & OCommonEmbeddedObject::GetIntermediateStatesSequence_Impl( sal_Int32 nNewState )
 {
     sal_Int32 nCurInd = 0;
     auto & rAcceptedStates = getAcceptedStates();
@@ -711,7 +711,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
         }
 
         // retrieve sequence of states that should be passed to reach desired state
-        uno::Sequence< sal_Int32 > aIntermediateStates = GetIntermediateStatesSequence_Impl( nNewState );
+        cpo::uno::Sequence< sal_Int32 > aIntermediateStates = GetIntermediateStatesSequence_Impl( nNewState );
 
         // notify listeners that the object is going to change the state
         StateChangeNotification_Impl( true, nOldState, nNewState,aGuard );
@@ -741,7 +741,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 }
 
 
-uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
+cpo::uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -851,7 +851,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 }
 
 
-uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
+cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO

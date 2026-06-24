@@ -54,7 +54,7 @@ UnoScriptTypeDetector::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 UnoScriptTypeDetector::getSupportedServiceNames()
 {
     return { u"com.sun.star.i18n.ScriptTypeDetector"_ustr };
@@ -63,7 +63,7 @@ UnoScriptTypeDetector::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_ScriptTypeDetector_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoScriptTypeDetector);
 }

@@ -414,7 +414,7 @@ SwVbaFind::Execute( const cpo::uno::Any& FindText, const cpo::uno::Any& MatchCas
 void SAL_CALL
 SwVbaFind::ClearFormatting(  )
 {
-    uno::Sequence< beans::PropertyValue >  aSearchAttribs;
+    cpo::uno::Sequence< beans::PropertyValue >  aSearchAttribs;
     mxPropertyReplace->setSearchAttributes( aSearchAttribs );
 }
 
@@ -424,10 +424,10 @@ SwVbaFind::getServiceImplName()
     return u"SwVbaFind"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaFind::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Find"_ustr
     };

@@ -64,7 +64,7 @@ public:
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > >
+    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > >
             queryMeanings_Impl( OUString& rTerm, const css::lang::Locale& rLocale, const css::beans::PropertyValues& rProperties );
 
     bool    UpdateAlternativesBox_Impl();

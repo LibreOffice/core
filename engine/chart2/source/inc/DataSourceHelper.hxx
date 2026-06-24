@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <rtl/ref.hxx>
 
 namespace chart { class ChartModel; }
@@ -56,18 +56,18 @@ public:
         static rtl::Reference< LabeledDataSequence >
             createLabeledDataSequence();
 
-        static css::uno::Sequence< css::beans::PropertyValue >
+        static cpo::uno::Sequence< css::beans::PropertyValue >
             createArguments(
                    bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories );
 
-        static css::uno::Sequence<
+        static cpo::uno::Sequence<
                css::beans::PropertyValue > createArguments(
                    const OUString & rRangeRepresentation,
-                   const css::uno::Sequence< sal_Int32 >& rSequenceMapping,
+                   const cpo::uno::Sequence< sal_Int32 >& rSequenceMapping,
                    bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories );
 
-        static void readArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments
-            , OUString & rRangeRepresentation, css::uno::Sequence< sal_Int32 >& rSequenceMapping
+        static void readArguments( const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments
+            , OUString & rRangeRepresentation, cpo::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& bUseColumns, bool& bFirstCellAsLabel, bool& bHasCategories );
 
         static rtl::Reference< ::chart::DataSource >
@@ -85,14 +85,14 @@ public:
         static bool detectRangeSegmentation(
             const rtl::Reference<::chart::ChartModel>& xChartModel
             , OUString& rOutRangeString
-            , css::uno::Sequence< sal_Int32 >& rSequenceMapping
+            , cpo::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& rOutUseColumns
             , bool& rOutFirstCellAsLabel
             , bool& rOutHasCategories );
 
         static void setRangeSegmentation(
             const rtl::Reference<::chart::ChartModel>& xChartModel
-            , const css::uno::Sequence< sal_Int32 >& rSequenceMapping
+            , const cpo::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool bUseColumns
             , bool bFirstCellAsLabel
             , bool bUseCategories );

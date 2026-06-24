@@ -52,7 +52,7 @@ class CachedContentResultSet
                                          m_pResult;
         css::uno::Reference< css::ucb::XContentIdentifierMapping >
                                          m_xContentIdentifierMapping;
-        std::optional<css::uno::Sequence< bool >>  m_pMappedReminder;
+        std::optional<cpo::uno::Sequence< bool >>  m_pMappedReminder;
 
     private:
         /// @throws css::sdbc::SQLException
@@ -65,7 +65,7 @@ class CachedContentResultSet
 
         void remindMapped( sal_Int32 nRow );
         bool isRowMapped( sal_Int32 nRow );
-        css::uno::Sequence< bool >& getMappedReminder();
+        cpo::uno::Sequence< bool >& getMappedReminder();
 
     public:
         CCRS_Cache( const css::uno::Reference<
@@ -192,13 +192,13 @@ public:
 
     // XTypeProvider
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySet inherited
 
@@ -305,7 +305,7 @@ public:
     virtual double SAL_CALL
     getDouble( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getBytes( sal_Int32 columnIndex ) override;
 
     virtual css::util::Date SAL_CALL
@@ -371,7 +371,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XCachedContentResultSetFactory
 

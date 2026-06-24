@@ -20,7 +20,7 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTEXPORT_HXX
 #define INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTEXPORT_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star {
@@ -30,7 +30,7 @@ namespace com::sun::star {
 class ManifestExport
 {
 public:
-    ManifestExport(css::uno::Reference < css::xml::sax::XDocumentHandler > const & xHandler, const css::uno::Sequence < css::uno::Sequence < css::beans::PropertyValue > > &rManList );
+    ManifestExport(css::uno::Reference < css::xml::sax::XDocumentHandler > const & xHandler, const cpo::uno::Sequence < cpo::uno::Sequence < css::beans::PropertyValue > > &rManList );
 };
 
 #endif

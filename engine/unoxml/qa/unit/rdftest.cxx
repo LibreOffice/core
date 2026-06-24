@@ -112,11 +112,12 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     CPPUNIT_ASSERT(xDocRepo);
 
     // 1. RDFa: get: not empty (initial)
-    ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult = xDocRepo->getStatementRDFa(xMeta);
+    ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
+        = xDocRepo->getStatementRDFa(xMeta);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), xResult.First.size());
     CPPUNIT_ASSERT(!xResult.Second);
 
-    css::uno::Sequence<uno::Reference<rdf::XURI>> xURI{};
+    cpo::uno::Sequence<uno::Reference<rdf::XURI>> xURI{};
 
     uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);
     uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, u"uri:bar"_ustr);
@@ -135,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     {
     }
 
-    css::uno::Sequence<uno::Reference<rdf::XURI>> xURI2{ xBar };
+    cpo::uno::Sequence<uno::Reference<rdf::XURI>> xURI2{ xBar };
 
     // 3. RDFa: set: null
     try
@@ -173,7 +174,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), xResult.First.size());
     CPPUNIT_ASSERT(xResult.Second);
 
-    css::uno::Sequence<uno::Reference<rdf::XURI>> xURI3{ xFoo, xBar, xBaz };
+    cpo::uno::Sequence<uno::Reference<rdf::XURI>> xURI3{ xFoo, xBar, xBaz };
 
     xDocRepo->setStatementRDFa(xFoo, xURI3, xMeta, OUString(), nullptr);
 
@@ -227,11 +228,11 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     // 1. query: package-id
     OUString sQuery(u"SELECT ?p WHERE { ?p rdf:type pkg:Package . }"_ustr);
     uno::Reference<rdf::XQuerySelectResult> aResult = xDocRepo->querySelect(sNss + sQuery);
-    uno::Sequence<OUString> aBindings = aResult->getBindingNames();
+    cpo::uno::Sequence<OUString> aBindings = aResult->getBindingNames();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBindings.getLength());
     CPPUNIT_ASSERT_EQUAL(u"p"_ustr, aBindings[0]);
 
-    uno::Sequence<uno::Reference<rdf::XNode>> aNode;
+    cpo::uno::Sequence<uno::Reference<rdf::XNode>> aNode;
     cpo::uno::fromAny(aResult->nextElement(), &aNode);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNode.getLength());
     CPPUNIT_ASSERT_EQUAL(u"urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"_ustr,
@@ -395,7 +396,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
     }
 
     // 6. foo graph in getGraphNames
-    css::uno::Sequence<css::uno::Reference<css::rdf::XURI>> xURI = xDocRepo->getGraphNames();
+    cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>> xURI = xDocRepo->getGraphNames();
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), xURI.size());
     CPPUNIT_ASSERT_EQUAL(xFoo->getStringValue(), xURI[0]->getStringValue());
 
@@ -698,7 +699,7 @@ std::vector<rdf::Statement> sortStatements(const std::vector<rdf::Statement>& rS
     return aStatements;
 }
 
-std::vector<rdf::Statement> sortStatements(const uno::Sequence<rdf::Statement>& rStatements)
+std::vector<rdf::Statement> sortStatements(const cpo::uno::Sequence<rdf::Statement>& rStatements)
 {
     return sortStatements(
         comphelper::sequenceToContainer<std::vector<rdf::Statement>>(rStatements));
@@ -730,9 +731,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 1
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
             uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, u"1"_ustr);
             rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
@@ -743,9 +744,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 2
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
             uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, u"2"_ustr);
             rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
@@ -760,9 +761,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 3
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             aSubject3 = aStatements[0].Subject->getStringValue();
@@ -773,9 +774,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 4
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             aSubject4 = aStatements[0].Subject->getStringValue();
@@ -786,9 +787,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 5
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             aSubject5 = aStatements[0].Subject->getStringValue();
@@ -803,7 +804,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 6
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             std::vector<rdf::Statement> aStatements = sortStatements(xResult.First);
             CPPUNIT_ASSERT_EQUAL(size_t(2), aStatements.size());
@@ -819,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 7
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
             std::vector<rdf::Statement> aStatements = sortStatements(xResult.First);
             CPPUNIT_ASSERT_EQUAL(size_t(3), aStatements.size());
@@ -844,9 +845,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 8
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit2, aStatements[0]);
@@ -855,9 +856,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 9
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit2, aStatements[0]);
@@ -866,9 +867,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 10
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLitType, aStatements[0]);
@@ -877,9 +878,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 11
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
             uno::Reference<css::rdf::XLiteral> xLitType11
                 = rdf::Literal::createWithType(xContext, u"11"_ustr, xBar);
@@ -891,9 +892,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 12
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             OUString aURL;
@@ -911,9 +912,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 13
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit2, aStatements[0]);
@@ -922,9 +923,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         {
             // RDFa: 14
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
 
             CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit2, aStatements[0]);
@@ -935,9 +936,9 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         do
         {
             uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-            ::beans::Pair<uno::Sequence<rdf::Statement>, bool> xResult
+            ::beans::Pair<cpo::uno::Sequence<rdf::Statement>, bool> xResult
                 = xDocRepo->getStatementRDFa(xPara);
-            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            cpo::uno::Sequence<rdf::Statement> aStatements = xResult.First;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aStatements.getLength());
         } while (xParaEnum->hasMoreElements());
     };
@@ -958,7 +959,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testTdf123293)
         uno::UNO_QUERY_THROW);
     const uno::Reference<io::XInputStream> xInputStream(
         xFileAccess->openFileRead(createFileURL(u"TESTRDFA.odt")), uno::UNO_SET_THROW);
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
         u"InputStream"_ustr, xInputStream) };
     mxComponent
         = mxDesktop->loadComponentFromURL(u"private:stream"_ustr, u"_blank"_ustr, 0, aLoadArgs);
@@ -1030,7 +1031,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     {
     }
 
-    css::uno::Sequence<uno::Reference<rdf::XURI>> xURI{};
+    cpo::uno::Sequence<uno::Reference<rdf::XURI>> xURI{};
     try
     {
         xDocumentMetadataAccess->addMetadataFile(u""_ustr, xURI);
@@ -1242,7 +1243,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     {
     }
 
-    uno::Sequence<beans::PropertyValue> aProperty{};
+    cpo::uno::Sequence<beans::PropertyValue> aProperty{};
     try
     {
         xDocumentMetadataAccess->loadMetadataFromMedium(aProperty);
@@ -1311,7 +1312,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     rdf::Statement aFooTypeMetadata(xFooPath, xRDFType, xPkgMetadata, xManifest);
     rdf::Statement aFooTypeBar(xFooPath, xRDFType, xBar, xManifest);
 
-    css::uno::Sequence<uno::Reference<rdf::XURI>> xURI2{ xBar };
+    cpo::uno::Sequence<uno::Reference<rdf::XURI>> xURI2{ xBar };
     xDocumentMetadataAccess->addMetadataFile(u"foo.rdf"_ustr, xURI2);
 
     xEnum = xRepo->getStatements(nullptr, nullptr, nullptr);
@@ -1328,7 +1329,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 
     // getMetadataGraphsWithType
-    css::uno::Sequence<uno::Reference<rdf::XURI>> xGraphBar
+    cpo::uno::Sequence<uno::Reference<rdf::XURI>> xGraphBar
         = xDocumentMetadataAccess->getMetadataGraphsWithType(xBar);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), xGraphBar.size());
     CPPUNIT_ASSERT_EQUAL(xFooPath->getStringValue(), xGraphBar[0]->getStringValue());
@@ -1393,25 +1394,25 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     CPPUNIT_ASSERT_STATEMENT_EQUAL(aStatements[4], xEnum->nextElement().get<rdf::Statement>());
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 
-    uno::Sequence<beans::PropertyValue> aArgsEmptyNoContent{
+    cpo::uno::Sequence<beans::PropertyValue> aArgsEmptyNoContent{
         comphelper::makePropertyValue(u"MediaType"_ustr,
                                       u"application/vnd.oasis.opendocument.text"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"CUSTOM.odt"))
     };
 
-    uno::Sequence<beans::PropertyValue> aArgsEmpty{
+    cpo::uno::Sequence<beans::PropertyValue> aArgsEmpty{
         comphelper::makePropertyValue(u"MediaType"_ustr,
                                       u"application/vnd.oasis.opendocument.text"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, createFileURL(u"TEST.odt"))
     };
 
-    uno::Sequence<beans::PropertyValue> aArgs{
+    cpo::uno::Sequence<beans::PropertyValue> aArgs{
         comphelper::makePropertyValue(u"MediaType"_ustr,
                                       u"application/vnd.oasis.opendocument.text"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
     };
 
-    css::uno::Sequence<uno::Reference<rdf::XURI>> xGraphNames = xRepo->getGraphNames();
+    cpo::uno::Sequence<uno::Reference<rdf::XURI>> xGraphNames = xRepo->getGraphNames();
 
     xDocumentMetadataAccess->storeMetadataToMedium(aArgs);
 

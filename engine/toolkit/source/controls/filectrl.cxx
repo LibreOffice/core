@@ -31,6 +31,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui;
+using namespace ::cpo::uno;
 
 
 FileControl::FileControl( vcl::Window* pParent, WinBits nStyle ) :

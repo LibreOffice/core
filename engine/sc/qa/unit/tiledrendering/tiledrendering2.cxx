@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCopyMultiSelection)
     ScModelObj* pModelObj = createDoc("multi-selection.ods");
     ScTestViewCallback aView1;
     // Get the center of A3:
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$3"_ustr),
     };
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorJumpOnFailedSearch)
     ScTestViewCallback aView;
 
     // Go to lower cell
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"ToPoint"_ustr, u"$C$3"_ustr),
     };
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
@@ -143,7 +143,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDecimalSeparatorInfo)
     ScTestViewCallback aView1;
 
     // Go to cell A1.
-    uno::Sequence<beans::PropertyValue> aPropertyValues
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
         = { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1"_ustr) };
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
 
@@ -216,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTdf167042)
     ScDocument* pDoc = pModelObj->GetDocument();
     ScTestViewCallback aView1;
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
         = { comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$1"_ustr) };
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
 
@@ -231,7 +231,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTdf167042)
     CPPUNIT_ASSERT(pNote);
     CPPUNIT_ASSERT_EQUAL(u"test1"_ustr, pNote->GetText());
 
-    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, false) };
+    cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, false) };
     dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
 
     pModelObj->postMouseEvent(KIT_MOUSEEVENT_MOUSEBUTTONDOWN, aPoint.getX(), aPoint.getY(), 1,
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPageBackgroundRemoteNotFetched)
 {
     // Page background image with a remote URL must not fetch
     // the URL during paint when link updates are not allowed.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -420,7 +420,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testShapeBackgroundRemoteNotFetched)
     // the URL during paint when link updates are not allowed.
     // The assert in createNewSdrFillGraphicAttribute will fire if
     // a remote fetch is attempted.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -450,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testBulletImageRemoteNotFetched)
     // Currently the editeng rendering path silently skips unresolved
     // GraphicExternalLink graphics. If someone adds fetching here,
     // this test should catch it.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -468,7 +468,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFormImageRemoteNotFetched)
 {
     // Form image button with a remote ImageURL must not fetch the
     // URL during import when link updates are not allowed.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };

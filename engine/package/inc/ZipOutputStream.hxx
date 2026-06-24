@@ -55,7 +55,7 @@ public:
     void writeLOC(std::unique_ptr<ZipEntry>&& pEntry, bool bEncrypt = false);
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void rawWrite( const css::uno::Sequence< sal_Int8 >& rBuffer );
+    void rawWrite( const cpo::uno::Sequence< sal_Int8 >& rBuffer );
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
     void rawCloseEntry( bool bEncrypt = false );

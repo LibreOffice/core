@@ -76,13 +76,13 @@ class PasteListener : public cppu::WeakImplHelper<text::XPasteListener>
     uno::Reference<text::XTextContent> m_xTextGraphicObject;
 
 public:
-    void SAL_CALL notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& rEvent) override;
+    void SAL_CALL notifyPasteEvent(const cpo::uno::Sequence<beans::PropertyValue>& rEvent) override;
 
     OUString& GetString();
     uno::Reference<text::XTextContent>& GetTextGraphicObject();
 };
 
-void PasteListener::notifyPasteEvent(const uno::Sequence<beans::PropertyValue>& rEvent)
+void PasteListener::notifyPasteEvent(const cpo::uno::Sequence<beans::PropertyValue>& rEvent)
 {
     comphelper::SequenceAsHashMap aMap(rEvent);
     auto it = aMap.find(u"TextRange"_ustr);
@@ -184,7 +184,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextPortionNotExpandsHints)
                          getProperty<awt::FontSlant>(xProps, u"CharPosture"_ustr));
     xProps->setPropertyValue(u"CharPosture"_ustr, cpo::uno::Any(awt::FontSlant_ITALIC));
     xCursor->collapseToEnd();
-    xTextA->insertTextPortion(u"x"_ustr, uno::Sequence<beans::PropertyValue>(), xCursor);
+    xTextA->insertTextPortion(u"x"_ustr, cpo::uno::Sequence<beans::PropertyValue>(), xCursor);
     xCursor->goLeft(1, true);
     CPPUNIT_ASSERT_EQUAL(u"x"_ustr, xCursor->getString());
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testInsertTextContentWithPropertiesNotExpandsH
     xCursor->collapseToEnd();
     uno::Reference<text::XTextContent> const xContent(
         xFactory->createInstance(u"com.sun.star.text.Footnote"_ustr), uno::UNO_QUERY);
-    xTextA->insertTextContentWithProperties(xContent, uno::Sequence<beans::PropertyValue>(),
+    xTextA->insertTextContentWithProperties(xContent, cpo::uno::Sequence<beans::PropertyValue>(),
                                             xCursor);
     xCursor->goLeft(1, true);
     CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xCursor->getString());
@@ -302,7 +302,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURLBitmap)
 bool ensureAutoTextExistsByTitle(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
                                  std::u16string_view autoTextName)
 {
-    const uno::Sequence<OUString> aTitles(autoTextGroup->getTitles());
+    const cpo::uno::Sequence<OUString> aTitles(autoTextGroup->getTitles());
     for (const auto& rTitle : aTitles)
     {
         if (rTitle == autoTextName)
@@ -314,7 +314,7 @@ bool ensureAutoTextExistsByTitle(const uno::Reference<text::XAutoTextGroup>& aut
 bool ensureAutoTextExistsByName(const uno::Reference<text::XAutoTextGroup>& autoTextGroup,
                                 std::u16string_view autoTextName)
 {
-    const uno::Sequence<OUString> aTitles(autoTextGroup->getElementNames());
+    const cpo::uno::Sequence<OUString> aTitles(autoTextGroup->getElementNames());
     for (const auto& rTitle : aTitles)
     {
         if (rTitle == autoTextName)
@@ -712,7 +712,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSetPagePrintSettings)
     uno::Reference<text::XPagePrintable> xPagePrintable(mxComponent, uno::UNO_QUERY);
 
     // set some stuff, try to get it back
-    uno::Sequence<beans::PropertyValue> aProps{
+    cpo::uno::Sequence<beans::PropertyValue> aProps{
         comphelper::makePropertyValue(u"PageColumns"_ustr, sal_Int16(2)),
         comphelper::makePropertyValue(u"IsLandscape"_ustr, true)
     };
@@ -1107,7 +1107,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
     {
         comphelper::SequenceAsHashMap hashMap(xOutline->getByIndex(0));
         hashMap[u"CharStyleName"_ustr] <<= u"red"_ustr;
-        uno::Sequence<beans::PropertyValue> props;
+        cpo::uno::Sequence<beans::PropertyValue> props;
         hashMap >> props;
         xOutline->replaceByIndex(0, cpo::uno::Any(props));
     }
@@ -1165,8 +1165,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testXTextCursor_setPropertyValues)
     xCursor->goLeft(1, true);
 
     uno::Reference<beans::XMultiPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    uno::Sequence<OUString> aPropNames = { u"OneUnknownProperty"_ustr, u"CharStyleName"_ustr };
-    uno::Sequence<cpo::uno::Any> aPropValues = { cpo::uno::Any(), cpo::uno::Any(u"Emphasis"_ustr) };
+    cpo::uno::Sequence<OUString> aPropNames = { u"OneUnknownProperty"_ustr, u"CharStyleName"_ustr };
+    cpo::uno::Sequence<cpo::uno::Any> aPropValues = { cpo::uno::Any(), cpo::uno::Any(u"Emphasis"_ustr) };
     CPPUNIT_ASSERT_THROW(xCursorProps->setPropertyValues(aPropNames, aPropValues),
                          lang::WrappedTargetException);
     CPPUNIT_ASSERT_EQUAL(u"Emphasis"_ustr,
@@ -1366,7 +1366,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf141525)
     createSwDoc();
 
     // Insert "Line with Arrow/Circle" shape with CTRL key
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:LineArrowCircle"_ustr, aArgs);
 
@@ -1438,7 +1438,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf162480)
 {
     createSwDoc();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Name", cpo::uno::Any(createFileURL(u"textboxInColumn2.fodt")) },
     });
 
@@ -1460,7 +1460,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164885)
         LocalDispatch() = default;
 
         void SAL_CALL dispatch(const css::util::URL& URL,
-                               const css::uno::Sequence<css::beans::PropertyValue>&) override
+                               const cpo::uno::Sequence<css::beans::PropertyValue>&) override
         {
             sLastCommand = URL.Complete;
         }
@@ -1495,8 +1495,8 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf164885)
                 return m_slave->queryDispatch(URL, TargetFrameName, SearchFlags);
             return {};
         }
-        css::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> SAL_CALL
-        queryDispatches(const css::uno::Sequence<css::frame::DispatchDescriptor>&) override
+        cpo::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> SAL_CALL
+        queryDispatches(const cpo::uno::Sequence<css::frame::DispatchDescriptor>&) override
         {
             return {};
         }

@@ -32,7 +32,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/file.hxx>
@@ -156,7 +156,7 @@ std::shared_ptr<SvMemoryStream> wrapStream(uno::Reference<io::XInputStream> cons
     for (;;)
     {
         const sal_Int32 nSize(2048);
-        uno::Sequence<sal_Int8> aData(nSize);
+        cpo::uno::Sequence<sal_Int8> aData(nSize);
         sal_Int32 nRead = rInputStream->readBytes(aData, nSize);
         aMemoryStream->WriteBytes(aData.getConstArray(), nRead);
         if (nRead < nSize)
@@ -679,7 +679,7 @@ public:
         uno::Reference< io::XInputStream > xInputStream = ucb::SimpleFileAccess::create(mxContext)->openFileRead( maURL + "/" + aName );
         return cpo::uno::Any(xInputStream);
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override
     {
         return {};
     }

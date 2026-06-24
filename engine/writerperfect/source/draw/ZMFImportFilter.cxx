@@ -13,7 +13,7 @@
 
 #include "ZMFImportFilter.hxx"
 
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
@@ -53,7 +53,7 @@ Sequence<OUString> SAL_CALL ZMFImportFilter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Draw_ZMFImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const css::uno::Sequence<cpo::uno::Any>&)
+    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new ZMFImportFilter(context));
 }

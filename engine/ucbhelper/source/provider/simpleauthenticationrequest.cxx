@@ -117,7 +117,7 @@ void SimpleAuthenticationRequest::initialize(
     if( bAllowSessionStoring )
         nSize++;
 
-    uno::Sequence< ucb::RememberAuthentication > aRememberModes( nSize );
+    cpo::uno::Sequence< ucb::RememberAuthentication > aRememberModes( nSize );
     auto it = aRememberModes.getArray();
     *it++ = ucb::RememberAuthentication_NO;
 

@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_WMFEXTERNAL_HXX
 
 #include <vcl/dllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star::beans
 {
@@ -50,7 +50,7 @@ struct VCL_DLLPUBLIC WmfExternal
     sal_uInt16 mapMode;
 
     WmfExternal();
-    bool setSequence(const css::uno::Sequence<css::beans::PropertyValue>& rSequence);
+    bool setSequence(const cpo::uno::Sequence<css::beans::PropertyValue>& rSequence);
 };
 
 #endif

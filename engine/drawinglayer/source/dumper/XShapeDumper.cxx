@@ -57,7 +57,7 @@ namespace {
 // auxiliary functions
 void dumpGradientProperty(const css::awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter);
 void dumpPolyPolygonBezierCoords(const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter);
-void dumpPointSequenceSequence(const css::drawing::PointSequenceSequence& rPointSequenceSequence, const uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
+void dumpPointSequenceSequence(const css::drawing::PointSequenceSequence& rPointSequenceSequence, const cpo::uno::Sequence<cpo::uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
 void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlTextWriterPtr xmlWriter);
 
 // FillProperties.idl
@@ -154,13 +154,13 @@ void dumpHomogenMatrixLine3(const css::drawing::HomogenMatrixLine3& rLine, xmlTe
 void dumpTransformationAsElement(const css::drawing::HomogenMatrix3& rTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
 void dumpHyperlinkAsAttribute(std::u16string_view sHyperlink, xmlTextWriterPtr xmlWriter);
-void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aInteropGrabBag, xmlTextWriterPtr xmlWriter);
+void dumpInteropGrabBagAsElement(const cpo::uno::Sequence< beans::PropertyValue>& aInteropGrabBag, xmlTextWriterPtr xmlWriter);
 
 // CustomShape.idl
 void dumpCustomShapeEngineAsAttribute(std::u16string_view sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeDataAsAttribute(
     std::u16string_view sCustomShapeData, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeGeometryAsElement(const css::uno::Sequence< css::beans::PropertyValue>& aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeGeometryAsElement(const cpo::uno::Sequence< css::beans::PropertyValue>& aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeReplacementURLAsAttribute(std::u16string_view sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter);
 
 // XShape.idl
@@ -638,17 +638,17 @@ void dumpPolygonKindAsAttribute(drawing::PolygonKind ePolygonKind, xmlTextWriter
     }
 }
 
-void dumpPointSequenceSequence(const drawing::PointSequenceSequence& aPointSequenceSequence, const uno::Sequence<uno::Sequence< drawing::PolygonFlags > >* pFlags, xmlTextWriterPtr xmlWriter)
+void dumpPointSequenceSequence(const drawing::PointSequenceSequence& aPointSequenceSequence, const cpo::uno::Sequence<cpo::uno::Sequence< drawing::PolygonFlags > >* pFlags, xmlTextWriterPtr xmlWriter)
 {
     // LibreOffice proudly presents - The Sequenception
     sal_Int32 nPointsSequence = aPointSequenceSequence.getLength();
 
     for (sal_Int32 i = 0; i < nPointsSequence; ++i)
     {
-        const uno::Sequence< awt::Point >& pointSequence = aPointSequenceSequence[i];
+        const cpo::uno::Sequence< awt::Point >& pointSequence = aPointSequenceSequence[i];
         sal_Int32 nPoints = pointSequence.getLength();
 
-        uno::Sequence< drawing::PolygonFlags> flagsSequence;
+        cpo::uno::Sequence< drawing::PolygonFlags> flagsSequence;
         if(pFlags)
             flagsSequence = (*pFlags)[i];
 
@@ -1073,7 +1073,7 @@ void dumpHyperlinkAsAttribute(std::u16string_view sHyperlink, xmlTextWriterPtr x
         OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aInteropGrabBag, xmlTextWriterPtr xmlWriter)
+void dumpInteropGrabBagAsElement(const cpo::uno::Sequence< beans::PropertyValue>& aInteropGrabBag, xmlTextWriterPtr xmlWriter)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "InteropGrabBag" ));
 
@@ -1153,25 +1153,25 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpViewBoxAsElement(aRectangleValue);
     }
-    else if(uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
+    else if(cpo::uno::Sequence< drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
             rPropertyValue.Name == "AdjustmentValues" && (aAny >>= aAdjustmentValues))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpAdjustmentValuesAsElement(aAdjustmentValues);
     }
-    else if(uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+    else if(cpo::uno::Sequence< drawing::EnhancedCustomShapeParameterPair > aCoordinates;
             rPropertyValue.Name == "Coordinates" && (aAny >>= aCoordinates))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpCoordinatesAsElement(aCoordinates);
     }
-    else if(uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
+    else if(cpo::uno::Sequence< drawing::EnhancedCustomShapeSegment > aSegments;
             rPropertyValue.Name == "Segments" && (aAny >>= aSegments))
     {
         EnhancedShapeDumper enhancedDumper(xmlWriter);
         enhancedDumper.dumpSegmentsAsElement(aSegments);
     }
-    else if(uno::Sequence< beans::PropertyValue > aPropSeq; aAny >>= aPropSeq)
+    else if(cpo::uno::Sequence< beans::PropertyValue > aPropSeq; aAny >>= aPropSeq)
     {
         (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( OUStringToOString(rPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr() ));
 
@@ -1206,7 +1206,7 @@ void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlT
     (void)xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpCustomShapeGeometryAsElement(const uno::Sequence< beans::PropertyValue>& aCustomShapeGeometry, xmlTextWriterPtr xmlWriter)
+void dumpCustomShapeGeometryAsElement(const cpo::uno::Sequence< beans::PropertyValue>& aCustomShapeGeometry, xmlTextWriterPtr xmlWriter)
 {
     (void)xmlTextWriterStartElement(xmlWriter, BAD_CAST( "CustomShapeGeometry" ));
 
@@ -1753,7 +1753,7 @@ void dumpShapeService(const uno::Reference< beans::XPropertySet >& xPropSet, xml
     if(xInfo->hasPropertyByName(u"InteropGrabBag"_ustr) && bDumpInteropProperties)
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"InteropGrabBag"_ustr);
-        uno::Sequence< beans::PropertyValue> aInteropGrabBag;
+        cpo::uno::Sequence< beans::PropertyValue> aInteropGrabBag;
         if(anotherAny >>= aInteropGrabBag)
             dumpInteropGrabBagAsElement(aInteropGrabBag, xmlWriter);
     }
@@ -1798,7 +1798,7 @@ void dumpCustomShapeService(const uno::Reference< beans::XPropertySet >& xPropSe
     }
     {
         cpo::uno::Any anotherAny = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr);
-        uno::Sequence< beans::PropertyValue> aCustomShapeGeometry;
+        cpo::uno::Sequence< beans::PropertyValue> aCustomShapeGeometry;
         if(anotherAny >>= aCustomShapeGeometry)
             dumpCustomShapeGeometryAsElement(aCustomShapeGeometry, xmlWriter);
     }
@@ -1823,7 +1823,7 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
     uno::Reference< drawing::XShapeDescriptor > xDescr(xShape, uno::UNO_QUERY_THROW);
     dumpShapeDescriptorAsAttribute(xDescr, xmlWriter);
 
-    // uno::Sequence<beans::Property> aProperties = xPropSetInfo->getProperties();
+    // cpo::uno::Sequence<beans::Property> aProperties = xPropSetInfo->getProperties();
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
 
@@ -1910,7 +1910,7 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
     }
 
     #if DEBUG_DUMPER
-        uno::Sequence< OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
+        cpo::uno::Sequence< OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
         sal_Int32 nServices = aServiceNames.getLength();
         for (sal_Int32 i = 0; i < nServices; ++i)
         {

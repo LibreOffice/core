@@ -66,10 +66,10 @@ private:
             const css::uno::Reference<css::text::XTextRange>& xPos1,
             const css::uno::Reference<css::text::XTextRange>& xPos2);
     rtl::Reference<SwXParagraph> finishOrAppendParagraph(
-            const css::uno::Sequence< css::beans::PropertyValue > & rProperties,
+            const cpo::uno::Sequence< css::beans::PropertyValue > & rProperties,
             const css::uno::Reference< css::text::XTextRange >& xInsertPosition);
     void ConvertCell(
-            const css::uno::Sequence< css::uno::Reference< css::text::XTextRange > > & rCell,
+            const cpo::uno::Sequence< css::uno::Reference< css::text::XTextRange > > & rCell,
             std::vector<SwNodeRange> & rRowNodes,
             SwNodeRange *const pLastCell);
 
@@ -100,7 +100,7 @@ public:
             const css::uno::Type& rType) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< css::uno::Type >
         SAL_CALL getTypes() override;
 
     // XPropertySet
@@ -158,33 +158,33 @@ public:
     // XParagraphAppend
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
         finishParagraph(
-            const css::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties) override;
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
         finishParagraphInsert(
-            const css::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties,
+            const cpo::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties,
             const css::uno::Reference< css::text::XTextRange >&     xInsertPosition) override final;
 
     // XTextPortionAppend
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
         appendTextPortion(
             const OUString& rText,
-            const css::uno::Sequence< css::beans::PropertyValue >& rCharacterAndParagraphProperties) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rCharacterAndParagraphProperties) override;
 
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
         insertTextPortion(
             const OUString& rText,
-            const css::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties,
+            const cpo::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties,
             const css::uno::Reference< css::text::XTextRange >&     rTextRange) override;
 
     // XTextContentAppend
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
         appendTextContent(
             const css::uno::Reference< css::text::XTextContent >&   xTextContent,
-            const css::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties) override;
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
         insertTextContentWithProperties(
             const css::uno::Reference< css::text::XTextContent >&  xTextContent,
-            const css::uno::Sequence< css::beans::PropertyValue >& rCharacterAndParagraphProperties,
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rCharacterAndParagraphProperties,
             const css::uno::Reference< css::text::XTextRange >& xInsertPosition) override;
 
     // XTextConvert
@@ -192,26 +192,26 @@ public:
         convertToTextFrame(
             const css::uno::Reference< css::text::XTextRange >& xStart,
             const css::uno::Reference< css::text::XTextRange >& xEnd,
-            const css::uno::Sequence< css::beans::PropertyValue >& xFrameProperties) override final;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& xFrameProperties) override final;
     virtual css::uno::Reference<
                 css::text::XTextTable > SAL_CALL
         convertToTable(
-            css::uno::Sequence<
-                css::uno::Sequence<
-                    css::uno::Sequence<
+            cpo::uno::Sequence<
+                cpo::uno::Sequence<
+                    cpo::uno::Sequence<
                         css::uno::Reference<
                             css::text::XTextRange > > > > const&
                 rTableRanges,
-           css::uno::Sequence<
-                css::uno::Sequence<
-                    css::uno::Sequence<
+           cpo::uno::Sequence<
+                cpo::uno::Sequence<
+                    cpo::uno::Sequence<
                         css::beans::PropertyValue > > > const&
                 rCellProperties,
-           css::uno::Sequence<
-                css::uno::Sequence<
+           cpo::uno::Sequence<
+                cpo::uno::Sequence<
                     css::beans::PropertyValue > > const&
                 rRowProperties,
-           css::uno::Sequence<
+           cpo::uno::Sequence<
                 css::beans::PropertyValue > const&
                 rTableProperties) override;
 
@@ -243,26 +243,26 @@ public:
 
     SW_DLLPUBLIC rtl::Reference< SwXParagraph >
         finishSwParagraphInsert(
-            const css::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties,
+            const cpo::uno::Sequence< css::beans::PropertyValue >&  rCharacterAndParagraphProperties,
             const css::uno::Reference< css::text::XTextRange >&     xInsertPosition);
     SW_DLLPUBLIC rtl::Reference< SwXTextTable >
         convertToSwTable(
-            css::uno::Sequence<
-                css::uno::Sequence<
-                    css::uno::Sequence<
+            cpo::uno::Sequence<
+                cpo::uno::Sequence<
+                    cpo::uno::Sequence<
                         css::uno::Reference<
                             css::text::XTextRange > > > > const&
                 rTableRanges,
-           css::uno::Sequence<
-                css::uno::Sequence<
-                    css::uno::Sequence<
+           cpo::uno::Sequence<
+                cpo::uno::Sequence<
+                    cpo::uno::Sequence<
                         css::beans::PropertyValue > > > const&
                 rCellProperties,
-           css::uno::Sequence<
-                css::uno::Sequence<
+           cpo::uno::Sequence<
+                cpo::uno::Sequence<
                     css::beans::PropertyValue > > const&
                 rRowProperties,
-           css::uno::Sequence<
+           cpo::uno::Sequence<
                 css::beans::PropertyValue > const&
                 rTableProperties);
     SW_DLLPUBLIC rtl::Reference< SwXTextFrame >
@@ -276,7 +276,7 @@ private:
     rtl::Reference< SwXTextRange > insertTextPortionImpl(
             SolarMutexGuard& rGuard,
             std::u16string_view rText,
-            const css::uno::Sequence< css::beans::PropertyValue >& rCharacterAndParagraphProperties,
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rCharacterAndParagraphProperties,
             const rtl::Reference<SwXTextCursor>& xTextCursor);
 
     SfxItemPropertySet const&   m_rPropSet;

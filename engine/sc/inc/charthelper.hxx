@@ -22,7 +22,7 @@
 #include "rangelst.hxx"
 
 namespace com::sun::star::chart2 { class XChartDocument; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 class SdrObject;
 class SdrPage;
@@ -42,7 +42,7 @@ public:
     static void GetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
             std::vector< OUString >& rRanges );
     static void SetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
-            const css::uno::Sequence< OUString >& rRanges );
+            const cpo::uno::Sequence< OUString >& rRanges );
 
     static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument& rDocument, SdrObject* pObject );
     static void FillProtectedChartRangesVector( ScRangeListVector& rRangesVector, const ScDocument& rDocument, const SdrPage* pPage );

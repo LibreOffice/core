@@ -150,7 +150,7 @@ public:
     virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
 
     /** @return  A list of all supported services. */
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /*  Derived classes have to implement:
         -   getImplementationName. */

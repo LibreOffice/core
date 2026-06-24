@@ -29,7 +29,7 @@
 #include "unohelper.hxx"
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -103,7 +103,7 @@ protected:
     }
 };
 
-class InstanceCollection : public Collection<css::uno::Sequence<css::beans::PropertyValue> >
+class InstanceCollection : public Collection<cpo::uno::Sequence<css::beans::PropertyValue> >
 {
 public:
     virtual bool isValid( const T& t ) const override
@@ -127,7 +127,7 @@ sal_Int32 lcl_findInstance( const InstanceCollection*,
 
 // get values from Sequence<PropertyValue> describing an Instance
 void getInstanceData(
-    const css::uno::Sequence<css::beans::PropertyValue>&,
+    const cpo::uno::Sequence<css::beans::PropertyValue>&,
     OUString* pID,
     css::uno::Reference<css::xml::dom::XDocument>*,
     OUString* pURL,
@@ -135,7 +135,7 @@ void getInstanceData(
 
 // set values on Sequence<PropertyValue> for an Instance
 void setInstanceData(
-    css::uno::Sequence<css::beans::PropertyValue>&,
+    cpo::uno::Sequence<css::beans::PropertyValue>&,
     const OUString* pID,
     const css::uno::Reference<css::xml::dom::XDocument>*,
     const OUString* pURL,

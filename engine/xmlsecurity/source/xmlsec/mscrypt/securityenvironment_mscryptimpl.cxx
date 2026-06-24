@@ -169,7 +169,7 @@ bool SAL_CALL SecurityEnvironment_MSCryptImpl::supportsService( const OUString& 
     return cppu::supportsService(this, serviceName);
 }
 /* XServiceInfo */
-uno::Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServiceNames() {
+cpo::uno::Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl::getSupportedServiceNames() {
     return { "com.sun.star.xml.crypto.SecurityEnvironment" };
 }
 
@@ -294,7 +294,7 @@ static BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore,
 #endif
 
 //Methods from XSecurityEnvironment
-uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPersonalCertificates()
+cpo::uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPersonalCertificates()
 {
     sal_Int32 length ;
     rtl::Reference<X509Certificate_MSCryptImpl> xcert ;
@@ -357,7 +357,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
     length = certsList.size() ;
     if( length != 0 ) {
         int i = 0;
-        uno::Sequence< uno::Reference< XCertificate > > certSeq( length ) ;
+        cpo::uno::Sequence< uno::Reference< XCertificate > > certSeq( length ) ;
         auto pcertSeq = certSeq.getArray();
 
         for( const auto& rXCert : certsList ) {
@@ -368,11 +368,11 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
         return certSeq ;
     }
 
-    return uno::Sequence< uno::Reference< XCertificate > >() ;
+    return cpo::uno::Sequence< uno::Reference< XCertificate > >() ;
 }
 
 
-uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const uno::Sequence< sal_Int8 >& serialNumber ) {
+uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const cpo::uno::Sequence< sal_Int8 >& serialNumber ) {
     unsigned int i ;
     rtl::Reference<X509Certificate_MSCryptImpl> xcert ;
     PCCERT_CONTEXT pCertContext = nullptr ;
@@ -564,11 +564,11 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( 
 }
 
 uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const OUString& serialNumber ) {
-    uno::Sequence< sal_Int8 > serial = xmlsecurity::numericStringToBigInteger( serialNumber ) ;
+    cpo::uno::Sequence< sal_Int8 > serial = xmlsecurity::numericStringToBigInteger( serialNumber ) ;
     return getCertificate( issuerName, serial ) ;
 }
 
-uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCertificatePath( const uno::Reference< XCertificate >& begin ) {
+cpo::uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCertificatePath( const uno::Reference< XCertificate >& begin ) {
     PCCERT_CHAIN_CONTEXT pChainContext ;
     PCCERT_CONTEXT pCertContext ;
 
@@ -657,7 +657,7 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
 
         pCertChain = pChainContext->rgpChain[0] ;
         if( pCertChain->cElement ) {
-            uno::Sequence< uno::Reference< XCertificate > > xCertChain( pCertChain->cElement ) ;
+            cpo::uno::Sequence< uno::Reference< XCertificate > > xCertChain( pCertChain->cElement ) ;
             auto pxCertChain = xCertChain.getArray();
 
             for( unsigned int i = 0 ; i < pCertChain->cElement ; i ++ ) {
@@ -682,10 +682,10 @@ uno::Sequence< uno::Reference < XCertificate > > SecurityEnvironment_MSCryptImpl
     if (pChainContext)
         CertFreeCertificateChain(pChainContext);
 
-    return uno::Sequence< uno::Reference < XCertificate > >();
+    return cpo::uno::Sequence< uno::Reference < XCertificate > >();
 }
 
-uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromRaw( const uno::Sequence< sal_Int8 >& rawCertificate ) {
+uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromRaw( const cpo::uno::Sequence< sal_Int8 >& rawCertificate ) {
     rtl::Reference<X509Certificate_MSCryptImpl> xcert ;
 
     if( rawCertificate.getLength() > 0 ) {
@@ -708,7 +708,7 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
         return nullptr;
     }
 
-    uno::Sequence<sal_Int8> rawCert(comphelper::arrayToSequence<sal_Int8>(chCert, certSize));
+    cpo::uno::Sequence<sal_Int8> rawCert(comphelper::arrayToSequence<sal_Int8>(chCert, certSize));
 
     xmlFree( chCert ) ;
 
@@ -716,7 +716,7 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
 }
 
 static HCERTSTORE getCertStoreForIntermediatCerts(
-    const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
+    const cpo::uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
 {
     HCERTSTORE store = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, 0, 0, nullptr);
     if (store == nullptr)
@@ -726,7 +726,7 @@ static HCERTSTORE getCertStoreForIntermediatCerts(
     {
         SAL_INFO("xmlsecurity.xmlsec", "Added temporary certificate: " << i->getSubjectName());
 
-        uno::Sequence<sal_Int8> data = i->getEncoded();
+        cpo::uno::Sequence<sal_Int8> data = i->getEncoded();
         PCCERT_CONTEXT cert = CertCreateCertificateContext(
             X509_ASN_ENCODING, reinterpret_cast<const BYTE*>(&data[0]), data.getLength());
         //Adding the certificate creates a copy and not just increases the ref count
@@ -797,7 +797,7 @@ static bool CheckUnitTestStore(PCCERT_CHAIN_CONTEXT const pChainContext, DWORD i
 //http://wiki.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
 sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
     const uno::Reference< css::security::XCertificate >& aCert,
-    const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
+    const cpo::uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
 {
     sal_Int32 validity = css::security::CertificateValidity::INVALID;
     PCCERT_CHAIN_CONTEXT pChainContext = nullptr;
@@ -1103,7 +1103,7 @@ void SecurityEnvironment_MSCryptImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeys
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SecurityEnvironment_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SecurityEnvironment_MSCryptImpl(pCtx));
 }

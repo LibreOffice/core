@@ -118,7 +118,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
     if( nPos == nCount )
         return;
 
-    const uno::Sequence< script::ScriptEventDescriptor > aDescs =
+    const cpo::uno::Sequence< script::ScriptEventDescriptor > aDescs =
             xEventManager->getScriptEvents( nPos );
     if( !aDescs.hasElements() )
         return;
@@ -1131,7 +1131,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
     if( TAG_SELECT == eTag )
     {
         aTmp = xPropSet->getPropertyValue( u"StringItemList"_ustr );
-        if( auto aList = o3tl::tryAccess<uno::Sequence<OUString>>(aTmp) )
+        if( auto aList = o3tl::tryAccess<cpo::uno::Sequence<OUString>>(aTmp) )
         {
             rWrt.IncIndentLevel(); // the content of Select can be indented
             sal_Int32 nCnt = aList->getLength();
@@ -1140,8 +1140,8 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             const OUString *pValues = nullptr;
             sal_Int32 nValCnt = 0;
             auto aTmp2 = xPropSet->getPropertyValue( u"ListSource"_ustr );
-            uno::Sequence<OUString> aValList;
-            if( auto s = o3tl::tryAccess<uno::Sequence<OUString>>(aTmp2) )
+            cpo::uno::Sequence<OUString> aValList;
+            if( auto s = o3tl::tryAccess<cpo::uno::Sequence<OUString>>(aTmp2) )
             {
                 aValList = *s;
                 nValCnt = aValList.getLength();
@@ -1152,8 +1152,8 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             const sal_Int16 *pSels = nullptr;
             sal_Int32 nSel = 0;
             sal_Int32 nSelCnt = 0;
-            uno::Sequence<sal_Int16> aSelList;
-            if( auto s = o3tl::tryAccess<uno::Sequence<sal_Int16>>(aSelTmp) )
+            cpo::uno::Sequence<sal_Int16> aSelList;
+            if( auto s = o3tl::tryAccess<cpo::uno::Sequence<sal_Int16>>(aSelTmp) )
             {
                 aSelList = *s;
                 nSelCnt = aSelList.getLength();

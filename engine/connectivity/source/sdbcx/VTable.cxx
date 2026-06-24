@@ -47,7 +47,7 @@ OUString SAL_CALL OTable::getImplementationName(  )
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL OTable::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OTable::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.TableDescriptor"_ustr:u"com.sun.star.sdbcx.Table"_ustr };
 }

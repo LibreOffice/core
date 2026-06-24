@@ -21,7 +21,7 @@
 
 #include <config_options.h>
 #include <framework/fwkdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
@@ -130,9 +130,9 @@ namespace framework
         bool            isRedoPossible() const;
         OUString getCurrentUndoActionTitle() const;
         OUString getCurrentRedoActionTitle() const;
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
                         getAllUndoActionTitles() const;
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
                         getAllRedoActionTitles() const;
         void            clear( IMutexGuard& i_instanceLock );
         void            clearRedo( IMutexGuard& i_instanceLock );

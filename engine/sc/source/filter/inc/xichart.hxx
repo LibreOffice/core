@@ -425,7 +425,7 @@ public:
     css::uno::Reference< css::chart2::data::XDataSequence >
                         CreateDataSequence( const OUString& rRole ) const;
     /** Creates a sequence of formatted string objects. */
-    css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >
+    cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >
                         CreateStringSequence( const XclImpChRoot& rRoot,
                             sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const;
 

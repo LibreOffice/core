@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <basic/sbxvar.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -56,7 +56,7 @@ namespace ooo::vba
     {
         /// @throws css::lang::IllegalArgumentException
         template < class T >
-        css::uno::Reference< T > getXSomethingFromArgs( css::uno::Sequence< cpo::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true )
+        css::uno::Reference< T > getXSomethingFromArgs( cpo::uno::Sequence< cpo::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true )
         {
             if ( args.getLength() < ( nPos + 1) )
                 throw css::lang::IllegalArgumentException();
@@ -90,7 +90,7 @@ namespace ooo::vba
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::script::XTypeConverter > const & getTypeConverter( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const OUString& aUrl );
-        VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const OUString & aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps );
+        VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const OUString & aUrl, const cpo::uno::Sequence< css::beans::PropertyValue >& sProps );
         VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell const * pView, sal_uInt16 nSlot );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         inline sal_Int32 OORGBToXLRGB( ::Color n ) { return OORGBToXLRGB(sal_Int32(n)); }
@@ -126,9 +126,9 @@ namespace ooo::vba
         VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, PointerStyle nPointer, bool bOverWrite );
         /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const cpo::uno::Any& aObj, const cpo::uno::Any& aValue  );
-        VBAHELPER_DLLPUBLIC cpo::uno::Any getPropertyValue( const css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );
-        VBAHELPER_DLLPUBLIC bool setPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue );
-        VBAHELPER_DLLPUBLIC void setOrAppendPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue );
+        VBAHELPER_DLLPUBLIC cpo::uno::Any getPropertyValue( const cpo::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );
+        VBAHELPER_DLLPUBLIC bool setPropertyValue( cpo::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue );
+        VBAHELPER_DLLPUBLIC void setOrAppendPropertyValue( cpo::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue );
 
         VBAHELPER_DLLPUBLIC bool executeRunTimeLibrary(std::u16string_view rSbRtl_command,
                                                        SbxArray* pParameters);
@@ -245,10 +245,10 @@ class VBAHELPER_DLLPUBLIC ContainerUtilities
 {
 
 public:
-    static OUString getUniqueName( const css::uno::Sequence< OUString >&  _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator);
-    static OUString getUniqueName( const css::uno::Sequence< OUString >& _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator, sal_Int32 _nStartSuffix );
+    static OUString getUniqueName( const cpo::uno::Sequence< OUString >&  _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator);
+    static OUString getUniqueName( const cpo::uno::Sequence< OUString >& _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator, sal_Int32 _nStartSuffix );
 
-    static sal_Int32 FieldInList( const css::uno::Sequence< OUString >& SearchList, const OUString& SearchString );
+    static sal_Int32 FieldInList( const cpo::uno::Sequence< OUString >& SearchList, const OUString& SearchString );
 };
 
 // really just a place holder to ease the porting pain

@@ -2149,7 +2149,7 @@ static ::css::beans::Pair<::rtl::OUString, ::rtl::OUString>
         // clang-format on
     };
 
-const ::css::uno::Sequence<::css::beans::Pair<OUString, OUString>>
+const ::cpo::uno::Sequence<::css::beans::Pair<OUString, OUString>>
     starmathdatabase::icustomMathmlHtmlEntities(
         icustomMathmlHtmlEntitiesData, starmathdatabase::STARMATH_MATHMLHTML_ENTITY_NUMBER);
 
@@ -2160,7 +2160,7 @@ static ::css::beans::Pair<::rtl::OUString, ::rtl::OUString>
         { u"&infin;"_ustr, u"\u221E"_ustr}
         // clang-format on
     };
-const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
+const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>
     starmathdatabase::icustomMathmlHtmlEntitiesExport(icustomMathmlHtmlEntitiesNamesExportData, 2);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

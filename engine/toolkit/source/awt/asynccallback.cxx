@@ -43,7 +43,7 @@ public:
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::awt::XRequestCallback:
     virtual void SAL_CALL addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const cpo::uno::Any & aData) override;
@@ -75,7 +75,7 @@ bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName)
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.AsyncCallback"_ustr };
 }
@@ -114,7 +114,7 @@ IMPL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, p, void )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_awt_comp_AsyncCallback_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new AsyncCallback());
 }

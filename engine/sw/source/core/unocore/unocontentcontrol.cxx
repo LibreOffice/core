@@ -65,7 +65,7 @@ public:
     void SAL_CALL release() noexcept override { cppu::OWeakObject::release(); }
 
     // XTypeProvider
-    uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
     // XText
     virtual rtl::Reference<SwXTextCursor> createXTextCursor() override;
@@ -115,9 +115,9 @@ rtl::Reference<SwXTextCursor> SwXContentControlText::createXTextCursor()
     return xRet;
 }
 
-uno::Sequence<sal_Int8> SAL_CALL SwXContentControlText::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL SwXContentControlText::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XText
@@ -349,7 +349,7 @@ bool SAL_CALL SwXContentControl::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL SwXContentControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SwXContentControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.TextContent"_ustr, u"com.sun.star.text.ContentControl"_ustr };
 }

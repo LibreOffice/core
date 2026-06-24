@@ -93,7 +93,7 @@ using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::StringPair;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::frame::XFrame;
@@ -779,12 +779,12 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 //  SfxBaseController -> XDispatchProvider
 
 
-uno::Sequence< Reference< frame::XDispatch > > SAL_CALL SfxBaseController::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& seqDescripts )
+cpo::uno::Sequence< Reference< frame::XDispatch > > SAL_CALL SfxBaseController::queryDispatches( const cpo::uno::Sequence< frame::DispatchDescriptor >& seqDescripts )
 {
     // Create return list - which must have same size then the given descriptor
     // It's not allowed to pack it!
     sal_Int32 nCount = seqDescripts.getLength();
-    uno::Sequence< Reference< frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< Reference< frame::XDispatch > > lDispatcher( nCount );
 
     std::transform(seqDescripts.begin(), seqDescripts.end(), lDispatcher.getArray(),
         [this](const frame::DispatchDescriptor& rDesc) -> Reference< frame::XDispatch > {
@@ -1038,7 +1038,7 @@ void SAL_CALL SfxBaseController::removeMouseClickHandler( const Reference< awt::
     m_pData->m_aUserInputInterception.removeMouseClickHandler( xHandler );
 }
 
-uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups()
+cpo::uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups()
 {
     SolarMutexGuard aGuard;
 
@@ -1067,7 +1067,7 @@ uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups
     return comphelper::containerToSequence( aGroupList );
 }
 
-uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
+cpo::uno::Sequence< frame::DispatchInformation > SAL_CALL SfxBaseController::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
 {
     std::vector< frame::DispatchInformation > aCmdVector;
 
@@ -1331,7 +1331,7 @@ void SfxBaseController::ShowInfoBars( )
     if ( !xCmisDoc.is( ) || !xCmisDoc->canCheckOut( ) )
         return;
 
-    const uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
+    const cpo::uno::Sequence< document::CmisProperty> aCmisProperties = xCmisDoc->getCmisProperties( );
 
     if ( !(xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( )) )
         return;
@@ -1343,7 +1343,7 @@ void SfxBaseController::ShowInfoBars( )
     for ( const auto& rCmisProp : aCmisProperties )
     {
         if ( rCmisProp.Id == "cmis:isVersionSeriesCheckedOut" ) {
-            uno::Sequence< bool > bTmp;
+            cpo::uno::Sequence< bool > bTmp;
             rCmisProp.Value >>= bTmp;
             bCheckedOut = bTmp[0];
         }
@@ -1423,7 +1423,7 @@ void SAL_CALL SfxBaseController::removeTitleChangeListener(const Reference< fram
         xBroadcaster->removeTitleChangeListener (xListener);
 }
 
-void SfxBaseController::initialize( const css::uno::Sequence< cpo::uno::Any >& /*aArguments*/ )
+void SfxBaseController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& /*aArguments*/ )
 {
 }
 

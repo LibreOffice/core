@@ -30,18 +30,18 @@ class DlgEdTransferableImpl final : public ::cppu::WeakImplHelper< css::datatran
                                                              css::datatransfer::clipboard::XClipboardOwner >
 {
 private:
-    css::uno::Sequence< css::datatransfer::DataFlavor > m_SeqFlavors;
-    css::uno::Sequence< cpo::uno::Any > m_SeqData;
+    cpo::uno::Sequence< css::datatransfer::DataFlavor > m_SeqFlavors;
+    cpo::uno::Sequence< cpo::uno::Any > m_SeqData;
 
     static bool compareDataFlavors( const css::datatransfer::DataFlavor& lFlavor, const css::datatransfer::DataFlavor& rFlavor );
 
 public:
-    DlgEdTransferableImpl( const css::uno::Sequence< css::datatransfer::DataFlavor >& aSeqFlavors, const css::uno::Sequence< cpo::uno::Any >& aSeqData );
+    DlgEdTransferableImpl( const cpo::uno::Sequence< css::datatransfer::DataFlavor >& aSeqFlavors, const cpo::uno::Sequence< cpo::uno::Any >& aSeqData );
     virtual ~DlgEdTransferableImpl() override;
 
     // XTransferable
     virtual cpo::uno::Any getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > getTransferDataFlavors() override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > getTransferDataFlavors() override;
     virtual bool isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
 
     // XClipboardOwner

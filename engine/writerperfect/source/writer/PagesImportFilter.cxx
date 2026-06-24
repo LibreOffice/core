@@ -48,7 +48,7 @@ bool SAL_CALL PagesImportFilter::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL PagesImportFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL PagesImportFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ImportFilter"_ustr,
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
@@ -56,7 +56,7 @@ css::uno::Sequence<OUString> SAL_CALL PagesImportFilter::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Writer_PagesImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const css::uno::Sequence<cpo::uno::Any>&)
+    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new PagesImportFilter(context));
 }

@@ -248,7 +248,7 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 
 Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttributes(
         sal_Int32 nIndex,
-        const uno::Sequence< OUString > & /*rRequestedAttributes*/ )
+        const cpo::uno::Sequence< OUString > & /*rRequestedAttributes*/ )
 {
     SolarMutexGuard aGuard;
     sal_Int32 nLen = GetAccessibleText_Impl().getLength();

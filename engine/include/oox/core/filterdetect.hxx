@@ -133,7 +133,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // com.sun.star.document.XExtendedFilterDetection interface ---------------
 
@@ -154,7 +154,7 @@ public:
         property of the passed media descriptor.
      */
     virtual OUString SAL_CALL
-                        detect( css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
+                        detect( cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
 
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;

@@ -799,8 +799,8 @@ public:
     virtual bool                    IsColumnSelected( sal_Int32 _nColumn ) const override;
     virtual sal_Int32               GetSelectedRowCount() const override;
     virtual sal_Int32               GetSelectedColumnCount() const override;
-    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const override;
-    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const override;
+    virtual void                    GetAllSelectedRows( cpo::uno::Sequence< sal_Int32 >& _rRows ) const override;
+    virtual void                    GetAllSelectedColumns( cpo::uno::Sequence< sal_Int32 >& _rColumns ) const override;
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;
     virtual OUString                GetAccessibleCellText(sal_Int32 _nRow, sal_uInt16 _nColPos) const override;
     virtual bool                    GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex, int nLen, std::vector< tools::Rectangle >& rVector ) override;

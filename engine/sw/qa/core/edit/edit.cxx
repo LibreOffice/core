@@ -503,7 +503,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocumentCompareCallback)
 
     // When comparing with an old document:
     OUString aOther = createFileURL(u"compare-old.odt");
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"URL"_ustr, aOther),
         comphelper::makePropertyValue(u"NoAcceptDialog"_ustr, true),
     };

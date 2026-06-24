@@ -60,17 +60,17 @@ class ItemContainer final : public ::cppu::WeakImplHelper< css::container::XInde
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override
         {
-            return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
+            return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
         virtual bool SAL_CALL hasElements() override;
 
     private:
-        void copyItemContainer( const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );
+        void copyItemContainer( const std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );
         static rtl::Reference< ItemContainer > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
 
         mutable ShareableMutex                                                               m_aShareMutex;
-        std::vector< css::uno::Sequence< css::beans::PropertyValue > > m_aItemVector;
+        std::vector< cpo::uno::Sequence< css::beans::PropertyValue > > m_aItemVector;
 };
 
 }

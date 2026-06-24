@@ -65,7 +65,7 @@ protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropType );
     void                                        ImplRegisterProperties( const std::vector< sal_uInt16 > &rIds );
     void                                        ImplRegisterProperty( sal_uInt16 nPropId, const cpo::uno::Any& rDefault );
-    css::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
+    cpo::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
     virtual cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
 
@@ -136,7 +136,7 @@ public:
 
     // css::beans::XPropertyState
     css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
+    cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
     void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
     cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
@@ -148,7 +148,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
     bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ::cppu::OPropertySetHelper
     ::cppu::IPropertyArrayHelper& getInfoHelper() override = 0;
@@ -161,13 +161,13 @@ public:
 
     // css::beans::XMultiPropertySet
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
-    void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values ) override;
+    void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
 protected:
     // override setValue methods to handle properties of FontDescriptor
     // css::beans::XFastPropertySet
     void setFastPropertyValueImpl( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
     css::beans::PropertyState getPropertyStateImpl( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
-    void setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values );
+    void setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

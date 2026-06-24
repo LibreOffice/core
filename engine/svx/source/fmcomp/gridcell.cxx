@@ -2483,7 +2483,7 @@ void DbComboBox::SetList(const Any& rItems)
     weld::ComboBox& rComboBox = pField->get_widget();
     rComboBox.clear();
 
-    css::uno::Sequence<OUString> aTest;
+    cpo::uno::Sequence<OUString> aTest;
     if (rItems >>= aTest)
     {
         for (const OUString& rString : aTest)
@@ -2599,7 +2599,7 @@ void DbListBox::SetList(const Any& rItems)
     rFieldList.clear();
     m_bBound = false;
 
-    css::uno::Sequence<OUString> aTest;
+    cpo::uno::Sequence<OUString> aTest;
     if (!(rItems >>= aTest))
         return;
 
@@ -2767,7 +2767,7 @@ void DbFilterField::PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect)
 
 void DbFilterField::SetList(const Any& rItems, bool bComboBox)
 {
-    css::uno::Sequence<OUString> aTest;
+    cpo::uno::Sequence<OUString> aTest;
     rItems >>= aTest;
     if (!aTest.hasElements())
         return;
@@ -4068,7 +4068,7 @@ void SAL_CALL FmXListBoxCell::addItem(const OUString& aItem, sal_Int16 nPos)
     }
 }
 
-void SAL_CALL FmXListBoxCell::addItems(const css::uno::Sequence<OUString>& aItems, sal_Int16 nPos)
+void SAL_CALL FmXListBoxCell::addItems(const cpo::uno::Sequence<OUString>& aItems, sal_Int16 nPos)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (m_pBox)
@@ -4113,16 +4113,16 @@ OUString SAL_CALL FmXListBoxCell::getItem(sal_Int16 nPos)
     return rBox.get_text(nPos);
 }
 
-css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getItems()
+cpo::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getItems()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    css::uno::Sequence<OUString> aSeq;
+    cpo::uno::Sequence<OUString> aSeq;
     if (m_pBox)
     {
         weld::ComboBox& rBox = m_pBox->get_widget();
         const sal_Int32 nEntries = rBox.get_count();
-        aSeq = css::uno::Sequence<OUString>( nEntries );
+        aSeq = cpo::uno::Sequence<OUString>( nEntries );
         for ( sal_Int32 n = nEntries; n; )
         {
             --n;
@@ -4182,7 +4182,7 @@ OUString SAL_CALL FmXListBoxCell::getSelectedItem()
     return aItem;
 }
 
-css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
+cpo::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

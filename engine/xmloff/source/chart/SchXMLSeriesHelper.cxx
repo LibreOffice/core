@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 ::std::vector< Reference< chart2::XDataSeries > >
     SchXMLSeriesHelper::getDataSeriesFromDiagram(
@@ -101,7 +101,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
     if( !xCooSysContainer.is())
         return nullptr;
 
-    const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+    const cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
     for( const auto& xCooSys : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system
@@ -109,7 +109,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
         SAL_WARN_IF( !xChartTypeContainer.is(), "xmloff.chart", "xChartTypeContainer is NULL");
         if( !xChartTypeContainer.is() )
             continue;
-        const uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+        const cpo::uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
         for( const auto& xChartType : aChartTypeList )
         {
             //iterate through all series in this chart type
@@ -118,7 +118,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
             if( !xDataSeriesContainer.is() )
                 continue;
 
-            const uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+            const cpo::uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
             if (std::find(aSeriesList.begin(), aSeriesList.end(), xSeries) != aSeriesList.end())
                 return xChartType;
         }

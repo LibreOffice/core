@@ -31,7 +31,7 @@ WmfExternal::WmfExternal()
 {
 }
 
-bool WmfExternal::setSequence(const css::uno::Sequence<css::beans::PropertyValue>& rSequence)
+bool WmfExternal::setSequence(const cpo::uno::Sequence<css::beans::PropertyValue>& rSequence)
 {
     bool bRetval(false);
 

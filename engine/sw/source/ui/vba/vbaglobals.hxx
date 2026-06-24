@@ -39,7 +39,7 @@ private:
     css::uno::Reference<ooo::vba::word::XApplication> const& getApplication();
 
 public:
-    SwVbaGlobals(css::uno::Sequence<cpo::uno::Any> const& aArgs,
+    SwVbaGlobals(cpo::uno::Sequence<cpo::uno::Any> const& aArgs,
                  css::uno::Reference<css::uno::XComponentContext> const& rxContext);
     virtual ~SwVbaGlobals() override;
 
@@ -69,11 +69,11 @@ public:
     virtual float SAL_CALL PointsToPicas(float Points) override;
 
     // XMultiServiceFactory
-    virtual css::uno::Sequence<OUString> SAL_CALL getAvailableServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getAvailableServiceNames() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAGLOBALS_HXX
 

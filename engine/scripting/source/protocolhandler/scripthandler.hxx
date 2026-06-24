@@ -65,24 +65,24 @@ public:
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-    virtual css::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
 
     /* Implementation for XDispatchProvider */
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL
     queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName,
                    sal_Int32 eSearchFlags ) override ;
-    virtual css::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL
     queryDispatches(
-        const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
+        const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
 
     /* Implementation for X(Notifying)Dispatch */
     virtual void SAL_CALL dispatchWithNotification(
         const css::util::URL& aURL,
-        const css::uno::Sequence< css::beans::PropertyValue >& lArgs,
+        const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs,
         const css::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
     virtual void SAL_CALL dispatch(
         const css::util::URL& aURL,
-        const css::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
     virtual void SAL_CALL addStatusListener(
         const css::uno::Reference< css::frame::XStatusListener >& xControl,
         const css::util::URL& aURL ) override;
@@ -92,7 +92,7 @@ public:
 
     /* Implementation for XInitialization */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence < cpo::uno::Any >& aArguments ) override;
+        const cpo::uno::Sequence < cpo::uno::Any >& aArguments ) override;
 };
 
 }

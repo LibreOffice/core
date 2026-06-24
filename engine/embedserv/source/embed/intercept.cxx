@@ -33,7 +33,7 @@ constexpr OUString IU2 = u".uno:CloseDoc"_ustr;
 constexpr OUString IU3 = u".uno:CloseWin"_ustr;
 constexpr OUString IU4 = u".uno:CloseFrame"_ustr;
 constexpr OUString IU5 = u".uno:SaveAs"_ustr;
-const uno::Sequence< OUString > Interceptor::m_aInterceptedURL{ IU0, IU1, IU2, IU3, IU4, IU5};
+const cpo::uno::Sequence< OUString > Interceptor::m_aInterceptedURL{ IU0, IU1, IU2, IU3, IU4, IU5};
 
 
 
@@ -124,7 +124,7 @@ void Interceptor::DisconnectDocHolder()
 void SAL_CALL
 Interceptor::dispatch(
     const util::URL& URL,
-    const uno::Sequence<
+    const cpo::uno::Sequence<
     beans::PropertyValue >& Arguments )
 {
     ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl > xOleAccess;
@@ -147,7 +147,7 @@ Interceptor::dispatch(
                 aDocLock.GetEmbedDocument()->Close( 0 );
             else if ( URL.Complete == m_aInterceptedURL[5] )
             {
-                uno::Sequence< beans::PropertyValue > aNewArgs = Arguments;
+                cpo::uno::Sequence< beans::PropertyValue > aNewArgs = Arguments;
                 sal_Int32 nInd = 0;
 
                 while( nInd < aNewArgs.getLength() )
@@ -362,7 +362,7 @@ Interceptor::removeStatusListener(
 
 
 //XInterceptorInfo
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SAL_CALL
 Interceptor::getInterceptedURLs(  )
 {
@@ -404,11 +404,11 @@ Interceptor::queryDispatch(
     }
 }
 
-uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
 Interceptor::queryDispatches(
-    const uno::Sequence<frame::DispatchDescriptor >& Requests )
+    const cpo::uno::Sequence<frame::DispatchDescriptor >& Requests )
 {
-    uno::Sequence< uno::Reference< frame::XDispatch > > aRet;
+    cpo::uno::Sequence< uno::Reference< frame::XDispatch > > aRet;
     osl::MutexGuard aGuard(m_aMutex);
     if(m_xSlaveDispatchProvider.is())
         aRet = m_xSlaveDispatchProvider->queryDispatches(Requests);

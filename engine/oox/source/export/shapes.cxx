@@ -267,7 +267,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
     // use a temp stream - while it would work to store directly to a
     // fragment stream, an error during export means we'd have to delete it
     rtl::Reference< comphelper::UNOMemoryStream > xTempStream = new comphelper::UNOMemoryStream();
-    uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
             { "OutputStream", Any(xTempStream->getOutputStream()) },
             { "FilterName", Any(OUString::createFromAscii(pFilterName)) }
         }));
@@ -679,7 +679,7 @@ static bool lcl_GetHandlePosition( sal_Int32 &nValue, const EnhancedCustomShapeP
     return bAdj;
 }
 
-static void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
+static void lcl_AnalyzeHandles( const cpo::uno::Sequence<beans::PropertyValues> & rHandles,
         std::vector< std::pair< sal_Int32, sal_Int32> > &rHandlePositionList,
         const Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
 {
@@ -826,7 +826,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 
     sal_Int32 nAdjustmentValuesIndex = -1;
     awt::Rectangle aViewBox;
-    uno::Sequence<beans::PropertyValues> aHandles;
+    cpo::uno::Sequence<beans::PropertyValues> aHandles;
 
     bool bFlipH = false;
     bool bFlipV = false;
@@ -864,7 +864,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     if (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes)
     {
         // get InteropGrabBag to export attributes stored in the grabbag
-        uno::Sequence<beans::PropertyValue> aGrabBagProps;
+        cpo::uno::Sequence<beans::PropertyValue> aGrabBagProps;
         rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBagProps;
 
         bool bUseBackground = false;
@@ -1287,7 +1287,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         WriteShapeEffects( rXPropSet );
 
         bool bHas3DEffectinShape = false;
-        uno::Sequence<beans::PropertyValue> grabBag;
+        cpo::uno::Sequence<beans::PropertyValue> grabBag;
         rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
 
         for (auto const& it : grabBag)
@@ -2945,7 +2945,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
         return *this;
     }
 
-    uno::Sequence<beans::PropertyValue> grabBag;
+    cpo::uno::Sequence<beans::PropertyValue> grabBag;
     OUString entryName;
     uno::Reference<container::XChild> xChild(xObj, uno::UNO_QUERY);
     if (xChild)
@@ -2976,13 +2976,13 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     {
         if (it.Name == "EmbeddedObjects")
         {
-            uno::Sequence<beans::PropertyValue> objects;
+            cpo::uno::Sequence<beans::PropertyValue> objects;
             it.Value >>= objects;
             for (auto const& object : objects)
             {
                 if (object.Name == entryName)
                 {
-                    uno::Sequence<beans::PropertyValue> props;
+                    cpo::uno::Sequence<beans::PropertyValue> props;
                     object.Value >>= props;
                     for (auto const& prop : props)
                     {

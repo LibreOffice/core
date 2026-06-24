@@ -525,7 +525,7 @@ TempFileFastService::~TempFileFastService ()
 
 // XInputStream
 
-sal_Int32 SAL_CALL TempFileFastService::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL TempFileFastService::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbInClosed )
@@ -547,7 +547,7 @@ sal_Int32 SAL_CALL TempFileFastService::readBytes( css::uno::Sequence< sal_Int8 
     return nRead;
 }
 
-sal_Int32 SAL_CALL TempFileFastService::readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL TempFileFastService::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     {
         std::unique_lock aGuard( maMutex );
@@ -635,7 +635,7 @@ void SAL_CALL TempFileFastService::closeInput()
 
 // XOutputStream
 
-void SAL_CALL TempFileFastService::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
+void SAL_CALL TempFileFastService::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     std::unique_lock aGuard( maMutex );
     if ( mbOutClosed )

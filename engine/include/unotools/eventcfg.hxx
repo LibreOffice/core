@@ -70,13 +70,13 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig final :
         css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
         void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
         cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+        cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         bool SAL_CALL hasByName( const OUString& aName ) override;
         css::uno::Type SAL_CALL getElementType(  ) override;
         bool SAL_CALL hasElements(  ) override;
         static const OUString & GetEventName( GlobalEventId nID );
 
-        css::uno::Sequence < css::beans::PropertyValue > getByName2( const OUString& aName );
+        cpo::uno::Sequence < css::beans::PropertyValue > getByName2( const OUString& aName );
 
     private:
         static GlobalEventConfig_Impl* m_pImpl;

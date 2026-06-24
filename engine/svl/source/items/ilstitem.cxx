@@ -38,7 +38,7 @@ SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, ::std::vector < sal_In
 {
 }
 
-SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const css::uno::Sequence < sal_Int32 >& rList )
+SfxIntegerListItem::SfxIntegerListItem( sal_uInt16 which, const cpo::uno::Sequence < sal_Int32 >& rList )
     : SfxPoolItem( which )
 {
     comphelper::sequenceToContainer(m_aList, rList);
@@ -67,13 +67,13 @@ bool SfxIntegerListItem::PutValue  ( const cpo::uno::Any& rVal, sal_uInt8 )
     css::uno::Reference < css::script::XTypeConverter > xConverter
             ( css::script::Converter::create(::comphelper::getProcessComponentContext()) );
     cpo::uno::Any aNew;
-    try { aNew = xConverter->convertTo( rVal, cppu::UnoType<css::uno::Sequence < sal_Int32 >>::get() ); }
+    try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < sal_Int32 >>::get() ); }
     catch (css::uno::Exception&)
     {
         return true;
     }
 
-    css::uno::Sequence<sal_Int32> aTempSeq;
+    cpo::uno::Sequence<sal_Int32> aTempSeq;
     bool bRet = aNew >>= aTempSeq;
     if (bRet)
         m_aList = comphelper::sequenceToContainer<std::vector<sal_Int32>>(aTempSeq);

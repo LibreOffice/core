@@ -18,7 +18,7 @@
 class Base : public cppu::WeakAggImplHelper1<css::lang::XInitialization>
 {
 public:
-    void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any> const& aArguments) override;
+    void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any> const& aArguments) override;
 };
 
 class Good : public Base, public css::lang::XMain
@@ -33,7 +33,7 @@ public:
 class Bad : public cppu::ImplInheritanceHelper<Base, css::lang::XMain>
 {
 public:
-    sal_Int32 SAL_CALL run(css::uno::Sequence<OUString> const& aArguments) override;
+    sal_Int32 SAL_CALL run(cpo::uno::Sequence<OUString> const& aArguments) override;
 };
 
 // expected-error@cppuhelper/implbase.hxx:* {{'ImplInheritanceHelper<Base, com::sun::star::lang::XMain>' derives from XAggregation, but its implementation of queryInterface does not delegate to an appropriate base class queryInterface [loplugin:unoaggregation]}}

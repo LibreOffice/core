@@ -128,7 +128,7 @@ std::unique_ptr<SvStream> getImageStream(uno::Reference<uno::XComponentContext> 
         uno::Reference<graphic::XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(rxContext);
 
         // let it create a graphic from the given URL
-        uno::Sequence<beans::PropertyValue> aMediaProperties{ comphelper::makePropertyValue(
+        cpo::uno::Sequence<beans::PropertyValue> aMediaProperties{ comphelper::makePropertyValue(
             u"URL"_ustr, rImageResourceURL) };
         uno::Reference<graphic::XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
 

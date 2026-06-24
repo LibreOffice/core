@@ -110,7 +110,7 @@ public:
     */
     bool addRecord( OUString const & rURL,
                     OUString const & rUsername,
-                    css::uno::Sequence< OUString > const & rPasswords,
+                    cpo::uno::Sequence< OUString > const & rPasswords,
                     css::uno::Reference< css::task::XInteractionHandler2 > const & xIH,
                     bool bPersist );
 
@@ -135,7 +135,7 @@ public:
     virtual bool SAL_CALL
     supportsService( const OUString& ServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     // XInteractionHandler2

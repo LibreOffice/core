@@ -157,7 +157,7 @@ public:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
     virtual bool SAL_CALL isBundle() override;
-    virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
     SAL_CALL getBundle(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -168,7 +168,7 @@ public:
     virtual OUString SAL_CALL getDisplayName() override;
     virtual OUString SAL_CALL getDescription() override;
     virtual OUString SAL_CALL getLicenseText() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getUpdateInformationURLs() override;
     virtual css::beans::StringPair SAL_CALL getPublisherInfo() override;
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL
@@ -231,7 +231,7 @@ protected:
 
     virtual ~PackageRegistryBackend() override;
     PackageRegistryBackend(
-        css::uno::Sequence<cpo::uno::Any> const & args,
+        cpo::uno::Sequence<cpo::uno::Any> const & args,
         css::uno::Reference<css::uno::XComponentContext> const & xContext );
 
     /* creates a folder with a unique name.

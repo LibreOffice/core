@@ -21,7 +21,7 @@
 
 #include <svl/poolitem.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
 namespace dbaui
@@ -31,17 +31,17 @@ namespace dbaui
 */
 class OStringListItem : public SfxPoolItem
 {
-    css::uno::Sequence<OUString> m_aList;
+    cpo::uno::Sequence<OUString> m_aList;
 
 public:
     DECLARE_ITEM_TYPE_FUNCTION(OStringListItem)
-    OStringListItem(sal_Int16 nWhich, const css::uno::Sequence<OUString>& _rList);
+    OStringListItem(sal_Int16 nWhich, const cpo::uno::Sequence<OUString>& _rList);
     OStringListItem(const OStringListItem& _rSource);
 
     virtual bool operator==(const SfxPoolItem& _rItem) const override;
     virtual OStringListItem* Clone(SfxItemPool* _pPool = nullptr) const override;
 
-    const css::uno::Sequence<OUString>& getList() const { return m_aList; }
+    const cpo::uno::Sequence<OUString>& getList() const { return m_aList; }
 };
 
 } // namespace dbaui

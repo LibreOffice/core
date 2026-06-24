@@ -48,12 +48,12 @@ namespace fileaccess {
 
         virtual sal_Int32 SAL_CALL
         readBytes(
-            css::uno::Sequence< sal_Int8 >& aData,
+            cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nBytesToRead ) override;
 
         virtual sal_Int32 SAL_CALL
         readSomeBytes(
-            css::uno::Sequence< sal_Int8 >& aData,
+            cpo::uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead ) override;
 
         virtual void SAL_CALL

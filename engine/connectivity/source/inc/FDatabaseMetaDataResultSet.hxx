@@ -146,7 +146,7 @@ namespace connectivity
     protected:
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         // ::comphelper::WeakComponentImplHelper
         virtual void disposing(std::unique_lock<std::mutex>&) override;
         // XResultSet
@@ -178,7 +178,7 @@ namespace connectivity
         virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) override;
         virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) override;
         virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
         virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
@@ -202,7 +202,7 @@ namespace connectivity
         virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         void setCatalogsMap();
         void setSchemasMap();

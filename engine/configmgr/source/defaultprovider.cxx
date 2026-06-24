@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
@@ -31,7 +31,7 @@
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_DefaultProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     osl::MutexGuard guard(*configmgr::lock());
     css::uno::Reference<css::uno::XInterface> singleton(
@@ -44,7 +44,7 @@ namespace configmgr::default_provider
 {
 OUString getImplementationName() { return u"com.sun.star.comp.configuration.DefaultProvider"_ustr; }
 
-css::uno::Sequence<OUString> getSupportedServiceNames()
+cpo::uno::Sequence<OUString> getSupportedServiceNames()
 {
     return { u"com.sun.star.configuration.DefaultProvider"_ustr };
 }

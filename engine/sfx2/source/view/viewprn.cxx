@@ -88,7 +88,7 @@ public:
                           const Reference< view::XRenderable >& i_xRender,
                           bool i_bApi, bool i_bDirect,
                           SfxViewShell* pView,
-                          const uno::Sequence< beans::PropertyValue >& rProps
+                          const cpo::uno::Sequence< beans::PropertyValue >& rProps
                         );
 
     virtual void Notify( SfxBroadcaster&, const SfxHint& ) override;
@@ -107,7 +107,7 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
                                             const Reference< view::XRenderable >& i_xRender,
                                             bool i_bApi, bool i_bDirect,
                                             SfxViewShell* pView,
-                                            const uno::Sequence< beans::PropertyValue >& rProps
+                                            const cpo::uno::Sequence< beans::PropertyValue >& rProps
                                           )
     : PrinterController(i_rPrinter, pView ? pView->GetFrameWeld() : nullptr)
     , maCompleteSelection(std::move( i_Complete ))
@@ -317,7 +317,7 @@ void SfxPrinterController::jobStarted()
 
     xDocProps->setPrintDate( now.GetUNODateTime() );
 
-    uno::Sequence < beans::PropertyValue > aOpts;
+    cpo::uno::Sequence < beans::PropertyValue > aOpts;
     aOpts = getJobProperties( aOpts );
 
     uno::Reference< frame::XController2 > xController;
@@ -576,7 +576,7 @@ void SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
         SetPrinter( pDocPrinter, nChangedFlags );
 }
 
-void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
+void SfxViewShell::StartPrint( const cpo::uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
 {
     assert( !pImpl->m_xPrinterController );
 
@@ -628,7 +628,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
     }
 }
 
-void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
+void SfxViewShell::ExecPrint( const cpo::uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
 {
     StartPrint( rProps, bIsAPI, bIsDirect );
     // FIXME: job setup

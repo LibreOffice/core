@@ -1387,7 +1387,7 @@ SwPasteContext::~SwPasteContext()
             return;
 
         // Invoke the listeners.
-        uno::Sequence<beans::PropertyValue> aEvent{ std::move(aPropertyValue) };
+        cpo::uno::Sequence<beans::PropertyValue> aEvent{ std::move(aPropertyValue) };
         m_rWrtShell.GetPasteListeners().notifyEach( &css::text::XPasteListener::notifyPasteEvent, aEvent );
     }
     catch (const uno::Exception& rException)
@@ -2447,7 +2447,7 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                             xTmpStor,
                                                             u"DummyName"_ustr,
-                                                            uno::Sequence< beans::PropertyValue >() );
+                                                            cpo::uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
                         // for example whether the object should be an iconified one
@@ -2464,7 +2464,7 @@ bool SwTransferable::PasteOLE( const TransferableDataHelper& rData, SwWrtShell& 
                 if (rData.GetString(nFormat, sFile) && !sFile.isEmpty())
                 {
                     // Copied from sd::View::DropInsertFileHdl
-                    uno::Sequence< beans::PropertyValue > aMedium{ comphelper::makePropertyValue(
+                    cpo::uno::Sequence< beans::PropertyValue > aMedium{ comphelper::makePropertyValue(
                         u"URL"_ustr, sFile) };
                     SwDocShell* pDocSh = rSh.GetDoc()->GetDocShell();
                     xObj = pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject(aMedium, aName);

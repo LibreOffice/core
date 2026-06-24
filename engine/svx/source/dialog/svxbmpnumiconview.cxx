@@ -19,7 +19,7 @@
 
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <vcl/virdev.hxx>

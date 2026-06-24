@@ -35,6 +35,7 @@
 using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace ::cpo::uno;
 
 namespace cppu
 {
@@ -326,7 +327,7 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
     nSize = pMap->size();
     if( nSize )
     {
-        css::uno::Sequence< Type > aInterfaceTypes( nSize );
+        cpo::uno::Sequence< Type > aInterfaceTypes( nSize );
         Type * pArray = aInterfaceTypes.getArray();
 
         sal_Int32 i = 0;
@@ -339,11 +340,11 @@ Sequence< Type > OMultiTypeInterfaceContainerHelper::getContainedTypes() const
         }
         if( static_cast<t_type2ptr::size_type>(i) != nSize ) {
             // may be empty container, reduce the sequence to the right size
-            aInterfaceTypes = css::uno::Sequence< Type >( pArray, i );
+            aInterfaceTypes = cpo::uno::Sequence< Type >( pArray, i );
         }
         return aInterfaceTypes;
     }
-    return css::uno::Sequence< Type >();
+    return cpo::uno::Sequence< Type >();
 }
 
 static t_type2ptr::iterator findType(t_type2ptr *pMap, const Type & rKey )
@@ -477,7 +478,7 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
     nSize = pMap ? pMap->size() : 0;
     if( nSize )
     {
-        css::uno::Sequence< sal_Int32 > aInterfaceTypes( nSize );
+        cpo::uno::Sequence< sal_Int32 > aInterfaceTypes( nSize );
         sal_Int32 * pArray = aInterfaceTypes.getArray();
 
         sal_Int32 i = 0;
@@ -490,11 +491,11 @@ Sequence< sal_Int32 > OMultiTypeInterfaceContainerHelperInt32::getContainedTypes
         }
         if( static_cast<t_long2ptr::size_type>(i) != nSize ) {
             // may be empty container, reduce the sequence to the right size
-            aInterfaceTypes = css::uno::Sequence< sal_Int32 >( pArray, i );
+            aInterfaceTypes = cpo::uno::Sequence< sal_Int32 >( pArray, i );
         }
         return aInterfaceTypes;
     }
-    return css::uno::Sequence< sal_Int32 >();
+    return cpo::uno::Sequence< sal_Int32 >();
 }
 
 OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperInt32::getContainer( const sal_Int32 & rKey ) const

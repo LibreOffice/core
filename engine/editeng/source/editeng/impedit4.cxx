@@ -89,6 +89,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::cpo::uno;
 
 
 ErrCode ImpEditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
@@ -2934,7 +2935,7 @@ namespace
         sal_Int32                   nLen;
         EditSelection               aSelection;
         OUString                    aNewText;
-        uno::Sequence< sal_Int32 >  aOffsets;
+        cpo::uno::Sequence< sal_Int32 >  aOffsets;
     };
 }
 
@@ -3283,7 +3284,7 @@ short ImpEditEngine::ReplaceTextOnly(
     ContentNode* pNode,
     sal_Int32 nCurrentStart,
     std::u16string_view rNewText,
-    const uno::Sequence< sal_Int32 >& rOffsets )
+    const cpo::uno::Sequence< sal_Int32 >& rOffsets )
 {
     // Change text without losing the attributes
     sal_Int32 nCharsAfterTransliteration = rOffsets.getLength();

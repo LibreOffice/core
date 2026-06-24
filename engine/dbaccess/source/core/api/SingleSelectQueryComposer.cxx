@@ -280,24 +280,24 @@ OUString SAL_CALL OSingleSelectQueryComposer::getImplementationName()
     }
 bool SAL_CALL OSingleSelectQueryComposer::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-css::uno::Sequence< OUString > SAL_CALL OSingleSelectQueryComposer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OSingleSelectQueryComposer::getSupportedServiceNames()
 {
     return { SERVICE_NAME_SINGLESELECTQUERYCOMPOSER };
 }
 
-css::uno::Sequence<sal_Int8> OSingleSelectQueryComposer::getImplementationId()
+cpo::uno::Sequence<sal_Int8> OSingleSelectQueryComposer::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-css::uno::Sequence< css::uno::Type > OSingleSelectQueryComposer::getTypes()
+cpo::uno::Sequence< css::uno::Type > OSingleSelectQueryComposer::getTypes()
 {
     return  ::comphelper::concatSequences(
         OSubComponent::getTypes( ),
@@ -317,7 +317,7 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OSingleSelectQuery
 }
 ::cppu::IPropertyArrayHelper* OSingleSelectQueryComposer::createArrayHelper( ) const
 {
-    css::uno::Sequence< css::beans::Property > aProps;
+    cpo::uno::Sequence< css::beans::Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }

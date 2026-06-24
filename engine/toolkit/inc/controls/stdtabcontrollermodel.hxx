@@ -78,7 +78,7 @@ class StdTabControllerModel final : public css::awt::XTabControllerModel,
     ::osl::Mutex&           GetMutex() { return maMutex; }
     sal_uInt32              ImplGetControlCount( const UnoControlModelEntryList& rList ) const;
     void                    ImplGetControlModels( css::uno::Reference< css::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;
-    static void             ImplSetControlModels( UnoControlModelEntryList& rList, const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls );
+    static void             ImplSetControlModels( UnoControlModelEntryList& rList, const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls );
     static sal_uInt32       ImplGetControlPos( const css::uno::Reference< css::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList );
 
 public:
@@ -93,18 +93,18 @@ public:
     cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XTabControllerModel
     bool SAL_CALL getGroupControl(  ) override;
     void SAL_CALL setGroupControl( bool GroupControl ) override;
-    void SAL_CALL setControlModels( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls ) override;
-    css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels(  ) override;
-    void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) override;
+    void SAL_CALL setControlModels( const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls ) override;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels(  ) override;
+    void SAL_CALL setGroup( const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) override;
     sal_Int32 SAL_CALL getGroupCount(  ) override;
-    void SAL_CALL getGroup( sal_Int32 nGroup, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, OUString& Name ) override;
-    void SAL_CALL getGroupByName( const OUString& Name, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group ) override;
+    void SAL_CALL getGroup( sal_Int32 nGroup, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, OUString& Name ) override;
+    void SAL_CALL getGroupByName( const OUString& Name, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group ) override;
 
     // css::io::XPersistObject
     OUString SAL_CALL getServiceName(  ) override;
@@ -116,7 +116,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

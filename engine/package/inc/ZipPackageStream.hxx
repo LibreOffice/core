@@ -63,8 +63,8 @@ private:
     bool                 m_bToBeCompressed, m_bToBeEncrypted, m_bHaveOwnKey, m_bIsEncrypted;
 
     ::rtl::Reference< BaseEncryptionData > m_xBaseEncryptionData;
-    css::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
-    css::uno::Sequence< sal_Int8 > m_aEncryptionKey;
+    cpo::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
+    cpo::uno::Sequence< sal_Int8 > m_aEncryptionKey;
 
     ::std::optional<ImportedAlgorithms> m_oImportedAlgorithms;
 
@@ -93,7 +93,7 @@ public:
     enum class Bugs { None, WinEncodingWrongSHA1, WrongSHA1 };
     ::rtl::Reference<EncryptionData> GetEncryptionData(Bugs bugs = Bugs::None);
 
-    css::uno::Sequence<sal_Int8> GetEncryptionKey(Bugs bugs = Bugs::None);
+    cpo::uno::Sequence<sal_Int8> GetEncryptionKey(Bugs bugs = Bugs::None);
 
     sal_Int32 GetStartKeyGenID() const;
 
@@ -116,11 +116,11 @@ public:
     }
     void SetPackageMember (bool bNewValue);
 
-    void setInitialisationVector (const css::uno::Sequence < sal_Int8 >& rNewVector )
+    void setInitialisationVector (const cpo::uno::Sequence < sal_Int8 >& rNewVector )
     { m_xBaseEncryptionData->m_aInitVector = rNewVector;}
-    void setSalt (const css::uno::Sequence < sal_Int8 >& rNewSalt )
+    void setSalt (const cpo::uno::Sequence < sal_Int8 >& rNewSalt )
     { m_xBaseEncryptionData->m_aSalt = rNewSalt;}
-    void setDigest (const css::uno::Sequence < sal_Int8 >& rNewDigest )
+    void setDigest (const cpo::uno::Sequence < sal_Int8 >& rNewDigest )
     { m_xBaseEncryptionData->m_aDigest = rNewDigest;}
     void setIterationCount(::std::optional<sal_Int32> const oNewCount)
     {
@@ -143,9 +143,9 @@ public:
 
     bool ParsePackageRawStream();
     virtual bool saveChild( const OUString &rPath,
-                            std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
+                            std::vector < cpo::uno::Sequence < css::beans::PropertyValue > > &rManList,
                             ZipOutputStream & rZipOut,
-                            const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
+                            const cpo::uno::Sequence < sal_Int8 >& rEncryptionKey,
                             ::std::optional<sal_Int32> oPBKDF2IterationCount,
                             ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) override;
 
@@ -172,7 +172,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 #endif
 

@@ -76,7 +76,7 @@ class PossibleHyphens final :
 {
     OUString             aWord;
     OUString             aWordWithHyphens;
-    css::uno::Sequence< sal_Int16 > aOrigHyphenPos;
+    cpo::uno::Sequence< sal_Int16 > aOrigHyphenPos;
     LanguageType         nLanguage;
 
     PossibleHyphens(const PossibleHyphens &) = delete;
@@ -85,7 +85,7 @@ class PossibleHyphens final :
 public:
     PossibleHyphens(OUString aWord, LanguageType nLang,
             OUString aHyphWord,
-            const css::uno::Sequence< sal_Int16 > &rPositions);
+            const cpo::uno::Sequence< sal_Int16 > &rPositions);
     virtual ~PossibleHyphens() override;
 
     // XPossibleHyphens
@@ -95,13 +95,13 @@ public:
         getLocale() override;
     virtual OUString SAL_CALL
         getPossibleHyphens() override;
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL
         getHyphenationPositions() override;
 
     static css::uno::Reference < css::linguistic2::XPossibleHyphens > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreatePossibleHyphens
         (const OUString &rWord, LanguageType nLang,
          const OUString &rHyphWord,
-         const css::uno::Sequence< sal_Int16 > &rPositions);
+         const cpo::uno::Sequence< sal_Int16 > &rPositions);
 };
 } // namespace linguistic
 

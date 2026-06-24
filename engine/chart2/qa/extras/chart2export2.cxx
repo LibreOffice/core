@@ -20,6 +20,7 @@
 using css::beans::XPropertySet;
 using namespace css;
 using namespace css::uno;
+using namespace ::cpo::uno;
 
 class Chart2ExportTest2 : public ChartTest
 {
@@ -437,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabel)
     sal_Int64 nFontColor;
     sal_Int32 nCharUnderline;
     uno::Reference<beans::XPropertySet> xPropertySet;
-    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+    cpo::uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
 
     // 1
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
@@ -701,7 +702,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomDataLabelMultipleSeries)
     float nFontSize;
     sal_Int64 nFontColor;
     uno::Reference<beans::XPropertySet> xPropertySet;
-    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+    cpo::uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
 
     // First series
     xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
@@ -1451,7 +1452,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf134977)
     CPPUNIT_ASSERT(xDataSeries.is());
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0),
                                                      uno::UNO_SET_THROW);
-    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+    cpo::uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
     float nFontSize;
     xPropertySet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aFields;
     aFields[0]->getPropertyValue(u"CharHeight"_ustr) >>= nFontSize;
@@ -1568,7 +1569,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf138204)
         CPPUNIT_ASSERT(xDataSeries.is());
 
         uno::Reference<beans::XPropertySet> xPropertySet;
-        uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+        cpo::uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
         xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
         xPropertySet->getPropertyValue(u"CustomLabelFields"_ustr) >>= aFields;
         CPPUNIT_ASSERT_EQUAL(aTestEntry.nNumFields, aFields.getLength());
@@ -1754,7 +1755,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf143942)
     };
 
     uno::Reference<beans::XPropertySet> xPropertySet;
-    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
+    cpo::uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields;
     for (size_t i = 0; i < nLabels; ++i)
     {
         xPropertySet.set(xDataSeries->getDataPointByIndex(i), uno::UNO_SET_THROW);

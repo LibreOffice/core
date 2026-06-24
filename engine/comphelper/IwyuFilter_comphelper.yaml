@@ -45,7 +45,7 @@ excludelist:
     - comphelper/fileurl.hxx
     comphelper/source/misc/AccessibleImplementationHelper.cxx:
     # Needed for template
-    - com/sun/star/uno/Sequence.hxx
+    - cpo/uno/Sequence.hxx
     comphelper/source/misc/getexpandeduri.cxx:
     # Needed for linker visibility
     - comphelper/getexpandeduri.hxx

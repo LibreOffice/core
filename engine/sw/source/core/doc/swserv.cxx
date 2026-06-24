@@ -19,7 +19,7 @@
 
 #include <sot/exchange.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <doc.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentLayoutAccess.hxx>
@@ -93,7 +93,7 @@ bool SwServerObject::GetData( cpo::uno::Any & rData,
             if( !aWrt.Write( xWrt ).IsError() )
             {
                 aMemStm.WriteChar( '\0' );        // append a zero char
-                rData <<= uno::Sequence< sal_Int8 >(
+                rData <<= cpo::uno::Sequence< sal_Int8 >(
                                         static_cast<sal_Int8 const *>(aMemStm.GetData()),
                                         aMemStm.Tell() );
                 bRet = true;

@@ -62,19 +62,19 @@ public:
     // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
     // css::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
 
     // XComponentLoader
-    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     // css::lang::XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XCommandProcessor
     virtual cpo::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;

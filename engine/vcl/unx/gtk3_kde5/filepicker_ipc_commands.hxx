@@ -24,7 +24,7 @@
 #include <vector>
 
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 // #define DEBUG_FILEPICKER_IPC
 
@@ -66,7 +66,7 @@ inline std::vector<char> readIpcStringArg(std::istream& stream)
 
 void readIpcArg(std::istream& stream, OUString& string);
 void readIpcArg(std::istream& stream, QString& string);
-void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq);
+void readIpcArg(std::istream& stream, cpo::uno::Sequence<OUString>& seq);
 
 inline void readIpcArg(std::istream& stream, Commands& value)
 {

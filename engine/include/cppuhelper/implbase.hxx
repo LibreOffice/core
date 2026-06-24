@@ -27,7 +27,7 @@
 
 #include "com/sun/star/lang/XTypeProvider.hpp"
 #include "cpo/uno/Any.h"
-#include "com/sun/star/uno/Sequence.hxx"
+#include "cpo/uno/Sequence.hxx"
 #include "com/sun/star/uno/Type.h"
 #include "cppuhelper/implbase_ex.hxx"
 #include "cppuhelper/weak.hxx"
@@ -112,11 +112,11 @@ public:
 
     void SAL_CALL release() SAL_NOEXCEPT override { OWeakObject::release(); }
 
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     { return WeakImplHelper_getTypes(cd::get()); }
 
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
-    { return css::uno::Sequence<sal_Int8>(); }
+    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    { return cpo::uno::Sequence<sal_Int8>(); }
 };
 
 /** Implementation helper implementing interfaces
@@ -168,11 +168,11 @@ public:
 
     void SAL_CALL release() SAL_NOEXCEPT override { BaseClass::release(); }
 
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     { return ImplInhHelper_getTypes(cd::get(), BaseClass::getTypes()); }
 
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
-    { return css::uno::Sequence<sal_Int8>(); }
+    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    { return cpo::uno::Sequence<sal_Int8>(); }
 };
 
 }

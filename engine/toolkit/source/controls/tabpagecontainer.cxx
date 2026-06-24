@@ -289,7 +289,7 @@ void SAL_CALL UnoControlTabPageContainer::removeTabPageContainerListener( const 
     m_aTabPageListeners.removeInterface( listener );
 }
 
-void UnoControlTabPageContainer::propertiesChange(const::css::uno::Sequence<PropertyChangeEvent> &aEvent)
+void UnoControlTabPageContainer::propertiesChange(const::cpo::uno::Sequence<PropertyChangeEvent> &aEvent)
 {
     UnoControlTabPageContainer_Base::propertiesChange(aEvent);
 
@@ -332,7 +332,7 @@ void SAL_CALL UnoControlTabPageContainer::addControl( const OUString& Name, cons
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageContainerModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPageContainerModel(context));
 }
@@ -340,7 +340,7 @@ stardiv_Toolkit_UnoControlTabPageContainerModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTabPageContainer_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTabPageContainer(context));
 }

@@ -44,7 +44,7 @@ namespace logging
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::logging::XLogFormatter;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::logging::XLogHandler;
@@ -83,7 +83,7 @@ namespace logging
 
     public:
         FileHandler(const css::uno::Reference<XComponentContext> &context,
-                const css::uno::Sequence<cpo::uno::Any> &arguments);
+                const cpo::uno::Sequence<cpo::uno::Any> &arguments);
         virtual ~FileHandler() override;
 
     private:
@@ -126,7 +126,7 @@ namespace logging
     }
 
     FileHandler::FileHandler(const css::uno::Reference<XComponentContext> &context,
-            const css::uno::Sequence<cpo::uno::Any> &arguments)
+            const cpo::uno::Sequence<cpo::uno::Any> &arguments)
         :FileHandler_Base( m_aMutex )
         ,m_xContext( context )
         ,m_aHandlerHelper( context, m_aMutex, rBHelper )
@@ -351,7 +351,7 @@ namespace logging
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_FileHandler(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new logging::FileHandler(context, arguments));
 }

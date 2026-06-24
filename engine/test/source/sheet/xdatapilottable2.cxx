@@ -153,7 +153,7 @@ void XDataPilotTable2::testInsertDrillDownSheet()
     for (sal_Int32 i = 0; i < nCellCount; ++i)
     {
         table::CellAddress aAddr = maResultCells[i];
-        uno::Sequence< uno::Sequence< Any > > aData = xDPTable->getDrillDownData(aAddr);
+        cpo::uno::Sequence< cpo::uno::Sequence< Any > > aData = xDPTable->getDrillDownData(aAddr);
         xDPTable->insertDrillDownSheet(aAddr);
 
         sal_Int32 nNewSheetCount= xIA->getCount();
@@ -248,7 +248,7 @@ table::CellAddress getLastUsedCellAddress( uno::Reference< sheet::XSpreadsheet >
 
 }
 
-void XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet > const & xSheet, const uno::Sequence< uno::Sequence< Any > >& aData)
+void XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpreadsheet > const & xSheet, const cpo::uno::Sequence< cpo::uno::Sequence< Any > >& aData)
 {
     table::CellAddress aLastCell = getLastUsedCellAddress(xSheet, 0, 0);
     CPPUNIT_ASSERT(aData.hasElements());
@@ -261,7 +261,7 @@ void XDataPilotTable2::checkDrillDownSheetContent(uno::Reference< sheet::XSpread
     uno::Reference< table::XCellRange > xCellRange = xSheet->getCellRangeByPosition(0, 0, aLastCell.Column, aLastCell.Row);
     uno::Reference< sheet::XCellRangeData > xCellRangeData(xCellRange, UNO_QUERY_THROW);
 
-    uno::Sequence< uno::Sequence< Any > > aSheetData = xCellRangeData->getDataArray();
+    cpo::uno::Sequence< cpo::uno::Sequence< Any > > aSheetData = xCellRangeData->getDataArray();
     for (sal_Int32 x = 0; x < aSheetData.getLength(); ++x)
     {
         for(sal_Int32 y = 0; y < aSheetData[x].getLength(); ++y)

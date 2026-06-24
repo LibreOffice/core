@@ -39,7 +39,7 @@ namespace dbaui
     using ::cpo::uno::Any;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::Property;
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
@@ -68,7 +68,7 @@ namespace dbaui
     public:
         explicit OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext );
 
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
         DECLARE_SERVICE_INFO();
         virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
@@ -113,10 +113,10 @@ namespace dbaui
         TextConnectionSettingsDialog::bindItemStorages( *m_pDatasourceItems, m_aPropertyValues );
     }
 
-    css::uno::Sequence<sal_Int8>
+    cpo::uno::Sequence<sal_Int8>
     OTextConnectionSettingsDialog::getImplementationId()
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
     OUString SAL_CALL OTextConnectionSettingsDialog::getImplementationName()
@@ -125,14 +125,14 @@ namespace dbaui
     }
     bool SAL_CALL OTextConnectionSettingsDialog::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-    css::uno::Sequence< OUString > SAL_CALL OTextConnectionSettingsDialog::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > SAL_CALL OTextConnectionSettingsDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.TextConnectionSettings"_ustr };
     }
@@ -259,7 +259,7 @@ namespace dbaui
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbaccess_OTextConnectionSettingsDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(static_cast<dbaui::ODatabaseAdministrationDialog*>(new ::dbaui::OTextConnectionSettingsDialog(context)));
 }

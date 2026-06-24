@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -93,12 +93,12 @@ void SvxAsianConfig::SetCharDistanceCompression(CharCompressType value) {
 }
 
 // static
-css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
+cpo::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
 {
-    const css::uno::Sequence< OUString > ns(
+    const cpo::uno::Sequence< OUString > ns(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get()->
         getElementNames());
-    css::uno::Sequence< css::lang::Locale > ls(ns.getLength());
+    cpo::uno::Sequence< css::lang::Locale > ls(ns.getLength());
     std::transform(ns.begin(), ns.end(), ls.getArray(),
         [](const OUString& rName) -> css::lang::Locale {
             return LanguageTag::convertToLocale( rName, false); });

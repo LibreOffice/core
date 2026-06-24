@@ -703,7 +703,7 @@ ScVbaControl::getServiceImplName()
     return u"ScVbaControl"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaControl::getServiceNames()
 {
     return { u"ooo.vba.excel.Control"_ustr };
@@ -772,7 +772,7 @@ public:
     //  XServiceInfo
     virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 }
@@ -786,7 +786,7 @@ OUString ControlProviderImpl::getImplementationName()
 {
     return u"ControlProviderImpl"_ustr;
 }
-css::uno::Sequence< OUString > ControlProviderImpl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ControlProviderImpl::getSupportedServiceNames()
 {
     return { u"ooo.vba.ControlProvider"_ustr };
 }
@@ -803,7 +803,7 @@ ControlProviderImpl::createControl( const uno::Reference< drawing::XControlShape
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ControlProviderImpl_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ControlProviderImpl(context));
 }

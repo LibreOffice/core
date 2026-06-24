@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-uno::Sequence<beans::PropertyValue> GetSuccessorProperties(const SwRangeRedline& rRedline)
+cpo::uno::Sequence<beans::PropertyValue> GetSuccessorProperties(const SwRangeRedline& rRedline)
 {
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
     if (pNext)
@@ -83,7 +83,7 @@ uno::Sequence<beans::PropertyValue> GetSuccessorProperties(const SwRangeRedline&
             comphelper::makePropertyValue(UNO_NAME_REDLINE_TEXT, xRedlineText)
         };
     }
-    return uno::Sequence<beans::PropertyValue>(5);
+    return cpo::uno::Sequence<beans::PropertyValue>(5);
 }
 
 /// Presents character properties in an item set as a beans::XPropertySet.
@@ -116,8 +116,8 @@ public:
 
     // XPropertyState
     beans::PropertyState SAL_CALL getPropertyState(const OUString& PropertyName) override;
-    uno::Sequence<beans::PropertyState>
-        SAL_CALL getPropertyStates(const uno::Sequence<OUString>& aPropertyName) override;
+    cpo::uno::Sequence<beans::PropertyState>
+        SAL_CALL getPropertyStates(const cpo::uno::Sequence<OUString>& aPropertyName) override;
     void SAL_CALL setPropertyToDefault(const OUString& PropertyName) override;
     cpo::uno::Any SAL_CALL getPropertyDefault(const OUString& aPropertyName) override;
 };
@@ -191,14 +191,14 @@ beans::PropertyState SwXRedlineAutoStyle::getPropertyState(const OUString& rProp
     return pPropertySet->getPropertyState(rPropertyName, *m_pItemSet);
 }
 
-uno::Sequence< beans::PropertyState > SwXRedlineAutoStyle::getPropertyStates(
-        const uno::Sequence<OUString>& rPropertyNames)
+cpo::uno::Sequence< beans::PropertyState > SwXRedlineAutoStyle::getPropertyStates(
+        const cpo::uno::Sequence<OUString>& rPropertyNames)
 {
     SolarMutexGuard aGuard;
 
     const SfxItemPropertySet* pPropertySet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
     const OUString* pNames = rPropertyNames.getConstArray();
-    uno::Sequence<beans::PropertyState> aRet(rPropertyNames.getLength());
+    cpo::uno::Sequence<beans::PropertyState> aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     const SfxItemPropertyMap& rMap = pPropertySet->getPropertyMap();
     for (sal_Int32 i = 0, nEnd = rPropertyNames.getLength(); i < nEnd; i++)
@@ -340,7 +340,7 @@ cpo::uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-uno::Sequence<uno::Type> SwXRedlineText::getTypes()
+cpo::uno::Sequence<uno::Type> SwXRedlineText::getTypes()
 {
     return cppu::OTypeCollection(
             cppu::UnoType<container::XEnumerationAccess>::get(),
@@ -348,9 +348,9 @@ uno::Sequence<uno::Type> SwXRedlineText::getTypes()
         ).getTypes();
 }
 
-uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 rtl::Reference< SwXTextCursor > SwXRedlineText::createXTextCursor()
@@ -485,15 +485,15 @@ bool SwXRedlinePortion::Validate()
     // don't throw; the only caller can return void instead
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  )
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
+cpo::uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
     const SwRangeRedline& rRedline, bool bIsStart )
 {
-    uno::Sequence< beans::PropertyValue > aRet(12);
+    cpo::uno::Sequence< beans::PropertyValue > aRet(12);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
     beans::PropertyValue* pRet = aRet.getArray();
 
@@ -772,7 +772,7 @@ cpo::uno::Any SwXRedline::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-uno::Sequence<uno::Type> SwXRedline::getTypes()
+cpo::uno::Sequence<uno::Type> SwXRedline::getTypes()
 {
     return comphelper::concatSequences(
             SwXText::getTypes(),
@@ -780,9 +780,9 @@ uno::Sequence<uno::Type> SwXRedline::getTypes()
         );
 }
 
-uno::Sequence<sal_Int8> SwXRedline::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SwXRedline::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

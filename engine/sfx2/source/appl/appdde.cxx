@@ -196,7 +196,7 @@ class SfxDdeDocTopic_Impl : public DdeTopic
 public:
     SfxObjectShell* pSh;
     DdeData aData;
-    css::uno::Sequence< sal_Int8 > aSeq;
+    cpo::uno::Sequence< sal_Int8 > aSeq;
 
     explicit SfxDdeDocTopic_Impl( SfxObjectShell* pShell )
         : DdeTopic( pShell->GetTitle(SFX_TITLE_FULLNAME) ), pSh( pShell )
@@ -531,7 +531,7 @@ bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
         }
         else
         {
-            aValue <<= css::uno::Sequence(static_cast<sal_Int8 const*>(pData->getData()),
+            aValue <<= cpo::uno::Sequence(static_cast<sal_Int8 const*>(pData->getData()),
                                           pData->getSize());
         }
         return pSh->DdeSetData(GetCurItem(), SotExchange::GetFormatMimeType(pData->GetFormat()),

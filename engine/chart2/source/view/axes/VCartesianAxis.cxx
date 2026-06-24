@@ -404,7 +404,7 @@ static bool lcl_hasWordBreak( const rtl::Reference<SvxShapeText>& xShape )
 }
 
 static OUString getTextLabelString(
-    const FixedNumberFormatter& rFixedNumberFormatter, const uno::Sequence<OUString>* pCategories,
+    const FixedNumberFormatter& rFixedNumberFormatter, const cpo::uno::Sequence<OUString>* pCategories,
     const TickInfo* pTickInfo, bool bComplexCat, Color& rExtraColor, bool& rHasExtraColor )
 {
     if (pCategories)
@@ -776,7 +776,7 @@ bool VCartesianAxis::createTextShapes(
 
     // Stores an array of text label strings in case of a normal
     // (non-complex) category axis.
-    const uno::Sequence<OUString>* pCategories = nullptr;
+    const cpo::uno::Sequence<OUString>* pCategories = nullptr;
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 
@@ -974,7 +974,7 @@ bool VCartesianAxis::createTextShapesSimple(
 
      // Stores an array of text label strings in case of a normal
      // (non-complex) category axis.
-    const uno::Sequence<OUString>* pCategories = nullptr;
+    const cpo::uno::Sequence<OUString>* pCategories = nullptr;
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 

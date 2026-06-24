@@ -165,7 +165,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies() const
         return std::vector< SfxStyleInfo_Impl >();
 
     css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
-    const css::uno::Sequence< OUString > lFamilyNames = xCont->getElementNames();
+    const cpo::uno::Sequence< OUString > lFamilyNames = xCont->getElementNames();
     std::vector< SfxStyleInfo_Impl > lFamilies;
     for (const auto& aFamily : lFamilyNames)
     {
@@ -201,7 +201,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies() const
 
 std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& sFamily)
 {
-    css::uno::Sequence< OUString > lStyleNames;
+    cpo::uno::Sequence< OUString > lStyleNames;
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess > xFamilies = xModel->getStyleFamilies();
     css::uno::Reference< css::container::XNameAccess > xStyleSet;
@@ -471,7 +471,7 @@ sal_Int32 CuiConfigGroupListBox::InitModule()
     {
         // return the number of added groups
         css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider(m_xFrame, css::uno::UNO_QUERY_THROW);
-        css::uno::Sequence< sal_Int16 > lGroups = xProvider->getSupportedCommandGroups();
+        cpo::uno::Sequence< sal_Int16 > lGroups = xProvider->getSupportedCommandGroups();
         sal_Int32                       c1      = lGroups.getLength();
         sal_Int32                       i1      = 0;
         sal_Int32                       nAddedGroups = 0;
@@ -606,7 +606,7 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
     }
 }
 
-void CuiConfigGroupListBox::FillFunctionsList(const css::uno::Sequence<DispatchInformation>& xCommands)
+void CuiConfigGroupListBox::FillFunctionsList(const cpo::uno::Sequence<DispatchInformation>& xCommands)
 {
     m_pFunctionListBox->freeze();
     for (const auto & rInfo : xCommands)
@@ -854,7 +854,7 @@ void CuiConfigGroupListBox::GroupSelected()
                 SfxGroupInfo_Impl *pCurrentInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(*xIter));
                 if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
                 {
-                    css::uno::Sequence< css::frame::DispatchInformation > lCommands;
+                    cpo::uno::Sequence< css::frame::DispatchInformation > lCommands;
                     try
                     {
                         lCommands = xProvider->getConfigurableDispatchInformation( pCurrentInfo->nUniqueID );
@@ -873,7 +873,7 @@ void CuiConfigGroupListBox::GroupSelected()
         {
             sal_uInt16                                                          nGroup    = pInfo->nUniqueID;
             css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
-            css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup);
+            cpo::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup);
             FillFunctionsList( lCommands );
             break;
         }

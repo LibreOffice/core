@@ -243,9 +243,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             try
             {
                 // create object with desired ClassId
-                uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
+                cpo::uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
-                uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
+                cpo::uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
                         { "DefaultParentBaseURL", Any(GetXMLImport().GetBaseURL()) }
                     }));
                 uno::Reference < embed::XEmbeddedObject > xObj( xFactory->createInstanceInitNew(
@@ -499,10 +499,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     return xPropSet;
 }
 
-static uno::Sequence< beans::PropertyValue > lcl_buildLinkMediaDescriptor(
+static cpo::uno::Sequence< beans::PropertyValue > lcl_buildLinkMediaDescriptor(
         const OUString& rAbsURL, SwDocShell* pShell )
 {
-    uno::Sequence< beans::PropertyValue > aMediaDescriptor{ comphelper::makePropertyValue(
+    cpo::uno::Sequence< beans::PropertyValue > aMediaDescriptor{ comphelper::makePropertyValue(
         u"URL"_ustr, rAbsURL) };
 
     if (SfxMedium* pMedium = pShell ? pShell->GetMedium() : nullptr)
@@ -577,7 +577,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
     OUString aAbsURL(aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
     SwDocShell* pShell = pDoc->GetDocShell();
-    uno::Sequence< beans::PropertyValue > aMediaDescriptor =
+    cpo::uno::Sequence< beans::PropertyValue > aMediaDescriptor =
         lcl_buildLinkMediaDescriptor( aAbsURL, pShell );
 
     // Insert a placeholder OLE frame and register the link with the link manager.
@@ -685,11 +685,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     try
     {
         // create object with desired ClassId
-        uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
+        cpo::uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj( xFactory->createInstanceInitNew(
             aClass, OUString(), xStorage, u"DummyName"_ustr,
-            uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
+            cpo::uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
         // set size to the object
         lcl_setObjectVisualArea( xObj,

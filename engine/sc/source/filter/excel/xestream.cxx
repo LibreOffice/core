@@ -88,6 +88,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::formula;
 using namespace ::oox;
 

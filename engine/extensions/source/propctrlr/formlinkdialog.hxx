@@ -99,7 +99,7 @@ namespace pcr
 
         void        getFormFields(
                         const css::uno::Reference< css::beans::XPropertySet >& _rxForm,
-                            css::uno::Sequence< OUString >& /* [out] */ _rNames
+                            cpo::uno::Sequence< OUString >& /* [out] */ _rNames
                     ) const;
 
         void        ensureFormConnection(

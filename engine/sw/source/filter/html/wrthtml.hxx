@@ -297,7 +297,7 @@ protected:
     ErrCode WriteStream() override;
     void SetupFilterOptions(SfxMedium& rMedium) override;
     void SetupFilterFromPropertyValues(
-        const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
 
 public:
     std::vector<OUString> m_aImgMapNames;   // written image maps

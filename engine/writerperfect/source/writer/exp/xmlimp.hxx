@@ -44,7 +44,7 @@ namespace writerperfect::exp
 /// Contains info about a fixed-layout page.
 struct FixedLayoutPage
 {
-    css::uno::Sequence<sal_Int8> aMetafile;
+    cpo::uno::Sequence<sal_Int8> aMetafile;
     Size aCssPixels;
     std::vector<OUString> aChapterNames;
 };
@@ -95,7 +95,7 @@ class XMLImport : public cppu::WeakImplHelper<css::xml::sax::XDocumentHandler>
 public:
     XMLImport(const css::uno::Reference<css::uno::XComponentContext>& xContext,
               librevenge::RVNGTextInterface& rGenerator, const OUString& rURL,
-              const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
+              const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
               const std::vector<FixedLayoutPage>& rPageMetafiles);
 
     rtl::Reference<XMLImportContext>

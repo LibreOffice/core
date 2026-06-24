@@ -53,7 +53,7 @@ namespace dbaccess
     using css::uno::UNO_SET_THROW;
     using css::uno::Exception;
     using cpo::uno::Any;
-    using css::uno::Sequence;
+    using cpo::uno::Sequence;
     using css::uno::XComponentContext;
     using css::embed::XStorage;
     using css::sdb::application::XDatabaseDocumentUI;

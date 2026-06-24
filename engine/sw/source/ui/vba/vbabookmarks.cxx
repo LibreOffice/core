@@ -78,7 +78,7 @@ public:
             throw container::NoSuchElementException();
         return m_cachePos;
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return mxNameAccess->getElementNames();
     }
@@ -222,10 +222,10 @@ SwVbaBookmarks::getServiceImplName()
     return u"SwVbaBookmarks"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaBookmarks::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Bookmarks"_ustr
     };

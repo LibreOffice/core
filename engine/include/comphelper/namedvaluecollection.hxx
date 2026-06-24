@@ -22,7 +22,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -62,28 +62,28 @@ namespace comphelper
             @param _rArguments
                 a sequence of Any's containing either PropertyValue's or NamedValue's.
         */
-        NamedValueCollection( const css::uno::Sequence< cpo::uno::Any >& _rArguments );
+        NamedValueCollection( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments );
 
         /** constructs a collection
             @param _rArguments
                 a sequence of PropertyValues's
         */
-        NamedValueCollection( const css::uno::Sequence< css::beans::PropertyValue >& _rArguments );
+        NamedValueCollection( const cpo::uno::Sequence< css::beans::PropertyValue >& _rArguments );
 
         /** constructs a collection
             @param _rArguments
                 a sequence of NamedValue's
         */
-        NamedValueCollection( const css::uno::Sequence< css::beans::NamedValue >& _rArguments );
+        NamedValueCollection( const cpo::uno::Sequence< css::beans::NamedValue >& _rArguments );
 
-        void assign( const css::uno::Sequence< cpo::uno::Any >& _rArguments )
+        void assign( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments )
         {
             impl_assign( _rArguments );
         }
 
         void clear()
         {
-            impl_assign( css::uno::Sequence< css::beans::NamedValue >() );
+            impl_assign( cpo::uno::Sequence< css::beans::NamedValue >() );
         }
 
         /** determines whether or not named values can be extracted from the given value
@@ -162,7 +162,7 @@ namespace comphelper
             For when you only need a single value from a Sequence<PropertyValue>.
         */
         template < typename VALUE_TYPE >
-        static VALUE_TYPE  getOrDefault( const css::uno::Sequence<css::beans::PropertyValue> & rPropSeq,
+        static VALUE_TYPE  getOrDefault( const cpo::uno::Sequence<css::beans::PropertyValue> & rPropSeq,
                     std::u16string_view _rValueName, const VALUE_TYPE& _rDefault )
         {
             VALUE_TYPE retVal( _rDefault );
@@ -185,7 +185,7 @@ namespace comphelper
             If the collection does not contain a value with the given name, an empty
             Any is returned.
         */
-        static const cpo::uno::Any& get( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq, std::u16string_view _rValueName );
+        static const cpo::uno::Any& get( const cpo::uno::Sequence<css::beans::PropertyValue>& rPropSeq, std::u16string_view _rValueName );
 
         /// determines whether a value with a given name is present in the collection
         bool has( const OUString& _rValueName ) const
@@ -223,28 +223,28 @@ namespace comphelper
             @return
                 the number of elements in the sequence
         */
-        sal_Int32 operator >>= ( css::uno::Sequence< css::beans::PropertyValue >& _out_rValues ) const;
+        sal_Int32 operator >>= ( cpo::uno::Sequence< css::beans::PropertyValue >& _out_rValues ) const;
 
         /** transforms the collection to a sequence of NamedValues
 
             @return
                 the number of elements in the sequence
         */
-        sal_Int32 operator >>= ( css::uno::Sequence< css::beans::NamedValue >& _out_rValues ) const;
+        sal_Int32 operator >>= ( cpo::uno::Sequence< css::beans::NamedValue >& _out_rValues ) const;
 
         /** transforms the collection into a sequence of PropertyValues
         */
-        css::uno::Sequence< css::beans::PropertyValue >
+        cpo::uno::Sequence< css::beans::PropertyValue >
                 getPropertyValues() const
         {
-            css::uno::Sequence< css::beans::PropertyValue > aValues;
+            cpo::uno::Sequence< css::beans::PropertyValue > aValues;
             *this >>= aValues;
             return aValues;
         }
 
         /** returns a Sequence< Any >, containing PropertyValues
         */
-        css::uno::Sequence< cpo::uno::Any >
+        cpo::uno::Sequence< cpo::uno::Any >
                 getWrappedPropertyValues() const
         {
             return impl_wrap< css::beans::PropertyValue >();
@@ -252,7 +252,7 @@ namespace comphelper
 
         /** returns a Sequence< Any >, containing NamedValues
         */
-        css::uno::Sequence< cpo::uno::Any >
+        cpo::uno::Sequence< cpo::uno::Any >
                 getWrappedNamedValues() const
         {
             return impl_wrap< css::beans::NamedValue >();
@@ -260,19 +260,19 @@ namespace comphelper
 
         /** transforms the collection into a sequence of NamedValues
         */
-        css::uno::Sequence< css::beans::NamedValue >
+        cpo::uno::Sequence< css::beans::NamedValue >
                 getNamedValues() const
         {
-            css::uno::Sequence< css::beans::NamedValue > aValues;
+            cpo::uno::Sequence< css::beans::NamedValue > aValues;
             *this >>= aValues;
             return aValues;
         }
 
     private:
         void    impl_assign( const cpo::uno::Any& i_rWrappedElements );
-        void    impl_assign( const css::uno::Sequence< cpo::uno::Any >& _rArguments );
-        void    impl_assign( const css::uno::Sequence< css::beans::PropertyValue >& _rArguments );
-        void    impl_assign( const css::uno::Sequence< css::beans::NamedValue >& _rArguments );
+        void    impl_assign( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments );
+        void    impl_assign( const cpo::uno::Sequence< css::beans::PropertyValue >& _rArguments );
+        void    impl_assign( const cpo::uno::Sequence< css::beans::NamedValue >& _rArguments );
 
         bool    get_ensureType(
                     const OUString& _rValueName,
@@ -281,7 +281,7 @@ namespace comphelper
                 ) const;
 
         static bool get_ensureType(
-                    const css::uno::Sequence<css::beans::PropertyValue> & rPropSeq,
+                    const cpo::uno::Sequence<css::beans::PropertyValue> & rPropSeq,
                     std::u16string_view _rValueName,
                     void* _pValueLocation,
                     const css::uno::Type& _rExpectedValueType
@@ -297,11 +297,11 @@ namespace comphelper
         bool    impl_remove( const OUString& _rValueName );
 
         template< class VALUE_TYPE >
-        css::uno::Sequence< cpo::uno::Any > impl_wrap() const
+        cpo::uno::Sequence< cpo::uno::Any > impl_wrap() const
         {
-            css::uno::Sequence< VALUE_TYPE > aValues;
+            cpo::uno::Sequence< VALUE_TYPE > aValues;
             *this >>= aValues;
-            css::uno::Sequence< cpo::uno::Any > aWrappedValues( aValues.getLength() );
+            cpo::uno::Sequence< cpo::uno::Any > aWrappedValues( aValues.getLength() );
             std::transform(aValues.begin(), aValues.end(), aWrappedValues.getArray(),
                            [](const auto& val) { return cpo::uno::Any(val); });
 

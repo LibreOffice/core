@@ -130,7 +130,7 @@ IMPL_LINK(TextUnderlineControl, PBClickHdl, weld::Button&, rButton, void)
         {
             const FontLineStyle eUnderline = getLineStyle(rButton);
 
-            css::uno::Sequence<css::beans::PropertyValue> aArgs(3);
+            cpo::uno::Sequence<css::beans::PropertyValue> aArgs(3);
             css::beans::PropertyValue* pArgs = aArgs.getArray();
             pArgs[0].Name = u"Underline.LineStyle"_ustr;
             pArgs[0].Value <<= sal_Int32(eUnderline);

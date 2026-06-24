@@ -128,7 +128,7 @@ bool SAL_CALL SortedResultSet::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL SortedResultSet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SortedResultSet::getSupportedServiceNames()
 {
     return { RESULTSET_SERVICE_NAME };
 }

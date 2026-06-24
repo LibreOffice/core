@@ -86,7 +86,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace chart
 {
@@ -314,7 +314,7 @@ void ChartController::executeDispatch_FontBold(
 
 void ChartController::executeDispatch_FontName(
     const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     // the sent font may have a lot of properties that we could set.
     // but now we set only this
@@ -327,7 +327,7 @@ void ChartController::executeDispatch_FontName(
 
 void ChartController::executeDispatch_FontHeight(
     const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     for (const auto& xProperty : xProperties)
         xProperty->setPropertyValue(u"CharHeight"_ustr, rArgs[0].Value);
@@ -350,7 +350,7 @@ void ChartController::executeDispatch_FontItalic(
 
 void ChartController::executeDispatch_FontUnderline(
     const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     OUString aPropName = u"CharUnderline"_ustr;
     sal_Int16 nFontUnderline = 0;
@@ -401,7 +401,7 @@ void ChartController::executeDispatch_FontShadowed(
 
 void ChartController::executeDispatch_FontColor(
     const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     for (const auto& xProperty : xProperties)
         xProperty->setPropertyValue(u"CharColor"_ustr, rArgs[0].Value);
@@ -472,7 +472,7 @@ void ChartController::executeDispatch_FontReset(
 
 void ChartController::executeDispatch_FontSpacing(
     const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-    const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     sal_Int16 nKerning = 0;
     rArgs[0].Value >>= nKerning;

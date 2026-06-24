@@ -262,7 +262,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
 
     // get the GrabBag. After import there may be values, but none anymore
     // starting with 'OOX.*', these are now at the DiagramHelper
-    uno::Sequence<beans::PropertyValue> aGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
     uno::Reference<beans::XPropertySet> xGroupProps(xGroupShape, uno::UNO_QUERY);
     xGroupProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
 
@@ -870,7 +870,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testVisualSignResize)
 {
 #if ENABLE_PDFIMPORT
     // Given a read-only document with a just inserted signature line:
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
     loadWithParams(createFileURL(u"empty.pdf"), aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());

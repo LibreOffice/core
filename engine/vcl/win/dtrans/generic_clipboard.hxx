@@ -54,7 +54,7 @@ namespace dtrans
          * XInitialization
          */
 
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         /*
          * XServiceInfo
@@ -64,7 +64,7 @@ namespace dtrans
 
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         /*
          * XClipboard

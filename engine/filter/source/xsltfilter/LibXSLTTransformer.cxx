@@ -402,7 +402,7 @@ namespace XSLT
     {
         return u"com.sun.star.comp.documentconversion.XSLTFilter"_ustr;
     }
-    css::uno::Sequence< OUString > LibXSLTTransformer::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > LibXSLTTransformer::getSupportedServiceNames()
     {
         return { u"com.sun.star.documentconversion.XSLTFilter"_ustr };
     }
@@ -568,7 +568,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_LibXSLTTransformer_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XSLT::LibXSLTTransformer(context));
 }

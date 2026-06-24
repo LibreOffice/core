@@ -91,7 +91,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -128,7 +128,7 @@ bool BackendImpl::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > BackendImpl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > BackendImpl::getSupportedServiceNames()
 {
     return { BACKEND_SERVICE_NAME };
 }
@@ -328,7 +328,7 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_executable_PackageRegistryBackend_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new dp_registry::backend::executable::BackendImpl(args, context));
 }

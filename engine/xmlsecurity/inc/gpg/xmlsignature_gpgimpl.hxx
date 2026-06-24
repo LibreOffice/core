@@ -59,10 +59,10 @@ class XSECXMLSEC_DLLPUBLIC XMLSignature_GpgImpl final : public ::cppu::WeakImplH
             const OUString& ServiceName
         ) override ;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
 
         //Helper for XServiceInfo
-        static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
+        static cpo::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
         /// @throws css::uno::RuntimeException
         static OUString impl_getImplementationName() ;

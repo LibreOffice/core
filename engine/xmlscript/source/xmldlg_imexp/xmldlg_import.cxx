@@ -857,7 +857,7 @@ bool ImportContext::importGraphicOrImageProperty(
         uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
         if ( xDocStorage.is() )
         {
-            uno::Sequence< Any > aArgs{ Any(xDocStorage->getDocumentStorage()) };
+            cpo::uno::Sequence< Any > aArgs{ Any(xDocStorage->getDocumentStorage()) };
             xGraphicStorageHandler.set(
                 _pImport->getComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext( u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr , aArgs, _pImport->getComponentContext() ),
                 UNO_QUERY );

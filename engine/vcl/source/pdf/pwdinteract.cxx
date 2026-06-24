@@ -56,7 +56,7 @@ public:
 
     // XInteractionRequest
     virtual cpo::uno::Any SAL_CALL getRequest(  ) override;
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations(  ) override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations(  ) override;
 
     // XInteractionPassword
     virtual void SAL_CALL setPassword( const OUString& rPwd ) override;
@@ -89,7 +89,7 @@ cpo::uno::Any PDFPasswordRequest::getRequest()
     return m_aRequest;
 }
 
-uno::Sequence< uno::Reference< task::XInteractionContinuation > > PDFPasswordRequest::getContinuations()
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > PDFPasswordRequest::getContinuations()
 {
     return { this };
 }

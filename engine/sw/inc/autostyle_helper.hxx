@@ -14,7 +14,7 @@
 #include <memory>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <svl/itemset.hxx>
 
@@ -25,7 +25,7 @@ class SwDoc;
 
 std::shared_ptr<SfxItemSet>
 PropValuesToAutoStyleItemSet(SwDoc& rDoc, IStyleAccess::SwAutoStyleFamily eFamily,
-                             const css::uno::Sequence<css::beans::PropertyValue>& Values,
+                             const cpo::uno::Sequence<css::beans::PropertyValue>& Values,
                              SwAttrSet& rSet);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -36,6 +36,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
+using namespace ::cpo::uno;
 
 static void Replace_OS_PlaceHolder(OUString& aString)
 {

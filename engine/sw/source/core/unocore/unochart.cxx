@@ -411,11 +411,11 @@ static void GetFormatAndCreateCursorFromRangeRep(
 }
 
 static bool GetSubranges( std::u16string_view rRangeRepresentation,
-        uno::Sequence< OUString > &rSubRanges, bool bNormalize )
+        cpo::uno::Sequence< OUString > &rSubRanges, bool bNormalize )
 {
     bool bRes = true;
     const sal_Int32 nLen = comphelper::string::getTokenCount(rRangeRepresentation, ';');
-    uno::Sequence< OUString > aRanges( nLen );
+    cpo::uno::Sequence< OUString > aRanges( nLen );
 
     sal_Int32 nCnt = 0;
     if (nLen != 0)
@@ -459,7 +459,7 @@ static bool GetSubranges( std::u16string_view rRangeRepresentation,
     return bRes;
 }
 
-static void SortSubranges( uno::Sequence< OUString > &rSubRanges, bool bCmpByColumn )
+static void SortSubranges( cpo::uno::Sequence< OUString > &rSubRanges, bool bCmpByColumn )
 {
     sal_Int32 nLen = rSubRanges.getLength();
     OUString *pSubRanges = rSubRanges.getArray();
@@ -516,7 +516,7 @@ SwChartDataProvider::~SwChartDataProvider()
 }
 
 uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createDataSource(
-        const uno::Sequence< beans::PropertyValue >& rArguments, bool bTestOnly )
+        const cpo::uno::Sequence< beans::PropertyValue >& rArguments, bool bTestOnly )
 {
     SolarMutexGuard aGuard;
     if (m_bDisposed)
@@ -527,7 +527,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
 
     // get arguments
     OUString aRangeRepresentation;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
     bool bFirstIsLabel      = false;
     bool bDtaSrcIsColumns   = true; // true : DataSource will be sequence of columns
                                     // false: DataSource will be sequence of rows
@@ -573,7 +573,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         }
     }
 
-    uno::Sequence< OUString > aSubRanges;
+    cpo::uno::Sequence< OUString > aSubRanges;
     // get sub-ranges and check that they all are from the very same table
     bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, true );
 
@@ -774,9 +774,9 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
         return nullptr;    // have createDataSourcePossible return true
 
     // create data source from found label and data sequences
-    uno::Sequence<uno::Reference<chart2::data::XDataSequence>> aLabelSeqs(nNumLDS);
+    cpo::uno::Sequence<uno::Reference<chart2::data::XDataSequence>> aLabelSeqs(nNumLDS);
     uno::Reference<chart2::data::XDataSequence>* pLabelSeqs = aLabelSeqs.getArray();
-    uno::Sequence<uno::Reference<chart2::data::XDataSequence>> aDataSeqs(nNumLDS);
+    cpo::uno::Sequence<uno::Reference<chart2::data::XDataSequence>> aDataSeqs(nNumLDS);
     uno::Reference<chart2::data::XDataSequence>* pDataSeqs = aDataSeqs.getArray();
     sal_Int32 nSeqsIdx = 0;
     for (oi = 0; oi < oiEnd; ++oi)
@@ -846,7 +846,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     OSL_ENSURE(nSeqsIdx == nNumLDS, "mismatch between sequence size and num,ber of entries");
 
     // build data source from data and label sequences
-    uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aLDS(nNumLDS);
+    cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aLDS(nNumLDS);
     uno::Reference<chart2::data::XLabeledDataSequence>* pLDS = aLDS.getArray();
     for (sal_Int32 i = 0; i < nNumLDS; ++i)
     {
@@ -859,7 +859,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
     // apply 'SequenceMapping' if it was provided
     if (aSequenceMapping.hasElements())
     {
-        uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aOld_LDS(aLDS);
+        cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> aOld_LDS(aLDS);
         uno::Reference<chart2::data::XLabeledDataSequence>* pOld_LDS = aOld_LDS.getArray();
 
         sal_Int32 nNewCnt = 0;
@@ -888,7 +888,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
 }
 
 bool SAL_CALL SwChartDataProvider::createDataSourcePossible(
-        const uno::Sequence< beans::PropertyValue >& rArguments )
+        const cpo::uno::Sequence< beans::PropertyValue >& rArguments )
 {
     SolarMutexGuard aGuard;
 
@@ -906,7 +906,7 @@ bool SAL_CALL SwChartDataProvider::createDataSourcePossible(
 }
 
 uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
-        const uno::Sequence< beans::PropertyValue >& rArguments )
+        const cpo::uno::Sequence< beans::PropertyValue >& rArguments )
 {
     SolarMutexGuard aGuard;
     return Impl_createDataSource( rArguments );
@@ -949,18 +949,18 @@ OUString SwChartDataProvider::GetBrokenCellRangeForExport(
     return OUString();
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
         const uno::Reference< chart2::data::XDataSource >& xDataSource )
 {
     SolarMutexGuard aGuard;
     if (m_bDisposed)
         throw lang::DisposedException();
 
-    uno::Sequence< beans::PropertyValue > aResult;
+    cpo::uno::Sequence< beans::PropertyValue > aResult;
     if (!xDataSource.is())
         return aResult;
 
-    const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aDS_LDS( xDataSource->getDataSequences() );
+    const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aDS_LDS( xDataSource->getDataSequences() );
     const uno::Reference< chart2::data::XLabeledDataSequence > *pDS_LDS = aDS_LDS.getConstArray();
     sal_Int32 nNumDS_LDS = aDS_LDS.getLength();
 
@@ -976,7 +976,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     // data used to build 'CellRangeRepresentation' from later on
     std::vector< std::vector< char > > aMap;
 
-    uno::Sequence< sal_Int32 > aSequenceMapping( nNumDS_LDS );
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping( nNumDS_LDS );
     sal_Int32 *pSequenceMapping = aSequenceMapping.getArray();
 
     OUStringBuffer aCellRanges;
@@ -1209,7 +1209,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     }
     // to be nice to the user we now sort the cell ranges according to
     // rows or columns depending on the direction used in the data source
-    uno::Sequence< OUString > aSortedRanges;
+    cpo::uno::Sequence< OUString > aSortedRanges;
     GetSubranges( aCellRanges, aSortedRanges, false /*sub ranges should already be normalized*/ );
     SortSubranges( aSortedRanges, (nDtaSrcIsColumns == 1) );
     OUStringBuffer aSortedCellRanges;
@@ -1222,7 +1222,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 
     // build value for 'SequenceMapping'
 
-    uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
+    cpo::uno::Sequence< sal_Int32 > aSortedMapping( aSequenceMapping );
     auto [begin, end] = asNonConstRange(aSortedMapping);
     std::sort(begin, end);
     bool bNeedSequenceMapping = false;
@@ -1398,7 +1398,7 @@ bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceName 
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.chart2.data.DataProvider"_ustr};
 }
@@ -1730,7 +1730,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXML
 }
 
 SwChartDataSource::SwChartDataSource(
-        const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > &rLDS ) :
+        const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > &rLDS ) :
     m_aLDS( rLDS )
 {
 }
@@ -1739,7 +1739,7 @@ SwChartDataSource::~SwChartDataSource()
 {
 }
 
-uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
+cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
 {
     SolarMutexGuard aGuard;
     return m_aLDS;
@@ -1755,7 +1755,7 @@ bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.chart2.data.DataSource"_ustr };
 }
@@ -1872,14 +1872,14 @@ OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
     return aRes;
 }
 
-uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
+cpo::uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
         chart2::data::LabelOrigin eLabelOrigin )
 {
     SolarMutexGuard aGuard;
     if (m_bDisposed)
         throw lang::DisposedException();
 
-    uno::Sequence< OUString > aLabels;
+    cpo::uno::Sequence< OUString > aLabels;
 
     {
         SwRangeDescriptor aDesc;
@@ -2001,11 +2001,11 @@ std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::Get
     return SwXCellRange::CreateXCellRange(m_pTableCursor, *pTableFormat, aDesc)->GetCells();
 }
 
-uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
+cpo::uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
 {
     SolarMutexGuard aGuard;
     auto vCells(GetCells());
-    uno::Sequence< OUString > vTextData(vCells.size());
+    cpo::uno::Sequence< OUString > vTextData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
         vTextData.getArray(),
@@ -2014,13 +2014,13 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
     return vTextData;
 }
 
-uno::Sequence< cpo::uno::Any > SAL_CALL SwChartDataSequence::getData()
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL SwChartDataSequence::getData()
 {
     SolarMutexGuard aGuard;
     try
     {
         auto vCells(GetCells());
-        uno::Sequence< cpo::uno::Any > vAnyData(vCells.size());
+        cpo::uno::Sequence< cpo::uno::Any > vAnyData(vCells.size());
         std::transform(vCells.begin(),
             vCells.end(),
             vAnyData.getArray(),
@@ -2032,14 +2032,14 @@ uno::Sequence< cpo::uno::Any > SAL_CALL SwChartDataSequence::getData()
     {
         TOOLS_WARN_EXCEPTION( "sw", "unexpected exception caught" );
     }
-    return uno::Sequence< cpo::uno::Any >{};
+    return cpo::uno::Sequence< cpo::uno::Any >{};
 }
 
-uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
+cpo::uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
 {
     SolarMutexGuard aGuard;
     auto vCells(GetCells());
-    uno::Sequence< double > vNumData(vCells.size());
+    cpo::uno::Sequence< double > vNumData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
         vNumData.getArray(),
@@ -2132,7 +2132,7 @@ bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceName 
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.chart2.data.DataSequence"_ustr };
 }
@@ -2602,7 +2602,7 @@ bool SAL_CALL SwChartLabeledDataSequence::supportsService(
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.chart2.data.LabeledDataSequence"_ustr };
 }

@@ -249,7 +249,7 @@ DataPointItemConverter::DataPointItemConverter(
     if (bDataSeries)
         return;
 
-    uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
+    cpo::uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
     // "DeletedLegendEntries"
     xSeries->getFastPropertyValue(PROP_DATASERIES_DELETED_LEGEND_ENTRIES) >>= deletedLegendEntriesSeq;
     for (const auto& deletedLegendEntry : deletedLegendEntriesSeq)
@@ -572,7 +572,7 @@ bool DataPointItemConverter::ApplySpecialItem(
             bool bHideLegendEntry = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
             if (bHideLegendEntry != m_bHideLegendEntry)
             {
-                uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
+                cpo::uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
                 // "DeletedLegendEntries"
                 m_xSeries->getFastPropertyValue(PROP_DATASERIES_DELETED_LEGEND_ENTRIES) >>= deletedLegendEntriesSeq;
                 std::vector<sal_Int32> deletedLegendEntries;

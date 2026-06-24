@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testArabicZero)
     // 1 -> "01"
     uno::Reference<text::XNumberingFormatter> xFormatter(
         text::DefaultNumberingProvider::create(m_xContext), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aProperties = {
         comphelper::makePropertyValue(u"NumberingType"_ustr,
                                       static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO)),
         comphelper::makePropertyValue(u"Value"_ustr, static_cast<sal_Int32>(1)),
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testArabicZero3)
     // 10 -> "010"
     uno::Reference<text::XNumberingFormatter> xFormatter(
         text::DefaultNumberingProvider::create(m_xContext), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aProperties = {
         comphelper::makePropertyValue(u"NumberingType"_ustr,
                                       static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO3)),
         comphelper::makePropertyValue(u"Value"_ustr, static_cast<sal_Int32>(10)),
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testArabicZero4)
     // 100 -> "0100"
     uno::Reference<text::XNumberingFormatter> xFormatter(
         text::DefaultNumberingProvider::create(m_xContext), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aProperties = {
         comphelper::makePropertyValue(u"NumberingType"_ustr,
                                       static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO4)),
         comphelper::makePropertyValue(u"Value"_ustr, static_cast<sal_Int32>(100)),
@@ -162,7 +162,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testArabicZero5)
     // 1000 -> "01000"
     uno::Reference<text::XNumberingFormatter> xFormatter(
         text::DefaultNumberingProvider::create(m_xContext), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aProperties = {
         comphelper::makePropertyValue(u"NumberingType"_ustr,
                                       static_cast<sal_uInt16>(style::NumberingType::ARABIC_ZERO5)),
         comphelper::makePropertyValue(u"Value"_ustr, static_cast<sal_Int32>(1000)),
@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testKoreanCounting)
     // 1 -> "일"
     uno::Reference<text::XNumberingFormatter> xFormatter(
         text::DefaultNumberingProvider::create(m_xContext), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aProperties = {
         comphelper::makePropertyValue(
             u"NumberingType"_ustr, static_cast<sal_uInt16>(style::NumberingType::NUMBER_HANGUL_KO)),
         comphelper::makePropertyValue(u"Value"_ustr, static_cast<sal_Int32>(1)),
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testKoreanLegal)
     // 1 -> "하나"
     uno::Reference<text::XNumberingFormatter> xFormatter(
         text::DefaultNumberingProvider::create(m_xContext), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aProperties = {
         comphelper::makePropertyValue(
             u"NumberingType"_ustr, static_cast<sal_uInt16>(style::NumberingType::NUMBER_LEGAL_KO)),
         comphelper::makePropertyValue(u"Value"_ustr, static_cast<sal_Int32>(1)),
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testKoreanDigital)
     // 1 -> "일"
     uno::Reference<text::XNumberingFormatter> xFormatter(
         text::DefaultNumberingProvider::create(m_xContext), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aProperties = {
         comphelper::makePropertyValue(
             u"NumberingType"_ustr,
             static_cast<sal_uInt16>(style::NumberingType::NUMBER_DIGITAL_KO)),
@@ -438,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(I18npoolDefaultnumberingproviderTest, testKoreanDigital2)
     // 1 -> "一"
     uno::Reference<text::XNumberingFormatter> xFormatter(
         text::DefaultNumberingProvider::create(m_xContext), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aProperties = {
         comphelper::makePropertyValue(
             u"NumberingType"_ustr,
             static_cast<sal_uInt16>(style::NumberingType::NUMBER_DIGITAL2_KO)),

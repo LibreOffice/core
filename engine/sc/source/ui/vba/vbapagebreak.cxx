@@ -99,10 +99,10 @@ ScVbaHPageBreak::getServiceImplName()
     return u"ScVbaHPageBreak"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaHPageBreak::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.HPageBreak"_ustr
     };
@@ -130,10 +130,10 @@ ScVbaVPageBreak::getServiceImplName()
     return u"ScVbaVPageBreak"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaVPageBreak::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.VPageBreak"_ustr
     };

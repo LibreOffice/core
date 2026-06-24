@@ -134,9 +134,9 @@ public:
     {
         return u"TitleImpl"_ustr;
     }
-    css::uno::Sequence< OUString > getServiceNames() override
+    cpo::uno::Sequence< OUString > getServiceNames() override
     {
-        static const css::uno::Sequence< OUString > aServiceNames{ u"ooo.vba.excel.XTitle"_ustr };
+        static const cpo::uno::Sequence< OUString > aServiceNames{ u"ooo.vba.excel.XTitle"_ustr };
         return aServiceNames;
     }
 };

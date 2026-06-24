@@ -52,10 +52,11 @@ const sal_uInt16 nCurrFormatDefault = 0;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
+using namespace cpo::uno;
 
 namespace
 {
-    uno::Sequence< lang::Locale > gInstalledLocales;
+    cpo::uno::Sequence< lang::Locale > gInstalledLocales;
     std::vector< LanguageType > gInstalledLanguageTypes;
 }
 
@@ -253,7 +254,7 @@ const css::i18n::LocaleDataItem2& LocaleDataWrapper::getLocaleItem() const
     return aLocaleDataItem;
 }
 
-css::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies() const
+cpo::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies() const
 {
     try
     {
@@ -266,7 +267,7 @@ css::uno::Sequence< css::i18n::Currency2 > LocaleDataWrapper::getAllCurrencies()
     return {};
 }
 
-css::uno::Sequence< css::i18n::FormatElement > LocaleDataWrapper::getAllFormats() const
+cpo::uno::Sequence< css::i18n::FormatElement > LocaleDataWrapper::getAllFormats() const
 {
     try
     {
@@ -292,9 +293,9 @@ css::i18n::ForbiddenCharacters LocaleDataWrapper::getForbiddenCharacters() const
     return css::i18n::ForbiddenCharacters();
 }
 
-const css::uno::Sequence< css::lang::Locale > & LocaleDataWrapper::getAllInstalledLocaleNames() const
+const cpo::uno::Sequence< css::lang::Locale > & LocaleDataWrapper::getAllInstalledLocaleNames() const
 {
-    uno::Sequence< lang::Locale > &rInstalledLocales = gInstalledLocales;
+    cpo::uno::Sequence< lang::Locale > &rInstalledLocales = gInstalledLocales;
 
     if ( rInstalledLocales.hasElements() )
         return rInstalledLocales;
@@ -313,9 +314,9 @@ const css::uno::Sequence< css::lang::Locale > & LocaleDataWrapper::getAllInstall
 // --- Impl and helpers ----------------------------------------------------
 
 // static
-const css::uno::Sequence< css::lang::Locale >& LocaleDataWrapper::getInstalledLocaleNames()
+const cpo::uno::Sequence< css::lang::Locale >& LocaleDataWrapper::getInstalledLocaleNames()
 {
-    const uno::Sequence< lang::Locale > &rInstalledLocales = gInstalledLocales;
+    const cpo::uno::Sequence< lang::Locale > &rInstalledLocales = gInstalledLocales;
 
     if ( !rInstalledLocales.hasElements() )
     {
@@ -333,7 +334,7 @@ const std::vector< LanguageType >& LocaleDataWrapper::getInstalledLanguageTypes(
     if ( !rInstalledLanguageTypes.empty() )
         return rInstalledLanguageTypes;
 
-    const css::uno::Sequence< css::lang::Locale > xLoc =  getInstalledLocaleNames();
+    const cpo::uno::Sequence< css::lang::Locale > xLoc =  getInstalledLocaleNames();
     sal_Int32 nCount = xLoc.getLength();
     std::vector< LanguageType > xLang;
     xLang.reserve(nCount);
@@ -447,12 +448,12 @@ const std::shared_ptr< css::i18n::Calendar2 >& LocaleDataWrapper::getDefaultCale
     return xDefaultCalendar;
 }
 
-css::uno::Sequence< css::i18n::CalendarItem2 > const & LocaleDataWrapper::getDefaultCalendarDays() const
+cpo::uno::Sequence< css::i18n::CalendarItem2 > const & LocaleDataWrapper::getDefaultCalendarDays() const
 {
     return getDefaultCalendar()->Days;
 }
 
-css::uno::Sequence< css::i18n::CalendarItem2 > const & LocaleDataWrapper::getDefaultCalendarMonths() const
+cpo::uno::Sequence< css::i18n::CalendarItem2 > const & LocaleDataWrapper::getDefaultCalendarMonths() const
 {
     return getDefaultCalendar()->Months;
 }
@@ -565,7 +566,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( std::u16string_view rCode,
 void LocaleDataWrapper::loadCurrencyFormats()
 {
     css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
-    uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::CURRENCY, maLanguageTag.getLocale() );
+    cpo::uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::CURRENCY, maLanguageTag.getLocale() );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
@@ -814,7 +815,7 @@ static DateOrder getDateOrderFromLongDateOrder( LongDateOrder eLong )
 void LocaleDataWrapper::loadDateOrders()
 {
     css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
-    uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::DATE, maLanguageTag.getLocale() );
+    cpo::uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::DATE, maLanguageTag.getLocale() );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
     {   // bad luck
@@ -925,7 +926,7 @@ void LocaleDataWrapper::loadDigitGrouping()
     }
 }
 
-const css::uno::Sequence< sal_Int32 >& LocaleDataWrapper::getDigitGrouping() const
+const cpo::uno::Sequence< sal_Int32 >& LocaleDataWrapper::getDigitGrouping() const
 {
     return aGrouping;
 }
@@ -1088,7 +1089,7 @@ void LocaleDataWrapper::ImplAddFormatNum( OUStringBuffer& rBuf,
 
         // copy number to buffer (excluding decimals)
         sal_uInt16 nNumLen2 = nNumLen-nDecimals;
-        uno::Sequence< bool > aGroupPos;
+        cpo::uno::Sequence< bool > aGroupPos;
         if (bUseThousandSep)
             aGroupPos = utl::DigitGroupingIterator::createForwardSequence(
                     nNumLen2, getDigitGrouping());
@@ -1483,7 +1484,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 
 // --- XLocaleData3 ----------------------------------------------------------
 
-css::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() const
+cpo::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() const
 {
     try
     {
@@ -1498,7 +1499,7 @@ css::uno::Sequence< css::i18n::Calendar2 > LocaleDataWrapper::getAllCalendars() 
 
 // --- XLocaleData4 ----------------------------------------------------------
 
-const css::uno::Sequence< OUString > & LocaleDataWrapper::getDateAcceptancePatterns() const
+const cpo::uno::Sequence< OUString > & LocaleDataWrapper::getDateAcceptancePatterns() const
 {
     return aDateAcceptancePatterns;
 }

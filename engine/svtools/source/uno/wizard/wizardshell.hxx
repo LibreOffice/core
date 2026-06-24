@@ -44,7 +44,7 @@ namespace svt::uno
         WizardShell(
             weld::Window* pParent,
             const css::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
-            const css::uno::Sequence< css::uno::Sequence< sal_Int16 > >& i_rPaths
+            const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int16 > >& i_rPaths
         );
 
         // Dialog overridables

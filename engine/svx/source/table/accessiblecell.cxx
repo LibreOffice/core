@@ -337,7 +337,7 @@ OUString SAL_CALL AccessibleCell::getImplementationName()
 Sequence<OUString> SAL_CALL AccessibleCell::getSupportedServiceNames()
 {
     ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleCell"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleCell"_ustr };
     return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
 

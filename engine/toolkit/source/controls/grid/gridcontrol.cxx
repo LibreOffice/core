@@ -413,7 +413,7 @@ void SAL_CALL UnoGridControl::deselectAllRows()
 }
 
 
-css::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelectedRows()
+cpo::uno::Sequence< ::sal_Int32 > SAL_CALL UnoGridControl::getSelectedRows()
 {
     return Reference< XGridRowSelection >( getPeer(), UNO_QUERY_THROW )->getSelectedRows();
 }
@@ -447,7 +447,7 @@ void SAL_CALL UnoGridControl::removeSelectionListener(const css::uno::Reference<
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_GridControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoGridControl());
 }
@@ -455,7 +455,7 @@ stardiv_Toolkit_GridControl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_GridControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoGridModel(context));
 }

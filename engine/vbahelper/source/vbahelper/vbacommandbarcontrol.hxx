@@ -37,7 +37,7 @@ protected:
     OUString               m_sResourceUrl;
     css::uno::Reference< css::container::XIndexAccess > m_xCurrentSettings;
     css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
-    css::uno::Sequence< css::beans::PropertyValue >     m_aPropertyValues;
+    cpo::uno::Sequence< css::beans::PropertyValue >     m_aPropertyValues;
 
     sal_Int32           m_nPosition;
 
@@ -71,7 +71,7 @@ public:
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 typedef cppu::ImplInheritanceHelper< ScVbaCommandBarControl, ov::XCommandBarPopup > CommandBarPopup_BASE;
@@ -87,7 +87,7 @@ public:
     }
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 typedef cppu::ImplInheritanceHelper< ScVbaCommandBarControl, ov::XCommandBarButton > CommandBarButton_BASE;
@@ -103,7 +103,7 @@ public:
     }
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBARCONTROL_HXX

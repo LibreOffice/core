@@ -21,7 +21,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 
@@ -69,7 +69,7 @@ protected:
 
     /** fill property values for this template entry */
     virtual void FillPropertyValues(
-        css::uno::Sequence<css::beans::PropertyValue> & rValues);
+        cpo::uno::Sequence<css::beans::PropertyValue> & rValues);
 
 };
 

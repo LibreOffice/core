@@ -122,7 +122,7 @@ void XAccessibleTextTester::testGetCharacter()
 void XAccessibleTextTester::testGetCharacterAttributes()
 {
     const sal_Int32 nCharCount = m_xText->getCharacterCount();
-    const css::uno::Sequence<OUString> aAttrs;
+    const cpo::uno::Sequence<OUString> aAttrs;
 
     // check that trying to get character attributes at invalid index results in IndexOutOfBoundsException
     for (sal_Int32 nPos : { sal_Int32(-1), nCharCount })
@@ -593,7 +593,7 @@ OUString XAccessibleTextTester::getSystemClipboardText()
 
     css::uno::Reference<css::datatransfer::XTransferable> xTrans = xClipboard->getContents();
 
-    css::uno::Sequence<css::datatransfer::DataFlavor> aDataFlavors
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> aDataFlavors
         = xTrans->getTransferDataFlavors();
 
     for (const css::datatransfer::DataFlavor& rDataFlavor : aDataFlavors)

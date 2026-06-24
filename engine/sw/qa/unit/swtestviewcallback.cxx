@@ -87,7 +87,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             }
             else
                 sRect = aPayload;
-            uno::Sequence<OUString> aSeq
+            cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::fromUtf8(sRect));
             if (std::string_view("EMPTY") == pPayload)
                 return;
@@ -108,7 +108,7 @@ void SwTestViewCallback::callbackImpl(int nType, const char* pPayload)
             boost::property_tree::read_json(aStream, aTree);
             OString aRect(aTree.get_child("rectangle").get_value<std::string>());
 
-            uno::Sequence<OUString> aSeq
+            cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aRect));
             if (std::string_view("EMPTY") == pPayload)
                 return;

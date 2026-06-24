@@ -52,12 +52,12 @@ void OSelfTerminateFileStream::CloseStreamDeleteFile()
     m_oTempFile.reset();
 }
 
-sal_Int32 SAL_CALL OSelfTerminateFileStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OSelfTerminateFileStream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     return m_xStreamWrapper->readBytes( aData, nBytesToRead );
 }
 
-sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OSelfTerminateFileStream::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     return m_xStreamWrapper->readSomeBytes( aData, nMaxBytesToRead );
 }

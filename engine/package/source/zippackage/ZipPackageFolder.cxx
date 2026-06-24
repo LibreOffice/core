@@ -210,7 +210,7 @@ cpo::uno::Any ZipPackageFolder::getByName( std::u16string_view aName )
 {
     return cpo::uno::Any ( uno::Reference(cppu::getXWeak(doGetByName ( aName ).xPackageEntry.get())) );
 }
-uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
     return comphelper::mapKeysToSequence(maContents);
 }
@@ -234,13 +234,13 @@ void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const cpo:
 
 bool ZipPackageFolder::saveChild(
         const OUString &rPath,
-        std::vector < uno::Sequence < PropertyValue > > &rManList,
+        std::vector < cpo::uno::Sequence < PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
-        const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        const cpo::uno::Sequence < sal_Int8 >& rEncryptionKey,
         ::std::optional<sal_Int32> const oPBKDF2IterationCount,
         ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args)
 {
-    uno::Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
+    cpo::uno::Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
     OUString sTempName = rPath + "/";
 
     if ( !GetMediaType().isEmpty() )
@@ -267,9 +267,9 @@ bool ZipPackageFolder::saveChild(
 
 void ZipPackageFolder::saveContents(
         const OUString &rPath,
-        std::vector < uno::Sequence < PropertyValue > > &rManList,
+        std::vector < cpo::uno::Sequence < PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
-        const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        const cpo::uno::Sequence < sal_Int8 >& rEncryptionKey,
         ::std::optional<sal_Int32> const oPBKDF2IterationCount,
         ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args) const
 {
@@ -388,7 +388,7 @@ OUString ZipPackageFolder::getImplementationName()
     return u"ZipPackageFolder"_ustr;
 }
 
-uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
 {
     return { u"com.sun.star.packages.PackageFolder"_ustr };
 }

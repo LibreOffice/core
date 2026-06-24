@@ -31,6 +31,7 @@ namespace comphelper
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 
 
@@ -154,7 +155,7 @@ sal_Int64 SAL_CALL MemoryInputStream::getLength(  )
 
 
 SequenceInputStream::SequenceInputStream(
-    css::uno::Sequence<sal_Int8> const & rData)
+    cpo::uno::Sequence<sal_Int8> const & rData)
 :   MemoryInputStream(rData.getConstArray(), rData.getLength())
 ,   m_aData(rData)
 {

@@ -300,7 +300,7 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
         const bool bEmbedLatinScript = getEmbedLatinScript();
         const bool bEmbedAsianScript = getEmbedAsianScript();
         const bool bEmbedComplexScript = getEmbedComplexScript();
-        const uno::Sequence<OUString> aFamilyNames = xFamilies->getElementNames();
+        const cpo::uno::Sequence<OUString> aFamilyNames = xFamilies->getElementNames();
         for (OUString const & sFamilyName : aFamilyNames)
         {
             uno::Reference<container::XNameAccess> xStyleContainer;
@@ -308,7 +308,7 @@ std::unordered_set<OUString> SvXMLExport::getUsedFontList()
 
             if (xStyleContainer.is())
             {
-                const uno::Sequence<OUString> aStyleNames = xStyleContainer->getElementNames();
+                const cpo::uno::Sequence<OUString> aStyleNames = xStyleContainer->getElementNames();
                 for (OUString const & rName : aStyleNames)
                 {
                     uno::Reference<style::XStyle> xStyle;
@@ -678,7 +678,7 @@ OUString SvXMLExport::embedFontFile(OUString const& fileUrl, OUString const& rFa
             }
             if( readSize == 0 )
                 break;
-            outputStream->writeBytes(uno::Sequence<sal_Int8>(buffer, readSize));
+            outputStream->writeBytes(cpo::uno::Sequence<sal_Int8>(buffer, readSize));
         }
         outputStream->closeOutput();
         if( storage.is() )

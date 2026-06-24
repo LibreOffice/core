@@ -162,12 +162,12 @@ void MSCodec_Xor95::InitKey( const sal_uInt8 pnPassData[ 16 ] )
     }
 }
 
-bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
+bool MSCodec_Xor95::InitCodec( const cpo::uno::Sequence< beans::NamedValue >& aData )
 {
     bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
-    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault(u"XOR95EncryptionKey"_ustr, uno::Sequence< sal_Int8 >() );
+    cpo::uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault(u"XOR95EncryptionKey"_ustr, cpo::uno::Sequence< sal_Int8 >() );
 
     if ( aKey.getLength() == 16 )
     {
@@ -183,10 +183,10 @@ bool MSCodec_Xor95::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
     return bResult;
 }
 
-uno::Sequence< beans::NamedValue > MSCodec_Xor95::GetEncryptionData()
+cpo::uno::Sequence< beans::NamedValue > MSCodec_Xor95::GetEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
-    aHashData[ u"XOR95EncryptionKey"_ustr ] <<= uno::Sequence<sal_Int8>( reinterpret_cast<sal_Int8*>(mpnKey), 16 );
+    aHashData[ u"XOR95EncryptionKey"_ustr ] <<= cpo::uno::Sequence<sal_Int8>( reinterpret_cast<sal_Int8*>(mpnKey), 16 );
     aHashData[ u"XOR95BaseKey"_ustr ] <<= static_cast<sal_Int16>(mnKey);
     aHashData[ u"XOR95PasswordHash"_ustr ] <<= static_cast<sal_Int16>(mnHash);
 
@@ -291,7 +291,7 @@ static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
 }
 #endif
 
-bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
+bool MSCodec97::InitCodec( const cpo::uno::Sequence< beans::NamedValue >& aData )
 {
 #if DEBUG_MSO_ENCRYPTION_STD97
     fprintf(stdout, "MSCodec_Std97::InitCodec: --begin\n");fflush(stdout);
@@ -299,13 +299,13 @@ bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
     bool bResult = false;
 
     ::comphelper::SequenceAsHashMap aHashData( aData );
-    uno::Sequence<sal_Int8> aKey = aHashData.getUnpackedValueOrDefault(m_sEncKeyName, uno::Sequence<sal_Int8>());
+    cpo::uno::Sequence<sal_Int8> aKey = aHashData.getUnpackedValueOrDefault(m_sEncKeyName, cpo::uno::Sequence<sal_Int8>());
     const size_t nKeyLen = aKey.getLength();
     if (nKeyLen == m_nHashLen)
     {
         assert(m_aDigestValue.size() == m_nHashLen);
         memcpy(m_aDigestValue.data(), aKey.getConstArray(), m_nHashLen);
-        uno::Sequence< sal_Int8 > aUniqueID = aHashData.getUnpackedValueOrDefault(u"STD97UniqueID"_ustr, uno::Sequence< sal_Int8 >() );
+        cpo::uno::Sequence< sal_Int8 > aUniqueID = aHashData.getUnpackedValueOrDefault(u"STD97UniqueID"_ustr, cpo::uno::Sequence< sal_Int8 >() );
         if ( aUniqueID.getLength() == 16 )
         {
             assert(m_aDocId.size() == static_cast<size_t>(aUniqueID.getLength()));
@@ -323,12 +323,12 @@ bool MSCodec97::InitCodec( const uno::Sequence< beans::NamedValue >& aData )
     return bResult;
 }
 
-uno::Sequence< beans::NamedValue > MSCodec97::GetEncryptionData()
+cpo::uno::Sequence< beans::NamedValue > MSCodec97::GetEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData;
     assert(m_aDigestValue.size() == m_nHashLen);
-    aHashData[m_sEncKeyName] <<= uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8*>(m_aDigestValue.data()), m_nHashLen);
-    aHashData[ u"STD97UniqueID"_ustr ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_aDocId.data()), m_aDocId.size() );
+    aHashData[m_sEncKeyName] <<= cpo::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8*>(m_aDigestValue.data()), m_nHashLen);
+    aHashData[ u"STD97UniqueID"_ustr ] <<= cpo::uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(m_aDocId.data()), m_aDocId.size() );
 
     return aHashData.getAsConstNamedValueList();
 }
@@ -340,7 +340,7 @@ void MSCodec_Std97::InitKey (
 #if DEBUG_MSO_ENCRYPTION_STD97
     fprintf(stdout, "MSCodec_Std97::InitKey: --begin\n");fflush(stdout);
 #endif
-    uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key(pPassData, pDocId);
+    cpo::uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key(pPassData, pDocId);
     // Fill raw digest of above updates into DigestValue.
 
     const size_t nKeyLen = aKey.getLength();
@@ -486,7 +486,7 @@ bool MSCodec_CryptoAPI::InitCipher(sal_uInt32 nCounter)
     return (result == rtl_Cipher_E_None);
 }
 
-uno::Sequence<beans::NamedValue> MSCodec_CryptoAPI::GetEncryptionData()
+cpo::uno::Sequence<beans::NamedValue> MSCodec_CryptoAPI::GetEncryptionData()
 {
     ::comphelper::SequenceAsHashMap aHashData(MSCodec97::GetEncryptionData());
     //add in the old encryption key as well as our new key so saving using the

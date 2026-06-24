@@ -55,7 +55,7 @@ public:
                                                 const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
 
     // css::text::XMultiTextMarkup:
-    virtual void SAL_CALL commitMultiTextMarkup( const css::uno::Sequence< css::text::TextMarkupDescriptor >& aMarkups ) override;
+    virtual void SAL_CALL commitMultiTextMarkup( const cpo::uno::Sequence< css::text::TextMarkupDescriptor >& aMarkups ) override;
 
 private:
     SwXTextMarkup( const SwXTextMarkup & ) = delete;

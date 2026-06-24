@@ -84,7 +84,7 @@
         <xsl:text>#include "cpo/uno/Any.hxx"&#xA;</xsl:text>
       </xsl:if>
       <xsl:if test=".//prop/@oor:type = 'xs:hexBinary' or .//prop/@oor:type = 'oor:boolean-list' or .//prop/@oor:type = 'oor:short-list' or .//prop/@oor:type = 'oor:int-list' or .//prop/@oor:type = 'oor:long-list' or .//prop/@oor:type = 'oor:double-list' or .//prop/@oor:type = 'oor:string-list'">
-        <xsl:text>#include "com/sun/star/uno/Sequence.hxx"&#xA;</xsl:text>
+        <xsl:text>#include "cpo/uno/Sequence.hxx"&#xA;</xsl:text>
       </xsl:if>
       <xsl:text>#include "rtl/ustring.h"&#xA;</xsl:text>
       <xsl:text>#include "rtl/ustring.hxx"&#xA;</xsl:text>
@@ -226,29 +226,29 @@
           <xsl:text>OUString</xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='xs:hexBinary'">
-          <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int8&gt; </xsl:text>
+          <xsl:text>cpo::uno::Sequence&lt;sal_Int8&gt; </xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='oor:boolean-list'">
-          <xsl:text>com::sun::star::uno::Sequence&lt;bool&gt; </xsl:text>
+          <xsl:text>cpo::uno::Sequence&lt;bool&gt; </xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='oor:short-list'">
-          <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int16&gt; </xsl:text>
+          <xsl:text>cpo::uno::Sequence&lt;sal_Int16&gt; </xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='oor:int-list'">
-          <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int32&gt; </xsl:text>
+          <xsl:text>cpo::uno::Sequence&lt;sal_Int32&gt; </xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='oor:long-list'">
-          <xsl:text>com::sun::star::uno::Sequence&lt;sal_Int64&gt; </xsl:text>
+          <xsl:text>cpo::uno::Sequence&lt;sal_Int64&gt; </xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='oor:double-list'">
-          <xsl:text>com::sun::star::uno::Sequence&lt;double&gt; </xsl:text>
+          <xsl:text>cpo::uno::Sequence&lt;double&gt; </xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='oor:string-list'">
-          <xsl:text>com::sun::star::uno::Sequence&lt;OUString&gt; </xsl:text>
+          <xsl:text>cpo::uno::Sequence&lt;OUString&gt; </xsl:text>
         </xsl:when>
         <xsl:when test="@oor:type='oor:hexBinary-list'">
-          <xsl:text>com::sun::star::uno::Sequence&lt;<!--
-          -->com::sun::star::uno::Sequence&lt;sal_Int8&gt; &gt; </xsl:text>
+          <xsl:text>cpo::uno::Sequence&lt;<!--
+          -->cpo::uno::Sequence&lt;sal_Int8&gt; &gt; </xsl:text>
         </xsl:when>
       </xsl:choose>
       <xsl:if test="not(@oor:nillable = 'false')">

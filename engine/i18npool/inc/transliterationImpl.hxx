@@ -45,21 +45,21 @@ public:
     virtual sal_Int16 SAL_CALL getType(  ) override ;
 
     virtual void SAL_CALL loadModule( css::i18n::TransliterationModules modName, const css::lang::Locale& rLocale ) override ;
-    virtual void SAL_CALL loadModuleNew( const css::uno::Sequence< css::i18n::TransliterationModulesNew >& modName,
+    virtual void SAL_CALL loadModuleNew( const cpo::uno::Sequence< css::i18n::TransliterationModulesNew >& modName,
         const css::lang::Locale& rLocale ) override ;
     virtual void SAL_CALL loadModuleByImplName( const OUString& implName,
         const css::lang::Locale& rLocale ) override;
-    virtual void SAL_CALL loadModulesByImplNames(const css::uno::Sequence< OUString >& modNamelist,
+    virtual void SAL_CALL loadModulesByImplNames(const cpo::uno::Sequence< OUString >& modNamelist,
         const css::lang::Locale& rLocale) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableModules(
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableModules(
         const css::lang::Locale& rLocale, sal_Int16 sType ) override;
 
     virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        css::uno::Sequence< sal_Int32 >& offset  ) override ;
+        cpo::uno::Sequence< sal_Int32 >& offset  ) override ;
 
     virtual OUString SAL_CALL folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        css::uno::Sequence< sal_Int32 >& offset ) override;
+        cpo::uno::Sequence< sal_Int32 >& offset ) override;
 
     // Methods in XExtendedTransliteration
     virtual OUString SAL_CALL transliterateString2String( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount ) override ;
@@ -68,7 +68,7 @@ public:
 
     virtual bool SAL_CALL equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
         sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
+    virtual cpo::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
         const OUString& str2 ) override ;
 
     virtual sal_Int32 SAL_CALL compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
@@ -79,7 +79,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
 #define maxCascade 27
@@ -101,8 +101,8 @@ private:
         css::uno::Reference< css::i18n::XExtendedTransliteration >& body );
 
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > getRange(
-        const css::uno::Sequence< OUString > &inStrs,
+    cpo::uno::Sequence< OUString > getRange(
+        const cpo::uno::Sequence< OUString > &inStrs,
         sal_Int32 length, const sal_Int16 _nCascade);
 };
 

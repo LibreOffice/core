@@ -340,7 +340,7 @@ bool SAL_CALL SwXBookmark::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXBookmark::getSupportedServiceNames()
 {
     return {
@@ -531,7 +531,7 @@ cpo::uno::Any SwXFieldmarkParameters::getByName(const OUString& aName)
     return pEntry->second;
 }
 
-uno::Sequence<OUString> SwXFieldmarkParameters::getElementNames()
+cpo::uno::Sequence<OUString> SwXFieldmarkParameters::getElementNames()
 {
     SolarMutexGuard aGuard;
     Fieldmark::parameter_map_t* pParameters = getCoreParameters();
@@ -582,7 +582,7 @@ SwXFieldmark::getImplementationName()
     return u"SwXFieldmark"_ustr;
 }
 
-uno::Sequence<OUString> SAL_CALL
+cpo::uno::Sequence<OUString> SAL_CALL
 SwXFieldmark::getSupportedServiceNames()
 {
     // is const, no lock needed

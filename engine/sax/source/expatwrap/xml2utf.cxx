@@ -33,6 +33,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
+using namespace cpo::uno;
 
 
 namespace sax_expatwrap {

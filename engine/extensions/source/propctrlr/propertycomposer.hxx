@@ -79,11 +79,11 @@ namespace pcr
                                                     SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual void                                SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void                                SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual css::uno::Sequence< css::beans::Property >
+        virtual cpo::uno::Sequence< css::beans::Property >
                                                     SAL_CALL getSupportedProperties() override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                                     SAL_CALL getSupersededProperties( ) override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                                     SAL_CALL getActuatingProperties( ) override;
         virtual css::inspection::LineDescriptor
                                                     SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;

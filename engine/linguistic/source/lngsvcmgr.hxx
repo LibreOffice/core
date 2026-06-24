@@ -68,13 +68,13 @@ class LngSvcMgr :
     Idle                                                aUpdateIdle;
 
 
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::lang::Locale >                             aAvailSpellLocales;
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::lang::Locale >                             aAvailGrammarLocales;
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::lang::Locale >                             aAvailHyphLocales;
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::lang::Locale >                             aAvailThesLocales;
 
     rtl::Reference<SpellCheckerDispatcher>              mxSpellDsp;
@@ -114,7 +114,7 @@ class LngSvcMgr :
     bool    SaveCfgSvcs( std::u16string_view rServiceName );
 
     // utl::ConfigItem (to allow for listening of changes of relevant properties)
-    virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
+    virtual void    Notify( const cpo::uno::Sequence< OUString > &rPropertyNames ) override;
     virtual void    ImplCommit() override;
 
     void UpdateAll();
@@ -131,12 +131,12 @@ public:
     virtual css::uno::Reference< css::linguistic2::XThesaurus > SAL_CALL getThesaurus(  ) override;
     virtual bool SAL_CALL addLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual bool SAL_CALL removeLinguServiceManagerListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
-    virtual void SAL_CALL setConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale, const css::uno::Sequence< OUString >& aServiceImplNames ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
+    virtual void SAL_CALL setConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale, const cpo::uno::Sequence< OUString >& aServiceImplNames ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getConfiguredServices( const OUString& aServiceName, const css::lang::Locale& aLocale ) override;
 
     // XAvailableLocales
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getAvailableLocales( const OUString& aServiceName ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getAvailableLocales( const OUString& aServiceName ) override;
 
     // XComponent
     virtual void SAL_CALL dispose(  ) override;
@@ -146,7 +146,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) override;

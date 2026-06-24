@@ -1627,7 +1627,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 rDrawingObject.setPolyLineCount(rDrawingObject.getPolyLineCount() - 1);
                 if (rDrawingObject.getPolyLineCount() == 0 && rDrawingObject.getPropertySet().is())
                 {
-                    uno::Sequence<uno::Sequence<awt::Point>> aPointSequenceSequence
+                    cpo::uno::Sequence<cpo::uno::Sequence<awt::Point>> aPointSequenceSequence
                         = { comphelper::containerToSequence(rDrawingObject.getPolyLinePoints()) };
                     rDrawingObject.getPropertySet()->setPropertyValue(
                         u"PolyPolygon"_ustr, cpo::uno::Any(aPointSequenceSequence));

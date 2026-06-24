@@ -77,7 +77,7 @@ private:
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
-            const css::uno::Sequence< css::beans::Property >& rProperties,
+            const cpo::uno::Sequence< css::beans::Property >& rProperties,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 private:
     typedef rtl::Reference< Content > ContentRef;
@@ -105,8 +105,8 @@ private:
     static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
         const css::uno::Reference< css::io::XOutputStream >& xOut );
 
-    css::uno::Sequence< cpo::uno::Any >
-        setPropertyValues( const css::uno::Sequence<
+    cpo::uno::Sequence< cpo::uno::Any >
+        setPropertyValues( const cpo::uno::Sequence<
             css::beans::PropertyValue >& rValues,
             const css::uno::Reference<
             css::ucb::XCommandEnvironment >& xEnv );
@@ -133,11 +133,11 @@ public:
 
     virtual ~Content() override;
 
-    virtual css::uno::Sequence< css::beans::Property >
+    virtual cpo::uno::Sequence< css::beans::Property >
         getProperties( const css::uno::Reference<
             css::ucb::XCommandEnvironment > & xEnv ) override;
 
-    virtual css::uno::Sequence< css::ucb::CommandInfo >
+    virtual cpo::uno::Sequence< css::ucb::CommandInfo >
         getCommands( const css::uno::Reference<
             css::ucb::XCommandEnvironment > & xEnv ) override;
 
@@ -150,13 +150,13 @@ public:
     virtual void SAL_CALL release()
         noexcept override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     virtual OUString SAL_CALL
     getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual OUString SAL_CALL
@@ -169,13 +169,13 @@ public:
 
     virtual void SAL_CALL abort( sal_Int32 CommandId ) override;
 
-    virtual css::uno::Sequence< css::ucb::ContentInfo >
+    virtual cpo::uno::Sequence< css::ucb::ContentInfo >
         SAL_CALL queryCreatableContentsInfo() override;
     virtual css::uno::Reference< css::ucb::XContent >
         SAL_CALL createNewContent( const css::ucb::ContentInfo& Info ) override;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::ucb::ContentInfo >
+    cpo::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
 

@@ -949,7 +949,7 @@ css::beans::PropertyValue ArtisticEffectProperties::getEffect()
     if( msName.isEmpty() )
         return aRet;
 
-    css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() + 1 );
+    cpo::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() + 1 );
     auto pSeq = aSeq.getArray();
     sal_uInt32 i = 0;
     for (auto const& attrib : maAttribs)
@@ -961,7 +961,7 @@ css::beans::PropertyValue ArtisticEffectProperties::getEffect()
 
     if( mrOleObjectInfo.maEmbeddedData.hasElements() )
     {
-        css::uno::Sequence< css::beans::PropertyValue > aGraphicSeq{
+        cpo::uno::Sequence< css::beans::PropertyValue > aGraphicSeq{
             comphelper::makePropertyValue(u"Id"_ustr, mrOleObjectInfo.maProgId),
             comphelper::makePropertyValue(u"Data"_ustr, mrOleObjectInfo.maEmbeddedData)
         };

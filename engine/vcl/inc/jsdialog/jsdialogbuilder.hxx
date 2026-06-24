@@ -52,7 +52,7 @@ public:
     JSDropTarget();
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArgs) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArgs) override;
 
     // XDropTarget
     virtual void SAL_CALL addDropTargetListener(
@@ -68,7 +68,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
 
@@ -274,7 +274,7 @@ public:
         if (GraphicConverter::Export(aOStm, rImage, ConvertDataFormat::PNG) != ERRCODE_NONE)
             return false;
 
-        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+        cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
                                           aOStm.Tell());
         OUStringBuffer aBuffer("data:image/png;base64,");
         ::comphelper::Base64::encode(aBuffer, aSeq);

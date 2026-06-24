@@ -28,6 +28,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo::uno;
 
 VCLXAccessibleTextField::VCLXAccessibleTextField(ListBox* pListBox,
                                                  const Reference<XAccessible>& _xParent)

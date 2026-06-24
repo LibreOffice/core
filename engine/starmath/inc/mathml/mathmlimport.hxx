@@ -98,9 +98,9 @@ public:
     void SetText(const OUString& rStr) { aText = rStr; }
 
     virtual void
-    SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(
-        const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+        const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
 
     void IncParseDepth() { ++nParseDepth; }
     bool TooDeep() const { return nParseDepth >= 2048; }

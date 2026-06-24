@@ -76,9 +76,9 @@ bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aNames { u"com.sun.star.awt.AccessibleWindow"_ustr };
+    cpo::uno::Sequence< OUString > aNames { u"com.sun.star.awt.AccessibleWindow"_ustr };
     return aNames;
 }
 
@@ -374,21 +374,21 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
     vcl::Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
     if ( pLabeledBy && pLabeledBy != pWindow )
     {
-        uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pLabeledBy->GetAccessible() };
+        cpo::uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pLabeledBy->GetAccessible() };
         rRelationSet.AddRelation(accessibility::AccessibleRelation(accessibility::AccessibleRelationType_LABELED_BY, aSequence));
     }
 
     vcl::Window* pLabelFor = pWindow->GetAccessibleRelationLabelFor();
     if ( pLabelFor && pLabelFor != pWindow )
     {
-        uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pLabelFor->GetAccessible() };
+        cpo::uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pLabelFor->GetAccessible() };
         rRelationSet.AddRelation(accessibility::AccessibleRelation(accessibility::AccessibleRelationType_LABEL_FOR, aSequence));
     }
 
     vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
     if ( pMemberOf && pMemberOf != pWindow )
     {
-        uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pMemberOf->GetAccessible() };
+        cpo::uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pMemberOf->GetAccessible() };
         rRelationSet.AddRelation(accessibility::AccessibleRelation(accessibility::AccessibleRelationType_MEMBER_OF, aSequence));
     }
 }

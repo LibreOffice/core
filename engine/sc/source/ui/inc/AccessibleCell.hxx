@@ -121,7 +121,7 @@ public:
     virtual OUString SAL_CALL getExtendedAttributes() override;
 
     // Override this method to handle cell's ParaIndent attribute specially.
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
 private:
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccDoc;

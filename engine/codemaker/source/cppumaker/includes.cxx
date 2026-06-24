@@ -196,7 +196,7 @@ void Includes::dump(
     }
     if (m_includeSequence) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Sequence." << hxxExtension[(m_filetype == FileType::HPP)]
+        out << "#include \"cpo/uno/Sequence." << hxxExtension[(m_filetype == FileType::HPP)]
             << "\"\n";
     }
     if (m_includeType) {

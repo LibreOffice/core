@@ -37,10 +37,10 @@ public:
     // XDriver
     css::uno::Reference<css::sdbc::XConnection>
         SAL_CALL connect(const OUString& url,
-                         const css::uno::Sequence<css::beans::PropertyValue>& info) override;
+                         const cpo::uno::Sequence<css::beans::PropertyValue>& info) override;
     bool SAL_CALL acceptsURL(const OUString& url) override;
-    css::uno::Sequence<css::sdbc::DriverPropertyInfo> SAL_CALL getPropertyInfo(
-        const OUString& url, const css::uno::Sequence<css::beans::PropertyValue>& info) override;
+    cpo::uno::Sequence<css::sdbc::DriverPropertyInfo> SAL_CALL getPropertyInfo(
+        const OUString& url, const cpo::uno::Sequence<css::beans::PropertyValue>& info) override;
 };
 }
 

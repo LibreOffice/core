@@ -125,12 +125,12 @@ public:
     DECL_LINK( StructSelHdl, StructPage&, void );
 public:
     mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
-    uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
+    cpo::uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
     ::std::unique_ptr<FormulaTokenArray>                    m_pTokenArray;
     ::std::optional<FormulaTokenArrayPlainIterator>         m_oTokenArrayIterator;
-    mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
-    mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
-    mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aFunctionOpCodes;
+    mutable cpo::uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
+    mutable cpo::uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
+    mutable cpo::uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aFunctionOpCodes;
     ::std::map<const FormulaToken*, sheet::FormulaToken>    m_aTokenMap;
     IFormulaEditorHelper*                                   m_pHelper;
     weld::Dialog&           m_rDialog;
@@ -361,7 +361,7 @@ void FormulaDlg_Impl::InitFormulaOpCodeMapper()
     m_aFunctionOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::FUNCTIONS);
 
     // 0:TOKEN_OPEN, 1:TOKEN_CLOSE, 2:TOKEN_SEP
-    uno::Sequence< OUString > aArgs { u"("_ustr, u")"_ustr, u";"_ustr };
+    cpo::uno::Sequence< OUString > aArgs { u"("_ustr, u")"_ustr, u";"_ustr };
     m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings( aArgs, sheet::FormulaLanguage::ODFF);
 
     m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings( sheet::FormulaLanguage::ODFF, sheet::FormulaMapGroup::SPECIAL);
@@ -401,7 +401,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
         while ( pIter != pEnd )
         {
             const sal_Int32 eOp = pIter->OpCode;
-            uno::Sequence<sheet::FormulaToken> aArgs { *pIter };
+            cpo::uno::Sequence<sheet::FormulaToken> aArgs { *pIter };
             const OUString aString = xParser->printFormula( aArgs, aRefPos);
             const sheet::FormulaToken* pNextToken = pIter + 1;
 
@@ -601,7 +601,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree, weld::TreeIter* pParent, cons
     if (itr == m_aTokenMap.end())
         return;
 
-    uno::Sequence<sheet::FormulaToken> aArgs { itr->second };
+    cpo::uno::Sequence<sheet::FormulaToken> aArgs { itr->second };
     try
     {
         const table::CellAddress aRefPos(m_pHelper->getReferencePosition());

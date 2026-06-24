@@ -21,7 +21,7 @@
 #define INCLUDED_UNOTOOLS_MODULEOPTIONS_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <unotools/options.hxx>
@@ -134,7 +134,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
             @return A suitable enum value. See EFactory above.
          */
         static EFactory ClassifyFactoryByURL(const OUString&                                                           sURL            ,
-                                             const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor);
+                                             const cpo::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor);
 
         /** @short  return the corresponding application ID for the given properties.
 
@@ -164,7 +164,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
         static bool IsBasicIDEInstalled() { return true; }
         bool IsDataBaseInstalled() const { return IsModuleInstalled(EModule::DATABASE); }
 
-        css::uno::Sequence < OUString > GetAllServiceNames();
+        cpo::uno::Sequence < OUString > GetAllServiceNames();
 
     private:
         std::shared_ptr<SvtModuleOptions_Impl>   m_pImpl;

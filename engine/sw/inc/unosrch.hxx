@@ -86,15 +86,15 @@ public:
     //XPropertyReplace
     virtual bool SAL_CALL getValueSearch() override;
     virtual void SAL_CALL setValueSearch(bool ValueSearch_) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getSearchAttributes() override;
-    virtual void SAL_CALL setSearchAttributes(const css::uno::Sequence< css::beans::PropertyValue >& aSearchAttribs) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getReplaceAttributes() override;
-    virtual void SAL_CALL setReplaceAttributes(const css::uno::Sequence< css::beans::PropertyValue >& aSearchAttribs) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getSearchAttributes() override;
+    virtual void SAL_CALL setSearchAttributes(const cpo::uno::Sequence< css::beans::PropertyValue >& aSearchAttribs) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getReplaceAttributes() override;
+    virtual void SAL_CALL setReplaceAttributes(const cpo::uno::Sequence< css::beans::PropertyValue >& aSearchAttribs) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void    FillSearchItemSet(SfxItemSet& rSet) const;
     void    FillReplaceItemSet(SfxItemSet& rSet) const;

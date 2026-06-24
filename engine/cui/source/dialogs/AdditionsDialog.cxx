@@ -60,7 +60,7 @@
 using namespace css;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -348,7 +348,7 @@ void SearchAndParseThread::Search()
 
 void SearchAndParseThread::CheckInstalledExtensions()
 {
-    const uno::Sequence<uno::Sequence<uno::Reference<deployment::XPackage>>> xAllPackages
+    const cpo::uno::Sequence<cpo::uno::Sequence<uno::Reference<deployment::XPackage>>> xAllPackages
         = m_pAdditionsDialog->getInstalledExtensions();
 
     if (!xAllPackages.hasElements())
@@ -519,10 +519,10 @@ AdditionsDialog::~AdditionsDialog()
     }
 }
 
-uno::Sequence<uno::Sequence<uno::Reference<deployment::XPackage>>>
+cpo::uno::Sequence<cpo::uno::Sequence<uno::Reference<deployment::XPackage>>>
 AdditionsDialog::getInstalledExtensions()
 {
-    uno::Sequence<uno::Sequence<uno::Reference<deployment::XPackage>>> xAllPackages;
+    cpo::uno::Sequence<cpo::uno::Sequence<uno::Reference<deployment::XPackage>>> xAllPackages;
 
     try
     {
@@ -769,7 +769,7 @@ IMPL_LINK_NOARG(AdditionsItem, InstallHdl, weld::Button&, void)
     try
     {
         m_pParentDialog->m_xExtensionManager->addExtension(aExtensionFile,
-                                                           uno::Sequence<beans::NamedValue>(),
+                                                           cpo::uno::Sequence<beans::NamedValue>(),
                                                            u"user"_ustr, xAbortChannel, pCmdEnv);
         m_xButtonInstall->set_label(CuiResId(RID_CUISTR_ADDITIONS_INSTALLEDBUTTON));
     }

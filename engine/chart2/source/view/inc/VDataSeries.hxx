@@ -50,7 +50,7 @@ public:
     sal_Int32 getLength() const;
 
     css::uno::Reference<css::chart2::data::XDataSequence> m_xModel;
-    mutable css::uno::Sequence<double> m_aValues;
+    mutable cpo::uno::Sequence<double> m_aValues;
 };
 
 class VDataSeries final
@@ -92,8 +92,8 @@ public:
 
     bool        hasPropertyMapping( const OUString& rPropName ) const;
 
-    css::uno::Sequence< double > const & getAllX() const;
-    css::uno::Sequence< double > const & getAllY() const;
+    cpo::uno::Sequence< double > const & getAllX() const;
+    cpo::uno::Sequence< double > const & getAllY() const;
 
     double getXMeanValue() const;
     double getYMeanValue() const;
@@ -224,7 +224,7 @@ private: //member
     mutable double m_fXMeanValue;
     mutable double m_fYMeanValue;
 
-    css::uno::Sequence<sal_Int32>    m_aAttributedDataPointIndexList;
+    cpo::uno::Sequence<sal_Int32>    m_aAttributedDataPointIndexList;
 
     css::chart2::StackingDirection     m_eStackingDirection;
 

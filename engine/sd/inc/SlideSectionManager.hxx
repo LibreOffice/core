@@ -11,7 +11,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <vector>
 #include "sddllapi.h"
 
@@ -41,11 +41,11 @@ public:
     explicit SlideSectionManager(SdDrawDocument& rDoc);
 
     /// Get sections as a UNO PropertyValue sequence (for UNO property / export).
-    css::uno::Sequence<css::beans::PropertyValue> GetSectionsAsPropertyValues() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> GetSectionsAsPropertyValues() const;
 
     /// Set sections from a UNO PropertyValue sequence (from UNO property / import).
     void
-    SetSectionsFromPropertyValues(const css::uno::Sequence<css::beans::PropertyValue>& rSections);
+    SetSectionsFromPropertyValues(const cpo::uno::Sequence<css::beans::PropertyValue>& rSections);
 
     sal_Int32 GetSectionCount() const;
     const SlideSection& GetSection(sal_Int32 nIndex) const;

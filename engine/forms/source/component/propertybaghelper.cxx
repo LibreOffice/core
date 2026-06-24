@@ -42,7 +42,7 @@ namespace frm
 
     using namespace comphelper;
     using ::com::sun::star::lang::DisposedException;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::Property;
     using ::cpo::uno::Any;
     using ::com::sun::star::beans::PropertyExistException;

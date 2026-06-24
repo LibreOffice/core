@@ -312,7 +312,7 @@ SlideLayoutController::SlideLayoutController(const Reference< uno::XComponentCon
 {
 }
 
-void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SlideLayoutController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -364,14 +364,14 @@ Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sd_SlideLayoutController_get_implementation(css::uno::XComponentContext* context,
-                                                              css::uno::Sequence<cpo::uno::Any> const &)
+                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sd::SlideLayoutController(context, false));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sd_InsertSlideController_get_implementation(css::uno::XComponentContext* context,
-                                                              css::uno::Sequence<cpo::uno::Any> const &)
+                                                              cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sd::SlideLayoutController(context, true));
 }

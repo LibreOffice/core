@@ -56,13 +56,13 @@ using namespace com::sun::star;
 
 namespace
 {
-SvMemoryStream AsStream(const css::uno::Sequence<sal_Int8>& s)
+SvMemoryStream AsStream(const cpo::uno::Sequence<sal_Int8>& s)
 {
     return SvMemoryStream(const_cast<sal_Int8*>(s.getConstArray()), s.getLength(),
                           StreamMode::READ);
 }
 
-Bitmap BitmapFromDIB(const css::uno::Sequence<sal_Int8>& dib)
+Bitmap BitmapFromDIB(const cpo::uno::Sequence<sal_Int8>& dib)
 {
     Bitmap bmp;
     if (dib.hasElements())
@@ -121,19 +121,19 @@ protected:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XGraphicProvider
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL queryGraphicDescriptor( const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
-    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL queryGraphic( const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
-    virtual void SAL_CALL storeGraphic( const css::uno::Reference< css::graphic::XGraphic >& Graphic, const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL queryGraphicDescriptor( const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL queryGraphic( const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
+    virtual void SAL_CALL storeGraphic( const css::uno::Reference< css::graphic::XGraphic >& Graphic, const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
 
     // XGraphicProvider2
-    uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL queryGraphics(const uno::Sequence< uno::Sequence<beans::PropertyValue> >& MediaPropertiesSeq ) override;
+    cpo::uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL queryGraphics(const cpo::uno::Sequence< cpo::uno::Sequence<beans::PropertyValue> >& MediaPropertiesSeq ) override;
 
 private:
 
@@ -156,14 +156,14 @@ bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.graphic.GraphicProvider"_ustr };
 }
 
-uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
 {
-    static const uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< uno::Type > aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<graphic::XGraphicProvider>::get()
@@ -171,9 +171,9 @@ uno::Sequence< uno::Type > SAL_CALL GraphicProvider::getTypes()
     return aTypes;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( std::u16string_view rResourceURL )
@@ -236,7 +236,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( st
 }
 
 
-uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDescriptor( const uno::Sequence< beans::PropertyValue >& rMediaProperties )
+uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDescriptor( const cpo::uno::Sequence< beans::PropertyValue >& rMediaProperties )
 {
     OUString aURL;
     uno::Reference< io::XInputStream > xIStm;
@@ -300,14 +300,14 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 }
 
 
-uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( const uno::Sequence< ::beans::PropertyValue >& rMediaProperties )
+uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( const cpo::uno::Sequence< ::beans::PropertyValue >& rMediaProperties )
 {
     OUString                                aPath;
 
     uno::Reference< io::XInputStream > xIStm;
     cpo::uno::Any aBtm;
 
-    uno::Sequence< ::beans::PropertyValue > aFilterData;
+    cpo::uno::Sequence< ::beans::PropertyValue > aFilterData;
 
     bool bLazyRead = false;
     bool bLoadAsLink = false;
@@ -415,7 +415,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     return xRet;
 }
 
-uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::queryGraphics(const uno::Sequence< uno::Sequence<beans::PropertyValue> >& rMediaPropertiesSeq)
+cpo::uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::queryGraphics(const cpo::uno::Sequence< cpo::uno::Sequence<beans::PropertyValue> >& rMediaPropertiesSeq)
 {
     // Turn properties into streams.
     std::vector< std::unique_ptr<SvStream> > aStreams;
@@ -441,7 +441,7 @@ uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::que
     std::vector<Graphic> aGraphics = rFilter.ImportGraphics(std::move(aStreams));
 
     // Returning: graphics to UNO objects.
-    uno::Sequence<uno::Reference<graphic::XGraphic>> aRet(aGraphics.size());
+    cpo::uno::Sequence<uno::Reference<graphic::XGraphic>> aRet(aGraphics.size());
     std::transform(aGraphics.begin(), aGraphics.end(), aRet.getArray(),
                    [](const auto& rGraphic) { return rGraphic.GetXGraphic(); });
     return aRet;
@@ -526,7 +526,7 @@ void ImplApplyBitmapResolution( ::Graphic& rGraphic, sal_Int32 nImageResolution,
         ImplApplyBitmapScaling( rGraphic, nDestPixelWidth, nDestPixelHeight );
 }
 
-void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::PropertyValue >& rFilterData )
+void ImplApplyFilterData( ::Graphic& rGraphic, const cpo::uno::Sequence< beans::PropertyValue >& rFilterData )
 {
     /* this method applies following attributes to the graphic, in the first step the
        cropping area (logical size in 100thmm) is applied, in the second step the resolution
@@ -663,7 +663,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, const uno::Sequence< beans::Prope
 }
 
 
-void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XGraphic >& rxGraphic, const uno::Sequence< beans::PropertyValue >& rMediaProperties )
+void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XGraphic >& rxGraphic, const cpo::uno::Sequence< beans::PropertyValue >& rMediaProperties )
 {
     std::unique_ptr<SvStream> pOStm;
     OUString    aPath;
@@ -698,7 +698,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
     if( !pOStm )
         return;
 
-    uno::Sequence< beans::PropertyValue >   aFilterDataSeq;
+    cpo::uno::Sequence< beans::PropertyValue >   aFilterDataSeq;
     OUString sFilterShortName;
 
     for( const auto& rMediaProperty : rMediaProperties )
@@ -795,7 +795,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_graphic_GraphicProvider_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new GraphicProvider);
 }

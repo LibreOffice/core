@@ -826,7 +826,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     OUString sUserName = GetUserName();
     sal_uInt32 nWriteProtHash = pDocShell->GetModifyPasswordHash();
     bool bHasPasswordHash = nWriteProtHash && !sUserName.isEmpty();
-    const uno::Sequence<beans::PropertyValue> aInfo = pDocShell->GetModifyPasswordInfo();
+    const cpo::uno::Sequence<beans::PropertyValue> aInfo = pDocShell->GetModifyPasswordInfo();
     OUString sAlgorithm, sSalt, sHash;
     sal_Int32 nCount = 0;
     for (const auto& prop : aInfo)
@@ -1096,7 +1096,7 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
                 </xsd:sequence>
             */
 
-            css::uno::Sequence<cpo::uno::Any> aSeqs;
+            cpo::uno::Sequence<cpo::uno::Any> aSeqs;
             aSeqs = rConnection->getDbPrSequenceAny();
             // export <dbPr> if not empty
             if (aSeqs.hasElements())
@@ -1439,10 +1439,10 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 }
 
 void ExcDocument::addElemensToAttrList(const rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
-                                       css::uno::Sequence<cpo::uno::Any>& aSeqs)
+                                       cpo::uno::Sequence<cpo::uno::Any>& aSeqs)
 {
-    css::uno::Sequence<css::xml::FastAttribute> aFastSeq;
-    css::uno::Sequence<css::xml::Attribute> aUnkSeq;
+    cpo::uno::Sequence<css::xml::FastAttribute> aFastSeq;
+    cpo::uno::Sequence<css::xml::Attribute> aUnkSeq;
 
     // TODO: check if aSeqs is empty or not
     for (const auto& a : aSeqs)

@@ -100,7 +100,7 @@ public:
     virtual sal_Int32 SAL_CALL getCaretPosition() override;
     virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
     virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
     virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
     virtual sal_Int32 SAL_CALL getCharacterCount() override;
     virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;
@@ -125,12 +125,12 @@ public:
     virtual bool SAL_CALL deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
     virtual bool SAL_CALL insertText( const OUString& sText, sal_Int32 nIndex ) override;
     virtual bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement ) override;
-    virtual bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::uno::Sequence< css::beans::PropertyValue >& aAttributeSet ) override;
+    virtual bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const cpo::uno::Sequence< css::beans::PropertyValue >& aAttributeSet ) override;
     virtual bool SAL_CALL setText( const OUString& sText ) override;
 
     // XAccessibleTextAttributes
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& RequestedAttributes ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( ::sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const cpo::uno::Sequence< OUString >& RequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( ::sal_Int32 Index, const cpo::uno::Sequence< OUString >& RequestedAttributes ) override;
 
     // XAccessibleHypertext
     virtual ::sal_Int32 SAL_CALL getHyperLinkCount(  ) override;
@@ -308,7 +308,7 @@ private:
     /// Check whether 0<=nStart<=n and 0<=nEnd<=n
     void CheckRange( sal_Int32 nStart, sal_Int32 nEnd );
 
-    void _correctValues( css::uno::Sequence< css::beans::PropertyValue >& rValues );
+    void _correctValues( cpo::uno::Sequence< css::beans::PropertyValue >& rValues );
     sal_Int32 SkipField(sal_Int32 nIndex, bool bForward);
     // get overlapped field, extend return string. Only extend forward for now
     void ExtendByField( css::accessibility::TextSegment& Segment );

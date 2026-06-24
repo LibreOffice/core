@@ -115,7 +115,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
         virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // XInterface
         virtual void SAL_CALL acquire() noexcept override
@@ -125,7 +125,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         /**
             @interface  XDesktop
@@ -206,13 +206,13 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         virtual css::uno::Reference< css::lang::XComponent >                        SAL_CALL loadComponentFromURL       ( const OUString&                                         sURL             ,
                                                                                                                           const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ,
-                                                                                                                          const css::uno::Sequence< css::beans::PropertyValue >&         lArguments       ) override;
+                                                                                                                          const cpo::uno::Sequence< css::beans::PropertyValue >&         lArguments       ) override;
 
         //  XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch >                        SAL_CALL queryDispatch              ( const css::util::URL&                                          aURL             ,
                                                                                                                           const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) override;
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >  SAL_CALL queryDispatches            ( const css::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >  SAL_CALL queryDispatches            ( const cpo::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) override;
 
         // XDispatchProviderInterception
         virtual void                                                                SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;

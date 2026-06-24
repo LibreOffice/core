@@ -3,7 +3,7 @@ basctl/source/inc/dlged.hxx:76
     enum basctl::DlgEdHint::Kind 
     2
 basic/source/classes/sbunoobj.cxx:3225
-    class com::sun::star::uno::Reference<class com::sun::star::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class com::sun::star::uno::Sequence<enum com::sun::star::uno::TypeClass> &,enum com::sun::star::reflection::TypeDescriptionSearchDepth)
+    class com::sun::star::uno::Reference<class com::sun::star::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class cpo::uno::Sequence<enum com::sun::star::uno::TypeClass> &,enum com::sun::star::reflection::TypeDescriptionSearchDepth)
     enum com::sun::star::reflection::TypeDescriptionSearchDepth depth
     -1
 basic/source/inc/expr.hxx:196
@@ -75,7 +75,7 @@ chart2/source/model/template/PieChartTypeTemplate.hxx:36
     int nCompositeSize
     3
 chart2/source/tools/RangeHighlighter.cxx:50
-    void lcl_fillRanges(class com::sun::star::uno::Sequence<struct com::sun::star::chart2::data::HighlightedRange> &,const class com::sun::star::uno::Sequence<class rtl::OUString> &,class Color,int)
+    void lcl_fillRanges(class cpo::uno::Sequence<struct com::sun::star::chart2::data::HighlightedRange> &,const class cpo::uno::Sequence<class rtl::OUString> &,class Color,int)
     int nIndex
     -1
 chart2/source/view/charttypes/PieChart.hxx:235
@@ -87,7 +87,7 @@ codemaker/source/javamaker/classfile.cxx:86
     unsigned int data
     3405691582
 comphelper/qa/unit/variadictemplates.cxx:63
-    void extract(const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
+    void extract(const class cpo::uno::Sequence<class cpo::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
     int nArg
     4
 connectivity/source/inc/java/sql/ConnectionLog.hxx:105
@@ -279,11 +279,11 @@ connectivity/source/inc/odbc/OFunctions.hxx:456
     int BufferLength
     2047
 connectivity/source/inc/odbc/OPreparedStatement.hxx:75
-    void connectivity::odbc::OPreparedStatement::setParameter(int,int,const class com::sun::star::uno::Sequence<signed char> &)
+    void connectivity::odbc::OPreparedStatement::setParameter(int,int,const class cpo::uno::Sequence<signed char> &)
     int _nType
     -2
 connectivity/source/inc/odbc/OTools.hxx:216
-    class com::sun::star::uno::Sequence<signed char> connectivity::odbc::OTools::getBytesValue(const class connectivity::odbc::OConnection *,void *,int,short,_Bool &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
+    class cpo::uno::Sequence<signed char> connectivity::odbc::OTools::getBytesValue(const class connectivity::odbc::OConnection *,void *,int,short,_Bool &,const class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> &)
     short _fSqlType
     -2
 cppcanvas/source/inc/implrenderer.hxx:183
@@ -507,11 +507,11 @@ include/comphelper/docpasswordhelper.hxx:286
     enum comphelper::Hash::IterCount eIterCount
     2
 include/comphelper/docpasswordhelper.hxx:342
-    class com::sun::star::uno::Sequence<signed char> comphelper::DocPasswordHelper::GenerateRandomByteSequence(int)
+    class cpo::uno::Sequence<signed char> comphelper::DocPasswordHelper::GenerateRandomByteSequence(int)
     int nLength
     16
 include/comphelper/propagg.hxx:120
-    void comphelper::OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class comphelper::IPropertyInfoService *,int)
+    void comphelper::OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(const class cpo::uno::Sequence<struct com::sun::star::beans::Property> &,const class cpo::uno::Sequence<struct com::sun::star::beans::Property> &,class comphelper::IPropertyInfoService *,int)
     int _nFirstAggregateId
     10000
 include/comphelper/propagg.hxx:286
@@ -519,11 +519,11 @@ include/comphelper/propagg.hxx:286
     int _nHandle
     194
 include/comphelper/property.hxx:52
-    void ModifyPropertyAttributes(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,const class rtl::OUString &,short,short)
+    void ModifyPropertyAttributes(class cpo::uno::Sequence<struct com::sun::star::beans::Property> &,const class rtl::OUString &,short,short)
     short _nRemoveAttrib
     8
 include/comphelper/seqstream.hxx:117
-    void comphelper::OSequenceOutputStream::OSequenceOutputStream(class com::sun::star::uno::Sequence<signed char> &,double,int)
+    void comphelper::OSequenceOutputStream::OSequenceOutputStream(class cpo::uno::Sequence<signed char> &,double,int)
     int _nMinimumResize
     128
 include/comphelper/storagehelper.hxx:119
@@ -803,7 +803,7 @@ include/i18nutil/unicode.hxx:42
     short unknownType
     87
 include/linguistic/spelldta.hxx:87
-    class com::sun::star::uno::Reference<class com::sun::star::linguistic2::XSpellAlternatives> linguistic::SpellAlternatives::CreateSpellAlternatives(const class rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,short,const class com::sun::star::uno::Sequence<class rtl::OUString> &)
+    class com::sun::star::uno::Reference<class com::sun::star::linguistic2::XSpellAlternatives> linguistic::SpellAlternatives::CreateSpellAlternatives(const class rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,short,const class cpo::uno::Sequence<class rtl::OUString> &)
     short nTypeP
     4
 include/o3tl/string_view.hxx:493
@@ -847,7 +847,7 @@ include/oox/drawingml/drawingmltypes.hxx:231
     long nHeight
     -1
 include/oox/export/drawingml.hxx:381
-    void oox::drawingml::DrawingML::WriteSolidFill(const class Color,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,int)
+    void oox::drawingml::DrawingML::WriteSolidFill(const class Color,const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,int)
     int nAlpha
     100000
 include/oox/export/drawingml.hxx:401
@@ -1655,7 +1655,7 @@ include/vcl/transfer.hxx:335
     enum SotClipboardFormatId nFormat
     13
 include/vcl/transfer.hxx:350
-    class com::sun::star::uno::Sequence<signed char> TransferableDataHelper::GetSequence(enum SotClipboardFormatId,const class rtl::OUString &) const
+    class cpo::uno::Sequence<signed char> TransferableDataHelper::GetSequence(enum SotClipboardFormatId,const class rtl::OUString &) const
     enum SotClipboardFormatId nFormat
     59
 include/vcl/TypeSerializer.hxx:29
@@ -1727,7 +1727,7 @@ include/xmloff/xmlexp.hxx:275
     const short eDefaultMeasureUnit
     3
 include/xmloff/xmlexp.hxx:511
-    void SvXMLExport::SetError(int,const class com::sun::star::uno::Sequence<class rtl::OUString> &)
+    void SvXMLExport::SetError(int,const class cpo::uno::Sequence<class rtl::OUString> &)
     int nId
     1074266113
 include/xmloff/xmlexppr.hxx:138
@@ -1771,7 +1771,7 @@ o3tl/qa/cow_wrapper_clients.hxx:133
     int 
     4
 oox/source/core/xmlfilterbase.cxx:604
-    void writeElement(const class std::shared_ptr<class sax_fastparser::FastSerializerHelper> &,int,const class com::sun::star::uno::Sequence<class rtl::OUString> &)
+    void writeElement(const class std::shared_ptr<class sax_fastparser::FastSerializerHelper> &,int,const class cpo::uno::Sequence<class rtl::OUString> &)
     int nXmlElement
     94636939
 oox/source/core/xmlfilterbase.cxx:618
@@ -1823,7 +1823,7 @@ sal/qa/osl/file/osl_File.cxx:102
     int nDelta
     2000
 sax/inc/xml2utf.hxx:96
-    int sax_expatwrap::XMLFile2UTFConverter::readAndConvert(class com::sun::star::uno::Sequence<signed char> &,int)
+    int sax_expatwrap::XMLFile2UTFConverter::readAndConvert(class cpo::uno::Sequence<signed char> &,int)
     int nMaxToRead
     16384
 sax/source/tools/converter.cxx:64
@@ -1983,7 +1983,7 @@ sc/inc/rangeutl.hxx:209
     enum ScRefFlags nFormatFlags
     32776
 sc/inc/rangeutl.hxx:217
-    void ScRangeStringConverter::GetStringFromRangeList(class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::table::CellRangeAddress> &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t)
+    void ScRangeStringConverter::GetStringFromRangeList(class rtl::OUString &,const class cpo::uno::Sequence<struct com::sun::star::table::CellRangeAddress> &,const class ScDocument *,enum formula::FormulaGrammar::AddressConvention,char16_t)
     char16_t cSeparator
     32
 sc/inc/scabstdlg.hxx:477
@@ -2203,7 +2203,7 @@ sc/source/filter/inc/formulabase.hxx:276
     unsigned long n
     8192
 sc/source/filter/inc/formulabase.hxx:763
-    void oox::xls::FormulaProcessorBase::convertStringToStringList(class com::sun::star::uno::Sequence<struct com::sun::star::sheet::FormulaToken> &,char16_t,_Bool) const
+    void oox::xls::FormulaProcessorBase::convertStringToStringList(class cpo::uno::Sequence<struct com::sun::star::sheet::FormulaToken> &,char16_t,_Bool) const
     char16_t cStringSep
     44
 sc/source/filter/inc/ftools.hxx:48
@@ -2315,7 +2315,7 @@ sc/source/filter/xml/xmlstyli.cxx:272
     unsigned int nFamily
     196608
 sc/source/ui/Accessibility/AccessibleCsvControl.cxx:217
-    int lcl_ExpandSequence(class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,int)
+    int lcl_ExpandSequence(class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,int)
     int nExp
     7
 sc/source/ui/dbgui/pvfundlg.cxx:72
@@ -2419,7 +2419,7 @@ sc/source/ui/pagedlg/tptable.cxx:59
     unsigned short nLBEntry
     2
 sc/source/ui/unoobj/cellsuno.cxx:1184
-    _Bool lcl_PutFormulaArray(class ScDocShell &,const class ScRange &,const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<class rtl::OUString> > &,const enum formula::FormulaGrammar::Grammar)
+    _Bool lcl_PutFormulaArray(class ScDocShell &,const class ScRange &,const class cpo::uno::Sequence<class cpo::uno::Sequence<class rtl::OUString> > &,const enum formula::FormulaGrammar::Grammar)
     const enum formula::FormulaGrammar::Grammar eGrammar
     16908294
 sc/source/ui/vba/vbarange.hxx:167
@@ -2539,11 +2539,11 @@ sd/source/ui/remotecontrol/AvahiNetworkService.hxx:19
     unsigned int aport
     1599
 sd/source/ui/remotecontrol/ImagePreparer.hxx:35
-    class com::sun::star::uno::Sequence<signed char> sd::ImagePreparer::preparePreview(unsigned int,unsigned int,unsigned int,unsigned long &)
+    class cpo::uno::Sequence<signed char> sd::ImagePreparer::preparePreview(unsigned int,unsigned int,unsigned int,unsigned long &)
     unsigned int aWidth
     320
 sd/source/ui/remotecontrol/ImagePreparer.hxx:35
-    class com::sun::star::uno::Sequence<signed char> sd::ImagePreparer::preparePreview(unsigned int,unsigned int,unsigned int,unsigned long &)
+    class cpo::uno::Sequence<signed char> sd::ImagePreparer::preparePreview(unsigned int,unsigned int,unsigned int,unsigned long &)
     unsigned int aHeight
     240
 sd/source/ui/sidebar/LayoutMenu.hxx:139
@@ -2599,7 +2599,7 @@ sfx2/source/doc/oleprops.cxx:107
     unsigned short eTextEnc
     65535
 sfx2/source/doc/oleprops.hxx:306
-    void SfxOleSection::SetThumbnailValue(int,const class com::sun::star::uno::Sequence<signed char> &)
+    void SfxOleSection::SetThumbnailValue(int,const class cpo::uno::Sequence<signed char> &)
     int nPropId
     17
 sfx2/source/doc/syspath.hxx:27

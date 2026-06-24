@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_TEXTMARKUPHELPER_HXX
 
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 namespace com::sun::star::accessibility {
     struct TextSegment;
@@ -56,7 +56,7 @@ class SwTextMarkupHelper
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
-        css::uno::Sequence< css::accessibility::TextSegment >
+        cpo::uno::Sequence< css::accessibility::TextSegment >
                 getTextMarkupAtIndex( const sal_Int32 nCharIndex,
                                       const sal_Int32 nTextMarkupType );
 

@@ -306,7 +306,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testAoo124143)
     uno::Reference<container::XIdentifierAccess> const xGluePoints(xGPS->getGluePoints(),
                                                                    uno::UNO_QUERY);
 
-    uno::Sequence<sal_Int32> const ids(xGluePoints->getIdentifiers());
+    cpo::uno::Sequence<sal_Int32> const ids(xGluePoints->getIdentifiers());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), ids.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ids[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ids[1]);
@@ -363,7 +363,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103567)
         OString const msg("shape " + OString::number(i) + ": ");
 
         CPPUNIT_ASSERT(xEvents->hasByName(u"OnClick"_ustr));
-        uno::Sequence<beans::PropertyValue> props;
+        cpo::uno::Sequence<beans::PropertyValue> props;
         xEvents->getByName(u"OnClick"_ustr) >>= props;
         comphelper::SequenceAsHashMap const map(props);
         {
@@ -782,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104445)
 
         uno::Reference<container::XIndexAccess> xNumRule;
         xPropSet->getPropertyValue(u"NumberingRules"_ustr) >>= xNumRule;
-        uno::Sequence<beans::PropertyValue> aBulletProps;
+        cpo::uno::Sequence<beans::PropertyValue> aBulletProps;
         xNumRule->getByIndex(0) >>= aBulletProps;
 
         for (beans::PropertyValue const& rProp : aBulletProps)
@@ -804,7 +804,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104445)
 
         uno::Reference<container::XIndexAccess> xNumRule;
         xPropSet->getPropertyValue(u"NumberingRules"_ustr) >>= xNumRule;
-        uno::Sequence<beans::PropertyValue> aBulletProps;
+        cpo::uno::Sequence<beans::PropertyValue> aBulletProps;
         xNumRule->getByIndex(0) >>= aBulletProps;
 
         for (beans::PropertyValue const& rProp : aBulletProps)
@@ -860,7 +860,7 @@ bool SdImportTest2::checkPattern(int nShapeNumber, std::vector<sal_uInt8>& rExpe
         uno::Reference<awt::XBitmap> xBitmap;
         if (aBitmapAny >>= xBitmap)
         {
-            uno::Sequence<sal_Int8> aBitmapSequence(xBitmap->getDIB());
+            cpo::uno::Sequence<sal_Int8> aBitmapSequence(xBitmap->getDIB());
             SvMemoryStream aBitmapStream(aBitmapSequence.getArray(), aBitmapSequence.getLength(),
                                          StreamMode::READ);
             ReadDIB(aBitmap, aBitmapStream, true);
@@ -1306,13 +1306,13 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
 
     uno::Reference<chart2::XCoordinateSystemContainer> xBCooSysCnt(xChart2Doc->getFirstDiagram(),
                                                                    uno::UNO_QUERY);
-    uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> aCooSysSeq(
+    cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> aCooSysSeq(
         xBCooSysCnt->getCoordinateSystems());
     uno::Reference<chart2::XChartTypeContainer> xCTCnt(aCooSysSeq[0], uno::UNO_QUERY);
 
     uno::Reference<chart2::XDataSeriesContainer> xDSCnt(xCTCnt->getChartTypes()[0], uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE("failed to load data series", xDSCnt.is());
-    uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
+    cpo::uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Invalid Series count", static_cast<sal_Int32>(1),
                                  aSeriesSeq.getLength());
 
@@ -1685,7 +1685,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testOOXTheme)
     createSdImpressDoc("pptx/ooxtheme.pptx");
 
     uno::Reference<beans::XPropertySet> xPropSet(mxComponent, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
     xPropSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
 
     bool bTheme = false;
@@ -1941,7 +1941,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testHyperlinksOnShapes)
         uno::Reference<document::XEventsSupplier> xEventsSupplier(xShape, uno::UNO_QUERY);
         uno::Reference<container::XNameAccess> xEvents(xEventsSupplier->getEvents());
 
-        uno::Sequence<beans::PropertyValue> props;
+        cpo::uno::Sequence<beans::PropertyValue> props;
         xEvents->getByName(u"OnClick"_ustr) >>= props;
         comphelper::SequenceAsHashMap map(props);
         auto iter(map.find(u"ClickAction"_ustr));
@@ -2270,7 +2270,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf153012)
     uno::Reference<chart2::XDataSeriesContainer> xDSCnt(xCTCnt->getChartTypes()[0],
                                                         uno::UNO_QUERY_THROW);
 
-    uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
+    cpo::uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeriesSeq.getLength());
 
     css::uno::Reference<css::beans::XPropertySet> xPropSet1(aSeriesSeq[0]->getDataPointByIndex(1),
@@ -2463,11 +2463,11 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testHTMLClipboardImport)
             if (!isDataFlavorSupported(aFlavor))
                 return {};
             SvFileStream aStream(m_aFileURL, StreamMode::READ);
-            uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
+            cpo::uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
             aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
             return cpo::uno::Any(bytes);
         }
-        uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+        cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
         {
             return { getHTMLFlavor() };
         }

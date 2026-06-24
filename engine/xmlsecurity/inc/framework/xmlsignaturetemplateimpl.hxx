@@ -59,7 +59,7 @@ class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
             const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
         ) override;
 
-        virtual css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL getTargets(
+        virtual cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL getTargets(
         ) override;
 
         virtual void SAL_CALL setBinding(
@@ -79,10 +79,10 @@ class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
             const OUString& ServiceName
         ) override ;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
 
         //Helper for XServiceInfo
-        static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
+        static cpo::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
         /// @throws css::uno::RuntimeException
         static OUString impl_getImplementationName() ;

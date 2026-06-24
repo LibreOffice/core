@@ -37,12 +37,12 @@ class CertificateExtension_XmlSecImpl : public ::cppu::WeakImplHelper<
             return m_Extn.m_critical;
         }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() override
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() override
         {
             return m_Extn.m_xExtnId;
         }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() override
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() override
         {
             return m_Extn.m_xExtnValue;
         }

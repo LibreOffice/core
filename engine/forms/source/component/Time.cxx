@@ -56,9 +56,9 @@ Sequence<Type> OTimeControl::_getTypes()
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -72,9 +72,9 @@ css::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames()
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OTimeModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OTimeModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
@@ -316,14 +316,14 @@ Sequence< Type > OTimeModel::getSupportedBindingTypes()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OTimeModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OTimeModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OTimeControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OTimeControl(component));
 }

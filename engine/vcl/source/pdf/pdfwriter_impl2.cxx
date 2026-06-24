@@ -56,6 +56,7 @@ using namespace vcl::pdf;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+using namespace ::cpo::uno;
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 
@@ -217,7 +218,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
             uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
             uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
-            uno::Sequence< beans::PropertyValue > aOutMediaProperties{
+            cpo::uno::Sequence< beans::PropertyValue > aOutMediaProperties{
                 comphelper::makePropertyValue(u"OutputStream"_ustr, xOut),
                 comphelper::makePropertyValue(u"MimeType"_ustr, u"image/jpeg"_ustr),
                 comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)

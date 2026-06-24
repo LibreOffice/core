@@ -20,11 +20,12 @@
 #include <comphelper/AccessibleImplementationHelper.hxx>
 
 #include <com/sun/star/awt/KeyStroke.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace css::awt;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace comphelper
 {

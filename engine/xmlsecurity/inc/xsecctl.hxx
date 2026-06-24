@@ -282,7 +282,7 @@ private:
     void setSignatureLineId(const OUString& rSignatureLineId);
 
 public:
-    void setSignatureBytes(const css::uno::Sequence<sal_Int8>& rBytes);
+    void setSignatureBytes(const cpo::uno::Sequence<sal_Int8>& rBytes);
 
 private:
     void setId( OUString const & ouId );

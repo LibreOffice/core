@@ -85,7 +85,7 @@ class SdXMLExport : public SvXMLExport
     ImpXMLEXPPageMasterInfo*    mpHandoutPageMaster;
     std::vector< std::unique_ptr<ImpXMLAutoLayoutInfo> >    mvAutoLayoutInfoList;
 
-    css::uno::Sequence< OUString > maDrawPagesAutoLayoutNames;
+    cpo::uno::Sequence< OUString > maDrawPagesAutoLayoutNames;
 
     ::std::vector< OUString >        maDrawPagesStyleNames;
     ::std::vector< OUString >        maDrawNotesPagesStyleNames;
@@ -154,8 +154,8 @@ class SdXMLExport : public SvXMLExport
     void exportAnnotations( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage );
 
 protected:
-    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
-    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetViewSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetConfigurationSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool() override;
     virtual bool getEmbedFonts() override { return mbEmbedFonts; }
     virtual bool getEmbedOnlyUsedFonts() override { return mbEmbedUsedOnly; }

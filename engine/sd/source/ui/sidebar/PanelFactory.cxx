@@ -58,7 +58,7 @@ PanelFactory::~PanelFactory()
 
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const OUString& rsUIElementResourceURL,
-    const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     // Process arguments.
     const ::comphelper::NamedValueCollection aArguments (rArguments);
@@ -137,7 +137,7 @@ bool PanelFactory::supportsService(OUString const & ServiceName) {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> PanelFactory::getSupportedServiceNames() {
+cpo::uno::Sequence<OUString> PanelFactory::getSupportedServiceNames() {
     return {u"com.sun.star.drawing.framework.PanelFactory"_ustr};
 }
 
@@ -146,7 +146,7 @@ css::uno::Sequence<OUString> PanelFactory::getSupportedServiceNames() {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_Draw_framework_PanelFactory_get_implementation(css::uno::XComponentContext* /*context*/,
-                                                                   css::uno::Sequence<cpo::uno::Any> const &)
+                                                                   cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sd::sidebar::PanelFactory);
 }

@@ -633,7 +633,7 @@ void PPTShape::addShape(
                     OUString sAPIEventName;
                     sal_Int32 nPropertyCount = 2;
                     css::presentation::ClickAction meClickAction;
-                    uno::Sequence<beans::PropertyValue> aProperties;
+                    cpo::uno::Sequence<beans::PropertyValue> aProperties;
 
                     static const std::map<OUString, css::presentation::ClickAction> ActionMap = {
                         { "#action?jump=nextslide", ClickAction_NEXTPAGE },

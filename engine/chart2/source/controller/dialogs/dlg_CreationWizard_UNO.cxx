@@ -64,7 +64,7 @@ bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServiceNam
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.WizardDialog"_ustr };
 }
@@ -112,9 +112,9 @@ cpo::uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const &
     return OComponentHelper::queryAggregation( rType );
 }
 
-uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes()
+cpo::uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes()
 {
-    static uno::Sequence<uno::Type> aTypeList{ cppu::UnoType<lang::XComponent>::get(),
+    static cpo::uno::Sequence<uno::Type> aTypeList{ cppu::UnoType<lang::XComponent>::get(),
                                                cppu::UnoType<lang::XTypeProvider>::get(),
                                                cppu::UnoType<uno::XAggregation>::get(),
                                                cppu::UnoType<uno::XWeak>::get(),
@@ -126,9 +126,9 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes()
     return aTypeList;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XTerminateListener
@@ -216,7 +216,7 @@ void SAL_CALL CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference
         });
 }
 
-void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL CreationWizardUnoDlg::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     for(const cpo::uno::Any& rArgument : aArguments)
     {
@@ -353,7 +353,7 @@ void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const OUString
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_WizardDialog_get_implementation(css::uno::XComponentContext *context,
-                                                         css::uno::Sequence<cpo::uno::Any> const &)
+                                                         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::CreationWizardUnoDlg(context));
 }

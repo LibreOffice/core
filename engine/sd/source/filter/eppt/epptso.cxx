@@ -1745,7 +1745,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 cpo::uno::Any aAny;
                 if (GetPropertyValue(aAny, mXPropSet, u"CustomShapeGeometry"_ustr, true))
                 {
-                    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+                    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
                     if (aAny >>= aGeoPropSeq)
                     {
                         sal_Int32 i, nCount = aGeoPropSeq.getLength();

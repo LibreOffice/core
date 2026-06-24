@@ -1135,7 +1135,7 @@ JSValue createService(JSContext* ctx, JSValueConst, int argc, JSValueConst* argv
         css::uno::Reference<css::uno::XComponentContext> context(
             fromJs(ctx, cppu::UnoType<css::uno::XComponentContext>::get(), argv[0]),
             css::uno::UNO_QUERY_THROW);
-        css::uno::Sequence<cpo::uno::Any> args(argc - 1);
+        cpo::uno::Sequence<cpo::uno::Any> args(argc - 1);
         for (sal_Int32 i = 0; i != params.getLength(); ++i)
         {
             assert(params[i]->isIn());
@@ -1613,7 +1613,7 @@ cpo::uno::Any fromJsSequence(JSContext* ctx, css::uno::Type const& type, JSValue
         auto const any = fromJs(ctx, elemDesc.get()->pWeakRef, elem);
         uno_copyData(
             seq->elements + (i * elemDesc.get()->nSize),
-            const_cast<void*>(type == cppu::UnoType<css::uno::Sequence<cpo::uno::Any>>::get()
+            const_cast<void*>(type == cppu::UnoType<cpo::uno::Sequence<cpo::uno::Any>>::get()
                                   ? &any
                                   : any.getValue()),
             elemDesc.get(), css::uno::cpp_acquire);
@@ -1916,7 +1916,7 @@ cpo::uno::Any fromJs(JSContext* ctx, css::uno::Type const& type, JSValueConst va
             }
             if (JS_IsArray(val))
             {
-                return fromJsSequence(ctx, cppu::UnoType<css::uno::Sequence<cpo::uno::Any>>::get(),
+                return fromJsSequence(ctx, cppu::UnoType<cpo::uno::Sequence<cpo::uno::Any>>::get(),
                                       val);
             }
             if (JS_IsNull(val))
@@ -2444,9 +2444,9 @@ public:
     }
 
     cpo::uno::Any SAL_CALL invoke(OUString const& aFunctionName,
-                                  css::uno::Sequence<cpo::uno::Any> const& aParams,
-                                  css::uno::Sequence<sal_Int16>& aOutParamIndex,
-                                  css::uno::Sequence<cpo::uno::Any>& aOutParam) override
+                                  cpo::uno::Sequence<cpo::uno::Any> const& aParams,
+                                  cpo::uno::Sequence<sal_Int16>& aOutParamIndex,
+                                  cpo::uno::Sequence<cpo::uno::Any>& aOutParam) override
     {
         aOutParamIndex = {};
         aOutParam = {};
@@ -2635,7 +2635,7 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
             JS_ThrowSyntaxError(ctx, "TODO: BAD NUMBER OF ARGUMENTS");
             throw JsException();
         }
-        css::uno::Sequence<cpo::uno::Any> args(info->aParamTypes.getLength());
+        cpo::uno::Sequence<cpo::uno::Any> args(info->aParamTypes.getLength());
         for (int i = 0; i != argc; ++i)
         {
             if (info->aParamModes[i] == css::reflection::ParamMode_OUT)
@@ -2669,8 +2669,8 @@ JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst*
             }
             args.getArray()[i] = fromJs(ctx, info->aParamTypes[i], arg);
         }
-        css::uno::Sequence<sal_Int16> outParamIndex; //TODO
-        css::uno::Sequence<cpo::uno::Any> outParam;
+        cpo::uno::Sequence<sal_Int16> outParamIndex; //TODO
+        cpo::uno::Sequence<cpo::uno::Any> outParam;
         ValueRef ret(ctx);
         try
         {

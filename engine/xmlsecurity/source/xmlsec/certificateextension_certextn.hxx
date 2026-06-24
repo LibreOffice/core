@@ -20,13 +20,13 @@
 #pragma once
 
 #include <sal/config.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 struct CertificateExtension_CertExtn
 {
     bool m_critical;
-    css::uno::Sequence<sal_Int8> m_xExtnId;
-    css::uno::Sequence<sal_Int8> m_xExtnValue;
+    cpo::uno::Sequence<sal_Int8> m_xExtnId;
+    cpo::uno::Sequence<sal_Int8> m_xExtnValue;
 
     CertificateExtension_CertExtn();
     void setCertExtn(unsigned char const* value, unsigned int vlen, unsigned char const* id,

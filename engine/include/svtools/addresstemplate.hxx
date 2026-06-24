@@ -67,14 +67,14 @@ namespace svt
             const css::uno::Reference< css::sdbc::XDataSource >& _rxTransientDS,
             const OUString& _rDataSourceName,
             const OUString& _rTable,
-            const css::uno::Sequence< css::util::AliasProgrammaticPair >& _rMapping
+            const cpo::uno::Sequence< css::util::AliasProgrammaticPair >& _rMapping
         );
 
         virtual ~AddressBookSourceDialog() override;
 
         // to be used if the object was constructed for editing a field mapping only
         void        getFieldMapping(
-            css::uno::Sequence< css::util::AliasProgrammaticPair >& _rMapping) const;
+            cpo::uno::Sequence< css::util::AliasProgrammaticPair >& _rMapping) const;
 
     private:
         void    implConstruct();

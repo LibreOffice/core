@@ -105,7 +105,7 @@ std::vector<OUString> TraceEvent::getEventVectorAndClear()
     return aRecording;
 }
 
-css::uno::Sequence<OUString> TraceEvent::getRecordingAndClear()
+cpo::uno::Sequence<OUString> TraceEvent::getRecordingAndClear()
 {
     return comphelper::containerToSequence(getEventVectorAndClear());
 }

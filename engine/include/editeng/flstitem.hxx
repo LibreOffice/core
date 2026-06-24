@@ -21,7 +21,7 @@
 
 #include <svl/poolitem.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <editeng/editengdllapi.h>
 
 // class SvxFontListItem -------------------------------------------------
@@ -39,7 +39,7 @@ class EDITENG_DLLPUBLIC SvxFontListItem final : public SfxPoolItem
 {
 private:
     const FontList*                 pFontList;
-    css::uno::Sequence< OUString >  aFontNameSeq;
+    cpo::uno::Sequence< OUString >  aFontNameSeq;
 
 public:
     DECLARE_ITEM_TYPE_FUNCTION(SvxFontListItem)

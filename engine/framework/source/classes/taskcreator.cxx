@@ -61,7 +61,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
 {
     rtl::Reference< TaskCreatorService > xCreator = new TaskCreatorService(m_xContext);
 
-    css::uno::Sequence< cpo::uno::Any > lArgs
+    cpo::uno::Sequence< cpo::uno::Any > lArgs
     {
         cpo::uno::Any(css::beans::NamedValue(ARGUMENT_PARENTFRAME, cpo::uno::Any(css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW)))) ,
         cpo::uno::Any(css::beans::NamedValue(ARGUMENT_CREATETOPWINDOW, cpo::uno::Any(true))),

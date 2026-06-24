@@ -91,7 +91,7 @@ public:
         noexcept override;
 
     //=====  XAccessibleGroupPosition  =========================================
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
         getGroupPosition( const cpo::uno::Any& rAny ) override;
     virtual OUString SAL_CALL getObjectLink( const cpo::uno::Any& accoject ) override;
 
@@ -102,7 +102,7 @@ private:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
     virtual bool

@@ -100,8 +100,8 @@ private:
     std::unique_ptr<ScDPResultData> mpResultData; // keep the rest in this!
     std::unique_ptr<ScDPResultMember> mpColumnResultRoot;
     std::unique_ptr<ScDPResultMember> mpRowResultRoot;
-    std::unique_ptr<css::uno::Sequence<css::sheet::MemberResult>[]> mpColumnResults;
-    std::unique_ptr<css::uno::Sequence<css::sheet::MemberResult>[]> mpRowResults;
+    std::unique_ptr<cpo::uno::Sequence<css::sheet::MemberResult>[]> mpColumnResults;
+    std::unique_ptr<cpo::uno::Sequence<css::sheet::MemberResult>[]> mpRowResults;
     std::vector<ScDPLevel*> maColumnLevelList;
     std::vector<ScDPLevel*> maRowLevelList;
     bool mbResultOverflow = false;
@@ -171,7 +171,7 @@ public:
 
     sal_Int32                    GetSourceDim(sal_Int32 nDim);
 
-    const css::uno::Sequence<css::sheet::MemberResult>*
+    const cpo::uno::Sequence<css::sheet::MemberResult>*
                             GetMemberResults( const ScDPLevel* pLevel );
 
     ScDPDimensions*         GetDimensionsObject();
@@ -181,11 +181,11 @@ public:
                             SAL_CALL getDimensions(  ) override;
 
                             // XDataPilotResults
-    virtual css::uno::Sequence< css::uno::Sequence< css::sheet::DataResult > > SAL_CALL getResults(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::sheet::DataResult > > SAL_CALL getResults(  ) override;
 
-    virtual css::uno::Sequence<double> SAL_CALL
+    virtual cpo::uno::Sequence<double> SAL_CALL
         getFilteredResults(
-            const css::uno::Sequence<css::sheet::DataPilotFieldFilter>& aFilters ) override;
+            const cpo::uno::Sequence<css::sheet::DataPilotFieldFilter>& aFilters ) override;
 
                             // XRefreshable
     virtual void SAL_CALL   refresh() override;
@@ -193,8 +193,8 @@ public:
     virtual void SAL_CALL   removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
 
                             // XDrillDownDataSupplier
-    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >
-        SAL_CALL getDrillDownData(const css::uno::Sequence<
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
+        SAL_CALL getDrillDownData(const cpo::uno::Sequence<
                                       css::sheet::DataPilotFieldFilter >& aFilters ) override;
 
                             // XPropertySet
@@ -216,7 +216,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 #if DUMP_PIVOT_TABLE
     void DumpResults() const;
@@ -241,7 +241,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XElementAccess
@@ -251,7 +251,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     tools::Long            getCount() const;
     ScDPDimension*  getByIndex(tools::Long nIndex) const;
@@ -327,7 +327,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     const ScTokenArray* getCalculationToken() const;
     css::sheet::DataPilotFieldOrientation getOrientation() const;
@@ -361,7 +361,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XElementAccess
@@ -371,7 +371,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     static sal_Int32     getCount();
     ScDPHierarchy*  getByIndex(tools::Long nIndex) const;
@@ -405,7 +405,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScDPLevels final : public cppu::WeakImplHelper<
@@ -426,7 +426,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XElementAccess
@@ -436,7 +436,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     sal_Int32            getCount() const;
     ScDPLevel*      getByIndex(sal_Int32 nIndex) const;
@@ -455,7 +455,7 @@ private:
     sal_Int32                        nHier;
     sal_Int32                        nLev;
     rtl::Reference<ScDPMembers> mxMembers;
-    css::uno::Sequence<sal_Int16> aSubTotals;
+    cpo::uno::Sequence<sal_Int16> aSubTotals;
     css::sheet::DataPilotFieldSortInfo     aSortInfo;      // stored user settings
     css::sheet::DataPilotFieldAutoShowInfo aAutoShowInfo;  // stored user settings
     css::sheet::DataPilotFieldLayoutInfo   aLayoutInfo;    // stored user settings
@@ -482,7 +482,7 @@ public:
                             getMembers() override;
 
                             // XDataPilotMemberResults
-    virtual css::uno::Sequence< css::sheet::MemberResult > SAL_CALL
+    virtual cpo::uno::Sequence< css::sheet::MemberResult > SAL_CALL
                             getResults() override;
 
                             // XPropertySet
@@ -504,9 +504,9 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    css::uno::Sequence<sal_Int16> getSubTotals() const;
+    cpo::uno::Sequence<sal_Int16> getSubTotals() const;
     bool getShowEmpty() const { return bShowEmpty;}
     bool getRepeatItemLabels() const { return bRepeatItemLabels; }
 
@@ -567,11 +567,11 @@ public:
     virtual                 ~ScDPMembers() override;
 
                             // XMembersAccess
-    virtual css::uno::Sequence< OUString > SAL_CALL getLocaleIndependentElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getLocaleIndependentElementNames() override;
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XElementAccess
@@ -581,7 +581,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     sal_Int32               getCount() const { return nMbrCount;}
     ScDPMember*             getByIndex(sal_Int32 nIndex) const;
@@ -593,7 +593,7 @@ public:
 
 private:
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > getElementNames( bool bLocaleIndependent ) const;
+    cpo::uno::Sequence< OUString > getElementNames( bool bLocaleIndependent ) const;
 };
 
 class ScDPMember final : public cppu::WeakImplHelper<
@@ -654,7 +654,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     bool isVisible() const { return bVisible;}
     bool getShowDetails() const { return bShowDet;}

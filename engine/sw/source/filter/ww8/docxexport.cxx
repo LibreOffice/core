@@ -118,15 +118,15 @@ using sw::mark::MarkBase;
 namespace
 {
 
-uno::Sequence<beans::PropertyValue>
+cpo::uno::Sequence<beans::PropertyValue>
 lcl_getEmbeddingsList(const rtl::Reference<SwXTextDocument>& xTextDoc)
 {
-    uno::Sequence<beans::PropertyValue> aRet;
+    cpo::uno::Sequence<beans::PropertyValue> aRet;
 
     if (!xTextDoc->getPropertySetInfo()->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         return aRet;
 
-    uno::Sequence<beans::PropertyValue> xPropertyList;
+    cpo::uno::Sequence<beans::PropertyValue> xPropertyList;
     xTextDoc->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= xPropertyList;
     auto pProp = std::find_if(
         std::cbegin(xPropertyList), std::cend(xPropertyList),
@@ -375,7 +375,7 @@ void DocxExport::DoComboBox(const OUString& rName,
                              const OUString& rHelp,
                              const OUString& rToolTip,
                              const OUString& rSelected,
-                             const uno::Sequence<OUString>& rListItems)
+                             const cpo::uno::Sequence<OUString>& rListItems)
 {
     m_pDocumentFS->startElementNS(XML_w, XML_ffData);
 
@@ -1122,7 +1122,7 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
 
     uno::Reference<text::XTextFieldsSupplier> xModel(pDocShell->GetModel(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTextFieldMasters = xModel->getTextFieldMasters();
-    uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
+    cpo::uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
     if (!aMasterNames.hasElements())
     {
         return;
@@ -1219,7 +1219,7 @@ void DocxExport::WriteSettings()
             FSNS( XML_xmlns, XML_w ), m_rFilter.getNamespaceURL(OOX_NS(doc)) );
 
     // Write protection
-    const uno::Sequence<beans::PropertyValue> aInfo = pDocShell->GetModifyPasswordInfo();
+    const cpo::uno::Sequence<beans::PropertyValue> aInfo = pDocShell->GetModifyPasswordInfo();
     if (aInfo.hasElements())
     {
         OUString sAlgorithm, sSalt, sHash;
@@ -1336,14 +1336,14 @@ void DocxExport::WriteSettings()
         const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
         if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
         {
-            uno::Sequence< beans::PropertyValue > propList;
+            cpo::uno::Sequence< beans::PropertyValue > propList;
             m_xTextDoc->getPropertyValue( aGrabBagName ) >>= propList;
             aGrabBagPropMap = comphelper::SequenceAsHashMap(propList);
         }
     }
 
     // write w:stylePaneFormatFilter
-    if (uno::Sequence< beans::PropertyValue > stylePaneFormatFilterProps;
+    if (cpo::uno::Sequence< beans::PropertyValue > stylePaneFormatFilterProps;
         aGrabBagPropMap.getValue(u"StylePaneFormatFilterProps"_ustr) >>= stylePaneFormatFilterProps)
     {
         OUString aVal;
@@ -1433,7 +1433,7 @@ void DocxExport::WriteSettings()
     }
     if ( xPropSetInfo->hasPropertyByName( u"RedlineProtectionKey"_ustr ) )
     {
-        uno::Sequence<sal_Int8> aKey;
+        cpo::uno::Sequence<sal_Int8> aKey;
         m_xTextDoc->getPropertyValue( u"RedlineProtectionKey"_ustr ) >>= aKey;
         bool bHasRedlineProtectionKey = aKey.hasElements();
         bHasDummyRedlineProtectionKey = aKey.getLength() == 1 && aKey[0] == 1;
@@ -1442,7 +1442,7 @@ void DocxExport::WriteSettings()
     }
 
     // write w:documentProtection
-    if (uno::Sequence< beans::PropertyValue > rAttributeList;
+    if (cpo::uno::Sequence< beans::PropertyValue > rAttributeList;
         aGrabBagPropMap.getValue(u"DocumentProtection"_ustr) >>= rAttributeList)
     {
         if (rAttributeList.hasElements())
@@ -1598,7 +1598,7 @@ void DocxExport::WriteSettings()
     bool bHasCompatibilityMode = false;
 
     // write w:compat
-    if (uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
+    if (cpo::uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
         aGrabBagPropMap.getValue(u"CompatSettings"_ustr) >>= aCompatSettingsSequence)
     {
         pFS->startElementNS(XML_w, XML_compat);
@@ -1607,7 +1607,7 @@ void DocxExport::WriteSettings()
 
         for (const auto& rCompatSetting : aCompatSettingsSequence)
         {
-            uno::Sequence< beans::PropertyValue > aCompatSetting;
+            cpo::uno::Sequence< beans::PropertyValue > aCompatSetting;
             rCompatSetting.Value >>= aCompatSetting;
             OUString aName;
             OUString aUri;
@@ -1693,7 +1693,7 @@ void DocxExport::WriteSettings()
     WriteDocVars(pFS);
 
     // write w:themeFontLang
-    if (uno::Sequence< beans::PropertyValue > themeFontLangProps;
+    if (cpo::uno::Sequence< beans::PropertyValue > themeFontLangProps;
         aGrabBagPropMap.getValue(u"ThemeFontLangProps"_ustr) >>= themeFontLangProps)
     {
         OUString aValues[3];
@@ -1742,8 +1742,8 @@ void DocxExport::WriteGlossary()
         return;
 
     uno::Reference<xml::dom::XDocument> glossaryDocDom;
-    uno::Sequence< uno::Sequence<beans::NamedValue> > glossaryDomList;
-    uno::Sequence< beans::PropertyValue > propList;
+    cpo::uno::Sequence< cpo::uno::Sequence<beans::NamedValue> > glossaryDomList;
+    cpo::uno::Sequence< beans::PropertyValue > propList;
     m_xTextDoc->getPropertyValue( aName ) >>= propList;
     sal_Int32 collectedProperties = 0;
     for (const auto& rProp : propList)
@@ -1777,9 +1777,9 @@ void DocxExport::WriteGlossary()
     uno::Reference< xml::sax::XSAXSerializable > serializer( glossaryDocDom, uno::UNO_QUERY );
     uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
     writer->setOutputStream( xOutputStream );
-    serializer->serialize(writer, uno::Sequence< beans::StringPair >());
+    serializer->serialize(writer, cpo::uno::Sequence< beans::StringPair >());
 
-    for (const uno::Sequence<beans::NamedValue>& glossaryElement : glossaryDomList)
+    for (const cpo::uno::Sequence<beans::NamedValue>& glossaryElement : glossaryDomList)
     {
         OUString gTarget, gType, gId, contentType, targetMode;
         uno::Reference<xml::dom::XDocument> xDom;
@@ -1818,7 +1818,7 @@ void DocxExport::WriteGlossary()
             continue; // External relation, no stream to write
         uno::Reference< xml::sax::XSAXSerializable > gserializer( xDom, uno::UNO_QUERY );
         writer->setOutputStream(GetFilter().openFragmentStream( "word/glossary/" + gTarget, contentType ) );
-        gserializer->serialize(writer, uno::Sequence< beans::StringPair >());
+        gserializer->serialize(writer, cpo::uno::Sequence< beans::StringPair >());
     }
 }
 
@@ -1858,7 +1858,7 @@ namespace {
 
 static void lcl_UpdateXmlValues(const SdtData& sdtData, const uno::Reference<css::io::XInputStream>& xInputStream, const uno::Reference<css::io::XOutputStream>& xOutputStream)
 {
-    uno::Sequence<cpo::uno::Any> aArgs{
+    cpo::uno::Sequence<cpo::uno::Any> aArgs{
     // XSLT transformation stylesheet:
     //  - write all elements as is
     //  - but if element matches sdtData.xpath, replace its text content by sdtData.xpath
@@ -1900,9 +1900,9 @@ void DocxExport::WriteCustomXml()
     if ( !xPropSetInfo->hasPropertyByName( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) )
         return;
 
-    uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomlist;
-    uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomPropslist;
-    uno::Sequence< beans::PropertyValue > propList;
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomlist;
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument> > customXmlDomPropslist;
+    cpo::uno::Sequence< beans::PropertyValue > propList;
     m_xTextDoc->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
     auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "OOXCustomXml"; });
@@ -1937,7 +1937,7 @@ void DocxExport::WriteCustomXml()
 
                 writer->setOutputStream(xMemStream->getOutputStream());
 
-                serializer->serialize(writer, uno::Sequence< beans::StringPair >());
+                serializer->serialize(writer, cpo::uno::Sequence< beans::StringPair >());
 
                 uno::Reference< io::XStream > xXSLTInStream = xMemStream;
                 rtl::Reference< comphelper::UNOMemoryStream > xXSLTOutStream;
@@ -1966,7 +1966,7 @@ void DocxExport::WriteCustomXml()
             {
                 writer->setOutputStream(xCustomXmlItemOutStream);
 
-                serializer->serialize(writer, uno::Sequence< beans::StringPair >());
+                serializer->serialize(writer, cpo::uno::Sequence< beans::StringPair >());
             }
         }
 
@@ -1976,7 +1976,7 @@ void DocxExport::WriteCustomXml()
             uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create( comphelper::getProcessComponentContext() );
             writer->setOutputStream( GetFilter().openFragmentStream( "customXml/itemProps"+OUString::number(j+1)+".xml",
                 u"application/vnd.openxmlformats-officedocument.customXmlProperties+xml"_ustr ) );
-            serializer->serialize(writer, uno::Sequence< beans::StringPair >());
+            serializer->serialize(writer, cpo::uno::Sequence< beans::StringPair >());
 
             // Adding itemprops's relationship entry to item.xml.rels file
             m_rFilter.addRelation(xCustomXmlItemOutStream,
@@ -2050,7 +2050,7 @@ void DocxExport::WriteEmbeddings()
     if (!pShell)
         return;
 
-    uno::Sequence<beans::PropertyValue> embeddingsList = lcl_getEmbeddingsList(m_xTextDoc);
+    cpo::uno::Sequence<beans::PropertyValue> embeddingsList = lcl_getEmbeddingsList(m_xTextDoc);
     for (const auto& rEmbedding : embeddingsList)
     {
         OUString embeddingPath = rEmbedding.Name;
@@ -2326,7 +2326,7 @@ sal_Int32 DocxExport::getWordCompatibilityMode()
     // Round-trip the existing compatibilityMode
     if (xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
     {
-        uno::Sequence< beans::PropertyValue > propList;
+        cpo::uno::Sequence< beans::PropertyValue > propList;
         m_xTextDoc->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= propList;
 
         sal_Int32 nImportedWordCompatbilityMode = -1;
@@ -2334,12 +2334,12 @@ sal_Int32 DocxExport::getWordCompatibilityMode()
         {
             if (rProp.Name == "CompatSettings")
             {
-                css::uno::Sequence< css::beans::PropertyValue > aCurrentCompatSettings;
+                cpo::uno::Sequence< css::beans::PropertyValue > aCurrentCompatSettings;
                 rProp.Value >>= aCurrentCompatSettings;
 
                 for (const auto& rCurrentCompatSetting : aCurrentCompatSettings)
                 {
-                    uno::Sequence< beans::PropertyValue > aCompatSetting;
+                    cpo::uno::Sequence< beans::PropertyValue > aCompatSetting;
                     rCurrentCompatSetting.Value >>= aCompatSetting;
 
                     OUString sName;

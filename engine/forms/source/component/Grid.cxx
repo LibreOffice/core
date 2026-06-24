@@ -163,9 +163,9 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
 }
 
 // XServiceInfo
-css::uno::Sequence<OUString> OGridControlModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OGridControlModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 4);
     auto pSupported = aSupported.getArray();
     pSupported[aSupported.getLength()-4] = u"com.sun.star.awt.UnoControlModel"_ustr;
@@ -334,7 +334,7 @@ rtl::Reference<OGridColumn>  OGridControlModel::createColumnById(sal_Int32 nType
     }
     return xReturn;
 }
-css::uno::Sequence<OUString> SAL_CALL OGridControlModel::getColumnTypes()
+cpo::uno::Sequence<OUString> SAL_CALL OGridControlModel::getColumnTypes()
 {
     return frm::getColumnTypes();
 }

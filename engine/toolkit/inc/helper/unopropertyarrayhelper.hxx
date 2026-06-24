@@ -34,16 +34,16 @@ class UnoPropertyArrayHelper final : public ::cppu::IPropertyArrayHelper
     bool    ImplHasProperty( sal_uInt16 nPropId ) const;
 
 public:
-                UnoPropertyArrayHelper( const css::uno::Sequence<sal_Int32>& rIDs );
+                UnoPropertyArrayHelper( const cpo::uno::Sequence<sal_Int32>& rIDs );
                 UnoPropertyArrayHelper( const std::vector< sal_uInt16 > &rIDs );
 
     // ::cppu::IPropertyArrayHelper
     bool SAL_CALL fillPropertyMembersByHandle( OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nHandle ) override;
-    css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
     css::beans::Property SAL_CALL getPropertyByName(const OUString& rPropertyName) override;
     bool SAL_CALL hasPropertyByName(const OUString& rPropertyName) override;
     sal_Int32 SAL_CALL getHandleByName( const OUString & rPropertyName ) override;
-    sal_Int32 SAL_CALL fillHandles( sal_Int32* pHandles, const css::uno::Sequence< OUString > & rPropNames ) override;
+    sal_Int32 SAL_CALL fillHandles( sal_Int32* pHandles, const cpo::uno::Sequence< OUString > & rPropNames ) override;
 };
 
 

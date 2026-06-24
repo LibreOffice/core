@@ -26,7 +26,7 @@ namespace drawinglayer::primitive2d
 {
 class BasePrimitive2D;
 typedef rtl::Reference<BasePrimitive2D> Primitive2DReference;
-typedef css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> Primitive2DSequence;
+typedef cpo::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> Primitive2DSequence;
 
 } // end of namespace drawinglayer::primitive2d
 

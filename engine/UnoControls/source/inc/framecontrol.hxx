@@ -70,11 +70,11 @@ public:
 
     //  XTypeProvider
 
-    virtual css::uno::Sequence< css::uno::Type > getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type > getTypes() override;
 
     OUString getImplementationName() override;
 
-    css::uno::Sequence<OUString> getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     //  XControl
 
@@ -103,7 +103,7 @@ public:
 
     //  XConnectionPointContainer
 
-    virtual css::uno::Sequence< css::uno::Type > getConnectionPointTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type > getConnectionPointTypes() override;
 
     virtual css::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
         const css::uno::Type& aType
@@ -154,11 +154,11 @@ private:
 
     void impl_createFrame(  const css::uno::Reference< css::awt::XWindowPeer >&       xPeer           ,
                             const OUString&                                         sURL            ,
-                            const css::uno::Sequence< css::beans::PropertyValue >&    seqArguments    );
+                            const cpo::uno::Sequence< css::beans::PropertyValue >&    seqArguments    );
 
     css::uno::Reference< css::frame::XFrame2 >              m_xFrame;
     OUString                                                m_sComponentURL;
-    css::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;
+    cpo::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;
     rtl::Reference<OConnectionPointContainerHelper>         m_aConnectionPointContainer;
 
 };

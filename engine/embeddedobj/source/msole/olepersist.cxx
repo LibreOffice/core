@@ -284,7 +284,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
     uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY_THROW );
     xSeek->seek( 0 );
 
-    uno::Sequence< sal_Int8 > aData( 8 );
+    cpo::uno::Sequence< sal_Int8 > aData( 8 );
     sal_Int32 nRead = xInStream->readBytes( aData, 8 );
     xSeek->seek( 0 );
 
@@ -304,7 +304,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
         xSeek->seek( 8 );
 
         // TargetDevice might be used in future, currently the cache has specified NULL
-        uno::Sequence< sal_Int8 > aHeadData( 4 );
+        cpo::uno::Sequence< sal_Int8 > aHeadData( 4 );
         nRead = xInStream->readBytes( aHeadData, 4 );
         sal_uInt32 nLen = 0;
         if ( nRead == 4 && aHeadData.getLength() == 4 )
@@ -361,7 +361,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     if ( !xTargetStream.is() || !xCachedVisualRepresentation.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTargetStream),
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTargetStream),
                                      cpo::uno::Any(true) }; // do not create copy
 
     uno::Reference< container::XNameContainer > xNameContainer(
@@ -389,14 +389,14 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
         throw uno::RuntimeException();
 
     // write 0xFFFFFFFF at the beginning
-    uno::Sequence< sal_Int8 > aData( 4 );
+    cpo::uno::Sequence< sal_Int8 > aData( 4 );
     auto pData = aData.getArray();
     * reinterpret_cast<sal_uInt32*>(pData) = 0xFFFFFFFF;
 
     xTempOutStream->writeBytes( aData );
 
     // write clipboard format
-    uno::Sequence< sal_Int8 > aSigData( 2 );
+    cpo::uno::Sequence< sal_Int8 > aSigData( 2 );
     xInCacheStream->readBytes( aSigData, 2 );
     if ( aSigData.getLength() < 2 )
         throw io::IOException();
@@ -501,7 +501,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
     if ( !xTargetStream.is() )
         throw uno::RuntimeException();
 
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTargetStream),
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTargetStream),
                                      cpo::uno::Any(true) }; // do not create copy
     uno::Reference< container::XNameContainer > xNameContainer(
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -562,7 +562,7 @@ bool OleEmbeddedObject::HasVisReplInStream()
             {
                 bool bExists = false;
 
-                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream),
+                cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream),
                                                  cpo::uno::Any(true) }; // do not create copy
                 uno::Reference< container::XNameContainer > xNameContainer(
                         m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -606,7 +606,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
         SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::TryToRetrieveCachedVisualRepresentation, retrieving" );
 
         uno::Reference< container::XNameContainer > xNameContainer;
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream),
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream),
                                          cpo::uno::Any(true) }; // do not create copy
         try
         {
@@ -1061,7 +1061,7 @@ void OleEmbeddedObject::StoreObjectToStream(uno::Reference<io::XOutputStream> co
 void OleEmbeddedObject::StoreToLocation_Impl(
                             const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& lObjArgs,
+                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs,
                             bool bSaveAs, osl::ResettableMutexGuard& rGuard)
 {
 #ifndef _WIN32
@@ -1277,8 +1277,8 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
-                    const uno::Sequence< beans::PropertyValue >& lArguments,
-                    const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                    const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                    const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1475,8 +1475,8 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
 
 void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& lArguments,
-                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                            const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1502,8 +1502,8 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
 
 void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& lArguments,
-                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                            const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1824,8 +1824,8 @@ bool SAL_CALL OleEmbeddedObject::isReadonly()
 
 
 void SAL_CALL OleEmbeddedObject::reload(
-                const uno::Sequence< beans::PropertyValue >& lArguments,
-                const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );

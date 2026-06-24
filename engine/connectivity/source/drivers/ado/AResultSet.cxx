@@ -60,7 +60,7 @@ OUString SAL_CALL OResultSet::getImplementationName(  )
     return "com.sun.star.sdbcx.ado.ResultSet";
 }
 
-css::uno::Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  )
 {
     return {"com.sun.star.sdbc.ResultSet","com.sun.star.sdbcx.ResultSet"};
 }
@@ -131,7 +131,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType )
     return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
 
-css::uno::Sequence< css::uno::Type > SAL_CALL OResultSet::getTypes(  )
+cpo::uno::Sequence< css::uno::Type > SAL_CALL OResultSet::getTypes(  )
 {
     return comphelper::concatSequences(cppu::OPropertySetHelper::getTypes(),
                                        OResultSet_BASE::getTypes());

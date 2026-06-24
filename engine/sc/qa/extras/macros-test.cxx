@@ -537,9 +537,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133887)
     createScDoc("tdf133887.ods");
 
     cpo::uno::Any aRet;
-    css::uno::Sequence<sal_Int16> aOutParamIndex;
-    css::uno::Sequence<cpo::uno::Any> aOutParam;
-    css::uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(sal_Int16(0)) };
+    cpo::uno::Sequence<sal_Int16> aOutParamIndex;
+    cpo::uno::Sequence<cpo::uno::Any> aOutParam;
+    cpo::uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(sal_Int16(0)) };
 
     SfxObjectShell::CallXScript(
         mxComponent,
@@ -561,9 +561,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf133889)
     createScDoc("tdf133889.ods");
 
     cpo::uno::Any aRet;
-    css::uno::Sequence<sal_Int16> aOutParamIndex;
-    css::uno::Sequence<cpo::uno::Any> aOutParam;
-    css::uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(sal_Int32(0)) };
+    cpo::uno::Sequence<sal_Int16> aOutParamIndex;
+    cpo::uno::Sequence<cpo::uno::Any> aOutParam;
+    cpo::uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(sal_Int32(0)) };
 
     SfxObjectShell::CallXScript(
         mxComponent,
@@ -769,7 +769,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testCool15956)
     // Deliberately non-sorted insertion order.
     const OUString order[]{ u"Gamma"_ustr, u"Alpha"_ustr, u"Delta"_ustr, u"Beta"_ustr };
 
-    auto checkOrder = [&order](const uno::Sequence<OUString>& names) {
+    auto checkOrder = [&order](const cpo::uno::Sequence<OUString>& names) {
         CPPUNIT_ASSERT(std::equal(names.begin(), names.end(), std::begin(order), std::end(order)));
     };
 
@@ -951,9 +951,9 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf159412)
     createScDoc("tdf159412.fods");
 
     cpo::uno::Any aRet;
-    css::uno::Sequence<sal_Int16> aOutParamIndex;
-    css::uno::Sequence<cpo::uno::Any> aOutParam;
-    css::uno::Sequence<cpo::uno::Any> aParams;
+    cpo::uno::Sequence<sal_Int16> aOutParamIndex;
+    cpo::uno::Sequence<cpo::uno::Any> aOutParam;
+    cpo::uno::Sequence<cpo::uno::Any> aParams;
 
     SfxObjectShell::CallXScript(
         mxComponent,

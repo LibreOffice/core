@@ -76,7 +76,7 @@ ErrCodeMsg SwDOCXReader::Read(SwDoc& rDoc, const OUString& /* rBaseURL */, SwPaM
     //to update the properties, which throws cause the properties are uninitialized
     pDocShell->SetLoading(SfxLoadedFlags::NONE);
 
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
     {
         { "InputStream", cpo::uno::Any(xStream) },
         { "InsertMode", cpo::uno::Any(true) },
@@ -129,7 +129,7 @@ bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles 
 
         uno::Reference<io::XStream> xStream( new utl::OStreamWrapper( *m_pMedium->GetInStream() ) );
 
-        uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
                 { "InputStream", cpo::uno::Any(xStream) },
                 { "ReadGlossaries", cpo::uno::Any(true) }
             }));

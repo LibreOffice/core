@@ -298,7 +298,7 @@ void TextConvWrapper::ReplaceUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
         const OUString& rOrigText,
         const OUString& rReplaceWith,
-        const css::uno::Sequence< sal_Int32 > &rOffsets,
+        const cpo::uno::Sequence< sal_Int32 > &rOffsets,
         ReplacementAction eAction,
         LanguageType *pNewUnitLanguage )
 {
@@ -394,7 +394,7 @@ void TextConvWrapper::ReplaceUnit(
 
 void TextConvWrapper::ChangeText( const OUString &rNewText,
         std::u16string_view rOrigText,
-        const uno::Sequence< sal_Int32 > *pOffsets,
+        const cpo::uno::Sequence< sal_Int32 > *pOffsets,
         ESelection *pESelection )
 {
     //!! code is a modified copy of SwHHCWrapper::ChangeText from sw !!

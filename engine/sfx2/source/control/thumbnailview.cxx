@@ -69,8 +69,8 @@ static css::uno::Reference<css::embed::XHierarchicalStorageAccess>
 getStorageAccess(const OUString& URL, sal_Int32 format)
 {
     auto xFactory = css::embed::StorageFactory::create(comphelper::getProcessComponentContext());
-    css::uno::Sequence descriptor{ comphelper::makePropertyValue(u"StorageFormat"_ustr, format) };
-    css::uno::Sequence args{ cpo::uno::Any(URL), cpo::uno::Any(css::embed::ElementModes::READ),
+    cpo::uno::Sequence descriptor{ comphelper::makePropertyValue(u"StorageFormat"_ustr, format) };
+    cpo::uno::Sequence args{ cpo::uno::Any(URL), cpo::uno::Any(css::embed::ElementModes::READ),
                              cpo::uno::Any(descriptor) };
     return xFactory->createInstanceWithArguments(args)
         .queryThrow<css::embed::XHierarchicalStorageAccess>();

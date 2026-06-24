@@ -226,7 +226,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf134355_DragCreateCustomShape)
     ScTabView* pTabView = pTabViewShell->GetViewData().GetView();
 
     // drag-create custom shape
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"SymbolShapes"_ustr, u"smiley"_ustr),
     };
     dispatchCommand(mxComponent, u".uno:SymbolShapes"_ustr, aPropertyValues);
@@ -1101,7 +1101,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf155094_paste_transposed)
     goToCell(u"$C$3:$E$5"_ustr);
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     goToCell(u"$K$6"_ustr);
-    uno::Sequence<beans::PropertyValue> aPropertyValues
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
         = { comphelper::makePropertyValue(u"Flags"_ustr, u"A"_ustr),
             comphelper::makePropertyValue(u"FormulaCommand"_ustr, sal_uInt16(0)),
             comphelper::makePropertyValue(u"SkipEmptyCells"_ustr, false),
@@ -1319,10 +1319,10 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf160329_sortWithHiddenRows)
     ScDocument* pDoc = getScDoc();
 
     // Sort the rows
-    uno::Sequence<beans::PropertyValue> aArgs1
+    cpo::uno::Sequence<beans::PropertyValue> aArgs1
         = { comphelper::makePropertyValue(u"DbName"_ustr, u"myRange"_ustr) };
     dispatchCommand(mxComponent, u".uno:SelectDB"_ustr, aArgs1);
-    uno::Sequence<beans::PropertyValue> aArgs2
+    cpo::uno::Sequence<beans::PropertyValue> aArgs2
         = { comphelper::makePropertyValue(u"ByRows"_ustr, true),
             comphelper::makePropertyValue(u"HasHeader"_ustr, true),
             comphelper::makePropertyValue(u"Col1"_ustr, sal_Int32(1)),
@@ -1353,7 +1353,7 @@ CPPUNIT_TEST_FIXTURE(ScShapeTest, testTdf167450_copySheet)
     ScDocument* pDocSource = getScDoc2();
 
     // Copy sheet to target document. 32767 means 'to end position'
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"DocName"_ustr, u"tdf167450_target"_ustr),
             comphelper::makePropertyValue(u"Index"_ustr, sal_Int32(32767)),
             comphelper::makePropertyValue(u"Copy"_ustr, true) };

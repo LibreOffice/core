@@ -65,12 +65,12 @@ namespace frm
         virtual bool SAL_CALL convertFastPropertyValue(
                     cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue ) override;
         virtual void describeFixedProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const override;
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
         // OBoundControlModel overridables
-        virtual css::uno::Sequence< css::uno::Type >
+        virtual cpo::uno::Sequence< css::uno::Type >
                                 getSupportedBindingTypes() override;
         virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
         virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;

@@ -88,7 +88,7 @@ public:
 
 class SwSelectAddressBlockDialog : public SfxDialogController
 {
-    css::uno::Sequence< OUString>    m_aAddressBlocks;
+    cpo::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
 
     std::unique_ptr<SwAddressPreview> m_xPreview;
@@ -109,9 +109,9 @@ public:
     SwSelectAddressBlockDialog(weld::Window* pParent, SwMailMergeConfigItem& rConfig);
     virtual ~SwSelectAddressBlockDialog() override;
 
-    void         SetAddressBlocks(const css::uno::Sequence< OUString>& rBlocks,
+    void         SetAddressBlocks(const cpo::uno::Sequence< OUString>& rBlocks,
                                 sal_uInt16 nSelected);
-    const css::uno::Sequence< OUString>&    GetAddressBlocks();
+    const cpo::uno::Sequence< OUString>&    GetAddressBlocks();
 
     void         SetSettings(bool bIsCountry, const OUString& sCountry);
     bool         IsIncludeCountry() const {return !m_xNeverRB->get_active();}
@@ -260,7 +260,7 @@ class SwAssignFieldsDialog : public SfxDialogController
     std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
     std::unique_ptr<SwAssignFieldsControl> m_xFieldsControl;
 
-    css::uno::Sequence< OUString > CreateAssignments();
+    cpo::uno::Sequence< OUString > CreateAssignments();
     DECL_LINK(OkHdl_Impl, weld::Button&, void);
     DECL_LINK(AssignmentModifyHdl_Impl, LinkParamNone*, void);
 

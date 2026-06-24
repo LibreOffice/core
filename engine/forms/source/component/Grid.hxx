@@ -106,10 +106,10 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OGridControlModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -130,7 +130,7 @@ public:
 
     // XGridColumnFactory
     virtual css::uno::Reference< css::beans::XPropertySet> SAL_CALL createColumn(const OUString& ColumnType) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getColumnTypes() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getColumnTypes() override;
 
     // XPersistObject
     virtual OUString SAL_CALL getServiceName() override;
@@ -159,7 +159,7 @@ public:
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
     // prevent method hiding

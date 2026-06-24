@@ -752,7 +752,7 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
                 bool bHideLegend = aIter.toBoolean();
                 if (bHideLegend)
                 {
-                    uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
+                    cpo::uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
                     Reference<beans::XPropertySet> xSeriesProp(mDataPoint.m_xSeries, uno::UNO_QUERY);
                     xSeriesProp->getPropertyValue(u"DeletedLegendEntries"_ustr) >>= deletedLegendEntriesSeq;
                     std::vector<sal_Int32> deletedLegendEntries;
@@ -1035,7 +1035,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 
     xLabelSeq->setValues( xNewSequence );
 
-    uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
+    cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences(
         xDataSource->getDataSequences());
 
     aSequences.realloc( aSequences.getLength() + 1 );

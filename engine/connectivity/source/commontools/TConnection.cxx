@@ -26,6 +26,7 @@ using namespace connectivity;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace ::cpo::uno;
 using namespace ::osl;
 
 
@@ -53,7 +54,7 @@ void OMetaConnection::disposing()
     m_aStatements.clear();
 }
 //XUnoTunnel
-sal_Int64 SAL_CALL OMetaConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL OMetaConnection::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     return comphelper::getSomethingImpl(rId, this);
 }

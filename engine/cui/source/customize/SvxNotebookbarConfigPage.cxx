@@ -48,6 +48,7 @@ namespace frame = css::frame;
 namespace container = css::container;
 namespace beans = css::beans;
 using namespace css::uno;
+using namespace ::cpo::uno;
 
 static bool isCategoryAvailable(std::u16string_view sClassId, std::u16string_view sUIItemId,
                                 std::u16string_view sActiveCategory, bool& isCategory)
@@ -202,7 +203,7 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId
     uno::Reference<container::XNameAccess> xNameAccess(
         css::frame::theUICommandDescription::get(xContext));
 
-    uno::Sequence<beans::PropertyValue> aPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aPropSeq;
 
     xNameAccess->getByName(getModuleId(m_sAppName)) >>= m_xCommandToLabelMap;
 

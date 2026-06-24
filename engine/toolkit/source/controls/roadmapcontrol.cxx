@@ -75,7 +75,7 @@ using namespace cpo::uno;
         return u"stardiv.Toolkit.UnoControlRoadmapModel"_ustr;
     }
 
-    css::uno::Sequence<OUString>
+    cpo::uno::Sequence<OUString>
     UnoControlRoadmapModel::getSupportedServiceNames()
     {
         auto s(UnoControlRoadmapModel_Base::getSupportedServiceNames());
@@ -472,7 +472,7 @@ OUString UnoRoadmapControl::getImplementationName()
     return u"stardiv.Toolkit.UnoRoadmapControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()
 {
     auto s(UnoControlBase::getSupportedServiceNames());
     s.realloc(s.getLength() + 2);
@@ -487,7 +487,7 @@ css::uno::Sequence<OUString> UnoRoadmapControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlRoadmapModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoControlRoadmapModel(context));
 }
@@ -495,7 +495,7 @@ stardiv_Toolkit_UnoControlRoadmapModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoRoadmapControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoRoadmapControl());
 }

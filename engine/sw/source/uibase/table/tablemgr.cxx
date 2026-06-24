@@ -283,7 +283,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
             }
         }
 
-        uno::Sequence< beans::PropertyValue > aArgs{
+        cpo::uno::Sequence< beans::PropertyValue > aArgs{
             beans::PropertyValue(
                 u"CellRangeRepresentation"_ustr, -1,
                 cpo::uno::Any( rCellRange ), beans::PropertyState_DIRECT_VALUE ),

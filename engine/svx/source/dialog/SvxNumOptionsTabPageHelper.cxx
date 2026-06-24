@@ -27,6 +27,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::text;
 using namespace css::style;
+using namespace ::cpo::uno;
 
 Reference<XDefaultNumberingProvider> SvxNumOptionsTabPageHelper::GetNumberingProvider()
 {

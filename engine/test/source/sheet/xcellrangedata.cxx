@@ -13,7 +13,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -25,7 +25,7 @@ namespace apitest {
 
 namespace {
 
-void setValues(uno::Sequence< uno::Sequence < Any > >& rColRow, double nOffset)
+void setValues(cpo::uno::Sequence< cpo::uno::Sequence < Any > >& rColRow, double nOffset)
 {
     auto pColRow = rColRow.getArray();
     for (sal_Int32 i = 0; i < 4; ++i)
@@ -47,7 +47,7 @@ void XCellRangeData::testSetDataArray()
 {
     uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
 
-    uno::Sequence< uno::Sequence < Any > > aColRow(4);
+    cpo::uno::Sequence< cpo::uno::Sequence < Any > > aColRow(4);
     setValues(aColRow, 1);
     xCellRangeData->setDataArray(aColRow);
 
@@ -70,7 +70,7 @@ void XCellRangeData::testSetDataArray()
 void XCellRangeData::testGetDataArray()
 {
     uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
-    uno::Sequence< uno::Sequence < Any > > aColRow = xCellRangeData->getDataArray();
+    cpo::uno::Sequence< cpo::uno::Sequence < Any > > aColRow = xCellRangeData->getDataArray();
     CPPUNIT_ASSERT(aColRow.hasElements());
 }
 
@@ -85,7 +85,7 @@ void XCellRangeData::testSetDataArrayOnTableSheet()
 {
     uno::Reference< sheet::XCellRangeData > xCellRangeData( getXCellRangeData(), UNO_QUERY_THROW);
 
-    uno::Sequence< uno::Sequence < Any > > aColRow;
+    cpo::uno::Sequence< cpo::uno::Sequence < Any > > aColRow;
     aColRow.realloc(4);
     setValues(aColRow, 1);
     CPPUNIT_ASSERT_THROW_MESSAGE("No RuntimeException thrown", xCellRangeData->setDataArray(aColRow),

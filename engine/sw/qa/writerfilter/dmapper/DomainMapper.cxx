@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDropdownNoDisplayText)
     uno::Reference<text::XTextContent> xContentControl;
     xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValues> aListItems;
+    cpo::uno::Sequence<beans::PropertyValues> aListItems;
     xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
@@ -213,10 +213,10 @@ CPPUNIT_TEST_FIXTURE(Test, testRTFStylePaste)
     std::unique_ptr<SvStream> pStream(
         new SvFileStream(createFileURL(u"clipboard.rtf"), StreamMode::READ));
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
-                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
-                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
-                                                             xBodyEnd) };
+    cpo::uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                                    comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                                    comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                                  xBodyEnd) };
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 
     // Then make sure those paragraph styles don't show up in the past result:

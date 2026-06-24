@@ -244,9 +244,9 @@ void SwVbaFormField::setOwnStatus(bool /*bSet*/)
 
 OUString SwVbaFormField::getServiceImplName() { return u"SwVbaFormField"_ustr; }
 
-uno::Sequence<OUString> SwVbaFormField::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaFormField::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.FormField"_ustr };
+    static cpo::uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.FormField"_ustr };
     return aServiceNames;
 }
 

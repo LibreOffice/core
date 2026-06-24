@@ -115,14 +115,14 @@ public:
         { return getPropertyInt16(u"StatusBarFunction"_ustr); }
     virtual void SAL_CALL setStatusBarFunction(sal_Int16 p1) override
         { setProperty(u"StatusBarFunction"_ustr, p1); }
-    virtual css::uno::Sequence<OUString> SAL_CALL getUserLists() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getUserLists() override
         {
            cpo::uno::Any any = getPropertyValue(u"UserLists"_ustr);
-           css::uno::Sequence<OUString> b;
+           cpo::uno::Sequence<OUString> b;
            any >>= b;
            return b;
         }
-    virtual void SAL_CALL setUserLists(const css::uno::Sequence<OUString>& p1) override
+    virtual void SAL_CALL setUserLists(const cpo::uno::Sequence<OUString>& p1) override
         { setPropertyValue( u"UserLists"_ustr, cpo::uno::Any(p1) ); }
     virtual sal_Int16 SAL_CALL getLinkUpdateMode() override
         { return getPropertyInt16(u"LinkUpdateMode"_ustr); }
@@ -164,7 +164,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScRecentFunctionsObj final : public cppu::WeakImplHelper<
@@ -176,14 +176,14 @@ public:
     virtual                 ~ScRecentFunctionsObj() override;
 
                             // XRecentFunctions
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getRecentFunctionIds() override;
-    virtual void SAL_CALL setRecentFunctionIds( const css::uno::Sequence< sal_Int32 >& aRecentFunctionIds ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getRecentFunctionIds() override;
+    virtual void SAL_CALL setRecentFunctionIds( const cpo::uno::Sequence< sal_Int32 >& aRecentFunctionIds ) override;
     virtual sal_Int32 SAL_CALL getMaxRecentFunctions() override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScFunctionListObj final : public cppu::WeakImplHelper<
@@ -197,12 +197,12 @@ public:
     virtual                 ~ScFunctionListObj() override;
 
                             // XFunctionDescriptions
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL
                             getById( sal_Int32 nId ) override;
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
@@ -220,7 +220,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

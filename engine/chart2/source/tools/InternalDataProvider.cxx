@@ -49,7 +49,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace chart
 {
@@ -67,7 +67,7 @@ constexpr OUString lcl_aCompleteRange = u"all"_ustr;
 typedef std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;
 
-std::vector< cpo::uno::Any > lcl_StringToAnyVector( const css::uno::Sequence< OUString >& aStringSeq )
+std::vector< cpo::uno::Any > lcl_StringToAnyVector( const cpo::uno::Sequence< OUString >& aStringSeq )
 {
     std::vector< cpo::uno::Any > aResult;
     aResult.reserve(aStringSeq.getLength());
@@ -306,7 +306,7 @@ InternalDataProvider::InternalDataProvider(
                 OUString aRangeString;
                 bool bFirstCellAsLabel = true;
                 bool bHasCategories = true;
-                uno::Sequence< sal_Int32 > aSequenceMapping;
+                cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
                 const bool bSomethingDetected(
                     DataSourceHelper::detectRangeSegmentation(
                         xModel, aRangeString, aSequenceMapping, m_bDataInColumns, bFirstCellAsLabel, bHasCategories ));
@@ -691,7 +691,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
     DataSourceHelper::readArguments( aArguments, aRangeRepresentation, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
 
     if( aRangeRepresentation == lcl_aCategoriesRangeName )
@@ -1320,7 +1320,7 @@ public:
     {}
 
     virtual sal_Int32 getLevelCount() const override;
-    virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
+    virtual cpo::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
 
 private:
     const std::vector< std::vector< cpo::uno::Any > >& m_rComplexDescriptions;
@@ -1330,7 +1330,7 @@ sal_Int32 SplitCategoriesProvider_ForComplexDescriptions::getLevelCount() const
 {
     return lcl_getInnerLevelCount( m_rComplexDescriptions );
 }
-uno::Sequence< OUString > SplitCategoriesProvider_ForComplexDescriptions::getStringsForLevel( sal_Int32 nLevel ) const
+cpo::uno::Sequence< OUString > SplitCategoriesProvider_ForComplexDescriptions::getStringsForLevel( sal_Int32 nLevel ) const
 {
     if( nLevel < lcl_getInnerLevelCount( m_rComplexDescriptions ) )
         return CommonFunctors::convertToSequence(m_rComplexDescriptions, lcl_getStringFromLevelVector(nLevel));
@@ -1475,7 +1475,7 @@ bool SAL_CALL InternalDataProvider::isNotANumber( double nNumber )
         || std::isinf( nNumber );
 }
 // lang::XInitialization:
-void SAL_CALL InternalDataProvider::initialize(const uno::Sequence< cpo::uno::Any > & _aArguments)
+void SAL_CALL InternalDataProvider::initialize(const cpo::uno::Sequence< cpo::uno::Any > & _aArguments)
 {
     comphelper::SequenceAsHashMap aArgs(_aArguments);
     if ( aArgs.getUnpackedValueOrDefault( u"CreateDefaultData"_ustr, false ) )
@@ -1499,7 +1499,7 @@ bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServiceNam
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL InternalDataProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL InternalDataProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.data.DataProvider"_ustr };
 }
@@ -1508,7 +1508,7 @@ css::uno::Sequence< OUString > SAL_CALL InternalDataProvider::getSupportedServic
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_InternalDataProvider_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::InternalDataProvider);
 }

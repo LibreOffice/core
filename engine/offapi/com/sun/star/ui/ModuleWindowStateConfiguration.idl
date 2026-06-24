@@ -39,7 +39,7 @@ service ModuleWindowStateConfiguration
         elements which are part of single installed module.
 
         <p>
-        An implementation must provide a com::sun::star::uno::Sequence which
+        An implementation must provide a cpo::uno::Sequence which
         has com::sun::star::beans::PropertyValue as entries. The following
         entries a defined:
         <ul>

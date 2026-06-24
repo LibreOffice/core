@@ -199,9 +199,9 @@ ErrCode LoadOlePropertySet(
 bool SaveOlePropertySet(
     const uno::Reference< document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage,
-    const uno::Sequence<sal_Int8> * i_pThumb,
-    const uno::Sequence<sal_Int8> * i_pGuid,
-    const uno::Sequence<sal_Int8> * i_pHyperlinks)
+    const cpo::uno::Sequence<sal_Int8> * i_pThumb,
+    const cpo::uno::Sequence<sal_Int8> * i_pGuid,
+    const cpo::uno::Sequence<sal_Int8> * i_pHyperlinks)
 {
     // *** global properties into stream "005SummaryInformation" ***
 
@@ -275,7 +275,7 @@ bool SaveOlePropertySet(
     uno::Reference<beans::XPropertySetInfo> xPropInfo =
         xUserDefinedProps->getPropertySetInfo();
     DBG_ASSERT(xPropInfo.is(), "UserDefinedProperties Info is null");
-    const uno::Sequence<beans::Property> props = xPropInfo->getProperties();
+    const cpo::uno::Sequence<beans::Property> props = xPropInfo->getProperties();
     for (const auto& rProp : props)
     {
         try
@@ -306,7 +306,7 @@ bool SaveOlePropertySet(
     return (nGlobError == ERRCODE_NONE) && (nDocError == ERRCODE_NONE);
 }
 
-uno::Sequence<sal_Int8> convertMetaFile(GDIMetaFile const * i_pThumb)
+cpo::uno::Sequence<sal_Int8> convertMetaFile(GDIMetaFile const * i_pThumb)
 {
     if (i_pThumb) {
         Bitmap aBitmap;
@@ -314,10 +314,10 @@ uno::Sequence<sal_Int8> convertMetaFile(GDIMetaFile const * i_pThumb)
         if (i_pThumb->CreateThumbnail(aBitmap))
         {
             WriteDIB(aBitmap, aStream, false, false);
-            return uno::Sequence<sal_Int8>(static_cast< const sal_Int8* >( aStream.GetData() ), aStream.TellEnd());
+            return cpo::uno::Sequence<sal_Int8>(static_cast< const sal_Int8* >( aStream.GetData() ), aStream.TellEnd());
         }
     }
-    return uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 } // namespace sfx2

@@ -211,7 +211,7 @@ std::string makeHttpRequest(std::u16string_view aURL, HTTP_METHOD method, const 
 }
 
 template <typename Func>
-uno::Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string path, Func f)
+cpo::uno::Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string path, Func f)
 {
     std::stringstream aStream(std::move(json)); // Optimized in C++20
     boost::property_tree::ptree aRoot;
@@ -228,7 +228,7 @@ uno::Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string
 
     if (auto tree = aRoot.get_child_optional(path))
     {
-        uno::Sequence<SingleProofreadingError> aErrors(tree->size());
+        cpo::uno::Sequence<SingleProofreadingError> aErrors(tree->size());
         auto it = tree->begin();
         for (auto& rError : asNonConstRange(aErrors))
         {
@@ -344,7 +344,7 @@ void lclShowCURLErrorInteraction(const css::uno::Reference<css::uno::XComponentC
 
     rtl::Reference<comphelper::OInteractionApprove> pApprove
         = new comphelper::OInteractionApprove();
-    css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> aContinuations{
+    cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> aContinuations{
         pApprove
     };
 
@@ -383,7 +383,7 @@ bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
     return false;
 }
 
-uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
+cpo::uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 {
     osl::MutexGuard aGuard(linguistic::GetLinguMutex());
 
@@ -394,7 +394,7 @@ uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
         return m_aSuppLocales;
 
     SvtLinguConfig aLinguCfg;
-    uno::Sequence<OUString> aLocaleList;
+    cpo::uno::Sequence<OUString> aLocaleList;
 
     if (LanguageToolCfg::RestProtocol::get().value_or("") == u"duden"_ustr)
     {
@@ -424,7 +424,7 @@ uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     const OUString& aDocumentIdentifier, const OUString& aText, const Locale& aLocale,
     sal_Int32 nStartOfSentencePosition, sal_Int32 nSuggestedBehindEndOfSentencePosition,
-    const uno::Sequence<PropertyValue>& aProperties)
+    const cpo::uno::Sequence<PropertyValue>& aProperties)
 {
     // ProofreadingResult declared here instead of parseHttpJSONResponse because of the early exists.
     ProofreadingResult xRes;
@@ -573,16 +573,16 @@ bool SAL_CALL LanguageToolGrammarChecker::supportsService(const OUString& Servic
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL LanguageToolGrammarChecker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL LanguageToolGrammarChecker::getSupportedServiceNames()
 {
     return { SN_GRAMMARCHECKER };
 }
 
-void SAL_CALL LanguageToolGrammarChecker::initialize(const uno::Sequence<cpo::uno::Any>&) {}
+void SAL_CALL LanguageToolGrammarChecker::initialize(const cpo::uno::Sequence<cpo::uno::Any>&) {}
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_LanguageToolGrammarChecker_get_implementation(
-    css::uno::XComponentContext* pContext, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* pContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LanguageToolGrammarChecker(pContext));
 }

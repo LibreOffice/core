@@ -80,15 +80,15 @@ cpo::uno::Any SAL_CALL SvXMLImportContext::queryInterface( const css::uno::Type&
 }
 
 // XTypeProvider
-css::uno::Sequence< css::uno::Type > SAL_CALL SvXMLImportContext::getTypes()
+cpo::uno::Sequence< css::uno::Type > SAL_CALL SvXMLImportContext::getTypes()
 {
     return { cppu::UnoType<XFastContextHandler>::get(),
              cppu::UnoType<XTypeProvider>::get() };
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL SvXMLImportContext::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvXMLImportContext::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,7 +39,7 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
     SAL_INFO("sw.vba", "lcl_getAddinCollection: " << aAddinPath );
     if( xSFA->isFolder( aAddinPath ) )
     {
-        const uno::Sequence< OUString > sEntries = xSFA->getFolderContents( aAddinPath, false );
+        const cpo::uno::Sequence< OUString > sEntries = xSFA->getFolderContents( aAddinPath, false );
         for( const OUString& sUrl : sEntries )
         {
             if( !xSFA->isFolder( sUrl ) && sUrl.endsWithIgnoreAsciiCase( ".dot" ) )
@@ -83,10 +83,10 @@ SwVbaAddins::getServiceImplName()
     return u"SwVbaAddins"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaAddins::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Addins"_ustr
     };

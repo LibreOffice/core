@@ -49,7 +49,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -91,7 +91,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
 
                     aTempStream.Seek( 0 );
 
-                    uno::Sequence< sal_Int8 > aSeq( 32000 );
+                    cpo::uno::Sequence< sal_Int8 > aSeq( 32000 );
                     sal_uInt32 nRead = 0;
                     do {
                         if ( aSeq.getLength() < 32000 )
@@ -146,7 +146,7 @@ bool SAL_CALL OPackageStructureCreator::supportsService( const OUString& Service
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OPackageStructureCreator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OPackageStructureCreator::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.PackageStructureCreator"_ustr, u"com.sun.star.comp.embed.PackageStructureCreator"_ustr };
 }
@@ -156,7 +156,7 @@ uno::Sequence< OUString > SAL_CALL OPackageStructureCreator::getSupportedService
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_embed_PackageStructureCreator_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new OPackageStructureCreator());
 }

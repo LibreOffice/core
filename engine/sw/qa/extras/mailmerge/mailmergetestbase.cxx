@@ -199,7 +199,7 @@ public:
 
     void executeMailMerge(bool bDontLoadResult = false)
     {
-        const uno::Sequence<beans::NamedValue> aSeqMailMergeArgs
+        const cpo::uno::Sequence<beans::NamedValue> aSeqMailMergeArgs
             = comphelper::containerToSequence(mMMargs);
         cpo::uno::Any res = mxJob->execute(aSeqMailMergeArgs);
 

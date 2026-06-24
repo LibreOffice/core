@@ -37,7 +37,7 @@ namespace framework
 
             // XNameAccess
             virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+            virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
             virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
             // XElementAccess
@@ -47,7 +47,7 @@ namespace framework
         private:
             typedef std::unordered_map<OUString, css::uno::Reference< css::graphic::XGraphic >> NameGraphicHashMap;
             NameGraphicHashMap              m_aNameToElementMap;
-            css::uno::Sequence< OUString >  m_aSeq;
+            cpo::uno::Sequence< OUString >  m_aSeq;
     };
 }
 

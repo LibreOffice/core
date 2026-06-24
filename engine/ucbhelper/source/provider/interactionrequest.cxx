@@ -39,7 +39,7 @@ struct InteractionRequest_Impl
 {
     rtl::Reference< InteractionContinuation > m_xSelection;
     cpo::uno::Any m_aRequest;
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference<
             css::task::XInteractionContinuation > > m_aContinuations;
 
@@ -76,7 +76,7 @@ void InteractionRequest::setRequest( const cpo::uno::Any & rRequest )
 
 
 void InteractionRequest::setContinuations(
-                const uno::Sequence< uno::Reference<
+                const cpo::uno::Sequence< uno::Reference<
                     task::XInteractionContinuation > > & rContinuations )
 {
     m_pImpl->m_aContinuations = rContinuations;
@@ -111,7 +111,7 @@ cpo::uno::Any SAL_CALL InteractionRequest::getRequest()
 
 
 // virtual
-uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL
 InteractionRequest::getContinuations()
 {
     return m_pImpl->m_aContinuations;
@@ -269,7 +269,7 @@ InteractionSupplyAuthentication::setPassword( const OUString& Password )
 
 
 // virtual
-uno::Sequence< ucb::RememberAuthentication > SAL_CALL
+cpo::uno::Sequence< ucb::RememberAuthentication > SAL_CALL
 InteractionSupplyAuthentication::getRememberPasswordModes(
                                     ucb::RememberAuthentication& Default )
 {
@@ -305,7 +305,7 @@ InteractionSupplyAuthentication::setAccount( const OUString& /*Account*/ )
 
 
 // virtual
-uno::Sequence< ucb::RememberAuthentication > SAL_CALL
+cpo::uno::Sequence< ucb::RememberAuthentication > SAL_CALL
 InteractionSupplyAuthentication::getRememberAccountModes(
                                     ucb::RememberAuthentication& Default )
 {

@@ -297,7 +297,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             OSL_ENSURE(pFieldmark!=nullptr, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != nullptr )
             {
-                uno::Sequence< OUString > vListEntries(aFormula.maListEntries.size());
+                cpo::uno::Sequence< OUString > vListEntries(aFormula.maListEntries.size());
                 std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), vListEntries.getArray());
                 (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
                 sal_Int32 nIndex = aFormula.mfDropdownIndex  < aFormula.maListEntries.size() ? aFormula.mfDropdownIndex : -1;
@@ -2429,7 +2429,7 @@ bool WW8FormulaListBox::Import(const uno::Reference <
     if (!maListEntries.empty())
     {
         sal_uInt32 nLen = maListEntries.size();
-        uno::Sequence< OUString > aListSource(nLen);
+        cpo::uno::Sequence< OUString > aListSource(nLen);
         auto aListSourceRange = asNonConstRange(aListSource);
         for (sal_uInt32 nI = 0; nI < nLen; ++nI)
             aListSourceRange[nI] = maListEntries[nI];

@@ -39,10 +39,10 @@ public:
 
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     virtual OUString SAL_CALL
-    detect(css::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq) override;
+    detect(cpo::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq) override;
 
 private:
 };
@@ -59,12 +59,12 @@ bool OrcusFormatDetect::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> OrcusFormatDetect::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OrcusFormatDetect::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
-OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq)
+OUString OrcusFormatDetect::detect(cpo::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq)
 {
     comphelper::SequenceAsHashMap aMediaDescriptor(rMediaDescSeq);
     bool bAborted
@@ -120,7 +120,7 @@ OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sc_OrcusFormatDetect_get_implementation(css::uno::XComponentContext*,
-                                                          css::uno::Sequence<cpo::uno::Any> const&)
+                                                          cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OrcusFormatDetect());
 }

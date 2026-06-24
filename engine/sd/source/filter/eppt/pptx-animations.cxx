@@ -1033,7 +1033,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommand()
         case EffectCommands::PLAY:
         {
             aCommand = "play"_ostr;
-            uno::Sequence<beans::NamedValue> aParamSeq;
+            cpo::uno::Sequence<beans::NamedValue> aParamSeq;
             xCommand->getParameter() >>= aParamSeq;
             comphelper::SequenceAsHashMap aMap(aParamSeq);
             auto it = aMap.find(u"MediaTime"_ustr);

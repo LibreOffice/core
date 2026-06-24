@@ -25,7 +25,7 @@
 #include <vcl/image.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <vector>
 #include "NotebookBarAddonsItem.hxx"
 

@@ -96,8 +96,8 @@ class SwXMLExport : public SvXMLExport
     virtual void ExportMasterStyles_() override;
     virtual void SetBodyAttributes() override;
     virtual void ExportContent_() override;
-    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
-    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetViewSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetConfigurationSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual sal_Int32 GetDocumentSpecificSettings( std::vector< SettingsGroup >& _out_rSettings ) override;
 
 private:

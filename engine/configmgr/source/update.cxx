@@ -24,7 +24,7 @@
 #include <com/sun/star/configuration/XUpdate.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -71,8 +71,8 @@ private:
 
     virtual void SAL_CALL insertModificationXcuFile(
         OUString const & fileUri,
-        css::uno::Sequence< OUString > const & includedPaths,
-        css::uno::Sequence< OUString > const & excludedPaths) override;
+        cpo::uno::Sequence< OUString > const & includedPaths,
+        cpo::uno::Sequence< OUString > const & excludedPaths) override;
 
     virtual void SAL_CALL writeModifications(OUString const & fileUri) override;
 
@@ -84,7 +84,7 @@ private:
         return cppu::supportsService(this, ServiceName);
     }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
         return {u"com.sun.star.configuration.Update_Service"_ustr};
     }
 
@@ -130,8 +130,8 @@ void Service::removeExtensionXcuFile(OUString const & fileUri)
 
 void Service::insertModificationXcuFile(
     OUString const & fileUri,
-    css::uno::Sequence< OUString > const & includedPaths,
-    css::uno::Sequence< OUString > const & excludedPaths)
+    cpo::uno::Sequence< OUString > const & includedPaths,
+    cpo::uno::Sequence< OUString > const & excludedPaths)
 {
     Broadcaster bc;
     {
@@ -159,7 +159,7 @@ void Service::writeModifications(OUString const & fileUri)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_Update_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new configmgr::update::Service(context));
 }

@@ -29,7 +29,7 @@
 #include <unonames.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <cppu/unotype.hxx>
@@ -52,7 +52,7 @@ public:
     ScTableConditionalFormat();
 
     virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Sequence<beans::PropertyValue> createCondition(const sal_Int32 nr) override;
+    virtual cpo::uno::Sequence<beans::PropertyValue> createCondition(const sal_Int32 nr) override;
     virtual void setUp() override;
 
     CPPUNIT_TEST_SUITE(ScTableConditionalFormat);
@@ -118,9 +118,10 @@ uno::Reference<uno::XInterface> ScTableConditionalFormat::init()
     return xSheetConditionalEntries;
 }
 
-uno::Sequence<beans::PropertyValue> ScTableConditionalFormat::createCondition(const sal_Int32 nr)
+cpo::uno::Sequence<beans::PropertyValue>
+ScTableConditionalFormat::createCondition(const sal_Int32 nr)
 {
-    uno::Sequence<beans::PropertyValue> aPropValue{
+    cpo::uno::Sequence<beans::PropertyValue> aPropValue{
         comphelper::makePropertyValue(SC_UNONAME_STYLENAME, u"Result2"_ustr),
         comphelper::makePropertyValue(SC_UNONAME_FORMULA1, "$Sheet1.$B$" + OUString::number(nr)),
         comphelper::makePropertyValue(SC_UNONAME_FORMULA2, u""_ustr),

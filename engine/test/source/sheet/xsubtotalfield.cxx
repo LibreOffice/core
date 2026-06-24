@@ -14,7 +14,7 @@
 #include <com/sun/star/sheet/XSubTotalField.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -22,8 +22,8 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 template<> inline std::string
-CPPUNIT_NS::assertion_traits<uno::Sequence< sheet::SubTotalColumn > >::toString(
-    const uno::Sequence< sheet::SubTotalColumn >& x)
+CPPUNIT_NS::assertion_traits<cpo::uno::Sequence< sheet::SubTotalColumn > >::toString(
+    const cpo::uno::Sequence< sheet::SubTotalColumn >& x)
 {
     OStringStream ost;
     ost << "Sequence: Length: " << x.getLength() << "\n";
@@ -51,10 +51,10 @@ void XSubTotalField::testGetSetTotalColumns()
 {
     uno::Reference< sheet::XSubTotalField > xSTF(init(), UNO_QUERY_THROW);
 
-    uno::Sequence< sheet::SubTotalColumn > sDefaultCols = xSTF->getSubTotalColumns();
+    cpo::uno::Sequence< sheet::SubTotalColumn > sDefaultCols = xSTF->getSubTotalColumns();
     CPPUNIT_ASSERT_MESSAGE("Unable to get SubTotalColumns", sDefaultCols.hasElements());
 
-    uno::Sequence< sheet::SubTotalColumn > sNewCols{ { /* Column   */ 5,
+    cpo::uno::Sequence< sheet::SubTotalColumn > sNewCols{ { /* Column   */ 5,
                                                        /* Function */ sheet::GeneralFunction_AVERAGE } };
     xSTF->setSubTotalColumns(sNewCols);
 

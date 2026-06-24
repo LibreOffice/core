@@ -3115,7 +3115,7 @@ void MainSequence::createMainSequence()
         {
             mxSequenceRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
-            uno::Sequence< css::beans::NamedValue > aUserData
+            cpo::uno::Sequence< css::beans::NamedValue > aUserData
                 { { u"node-type"_ustr, cpo::uno::Any(css::presentation::EffectNodeType::MAIN_SEQUENCE) } };
             mxSequenceRoot->setUserData( aUserData );
 
@@ -3172,7 +3172,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::
     // create a new interactive sequence container
     Reference< XTimeContainer > xISRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
-    uno::Sequence< css::beans::NamedValue > aUserData
+    cpo::uno::Sequence< css::beans::NamedValue > aUserData
         { { u"node-type"_ustr, cpo::uno::Any(css::presentation::EffectNodeType::INTERACTIVE_SEQUENCE) } };
     xISRoot->setUserData( aUserData );
     xISRoot->setRestart( css::animations::AnimationRestart::WHEN_NOT_ACTIVE );

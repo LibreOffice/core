@@ -1121,7 +1121,7 @@ bool SwXFrame::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXFrame::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXFrame::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.BaseFrame"_ustr, u"com.sun.star.text.TextContent"_ustr, u"com.sun.star.document.LinkTarget"_ustr };
 }
@@ -1957,7 +1957,7 @@ cpo::uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 
     if(FN_UNO_ANCHOR_TYPES == pEntry->nWID)
     {
-        uno::Sequence<text::TextContentAnchorType> aTypes
+        cpo::uno::Sequence<text::TextContentAnchorType> aTypes
         {
             text::TextContentAnchorType_AT_PARAGRAPH,
             text::TextContentAnchorType_AS_CHARACTER,
@@ -2363,16 +2363,16 @@ void SwXFrame::removeVetoableChangeListener(
 beans::PropertyState SwXFrame::getPropertyState( const OUString& rPropertyName )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aPropertyNames { rPropertyName };
-    uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aPropertyNames);
+    cpo::uno::Sequence< OUString > aPropertyNames { rPropertyName };
+    cpo::uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aPropertyNames);
     return aStates.getConstArray()[0];
 }
 
-uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
-    const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
+    const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< beans::PropertyState > aStates(aPropertyNames.getLength());
+    cpo::uno::Sequence< beans::PropertyState > aStates(aPropertyNames.getLength());
     auto [pStates, end] = asNonConstRange(aStates);
     SwFrameFormat* pFormat = GetFrameFormat();
     if(pFormat)
@@ -3191,7 +3191,7 @@ void SAL_CALL SwXTextFrame::release(  )noexcept
     return aRet;
 }
 
-uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  )
+cpo::uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  )
 {
     return comphelper::concatSequences(
         SwXTextFrameBaseClass::getTypes(),
@@ -3200,9 +3200,9 @@ uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  )
     );
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  )
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SwXTextFrame::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 uno::Reference< text::XText >  SwXTextFrame::getText()
@@ -3346,9 +3346,9 @@ bool SwXTextFrame::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextFrame::getSupportedServiceNames()
 {
-    uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
+    cpo::uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 2);
     OUString* pArray = aRet.getArray();
     pArray[aRet.getLength() - 2] = u"com.sun.star.text.TextFrame"_ustr;
@@ -3416,9 +3416,9 @@ bool SwXTextGraphicObject::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextGraphicObject::getSupportedServiceNames()
 {
-    uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
+    cpo::uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 1);
     OUString* pArray = aRet.getArray();
     pArray[aRet.getLength() - 1] = u"com.sun.star.text.TextGraphicObject"_ustr;
@@ -3554,9 +3554,9 @@ bool SwXTextEmbeddedObject::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextEmbeddedObject::getSupportedServiceNames()
 {
-    uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
+    cpo::uno::Sequence < OUString > aRet = SwXFrame::getSupportedServiceNames();
     aRet.realloc(aRet.getLength() + 1);
     OUString* pArray = aRet.getArray();
     pArray[aRet.getLength() - 1] = u"com.sun.star.text.TextEmbeddedObject"_ustr;

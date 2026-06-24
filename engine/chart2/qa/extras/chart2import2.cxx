@@ -23,6 +23,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace ::cpo::uno;
 
 class Chart2ImportTest2 : public ChartTest
 {
@@ -226,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testExternalStrRefsXLSX)
 
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     chart2::ScaleData aScaleData = xAxis->getScaleData();
-    css::uno::Sequence<cpo::uno::Any> aValues = aScaleData.Categories->getValues()->getData();
+    cpo::uno::Sequence<cpo::uno::Any> aValues = aScaleData.Categories->getValues()->getData();
     CPPUNIT_ASSERT_EQUAL(u"test1"_ustr, aValues[0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"test2"_ustr, aValues[1].get<OUString>());
 }

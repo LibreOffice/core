@@ -39,7 +39,7 @@ public:
     virtual cpo::uno::Any SAL_CALL AutoTextEntries( const cpo::uno::Any& index ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBATEMPLATE_HXX
 

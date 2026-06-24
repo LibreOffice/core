@@ -68,7 +68,7 @@ public:
 
 
 // css::lang::XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
 // css::uno::XInterface
     virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -116,7 +116,7 @@ public:
 // css::sdbc::XPreparedBatchExecution
     virtual void SAL_CALL addBatch(  ) override;
     virtual void SAL_CALL clearBatch(  ) override;
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
 // css::sdbc::XGeneratedResultSet
     virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getGeneratedValues(  ) override;
 
@@ -152,7 +152,7 @@ public:
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // css::sdbc::XStatement
     virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override;
@@ -166,7 +166,7 @@ public:
     // XBatchExecution
     virtual void SAL_CALL addBatch( const OUString& sql ) override;
     virtual void SAL_CALL clearBatch(  ) override;
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
 
     using OStatementBase::addBatch;
 

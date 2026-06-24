@@ -56,7 +56,7 @@ ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent,
     }
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaStyles::getStyleNames()
 {
     return mxNameContainerCellStyles->getElementNames();
@@ -188,10 +188,10 @@ ScVbaStyles::getServiceImplName()
     return u"ScVbaStyles"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaStyles::getServiceNames()
 {
-        static uno::Sequence< OUString > const aServiceNames
+        static cpo::uno::Sequence< OUString > const aServiceNames
         {
             u"ooo.vba.excel.XStyles"_ustr
         };

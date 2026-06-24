@@ -2650,7 +2650,7 @@ public:
         rtl::Reference<SwXStyleFamily> xStyleFamily = xStyleFamilies->GetPageStyles();
         if (!xStyleFamily.is())
             return;
-        const uno::Sequence<OUString> xStyleFamilyNames = xStyleFamily->getElementNames();
+        const cpo::uno::Sequence<OUString> xStyleFamilyNames = xStyleFamily->getElementNames();
         for (const OUString& rStyleFamilyName : xStyleFamilyNames)
         {
             rtl::Reference<SwXBaseStyle> xPropertySet(

@@ -740,7 +740,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = m_pDocument->GetVbaEventProcessor();
             if ( xVbaEvents.is() ) try
             {
-                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(pScHint->GetTab1()) };
+                cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(pScHint->GetTab1()) };
                 xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_NEWSHEET, aArgs );
             }
             catch( uno::Exception& )
@@ -863,7 +863,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
                                     uno::Reference< frame::XController > xController = pFrame->GetController();
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
-                                    uno::Sequence< beans::NamedValue > aArgsForJob { { u"SpreadsheetView"_ustr, cpo::uno::Any( xSpreadsheetView ) } };
+                                    cpo::uno::Sequence< beans::NamedValue > aArgsForJob { { u"SpreadsheetView"_ustr, cpo::uno::Any( xSpreadsheetView ) } };
                                     xJob->execute( aArgsForJob );
                                 }
                             }
@@ -998,7 +998,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             }
 
                                             // TODO/LATER: More entries from the MediaDescriptor might be interesting for the merge
-                                            uno::Sequence< beans::PropertyValue > aValues{
+                                            cpo::uno::Sequence< beans::PropertyValue > aValues{
                                                 comphelper::makePropertyValue(
                                                     u"FilterName"_ustr,
                                                     GetMedium()->GetFilter()->GetFilterName())
@@ -1164,7 +1164,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             {
                 cpo::uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
-                uno::Sequence< cpo::uno::Any > aArgs{ aWorkbook };
+                cpo::uno::Sequence< cpo::uno::Any > aArgs{ aWorkbook };
                 ScModule::get()->CallAutomationApplicationEventSinks(u"NewWorkbook"_ustr, aArgs);
             }
             break;
@@ -1172,7 +1172,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             {
                 cpo::uno::Any aWorkbook;
                 aWorkbook <<= mxAutomationWorkbookObject;
-                uno::Sequence< cpo::uno::Any > aArgs{ aWorkbook };
+                cpo::uno::Sequence< cpo::uno::Any > aArgs{ aWorkbook };
                 ScModule::get()->CallAutomationApplicationEventSinks(u"WorkbookOpen"_ustr, aArgs);
             }
             break;
@@ -3038,7 +3038,7 @@ bool ScDocShell::QuerySlotExecutable( sal_uInt16 nSlotId )
     using namespace ::com::sun::star::script::vba;
 
     sal_Int32 nVbaEventId = VBAEventId::NO_EVENT;
-    uno::Sequence< cpo::uno::Any > aArgs;
+    cpo::uno::Sequence< cpo::uno::Any > aArgs;
     switch( nSlotId )
     {
         case SID_SAVEDOC:
@@ -3100,7 +3100,7 @@ bool ScDocShell::PrepareClose( bool bUI )
         try
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( m_pDocument->GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< cpo::uno::Any > aArgs;
+            cpo::uno::Sequence< cpo::uno::Any > aArgs;
             xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_BEFORECLOSE, aArgs );
         }
         catch( util::VetoException& )
@@ -3796,13 +3796,13 @@ void ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
         // when password protection is applied change tracking must always be active
         SetChangeRecording( true );
 
-        css::uno::Sequence< sal_Int8 > aProtectionHash;
+        cpo::uno::Sequence< sal_Int8 > aProtectionHash;
         SvPasswordHelper::GetHashPassword( aProtectionHash, rNewPassword );
         pChangeTrack->SetProtection( aProtectionHash );
     }
     else
     {
-        pChangeTrack->SetProtection( css::uno::Sequence< sal_Int8 >() );
+        pChangeTrack->SetProtection( cpo::uno::Sequence< sal_Int8 >() );
     }
 
     if ( bProtected != pChangeTrack->IsProtected() )
@@ -3812,7 +3812,7 @@ void ScDocShell::SetProtectionPassword( const OUString &rNewPassword )
     }
 }
 
-bool ScDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash )
+bool ScDocShell::GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPasswordHash )
 {
     bool bRes = false;
     ScChangeTrack* pChangeTrack = m_pDocument->GetChangeTrack();

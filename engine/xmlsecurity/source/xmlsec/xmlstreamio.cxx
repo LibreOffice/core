@@ -112,7 +112,7 @@ static int xmlStreamRead( void* context, char* buffer, int len )
 {
     int numbers ;
     css::uno::Reference< css::io::XInputStream > xInputStream ;
-    css::uno::Sequence< sal_Int8 > outSeqs( len ) ;
+    cpo::uno::Sequence< sal_Int8 > outSeqs( len ) ;
 
     numbers = 0 ;
     if (g_bInputCallbacksEnabled && g_bInputCallbacksRegistered)

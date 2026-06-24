@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
@@ -194,7 +194,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
         css::uno::Reference< css::sdbc::XResultSet > xResultSet;
 
         const sal_Int32 nSeqSize = pDateTimeList ? 2 : 1;
-        css::uno::Sequence < OUString > aProps( nSeqSize );
+        cpo::uno::Sequence < OUString > aProps( nSeqSize );
         OUString* pProps = aProps.getArray();
         pProps[ 0 ] = u"Title"_ustr;
         if( pDateTimeList )

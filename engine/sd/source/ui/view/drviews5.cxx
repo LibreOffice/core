@@ -440,7 +440,7 @@ void DrawViewShell::HidePage()
         pFormShell->PrepareClose(false);
 }
 
-void DrawViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence )
+void DrawViewShell::WriteUserDataSequence ( cpo::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     WriteFrameViewData();
 
@@ -456,7 +456,7 @@ void DrawViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::Pro
     GetDocSh()->GetDoc()->WriteUserDataSequence(rSequence);
 }
 
-void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence )
+void DrawViewShell::ReadUserDataSequence ( const cpo::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     WriteFrameViewData();
 

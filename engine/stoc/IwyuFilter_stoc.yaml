@@ -37,7 +37,7 @@ excludelist:
     - vector
     - rtl/string.hxx
     # Actually used
-    - com/sun/star/uno/Sequence.hxx
+    - cpo/uno/Sequence.hxx
     stoc/source/security/access_controller.cxx:
     # Needed for __DIAGNOSE mode
     - rtl/ustrbuf.hxx

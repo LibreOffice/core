@@ -31,7 +31,7 @@ namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::uno { class XInterface; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace comphelper
@@ -87,7 +87,7 @@ public:
     OUString        CreateUniqueObjectName();
 
     // get a list of object names that have been added so far
-    css::uno::Sequence < OUString > GetObjectNames() const;
+    cpo::uno::Sequence < OUString > GetObjectNames() const;
 
     // check for existence of objects at all
     bool            HasEmbeddedObjects() const;
@@ -105,7 +105,7 @@ public:
 
     // create an object from a ClassId
     css::uno::Reference < css::embed::XEmbeddedObject > CreateEmbeddedObject(
-                        const css::uno::Sequence < sal_Int8 >& rClassId,
+                        const cpo::uno::Sequence < sal_Int8 >& rClassId,
                         OUString& rNewName,
                         std::optional<OUString> oDefaultParentBaseURL = std::nullopt );
 
@@ -118,14 +118,14 @@ public:
     // load an embedded object from a MediaDescriptor and insert it into the container
     // a new object will be created from the new content and returned
     css::uno::Reference < css::embed::XEmbeddedObject > InsertEmbeddedObject(
-                        const css::uno::Sequence < css::beans::PropertyValue >& aMedium,
+                        const cpo::uno::Sequence < css::beans::PropertyValue >& aMedium,
                         OUString& rName,
                         OUString const* pBaseURL = nullptr);
 
     // create an embedded link based on a MediaDescriptor and insert it into the container
     // a new object will be created from the new content and returned
     css::uno::Reference < css::embed::XEmbeddedObject > InsertEmbeddedLink(
-                        const css::uno::Sequence < css::beans::PropertyValue >& aMedium,
+                        const cpo::uno::Sequence < css::beans::PropertyValue >& aMedium,
                         OUString& rNewName);
 
     // create an object from a stream that contains its persistent representation and insert it as usual (usually called from clipboard)

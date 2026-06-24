@@ -175,10 +175,10 @@ SwVbaTablesOfContents::getServiceImplName()
     return u"SwVbaTablesOfContents"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaTablesOfContents::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.TablesOfContents"_ustr
     };

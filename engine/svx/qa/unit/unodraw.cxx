@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testWriterGraphicExport)
     // picture.
     xExportFilter->setSourceDocument(xShape);
 
-    uno::Sequence<beans::PropertyValue> aProperties(
+    cpo::uno::Sequence<beans::PropertyValue> aProperties(
         comphelper::InitPropertySequence({ { "URL", cpo::uno::Any(maTempFile.GetURL()) },
                                            { "MediaType", cpo::uno::Any(u"image/jpeg"_ustr) } }));
     CPPUNIT_ASSERT(xExportFilter->filter(aProperties));

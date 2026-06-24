@@ -28,6 +28,7 @@ using namespace ::svt;
 using namespace css::beans;
 using namespace css::task;
 using namespace css::uno;
+using namespace ::cpo::uno;
 
 RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )
     : SvtFileDialog_Base( pParent, u"fps/ui/remotefilesdialog.ui"_ustr, u"RemoteFilesDialog"_ustr )
@@ -923,13 +924,13 @@ void RemoteFilesDialog::SetHasFilename( bool )
 {
 }
 
-void RemoteFilesDialog::SetDenyList( const css::uno::Sequence< OUString >& rDenyList )
+void RemoteFilesDialog::SetDenyList( const cpo::uno::Sequence< OUString >& rDenyList )
 {
     m_aDenyList = rDenyList;
     m_xTreeView->SetDenyList( rDenyList );
 }
 
-const css::uno::Sequence< OUString >& RemoteFilesDialog::GetDenyList() const
+const cpo::uno::Sequence< OUString >& RemoteFilesDialog::GetDenyList() const
 {
     return m_aDenyList;
 }
@@ -967,7 +968,7 @@ void RemoteFilesDialog::setCurrentFileText( const OUString& rText, bool bSelectA
 
 void RemoteFilesDialog::AddFilterGroup(
                                   const OUString& rFilter,
-                                  const css::uno::Sequence< css::beans::StringPair >& rFilters )
+                                  const cpo::uno::Sequence< css::beans::StringPair >& rFilters )
 {
     AddFilter( rFilter, OUString() );
     for (const StringPair& rSubFilter : rFilters)

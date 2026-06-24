@@ -35,11 +35,11 @@ TSAURLsDialog::TSAURLsDialog(weld::Window* pParent)
 
     try
     {
-        std::optional<css::uno::Sequence<OUString>> aUserSetTSAURLs(
+        std::optional<cpo::uno::Sequence<OUString>> aUserSetTSAURLs(
             officecfg::Office::Common::Security::Scripting::TSAURLs::get());
         if (aUserSetTSAURLs)
         {
-            const css::uno::Sequence<OUString>& rUserSetTSAURLs = *aUserSetTSAURLs;
+            const cpo::uno::Sequence<OUString>& rUserSetTSAURLs = *aUserSetTSAURLs;
             for (auto const& userSetTSAURL : rUserSetTSAURLs)
             {
                 AddTSAURL(userSetTSAURL);

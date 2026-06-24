@@ -64,7 +64,7 @@ XCommandInfo_impl::queryInterface( const uno::Type& rType )
 }
 
 
-uno::Sequence< CommandInfo > SAL_CALL
+cpo::uno::Sequence< CommandInfo > SAL_CALL
 XCommandInfo_impl::getCommands()
 {
     return m_pMyShell->m_sCommandInfo;

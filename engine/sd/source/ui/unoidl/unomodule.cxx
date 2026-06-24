@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 
     // XNotifyingDispatch
-void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs, const uno::Reference< frame::XDispatchResultListener >& xListener )
+void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, const cpo::uno::Sequence< beans::PropertyValue >& aArgs, const uno::Reference< frame::XDispatchResultListener >& xListener )
 {
     // there is no guarantee, that we are held alive during this method!
     // May the outside dispatch container will be updated by a CONTEXT_CHANGED
@@ -64,7 +64,7 @@ void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     }
 }
     // XDispatch
-void SAL_CALL SdUnoModule::dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs )
+void SAL_CALL SdUnoModule::dispatch( const util::URL& aURL, const cpo::uno::Sequence< beans::PropertyValue >& aArgs )
 {
     dispatchWithNotification(aURL, aArgs, uno::Reference< frame::XDispatchResultListener >());
 }
@@ -77,10 +77,10 @@ void SAL_CALL SdUnoModule::removeStatusListener(const uno::Reference< frame::XSt
 {
 }
 
-uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& seqDescripts )
+cpo::uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryDispatches( const cpo::uno::Sequence< frame::DispatchDescriptor >& seqDescripts )
 {
     sal_Int32 nCount = seqDescripts.getLength();
-    uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
 
     std::transform(seqDescripts.begin(), seqDescripts.end(), lDispatcher.getArray(),
         [this](const frame::DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
@@ -114,7 +114,7 @@ bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.ModuleDispatcher"_ustr };
 }
@@ -122,7 +122,7 @@ uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Draw_DrawingModule_get_implementation(css::uno::XComponentContext* ,
-                                                        css::uno::Sequence<cpo::uno::Any> const &)
+                                                        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
 

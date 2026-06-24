@@ -1241,7 +1241,7 @@ bool SwFormatCol::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         rVal >>= xCols;
         if(xCols.is())
         {
-            uno::Sequence<text::TextColumn> aSetColumns = xCols->getColumns();
+            cpo::uno::Sequence<text::TextColumn> aSetColumns = xCols->getColumns();
             const text::TextColumn* pArray = aSetColumns.getConstArray();
             m_aColumns.clear();
             //max count is 64k here - this is something the array can't do

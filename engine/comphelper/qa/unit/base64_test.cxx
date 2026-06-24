@@ -24,7 +24,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <comphelper/base64.hxx>
 
@@ -49,7 +49,7 @@ public:
 void Base64Test::testBase64Encode()
 {
     OUStringBuffer aBuffer(32);
-    uno::Sequence<sal_Int8> inputSequence;
+    cpo::uno::Sequence<sal_Int8> inputSequence;
 
     inputSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);
@@ -68,9 +68,9 @@ void Base64Test::testBase64Encode()
 
 void Base64Test::testBase64Decode()
 {
-    uno::Sequence<sal_Int8> decodedSequence;
+    cpo::uno::Sequence<sal_Int8> decodedSequence;
 
-    uno::Sequence<sal_Int8> expectedSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
+    cpo::uno::Sequence<sal_Int8> expectedSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
     comphelper::Base64::decode(decodedSequence, u"AAAAAAABAgM=");
     CPPUNIT_ASSERT(std::equal(std::cbegin(expectedSequence), std::cend(expectedSequence),
                               std::cbegin(decodedSequence)));
@@ -89,7 +89,7 @@ void Base64Test::testBase64Decode()
 void Base64Test::testBase64EncodeForOStringBuffer()
 {
     OStringBuffer aBuffer(32);
-    uno::Sequence<sal_Int8> inputSequence;
+    cpo::uno::Sequence<sal_Int8> inputSequence;
 
     inputSequence = { 0, 0, 0, 0, 0, 1, 2, 3 };
     comphelper::Base64::encode(aBuffer, inputSequence);

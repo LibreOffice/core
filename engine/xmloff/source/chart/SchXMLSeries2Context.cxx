@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace
 {
@@ -1248,7 +1248,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                             = xPointProp->getPropertySetInfo();
                         if (xPointPropInfo.is())
                         {
-                            uno::Sequence<beans::Property> aProperties = xPointPropInfo->getProperties();
+                            cpo::uno::Sequence<beans::Property> aProperties = xPointPropInfo->getProperties();
                             for (const auto& rProperty : aProperties)
                             {
                                 if (!rProperty.Name.startsWith("Char")

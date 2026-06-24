@@ -66,7 +66,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
                    XInterceptorInfo, it will be registered for one pattern "*" by default.
                    That would make it possible to handle it in the same manner then real
                    registered interceptor objects and we must not implement any special code. */
-        css::uno::Sequence< OUString > lURLPattern;
+        cpo::uno::Sequence< OUString > lURLPattern;
     };
 
     /** @short implements a list of items of type InterceptorInfo, and provides some special
@@ -205,7 +205,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
 
             @return A list of dispatch objects.
          */
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor) override;
 
         // XDispatchProviderInterception
 

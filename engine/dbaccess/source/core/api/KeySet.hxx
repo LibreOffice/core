@@ -64,7 +64,7 @@ namespace dbaccess
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
     void getColumnPositions(const css::uno::Reference< css::container::XNameAccess >& _rxQueryColumns,
-                            const css::uno::Sequence< OUString >& _rColumnNames,
+                            const cpo::uno::Sequence< OUString >& _rColumnNames,
                             std::u16string_view _rsUpdateTableName,
                             SelectColumnsMetaData& o_rColumnNames /* out */,
                             bool i_bAppendTableName = false);
@@ -170,7 +170,7 @@ namespace dbaccess
         virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) override;
         virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) override;
         virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
         virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;

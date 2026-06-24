@@ -314,7 +314,7 @@ void StatusBarManager::CreateControllers()
             cpo::uno::Any(comphelper::makePropertyValue(u"StatusbarItem"_ustr, xStatusbarItem))
         };
 
-        uno::Sequence< cpo::uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
+        cpo::uno::Sequence< cpo::uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
 
         // 1) UNO Statusbar controllers, registered in Controllers.xcu
         if ( m_xStatusbarControllerFactory.is() &&
@@ -380,7 +380,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
-        uno::Sequence< beans::PropertyValue >   aProps;
+        cpo::uno::Sequence< beans::PropertyValue >   aProps;
         OUString                                aCommandURL;
         sal_Int16                               nOffset( 0 );
         sal_Int16                               nStyle( 0 );

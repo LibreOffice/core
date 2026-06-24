@@ -82,6 +82,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
+using namespace ::cpo::uno;
 using namespace ::sfx2;
 
 const sal_Unicode aDeliStart = '['; // for the form

@@ -88,10 +88,10 @@ ScVbaCheckbox::getServiceImplName()
     return u"ScVbaCheckbox"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaCheckbox::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.CheckBox"_ustr
     };

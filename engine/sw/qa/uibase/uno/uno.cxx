@@ -210,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
     createSwDoc();
     for (int i = 0; i < 2; ++i)
     {
-        uno::Sequence<css::beans::PropertyValue> aArgs = {
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
             comphelper::makePropertyValue(u"FieldType"_ustr, cpo::uno::Any(ODF_UNHANDLED)),
             comphelper::makePropertyValue(u"FieldCommand"_ustr,
                                           cpo::uno::Any(u"ADDIN ZOTERO_ITEM foo bar"_ustr)),
@@ -219,7 +219,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
         dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     }
     {
-        uno::Sequence<css::beans::PropertyValue> aArgs = {
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
             comphelper::makePropertyValue(u"FieldType"_ustr, cpo::uno::Any(ODF_UNHANDLED)),
             comphelper::makePropertyValue(u"FieldCommand"_ustr,
                                           cpo::uno::Any(u"ADDIN ZOTERO_BIBL foo bar"_ustr)),
@@ -284,19 +284,19 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmarks)
     // Given a document with 3 bookmarks: 2 zotero references and a zotero bibliography:
     createSwDoc();
     {
-        uno::Sequence<css::beans::PropertyValue> aArgs = {
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
             comphelper::makePropertyValue(u"Bookmark"_ustr, cpo::uno::Any(u"ZOTERO_BREF_1"_ustr)),
         };
         dispatchCommand(mxComponent, u".uno:InsertBookmark"_ustr, aArgs);
     }
     {
-        uno::Sequence<css::beans::PropertyValue> aArgs = {
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
             comphelper::makePropertyValue(u"Bookmark"_ustr, cpo::uno::Any(u"ZOTERO_BREF_2"_ustr)),
         };
         dispatchCommand(mxComponent, u".uno:InsertBookmark"_ustr, aArgs);
     }
     {
-        uno::Sequence<css::beans::PropertyValue> aArgs = {
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
             comphelper::makePropertyValue(u"Bookmark"_ustr, cpo::uno::Any(u"ZOTERO_BIBL"_ustr)),
         };
         dispatchCommand(mxComponent, u".uno:InsertBookmark"_ustr, aArgs);
@@ -326,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
     OUString aName(u"ZOTERO_ITEM CSL_CITATION {} "_ustr);
     for (int i = 0; i < 5; ++i)
     {
-        uno::Sequence<css::beans::PropertyValue> aArgs = {
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
             comphelper::makePropertyValue(u"TypeName"_ustr, cpo::uno::Any(u"SetRef"_ustr)),
             comphelper::makePropertyValue(u"Name"_ustr,
                                           cpo::uno::Any(aName + OUString::number(i + 1))),
@@ -405,7 +405,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
 {
     // Given a document with a fieldmark:
     createSwDoc();
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FieldType"_ustr, cpo::uno::Any(ODF_UNHANDLED)),
         comphelper::makePropertyValue(u"FieldCommand"_ustr,
                                       cpo::uno::Any(u"ADDIN ZOTERO_ITEM foo bar"_ustr)),
@@ -442,7 +442,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetSections)
 {
     // Given a document with a section:
     createSwDoc();
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(
             u"RegionName"_ustr,
             cpo::uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"_ustr)),
@@ -470,7 +470,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmark)
 {
     // Given a document with a bookmark:
     createSwDoc();
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Bookmark"_ustr, cpo::uno::Any(u"ZOTERO_BREF_1"_ustr)),
         comphelper::makePropertyValue(u"BookmarkText"_ustr,
                                       cpo::uno::Any(u"<p>aaa</p><p>bbb</p>"_ustr)),
@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetField)
 {
     // Given a document with a refmark:
     createSwDoc();
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"TypeName"_ustr, cpo::uno::Any(u"SetRef"_ustr)),
         comphelper::makePropertyValue(u"Name"_ustr,
                                       cpo::uno::Any(u"ZOTERO_ITEM CSL_CITATION {} refmark"_ustr)),

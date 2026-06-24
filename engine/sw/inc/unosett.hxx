@@ -65,7 +65,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void            Invalidate() {m_pDoc = nullptr;}
 };
@@ -95,7 +95,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void            Invalidate() {m_pDoc = nullptr;}
 };
@@ -125,7 +125,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void            Invalidate() {m_pDoc = nullptr;}
 };
@@ -185,16 +185,16 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    SW_DLLPUBLIC css::uno::Sequence<css::beans::PropertyValue> getRuleByIndex(sal_Int32 nIndex);
+    SW_DLLPUBLIC cpo::uno::Sequence<css::beans::PropertyValue> getRuleByIndex(sal_Int32 nIndex);
 
-    css::uno::Sequence< css::beans::PropertyValue>
+    cpo::uno::Sequence< css::beans::PropertyValue>
             GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
     void    SetNumberingRuleByIndex(SwNumRule& rNumRule,
-                const css::uno::Sequence< css::beans::PropertyValue>& rProperties, sal_Int32 nIndex);
+                const cpo::uno::Sequence< css::beans::PropertyValue>& rProperties, sal_Int32 nIndex);
 
     const UIName*           GetNewCharStyleNames() const {return m_sNewCharStyleNames;}
     const UIName*           GetBulletFontNames() const {return m_sNewBulletFontNames;}
@@ -206,7 +206,7 @@ public:
 
     SW_DLLPUBLIC cpo::uno::Any getPropertyByIndex(sal_Int32 nIndex, const OUString& rPropName);
 
-    static css::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(
+    static cpo::uno::Sequence<css::beans::PropertyValue> GetPropertiesForNumFormat(
             const SwNumFormat& rFormat, UIName const& rCharFormatName,
             ProgName const* pHeadingStyleName, OUString const & referer);
     static void SetPropertiesToNumFormat(
@@ -217,7 +217,7 @@ public:
             OUString *const pParagraphStyleName,
             SwDoc *const pDoc,
             SwDocShell *const pDocShell,
-            css::uno::Sequence<css::beans::PropertyValue> const& rProperties);
+            cpo::uno::Sequence<css::beans::PropertyValue> const& rProperties);
 
 private:
     cpo::uno::Any GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex, const OUString& rPropName) const;
@@ -238,7 +238,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 

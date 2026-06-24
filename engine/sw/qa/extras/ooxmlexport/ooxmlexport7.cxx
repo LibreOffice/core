@@ -715,7 +715,7 @@ DECLARE_OOXMLEXPORT_TEST(testPresetShape, "preset-shape.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
     comphelper::SequenceAsHashMap aPath(aCustomShapeGeometry[u"Path"_ustr]);
-    uno::Sequence<awt::Size>      aSubViewSize((aPath[u"SubViewSize"_ustr]).get<uno::Sequence<awt::Size> >() );
+    cpo::uno::Sequence<awt::Size>      aSubViewSize((aPath[u"SubViewSize"_ustr]).get<cpo::uno::Sequence<awt::Size> >() );
 
     // This was 0.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aSubViewSize[0].Height);
@@ -937,7 +937,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentInitials)
 DECLARE_OOXMLEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr));
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< cpo::uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr));
 
     // Test that the shape is a rounded rectangle.
     CPPUNIT_ASSERT_EQUAL(u"ooxml-roundRect"_ustr, aCustomShapeGeometry[u"Type"_ustr].get<OUString>());

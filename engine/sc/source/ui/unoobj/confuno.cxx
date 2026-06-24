@@ -71,7 +71,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetConfigPropertyMap()
         { SC_UNO_RASTERSYNC,   0,  cppu::UnoType<bool>::get(),              0, 0},
         { SC_UNO_AUTOCALC,     0,  cppu::UnoType<bool>::get(),              0, 0},
         { SC_UNO_PRINTERNAME,  0,  cppu::UnoType<OUString>::get(),    0, 0},
-        { SC_UNO_PRINTERSETUP, 0,  cppu::UnoType<uno::Sequence<sal_Int8>>::get(), 0, 0},
+        { SC_UNO_PRINTERSETUP, 0,  cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), 0, 0},
         { SC_UNO_PRINTERPAPER, 0,  cppu::UnoType<bool>::get(),              0, 0},
         { SC_UNO_APPLYDOCINF,  0,  cppu::UnoType<bool>::get(),              0, 0 },
         { SC_UNO_SAVE_THUMBNAIL,  0,  cppu::UnoType<bool>::get(),              0, 0 },
@@ -84,7 +84,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetConfigPropertyMap()
         { SC_UNO_ALLOWPRINTJOBCANCEL, 0, cppu::UnoType<bool>::get(),        0, 0},
         { SC_UNO_LOADREADONLY, 0,  cppu::UnoType<bool>::get(),              0, 0},
         { SC_UNO_SHAREDOC,     0,  cppu::UnoType<bool>::get(),              0, 0},
-        { SC_UNO_MODIFYPASSWORDINFO, 0,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),              0, 0},
+        { SC_UNO_MODIFYPASSWORDINFO, 0,  cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get(),              0, 0},
         { SC_UNO_MODIFYPASSWORDHASH, 0,  cppu::UnoType<sal_Int32>::get(),   0, 0},
         { SC_UNO_EMBED_FONTS,               0,  cppu::UnoType<bool>::get(), 0, 0},
         { SC_UNO_EMBED_ONLY_USED_FONTS,     0,  cppu::UnoType<bool>::get(), 0, 0},
@@ -236,7 +236,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
     }
     else if ( aPropertyName == SC_UNO_PRINTERSETUP )
     {
-        uno::Sequence<sal_Int8> aSequence;
+        cpo::uno::Sequence<sal_Int8> aSequence;
         if ( aValue >>= aSequence )
         {
             sal_uInt32 nSize = aSequence.getLength();
@@ -333,7 +333,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
     }
     else if ( aPropertyName == SC_UNO_MODIFYPASSWORDINFO )
     {
-        uno::Sequence< beans::PropertyValue > aInfo;
+        cpo::uno::Sequence< beans::PropertyValue > aInfo;
         if ( !( aValue >>= aInfo ) )
             throw lang::IllegalArgumentException(
                 u"Value of type Sequence<PropertyValue> expected!"_ustr,
@@ -526,11 +526,11 @@ cpo::uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString
         {
             SvMemoryStream aStream;
             pPrinter->Store( aStream );
-            aRet <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aStream.GetData() ),
+            aRet <<= cpo::uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aStream.GetData() ),
                                                         aStream.TellEnd() );
         }
         else
-            aRet <<= uno::Sequence<sal_Int8>();
+            aRet <<= cpo::uno::Sequence<sal_Int8>();
     }
     else if ( aPropertyName == SC_UNO_PRINTERPAPER)
     {
@@ -657,7 +657,7 @@ bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rService
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
 {
     return {u"com.sun.star.comp.SpreadsheetSettings"_ustr,
             u"com.sun.star.document.Settings"_ustr};

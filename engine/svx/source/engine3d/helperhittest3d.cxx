@@ -26,7 +26,7 @@
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <sdr/contact/viewcontactofe3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 
 using namespace com::sun::star;
@@ -148,7 +148,7 @@ E3dScene* fillViewInformation3DForCompoundObject(drawinglayer::geometry::ViewInf
     }
     else
     {
-        const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+        const cpo::uno::Sequence< beans::PropertyValue > aEmptyParameters;
         o_rViewInformation3D = drawinglayer::geometry::ViewInformation3D(aEmptyParameters);
     }
 
@@ -181,7 +181,7 @@ void getAllHit3DObjectsSortedFrontToBack(
 
     SdrObjListIter aIterator(pList, SdrIterMode::DeepNoGroups);
     ::std::vector< ImplPairDephAndObject > aDepthAndObjectResults;
-    const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+    const cpo::uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
 
     while(aIterator.IsMore())
@@ -234,7 +234,7 @@ bool checkHitSingle3DObject(
     const basegfx::B2DPoint& rPoint,
     const E3dCompoundObject& rCandidate)
 {
-    const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+    const cpo::uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, rCandidate);
 

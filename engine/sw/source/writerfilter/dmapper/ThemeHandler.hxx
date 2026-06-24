@@ -26,7 +26,7 @@ private:
 
 public:
     ThemeHandler(oox::drawingml::ThemePtr const& pTheme,
-                 const css::uno::Sequence<css::beans::PropertyValue>& rLangProperties);
+                 const cpo::uno::Sequence<css::beans::PropertyValue>& rLangProperties);
     OUString getFontNameForTheme(const Id id) const;
     static OUString getStringForTheme(const Id id);
 };

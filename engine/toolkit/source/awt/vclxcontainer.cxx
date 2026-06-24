@@ -59,19 +59,19 @@ void VCLXContainer::removeVclContainerListener( const css::uno::Reference< css::
         GetContainerListeners().removeInterface( rxListener );
 }
 
-css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::getWindows(  )
+cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::getWindows(  )
 {
     SolarMutexGuard aGuard;
 
     // Request container interface from all children
-    css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > aSeq;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > > aSeq;
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         sal_uInt16 nChildren = pWindow->GetChildCount();
         if ( nChildren )
         {
-            aSeq = css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >( nChildren );
+            aSeq = cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >( nChildren );
             css::uno::Reference< css::awt::XWindow > * pChildRefs = aSeq.getArray();
             for ( sal_uInt16 n = 0; n < nChildren; n++ )
             {
@@ -102,7 +102,7 @@ void VCLXContainer::enableDialogControl( bool bEnable )
     }
 }
 
-void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const css::uno::Sequence< cpo::uno::Any >& Tabs, bool bGroupControl )
+void VCLXContainer::setTabOrder( const cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const cpo::uno::Sequence< cpo::uno::Any >& Tabs, bool bGroupControl )
 {
     SolarMutexGuard aGuard;
 
@@ -116,7 +116,7 @@ void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< 
     {
         // css::style::TabStop
         VclPtr<vcl::Window> pWin = VCLUnoHelper::GetWindow( pComps[n] );
-        // May be NULL if a css::uno::Sequence is originated from TabController and is missing a peer!
+        // May be NULL if a cpo::uno::Sequence is originated from TabController and is missing a peer!
         if ( pWin )
         {
             // Order windows before manipulating their style, because elements such as the
@@ -147,7 +147,7 @@ void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< 
     }
 }
 
-void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components )
+void VCLXContainer::setGroup( const cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components )
 {
     SolarMutexGuard aGuard;
 

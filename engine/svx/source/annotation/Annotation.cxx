@@ -115,7 +115,7 @@ void Annotation::fromData(const AnnotationData& rData)
 Annotation::Annotation(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
                        SdrPage* pPage)
     : cppu::PropertySetMixin<office::XAnnotation>(rxContext, IMPLEMENTS_PROPERTY_SET,
-                                                  uno::Sequence<OUString>())
+                                                  cpo::uno::Sequence<OUString>())
     , mpPage(pPage)
 {
 }

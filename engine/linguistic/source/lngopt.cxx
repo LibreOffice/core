@@ -380,7 +380,7 @@ bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
 }
 
 // XServiceInfo
-uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
 {
     return { u"com.sun.star.linguistic2.LinguProperties"_ustr };
 }
@@ -411,7 +411,7 @@ Locale LinguProps::getPropertyLocale(const OUString& aPropertyName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_LinguProps_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LinguProps());
 }

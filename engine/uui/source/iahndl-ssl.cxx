@@ -30,7 +30,7 @@
 
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
@@ -79,7 +79,7 @@ getContentPart( std::u16string_view _rRawString )
 
 bool
 isDomainMatch(
-              std::u16string_view hostName, const uno::Sequence< OUString >& certHostNames)
+              std::u16string_view hostName, const cpo::uno::Sequence< OUString >& certHostNames)
 {
     for ( const OUString& element : certHostNames){
        if (element.isEmpty())
@@ -225,7 +225,7 @@ handleCertificateValidationRequest_(
     weld::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     ucb::CertificateValidationRequest const & rRequest,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
 {
     uno::Reference< task::XInteractionApprove > xApprove;
@@ -253,7 +253,7 @@ handleCertificateValidationRequest_(
                                               rRequest.Certificate );
     }
 
-    const uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = rRequest.Certificate->getExtensions();
+    const cpo::uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = rRequest.Certificate->getExtensions();
     uno::Reference< security::XSanExtension > sanExtension;
     auto pExtension = std::find_if(extensions.begin(), extensions.end(),
         [](const uno::Reference< security::XCertificateExtension >& element) {
@@ -271,7 +271,7 @@ handleCertificateValidationRequest_(
         altNames = comphelper::sequenceToContainer<std::vector<security::CertAltNameEntry>>(sanExtension->getAlternativeNames());
     }
 
-    uno::Sequence< OUString > certHostNames(altNames.size() + 1);
+    cpo::uno::Sequence< OUString > certHostNames(altNames.size() + 1);
     auto pcertHostNames = certHostNames.getArray();
     pcertHostNames[0] = getContentPart(rRequest.Certificate->getSubjectName());
 

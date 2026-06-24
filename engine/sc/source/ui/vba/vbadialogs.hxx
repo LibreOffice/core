@@ -37,7 +37,7 @@ public:
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 private:
     css::uno::Reference< css::frame::XModel > m_xModel;
 };

@@ -29,6 +29,7 @@
 #include <cassert>
 
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 // converts the openoffice text/html clipboard format to the HTML Format
 // well known under MS Windows

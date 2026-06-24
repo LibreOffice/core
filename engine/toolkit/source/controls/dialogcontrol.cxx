@@ -151,7 +151,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"stardiv.Toolkit.UnoControlDialogModel"_ustr; }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         auto s(ControlModelContainerBase::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
@@ -203,7 +203,7 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
     Reference< XNameContainer > xSrcNameCont( const_cast< UnoControlDialogModel& >(rModel).getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
     Reference<XNameContainer > xNameCont( new SimpleNamedThingContainer< XControlModel > );
 
-    const uno::Sequence< OUString > sNames = xSrcNameCont->getElementNames();
+    const cpo::uno::Sequence< OUString > sNames = xSrcNameCont->getElementNames();
     for ( OUString const & name : sNames )
     {
         if ( xSrcNameCont->hasByName( name ) )
@@ -385,9 +385,9 @@ bool UnoDialogControl::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> UnoDialogControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoDialogControl::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         u"com.sun.star.awt.UnoControlDialog"_ustr,
         u"stardiv.vcl.control.Dialog"_ustr};
 }
@@ -748,7 +748,7 @@ void SAL_CALL UnoMultiPageControl::removeTabListener( const Reference< XTabListe
 IMPL_IMPLEMENTATION_ID( UnoMultiPageControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoMultiPageControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoMultiPageControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -805,7 +805,7 @@ void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, c
 
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
-    const uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
+    const cpo::uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
     for( const auto& rCtrl : aCtrls )
        bindPage( rCtrl );
     sal_Int32 nActiveTab(0);
@@ -1177,7 +1177,7 @@ uno::Reference< beans::XPropertySetInfo > UnoFrameModel::getPropertySetInfo(  )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlDialogModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new OGeometryControlModel<UnoControlDialogModel>(context));
 }
@@ -1185,7 +1185,7 @@ stardiv_Toolkit_UnoControlDialogModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoDialogControl_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoDialogControl(context));
 }
@@ -1193,7 +1193,7 @@ stardiv_Toolkit_UnoDialogControl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoMultiPageControl_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoMultiPageControl(context));
 }
@@ -1201,7 +1201,7 @@ stardiv_Toolkit_UnoMultiPageControl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoMultiPageModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoMultiPageModel(context));
 }
@@ -1209,7 +1209,7 @@ stardiv_Toolkit_UnoMultiPageModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoPageControl_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoPageControl(context));
 }
@@ -1217,7 +1217,7 @@ stardiv_Toolkit_UnoPageControl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoPageModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoPageModel(context));
 }
@@ -1225,7 +1225,7 @@ stardiv_Toolkit_UnoPageModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFrameControl_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFrameControl(context));
 }
@@ -1233,7 +1233,7 @@ stardiv_Toolkit_UnoFrameControl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFrameModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFrameModel(context));
 }

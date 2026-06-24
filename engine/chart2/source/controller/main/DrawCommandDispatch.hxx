@@ -54,7 +54,7 @@ protected:
     virtual FeatureState getState( const OUString& rCommand ) override;
 
     // execute a feature
-    virtual void execute( const OUString& rCommand, const css::uno::Sequence< css::beans::PropertyValue>& rArgs ) override;
+    virtual void execute( const OUString& rCommand, const cpo::uno::Sequence< css::beans::PropertyValue>& rArgs ) override;
 
     // all the features which should be handled by this class
     virtual void describeSupportedFeatures() override;

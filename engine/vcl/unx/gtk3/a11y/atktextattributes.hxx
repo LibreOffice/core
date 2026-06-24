@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 
 #include <atk/atk.h>
 
 AtkAttributeSet* attribute_set_new_from_property_values(
-    const css::uno::Sequence<css::beans::PropertyValue>& rAttributeList, bool run_attributes_only,
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rAttributeList, bool run_attributes_only,
     AtkText* text);
 
 AtkAttributeSet* attribute_set_new_from_extended_attributes(
@@ -34,7 +34,7 @@ AtkAttributeSet* attribute_set_new_from_extended_attributes(
         rExtendedAttributes);
 
 bool attribute_set_map_to_property_values(
-    AtkAttributeSet* attribute_set, css::uno::Sequence<css::beans::PropertyValue>& rValueList);
+    AtkAttributeSet* attribute_set, cpo::uno::Sequence<css::beans::PropertyValue>& rValueList);
 
 AtkAttributeSet* attribute_set_prepend_misspelled(AtkAttributeSet* attribute_set);
 // #i92232#

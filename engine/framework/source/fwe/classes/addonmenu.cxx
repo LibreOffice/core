@@ -22,7 +22,7 @@
 #include <menuconfiguration.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <vcl/commandinfoprovider.hxx>
@@ -31,6 +31,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
+using namespace ::cpo::uno;
 
 namespace framework
 {

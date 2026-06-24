@@ -251,7 +251,7 @@ OUString QtClipboard::getImplementationName()
     return u"com.sun.star.datatransfer.QtClipboard"_ustr;
 }
 
-css::uno::Sequence<OUString> QtClipboard::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> QtClipboard::getSupportedServiceNames()
 {
     return { u"com.sun.star.datatransfer.clipboard.SystemClipboard"_ustr };
 }

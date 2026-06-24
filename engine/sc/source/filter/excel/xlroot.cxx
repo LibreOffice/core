@@ -256,7 +256,7 @@ sal_Int32 XclRoot::GetHmmFromPixelY( double fPixelY ) const
     return static_cast< sal_Int32 >( fPixelY * mrData.mfScreenPixelY + 0.5 );
 }
 
-uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+cpo::uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
     ::std::vector< OUString > aDefaultPasswords {  XclRootData::gaDefPassword };
     return ScfApiHelper::QueryEncryptionDataForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );

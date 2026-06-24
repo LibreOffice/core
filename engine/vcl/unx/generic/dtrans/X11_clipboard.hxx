@@ -64,7 +64,7 @@ namespace x11 {
 
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         /*
          * XClipboard
@@ -102,7 +102,7 @@ namespace x11 {
         virtual css::uno::Reference< css::uno::XInterface > getReference() noexcept override;
     };
 
-    css::uno::Sequence< OUString > X11Clipboard_getSupportedServiceNames();
+    cpo::uno::Sequence< OUString > X11Clipboard_getSupportedServiceNames();
 
 } // namespace
 

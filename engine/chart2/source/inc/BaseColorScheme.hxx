@@ -32,11 +32,11 @@ public:
 
     /// declare XServiceInfo methods
     bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 protected:
     // member variables
-    mutable css::uno::Sequence<sal_Int64> m_aColorSequence;
+    mutable cpo::uno::Sequence<sal_Int64> m_aColorSequence;
     mutable sal_Int32 m_nNumberOfColors;
 };
 } // namespace chart

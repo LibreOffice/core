@@ -45,7 +45,7 @@ void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& 
     rtl::Reference< Diagram > xDiagram = xChartModel->getFirstChartDiagram();
 
     //get possibilities
-    uno::Sequence< bool > aAxisPossibilityList;
+    cpo::uno::Sequence< bool > aAxisPossibilityList;
     AxisHelper::getAxisOrGridPossibilities( aAxisPossibilityList, xDiagram );
     bool* pPossibilityList = aPossibilityList.getArray();
     pPossibilityList[2]=aAxisPossibilityList[0];//x axis title

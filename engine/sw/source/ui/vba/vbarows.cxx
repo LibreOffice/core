@@ -363,10 +363,10 @@ SwVbaRows::getServiceImplName()
     return u"SwVbaRows"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaRows::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Rows"_ustr
     };

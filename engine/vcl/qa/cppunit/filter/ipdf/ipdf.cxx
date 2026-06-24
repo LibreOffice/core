@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     createTempCopy(u"add-visible-signature-last-page.pdf");
 
     // Open it.
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
     loadWithParams(maTempFile.GetURL(), aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());

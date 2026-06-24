@@ -409,7 +409,7 @@ sal_Int32 BrowseBox::GetSelectedColumnCount() const
     return pColumnSel ? pColumnSel->GetSelectCount() : 0;
 }
 
-void BrowseBox::GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const
+void BrowseBox::GetAllSelectedRows( cpo::uno::Sequence< sal_Int32 >& _rRows ) const
 {
     sal_Int32 nCount = GetSelectRowCount();
     if( nCount )
@@ -424,7 +424,7 @@ void BrowseBox::GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) co
     }
 }
 
-void BrowseBox::GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const
+void BrowseBox::GetAllSelectedColumns( cpo::uno::Sequence< sal_Int32 >& _rColumns ) const
 {
     const MultiSelection* pColumnSel = GetColumnSelection();
     sal_Int32 nCount = GetSelectedColumnCount();

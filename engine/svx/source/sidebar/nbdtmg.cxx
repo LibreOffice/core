@@ -56,6 +56,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::text;
 using namespace com::sun::star::container;
+using namespace ::cpo::uno;
 
 namespace svx::sidebar {
 
@@ -249,8 +250,8 @@ BulletsTypeMgr& BulletsTypeMgr::GetInstance()
 
 void BulletsTypeMgr::Init()
 {
-    css::uno::Sequence< OUString > aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
-    css::uno::Sequence< OUString > aBulletSymbolsFonts(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
+    cpo::uno::Sequence< OUString > aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
+    cpo::uno::Sequence< OUString > aBulletSymbolsFonts(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
 
     vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
@@ -277,7 +278,7 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
     const SvxNumberFormat& aFmt(aNum.GetLevel(nActLv));
     sal_UCS4 cChar = aFmt.GetBulletChar();
 
-    css::uno::Sequence<OUString> aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
+    cpo::uno::Sequence<OUString> aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
     for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
     {
         if ( (cChar == aBulletSymbols[i].toChar()) ||
@@ -322,8 +323,8 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return;
 
-    css::uno::Sequence<OUString> aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
-    css::uno::Sequence<OUString> aBulletFontSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
+    cpo::uno::Sequence<OUString> aBulletSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBullets::get());
+    cpo::uno::Sequence<OUString> aBulletFontSymbols(officecfg::Office::Common::BulletsNumbering::DefaultBulletsFonts::get());
 
     sal_UCS4 cChar = aBulletSymbols[nIndex].toChar();
     vcl::Font& rActBulletFont = pActualBullets[nIndex]->aFont;

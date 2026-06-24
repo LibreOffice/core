@@ -88,7 +88,7 @@ public:
     virtual void SetShowChanges( bool bShowChanges ) override;
     virtual void SetRecordChanges( bool bRecordChanges ) override;
     virtual void SetChangesProtectionKey(
-        const css::uno::Sequence<sal_Int8> & rKey ) override;
+        const cpo::uno::Sequence<sal_Int8> & rKey ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLTEXTI_HXX

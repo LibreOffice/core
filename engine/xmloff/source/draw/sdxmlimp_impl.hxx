@@ -95,11 +95,11 @@ public:
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     virtual void SAL_CALL endDocument() override;
-    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
-    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
+    virtual void SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
@@ -127,7 +127,7 @@ public:
     bool IsImpress() const { return !mbIsDraw; }
 
     virtual void SetStatistics(
-        const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
+        const cpo::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
 
     bool IsPreview() const { return mbPreview; }
 

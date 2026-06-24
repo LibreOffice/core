@@ -179,7 +179,7 @@ bool RootAccess::hasPendingChanges() {
     return !changes.empty();
 }
 
-css::uno::Sequence< ::css::util::ElementChange > RootAccess::getPendingChanges()
+cpo::uno::Sequence< ::css::util::ElementChange > RootAccess::getPendingChanges()
 {
     assert(thisIs(IS_UPDATE));
     osl::MutexGuard g(*lock_);

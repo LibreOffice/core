@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
@@ -78,7 +78,7 @@ class ConfigChangeListener_Impl;
 
             void                    RemoveChangesListener();
             void                    CallNotify(
-                                const css::uno::Sequence<OUString>& aPropertyNames);
+                                const cpo::uno::Sequence<OUString>& aPropertyNames);
 
             css::uno::Reference< css::container::XHierarchicalNameAccess>
                                         GetTree();
@@ -93,15 +93,15 @@ class ConfigChangeListener_Impl;
             void                    SetModified  (); // mark item as modified
             void                    ClearModified(); // reset state after commit!
 
-            css::uno::Sequence< cpo::uno::Any>
-                                    GetProperties(const css::uno::Sequence< OUString >& rNames);
+            cpo::uno::Sequence< cpo::uno::Any>
+                                    GetProperties(const cpo::uno::Sequence< OUString >& rNames);
 
-            css::uno::Sequence< bool >
-                                    GetReadOnlyStates(const css::uno::Sequence< OUString >& rNames);
+            cpo::uno::Sequence< bool >
+                                    GetReadOnlyStates(const cpo::uno::Sequence< OUString >& rNames);
 
             bool                PutProperties(
-                                        const css::uno::Sequence< OUString >& rNames,
-                                        const css::uno::Sequence< cpo::uno::Any>& rValues);
+                                        const cpo::uno::Sequence< OUString >& rNames,
+                                        const cpo::uno::Sequence< cpo::uno::Any>& rValues);
 
             /** enables notifications about changes on selected sub nodes/values
 
@@ -111,7 +111,7 @@ class ConfigChangeListener_Impl;
                 @see Notify
                 @see DisableNotification
             */
-            bool                EnableNotification(const css::uno::Sequence< OUString >& rNames,
+            bool                EnableNotification(const cpo::uno::Sequence< OUString >& rNames,
                                         bool bEnableInternalNotification = false);
             /** disables notifications about changes on sub nodes/values, which previously had
                 been enabled with EnableNotification
@@ -121,20 +121,20 @@ class ConfigChangeListener_Impl;
             void                    DisableNotification();
 
             //returns all members of a node in a specific format
-            css::uno::Sequence< OUString >
+            cpo::uno::Sequence< OUString >
                                     GetNodeNames(const OUString& rNode);
             //returns all members of a node in a specific format
-            css::uno::Sequence< OUString >
+            cpo::uno::Sequence< OUString >
                                     GetNodeNames(const OUString& rNode, ConfigNameFormat eFormat);
             // remove all members of a set
             bool                ClearNodeSet(const OUString& rNode);
             // remove selected members of a set
             bool                ClearNodeElements(const OUString& rNode,
-                                        css::uno::Sequence< OUString > const & rElements);
+                                        cpo::uno::Sequence< OUString > const & rElements);
             // change or add members to a set
-            bool                SetSetProperties(const OUString& rNode, const css::uno::Sequence< css::beans::PropertyValue >& rValues);
+            bool                SetSetProperties(const OUString& rNode, const cpo::uno::Sequence< css::beans::PropertyValue >& rValues);
             // remove, change or add members of a set
-            bool                ReplaceSetProperties(const OUString& rNode, const css::uno::Sequence< css::beans::PropertyValue >& rValues);
+            bool                ReplaceSetProperties(const OUString& rNode, const cpo::uno::Sequence< css::beans::PropertyValue >& rValues);
             // add a new node without setting any properties
             bool                AddNode(const OUString& rNode, const OUString& rNewNode);
 
@@ -148,7 +148,7 @@ class ConfigChangeListener_Impl;
 
             /** is called from the ConfigManager before application ends of from the
                 PropertyChangeListener if the sub tree broadcasts changes. */
-            virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames)=0;
+            virtual void            Notify( const cpo::uno::Sequence<OUString>& aPropertyNames)=0;
 
             const OUString&         GetSubTreeName() const {return sSubTree;}
 
@@ -159,17 +159,17 @@ class ConfigChangeListener_Impl;
             ConfigItemMode GetMode() const { return m_nMode;}
 
             //returns all members of a node in a specific format
-            static css::uno::Sequence< OUString > GetNodeNames(
+            static cpo::uno::Sequence< OUString > GetNodeNames(
                     css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const OUString& rNode, ConfigNameFormat eFormat);
-            static css::uno::Sequence< cpo::uno::Any> GetProperties(
+            static cpo::uno::Sequence< cpo::uno::Any> GetProperties(
                     css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
-                    const css::uno::Sequence< OUString >& rNames,
+                    const cpo::uno::Sequence< OUString >& rNames,
                     bool bAllLocales);
             static bool PutProperties(
                     css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
-                    const css::uno::Sequence< OUString >& rNames,
-                    const css::uno::Sequence< cpo::uno::Any>& rValues,
+                    const cpo::uno::Sequence< OUString >& rNames,
+                    const cpo::uno::Sequence< cpo::uno::Any>& rValues,
                     bool bAllLocales);
             // remove all members of a set
             static bool ClearNodeSet(
@@ -179,13 +179,13 @@ class ConfigChangeListener_Impl;
             static bool ReplaceSetProperties(
                     css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const OUString& rNode,
-                    const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
                     bool bAllLocales);
             // change or add members to a set
             static bool SetSetProperties(
                     css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const OUString& rNode,
-                    const css::uno::Sequence< css::beans::PropertyValue >& rValues);
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& rValues);
     };
 }//namespace utl
 #endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX

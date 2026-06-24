@@ -30,7 +30,7 @@ using namespace com::sun::star::mozilla;
 using namespace connectivity::mozab;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 MozillaBootstrap::MozillaBootstrap()
     : OMozillaBootstrap_BASE(m_aMutex)
@@ -72,7 +72,7 @@ Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  )
 {
     return m_ProfileAccess->getProfileCount(product);
 }
-::sal_Int32 SAL_CALL MozillaBootstrap::getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list )
+::sal_Int32 SAL_CALL MozillaBootstrap::getProfileList( css::mozilla::MozillaProductType product, cpo::uno::Sequence< OUString >& list )
 {
     return m_ProfileAccess->getProfileList(product,list);
 }
@@ -127,7 +127,7 @@ OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProd
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_moz_MozillaBootstrap_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new connectivity::mozab::MozillaBootstrap());
 }

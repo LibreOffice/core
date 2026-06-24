@@ -38,7 +38,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -60,12 +60,12 @@ namespace {
 class Service: public cppu::WeakImplHelper< css::lang::XMain > {
 public:
     virtual sal_Int32 SAL_CALL
-    run(css::uno::Sequence< OUString > const & arguments)
+    run(cpo::uno::Sequence< OUString > const & arguments)
         throw (css::uno::RuntimeException);
 
     static OUString getImplementationName();
 
-    static css::uno::Sequence< OUString > getSupportedServiceNames();
+    static cpo::uno::Sequence< OUString > getSupportedServiceNames();
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -115,13 +115,13 @@ template< typename T > void assertEqual(T const & value, T const & argument) {
 
 }
 
-sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
+sal_Int32 Service::run(cpo::uno::Sequence< OUString > const &)
     throw (css::uno::RuntimeException)
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > factory(
         m_context->getServiceManager());
     assertTrue(factory.is());
-    css::uno::Sequence< cpo::uno::Any > args(1);
+    cpo::uno::Sequence< cpo::uno::Any > args(1);
     args[0] = css::uno::Reference< css::beans::XPropertySet >(
         factory, css::uno::UNO_QUERY_THROW)->getPropertyValue(
             OUString("Registry"));
@@ -254,14 +254,14 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
     assertEqual(
         OUString( "test.registrytdprovider.XTest1"),
         interface->getName());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > bases(
             interface->getBaseTypes());
     assertEqual< sal_Int32 >(1, bases.getLength());
     assertEqual(
         OUString( "com.sun.star.uno.XInterface"),
         bases[0]->getName());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
             optionalBases(interface->getOptionalBaseTypes());
     assertEqual< sal_Int32 >(1, optionalBases.getLength());
@@ -269,7 +269,7 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
         OUString(
             "test.registrytdprovider.XBase"),
         optionalBases[0]->getName());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > members(
                 interface->getMembers());
@@ -277,10 +277,10 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
 
     css::uno::Reference< css::reflection::XInterfaceAttributeTypeDescription2 >
         attribute;
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
             getExceptions;
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
             setExceptions;
     css::uno::Reference< css::reflection::XInterfaceMethodTypeDescription >
@@ -733,8 +733,8 @@ OUString Service::getImplementationName() {
     return OUString("test.registrytdprovider.impl");
 }
 
-css::uno::Sequence< OUString > Service::getSupportedServiceNames() {
-    return css::uno::Sequence< OUString >();
+cpo::uno::Sequence< OUString > Service::getSupportedServiceNames() {
+    return cpo::uno::Sequence< OUString >();
 }
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(
@@ -765,7 +765,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(char const 
 namespace {
 
 bool writeInfo(void * registryKey, OUString const & implementationName,
-               css::uno::Sequence< OUString > const & serviceNames) {
+               cpo::uno::Sequence< OUString > const & serviceNames) {
     OUString keyName = "/" + implementationName + "/UNO/SERVICES";
     css::uno::Reference< css::registry::XRegistryKey > key;
     try {

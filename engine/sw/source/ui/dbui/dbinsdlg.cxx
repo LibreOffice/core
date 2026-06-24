@@ -1477,7 +1477,7 @@ static OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
     }
 }
 
-void SwInsertDBColAutoPilot::Notify( const css::uno::Sequence< OUString >&  ) {}
+void SwInsertDBColAutoPilot::Notify( const cpo::uno::Sequence< OUString >&  ) {}
 
 void SwInsertDBColAutoPilot::ImplCommit()
 {

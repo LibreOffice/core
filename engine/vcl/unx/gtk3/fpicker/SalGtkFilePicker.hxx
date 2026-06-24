@@ -74,11 +74,11 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         virtual OUString SAL_CALL getDisplayDirectory(  ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getFiles(  ) override;
 
         // XFilePicker2 functions
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSelectedFiles() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSelectedFiles() override;
 
         // XFilterManager functions
 
@@ -90,7 +90,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         // XFilterGroupManager functions
 
-        virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters ) override;
+        virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const cpo::uno::Sequence< css::beans::StringPair >& aFilters ) override;
 
         // XFilePickerControlAccess functions
 
@@ -106,7 +106,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         // XFilePreview
 
-        virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  ) override;
+        virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  ) override;
 
         virtual sal_Int32 SAL_CALL getTargetColorDepth(  ) override;
 
@@ -122,7 +122,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
 
         // XInitialization
 
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XCancellable
 
@@ -135,7 +135,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         SalGtkFilePicker& operator=( const SalGtkFilePicker& ) = delete;
 
         bool FilterNameExists( const OUString& rTitle );
-        bool FilterNameExists( const css::uno::Sequence< css::beans::StringPair >& _rGroupedFilters );
+        bool FilterNameExists( const cpo::uno::Sequence< css::beans::StringPair >& _rGroupedFilters );
 
         void ensureFilterVector( const OUString& _rInitialCurrentFilter );
 
@@ -215,7 +215,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         void implChangeType( GtkTreeSelection *selection );
         GtkFileFilter * implAddFilter( const OUString& rFilter, const OUString& rType );
         void implAddFilterGroup(
-                     const css::uno::Sequence< css::beans::StringPair>& _rFilters );
+                     const cpo::uno::Sequence< css::beans::StringPair>& _rFilters );
         void updateCurrentFilterFromName(const gchar* filtername);
         void unselect_type();
         void InitialMapping();

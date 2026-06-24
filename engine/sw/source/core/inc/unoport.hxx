@@ -137,20 +137,20 @@ protected:
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
     void SetPropertyValues_Impl(
-        const css::uno::Sequence< OUString >& aPropertyNames,
-        const css::uno::Sequence< cpo::uno::Any >& aValues );
+        const cpo::uno::Sequence< OUString >& aPropertyNames,
+        const cpo::uno::Sequence< cpo::uno::Any >& aValues );
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< cpo::uno::Any > GetPropertyValues_Impl(
-        const css::uno::Sequence< OUString >& aPropertyNames );
+    cpo::uno::Sequence< cpo::uno::Any > GetPropertyValues_Impl(
+        const cpo::uno::Sequence< OUString >& aPropertyNames );
 
     void GetPropertyValue( cpo::uno::Any &rVal,
                 const SfxItemPropertyMapEntry& rEntry, SwUnoCursor *pUnoCursor, std::unique_ptr<SfxItemSet> &pSet );
 
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> GetPropertyValuesTolerant_Impl(
-        const css::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly );
+    cpo::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> GetPropertyValuesTolerant_Impl(
+        const cpo::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly );
 
     virtual ~SwXTextPortion() override;
 
@@ -174,16 +174,16 @@ public:
     virtual void SAL_CALL  setString(const OUString& aString) override;
 
     //XTolerantMultiPropertySet
-    virtual css::uno::Sequence< css::beans::SetPropertyTolerantFailed > SAL_CALL setPropertyValuesTolerant( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< css::beans::GetPropertyTolerantResult > SAL_CALL getPropertyValuesTolerant( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual css::uno::Sequence< css::beans::GetDirectPropertyTolerantResult > SAL_CALL getDirectPropertyValuesTolerant( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual cpo::uno::Sequence< css::beans::SetPropertyTolerantFailed > SAL_CALL setPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual cpo::uno::Sequence< css::beans::GetPropertyTolerantResult > SAL_CALL getPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual cpo::uno::Sequence< css::beans::GetDirectPropertyTolerantResult > SAL_CALL getDirectPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
     //XMultiPropertySet
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void SAL_CALL firePropertiesChangeEvent( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void SAL_CALL firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
@@ -196,18 +196,18 @@ public:
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XContentEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createContentEnumeration(const OUString& aServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
     void SetRefMark( rtl::Reference< SwXReferenceMark > const & xMark)
     { m_xRefMark = xMark; }
@@ -272,7 +272,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 };
 
@@ -295,10 +295,10 @@ public:
         bool const bIsStart);
 
     /// @throws std::exception
-    static css::uno::Sequence< css::beans::PropertyValue > CreateRedlineProperties(
+    static cpo::uno::Sequence< css::beans::PropertyValue > CreateRedlineProperties(
                 SwRangeRedline const& rRedline, bool const bIsStart);
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() override;
 
     // XPropertySet

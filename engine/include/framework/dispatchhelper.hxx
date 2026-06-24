@@ -74,20 +74,20 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XDispatchHelper
     virtual cpo::uno::Any SAL_CALL
     executeDispatch(const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
                     const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
-                    const css::uno::Sequence<css::beans::PropertyValue>& lArguments) override;
+                    const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments) override;
 
     // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extensions
     /// @throws css::uno::RuntimeException
     const cpo::uno::Any&
     executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
                     const css::util::URL& aURL, bool SyncronFlag,
-                    const css::uno::Sequence<css::beans::PropertyValue>& lArguments);
+                    const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments);
 
     // XDispatchResultListener
     virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aResult) override;

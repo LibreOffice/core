@@ -62,7 +62,7 @@ public:
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void setAddIn( const css::uno::Reference< css::util::XRefreshable >& xAddIn );
     const css::uno::Reference< css::util::XRefreshable >& getAddIn() const { return m_xAddIn;}
@@ -92,9 +92,9 @@ public:
 
     // ____ XModel ____
     virtual bool SAL_CALL attachResource( const OUString& URL,
-                                              const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+                                              const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
     virtual OUString SAL_CALL getURL() override;
-    virtual css::uno::Sequence<
+    virtual cpo::uno::Sequence<
         css::beans::PropertyValue > SAL_CALL getArgs() override;
     virtual void SAL_CALL connectController( const css::uno::Reference<
                                              css::frame::XController >& Controller ) override;
@@ -126,8 +126,8 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(
                 const OUString& ServiceSpecifier,
-                const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+                const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
     // ____ XAggregation ____
     virtual void SAL_CALL setDelegator(
@@ -135,7 +135,7 @@ public:
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
 
     // ____ WrappedPropertySet ____
-    virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;
+    virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 

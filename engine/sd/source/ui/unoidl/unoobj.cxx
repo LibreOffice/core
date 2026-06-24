@@ -300,7 +300,7 @@ bool SdXShape::queryAggregation( const css::uno::Type & rType, cpo::uno::Any& aA
     return false;
 }
 
-uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
 {
     if( mpModel && !mpModel->IsImpressDocument() )
     {
@@ -309,7 +309,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     else
     {
         SdrObjKind nObjId = mpShape->getShapeKind();
-        uno::Sequence< uno::Type > aTypes;
+        cpo::uno::Sequence< uno::Type > aTypes;
         SdTypesCache& gImplTypesCache = SdModule::get()->gImplTypesCache;
         SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
         if( aIter == gImplTypesCache.end() )
@@ -808,7 +808,7 @@ SdAnimationInfo* SdXShape::GetAnimationInfo( bool bCreate ) const
     return pInfo;
 }
 
-uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SdXShape::getSupportedServiceNames()
 {
     std::vector<std::u16string_view> aAdd{ u"com.sun.star.presentation.Shape",
                                        u"com.sun.star.document.LinkTarget" };
@@ -1077,7 +1077,7 @@ public:
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
@@ -1087,7 +1087,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 // XEventsSupplier
@@ -1155,7 +1155,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const cpo
     if( mpShape == nullptr || aName != gaStrOnClick )
         throw container::NoSuchElementException();
 
-    uno::Sequence< beans::PropertyValue > aProperties;
+    cpo::uno::Sequence< beans::PropertyValue > aProperties;
     if( !aElement.hasValue() || aElement.getValueType() != getElementType() || !(aElement >>= aProperties) )
         throw lang::IllegalArgumentException();
 
@@ -1454,7 +1454,7 @@ cpo::uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         break;
     }
 
-    uno::Sequence< beans::PropertyValue > aProperties( nPropertyCount );
+    cpo::uno::Sequence< beans::PropertyValue > aProperties( nPropertyCount );
     beans::PropertyValue* pProperties = aProperties.getArray();
 
     cpo::uno::Any aAny;
@@ -1621,7 +1621,7 @@ cpo::uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     return aAny;
 }
 
-uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getElementNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getElementNames(  )
 {
     return { gaStrOnClick };
 }
@@ -1634,7 +1634,7 @@ bool SAL_CALL SdUnoEventsAccess::hasByName( const OUString& aName )
 // XElementAccess
 uno::Type SAL_CALL SdUnoEventsAccess::getElementType(  )
 {
-    return cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get();
+    return cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get();
 }
 
 bool SAL_CALL SdUnoEventsAccess::hasElements(  )
@@ -1653,7 +1653,7 @@ bool SAL_CALL SdUnoEventsAccess::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames(  )
 {
     return { gaStrServiceName };
 }

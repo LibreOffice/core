@@ -26,7 +26,7 @@
 namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
 namespace
@@ -102,7 +102,7 @@ OUString SAL_CALL ColumnChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
 }
 
-uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
+cpo::uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
@@ -149,7 +149,7 @@ bool SAL_CALL ColumnChartType::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_COLUMN,
@@ -160,7 +160,7 @@ css::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_ColumnChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ColumnChartType());
 }

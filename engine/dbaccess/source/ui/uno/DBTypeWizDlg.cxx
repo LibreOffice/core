@@ -25,7 +25,7 @@ using namespace dbaui;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_ODBTypeWizDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ODBTypeWizDialog(context));
 }
@@ -44,7 +44,7 @@ ODBTypeWizDialog::ODBTypeWizDialog(const Reference< XComponentContext >& _rxORB)
 
 Sequence<sal_Int8> SAL_CALL ODBTypeWizDialog::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 OUString SAL_CALL ODBTypeWizDialog::getImplementationName()
@@ -52,7 +52,7 @@ OUString SAL_CALL ODBTypeWizDialog::getImplementationName()
     return u"org.openoffice.comp.dbu.ODBTypeWizDialog"_ustr;
 }
 
-css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialog::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.DataSourceTypeChangeDialog"_ustr };
 }

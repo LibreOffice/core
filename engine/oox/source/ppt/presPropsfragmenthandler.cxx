@@ -49,7 +49,7 @@ void PresPropsFragmentHandler::finalizeImport()
             XCustPresentationSupplier(getFilter().getModel(), css::uno::UNO_QUERY_THROW);
         css::uno::Reference<css::container::XNameContainer> mxCustShows;
         mxCustShows = XCustPresentationSupplier->getCustomPresentations();
-        const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
+        const cpo::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
         xPresentationProps->setPropertyValue(u"CustomShow"_ustr,
                                              cpo::uno::Any(aNameSeq[m_sId.toInt32()]));
     }

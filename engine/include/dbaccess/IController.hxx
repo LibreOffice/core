@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_ICONTROLLER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -50,7 +50,7 @@ namespace dbaui
             @param  _rCommand
                 the URL of the command
         */
-        virtual void executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
+        virtual void executeChecked(const css::util::URL& _rCommand, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) = 0;
 
         /** checks if the selected data source is read only
             @return

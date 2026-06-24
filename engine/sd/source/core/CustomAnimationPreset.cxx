@@ -253,7 +253,7 @@ void CustomAnimationPresets::importEffects()
             configuration::theDefaultProvider::get( xContext );
 
         // read path to transition effects files from config
-        uno::Sequence< OUString > aFiles;
+        cpo::uno::Sequence< OUString > aFiles;
         aFiles = officecfg::Office::Impress::Misc::EffectFiles::get();
         for (const auto& rFile : aFiles)
         {

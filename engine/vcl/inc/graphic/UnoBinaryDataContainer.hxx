@@ -33,7 +33,7 @@ public:
     BinaryDataContainer const& getBinaryDataContainer() const { return maBinaryDataContainer; }
 
     // XBinaryDataContainer
-    css::uno::Sequence<sal_Int8> SAL_CALL getCopyAsByteSequence() override;
+    cpo::uno::Sequence<sal_Int8> SAL_CALL getCopyAsByteSequence() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

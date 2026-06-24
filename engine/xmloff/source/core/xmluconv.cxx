@@ -774,7 +774,7 @@ void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
         rBuffer.append( GetXMLToken(eSync) );
 }
 
-void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>& rProps,
+void SvXMLUnitConverter::convertPropertySet(cpo::uno::Sequence<beans::PropertyValue>& rProps,
                     const uno::Reference<beans::XPropertySet>& aProperties,
                     const std::initializer_list<std::u16string_view>* pOmitFalseValues)
 {
@@ -782,7 +782,7 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
     if (!xPropertySetInfo.is())
         return;
 
-    const uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
+    const cpo::uno::Sequence< beans::Property > aProps = xPropertySetInfo->getProperties();
     if (aProps.hasElements())
     {
         std::vector<beans::PropertyValue> aPropsVec;
@@ -808,7 +808,7 @@ void SvXMLUnitConverter::convertPropertySet(uno::Sequence<beans::PropertyValue>&
 }
 
 void SvXMLUnitConverter::convertPropertySet(uno::Reference<beans::XPropertySet> const & rProperties,
-                    const uno::Sequence<beans::PropertyValue>& aProps)
+                    const cpo::uno::Sequence<beans::PropertyValue>& aProps)
 {
     if (aProps.hasElements())
     {

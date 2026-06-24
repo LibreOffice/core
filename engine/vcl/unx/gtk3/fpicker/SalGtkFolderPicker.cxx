@@ -178,7 +178,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
 
 // XInitialization
 
-void SAL_CALL SalGtkFolderPicker::initialize(const uno::Sequence<cpo::uno::Any>& aArguments)
+void SAL_CALL SalGtkFolderPicker::initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments)
 {
     m_pParentWidget = GetParentWidget(aArguments);
 }

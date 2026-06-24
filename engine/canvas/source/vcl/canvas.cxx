@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    Canvas::Canvas( const uno::Sequence< cpo::uno::Any >&                aArguments,
+    Canvas::Canvas( const cpo::uno::Sequence< cpo::uno::Any >&                aArguments,
                     const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
         maArguments(aArguments)
     {
@@ -105,7 +105,7 @@ namespace vclcanvas
         return cppu::supportsService(this, ServiceName);
     }
 
-    css::uno::Sequence<OUString> Canvas::getSupportedServiceNames() {
+    cpo::uno::Sequence<OUString> Canvas::getSupportedServiceNames() {
         return {getServiceName()};
     }
 
@@ -124,7 +124,7 @@ namespace vclcanvas
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_Canvas_VCL_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     rtl::Reference<vclcanvas::Canvas> p = new vclcanvas::Canvas(args, context);
     p->initialize();

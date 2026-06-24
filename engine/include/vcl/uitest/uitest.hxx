@@ -16,7 +16,7 @@
 #include <memory>
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 class UIObject;
 
@@ -25,7 +25,7 @@ namespace UITest
     bool executeCommand(const OUString& rCommand);
 
     bool executeCommandWithParameters(const OUString& rCommand,
-        const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs);
 
     bool executeCommandForProvider(
         const OUString& rCommand,

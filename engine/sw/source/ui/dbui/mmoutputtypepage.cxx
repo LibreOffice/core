@@ -167,7 +167,7 @@ void SwMailDispatcherListener_Impl::mailDeliveryError(
 
 void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMailMessage > const & xMessage )
 {
-    const uno::Sequence< mail::MailAttachment > aAttachments = xMessage->getAttachments();
+    const cpo::uno::Sequence< mail::MailAttachment > aAttachments = xMessage->getAttachments();
 
     for(const auto& rAttachment : aAttachments)
     {

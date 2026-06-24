@@ -39,9 +39,9 @@ class MiscUtils
 {
 public:
 
-static css::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Reference< css::uno::XComponentContext >& xCtx)
+static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Reference< css::uno::XComponentContext >& xCtx)
 {
-    css::uno::Sequence< OUString > result;
+    cpo::uno::Sequence< OUString > result;
     try
     {
         if ( !xCtx.is() )

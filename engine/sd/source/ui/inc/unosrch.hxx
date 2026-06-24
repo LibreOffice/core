@@ -112,10 +112,10 @@ public:
     lets people access it through the XIndexAccess Interface. */
 class SdUnoFindAllAccess final : public ::cppu::WeakImplHelper< css::container::XIndexAccess > // public css::container::XElementAccess
 {
-    css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > maSequence;
+    cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > maSequence;
 
 public:
-    SdUnoFindAllAccess( css::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > const & rSequence ) noexcept;
+    SdUnoFindAllAccess( cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface >  > const & rSequence ) noexcept;
     virtual ~SdUnoFindAllAccess() noexcept override;
 
     // XIndexAccess

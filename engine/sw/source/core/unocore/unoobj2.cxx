@@ -433,7 +433,7 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
         { return u"SwXParagraphEnumeration"_ustr; }
     virtual bool SAL_CALL supportsService( const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         { return {u"com.sun.star.text.ParagraphEnumeration"_ustr}; };
 
     // XEnumeration
@@ -896,7 +896,7 @@ bool SAL_CALL SwXTextRange::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXTextRange::getSupportedServiceNames()
 {
     return {
@@ -1455,10 +1455,10 @@ bool SAL_CALL SwXTextRange::hasElements()
     return true;
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXTextRange::getAvailableServiceNames()
 {
-    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextContent"_ustr };
+    cpo::uno::Sequence<OUString> aRet { u"com.sun.star.text.TextContent"_ustr };
     return aRet;
 }
 
@@ -1550,8 +1550,8 @@ SwXTextRange::getPropertyState(const OUString& rPropertyName)
             rPropertyName);
 }
 
-uno::Sequence< beans::PropertyState > SAL_CALL
-SwXTextRange::getPropertyStates(const uno::Sequence< OUString >& rPropertyName)
+cpo::uno::Sequence< beans::PropertyState > SAL_CALL
+SwXTextRange::getPropertyStates(const cpo::uno::Sequence< OUString >& rPropertyName)
 {
     SolarMutexGuard g;
 
@@ -1597,7 +1597,7 @@ SwXTextRange::getPropertyDefault(const OUString& rPropertyName)
 void SAL_CALL
 SwXTextRange::makeRedline(
     const OUString& rRedlineType,
-    const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
+    const cpo::uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
     SolarMutexGuard aGuard;
 
@@ -1620,7 +1620,7 @@ struct SwXTextRangesImpl final : public SwXTextRanges
         { return u"SwXTextRanges"_ustr; };
     virtual bool SAL_CALL supportsService( const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         { return { u"com.sun.star.text.TextRanges"_ustr }; };
 
     // XElementAccess
@@ -1727,7 +1727,7 @@ struct SwXParaFrameEnumerationImpl final : public SwXParaFrameEnumeration
         { return u"SwXParaFrameEnumeration"_ustr; };
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override
         { return cppu::supportsService(this, rServiceName); };
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         { return {u"com.sun.star.util.ContentEnumeration"_ustr}; };
 
     // XEnumeration

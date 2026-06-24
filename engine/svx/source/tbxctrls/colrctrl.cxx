@@ -50,7 +50,7 @@ using namespace com::sun::star;
 class SvxColorValueSetData final : public TransferDataContainer
 {
 private:
-    uno::Sequence<beans::NamedValue> m_Data;
+    cpo::uno::Sequence<beans::NamedValue> m_Data;
 
     virtual void AddSupportedFormats() override;
     virtual bool GetData(const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc) override;
@@ -60,7 +60,7 @@ public:
     {
     }
 
-    void SetData(const uno::Sequence<beans::NamedValue>& rData)
+    void SetData(const cpo::uno::Sequence<beans::NamedValue>& rData)
     {
         m_Data = rData;
         ClearFormats(); // invalidate m_aAny so new data will take effect
@@ -167,7 +167,7 @@ bool SvxColorValueSet_docking::StartDrag()
     color.QueryValue(c, 0);
     style.QueryValue(s, 0);
 
-    uno::Sequence<beans::NamedValue> props{ { u"FillColor"_ustr, std::move(c) },
+    cpo::uno::Sequence<beans::NamedValue> props{ { u"FillColor"_ustr, std::move(c) },
                                             { u"FillStyle"_ustr, std::move(s) } };
     m_xHelper->SetData(props);
 

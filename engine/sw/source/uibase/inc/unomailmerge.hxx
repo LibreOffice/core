@@ -86,7 +86,7 @@ class SwXMailMerge final :
     OUString        m_aTmpFileName;
 
     // properties of mail merge service
-    css::uno::Sequence< cpo::uno::Any >           m_aSelection;
+    cpo::uno::Sequence< cpo::uno::Any >           m_aSelection;
     css::uno::Reference< css::sdbc::XResultSet >  m_xResultSet;
     css::uno::Reference< css::sdbc::XConnection > m_xConnection;
     css::uno::Reference< css::frame::XModel >     m_xModel;
@@ -108,17 +108,17 @@ class SwXMailMerge final :
     OUString                                         m_sMailBody;
     OUString                                         m_sAttachmentName;
     OUString                                         m_sAttachmentFilter;
-    css::uno::Sequence< OUString >                   m_aCopiesTo;
-    css::uno::Sequence< OUString >                   m_aBlindCopiesTo;
+    cpo::uno::Sequence< OUString >                   m_aCopiesTo;
+    cpo::uno::Sequence< OUString >                   m_aBlindCopiesTo;
     bool                                             m_bSendAsHTML;
     bool                                             m_bSendAsAttachment;
 
-    css::uno::Sequence< css::beans::PropertyValue >  m_aPrintSettings;
+    cpo::uno::Sequence< css::beans::PropertyValue >  m_aPrintSettings;
 
     bool                                             m_bSaveAsSingleFile;
     OUString                                         m_sSaveFilter;
     OUString                                         m_sSaveFilterOptions;
-    css::uno::Sequence< css::beans::PropertyValue >  m_aSaveFilterData;
+    cpo::uno::Sequence< css::beans::PropertyValue >  m_aSaveFilterData;
 
     bool        m_bDisposing;
     SwDBManager     *m_pMgr;
@@ -135,7 +135,7 @@ public:
     void LaunchMailMergeEvent( const css::text::MailMergeEvent &rData ) const;
 
     // XJob
-    virtual cpo::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
+    virtual cpo::uno::Any SAL_CALL execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) override;
 
     // XCancellable
     virtual void SAL_CALL cancel() override;
@@ -161,7 +161,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 #endif

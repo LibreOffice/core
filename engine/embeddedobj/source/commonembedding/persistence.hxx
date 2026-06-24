@@ -21,7 +21,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-css::uno::Sequence< css::beans::PropertyValue > GetValuableArgs_Impl( const css::uno::Sequence< css::beans::PropertyValue >& aMedDescr,
+cpo::uno::Sequence< css::beans::PropertyValue > GetValuableArgs_Impl( const cpo::uno::Sequence< css::beans::PropertyValue >& aMedDescr,
                                                             bool bCanUseDocumentBaseURL );
 
 

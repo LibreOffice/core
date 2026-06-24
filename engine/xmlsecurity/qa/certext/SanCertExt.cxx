@@ -50,7 +50,7 @@ namespace {
     class Test: public CppUnit::TestFixture {
 
     private:
-        static uno::Sequence< security::CertAltNameEntry > altNames;
+        static cpo::uno::Sequence< security::CertAltNameEntry > altNames;
         static bool runOnce;
 
         uno::Reference< xml::crypto::XSecurityEnvironment > initUno();
@@ -95,7 +95,7 @@ namespace {
         CPPUNIT_TEST_SUITE_END();
     };
 
-    uno::Sequence< security::CertAltNameEntry > Test::altNames;
+    cpo::uno::Sequence< security::CertAltNameEntry > Test::altNames;
     bool Test::runOnce = false;
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);
@@ -136,7 +136,7 @@ namespace {
         OString b64Cert(getB64CertFromFile("User_35_Root_11.crt"));
         uno::Reference< security::XCertificate > xCert = xSecurityEnv->createCertificateFromAscii(
             OStringToOUString( b64Cert, RTL_TEXTENCODING_ASCII_US ) );
-        uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = xCert->getExtensions();
+        cpo::uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = xCert->getExtensions();
         for (sal_Int32 i = 0 ; i < extensions.getLength(); i++)
         {
             uno::Reference< security::XCertificateExtension >element = extensions[i];
@@ -169,7 +169,7 @@ namespace {
                 if (altNames[n].Value >>= otherNameProp)
                 {
                     CPPUNIT_ASSERT_EQUAL( OUString("1.2.3.4"), otherNameProp.Name);
-                    uno::Sequence< sal_Int8 > ipAddress;
+                    cpo::uno::Sequence< sal_Int8 > ipAddress;
                     otherNameProp.Value >>= ipAddress;
                     CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( ipAddress.getLength() > 0 ) );
                 }
@@ -226,7 +226,7 @@ namespace {
         {
             if (altNames[n].Type ==  security::ExtAltNameType_IP_ADDRESS)
             {
-                uno::Sequence< sal_Int8 > ipAddress;
+                cpo::uno::Sequence< sal_Int8 > ipAddress;
                 altNames[n].Value >>= ipAddress;
                 CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( ipAddress.getLength() > 0 ) );
             }

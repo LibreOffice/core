@@ -833,7 +833,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                     else
                     {
                         OUString aQueryStr = rEntry.GetQueryItem().maString.getString();
-                        css::uno::Sequence< sal_Int32 > xOff;
+                        cpo::uno::Sequence< sal_Int32 > xOff;
                         const LanguageType nLang = ScGlobal::oSysLocale->GetLanguageTag().getLanguageType();
                         OUString aCell = rTransliteration.transliterate(
                             aCellStr, nLang, 0, aCellStr.getLength(), &xOff);

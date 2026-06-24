@@ -21,7 +21,7 @@
 #include "ItemConverter.hxx"
 
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <rtl/ref.hxx>
 #include <optional>
 #include <vector>
@@ -60,7 +60,7 @@ private:
     std::vector<std::unique_ptr<ItemConverter>> maConverters;
     sal_Int32                           mnNumberFormat;
     sal_Int32                           mnPercentNumberFormat;
-    css::uno::Sequence<sal_Int32>       maAvailableLabelPlacements;
+    cpo::uno::Sequence<sal_Int32>       maAvailableLabelPlacements;
 
     bool mbDataSeries:1;
     bool mbForbidPercentValue:1;

@@ -30,7 +30,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class E> class Sequence;
 }
@@ -41,18 +41,18 @@ class COMPHELPER_DLLPUBLIC Base64
 {
 public:
     /** encodes the given byte sequence into Base64 */
-    static void encode(OUStringBuffer& aStrBuffer, const css::uno::Sequence<sal_Int8>& aPass);
+    static void encode(OUStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int8>& aPass);
 
-    static void encode(OStringBuffer& aStrBuffer, const css::uno::Sequence<sal_Int8>& aPass);
+    static void encode(OStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int8>& aPass);
 
     // Decode a base 64 encoded string into a sequence of bytes. The first
     // version can be used for attribute values only, because it does not
     // return any chars left from conversion.
     // For text submitted through the SAX characters call, the later method
     // must be used!
-    static void decode(css::uno::Sequence<sal_Int8>& aPass, std::u16string_view sBuffer);
+    static void decode(cpo::uno::Sequence<sal_Int8>& aPass, std::u16string_view sBuffer);
 
-    static std::size_t decodeSomeChars(css::uno::Sequence<sal_Int8>& aPass,
+    static std::size_t decodeSomeChars(cpo::uno::Sequence<sal_Int8>& aPass,
                                        std::u16string_view sBuffer);
 };
 }

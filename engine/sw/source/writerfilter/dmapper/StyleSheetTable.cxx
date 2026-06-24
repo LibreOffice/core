@@ -306,14 +306,14 @@ void StyleSheetTable::SetPropertiesToDefault(const rtl::Reference<SwXBaseStyle>&
 {
     // See if the existing style has any non-default properties. If so, reset them back to default.
     uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xStyle->getPropertySetInfo();
-    const uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
+    const cpo::uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
     std::vector<OUString> aPropertyNames;
     aPropertyNames.reserve(aProperties.getLength());
     std::transform(aProperties.begin(), aProperties.end(), std::back_inserter(aPropertyNames),
         [](const beans::Property& rProp) { return rProp.Name; });
 
     uno::Reference<beans::XPropertyState> xPropertyState(static_cast<cppu::OWeakObject*>(xStyle.get()), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(comphelper::containerToSequence(aPropertyNames));
+    cpo::uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(comphelper::containerToSequence(aPropertyNames));
     for (sal_Int32 i = 0; i < aStates.getLength(); ++i)
     {
         if (aStates[i] == beans::PropertyState_DIRECT_VALUE)
@@ -800,12 +800,12 @@ void StyleSheetTable::lcl_entry(const writerfilter::Reference<Properties>::Point
             rLatentStyles.push_back(aValue);
         }
 
-        uno::Sequence<beans::PropertyValue> aLatentStyles( comphelper::containerToSequence(rLatentStyles) );
+        cpo::uno::Sequence<beans::PropertyValue> aLatentStyles( comphelper::containerToSequence(rLatentStyles) );
 
         // We can put all latent style info directly to the document interop
         // grab bag, as we can be sure that only a single style entry has
         // latent style info.
-        auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr).get< uno::Sequence<beans::PropertyValue> >());
+        auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr).get< cpo::uno::Sequence<beans::PropertyValue> >());
         beans::PropertyValue aValue;
         aValue.Name = u"latentStyles"_ustr;
         aValue.Value <<= aLatentStyles;
@@ -827,8 +827,8 @@ public:
     PropValVector(){}
 
     void Insert(const beans::PropertyValue& rVal);
-    uno::Sequence< cpo::uno::Any > getValues();
-    uno::Sequence< OUString > getNames();
+    cpo::uno::Sequence< cpo::uno::Any > getValues();
+    cpo::uno::Sequence< OUString > getNames();
     const std::vector<beans::PropertyValue>& getProperties() const { return m_aValues; };
 };
 
@@ -846,7 +846,7 @@ void PropValVector::Insert(const beans::PropertyValue& rVal)
     m_aValues.push_back(rVal);
 }
 
-uno::Sequence< cpo::uno::Any > PropValVector::getValues()
+cpo::uno::Sequence< cpo::uno::Any > PropValVector::getValues()
 {
     std::vector<cpo::uno::Any> aRet;
     std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet),
@@ -854,7 +854,7 @@ uno::Sequence< cpo::uno::Any > PropValVector::getValues()
     return comphelper::containerToSequence(aRet);
 }
 
-uno::Sequence< OUString > PropValVector::getNames()
+cpo::uno::Sequence< OUString > PropValVector::getNames()
 {
     std::vector<OUString> aRet;
     std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet),
@@ -1004,7 +1004,7 @@ void StyleSheetTable::ApplyClonedTOCStylesToXText(uno::Reference<text::XText> co
         else if (xElem->supportsService(u"com.sun.star.text.TextTable"_ustr))
         {
             uno::Reference<text::XTextTable> const xTable(xElem, uno::UNO_QUERY_THROW);
-            uno::Sequence<OUString> const cells(xTable->getCellNames());
+            cpo::uno::Sequence<OUString> const cells(xTable->getCellNames());
             for (OUString const& rCell : cells)
             {
                 uno::Reference<text::XText> const xCell(xTable->getCellByName(rCell), uno::UNO_QUERY_THROW);
@@ -1148,7 +1148,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                                 rtl::Reference<SwXNumberingRules> xNumberingRules = xNewStyle->getNumberingRules();
                                 for (sal_Int32 i = 0; i < xNumberingRules->getCount(); ++i)
                                 {
-                                    uno::Sequence< beans::PropertyValue > aLvlProps{
+                                    cpo::uno::Sequence< beans::PropertyValue > aLvlProps{
                                         comphelper::makePropertyValue(
                                             u"NumberingType"_ustr, style::NumberingType::NUMBER_NONE)
                                     };
@@ -1563,7 +1563,7 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
             {
                 // If we had any table styles, add a new document-level InteropGrabBag entry for them.
                 cpo::uno::Any aAny = m_xTextDocument->getPropertyValue(u"InteropGrabBag"_ustr);
-                auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< uno::Sequence<beans::PropertyValue> >());
+                auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aAny.get< cpo::uno::Sequence<beans::PropertyValue> >());
                 beans::PropertyValue aValue;
                 aValue.Name = u"tableStyles"_ustr;
                 aValue.Value <<= comphelper::containerToSequence(aTableStylesVec);

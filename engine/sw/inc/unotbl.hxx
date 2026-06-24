@@ -95,8 +95,8 @@ public:
     virtual void SAL_CALL release(  ) noexcept override;
 
     //XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     //XCell
     virtual OUString SAL_CALL getFormula(  ) override;
@@ -127,7 +127,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XEnumerationAccess - was: XParagraphEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createEnumeration() override;
@@ -175,7 +175,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     static SwTableLine* FindLine(SwTable* pTable, SwTableLine const * pLine);
 
@@ -224,7 +224,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 
     // ITextCursorHelper
@@ -284,7 +284,7 @@ public:
     virtual css::uno::Reference< css::table::XTableRows > SAL_CALL getRows(  ) override;
     virtual css::uno::Reference< css::table::XTableColumns > SAL_CALL getColumns(  ) override;
     virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByName( const OUString& aCellName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getCellNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getCellNames(  ) override;
     virtual css::uno::Reference< css::text::XTextTableCursor > SAL_CALL createCursorByCellName( const OUString& aCellName ) override;
 
     //XTextContent
@@ -302,12 +302,12 @@ public:
     virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) override;
 
     //XChartDataArray
-    virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL getData(  ) override;
-    virtual void SAL_CALL setData( const css::uno::Sequence< css::uno::Sequence< double > >& aData ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getRowDescriptions(  ) override;
-    virtual void SAL_CALL setRowDescriptions( const css::uno::Sequence< OUString >& aRowDescriptions ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getColumnDescriptions(  ) override;
-    virtual void SAL_CALL setColumnDescriptions( const css::uno::Sequence< OUString >& aColumnDescriptions ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< double > > SAL_CALL getData(  ) override;
+    virtual void SAL_CALL setData( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aData ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getRowDescriptions(  ) override;
+    virtual void SAL_CALL setRowDescriptions( const cpo::uno::Sequence< OUString >& aRowDescriptions ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getColumnDescriptions(  ) override;
+    virtual void SAL_CALL setColumnDescriptions( const cpo::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
     //XChartData
     virtual void SAL_CALL addChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
@@ -316,8 +316,8 @@ public:
     virtual bool SAL_CALL isNotANumber( double nNumber ) override;
 
     //XSortable
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL createSortDescriptor() override;
-    virtual void SAL_CALL sort(const css::uno::Sequence< css::beans::PropertyValue >& xDescriptor) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL createSortDescriptor() override;
+    virtual void SAL_CALL sort(const cpo::uno::Sequence< css::beans::PropertyValue >& xDescriptor) override;
 
     //XAutoFormattable
     virtual void SAL_CALL autoFormat(const OUString& aName) override;
@@ -336,13 +336,13 @@ public:
     virtual void SAL_CALL setName(const OUString& Name_) override;
 
     //XCellRangeData
-    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > > SAL_CALL getDataArray(  ) override;
-    virtual void SAL_CALL setDataArray( const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& aArray ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > SAL_CALL getDataArray(  ) override;
+    virtual void SAL_CALL setDataArray( const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aArray ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     rtl::Reference< SwXTableRows > getSwRows();
     rtl::Reference< SwXCell > getSwCellByPosition( sal_Int32 nColumn, sal_Int32 nRow );
@@ -398,25 +398,25 @@ public:
     virtual bool SAL_CALL isNotANumber( double nNumber ) override;
 
     //XChartDataArray
-    virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL getData(  ) override;
-    virtual void SAL_CALL setData( const css::uno::Sequence< css::uno::Sequence< double > >& aData ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getRowDescriptions(  ) override;
-    virtual void SAL_CALL setRowDescriptions( const css::uno::Sequence< OUString >& aRowDescriptions ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getColumnDescriptions(  ) override;
-    virtual void SAL_CALL setColumnDescriptions( const css::uno::Sequence< OUString >& aColumnDescriptions ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< double > > SAL_CALL getData(  ) override;
+    virtual void SAL_CALL setData( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aData ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getRowDescriptions(  ) override;
+    virtual void SAL_CALL setRowDescriptions( const cpo::uno::Sequence< OUString >& aRowDescriptions ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getColumnDescriptions(  ) override;
+    virtual void SAL_CALL setColumnDescriptions( const cpo::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
     //XSortable
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL createSortDescriptor() override;
-    virtual void SAL_CALL sort(const css::uno::Sequence< css::beans::PropertyValue >& xDescriptor) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL createSortDescriptor() override;
+    virtual void SAL_CALL sort(const cpo::uno::Sequence< css::beans::PropertyValue >& xDescriptor) override;
 
     //XCellRangeData
-    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > > SAL_CALL getDataArray(  ) override;
-    virtual void SAL_CALL setDataArray( const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& aArray ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > SAL_CALL getDataArray(  ) override;
+    virtual void SAL_CALL setDataArray( const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aArray ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 
@@ -451,7 +451,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class SwXTableColumns final : public cppu::WeakImplHelper
@@ -485,7 +485,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 int sw_CompareCellRanges(

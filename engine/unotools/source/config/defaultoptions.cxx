@@ -22,7 +22,7 @@
 #include <osl/file.hxx>
 #include <unotools/defaultoptions.hxx>
 #include <unotools/pathoptions.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -32,7 +32,7 @@ namespace SvtDefaultOptions
 OUString GetDefaultPath( SvtPathOptions::Paths nId )
 {
     SvtPathOptions aPathOpt;
-    auto seqToPath = [&aPathOpt] (const css::uno::Sequence<OUString> & rSeq)
+    auto seqToPath = [&aPathOpt] (const cpo::uno::Sequence<OUString> & rSeq)
         {
             // single paths
             sal_Int32 nCount = rSeq.getLength();

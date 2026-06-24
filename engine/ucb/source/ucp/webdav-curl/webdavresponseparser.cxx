@@ -317,7 +317,7 @@ namespace
         std::vector< http_dav_ucp::DAVPropertyValue > maPropStatProperties;
         std::vector< OUString >              maResponseNames;
         std::vector< OUString >              maPropStatNames;
-        uno::Sequence< ucb::LockEntry >             maLockEntries;
+        cpo::uno::Sequence< ucb::LockEntry >             maLockEntries;
         ucb::LockScope                              maLockScope;
         ucb::LockType                               maLockType;
         ucb::Lock                                   maLock;

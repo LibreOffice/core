@@ -33,6 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 uno::Reference<document::XDocumentProperties>
 SwXMLImport::GetDocumentProperties() const

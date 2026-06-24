@@ -95,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnSelections)
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
 
     // Select the 5th row with no modifier
-    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
             { "Row", cpo::uno::Any(sal_Int32(5 - 1)) },
             { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
         }));
@@ -222,7 +222,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEmptyColumnSelection)
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
 
     // Select empty column, 1000
-    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
                 { "Col", cpo::uno::Any(sal_Int32(1000 - 1)) },
                 { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
         }));
@@ -237,7 +237,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewCursors)
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ScTestViewCallback aView1;
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2(/*bDeleteListenerOnDestruct*/false);
     // This was false, the new view did not get the view (cell) cursor of the old view.
     CPPUNIT_ASSERT(aView2.m_bViewCursorInvalidated);
@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineRenderParameter)
 
     bool bSet = pView->IsAutoSpell();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues =
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
         comphelper::makePropertyValue(u".uno:SpellOnline"_ustr, cpo::uno::Any(!bSet)),
     };
@@ -273,7 +273,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextViewSelection)
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ScTestViewCallback aView1;
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // Create a selection on two cells in the second view, that's a text selection in COKit terms.
@@ -290,7 +290,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDocumentSizeChanged)
     setupCOKitViewCallback(SfxViewShell::Current());
 
     // Go to the A30 cell -- that will extend the document size.
-    uno::Sequence<beans::PropertyValue> aPropertyValues =
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
         comphelper::makePropertyValue(u"ToPoint"_ustr, u"$A$30"_ustr),
     };
@@ -306,7 +306,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testViewLock)
     ScModelObj* pModelObj = createDoc("shape.ods");
     ScTestViewCallback aView1;
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // Begin text edit in the second view and assert that the first gets a lock
@@ -335,7 +335,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetSwitchViewLock)
     ScModelObj* pModelObj = createDoc("two_sheets.ods");
     ScTestViewCallback aView1;
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // Reset counter after view creation (which may trigger callbacks).
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandle)
         lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
         sal_uInt32 oldX = x;
         sal_uInt32 oldY = y;
-        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             {"HandleNum", cpo::uno::Any(id)},
             {"NewPosX", cpo::uno::Any(x+1)},
@@ -415,7 +415,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testMoveShapeHandleTextBox)
         lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
         sal_uInt32 oldX = x;
         sal_uInt32 oldY = y;
-        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             {"HandleNum", cpo::uno::Any(id)},
             {"NewPosX", cpo::uno::Any(x+1)},
@@ -443,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
     ScDocument& rDoc = pDocSh->GetDocument();
 
     // Col 3, Tab 0
-    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
             { "ColumnWidth", cpo::uno::Any(sal_uInt16(4000)) }, // 4cm
             { "Column", cpo::uno::Any(sal_Int16(3)) }
         }));
@@ -453,7 +453,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testColRowResize)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
 
     // Row 5, Tab 0
-    uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
             { "RowHeight", cpo::uno::Any(sal_uInt16(2000)) },
             { "Row", cpo::uno::Any(sal_Int16(5)) },
         }));
@@ -513,7 +513,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViews)
 
     // view #2
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // move cell cursor i view #2
@@ -539,7 +539,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
 
     // view #2
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
@@ -570,7 +570,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextEditViewInvalidations)
 
     // view #3
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView3;
 
     // text edit a cell in view #1
@@ -589,7 +589,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoRedundantSpellInvalidations)
     // either view.
 
     // Turn online spell-checking on for the document and current view #1.
-    uno::Sequence<beans::PropertyValue> aSpellOnArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aSpellOnArgs = {
         comphelper::makePropertyValue(u".uno:SpellOnline"_ustr, cpo::uno::Any(true)),
     };
     ScModelObj* pModelObj = createDoc("small.ods");
@@ -685,7 +685,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCreateViewGraphicSelection)
     // Create a second view.
     int nView1 = KitHelper::getCurrentView();
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
     CPPUNIT_ASSERT(aView2.m_bGraphicViewSelection);
     CPPUNIT_ASSERT(aView1.m_bGraphicViewSelection);
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoSum)
 
     ScTestViewCallback aView;
 
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, u".uno:AutoSum"_ustr, aArgs);
     CPPUNIT_ASSERT(aView.m_sCellFormula.startsWith("=SUM("));
 }
@@ -735,13 +735,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
 {
     createDoc("small.ods");
     {
-        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
                 { "Col", cpo::uno::Any(sal_Int32(2 - 1)) },
                 { "Modifier", cpo::uno::Any(KEY_SHIFT) }
             }));
         dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
 
-        uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
                 { "Col", cpo::uno::Any(sal_Int32(3 - 1)) },
                 { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
             }));
@@ -754,7 +754,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
     SCCOL nOldCurX = pViewData->GetCurX();
     SCROW nOldCurY = pViewData->GetCurY();
     {
-        uno::Sequence<beans::PropertyValue> aArgs;
+        cpo::uno::Sequence<beans::PropertyValue> aArgs;
         dispatchCommand(mxComponent, u".uno:HideColumn"_ustr, aArgs);
     }
 
@@ -763,13 +763,13 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
     CPPUNIT_ASSERT(nNewCurX > nOldCurX);
     CPPUNIT_ASSERT_EQUAL(nOldCurY, nNewCurY);
     {
-        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
                 { "Row", cpo::uno::Any(sal_Int32(6 - 1)) },
                 { "Modifier", cpo::uno::Any(KEY_SHIFT) }
             }));
         dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
 
-        uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
                 { "Row", cpo::uno::Any(sal_Int32(7 - 1)) },
                 { "Modifier", cpo::uno::Any(sal_uInt16(0)) }
             }));
@@ -779,7 +779,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
     nOldCurX = pViewData->GetCurX();
     nOldCurY = pViewData->GetCurY();
     {
-        uno::Sequence<beans::PropertyValue> aArgs;
+        cpo::uno::Sequence<beans::PropertyValue> aArgs;
         dispatchCommand(mxComponent, u".uno:HideRow"_ustr, aArgs);
     }
     nNewCurX = pViewData->GetCurX();
@@ -902,7 +902,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnCopyPasteCells)
     // view
     ScTestViewCallback aView;
 
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     // select and copy cells
     pModelObj->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
     pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
@@ -936,7 +936,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
     // view
     ScTestViewCallback aView;
 
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     // move downward
     for (int i = 0; i < 200; ++i)
     {
@@ -995,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
             pTabViewShell->SetCursor(4, 4);
 
         // Add a new comment
-        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
             {"Text", cpo::uno::Any(u"Comment"_ustr)},
             {"Author", cpo::uno::Any(u"Kit User1"_ustr)},
@@ -1095,7 +1095,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
     // view #2
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
@@ -1153,7 +1153,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
     // view #2
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
@@ -1175,7 +1175,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoRepairDispatch)
 
     // try to execute undo in view #2 in repair mode
     KitHelper::setView(nView2);
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"Repair", cpo::uno::Any(true)}
     }));
@@ -1205,7 +1205,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
 
     // insert an image in view and see if both views are invalidated
     aView.m_bInvalidateTiles = false;
-    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
             { "FileName", cpo::uno::Any(createFileURL(u"smile.png")) }
         }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
@@ -1213,7 +1213,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertGraphicInvalidations)
 
     // undo image insertion in view and see if both views are invalidated
     aView.m_bInvalidateTiles = false;
-    uno::Sequence<beans::PropertyValue> aArgs2;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs2;
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, aArgs2);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 }
@@ -1591,7 +1591,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSpellOnlineParameter)
 
     bool bSet = pView->IsAutoSpell();
 
-    uno::Sequence<beans::PropertyValue> params =
+    cpo::uno::Sequence<beans::PropertyValue> params =
     {
         comphelper::makePropertyValue(u"Enable"_ustr, cpo::uno::Any(!bSet)),
     };
@@ -1614,9 +1614,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testVbaRangeCopyPaste)
     CPPUNIT_ASSERT(pDocShell);
 
     cpo::uno::Any aRet;
-    uno::Sequence< cpo::uno::Any > aOutParam;
-    uno::Sequence< cpo::uno::Any > aParams;
-    uno::Sequence< sal_Int16 > aOutParamIndex;
+    cpo::uno::Sequence< cpo::uno::Any > aOutParam;
+    cpo::uno::Sequence< cpo::uno::Any > aParams;
+    cpo::uno::Sequence< sal_Int16 > aOutParamIndex;
 
     SfxObjectShell::CallXScript(
         mxComponent,
@@ -1763,7 +1763,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
 
-    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
             { "Name", cpo::uno::Any(u""_ustr) },
             { "Index", cpo::uno::Any(sal_Int32(1)) }
         }));
@@ -1776,7 +1776,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInsertDeletePageInvalidation)
     // Delete sheet
     aView1.m_bInvalidateTiles = false;
     aView1.m_aInvalidations.clear();
-    uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
             { "Index", cpo::uno::Any(sal_Int32(1)) }
         }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs2);
@@ -1896,7 +1896,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRowColumnHeaders)
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
     ScTestViewCallback aView2;
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // ViewRowColumnHeaders test
     KitHelper::setView(nView1);
@@ -2136,7 +2136,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetGeometryDataInvariance)
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
     ScTestViewCallback aView2;
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Try with the default empty document once (nIdx = 0) and then with sheet geometry settings (nIdx = 1)
     for (size_t nIdx = 0; nIdx < 2; ++nIdx)
@@ -2404,7 +2404,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSortAscendingDescending)
     aView.m_sInvalidateSheetGeometry = ""_ostr;
 
     // sort ascending
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, u".uno:SortAscending"_ustr, aArgs);
 
     // check it's sorted
@@ -2615,7 +2615,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSheetViewDataCrash)
     KitHelper::setView(nView1);
 
     // Imitate online while creating a new sheet on empty.ods.
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({
             { "Name",  cpo::uno::Any(u"NewSheet"_ustr) },
             { "Index", cpo::uno::Any(sal_Int32(2)) }
@@ -2650,7 +2650,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextBoxInsert)
     ScTestViewCallback aView1;
 
     // insert textbox
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({
             { "CreateDirectly",  cpo::uno::Any(true) }
         }));
@@ -2686,7 +2686,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         pTabViewShell->SetCursor(1, 1);
 
         // Add a new comment
-        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
             {"Text", cpo::uno::Any(u"COKit Comment Cell B2"_ustr)},
             {"Author", cpo::uno::Any(u"COKit Client"_ustr)},
@@ -2700,7 +2700,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
         CPPUNIT_ASSERT_EQUAL(std::string("COKit Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
         CPPUNIT_ASSERT_EQUAL(std::string("COKit Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
 
-        uno::Sequence<beans::PropertyValue> aCopyPasteArgs;
+        cpo::uno::Sequence<beans::PropertyValue> aCopyPasteArgs;
 
         // We need separate tests for single cell copy-paste and cell-range copy-paste
         // since they hit different code paths in ScColumn methods.
@@ -2763,7 +2763,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
     saveAndReload(TestFilter::XLSX);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     const ScDocument* pDoc = pModelObj->GetDocument();
     ScTestViewCallback aView;
     int nView = KitHelper::getCurrentView();
@@ -2779,7 +2779,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
     typeCharsInCell("7/8", 0, 7, pTabViewShell, pModelObj,
         false /* bInEdit */, false /* bCommit */); // Type "7/8" in A8
 
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, u".uno:Save"_ustr, aArgs);
 
     CPPUNIT_ASSERT_MESSAGE("Should not be marked modified after save", !pDocSh->IsModified());
@@ -2811,7 +2811,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReordering)
     // view #2
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
@@ -2873,7 +2873,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingRedo)
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
     SfxViewShell* pView2 = SfxViewShell::Current();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
@@ -2961,7 +2961,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoReorderingMulti)
     // view #2
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
 
     // text edit a cell in view #1
@@ -3031,7 +3031,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pModelObj->getViewRenderState());
     // Set second view to dark scheme
     {
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
@@ -3114,7 +3114,7 @@ void testInvalidateOnTextEditWithDifferentZoomLevels::TestBody(const ColRowZoom&
     Scheduler::ProcessEventsToIdle();
     // view #2
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTestViewCallback aView2;
     Scheduler::ProcessEventsToIdle();
     auto* pTabViewShell2 = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -3266,7 +3266,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     saveAndReload(TestFilter::ODS);
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
     CPPUNIT_ASSERT(pView);
@@ -3276,7 +3276,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNoInvalidateOnSave)
     // track invalidations
     ScTestViewCallback aView;
 
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, u".uno:Save"_ustr, aArgs);
 
     Scheduler::ProcessEventsToIdle();
@@ -3308,7 +3308,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellMinimalInvalidations)
     // Paste into a single cell
     {
         pView->SetCursor(aD4.Col(), aD4.Row());
-        uno::Sequence<beans::PropertyValue> aArgs;
+        cpo::uno::Sequence<beans::PropertyValue> aArgs;
         dispatchCommand(mxComponent, u".uno:Copy"_ustr, aArgs);
         pView->SetCursor(aA8.Col(), aA8.Row());
         Scheduler::ProcessEventsToIdle();
@@ -3362,7 +3362,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCellInvalidationDocWithExistingZo
     // Create a View #2
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     // register to track View #1 invalidations
     ScTestViewCallback aView2;
 
@@ -3473,7 +3473,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInputHandlerSyncedZoom)
 
     // Create a View #2
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Set View #2 to the same zoom as View #1
     pModelObj->setClientVisibleArea(tools::Rectangle(0, 0, 17933, 4853));
@@ -3560,7 +3560,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLongFirstColumnMouseClick)
 
     ScModelObj* pModelObj = createDoc("DocumentWithLongFirstColumn.ods");
     CPPUNIT_ASSERT(pModelObj);
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Fetch current view data
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -3730,7 +3730,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
         ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
         CPPUNIT_ASSERT(pModelObj);
 
-        pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+        pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
         ScDocument* pDoc = pModelObj->GetDocument();
 
         int nViewFR = KitHelper::getCurrentView();
@@ -3772,7 +3772,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testNumberFormatLocaleMultiUser)
 
         Scheduler::ProcessEventsToIdle();
 
-        uno::Sequence<beans::PropertyValue> aArgs;
+        cpo::uno::Sequence<beans::PropertyValue> aArgs;
         dispatchCommand(mxComponent, u".uno:Save"_ustr, aArgs);
 
         Scheduler::ProcessEventsToIdle();
@@ -3793,7 +3793,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLeftOverflowEdit)
     ScTestViewCallback aView;
 
     // Go to Cell B5000
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"ToPoint"_ustr, u"$B$5000"_ustr),
     };
     dispatchCommand(mxComponent, u".uno:GoToCell"_ustr, aPropertyValues);
@@ -3822,7 +3822,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
 
     // Freeze panes on a column and receive the proper state back
     aView.m_aStateChanges.clear();
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"Index"_ustr,  cpo::uno::Any(static_cast<sal_Int32>(8))),
     };
     comphelper::dispatchCommand(u".uno:FreezePanesColumn"_ustr, aPropertyValues);
@@ -3859,7 +3859,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScTestViewCallback aView;
     KitHelper::createView();
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
 
@@ -3890,7 +3890,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCursorVisibilityAfterPaste)
     pModelObj->postKeyEvent(KIT_KEYEVENT_KEYUP, 'B', 0);
     Scheduler::ProcessEventsToIdle();
 
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, aArgs); // Paste B.
     Scheduler::ProcessEventsToIdle();
 
@@ -3902,7 +3902,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoFilterPosition)
 {
     ScModelObj* pModelObj = createDoc("autofilter.ods");
     ScTestViewCallback aView;
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
 
     pView->SetCursor(0, 0); // Go to A1.
@@ -3922,7 +3922,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPivotFilterPosition)
 {
     ScModelObj* pModelObj = createDoc("pivotTableFilter.ods");
     ScTestViewCallback aView;
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
 
     pView->SetCursor(1, 0); // Go to B1.
@@ -3942,7 +3942,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testPrintRanges)
 {
     ScModelObj* pModelObj = createDoc("PrintRanges.ods");
     ScTestViewCallback aView;
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     /*
         Expected output: { \"printranges\": [ { \"sheet\": 0, \"ranges\": [ [ 2, 6, 2, 6]]}]}
@@ -3976,7 +3976,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
     }
 
     {
-        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
                 { "Language", cpo::uno::Any(u"Default_Spanish (Spain)"_ustr) },
             }));
         dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
@@ -3990,7 +3990,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
     }
 
     {
-        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
                 { "Language", cpo::uno::Any(u"Default_English (USA)"_ustr) },
             }));
         dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
@@ -4007,7 +4007,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testKitLanguageStatus)
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testValidationCellCrash)
 {
     ScModelObj* pModelObj = createDoc("validationcrash.xlsx");
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(pModelObj);
     ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
     CPPUNIT_ASSERT(pDocSh);
@@ -4044,7 +4044,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
         pTabViewShell->SetCursor(2, 3);
 
         // 1) Insert a threaded comment via .uno:InsertThreadedComment
-        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
             {"Text", cpo::uno::Any(u"Threaded comment text"_ustr)},
             {"Author", cpo::uno::Any(u"Kit Author"_ustr)},
@@ -4144,7 +4144,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
         CPPUNIT_ASSERT(!pDoc->GetNote(aPos));
 
         // 1) Insert a threaded comment via .uno:InsertThreadedComment.
-        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
             {"Text", cpo::uno::Any(u"Kit thread"_ustr)},
             {"Author", cpo::uno::Any(u"Kit Author"_ustr)},
@@ -4210,7 +4210,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
         pTabViewShell->SetCursor(aPos.Col(), aPos.Row());
 
         // 1) No Author arg at all: pAuthorItem == nullptr in the slot.
-        uno::Sequence<beans::PropertyValue> aArgsNoAuthor(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aArgsNoAuthor(comphelper::InitPropertySequence(
         {
             {"Text", cpo::uno::Any(u"no author arg"_ustr)},
         }));
@@ -4224,7 +4224,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
         CPPUNIT_ASSERT(!pDoc->GetNote(aPos));
 
         // 2) Author arg present but empty: the regression case.
-        uno::Sequence<beans::PropertyValue> aArgsEmptyAuthor(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aArgsEmptyAuthor(comphelper::InitPropertySequence(
         {
             {"Text", cpo::uno::Any(u"empty author arg"_ustr)},
             {"Author", cpo::uno::Any(u""_ustr)},

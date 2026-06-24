@@ -47,10 +47,10 @@ namespace basegfx::unotools
 {
         namespace
         {
-            uno::Sequence< geometry::RealBezierSegment2D > bezierSequenceFromB2DPolygon(const ::basegfx::B2DPolygon& rPoly)
+            cpo::uno::Sequence< geometry::RealBezierSegment2D > bezierSequenceFromB2DPolygon(const ::basegfx::B2DPolygon& rPoly)
             {
                 const sal_uInt32 nPointCount(rPoly.count());
-                uno::Sequence< geometry::RealBezierSegment2D > outputSequence(nPointCount);
+                cpo::uno::Sequence< geometry::RealBezierSegment2D > outputSequence(nPointCount);
                 geometry::RealBezierSegment2D* pOutput = outputSequence.getArray();
 
                 // fill sequences and imply closed polygon on this implementation layer
@@ -69,11 +69,11 @@ namespace basegfx::unotools
                 return outputSequence;
             }
 
-            uno::Sequence< geometry::RealPoint2D > pointSequenceFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly )
+            cpo::uno::Sequence< geometry::RealPoint2D > pointSequenceFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly )
             {
                 const sal_uInt32 nNumPoints( rPoly.count() );
 
-                uno::Sequence< geometry::RealPoint2D > outputSequence( nNumPoints );
+                cpo::uno::Sequence< geometry::RealPoint2D > outputSequence( nNumPoints );
                 geometry::RealPoint2D* pOutput = outputSequence.getArray();
 
                 // fill sequence from polygon
@@ -90,13 +90,13 @@ namespace basegfx::unotools
             }
         }
 
-        uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
+        cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
         {
             const sal_uInt32 nNumPolies( rPolyPoly.count() );
             sal_uInt32 i;
 
-            uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( nNumPolies );
-            uno::Sequence< geometry::RealBezierSegment2D >* pOutput = outputSequence.getArray();
+            cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > outputSequence( nNumPolies );
+            cpo::uno::Sequence< geometry::RealBezierSegment2D >* pOutput = outputSequence.getArray();
 
             for( i=0; i<nNumPolies; ++i )
             {
@@ -106,13 +106,13 @@ namespace basegfx::unotools
             return outputSequence;
         }
 
-        uno::Sequence< uno::Sequence< geometry::RealPoint2D > > pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly  )
+        cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly  )
         {
             const sal_uInt32 nNumPolies( rPolyPoly.count() );
             sal_uInt32 i;
 
-            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence( nNumPolies );
-            uno::Sequence< geometry::RealPoint2D >* pOutput = outputSequence.getArray();
+            cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > outputSequence( nNumPolies );
+            cpo::uno::Sequence< geometry::RealPoint2D >* pOutput = outputSequence.getArray();
 
             for( i=0; i<nNumPolies; ++i )
             {
@@ -132,13 +132,13 @@ namespace basegfx::unotools
 
             if( rPoly.areControlPointsUsed() )
             {
-                uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > outputSequence{ bezierSequenceFromB2DPolygon( rPoly )};
+                cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > outputSequence{ bezierSequenceFromB2DPolygon( rPoly )};
 
                 xRes = xGraphicDevice->createCompatibleBezierPolyPolygon( outputSequence );
             }
             else
             {
-                uno::Sequence< uno::Sequence< geometry::RealPoint2D > > outputSequence{
+                cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > outputSequence{
                  pointSequenceFromB2DPolygon( rPoly )};
 
                 xRes = xGraphicDevice->createCompatibleLinePolyPolygon( outputSequence );
@@ -180,7 +180,7 @@ namespace basegfx::unotools
             return xRes;
         }
 
-        ::basegfx::B2DPolygon polygonFromPoint2DSequence( const uno::Sequence< geometry::RealPoint2D >& points )
+        ::basegfx::B2DPolygon polygonFromPoint2DSequence( const cpo::uno::Sequence< geometry::RealPoint2D >& points )
         {
             const sal_Int32 nCurrSize( points.getLength() );
 
@@ -192,7 +192,7 @@ namespace basegfx::unotools
             return aPoly;
         }
 
-        ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
+        ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence( const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > >& points )
         {
             ::basegfx::B2DPolyPolygon aRes;
 
@@ -204,7 +204,7 @@ namespace basegfx::unotools
             return aRes;
         }
 
-        ::basegfx::B2DPolygon polygonFromBezier2DSequence( const uno::Sequence< geometry::RealBezierSegment2D >& curves )
+        ::basegfx::B2DPolygon polygonFromBezier2DSequence( const cpo::uno::Sequence< geometry::RealBezierSegment2D >& curves )
         {
             const sal_Int32 nSize(curves.getLength());
             basegfx::B2DPolygon aRetval;
@@ -236,7 +236,7 @@ namespace basegfx::unotools
             return aRetval;
         }
 
-        ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence( const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >& curves )
+        ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence( const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > >& curves )
         {
             ::basegfx::B2DPolyPolygon aRes;
 

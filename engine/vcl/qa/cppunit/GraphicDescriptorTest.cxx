@@ -13,7 +13,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <vcl/graphicfilter.hxx>
@@ -63,7 +63,7 @@ void createBitmapAndExportForType(SvStream& rStream, std::u16string_view sType)
 {
     Bitmap aBitmap = createBitmap();
 
-    uno::Sequence<beans::PropertyValue> aFilterData;
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName(sType);
     rGraphicFilter.ExportGraphic(aBitmap, u"none", rStream, nFilterFormat, &aFilterData);

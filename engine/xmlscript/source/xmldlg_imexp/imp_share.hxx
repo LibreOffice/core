@@ -314,8 +314,8 @@ class MenuPopupElement
     std::vector< sal_Int16 > _itemSelected;
     bool _allowEmptyItems;
 public:
-    css::uno::Sequence< OUString > getItemValues();
-    css::uno::Sequence< sal_Int16 > getSelectedItems();
+    cpo::uno::Sequence< OUString > getItemValues();
+    cpo::uno::Sequence< sal_Int16 > getSelectedItems();
 
     virtual css::uno::Reference< css::xml::input::XElement >
     SAL_CALL startChildElement(

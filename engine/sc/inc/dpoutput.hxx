@@ -21,7 +21,7 @@
 
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <tools/long.hxx>
 
@@ -57,7 +57,7 @@ private:
     std::vector<ScDPOutLevelData> mpColFields;
     std::vector<ScDPOutLevelData> mpRowFields;
     std::vector<ScDPOutLevelData> mpPageFields;
-    css::uno::Sequence<css::uno::Sequence<css::sheet::DataResult>> maData;
+    cpo::uno::Sequence<cpo::uno::Sequence<css::sheet::DataResult>> maData;
     OUString maDataDescription;
 
     // Number format related parameters

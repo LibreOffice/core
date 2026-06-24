@@ -34,7 +34,7 @@ private:
     sal_Int32 m_nLineDashStyle;
     double m_nLineWeight;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     static sal_Int32 convertLineStartEndNameToArrowheadStyle( std::u16string_view sLineName );
     /// @throws css::uno::RuntimeException
     static OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle );

@@ -32,7 +32,7 @@ namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XOutputStream; }
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 namespace comphelper::OFOPXMLHelper {
 
@@ -41,7 +41,7 @@ namespace comphelper::OFOPXMLHelper {
     // the first tag of each element sequence must be "Id"
     /// @throws css::uno::Exception
     COMPHELPER_DLLPUBLIC
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >
     ReadRelationsInfoSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
         std::u16string_view aStreamName,
@@ -54,7 +54,7 @@ namespace comphelper::OFOPXMLHelper {
     // by StringPair object ( First - PartName, Second - ContentType )
     /// @throws css::uno::Exception
     COMPHELPER_DLLPUBLIC
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >
     ReadContentTypeSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
         const css::uno::Reference< css::uno::XComponentContext >& rContext );
@@ -68,7 +68,7 @@ namespace comphelper::OFOPXMLHelper {
     // The "Override" sequence is searched first before falling back on "Default".
     COMPHELPER_DLLPUBLIC
     OUString
-    GetContentTypeByName(const css::uno::Sequence<css::uno::Sequence<css::beans::StringPair>>& rContentTypes,
+    GetContentTypeByName(const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::StringPair>>& rContentTypes,
                          const OUString& rFilename);
 
     // writes sequence of elements, where each element is described by sequence of tags,
@@ -78,7 +78,7 @@ namespace comphelper::OFOPXMLHelper {
     COMPHELPER_DLLPUBLIC
     void WriteRelationsInfoSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
-        const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aSequence,
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >& aSequence,
         const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
     // writes two entries of type sequence<StringPair>
@@ -90,8 +90,8 @@ namespace comphelper::OFOPXMLHelper {
     COMPHELPER_DLLPUBLIC
     void WriteContentSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
-        const css::uno::Sequence< css::beans::StringPair >& aDefaultsSequence,
-        const css::uno::Sequence< css::beans::StringPair >& aOverridesSequence,
+        const cpo::uno::Sequence< css::beans::StringPair >& aDefaultsSequence,
+        const cpo::uno::Sequence< css::beans::StringPair >& aOverridesSequence,
         const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
 } // namespace comphelper::OFOPXMLHelper

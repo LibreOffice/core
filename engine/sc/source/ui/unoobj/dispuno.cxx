@@ -109,13 +109,13 @@ uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDi
     return xResult;
 }
 
-uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
+cpo::uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
                         ScDispatchProviderInterceptor::queryDispatches(
-                        const uno::Sequence<frame::DispatchDescriptor>& aDescripts )
+                        const cpo::uno::Sequence<frame::DispatchDescriptor>& aDescripts )
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
+    cpo::uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
     std::transform(aDescripts.begin(), aDescripts.end(), aReturn.getArray(),
         [this](const frame::DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
             return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
@@ -201,7 +201,7 @@ void ScDispatch::Notify( SfxBroadcaster&, const SfxHint& rHint )
 // XDispatch
 
 void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
-                                const uno::Sequence<beans::PropertyValue>& aArgs )
+                                const cpo::uno::Sequence<beans::PropertyValue>& aArgs )
 {
     SolarMutexGuard aGuard;
 

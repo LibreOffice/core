@@ -111,7 +111,7 @@ void SvObjectServerList::FillInsertObjects()
     try{
         uno::Reference< container::XNameAccess > xNameAccess = officecfg::Office::Embedding::ObjectNames::get();
 
-        const uno::Sequence< OUString > seqNames= xNameAccess->getElementNames();
+        const cpo::uno::Sequence< OUString > seqNames= xNameAccess->getElementNames();
 
         for( const auto& rName : seqNames )
         {
@@ -273,7 +273,7 @@ bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, O
     if (!aAny.hasValue())
         return false;
 
-    uno::Sequence< sal_Int8 > anySequence;
+    cpo::uno::Sequence< sal_Int8 > anySequence;
     aAny >>= anySequence;
 
     OleObjectDescriptor* pOleObjDescr =

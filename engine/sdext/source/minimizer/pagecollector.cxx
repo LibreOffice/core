@@ -32,6 +32,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
+using namespace ::cpo::uno;
 
 void PageCollector::CollectCustomShowPages( const css::uno::Reference< css::frame::XModel >& rxModel, std::u16string_view rCustomShowName, std::vector< Reference< XDrawPage > >& rUsedPageList )
 {

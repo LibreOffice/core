@@ -117,8 +117,8 @@ private:
     rtl::Reference<DlgEdForm>  pDlgEdForm; // never nullptr
     css::uno::Reference< css::container::XNameContainer >     m_xUnoControlDialogModel;
     css::uno::Reference< css::awt::XControlContainer >        m_xControlContainer;
-    css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
-    css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
+    cpo::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
+    cpo::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
     css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
     std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory>> pObjFac; // never nullptr
     vcl::Window&                    rWindow; // DialogWindow

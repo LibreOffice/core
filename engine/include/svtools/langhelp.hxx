@@ -11,7 +11,7 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -23,7 +23,7 @@
  */
 SVT_DLLPUBLIC void localizeWebserviceURI( OUString& io_rURI );
 
-OUString SVT_DLLPUBLIC getInstalledLocaleForLanguage(css::uno::Sequence<OUString> const & installed, OUString const & locale);
-OUString SVT_DLLPUBLIC getInstalledLocaleForSystemUILanguage(css::uno::Sequence<OUString> const & installed, bool bRequestInstallIfMissing, const OUString& rPreferredLocale = OUString());
+OUString SVT_DLLPUBLIC getInstalledLocaleForLanguage(cpo::uno::Sequence<OUString> const & installed, OUString const & locale);
+OUString SVT_DLLPUBLIC getInstalledLocaleForSystemUILanguage(cpo::uno::Sequence<OUString> const & installed, bool bRequestInstallIfMissing, const OUString& rPreferredLocale = OUString());
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

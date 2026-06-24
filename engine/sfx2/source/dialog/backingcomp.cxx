@@ -86,16 +86,16 @@ public:
     virtual void          SAL_CALL release       (                             ) noexcept override;
 
     // XTypeProvide
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes           () override;
-    virtual css::uno::Sequence< sal_Int8 >       SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes           () override;
+    virtual cpo::uno::Sequence< sal_Int8 >       SAL_CALL getImplementationId() override;
 
     // XServiceInfo
     virtual OUString                       SAL_CALL getImplementationName   (                                     ) override;
     virtual bool                              SAL_CALL supportsService         ( const OUString& sServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(                                     ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(                                     ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& lArgs ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArgs ) override;
 
     // XController
     virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
@@ -120,10 +120,10 @@ public:
 
     // XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
     virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
 };
@@ -213,13 +213,13 @@ void SAL_CALL BackingComp::release()
     @return A list of all supported interface types.
 */
 
-css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
+cpo::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
 {
     static cppu::OTypeCollection aTypeCollection = [this]() {
         SolarMutexGuard aGuard;
         css::uno::Reference<css::lang::XTypeProvider> xProvider(m_xWindow, css::uno::UNO_QUERY);
 
-        css::uno::Sequence<css::uno::Type> lWindowTypes;
+        cpo::uno::Sequence<css::uno::Type> lWindowTypes;
         if (xProvider.is())
             lWindowTypes = xProvider->getTypes();
 
@@ -246,9 +246,9 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
     @return A byte array, which represent the unique id.
 */
 
-css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 OUString SAL_CALL BackingComp::getImplementationName()
@@ -261,7 +261,7 @@ bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceName 
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.StartModule"_ustr, u"com.sun.star.frame.ProtocolHandler"_ustr };
 }
@@ -610,7 +610,7 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
                 Means if may be attachedFrame() wasn't called before.
  */
 
-void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< cpo::uno::Any >& lArgs )
+void SAL_CALL BackingComp::initialize( /*IN*/ const cpo::uno::Sequence< cpo::uno::Any >& lArgs )
 {
     /* SAFE { */
     SolarMutexGuard aGuard;
@@ -678,10 +678,10 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL BackingComp::queryDispatch
     return xDispatch;
 }
 
-css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL BackingComp::queryDispatches( const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts )
+cpo::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL BackingComp::queryDispatches( const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts )
 {
     sal_Int32 nCount = seqDescripts.getLength();
-    css::uno::Sequence < css::uno::Reference < XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence < css::uno::Reference < XDispatch > > lDispatcher( nCount );
 
     std::transform(seqDescripts.begin(), seqDescripts.end(), lDispatcher.getArray(),
         [this](const css::frame::DispatchDescriptor& rDesc) -> css::uno::Reference<XDispatch> {
@@ -691,7 +691,7 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Bac
 }
 
 // XDispatch
-void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ )
+void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ )
 {
     // vnd.org.libreoffice.recentdocs:ClearRecentFileList  - clear recent files
     if ( aURL.Path != "ClearRecentFileList" )
@@ -728,7 +728,7 @@ void SAL_CALL BackingComp::removeStatusListener( const css::uno::Reference< css:
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_BackingComp_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new BackingComp);
 }

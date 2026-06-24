@@ -27,7 +27,7 @@
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <dialmgr.hxx>

@@ -288,7 +288,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(
             const OUString & ServiceName) override;
-    virtual uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // css::rdf::XRepository:
@@ -302,7 +302,7 @@ public:
             const uno::Reference< io::XOutputStream > & i_xOutStream,
             const uno::Reference< rdf::XURI > & i_xGraphName,
             const uno::Reference< rdf::XURI > & i_xBaseURI) override;
-    virtual uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
+    virtual cpo::uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
         getGraphNames() override;
     virtual uno::Reference< rdf::XNamedGraph > SAL_CALL getGraph(
             const uno::Reference< rdf::XURI > & i_xGraphName) override;
@@ -323,13 +323,13 @@ public:
     // css::rdf::XDocumentRepository:
     virtual void SAL_CALL setStatementRDFa(
             const uno::Reference< rdf::XResource > & i_xSubject,
-            const uno::Sequence< uno::Reference< rdf::XURI > > & i_rPredicates,
+            const cpo::uno::Sequence< uno::Reference< rdf::XURI > > & i_rPredicates,
             const uno::Reference< rdf::XMetadatable > & i_xObject,
             const OUString & i_rRDFaContent,
             const uno::Reference< rdf::XURI > & i_xRDFaDatatype) override;
     virtual void SAL_CALL removeStatementRDFa(
             const uno::Reference< rdf::XMetadatable > & i_xElement) override;
-    virtual beans::Pair< uno::Sequence<rdf::Statement>, bool > SAL_CALL
+    virtual beans::Pair< cpo::uno::Sequence<rdf::Statement>, bool > SAL_CALL
         getStatementRDFa(uno::Reference< rdf::XMetadatable > const& i_xElement) override;
     virtual uno::Reference< container::XEnumeration > SAL_CALL
         getStatementsRDFa(
@@ -339,7 +339,7 @@ public:
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(
-            const uno::Sequence< cpo::uno::Any > & i_rArguments) override;
+            const cpo::uno::Sequence< cpo::uno::Any > & i_rArguments) override;
 
     // XNamedGraph forwards ---------------------------------------------
     NamedGraphMap_t::iterator clearGraph_NoLock(
@@ -584,7 +584,7 @@ public:
             std::mutex & i_rMutex,
             std::shared_ptr<librdf_query> i_pQuery,
             std::shared_ptr<librdf_query_results> i_pQueryResult,
-            uno::Sequence< OUString > const& i_rBindingNames )
+            cpo::uno::Sequence< OUString > const& i_rBindingNames )
         : m_xRep(i_pRepository)
         , m_rMutex(i_rMutex)
         , m_pQuery(std::move(i_pQuery))
@@ -605,7 +605,7 @@ public:
     virtual cpo::uno::Any SAL_CALL nextElement() override;
 
     // css::rdf::XQuerySelectResult:
-    virtual uno::Sequence< OUString > SAL_CALL getBindingNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getBindingNames() override;
 
 private:
 
@@ -622,7 +622,7 @@ private:
     // queries must be freed only after all the results are completely read
     std::shared_ptr<librdf_query> const m_pQuery;
     std::shared_ptr<librdf_query_results> const m_pQueryResult;
-    uno::Sequence< OUString > const m_BindingNames;
+    cpo::uno::Sequence< OUString > const m_BindingNames;
 };
 
 
@@ -669,7 +669,7 @@ librdf_QuerySelectResult::nextElement()
             "librdf_query_results_get_bindings failed"_ustr, *this,
             cpo::uno::Any(e));
     }
-    uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
+    cpo::uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
     auto retRange = asNonConstRange(ret);
     for (int i = 0; i < count; ++i) {
         retRange[i] = m_xRep->getTypeConverter().convertToXNode(aNodes[i]);
@@ -680,7 +680,7 @@ librdf_QuerySelectResult::nextElement()
 }
 
 // css::rdf::XQuerySelectResult:
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 librdf_QuerySelectResult::getBindingNames()
 {
     // const - no lock needed
@@ -918,7 +918,7 @@ bool SAL_CALL librdf_Repository::supportsService(
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 librdf_Repository::getSupportedServiceNames()
 {
     return { u"com.sun.star.rdf.Repository"_ustr };
@@ -992,7 +992,7 @@ librdf_Repository::importGraph(::sal_Int16 i_Format,
 
     const OUString contextU( i_xGraphName->getStringValue() );
 
-    uno::Sequence<sal_Int8> buf;
+    cpo::uno::Sequence<sal_Int8> buf;
     uno::Reference<io::XSeekable> xSeekable(i_xInStream, uno::UNO_QUERY);
     // UGLY: if only redland could read streams...
     const sal_Int64 sz( xSeekable.is() ? xSeekable->getLength() : 1 << 20 );
@@ -1077,7 +1077,7 @@ void addChaffWhenEncryptedStorage(const uno::Reference< io::XOutputStream > &rSt
     // exceptions are propagated
     if (!bAddChaff)
     {
-        const uno::Sequence<sal_Int8> buf(
+        const cpo::uno::Sequence<sal_Int8> buf(
             reinterpret_cast<sal_Int8*>(pBuffer), length);
         rStream->writeBytes(buf);
     }
@@ -1091,7 +1091,7 @@ void addChaffWhenEncryptedStorage(const uno::Reference< io::XOutputStream > &rSt
 
             size_t preamblelen = postcomment - pBuffer;
 
-            uno::Sequence<sal_Int8> buf(
+            cpo::uno::Sequence<sal_Int8> buf(
                 reinterpret_cast<sal_Int8*>(pBuffer), preamblelen);
             rStream->writeBytes(buf);
 
@@ -1100,11 +1100,11 @@ void addChaffWhenEncryptedStorage(const uno::Reference< io::XOutputStream > &rSt
                 comphelper::xml::makeXMLChaff() +
                 "-->";
 
-            buf = uno::Sequence<sal_Int8>(
+            buf = cpo::uno::Sequence<sal_Int8>(
                 reinterpret_cast<const sal_Int8*>(aComment.getStr()), aComment.getLength());
             rStream->writeBytes(buf);
 
-            buf = uno::Sequence<sal_Int8>(
+            buf = cpo::uno::Sequence<sal_Int8>(
                 reinterpret_cast<sal_Int8*>(postcomment), length-preamblelen);
             rStream->writeBytes(buf);
         }
@@ -1253,7 +1253,7 @@ librdf_Repository::exportGraph(::sal_Int16 i_Format,
     addChaffWhenEncryptedStorage(i_xOutStream, pBuf.get(), length);
 }
 
-uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< rdf::XURI > > SAL_CALL
 librdf_Repository::getGraphNames()
 {
     std::scoped_lock g(m_aMutex);
@@ -1406,7 +1406,7 @@ librdf_Repository::querySelect(const OUString & i_rQuery)
             u"librdf_Repository::querySelect: "
             "librdf_query_results_get_bindings_count failed"_ustr, *this);
     }
-    uno::Sequence< OUString > names(count);
+    cpo::uno::Sequence< OUString > names(count);
     auto namesRange = asNonConstRange(names);
     for (int i = 0; i < count; ++i) {
         const char* name( librdf_query_results_get_binding_name(
@@ -1490,7 +1490,7 @@ librdf_Repository::queryAsk(const OUString & i_rQuery)
 // css::rdf::XDocumentRepository:
 void SAL_CALL librdf_Repository::setStatementRDFa(
     const uno::Reference< rdf::XResource > & i_xSubject,
-    const uno::Sequence< uno::Reference< rdf::XURI > > & i_rPredicates,
+    const cpo::uno::Sequence< uno::Reference< rdf::XURI > > & i_rPredicates,
     const uno::Reference< rdf::XMetadatable > & i_xObject,
     const OUString & i_rRDFaContent,
     const uno::Reference< rdf::XURI > & i_xRDFaDatatype)
@@ -1623,7 +1623,7 @@ void SAL_CALL librdf_Repository::removeStatementRDFa(
     clearGraph_NoLock(sXmlId, true);
 }
 
-beans::Pair< uno::Sequence<rdf::Statement>, bool > SAL_CALL
+beans::Pair< cpo::uno::Sequence<rdf::Statement>, bool > SAL_CALL
 librdf_Repository::getStatementRDFa(
     const uno::Reference< rdf::XMetadatable > & i_xElement)
 {
@@ -1633,7 +1633,7 @@ librdf_Repository::getStatementRDFa(
     }
     const beans::StringPair mdref( i_xElement->getMetadataReference() );
     if ((mdref.First.isEmpty()) || (mdref.Second.isEmpty())) {
-        return beans::Pair< uno::Sequence<rdf::Statement>, bool >();
+        return beans::Pair< cpo::uno::Sequence<rdf::Statement>, bool >();
     }
     OUString const sXmlId(mdref.First + "#" + mdref.Second);
     uno::Reference<rdf::XURI> xXmlId;
@@ -1662,7 +1662,7 @@ librdf_Repository::getStatementRDFa(
 
     std::scoped_lock g(m_aMutex); // don't call i_x* with mutex locked
 
-    return beans::Pair< uno::Sequence<rdf::Statement>, bool >(
+    return beans::Pair< cpo::uno::Sequence<rdf::Statement>, bool >(
             comphelper::containerToSequence(ret), 0 != m_RDFaXHTMLContentSet.count(sXmlId));
 }
 
@@ -1734,7 +1734,7 @@ librdf_Repository::getStatementsRDFa(
 
 // css::lang::XInitialization:
 void SAL_CALL librdf_Repository::initialize(
-    const uno::Sequence< cpo::uno::Any > &)
+    const cpo::uno::Sequence< cpo::uno::Any > &)
 {
     std::scoped_lock g(m_aMutex);
 
@@ -2462,7 +2462,7 @@ librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 unoxml_rdfRepository_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new librdf_Repository(context));
 }

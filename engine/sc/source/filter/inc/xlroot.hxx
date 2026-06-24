@@ -179,7 +179,7 @@ public:
     /** Returns the default password used for stream encryption. */
     static const OUString & GetDefaultPassword() { return XclRootData::gaDefPassword; }
     /** Requests and verifies a password from the medium or the user. */
-    css::uno::Sequence< css::beans::NamedValue >
+    cpo::uno::Sequence< css::beans::NamedValue >
         RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
 
     /** Returns the OLE2 root storage of the imported/exported file.

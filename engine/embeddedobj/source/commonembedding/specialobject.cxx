@@ -36,7 +36,7 @@
 using namespace ::com::sun::star;
 
 
-OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext, const uno::Sequence< beans::NamedValue >& aObjectProps )
+OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext, const cpo::uno::Sequence< beans::NamedValue >& aObjectProps )
 : OCommonEmbeddedObject( rxContext, aObjectProps )
 {
     maSize.Width = maSize.Height = 10000;
@@ -170,8 +170,8 @@ void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
 }
 
 void SAL_CALL OSpecialEmbeddedObject::reload(
-                const uno::Sequence< beans::PropertyValue >&,
-                const uno::Sequence< beans::PropertyValue >&)
+                const cpo::uno::Sequence< beans::PropertyValue >&,
+                const cpo::uno::Sequence< beans::PropertyValue >&)
 {
     // Allow IFrames to reload their content
     SetInplaceActiveState();
@@ -187,7 +187,7 @@ bool SAL_CALL OSpecialEmbeddedObject::supportsService(const OUString& ServiceNam
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL OSpecialEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OSpecialEmbeddedObject::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.embed.OSpecialEmbeddedObject"_ustr };
 }

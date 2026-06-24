@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > const & xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
+ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > const & xHandler,  const cpo::uno::Sequence< cpo::uno::Sequence < beans::PropertyValue > >& rManList )
 {
     static constexpr OUString sKeyInfo                      ( u"KeyInfo"_ustr );
     static constexpr OUString sPgpKeyIDProperty             ( u"KeyId"_ustr );
@@ -65,8 +65,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     OUString aDocMediaType;
     OUString aDocVersion;
     bool isWholesomeEncryption(false);
-    const uno::Sequence<beans::PropertyValue>* pRootFolderPropSeq = nullptr;
-    for (const uno::Sequence < beans::PropertyValue >& rSequence : rManList)
+    const cpo::uno::Sequence<beans::PropertyValue>* pRootFolderPropSeq = nullptr;
+    for (const cpo::uno::Sequence < beans::PropertyValue >& rSequence : rManList)
     {
         OUString aMediaType;
         OUString aPath;
@@ -206,13 +206,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             }
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            uno::Sequence< uno::Sequence < beans::NamedValue > > aKeyInfoSequence;
+            cpo::uno::Sequence< cpo::uno::Sequence < beans::NamedValue > > aKeyInfoSequence;
             *pKeyInfoProperty >>= aKeyInfoSequence;
-            for (const uno::Sequence<beans::NamedValue>& rKeyInfoSequence : aKeyInfoSequence)
+            for (const cpo::uno::Sequence<beans::NamedValue>& rKeyInfoSequence : aKeyInfoSequence)
             {
-                uno::Sequence < sal_Int8 > aPgpKeyID;
-                uno::Sequence < sal_Int8 > aPgpKeyPacket;
-                uno::Sequence < sal_Int8 > aCipherValue;
+                cpo::uno::Sequence < sal_Int8 > aPgpKeyID;
+                cpo::uno::Sequence < sal_Int8 > aPgpKeyPacket;
+                cpo::uno::Sequence < sal_Int8 > aCipherValue;
                 for (const beans::NamedValue& rNValue : rKeyInfoSequence)
                 {
                     if (rNValue.Name == sPgpKeyIDProperty )
@@ -293,7 +293,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     }
 
     // now write individual file entries
-    for (const uno::Sequence<beans::PropertyValue>& rSequence : rManList)
+    for (const cpo::uno::Sequence<beans::PropertyValue>& rSequence : rManList)
     {
         if (&rSequence == pRootFolderPropSeq && isWholesomeEncryption)
         {
@@ -367,7 +367,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
             // ==== Encryption Data
             rtl::Reference<::comphelper::AttributeList> pNewAttrList = new ::comphelper::AttributeList;
             OUStringBuffer aBuffer;
-            uno::Sequence < sal_Int8 > aSequence;
+            cpo::uno::Sequence < sal_Int8 > aSequence;
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
@@ -493,7 +493,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                     pNewAttrList->AddAttribute(ATTRIBUTE_KEY_DERIVATION_NAME,
                                                ARGON2ID_URL_LO);
 
-                    uno::Sequence<sal_Int32> args;
+                    cpo::uno::Sequence<sal_Int32> args;
                     *pArgon2Args >>= args;
                     assert(args.getLength() == 3);
                     pNewAttrList->AddAttribute(ATTRIBUTE_ARGON2_T_LO, OUString::number(args[0]));

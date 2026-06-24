@@ -1845,7 +1845,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 
                         do
                         {
-                            css::uno::Sequence< sal_Int8 > aReadSeq;
+                            cpo::uno::Sequence< sal_Int8 > aReadSeq;
 
                             nRead = xStream->readSomeBytes( aReadSeq, nBytesToRead );
 

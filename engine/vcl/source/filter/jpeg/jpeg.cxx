@@ -35,7 +35,7 @@ VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, ImportOutput& rImportOutp
 }
 
 bool ExportJPEG(SvStream& rOutputStream, const Graphic& rGraphic,
-                    const css::uno::Sequence<css::beans::PropertyValue>* pFilterData,
+                    const cpo::uno::Sequence<css::beans::PropertyValue>* pFilterData,
                     bool* pExportWasGrey)
 {
     JPEGWriter aJPEGWriter( rOutputStream, pFilterData, pExportWasGrey );

@@ -56,7 +56,7 @@ namespace connectivity::component
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
@@ -68,7 +68,7 @@ namespace connectivity::component
         virtual bool SAL_CALL hasOrderedBookmarks(  ) override;
         virtual sal_Int32 SAL_CALL hashBookmark( const cpo::uno::Any& bookmark ) override;
         // XDeleteRows
-        virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< cpo::uno::Any >& rows ) override;
+        virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const cpo::uno::Sequence< cpo::uno::Any >& rows ) override;
 
         virtual bool isRowDeleted() const override { return false; }
 

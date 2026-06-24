@@ -127,10 +127,10 @@ UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
 {
 }
 
-css::uno::Sequence<sal_Int32> UnoControlModel::ImplGetPropertyIds() const
+cpo::uno::Sequence<sal_Int32> UnoControlModel::ImplGetPropertyIds() const
 {
     sal_uInt32 nIDs = maData.size();
-    css::uno::Sequence<sal_Int32>  aIDs( nIDs );
+    cpo::uno::Sequence<sal_Int32>  aIDs( nIDs );
     sal_Int32* pIDs = aIDs.getArray();
     sal_uInt32 n = 0;
     for ( const auto& rData : maData )
@@ -300,21 +300,21 @@ cpo::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
             case BASEPROPERTY_STRINGITEMLIST:
             {
-                css::uno::Sequence< OUString> aStringSeq;
+                cpo::uno::Sequence< OUString> aStringSeq;
                 aDefault <<= aStringSeq;
 
             }
             break;
             case BASEPROPERTY_TYPEDITEMLIST:
             {
-                css::uno::Sequence< cpo::uno::Any > aAnySeq;
+                cpo::uno::Sequence< cpo::uno::Any > aAnySeq;
                 aDefault <<= aAnySeq;
 
             }
             break;
             case BASEPROPERTY_SELECTEDITEMS:
             {
-                css::uno::Sequence<sal_Int16> aINT16Seq;
+                cpo::uno::Sequence<sal_Int16> aINT16Seq;
                 aDefault <<= aINT16Seq;
             }
             break;
@@ -479,13 +479,13 @@ css::beans::PropertyState UnoControlModel::getPropertyStateImpl( std::unique_loc
     return CompareProperties( aValue, aDefault ) ? css::beans::PropertyState_DEFAULT_VALUE : css::beans::PropertyState_DIRECT_VALUE;
 }
 
-css::uno::Sequence< css::beans::PropertyState > UnoControlModel::getPropertyStates( const css::uno::Sequence< OUString >& PropertyNames )
+cpo::uno::Sequence< css::beans::PropertyState > UnoControlModel::getPropertyStates( const cpo::uno::Sequence< OUString >& PropertyNames )
 {
     std::unique_lock aGuard( m_aMutex );
 
     sal_Int32 nNames = PropertyNames.getLength();
 
-    css::uno::Sequence< css::beans::PropertyState > aStates( nNames );
+    cpo::uno::Sequence< css::beans::PropertyState > aStates( nNames );
 
     std::transform(PropertyNames.begin(), PropertyNames.end(), aStates.getArray(),
         [this, &aGuard](const OUString& rName) -> css::beans::PropertyState
@@ -640,9 +640,9 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
                     t.NanoSeconds / 1000000 + 100 * t.Seconds
                     + 10000 * t.Minutes + 1000000 * t.Hours); // HHMMSShh
             }
-            else if ( rType == cppu::UnoType< css::uno::Sequence< OUString> >::get() )
+            else if ( rType == cppu::UnoType< cpo::uno::Sequence< OUString> >::get() )
             {
-                css::uno::Sequence< OUString> aSeq;
+                cpo::uno::Sequence< OUString> aSeq;
                 rValue >>= aSeq;
                 tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
@@ -651,16 +651,16 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
             }
             else if ( rType == cppu::UnoType< cppu::UnoSequenceType<cppu::UnoUnsignedShortType> >::get() )
             {
-                css::uno::Sequence<sal_uInt16> aSeq;
+                cpo::uno::Sequence<sal_uInt16> aSeq;
                 rValue >>= aSeq;
                 tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
                 for (const auto nVal : aSeq)
                     OutStream->writeShort( nVal );
             }
-            else if ( rType == cppu::UnoType< css::uno::Sequence<sal_Int16> >::get() )
+            else if ( rType == cppu::UnoType< cpo::uno::Sequence<sal_Int16> >::get() )
             {
-                css::uno::Sequence<sal_Int16> aSeq;
+                cpo::uno::Sequence<sal_Int16> aSeq;
                 rValue >>= aSeq;
                 tools::Long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
@@ -758,8 +758,8 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
 
     short nVersion = InStream->readShort();
     sal_uInt32 nProps = static_cast<sal_uInt32>(InStream->readLong());
-    css::uno::Sequence< OUString> aProps( nProps );
-    css::uno::Sequence< cpo::uno::Any> aValues( nProps );
+    cpo::uno::Sequence< OUString> aProps( nProps );
+    cpo::uno::Sequence< cpo::uno::Any> aValues( nProps );
     bool bInvalidEntries = false;
 
     // Unfortunately, there's no mark for the whole block, thus only properties may be changed.
@@ -851,10 +851,10 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                         (n % 100) * 1000000, (n / 100) % 100, (n / 10000) % 100,
                         n / 1000000, false);
                 }
-                else if ( *pType == cppu::UnoType< css::uno::Sequence< OUString> >::get() )
+                else if ( *pType == cppu::UnoType< cpo::uno::Sequence< OUString> >::get() )
                 {
                     tools::Long nEntries = InStream->readLong();
-                    css::uno::Sequence< OUString> aSeq( nEntries );
+                    cpo::uno::Sequence< OUString> aSeq( nEntries );
                     for ( tools::Long n = 0; n < nEntries; n++ )
                         aSeq.getArray()[n] = InStream->readUTF();
                     aValue <<= aSeq;
@@ -864,15 +864,15 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
 
                 {
                     tools::Long nEntries = InStream->readLong();
-                    css::uno::Sequence<sal_uInt16> aSeq( nEntries );
+                    cpo::uno::Sequence<sal_uInt16> aSeq( nEntries );
                     for ( tools::Long n = 0; n < nEntries; n++ )
                         aSeq.getArray()[n] = static_cast<sal_uInt16>(InStream->readShort());
                     aValue <<= aSeq;
                 }
-                else if ( *pType == cppu::UnoType< css::uno::Sequence<sal_Int16> >::get() )
+                else if ( *pType == cppu::UnoType< cpo::uno::Sequence<sal_Int16> >::get() )
                 {
                     tools::Long nEntries = InStream->readLong();
-                    css::uno::Sequence<sal_Int16> aSeq( nEntries );
+                    cpo::uno::Sequence<sal_Int16> aSeq( nEntries );
                     for ( tools::Long n = 0; n < nEntries; n++ )
                         aSeq.getArray()[n] = InStream->readShort();
                     aValue <<= aSeq;
@@ -1026,7 +1026,7 @@ bool UnoControlModel::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.awt.UnoControlModel"_ustr };
 }
@@ -1255,13 +1255,13 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlModel::getProperty
     return css::uno::Reference< css::beans::XPropertySetInfo >();
 }
 
-void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values )
+void UnoControlModel::setPropertyValues( const cpo::uno::Sequence< OUString >& rPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values )
 {
     std::unique_lock aGuard( m_aMutex );
     setPropertyValuesImpl(aGuard, rPropertyNames, Values);
 }
 
-void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values )
+void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< OUString >& rPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values )
 {
     sal_Int32 nProps = rPropertyNames.getLength();
     if (nProps != Values.getLength())
@@ -1274,7 +1274,7 @@ void UnoControlModel::setPropertyValuesImpl( std::unique_lock<std::mutex>& rGuar
     sal_Int32* pHandles = aHandles.getArray();
 
     // may need to change the order in the sequence, for this we need a non-const value sequence
-    uno::Sequence< cpo::uno::Any > aValues( Values );
+    cpo::uno::Sequence< cpo::uno::Any > aValues( Values );
     cpo::uno::Any* pValues = aValues.getArray();
 
     sal_Int32 nValidHandles = getInfoHelper().fillHandles( pHandles, rPropertyNames );

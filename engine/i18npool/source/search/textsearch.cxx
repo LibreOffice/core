@@ -361,7 +361,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             nInEndPos += std::min(nMaxTrailingLen, searchStr.getLength() - endPos);
         }
 
-        css::uno::Sequence<sal_Int32> offset(nInEndPos - nInStartPos);
+        cpo::uno::Sequence<sal_Int32> offset(nInEndPos - nInStartPos);
         in_str = xTranslit->transliterate(searchStr, nInStartPos, nInEndPos - nInStartPos, offset);
 
         if ( bReplaceApostrophe )
@@ -421,7 +421,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         SearchResult sres2;
 
         in_str = searchStr;
-        css::uno::Sequence <sal_Int32> offset( in_str.getLength());
+        cpo::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
         in_str = xTranslit2->transliterate( searchStr, 0, in_str.getLength(), offset );
 
@@ -479,7 +479,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
     if ( xTranslit.is() )
     {
         // apply only simple 1<->1 transliteration here
-        css::uno::Sequence<sal_Int32> offset(startPos - endPos);
+        cpo::uno::Sequence<sal_Int32> offset(startPos - endPos);
         in_str = xTranslit->transliterate( searchStr, endPos, startPos - endPos, offset );
 
         if ( bReplaceApostrophe )
@@ -543,7 +543,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         SearchResult sres2;
 
         in_str = searchStr;
-        css::uno::Sequence <sal_Int32> offset( in_str.getLength());
+        cpo::uno::Sequence <sal_Int32> offset( in_str.getLength());
 
         in_str = xTranslit2->transliterate(searchStr, 0, in_str.getLength(), offset);
 
@@ -1584,7 +1584,7 @@ TextSearch::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 i18npool_TextSearch_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new TextSearch(context));
 }

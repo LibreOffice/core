@@ -82,7 +82,7 @@ private:
     sal_Int32 m_nNoBorderResizeReact;
     sal_Int32 m_nNoResizeReact;
 
-    css::uno::Sequence< cpo::uno::Any > m_aOutplaceFrameProps;
+    cpo::uno::Sequence< cpo::uno::Any > m_aOutplaceFrameProps;
 
 
     css::uno::Reference< css::frame::XFrame > const & GetDocFrame();
@@ -138,7 +138,7 @@ public:
         return m_aContainerName;
     }
 
-    void SetOutplaceFrameProperties( const css::uno::Sequence< cpo::uno::Any >& aProps )
+    void SetOutplaceFrameProperties( const cpo::uno::Sequence< cpo::uno::Any >& aProps )
         { m_aOutplaceFrameProps = aProps; }
 
     void PlaceFrame( const css::awt::Rectangle& aNewRect );

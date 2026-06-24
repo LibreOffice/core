@@ -66,7 +66,7 @@ bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
                                         UNOMainThreadExecutor::impl_staticGetImplementationName() +
                                         OUString( "/UNO/SERVICES")  );
 
-            uno::Sequence< OUString > &rServices = UNOMainThreadExecutor::impl_staticGetSupportedServiceNames();
+            cpo::uno::Sequence< OUString > &rServices = UNOMainThreadExecutor::impl_staticGetSupportedServiceNames();
             for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 

@@ -205,7 +205,7 @@ bool DocumentSignatureManager::isXML(std::u16string_view rURI)
 
     if (readManifest())
     {
-        for (const uno::Sequence<beans::PropertyValue>& entry : m_manifest)
+        for (const cpo::uno::Sequence<beans::PropertyValue>& entry : m_manifest)
         {
             OUString sPath;
             OUString sMediaType;
@@ -427,7 +427,7 @@ bool DocumentSignatureManager::add(
                                              eAlgorithmID);
     }
 
-    const uno::Sequence<uno::Reference<security::XCertificate>> aCertPath
+    const cpo::uno::Sequence<uno::Reference<security::XCertificate>> aCertPath
         = xSecurityContext->getSecurityEnvironment()->buildCertificatePath(xCert);
 
     OUStringBuffer aStrBuffer;

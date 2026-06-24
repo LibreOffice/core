@@ -1030,7 +1030,7 @@ bool UnusedFields::checkForWriteWhenUsingCollectionType(const CXXMethodDecl * ca
     {
         mapLike = true;
     }
-    else if (tc.Class("Sequence").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+    else if (tc.Class("Sequence").Namespace("uno").Namespace("cpo").GlobalNamespace())
     {
         cssSequence = true;
     }

@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <osl/diagnose.h>
@@ -88,12 +88,12 @@ bool satisfiesMaximalVersion(
 
 namespace dp_misc::Dependencies {
 
-css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
+cpo::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
 check(dp_misc::DescriptionInfoset const & infoset) {
     css::uno::Reference< css::xml::dom::XNodeList > deps(
         infoset.getDependencies());
     sal_Int32 n = deps->getLength();
-    css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
+    cpo::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
         unsatisfied(n);
     auto unsatisfiedRange = asNonConstRange(unsatisfied);
     sal_Int32 unsat = 0;

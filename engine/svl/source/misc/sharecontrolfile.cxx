@@ -153,7 +153,7 @@ const std::vector< o3tl::enumarray< LockFileComponent, OUString > > & ShareContr
         if (nLength > SAL_MAX_INT32 || nLength < 0)
             throw uno::RuntimeException();
 
-        uno::Sequence< sal_Int8 > aBuffer( static_cast<sal_Int32>(nLength) );
+        cpo::uno::Sequence< sal_Int8 > aBuffer( static_cast<sal_Int32>(nLength) );
         m_xSeekable->seek( 0 );
 
         sal_Int32 nRead = m_xInputStream->readBytes( aBuffer, static_cast<sal_Int32>(nLength) );
@@ -161,7 +161,7 @@ const std::vector< o3tl::enumarray< LockFileComponent, OUString > > & ShareContr
         nLength -= nRead;
         while ( nLength > 0 )
         {
-            uno::Sequence< sal_Int8 > aTmpBuf( static_cast<sal_Int32>(nLength) );
+            cpo::uno::Sequence< sal_Int8 > aTmpBuf( static_cast<sal_Int32>(nLength) );
             nRead = m_xInputStream->readBytes( aTmpBuf, static_cast<sal_Int32>(nLength) );
             if ( nRead > nLength )
                 throw uno::RuntimeException();
@@ -202,7 +202,7 @@ void ShareControlFile::SetUsersDataAndStore( std::unique_lock<std::mutex>& /*rGu
     }
 
     OString aStringData( OUStringToOString( aBuffer, RTL_TEXTENCODING_UTF8 ) );
-    uno::Sequence< sal_Int8 > aData( reinterpret_cast<sal_Int8 const *>(aStringData.getStr()), aStringData.getLength() );
+    cpo::uno::Sequence< sal_Int8 > aData( reinterpret_cast<sal_Int8 const *>(aStringData.getStr()), aStringData.getLength() );
     m_xOutputStream->writeBytes( aData );
     m_aUsersData = std::move(aUsersData);
 }

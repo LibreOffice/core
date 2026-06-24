@@ -61,7 +61,7 @@ bool SAL_CALL SEInitializerGpg::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL SEInitializerGpg::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SEInitializerGpg::getSupportedServiceNames()
 {
     return { u"com.sun.star.xml.crypto.GPGSEInitializer"_ustr };
 }
@@ -73,7 +73,7 @@ OUString SAL_CALL SEInitializerGpg::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_security_SEInitializer_Gpg_get_implementation(
-    uno::XComponentContext* /*pCtx*/, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SEInitializerGpg());
 }

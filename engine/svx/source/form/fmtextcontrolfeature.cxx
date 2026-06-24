@@ -33,6 +33,7 @@ namespace svx
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
+    using namespace ::cpo::uno;
 
     FmTextControlFeature::FmTextControlFeature( const Reference< XDispatch >& _rxDispatcher, URL _aFeatureURL, SfxSlotId _nSlotId, FmTextControlShell* _pInvalidator )
         :m_xDispatcher    ( _rxDispatcher )

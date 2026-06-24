@@ -570,7 +570,7 @@ void SwTextFrame::AdjustFrame( const SwTwips nChgHght, bool bHasToFit )
         Shrink( -nChgHght );
 }
 
-css::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips CurrentPos )
+cpo::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips CurrentPos )
 {
     SwTextFormatInfo     aInf( getRootFrame()->GetCurrShell()->GetOut(), this );
     SwTextFormatter      aLine( this, &aInf );

@@ -129,8 +129,8 @@ namespace sfx2
         virtual bool SAL_CALL isRedoPossible(  ) override;
         virtual OUString SAL_CALL getCurrentUndoActionTitle(  ) override;
         virtual OUString SAL_CALL getCurrentRedoActionTitle(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getAllUndoActionTitles(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getAllRedoActionTitles(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getAllUndoActionTitles(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getAllRedoActionTitles(  ) override;
         virtual void SAL_CALL clear(  ) override;
         virtual void SAL_CALL clearRedo(  ) override;
         virtual void SAL_CALL reset(  ) override;

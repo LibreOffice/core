@@ -22,7 +22,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -160,7 +160,7 @@ public:
                                              SfxFilterFlags nMust,
                                              SfxFilterFlags nDont,
                                              const OUString& rPreselectedDir,
-                                             const css::uno::Sequence< OUString >& rDenyList,
+                                             const cpo::uno::Sequence< OUString >& rDenyList,
                                              weld::Window* pPreferredParent);
 
                             FileDialogHelper(sal_Int16 nDialogType,
@@ -168,7 +168,7 @@ public:
                                              const OUString& aFilterUIName,
                                              std::u16string_view aExtName,
                                              const OUString& rPreselectedDir,
-                                             const css::uno::Sequence< OUString >& rDenyList,
+                                             const cpo::uno::Sequence< OUString >& rDenyList,
                                              weld::Window* pPreferredParent);
 
     virtual                 ~FileDialogHelper();
@@ -188,7 +188,7 @@ public:
     OUString                GetPath() const;
 
     /** Provides the selected files with full path information */
-    css::uno::Sequence< OUString > GetSelectedFiles() const;
+    cpo::uno::Sequence< OUString > GetSelectedFiles() const;
 
     void                     AddFilter( const OUString& rFilterName, const OUString& rExtension );
     void                     SetCurrentFilter( const OUString& rFilter );
@@ -267,7 +267,7 @@ public:
 
    DECL_DLLPRIVATE_LINK( ExecuteSystemFilePicker, void*, void );
 
-   ErrCode                  Execute( css::uno::Sequence<OUString>& rpURLList,
+   ErrCode                  Execute( cpo::uno::Sequence<OUString>& rpURLList,
                                      std::optional<SfxAllItemSet>& rpSet,
                                      OUString&         rFilter,
                                      const OUString&   rDirPath );
@@ -284,12 +284,12 @@ public:
 ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
-                             css::uno::Sequence<OUString>& rpURLList,
+                             cpo::uno::Sequence<OUString>& rpURLList,
                              OUString& rFilter,
                              std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
-                             const css::uno::Sequence< OUString >& rDenyList,
+                             const cpo::uno::Sequence< OUString >& rDenyList,
                              std::optional<bool>& rShowFilterDialog );
 
 css::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);

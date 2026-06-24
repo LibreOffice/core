@@ -52,6 +52,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::cpo::uno;
 
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
@@ -80,17 +81,17 @@ public:
     ThesDummy_Impl() {}
 
     // XSupportedLocales
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales() override;
     virtual bool SAL_CALL
         hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XThesaurus
-    virtual css::uno::Sequence<
+    virtual cpo::uno::Sequence<
             css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
         queryMeanings( const OUString& rTerm,
                 const css::lang::Locale& rLocale,
-                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
 }
@@ -128,7 +129,7 @@ void ThesDummy_Impl::GetThes_Impl()
 }
 
 
-uno::Sequence< lang::Locale > SAL_CALL
+cpo::uno::Sequence< lang::Locale > SAL_CALL
         ThesDummy_Impl::getLocales()
 {
     GetThes_Impl();
@@ -152,14 +153,14 @@ bool SAL_CALL
 }
 
 
-uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
         ThesDummy_Impl::queryMeanings(
                 const OUString& rTerm,
                 const lang::Locale& rLocale,
-                const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetThes_Impl();
-    uno::Sequence< uno::Reference< linguistic2::XMeaning > > aRes;
+    cpo::uno::Sequence< uno::Reference< linguistic2::XMeaning > > aRes;
     OSL_ENSURE( xThes.is(), "Thesaurus missing" );
     if (xThes.is())
         aRes = xThes->queryMeanings( rTerm, rLocale, rProperties );
@@ -181,17 +182,17 @@ class SpellDummy_Impl :
 public:
 
     // XSupportedLocales (for XSpellChecker)
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales() override;
     virtual bool SAL_CALL
         hasLocale( const css::lang::Locale& ) override;
 
     virtual bool SAL_CALL
         isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
-                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL
         spell( const OUString& rWord, const css::lang::Locale& nLanguage,
-                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
 }
@@ -206,7 +207,7 @@ void SpellDummy_Impl::GetSpell_Impl()
 }
 
 
-uno::Sequence< css::lang::Locale > SAL_CALL
+cpo::uno::Sequence< css::lang::Locale > SAL_CALL
     SpellDummy_Impl::getLocales()
 {
     GetSpell_Impl();
@@ -230,7 +231,7 @@ bool SAL_CALL
 
 bool SAL_CALL
     SpellDummy_Impl::isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
-            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetSpell_Impl();
     bool bRes = true;
@@ -242,7 +243,7 @@ bool SAL_CALL
 
 uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
     SpellDummy_Impl::spell( const OUString& rWord, const css::lang::Locale& nLanguage,
-            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetSpell_Impl();
     uno::Reference< linguistic2::XSpellAlternatives > xRes;
@@ -266,7 +267,7 @@ class HyphDummy_Impl :
 public:
 
     // XSupportedLocales
-    virtual css::uno::Sequence<
+    virtual cpo::uno::Sequence<
             css::lang::Locale > SAL_CALL
         getLocales() override;
     virtual bool SAL_CALL
@@ -278,19 +279,19 @@ public:
         hyphenate( const OUString& rWord,
                 const css::lang::Locale& rLocale,
                 sal_Int16 nMaxLeading,
-                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference<
             css::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& rWord,
                 const css::lang::Locale& rLocale,
                 sal_Int16 nIndex,
-                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
     virtual css::uno::Reference<
             css::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
                 const OUString& rWord,
                 const css::lang::Locale& rLocale,
-                const css::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
 
 }
@@ -305,14 +306,14 @@ void HyphDummy_Impl::GetHyph_Impl()
 }
 
 
-uno::Sequence< lang::Locale > SAL_CALL
+cpo::uno::Sequence< lang::Locale > SAL_CALL
     HyphDummy_Impl::getLocales()
 {
     GetHyph_Impl();
     if (xHyph.is())
         return xHyph->getLocales();
     else
-        return uno::Sequence< lang::Locale >();
+        return cpo::uno::Sequence< lang::Locale >();
 }
 
 
@@ -332,7 +333,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
             const OUString& rWord,
             const lang::Locale& rLocale,
             sal_Int16 nMaxLeading,
-            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XHyphenatedWord > xRes;
@@ -347,7 +348,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
             const OUString& rWord,
             const lang::Locale& rLocale,
             sal_Int16 nIndex,
-            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XHyphenatedWord > xRes;
@@ -361,7 +362,7 @@ uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
     HyphDummy_Impl::createPossibleHyphens(
             const OUString& rWord,
             const lang::Locale& rLocale,
-            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     GetHyph_Impl();
     uno::Reference< linguistic2::XPossibleHyphens > xRes;

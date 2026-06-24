@@ -304,11 +304,11 @@ bool OleConverter::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> OleConverter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OleConverter::getSupportedServiceNames()
 {
     if (m_nUnoWrapperClass == INTERFACE_OLE_WRAPPER_IMPL)
     {
-        return css::uno::Sequence<OUString>{
+        return cpo::uno::Sequence<OUString>{
             "com.sun.star.bridge.OleBridgeSupplier2",
             "com.sun.star.bridge.oleautomation.BridgeSupplier"};
     }
@@ -387,9 +387,9 @@ bool OleClient::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> OleClient::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OleClient::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         "com.sun.star.bridge.OleObjectFactory",
         "com.sun.star.bridge.oleautomation.Factory"};
 }
@@ -508,9 +508,9 @@ bool OleServer::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> OleServer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OleServer::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         "com.sun.star.bridge.OleApplicationRegistration",
         "com.sun.star.bridge.oleautomation.ApplicationRegistration"};
 }

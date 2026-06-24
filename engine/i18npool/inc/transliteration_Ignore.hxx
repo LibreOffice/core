@@ -32,7 +32,7 @@ class transliteration_Ignore : public transliteration_commonclass
 {
 public:
         virtual OUString
-        foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >* pOffset ) override;
+        foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, cpo::uno::Sequence< sal_Int32 >* pOffset ) override;
 
         // This method is shared.
         bool SAL_CALL
@@ -40,7 +40,7 @@ public:
             const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
 
         // This method is implemented in sub class if needed. Otherwise, the method implemented in this class will be used.
-        css::uno::Sequence< OUString > SAL_CALL
+        cpo::uno::Sequence< OUString > SAL_CALL
         transliterateRange( const OUString& str1, const OUString& str2 ) override;
 
 
@@ -48,13 +48,13 @@ public:
         sal_Int16 SAL_CALL getType(  ) override;
 
         OUString
-        transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >* pOffset ) override;
+        transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, cpo::uno::Sequence< sal_Int32 >* pOffset ) override;
 
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar) override;
 
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString >
+        static cpo::uno::Sequence< OUString >
         transliterateRange( const OUString& str1, const OUString& str2, XTransliteration& t1, XTransliteration& t2 );
 
         struct Mapping {
@@ -97,7 +97,7 @@ public:
     ignoreDiacritics_CTL();
 
     OUString
-    foldingImpl(const OUString& rInStr, sal_Int32 nStartPos, sal_Int32 nCount, css::uno::Sequence<sal_Int32>* pOffset) override;
+    foldingImpl(const OUString& rInStr, sal_Int32 nStartPos, sal_Int32 nCount, cpo::uno::Sequence<sal_Int32>* pOffset) override;
 
     sal_Unicode SAL_CALL
     transliterateChar2Char(sal_Unicode nInChar) override;
@@ -116,7 +116,7 @@ public:\
             implementationName = "com.sun.star.i18n.Transliteration.ignore"#name;\
         };\
         OUString foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, \
-                css::uno::Sequence< sal_Int32 >* pOffset) override; \
+                cpo::uno::Sequence< sal_Int32 >* pOffset) override; \
 };
 
 TRANSLITERATION_IGNORE(KiKuFollowedBySa_ja_JP)
@@ -137,9 +137,9 @@ public:\
             implementationName = "com.sun.star.i18n.Transliteration." implname;\
         };\
         OUString foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, \
-                css::uno::Sequence< sal_Int32 >* pOffset) override; \
+                cpo::uno::Sequence< sal_Int32 >* pOffset) override; \
         using transliteration_Ignore::transliterateRange;\
-        css::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1, \
+        cpo::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1, \
                 const OUString& str2 ) override; \
         sal_Unicode SAL_CALL \
         transliterateChar2Char( sal_Unicode inChar) \

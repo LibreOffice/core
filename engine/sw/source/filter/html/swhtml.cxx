@@ -458,7 +458,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
         return;
     }
 
-    uno::Sequence<OUString> aTypes;
+    cpo::uno::Sequence<OUString> aTypes;
     it->second >>= aTypes;
     m_aAllowedRTFOLEMimeTypes = comphelper::sequenceToContainer<std::set<OUString>>(aTypes);
 }

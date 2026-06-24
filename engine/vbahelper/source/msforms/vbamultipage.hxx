@@ -46,7 +46,7 @@ public:
 
     //XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAMULTIPAGE_HXX

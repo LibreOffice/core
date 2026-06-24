@@ -76,7 +76,7 @@ const SfxItemPropertySet* lcl_GetURLPropertySet()
     static const SfxItemPropertyMapEntry aURLPropertyMap_Impl[] =
     {
         { SC_UNONAME_ANCTYPE,  0,  cppu::UnoType<text::TextContentAnchorType>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { SC_UNONAME_ANCTYPES, 0,  cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNONAME_ANCTYPES, 0,  cppu::UnoType<cpo::uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
         { SC_UNONAME_REPR,     0,  cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNONAME_TARGET,   0,  cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNONAME_TEXTWRAP, 0,  cppu::UnoType<text::WrapTextMode>::get(), beans::PropertyAttribute::READONLY, 0 },
@@ -92,7 +92,7 @@ const SfxItemPropertySet* lcl_GetHeaderFieldPropertySet()
     static const SfxItemPropertyMapEntry aHeaderFieldPropertyMap_Impl[] =
     {
         { SC_UNONAME_ANCTYPE,  0,  cppu::UnoType<text::TextContentAnchorType>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { SC_UNONAME_ANCTYPES, 0,  cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNONAME_ANCTYPES, 0,  cppu::UnoType<cpo::uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
         { SC_UNONAME_TEXTWRAP, 0,  cppu::UnoType<text::WrapTextMode>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
     static SfxItemPropertySet aHeaderFieldPropertySet_Impl( aHeaderFieldPropertyMap_Impl );
@@ -104,7 +104,7 @@ const SfxItemPropertySet* lcl_GetFileFieldPropertySet()
     static const SfxItemPropertyMapEntry aFileFieldPropertyMap_Impl[] =
     {
         { SC_UNONAME_ANCTYPE,  0,  cppu::UnoType<text::TextContentAnchorType>::get(), beans::PropertyAttribute::READONLY, 0 },
-        { SC_UNONAME_ANCTYPES, 0,  cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNONAME_ANCTYPES, 0,  cppu::UnoType<cpo::uno::Sequence<text::TextContentAnchorType>>::get(), beans::PropertyAttribute::READONLY, 0 },
         { SC_UNONAME_FILEFORM, 0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { SC_UNONAME_TEXTWRAP, 0,  cppu::UnoType<text::WrapTextMode>::get(), beans::PropertyAttribute::READONLY, 0 },
     };
@@ -1234,7 +1234,7 @@ cpo::uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aProper
     if (aPropertyName == SC_UNONAME_ANCTYPES)
     {
         cpo::uno::Any aRet;
-        uno::Sequence<text::TextContentAnchorType> aSeq { text::TextContentAnchorType_AS_CHARACTER };
+        cpo::uno::Sequence<text::TextContentAnchorType> aSeq { text::TextContentAnchorType_AS_CHARACTER };
         aRet <<= aSeq;
         return aRet;
     }
@@ -1275,17 +1275,17 @@ bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
 {
     return {u"com.sun.star.text.TextField"_ustr,
             u"com.sun.star.text.TextContent"_ustr};
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()
+cpo::uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()
 {
     return comphelper::concatSequences(
         ScEditFieldObj_Base::getTypes(),
-        uno::Sequence<uno::Type>
+        cpo::uno::Sequence<uno::Type>
         {
             cppu::UnoType<text::XTextField>::get(),
             cppu::UnoType<beans::XPropertySet>::get(),
@@ -1294,9 +1294,9 @@ uno::Sequence<uno::Type> SAL_CALL ScEditFieldObj::getTypes()
         } );
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScEditFieldObj::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL ScEditFieldObj::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <xmloff/xmltoken.hxx>
 
@@ -237,12 +237,12 @@ private:
         SectionTypeEnum eType,                /// index type
         sal_Int32 nLevel,                     /// outline level (if applicable)
         const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
-        const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue> > & rValues);
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue> > & rValues);
 
     /// export a single template element (e.g. span or tab-stop)
     void ExportIndexTemplateElement(
         SectionTypeEnum eType, //i90246, needed for ODF 1.0, 1.0 and 1.2 management
-        const css::uno::Sequence<
+        const cpo::uno::Sequence<
             css::beans::PropertyValue> & rValues);
 
     /// export level paragraph styles

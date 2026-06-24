@@ -87,7 +87,7 @@ private:
     bool                         m_bUseUserData;
     bool                         m_bUseThumbnailSave;
     std::vector< std::unique_ptr<CustomProperty> >    m_aCustomProperties;
-    css::uno::Sequence< css::document::CmisProperty > m_aCmisProperties;
+    cpo::uno::Sequence< css::document::CmisProperty > m_aCmisProperties;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -95,7 +95,7 @@ public:
     SfxDocumentInfoItem();
     SfxDocumentInfoItem( const OUString &rFileName,
         const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
-        const css::uno::Sequence< css::document::CmisProperty> & i_cmisProps,
+        const cpo::uno::Sequence< css::document::CmisProperty> & i_cmisProps,
         bool bUseUserData, bool bUseThumbnailSave, sal_Int64 nFileSize );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem() override;
@@ -168,10 +168,10 @@ public:
     void        AddCustomProperty(  const OUString& sName,
                                     const cpo::uno::Any& rValue );
 
-    const css::uno::Sequence< css::document::CmisProperty >&
+    const cpo::uno::Sequence< css::document::CmisProperty >&
                         GetCmisProperties() const { return m_aCmisProperties;}
 
-    void        SetCmisProperties(const css::uno::Sequence< css::document::CmisProperty >& cmisProps );
+    void        SetCmisProperties(const cpo::uno::Sequence< css::document::CmisProperty >& cmisProps );
     virtual SfxDocumentInfoItem* Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual bool        operator==( const SfxPoolItem& ) const override;
     // Marked as false since the SfxStringItem superclass supports hashing, but
@@ -449,7 +449,7 @@ public:
     void                DoScroll( sal_Int32 nNewPos );
     void                ReloadLinesContent();
 
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
                         GetCustomProperties();
     void                SetCustomProperties(std::vector< std::unique_ptr<CustomProperty> >&& rProperties);
     void                SetRemovedHdl( const Link<void*,void>& rLink ) { m_aRemovedHdl = rLink; }
@@ -487,7 +487,7 @@ public:
     bool         AreAllLinesValid() const { return m_xPropertiesWin->AreAllLinesValid(); }
     void         ClearAllLines() { m_xPropertiesWin->ClearAllLines(); }
 
-    css::uno::Sequence<css::beans::PropertyValue>
+    cpo::uno::Sequence<css::beans::PropertyValue>
                  GetCustomProperties() const
                         { return m_xPropertiesWin->GetCustomProperties(); }
     void         SetCustomProperties(std::vector< std::unique_ptr<CustomProperty> >&& rProperties);
@@ -587,7 +587,7 @@ public:
                   cpo::uno::Any const & rAny );
     void ClearAllLines();
 
-    css::uno::Sequence< css::document::CmisProperty >
+    cpo::uno::Sequence< css::document::CmisProperty >
                         GetCmisProperties() const;
 };
 
@@ -610,7 +610,7 @@ public:
                   cpo::uno::Any const & rAny );
 
     void ClearAllLines();
-    css::uno::Sequence< css::document::CmisProperty >
+    cpo::uno::Sequence< css::document::CmisProperty >
                     GetCmisProperties() const
                         { return m_aPropertiesWin.GetCmisProperties(); }
 };

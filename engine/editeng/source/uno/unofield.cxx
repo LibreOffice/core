@@ -544,7 +544,7 @@ cpo::uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rTyp
 
 // XTypeProvider
 
-uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
 {
     if( !maTypeSequence.hasElements() )
     {
@@ -559,9 +559,9 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
     return maTypeSequence;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextField::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextField::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 cpo::uno::Any SAL_CALL SvxUnoTextField::queryInterface( const uno::Type & rType )
@@ -791,9 +791,9 @@ OUString SAL_CALL SvxUnoTextField::getImplementationName()
     return u"SvxUnoTextField"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSeq(4);
+    cpo::uno::Sequence<OUString> aSeq(4);
     OUString* pServices = aSeq.getArray();
     pServices[0] = u"com.sun.star.text.TextContent"_ustr;
     pServices[1] = u"com.sun.star.text.TextField"_ustr;

@@ -19,16 +19,16 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <premac.h>
 #include <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-bool ImageToPNG(css::uno::Sequence<sal_Int8> const& rImgData,
-                css::uno::Sequence<sal_Int8>& rPngData);
+bool ImageToPNG(cpo::uno::Sequence<sal_Int8> const& rImgData,
+                cpo::uno::Sequence<sal_Int8>& rPngData);
 
-bool PNGToImage(css::uno::Sequence<sal_Int8> const& rPngData,
-                css::uno::Sequence<sal_Int8>& rImgData, NSBitmapImageFileType eOutFormat);
+bool PNGToImage(cpo::uno::Sequence<sal_Int8> const& rPngData,
+                cpo::uno::Sequence<sal_Int8>& rImgData, NSBitmapImageFileType eOutFormat);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,7 +41,7 @@
 
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -100,10 +100,10 @@ Reference< XInterface > ScfApiHelper::CreateInstance( const OUString& rServiceNa
     return CreateInstance( ::comphelper::getProcessServiceFactory(), rServiceName );
 }
 
-uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( SfxMedium& rMedium,
+cpo::uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( SfxMedium& rMedium,
         ::comphelper::IDocPasswordVerifier& rVerifier, const ::std::vector< OUString >* pDefaultPasswords )
 {
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
     const SfxUnoAnyItem* pEncryptionDataItem = rMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
     if ( pEncryptionDataItem )
         pEncryptionDataItem->GetValue() >>= aEncryptionData;

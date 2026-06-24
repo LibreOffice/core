@@ -93,11 +93,11 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c )
     return nRet;
 }
 
-css::uno::Sequence< sal_Int16 > VCLXFont::getCharWidths( sal_Unicode nFirst, sal_Unicode nLast )
+cpo::uno::Sequence< sal_Int16 > VCLXFont::getCharWidths( sal_Unicode nFirst, sal_Unicode nLast )
 {
     std::unique_lock aGuard( maMutex );
 
-    css::uno::Sequence<sal_Int16> aSeq;
+    cpo::uno::Sequence<sal_Int16> aSeq;
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
     if ( pOutDev )
     {
@@ -105,7 +105,7 @@ css::uno::Sequence< sal_Int16 > VCLXFont::getCharWidths( sal_Unicode nFirst, sal
         pOutDev->SetFont( maFont );
 
         sal_Int16 nCount = nLast-nFirst + 1;
-        aSeq = css::uno::Sequence<sal_Int16>( nCount );
+        aSeq = cpo::uno::Sequence<sal_Int16>( nCount );
         for ( sal_uInt16 n = 0; n < nCount; n++ )
         {
             aSeq.getArray()[n] = sal::static_int_cast< sal_Int16 >(
@@ -134,7 +134,7 @@ sal_Int32 VCLXFont::getStringWidth( const OUString& str )
     return nRet;
 }
 
-sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, css::uno::Sequence< sal_Int32 >& rDXArray )
+sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, cpo::uno::Sequence< sal_Int32 >& rDXArray )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -155,7 +155,7 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, css::uno::Sequence
     return nRet;
 }
 
-void VCLXFont::getKernPairs( css::uno::Sequence< sal_Unicode >& /*rnChars1*/, css::uno::Sequence< sal_Unicode >& /*rnChars2*/, css::uno::Sequence< sal_Int16 >& /*rnKerns*/ )
+void VCLXFont::getKernPairs( cpo::uno::Sequence< sal_Unicode >& /*rnChars1*/, cpo::uno::Sequence< sal_Unicode >& /*rnChars2*/, cpo::uno::Sequence< sal_Int16 >& /*rnKerns*/ )
 {
     // NOTE: this empty method is just used for keeping the related UNO-API stable
 }

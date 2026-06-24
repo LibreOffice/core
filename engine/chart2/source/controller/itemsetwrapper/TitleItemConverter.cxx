@@ -49,7 +49,7 @@ class FormattedStringsConverter : public MultipleItemConverter
 {
 public:
     FormattedStringsConverter(
-        const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
+        const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
         SfxItemPool & rItemPool,
         const std::optional<awt::Size>& pRefSize,
         const uno::Reference< beans::XPropertySet > & xParentProp );
@@ -61,7 +61,7 @@ protected:
 } // anonymous namespace
 
 FormattedStringsConverter::FormattedStringsConverter(
-    const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
+    const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
     SfxItemPool & rItemPool,
     const std::optional<awt::Size>& pRefSize,
     const uno::Reference< beans::XPropertySet > & xParentProp ) :
@@ -106,7 +106,7 @@ TitleItemConverter::TitleItemConverter(
     uno::Reference< chart2::XTitle > xTitle( rPropertySet, uno::UNO_QUERY );
     if( xTitle.is())
     {
-        uno::Sequence< uno::Reference< chart2::XFormattedString > > aStringSeq( xTitle->getText());
+        cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > aStringSeq( xTitle->getText());
         if( aStringSeq.hasElements() )
         {
             m_aConverters.emplace_back(

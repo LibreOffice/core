@@ -151,7 +151,7 @@ void JobData::setAlias( const OUString& sAlias )
             (xArgumentList.is()      )
            )
         {
-            css::uno::Sequence< OUString > lArgumentNames = xArgumentList->getElementNames();
+            cpo::uno::Sequence< OUString > lArgumentNames = xArgumentList->getElementNames();
             sal_Int32                             nCount         = lArgumentNames.getLength();
             m_lArguments.resize(nCount);
             for (sal_Int32 i=0; i<nCount; ++i)
@@ -246,9 +246,9 @@ void JobData::setJobConfig( std::vector< css::beans::NamedValue >&& lArguments )
     if (xArgumentList.is())
     {
         sal_Int32                             nCount = m_lArguments.size();
-        css::uno::Sequence< OUString > lNames (nCount);
+        cpo::uno::Sequence< OUString > lNames (nCount);
         auto lNamesRange = asNonConstRange(lNames);
-        css::uno::Sequence< cpo::uno::Any >   lValues(nCount);
+        cpo::uno::Sequence< cpo::uno::Any >   lValues(nCount);
         auto lValuesRange = asNonConstRange(lValues);
 
         for (sal_Int32 i=0; i<nCount; ++i)
@@ -325,9 +325,9 @@ const std::vector< css::beans::NamedValue > & JobData::getJobConfig() const
     return m_lArguments;
 }
 
-css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
+cpo::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 {
-    css::uno::Sequence< css::beans::NamedValue > lConfig;
+    cpo::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
         lConfig = { { u"Alias"_ustr, cpo::uno::Any(m_sAlias) },
@@ -482,7 +482,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
     // We create an additional job name list with the same size, then the original list...
     // step over all job entries... check her timestamps... and put only job names to the
     // destination list, which represent an enabled job.
-    const css::uno::Sequence< OUString > lAllJobs = xJobList->getElementNames();
+    const cpo::uno::Sequence< OUString > lAllJobs = xJobList->getElementNames();
     sal_Int32 c = lAllJobs.getLength();
 
     std::vector< OUString > lEnabledJobs(c);

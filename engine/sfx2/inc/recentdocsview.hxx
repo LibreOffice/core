@@ -29,7 +29,7 @@ class RecentDocsView;
 struct LoadRecentFile
 {
     css::util::URL                                    aTargetURL;
-    css::uno::Sequence< css::beans::PropertyValue >   aArgSeq;
+    cpo::uno::Sequence< css::beans::PropertyValue >   aArgSeq;
     css::uno::Reference< css::frame::XDispatch >      xDispatch;
     RecentDocsView*                                   pView;
 };

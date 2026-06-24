@@ -34,7 +34,7 @@
 namespace logging
 {
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
 
@@ -142,7 +142,7 @@ namespace logging
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_PlainTextFormatter(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new logging::PlainTextFormatter());
 }

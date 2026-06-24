@@ -99,7 +99,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame*
 }
 
 void ScDBDocFunc::DoImportUno( const ScAddress& rPos,
-                                const uno::Sequence<beans::PropertyValue>& aArgs )
+                                const cpo::uno::Sequence<beans::PropertyValue>& aArgs )
 {
     svx::ODataAccessDescriptor aDesc( aArgs );      // includes selection and result set
 
@@ -150,7 +150,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     sal_Int32 nRowsRead = 0;
     sal_Int32 nListCount = 0;
 
-    uno::Sequence<cpo::uno::Any> aSelection;
+    cpo::uno::Sequence<cpo::uno::Any> aSelection;
     if ( pDescriptor && pDescriptor->has(svx::DataAccessDescriptorProperty::Selection) )
     {
         (*pDescriptor)[svx::DataAccessDescriptorProperty::Selection] >>= aSelection;
@@ -257,8 +257,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             {
                 nEndCol = static_cast<SCCOL>( rParam.nCol1 + nColCount - 1 );
 
-                uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
-                uno::Sequence<bool> aColCurr( nColCount );      // currency flag is not in types
+                cpo::uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
+                cpo::uno::Sequence<bool> aColCurr( nColCount );      // currency flag is not in types
                 sal_Int32* pTypeArr = aColTypes.getArray();
                 bool* pCurrArr = aColCurr.getArray();
                 for (tools::Long i=0; i<nColCount; i++)

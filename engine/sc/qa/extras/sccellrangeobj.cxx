@@ -41,7 +41,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 using namespace css;
 
@@ -227,15 +227,15 @@ uno::Reference<uno::XInterface> ScCellRangeObj::getXCellRangeData()
 void ScCellRangeObj::testSortOOB()
 {
     uno::Reference<util::XSortable> xSortable(init(), uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aEmptyDescriptor;
+    cpo::uno::Sequence<beans::PropertyValue> aEmptyDescriptor;
     xSortable->sort(aEmptyDescriptor);
 
-    uno::Sequence<util::SortField> aSort(1);
+    cpo::uno::Sequence<util::SortField> aSort(1);
     auto pSort = aSort.getArray();
     pSort[0].Field = 0xffffff;
     pSort[0].SortAscending = true;
 
-    uno::Sequence<beans::PropertyValue> aProps(
+    cpo::uno::Sequence<beans::PropertyValue> aProps(
         comphelper::InitPropertySequence({ { "SortFields", cpo::uno::Any(aSort) } }));
 
     xSortable->sort(aProps);

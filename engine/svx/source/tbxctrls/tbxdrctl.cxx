@@ -39,7 +39,7 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rT
     rTbx.Invalidate();
 }
 
-void SAL_CALL SvxTbxCtlDraw::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SvxTbxCtlDraw::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::ToolboxController::initialize(aArguments);
     /*

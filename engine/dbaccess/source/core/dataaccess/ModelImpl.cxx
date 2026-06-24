@@ -902,7 +902,7 @@ bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference<
                     xTargetMetaInf->dispose();
 
                     // now check the copied signature
-                    uno::Sequence<security::DocumentSignatureInformation> aInfos
+                    cpo::uno::Sequence<security::DocumentSignatureInformation> aInfos
                         = xDDSigns->verifyScriptingContentSignatures(
                             _rxStorage, uno::Reference<io::XInputStream>());
                     SignatureState nState = DocumentSignatures::getSignatureState(aInfos);
@@ -1379,7 +1379,7 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(
         uno::Reference<security::XDocumentDigitalSignatures> xSigner(
             security::DocumentDigitalSignatures::createWithVersion(
                 comphelper::getProcessComponentContext(), aODFVersion));
-        uno::Sequence<security::DocumentSignatureInformation> aInfo
+        cpo::uno::Sequence<security::DocumentSignatureInformation> aInfo
             = xSigner->verifyScriptingContentSignatures(xStorage,
                                                         uno::Reference<io::XInputStream>());
 

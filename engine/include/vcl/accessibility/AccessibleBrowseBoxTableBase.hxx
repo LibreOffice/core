@@ -181,11 +181,11 @@ protected:
     /** Fills a sequence with sorted indexes of completely selected rows.
         @attention  This method requires locked mutex's and a living object.
         @param rSeq  Out-parameter that takes the sorted row index list. */
-    void implGetSelectedRows( css::uno::Sequence< sal_Int32 >& rSeq );
+    void implGetSelectedRows( cpo::uno::Sequence< sal_Int32 >& rSeq );
     /** Fills a sequence with sorted indexes of completely selected columns.
         @attention  This method requires locked mutex's and a living object.
         @param rSeq  Out-parameter that takes the sorted column index list. */
-    void implGetSelectedColumns( css::uno::Sequence< sal_Int32 >& rSeq );
+    void implGetSelectedColumns( cpo::uno::Sequence< sal_Int32 >& rSeq );
 
     /** @attention  This method requires locked mutex's and a living object.
         @throws <type>IndexOutOfBoundsException</type>

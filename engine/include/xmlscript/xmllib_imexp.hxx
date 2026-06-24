@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <xmlscript/xmlscriptdllapi.h>
 
@@ -42,7 +42,7 @@ struct XMLSCRIPT_DLLPUBLIC LibDescriptor
     bool bLink;
     bool bReadOnly;
     bool bPasswordProtected;
-    css::uno::Sequence< OUString > aElementNames;
+    cpo::uno::Sequence< OUString > aElementNames;
     bool bPreload;
 };
 

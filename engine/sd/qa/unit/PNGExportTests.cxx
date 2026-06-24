@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr)
     };
@@ -108,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr)
     };
@@ -174,10 +174,10 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
         u"Translucent"_ustr, sal_Int32(0)) };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -206,12 +206,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157652)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100))
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -253,12 +253,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100))
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -303,13 +303,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf158743)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"Translucent"_ustr, sal_Int32(1))
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -360,13 +360,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157795)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"Translucent"_ustr, sal_Int32(1)),
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -408,13 +408,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105362)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"Translucent"_ustr, sal_Int32(1)),
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -456,12 +456,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100))
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -506,12 +506,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100))
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -556,12 +556,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100))
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -606,12 +606,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100))
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -655,13 +655,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"Translucent"_ustr, sal_Int32(1)),
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -703,12 +703,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(100)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(100)),
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -753,12 +753,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
     uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
         = drawing::GraphicExportFilter::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(320)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(180))
     };
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -810,12 +810,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf99729)
             = drawing::GraphicExportFilter::create(xContext);
         CPPUNIT_ASSERT(xGraphicExporter.is());
 
-        uno::Sequence<beans::PropertyValue> aFilterData{
+        cpo::uno::Sequence<beans::PropertyValue> aFilterData{
             comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(320)),
             comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(240))
         };
 
-        uno::Sequence<beans::PropertyValue> aDescriptor{
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
             comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
             comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
             comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -876,13 +876,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
     // physical pixels are combined into blended shades of white
     // and blue.
 #else
-        css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
             comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(200)),
             comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(200)),
             comphelper::makePropertyValue(u"AntiAliasing"_ustr, false),
         };
 
-        css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
+        cpo::uno::Sequence<css::beans::PropertyValue> aDescriptor{
             comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
             comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
             comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -904,13 +904,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
 
     // 2. AA enabled
     {
-        css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
             comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(200)),
             comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(200)),
             comphelper::makePropertyValue(u"AntiAliasing"_ustr, true),
         };
 
-        css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
+        cpo::uno::Sequence<css::beans::PropertyValue> aDescriptor{
             comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
             comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
             comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -948,13 +948,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testNoAntiAliasExport)
     xGraphicExporter->setSourceDocument(xPage);
 
     // 101 x 151 is current width x height ratio of the loaded SVG. FIXME: it should be 100 x 150.
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(101)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(151)),
         comphelper::makePropertyValue(u"AntiAliasing"_ustr, false),
     };
 
-    css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<css::beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -989,13 +989,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
     xGraphicExporter->setSourceDocument(xPage);
 
     // 101 x 151 is current width x height ratio of the loaded SVG. FIXME: it should be 100 x 150.
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"PixelWidth"_ustr, sal_Int32(101)),
         comphelper::makePropertyValue(u"PixelHeight"_ustr, sal_Int32(151)),
         comphelper::makePropertyValue(u"AntiAliasing"_ustr, true),
     };
 
-    css::uno::Sequence<css::beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<css::beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"PNG"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)

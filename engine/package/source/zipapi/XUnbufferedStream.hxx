@@ -51,7 +51,7 @@ class XUnbufferedStream final : public cppu::WeakImplHelper
 
     css::uno::Reference < css::io::XInputStream > mxZipStream;
     css::uno::Reference < css::io::XSeekable > mxZipSeek;
-    css::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
+    cpo::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
     ZipEntry maEntry;
     sal_Int32 mnBlockSize;
     css::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
@@ -85,8 +85,8 @@ public:
     virtual ~XUnbufferedStream() override;
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
     virtual sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;

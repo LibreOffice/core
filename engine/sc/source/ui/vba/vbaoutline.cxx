@@ -45,10 +45,10 @@ ScVbaOutline::getServiceImplName()
     return u"ScVbaOutline"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaOutline::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Outline"_ustr
     };

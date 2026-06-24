@@ -84,7 +84,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 
     void AddChanges( SwTextNode& rTNd, sal_Int32 nStart, sal_Int32 nLen,
-                     css::uno::Sequence <sal_Int32> const & rOffsets );
+                     cpo::uno::Sequence <sal_Int32> const & rOffsets );
     bool HasData() const { return m_aChanges.size() > 0; }
 };
 

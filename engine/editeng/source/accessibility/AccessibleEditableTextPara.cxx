@@ -606,7 +606,7 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleEditableTextPara::ge
         if ( nMyParaIndex > 0 &&
              mpParaManager->IsReferencable( nMyParaIndex - 1 ) )
         {
-            uno::Sequence<uno::Reference<XAccessible>> aSequence
+            cpo::uno::Sequence<uno::Reference<XAccessible>> aSequence
                 { mpParaManager->GetChild( nMyParaIndex - 1 ).first.get() };
             AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_FROM,
                                        aSequence );
@@ -617,7 +617,7 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleEditableTextPara::ge
         if ( (nMyParaIndex + 1) < mpParaManager->GetNum() &&
              mpParaManager->IsReferencable( nMyParaIndex + 1 ) )
         {
-            uno::Sequence<uno::Reference<XAccessible>> aSequence
+            cpo::uno::Sequence<uno::Reference<XAccessible>> aSequence
                 { mpParaManager->GetChild( nMyParaIndex + 1 ).first.get() };
             AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_TO,
                                        aSequence );
@@ -633,9 +633,9 @@ uno::Reference< XAccessibleRelationSet > SAL_CALL AccessibleEditableTextPara::ge
     }
 }
 
-static uno::Sequence< OUString > const & getAttributeNames()
+static cpo::uno::Sequence< OUString > const & getAttributeNames()
 {
-    static const uno::Sequence<OUString> aNames{
+    static const cpo::uno::Sequence<OUString> aNames{
         u"CharColor"_ustr,
         u"CharContoured"_ustr,
         u"CharEmphasis"_ustr,
@@ -666,8 +666,8 @@ namespace {
 
 struct IndexCompare
 {
-    const uno::Sequence<beans::PropertyValue>& m_rValues;
-    explicit IndexCompare(const uno::Sequence<beans::PropertyValue>& rValues)
+    const cpo::uno::Sequence<beans::PropertyValue>& m_rValues;
+    explicit IndexCompare(const cpo::uno::Sequence<beans::PropertyValue>& rValues)
         : m_rValues(rValues)
     {
     }
@@ -922,7 +922,7 @@ sal_Unicode SAL_CALL AccessibleEditableTextPara::getCharacter( sal_Int32 nIndex 
     return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& rRequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& rRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 
@@ -934,7 +934,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCh
     CheckIndex(nIndex); // may throw IndexOutOfBoundsException
 
     bool bSupplementalMode = false;
-    uno::Sequence< OUString > aPropertyNames = rRequestedAttributes;
+    cpo::uno::Sequence< OUString > aPropertyNames = rRequestedAttributes;
     if (!aPropertyNames.hasElements())
     {
         bSupplementalMode = true;
@@ -945,14 +945,14 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCh
     ::comphelper::SequenceAsHashMap aPropHashMap( getDefaultAttributes( aPropertyNames ) );
 
     // ... and override them with the direct attributes from the specific position
-    const uno::Sequence< beans::PropertyValue > aRunAttribs( getRunAttributes( nIndex, aPropertyNames ) );
+    const cpo::uno::Sequence< beans::PropertyValue > aRunAttribs( getRunAttributes( nIndex, aPropertyNames ) );
     for (auto const& rRunAttrib : aRunAttribs)
     {
         aPropHashMap[ rRunAttrib.Name ] = rRunAttrib.Value; //!! should not only be the value !!
     }
 
     // get resulting sequence
-    uno::Sequence< beans::PropertyValue > aRes;
+    cpo::uno::Sequence< beans::PropertyValue > aRes;
     aPropHashMap >> aRes;
 
     // since SequenceAsHashMap ignores property handles and property state
@@ -1003,7 +1003,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCh
         std::iota(indices.begin(), indices.end(), 0);
         std::sort(indices.begin(), indices.end(), IndexCompare(aRes));
         // create sorted sequences according to index array
-        uno::Sequence<beans::PropertyValue> aNewValues( nLength );
+        cpo::uno::Sequence<beans::PropertyValue> aNewValues( nLength );
         std::transform(indices.begin(), indices.end(), aNewValues.getArray(),
                        [&aRes](sal_Int32 index) -> const beans::PropertyValue& { return aRes[index]; });
 
@@ -1180,7 +1180,7 @@ OUString SAL_CALL AccessibleEditableTextPara::getTextRange( sal_Int32 nStartInde
     return OCommonAccessibleText::implGetTextRange(implGetText(), nStartIndex, nEndIndex);
 }
 
-void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >& rValues)
+void AccessibleEditableTextPara::_correctValues( cpo::uno::Sequence< PropertyValue >& rValues)
 {
     SvxTextForwarder& rCacheTF = GetTextForwarder();
     sal_Int32 nRes = rValues.getLength();
@@ -2021,7 +2021,7 @@ bool SAL_CALL AccessibleEditableTextPara::replaceText( sal_Int32 nStartIndex, sa
     }
 }
 
-bool SAL_CALL AccessibleEditableTextPara::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const uno::Sequence< beans::PropertyValue >& aAttributeSet )
+bool SAL_CALL AccessibleEditableTextPara::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const cpo::uno::Sequence< beans::PropertyValue >& aAttributeSet )
 {
 
     SolarMutexGuard aGuard;
@@ -2085,8 +2085,8 @@ bool SAL_CALL AccessibleEditableTextPara::setText( const OUString& sText )
 }
 
 // XAccessibleTextAttributes
-uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDefaultAttributes(
-        const uno::Sequence< OUString >& rRequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDefaultAttributes(
+        const cpo::uno::Sequence< OUString >& rRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 
@@ -2107,7 +2107,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDe
                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
     // build sequence of available properties to check
-    uno::Sequence< beans::Property > aProperties;
+    cpo::uno::Sequence< beans::Property > aProperties;
     if (const sal_Int32 nLenReqAttr = rRequestedAttributes.getLength())
     {
         aProperties.realloc( nLenReqAttr );
@@ -2132,7 +2132,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDe
         aProperties = xPropSetInfo->getProperties();
 
     // build resulting sequence
-    uno::Sequence< beans::PropertyValue > aOutSequence( aProperties.getLength() );
+    cpo::uno::Sequence< beans::PropertyValue > aOutSequence( aProperties.getLength() );
     beans::PropertyValue* pOutSequence = aOutSequence.getArray();
     sal_Int32 nOutLen = 0;
     for (const beans::Property& rProperty : aProperties)
@@ -2166,9 +2166,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getDe
 }
 
 
-uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getRunAttributes(
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getRunAttributes(
         sal_Int32 nIndex,
-        const uno::Sequence< OUString >& rRequestedAttributes )
+        const cpo::uno::Sequence< OUString >& rRequestedAttributes )
 {
 
     SolarMutexGuard aGuard;
@@ -2193,7 +2193,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getRu
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
 
     // build sequence of available properties to check
-    uno::Sequence< beans::Property > aProperties;
+    cpo::uno::Sequence< beans::Property > aProperties;
     if (const sal_Int32 nLenReqAttr = rRequestedAttributes.getLength())
     {
         aProperties.realloc( nLenReqAttr );
@@ -2218,7 +2218,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getRu
         aProperties = xPropSetInfo->getProperties();
 
     // build resulting sequence
-    uno::Sequence< beans::PropertyValue > aOutSequence( aProperties.getLength() );
+    cpo::uno::Sequence< beans::PropertyValue > aOutSequence( aProperties.getLength() );
     beans::PropertyValue* pOutSequence = aOutSequence.getArray();
     sal_Int32 nOutLen = 0;
     for (const beans::Property& rProperty : aProperties)

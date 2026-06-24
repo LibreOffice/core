@@ -34,7 +34,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.testuno.Singleton"_ustr };
     }
@@ -45,7 +45,7 @@ public:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_testuno_Singleton_get_implementation(css::uno::XComponentContext*,
-                                                       css::uno::Sequence<cpo::uno::Any> const&)
+                                                       cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SingletonTest);
 }

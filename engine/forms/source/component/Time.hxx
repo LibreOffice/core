@@ -35,7 +35,7 @@ private:
     bool                        m_bDateTimeField;
 
 protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     OTimeModel(
@@ -60,11 +60,11 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OTimeModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
     // prevent method hiding
@@ -76,7 +76,7 @@ protected:
                             translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual css::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes() override;
     virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;
     virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
@@ -95,7 +95,7 @@ protected:
 class OTimeControl: public OBoundControl
 {
 protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     explicit OTimeControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -105,7 +105,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OTimeControl"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

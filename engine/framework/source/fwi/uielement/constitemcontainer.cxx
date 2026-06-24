@@ -179,7 +179,7 @@ Any SAL_CALL ConstItemContainer::getByIndex( sal_Int32 Index )
 
 namespace
 {
-    std::vector<comphelper::PropertyMapEntry> makePropertyMap(const css::uno::Sequence<css::beans::Property>& rProps)
+    std::vector<comphelper::PropertyMapEntry> makePropertyMap(const cpo::uno::Sequence<css::beans::Property>& rProps)
     {
         std::vector<comphelper::PropertyMapEntry> aEntries;
         for (auto const& it : rProps)
@@ -253,7 +253,7 @@ Any SAL_CALL ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
     return ourInfoHelper;
 }
 
-css::uno::Sequence< css::beans::Property > ConstItemContainer::impl_getStaticPropertyDescriptor()
+cpo::uno::Sequence< css::beans::Property > ConstItemContainer::impl_getStaticPropertyDescriptor()
 {
     // Create a property array to initialize sequence!
     // Table of all predefined properties of this class. It's used from OPropertySetHelper-class!

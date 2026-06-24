@@ -49,8 +49,8 @@ public:
     virtual void release() noexcept override;
 
     // XTypeProvider ( ::SfxBaseController )
-    virtual css::uno::Sequence< css::uno::Type > getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;

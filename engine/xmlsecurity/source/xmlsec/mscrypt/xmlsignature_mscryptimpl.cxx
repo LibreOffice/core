@@ -39,6 +39,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
+using namespace ::cpo::uno;
 
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
@@ -74,7 +75,7 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
             const OUString& ServiceName
         ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 } ;
 
 }
@@ -299,7 +300,7 @@ Sequence< OUString > SAL_CALL XMLSignature_MSCryptImpl::getSupportedServiceNames
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_XMLSignature_get_implementation(uno::XComponentContext* /*pCtx*/,
-                                                        uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                                        cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new XMLSignature_MSCryptImpl);
 }

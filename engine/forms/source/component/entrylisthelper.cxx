@@ -297,7 +297,7 @@ using namespace cpo::uno;
     void OEntryListHelper::setNewStringItemList( const cpo::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );
-        css::uno::Sequence<OUString> aTmp;
+        cpo::uno::Sequence<OUString> aTmp;
         OSL_VERIFY( _rValue >>= aTmp );
         comphelper::sequenceToContainer(m_aStringItems, aTmp);
         if (m_aTypedItems.hasElements())

@@ -12,14 +12,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <comphelper/comphelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 
 namespace comphelper
 {
-typedef std::vector<css::uno::Sequence<css::beans::PropertyValue>> IndexedPropertyValues;
+typedef std::vector<cpo::uno::Sequence<css::beans::PropertyValue>> IndexedPropertyValues;
 
 class COMPHELPER_DLLPUBLIC IndexedPropertyValuesContainer final
     : public cppu::WeakImplHelper<css::container::XIndexContainer, css::lang::XServiceInfo>
@@ -45,7 +45,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     IndexedPropertyValues maProperties;

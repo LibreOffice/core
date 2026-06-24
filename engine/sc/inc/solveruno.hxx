@@ -71,17 +71,17 @@ public:
     virtual void SAL_CALL setGoalValue(const cpo::uno::Any& aValue) override;
     virtual OUString SAL_CALL getEngine() override;
     virtual void SAL_CALL setEngine(const OUString& sEngine) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getAvailableEngines() override;
-    virtual css::uno::Sequence<cpo::uno::Any> SAL_CALL getVariableCells() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getAvailableEngines() override;
+    virtual cpo::uno::Sequence<cpo::uno::Any> SAL_CALL getVariableCells() override;
     virtual void SAL_CALL
-    setVariableCells(const css::uno::Sequence<cpo::uno::Any>& aRanges) override;
-    virtual css::uno::Sequence<css::sheet::ModelConstraint> SAL_CALL getConstraints() override;
+    setVariableCells(const cpo::uno::Sequence<cpo::uno::Any>& aRanges) override;
+    virtual cpo::uno::Sequence<css::sheet::ModelConstraint> SAL_CALL getConstraints() override;
     virtual void SAL_CALL
-    setConstraints(const css::uno::Sequence<css::sheet::ModelConstraint>& aConstraints) override;
+    setConstraints(const cpo::uno::Sequence<css::sheet::ModelConstraint>& aConstraints) override;
     virtual sal_Int32 SAL_CALL getConstraintCount() override;
-    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getEngineOptions() override;
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getEngineOptions() override;
     virtual void SAL_CALL
-    setEngineOptions(const css::uno::Sequence<css::beans::PropertyValue>& rProps) override;
+    setEngineOptions(const cpo::uno::Sequence<css::beans::PropertyValue>& rProps) override;
     virtual sal_Int8 SAL_CALL getStatus() override;
     virtual OUString SAL_CALL getErrorMessage() override;
     virtual bool SAL_CALL getSuppressDialog() override;
@@ -95,5 +95,5 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };

@@ -66,7 +66,7 @@ class OFormattedModel final
         DECLARE_UNO3_AGG_DEFAULTS( OFormattedModel, OEditBaseModel )
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+        virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
         // XAggregation
         virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
@@ -78,7 +78,7 @@ class OFormattedModel final
         OUString SAL_CALL getImplementationName() override
         { return u"com.sun.star.form.OFormattedModel"_ustr; }
 
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // XPersistObject
         virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
@@ -97,10 +97,10 @@ class OFormattedModel final
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const override;
         virtual void describeAggregateProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
         // XPropertyChangeListener
@@ -118,7 +118,7 @@ class OFormattedModel final
                             translateDbColumnToControlValue( ) override;
         virtual bool        commitControlValueToDbColumn( bool _bPostReset ) override;
 
-        virtual css::uno::Sequence< css::uno::Type >
+        virtual cpo::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes() override;
         virtual cpo::uno::Any
                             translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
@@ -153,13 +153,13 @@ class OFormattedModel final
         DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl)
         virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
-        virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+        virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
         // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() override
         { return u"com.sun.star.form.OFormattedControl"_ustr; }
 
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // css::lang::XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;

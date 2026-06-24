@@ -21,7 +21,7 @@
 #include <memory>
 #include <vector>
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include "swdllapi.h"
@@ -303,7 +303,7 @@ public:
     void InvalidateModel();
     void ReactivateModel();
 
-    virtual css::uno::Sequence< OUString >  GetEventNames() override;
+    virtual cpo::uno::Sequence< OUString >  GetEventNames() override;
 
     /// #i20883# Digital Signatures and Encryption
     virtual HiddenInformation GetHiddenInformationState( HiddenInformation nStates ) override;
@@ -330,10 +330,10 @@ public:
     virtual bool    HasChangeRecordProtection() const override;
     virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic) override;
     virtual void    SetProtectionPassword( const OUString &rPassword ) override;
-    virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
+    virtual bool    GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
-    void CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments);
+    void CallAutomationDocumentEventSinks(const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments);
     void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
 
     // Lock all unlocked views, and returns a guard object which unlocks those views when destructed

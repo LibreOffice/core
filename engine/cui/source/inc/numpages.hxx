@@ -98,8 +98,8 @@ class SvxBulletPickTabPage final : public SfxTabPage
     std::unique_ptr<weld::Button> m_xBtChangeBullet;
     std::unique_ptr<weld::IconView> m_xExamplesIV;
     Size aPreviewSize;
-    css::uno::Sequence<OUString> m_aBulletSymbols;
-    css::uno::Sequence<OUString> m_aBulletSymbolsFonts;
+    cpo::uno::Sequence<OUString> m_aBulletSymbols;
+    cpo::uno::Sequence<OUString> m_aBulletSymbolsFonts;
 
     DECL_LINK(NumSelectHdl_Impl, weld::IconView&, void);
     DECL_LINK(DoubleClickHdl_Impl, weld::IconView&, bool);

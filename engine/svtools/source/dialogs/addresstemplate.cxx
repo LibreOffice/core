@@ -268,7 +268,7 @@ using namespace cpo::uno;
         virtual void    setDatasourceName(const OUString& _rName) override;
         virtual void    setCommand(const OUString& _rCommand) override;
 
-        virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
+        virtual void    Notify( const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 
     private:
         virtual void    ImplCommit() override;
@@ -277,7 +277,7 @@ using namespace cpo::uno;
 
     }
 
-void AssignmentPersistentData::Notify( const css::uno::Sequence<OUString>& )
+void AssignmentPersistentData::Notify( const cpo::uno::Sequence<OUString>& )
 {
 }
 
@@ -695,7 +695,7 @@ void AssignmentPersistentData::ImplCommit()
         // fill the datasources listbox
         try
         {
-            const css::uno::Sequence<OUString> aElementNames = m_xDatabaseContext->getElementNames();
+            const cpo::uno::Sequence<OUString> aElementNames = m_xDatabaseContext->getElementNames();
             for (const OUString& rDatasourceName : aElementNames)
                 m_xDatasource->append_text(rDatasourceName);
         }

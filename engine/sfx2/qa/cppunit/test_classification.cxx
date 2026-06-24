@@ -46,7 +46,7 @@ public:
 
 void ClassificationTest::testClassification()
 {
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"Name", cpo::uno::Any(u"Non-Business"_ustr)},
         {"Type", cpo::uno::Any(u"urn:bails:ExportControl:"_ustr)},

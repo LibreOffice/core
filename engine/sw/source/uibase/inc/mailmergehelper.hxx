@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MAILMERGEHELPER_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MAILMERGEHELPER_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/mail/XAuthenticator.hpp>
 #include <com/sun/star/mail/XConnectionListener.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
@@ -102,7 +102,7 @@ public:
 
     // fill the actual data into a string (address block or greeting)
     static OUString FillData(const OUString& rAddress, SwMailMergeConfigItem const & rConfigItem,
-                             const css::uno::Sequence<OUString>* pAssignments = nullptr);
+                             const cpo::uno::Sequence<OUString>* pAssignments = nullptr);
 
     void SetSelectHdl (const Link<LinkParamNone*,void>& rLink) { m_aSelectHdl = rLink; }
 };
@@ -199,7 +199,7 @@ class SW_DLLPUBLIC SwMailTransferable final :
     virtual ~SwMailTransferable() override;
     virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
 
-    virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    virtual cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
 
     //XPropertySet
@@ -229,11 +229,11 @@ class SW_DLLPUBLIC SwMailMessage final :
     css::uno::Reference<css::datatransfer::XTransferable> m_xBody;
 //  css::mail::MailMessageBody m_aBody;
 
-    css::uno::Sequence<OUString> m_aRecipients;
-    css::uno::Sequence<OUString> m_aCcRecipients;
-    css::uno::Sequence<OUString> m_aBccRecipients;
-//  css::uno::Sequence<css::mail::MailAttachmentDescriptor> m_aAttachments;
-    css::uno::Sequence<css::mail::MailAttachment> m_aAttachments;
+    cpo::uno::Sequence<OUString> m_aRecipients;
+    cpo::uno::Sequence<OUString> m_aCcRecipients;
+    cpo::uno::Sequence<OUString> m_aBccRecipients;
+//  cpo::uno::Sequence<css::mail::MailAttachmentDescriptor> m_aAttachments;
+    cpo::uno::Sequence<css::mail::MailAttachment> m_aAttachments;
 public:
     SwMailMessage();
     virtual ~SwMailMessage() override;
@@ -253,11 +253,11 @@ public:
     virtual void SAL_CALL addRecipient( const OUString& sRecipientAddress ) override;
     virtual void SAL_CALL addCcRecipient( const OUString& sRecipientAddress ) override;
     virtual void SAL_CALL addBccRecipient( const OUString& sRecipientAddress ) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getRecipients() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getCcRecipients() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getBccRecipients() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getRecipients() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getCcRecipients() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getBccRecipients() override;
     virtual void SAL_CALL addAttachment(const css::mail::MailAttachment& aMailAttachment) override;
-    virtual css::uno::Sequence<css::mail::MailAttachment> SAL_CALL getAttachments() override;
+    virtual cpo::uno::Sequence<css::mail::MailAttachment> SAL_CALL getAttachments() override;
     void SetSenderName(const OUString& rSenderName)
     {
         m_sSenderName = rSenderName;

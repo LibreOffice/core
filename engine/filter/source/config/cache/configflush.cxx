@@ -44,7 +44,7 @@ bool SAL_CALL ConfigFlush::supportsService(const OUString& sServiceName)
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ConfigFlush::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ConfigFlush::getSupportedServiceNames()
 {
     return  { u"com.sun.star.document.FilterConfigRefresh"_ustr };
 }
@@ -82,7 +82,7 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_ConfigFlush_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::ConfigFlush());
 }

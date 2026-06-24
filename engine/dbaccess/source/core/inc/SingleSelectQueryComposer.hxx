@@ -146,7 +146,7 @@ namespace dbaccess
             @return
                 The structured filter
         */
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >
+        cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >
                     getStructuredCondition( TGetParseNode const & _aGetFunctor );
 
         css::uno::Reference< css::container::XIndexAccess >
@@ -210,8 +210,8 @@ namespace dbaccess
 
         void SAL_CALL disposing() override;
 
-        virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
         // css::uno::XInterface
         DECLARE_XINTERFACE( )
@@ -228,12 +228,12 @@ namespace dbaccess
         virtual OUString SAL_CALL getElementaryQuery() override;
         virtual void SAL_CALL setElementaryQuery( const OUString& _rElementary ) override;
         virtual void SAL_CALL setFilter( const OUString& filter ) override;
-        virtual void SAL_CALL setStructuredFilter( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& filter ) override;
+        virtual void SAL_CALL setStructuredFilter( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& filter ) override;
         virtual void SAL_CALL appendFilterByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator ) override;
         virtual void SAL_CALL appendGroupByColumn( const css::uno::Reference< css::beans::XPropertySet >& column ) override;
         virtual void SAL_CALL setGroup( const OUString& group ) override;
         virtual void SAL_CALL setHavingClause( const OUString& filter ) override;
-        virtual void SAL_CALL setStructuredHavingClause( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& filter ) override;
+        virtual void SAL_CALL setStructuredHavingClause( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& filter ) override;
         virtual void SAL_CALL appendHavingClauseByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator ) override;
         virtual void SAL_CALL appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool ascending ) override;
         virtual void SAL_CALL setOrder( const OUString& order ) override;
@@ -243,11 +243,11 @@ namespace dbaccess
         virtual void SAL_CALL setQuery( const OUString& command ) override;
         virtual void SAL_CALL setCommand( const OUString& command,sal_Int32 CommandType ) override;
         virtual OUString SAL_CALL getFilter(  ) override;
-        virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) override;
         virtual OUString SAL_CALL getGroup(  ) override;
         virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getGroupColumns(  ) override;
         virtual OUString SAL_CALL getHavingClause(  ) override;
-        virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredHavingClause(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getStructuredHavingClause(  ) override;
         virtual OUString SAL_CALL getOrder(  ) override;
         virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getOrderColumns(  ) override;
         virtual OUString SAL_CALL getQueryWithSubstitution(  ) override;

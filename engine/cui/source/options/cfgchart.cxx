@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <tools/debug.hxx>
 #include <sal/log.hxx>
 #include "cfgchart.hxx"
@@ -163,7 +163,7 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 SvxChartColorTable SvxChartOptions::GetDefaultColors()
 {
     // 1. default colors for series
-    uno::Sequence< sal_Int64 > aColorSeq = officecfg::Office::Chart::DefaultColor::Series::get();
+    cpo::uno::Sequence< sal_Int64 > aColorSeq = officecfg::Office::Chart::DefaultColor::Series::get();
 
     sal_Int32 nCount = aColorSeq.getLength();
     Color aCol;
@@ -201,7 +201,7 @@ void SvxChartOptions::SetDefaultColors( const SvxChartColorTable& rDefColors )
     // 1. default colors for series
     // convert list to sequence
     const size_t nCount = rDefColors.size();
-    uno::Sequence< sal_Int64 > aColors( nCount );
+    cpo::uno::Sequence< sal_Int64 > aColors( nCount );
     auto aColorsRange = asNonConstRange(aColors);
     for( size_t i=0; i < nCount; i++ )
     {

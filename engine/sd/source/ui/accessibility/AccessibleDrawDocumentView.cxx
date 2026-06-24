@@ -361,12 +361,12 @@ OUString SAL_CALL
     return u"AccessibleDrawDocumentView"_ustr;
 }
 
-css::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString> SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames()
 {
     ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleDrawDocumentView"_ustr };
-    uno::Sequence<OUString> aServiceNames =
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleDrawDocumentView"_ustr };
+    cpo::uno::Sequence<OUString> aServiceNames =
         AccessibleDocumentViewBase::getSupportedServiceNames();
 
     return comphelper::concatSequences(aServiceNames, vals);
@@ -398,7 +398,7 @@ void SAL_CALL
     AccessibleDocumentViewBase::release ();
 }
 //=====  XAccessibleGroupPosition  =========================================
-uno::Sequence< sal_Int32 > SAL_CALL
+cpo::uno::Sequence< sal_Int32 > SAL_CALL
     AccessibleDrawDocumentView::getGroupPosition( const cpo::uno::Any& rAny )
 {
     SolarMutexGuard g;
@@ -407,7 +407,7 @@ uno::Sequence< sal_Int32 > SAL_CALL
     // [0] group level(always be 0 now)
     // [1] similar items counts in the group
     // [2] the position of the object in the group
-    uno::Sequence< sal_Int32 > aRet( 3 );
+    cpo::uno::Sequence< sal_Int32 > aRet( 3 );
     //get the xShape of the current selected drawing object
     uno::Reference<XAccessibleContext> xAccContent;
     rAny >>= xAccContent;
@@ -507,7 +507,7 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName()
     uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
     if (xInfo.is())
     {
-        uno::Sequence< OUString > aServices( xInfo->getSupportedServiceNames() );
+        cpo::uno::Sequence< OUString > aServices( xInfo->getSupportedServiceNames() );
         const OUString& sFirstService = aServices[0];
         if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {

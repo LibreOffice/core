@@ -42,7 +42,7 @@ private:
     css::uno::Reference< css::awt::XControlContainer >    mxControlContainer;
 
     ::osl::Mutex&               GetMutex() { return maMutex; }
-    static bool                 ImplCreateComponentSequence( css::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rControls, const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rModels, css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& rComponents, css::uno::Sequence< cpo::uno::Any>* pTabStops, bool bPeerComponent );
+    static bool                 ImplCreateComponentSequence( cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rControls, const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rModels, cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& rComponents, cpo::uno::Sequence< cpo::uno::Any>* pTabStops, bool bPeerComponent );
     // if sequence length of rModels is less than rControls, return only the matching elements in rModels sequence and remove corresponding elements from rControls
     void                        ImplActivateControl( bool bFirst ) const;
 
@@ -50,7 +50,7 @@ public:
                             StdTabController();
                             virtual ~StdTabController() override;
 
-    static css::uno::Reference< css::awt::XControl >  FindControl( css::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rCtrls, const css::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
+    static css::uno::Reference< css::awt::XControl >  FindControl( cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rCtrls, const css::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
 
     // css::uno::XInterface
     cpo::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
@@ -60,15 +60,15 @@ public:
     cpo::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // XTabController
     void SAL_CALL setModel( const css::uno::Reference< css::awt::XTabControllerModel >& Model ) override;
     css::uno::Reference< css::awt::XTabControllerModel > SAL_CALL getModel(  ) override;
     void SAL_CALL setContainer( const css::uno::Reference< css::awt::XControlContainer >& Container ) override;
     css::uno::Reference< css::awt::XControlContainer > SAL_CALL getContainer(  ) override;
-    css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls(  ) override;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls(  ) override;
     void SAL_CALL autoTabOrder(  ) override;
     void SAL_CALL activateTabOrder(  ) override;
     void SAL_CALL activateFirst(  ) override;
@@ -79,7 +79,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

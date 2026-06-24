@@ -248,7 +248,7 @@ using namespace cpo::uno;
                 css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(pDialog->GetXWindow(), css::uno::UNO_QUERY);
                 if (xSysDepWin.is())
                 {
-                    css::uno::Sequence<sal_Int8> aProcessIdent(16);
+                    cpo::uno::Sequence<sal_Int8> aProcessIdent(16);
                     rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
                     cpo::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_WIN32);
                     sal_Int64 tmp(0);
@@ -276,7 +276,7 @@ using namespace cpo::uno;
                 Reference<XMozillaBootstrap> xMozillaBootstrap = MozillaBootstrap::create(xContext);
 
                 // collect all Mozilla Profiles
-                css::uno::Sequence< OUString > list;
+                cpo::uno::Sequence< OUString > list;
 
                 xMozillaBootstrap->getProfileList( profileType, list );
 

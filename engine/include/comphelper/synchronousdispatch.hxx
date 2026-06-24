@@ -32,7 +32,7 @@ namespace com::sun::star {
 }
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 
@@ -52,7 +52,7 @@ namespace comphelper
             const css::uno::Reference< css::uno::XInterface > &xStartPoint,
             const OUString &sURL,
             const OUString &sTarget,
-            const css::uno::Sequence< css::beans::PropertyValue > &lArguments );
+            const cpo::uno::Sequence< css::beans::PropertyValue > &lArguments );
     };
 
 

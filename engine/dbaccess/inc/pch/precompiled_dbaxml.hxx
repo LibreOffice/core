@@ -69,8 +69,8 @@
 #include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.h>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <comphelper/comphelperdllapi.h>

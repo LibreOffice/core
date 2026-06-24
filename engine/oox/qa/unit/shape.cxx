@@ -503,12 +503,12 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
     xShapeProps->getPropertyValue(u"TextBoxContent"_ustr) >>= xTextFrame;
     CPPUNIT_ASSERT(!xTextFrame.is());
 
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     CPPUNIT_ASSERT(aGeoPropSeq.getLength() > 0);
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
 
-    uno::Sequence<beans::PropertyValue> aTextPathSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aTextPathSeq;
     aGeoPropMap.getValue(u"TextPath"_ustr) >>= aTextPathSeq;
     CPPUNIT_ASSERT(aTextPathSeq.getLength() > 0);
 
@@ -518,11 +518,11 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
     CPPUNIT_ASSERT(bTextPathOn);
 
     // Is it the correct kind of Fontwork?
-    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
     aGeoPropMap.getValue(u"AdjustmentValues"_ustr) >>= aAdjustmentSeq;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAdjustmentSeq.getLength());
 
-    uno::Sequence<uno::Sequence<beans::PropertyValue>> aHandleSeq;
+    cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aHandleSeq;
     aGeoPropMap.getValue(u"Handles"_ustr) >>= aHandleSeq;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aHandleSeq.getLength());
 

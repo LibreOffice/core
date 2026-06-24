@@ -89,7 +89,7 @@ namespace connectivity::flat
 
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         //XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         virtual void SAL_CALL disposing() override;
 
         OUString getEntry() const;

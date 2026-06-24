@@ -63,7 +63,7 @@ class RecentFilesMenuController :  public svt::PopupMenuControllerBase
 
 public:
     RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
-                               const uno::Sequence< cpo::uno::Any >& args );
+                               const cpo::uno::Sequence< cpo::uno::Any >& args );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override
@@ -76,7 +76,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.frame.PopupMenuController"_ustr};
     }
@@ -92,7 +92,7 @@ public:
     virtual uno::Reference< frame::XDispatch > SAL_CALL queryDispatch( const util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) override;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& seqProperties ) override;
+    virtual void SAL_CALL dispatch( const util::URL& aURL, const cpo::uno::Sequence< beans::PropertyValue >& seqProperties ) override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
@@ -109,7 +109,7 @@ private:
 };
 
 RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
-                                                      const uno::Sequence< cpo::uno::Any >& args ) :
+                                                      const cpo::uno::Sequence< cpo::uno::Any >& args ) :
     svt::PopupMenuControllerBase( xContext ),
     m_bDisabled( false ),
     m_bShowToolbarEntries( false )
@@ -432,7 +432,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
             SvtHistoryOptions::Clear( EHistoryType::PickList, false );
             dispatchCommand(
             u"vnd.org.libreoffice.recentdocs:ClearRecentFileList"_ustr,
-            css::uno::Sequence< css::beans::PropertyValue >() );
+            cpo::uno::Sequence< css::beans::PropertyValue >() );
         }
     }
 
@@ -526,7 +526,7 @@ void SAL_CALL RecentFilesMenuController::dispatch(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_RecentFilesMenuController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &args)
+    cpo::uno::Sequence<cpo::uno::Any> const &args)
 {
     return cppu::acquire(new RecentFilesMenuController(context, args));
 }

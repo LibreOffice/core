@@ -22,7 +22,7 @@
 
 using ::comphelper::PropertyInfo;
 using ::comphelper::ChainablePropertySetInfo;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::UnknownPropertyException;
 

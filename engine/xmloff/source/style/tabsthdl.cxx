@@ -18,7 +18,7 @@
  */
 
 #include "tabsthdl.hxx"
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 
 using namespace ::com::sun::star;
@@ -33,10 +33,10 @@ XMLTabStopPropHdl::~XMLTabStopPropHdl()
 
 bool XMLTabStopPropHdl::equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const
 {
-    uno::Sequence< style::TabStop> aSeq1;
+    cpo::uno::Sequence< style::TabStop> aSeq1;
     if( r1 >>= aSeq1 )
     {
-        uno::Sequence< style::TabStop> aSeq2;
+        cpo::uno::Sequence< style::TabStop> aSeq2;
         if( r2 >>= aSeq2 )
         {
             return std::equal(std::cbegin(aSeq1), std::cend(aSeq1), std::cbegin(aSeq2), std::cend(aSeq2),

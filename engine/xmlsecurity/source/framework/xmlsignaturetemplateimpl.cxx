@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno ;
+using namespace ::cpo::uno;
 using ::com::sun::star::lang::XMultiServiceFactory ;
 
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
@@ -54,7 +55,7 @@ void SAL_CALL XMLSignatureTemplateImpl::setTarget( const css::uno::Reference< cs
     targets.push_back( aXmlElement );
 }
 
-css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl::getTargets()
+cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl::getTargets()
 {
     return comphelper::containerToSequence(targets);
 }

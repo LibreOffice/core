@@ -209,9 +209,9 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
             if (SfxApplication::IsXScriptURL(aMacro))
             {
                 cpo::uno::Any aRet;
-                uno::Sequence<sal_Int16> aOutArgsIndex;
-                uno::Sequence<cpo::uno::Any> aParams;
-                uno::Sequence<cpo::uno::Any> aOutArgs;
+                cpo::uno::Sequence<sal_Int16> aOutArgsIndex;
+                cpo::uno::Sequence<cpo::uno::Any> aParams;
+                cpo::uno::Sequence<cpo::uno::Any> aOutArgs;
 
                 mpDocSh->CallXScript(aMacro, aParams, aRet, aOutArgsIndex, aOutArgs);
             }

@@ -461,7 +461,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
             continue;
         // Get the custom shape property
         auto aCustomShapeGeometry = xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                                        .get<uno::Sequence<beans::PropertyValue>>();
+                                        .get<cpo::uno::Sequence<beans::PropertyValue>>();
         // Find for shape type
         for (const auto& aCustomGeometryIterator : aCustomShapeGeometry)
         {
@@ -536,7 +536,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134619_numberingProps)
     // Get the third paragraph's numbering style's 1st level's bullet size
     uno::Reference<text::XTextRange> xParagraph = getParagraph(3);
     auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, u"NumberingRules"_ustr);
-    uno::Sequence<beans::PropertyValue> aLevel;
+    cpo::uno::Sequence<beans::PropertyValue> aLevel;
     xLevels->getByIndex(0) >>= aLevel; // 1st level
     OUString aCharStyleName = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "CharStyleName"; })->Value.get<OUString>();
 
@@ -1118,7 +1118,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152153)
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
-    const uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    const cpo::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
     int nImageFiles = 0;
     for (const auto& rElementName : aNames)
         if (rElementName.startsWith("word/media/image"))
@@ -1140,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152152)
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
-    const uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    const cpo::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
     int nImageFiles = 0;
     for (const auto& rElementName : aNames)
         if (rElementName.startsWith("word/media/hdphoto"))

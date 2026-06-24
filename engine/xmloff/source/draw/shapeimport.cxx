@@ -627,7 +627,7 @@ void ShapeGroupContext::popGroupAndPostProcess()
     uno::Reference<drawing::XShapes3> xShapes3(mxShapes, uno::UNO_QUERY);
     if( xShapes3.is())
     {
-        uno::Sequence<sal_Int32> aNewOrder(maZOrderList.size() + maUnsortedList.size());
+        cpo::uno::Sequence<sal_Int32> aNewOrder(maZOrderList.size() + maUnsortedList.size());
         auto pNewOrder = aNewOrder.getArray();
         sal_Int32 nIndex = 0;
 

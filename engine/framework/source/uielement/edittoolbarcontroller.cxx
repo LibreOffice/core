@@ -33,6 +33,7 @@ using namespace ::com::sun::star;
 using namespace css::uno;
 using namespace css::beans;
 using namespace css::frame;
+using namespace ::cpo::uno;
 
 namespace framework
 {

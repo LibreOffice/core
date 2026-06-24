@@ -43,7 +43,7 @@ bool SAL_CALL DispatchHelper::supportsService(const OUString& sServiceName)
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL DispatchHelper::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL DispatchHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.DispatchHelper"_ustr };
 }
@@ -84,7 +84,7 @@ DispatchHelper::~DispatchHelper() {}
 cpo::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
     const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
-    const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments)
 {
     // check for valid parameters
     if ((!xDispatchProvider.is()) || (!m_xContext.is()) || (sURL.isEmpty()))
@@ -124,7 +124,7 @@ cpo::uno::Any SAL_CALL DispatchHelper::executeDispatch(
 const cpo::uno::Any&
 DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
                                 const css::util::URL& aURL, bool SyncronFlag,
-                                const css::uno::Sequence<css::beans::PropertyValue>& lArguments)
+                                const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments)
 {
     comphelper::ProfileZone aZone("executeDispatch");
     css::uno::Reference<css::uno::XInterface> xTHIS(static_cast<::cppu::OWeakObject*>(this),
@@ -138,7 +138,7 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
                                                                             css::uno::UNO_QUERY);
 
         // make sure that synchronous execution is used (if possible)
-        css::uno::Sequence<css::beans::PropertyValue> aArguments(lArguments);
+        cpo::uno::Sequence<css::beans::PropertyValue> aArguments(lArguments);
         sal_Int32 nLength = lArguments.getLength();
         aArguments.realloc(nLength + 1);
         auto pArguments = aArguments.getArray();
@@ -211,7 +211,7 @@ void SAL_CALL DispatchHelper::disposing(const css::lang::EventObject&)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_DispatchHelper_get_implementation(css::uno::XComponentContext* context,
-                                            css::uno::Sequence<cpo::uno::Any> const&)
+                                            cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new framework::DispatchHelper(context));
 }

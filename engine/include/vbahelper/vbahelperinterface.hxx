@@ -22,7 +22,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -68,7 +68,7 @@ protected:
 public:
     InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< css::uno::XComponentContext > xContext ) : mxParent( xParent ), mxContext(std::move( xContext )) {}
     virtual OUString getServiceImplName() = 0;
-    virtual css::uno::Sequence<OUString> getServiceNames() = 0;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() = 0;
 
     // XHelperInterface Methods
     virtual ::sal_Int32 SAL_CALL getCreator() override
@@ -88,12 +88,12 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) override { return getServiceImplName(); }
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override
     {
-        css::uno::Sequence< OUString > sServices = getSupportedServiceNames();
+        cpo::uno::Sequence< OUString > sServices = getSupportedServiceNames();
         return std::find(sServices.begin(), sServices.end(), ServiceName) != sServices.end();
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
     {
-        css::uno::Sequence< OUString > aNames = getServiceNames();
+        cpo::uno::Sequence< OUString > aNames = getServiceNames();
         return aNames;
     }
  };
@@ -113,7 +113,7 @@ public:
  */
 #define VBAHELPER_DECL_XHELPERINTERFACE \
     virtual OUString getServiceImplName() override; \
-    virtual css::uno::Sequence< OUString > getServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getServiceNames() override;
 
 
 /** Helper macro to implement the methods 'getServiceImplName()' and
@@ -125,9 +125,9 @@ OUString classname::getServiceImplName() \
 { \
     return u"" #classname ""_ustr; \
 } \
-css::uno::Sequence< OUString > classname::getServiceNames() \
+cpo::uno::Sequence< OUString > classname::getServiceNames() \
 { \
-    static const css::uno::Sequence< OUString > saServiceNames { servicename }; \
+    static const cpo::uno::Sequence< OUString > saServiceNames { servicename }; \
     return saServiceNames; \
 }
 

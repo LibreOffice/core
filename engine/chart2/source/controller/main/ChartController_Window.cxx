@@ -1017,7 +1017,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                 if( xSeries.is() )
                 {
-                    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+                    cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
                     // "AttributedDataPoints"
                     if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
                     {
@@ -1220,7 +1220,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, u".uno:ManageThemes"_ustr);
         }
 
-        css::uno::Sequence< cpo::uno::Any > aArgs{
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{
             cpo::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true )),
             cpo::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, m_xFrame )),
             cpo::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, aMenuName ))
@@ -1547,7 +1547,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         nCode == KEY_ESCAPE )
     {
         uno::Reference< frame::XDispatchHelper > xDispatchHelper( frame::DispatchHelper::create(m_xCC) );
-        uno::Sequence< beans::PropertyValue > aArgs;
+        cpo::uno::Sequence< beans::PropertyValue > aArgs;
         xDispatchHelper->executeDispatch(
             uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
             u".uno:TerminateInplaceActivation"_ustr,
@@ -2047,7 +2047,7 @@ void ChartController::sendPopupRequest(std::u16string_view rCID, tools::Rectangl
         sal_Int32(aRectangle.GetHeight())
     };
 
-    uno::Sequence<beans::PropertyValue> aCallbackData = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aCallbackData = comphelper::InitPropertySequence(
     {
         {"Rectangle",      cpo::uno::Any(xRectangle)},
         {"DimensionIndex", cpo::uno::Any(sal_Int32(nDimensionIndex))},

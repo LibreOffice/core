@@ -229,7 +229,7 @@ void ViewContactOfE3dScene::createViewInformation3D(const basegfx::B3DRange& rCo
         aDeviceToView.translate(0.5, 0.5, 0.5);
     }
 
-    const uno::Sequence< beans::PropertyValue > aEmptyProperties;
+    const cpo::uno::Sequence< beans::PropertyValue > aEmptyProperties;
     maViewInformation3D = drawinglayer::geometry::ViewInformation3D(
         aTransformation, aOrientation, aProjection,
         aDeviceToView, 0.0, aEmptyProperties);
@@ -297,7 +297,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createSce
             // currently is based on creating the target-ViewInformation3D using a given range. To
             // get the true range, use a neutral ViewInformation3D here. This leaves all matrices
             // on identity and the time on 0.0.
-            const uno::Sequence< beans::PropertyValue > aEmptyProperties;
+            const cpo::uno::Sequence< beans::PropertyValue > aEmptyProperties;
             const drawinglayer::geometry::ViewInformation3D aNeutralViewInformation3D(aEmptyProperties);
             const basegfx::B3DRange aContentRange(aAllSequence.getB3DRange(aNeutralViewInformation3D));
 
@@ -434,7 +434,7 @@ basegfx::B3DRange ViewContactOfE3dScene::getAllContentRange3D() const
         // for getting the 3D range using getB3DRangeFromPrimitive3DContainer a ViewInformation3D
         // needs to be given for evtl. decompositions. Use a neutral ViewInformation3D here. This
         // leaves all matrices on identity and the time on 0.0.
-        const uno::Sequence< beans::PropertyValue > aEmptyProperties;
+        const cpo::uno::Sequence< beans::PropertyValue > aEmptyProperties;
         const drawinglayer::geometry::ViewInformation3D aNeutralViewInformation3D(aEmptyProperties);
 
         aAllContentRange3D = xAllSequence.getB3DRange(aNeutralViewInformation3D);

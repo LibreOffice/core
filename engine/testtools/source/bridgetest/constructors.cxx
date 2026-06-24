@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -57,10 +57,10 @@ private:
     virtual ~Impl() override {}
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence< cpo::uno::Any > const & arguments) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & arguments) override;
 };
 
-void Impl::initialize(css::uno::Sequence< cpo::uno::Any > const & arguments)
+void Impl::initialize(cpo::uno::Sequence< cpo::uno::Any > const & arguments)
 {
     bool arg0;
     ::sal_Int8 arg1 = sal_Int8();
@@ -76,32 +76,32 @@ void Impl::initialize(css::uno::Sequence< cpo::uno::Any > const & arguments)
     OUString arg11;
     css::uno::Type arg12;
     bool arg13;
-    css::uno::Sequence< bool > arg14;
-    css::uno::Sequence< ::sal_Int8 > arg15;
-    css::uno::Sequence< ::sal_Int16 > arg16;
-    css::uno::Sequence< ::sal_uInt16 > arg17;
-    css::uno::Sequence< ::sal_Int32 > arg18;
-    css::uno::Sequence< ::sal_uInt32 > arg19;
-    css::uno::Sequence< ::sal_Int64 > arg20;
-    css::uno::Sequence< ::sal_uInt64 > arg21;
-    css::uno::Sequence< float > arg22;
-    css::uno::Sequence< double > arg23;
-    css::uno::Sequence< sal_Unicode > arg24;
-    css::uno::Sequence< OUString > arg25;
-    css::uno::Sequence< css::uno::Type > arg26;
-    css::uno::Sequence< cpo::uno::Any > arg27;
+    cpo::uno::Sequence< bool > arg14;
+    cpo::uno::Sequence< ::sal_Int8 > arg15;
+    cpo::uno::Sequence< ::sal_Int16 > arg16;
+    cpo::uno::Sequence< ::sal_uInt16 > arg17;
+    cpo::uno::Sequence< ::sal_Int32 > arg18;
+    cpo::uno::Sequence< ::sal_uInt32 > arg19;
+    cpo::uno::Sequence< ::sal_Int64 > arg20;
+    cpo::uno::Sequence< ::sal_uInt64 > arg21;
+    cpo::uno::Sequence< float > arg22;
+    cpo::uno::Sequence< double > arg23;
+    cpo::uno::Sequence< sal_Unicode > arg24;
+    cpo::uno::Sequence< OUString > arg25;
+    cpo::uno::Sequence< css::uno::Type > arg26;
+    cpo::uno::Sequence< cpo::uno::Any > arg27;
     bool arg27b;
-    css::uno::Sequence< css::uno::Sequence< bool > > arg28;
-    css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > > arg29;
+    cpo::uno::Sequence< cpo::uno::Sequence< bool > > arg28;
+    cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > arg29;
     bool arg29b;
-    css::uno::Sequence< ::test::testtools::bridgetest::TestEnum > arg30;
-    css::uno::Sequence< ::test::testtools::bridgetest::TestStruct > arg31;
-    css::uno::Sequence<
+    cpo::uno::Sequence< ::test::testtools::bridgetest::TestEnum > arg30;
+    cpo::uno::Sequence< ::test::testtools::bridgetest::TestStruct > arg31;
+    cpo::uno::Sequence<
         ::test::testtools::bridgetest::TestPolyStruct< bool > > arg32;
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         ::test::testtools::bridgetest::TestPolyStruct< cpo::uno::Any > > arg33;
     bool arg33b;
-    css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > arg34;
+    cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > > arg34;
     ::test::testtools::bridgetest::TestEnum arg35;
     ::test::testtools::bridgetest::TestStruct arg36;
     ::test::testtools::bridgetest::TestPolyStruct< bool > arg37;
@@ -189,7 +189,7 @@ private:
     virtual ~Impl2() override {}
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence< cpo::uno::Any > const & arguments) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & arguments) override;
 
     //XMultiBase1
     virtual double SAL_CALL getatt1() override;
@@ -201,7 +201,7 @@ private:
     double m_attr1;
 };
 
-void Impl2::initialize(css::uno::Sequence< cpo::uno::Any > const & arguments)
+void Impl2::initialize(cpo::uno::Sequence< cpo::uno::Any > const & arguments)
 {
     ttb::TestPolyStruct< css::uno::Type > arg0;
     ttb::TestPolyStruct< cpo::uno::Any > arg1;
@@ -227,41 +227,41 @@ void Impl2::initialize(css::uno::Sequence< cpo::uno::Any > const & arguments)
         ::sal_Unicode, ttb::TestPolyStruct < cpo::uno::Any > > > arg16;
     ttb::TestPolyStruct2< ttb::TestPolyStruct2<sal_Unicode, cpo::uno::Any >,
         ttb::TestPolyStruct<sal_Unicode> > arg17;
-    ttb::TestPolyStruct<css::uno::Sequence< css::uno::Type > > arg18;
-    ttb::TestPolyStruct<css::uno::Sequence<cpo::uno::Any> > arg19;
-    ttb::TestPolyStruct<css::uno::Sequence< bool > > arg20;
-    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int8 > > arg21;
-    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int16 > > arg22;
-    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int32 > > arg23;
-    ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int64 > > arg24;
-    ttb::TestPolyStruct<css::uno::Sequence< sal_Unicode> > arg25;
-    ttb::TestPolyStruct<css::uno::Sequence< OUString > > arg26;
-    ttb::TestPolyStruct<css::uno::Sequence<float> > arg27;
-    ttb::TestPolyStruct<css::uno::Sequence<double> > arg28;
-    ttb::TestPolyStruct<css::uno::Sequence<css::uno::Reference<css::uno::XInterface> > > arg29;
-    ttb::TestPolyStruct<css::uno::Sequence<css::uno::Reference<css::lang::XComponent> > > arg30;
-    ttb::TestPolyStruct<css::uno::Sequence<ttb::TestEnum> >  arg31;
-    ttb::TestPolyStruct<css::uno::Sequence<ttb::TestPolyStruct2<
-        ::sal_Unicode, css::uno::Sequence<cpo::uno::Any> > > > arg32;
+    ttb::TestPolyStruct<cpo::uno::Sequence< css::uno::Type > > arg18;
+    ttb::TestPolyStruct<cpo::uno::Sequence<cpo::uno::Any> > arg19;
+    ttb::TestPolyStruct<cpo::uno::Sequence< bool > > arg20;
+    ttb::TestPolyStruct<cpo::uno::Sequence< ::sal_Int8 > > arg21;
+    ttb::TestPolyStruct<cpo::uno::Sequence< ::sal_Int16 > > arg22;
+    ttb::TestPolyStruct<cpo::uno::Sequence< ::sal_Int32 > > arg23;
+    ttb::TestPolyStruct<cpo::uno::Sequence< ::sal_Int64 > > arg24;
+    ttb::TestPolyStruct<cpo::uno::Sequence< sal_Unicode> > arg25;
+    ttb::TestPolyStruct<cpo::uno::Sequence< OUString > > arg26;
+    ttb::TestPolyStruct<cpo::uno::Sequence<float> > arg27;
+    ttb::TestPolyStruct<cpo::uno::Sequence<double> > arg28;
+    ttb::TestPolyStruct<cpo::uno::Sequence<css::uno::Reference<css::uno::XInterface> > > arg29;
+    ttb::TestPolyStruct<cpo::uno::Sequence<css::uno::Reference<css::lang::XComponent> > > arg30;
+    ttb::TestPolyStruct<cpo::uno::Sequence<ttb::TestEnum> >  arg31;
+    ttb::TestPolyStruct<cpo::uno::Sequence<ttb::TestPolyStruct2<
+        ::sal_Unicode, cpo::uno::Sequence<cpo::uno::Any> > > > arg32;
     bool arg32a = false;
-    ttb::TestPolyStruct<css::uno::Sequence<ttb::TestPolyStruct2<
-        ttb::TestPolyStruct< ::sal_Unicode>, css::uno::Sequence<cpo::uno::Any> > > > arg33;
-    ttb::TestPolyStruct<css::uno::Sequence<css::uno::Sequence< ::sal_Int32> > > arg34;
-    css::uno::Sequence<ttb::TestPolyStruct< ::sal_Int32> > arg35;
-    css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, cpo::uno::Any> > > arg36;
-    css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2<
+    ttb::TestPolyStruct<cpo::uno::Sequence<ttb::TestPolyStruct2<
+        ttb::TestPolyStruct< ::sal_Unicode>, cpo::uno::Sequence<cpo::uno::Any> > > > arg33;
+    ttb::TestPolyStruct<cpo::uno::Sequence<cpo::uno::Sequence< ::sal_Int32> > > arg34;
+    cpo::uno::Sequence<ttb::TestPolyStruct< ::sal_Int32> > arg35;
+    cpo::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, cpo::uno::Any> > > arg36;
+    cpo::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2<
         ttb::TestPolyStruct2< ::sal_Unicode,cpo::uno::Any >, OUString> > > arg37;
-    css::uno::Sequence<ttb::TestPolyStruct2< OUString, ttb::TestPolyStruct2<
+    cpo::uno::Sequence<ttb::TestPolyStruct2< OUString, ttb::TestPolyStruct2<
         ::sal_Unicode, ttb::TestPolyStruct<cpo::uno::Any> > > > arg38;
-    css::uno::Sequence<ttb::TestPolyStruct2<ttb::TestPolyStruct2<
+    cpo::uno::Sequence<ttb::TestPolyStruct2<ttb::TestPolyStruct2<
         ::sal_Unicode, cpo::uno::Any>, ttb::TestPolyStruct< ::sal_Unicode> > > arg39;
-    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct< ::sal_Unicode> > > arg40;
-    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, cpo::uno::Any> > > >arg41;
-    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<
+    cpo::uno::Sequence<cpo::uno::Sequence<ttb::TestPolyStruct< ::sal_Unicode> > > arg40;
+    cpo::uno::Sequence<cpo::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, cpo::uno::Any> > > >arg41;
+    cpo::uno::Sequence<cpo::uno::Sequence<ttb::TestPolyStruct<
         ttb::TestPolyStruct2<ttb::TestPolyStruct2<sal_Unicode, cpo::uno::Any>, OUString> > > > arg42;
-    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct2<
+    cpo::uno::Sequence<cpo::uno::Sequence<ttb::TestPolyStruct2<
         OUString, ttb::TestPolyStruct2< ::sal_Unicode, ttb::TestPolyStruct<cpo::uno::Any> > > > > arg43;
-    css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct2<
+    cpo::uno::Sequence<cpo::uno::Sequence<ttb::TestPolyStruct2<
         ttb::TestPolyStruct2< ::sal_Unicode, cpo::uno::Any>, ttb::TestPolyStruct<
         ::sal_Unicode> > > > arg44;
 
@@ -415,7 +415,7 @@ OUString getImplementationName() {
             u"comp.test.testtools.bridgetest.Constructors"_ustr;
 }
 
-css::uno::Sequence< OUString > getSupportedServiceNames() {
+cpo::uno::Sequence< OUString > getSupportedServiceNames() {
     return { u"test.testtools.bridgetest.Constructors"_ustr };
 }
 
@@ -430,7 +430,7 @@ OUString getImplementationName2() {
     return u"comp.test.testtools.bridgetest.Constructors2"_ustr;
 }
 
-css::uno::Sequence< OUString > getSupportedServiceNames2() {
+cpo::uno::Sequence< OUString > getSupportedServiceNames2() {
     return { u"test.testtools.bridgetest.Constructors2"_ustr };
 }
 

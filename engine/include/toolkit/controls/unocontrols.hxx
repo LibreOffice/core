@@ -96,7 +96,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -171,7 +171,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     bool SAL_CALL setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
 };
@@ -198,7 +198,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -212,7 +212,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -264,7 +264,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -315,7 +315,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -343,7 +343,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // ::cppu::OPropertySetHelper
     void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
@@ -377,7 +377,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -402,7 +402,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -455,7 +455,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -480,7 +480,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -535,7 +535,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -584,8 +584,8 @@ public:
     void SAL_CALL dispose(  ) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XControl
     bool SAL_CALL isTransparent(  ) override;
@@ -631,7 +631,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -650,8 +650,8 @@ public:
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XControl
     bool SAL_CALL isTransparent(  ) override;
@@ -670,7 +670,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -695,7 +695,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -711,7 +711,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -754,7 +754,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::awt::XItemList
     virtual ::sal_Int32 SAL_CALL getItemCount() override;
@@ -771,7 +771,7 @@ public:
     virtual OUString SAL_CALL getItemImage( ::sal_Int32 Position ) override;
     virtual css::beans::Pair< OUString, OUString > SAL_CALL getItemTextAndImage( ::sal_Int32 Position ) override;
     virtual cpo::uno::Any SAL_CALL getItemData( ::sal_Int32 Position ) override;
-    virtual css::uno::Sequence< css::beans::Pair< OUString, OUString > > SAL_CALL getAllItems(  ) override;
+    virtual cpo::uno::Sequence< css::beans::Pair< OUString, OUString > > SAL_CALL getAllItems(  ) override;
     virtual void SAL_CALL addItemListListener( const css::uno::Reference< css::awt::XItemListListener >& Listener ) override;
     virtual void SAL_CALL removeItemListListener( const css::uno::Reference< css::awt::XItemListListener >& Listener ) override;
 
@@ -843,17 +843,17 @@ public:
     void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) override;
-    void SAL_CALL addItems( const css::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
+    void SAL_CALL addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
     void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
     sal_Int16 SAL_CALL getItemCount(  ) override;
     OUString SAL_CALL getItem( sal_Int16 nPos ) override;
-    css::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
     sal_Int16 SAL_CALL getSelectedItemPos(  ) override;
-    css::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
+    cpo::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
     OUString SAL_CALL getSelectedItem(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
     void SAL_CALL selectItemPos( sal_Int16 nPos, bool bSelect ) override;
-    void SAL_CALL selectItemsPos( const css::uno::Sequence< sal_Int16 >& aPositions, bool bSelect ) override;
+    void SAL_CALL selectItemsPos( const cpo::uno::Sequence< sal_Int16 >& aPositions, bool bSelect ) override;
     void SAL_CALL selectItem( const OUString& aItem, bool bSelect ) override;
     bool SAL_CALL isMutipleMode(  ) override;
     void SAL_CALL setMultipleMode( bool bMulti ) override;
@@ -885,7 +885,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void                ImplUpdateSelectedItemsProperty();
@@ -919,7 +919,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 
@@ -950,8 +950,8 @@ public:
 
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XComboBox
     void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
@@ -959,11 +959,11 @@ public:
     void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) override;
-    void SAL_CALL addItems( const css::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
+    void SAL_CALL addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
     void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
     sal_Int16 SAL_CALL getItemCount(  ) override;
     OUString SAL_CALL getItem( sal_Int16 nPos ) override;
-    css::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
     sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
     void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) override;
 
@@ -982,7 +982,7 @@ public:
 
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 private:
     virtual void        ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal ) override;
     virtual void        updateFromModel() override;
@@ -1007,8 +1007,8 @@ public:
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
@@ -1048,7 +1048,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1070,8 +1070,8 @@ public:
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
@@ -1099,7 +1099,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1124,7 +1124,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1146,8 +1146,8 @@ public:
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
@@ -1173,7 +1173,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1198,7 +1198,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1222,8 +1222,8 @@ public:
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XTextListener
     void SAL_CALL textChanged( const css::awt::TextEvent& rEvent ) override;
@@ -1249,7 +1249,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1274,7 +1274,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1298,8 +1298,8 @@ public:
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XTextListener
     void SAL_CALL textChanged( const css::awt::TextEvent& rEvent ) override;
@@ -1325,7 +1325,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1350,7 +1350,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1370,8 +1370,8 @@ public:
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XPatternField
     void SAL_CALL setMasks( const OUString& EditMask, const OUString& LiteralMask ) override;
@@ -1384,7 +1384,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1409,7 +1409,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1427,8 +1427,8 @@ public:
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XProgressBar
     void SAL_CALL setForegroundColor( sal_Int32 nColor ) override;
@@ -1440,7 +1440,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1465,7 +1465,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -1481,7 +1481,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

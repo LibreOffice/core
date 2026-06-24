@@ -32,7 +32,7 @@ using namespace com::sun::star;
 
 ResultSetBase::ResultSetBase( uno::Reference< uno::XComponentContext >  xContext,
                               uno::Reference< ucb::XContentProvider >  xProvider,
-                              const uno::Sequence< beans::Property >& seq )
+                              const cpo::uno::Sequence< beans::Property >& seq )
     : m_xContext(std::move( xContext )),
       m_xProvider(std::move( xProvider )),
       m_nRow( -1 ),
@@ -330,7 +330,7 @@ class XPropertySetInfoImpl
 {
 public:
 
-    explicit XPropertySetInfoImpl( const uno::Sequence< beans::Property >& aSeq )
+    explicit XPropertySetInfoImpl( const cpo::uno::Sequence< beans::Property >& aSeq )
         : m_aSeq( aSeq )
     {
     }
@@ -355,7 +355,7 @@ public:
         return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
     }
 
-    uno::Sequence< beans::Property > SAL_CALL getProperties() override
+    cpo::uno::Sequence< beans::Property > SAL_CALL getProperties() override
     {
         return m_aSeq;
     }
@@ -377,7 +377,7 @@ public:
 
 private:
 
-    uno::Sequence< beans::Property > m_aSeq;
+    cpo::uno::Sequence< beans::Property > m_aSeq;
 };
 
 }
@@ -386,7 +386,7 @@ private:
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 ResultSetBase::getPropertySetInfo()
 {
-    uno::Sequence< beans::Property > seq
+    cpo::uno::Sequence< beans::Property > seq
     {
         { u"RowCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY },
         { u"IsRowCountFinal"_ustr, -1, cppu::UnoType<bool>::get(), beans::PropertyAttribute::READONLY }

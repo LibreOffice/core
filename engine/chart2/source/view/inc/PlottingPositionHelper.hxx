@@ -30,7 +30,7 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
@@ -75,7 +75,7 @@ public:
     virtual css::drawing::Position3D transform(
         const css::drawing::Position3D& rSourceValues ) const = 0;
     virtual css::drawing::Position3D transform(
-        const css::uno::Sequence< double >& rSourceValues ) const = 0;
+        const cpo::uno::Sequence< double >& rSourceValues ) const = 0;
 };
 
 
@@ -95,7 +95,7 @@ public:
     const std::vector< ExplicitScaleData >& getScales() const { return m_aScales;}
 
     //better performance for big data
-    inline void   setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
+    inline void   setCoordinateSystemResolution( const cpo::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
     inline bool   isSameForGivenResolution( double fX, double fY, double fZ
                                 , double fX2, double fY2, double fZ2 );
 
@@ -277,7 +277,7 @@ bool PolarPlottingPositionHelper::isMathematicalOrientationRadius() const
 }
 
 //better performance for big data
-void PlottingPositionHelper::setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution )
+void PlottingPositionHelper::setCoordinateSystemResolution( const cpo::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution )
 {
     m_nXResolution = 1000;
     m_nYResolution = 1000;

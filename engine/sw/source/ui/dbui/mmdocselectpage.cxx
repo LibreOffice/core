@@ -68,7 +68,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(weld::Container* pPage, SwMai
     Link<weld::Button&,void> aExchangeDatabaseHdl = LINK(this, SwMailMergeDocSelectPage, ExchangeDatabaseHdl);
     m_xExchangeDatabasePB->connect_clicked(aExchangeDatabaseHdl);
 
-    const uno::Sequence< OUString >& rDocs =
+    const cpo::uno::Sequence< OUString >& rDocs =
                             m_pWizard->GetConfigItem().GetSavedDocuments();
     for(const auto& rDoc : rDocs)
     {

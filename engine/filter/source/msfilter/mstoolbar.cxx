@@ -58,8 +58,8 @@ void CustomToolBarImportHelper::applyIcons()
 {
     for (auto const& concommand : iconcommands)
     {
-        uno::Sequence<OUString> commands { concommand.sCommand };
-        uno::Sequence< uno::Reference< graphic::XGraphic > > images { concommand.image };
+        cpo::uno::Sequence<OUString> commands { concommand.sCommand };
+        cpo::uno::Sequence< uno::Reference< graphic::XGraphic > > images { concommand.image };
         auto pimages = images.getArray();
 
         uno::Reference< ui::XImageManager > xImageManager( getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
@@ -137,7 +137,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         xProps->setPropertyValue(u"UIName"_ustr, cpo::uno::Any( rName ) );
         if ( xPopup.is() )
         {
-            uno::Sequence< beans::PropertyValue > aPopupMenu{
+            cpo::uno::Sequence< beans::PropertyValue > aPopupMenu{
                 comphelper::makePropertyValue(u"CommandURL"_ustr, "vnd.openoffice.org:" + rName),
                 comphelper::makePropertyValue(u"Label"_ustr, rName),
                 comphelper::makePropertyValue(u"ItemDescriptorContainer"_ustr, xMenuDesc),
@@ -318,10 +318,10 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                 OUString sBuiltInCmd = helper.MSOTCIDToOOCommand(  *pSpecificInfo->getBtnFace() );
                 if ( !sBuiltInCmd.isEmpty() )
                 {
-                    uno::Sequence<OUString> sCmds { sBuiltInCmd };
+                    cpo::uno::Sequence<OUString> sCmds { sBuiltInCmd };
                     uno::Reference< ui::XImageManager > xImageManager( helper.getAppCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
                     // 0 = default image size
-                    uno::Sequence< uno::Reference< graphic::XGraphic > > sImages = xImageManager->getImages( 0, sCmds );
+                    cpo::uno::Sequence< uno::Reference< graphic::XGraphic > > sImages = xImageManager->getImages( 0, sCmds );
                     if ( sImages.hasElements() && sImages[0].is() )
                         helper.addIcon( sImages[0], sCommand );
                 }

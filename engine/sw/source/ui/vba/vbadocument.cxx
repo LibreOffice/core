@@ -101,7 +101,7 @@ SwVbaDocument::SwVbaDocument( const uno::Reference< XHelperInterface >& xParent,
     Initialize();
 }
 
-SwVbaDocument::SwVbaDocument( uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
+SwVbaDocument::SwVbaDocument( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
     : SwVbaDocument_BASE( aArgs, xContext ),
     mxTextDocument(dynamic_cast<SwXTextDocument*>(getXSomethingFromArgs< frame::XModel >( aArgs, 1 ).get()))
 {
@@ -585,7 +585,7 @@ SwVbaDocument::SaveAs2000( const cpo::uno::Any& FileName, const cpo::uno::Any& F
     sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
     FileFormat >>= nFileFormat;
 
-    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()) };
+    cpo::uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()) };
 
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
@@ -612,7 +612,7 @@ SwVbaDocument::SavePreviewPngAs( const cpo::uno::Any& FileName )
     OUString sURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
 
-    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr,
+    cpo::uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr,
                                                             u"writer_png_Export"_ustr) };
 
     mxTextDocument->storeToURL( sURL, storeProps );
@@ -648,7 +648,7 @@ SwVbaDocument::getIntrospection(  )
 }
 
 cpo::uno::Any SAL_CALL
-SwVbaDocument::invoke( const OUString& aFunctionName, const uno::Sequence< cpo::uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
+SwVbaDocument::invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& /*aParams*/, cpo::uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
     SAL_INFO("sw.vba", "** will barf " << aFunctionName );
     throw uno::RuntimeException(); // unsupported operation
@@ -738,7 +738,7 @@ SwVbaDocument::GetConnectionPoint()
 // XSinkCaller
 
 void SAL_CALL
-SwVbaDocument::CallSinks( const OUString& Method, uno::Sequence< cpo::uno::Any >& Arguments )
+SwVbaDocument::CallSinks( const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
     for (auto& i : mvSinks)
     {
@@ -775,10 +775,10 @@ SwVbaDocumentOutgoingConnectionPoint::Unadvise( sal_uInt32 Cookie )
     mpDoc->RemoveSink( Cookie );
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaDocument::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Document"_ustr
     };
@@ -787,7 +787,7 @@ SwVbaDocument::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Writer_SwVbaDocument_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SwVbaDocument(args, context));
 }

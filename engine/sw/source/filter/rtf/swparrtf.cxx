@@ -88,7 +88,7 @@ ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& r
         = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), nullptr);
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         { { "InputStream",
             cpo::uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(*m_pStream))) },
           { "InsertMode", cpo::uno::Any(true) },
@@ -129,7 +129,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream& rStream)
     xImporter->setTargetDocument(xDstDoc);
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         { { "InputStream",
             cpo::uno::Any(uno::Reference<io::XStream>(new utl::OStreamWrapper(rStream))) } }));
     bool bRet = true;
@@ -187,7 +187,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportRTF(SvStream& rStream)
     xImporter->setTargetDocument(xModel);
 
     uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "InputStream", cpo::uno::Any(xStream) } }));
 
     bool ret = true;
@@ -237,9 +237,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportRTF(SvStream& rStream)
 
         // ofz#60533 fuzzer learned to use fo:font-size="842pt" which generate timeouts trying
         // to export thousands of pages from minimal input size
-        uno::Sequence<beans::PropertyValue> aFilterData(
+        cpo::uno::Sequence<beans::PropertyValue> aFilterData(
             comphelper::InitPropertySequence({ { "PageRange", cpo::uno::Any(u"1-100"_ustr) } }));
-        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
             { { "FilterName", cpo::uno::Any(u"writer_pdf_Export"_ustr) },
               { "OutputStream", cpo::uno::Any(xOutputStream) },
               { "FilterData", cpo::uno::Any(aFilterData) } }));

@@ -119,7 +119,7 @@ public:
     // css::container::XNameContainer, XNameReplace, XNameAccess
     void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     bool SAL_CALL hasByName( const OUString& aName ) override;
     void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
     void SAL_CALL removeByName( const OUString& Name ) override;
@@ -129,8 +129,8 @@ public:
 
     // css::lang::XMultiServiceFactory
     css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XComponent
     void SAL_CALL dispose(  ) override;
@@ -138,12 +138,12 @@ public:
     // XTabControllerModel
     virtual bool SAL_CALL getGroupControl(  ) override;
     virtual void SAL_CALL setGroupControl( bool GroupControl ) override;
-    virtual void SAL_CALL setControlModels( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels(  ) override;
-    virtual void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) override;
+    virtual void SAL_CALL setControlModels( const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels(  ) override;
+    virtual void SAL_CALL setGroup( const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) override;
     virtual sal_Int32 SAL_CALL getGroupCount(  ) override;
-    virtual void SAL_CALL getGroup( sal_Int32 nGroup, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, OUString& Name ) override;
-    virtual void SAL_CALL getGroupByName( const OUString& Name, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group ) override;
+    virtual void SAL_CALL getGroup( sal_Int32 nGroup, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, OUString& Name ) override;
+    virtual void SAL_CALL getGroupByName( const OUString& Name, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group ) override;
 
     // XChangesNotifier
     virtual void SAL_CALL addChangesListener( const css::uno::Reference< css::util::XChangesListener >& aListener ) override;
@@ -160,7 +160,7 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED(ControlModelContainerBase, ControlModel_Base, "toolkit.ControlModelContainerBase" )
 
     // XInitialization
-    virtual void SAL_CALL initialize (const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize (const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // css::awt::tab::XTabPageModel
     virtual ::sal_Int16 SAL_CALL getTabPageID() override;
@@ -263,7 +263,7 @@ public:
     // to implement this, certainly Dialog does, let's see about others
     virtual void SAL_CALL modified( const css::lang::EventObject& ) override {}
 protected:
-    virtual void ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) override;
+    virtual void ImplModelPropertiesChanged( const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) override;
     virtual void removingControl( const css::uno::Reference< css::awt::XControl >& _rxControl ) override;
     virtual void addingControl( const css::uno::Reference< css::awt::XControl >& _rxControl ) override;
 };

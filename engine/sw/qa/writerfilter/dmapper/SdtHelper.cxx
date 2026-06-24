@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunDropdown)
     uno::Reference<text::XTextContent> xContentControl;
     xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValues> aListItems;
+    cpo::uno::Sequence<beans::PropertyValues> aListItems;
     xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aListItems.getLength());
     comphelper::SequenceAsHashMap aMap0(aListItems[0]);

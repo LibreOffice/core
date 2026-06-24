@@ -435,7 +435,7 @@ public:
     virtual bool    HasChangeRecordProtection() const override;
     virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic) override;
     virtual void    SetProtectionPassword( const OUString &rPassword ) override;
-    virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
+    virtual bool    GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
     void SnapVisArea( tools::Rectangle& rRect ) const;
 
@@ -527,8 +527,8 @@ namespace HelperNotifyChanges
 
     inline void Notify(ScModelObj &rModelObj, const ScRangeList &rChangeRanges,
         const OUString &rType = u"cell-change"_ustr,
-        const css::uno::Sequence< css::beans::PropertyValue >& rProperties =
-            css::uno::Sequence< css::beans::PropertyValue >())
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties =
+            cpo::uno::Sequence< css::beans::PropertyValue >())
     {
         rModelObj.NotifyChanges(rType, rChangeRanges, rProperties);
     }

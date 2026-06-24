@@ -41,7 +41,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const  OUString& aName, const  cpo::uno::Any& aElement ) override;
@@ -53,7 +53,7 @@ public:
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
 
-    virtual uno::Sequence<  OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getElementNames() override;
 
     virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
@@ -79,9 +79,9 @@ OUString SAL_CALL SvxUnoColorTable::getImplementationName()
     return u"com.sun.star.drawing.SvxUnoColorTable"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.ColorTable"_ustr };
+    cpo::uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.ColorTable"_ustr };
     return aSNS;
 }
 
@@ -135,11 +135,11 @@ cpo::uno::Any SAL_CALL SvxUnoColorTable::getByName( const OUString& aName )
     return cpo::uno::Any( static_cast<sal_Int32>(pEntry->GetColor().GetRGBColor()) );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoColorTable::getElementNames()
 {
     const tools::Long nCount = pList.is() ? pList->Count() : 0;
 
-    uno::Sequence< OUString > aSeq( nCount );
+    cpo::uno::Sequence< OUString > aSeq( nCount );
     OUString* pStrings = aSeq.getArray();
 
     for( tools::Long nIndex = 0; nIndex < nCount; nIndex++ )
@@ -173,7 +173,7 @@ bool SAL_CALL SvxUnoColorTable::hasElements()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_drawing_SvxUnoColorTable_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvxUnoColorTable);
 }

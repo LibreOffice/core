@@ -25,10 +25,10 @@
 class SvXMLExport;
 namespace com::sun::star {
     namespace uno { template<typename T> class Reference; }
-    namespace uno { template<typename T> class Sequence; }
     namespace beans { class XPropertySet; struct PropertyValue; }
     namespace container { class XNameAccess; }
 }
+namespace cpo::uno { template <typename > class Sequence; }
 
 
 /** export an XForms model. */
@@ -45,7 +45,7 @@ OUString getXFormsSubmissionName( const css::uno::Reference<css::beans::XPropert
 */
 void XMLOFF_DLLPUBLIC getXFormsSettings(
         const css::uno::Reference< css::container::XNameAccess >& _rXForms,
-              css::uno::Sequence< css::beans::PropertyValue >& _out_rSettings
+              cpo::uno::Sequence< css::beans::PropertyValue >& _out_rSettings
     );
 
 #endif

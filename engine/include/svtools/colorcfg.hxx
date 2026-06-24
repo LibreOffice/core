@@ -21,7 +21,7 @@
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <unotools/options.hxx>
 #include <memory>
 
@@ -283,7 +283,7 @@ public:
     EditableColorConfig();
     ~EditableColorConfig();
 
-    css::uno::Sequence< OUString >  GetSchemeNames() const;
+    cpo::uno::Sequence< OUString >  GetSchemeNames() const;
     void                        DeleteScheme(const OUString& rScheme );
     void                        AddScheme(const OUString& rScheme );
     void                        LoadScheme(const OUString& rScheme );

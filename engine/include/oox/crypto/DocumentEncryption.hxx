@@ -12,7 +12,7 @@
 #define INCLUDED_OOX_CRYPTO_DOCUMENTENCRYPTION_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star {
     namespace io { class XStream; }
@@ -33,13 +33,13 @@ private:
     oox::ole::OleStorage& mrOleStorage;
 
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
-    const css::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
+    const cpo::uno::Sequence< css::beans::NamedValue >& mMediaEncData;
 
 public:
     DocumentEncryption(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         css::uno::Reference< css::io::XStream > const & xDocumentStream,
         oox::ole::OleStorage& rOleStorage,
-        const css::uno::Sequence< css::beans::NamedValue >& rMediaEncData);
+        const cpo::uno::Sequence< css::beans::NamedValue >& rMediaEncData);
 
     bool encrypt();
 

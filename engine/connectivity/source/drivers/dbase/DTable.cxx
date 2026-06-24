@@ -1982,7 +1982,7 @@ void ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
     // if the BlockNo 0 is given, the block will be appended at the end
     std::size_t nSize = 0;
     OString aStr;
-    css::uno::Sequence<sal_Int8> aValue;
+    cpo::uno::Sequence<sal_Int8> aValue;
     sal_uInt8 nHeader[4];
     const bool bBinary = aVariable.getTypeKind() == DataType::LONGVARBINARY && m_aMemoHeader.db_typ == MemoFoxPro;
     if ( bBinary )
@@ -2700,7 +2700,7 @@ bool ODbaseTable::ReadMemo(std::size_t nBlockNo, ORowSetValue& aVariable)
                 } // if ( bIsText )
                 else
                 {
-                    css::uno::Sequence< sal_Int8 > aData(nLength);
+                    cpo::uno::Sequence< sal_Int8 > aData(nLength);
                     m_pMemoStream->ReadBytes(aData.getArray(), nLength);
                     aVariable = aData;
                 }

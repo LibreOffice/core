@@ -113,10 +113,10 @@ protected:
     css::uno::Reference< css::awt::XVclWindowPeer >      ImplGetCompatiblePeer();
     virtual void                                                                ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc );
-    virtual void                                                                ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents );
+    virtual void                                                                ImplModelPropertiesChanged( const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents );
 
     void                                                                        ImplLockPropertyChangeNotification( const OUString& rPropertyName, bool bLock );
-    void                                                                        ImplLockPropertyChangeNotifications( const css::uno::Sequence< OUString >& rPropertyNames, bool bLock );
+    void                                                                        ImplLockPropertyChangeNotifications( const cpo::uno::Sequence< OUString >& rPropertyNames, bool bLock );
 
     void DisposeAccessibleContext(css::uno::Reference<
             css::lang::XComponent> const& xContext);
@@ -138,7 +138,7 @@ public:
     virtual OUString GetComponentServiceName() const;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) override;
@@ -197,7 +197,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
     bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
@@ -221,7 +221,7 @@ public:
 
 protected:
     // css::beans::XPropertiesChangeListener
-    void SAL_CALL propertiesChange( const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) override;
+    void SAL_CALL propertiesChange( const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) override;
 };
 
 

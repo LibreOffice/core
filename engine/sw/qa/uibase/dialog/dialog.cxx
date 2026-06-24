@@ -36,7 +36,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertSection)
     createSwDoc();
 
     // When inserting a section with text:
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(
             u"RegionName"_ustr,
             cpo::uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RNDRfiit6mXBc"_ustr)),

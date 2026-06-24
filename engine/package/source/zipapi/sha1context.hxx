@@ -41,8 +41,8 @@ public:
 
     static css::uno::Reference< css::xml::crypto::XDigestContext > Create();
 
-    virtual void SAL_CALL updateDigest( const css::uno::Sequence< ::sal_Int8 >& aData ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() override;
+    virtual void SAL_CALL updateDigest( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() override;
 
 };
 
@@ -61,8 +61,8 @@ public:
 
     static css::uno::Reference<css::xml::crypto::XDigestContext> Create();
 
-    virtual void SAL_CALL updateDigest(const css::uno::Sequence<::sal_Int8>& rData) override;
-    virtual css::uno::Sequence<::sal_Int8> SAL_CALL finalizeDigestAndDispose() override;
+    virtual void SAL_CALL updateDigest(const cpo::uno::Sequence<::sal_Int8>& rData) override;
+    virtual cpo::uno::Sequence<::sal_Int8> SAL_CALL finalizeDigestAndDispose() override;
 
 };
 

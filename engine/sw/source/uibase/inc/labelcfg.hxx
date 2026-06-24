@@ -44,7 +44,7 @@ public:
     SwLabelConfig();
     virtual ~SwLabelConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
     void    FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr);
     const std::vector<OUString>& GetManufacturers() const {return m_aManufacturers;}

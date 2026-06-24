@@ -163,7 +163,7 @@ public:
     FilterPropertiesInfo_Impl();
 
     void AddProperty(const OUString& rApiName, const sal_uInt32 nIndex);
-    const uno::Sequence<OUString>& GetApiNames();
+    const cpo::uno::Sequence<OUString>& GetApiNames();
     void FillPropertyStateArray(
             std::vector< XMLPropertyState >& rPropStates,
             const Reference< XPropertySet >& xPropSet,
@@ -185,7 +185,7 @@ void FilterPropertiesInfo_Impl::AddProperty(
     mxApiNames.reset();
 }
 
-const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
+const cpo::uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 {
     if( !mxApiNames )
     {
@@ -251,7 +251,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
 {
     XMLPropertyStates_Impl aPropStates;
 
-    const uno::Sequence<OUString>& rApiNames = GetApiNames();
+    const cpo::uno::Sequence<OUString>& rApiNames = GetApiNames();
 
     Reference < XTolerantMultiPropertySet > xTolPropSet( rPropSet, UNO_QUERY );
     if (xTolPropSet.is())
@@ -1013,7 +1013,7 @@ void SvXMLExportPropertyMapper::_exportXML(
             std::unique_ptr<SvXMLNamespaceMap> pNewNamespaceMap;
             const SvXMLNamespaceMap *pNamespaceMap = &rNamespaceMap;
 
-            const uno::Sequence< OUString > aAttribNames( xAttrContainer->getElementNames() );
+            const cpo::uno::Sequence< OUString > aAttribNames( xAttrContainer->getElementNames() );
 
             xml::AttributeData aData;
             for( const auto& rAttribName : aAttribNames )

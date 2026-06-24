@@ -60,10 +60,10 @@ public:
     virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) = 0;
 
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) = 0;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) = 0;
 
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() = 0;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() = 0;
 
     virtual void dispose() = 0;
 

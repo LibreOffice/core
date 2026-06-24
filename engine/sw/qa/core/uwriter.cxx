@@ -357,7 +357,7 @@ static SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
     sw::mark::Fieldmark *pFieldmark =
             pMarksAccess->makeNoTextFieldBookmark(aPaM, SwMarkName(u"test"_ustr), ODF_FORMDROPDOWN);
     CPPUNIT_ASSERT(pFieldmark);
-    uno::Sequence< OUString > vListEntries { u"BBBBB"_ustr };
+    cpo::uno::Sequence< OUString > vListEntries { u"BBBBB"_ustr };
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
     (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= sal_Int32(0);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, u"CCCCC"_ustr);

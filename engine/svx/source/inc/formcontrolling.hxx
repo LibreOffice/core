@@ -178,7 +178,7 @@ namespace svx
         virtual ~FormControllerHelper() override;
 
         // XFeatureInvalidation
-        virtual void SAL_CALL invalidateFeatures( const css::uno::Sequence< ::sal_Int16 >& Features ) override;
+        virtual void SAL_CALL invalidateFeatures( const cpo::uno::Sequence< ::sal_Int16 >& Features ) override;
         virtual void SAL_CALL invalidateAllFeatures() override;
 
         // XSQLErrorListener
@@ -192,11 +192,11 @@ namespace svx
         bool    impl_operateForm_nothrow(
                     const FormOperation _eWhat,
                     const sal_Int16 _nFeature,  /* ignore for COMMIT_* */
-                    const css::uno::Sequence< css::beans::NamedValue >& _rArguments /* ignore except for EXECUTE_ARGS */
+                    const cpo::uno::Sequence< css::beans::NamedValue >& _rArguments /* ignore except for EXECUTE_ARGS */
                 ) const;
         bool    impl_operateForm_nothrow( const FormOperation _eWhat ) const
         {
-            return impl_operateForm_nothrow( _eWhat, 0, css::uno::Sequence< css::beans::NamedValue >() );
+            return impl_operateForm_nothrow( _eWhat, 0, cpo::uno::Sequence< css::beans::NamedValue >() );
         }
 
     private:

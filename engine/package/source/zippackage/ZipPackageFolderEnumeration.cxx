@@ -50,9 +50,9 @@ OUString ZipPackageFolderEnumeration::getImplementationName()
     return u"ZipPackageFolderEnumeration"_ustr;
 }
 
-uno::Sequence<OUString> ZipPackageFolderEnumeration::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ZipPackageFolderEnumeration::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aNames{ u"com.sun.star.packages.PackageFolderEnumeration"_ustr };
+    cpo::uno::Sequence<OUString> aNames{ u"com.sun.star.packages.PackageFolderEnumeration"_ustr };
     return aNames;
 }
 

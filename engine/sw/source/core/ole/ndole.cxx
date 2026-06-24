@@ -79,14 +79,14 @@ class SwOLELRUCache
 private:
     std::deque<SwOLEObj *> m_OleObjects;
     sal_Int32 m_nLRU_InitSize;
-    static uno::Sequence< OUString > GetPropertyNames();
+    static cpo::uno::Sequence< OUString > GetPropertyNames();
 
     virtual void ImplCommit() override;
 
 public:
     SwOLELRUCache();
 
-    virtual void Notify( const uno::Sequence<
+    virtual void Notify( const cpo::uno::Sequence<
                                 OUString>& aPropertyNames ) override;
     void Load();
 
@@ -252,7 +252,7 @@ public:
             // let the IFrameObject reload the link
             try
             {
-                xPersObj->reload(uno::Sequence<beans::PropertyValue>(), uno::Sequence<beans::PropertyValue>());
+                xPersObj->reload(cpo::uno::Sequence<beans::PropertyValue>(), cpo::uno::Sequence<beans::PropertyValue>());
             }
             catch (const uno::Exception&)
             {
@@ -602,9 +602,9 @@ bool SwOLENode::UpdateLinkURL_Impl()
                         xObj->changeState( embed::EmbedStates::LOADED );
 
                     // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
-                    uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                    cpo::uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
                         u"URL"_ustr, aNewLinkURL) };
-                    xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
+                    xPersObj->reload( aArgs, cpo::uno::Sequence< beans::PropertyValue >() );
 
                     maLinkURL = aNewLinkURL;
                     bResult = true;
@@ -719,7 +719,7 @@ void SwOLENode::CheckFileLink_Impl()
 }
 
 void SwOLENode::SetDeferredLink(const OUString& rLinkURL,
-                                const uno::Sequence<beans::PropertyValue>& rMediaDescriptor)
+                                const cpo::uno::Sequence<beans::PropertyValue>& rMediaDescriptor)
 {
     if (mpObjectLink)
         return;
@@ -738,7 +738,7 @@ bool SwOLENode::CompleteDeferredLink()
         return false;
 
     // Take ownership of the descriptor and clear it so we don't retry
-    uno::Sequence<beans::PropertyValue> aMediaDescriptor;
+    cpo::uno::Sequence<beans::PropertyValue> aMediaDescriptor;
     std::swap(aMediaDescriptor, maDeferredMediaDescriptor);
 
     try
@@ -750,7 +750,7 @@ bool SwOLENode::CompleteDeferredLink()
             embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
         uno::Reference<embed::XEmbeddedObject> xObj(xFactory->createInstanceLink(
-                xStorage, u"DummyName"_ustr, aMediaDescriptor, uno::Sequence<beans::PropertyValue>()),
+                xStorage, u"DummyName"_ustr, aMediaDescriptor, cpo::uno::Sequence<beans::PropertyValue>()),
             uno::UNO_QUERY);
 
         if (!xObj.is())
@@ -1364,13 +1364,13 @@ SwOLELRUCache::SwOLELRUCache()
     Load();
 }
 
-uno::Sequence< OUString > SwOLELRUCache::GetPropertyNames()
+cpo::uno::Sequence< OUString > SwOLELRUCache::GetPropertyNames()
 {
     Sequence< OUString > aNames { u"Writer/OLE_Objects"_ustr };
     return aNames;
 }
 
-void SwOLELRUCache::Notify( const uno::Sequence< OUString>&  )
+void SwOLELRUCache::Notify( const cpo::uno::Sequence< OUString>&  )
 {
     Load();
 }

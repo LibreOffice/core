@@ -754,7 +754,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
     PropertyMapVector2::const_iterator aLastRowIterator = m_aCellProperties.end() - 1;
     sal_Int32 nRow = 0;
 
-    css::uno::Sequence<css::beans::PropertyValues>* pCellProperties = aCellProperties.getArray();
+    cpo::uno::Sequence<css::beans::PropertyValues>* pCellProperties = aCellProperties.getArray();
     PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
     while( aRowOfCellsIterator != aRowOfCellsIteratorEnd )
     {
@@ -1133,13 +1133,13 @@ static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRo
     return true;
 }
 
-css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTableGetRowProperties()
+cpo::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTableGetRowProperties()
 {
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("getRowProperties");
 #endif
 
-    css::uno::Sequence<css::beans::PropertyValues> aRowProperties( m_aRowProperties.size() );
+    cpo::uno::Sequence<css::beans::PropertyValues> aRowProperties( m_aRowProperties.size() );
     auto aRowPropertiesRange = asNonConstRange(aRowProperties);
     sal_Int32 nRow = 0;
     for( const auto& rRow : m_aRowProperties )
@@ -1349,7 +1349,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
         uno::Reference<beans::XPropertySetInfo> xPropSetInfo(
             rParaProp.m_rPropertySet->getPropertySetInfo(), uno::UNO_SET_THROW);
         auto props = xPropSetInfo->getProperties();
-        uno::Sequence<OUString> propNames(props.getLength());
+        cpo::uno::Sequence<OUString> propNames(props.getLength());
         std::transform(props.begin(), props.end(), propNames.getArray(),
                        [](const beans::Property& prop) { return prop.Name; });
         uno::Reference<beans::XTolerantMultiPropertySet> xTolPara(rParaProp.m_rPropertySet,
@@ -1391,7 +1391,7 @@ static void lcl_convertFormulaRanges(const rtl::Reference<SwXTextTable> & xTable
             try
             {
                 rtl::Reference<SwXCell> xCellProperties = xTable->getSwCellByPosition(nCol, nRow);
-                uno::Sequence<beans::PropertyValue> aCellGrabBag;
+                cpo::uno::Sequence<beans::PropertyValue> aCellGrabBag;
                 xCellProperties->getPropertyValue(u"CellInteropGrabBag"_ustr) >>= aCellGrabBag;
                 OUString sFormula;
                 bool bReplace = false;
@@ -1536,12 +1536,12 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     bool bFloating = !aFrameProperties.empty() || bConvertToFloating;
 
     aTableInfo.pTableStyle = endTableGetTableStyle(aTableInfo, aFrameProperties, bConvertToFloating);
-    //  expands to uno::Sequence< Sequence< beans::PropertyValues > >
+    //  expands to cpo::uno::Sequence< Sequence< beans::PropertyValues > >
 
     std::vector<HorizontallyMergedCell> aMerges;
     CellPropertyValuesSeq_t aCellProperties = endTableGetCellProperties(aTableInfo, aMerges);
 
-    css::uno::Sequence<css::beans::PropertyValues> aRowProperties = endTableGetRowProperties();
+    cpo::uno::Sequence<css::beans::PropertyValues> aRowProperties = endTableGetRowProperties();
 
 #ifdef DBG_UTIL
     lcl_DumpPropertyValueSeq(aRowProperties);
@@ -1620,10 +1620,10 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         if (bFloating && m_aTableRanges[0].hasElements() && m_aTableRanges[0][0].hasElements())
         {
             xStart = m_aTableRanges[0][0][0];
-            uno::Sequence< uno::Sequence< uno::Reference<text::XTextRange> > >& rLastRow = m_aTableRanges[m_aTableRanges.size() - 1];
+            cpo::uno::Sequence< cpo::uno::Sequence< uno::Reference<text::XTextRange> > >& rLastRow = m_aTableRanges[m_aTableRanges.size() - 1];
             if (rLastRow.hasElements())
             {
-                const uno::Sequence< uno::Reference<text::XTextRange> >& rLastCell = rLastRow[rLastRow.getLength() - 1];
+                const cpo::uno::Sequence< uno::Reference<text::XTextRange> >& rLastCell = rLastRow[rLastRow.getLength() - 1];
                 xEnd = rLastCell[1];
             }
         }

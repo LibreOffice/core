@@ -481,7 +481,7 @@ awt::Size Direction3DToAWTSize( const drawing::Direction3D& rDirection )
     return aRet;
 }
 
-drawing::Position3D SequenceToPosition3D( const uno::Sequence< double >& rSeq )
+drawing::Position3D SequenceToPosition3D( const cpo::uno::Sequence< double >& rSeq )
 {
     OSL_ENSURE(rSeq.getLength()==3,"The sequence needs to have length 3 for conversion into vector");
 
@@ -494,10 +494,10 @@ drawing::Position3D SequenceToPosition3D( const uno::Sequence< double >& rSeq )
 
 using namespace ::com::sun::star::chart2;
 
-uno::Sequence< double > DataSequenceToDoubleSequence(
+cpo::uno::Sequence< double > DataSequenceToDoubleSequence(
     const uno::Reference< data::XDataSequence >& xDataSequence )
 {
-    uno::Sequence< double > aResult;
+    cpo::uno::Sequence< double > aResult;
     OSL_ASSERT( xDataSequence.is());
     if(!xDataSequence.is())
         return aResult;
@@ -509,7 +509,7 @@ uno::Sequence< double > DataSequenceToDoubleSequence(
     }
     else
     {
-        uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
+        cpo::uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
         aResult.realloc(aValues.getLength());
         auto pResult = aResult.getArray();
         for(sal_Int32 nN=aValues.getLength();nN--;)
@@ -522,10 +522,10 @@ uno::Sequence< double > DataSequenceToDoubleSequence(
     return aResult;
 }
 
-uno::Sequence< OUString > DataSequenceToStringSequence(
+cpo::uno::Sequence< OUString > DataSequenceToStringSequence(
     const uno::Reference< data::XDataSequence >& xDataSequence )
 {
-    uno::Sequence< OUString > aResult;
+    cpo::uno::Sequence< OUString > aResult;
     if(!xDataSequence.is())
         return aResult;
 
@@ -536,7 +536,7 @@ uno::Sequence< OUString > DataSequenceToStringSequence(
     }
     else
     {
-        uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
+        cpo::uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
         aResult.realloc(aValues.getLength());
         auto pResult = aResult.getArray();
 

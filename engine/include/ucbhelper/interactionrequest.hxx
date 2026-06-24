@@ -86,12 +86,12 @@ public:
       * @param rContinuations contains the possible continuations.
       */
     void setContinuations(
-        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > & rContinuations );
+        const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > & rContinuations );
 
     // XInteractionRequest
     virtual cpo::uno::Any SAL_CALL
     getRequest() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
     getContinuations() override;
 
     // Non-interface methods.
@@ -236,9 +236,9 @@ using InteractionSupplyAuthentication_BASE = cppu::ImplInheritanceHelper<Interac
 class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication final :
                   public InteractionSupplyAuthentication_BASE
 {
-    css::uno::Sequence< css::ucb::RememberAuthentication >
+    cpo::uno::Sequence< css::ucb::RememberAuthentication >
                   m_aRememberPasswordModes;
-    css::uno::Sequence< css::ucb::RememberAuthentication >
+    cpo::uno::Sequence< css::ucb::RememberAuthentication >
                   m_aRememberAccountModes;
     OUString m_aRealm;
     OUString m_aUserName;
@@ -292,9 +292,9 @@ public:
                     bool bCanSetUserName,
                     bool bCanSetPassword,
                     bool bCanSetAccount,
-                    const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberPasswordModes,
+                    const cpo::uno::Sequence< css::ucb::RememberAuthentication > & rRememberPasswordModes,
                     const css::ucb::RememberAuthentication eDefaultRememberPasswordMode,
-                    const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
+                    const cpo::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
                     const css::ucb::RememberAuthentication  eDefaultRememberAccountMode,
                     bool bCanUseSystemCredentials );
 
@@ -317,7 +317,7 @@ public:
     virtual void SAL_CALL
     setPassword( const OUString& Password ) override;
 
-    virtual css::uno::Sequence<
+    virtual cpo::uno::Sequence<
                 css::ucb::RememberAuthentication > SAL_CALL
     getRememberPasswordModes(
             css::ucb::RememberAuthentication& Default ) override;
@@ -329,7 +329,7 @@ public:
     virtual void SAL_CALL
     setAccount( const OUString& Account ) override;
 
-    virtual css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL
+    virtual cpo::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL
     getRememberAccountModes(
             css::ucb::RememberAuthentication& Default ) override;
     virtual void SAL_CALL
@@ -385,9 +385,9 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
     bool bCanSetUserName,
     bool bCanSetPassword,
     bool bCanSetAccount,
-    const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberPasswordModes,
+    const cpo::uno::Sequence< css::ucb::RememberAuthentication > & rRememberPasswordModes,
     const css::ucb::RememberAuthentication eDefaultRememberPasswordMode,
-    const css::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
+    const cpo::uno::Sequence< css::ucb::RememberAuthentication > & rRememberAccountModes,
     const css::ucb::RememberAuthentication eDefaultRememberAccountMode,
     bool bCanUseSystemCredentials )
 : InteractionSupplyAuthentication_BASE( pRequest ),

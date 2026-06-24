@@ -32,7 +32,7 @@
 
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::PropertyValue;
 

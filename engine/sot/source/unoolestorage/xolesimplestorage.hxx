@@ -67,7 +67,7 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
 public:
 
     OLESimpleStorage(css::uno::Reference<css::uno::XComponentContext> xContext,
-            css::uno::Sequence<cpo::uno::Any> const &arguments);
+            cpo::uno::Sequence<cpo::uno::Any> const &arguments);
 
     virtual ~OLESimpleStorage() override;
 
@@ -81,7 +81,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -107,11 +107,11 @@ public:
 
     //  XClassifiedObject
 
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getClassID() override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getClassID() override;
 
     virtual OUString SAL_CALL getClassName() override;
 
-    virtual void SAL_CALL setClassInfo( const css::uno::Sequence< ::sal_Int8 >& aClassID,
+    virtual void SAL_CALL setClassInfo( const cpo::uno::Sequence< ::sal_Int8 >& aClassID,
                                         const OUString& sClassName ) override;
 
     //  XServiceInfo
@@ -120,7 +120,7 @@ public:
 
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif

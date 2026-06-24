@@ -664,9 +664,9 @@ bool SwContentControlListItem::operator==(const SwContentControlListItem& rOther
 void SwContentControlListItem::ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
                                           cpo::uno::Any& rVal)
 {
-    uno::Sequence<uno::Sequence<beans::PropertyValue>> aRet(rItems.size());
+    cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aRet(rItems.size());
 
-    uno::Sequence<beans::PropertyValue>* pRet = aRet.getArray();
+    cpo::uno::Sequence<beans::PropertyValue>* pRet = aRet.getArray();
     for (size_t i = 0; i < rItems.size(); ++i)
     {
         const SwContentControlListItem& rItem = rItems[i];
@@ -684,7 +684,7 @@ SwContentControlListItem::ItemsFromAny(const cpo::uno::Any& rVal)
 {
     std::vector<SwContentControlListItem> aRet;
 
-    uno::Sequence<uno::Sequence<beans::PropertyValue>> aSequence;
+    cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aSequence;
     rVal >>= aSequence;
     for (const auto& rItem : aSequence)
     {

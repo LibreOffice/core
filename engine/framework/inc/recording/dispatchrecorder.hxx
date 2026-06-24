@@ -57,12 +57,12 @@ class DispatchRecorder final
         /* interface XServiceInfo */
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XDispatchRecorder
         virtual void SAL_CALL            startRecording         ( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
-        virtual void SAL_CALL            recordDispatch         ( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
-        virtual void SAL_CALL            recordDispatchAsComment( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+        virtual void SAL_CALL            recordDispatch         ( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+        virtual void SAL_CALL            recordDispatchAsComment( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
         virtual void SAL_CALL            endRecording           () override;
         virtual OUString SAL_CALL getRecordedMacro       () override;
 
@@ -79,7 +79,7 @@ class DispatchRecorder final
     // private functions
     private:
         void implts_recordMacro( std::u16string_view aURL,
-                                          const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                                          const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                                 bool bAsComment, OUStringBuffer& );
         void AppendToBuffer( const cpo::uno::Any& aValue, OUStringBuffer& aArgumentBuffer );
 

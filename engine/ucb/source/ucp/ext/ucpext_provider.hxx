@@ -37,7 +37,7 @@ namespace ucb::ucp::ext
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XContentProvider
         virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;

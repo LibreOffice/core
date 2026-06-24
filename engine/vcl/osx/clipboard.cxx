@@ -64,7 +64,7 @@ static OUString clipboard_getImplementationName()
   return "com.sun.star.datatransfer.clipboard.AquaClipboard";
 }
 
-static uno::Sequence<OUString> clipboard_getSupportedServiceNames()
+static cpo::uno::Sequence<OUString> clipboard_getSupportedServiceNames()
 {
   return { OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") };
 }
@@ -313,7 +313,7 @@ void SAL_CALL AquaClipboard::flushClipboard()
 {
     if (mXClipboardContent.is())
     {
-        uno::Sequence<datatransfer::DataFlavor> flavorList = mXClipboardContent->getTransferDataFlavors();
+        cpo::uno::Sequence<datatransfer::DataFlavor> flavorList = mXClipboardContent->getTransferDataFlavors();
         sal_uInt32 nFlavors = flavorList.getLength();
         bool bInternal(false);
 
@@ -349,7 +349,7 @@ bool SAL_CALL AquaClipboard::supportsService(OUString const & rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL AquaClipboard::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL AquaClipboard::getSupportedServiceNames()
 {
     return clipboard_getSupportedServiceNames();
 }

@@ -30,7 +30,7 @@ using namespace com::sun::star;
     sString = (ServiceName);                                        \
     xSingleFactory = ::cppu::createSingleFactory(xServiceFactory,   \
                         OUString(), ImplName##_NewInstance_Impl,    \
-                        uno::Sequence< OUString>(&sString, 1));     \
+                        cpo::uno::Sequence< OUString>(&sString, 1));     \
     if (xSingleFactory.is())                                        \
         xSet->insert(cpo::uno::Any(xSingleFactory));
 

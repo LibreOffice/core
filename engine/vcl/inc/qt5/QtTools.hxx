@@ -41,7 +41,7 @@
 #include <vcl/vclenum.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include <memory>
@@ -103,7 +103,7 @@ Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
 sal_Int8 toVclDropActions(Qt::DropActions dragOperation);
 sal_Int8 toVclDropAction(Qt::DropAction dragOperation);
 
-inline QList<int> toQList(const css::uno::Sequence<sal_Int32>& aSequence)
+inline QList<int> toQList(const cpo::uno::Sequence<sal_Int32>& aSequence)
 {
     QList<int> aList;
     for (sal_Int32 i : aSequence)

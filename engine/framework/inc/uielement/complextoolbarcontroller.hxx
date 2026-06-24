@@ -62,7 +62,7 @@ class ComplexToolbarController : public svt::ToolboxController
         {
             css::uno::Reference< css::frame::XDispatch >     xDispatch;
             css::util::URL                                   aTargetURL;
-            css::uno::Sequence< css::beans::PropertyValue >  aArgs;
+            cpo::uno::Sequence< css::beans::PropertyValue >  aArgs;
         };
 
         struct NotifyInfo
@@ -70,17 +70,17 @@ class ComplexToolbarController : public svt::ToolboxController
             OUString                                                        aEventName;
             css::uno::Reference< css::frame::XControlNotificationListener > xNotifyListener;
             css::util::URL                                                  aSourceURL;
-            css::uno::Sequence< css::beans::NamedValue >                    aInfoSeq;
+            cpo::uno::Sequence< css::beans::NamedValue >                    aInfoSeq;
         };
 
     protected:
         css::uno::Reference< css::frame::XDispatch > getDispatchFromCommand( const OUString& aCommand ) const;
         void addNotifyInfo( const OUString&                                                        aEventName,
                             const css::uno::Reference< css::frame::XDispatch >& xDispatch,
-                            const css::uno::Sequence< css::beans::NamedValue >& rInfo );
+                            const cpo::uno::Sequence< css::beans::NamedValue >& rInfo );
 
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) = 0;
-        virtual css::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const;
         const css::util::URL& getInitializedURL();
         void notifyFocusGet();
         void notifyFocusLost();

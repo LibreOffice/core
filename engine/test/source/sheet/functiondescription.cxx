@@ -23,7 +23,7 @@ namespace apitest
 {
 void FunctionDescription::testFunctionDescriptionProperties()
 {
-    const uno::Sequence<beans::PropertyValue> aFunctionDescription(init());
+    const cpo::uno::Sequence<beans::PropertyValue> aFunctionDescription(init());
 
     std::vector<OUString> names;
     // Only test the get/read operation of the values, because set/write operation doesn't
@@ -58,7 +58,7 @@ void FunctionDescription::testFunctionDescriptionProperties()
         else if (value.Name == "Arguments")
         {
             names.push_back(value.Name);
-            uno::Sequence<sheet::FunctionArgument> sArguments;
+            cpo::uno::Sequence<sheet::FunctionArgument> sArguments;
             CPPUNIT_ASSERT(value.Value >>= sArguments);
         }
         else

@@ -190,7 +190,7 @@ void ScMyTables::DeleteTable()
     if (!(rImport.GetDocument() && maProtectionData.mbProtected))
         return;
 
-    uno::Sequence<sal_Int8> aHash;
+    cpo::uno::Sequence<sal_Int8> aHash;
     ::comphelper::Base64::decode(aHash, maProtectionData.maPassword);
 
     ScTableProtection aProtect;

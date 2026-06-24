@@ -777,7 +777,7 @@ void SwView::Execute(SfxRequest &rReq)
                     {
                         // dummy RedlinePassword from OOXML import: get real password info
                         // from the grab-bag to verify the password
-                        const css::uno::Sequence< css::beans::PropertyValue > aDocumentProtection =
+                        const cpo::uno::Sequence< css::beans::PropertyValue > aDocumentProtection =
                             static_cast<SfxObjectShell*>(GetDocShell())->
                                                    GetDocumentProtectionFromGrabBag();
 

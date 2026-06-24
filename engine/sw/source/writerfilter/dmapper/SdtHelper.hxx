@@ -15,7 +15,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <rtl/ustrbuf.hxx>
@@ -118,7 +118,7 @@ class SdtHelper final : public virtual SvRefBase
     /// Create and append the drawing::XControlShape, containing the various models.
     void createControlShape(css::awt::Size aSize,
                             css::uno::Reference<css::awt::XControlModel> const& xControlModel,
-                            const css::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
+                            const cpo::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
 
     void loadPropertiesXMLs();
 
@@ -205,7 +205,7 @@ public:
     void createPlainTextControl();
 
     void appendToInteropGrabBag(const css::beans::PropertyValue& rValue);
-    css::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();
+    cpo::uno::Sequence<css::beans::PropertyValue> getInteropGrabBagAndClear();
     bool isInteropGrabBagEmpty() const;
     bool containedInInteropGrabBag(const OUString& rValueName);
     sal_Int32 getInteropGrabBagSize() const;

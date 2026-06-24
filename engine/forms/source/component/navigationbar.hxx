@@ -72,7 +72,7 @@ namespace frm
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
@@ -93,7 +93,7 @@ namespace frm
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const override;
 
         // prevent method hiding

@@ -31,7 +31,7 @@ public:
     virtual ~VPolarCoordinateSystem() override;
 
     //better performance for big data
-    virtual css::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const css::awt::Size& rPageSize
+    virtual cpo::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const css::awt::Size& rPageSize
                                     , const css::awt::Size& rPageResolution ) override;
 
     virtual void createVAxisList(

@@ -140,7 +140,7 @@ void FSStorage::CopyContentToStorage_Impl(ucbhelper::Content& rContent,
 {
     // get list of contents of the Content
     // create cursor for access to children
-    uno::Sequence< OUString > aProps( 2 );
+    cpo::uno::Sequence< OUString > aProps( 2 );
     OUString* pProps = aProps.getArray();
     pProps[0] = u"TargetURL"_ustr;
     pProps[1] = u"IsFolder"_ustr;
@@ -225,9 +225,9 @@ void SAL_CALL FSStorage::release() noexcept
 
 //  XTypeProvider
 
-uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
 {
-    static const uno::Sequence<uno::Type> aTypes {
+    static const cpo::uno::Sequence<uno::Type> aTypes {
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<embed::XStorage>::get(),
         cppu::UnoType<embed::XHierarchicalStorageAccess>::get(),
@@ -235,9 +235,9 @@ uno::Sequence< uno::Type > SAL_CALL FSStorage::getTypes()
     return aTypes;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL FSStorage::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL FSStorage::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 //  XStorage
@@ -790,15 +790,15 @@ cpo::uno::Any SAL_CALL FSStorage::getByName( const OUString& aName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
 {
     std::unique_lock aGuard( m_aMutex );
 
-    uno::Sequence< OUString > aResult;
+    cpo::uno::Sequence< OUString > aResult;
 
     try
     {
-        uno::Sequence<OUString> aProps { u"Title"_ustr };
+        cpo::uno::Sequence<OUString> aProps { u"Title"_ustr };
 
         sal_Int32 nSize = 0;
         uno::Reference<sdbc::XResultSet> xResultSet
@@ -867,7 +867,7 @@ bool SAL_CALL FSStorage::hasElements()
 
     try
     {
-        uno::Sequence<OUString> aProps { u"TargetURL"_ustr };
+        cpo::uno::Sequence<OUString> aProps { u"TargetURL"_ustr };
 
         uno::Reference<sdbc::XResultSet> xResultSet
             = m_aContent.createCursor(aProps, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS);

@@ -132,7 +132,7 @@ void ConvertAttrCharToGen(SfxItemSet& rSet, bool bIsPara)
     std::map<OUString, cpo::uno::Any> aGrabBagMap;
     aGrabBagMap[u"DialogUseCharAttr"_ustr] <<= true;
     // Store initial ranges to allow restoring later
-    uno::Sequence<sal_uInt16> aOrigRanges(rSet.GetRanges().size() * 2 + 1);
+    cpo::uno::Sequence<sal_uInt16> aOrigRanges(rSet.GetRanges().size() * 2 + 1);
     int i = 0;
     for (const auto& rPair : rSet.GetRanges())
     {
@@ -177,7 +177,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, bool bIs
         auto aIterator = rMap.find(u"OrigItemSetRanges"_ustr);
         if (aIterator != rMap.end())
         {
-            uno::Sequence<sal_uInt16> aOrigRanges;
+            cpo::uno::Sequence<sal_uInt16> aOrigRanges;
             if ( aIterator->second >>= aOrigRanges )
             {
                 assert(aOrigRanges.getLength() % 2 == 1);
@@ -971,7 +971,7 @@ bool ExecuteMenuCommand(const css::uno::Reference<css::awt::XPopupMenu>& rMenu, 
         uno::Reference< frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
         if( xDisp.is() )
         {
-            uno::Sequence< beans::PropertyValue > aSeq;
+            cpo::uno::Sequence< beans::PropertyValue > aSeq;
             xDisp->dispatch( aURL, aSeq );
             bRet = true;
         }

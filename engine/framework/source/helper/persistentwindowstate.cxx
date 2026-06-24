@@ -49,7 +49,7 @@ PersistentWindowState::~PersistentWindowState()
 {
 }
 
-void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< cpo::uno::Any >& lArguments)
+void SAL_CALL PersistentWindowState::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;
@@ -306,7 +306,7 @@ OUString PersistentWindowState::implst_getWindowStateFromModel(const css::uno::R
         css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
         if (xIndexAccess && xIndexAccess->getCount() > 0)
         {
-            css::uno::Sequence<css::beans::PropertyValue> aSeq;
+            cpo::uno::Sequence<css::beans::PropertyValue> aSeq;
             if (xIndexAccess->getByIndex(0) >>= aSeq)
             {
                 for (const auto& rProp : aSeq)

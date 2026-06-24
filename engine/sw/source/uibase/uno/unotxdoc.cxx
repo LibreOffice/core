@@ -586,7 +586,7 @@ void SwXTextDocument::close( bool bDeliverOwnership )
 {
     if(m_pDocShell)
     {
-        uno::Sequence< cpo::uno::Any > aArgs;
+        cpo::uno::Sequence< cpo::uno::Any > aArgs;
         m_pDocShell->CallAutomationDocumentEventSinks( u"Close"_ustr, aArgs );
     }
     SolarMutexGuard aGuard;
@@ -1425,7 +1425,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.drawing.DrawPages"_ustr };
     }
@@ -1615,7 +1615,7 @@ void    SwXTextDocument::InitNewDoc()
 
 css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     OUString const & rServiceName,
-    css::uno::Sequence<cpo::uno::Any> const * arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const * arguments)
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -2193,7 +2193,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
 
         // Sequence of nodes, each of them represented by three-element sequence:
         // [ index, styleIntPtr, list_id ]
-        std::vector<css::uno::Sequence<cpo::uno::Any>> nodes;
+        std::vector<cpo::uno::Sequence<cpo::uno::Any>> nodes;
 
         const SwDoc& rDoc = GetDocOrThrow();
         for (const SwNumRule* pNumRule : rDoc.GetNumRuleTable())
@@ -2532,7 +2532,7 @@ static VclPtr< OutputDevice > lcl_GetOutputDevice( const SwPrintUIOptions &rPrin
 }
 
 static bool lcl_SeqHasProperty(
-    const uno::Sequence< beans::PropertyValue >& rOptions,
+    const cpo::uno::Sequence< beans::PropertyValue >& rOptions,
     const char *pPropName )
 {
     return std::any_of(rOptions.begin(), rOptions.end(),
@@ -2541,7 +2541,7 @@ static bool lcl_SeqHasProperty(
 }
 
 static bool lcl_GetBoolProperty(
-    const uno::Sequence< beans::PropertyValue >& rOptions,
+    const cpo::uno::Sequence< beans::PropertyValue >& rOptions,
     const char *pPropName )
 {
     bool bRes = false;
@@ -2555,7 +2555,7 @@ static bool lcl_GetBoolProperty(
 
 SfxViewShell * SwXTextDocument::GetRenderView(
     bool &rbIsSwSrcView,
-    const uno::Sequence< beans::PropertyValue >& rOptions,
+    const cpo::uno::Sequence< beans::PropertyValue >& rOptions,
     bool bIsPDFExport )
 {
     // get view shell to use
@@ -2675,7 +2675,7 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
 
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const cpo::uno::Any& rSelection,
-        const uno::Sequence< beans::PropertyValue >& rxOptions )
+        const cpo::uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -2848,10 +2848,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     return nRet;
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         sal_Int32 nRenderer,
         const cpo::uno::Any& rSelection,
-        const uno::Sequence< beans::PropertyValue >& rxOptions )
+        const cpo::uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -2877,7 +2877,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
     if (!pDoc || !pView)
-        return uno::Sequence< beans::PropertyValue >();
+        return cpo::uno::Sequence< beans::PropertyValue >();
 
     // due to #110067# (document page count changes sometimes during
     // PDF export/printing) we can not check for the upper bound properly.
@@ -2896,9 +2896,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     // since SwSrcView::PrintSource is a poor implementation to get the number of pages to print
     // we omit checking of the upper bound in this case.
     if (!bIsSwSrcView && m_pRenderData && nRenderer > nMaxRenderer)
-        return uno::Sequence< beans::PropertyValue >();
+        return cpo::uno::Sequence< beans::PropertyValue >();
 
-    uno::Sequence< beans::PropertyValue > aRenderer;
+    cpo::uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
         // #i114210#
@@ -3161,7 +3161,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
 void SAL_CALL SwXTextDocument::render(
         sal_Int32 nRenderer,
         const cpo::uno::Any& rSelection,
-        const uno::Sequence< beans::PropertyValue >& rxOptions )
+        const cpo::uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
     ThrowIfInvalid();
@@ -3351,7 +3351,7 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  )
     SfxObjectShellRef pShell = GetDocOrThrow().CreateCopy(false, false);
     uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
     uno::Reference< embed::XStorage > xNewStorage = ::comphelper::OStorageHelper::GetTemporaryStorage( );
-    uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;
+    cpo::uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;
     storeToStorage( xNewStorage, aTempMediaDescriptor );
     uno::Reference< document::XStorageBasedDocument > xStorageDoc( xNewModel, uno::UNO_QUERY );
     xStorageDoc->loadFromStorage( xNewStorage, aTempMediaDescriptor );
@@ -3919,7 +3919,7 @@ VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
     return &(pView->GetEditWin());
 }
 
-void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+void SwXTextDocument::initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -4028,7 +4028,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // if we know what theme the user wants, then we can dispatch that now early
     if (!sThemeName.isEmpty())
     {
-        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             { "NewTheme", cpo::uno::Any(sThemeName) }
         }));
@@ -4036,7 +4036,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     }
     if (!sBackgroundThemeName.isEmpty())
     {
-        css::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             { "NewTheme", cpo::uno::Any(sBackgroundThemeName) }
         }));
@@ -4184,7 +4184,7 @@ void SwXTextDocument::resetSelection()
 /**
  * retrieve languages already used in current document
  */
-uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
+cpo::uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         ::sal_Int16 nScriptTypes,
         ::sal_Int16 nMaxCount )
 {
@@ -4357,7 +4357,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         nMaxCount = static_cast< sal_Int16 >( aAllLangs.size() );
 
     // build return value
-    uno::Sequence< lang::Locale > aLanguages( nMaxCount );
+    cpo::uno::Sequence< lang::Locale > aLanguages( nMaxCount );
     lang::Locale* pLanguage = aLanguages.getArray();
     if (nMaxCount > 0)
     {

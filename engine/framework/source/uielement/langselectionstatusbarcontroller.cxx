@@ -65,7 +65,7 @@ public:
     LangSelectionStatusbarController& operator=(const LangSelectionStatusbarController&) = delete;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
@@ -99,7 +99,7 @@ LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::R
 {
 }
 
-void SAL_CALL LangSelectionStatusbarController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL LangSelectionStatusbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -353,7 +353,7 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_LangSelectionStatusbarController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new LangSelectionStatusbarController(context));
 }

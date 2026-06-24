@@ -34,7 +34,7 @@ OUString SAL_CALL OIndexColumn::getImplementationName(  )
     return u"com.sun.star.sdbcx.VIndexColumn"_ustr;
 }
 
-css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.IndexColumnDescriptor"_ustr:u"com.sun.star.sdbcx.IndexColumn"_ustr };
 }

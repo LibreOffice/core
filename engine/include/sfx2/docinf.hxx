@@ -35,7 +35,7 @@ namespace com::sun::star {
 }
 
 namespace com::sun::star::uno { template <typename > class Reference; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 
 namespace sfx2 {
@@ -60,12 +60,12 @@ ErrCode SFX2_DLLPUBLIC LoadOlePropertySet(
 bool SFX2_DLLPUBLIC SaveOlePropertySet(
     const css::uno::Reference< css::document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage,
-    const css::uno::Sequence<sal_Int8> * i_pThumb = nullptr,
-    const css::uno::Sequence<sal_Int8> * i_pGuid = nullptr,
-    const css::uno::Sequence<sal_Int8> * i_pHyperlinks = nullptr);
+    const cpo::uno::Sequence<sal_Int8> * i_pThumb = nullptr,
+    const cpo::uno::Sequence<sal_Int8> * i_pGuid = nullptr,
+    const cpo::uno::Sequence<sal_Int8> * i_pHyperlinks = nullptr);
 
 
-css::uno::Sequence<sal_Int8> SFX2_DLLPUBLIC convertMetaFile(
+cpo::uno::Sequence<sal_Int8> SFX2_DLLPUBLIC convertMetaFile(
     GDIMetaFile const * i_pThumb);
 
 } // namespace sfx2

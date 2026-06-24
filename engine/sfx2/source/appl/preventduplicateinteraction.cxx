@@ -102,7 +102,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     }
     else
     {
-        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+        const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
         for (const auto& rContinuation : lContinuations)
         {
             css::uno::Reference< css::task::XInteractionAbort > xAbort(rContinuation, css::uno::UNO_QUERY);
@@ -147,7 +147,7 @@ bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const css::
     }
     else
     {
-        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+        const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
         for (const auto& rContinuation : lContinuations)
         {
             css::uno::Reference< css::task::XInteractionAbort > xAbort(rContinuation, css::uno::UNO_QUERY);
@@ -198,7 +198,7 @@ bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&      
     return false;
 }
 
-void SAL_CALL PreventDuplicateInteraction::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL PreventDuplicateInteraction::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     std::unique_lock aLock(m_aLock);
     // If we're re-initialized to set a specific new window as a parent then drop our temporary

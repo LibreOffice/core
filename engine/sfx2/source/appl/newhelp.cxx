@@ -577,17 +577,17 @@ void IndexTabPage_Impl::InitializeIndex()
         css::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
-            css::uno::Sequence< OUString > aPropSeq{ PROPERTY_KEYWORDLIST, PROPERTY_KEYWORDREF,
+            cpo::uno::Sequence< OUString > aPropSeq{ PROPERTY_KEYWORDLIST, PROPERTY_KEYWORDREF,
                                                      PROPERTY_ANCHORREF, PROPERTY_TITLEREF };
 
             // abi: use one possibly remote call only
-            css::uno::Sequence< cpo::uno::Any > aAnySeq =
+            cpo::uno::Sequence< cpo::uno::Any > aAnySeq =
                   aCnt.getPropertyValues( aPropSeq );
 
-            css::uno::Sequence< OUString > aKeywordList;
-            css::uno::Sequence< css::uno::Sequence< OUString > > aKeywordRefList;
-            css::uno::Sequence< css::uno::Sequence< OUString > > aAnchorRefList;
-            css::uno::Sequence< css::uno::Sequence< OUString > > aTitleRefList;
+            cpo::uno::Sequence< OUString > aKeywordList;
+            cpo::uno::Sequence< cpo::uno::Sequence< OUString > > aKeywordRefList;
+            cpo::uno::Sequence< cpo::uno::Sequence< OUString > > aAnchorRefList;
+            cpo::uno::Sequence< cpo::uno::Sequence< OUString > > aTitleRefList;
 
             if ( ( aAnySeq[0] >>= aKeywordList ) && ( aAnySeq[1] >>= aKeywordRefList ) &&
                  ( aAnySeq[2] >>= aAnchorRefList ) && ( aAnySeq[3] >>= aTitleRefList ) )
@@ -601,9 +601,9 @@ void IndexTabPage_Impl::InitializeIndex()
                     // abi: Do not copy, but use references
                     const OUString& aKeywordPair = aKeywordList[i];
                     DBG_ASSERT( !aKeywordPair.isEmpty(), "invalid help index" );
-                    const css::uno::Sequence< OUString >& aRefList = aKeywordRefList[i];
-                    const css::uno::Sequence< OUString >& aAnchorList = aAnchorRefList[i];
-                    const css::uno::Sequence< OUString >& aTitleList = aTitleRefList[i];
+                    const cpo::uno::Sequence< OUString >& aRefList = aKeywordRefList[i];
+                    const cpo::uno::Sequence< OUString >& aAnchorList = aAnchorRefList[i];
+                    const cpo::uno::Sequence< OUString >& aTitleList = aTitleRefList[i];
 
                     DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),"reference list and title list of different length" );
 

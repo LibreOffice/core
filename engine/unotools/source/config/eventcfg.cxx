@@ -25,7 +25,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
@@ -101,7 +101,7 @@ public:
     GlobalEventConfig_Impl( );
     virtual ~GlobalEventConfig_Impl( ) override;
 
-    void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
+    void            Notify( const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::container::NoSuchElementException
@@ -111,9 +111,9 @@ public:
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence < css::beans::PropertyValue > getByName( const OUString& aName );
+    cpo::uno::Sequence < css::beans::PropertyValue > getByName( const OUString& aName );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > getElementNames(  );
+    cpo::uno::Sequence< OUString > getElementNames(  );
     /// @throws css::uno::RuntimeException
     bool hasByName( const OUString& aName );
     /// @throws css::uno::RuntimeException
@@ -238,7 +238,7 @@ void GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aE
     SetModified();
 }
 
-css::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig_Impl::getByName( const OUString& aName )
+cpo::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig_Impl::getByName( const OUString& aName )
 {
     static constexpr OUString sScript = u"Script"_ustr;
     Sequence< beans::PropertyValue > props(2);
@@ -266,7 +266,7 @@ css::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig_Impl::getByNa
 
 Sequence< OUString > GlobalEventConfig_Impl::getElementNames(  )
 {
-    return uno::Sequence< OUString >(m_supportedEvents.data(), SupportedEventsVector::size());
+    return cpo::uno::Sequence< OUString >(m_supportedEvents.data(), SupportedEventsVector::size());
 }
 
 bool GlobalEventConfig_Impl::hasByName( const OUString& aName )
@@ -343,7 +343,7 @@ Any SAL_CALL GlobalEventConfig::getByName( const OUString& aName )
 {
     return Any(getByName2(aName));
 }
-css::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig::getByName2( const OUString& aName )
+cpo::uno::Sequence < css::beans::PropertyValue > GlobalEventConfig::getByName2( const OUString& aName )
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     return m_pImpl->getByName( aName );

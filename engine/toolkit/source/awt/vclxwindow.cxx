@@ -2507,7 +2507,7 @@ VCLXWindow::GetPropHelper()
     return mpImpl->mpPropHelper.get();
 }
 
-css::uno::Sequence< css::beans::Property > SAL_CALL
+cpo::uno::Sequence< css::beans::Property > SAL_CALL
 VCLXWindow::getProperties()
 {
     return GetPropHelper()->getProperties();

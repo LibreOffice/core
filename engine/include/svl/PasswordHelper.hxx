@@ -27,19 +27,19 @@
 
 #include <svl/svldllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 class SvPasswordHelper
 {
-    static void     GetHashPasswordLittleEndian(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
-    static void     GetHashPasswordBigEndian(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
+    static void     GetHashPasswordLittleEndian(cpo::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
+    static void     GetHashPasswordBigEndian(cpo::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
 
 public:
-    SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence <sal_Int8>& rPassHash, const char* pPass, sal_uInt32 nLen);
+    SVL_DLLPUBLIC static void     GetHashPassword(cpo::uno::Sequence <sal_Int8>& rPassHash, const char* pPass, sal_uInt32 nLen);
 
-    SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
-    SVL_DLLPUBLIC static void     GetHashPasswordSHA1UTF8(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
-    SVL_DLLPUBLIC static void     GetHashPasswordSHA256(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
+    SVL_DLLPUBLIC static void     GetHashPassword(cpo::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
+    SVL_DLLPUBLIC static void     GetHashPasswordSHA1UTF8(cpo::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
+    SVL_DLLPUBLIC static void     GetHashPasswordSHA256(cpo::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
     /**
     Use this method to compare a given string with another given Hash value.
     This is necessary, because in older versions exists different hashes of the same string. They were endian dependent.
@@ -48,7 +48,7 @@ public:
     tdf#115483: also check 2 different new ways of hashing that were added in
     ODF 1.2, requiring UTF-8 encoding.
     */
-    SVL_DLLPUBLIC static bool     CompareHashPassword(const css::uno::Sequence<sal_Int8>& rOldPassHash, std::u16string_view sNewPass);
+    SVL_DLLPUBLIC static bool     CompareHashPassword(const cpo::uno::Sequence<sal_Int8>& rOldPassHash, std::u16string_view sNewPass);
 
     /** Get password strength percentage
 

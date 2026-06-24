@@ -9,7 +9,7 @@
  */
 
 #include <oox/helper/grabbagstack.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 
 namespace oox

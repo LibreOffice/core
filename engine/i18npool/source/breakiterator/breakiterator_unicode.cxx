@@ -144,7 +144,7 @@ void BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocal
         if (!bInMap && rule)
             do
             {
-                const uno::Sequence< OUString > breakRules = LocaleDataImpl::get()->getBreakIteratorRules(rLocale);
+                const cpo::uno::Sequence< OUString > breakRules = LocaleDataImpl::get()->getBreakIteratorRules(rLocale);
 
                 status = U_ZERO_ERROR;
                 udata_setAppData("OpenOffice", OpenOffice_dat, &status);
@@ -594,7 +594,7 @@ BreakIterator_Unicode::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 BreakIterator_Unicode::getSupportedServiceNames()
 {
     return{ cBreakIterator };
@@ -605,7 +605,7 @@ BreakIterator_Unicode::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_i18n_BreakIterator_Unicode_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new i18npool::BreakIterator_Unicode());
 }

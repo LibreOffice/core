@@ -71,7 +71,7 @@ Sequence< Type > SAL_CALL OQueryComposer::getTypes()
 
 Sequence< sal_Int8 > SAL_CALL OQueryComposer::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Any SAL_CALL OQueryComposer::queryInterface( const Type & rType )

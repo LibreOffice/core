@@ -89,7 +89,7 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const cpo::uno::Any & rExceptio
     @throws css::uno::Exception
  */
 UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::ucb::IOErrorCode eError,
-                             const css::uno::Sequence< cpo::uno::Any > & rArgs,
+                             const cpo::uno::Sequence< cpo::uno::Any > & rArgs,
                              const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                              const OUString & rMessage = OUString(),
                              const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = nullptr );

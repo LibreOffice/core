@@ -265,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testUndoShells)
 {
     // Load a document and set the page size.
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"AttributePageSize.Width", cpo::uno::Any(static_cast<sal_Int32>(10000))},
         {"AttributePageSize.Height", cpo::uno::Any(static_cast<sal_Int32>(10000))},
@@ -347,7 +347,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePage)
     // the document has 1 slide
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pDoc->GetSdPageCount(PageKind::Standard));
 
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     // Insert slides
     m_aDocumentSizeCondition.reset();
@@ -422,7 +422,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertTable)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
 
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "Rows", cpo::uno::Any(sal_Int32(3)) },
         { "Columns", cpo::uno::Any(sal_Int32(5)) }
@@ -447,7 +447,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testDeleteTable)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
 
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "Rows", cpo::uno::Any(sal_Int32(3)) },
         { "Columns", cpo::uno::Any(sal_Int32(5)) }
@@ -603,7 +603,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewCursorParts)
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     SdTestViewCallback aView1;
     KitHelper::createView();
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SdTestViewCallback aView2;
 
     // Select the shape in the second view.
@@ -650,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorViews)
     // Make sure that cursor state is not changed just because we create a second view.
     aView1.m_bCursorVisibleChanged = false;
     KitHelper::createView();
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!aView1.m_bCursorVisibleChanged);
 
@@ -804,7 +804,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCursorVisibility_MultiView)
 
     // Make sure that cursor state is not changed just because we create a second view.
     KitHelper::createView();
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     const int nView2 = KitHelper::getCurrentView();
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(false, aView1.m_bCursorVisibleChanged);
@@ -882,7 +882,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewLock)
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     SdTestViewCallback aView1;
     KitHelper::createView();
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Begin text edit in the second view and assert that the first gets a lock
     // notification.
@@ -1077,7 +1077,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf102223)
         int(1411), static_cast<int>(rEditView.GetAttribs().Get(EE_CHAR_FONTHEIGHT).GetHeight()));
 
     // cut contents of cell
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     dispatchCommand(mxComponent, u".uno:Cut"_ustr, aArgs);
 
     pView->SdrEndTextEdit(false);
@@ -1195,7 +1195,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testKeepTextSelectionAcrossTransientP
     CPPUNIT_ASSERT(pOutlinerViewAfter->GetEditView().HasSelection());
 
     // Copying targets the selected text, not an empty object copy.
-    dispatchCommand(mxComponent, u".uno:Copy"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard
         = pOutlinerViewAfter->GetEditView().GetClipboard();
     CPPUNIT_ASSERT_EQUAL("First slide"_ostr,
@@ -1247,7 +1247,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClipNumRules)
         SvxNumberFormat aNumFmt(pNumFmt->GetNumRule().GetLevel(2));
 
         // cut contents of bullet item
-        dispatchCommand(mxComponent, u".uno:Cut"_ustr, uno::Sequence<beans::PropertyValue>());
+        dispatchCommand(mxComponent, u".uno:Cut"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
         CPPUNIT_ASSERT(pView->GetTextEditObject());
         EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
@@ -1255,7 +1255,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testClipNumRules)
         CPPUNIT_ASSERT_EQUAL(OUString(), rEditView2.GetSelected());
 
         // paste contents of bullet item
-        dispatchCommand(mxComponent, u".uno:Paste"_ustr, uno::Sequence<beans::PropertyValue>());
+        dispatchCommand(mxComponent, u".uno:Paste"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
         // send an ESC key to trigger the commit of the edit to the main model
         pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
@@ -1302,7 +1302,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
     rEditView.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.
 
     // trigger the clone-formatting/paintbrush command to copy formatting contents of cell
-    uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, true) };
+    cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"PersistentCopy"_ustr, true) };
     dispatchCommand(mxComponent, u".uno:FormatPaintbrush"_ustr, aArgs);
 
     // now click on the table
@@ -1423,20 +1423,20 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShowAndUseGridCallbacks)
     */
 
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     SdTestViewCallback aView;
 
-    dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridVisible=true") != aView.m_aStateChanged.end());
 
-    dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:GridVisible"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridVisible=false") != aView.m_aStateChanged.end());
 
-    dispatchCommand(mxComponent, u".uno:GridUse"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:GridUse"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=false") != aView.m_aStateChanged.end());
 
-    dispatchCommand(mxComponent, u".uno:GridUse"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:GridUse"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=true") != aView.m_aStateChanged.end());
 }
 
@@ -1454,7 +1454,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     int nView1 = KitHelper::getCurrentView();
 
     KitHelper::createView();
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         {".uno:Author", cpo::uno::Any(u"Kit User2"_ustr)},
     }));
@@ -1547,7 +1547,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 {
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     // Load the document.
     // Set the tiled annotations off
@@ -1593,7 +1593,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
 {
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     // Load the document.
     // Set the tiled annotations off
@@ -1643,7 +1643,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     SdTestViewCallback aView1;
     int nView1 = KitHelper::getCurrentView();
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
 
     // Create second view
@@ -1681,7 +1681,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage2)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     SdTestViewCallback aView1;
     int nView1 = KitHelper::getCurrentView();
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
 
     // Create second view
@@ -1900,7 +1900,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testLanguageAllText)
     createDoc("language-all-text.odp");
 
     // Set the language to English for all text.
-    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
         { "Language", cpo::uno::Any(u"Default_English (USA)"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:LanguageStatus"_ustr, aArgs);
@@ -1992,7 +1992,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf115783)
     const int nShiftRight = KEY_SHIFT + KEY_RIGHT;
     pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, nShiftRight);
     pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, nShiftRight);
-    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
         { "FontHeight.Height", cpo::uno::Any(static_cast<float>(12)) },
     });
     dispatchCommand(mxComponent, u".uno:FontHeight"_ustr, aArgs);
@@ -2069,14 +2069,14 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteTextOnSlide)
     Scheduler::ProcessEventsToIdle();
 
     // Copy some text
-    dispatchCommand(mxComponent, u".uno:Copy"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
     pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // Paste onto the slide
-    dispatchCommand(mxComponent, u".uno:Paste"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, awt::Key::ESCAPE);
     pXImpressDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, awt::Key::ESCAPE);
@@ -2174,7 +2174,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCutSelectionChange)
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
 
     // Cut the selected text
-    dispatchCommand(mxComponent, u".uno:Cut"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:Cut"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     // Selection is removed
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), m_aSelection.size());
@@ -2197,7 +2197,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
     CPPUNIT_ASSERT_EQUAL("SD;Default"_ostr, pXImpressDocument->getViewRenderState());
     // Set to dark scheme
     {
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
@@ -2255,7 +2255,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     SdTestViewCallback aView1;
     // Switch first view to light scheme
     {
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
             }
@@ -2270,7 +2270,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     SdTestViewCallback aView2;
     // Set second view to dark scheme
     {
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
@@ -2286,7 +2286,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
     assertTilePixelColor(pXImpressDocument, 255, 255, Color(0x1c, 0x1c, 0x1c));
     // Switch second view back to light scheme
     {
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
             }
@@ -2327,7 +2327,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testRegenerateDiagram)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
 
     // regenerate diagram
-    dispatchCommand(mxComponent, u".uno:RegenerateDiagram"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:RegenerateDiagram"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     // diagram content (child shape count) should be the same as in the beginning
     // NOTE: This is due to regenerate-diagram.pptx *not* having a drawing.xml
@@ -2345,7 +2345,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePageInvalidation)
     // Insert slide
     aView1.m_bTilesInvalidated = false;
     aView1.m_aInvalidations.clear();
-    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT_EQUAL(9, pXImpressDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(size_t(9), aView1.m_aInvalidations.size());
@@ -2353,7 +2353,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertDeletePageInvalidation)
     // Delete slide
     aView1.m_bTilesInvalidated = false;
     aView1.m_aInvalidations.clear();
-    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:DeletePage"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
     CPPUNIT_ASSERT_EQUAL(8, pXImpressDocument->getParts());
     CPPUNIT_ASSERT_EQUAL(size_t(8), aView1.m_aInvalidations.size());
@@ -2365,7 +2365,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSpellOnlineRenderParameter)
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     bool bSet = pXImpressDocument->GetDoc()->GetOnlineSpell();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues =
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
         comphelper::InitPropertySequence({ { ".uno:SpellOnline", cpo::uno::Any(!bSet) } }),
     };
@@ -2466,7 +2466,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMoveShapeHandle)
         lcl_extractHandleParameters(aView1.m_ShapeSelection, id, x ,y);
         sal_uInt32 oldX = x;
         sal_uInt32 oldY = y;
-        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             {"HandleNum", cpo::uno::Any(id)},
             {"NewPosX", cpo::uno::Any(x+1)},
@@ -2514,7 +2514,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteUndo)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("TextBoxAndRect.odg");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
 
     // Create view 1
@@ -2793,7 +2793,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEndTextEditAfterShapeDeleted)
     // notification makes view 1 end its text edit because the object is no
     // longer inserted. The undo manager must be swapped back cleanly.
     SdXImpressDocument* pXImpressDocument = createDoc("TextBoxAndRect.odg");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     const int nView1 = KitHelper::getCurrentView();
     sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -2898,7 +2898,7 @@ void readJSON(boost::property_tree::ptree& rTree, OUString const& rJson)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
@@ -2995,7 +2995,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     Scheduler::ProcessEventsToIdle();
 
@@ -3238,7 +3238,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     // - main slide layer
 
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
@@ -3365,7 +3365,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     // Check rendering of fields - each in own layer
 
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_WithFields.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
@@ -3595,7 +3595,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_SlideNumber_Header_DateTime)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_SlideNumber_Header_DateTime.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000);
     aSlideRendererChecker.checkSlideSize(2000, 1125);
 
@@ -3619,7 +3619,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_SlideNu
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Background)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_SlideNumber_Header_DateTime.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, true);
     aSlideRendererChecker.checkSlideSize(2000, 1125);
 
@@ -3641,7 +3641,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Ba
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_MasterPage)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_SlideNumber_Header_DateTime.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, true, false);
     aSlideRendererChecker.checkSlideSize(2000, 1125);
 
@@ -3661,7 +3661,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Ma
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Background_And_MasterPage)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_SlideNumber_Header_DateTime.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
     aSlideRendererChecker.checkSlideSize(2000, 1125);
 
@@ -3683,7 +3683,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
 
     SdXImpressDocument* pXImpressDocument
         = createDoc("SlideRenderingTest_Animated_Shape_Inside_A_Group.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
     aSlideRendererChecker.checkSlideSize(2000, 1125);
 
@@ -3701,7 +3701,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
     // a single not animated shape
 
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animated_Group.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
     aSlideRendererChecker.checkSlideSize(2000, 1125);
 
@@ -3721,7 +3721,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
     // 2 animated groups made up by 2 shapes each
 
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animated_Groups.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
     aSlideRendererChecker.checkSlideSize(2000, 1125);
 
@@ -3745,7 +3745,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
     // 1st and 2nd group are grouped together and the 2nd level group is animated
 
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animated_MultiLevel_Group.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SlideRendererChecker aSlideRendererChecker(pXImpressDocument, 0, 2000, 2000, false, false);
     aSlideRendererChecker.checkSlideSize(2000, 1125);
 
@@ -3766,7 +3766,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     // Check rendering of animated objects - each in own layer
 
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animations.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
@@ -3938,7 +3938,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animations2)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("anim.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
@@ -4199,7 +4199,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     // Check rendering of animated paragraphs in a text box
 
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_TextBox.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
@@ -4366,7 +4366,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     // Check rendering of animated paragraphs in a text box when there are multiple effects for one paragraph
 
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animations_SecondParagraphMultipleEffects.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
@@ -4471,7 +4471,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animation_DifferentKindOfTextBox)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animations_DifferentKindOfTextBox.odp");
-    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
@@ -4614,7 +4614,7 @@ public:
         return {};
     }
 
-    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
     {
         return { m_aFlavor };
     }

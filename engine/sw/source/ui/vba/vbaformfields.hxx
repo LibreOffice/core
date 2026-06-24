@@ -36,7 +36,7 @@ public:
     // SwVbaFormFields_BASE
     cpo::uno::Any createCollectionObject(const cpo::uno::Any& aSource) override;
     OUString getServiceImplName() override;
-    css::uno::Sequence<OUString> getServiceNames() override;
+    cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

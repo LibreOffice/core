@@ -33,7 +33,7 @@
 
 #include <optutil.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <miscuno.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>

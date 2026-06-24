@@ -37,7 +37,7 @@ OFSInputStreamContainer::~OFSInputStreamContainer()
 {
 }
 
-uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL OFSInputStreamContainer::getTypes()
 {
     if (m_bSeekable)
     {
@@ -90,7 +90,7 @@ void SAL_CALL OFSInputStreamContainer::release()
     ::cppu::OWeakObject::release();
 }
 
-sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -103,7 +103,7 @@ sal_Int32 SAL_CALL OFSInputStreamContainer::readBytes( uno::Sequence< sal_Int8 >
     return m_xInputStream->readBytes( aData, nBytesToRead );
 }
 
-sal_Int32 SAL_CALL OFSInputStreamContainer::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OFSInputStreamContainer::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 

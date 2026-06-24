@@ -27,7 +27,7 @@
 #include <com/sun/star/xforms/XSubmission.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include "computedexpression.hxx"
 
 // forward declarations
@@ -66,7 +66,7 @@ class Submission : public Submission_t
     OUString msCDataSectionElement;
     OUString msReplace;
     OUString msSeparator;
-    css::uno::Sequence< OUString > msIncludeNamespacePrefixes;
+    cpo::uno::Sequence< OUString > msIncludeNamespacePrefixes;
 
 private:
 
@@ -140,8 +140,8 @@ public:
     OUString getSeparator() const { return msSeparator;}
     void setSeparator( const OUString& );
 
-    css::uno::Sequence< OUString > getIncludeNamespacePrefixes() const { return msIncludeNamespacePrefixes;}
-    void setIncludeNamespacePrefixes( const css::uno::Sequence< OUString >& );
+    cpo::uno::Sequence< OUString > getIncludeNamespacePrefixes() const { return msIncludeNamespacePrefixes;}
+    void setIncludeNamespacePrefixes( const cpo::uno::Sequence< OUString >& );
 
     /** perform the submission
      * @returns if submission was successful */

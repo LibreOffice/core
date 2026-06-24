@@ -81,8 +81,8 @@ class DemoRenderer
         Size maBox;
         rendering::ViewState   maViewState;
         rendering::RenderState maRenderState;
-        uno::Sequence< double > maColorBlack;
-        uno::Sequence< double > maColorRed;
+        cpo::uno::Sequence< double > maColorBlack;
+        cpo::uno::Sequence< double > maColorRed;
         uno::Reference< rendering::XCanvas > mxCanvas;
         uno::Reference< rendering::XCanvasFont > mxDefaultFont;
         uno::Reference< rendering::XGraphicDevice > mxDevice;
@@ -119,7 +119,7 @@ class DemoRenderer
             geometry::Matrix2D aFontMatrix( 1, 0,
                                             0, 1 );
             rendering::FontRequest aFontRequest( aFontInfo, 12.0, 0.0, aLocale );
-            uno::Sequence< beans::PropertyValue > aExtraFontProperties;
+            cpo::uno::Sequence< beans::PropertyValue > aExtraFontProperties;
             mxDefaultFont = xCanvas->createFont( aFontRequest, aExtraFontProperties, aFontMatrix );
             if( !mxDefaultFont.is() )
                 fprintf( stderr, "Failed to create font\n" );
@@ -152,9 +152,9 @@ class DemoRenderer
             mxCanvas->drawText( aText, mxDefaultFont, maViewState, aRenderState, 0);
         }
 
-        void drawRect( tools::Rectangle rRect, const uno::Sequence< double > &aColor, int /*nWidth*/ )
+        void drawRect( tools::Rectangle rRect, const cpo::uno::Sequence< double > &aColor, int /*nWidth*/ )
         {
-            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys
+            cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > aPolys
             {
                 {
                     { o3tl::narrowing<double>(rRect.Left()),  o3tl::narrowing<double>(rRect.Top()) },
@@ -212,7 +212,7 @@ class DemoRenderer
             const char hilbert[] = "urdrrulurulldluuruluurdrurddldrrruluurdrurddldrddlulldrdldrrurd";
             int nLength = std::size( hilbert );
 
-            uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
+            cpo::uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
             auto pPoints = aPoints.getArray();
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
 
@@ -240,7 +240,7 @@ class DemoRenderer
                 }
             }
 
-            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys { aPoints };
+            cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > aPolys { aPoints };
 
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, false );
@@ -387,7 +387,7 @@ class DemoRenderer
             const int num_curves = 3;
 
             //hacky hack hack
-            uno::Sequence< geometry::RealBezierSegment2D > aBeziers (num_curves);
+            cpo::uno::Sequence< geometry::RealBezierSegment2D > aBeziers (num_curves);
             auto pBeziers = aBeziers.getArray();
             uno::Reference< rendering::XBezierPolyPolygon2D > xPoly;
 
@@ -398,7 +398,7 @@ class DemoRenderer
                                                             r * 2 * sin((i*2*M_PI + 2*M_PI)/num_curves),  //C1y
                                                             r * 2 * cos((i*2*M_PI + 2*M_PI)/num_curves),  //C2x
                                                             r * 2 * sin((i*2*M_PI + 2*M_PI)/num_curves)); //C2y
-            uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > > aPolys { aBeziers };
+            cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > aPolys { aBeziers };
             xPoly = mxDevice->createCompatibleBezierPolyPolygon(aPolys);
             xPoly->setClosed( 0, true );
             //uno::Reference< rendering::XBezierPolyPolygon2D> xPP( xPoly, uno::UNO_QUERY );
@@ -480,7 +480,7 @@ class DemoRenderer
     void drawRegularPolygon(double centerx, double centery, int sides, double r)
         {
             //hacky hack hack
-            uno::Sequence< geometry::RealPoint2D > aPoints (sides);
+            cpo::uno::Sequence< geometry::RealPoint2D > aPoints (sides);
             auto pPoints = aPoints.getArray();
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
 
@@ -489,7 +489,7 @@ class DemoRenderer
                 pPoints[i]= geometry::RealPoint2D( centerx + r * cos(i*2 * M_PI/sides),
                                                    centery + r * sin(i*2 * M_PI/sides));
             }
-            uno::Sequence< uno::Sequence< geometry::RealPoint2D > > aPolys { aPoints };
+            cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > aPolys { aPoints };
             xPoly = mxDevice->createCompatibleLinePolyPolygon( aPolys );
             xPoly->setClosed( 0, true );
             rendering::RenderState aRenderState( maRenderState );

@@ -75,7 +75,7 @@ namespace vclcanvas
                    public RepaintTarget
     {
     public:
-        Canvas( const css::uno::Sequence<
+        Canvas( const cpo::uno::Sequence<
                       cpo::uno::Any >&               aArguments,
                 const css::uno::Reference<
                       css::uno::XComponentContext >& rxContext );
@@ -100,7 +100,7 @@ namespace vclcanvas
 
         OUString SAL_CALL getImplementationName() override;
         bool SAL_CALL supportsService(OUString const & ServiceName) override;
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,
@@ -111,7 +111,7 @@ namespace vclcanvas
                               const GraphicAttr&                            rAttr ) const override;
 
     private:
-        css::uno::Sequence< cpo::uno::Any >                maArguments;
+        cpo::uno::Sequence< cpo::uno::Any >                maArguments;
     };
 }
 

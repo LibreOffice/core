@@ -832,7 +832,7 @@ bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor 
         if( bResetModified )
             EnableSetModified( false );
 
-        uno::Sequence < OUString > aNames = m_pOLEChildList->GetObjectNames();
+        cpo::uno::Sequence < OUString > aNames = m_pOLEChildList->GetObjectNames();
         for( sal_Int32 n = aNames.getLength(); n; n-- )
         {
             if (!m_pOLEChildList->MoveEmbeddedObject(aNames[n-1], GetEmbeddedObjectContainer()))
@@ -1469,7 +1469,7 @@ void SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
     }
 }
 
-bool SwDocShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash )
+bool SwDocShell::GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPasswordHash )
 {
     bool bRes = false;
 
@@ -1492,7 +1492,7 @@ void SwDocShell::RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo
     mxAutomationDocumentEventsCaller = xCaller;
 }
 
-void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments)
+void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments)
 {
     if (mxAutomationDocumentEventsCaller.is())
         mxAutomationDocumentEventsCaller->CallSinks(Method, Arguments);

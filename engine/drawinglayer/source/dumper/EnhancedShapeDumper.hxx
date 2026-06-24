@@ -82,12 +82,12 @@ public:
     void dumpMirroredXAsAttribute(bool bMirroredX); // also used in EnhancedCustomShapeHandle
     void dumpMirroredYAsAttribute(bool bMirroredY); // also used in EnhancedCustomShapeHandle
     void dumpTextRotateAngleAsAttribute(double aTextRotateAngle);
-    void dumpAdjustmentValuesAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues);
-    void dumpExtrusionAsElement(const css::uno::Sequence< css::beans::PropertyValue >& aExtrusion);
-    void dumpPathAsElement(const css::uno::Sequence< css::beans::PropertyValue >& aPath);
-    void dumpTextPathAsElement(const css::uno::Sequence< css::beans::PropertyValue >& aTextPath);
-    void dumpEquationsAsElement(const css::uno::Sequence< OUString >& aEquations);
-    void dumpHandlesAsElement(const css::uno::Sequence< css::beans::PropertyValues >& aHandles);
+    void dumpAdjustmentValuesAsElement(const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues);
+    void dumpExtrusionAsElement(const cpo::uno::Sequence< css::beans::PropertyValue >& aExtrusion);
+    void dumpPathAsElement(const cpo::uno::Sequence< css::beans::PropertyValue >& aPath);
+    void dumpTextPathAsElement(const cpo::uno::Sequence< css::beans::PropertyValue >& aTextPath);
+    void dumpEquationsAsElement(const cpo::uno::Sequence< OUString >& aEquations);
+    void dumpHandlesAsElement(const cpo::uno::Sequence< css::beans::PropertyValues >& aHandles);
 
     // EnhancedCustomShapeHandle.idl
     void dumpEnhancedCustomShapeHandleService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
@@ -107,18 +107,18 @@ public:
 
     // EnhancedCustomShapePath.idl
     void dumpEnhancedCustomShapePathService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
-    void dumpCoordinatesAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& aCoordinates);
-    void dumpSegmentsAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& aSegments);
+    void dumpCoordinatesAsElement(const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& aCoordinates);
+    void dumpSegmentsAsElement(const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& aSegments);
     void dumpStretchXAsAttribute(sal_Int32 aStretchX);
     void dumpStretchYAsAttribute(sal_Int32 aStretchY);
-    void dumpTextFramesAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame >& aTextFrames);
-    void dumpGluePointsAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& aGluePoints);
-    void dumpGluePointLeavingDirectionsAsElement(const css::uno::Sequence< double >& aGluePointLeavingDirections);
+    void dumpTextFramesAsElement(const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame >& aTextFrames);
+    void dumpGluePointsAsElement(const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& aGluePoints);
+    void dumpGluePointLeavingDirectionsAsElement(const cpo::uno::Sequence< double >& aGluePointLeavingDirections);
     void dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType);
     void dumpExtrusionAllowedAsAttribute(bool bExtrusionAllowed);
     void dumpConcentricGradientFillAllowedAsAttribute(bool bConcentricGradientFillAllowed);
     void dumpTextPathAllowedAsAttribute(bool bTextPathAllowed);
-    void dumpSubViewSizeAsElement(const css::uno::Sequence< css::awt::Size >& aSubViewSize);
+    void dumpSubViewSizeAsElement(const cpo::uno::Sequence< css::awt::Size >& aSubViewSize);
 
     // EnhancedCustomShapePath.idl
     void dumpEnhancedCustomShapeTextPathService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);

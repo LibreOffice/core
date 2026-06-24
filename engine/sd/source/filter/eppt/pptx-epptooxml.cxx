@@ -419,7 +419,7 @@ ShapeExport& PowerPointShapeExport::WriteGraphicObjectShape(const Reference<XSha
     return ShapeExport::WriteGraphicObjectShape(xShape);
 }
 
-PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContext, const uno::Sequence<cpo::uno::Any>& rArguments)
+PowerPointExport::PowerPointExport(const Reference< XComponentContext >& rContext, const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
     : XmlFilterBase(rContext)
     , mpAuthorIDs( new SvtSecurityMapPersonalInfo )
     , mnLayoutFileIdMax(1)
@@ -723,7 +723,7 @@ void PowerPointExport::WriteEmbeddedFontList()
 
     std::vector<EmbeddedFont> aEmbeddedFontInfo;
 
-    uno::Sequence<cpo::uno::Any> aAnySeq;
+    cpo::uno::Sequence<cpo::uno::Any> aAnySeq;
     if (!(mXModel->getPropertyValue(u"Fonts"_ustr) >>= aAnySeq))
         return;
 
@@ -841,7 +841,7 @@ void PowerPointExport::WriteEmbeddedFontList()
                 OUString sArchivePath = "ppt/fonts/" + sFontFileName;
 
                 uno::Reference<css::io::XOutputStream> xOutStream = openFragmentStream(sArchivePath, u"application/x-fontdata"_ustr);
-                xOutStream->writeBytes(uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(rEOT.data()), rEOT.size()));
+                xOutStream->writeBytes(cpo::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(rEOT.data()), rEOT.size()));
                 xOutStream->closeOutput();
 
                 OUString sRelID = addRelation(mPresentationFS->getOutputStream(),
@@ -960,7 +960,7 @@ void PowerPointExport::WriteSections()
     if (!mXModel->getPropertySetInfo()->hasPropertyByName(u"SlideSections"_ustr))
         return;
 
-    uno::Sequence<beans::PropertyValue> aSectionList;
+    cpo::uno::Sequence<beans::PropertyValue> aSectionList;
     mXModel->getPropertyValue(u"SlideSections"_ustr) >>= aSectionList;
 
     if (!aSectionList.hasElements())
@@ -989,12 +989,12 @@ void PowerPointExport::WriteSections()
     sal_Int32 nFallbackIdx = 0;
     for (const auto& rSectionProp : aSectionList)
     {
-        uno::Sequence<beans::PropertyValue> aSectionProps;
+        cpo::uno::Sequence<beans::PropertyValue> aSectionProps;
         rSectionProp.Value >>= aSectionProps;
 
         OUString sSectionName;
         OUString sSectionId;
-        uno::Sequence<OUString> aSlideNames;
+        cpo::uno::Sequence<OUString> aSlideNames;
 
         for (const auto& rProp : aSectionProps)
         {
@@ -1602,7 +1602,7 @@ void PowerPointExport::WritePresentationProps()
     {
         css::uno::Reference<css::container::XNameContainer> mxCustShows;
         mxCustShows = mXModel->getCustomPresentations();
-        const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
+        const cpo::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
 
         sal_Int32 nCustShowIndex = 0;
         for (sal_Int32 i = 0; i < aNameSeq.getLength(); i++)
@@ -2150,13 +2150,13 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     pFS->endElementNS(XML_p, XML_cSld);
 
-    uno::Sequence<beans::PropertyValue> aGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
     if (mXModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
         mXModel->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
 
     std::vector<OUString> aClrMap;
     aClrMap.reserve(12);
-    uno::Sequence<beans::PropertyValue> aClrMapPropValue;
+    cpo::uno::Sequence<beans::PropertyValue> aClrMapPropValue;
     if(aGrabBag.hasElements())
     {
         for (const auto& rProp : aGrabBag)
@@ -2305,12 +2305,12 @@ void PowerPointExport::WriteLayoutClrMapOvr(const FSHelperPtr& pFS, sal_uInt32 n
     OUString sKey = "OOXLayoutClrMapOvr_" + OUString::number(nMasterNum);
 
     // Get grab bag
-    uno::Sequence<beans::PropertyValue> aGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
     if (mXModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
         mXModel->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
 
     // Look for layout color map override
-    uno::Sequence<beans::PropertyValue> aClrMapOvr;
+    cpo::uno::Sequence<beans::PropertyValue> aClrMapOvr;
     for (const auto& rProp : aGrabBag)
     {
         if (rProp.Name == sKey)
@@ -2685,7 +2685,7 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
             WriteShapeEffects( xProps );
 
             bool bHas3DEffectinShape = false;
-            uno::Sequence<beans::PropertyValue> grabBag;
+            cpo::uno::Sequence<beans::PropertyValue> grabBag;
             if (xProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
                 xProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= grabBag;
 
@@ -3053,7 +3053,7 @@ void PowerPointExport::embedEffectAudio(const FSHelperPtr& pFS, const OUString& 
 
     // MS PowerPoint reports a corrupt file if the media name contains non-ascii characters
     OUString sAsciiName;
-    uno::Sequence<sal_Int8> aTempBuf;
+    cpo::uno::Sequence<sal_Int8> aTempBuf;
     if (comphelper::string::isValidAsciiFilename(sName))
         sAsciiName = sName;
     else
@@ -3226,7 +3226,7 @@ Reference<XShape> PowerPointExport::GetReferencedPlaceholderXShape(const Placeho
 // UNO component
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 css_comp_Impress_oox_PowerPointExport(uno::XComponentContext* rxCtxt,
-                                      uno::Sequence<cpo::uno::Any> const& rArguments)
+                                      cpo::uno::Sequence<cpo::uno::Any> const& rArguments)
 {
     return cppu::acquire(new PowerPointExport(rxCtxt, rArguments));
 }

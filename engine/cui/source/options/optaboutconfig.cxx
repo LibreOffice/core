@@ -320,7 +320,7 @@ void CuiAboutConfigTabPage::FillItemSet()
 
 namespace
 {
-OUString lcl_StringListToString(const uno::Sequence<OUString>& seq)
+OUString lcl_StringListToString(const cpo::uno::Sequence<OUString>& seq)
 {
     OUStringBuffer sBuffer;
     for (sal_Int32 i = 0; i != seq.getLength(); ++i)
@@ -332,7 +332,7 @@ OUString lcl_StringListToString(const uno::Sequence<OUString>& seq)
     return sBuffer.makeStringAndClear();
 }
 
-OUString lcl_IntListToString(const uno::Sequence<sal_Int16>& seq)
+OUString lcl_IntListToString(const cpo::uno::Sequence<sal_Int16>& seq)
 {
     OUStringBuffer sBuffer;
     for (sal_Int32 i = 0; i != seq.getLength(); ++i)
@@ -344,7 +344,7 @@ OUString lcl_IntListToString(const uno::Sequence<sal_Int16>& seq)
     return sBuffer.makeStringAndClear();
 }
 
-OUString lcl_IntListToString(const uno::Sequence<sal_Int32>& seq)
+OUString lcl_IntListToString(const cpo::uno::Sequence<sal_Int32>& seq)
 {
     OUStringBuffer sBuffer;
     for (sal_Int32 i = 0; i != seq.getLength(); ++i)
@@ -356,7 +356,7 @@ OUString lcl_IntListToString(const uno::Sequence<sal_Int32>& seq)
     return sBuffer.makeStringAndClear();
 }
 
-OUString lcl_IntListToString(const uno::Sequence<sal_Int64>& seq)
+OUString lcl_IntListToString(const cpo::uno::Sequence<sal_Int64>& seq)
 {
     OUStringBuffer sBuffer;
     for (sal_Int32 i = 0; i != seq.getLength(); ++i)
@@ -368,7 +368,7 @@ OUString lcl_IntListToString(const uno::Sequence<sal_Int64>& seq)
     return sBuffer.makeStringAndClear();
 }
 
-OUString lcl_DoubleListToString(const uno::Sequence<double>& seq)
+OUString lcl_DoubleListToString(const cpo::uno::Sequence<double>& seq)
 {
     OUStringBuffer sBuffer;
     for (sal_Int32 i = 0; i != seq.getLength(); ++i)
@@ -387,7 +387,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
 {
     OUString sPath
         = Reference<XHierarchicalName>(xNameAccess, uno::UNO_QUERY_THROW)->getHierarchicalName();
-    const uno::Sequence<OUString> seqItems = xNameAccess->getElementNames();
+    const cpo::uno::Sequence<OUString> seqItems = xNameAccess->getElementNames();
     for (const OUString& item : seqItems)
     {
         Any aNode = xNameAccess->getByName(item);
@@ -491,21 +491,21 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                 else if (sDynamicType == "string")
                     aType = cppu::UnoType<OUString>::get();
                 else if (sDynamicType == "[]byte")
-                    aType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
+                    aType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
                 else if (sDynamicType == "[]boolean")
-                    aType = cppu::UnoType<css::uno::Sequence<bool>>::get();
+                    aType = cppu::UnoType<cpo::uno::Sequence<bool>>::get();
                 else if (sDynamicType == "[]short")
-                    aType = cppu::UnoType<css::uno::Sequence<sal_Int16>>::get();
+                    aType = cppu::UnoType<cpo::uno::Sequence<sal_Int16>>::get();
                 else if (sDynamicType == "[]long")
-                    aType = cppu::UnoType<css::uno::Sequence<sal_Int32>>::get();
+                    aType = cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get();
                 else if (sDynamicType == "[]hyper")
-                    aType = cppu::UnoType<css::uno::Sequence<sal_Int64>>::get();
+                    aType = cppu::UnoType<cpo::uno::Sequence<sal_Int64>>::get();
                 else if (sDynamicType == "[]double")
-                    aType = cppu::UnoType<css::uno::Sequence<double>>::get();
+                    aType = cppu::UnoType<cpo::uno::Sequence<double>>::get();
                 else if (sDynamicType == "[]string")
-                    aType = cppu::UnoType<css::uno::Sequence<OUString>>::get();
+                    aType = cppu::UnoType<cpo::uno::Sequence<OUString>>::get();
                 else if (sDynamicType == "[][]byte")
-                    aType = cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int8>>>::get();
+                    aType = cppu::UnoType<cpo::uno::Sequence<cpo::uno::Sequence<sal_Int8>>>::get();
             }
 
             if (it != m_modifiedPrefBoxEntries.end())
@@ -549,11 +549,12 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                         sValue = aNode.get<OUString>();
                     sType = u"string"_ustr;
                 }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int8>>::get())
+                else if (aType == cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get())
                 {
                     if (bHasValue)
                     {
-                        const uno::Sequence<sal_Int8> seq = aNode.get<uno::Sequence<sal_Int8>>();
+                        const cpo::uno::Sequence<sal_Int8> seq
+                            = aNode.get<cpo::uno::Sequence<sal_Int8>>();
                         for (sal_Int8 j : seq)
                         {
                             OUString s = OUString::number(static_cast<sal_uInt8>(j), 16);
@@ -566,11 +567,11 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = u"hexBinary"_ustr;
                 }
-                else if (aType == cppu::UnoType<css::uno::Sequence<bool>>::get())
+                else if (aType == cppu::UnoType<cpo::uno::Sequence<bool>>::get())
                 {
                     if (bHasValue)
                     {
-                        uno::Sequence<bool> seq = aNode.get<uno::Sequence<bool>>();
+                        cpo::uno::Sequence<bool> seq = aNode.get<cpo::uno::Sequence<bool>>();
                         for (sal_Int32 j = 0; j != seq.getLength(); ++j)
                         {
                             if (j != 0)
@@ -582,11 +583,12 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = u"boolean-list"_ustr;
                 }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int16>>::get())
+                else if (aType == cppu::UnoType<cpo::uno::Sequence<sal_Int16>>::get())
                 {
                     if (bHasValue)
                     {
-                        uno::Sequence<sal_Int16> seq = aNode.get<uno::Sequence<sal_Int16>>();
+                        cpo::uno::Sequence<sal_Int16> seq
+                            = aNode.get<cpo::uno::Sequence<sal_Int16>>();
                         for (sal_Int32 j = 0; j != seq.getLength(); ++j)
                         {
                             if (j != 0)
@@ -598,11 +600,12 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = u"short-list"_ustr;
                 }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get())
+                else if (aType == cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get())
                 {
                     if (bHasValue)
                     {
-                        uno::Sequence<sal_Int32> seq = aNode.get<uno::Sequence<sal_Int32>>();
+                        cpo::uno::Sequence<sal_Int32> seq
+                            = aNode.get<cpo::uno::Sequence<sal_Int32>>();
                         for (sal_Int32 j = 0; j != seq.getLength(); ++j)
                         {
                             if (j != 0)
@@ -614,11 +617,12 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = u"int-list"_ustr;
                 }
-                else if (aType == cppu::UnoType<css::uno::Sequence<sal_Int64>>::get())
+                else if (aType == cppu::UnoType<cpo::uno::Sequence<sal_Int64>>::get())
                 {
                     if (bHasValue)
                     {
-                        uno::Sequence<sal_Int64> seq = aNode.get<uno::Sequence<sal_Int64>>();
+                        cpo::uno::Sequence<sal_Int64> seq
+                            = aNode.get<cpo::uno::Sequence<sal_Int64>>();
                         for (sal_Int32 j = 0; j != seq.getLength(); ++j)
                         {
                             if (j != 0)
@@ -630,11 +634,11 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = u"long-list"_ustr;
                 }
-                else if (aType == cppu::UnoType<css::uno::Sequence<double>>::get())
+                else if (aType == cppu::UnoType<cpo::uno::Sequence<double>>::get())
                 {
                     if (bHasValue)
                     {
-                        uno::Sequence<double> seq = aNode.get<uno::Sequence<double>>();
+                        cpo::uno::Sequence<double> seq = aNode.get<cpo::uno::Sequence<double>>();
                         for (sal_Int32 j = 0; j != seq.getLength(); ++j)
                         {
                             if (j != 0)
@@ -646,19 +650,19 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
                     }
                     sType = u"double-list"_ustr;
                 }
-                else if (aType == cppu::UnoType<css::uno::Sequence<OUString>>::get())
+                else if (aType == cppu::UnoType<cpo::uno::Sequence<OUString>>::get())
                 {
                     if (bHasValue)
-                        sValue = lcl_StringListToString(aNode.get<uno::Sequence<OUString>>());
+                        sValue = lcl_StringListToString(aNode.get<cpo::uno::Sequence<OUString>>());
                     sType = u"string-list"_ustr;
                 }
                 else if (aType
-                         == cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int8>>>::get())
+                         == cppu::UnoType<cpo::uno::Sequence<cpo::uno::Sequence<sal_Int8>>>::get())
                 {
                     if (bHasValue)
                     {
-                        const uno::Sequence<uno::Sequence<sal_Int8>> seq
-                            = aNode.get<uno::Sequence<uno::Sequence<sal_Int8>>>();
+                        const cpo::uno::Sequence<cpo::uno::Sequence<sal_Int8>> seq
+                            = aNode.get<cpo::uno::Sequence<cpo::uno::Sequence<sal_Int8>>>();
                         for (sal_Int32 j = 0; j != seq.getLength(); ++j)
                         {
                             if (j != 0)
@@ -711,7 +715,7 @@ Reference<XNameAccess> CuiAboutConfigTabPage::getConfigAccess(const OUString& sN
     aProperty.Name = u"nodepath"_ustr;
     aProperty.Value <<= sNodePath;
 
-    uno::Sequence<cpo::uno::Any> aArgumentList{ cpo::uno::Any(aProperty) };
+    cpo::uno::Sequence<cpo::uno::Any> aArgumentList{ cpo::uno::Any(aProperty) };
 
     OUString sAccessString;
 
@@ -881,7 +885,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
                 if (aListDialog.run() == RET_OK)
                 {
                     std::vector<OUString> seqStr = aListDialog.GetEntries();
-                    uno::Sequence<sal_Int16> seqShort(seqStr.size());
+                    cpo::uno::Sequence<sal_Int16> seqShort(seqStr.size());
                     std::transform(
                         seqStr.begin(), seqStr.end(), seqShort.getArray(),
                         [](const auto& str) { return static_cast<sal_Int16>(str.toInt32()); });
@@ -898,7 +902,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
                 if (aListDialog.run() == RET_OK)
                 {
                     std::vector<OUString> seqStr = aListDialog.GetEntries();
-                    uno::Sequence<sal_Int32> seq(seqStr.size());
+                    cpo::uno::Sequence<sal_Int32> seq(seqStr.size());
                     std::transform(
                         seqStr.begin(), seqStr.end(), seq.getArray(),
                         [](const auto& str) { return static_cast<sal_Int32>(str.toInt32()); });
@@ -915,7 +919,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
                 if (aListDialog.run() == RET_OK)
                 {
                     std::vector<OUString> seqStr = aListDialog.GetEntries();
-                    uno::Sequence<sal_Int64> seq(seqStr.size());
+                    cpo::uno::Sequence<sal_Int64> seq(seqStr.size());
                     std::transform(
                         seqStr.begin(), seqStr.end(), seq.getArray(),
                         [](const auto& str) { return static_cast<sal_Int64>(str.toInt32()); });
@@ -932,7 +936,7 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
                 if (aListDialog.run() == RET_OK)
                 {
                     std::vector<OUString> seqStr = aListDialog.GetEntries();
-                    uno::Sequence<double> seq(seqStr.size());
+                    cpo::uno::Sequence<double> seq(seqStr.size());
                     std::transform(
                         seqStr.begin(), seqStr.end(), seq.getArray(),
                         [](const auto& str) { return static_cast<double>(str.toDouble()); });
@@ -944,8 +948,8 @@ IMPL_LINK_NOARG(CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void)
             else if (sPropertyType == "string-list")
             {
                 SvxListDialog aListDialog(m_xDialog.get());
-                uno::Sequence<OUString> aList
-                    = pUserData->aPropertyValue.get<uno::Sequence<OUString>>();
+                cpo::uno::Sequence<OUString> aList
+                    = pUserData->aPropertyValue.get<cpo::uno::Sequence<OUString>>();
                 aListDialog.SetEntries(
                     comphelper::sequenceToContainer<std::vector<OUString>>(aList));
                 aListDialog.SetMode(ListMode::String);

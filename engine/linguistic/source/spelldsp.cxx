@@ -192,7 +192,7 @@ bool SAL_CALL SpellCheckerDispatcher::hasLocale( const Locale& rLocale )
 
 bool SAL_CALL
     SpellCheckerDispatcher::isValid( const OUString& rWord, const Locale& rLocale,
-            const css::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
+            const cpo::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     // for historical reasons, the word can be only with ASCII apostrophe in the dictionaries,
@@ -222,7 +222,7 @@ bool SAL_CALL
 
 Reference< XSpellAlternatives > SAL_CALL
     SpellCheckerDispatcher::spell( const OUString& rWord, const Locale& rLocale,
-            const css::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
+            const cpo::uno::Sequence< ::css::beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return spell_Impl( rWord, LinguLocaleToLanguage( rLocale ), rProperties );

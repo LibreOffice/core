@@ -76,7 +76,7 @@ public:
     DocumentProtection();
     virtual ~DocumentProtection() override;
 
-    css::uno::Sequence<css::beans::PropertyValue> toSequence() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> toSequence() const;
 
     bool getProtectForm() const { return m_bProtectForm; }
     bool getRedlineProtection() const { return m_bRedlineProtection; }

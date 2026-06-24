@@ -30,7 +30,7 @@ public:
 
     // XFilter
     virtual bool SAL_CALL
-    filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
+    filter(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
 
     virtual void SAL_CALL cancel() override {}
 
@@ -43,7 +43,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize(const css::uno::Sequence<cpo::uno::Any>& /*aArguments*/) override
+    initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/) override
     {
     }
 
@@ -58,7 +58,7 @@ public:
         return cppu::supportsService(this, rServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.document.ExportFilter"_ustr };
     }

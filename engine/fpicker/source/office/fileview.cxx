@@ -290,12 +290,12 @@ public:
     FileViewResult          GetFolderContent_Impl(
         std::u16string_view rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const css::uno::Sequence< OUString >& rDenyList );
+        const cpo::uno::Sequence< OUString >& rDenyList );
 
     FileViewResult          GetFolderContent_Impl(
         const FolderDescriptor& _rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const css::uno::Sequence< OUString >& rDenyList );
+        const cpo::uno::Sequence< OUString >& rDenyList );
     void                    FilterFolderContent_Impl( std::u16string_view rFilter );
     void                    CancelRunningAsyncAction();
 
@@ -937,7 +937,7 @@ FileViewResult SvtFileView::Initialize(
     const OUString& rURL,
     const OUString& rFilter,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const css::uno::Sequence< OUString >& rDenyList )
+    const cpo::uno::Sequence< OUString >& rDenyList )
 {
     weld::WaitObject aWaitCursor(mpImpl->m_pTopLevel);
     maDenyList = rDenyList;
@@ -1176,7 +1176,7 @@ void SvtFileView_Impl::Clear()
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     std::u16string_view rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const css::uno::Sequence< OUString >& rDenyList )
+    const cpo::uno::Sequence< OUString >& rDenyList )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
     INetURLObject aFolderObj( rFolder );
@@ -1191,7 +1191,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const FolderDescriptor& _rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const css::uno::Sequence< OUString >& rDenyList )
+    const cpo::uno::Sequence< OUString >& rDenyList )
 {
     DBG_TESTSOLARMUTEX();
     ::osl::ClearableMutexGuard aGuard( maMutex );

@@ -117,7 +117,7 @@ void ODBTable::columnDropped(const OUString& _sName)
 
 Sequence< sal_Int8 > ODBTable::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // OComponentHelper
@@ -237,14 +237,14 @@ OUString SAL_CALL ODBTable::getImplementationName()
     }
 bool SAL_CALL ODBTable::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-css::uno::Sequence< OUString > SAL_CALL ODBTable::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ODBTable::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_TABLE };
 }

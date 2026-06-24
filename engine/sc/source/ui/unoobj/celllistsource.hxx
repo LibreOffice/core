@@ -64,12 +64,12 @@ namespace calc
         // XListEntrySource
         virtual sal_Int32 SAL_CALL getListEntryCount(  ) override;
         virtual OUString SAL_CALL getListEntry( sal_Int32 Position ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getAllListEntries(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getAllListEntries(  ) override;
         virtual void SAL_CALL addListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
         virtual void SAL_CALL removeListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
 
         // XListEntryTypedSource
-        virtual css::uno::Sequence< OUString > SAL_CALL getAllListEntriesTyped( css::uno::Sequence< cpo::uno::Any >& rDataValues ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getAllListEntriesTyped( cpo::uno::Sequence< cpo::uno::Any >& rDataValues ) override;
 
         // OComponentHelper/XComponent
         virtual void disposing( std::unique_lock<std::mutex>& ) override;
@@ -77,7 +77,7 @@ namespace calc
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // OPropertyImplHelper
         using OCellListSource_Base::getFastPropertyValue;
@@ -91,7 +91,7 @@ namespace calc
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void    checkInitialized();

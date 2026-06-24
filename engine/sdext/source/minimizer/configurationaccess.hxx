@@ -88,7 +88,7 @@ class ConfigurationAccess
         sal_Int16 GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Int16 nDefault ) const;
         sal_Int32 GetConfigProperty( const PPPOptimizerTokenEnum, const sal_Int32 nDefault ) const;
 
-        css::uno::Sequence< css::beans::PropertyValue > GetConfigurationSequence();
+        cpo::uno::Sequence< css::beans::PropertyValue > GetConfigurationSequence();
 
         // getting access to the OptimizerSettings list
         std::vector< OptimizerSettings >& GetOptimizerSettings() { return maSettings; };

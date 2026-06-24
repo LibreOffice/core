@@ -48,7 +48,7 @@ void TestOrdinalSuffix::testFrench()
     lang::Locale aLocale(u"fr"_ustr, u"LU"_ustr, u""_ustr);
 
     //1er
-    uno::Sequence<OUString> aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
+    cpo::uno::Sequence<OUString> aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
     const OUString* pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), u"er"_ustr);
     CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 
@@ -63,7 +63,7 @@ void TestOrdinalSuffix::testEnglish()
     lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
 
     //1st
-    uno::Sequence<OUString> aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
+    cpo::uno::Sequence<OUString> aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
     const OUString* pFind = std::find(std::cbegin(aSuffixes), std::cend(aSuffixes), u"st"_ustr);
     CPPUNIT_ASSERT(pFind != std::cend(aSuffixes));
 

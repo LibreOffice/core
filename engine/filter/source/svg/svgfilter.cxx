@@ -60,6 +60,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mxContext( rxCtx ),
@@ -605,7 +606,7 @@ class SVGFileInfo
 {
 private:
     const uno::Reference<io::XInputStream>&     mxInput;
-    uno::Sequence< sal_Int8 >                   mnFirstBytes;
+    cpo::uno::Sequence< sal_Int8 >                   mnFirstBytes;
     sal_Int32                                   mnFirstBytesSize;
     sal_Int32                                   mnFirstRead;
     bool                                        mbProcessed;
@@ -819,7 +820,7 @@ OUString SVGFilter::getImplementationName()
 {
     return u"com.sun.star.comp.Draw.SVGFilter"_ustr;
 }
-css::uno::Sequence< OUString > SVGFilter::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SVGFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ImportFilter"_ustr,
             u"com.sun.star.document.ExportFilter"_ustr,
@@ -829,7 +830,7 @@ css::uno::Sequence< OUString > SVGFilter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_SVGFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SVGFilter(context));
 }

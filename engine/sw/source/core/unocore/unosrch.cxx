@@ -53,8 +53,8 @@ public:
     /// @throws beans::UnknownPropertyException
     /// @throws lang::IllegalArgumentException
     /// @throws uno::RuntimeException
-    void    SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs);
-    uno::Sequence< beans::PropertyValue > GetProperties() const;
+    void    SetProperties(const cpo::uno::Sequence< beans::PropertyValue >& aSearchAttribs);
+    cpo::uno::Sequence< beans::PropertyValue > GetProperties() const;
 
     void    FillItemSet(SfxItemSet& rSet, bool bIsValueSearch) const;
     bool    HasAttributes() const;
@@ -65,7 +65,7 @@ SwSearchProperties_Impl::SwSearchProperties_Impl() :
 {
 }
 
-void SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
+void SwSearchProperties_Impl::SetProperties(const cpo::uno::Sequence< beans::PropertyValue >& aSearchAttribs)
 {
     //delete all existing values
     maValues.clear();
@@ -79,9 +79,9 @@ void SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Property
     }
 }
 
-uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperties() const
+cpo::uno::Sequence< beans::PropertyValue > SwSearchProperties_Impl::GetProperties() const
 {
-    uno::Sequence< beans::PropertyValue > aRet(maValues.size());
+    cpo::uno::Sequence< beans::PropertyValue > aRet(maValues.size());
     beans::PropertyValue* pProps = aRet.getArray();
     sal_Int32 nPropCount = 0;
     for(auto const & rPair : maValues)
@@ -510,22 +510,22 @@ void SwXTextSearch::setValueSearch(bool ValueSearch_)
     m_bIsValueSearch = ValueSearch_;
 }
 
-uno::Sequence< beans::PropertyValue > SwXTextSearch::getSearchAttributes()
+cpo::uno::Sequence< beans::PropertyValue > SwXTextSearch::getSearchAttributes()
 {
     return  m_pSearchProperties->GetProperties();
 }
 
-void SwXTextSearch::setSearchAttributes(const uno::Sequence< beans::PropertyValue >& rSearchAttribs)
+void SwXTextSearch::setSearchAttributes(const cpo::uno::Sequence< beans::PropertyValue >& rSearchAttribs)
 {
     m_pSearchProperties->SetProperties(rSearchAttribs);
 }
 
-uno::Sequence< beans::PropertyValue > SwXTextSearch::getReplaceAttributes()
+cpo::uno::Sequence< beans::PropertyValue > SwXTextSearch::getReplaceAttributes()
 {
     return m_pReplaceProperties->GetProperties();
 }
 
-void SwXTextSearch::setReplaceAttributes(const uno::Sequence< beans::PropertyValue >& rReplaceAttribs)
+void SwXTextSearch::setReplaceAttributes(const cpo::uno::Sequence< beans::PropertyValue >& rReplaceAttribs)
 {
     m_pReplaceProperties->SetProperties(rReplaceAttribs);
 }
@@ -560,7 +560,7 @@ bool SwXTextSearch::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.SearchDescriptor"_ustr, u"com.sun.star.util.ReplaceDescriptor"_ustr };
 }

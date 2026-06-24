@@ -44,11 +44,11 @@ using namespace ::com::sun::star;
 
 namespace {
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 GetSupportedServiceNamesImpl(
         size_t const nServices, char const*const pServices[])
 {
-    uno::Sequence< OUString > ret(static_cast<sal_Int32>(nServices));
+    cpo::uno::Sequence< OUString > ret(static_cast<sal_Int32>(nServices));
 
     std::transform(pServices, pServices + nServices, ret.getArray(),
         [](const char* pService) -> OUString { return OUString::createFromAscii(pService); });
@@ -192,7 +192,7 @@ bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXFootnote::getSupportedServiceNames()
 {
     SolarMutexGuard g;
@@ -201,18 +201,18 @@ SwXFootnote::getSupportedServiceNames()
             g_ServicesFootnote);
 }
 
-uno::Sequence< uno::Type > SAL_CALL
+cpo::uno::Sequence< uno::Type > SAL_CALL
 SwXFootnote::getTypes()
 {
-    const uno::Sequence< uno::Type > aTypes = SwXFootnote_Base::getTypes();
-    const uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
+    const cpo::uno::Sequence< uno::Type > aTypes = SwXFootnote_Base::getTypes();
+    const cpo::uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL
+cpo::uno::Sequence< sal_Int8 > SAL_CALL
 SwXFootnote::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 cpo::uno::Any SAL_CALL

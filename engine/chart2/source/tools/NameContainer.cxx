@@ -25,7 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
 namespace chart

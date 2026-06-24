@@ -35,7 +35,7 @@ using namespace ::com::sun::star::chart2;
 using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace chart
 {
@@ -72,7 +72,7 @@ void ReferenceSizeProvider::setValuesAtTitle(
         // set from auto-resize on to off -> adapt font sizes at XFormattedStrings
         if( bHasOldRefSize && ! useAutoScale())
         {
-            const uno::Sequence< uno::Reference< XFormattedString > > aStrSeq(
+            const cpo::uno::Sequence< uno::Reference< XFormattedString > > aStrSeq(
                 xTitle->getText());
             for( uno::Reference< XFormattedString > const & formattedStr : aStrSeq )
             {

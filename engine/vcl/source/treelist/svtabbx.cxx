@@ -52,14 +52,14 @@ namespace {
     {
         SvMemoryStream aOStm(65535, 65535);
         // Use fastest compression "1"
-        css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+        cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
             comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
         };
         vcl::PngImageWriter aPNGWriter(aOStm);
         aPNGWriter.setParameters(aFilterData);
         if (aPNGWriter.write(rImage))
         {
-            css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+            cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
                                             aOStm.Tell());
             OStringBuffer aBuffer("data:image/png;base64,");
             ::comphelper::Base64::encode(aBuffer, aSeq);
@@ -877,7 +877,7 @@ bool SvHeaderTabListBox::IsColumnSelected( sal_Int32 ) const
     return false;
 }
 
-void SvHeaderTabListBox::GetAllSelectedRows(css::uno::Sequence<sal_Int32 >& rRowIndices) const
+void SvHeaderTabListBox::GetAllSelectedRows(cpo::uno::Sequence<sal_Int32 >& rRowIndices) const
 {
     const sal_Int32 nCount = GetSelectedRowCount();
     rRowIndices.realloc(nCount);
@@ -893,7 +893,7 @@ void SvHeaderTabListBox::GetAllSelectedRows(css::uno::Sequence<sal_Int32 >& rRow
     assert(nIndex == nCount && "Mismatch between GetSelectedRowCount() and count of selected rows when iterating.");
 }
 
-void SvHeaderTabListBox::GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& ) const
+void SvHeaderTabListBox::GetAllSelectedColumns( cpo::uno::Sequence< sal_Int32 >& ) const
 {
 }
 

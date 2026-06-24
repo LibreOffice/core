@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::chart::DataSeriesProperties;
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
 namespace
@@ -71,7 +71,7 @@ void lcl_applyDefaultStyle(
     }
 }
 
-void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xProp, const uno::Sequence < sal_Int32 >& rAvailablePlacements )
+void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xProp, const cpo::uno::Sequence < sal_Int32 >& rAvailablePlacements )
 {
     sal_Int32 nLabelPlacement=0;
     if( !(xProp.is() && (xProp->getPropertyValue( u"LabelPlacement"_ustr ) >>= nLabelPlacement)) )
@@ -111,7 +111,7 @@ void lcl_ensureCorrectMissingValueTreatment( const rtl::Reference< ::chart::Diag
 {
     if( xDiagram.is() )
     {
-        uno::Sequence < sal_Int32 > aAvailableMissingValueTreatment(
+        cpo::uno::Sequence < sal_Int32 > aAvailableMissingValueTreatment(
             ::chart::ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
         if( aAvailableMissingValueTreatment.hasElements() )
@@ -140,7 +140,7 @@ ChartTypeTemplate::~ChartTypeTemplate()
 // ____ ChartTypeTemplate ____
 rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource2(
     const uno::Reference< data::XDataSource >& xDataSource,
-    const uno::Sequence< beans::PropertyValue >& aArguments )
+    const cpo::uno::Sequence< beans::PropertyValue >& aArguments )
 {
     rtl::Reference< Diagram > xDia;
 
@@ -241,7 +241,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
         {
             if (rCoords.is())
             {
-                rCoords->setChartTypes(uno::Sequence<uno::Reference<XChartType>>());
+                rCoords->setChartTypes(cpo::uno::Sequence<uno::Reference<XChartType>>());
             }
         }
 
@@ -388,11 +388,11 @@ void ChartTypeTemplate::applyStyle2(
 
         //ensure valid label placement
         {
-            uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+            cpo::uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                         getChartTypeForIndex( nChartTypeIndex ), isSwapXAndY(), xSeries ) );
             lcl_ensureCorrectLabelPlacement( xSeries, aAvailablePlacements );
 
-            uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+            cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
             // "AttributedDataPoints"
             if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
                 for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
@@ -448,7 +448,7 @@ void ChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& 
             //iterate through all series in this chart type
             for( rtl::Reference< DataSeries > const & xSeries : xChartType->getDataSeries2() )
             {
-                uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+                cpo::uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                     xChartType, isSwapXAndY(), xSeries ) );
                 if(!aAvailablePlacements.hasElements())
                     continue;
@@ -457,7 +457,7 @@ void ChartTypeTemplate::resetStyles2( const rtl::Reference< ::chart::Diagram >& 
 
                 lcl_resetLabelPlacementIfDefault( xSeries, nDefaultPlacement );
 
-                uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+                cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
                 // "AttributedDataPoints"
                 if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
                     for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
@@ -831,7 +831,7 @@ css::uno::Reference< css::uno::XInterface > ChartTypeTemplate::getDataInterprete
 }
 css::uno::Reference< css::chart2::XDiagram > ChartTypeTemplate::createDiagramByDataSource(
     const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-    const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+    const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments )
 {
     return createDiagramByDataSource2(xDataSource, aArguments);
 }
@@ -843,7 +843,7 @@ void ChartTypeTemplate::changeDiagram(
 void ChartTypeTemplate::changeDiagramData(
     const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
     const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-    const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+    const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments )
 {
     changeDiagramData(rtl::Reference<Diagram>(dynamic_cast<Diagram*>(xDiagram.get())), xDataSource, aArguments);
 }
@@ -854,7 +854,7 @@ bool ChartTypeTemplate::matchesTemplate(
     return matchesTemplate2(dynamic_cast<Diagram*>(xDiagram.get()), bAdaptProperties);
 }
 css::uno::Reference< ::css::chart2::XChartType > ChartTypeTemplate::getChartTypeForNewSeries(
-    const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes )
+    const cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes )
 {
     std::vector< rtl::Reference< ::chart::ChartType > > aTmp;
     aTmp.reserve(aFormerlyUsedChartTypes.getLength());

@@ -85,7 +85,7 @@ bool SAL_CALL SortedDynamicResultSet::supportsService( const OUString& ServiceNa
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSet::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.SortedDynamicResultSet"_ustr };
 }
@@ -418,7 +418,7 @@ bool SAL_CALL SortedDynamicResultSetFactory::supportsService( const OUString& Se
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSetFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSetFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.SortedDynamicResultSetFactory"_ustr };
 }
@@ -426,7 +426,7 @@ css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSetFactory::getSuppor
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_SortedDynamicResultSetFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SortedDynamicResultSetFactory(context));
 }

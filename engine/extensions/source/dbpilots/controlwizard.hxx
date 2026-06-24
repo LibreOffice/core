@@ -67,10 +67,10 @@ namespace dbp
     protected:
         static void fillListBox(
             weld::TreeView& _rList,
-            const css::uno::Sequence< OUString >& _rItems);
+            const cpo::uno::Sequence< OUString >& _rItems);
         static void fillListBox(
             weld::ComboBox& _rList,
-            const css::uno::Sequence< OUString >& _rItems);
+            const cpo::uno::Sequence< OUString >& _rItems);
 
     protected:
         void enableFormDatasourceDisplay();

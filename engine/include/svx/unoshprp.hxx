@@ -22,7 +22,7 @@
 
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -348,12 +348,12 @@
     { UNO_NAME_MISC_OBJ_FRAMERECT,        OWN_ATTR_FRAMERECT,         cppu::UnoType<css::awt::Rectangle>::get(), 0,  0 }, \
     { UNO_NAME_MISC_OBJ_ROTATEANGLE,      SDRATTR_ROTATEANGLE,        ::cppu::UnoType<sal_Int32>::get(),        0,  0}, \
     { UNO_NAME_BITMAP,                    OWN_ATTR_BITMAP,            cppu::UnoType<css::awt::XBitmap>::get(),   css::beans::PropertyAttribute::READONLY, 0}, \
-    { UNO_NAME_OLE2_METAFILE,             OWN_ATTR_METAFILE,          cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0}, \
+    { UNO_NAME_OLE2_METAFILE,             OWN_ATTR_METAFILE,          cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0}, \
     { u"IsFontwork"_ustr,                  OWN_ATTR_ISFONTWORK,        cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY, 0}, \
     { UNO_NAME_MISC_OBJ_BOUNDRECT,        OWN_ATTR_BOUNDRECT,         cppu::UnoType<css::awt::Rectangle>::get(), css::beans::PropertyAttribute::READONLY, 0},
 
 #define MISC_OBJ_PROPERTIES \
-    { UNO_NAME_MISC_OBJ_INTEROPGRABBAG,   OWN_ATTR_INTEROPGRABBAG,    cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get(),  0,  0}, \
+    { UNO_NAME_MISC_OBJ_INTEROPGRABBAG,   OWN_ATTR_INTEROPGRABBAG,    cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get(),  0,  0}, \
     MISC_OBJ_PROPERTIES_NO_SHEAR \
     { UNO_NAME_MISC_OBJ_SHEARANGLE,       SDRATTR_SHEARANGLE,         ::cppu::UnoType<sal_Int32>::get(),        0,  0},
 

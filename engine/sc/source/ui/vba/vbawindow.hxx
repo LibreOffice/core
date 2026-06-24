@@ -61,7 +61,7 @@ public:
         const css::uno::Reference< css::frame::XController >& xController );
     /// @throws css::uno::RuntimeException
     ScVbaWindow(
-        const css::uno::Sequence< cpo::uno::Any >& aArgs,
+        const cpo::uno::Sequence< cpo::uno::Any >& aArgs,
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     // XWindow
@@ -123,7 +123,7 @@ public:
     virtual void SAL_CALL PrintPreview( const cpo::uno::Any& EnableChanges ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

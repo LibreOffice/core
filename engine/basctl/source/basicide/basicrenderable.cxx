@@ -70,11 +70,11 @@ Renderable::Renderable (BaseWindow* pWin)
     vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintContentName, 0, true);
     m_aUIProperties[3].Value = setChoiceListControlOpt(u"evenoddbox"_ustr,
                                                         OUString(),
-                                                        uno::Sequence<OUString>(),
+                                                        cpo::uno::Sequence<OUString>(),
                                                         u"EvenOdd"_ustr,
-                                                        uno::Sequence<OUString>(),
+                                                        cpo::uno::Sequence<OUString>(),
                                                         0,
-                                                        uno::Sequence< bool >(),
+                                                        cpo::uno::Sequence< bool >(),
                                                         aEvenOddOpt);
 }
 

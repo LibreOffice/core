@@ -62,7 +62,7 @@ void LpSolverTest::setUp()
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(m_xContext);
     uno::Reference<lang::XComponent> xComponent(xComponentLoader->loadComponentFromURL(
             u"private:factory/scalc"_ustr, u"_blank"_ustr, 0,
-            uno::Sequence < css::beans::PropertyValue >()));
+            cpo::uno::Sequence < css::beans::PropertyValue >()));
     m_xDocument.set(xComponent, uno::UNO_QUERY_THROW);
 }
 
@@ -103,8 +103,8 @@ void LpSolverTest::testSLPSolverNonlinear()
         uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 0); // B1
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 } }; // A1
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 } }; // A1
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
           cpo::uno::Any(-10.0) },
         { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
@@ -119,7 +119,7 @@ void LpSolverTest::testSLPSolverNonlinear()
 
     xSolver->solve();
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, aSolution[0], 1E-4);
 }
@@ -145,8 +145,8 @@ void LpSolverTest::testSLPSolverNonlinearConstraint()
         uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1); // B2 = x + y
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 }, { 0, 0, 1 } };
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 }, { 0, 0, 1 } };
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         // x*x + y*y <= 1 (cell B1)
         { table::CellAddress(0, 1, 0), sheet::SolverConstraintOperator_LESS_EQUAL,
           cpo::uno::Any(1.0) },
@@ -168,7 +168,7 @@ void LpSolverTest::testSLPSolverNonlinearConstraint()
 
     xSolver->solve();
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.70710678, aSolution[0], 1E-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.70710678, aSolution[1], 1E-3);
@@ -187,7 +187,7 @@ void LpSolverTest::testSLPSolverLargeModel()
         = m_directories.getURLFromSrc(u"/sc/qa/unit/data/solver/ResourceDepletion.fods"_ustr);
     uno::Reference<frame::XDesktop2> xLoader = frame::Desktop::create(m_xContext);
     uno::Reference<lang::XComponent> xComponent(xLoader->loadComponentFromURL(
-        aUrl, u"_blank"_ustr, 0, uno::Sequence<css::beans::PropertyValue>()));
+        aUrl, u"_blank"_ustr, 0, cpo::uno::Sequence<css::beans::PropertyValue>()));
     uno::Reference<sheet::XSpreadsheetDocument> xDocument(xComponent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xSheets(xDocument->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xSheets->getByIndex(0), uno::UNO_QUERY_THROW);
@@ -207,8 +207,8 @@ void LpSolverTest::testSLPSolverLargeModel()
         aConstraintList.push_back({ table::CellAddress(0, 4, nRow),
                                     sheet::SolverConstraintOperator_GREATER_EQUAL, cpo::uno::Any(0.0) });
     }
-    uno::Sequence<table::CellAddress> aVariables(aVariableList.data(), aVariableList.size());
-    uno::Sequence<sheet::SolverConstraint> aConstraints(aConstraintList.data(),
+    cpo::uno::Sequence<table::CellAddress> aVariables(aVariableList.data(), aVariableList.size());
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints(aConstraintList.data(),
                                                         aConstraintList.size());
 
     uno::Reference<sheet::XSolver> xSolver(
@@ -227,7 +227,7 @@ void LpSolverTest::testSLPSolverLargeModel()
     xSolver->solve();
 
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     for (sal_Int32 i = 0; i < aSolution.getLength(); ++i)
         xSheet->getCellByPosition(1, 9 + i)->setValue(aSolution[i]);
@@ -248,10 +248,10 @@ void LpSolverTest::testSolver(OUString const & rName)
     table::CellAddress aObjective(0, 0, 0);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables { {0, 0, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables { {0, 0, 0 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* Left     */ table::CellAddress(0, 0, 0),
           /* Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
           /* Right    */ cpo::uno::Any(5.0) }
@@ -267,7 +267,7 @@ void LpSolverTest::testSolver(OUString const & rName)
     // test results
     xSolver->solve();
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aSolution.getLength(), aVariables.getLength());
     CPPUNIT_ASSERT_EQUAL(5.0, aSolution[0]);
 

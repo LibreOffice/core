@@ -198,7 +198,7 @@ private:
                                    + "\0" + _telephonenumber + "=" + GetTelephoneNumber() // tel
                                    + "\0" + _facsimiletelephonenumber + "=" + GetFaxNumber() // fax
                                    + "\0" + _mail + "=" + GetMail(); // mail
-            const css::uno::Sequence<sal_Int8> seqCachedData(
+            const cpo::uno::Sequence<sal_Int8> seqCachedData(
                 reinterpret_cast<const sal_Int8*>(sCachedData.getStr()),
                 sCachedData.getLength() * sizeof(sal_Unicode));
             OUStringBuffer sOutBuf;
@@ -227,7 +227,7 @@ private:
             throw css::uno::RuntimeException();
 
         {
-            css::uno::Sequence<sal_Int8> seqCachedData;
+            cpo::uno::Sequence<sal_Int8> seqCachedData;
             comphelper::Base64::decode(seqCachedData, sCache);
             sCache = OUString(reinterpret_cast<const sal_Unicode*>(seqCachedData.getConstArray()),
                               seqCachedData.getLength() / sizeof(sal_Unicode));
@@ -413,7 +413,7 @@ bool SAL_CALL WinUserInfoBe::supportsService(const OUString& aServiceName)
     return cppu::supportsService(this, aServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL WinUserInfoBe::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL WinUserInfoBe::getSupportedServiceNames()
 {
     return { "com.sun.star.configuration.backend.WinUserInfoBe" };
 }
@@ -423,7 +423,7 @@ css::uno::Sequence<OUString> SAL_CALL WinUserInfoBe::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_WinUserInfoBe_get_implementation(css::uno::XComponentContext*,
-                                            css::uno::Sequence<cpo::uno::Any> const&)
+                                            cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new extensions::config::WinUserInfo::WinUserInfoBe());
 }

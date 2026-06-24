@@ -54,11 +54,11 @@ public:
     SdOptionsItem & operator =(SdOptionsItem const &) = delete; // due to ConfigItem
     SdOptionsItem & operator =(SdOptionsItem &&) = delete; // due to ConfigItem
 
-    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void            Notify( const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 
-    css::uno::Sequence< cpo::uno::Any > GetProperties( const css::uno::Sequence< OUString >& rNames );
-    bool                    PutProperties( const css::uno::Sequence< OUString >& rNames,
-                                           const css::uno::Sequence< cpo::uno::Any>& rValues );
+    cpo::uno::Sequence< cpo::uno::Any > GetProperties( const cpo::uno::Sequence< OUString >& rNames );
+    bool                    PutProperties( const cpo::uno::Sequence< OUString >& rNames,
+                                           const cpo::uno::Sequence< cpo::uno::Any>& rValues );
     using ConfigItem::SetModified;
 };
 
@@ -76,7 +76,7 @@ private:
     bool                    mbEnableModify  : 1;
 
     SAL_DLLPRIVATE void Commit( SdOptionsItem& rCfgItem ) const;
-    SAL_DLLPRIVATE css::uno::Sequence< OUString > GetPropertyNames() const;
+    SAL_DLLPRIVATE cpo::uno::Sequence< OUString > GetPropertyNames() const;
 
 protected:
 

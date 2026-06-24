@@ -56,7 +56,7 @@ void MenuContentHandler::gatherMenuContent(
     for (sal_Int32 n = 0; n < xIndexAccess->getCount(); n++)
     {
         MenuContent aNewContent;
-        uno::Sequence<beans::PropertyValue> aProperties;
+        cpo::uno::Sequence<beans::PropertyValue> aProperties;
         uno::Reference<container::XIndexAccess> xIndexContainer;
 
         if (!(xIndexAccess->getByIndex(n) >>= aProperties))
@@ -281,7 +281,7 @@ void CommandListBox::dispatchCommandAndClose(OUString const& rCommand)
     mxPopover->popdown();
 
     if (!rCommand.isEmpty())
-        comphelper::dispatchCommand(rCommand, uno::Sequence<beans::PropertyValue>());
+        comphelper::dispatchCommand(rCommand, cpo::uno::Sequence<beans::PropertyValue>());
 }
 
 void CommandPopupHandler::showPopup(weld::Window* pParent,

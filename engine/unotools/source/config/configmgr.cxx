@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <officecfg/Setup.hxx>
 #include <rtl/ustring.hxx>
@@ -115,7 +115,7 @@ utl::ConfigManager & utl::ConfigManager::getConfigManager() {
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
-    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(css::beans::NamedValue(
+    cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(css::beans::NamedValue(
         u"nodepath"_ustr,
         cpo::uno::Any("/org.openoffice." + item.GetSubTreeName()))) };
     if (item.GetMode() & ConfigItemMode::AllLocales) {
@@ -131,7 +131,7 @@ utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(std::u16string_view rSubTreeName) {
-    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(css::beans::NamedValue(
+    cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(css::beans::NamedValue(
         u"nodepath"_ustr,
         cpo::uno::Any(OUString::Concat(u"/org.openoffice.") + rSubTreeName))) };
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(

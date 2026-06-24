@@ -86,13 +86,13 @@ public:
         );
 
     void    initialLoad(
-                const css::uno::Sequence< sal_Int8 >& i_rClassID,
-                const css::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs,
+                const cpo::uno::Sequence< sal_Int8 >& i_rClassID,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs,
                 const css::uno::Reference< css::sdbc::XConnection >& i_rConnection
             );
 
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
 // css::uno::XInterface
     DECLARE_XINTERFACE( )
@@ -169,13 +169,13 @@ public:
     static OUString GetDocumentServiceFromMediaType(
         const OUString& _rMediaType,
         const css::uno::Reference< css::uno::XComponentContext > & _rxContext,
-        css::uno::Sequence< sal_Int8 >& _rClassId
+        cpo::uno::Sequence< sal_Int8 >& _rClassId
     );
     static OUString GetDocumentServiceFromMediaType(
         const css::uno::Reference< css::embed::XStorage >& _rxContainerStorage,
         const OUString& _rEntityName,
         const css::uno::Reference< css::uno::XComponentContext > & _rxContext,
-        css::uno::Sequence< sal_Int8 >& _rClassId
+        cpo::uno::Sequence< sal_Int8 >& _rClassId
     );
 
     struct NotifierAccess { friend class NameChangeNotifier; private: NotifierAccess() { } };
@@ -248,13 +248,13 @@ private:
 
     /** fills the load arguments
     */
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
         fillLoadArgs(
             const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
             const bool _bSuppressMacros,
             const bool _bReadOnly,
-            const css::uno::Sequence< css::beans::PropertyValue >& i_rOpenCommandArguments,
-            css::uno::Sequence< css::beans::PropertyValue >& _out_rEmbeddedObjectDescriptor
+            const cpo::uno::Sequence< css::beans::PropertyValue >& i_rOpenCommandArguments,
+            cpo::uno::Sequence< css::beans::PropertyValue >& _out_rEmbeddedObjectDescriptor
         );
 
     /** splits the given arguments to an "open*" command into arguments for loading the document, and arguments to be
@@ -272,7 +272,7 @@ private:
             the EmbeddedObjectDescriptor to be passed when initializing the embedded object
     */
     static void separateOpenCommandArguments(
-            const css::uno::Sequence< css::beans::PropertyValue >&    i_rOpenCommandArguments,
+            const cpo::uno::Sequence< css::beans::PropertyValue >&    i_rOpenCommandArguments,
             ::comphelper::NamedValueCollection&                                                 o_rDocumentLoadArgs,
             ::comphelper::NamedValueCollection&                                                 o_rEmbeddedObjectDescriptor
         );
@@ -283,8 +283,8 @@ private:
     */
     void loadEmbeddedObject(
                 const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                const css::uno::Sequence< sal_Int8 >& _aClassID,
-                const css::uno::Sequence< css::beans::PropertyValue >& _rAdditionalArgs,
+                const cpo::uno::Sequence< sal_Int8 >& _aClassID,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& _rAdditionalArgs,
                 const bool _bSuppressMacros,
                 const bool _bReadOnly
             );
@@ -296,8 +296,8 @@ private:
     {
         loadEmbeddedObject(
             nullptr,
-            css::uno::Sequence< sal_Int8 >(),
-            css::uno::Sequence< css::beans::PropertyValue >(),
+            cpo::uno::Sequence< sal_Int8 >(),
+            cpo::uno::Sequence< css::beans::PropertyValue >(),
             true,
             true
         );

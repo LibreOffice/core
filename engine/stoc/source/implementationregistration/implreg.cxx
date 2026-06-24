@@ -1069,7 +1069,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 private: // helper methods
     void prepareRegister(
@@ -1157,7 +1157,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceM
 // XInitialization
 
 void ImplementationRegistration::initialize(
-    const css::uno::Sequence< cpo::uno::Any >& aArgs )
+    const cpo::uno::Sequence< cpo::uno::Any >& aArgs )
 {
 
     if( aArgs.getLength() != 4 ) {
@@ -1568,7 +1568,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_ImplementationRegistration_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ImplementationRegistration(context));
 }

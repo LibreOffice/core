@@ -38,6 +38,7 @@ using namespace ::com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using com::sun::star::packages::zip::ZipIOException;
 
 XUnbufferedStream::XUnbufferedStream(
@@ -272,7 +273,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                     if ( mnZipCurrent == mnZipEnd )
                     {
                         // this should throw if AEAD is in use and the tag fails to validate
-                        uno::Sequence< sal_Int8 > aSuffix = m_xCipherContext->finalizeCipherContextAndDispose();
+                        cpo::uno::Sequence< sal_Int8 > aSuffix = m_xCipherContext->finalizeCipherContextAndDispose();
                         if ( aSuffix.hasElements() )
                         {
                             sal_Int32 nOldLen = maCompBuffer.getLength();

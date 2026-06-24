@@ -68,9 +68,9 @@ OUString enumValueToEnumName(cpo::uno::Any const& aValue,
     xTypeDescription.set(xManager->getByHierarchicalName(aValue.getValueTypeName()),
                          uno::UNO_QUERY);
 
-    const uno::Sequence<sal_Int32> aValues = xTypeDescription->getEnumValues();
+    const cpo::uno::Sequence<sal_Int32> aValues = xTypeDescription->getEnumValues();
     sal_Int32 nValuesIndex = std::find(aValues.begin(), aValues.end(), nIntValue) - aValues.begin();
-    uno::Sequence<OUString> aNames = xTypeDescription->getEnumNames();
+    cpo::uno::Sequence<OUString> aNames = xTypeDescription->getEnumNames();
     return aNames[nValuesIndex];
 }
 
@@ -194,7 +194,7 @@ OUString getInterfaceName(uno::Reference<uno::XInterface> const& xInterface,
         return xNamed->getName();
 
     auto xInvocationFactory = css::script::Invocation::create(xContext);
-    uno::Sequence<cpo::uno::Any> aParameters = { cpo::uno::Any(xInterface) };
+    cpo::uno::Sequence<cpo::uno::Any> aParameters = { cpo::uno::Any(xInterface) };
     auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
     if (xInvocationInterface.is())
     {
@@ -673,7 +673,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
         const auto xNameAccess = uno::Reference<container::XNameAccess>(maAny, uno::UNO_QUERY);
         if (xNameAccess.is())
         {
-            const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+            const cpo::uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
             for (OUString const& rName : aNames)
             {
                 cpo::uno::Any aAny = xNameAccess->getByName(rName);
@@ -731,7 +731,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     }
 
     auto xInvocationFactory = css::script::Invocation::create(mxContext);
-    uno::Sequence<cpo::uno::Any> aParameters = { maAny };
+    cpo::uno::Sequence<cpo::uno::Any> aParameters = { maAny };
     auto xInvocationInterface = xInvocationFactory->createInstanceWithArguments(aParameters);
     if (!xInvocationInterface.is())
         return;
@@ -744,7 +744,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
     if (!xInvocationAccess.is())
         return;
 
-    uno::Sequence<script::InvocationInfo> aInvocationInfoSequence;
+    cpo::uno::Sequence<script::InvocationInfo> aInvocationInfoSequence;
     try
     {
         aInvocationInfoSequence = xInvocation->getInfo();
@@ -1277,7 +1277,7 @@ void ObjectInspectorTreeHandler::appendServices(uno::Reference<uno::XInterface> 
     if (!xServiceInfo)
         return;
 
-    const uno::Sequence<OUString> aServiceNames(xServiceInfo->getSupportedServiceNames());
+    const cpo::uno::Sequence<OUString> aServiceNames(xServiceInfo->getSupportedServiceNames());
     for (auto const& aServiceName : aServiceNames)
     {
         lclAppendNode(mpObjectInspectorWidgets->mpServicesTreeView,

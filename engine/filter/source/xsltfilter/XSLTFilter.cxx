@@ -153,7 +153,7 @@ namespace XSLT
         //  XServiceInfo
         virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XImportFilter
         virtual bool SAL_CALL
@@ -199,7 +199,7 @@ namespace XSLT
     {
         return u"com.sun.star.comp.documentconversion.XSLTFilter"_ustr;
     }
-    css::uno::Sequence< OUString > XSLTFilter::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > XSLTFilter::getSupportedServiceNames()
     {
         return { u"com.sun.star.documentconversion.XSLTFilter"_ustr };
     }
@@ -646,7 +646,7 @@ namespace XSLT
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_XSLTFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XSLT::XSLTFilter(context));
 }

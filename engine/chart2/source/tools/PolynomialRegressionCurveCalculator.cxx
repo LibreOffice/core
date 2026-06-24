@@ -89,8 +89,8 @@ void PolynomialRegressionCurveCalculator::computeCorrelationCoefficient(
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
-    const uno::Sequence< double >& aXValues,
-    const uno::Sequence< double >& aYValues )
+    const cpo::uno::Sequence< double >& aXValues,
+    const cpo::uno::Sequence< double >& aYValues )
 {
     m_fCorrelationCoefficient = std::numeric_limits<double>::quiet_NaN();
 

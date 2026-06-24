@@ -474,10 +474,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf163194)
     }
 
     // Export to PDF with comments in margin
-    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
-                               comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, true) };
-    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
-                               comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()) };
+    cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
+                                    comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr,
+                                                                  true) };
+    cpo::uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
+                                    comphelper::makePropertyValue(u"URL"_ustr,
+                                                                  maTempFile.GetURL()) };
     dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
 
     if (auto pPdfDocument = parsePDFExport()) // This part will be skipped without PDFium

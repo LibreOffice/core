@@ -73,7 +73,7 @@
 
 using namespace com::sun::star;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
@@ -1873,7 +1873,7 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
                 ScDPSaveDimension* pDim = aData.GetDimensionByName( aDimName );
 
                 // get all member names in source order
-                uno::Sequence<OUString> aMemberNames;
+                cpo::uno::Sequence<OUString> aMemberNames;
                 pDPObj->GetMemberNames( aDestData.Dimension, aMemberNames );
 
                 bool bInserted = false;

@@ -365,7 +365,7 @@ OUString SAL_CALL
     return u"AccessibleDocumentViewBase"_ustr;
 }
 
-css::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString> SAL_CALL
     AccessibleDocumentViewBase::getSupportedServiceNames()
 {
     ensureAlive();

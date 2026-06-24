@@ -624,7 +624,7 @@ std::unique_ptr<SvStream> EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) co
             try
             {
                 sal_Int32 nRead=0;
-                uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+                cpo::uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
                 do
                 {
                     nRead = xStream->readBytes ( aSequence, nConstBufferSize );
@@ -962,13 +962,13 @@ OUString EmbeddedObjectRef::GetChartType()
                     if( ! xDiagram.is())
                         return OUString();
                     uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-                    const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+                    const cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
                     // IA2 CWS. Unused: int nCoordinateCount = aCooSysSeq.getLength();
                     bool bGetChartType = false;
                     for( const auto& rCooSys : aCooSysSeq )
                     {
                         uno::Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
-                        const uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+                        const cpo::uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
                         int nDimesionCount = rCooSys->getDimension();
                         if( nDimesionCount == 3 )
                             Style.append("3D ");

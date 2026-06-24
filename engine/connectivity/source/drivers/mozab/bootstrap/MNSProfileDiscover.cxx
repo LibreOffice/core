@@ -167,7 +167,7 @@ namespace connectivity::mozab
             ProductStruct &rProduct = m_ProductProfileList[index];
             return static_cast< ::sal_Int32 >(rProduct.mProfileList.size());
         }
-        ::sal_Int32 ProfileAccess::getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list )
+        ::sal_Int32 ProfileAccess::getProfileList( css::mozilla::MozillaProductType product, cpo::uno::Sequence< OUString >& list )
         {
             sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];

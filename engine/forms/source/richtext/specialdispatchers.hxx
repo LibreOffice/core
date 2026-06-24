@@ -34,7 +34,7 @@ namespace frm
         virtual ~OSelectAllDispatcher() override;
 
         // XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
         // ORichTextFeatureDispatcher
         virtual css::frame::FeatureStateEvent  buildStatusEvent() const override;
@@ -62,7 +62,7 @@ namespace frm
 
     protected:
         // XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL& URL, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+        virtual void SAL_CALL dispatch( const css::util::URL& URL, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
         // ORichTextFeatureDispatcher
         virtual css::frame::FeatureStateEvent  buildStatusEvent() const override;
@@ -81,7 +81,7 @@ namespace frm
     protected:
         // OParametrizedAttributeDispatcher
         virtual SfxPoolItemHolder convertDispatchArgsToItem(
-            const css::uno::Sequence< css::beans::PropertyValue >& _rArguments ) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& _rArguments ) override;
     };
 
 

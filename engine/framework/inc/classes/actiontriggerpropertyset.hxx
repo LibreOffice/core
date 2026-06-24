@@ -53,11 +53,11 @@ class ActionTriggerPropertySet final : private cppu::BaseMutex,
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     private:
 
@@ -77,7 +77,7 @@ class ActionTriggerPropertySet final : private cppu::BaseMutex,
 
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
-        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         //  helper
 

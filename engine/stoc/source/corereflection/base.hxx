@@ -107,7 +107,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString & rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XIdlReflection
     virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL forName( const OUString & rTypeName ) override;
@@ -156,18 +156,18 @@ public:
     virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
 
     // def impl ????
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getClasses() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getClasses() override;
     virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL getClass( const OUString & rName ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getInterfaces() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getInterfaces() override;
 
     // structs, interfaces
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
     // structs
     virtual css::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
     // interfaces
     virtual css::uno::Reference< css::reflection::XIdlMethod > SAL_CALL getMethod( const OUString & rName ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlMethod > > SAL_CALL getMethods() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlMethod > > SAL_CALL getMethods() override;
     // array
     virtual css::uno::Reference< css::reflection::XIdlClass > SAL_CALL getComponentType() override;
     virtual css::uno::Reference< css::reflection::XIdlArray > SAL_CALL getArray() override;
@@ -179,7 +179,7 @@ class InterfaceIdlClassImpl
 {
     typedef std::pair< OUString, typelib_TypeDescription * > MemberInit;
 
-    css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > >      _xSuperClasses;
+    cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > >      _xSuperClasses;
 
     std::unique_ptr<MemberInit[]>           _pSortedMemberInit; // first methods, then attributes
     OUString2Field                          _aName2Field;
@@ -205,11 +205,11 @@ public:
 
     // IdlClassImpl modifications
     virtual bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
     virtual css::uno::Reference< css::reflection::XIdlMethod > SAL_CALL getMethod( const OUString & rName ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlMethod > > SAL_CALL getMethods() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlMethod > > SAL_CALL getMethods() override;
     virtual css::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
     virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
 };
 
@@ -219,7 +219,7 @@ class CompoundIdlClassImpl
 {
     css::uno::Reference< css::reflection::XIdlClass >
                                              _xSuperClass;
-    std::optional< css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > >
+    std::optional< cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > >
                                             m_xFields;
     OUString2Field                          _aName2Field;
 
@@ -237,9 +237,9 @@ public:
 
     // IdlClassImpl modifications
     virtual bool SAL_CALL isAssignableFrom( const css::uno::Reference< css::reflection::XIdlClass > & xType ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > > SAL_CALL getSuperclasses() override;
     virtual css::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
 };
 
 
@@ -273,7 +273,7 @@ public:
 class EnumIdlClassImpl
     : public IdlClassImpl
 {
-    std::optional< css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > > m_xFields;
+    std::optional< cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > > m_xFields;
     OUString2Field                       _aName2Field;
 
 public:
@@ -290,7 +290,7 @@ public:
 
     // IdlClassImpl modifications
     virtual css::uno::Reference< css::reflection::XIdlField > SAL_CALL getField( const OUString & rName ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlField > > SAL_CALL getFields() override;
     virtual void SAL_CALL createObject( cpo::uno::Any & rObj ) override;
 };
 

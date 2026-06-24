@@ -47,7 +47,7 @@ namespace basprov
         // hack, OPropertyContainer doesn't allow you to define a property of unknown
         // type ( I guess because an Any can't contain an Any... I've always wondered why?
     // as it's not unusual to do that in corba )
-        css::uno::Sequence< cpo::uno::Any > m_caller;
+        cpo::uno::Sequence< cpo::uno::Any > m_caller;
     protected:
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
@@ -67,9 +67,9 @@ namespace basprov
 
         // XScript
         virtual cpo::uno::Any SAL_CALL invoke(
-            const css::uno::Sequence< cpo::uno::Any >& aParams,
-            css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-            css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+            const cpo::uno::Sequence< cpo::uno::Any >& aParams,
+            cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
+            cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
         // SfxListener
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     };

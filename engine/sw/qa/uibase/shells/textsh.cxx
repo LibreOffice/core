@@ -43,7 +43,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteSections)
     // Given a document with a section:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"RegionName"_ustr,
                                       cpo::uno::Any(u"ZOTERO_BIBL {} CSL_BIBLIOGRAPHY RND"_ustr)),
         comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"old content"_ustr)),

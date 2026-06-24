@@ -187,7 +187,7 @@ void SvxZoomSliderControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, 
                     mxImpl->mnMaxZoom > mxImpl->mnSliderCenter,
                     "Looks like the zoom slider item is corrupted" );
 
-        const css::uno::Sequence < sal_Int32 > rSnappingPoints = static_cast<const SvxZoomSliderItem*>( pState )->GetSnappingPoints();
+        const cpo::uno::Sequence < sal_Int32 > rSnappingPoints = static_cast<const SvxZoomSliderItem*>( pState )->GetSnappingPoints();
         mxImpl->maSnappingPointOffsets.clear();
         mxImpl->maSnappingPointZooms.clear();
 
@@ -381,7 +381,7 @@ void SvxZoomSliderControl::repaintAndExecute()
     cpo::uno::Any any;
     aZoomSliderItem.QueryValue(any);
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(u"ZoomSlider"_ustr,
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(u"ZoomSlider"_ustr,
                                                                                        any) };
     execute(aArgs);
 }

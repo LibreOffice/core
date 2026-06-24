@@ -69,9 +69,9 @@ OImageButtonModel::~OImageButtonModel()
 }
 
 // XServiceInfo
-css::uno::Sequence<OUString>  OImageButtonModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString>  OImageButtonModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OClickableImageBaseModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -160,9 +160,9 @@ Sequence<Type> OImageButtonControl::_getTypes()
     return aTypes;
 }
 
-css::uno::Sequence<OUString>  OImageButtonControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString>  OImageButtonControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OClickableImageBaseControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -232,14 +232,14 @@ void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OImageButtonModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageButtonModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OImageButtonControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageButtonControl(component));
 }

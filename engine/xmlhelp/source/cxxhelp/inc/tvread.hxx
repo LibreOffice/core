@@ -118,7 +118,7 @@ namespace treeview {
         virtual cpo::uno::Any SAL_CALL
         getByName( const OUString& aName ) override = 0;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString > SAL_CALL
         getElementNames( ) override = 0;
 
         virtual bool SAL_CALL
@@ -149,7 +149,7 @@ namespace treeview {
         virtual cpo::uno::Any SAL_CALL
         getByName( const OUString& aName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString > SAL_CALL
         getElementNames( ) override;
 
         virtual bool SAL_CALL
@@ -185,7 +185,7 @@ namespace treeview {
         virtual cpo::uno::Any SAL_CALL
         getByName( const OUString& aName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString > SAL_CALL
         getElementNames( ) override;
 
         virtual bool SAL_CALL
@@ -248,15 +248,15 @@ namespace treeview {
         IteratorState                                                               m_eState;
         OUString                                                               m_aLanguage;
 
-        css::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< css::uno::Reference
             < css::deployment::XPackage > >                              m_aUserPackagesSeq;
         bool                                                                        m_bUserPackagesLoaded;
 
-        css::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< css::uno::Reference
             < css::deployment::XPackage > >                              m_aSharedPackagesSeq;
         bool                                                                        m_bSharedPackagesLoaded;
 
-        css::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< css::uno::Reference
             < css::deployment::XPackage > >                              m_aBundledPackagesSeq;
         bool                                                                        m_bBundledPackagesLoaded;
 

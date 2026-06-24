@@ -88,9 +88,9 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     return xReturn;
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL InterceptionHelper::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL InterceptionHelper::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
-    css::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> lDispatches(lDescriptor.getLength());
+    cpo::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> lDispatches(lDescriptor.getLength());
     std::transform(lDescriptor.begin(), lDescriptor.end(), lDispatches.getArray(),
                    [this](const css::frame::DispatchDescriptor& r)
                    { return queryDispatch(r.FeatureURL, r.FrameName, r.SearchFlags); });

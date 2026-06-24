@@ -296,7 +296,7 @@ class ModelData_Impl
 public:
     ModelData_Impl( SfxStoringHelper& aOwner,
                     uno::Reference< frame::XModel2 > xModel,
-                    const uno::Sequence< beans::PropertyValue >& aMediaDescr );
+                    const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr );
 
     ~ModelData_Impl();
 
@@ -320,10 +320,10 @@ public:
 
 
     OUString GetDocServiceName();
-    uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags nMust, SfxFilterFlags nDont );
-    uno::Sequence< beans::PropertyValue > GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont );
-    uno::Sequence< beans::PropertyValue > GetPreselectedFilter_Impl( sal_Int16 nStoreMode );
-    uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilter();
+    cpo::uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags nMust, SfxFilterFlags nDont );
+    cpo::uno::Sequence< beans::PropertyValue > GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont );
+    cpo::uno::Sequence< beans::PropertyValue > GetPreselectedFilter_Impl( sal_Int16 nStoreMode );
+    cpo::uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilter();
 
     bool ExecuteFilterDialog_Impl( const OUString& aFilterName, bool bAsync );
 
@@ -341,7 +341,7 @@ public:
                                 bool bPreselectPassword,
                                 OUString& aSuggestedDir,
                                 sal_Int16 nDialog,
-                                const css::uno::Sequence<OUString>& rDenyList,
+                                const cpo::uno::Sequence<OUString>& rDenyList,
                                 SignatureState const nScriptingSignatureState
                                 );
 
@@ -355,7 +355,7 @@ public:
 
 ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
                                 uno::Reference< frame::XModel2 > xModel,
-                                const uno::Sequence< beans::PropertyValue >& aMediaDescr )
+                                const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr )
 : m_pOwner( &aOwner )
 , m_xModel(std::move( xModel ))
 , m_aMediaDescrHM( aMediaDescr )
@@ -438,7 +438,7 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
 {
     if ( !m_pModulePropsHM )
     {
-        uno::Sequence< beans::PropertyValue > aModuleProps;
+        cpo::uno::Sequence< beans::PropertyValue > aModuleProps;
         m_pOwner->GetModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
         if ( !aModuleProps.hasElements() )
             throw uno::RuntimeException(); // TODO;
@@ -479,9 +479,9 @@ void ModelData_Impl::CheckInteractionHandler()
 }
 
 
-uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter()
+cpo::uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter()
 {
-    uno::Sequence< beans::PropertyValue > aProps;
+    cpo::uno::Sequence< beans::PropertyValue > aProps;
 
     const OUString aFilterName = GetModuleProps().getUnpackedValueOrDefault( u"ooSetupFactoryDefaultFilter"_ustr, OUString() );
 
@@ -491,11 +491,11 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 }
 
 
-uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags nMust,
+cpo::uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilterCheckFlags( SfxFilterFlags nMust,
                                                                                             SfxFilterFlags nDont )
 {
-    uno::Sequence< beans::PropertyValue > aFilterProps;
-    uno::Sequence< beans::PropertyValue > aProps = GetDocServiceDefaultFilter();
+    cpo::uno::Sequence< beans::PropertyValue > aFilterProps;
+    cpo::uno::Sequence< beans::PropertyValue > aProps = GetDocServiceDefaultFilter();
     if ( aProps.hasElements() )
     {
         ::comphelper::SequenceAsHashMap aFiltHM( aProps );
@@ -509,20 +509,20 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 }
 
 
-uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont )
+cpo::uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont )
 {
-    uno::Sequence< beans::NamedValue > aSearchRequest { { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) } };
+    cpo::uno::Sequence< beans::NamedValue > aSearchRequest { { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) } };
 
     return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
 
 
-uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl( sal_Int16 nStoreMode )
+cpo::uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl( sal_Int16 nStoreMode )
 {
     if ( nStoreMode == SAVEASREMOTE_REQUESTED )
         nStoreMode = SAVEAS_REQUESTED;
 
-    uno::Sequence< beans::PropertyValue > aFilterProps;
+    cpo::uno::Sequence< beans::PropertyValue > aFilterProps;
 
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
@@ -530,7 +530,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     if ( ( nStoreMode != SAVEASREMOTE_REQUESTED ) && ( nStoreMode & PDFEXPORT_REQUESTED ) )
     {
         // Preselect PDF-Filter for EXPORT
-        uno::Sequence< beans::NamedValue > aSearchRequest
+        cpo::uno::Sequence< beans::NamedValue > aSearchRequest
         {
             { u"Type"_ustr, cpo::uno::Any(u"pdf_Portable_Document_Format"_ustr) },
             { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) }
@@ -541,7 +541,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     else if ( ( nStoreMode != SAVEASREMOTE_REQUESTED ) && ( nStoreMode & EPUBEXPORT_REQUESTED ) )
     {
         // Preselect EPUB filter for export.
-        uno::Sequence<beans::NamedValue> aSearchRequest
+        cpo::uno::Sequence<beans::NamedValue> aSearchRequest
         {
             { u"Type"_ustr, cpo::uno::Any(u"writer_EPUB_Document"_ustr) },
             { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) }
@@ -569,7 +569,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
     bool bDialogUsed = false;
 
     try {
-        uno::Sequence < beans::PropertyValue > aProps;
+        cpo::uno::Sequence < beans::PropertyValue > aProps;
         cpo::uno::Any aAny = m_pOwner->GetFilterConfiguration()->getByName( aFilterName );
         if ( aAny >>= aProps )
         {
@@ -581,7 +581,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
                 pProp->Value >>= aServiceName;
                 if( !aServiceName.isEmpty() )
                 {
-                    uno::Sequence<cpo::uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
+                    cpo::uno::Sequence<cpo::uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                     {
                         {"ParentWindow", cpo::uno::Any(SfxStoringHelper::GetModelXWindow(m_xModel))},
                     }));
@@ -614,7 +614,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
                         if( xExporter.is() )
                             xExporter->setSourceDocument( GetModel() );
 
-                        uno::Sequence< beans::PropertyValue > aPropsForDialog;
+                        cpo::uno::Sequence< beans::PropertyValue > aPropsForDialog;
                         GetMediaDescr() >> aPropsForDialog;
                         xFilterProperties->setPropertyValues( aPropsForDialog );
 
@@ -639,7 +639,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
                                     sal_uInt32(ERRCODE_IO_ABORT));
                             }
 
-                            const uno::Sequence< beans::PropertyValue > aPropsFromDialog =
+                            const cpo::uno::Sequence< beans::PropertyValue > aPropsFromDialog =
                                                                         xFilterProperties->getPropertyValues();
                             for ( const auto& rProp : aPropsFromDialog )
                                 GetMediaDescr()[rProp.Name] = rProp.Value;
@@ -672,7 +672,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
 void SfxStoringHelper::CallFinishGUIStoreModel()
 {
     ::comphelper::SequenceAsHashMap::const_iterator aFileNameIter = m_xModelData->GetMediaDescr().find( u"URL"_ustr );
-    uno::Sequence< beans::PropertyValue > aFilterProps = m_xModelData->GetPreselectedFilter_Impl( m_nStoreMode );
+    cpo::uno::Sequence< beans::PropertyValue > aFilterProps = m_xModelData->GetPreselectedFilter_Impl( m_nStoreMode );
     const OUString aFilterFromMediaDescr = m_xModelData->GetMediaDescr().getUnpackedValueOrDefault( aFilterNameString, OUString() );
     const OUString aOldFilterName = m_xModelData->GetDocProps().getUnpackedValueOrDefault( aFilterNameString, OUString() );
     ::comphelper::SequenceAsHashMap aFilterPropsHM( aFilterProps );
@@ -696,7 +696,7 @@ IMPL_LINK( ModelData_Impl, OptionsDialogClosedHdl, css::ui::dialogs::DialogClose
         if (pNotifier)
             pNotifier->viewCallback( KIT_CALLBACK_EXPORT_FILE, "PENDING"_ostr );
 
-        const uno::Sequence< beans::PropertyValue > aPropsFromDialog = m_xFilterProperties->getPropertyValues();
+        const cpo::uno::Sequence< beans::PropertyValue > aPropsFromDialog = m_xFilterProperties->getPropertyValues();
         for ( const auto& rProp : aPropsFromDialog )
             GetMediaDescr()[rProp.Name] = rProp.Value;
 
@@ -783,7 +783,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
     if ( !aFilterName.isEmpty() )
     {
         // get properties of filter
-        uno::Sequence< beans::PropertyValue > aFilterProps;
+        cpo::uno::Sequence< beans::PropertyValue > aFilterProps;
         m_pOwner->GetFilterConfiguration()->getByName( aFilterName ) >>= aFilterProps;
 
         aFiltPropsHM = ::comphelper::SequenceAsHashMap( aFilterProps );
@@ -820,8 +820,8 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
     {
         OUString aSupportedFilters;
         const ::comphelper::SequenceAsHashMap& rDocumentProperties = GetDocProps();
-        const css::uno::Sequence<css::beans::NamedValue> aEncryptionData = rDocumentProperties.getUnpackedValueOrDefault(u"EncryptionData"_ustr, css::uno::Sequence<css::beans::NamedValue>());
-        if (aEncryptionData != css::uno::Sequence<css::beans::NamedValue>())
+        const cpo::uno::Sequence<css::beans::NamedValue> aEncryptionData = rDocumentProperties.getUnpackedValueOrDefault(u"EncryptionData"_ustr, cpo::uno::Sequence<css::beans::NamedValue>());
+        if (aEncryptionData != cpo::uno::Sequence<css::beans::NamedValue>())
         {
             for (const css::beans::NamedValue& aNamedValue : aEncryptionData)
             {
@@ -869,14 +869,14 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 
 bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 {
-    uno::Sequence< beans::NamedValue > aSearchRequest { { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) } };
+    cpo::uno::Sequence< beans::NamedValue > aSearchRequest { { u"DocumentService"_ustr, cpo::uno::Any(GetDocServiceName()) } };
 
     uno::Reference< container::XEnumeration > xFilterEnum =
                                     m_pOwner->GetFilterQuery()->createSubSetEnumerationByProperties( aSearchRequest );
 
     while ( xFilterEnum->hasMoreElements() )
     {
-        uno::Sequence< beans::PropertyValue > aProps;
+        cpo::uno::Sequence< beans::PropertyValue > aProps;
         if ( xFilterEnum->nextElement() >>= aProps )
         {
             ::comphelper::SequenceAsHashMap aPropsHM( aProps );
@@ -896,7 +896,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                                             bool bPreselectPassword,
                                             OUString& aSuggestedDir,
                                             sal_Int16 nDialog,
-                                            const css::uno::Sequence<OUString>& rDenyList,
+                                            const cpo::uno::Sequence<OUString>& rDenyList,
                                             SignatureState const nScriptingSignatureState)
 {
     if ( nStoreMode == SAVEASREMOTE_REQUESTED )
@@ -1055,7 +1055,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     // it is no export, bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
     else if ( bSetStandardName || GetStorable()->hasLocation() )
     {
-        uno::Sequence< beans::PropertyValue > aOldFilterProps;
+        cpo::uno::Sequence< beans::PropertyValue > aOldFilterProps;
         const OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault( sFilterNameString, OUString() );
 
         if ( !aOldFilterName.isEmpty() )
@@ -1275,7 +1275,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
     // for Export - keep a runtime var for each document where the document was last exported to
     if (GetStorable()->hasLocation() && (nStoreMode & EXPORT_REQUESTED))
     {
-        uno::Sequence< beans::PropertyValue > descriptor{
+        cpo::uno::Sequence< beans::PropertyValue > descriptor{
             beans::PropertyValue(u"ExportDirectory"_ustr,
                 -1, cpo::uno::Any(aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE )), beans::PropertyState_DIRECT_VALUE),
         };
@@ -1313,7 +1313,7 @@ bool ModelData_Impl::ShowDocumentInfoDialog()
                         // which will become SfxRequest::IsSynchronCall of true
                         // in SfxObjectShell::ExecFile_Impl to request that we
                         // do not want the properties dialog to be run async
-                        uno::Sequence< beans::PropertyValue > aProperties{
+                        cpo::uno::Sequence< beans::PropertyValue > aProperties{
                             comphelper::makePropertyValue(u"SynchronMode"_ustr, true)
                         };
                         xDispatch->dispatch(aURL, aProperties);
@@ -1341,13 +1341,13 @@ OUString ModelData_Impl::GetRecommendedExtension( const OUString& aTypeName )
        uno::UNO_QUERY );
     if ( xTypeDetection.is() )
     {
-       uno::Sequence< beans::PropertyValue > aTypeNameProps;
+       cpo::uno::Sequence< beans::PropertyValue > aTypeNameProps;
        if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.hasElements() )
        {
            ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
-           uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
+           cpo::uno::Sequence< OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
                                            u"Extensions"_ustr,
-                                           ::uno::Sequence< OUString >() );
+                                           ::cpo::uno::Sequence< OUString >() );
            if ( aExtensions.hasElements() )
                return aExtensions[0];
        }
@@ -1437,7 +1437,7 @@ uno::Reference< css::frame::XModuleManager2 > const & SfxStoringHelper::GetModul
 
 bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xModel,
                                             std::u16string_view aSlotName,
-                                            uno::Sequence< beans::PropertyValue >& aArgsSequence,
+                                            cpo::uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                             bool bPreselectPassword,
                                             SignatureState const nDocumentSignatureState,
                                             SignatureState const nScriptingSignatureState,
@@ -1573,7 +1573,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xM
     }
 
     // preselect a filter for the storing process
-    uno::Sequence< beans::PropertyValue > aFilterProps = aModelData.GetPreselectedFilter_Impl( m_nStoreMode );
+    cpo::uno::Sequence< beans::PropertyValue > aFilterProps = aModelData.GetPreselectedFilter_Impl( m_nStoreMode );
 
     DBG_ASSERT( aFilterProps.hasElements(), "No filter for storing!\n" );
     if ( !aFilterProps.hasElements() )
@@ -1616,11 +1616,11 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel2 >& xM
 
 bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::const_iterator& aFileNameIter,
                                           ModelData_Impl& aModelData, bool bRemote, sal_Int16 nStoreMode,
-                                          const uno::Sequence< beans::PropertyValue >& aFilterProps,
+                                          const cpo::uno::Sequence< beans::PropertyValue >& aFilterProps,
                                           bool bSetStandardName, bool bPreselectPassword, bool bDialogUsed,
                                           std::u16string_view aFilterFromMediaDescr,
                                           std::u16string_view aOldFilterName,
-                                          uno::Sequence< beans::PropertyValue >& aArgsSequence,
+                                          cpo::uno::Sequence< beans::PropertyValue >& aArgsSequence,
                                           OUString aFilterName,
                                           SignatureState const nScriptingSignatureState)
 {
@@ -1668,7 +1668,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
         if ( aSuggestedName.isEmpty() )
             aSuggestedName = aModelData.GetDocProps().getUnpackedValueOrDefault(u"SuggestedSaveAsName"_ustr, OUString() );
 
-        css::uno::Sequence< OUString >  aDenyList;
+        cpo::uno::Sequence< OUString >  aDenyList;
 
         ::comphelper::SequenceAsHashMap::const_iterator aDenyListIter =
             aModelData.GetMediaDescr().find( u"DenyList"_ustr );
@@ -2006,7 +2006,7 @@ bool SfxStoringHelper::CheckFilterOptionsAppearance(
     if( xFilterCFG.is() )
     {
         try {
-            uno::Sequence < beans::PropertyValue > aProps;
+            cpo::uno::Sequence < beans::PropertyValue > aProps;
             cpo::uno::Any aAny = xFilterCFG->getByName( aFilterName );
             if ( aAny >>= aProps )
             {
@@ -2048,7 +2048,7 @@ void SfxStoringHelper::SetDocInfoState(
                 xDocPropsToFill->getUserDefinedProperties(), uno::UNO_QUERY);
         uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
         uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
-        const uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+        const cpo::uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
         for (const beans::Property& rProp : lProps)
         {
             cpo::uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );

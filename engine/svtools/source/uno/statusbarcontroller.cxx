@@ -498,7 +498,7 @@ void StatusbarController::bindListener()
     return aRect;
 }
 
-void StatusbarController::execute( const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
+void StatusbarController::execute( const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;

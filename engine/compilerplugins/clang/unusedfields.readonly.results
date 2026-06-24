@@ -613,9 +613,9 @@ sd/source/core/CustomAnimationCloner.cxx:70
 sd/source/core/CustomAnimationCloner.cxx:71
     sd::(anonymous namespace)::CustomAnimationClonerImpl maCloneNodeVector std::vector<Reference<XAnimationNode> >
 sd/source/ui/inc/unopage.hxx:165
-    SdDrawPage maTypeSequence css::uno::Sequence<css::uno::Type>
+    SdDrawPage maTypeSequence cpo::uno::Sequence<css::uno::Type>
 sd/source/ui/inc/unopage.hxx:227
-    SdMasterPage maTypeSequence css::uno::Sequence<css::uno::Type>
+    SdMasterPage maTypeSequence cpo::uno::Sequence<css::uno::Type>
 sd/source/ui/sidebar/MasterPageContainer.cxx:142
     sd::sidebar::MasterPageContainer::Implementation maLargePreviewBeingCreated Image
 sd/source/ui/sidebar/MasterPageContainer.cxx:143

@@ -52,15 +52,15 @@ class XmlFilterAdaptor final : public cppu::WeakImplHelper
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;
-    css::uno::Sequence< OUString > msUserData;
+    cpo::uno::Sequence< OUString > msUserData;
     OUString msTemplateName;
     FilterType meType;
 
     /// @throws css::uno::RuntimeException
-    bool exportImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
+    bool exportImpl( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
     /// @throws css::uno::RuntimeException
-    bool importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
+    bool importImpl( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
 
 public:
@@ -73,7 +73,7 @@ public:
 
     // XFilter
 
-    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
 
     virtual void SAL_CALL cancel(  ) override;
 
@@ -90,7 +90,7 @@ public:
 
     // XInitialization
 
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
     // XServiceInfo
@@ -99,7 +99,7 @@ public:
 
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 };
 

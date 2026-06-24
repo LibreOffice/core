@@ -25,9 +25,9 @@ using namespace ::com::sun::star;
 
 namespace cppcanvastools
 {
-        uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA aColor  )
+        cpo::uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA aColor  )
         {
-            uno::Sequence< double > aRes{
+            cpo::uno::Sequence< double > aRes{
                 cppcanvas::getRed(aColor) / 255.0,
                 cppcanvas::getGreen(aColor) / 255.0,
                 cppcanvas::getBlue(aColor) / 255.0,
@@ -36,7 +36,7 @@ namespace cppcanvastools
             return aRes;
         }
 
-        cppcanvas::IntSRGBA doubleSequenceToIntSRGBA( const uno::Sequence< double >& rColor  )
+        cppcanvas::IntSRGBA doubleSequenceToIntSRGBA( const cpo::uno::Sequence< double >& rColor  )
         {
             return cppcanvas::makeColor( static_cast<sal_uInt8>( 255*rColor[0] + .5 ),
                               static_cast<sal_uInt8>( 255*rColor[1] + .5 ),

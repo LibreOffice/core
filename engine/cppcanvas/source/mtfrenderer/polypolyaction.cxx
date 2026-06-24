@@ -79,7 +79,7 @@ namespace cppcanvas::internal
                 // stroke color is now implicit: the maState.DeviceColor member
                 rendering::RenderState                              maState;
 
-                uno::Sequence< double >                             maFillColor;
+                cpo::uno::Sequence< double >                             maFillColor;
             };
 
             PolyPolyAction::PolyPolyAction( const ::basegfx::B2DPolyPolygon&    rPolyPoly,
@@ -152,7 +152,7 @@ namespace cppcanvas::internal
                 {
                     // TODO(E3): Use DBO's finalizer here,
                     // fillPolyPolygon() might throw
-                    uno::Sequence<double> aTmpColor( aLocalState.DeviceColor );
+                    cpo::uno::Sequence<double> aTmpColor( aLocalState.DeviceColor );
                     aLocalState.DeviceColor = maFillColor;
 
                     rCachedPrimitive = mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
@@ -274,7 +274,7 @@ namespace cppcanvas::internal
                 rendering::RenderState aLocalState( maState );
                 ::canvastools::prependToRenderState(aLocalState, rTransformation);
 
-                uno::Sequence< rendering::Texture > aSeq { maTexture };
+                cpo::uno::Sequence< rendering::Texture > aSeq { maTexture };
 
                 rCachedPrimitive = mpCanvas->getUNOCanvas()->fillTexturedPolyPolygon( mxPolyPoly,
                                                                                       mpCanvas->getViewState(),

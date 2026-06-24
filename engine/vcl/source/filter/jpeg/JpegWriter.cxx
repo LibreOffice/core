@@ -113,7 +113,7 @@ void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
     destination->stream = stream;
 }
 
-JPEGWriter::JPEGWriter( SvStream& rStream, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
+JPEGWriter::JPEGWriter( SvStream& rStream, const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData, bool* pExportWasGrey ) :
     mrStream     ( rStream ),
     mpBuffer     ( nullptr ),
     mbNative     ( false ),

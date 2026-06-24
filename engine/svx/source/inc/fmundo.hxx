@@ -95,7 +95,7 @@ private:
     css::uno::Reference< css::uno::XInterface >
                     m_xOwnElement;  // object owned by the action
     sal_Int32       m_nIndex;       // index of the object within its container
-    css::uno::Sequence< css::script::ScriptEventDescriptor >
+    cpo::uno::Sequence< css::script::ScriptEventDescriptor >
                     m_aEvents;      // events of the object
     Action          m_eAction;
 };
@@ -133,7 +133,7 @@ public:
     // UNO binding
     //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
     //  virtual bool queryInterface(UsrUik, css::uno::Reference< css::uno::XInterface>&);
-    //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass>>    getIdlClasses();
+    //  virtual cpo::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass>>    getIdlClasses();
 
     void Lock() { osl_atomic_increment( &m_Locks ); }
     void UnLock() { osl_atomic_decrement( &m_Locks ); }

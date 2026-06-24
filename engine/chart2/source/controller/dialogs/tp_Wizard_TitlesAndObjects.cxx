@@ -75,8 +75,8 @@ void TitlesAndObjectsTabPage::initializePage()
     //init grid checkboxes
     {
         rtl::Reference< Diagram > xDiagram = m_xChartModel->getFirstChartDiagram();
-        uno::Sequence< bool > aPossibilityList;
-        uno::Sequence< bool > aExistenceList;
+        cpo::uno::Sequence< bool > aPossibilityList;
+        cpo::uno::Sequence< bool > aExistenceList;
         AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, false );
         AxisHelper::getAxisOrGridExistence( aExistenceList, xDiagram, false );
         m_xCB_Grid_X->set_sensitive( aPossibilityList[0] );
@@ -120,9 +120,9 @@ void TitlesAndObjectsTabPage::commitToModel()
     //commit grid changes to model
     {
         rtl::Reference< Diagram > xDiagram = xModel->getFirstChartDiagram();
-        uno::Sequence< bool > aOldExistenceList;
+        cpo::uno::Sequence< bool > aOldExistenceList;
         AxisHelper::getAxisOrGridExistence( aOldExistenceList, xDiagram, false );
-        uno::Sequence< bool > aNewExistenceList(aOldExistenceList);
+        cpo::uno::Sequence< bool > aNewExistenceList(aOldExistenceList);
         bool* pNewExistenceList = aNewExistenceList.getArray();
         pNewExistenceList[0] = m_xCB_Grid_X->get_active();
         pNewExistenceList[1] = m_xCB_Grid_Y->get_active();

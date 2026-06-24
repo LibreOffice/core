@@ -204,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMsoSpt180)
     createSwDoc("mso-spt180.docx");
     saveAndReload(TestFilter::DOCX);
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    const uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), u"CustomShapeGeometry"_ustr);
+    const cpo::uno::Sequence<beans::PropertyValue> aProps = getProperty< cpo::uno::Sequence<beans::PropertyValue> >(xGroup->getByIndex(0), u"CustomShapeGeometry"_ustr);
     OUString aType;
     for (beans::PropertyValue const & prop : aProps)
         if (prop.Name == "Type")
@@ -559,7 +559,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedXlsx)
 
     // finally check the embedded files are present in the zipped document
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
-    const uno::Sequence<OUString> names = xNameAccess->getElementNames();
+    const cpo::uno::Sequence<OUString> names = xNameAccess->getElementNames();
     int nSheetFiles = 0;
     int nImageFiles = 0;
     for (OUString const & n : names)
@@ -840,7 +840,7 @@ void Test::verifyComboBoxExport(bool aComboBoxAsDropDown)
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
 
-        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, u"Items"_ustr);
+        cpo::uno::Sequence<OUString> aItems = getProperty< cpo::uno::Sequence<OUString> >(aField, u"Items"_ustr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aItems.getLength());
         CPPUNIT_ASSERT_EQUAL(u"manolo"_ustr, aItems[0]);
         CPPUNIT_ASSERT_EQUAL(u"pepito"_ustr, aItems[1]);
@@ -855,7 +855,7 @@ void Test::verifyComboBoxExport(bool aComboBoxAsDropDown)
 
         CPPUNIT_ASSERT_EQUAL(u"Manolo"_ustr, getProperty<OUString>(xControl->getControl(), u"Text"_ustr));
 
-        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(xControl->getControl(), u"StringItemList"_ustr);
+        cpo::uno::Sequence<OUString> aItems = getProperty< cpo::uno::Sequence<OUString> >(xControl->getControl(), u"StringItemList"_ustr);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aItems.getLength());
         CPPUNIT_ASSERT_EQUAL(u"manolo"_ustr, aItems[0]);
         CPPUNIT_ASSERT_EQUAL(u"pepito"_ustr, aItems[1]);

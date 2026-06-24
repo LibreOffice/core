@@ -48,7 +48,7 @@ static bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >
 
     if ( xSeekable->getLength() )
     {
-        uno::Sequence< sal_Int8 > aData( 4 );
+        cpo::uno::Sequence< sal_Int8 > aData( 4 );
         xSeekable->seek( 0 );
         sal_Int32 nRead = xInputStream->readBytes( aData, 4 );
         xSeekable->seek( 0 );
@@ -69,12 +69,12 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
     uno::Reference < io::XStream > xTempStream(new utl::TempFileFastService);
 
     return cppu::getXWeak(new OStorage(xTempStream, embed::ElementModes::READWRITE,
-                                                  uno::Sequence<beans::PropertyValue>(), m_xContext,
+                                                  cpo::uno::Sequence<beans::PropertyValue>(), m_xContext,
                                                   embed::StorageFormats::PACKAGE));
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithArguments(
-            const uno::Sequence< cpo::uno::Any >& aArguments )
+            const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // The request for storage can be done with up to three arguments
 
@@ -142,8 +142,8 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
     }
 
     // retrieve mediadescriptor and set storage properties
-    uno::Sequence< beans::PropertyValue > aDescr;
-    uno::Sequence< beans::PropertyValue > aPropsToSet;
+    cpo::uno::Sequence< beans::PropertyValue > aDescr;
+    cpo::uno::Sequence< beans::PropertyValue > aPropsToSet;
 
     sal_Int32 nStorageType = embed::StorageFormats::PACKAGE;
 
@@ -269,7 +269,7 @@ bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
 {
     return  { u"com.sun.star.embed.StorageFactory"_ustr,
                 u"com.sun.star.comp.embed.StorageFactory"_ustr };
@@ -278,7 +278,7 @@ uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_OStorageFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OStorageFactory(context));
 }

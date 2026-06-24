@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <test/testtools/bridgetest/Constructors.hpp>
 #include <test/testtools/bridgetest/Constructors2.hpp>
@@ -115,7 +115,7 @@ static void assign( TestData & rData,
                     sal_Int8 nByte2, sal_Int16 nShort2,
                     const css::uno::Reference< css::uno::XInterface >& xTest,
                     const cpo::uno::Any& rAny,
-                    const css::uno::Sequence< TestElement >& rSequence )
+                    const cpo::uno::Sequence< TestElement >& rSequence )
 {
     assign( static_cast<TestElement &>(rData),
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
@@ -192,7 +192,7 @@ public:
                                      sal_Int16 nShort2,
                                      const css::uno::Reference< css::uno::XInterface >& xTest,
                                      const cpo::uno::Any& rAny,
-                                     const css::uno::Sequence<TestElement >& rSequence,
+                                     const cpo::uno::Sequence<TestElement >& rSequence,
                                      const ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
     virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL setValues2( bool& bBool,
@@ -212,7 +212,7 @@ public:
                                                                                  sal_Int16& nShort2,
                                                                                  css::uno::Reference< css::uno::XInterface >& xTest,
                                                                                  cpo::uno::Any& rAny,
-                                                                                 css::uno::Sequence<TestElement >& rSequence,
+                                                                                 cpo::uno::Sequence<TestElement >& rSequence,
                                                                                  ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
     virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getValues( bool& bBool,
@@ -232,7 +232,7 @@ public:
                                                                                 sal_Int16& nShort2,
                                                                                 css::uno::Reference< css::uno::XInterface >& xTest,
                                                                                 cpo::uno::Any& rAny,
-                                                                                css::uno::Sequence< TestElement >& rSequence,
+                                                                                cpo::uno::Sequence< TestElement >& rSequence,
                                                                                 ::test::testtools::bridgetest::TestDataElements& rStruct ) override;
 
     virtual SmallStruct SAL_CALL echoSmallStruct(const SmallStruct& rStruct) override
@@ -294,7 +294,7 @@ public:
         { return _aData.Interface; }
     virtual cpo::uno::Any SAL_CALL getAny() override
         { return _aData.Any; }
-    virtual css::uno::Sequence< TestElement > SAL_CALL getSequence() override
+    virtual cpo::uno::Sequence< TestElement > SAL_CALL getSequence() override
         { return _aData.Sequence; }
     virtual ::test::testtools::bridgetest::TestDataElements SAL_CALL getStruct() override
         { return _aStructData; }
@@ -333,7 +333,7 @@ public:
         { _aData.Interface = _interface; }
     virtual void SAL_CALL setAny( const cpo::uno::Any& _any ) override
         { _aData.Any = _any; }
-    virtual void SAL_CALL setSequence( const css::uno::Sequence<TestElement >& _sequence ) override
+    virtual void SAL_CALL setSequence( const cpo::uno::Sequence<TestElement >& _sequence ) override
         { _aData.Sequence = _sequence; }
     virtual void SAL_CALL setStruct( const ::test::testtools::bridgetest::TestDataElements& _struct ) override
         { _aStructData = _struct; }
@@ -599,7 +599,7 @@ void Test_Impl::setValues( bool bBool,
                            sal_Int16 nShort2,
                            const css::uno::Reference< css::uno::XInterface >& xTest,
                            const cpo::uno::Any& rAny,
-                           const css::uno::Sequence<TestElement >& rSequence,
+                           const cpo::uno::Sequence<TestElement >& rSequence,
                            const ::test::testtools::bridgetest::TestDataElements& rStruct )
 {
     assign( _aData,
@@ -625,7 +625,7 @@ void Test_Impl::setValues( bool bBool,
                                                                        sal_Int16& nShort2,
                                                                        css::uno::Reference< css::uno::XInterface >& xTest,
                                                                        cpo::uno::Any& rAny,
-                                                                       css::uno::Sequence<TestElement >& rSequence,
+                                                                       cpo::uno::Sequence<TestElement >& rSequence,
                                                                        ::test::testtools::bridgetest::TestDataElements& rStruct )
 {
     assign( _aData,
@@ -656,7 +656,7 @@ void Test_Impl::setValues( bool bBool,
                                                                       sal_Int16& nShort2,
                                                                       css::uno::Reference< css::uno::XInterface >& xTest,
                                                                       cpo::uno::Any& rAny,
-                                                                      css::uno::Sequence<TestElement >& rSequence,
+                                                                      cpo::uno::Sequence<TestElement >& rSequence,
                                                                       ::test::testtools::bridgetest::TestDataElements& rStruct )
 {
     bBool = _aData.Bool;

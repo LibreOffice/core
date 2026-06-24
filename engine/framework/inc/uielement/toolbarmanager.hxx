@@ -142,7 +142,7 @@ class ToolBarManager final : public ToolbarManager_Base
         void FillToolbar( const css::uno::Reference< css::container::XIndexAccess >& rToolBarData,
                           const css::uno::Reference< css::container::XIndexAccess >& rContextData,
                           const OUString& rContextToolbarName );
-        void FillAddonToolbar( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rAddonToolbar );
+        void FillAddonToolbar( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& rAddonToolbar );
         void FillOverflowToolbar( ToolBox const * pParent );
         void notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand );
         void Destroy();

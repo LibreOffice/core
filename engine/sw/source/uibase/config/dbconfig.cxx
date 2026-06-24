@@ -19,7 +19,7 @@
 
 #include <dbconfig.hxx>
 #include <osl/diagnose.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <swdbdata.hxx>
 
 using namespace utl;
@@ -92,6 +92,6 @@ const SwDBData& SwDBConfig::GetBibliographySource()
 }
 
 void SwDBConfig::ImplCommit() {}
-void SwDBConfig::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwDBConfig::Notify( const cpo::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

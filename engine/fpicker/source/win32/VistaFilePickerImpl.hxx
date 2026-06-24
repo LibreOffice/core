@@ -91,7 +91,7 @@ class VistaFilePickerImpl : public  IVistaFilePickerInternalNotify
     public:
 
         // Workaround made to get input in Template Listbox
-        css::uno::Sequence< OUString > m_lItems;
+        cpo::uno::Sequence< OUString > m_lItems;
         /** used for marshalling requests.
          *  Will be used to map requests to the right implementations.
          */

@@ -109,8 +109,8 @@ public:
 
                             // XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL
-                            getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL
+                            getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL   setPropertyToDefault( const OUString& PropertyName ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
@@ -155,8 +155,8 @@ public:
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) override;
 
                             // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
                             // XEventsSupplier
     virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents() override;
@@ -164,7 +164,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override ;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

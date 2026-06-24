@@ -172,9 +172,9 @@ PropertyChangeNotifier::PropertyChangeNotifier(
 
 
 void PropertyChangeNotifier::notifyPropertyChanged(
-    const uno::Sequence< beans::PropertyChangeEvent >& seqChanged ) const
+    const cpo::uno::Sequence< beans::PropertyChangeEvent >& seqChanged ) const
 {
-    uno::Sequence< beans::PropertyChangeEvent > Changes  = seqChanged;
+    cpo::uno::Sequence< beans::PropertyChangeEvent > Changes  = seqChanged;
 
     for( auto& rChange : asNonConstRange(Changes) )
         rChange.Source = m_xCreatorContent;
@@ -191,7 +191,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
 
     for (const auto& rChange : Changes)
     {
-        uno::Sequence< beans::PropertyChangeEvent > seq{ rChange };
+        cpo::uno::Sequence< beans::PropertyChangeEvent > seq{ rChange };
         it = m_aListeners.find( rChange.PropertyName );
         if (it != m_aListeners.end())
         {

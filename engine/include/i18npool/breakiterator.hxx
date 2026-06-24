@@ -97,7 +97,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override = 0;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override = 0;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
     // optimised variants that do not require the call-site to allocate a temporary OUString
     virtual sal_Int32 endOfScript(std::u16string_view Text, sal_Int32 nStartPos,

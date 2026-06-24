@@ -150,9 +150,9 @@ class SvtLinguConfigItem : public utl::ConfigItem
     SvtLinguOptions     aOpt;
 
     static bool GetHdlByName( sal_Int32 &rnHdl, std::u16string_view rPropertyName, bool bFullPropName = false );
-    static uno::Sequence< OUString > GetPropertyNames();
-    void                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
-    bool                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
+    static cpo::uno::Sequence< OUString > GetPropertyNames();
+    void                LoadOptions( const cpo::uno::Sequence< OUString > &rProperyNames );
+    bool                SaveOptions( const cpo::uno::Sequence< OUString > &rProperyNames );
 
     SvtLinguConfigItem(const SvtLinguConfigItem&) = delete;
     SvtLinguConfigItem& operator=(const SvtLinguConfigItem&) = delete;
@@ -162,7 +162,7 @@ public:
     SvtLinguConfigItem();
 
     // utl::ConfigItem
-    virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
+    virtual void    Notify( const cpo::uno::Sequence< OUString > &rPropertyNames ) override;
 
     // make some protected functions of utl::ConfigItem public
     using utl::ConfigItem::GetNodeNames;
@@ -191,7 +191,7 @@ public:
 SvtLinguConfigItem::SvtLinguConfigItem() :
     utl::ConfigItem( u"Office.Linguistic"_ustr )
 {
-    const uno::Sequence< OUString > aPropertyNames = GetPropertyNames();
+    const cpo::uno::Sequence< OUString > aPropertyNames = GetPropertyNames();
     LoadOptions( aPropertyNames );
     ClearModified();
 
@@ -199,7 +199,7 @@ SvtLinguConfigItem::SvtLinguConfigItem() :
     EnableNotification( aPropertyNames );
 }
 
-void SvtLinguConfigItem::Notify( const uno::Sequence< OUString > &rPropertyNames )
+void SvtLinguConfigItem::Notify( const cpo::uno::Sequence< OUString > &rPropertyNames )
 {
     {
         std::unique_lock aGuard(theSvtLinguConfigItemMutex());
@@ -268,9 +268,9 @@ NamesToHdl constexpr aNamesToHdl[] =
 {            u""_ustr,                                         u""_ustr,                                      -1}
 };
 
-uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
+cpo::uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
 {
-    uno::Sequence< OUString > aNames;
+    cpo::uno::Sequence< OUString > aNames;
     aNames.realloc(std::size(aNamesToHdl));
     OUString *pNames = aNames.getArray();
     sal_Int32 nIdx = 0;
@@ -563,15 +563,15 @@ void SvtLinguConfigItem::GetOptions(SvtLinguOptions &rOptions) const
     rOptions = aOpt;
 }
 
-void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyNames )
+void SvtLinguConfigItem::LoadOptions( const cpo::uno::Sequence< OUString > &rProperyNames )
 {
     bool bRes = false;
 
     const OUString *pProperyNames = rProperyNames.getConstArray();
     sal_Int32 nProps = rProperyNames.getLength();
 
-    const uno::Sequence< cpo::uno::Any > aValues = GetProperties( rProperyNames );
-    const uno::Sequence< bool > aROStates = GetReadOnlyStates( rProperyNames );
+    const cpo::uno::Sequence< cpo::uno::Any > aValues = GetProperties( rProperyNames );
+    const cpo::uno::Sequence< bool > aROStates = GetReadOnlyStates( rProperyNames );
 
     if (nProps  &&  aValues.getLength() == nProps &&  aROStates.getLength() == nProps)
     {
@@ -680,7 +680,7 @@ void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
     DBG_ASSERT( bRes, "LoadOptions failed" );
 }
 
-bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyNames )
+bool SvtLinguConfigItem::SaveOptions( const cpo::uno::Sequence< OUString > &rProperyNames )
 {
     if (!IsModified())
         return true;
@@ -690,7 +690,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     bool bRet = false;
 
     sal_Int32 nProps = rProperyNames.getLength();
-    uno::Sequence< cpo::uno::Any > aValues( nProps );
+    cpo::uno::Sequence< cpo::uno::Any > aValues( nProps );
     cpo::uno::Any *pValue = aValues.getArray();
 
     if (nProps  &&  aValues.getLength() == nProps)
@@ -840,18 +840,18 @@ SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
     return *pCfgItem;
 }
 
-uno::Sequence< OUString > SvtLinguConfig::GetNodeNames( const OUString &rNode ) const
+cpo::uno::Sequence< OUString > SvtLinguConfig::GetNodeNames( const OUString &rNode ) const
 {
     return GetConfigItem().GetNodeNames( rNode );
 }
 
-uno::Sequence< cpo::uno::Any > SvtLinguConfig::GetProperties( const uno::Sequence< OUString > &rNames ) const
+cpo::uno::Sequence< cpo::uno::Any > SvtLinguConfig::GetProperties( const cpo::uno::Sequence< OUString > &rNames ) const
 {
     return GetConfigItem().GetProperties(rNames);
 }
 
 bool SvtLinguConfig::ReplaceSetProperties(
-        const OUString &rNode, const uno::Sequence< beans::PropertyValue >& rValues )
+        const OUString &rNode, const cpo::uno::Sequence< beans::PropertyValue >& rValues )
 {
     return GetConfigItem().ReplaceSetProperties( rNode, rValues );
 }
@@ -888,7 +888,7 @@ bool SvtLinguConfig::IsReadOnly( std::u16string_view rPropertyName ) const
 
 bool SvtLinguConfig::GetElementNamesFor(
      const OUString &rNodeName,
-     uno::Sequence< OUString > &rElementNames ) const
+     cpo::uno::Sequence< OUString > &rElementNames ) const
 {
     bool bSuccess = false;
     try
@@ -914,7 +914,7 @@ bool SvtLinguConfig::GetElementNamesFor(
 bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     const OUString &rSetName,
     const OUString &rSetEntry,
-    uno::Sequence< OUString > &rFormatList ) const
+    cpo::uno::Sequence< OUString > &rFormatList ) const
 {
     if (rSetName.isEmpty() || rSetEntry.isEmpty())
         return false;
@@ -943,7 +943,7 @@ bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     return bSuccess;
 }
 
-bool SvtLinguConfig::GetLocaleListFor( const OUString &rSetName, const OUString &rSetEntry, css::uno::Sequence< OUString > &rLocaleList ) const
+bool SvtLinguConfig::GetLocaleListFor( const OUString &rSetName, const OUString &rSetEntry, cpo::uno::Sequence< OUString > &rLocaleList ) const
 {
     if (rSetName.isEmpty() || rSetEntry.isEmpty())
         return false;
@@ -1007,9 +1007,9 @@ bool SvtLinguConfig::GetDictionaryEntry(
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
 
         // read group data...
-        uno::Sequence< OUString >  aLocations;
+        cpo::uno::Sequence< OUString >  aLocations;
         OUString                   aFormatName;
-        uno::Sequence< OUString >  aLocaleNames;
+        cpo::uno::Sequence< OUString >  aLocaleNames;
         bSuccess =  (xNA->getByName( u"Locations"_ustr ) >>= aLocations)  &&
                     (xNA->getByName( u"Format"_ustr )    >>= aFormatName) &&
                     (xNA->getByName( u"Locales"_ustr )   >>= aLocaleNames);
@@ -1042,9 +1042,9 @@ bool SvtLinguConfig::GetDictionaryEntry(
     return bSuccess;
 }
 
-uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
+cpo::uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
 {
-    uno::Sequence< OUString > aResult;
+    cpo::uno::Sequence< OUString > aResult;
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY );
@@ -1070,10 +1070,10 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
 
     try
     {
-        uno::Sequence< OUString > aElementNames;
+        cpo::uno::Sequence< OUString > aElementNames;
         GetElementNamesFor( aG_Dictionaries, aElementNames );
 
-        const uno::Sequence< OUString > aDisabledDics( GetDisabledDictionaries() );
+        const cpo::uno::Sequence< OUString > aDisabledDics( GetDisabledDictionaries() );
 
         SvtLinguConfigDictionaryEntry aDicEntry;
         for (const OUString& rElementName : aElementNames)
@@ -1121,7 +1121,7 @@ uno::Reference< util::XChangesBatch > const & SvtLinguConfig::GetMainUpdateAcces
         beans::PropertyValue aValue;
         aValue.Name  = u"nodepath"_ustr;
         aValue.Value <<= u"org.openoffice.Office.Linguistic"_ustr;
-        uno::Sequence< cpo::uno::Any > aProps{ cpo::uno::Any(aValue) };
+        cpo::uno::Sequence< cpo::uno::Any > aProps{ cpo::uno::Any(aValue) };
         m_xMainUpdateAccess.set(
                 xConfigurationProvider->createInstanceWithArguments(
                     u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aProps),
@@ -1219,7 +1219,7 @@ bool SvtLinguConfig::HasGrammarChecker() const
         if (!xNA)
             return false;
 
-        uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
+        cpo::uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
         bRes = aElementNames.hasElements();
     }
     catch (const uno::Exception&)

@@ -69,16 +69,16 @@ public:
     virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< css::uno::Type >
         SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XComponent

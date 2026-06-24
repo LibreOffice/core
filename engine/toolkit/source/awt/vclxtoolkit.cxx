@@ -38,7 +38,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -482,7 +482,7 @@ public:
 
     virtual void SAL_CALL stopRecording() override;
 
-    css::uno::Sequence< OUString > SAL_CALL getRecordingAndClear() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getRecordingAndClear() override;
 
     virtual void SAL_CALL waitUntilAllIdlesDispatched() override;
 
@@ -490,12 +490,12 @@ public:
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) override;
     css::awt::Rectangle                                        SAL_CALL getWorkArea(  ) override;
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL createWindow( const css::awt::WindowDescriptor& Descriptor ) override;
-    css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > SAL_CALL createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& Descriptors ) override;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > SAL_CALL createWindows( const cpo::uno::Sequence< css::awt::WindowDescriptor >& Descriptors ) override;
     css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) override;
     css::uno::Reference< css::awt::XRegion >      SAL_CALL createRegion(  ) override;
 
     // css::awt::XSystemChildFactory
-    css::uno::Reference< css::awt::XWindowPeer > SAL_CALL createSystemChild( const cpo::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
+    css::uno::Reference< css::awt::XWindowPeer > SAL_CALL createSystemChild( const cpo::uno::Any& Parent, const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
     // css::awt::XMessageBoxFactory
     virtual css::uno::Reference< css::awt::XMessageBox > SAL_CALL createMessageBox( const css::uno::Reference< css::awt::XWindowPeer >& aParent, css::awt::MessageBoxType eType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) override;
@@ -509,7 +509,7 @@ public:
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
     bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // css::awt::XExtendedToolkit:
 
@@ -559,7 +559,7 @@ public:
     // css::awt::XFontMappingUse:
     virtual void SAL_CALL startTrackingFontMappingUse() override;
 
-    virtual css::uno::Sequence<css::awt::XFontMappingUseItem> SAL_CALL finishTrackingFontMappingUse() override;
+    virtual cpo::uno::Sequence<css::awt::XFontMappingUseItem> SAL_CALL finishTrackingFontMappingUse() override;
 
     // css:awt:XToolkitRobot
     virtual void SAL_CALL keyPress( const css::awt::KeyEvent & aKeyEvent ) override;
@@ -1633,7 +1633,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
 
                                 rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(processID) );
 
-                                css::uno::Sequence<sal_Int8> processIdSeq(processID, 16);
+                                cpo::uno::Sequence<sal_Int8> processIdSeq(processID, 16);
 
                                 cpo::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
@@ -1645,7 +1645,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                                 bool bUseParentData = true;
                                 if( ! (anyHandle >>= nWindowHandle) )
                                 {
-                                    css::uno::Sequence< css::beans::NamedValue > aProps;
+                                    cpo::uno::Sequence< css::beans::NamedValue > aProps;
                                     if( anyHandle >>= aProps )
                                     {
                                         for (const css::beans::NamedValue& rProp : aProps)
@@ -1859,10 +1859,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return xRef;
 }
 
-css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors )
+cpo::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const cpo::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors )
 {
     sal_uInt32 nComponents = rDescriptors.getLength();
-    css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > aSeq( nComponents );
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > aSeq( nComponents );
     for ( sal_uInt32 n = 0; n < nComponents; n++ )
     {
         css::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
@@ -1877,7 +1877,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::
 }
 
 // css::awt::XSystemChildFactory
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const cpo::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType )
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const cpo::uno::Any& Parent, const cpo::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType )
 {
     VclPtr<vcl::Window> pChildWindow;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
@@ -1890,7 +1890,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
         bool bUseParentData = true;
         if( ! (Parent >>= nWindowHandle) )
         {
-            css::uno::Sequence< css::beans::NamedValue > aProps;
+            cpo::uno::Sequence< css::beans::NamedValue > aProps;
             if( Parent >>= aProps )
             {
                 for (const css::beans::NamedValue& rProp : aProps)
@@ -2088,9 +2088,9 @@ bool VCLXToolkit::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         u"com.sun.star.awt.Toolkit"_ustr, u"stardiv.vcl.VclToolkit"_ustr};
 }
 
@@ -2431,12 +2431,12 @@ void SAL_CALL VCLXToolkit::startTrackingFontMappingUse()
     OutputDevice::StartTrackingFontMappingUse();
 }
 
-css::uno::Sequence<css::awt::XFontMappingUseItem>
+cpo::uno::Sequence<css::awt::XFontMappingUseItem>
 SAL_CALL VCLXToolkit::finishTrackingFontMappingUse()
 {
     SolarMutexGuard aSolarGuard;
     OutputDevice::FontMappingUseData data = OutputDevice::FinishTrackingFontMappingUse();
-    css::uno::Sequence<css::awt::XFontMappingUseItem> ret( data.size());
+    cpo::uno::Sequence<css::awt::XFontMappingUseItem> ret( data.size());
     css::awt::XFontMappingUseItem* retData = ret.getArray();
     for( size_t i = 0; i < data.size(); ++i )
     {
@@ -2478,7 +2478,7 @@ void SAL_CALL VCLXToolkit::stopRecording()
     comphelper::TraceEvent::stopRecording();
 }
 
-css::uno::Sequence< OUString > VCLXToolkit::getRecordingAndClear()
+cpo::uno::Sequence< OUString > VCLXToolkit::getRecordingAndClear()
 {
     return comphelper::ProfileZone::getRecordingAndClear();
 }
@@ -2552,7 +2552,7 @@ void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXToolkit_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXToolkit());
 }

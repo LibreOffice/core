@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_OBJSHIMP_HXX
 #define INCLUDED_SFX2_SOURCE_INC_OBJSHIMP_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <tools/datetime.hxx>
@@ -121,7 +121,7 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
 
     // TODO/LATER: m_aModifyPasswordInfo should completely replace m_nModifyPasswordHash in future
     sal_uInt32          m_nModifyPasswordHash;
-    css::uno::Sequence< css::beans::PropertyValue > m_aModifyPasswordInfo;
+    cpo::uno::Sequence< css::beans::PropertyValue > m_aModifyPasswordInfo;
     bool                m_bModifyPasswordEntered;
     /// If true, then this is not a real save, just the signatures change.
     bool m_bSavingForSigning;

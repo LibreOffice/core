@@ -211,7 +211,7 @@ class BibToolBar:   public ToolBox
         void    statusChanged(const css::frame::FeatureStateEvent& Event);
 
         void    SetDatMan(BibDataManager& rDatMan) {pDatMan = &rDatMan;}
-        void    SendDispatch(ToolBoxItemId nId, const css::uno::Sequence< css::beans::PropertyValue >& rArgs);
+        void    SendDispatch(ToolBoxItemId nId, const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs);
 };
 
 

@@ -131,7 +131,7 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes()
 
 Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(

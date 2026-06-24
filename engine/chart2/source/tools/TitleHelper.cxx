@@ -299,7 +299,7 @@ OUString TitleHelper::getCompleteString( const rtl::Reference< Title >& xTitle )
     if(!xTitle.is())
         return OUString();
     OUStringBuffer aRet;
-    const uno::Sequence< uno::Reference< XFormattedString > > aStringList = xTitle->getText();
+    const cpo::uno::Sequence< uno::Reference< XFormattedString > > aStringList = xTitle->getText();
     for( uno::Reference< XFormattedString > const & formattedStr : aStringList )
         aRet.append( formattedStr->getString() );
     return aRet.makeStringAndClear();
@@ -330,7 +330,7 @@ OUString TitleHelper::getUnstackedStr(const OUString& rNewText)
 }
 
 void TitleHelper::setFormattedString( const rtl::Reference< Title >& xTitle,
-    const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle )
+    const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle )
 {
     if (!xTitle.is() || !aNewFormattedTitle.hasElements())
         return;
@@ -368,8 +368,8 @@ void TitleHelper::setCompleteString( const OUString& rNewText
         aNewText = getUnstackedStr(rNewText);
     }
 
-    uno::Sequence< uno::Reference< XFormattedString > > aNewStringList;
-    uno::Sequence< uno::Reference< XFormattedString > > aOldStringList = xTitle->getText();
+    cpo::uno::Sequence< uno::Reference< XFormattedString > > aNewStringList;
+    cpo::uno::Sequence< uno::Reference< XFormattedString > > aOldStringList = xTitle->getText();
     if( aOldStringList.hasElements())
     {
         const OUString aFullString = getCompleteString(xTitle);

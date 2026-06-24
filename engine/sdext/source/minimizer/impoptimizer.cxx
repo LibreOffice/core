@@ -575,7 +575,7 @@ void ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             case TK_DialogParentWindow: rArgument.Value >>= mxDialogParentWindow; break;
             case TK_Settings :
             {
-                css::uno::Sequence< css::beans::PropertyValue > aSettings;
+                cpo::uno::Sequence< css::beans::PropertyValue > aSettings;
                 rArgument.Value >>= aSettings;
                 for (const auto& rSetting : aSettings)
                 {

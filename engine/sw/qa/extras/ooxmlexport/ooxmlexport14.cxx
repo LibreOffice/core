@@ -613,10 +613,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120315, "tdf120315.docx")
                                                     uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
-    CPPUNIT_ASSERT_EQUAL(getProperty<uno::Sequence<text::TableColumnSeparator>>(
+    CPPUNIT_ASSERT_EQUAL(getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                              xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0]
                              .Position,
-                         getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                         getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                              xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[2]
                              .Position);
 }

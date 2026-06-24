@@ -44,7 +44,7 @@ ChartThemeControl::ChartThemeControl(const uno::Reference<uno::XComponentContext
 
 ChartThemeControl::~ChartThemeControl() = default;
 
-void ChartThemeControl::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void ChartThemeControl::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     svt::PopupWindowController::initialize(rArguments);
 
@@ -149,14 +149,14 @@ OUString ChartThemeControl::getImplementationName()
     return u"com.sun.star.comp.chart2.ChartThemeControl"_ustr;
 }
 
-uno::Sequence<OUString> ChartThemeControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ChartThemeControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_chart2_ChartThemeControl_get_implementation(uno::XComponentContext* rContext,
-                                                              uno::Sequence<cpo::uno::Any> const&)
+com_sun_star_comp_chart2_ChartThemeControl_get_implementation(
+    uno::XComponentContext* rContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ChartThemeControl(rContext));
 }

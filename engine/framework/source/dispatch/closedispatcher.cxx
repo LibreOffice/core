@@ -86,37 +86,37 @@ CloseDispatcher::~CloseDispatcher()
 }
 
 void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                                  aURL      ,
-                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
+                                        const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-css::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGroups()
+cpo::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGroups()
 {
-    return  css::uno::Sequence< sal_Int16 >{css::frame::CommandGroup::VIEW, css::frame::CommandGroup::DOCUMENT};
+    return  cpo::uno::Sequence< sal_Int16 >{css::frame::CommandGroup::VIEW, css::frame::CommandGroup::DOCUMENT};
 }
 
-css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
+cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
 {
     if (nCommandGroup == css::frame::CommandGroup::VIEW)
     {
         /* Attention: Don't add .uno:CloseFrame here. Because it's not really
                       a configurable feature ... and further it does not have
                       a valid UIName entry inside the GenericCommands.xcu ... */
-        css::uno::Sequence< css::frame::DispatchInformation > lViewInfos{
+        cpo::uno::Sequence< css::frame::DispatchInformation > lViewInfos{
             { URL_CLOSEWIN, css::frame::CommandGroup::VIEW }
         };
         return lViewInfos;
     }
     else if (nCommandGroup == css::frame::CommandGroup::DOCUMENT)
     {
-        css::uno::Sequence< css::frame::DispatchInformation > lDocInfos{
+        cpo::uno::Sequence< css::frame::DispatchInformation > lDocInfos{
             { URL_CLOSEDOC, css::frame::CommandGroup::DOCUMENT }
         };
         return lDocInfos;
     }
 
-    return css::uno::Sequence< css::frame::DispatchInformation >();
+    return cpo::uno::Sequence< css::frame::DispatchInformation >();
 }
 
 void SAL_CALL CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
@@ -130,7 +130,7 @@ void SAL_CALL CloseDispatcher::removeStatusListener(const css::uno::Reference< c
 }
 
 void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
-                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
+                                                        const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // SAFE -> ----------------------------------

@@ -29,7 +29,7 @@
 
 namespace chart { class ChartModel; }
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 namespace com::sun::star::chart2 {
     class XDataSeries;
@@ -127,7 +127,7 @@ public:
 
     bool allArgumentsForRectRangeDetected() const;
 
-    void setData( const css::uno::Sequence< css::beans::PropertyValue > & rArguments );
+    void setData( const cpo::uno::Sequence< css::beans::PropertyValue > & rArguments );
 
     void setTimeBasedRange( bool bTimeBased, sal_Int32 nStart, sal_Int32 nEnd) const;
 

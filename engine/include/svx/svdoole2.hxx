@@ -170,7 +170,7 @@ public:
     // prompted the user about link updates. The actual embedded object will be
     // created when the user confirms via UpdateAllLinks
     void SetDeferredLink(const OUString& rLinkURL,
-                         const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
+                         const cpo::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
     bool CompleteDeferredLink();
     bool HasDeferredLink() const;
 

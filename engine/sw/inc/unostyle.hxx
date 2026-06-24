@@ -70,7 +70,7 @@ public:
 
     //XNameAccess
     SW_DLLPUBLIC virtual cpo::uno::Any SAL_CALL getByName(const OUString& Name) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
     //XIndexAccess
@@ -82,13 +82,13 @@ public:
     virtual bool SAL_CALL hasElements(  ) override;
 
     //XStyleLoader
-    virtual void SAL_CALL loadStylesFromURL(const OUString& rURL, const css::uno::Sequence< css::beans::PropertyValue >& aOptions) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getStyleLoaderOptions() override;
+    virtual void SAL_CALL loadStylesFromURL(const OUString& rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aOptions) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getStyleLoaderOptions() override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetPageStyles();
     SW_DLLPUBLIC rtl::Reference<SwXStyleFamily> GetCharacterStyles();
@@ -132,7 +132,7 @@ public:
 
     //XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName(const OUString& Name) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
 };
@@ -149,7 +149,7 @@ public:
     virtual ~SwXAutoStyleFamily() override;
 
     //XAutoStyleFamily
-    virtual css::uno::Reference< css::style::XAutoStyle > SAL_CALL insertStyle( const css::uno::Sequence< css::beans::PropertyValue >& Values ) override;
+    virtual css::uno::Reference< css::style::XAutoStyle > SAL_CALL insertStyle( const cpo::uno::Sequence< css::beans::PropertyValue >& Values ) override;
 
     //XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
@@ -192,7 +192,7 @@ private:
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< cpo::uno::Any > GetPropertyValues_Impl( const css::uno::Sequence< OUString >& aPropertyNames );
+    cpo::uno::Sequence< cpo::uno::Any > GetPropertyValues_Impl( const cpo::uno::Sequence< OUString >& aPropertyNames );
 
 public:
 
@@ -209,25 +209,25 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     //XMultiPropertySet
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void SAL_CALL firePropertiesChangeEvent( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void SAL_CALL firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     //XMultiPropertyStates
     virtual void SAL_CALL setAllPropertiesToDefault(  ) override;
-    virtual void SAL_CALL setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void SAL_CALL setPropertiesToDefault( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyDefaults( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
     // Special
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getProperties() override;
 
     virtual void Notify( const SfxHint& ) override;
 
@@ -307,7 +307,7 @@ public:
 
     //XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName(const OUString& rName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(const OUString& rName) override;
 
     //XNameContainer
@@ -322,7 +322,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     static rtl::Reference<SwXTextTableStyle> CreateXTextTableStyle(SwDocShell* pDocShell, const TableStyleName& rTableAutoFormatName);
 };
@@ -387,14 +387,14 @@ class SwXTextCellStyle final : public cppu::ImplInheritanceHelper
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState(const OUString& PropertyName) override;
-    virtual css::uno::Sequence<css::beans::PropertyState> SAL_CALL getPropertyStates(const css::uno::Sequence< OUString >& aPropertyName) override;
+    virtual cpo::uno::Sequence<css::beans::PropertyState> SAL_CALL getPropertyStates(const cpo::uno::Sequence< OUString >& aPropertyName) override;
     virtual void SAL_CALL setPropertyToDefault(const OUString& PropertyName) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault(const OUString& aPropertyName) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     static rtl::Reference<SwXTextCellStyle> CreateXTextCellStyle(SwDocShell* pDocShell, const UIName& sName);
 };
@@ -429,7 +429,7 @@ public:
 
     //XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName(const OUString& Name) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
     //XNameContainer
@@ -452,7 +452,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     rtl::Reference<SwXBaseStyle> getStyleByName(const OUString& rName);
     rtl::Reference<SwXPageStyle> getPageStyleByName(const OUString& rName);

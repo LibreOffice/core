@@ -72,10 +72,10 @@ SwVbaDialog::getServiceImplName()
     return u"SwVbaDialog"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaDialog::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Dialog"_ustr
     };

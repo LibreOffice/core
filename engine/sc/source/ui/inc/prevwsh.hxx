@@ -72,8 +72,8 @@ private:
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
 
-    virtual void    WriteUserDataSequence (css::uno::Sequence < css::beans::PropertyValue >& ) override;
-    virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >& ) override;
+    virtual void    WriteUserDataSequence (cpo::uno::Sequence < css::beans::PropertyValue >& ) override;
+    virtual void    ReadUserDataSequence (const cpo::uno::Sequence < css::beans::PropertyValue >& ) override;
 
 public:
                     SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL)

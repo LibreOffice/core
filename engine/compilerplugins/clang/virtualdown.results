@@ -37,13 +37,13 @@ extensions/source/propctrlr/commoncontrol.hxx:135
 forms/source/xforms/collection.hxx:130
     _Bool Collection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >::isValid(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)const
 forms/source/xforms/collection.hxx:130
-    _Bool Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >::isValid(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)const
+    _Bool Collection<cpo::uno::Sequence<com::sun::star::beans::PropertyValue> >::isValid(const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)const
 forms/source/xforms/collection.hxx:139
-    void Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >::_insert(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
+    void Collection<cpo::uno::Sequence<com::sun::star::beans::PropertyValue> >::_insert(const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
 forms/source/xforms/collection.hxx:139
     void Collection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >::_insert(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)
 forms/source/xforms/collection.hxx:142
-    void Collection<com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> >::_remove(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
+    void Collection<cpo::uno::Sequence<com::sun::star::beans::PropertyValue> >::_remove(const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
 forms/source/xforms/collection.hxx:142
     void Collection<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> >::_remove(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,)
 forms/source/xforms/datatypes.hxx:234
@@ -57,7 +57,7 @@ forms/source/xforms/namedcollection.hxx:85
 forms/source/xforms/namedcollection.hxx:91
     class cpo::uno::Any NamedCollection::getByName(const class rtl::OUString &,)
 forms/source/xforms/namedcollection.hxx:99
-    class com::sun::star::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
+    class cpo::uno::Sequence<class rtl::OUString> NamedCollection::getElementNames()
 forms/source/xforms/namedcollection.hxx:104
     unsigned char NamedCollection::hasByName(const class rtl::OUString &,)
 include/basic/sbxvar.hxx:127
@@ -107,21 +107,21 @@ include/canvas/base/canvasbase.hxx:190
 include/canvas/base/canvasbase.hxx:206
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokePolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::rendering::StrokeAttributes &,)
 include/canvas/base/canvasbase.hxx:223
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const struct com::sun::star::rendering::StrokeAttributes &,)
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class cpo::uno::Sequence<struct com::sun::star::rendering::Texture> &,const struct com::sun::star::rendering::StrokeAttributes &,)
 include/canvas/base/canvasbase.hxx:241
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,const struct com::sun::star::rendering::StrokeAttributes &,)
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::strokeTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class cpo::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,const struct com::sun::star::rendering::StrokeAttributes &,)
 include/canvas/base/canvasbase.hxx:260
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> canvas::CanvasBase::queryStrokeShapes(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const struct com::sun::star::rendering::StrokeAttributes &,)
 include/canvas/base/canvasbase.hxx:277
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,)
 include/canvas/base/canvasbase.hxx:293
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,)
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTexturedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class cpo::uno::Sequence<struct com::sun::star::rendering::Texture> &,)
 include/canvas/base/canvasbase.hxx:310
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class com::sun::star::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,)
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::fillTextureMappedPolyPolygon(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XPolyPolygon2D> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,const class cpo::uno::Sequence<struct com::sun::star::rendering::Texture> &,const class com::sun::star::uno::Reference<class com::sun::star::geometry::XMapping2D> &,)
 include/canvas/base/canvasbase.hxx:329
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> canvas::CanvasBase::createFont(const struct com::sun::star::rendering::FontRequest &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const struct com::sun::star::geometry::Matrix2D &,)
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> canvas::CanvasBase::createFont(const struct com::sun::star::rendering::FontRequest &,const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const struct com::sun::star::geometry::Matrix2D &,)
 include/canvas/base/canvasbase.hxx:347
-    class com::sun::star::uno::Sequence<struct com::sun::star::rendering::FontInfo> canvas::CanvasBase::queryAvailableFonts(const struct com::sun::star::rendering::FontInfo &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
+    class cpo::uno::Sequence<struct com::sun::star::rendering::FontInfo> canvas::CanvasBase::queryAvailableFonts(const struct com::sun::star::rendering::FontInfo &,const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,)
 include/canvas/base/canvasbase.hxx:361
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCachedPrimitive> canvas::CanvasBase::drawText(const struct com::sun::star::rendering::StringContext &,const class com::sun::star::uno::Reference<class com::sun::star::rendering::XCanvasFont> &,const struct com::sun::star::rendering::ViewState &,const struct com::sun::star::rendering::RenderState &,signed char,)
 include/canvas/base/canvasbase.hxx:383
@@ -183,9 +183,9 @@ include/canvas/base/graphicdevicebase.hxx:152
 include/canvas/base/graphicdevicebase.hxx:159
     struct com::sun::star::geometry::RealSize2D canvas::GraphicDeviceBase::getPhysicalSize()
 include/canvas/base/graphicdevicebase.hxx:166
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XLinePolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleLinePolyPolygon(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::geometry::RealPoint2D> > &,)
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XLinePolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleLinePolyPolygon(const class cpo::uno::Sequence<class cpo::uno::Sequence<struct com::sun::star::geometry::RealPoint2D> > &,)
 include/canvas/base/graphicdevicebase.hxx:173
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBezierPolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleBezierPolyPolygon(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Sequence<struct com::sun::star::geometry::RealBezierSegment2D> > &,)
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XBezierPolyPolygon2D> canvas::GraphicDeviceBase::createCompatibleBezierPolyPolygon(const class cpo::uno::Sequence<class cpo::uno::Sequence<struct com::sun::star::geometry::RealBezierSegment2D> > &,)
 include/canvas/base/graphicdevicebase.hxx:180
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> canvas::GraphicDeviceBase::createCompatibleBitmap(const struct com::sun::star::geometry::IntegerSize2D &,)
 include/canvas/base/graphicdevicebase.hxx:191
@@ -203,9 +203,9 @@ include/canvas/base/graphicdevicebase.hxx:234
 include/canvas/base/graphicdevicebase.hxx:240
     class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstance(const class rtl::OUString &,)
 include/canvas/base/graphicdevicebase.hxx:248
-    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,)
+    class com::sun::star::uno::Reference<class com::sun::star::uno::XInterface> canvas::GraphicDeviceBase::createInstanceWithArguments(const class rtl::OUString &,const class cpo::uno::Sequence<class cpo::uno::Any> &,)
 include/canvas/base/graphicdevicebase.hxx:256
-    class com::sun::star::uno::Sequence<class rtl::OUString> canvas::GraphicDeviceBase::getAvailableServiceNames()
+    class cpo::uno::Sequence<class rtl::OUString> canvas::GraphicDeviceBase::getAvailableServiceNames()
 include/canvas/base/graphicdevicebase.hxx:263
     void canvas::GraphicDeviceBase::update()
 include/canvas/base/graphicdevicebase.hxx:273
@@ -223,19 +223,19 @@ include/canvas/base/graphicdevicebase.hxx:305
 include/canvas/base/graphicdevicebase.hxx:313
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
 include/canvas/base/integerbitmapbase.hxx:45
-    class com::sun::star::uno::Sequence<signed char> canvas::IntegerBitmapBase::getData(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
+    class cpo::uno::Sequence<signed char> canvas::IntegerBitmapBase::getData(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
 include/canvas/base/integerbitmapbase.hxx:59
-    void canvas::IntegerBitmapBase::setData(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
+    void canvas::IntegerBitmapBase::setData(const class cpo::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
 include/canvas/base/integerbitmapbase.hxx:73
-    void canvas::IntegerBitmapBase::setPixel(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
+    void canvas::IntegerBitmapBase::setPixel(const class cpo::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
 include/canvas/base/integerbitmapbase.hxx:87
-    class com::sun::star::uno::Sequence<signed char> canvas::IntegerBitmapBase::getPixel(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
+    class cpo::uno::Sequence<signed char> canvas::IntegerBitmapBase::getPixel(struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
 include/canvas/base/integerbitmapbase.hxx:101
     struct com::sun::star::rendering::IntegerBitmapLayout canvas::IntegerBitmapBase::getMemoryLayout()
 include/canvas/base/spritecanvasbase.hxx:96
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromAnimation(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimation> &,)
 include/canvas/base/spritecanvasbase.hxx:107
-    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromBitmaps(const class com::sun::star::uno::Sequence<class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> > &,signed char,)
+    class com::sun::star::uno::Reference<class com::sun::star::rendering::XAnimatedSprite> canvas::SpriteCanvasBase::createSpriteFromBitmaps(const class cpo::uno::Sequence<class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmap> > &,signed char,)
 include/canvas/base/spritecanvasbase.hxx:122
     class com::sun::star::uno::Reference<class com::sun::star::rendering::XCustomSprite> canvas::SpriteCanvasBase::createCustomSprite(const struct com::sun::star::geometry::RealSize2D &,)
 include/canvas/base/spritecanvasbase.hxx:133
@@ -257,7 +257,7 @@ include/comphelper/servicedecl.hxx:164
 include/comphelper/servicedecl.hxx:167
     unsigned char comphelper::service_decl::detail::OwnServiceImpl::supportsService(const class rtl::OUString &,)
 include/comphelper/servicedecl.hxx:171
-    class com::sun::star::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
+    class cpo::uno::Sequence<class rtl::OUString> comphelper::service_decl::detail::OwnServiceImpl::getSupportedServiceNames()
 include/comphelper/unique_disposing_ptr.hxx:41
     void comphelper::unique_disposing_ptr<basctl::(anonymous namespace)::Dll>::reset(class basctl::(anonymous namespace)::Dll *,)
 include/comphelper/unique_disposing_ptr.hxx:41
@@ -315,7 +315,7 @@ include/test/table/xtablerows.hxx:27
 include/test/table/xtablerows.hxx:28
     void apitest::XTableRows::testRemoveByIndex()
 include/toolkit/controls/geometrycontrolmodel.hxx:184
-    void OGeometryControlModel::fillProperties(class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,class com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,)const
+    void OGeometryControlModel::fillProperties(class cpo::uno::Sequence<struct com::sun::star::beans::Property> &,class cpo::uno::Sequence<struct com::sun::star::beans::Property> &,)const
 include/vbahelper/vbacollectionimpl.hxx:244
     class cpo::uno::Any ScVbaCollectionBase<cppu::WeakImplHelper<ooo::vba::word::XColumns> >::getItemByStringIndex(const class rtl::OUString &,)
 include/vbahelper/vbacollectionimpl.hxx:244

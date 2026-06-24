@@ -31,6 +31,7 @@ using namespace css::uno;
 using namespace css::ucb;
 using namespace css::task;
 using namespace css::io;
+using namespace ::cpo::uno;
 using namespace ucbhelper;
 
 

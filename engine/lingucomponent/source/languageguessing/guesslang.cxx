@@ -85,11 +85,11 @@ public:
 
     // XLanguageGuessing implementation
     virtual css::lang::Locale SAL_CALL guessPrimaryLanguage( const OUString& aText, ::sal_Int32 nStartPos, ::sal_Int32 nLen ) override;
-    virtual void SAL_CALL disableLanguages( const css::uno::Sequence< css::lang::Locale >& aLanguages ) override;
-    virtual void SAL_CALL enableLanguages( const css::uno::Sequence< css::lang::Locale >& aLanguages ) override;
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getAvailableLanguages(  ) override;
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getEnabledLanguages(  ) override;
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getDisabledLanguages(  ) override;
+    virtual void SAL_CALL disableLanguages( const cpo::uno::Sequence< css::lang::Locale >& aLanguages ) override;
+    virtual void SAL_CALL enableLanguages( const cpo::uno::Sequence< css::lang::Locale >& aLanguages ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getAvailableLanguages(  ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getEnabledLanguages(  ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getDisabledLanguages(  ) override;
 
     // implementation specific
     /// @throws RuntimeException
@@ -187,7 +187,7 @@ void LangGuess_Impl::SetFingerPrintsDB(
     m_aGuesser.SetDBPath(conf_file_path.getStr(), path.getStr());
 }
 
-uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
+cpo::uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 {
     std::scoped_lock aGuard( GetLangGuessMutex() );
 
@@ -209,7 +209,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
     return aRes;
 }
 
-uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
+cpo::uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 {
     std::scoped_lock aGuard( GetLangGuessMutex() );
 
@@ -231,7 +231,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
     return aRes;
 }
 
-uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
+cpo::uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 {
     std::scoped_lock aGuard( GetLangGuessMutex() );
 
@@ -254,7 +254,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 }
 
 void SAL_CALL LangGuess_Impl::disableLanguages(
-        const uno::Sequence< Locale >& rLanguages )
+        const cpo::uno::Sequence< Locale >& rLanguages )
 {
     std::scoped_lock aGuard( GetLangGuessMutex() );
 
@@ -275,7 +275,7 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
 }
 
 void SAL_CALL LangGuess_Impl::enableLanguages(
-        const uno::Sequence< Locale >& rLanguages )
+        const cpo::uno::Sequence< Locale >& rLanguages )
 {
     std::scoped_lock aGuard( GetLangGuessMutex() );
 
@@ -312,7 +312,7 @@ Sequence<OUString> SAL_CALL LangGuess_Impl::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_LangGuess_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LangGuess_Impl());
 }

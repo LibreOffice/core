@@ -1623,7 +1623,7 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nPor
         nMaxBreakPos = pNode->GetText().getLength() - 1;
 
     uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
-    i18n::LineBreakHyphenationOptions aHyphOptions( nullptr, uno::Sequence< beans::PropertyValue >(), 1 );
+    i18n::LineBreakHyphenationOptions aHyphOptions( nullptr, cpo::uno::Sequence< beans::PropertyValue >(), 1 );
 
     i18n::LineBreakUserOptions aUserOptions;
     aUserOptions.forbiddenBeginCharacters = ImpGetLocaleDataWrapper()->getForbiddenCharacters().beginLine;

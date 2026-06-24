@@ -91,9 +91,9 @@ namespace filter::odfflatxml {
             bool SAL_CALL supportsService(OUString const & ServiceName) override
             { return cppu::supportsService(this, ServiceName); }
 
-            css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+            cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
             {
-                return css::uno::Sequence<OUString>{
+                return cpo::uno::Sequence<OUString>{
                     u"com.sun.star.document.ImportFilter"_ustr,
                         u"com.sun.star.document.ExportFilter"_ustr};
             }
@@ -251,7 +251,7 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_OdfFlatXml_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OdfFlatXml(context));
 }

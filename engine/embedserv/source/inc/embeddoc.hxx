@@ -24,7 +24,7 @@
 #include <objidl.h>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <rtl/ref.hxx>
 #include <unordered_map>
 
@@ -46,11 +46,11 @@ class EmbedDocument_Impl
       public IExternalConnection
 {
 protected:
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
                 fillArgsForLoading_Impl( css::uno::Reference< css::io::XInputStream > const & xStream,
                                          DWORD nStreamMode,
                                          LPCOLESTR pFilePath = nullptr );
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
                 fillArgsForStoring_Impl( css::uno::Reference< css::io::XOutputStream > const & xStream );
 
     HRESULT SaveTo_Impl( IStorage* pStg );

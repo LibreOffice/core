@@ -104,11 +104,11 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 };
 
 //  ScViewPaneObj for direct use (including OWeakObject)
@@ -262,7 +262,7 @@ public:
     virtual void SAL_CALL   freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRows ) override;
 
                             // XRangeSelection
-    virtual void SAL_CALL   startRangeSelection( const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+    virtual void SAL_CALL   startRangeSelection( const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual void SAL_CALL   abortRangeSelection() override;
     virtual void SAL_CALL   addRangeSelectionListener( const css::uno::Reference< css::sheet::XRangeSelectionListener >& aListener ) override;
     virtual void SAL_CALL   removeRangeSelectionListener( const css::uno::Reference< css::sheet::XRangeSelectionListener >& aListener ) override;
@@ -272,18 +272,18 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XTransferableSupplier
     virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getTransferable() override;
     virtual void SAL_CALL insertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
 
     // XSelectedSheetsSupplier
-    virtual css::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets() override;
+    virtual cpo::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets() override;
 
     rtl::Reference< ScTableSheetObj > getActiveScSheet();
 };
@@ -305,7 +305,7 @@ public:
     virtual void Notify(SfxBroadcaster&, const SfxHint& rHint) override;
 
     // XSelectedSheetsSupplier
-    virtual css::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets() override;
+    virtual cpo::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

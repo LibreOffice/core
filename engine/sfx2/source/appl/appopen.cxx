@@ -38,7 +38,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.hxx>
@@ -127,9 +127,9 @@ public:
     }
 
     virtual ::comphelper::DocPasswordVerifierResult
-                        verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData ) override;
+                        verifyPassword( const OUString& rPassword, cpo::uno::Sequence< beans::NamedValue >& o_rEncryptionData ) override;
     virtual ::comphelper::DocPasswordVerifierResult
-                        verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData ) override;
+                        verifyEncryptionData( const cpo::uno::Sequence< beans::NamedValue >& rEncryptionData ) override;
 
 private:
     SfxMedium & m_rMedium;
@@ -138,14 +138,14 @@ private:
 
 }
 
-::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
+::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyPassword( const OUString& rPassword, cpo::uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
     o_rEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( rPassword );
     return verifyEncryptionData( o_rEncryptionData );
 }
 
 
-::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
+::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyEncryptionData( const cpo::uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
     ::comphelper::DocPasswordVerifierResult eResult = ::comphelper::DocPasswordVerifierResult::WrongPassword;
     try
@@ -206,7 +206,7 @@ ErrCode CheckPasswd_Impl
             if ( xStorageProps.is() )
             {
                 bool bIsEncrypted = false;
-                uno::Sequence< uno::Sequence< beans::NamedValue > > aGpgProperties;
+                cpo::uno::Sequence< cpo::uno::Sequence< beans::NamedValue > > aGpgProperties;
                 try {
                     xStorageProps->getPropertyValue(u"HasEncryptedEntries"_ustr)
                         >>= bIsEncrypted;
@@ -237,7 +237,7 @@ ErrCode CheckPasswd_Impl
                         if ( pPasswordItem )
                             aPassword = pPasswordItem->GetValue();
 
-                        uno::Sequence< beans::NamedValue > aEncryptionData;
+                        cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
                         const SfxUnoAnyItem* pEncryptionDataItem = rSet.GetItem(SID_ENCRYPTIONDATA, false);
                         if ( pEncryptionDataItem )
                             pEncryptionDataItem->GetValue() >>= aEncryptionData;
@@ -611,7 +611,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( !pFileNameItem )
     {
         // get FileName from dialog
-        css::uno::Sequence<OUString> aURLList;
+        cpo::uno::Sequence<OUString> aURLList;
         OUString aFilter;
         std::optional<SfxAllItemSet> pSet;
         OUString aPath;
@@ -643,7 +643,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             nDialogType = ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
         }
 
-        css::uno::Sequence< OUString >  aDenyList;
+        cpo::uno::Sequence< OUString >  aDenyList;
 
         const SfxStringListItem* pDenyListItem = rReq.GetArg(SID_DENY_LIST);
         if ( pDenyListItem )

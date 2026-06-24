@@ -112,7 +112,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XPropertySet
@@ -143,9 +143,9 @@ public:
     // XPropertyState
     virtual css::beans::PropertyState SAL_CALL
         getPropertyState(const OUString& rPropertyName) override;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL
         getPropertyStates(
-            const css::uno::Sequence< OUString >& rPropertyNames) override;
+            const cpo::uno::Sequence< OUString >& rPropertyNames) override;
     virtual void SAL_CALL setPropertyToDefault(
             const OUString& rPropertyName) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault(
@@ -153,30 +153,30 @@ public:
 
     // XMultiPropertySet
     virtual void SAL_CALL setPropertyValues(
-            const css::uno::Sequence< OUString >& aPropertyNames,
-            const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
+            const cpo::uno::Sequence< OUString >& aPropertyNames,
+            const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
 
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
-        getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
+        getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
     virtual void SAL_CALL addPropertiesChangeListener(
-        const css::uno::Sequence< OUString >& aPropertyNames,
+        const cpo::uno::Sequence< OUString >& aPropertyNames,
         const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     virtual void SAL_CALL removePropertiesChangeListener(
         const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     virtual void SAL_CALL firePropertiesChangeEvent(
-        const css::uno::Sequence< OUString >& aPropertyNames,
+        const cpo::uno::Sequence< OUString >& aPropertyNames,
         const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     // XMultiPropertyStates
     virtual void SAL_CALL setAllPropertiesToDefault() override;
     virtual void SAL_CALL setPropertiesToDefault(
-            const css::uno::Sequence< OUString >&  rPropertyNames) override;
-    virtual css::uno::Sequence< cpo::uno::Any >
+            const cpo::uno::Sequence< OUString >&  rPropertyNames) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any >
         SAL_CALL getPropertyDefaults(
-            const css::uno::Sequence< OUString >&  rPropertyNames) override;
+            const cpo::uno::Sequence< OUString >&  rPropertyNames) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -189,19 +189,19 @@ public:
     // XContentEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
         createContentEnumeration(const OUString& rServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames() override;
 
     // XSortable
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL
         createSortDescriptor() override;
     virtual void SAL_CALL sort(
-            const css::uno::Sequence< css::beans::PropertyValue >& xDescriptor) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& xDescriptor) override;
 
     // XDocumentInsertable
     virtual void SAL_CALL insertDocumentFromURL(
             const OUString& rURL,
-            const css::uno::Sequence< css::beans::PropertyValue >& rOptions) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rOptions) override;
 
     // XTextRange
     virtual css::uno::Reference< css::text::XText >
@@ -250,7 +250,7 @@ public:
     // XRedline
     virtual void SAL_CALL makeRedline(
             const OUString& rRedlineType,
-            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& RedlineProperties) override;
 
     //XMarkingAccess
     virtual void SAL_CALL invalidateMarkings(::sal_Int32 nType) override;

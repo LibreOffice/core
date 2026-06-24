@@ -51,7 +51,7 @@ bool SAL_CALL MacrosMenuController::supportsService( const OUString& sServiceNam
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL MacrosMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL MacrosMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -159,7 +159,7 @@ void MacrosMenuController::addScriptItems(const Reference<css::awt::XPopupMenu>&
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_MacrosMenuController_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::MacrosMenuController(context));
 }

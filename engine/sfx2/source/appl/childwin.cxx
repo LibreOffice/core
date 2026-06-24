@@ -292,7 +292,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     SvtViewOptions aWinOpt(EViewType::Window, sName);
     aWinOpt.SetWindowState(rInfo.aWinState);
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq
+    cpo::uno::Sequence < css::beans::NamedValue > aSeq
         { { u"Data"_ustr, cpo::uno::Any(aWinData) } };
     aWinOpt.SetUserData( aSeq );
 
@@ -368,7 +368,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     if (xWinOpt->Exists() && xWinOpt->HasVisible() )
         rInfo.bVisible  = xWinOpt->IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq = xWinOpt->GetUserData();
+    cpo::uno::Sequence < css::beans::NamedValue > aSeq = xWinOpt->GetUserData();
 
     OUString aTmp;
     if ( aSeq.hasElements() )

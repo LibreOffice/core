@@ -89,7 +89,7 @@ struct OWriteStream_Impl
 
     OStorage_Impl* m_pParent;
 
-    css::uno::Sequence< css::beans::PropertyValue > m_aProps;
+    cpo::uno::Sequence< css::beans::PropertyValue > m_aProps;
 
     bool m_bForceEncrypted;
 
@@ -107,10 +107,10 @@ struct OWriteStream_Impl
 
     // Relations info related data, stored in *.rels file in OFOPXML format
     css::uno::Reference< css::io::XInputStream > m_xOrigRelInfoStream;
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > m_aOrigRelInfo;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > m_aOrigRelInfo;
     bool m_bOrigRelInfoBroken;
 
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > m_aNewRelInfo;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > m_aNewRelInfo;
     css::uno::Reference< css::io::XInputStream > m_xNewRelInfoStream;
     sal_Int16 m_nRelInfoStatus;
     sal_Int32 m_nRelId;
@@ -127,9 +127,9 @@ private:
     /// @throws css::packages::NoEncryptionException
     ::comphelper::SequenceAsHashMap GetCommonRootEncryptionData();
 
-    css::uno::Sequence< css::beans::PropertyValue > ReadPackageStreamProperties();
-    css::uno::Sequence< css::beans::PropertyValue > InsertOwnProps(
-                            const css::uno::Sequence< css::beans::PropertyValue >& aProps,
+    cpo::uno::Sequence< css::beans::PropertyValue > ReadPackageStreamProperties();
+    cpo::uno::Sequence< css::beans::PropertyValue > InsertOwnProps(
+                            const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                             bool bUseCommonEncryption );
 
 public:
@@ -173,14 +173,14 @@ public:
 
     void InsertStreamDirectly(
             const css::uno::Reference< css::io::XInputStream >& xInStream,
-            const css::uno::Sequence< css::beans::PropertyValue >& aProps );
+            const cpo::uno::Sequence< css::beans::PropertyValue >& aProps );
 
     void Commit();
     void Revert();
 
-    css::uno::Sequence< css::beans::PropertyValue > const & GetStreamProperties();
+    cpo::uno::Sequence< css::beans::PropertyValue > const & GetStreamProperties();
 
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > GetAllRelationshipsIfAny();
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > GetAllRelationshipsIfAny();
 
     void CopyInternallyTo_Impl( const css::uno::Reference< css::io::XStream >& xDestStream,
                                 const ::comphelper::SequenceAsHashMap& aEncryptionData );
@@ -202,7 +202,7 @@ public:
 
     void CreateReadonlyCopyBasedOnData(
                     const css::uno::Reference< css::io::XInputStream >& xDataToCopy,
-                    const css::uno::Sequence< css::beans::PropertyValue >& aProps,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                     css::uno::Reference< css::io::XStream >& xTargetStream );
 
     void GetCopyOfLastCommit( css::uno::Reference< css::io::XStream >& xTargetStream );
@@ -275,18 +275,18 @@ public:
     virtual void SAL_CALL release() noexcept override;
 
     //  XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
     virtual sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
     virtual void SAL_CALL flush(  ) override;
     virtual void SAL_CALL closeOutput(  ) override;
 
@@ -312,19 +312,19 @@ public:
     virtual void SAL_CALL removeEncryption() override;
 
     //XEncryptionProtectedSource2
-    virtual void SAL_CALL setEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
+    virtual void SAL_CALL setEncryptionData( const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
     virtual bool SAL_CALL hasEncryptionData() override;
 
     //XRelationshipAccess
     virtual bool SAL_CALL hasByID( const OUString& sID ) override;
     virtual OUString SAL_CALL getTargetByID( const OUString& sID ) override;
     virtual OUString SAL_CALL getTypeByID( const OUString& sID ) override;
-    virtual css::uno::Sequence< css::beans::StringPair > SAL_CALL getRelationshipByID( const OUString& sID ) override;
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getRelationshipsByType( const OUString& sType ) override;
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getAllRelationships(  ) override;
-    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const css::uno::Sequence< css::beans::StringPair >& aEntry, bool bReplace ) override;
+    virtual cpo::uno::Sequence< css::beans::StringPair > SAL_CALL getRelationshipByID( const OUString& sID ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > SAL_CALL getRelationshipsByType( const OUString& sType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > SAL_CALL getAllRelationships(  ) override;
+    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const cpo::uno::Sequence< css::beans::StringPair >& aEntry, bool bReplace ) override;
     virtual void SAL_CALL removeRelationshipByID( const OUString& sID ) override;
-    virtual void SAL_CALL insertRelationships( const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aEntries, bool bReplace ) override;
+    virtual void SAL_CALL insertRelationships( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >& aEntries, bool bReplace ) override;
     virtual void SAL_CALL clearRelationships(  ) override;
 
     //XPropertySet

@@ -213,9 +213,9 @@ sal_Int32 ZipPackageStream::GetIVSize() const
     return xResult;
 }
 
-uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
+cpo::uno::Sequence<sal_Int8> ZipPackageStream::GetEncryptionKey(Bugs const bugs)
 {
-    uno::Sequence< sal_Int8 > aResult;
+    cpo::uno::Sequence< sal_Int8 > aResult;
     sal_Int32 nKeyGenID = GetStartKeyGenID();
     bool const bUseWinEncoding = (bugs == Bugs::WinEncodingWrongSHA1 || m_bUseWinEncoding);
 
@@ -437,9 +437,9 @@ static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< io::XInputStre
 
 bool ZipPackageStream::saveChild(
         const OUString &rPath,
-        std::vector < uno::Sequence < beans::PropertyValue > > &rManList,
+        std::vector < cpo::uno::Sequence < beans::PropertyValue > > &rManList,
         ZipOutputStream & rZipOut,
-        const uno::Sequence < sal_Int8 >& rEncryptionKey,
+        const cpo::uno::Sequence < sal_Int8 >& rEncryptionKey,
         ::std::optional<sal_Int32> const oPBKDF2IterationCount,
         ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args)
 {
@@ -449,7 +449,7 @@ bool ZipPackageStream::saveChild(
     static constexpr OUString sDigestAlgProperty    (u"DigestAlgorithm"_ustr);
     static constexpr OUString sDerivedKeySizeProperty  (u"DerivedKeySize"_ustr);
 
-    uno::Sequence < beans::PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
+    cpo::uno::Sequence < beans::PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
 
     // In case the entry we are reading is also the entry we are writing, we will
     // store the ZipEntry data in pTempEntry
@@ -585,9 +585,9 @@ bool ZipPackageStream::saveChild(
         {
             if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
             {
-                uno::Sequence<sal_Int8> aSalt(16);
+                cpo::uno::Sequence<sal_Int8> aSalt(16);
                 // note: for GCM it's particularly important that IV is unique
-                uno::Sequence<sal_Int8> aVector(GetIVSize());
+                cpo::uno::Sequence<sal_Int8> aVector(GetIVSize());
                 rtl_random_getBytes(aSalt.getArray(), 16);
                 rtl_random_getBytes(aVector.getArray(), aVector.getLength());
                 if ( !m_bHaveOwnKey )
@@ -615,7 +615,7 @@ bool ZipPackageStream::saveChild(
                 pPropSet[PKG_MNFST_KDF].Name = u"KeyDerivationFunction"_ustr;
                 pPropSet[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::Argon2id;
                 pPropSet[PKG_MNFST_ARGON2ARGS].Name = u"Argon2Args"_ustr;
-                uno::Sequence<sal_Int32> const args{
+                cpo::uno::Sequence<sal_Int32> const args{
                     ::std::get<0>(*m_xBaseEncryptionData->m_oArgon2Args),
                     ::std::get<1>(*m_xBaseEncryptionData->m_oArgon2Args),
                     ::std::get<2>(*m_xBaseEncryptionData->m_oArgon2Args) };
@@ -692,7 +692,7 @@ bool ZipPackageStream::saveChild(
             ZipOutputStream::setEntry(*pTempEntry);
             rZipOut.writeLOC(std::move(pAutoTempEntry));
 
-            uno::Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
+            cpo::uno::Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
             sal_Int32 nLength;
 
             do
@@ -762,7 +762,7 @@ bool ZipPackageStream::saveChild(
             if (pTempEntry->nMethod == STORED)
             {
                 sal_Int32 nLength;
-                uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
+                cpo::uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
                 rZipOut.writeLOC(std::move(pAutoTempEntry), bToBeEncrypted);
                 do
                 {
@@ -1228,7 +1228,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         if ( m_rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
             throw beans::PropertyVetoException();
 
-        uno::Sequence< sal_Int8 > aNewKey;
+        cpo::uno::Sequence< sal_Int8 > aNewKey;
 
         if ( !( aValue >>= aNewKey ) )
         {
@@ -1271,7 +1271,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         if ( m_rZipPackage.getFormat() != embed::StorageFormats::PACKAGE )
             throw beans::PropertyVetoException();
 
-        uno::Sequence< beans::NamedValue > aKeys;
+        cpo::uno::Sequence< beans::NamedValue > aKeys;
         if ( !( aValue >>= aKeys ) )
         {
                 throw IllegalArgumentException(u"Wrong type for StorageEncryptionKeys property!"_ustr,

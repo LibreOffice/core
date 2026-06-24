@@ -11,7 +11,7 @@
 
 #include <com/sun/star/sheet/XCellRangeFormula.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -24,8 +24,9 @@ void XCellRangeFormula::testGetSetFormulaArray()
 {
     uno::Reference<sheet::XCellRangeFormula> xCRF(init(), UNO_QUERY_THROW);
 
-    uno::Sequence<uno::Sequence<OUString>> aFormulaArrayOriginal = xCRF->getFormulaArray();
-    uno::Sequence<uno::Sequence<OUString>> aFormulaArrayNew = xCRF->getFormulaArray();
+    cpo::uno::Sequence<cpo::uno::Sequence<OUString>> aFormulaArrayOriginal
+        = xCRF->getFormulaArray();
+    cpo::uno::Sequence<cpo::uno::Sequence<OUString>> aFormulaArrayNew = xCRF->getFormulaArray();
     aFormulaArrayNew.getArray()[0].getArray()[0] = u"NewValue"_ustr;
 
     xCRF->setFormulaArray(aFormulaArrayNew);

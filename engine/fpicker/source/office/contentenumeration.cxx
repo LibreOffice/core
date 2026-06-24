@@ -64,7 +64,7 @@ namespace
 }
 
     using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::util::DateTime;
@@ -110,7 +110,7 @@ namespace
 
     EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
         const FolderDescriptor& _rFolder,
-        const css::uno::Sequence< OUString >& rDenyList )
+        const cpo::uno::Sequence< OUString >& rDenyList )
     {
         {
             std::unique_lock aGuard( m_aMutex );

@@ -480,7 +480,7 @@ using namespace cpo::uno;
     {
     }
 
-    void HangulHanjaConversionDialog::FillSuggestions( const css::uno::Sequence< OUString >& _rSuggestions )
+    void HangulHanjaConversionDialog::FillSuggestions( const cpo::uno::Sequence< OUString >& _rSuggestions )
     {
         m_xSuggestions->Clear();
         for ( auto const & suggestion : _rSuggestions )

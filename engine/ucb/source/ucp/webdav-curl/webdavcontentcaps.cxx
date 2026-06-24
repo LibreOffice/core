@@ -29,7 +29,7 @@
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/ucb/PropertyCommandArgument.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/LockEntry.hpp>
@@ -138,7 +138,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     u"CreatableContentsInfo"_ustr,
                     -1,
-                    cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                    cppu::UnoType<cpo::uno::Sequence< ucb::ContentInfo >>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -203,7 +203,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::LOCKDISCOVERY,
                     -1,
-                    cppu::UnoType<uno::Sequence< ucb::Lock >>::get(),
+                    cppu::UnoType<cpo::uno::Sequence< ucb::Lock >>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -219,7 +219,7 @@ bool ContentProvider::getProperty(
                 beans::Property(
                     DAVProperties::SUPPORTEDLOCK,
                     -1,
-                    cppu::UnoType<uno::Sequence< ucb::LockEntry >>::get(),
+                    cppu::UnoType<cpo::uno::Sequence< ucb::LockEntry >>::get(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
@@ -269,7 +269,7 @@ void Content::removeCachedPropertyNames( const OUString & rURL )
 
 
 // virtual
-uno::Sequence< beans::Property > Content::getProperties(
+cpo::uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     bool bTransient;
@@ -475,9 +475,9 @@ uno::Sequence< beans::Property > Content::getProperties(
             aPropSet.insert( rEntry.first );
     }
 
-    // std::set -> uno::Sequence
+    // std::set -> cpo::uno::Sequence
     sal_Int32 nCount = aPropSet.size();
-    uno::Sequence< beans::Property > aProperties( nCount );
+    cpo::uno::Sequence< beans::Property > aProperties( nCount );
     auto aPropertiesRange = asNonConstRange(aProperties);
 
     beans::Property aProp;
@@ -494,12 +494,12 @@ uno::Sequence< beans::Property > Content::getProperties(
 
 
 // virtual
-uno::Sequence< ucb::CommandInfo > Content::getCommands(
+cpo::uno::Sequence< ucb::CommandInfo > Content::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Sequence< ucb::CommandInfo > aCmdInfo( 10 );
+    cpo::uno::Sequence< ucb::CommandInfo > aCmdInfo( 10 );
     auto pCmdInfo = aCmdInfo.getArray();
 
 
@@ -520,12 +520,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ucb::CommandInfo(
                 u"getPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::Property >>::get());
+                cppu::UnoType<cpo::uno::Sequence< beans::Property >>::get());
     pCmdInfo[ 3 ] =
             ucb::CommandInfo(
                 u"setPropertyValues"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get());
+                cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get());
 
 
     // Optional standard commands

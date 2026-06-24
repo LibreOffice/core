@@ -34,7 +34,7 @@ BasicColorConfig::BasicColorConfig()
 
 BasicColorConfig::~BasicColorConfig() {}
 
-void BasicColorConfig::Notify(const css::uno::Sequence<OUString>&) {}
+void BasicColorConfig::Notify(const cpo::uno::Sequence<OUString>&) {}
 
 void BasicColorConfig::ImplCommit() {}
 
@@ -57,13 +57,13 @@ ColorScheme BasicColorConfig::GetColorScheme(const OUString& rScheme)
                                             OUString(rScheme + "/BackgroundColor/Color"),
                                             OUString(rScheme + "/LineHighlightColor/Color") };
 
-    css::uno::Sequence<OUString> aPropNames(aVecPropNames.size());
+    cpo::uno::Sequence<OUString> aPropNames(aVecPropNames.size());
     OUString* pPropNames = aPropNames.getArray();
     for (size_t i = 0; i < aVecPropNames.size(); i++)
     {
         pPropNames[i] = aVecPropNames[i];
     }
-    css::uno::Sequence<cpo::uno::Any> aColors = GetProperties(aPropNames);
+    cpo::uno::Sequence<cpo::uno::Any> aColors = GetProperties(aPropNames);
 
     ColorScheme aColorScheme;
     aColorScheme.m_sSchemeName = rScheme;

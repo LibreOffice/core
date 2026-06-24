@@ -90,7 +90,7 @@ using namespace cpo::uno;
     OPropertyExport::exportRemainingPropertiesSequence(
         Any const & value, token::XMLTokenEnum eValueAttName)
     {
-        css::uno::Sequence<T> anySeq;
+        cpo::uno::Sequence<T> anySeq;
         bool bSuccess = value >>= anySeq;
         assert(bSuccess); (void)bSuccess;
         for (T const& i : anySeq)

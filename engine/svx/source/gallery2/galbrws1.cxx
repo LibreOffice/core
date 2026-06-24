@@ -68,7 +68,7 @@ namespace
 struct DispatchInfo
 {
     css::util::URL                                  TargetURL;
-    css::uno::Sequence< css::beans::PropertyValue > Arguments;
+    cpo::uno::Sequence< css::beans::PropertyValue > Arguments;
     css::uno::Reference< css::frame::XDispatch >    Dispatch;
 };
 
@@ -98,7 +98,7 @@ private:
     CommandInfoMap   m_aCommandInfo;
 
     static void Execute( const CommandInfo &rCmdInfo,
-                  const css::uno::Sequence< css::beans::PropertyValue > &rArguments );
+                  const cpo::uno::Sequence< css::beans::PropertyValue > &rArguments );
 
     void MenuSelectHdl(std::u16string_view rIdent);
     void BackgroundMenuSelectHdl(sal_uInt16 nId);
@@ -506,7 +506,7 @@ void GalleryBrowser::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 IMPL_STATIC_LINK_NOARG( GalleryBrowser, OnMoreGalleriesClick, weld::Button&, void)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{
         comphelper::makePropertyValue(u"AdditionsTag"_ustr, u"Gallery"_ustr)
     };
     comphelper::dispatchCommand(u".uno:AdditionsDialog"_ustr, aArgs);
@@ -1330,7 +1330,7 @@ void GalleryBrowser::DispatchAdd(
         xGraphic.set( aGraphic.GetXGraphic() );
     OSL_ENSURE( xGraphic.is(), "gallery item is graphic, but the reference is invalid!" );
 
-    css::uno::Sequence< css::beans::PropertyValue > aSeq{
+    cpo::uno::Sequence< css::beans::PropertyValue > aSeq{
         comphelper::makePropertyValue(SVXGALLERYITEM_TYPE, nType),
         comphelper::makePropertyValue(SVXGALLERYITEM_URL, OUString()),
         comphelper::makePropertyValue(SVXGALLERYITEM_FILTER, aFilterName),
@@ -1339,7 +1339,7 @@ void GalleryBrowser::DispatchAdd(
     };
     assert(aSeq.getLength() == SVXGALLERYITEM_PARAMS);
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
         SVXGALLERYITEM_ARGNAME, aSeq) };
 
     std::unique_ptr<DispatchInfo> pInfo(new DispatchInfo);
@@ -1633,7 +1633,7 @@ void SAL_CALL GalleryThemePopup::statusChanged(
         if ( rEvent.IsEnabled )
         {
             OUString sItem;
-            css::uno::Sequence< OUString > sItems;
+            cpo::uno::Sequence< OUString > sItems;
             if ( ( rEvent.State >>= sItem ) && sItem.getLength() )
             {
                 mxBackgroundPopup->append(OUString::number(1), sItem);
@@ -1658,7 +1658,7 @@ void SAL_CALL GalleryThemePopup::disposing(
 
 void GalleryThemePopup::Execute(
     const CommandInfo &rCmdInfo,
-    const css::uno::Sequence< css::beans::PropertyValue > &rArguments )
+    const cpo::uno::Sequence< css::beans::PropertyValue > &rArguments )
 {
     if ( rCmdInfo.Dispatch.is() )
     {
@@ -1772,7 +1772,7 @@ void GalleryThemePopup::BackgroundMenuSelectHdl(sal_uInt16 nPos)
     OUString aURL( mpBrowser->GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
     OUString aFilterName( mpBrowser->GetFilterName() );
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs{
+    cpo::uno::Sequence< css::beans::PropertyValue > aArgs{
         comphelper::makePropertyValue(u"Background.Transparent"_ustr, sal_Int32( 0 )), // 0 - 100
         comphelper::makePropertyValue(u"Background.BackColor"_ustr, sal_Int32( - 1 )),
         comphelper::makePropertyValue(u"Background.URL"_ustr, aURL),

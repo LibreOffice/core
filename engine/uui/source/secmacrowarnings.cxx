@@ -161,7 +161,7 @@ void MacroWarning::EnableOkBtn(bool bEnable)
 
 void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
                                const OUString& aODFVersion,
-                               const css::uno::Sequence< security::DocumentSignatureInformation >& rInfos )
+                               const cpo::uno::Sequence< security::DocumentSignatureInformation >& rInfos )
 {
     mxStore = rxStore;
     maODFVersion = aODFVersion;

@@ -72,7 +72,7 @@ IMPL_LINK(ChartUIObject, PostCommand, void*, pCommand, void)
 {
         css::util::URL aURL;
         aURL.Path = *static_cast<OUString*>(pCommand);
-        mxChartWindow->GetController()->dispatch(aURL, css::uno::Sequence<css::beans::PropertyValue>());
+        mxChartWindow->GetController()->dispatch(aURL, cpo::uno::Sequence<css::beans::PropertyValue>());
 }
 
 std::unique_ptr<UIObject> ChartUIObject::get_child(const OUString& rID)

@@ -850,7 +850,7 @@ void ScCopyPasteTest::tdf122716_rtf_portion_encoding()
     auto xTransferable = pModelObj->getSelection();
     // Get the RTF data:
     auto rtf_any = xTransferable->getTransferData({ u"text/rtf"_ustr, {}, {} });
-    css::uno::Sequence<sal_Int8> rtf_bytes;
+    cpo::uno::Sequence<sal_Int8> rtf_bytes;
     CPPUNIT_ASSERT(rtf_any >>= rtf_bytes);
     OString rtf_string(reinterpret_cast<const char*>(rtf_bytes.getConstArray()),
                        rtf_bytes.getLength());

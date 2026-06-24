@@ -322,8 +322,8 @@ void SmartArtDiagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Re
     uno::Reference< embed::XRelationshipAccess > xRelations( xOutputStream, uno::UNO_QUERY );
     if( xRelations.is() )
     {
-        const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
-        for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+        const cpo::uno::Sequence<cpo::uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
+        for (const cpo::uno::Sequence<beans::StringPair>& aSeq : aSeqs)
         {
             SAL_INFO("oox", "RelationData:");
             for (const beans::StringPair& aPair : aSeq)
@@ -362,8 +362,8 @@ void SmartArtDiagram::writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, uno:
     uno::Reference< embed::XRelationshipAccess > xRelations( xOutputStream, uno::UNO_QUERY );
     if( xRelations.is() )
     {
-        const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
-        for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+        const cpo::uno::Sequence<cpo::uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
+        for (const cpo::uno::Sequence<beans::StringPair>& aSeq : aSeqs)
         {
             SAL_INFO("oox", "RelationDrawing:");
             for (const beans::StringPair& aPair : aSeq)
@@ -398,7 +398,7 @@ void SmartArtDiagram::addDomTreeToModelData(svx::diagram::DomMapFlag aId, std::u
         uno::Reference<xml::sax::XWriter> writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
         serializer.set(aDomTree, uno::UNO_QUERY);
         writer->setOutputStream(pStreamWrapper->getOutputStream());
-        serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW), uno::Sequence<beans::StringPair>());
+        serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW), cpo::uno::Sequence<beans::StringPair>());
 
         // put into string
         const OUString aContent(static_cast<const char*>(aStream.GetData()), aStream.TellEnd(), RTL_TEXTENCODING_UTF8);
@@ -594,10 +594,10 @@ void loadDiagram( ShapePtr const & pShape,
                            pDiagram,
                            xRefDataModel);
 
-            uno::Sequence<uno::Sequence<cpo::uno::Any>> aDataImageRelsMap(
+            cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> aDataImageRelsMap(
                 pShape->resolveRelationshipsOfTypeFromOfficeDoc(
                     rFilter, xRefDataModel->getFragmentPath(), u"image"));
-            uno::Sequence<uno::Sequence<cpo::uno::Any>> aDataHlinkRelsMap(
+            cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> aDataHlinkRelsMap(
                 pShape->resolveRelationshipsOfTypeFromOfficeDoc(
                     rFilter, xRefDataModel->getFragmentPath(), u"hlink"));
 

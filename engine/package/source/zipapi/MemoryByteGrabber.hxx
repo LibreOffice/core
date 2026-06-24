@@ -19,14 +19,14 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_ZIPAPI_MEMORYBYTEGRABBER_HXX
 #define INCLUDED_PACKAGE_SOURCE_ZIPAPI_MEMORYBYTEGRABBER_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 class MemoryByteGrabber final
 {
     const sal_Int8 *mpBuffer;
     sal_Int32 mnCurrent, mnEnd;
 public:
-    MemoryByteGrabber ( const css::uno::Sequence < sal_Int8 > & rBuffer )
+    MemoryByteGrabber ( const cpo::uno::Sequence < sal_Int8 > & rBuffer )
     : mpBuffer ( rBuffer.getConstArray() )
     , mnCurrent ( 0 )
     , mnEnd ( rBuffer.getLength() )
@@ -38,7 +38,7 @@ public:
     , mnEnd ( nBufLen )
     {
     }
-    MemoryByteGrabber(css::uno::Sequence<sal_Int8> &&) = delete;
+    MemoryByteGrabber(cpo::uno::Sequence<sal_Int8> &&) = delete;
 
     const sal_Int8 * getCurrentPos () const { return mpBuffer + mnCurrent; }
 

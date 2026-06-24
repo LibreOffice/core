@@ -207,11 +207,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSteppedLines)
     }
 }
 
-uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XChartDocument > const & xChart1Doc)
+cpo::uno::Sequence < OUString > getChartColumnDescriptions( uno::Reference< chart::XChartDocument > const & xChart1Doc)
 {
     CPPUNIT_ASSERT(xChart1Doc.is());
     uno::Reference< chart::XChartDataArray > xChartData ( xChart1Doc->getData(), UNO_QUERY_THROW);
-    uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     return seriesList;
 }
 
@@ -219,7 +219,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODSChartSeries)
 {
     loadFromFile(u"ods/chart.ods");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0), UNO_QUERY_THROW);
-    uno::Sequence < OUString > seriesList = getChartColumnDescriptions( xChart1Doc);
+    cpo::uno::Sequence < OUString > seriesList = getChartColumnDescriptions( xChart1Doc);
     CPPUNIT_ASSERT_EQUAL(u"Col 1"_ustr, seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(u"Col2"_ustr, seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(u"Col 33"_ustr, seriesList[2]);
@@ -230,7 +230,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testXLSXChartSeries)
 {
     loadFromFile(u"xlsx/chart.xlsx");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0), UNO_QUERY_THROW);
-    uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
+    cpo::uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
     CPPUNIT_ASSERT_EQUAL(u"Col 1"_ustr, seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(u"Col2"_ustr, seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(u"Col 33"_ustr, seriesList[2]);
@@ -241,7 +241,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testXLSChartSeries)
 {
     loadFromFile(u"xls/chart.xls");
     uno::Reference< chart::XChartDocument > xChart1Doc ( getChartCompFromSheet( 0, 0), UNO_QUERY_THROW);
-    uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
+    cpo::uno::Sequence < OUString > seriesList = getChartColumnDescriptions(xChart1Doc );
     CPPUNIT_ASSERT_EQUAL(u"Col 1"_ustr, seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(u"Col 2"_ustr, seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(u"Col 3"_ustr, seriesList[2]);
@@ -251,7 +251,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testXLSChartSeries)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODTChartSeries)
 {
     loadFromFile(u"odt/chart.odt");
-    uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions();
+    cpo::uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, seriesList[2]);
@@ -261,7 +261,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODTChartSeries)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCChartSeries)
 {
     loadFromFile(u"doc/chart.doc");
-    uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions();
+    cpo::uno::Sequence< OUString > seriesList = getWriterChartColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, seriesList[2]);
@@ -276,7 +276,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartSeries)
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<cpo::uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"Series 1"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"Series 2"_ustr, aLabels[1][0].get<OUString>());
@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testDOCXChartEmptySeries)
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<cpo::uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"1. dataseries"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"2. dataseries"_ustr, aLabels[1][0].get<OUString>());
@@ -366,7 +366,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTChartSeries)
     loadFromFile(u"ppt/chart.ppt");
     uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress( 0, 0 );
     uno::Reference< chart::XChartDataArray > xChartData ( xChartDoc->getData(), uno::UNO_QUERY_THROW);
-    uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
 
     CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, seriesList[1]);
@@ -384,7 +384,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXChartSeries)
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<cpo::uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, aLabels[1][0].get<OUString>());
@@ -435,7 +435,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPPTXHiddenDataSeries)
     CPPUNIT_ASSERT(xCT.is());
 
     // There should be only one data series present.
-    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<cpo::uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(1), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"Series 3"_ustr, aLabels[0][0].get<OUString>());
 
@@ -600,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testODPChartSeries)
     loadFromFile(u"odp/chart.odp");
     uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress( 0, 0 );
     uno::Reference< chart::XChartDataArray > xChartData ( xChartDoc->getData(), uno::UNO_QUERY_THROW);
-    uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL(u"Column 1"_ustr, seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(u"Column 2"_ustr, seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(u"Column 3"_ustr, seriesList[2]);
@@ -615,7 +615,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc864396)
 
     uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
     uno::Reference< chart::XChartDataArray > xChartDataArray(xDataProvider, uno::UNO_QUERY_THROW);
-    uno::Sequence< OUString > aRowLabels = xChartDataArray->getRowDescriptions();
+    cpo::uno::Sequence< OUString > aRowLabels = xChartDataArray->getRowDescriptions();
     for(sal_Int32 i = 0; i < aRowLabels.getLength(); ++i)
     {
         OUString aExpected = "cat" + OUString::number(i+1);
@@ -787,7 +787,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf127811)
     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<cpo::uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aLabels.size());
 
     // Without the fix in place, this test would have failed with

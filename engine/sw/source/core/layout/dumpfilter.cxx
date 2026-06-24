@@ -36,7 +36,7 @@ namespace
             uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY_THROW );
 
             // Don't output the terminating \0 to the xml or the file will be invalid
-            uno::Sequence< sal_Int8 > seq( nLen );
+            cpo::uno::Sequence< sal_Int8 > seq( nLen );
             strncpy( reinterpret_cast<char *>(seq.getArray()), sBuffer, nLen );
             xOut->writeBytes( seq );
         }
@@ -78,7 +78,7 @@ namespace sw
     }
 
     // XFilter
-    bool LayoutDumpFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
+    bool LayoutDumpFilter::filter( const cpo::uno::Sequence< beans::PropertyValue >& aDescriptor )
     {
         bool bRet = false;
 
@@ -134,7 +134,7 @@ namespace sw
     }
 
     // XInitialization
-    void LayoutDumpFilter::initialize( const uno::Sequence< cpo::uno::Any >& )
+    void LayoutDumpFilter::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
     {
     }
 
@@ -149,7 +149,7 @@ namespace sw
         return cppu::supportsService(this, rServiceName);
     }
 
-    uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > LayoutDumpFilter::getSupportedServiceNames()
     {
         return { u"com.sun.star.document.ExportFilter"_ustr };
     }
@@ -159,7 +159,7 @@ namespace sw
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_LayoutDump_get_implementation(css::uno::XComponentContext*,
-                                css::uno::Sequence<cpo::uno::Any> const &)
+                                cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new sw::LayoutDumpFilter());
 }

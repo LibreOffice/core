@@ -419,7 +419,7 @@ void SfxClassificationHelper::Impl::parsePolicy()
     m_aIPPartNumbers = xClassificationParser->m_aIPPartNumbers;
 }
 
-static bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, std::u16string_view rName)
+static bool lcl_containsProperty(const cpo::uno::Sequence<beans::Property>& rProperties, std::u16string_view rName)
 {
     return std::any_of(rProperties.begin(), rProperties.end(), [&](const beans::Property& rProperty)
     {
@@ -450,7 +450,7 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
 {
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = m_xDocumentProperties->getUserDefinedProperties();
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
-    uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+    cpo::uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     for (auto& rPair : m_aCategory)
     {
         SfxClassificationPolicyType eType = rPair.first;
@@ -481,7 +481,7 @@ bool SfxClassificationHelper::IsClassified(const uno::Reference<document::XDocum
         return false;
 
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
-    const uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+    const cpo::uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     for (const beans::Property& rProperty : aProperties)
     {
         if (rProperty.Name.startsWith("urn:bails:"))
@@ -568,7 +568,7 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
         return;
 
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
-    const uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
+    const cpo::uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     for (const beans::Property& rProperty : aProperties)
     {
         if (!rProperty.Name.startsWith("urn:bails:"))

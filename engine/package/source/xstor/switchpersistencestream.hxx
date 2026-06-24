@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_SWITCHPERSISTENCESTREAM_HXX
 #define INCLUDED_PACKAGE_SOURCE_XSTOR_SWITCHPERSISTENCESTREAM_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -76,14 +76,14 @@ public:
     virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) override;
 
 // css::io::XInputStream
-    virtual ::sal_Int32 SAL_CALL readBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
     virtual ::sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;
 
 // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) override;
+    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;
     virtual void SAL_CALL flush(  ) override;
     virtual void SAL_CALL closeOutput(  ) override;
 

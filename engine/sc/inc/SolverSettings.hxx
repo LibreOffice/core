@@ -201,9 +201,9 @@ public:
     SC_DLLPUBLIC void SetParameter(SolverParameter eParam, const OUString& sValue);
     SC_DLLPUBLIC ObjectiveType GetObjectiveType() { return m_eObjType; }
     SC_DLLPUBLIC void SetObjectiveType(ObjectiveType eType);
-    SC_DLLPUBLIC void GetEngineOptions(css::uno::Sequence<css::beans::PropertyValue>& aOptions);
+    SC_DLLPUBLIC void GetEngineOptions(cpo::uno::Sequence<css::beans::PropertyValue>& aOptions);
     SC_DLLPUBLIC void
-    SetEngineOptions(const css::uno::Sequence<css::beans::PropertyValue>& aOptions);
+    SetEngineOptions(const cpo::uno::Sequence<css::beans::PropertyValue>& aOptions);
     SC_DLLPUBLIC const std::vector<ModelConstraint>& GetConstraints() { return m_aConstraints; }
     SC_DLLPUBLIC void SetConstraints(std::vector<ModelConstraint> aConstraints);
 

@@ -49,7 +49,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-uno::Sequence< sal_Int32 > ScVbaWorkbook::ColorData;
+cpo::uno::Sequence< sal_Int32 > ScVbaWorkbook::ColorData;
 
 void SAL_CALL
 ScVbaWorkbook::ResetColors(  )
@@ -78,7 +78,7 @@ ScVbaWorkbook::Colors( const ::cpo::uno::Any& Index )
     return aRet;
 }
 
-bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< beans::PropertyValue >& rProps )
+bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, cpo::uno::Sequence< beans::PropertyValue >& rProps )
 {
     auto [begin, end] = asNonConstRange(rProps);
     auto pProp = std::find_if(begin, end,
@@ -123,7 +123,7 @@ ScVbaWorkbook::getFileFormat(  )
 {
         sal_Int32 aFileFormat = 0;
         OUString aFilterName;
-        uno::Sequence< beans::PropertyValue > aArgs = getModel()->getArgs();
+        cpo::uno::Sequence< beans::PropertyValue > aArgs = getModel()->getArgs();
 
         // #FIXME - seems suspect should we not walk through the properties
         // to find the FilterName
@@ -197,7 +197,7 @@ ScVbaWorkbook::ScVbaWorkbook( const css::uno::Reference< ov::XHelperInterface >&
     init();
 }
 
-ScVbaWorkbook::ScVbaWorkbook( uno::Sequence< cpo::uno::Any> const & args,
+ScVbaWorkbook::ScVbaWorkbook( cpo::uno::Sequence< cpo::uno::Any> const & args,
                               uno::Reference< uno::XComponentContext> const & xContext )
 : ScVbaWorkbook_BASE( args, xContext ),
   mxModel(dynamic_cast<ScModelObj*>(getXSomethingFromArgs< frame::XModel >( args, 1 ).get()))
@@ -311,7 +311,7 @@ ScVbaWorkbook::SaveCopyAs( const OUString& sFileName )
     OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, aURL );
     rtl::Reference< ScModelObj > xStor( getModel() );
-    uno::Sequence<  beans::PropertyValue > storeProps{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<  beans::PropertyValue > storeProps{ comphelper::makePropertyValue(
         u"FilterName"_ustr, SC_XL97_FILTER_NAME) };
     xStor->storeToURL( aURL, storeProps );
 }
@@ -354,7 +354,7 @@ ScVbaWorkbook::SaveAs( const cpo::uno::Any& FileName, const cpo::uno::Any& FileF
     sal_Int32 nFileFormat = excel::XlFileFormat::xlExcel9795;
     FileFormat >>= nFileFormat;
 
-    uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()) };
+    cpo::uno::Sequence storeProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()) };
     setFilterPropsFromFormat( nFileFormat, storeProps );
 
     rtl::Reference< ScModelObj > xStor( getModel() );
@@ -403,10 +403,10 @@ ScVbaWorkbook::getServiceImplName()
     return u"ScVbaWorkbook"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaWorkbook::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Workbook"_ustr
     };
@@ -421,7 +421,7 @@ ScVbaWorkbook::getCodeName()
 }
 
 sal_Int64
-ScVbaWorkbook::getSomething(const uno::Sequence<sal_Int8 >& rId )
+ScVbaWorkbook::getSomething(const cpo::uno::Sequence<sal_Int8 >& rId )
 {
     if (comphelper::isUnoTunnelId<ScVbaWorksheet>(rId)) // ???
     {
@@ -432,7 +432,7 @@ ScVbaWorkbook::getSomething(const uno::Sequence<sal_Int8 >& rId )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaWorkbook_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaWorkbook(args, context));
 }

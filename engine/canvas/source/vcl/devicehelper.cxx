@@ -73,7 +73,7 @@ namespace vclcanvas
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
         const uno::Reference< rendering::XGraphicDevice >&              ,
-        const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
+        const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > >&  points )
     {
         uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
         if( !mpOutDev )
@@ -89,7 +89,7 @@ namespace vclcanvas
 
     uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
         const uno::Reference< rendering::XGraphicDevice >&                      ,
-        const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
+        const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
         uno::Reference< rendering::XBezierPolyPolygon2D > xPoly;
         if( !mpOutDev )

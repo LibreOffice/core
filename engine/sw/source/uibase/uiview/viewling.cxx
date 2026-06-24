@@ -572,7 +572,7 @@ IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, void*, p, void )
         // Asynchronous execution as this can lead to our own destruction!
         // Framework can recycle our current frame and the layout manager disposes all user interface
         // elements if a component gets detached from its frame!
-        pExecuteInfo->xDispatch->dispatch(pExecuteInfo->aTargetURL, uno::Sequence<beans::PropertyValue>());
+        pExecuteInfo->xDispatch->dispatch(pExecuteInfo->aTargetURL, cpo::uno::Sequence<beans::PropertyValue>());
     }
     catch (const Exception&)
     {
@@ -632,7 +632,7 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
                 m_pWrtShell->GetCorrection(bIsMouseEvent ? &rPt : nullptr, aToFill));
             ProofreadingResult aGrammarCheckRes;
             sal_Int32 nErrorInResult = -1;
-            uno::Sequence< OUString > aSuggestions;
+            cpo::uno::Sequence< OUString > aSuggestions;
             bool bCorrectionRes = false;
             if (!xAlt.is() || !xAlt->getAlternatives().hasElements())
             {
@@ -778,7 +778,7 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
     m_pWrtShell->LockView( true );
     m_pWrtShell->Push();
 
-    css::uno::Sequence< cpo::uno::Any > aArgs{
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{
         cpo::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, GetDispatcher().GetFrame()->GetFrame().GetFrameInterface() )),
         cpo::uno::Any(comphelper::makePropertyValue( u"CommandURL"_ustr, u".uno:OpenSmartTagMenuOnCursor"_ustr ))
     };

@@ -2390,7 +2390,7 @@ void ScModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< oo
     mxAutomationApplicationEventsCaller = xCaller;
 }
 
-void ScModule::CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments)
+void ScModule::CallAutomationApplicationEventSinks(const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments)
 {
     if (mxAutomationApplicationEventsCaller.is())
         mxAutomationApplicationEventsCaller->CallSinks(Method, Arguments);

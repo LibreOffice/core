@@ -39,7 +39,7 @@ class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
     DECL_LINK(WindowEventListener, VclWindowEvent&, void);
 
     std::recursive_mutex m_aMutex;
-    css::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavorList;
+    cpo::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavorList;
 
     vcl::Window* findTopLevelWindow(Point& location);
     /*
@@ -49,7 +49,7 @@ class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
     /// @throws css::uno::RuntimeException
     static sal_Int32 fireDragEnterEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
-        const css::uno::Sequence< css::datatransfer::DataFlavor >& aFlavorList );
+        const cpo::uno::Sequence< css::datatransfer::DataFlavor >& aFlavorList );
 
     /// @throws css::uno::RuntimeException
     static sal_Int32 fireDragOverEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,

@@ -19,7 +19,7 @@
 
 #include <uielement/menubarmerger.hxx>
 #include <framework/addonsoptions.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
@@ -383,7 +383,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
 }
 
 void MenuBarMerger::GetMenuEntry(
-    const uno::Sequence< beans::PropertyValue >& rAddonMenuEntry,
+    const cpo::uno::Sequence< beans::PropertyValue >& rAddonMenuEntry,
     AddonMenuItem&                               rAddonMenuItem )
 {
     // Reset submenu member
@@ -398,7 +398,7 @@ void MenuBarMerger::GetMenuEntry(
             rProp.Value >>= rAddonMenuItem.aTitle;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_SUBMENU )
         {
-            uno::Sequence< uno::Sequence< beans::PropertyValue > > aSubMenu;
+            cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > > aSubMenu;
             rProp.Value >>= aSubMenu;
             GetSubMenu( aSubMenu, rAddonMenuItem.aSubMenu );
         }
@@ -408,7 +408,7 @@ void MenuBarMerger::GetMenuEntry(
 }
 
 void MenuBarMerger::GetSubMenu(
-    const uno::Sequence< uno::Sequence< beans::PropertyValue > >& rSubMenuEntries,
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > >& rSubMenuEntries,
     AddonMenuContainer&                                           rSubMenu )
 {
     rSubMenu.clear();
@@ -417,7 +417,7 @@ void MenuBarMerger::GetSubMenu(
     rSubMenu.reserve(rSubMenu.size() + nCount);
     for ( sal_Int32 i = 0; i < nCount; i++ )
     {
-        const uno::Sequence< beans::PropertyValue >& rMenuEntry = rSubMenuEntries[ i ];
+        const cpo::uno::Sequence< beans::PropertyValue >& rMenuEntry = rSubMenuEntries[ i ];
 
         AddonMenuItem aMenuItem;
         GetMenuEntry( rMenuEntry, aMenuItem );

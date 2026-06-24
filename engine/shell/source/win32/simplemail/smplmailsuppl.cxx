@@ -27,7 +27,7 @@
 #include <windows.h>
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::system::XSimpleMailClientSupplier;
 using com::sun::star::system::XSimpleMailClient;
@@ -76,7 +76,7 @@ Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_CSmplMailSuppl_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CSmplMailSuppl());
 }

@@ -65,7 +65,7 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
     std::mutex                                      m_aMutex;
     comphelper::OInterfaceContainerHelper4<view::XPrintJobListener> m_aJobListeners;
     rtl::Reference<SfxPrintJob_Impl>                m_xPrintJob;
-    css::uno::Sequence< css::beans::PropertyValue > m_aPrintOptions;
+    cpo::uno::Sequence< css::beans::PropertyValue > m_aPrintOptions;
 
     explicit IMPL_PrintListener_DataContainer()
     {
@@ -150,7 +150,7 @@ SfxPrintHelper::SfxPrintHelper()
     m_pData.reset(new IMPL_PrintListener_DataContainer());
 }
 
-void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SfxPrintHelper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     if ( !aArguments.hasElements() )
         return;
@@ -249,7 +249,7 @@ namespace
 //  XPrintable
 
 
-uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
 {
     // object already disposed?
     SolarMutexGuard aGuard;
@@ -269,7 +269,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
         pPrinter = pFirst->GetViewShell()->GetPrinter(true);
 
     if ( !pPrinter )
-        return uno::Sequence< beans::PropertyValue >();
+        return cpo::uno::Sequence< beans::PropertyValue >();
 
     return
     {
@@ -288,7 +288,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
 //  XPrintable
 
 
-void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,
+void SfxPrintHelper::impl_setPrinter(const cpo::uno::Sequence< beans::PropertyValue >& rPrinter,
                                      VclPtr<SfxPrinter>& pPrinter,
                                      SfxPrinterChangeFlags& nChangeFlags,
                                      SfxViewShell*& pViewSh)
@@ -415,7 +415,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         Application::Yield();
 }
 
-void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter)
+void SAL_CALL SfxPrintHelper::setPrinter(const cpo::uno::Sequence< beans::PropertyValue >& rPrinter)
 {
     // object already disposed?
     SolarMutexGuard aGuard;
@@ -537,7 +537,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 
 //  XPrintable
 
-void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >& rOptions)
+void SAL_CALL SfxPrintHelper::print(const cpo::uno::Sequence< beans::PropertyValue >& rOptions)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
@@ -564,7 +564,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     OUString sUcbUrl;
     ::utl::TempFileNamed* pUCBPrintTempFile = nullptr;
 
-    uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
+    cpo::uno::Sequence < beans::PropertyValue > aCheckedArgs( rOptions.getLength() );
     auto pCheckedArgs = aCheckedArgs.getArray();
     sal_Int32 nProps = 0;
     bool  bWaitUntilEnd = false;

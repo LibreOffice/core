@@ -90,9 +90,9 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
     return xResult;
 }
 
-uno::Sequence<OUString> SAL_CALL SwXDispatchProviderInterceptor::getInterceptedURLs()
+cpo::uno::Sequence<OUString> SAL_CALL SwXDispatchProviderInterceptor::getInterceptedURLs()
 {
-    uno::Sequence<OUString> aRet =
+    cpo::uno::Sequence<OUString> aRet =
     {
          u".uno:DataSourceBrowser/*"_ustr
     };
@@ -100,11 +100,11 @@ uno::Sequence<OUString> SAL_CALL SwXDispatchProviderInterceptor::getInterceptedU
     return aRet;
 }
 
-uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
-    const uno::Sequence< frame::DispatchDescriptor >& aDescripts )
+cpo::uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
+    const cpo::uno::Sequence< frame::DispatchDescriptor >& aDescripts )
 {
     DispatchMutexLock_Impl aLock;
-    uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
+    cpo::uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
     std::transform(aDescripts.begin(), aDescripts.end(), aReturn.getArray(),
         [this](const frame::DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
             return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
@@ -184,7 +184,7 @@ SwXDispatch::~SwXDispatch()
 }
 
 void SwXDispatch::dispatch(const util::URL& aURL,
-    const uno::Sequence< beans::PropertyValue >& aArgs)
+    const cpo::uno::Sequence< beans::PropertyValue >& aArgs)
 {
     if(!m_pView)
         throw uno::RuntimeException();

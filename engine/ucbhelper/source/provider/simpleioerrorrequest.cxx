@@ -27,7 +27,7 @@ using namespace ucbhelper;
 
 SimpleIOErrorRequest::SimpleIOErrorRequest(
                 const ucb::IOErrorCode eError,
-                const uno::Sequence< cpo::uno::Any > & rArgs,
+                const cpo::uno::Sequence< cpo::uno::Any > & rArgs,
                 const OUString & rMessage,
                 const uno::Reference< ucb::XCommandProcessor > & xContext )
 {

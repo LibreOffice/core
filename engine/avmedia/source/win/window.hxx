@@ -43,7 +43,7 @@ public:
             Window( Player& rPlayer );
             ~Window() override;
 
-    bool    create( const css::uno::Sequence< cpo::uno::Any >& aArguments );
+    bool    create( const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
     void    updatePointer();
 
     // XPlayerWindow
@@ -79,7 +79,7 @@ public:
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;
     virtual bool supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 public:
 

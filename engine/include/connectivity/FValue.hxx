@@ -31,7 +31,7 @@
 namespace com::sun::star::sdb { class XColumn; }
 namespace com::sun::star::sdbc { class XRow; }
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::util { struct Date; }
 namespace com::sun::star::util { struct DateTime; }
 namespace com::sun::star::util { struct Time; }
@@ -259,7 +259,7 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const css::uno::Sequence<sal_Int8>& _rRH)
+        ORowSetValue(const cpo::uno::Sequence<sal_Int8>& _rRH)
             :m_eTypeKind(css::sdbc::DataType::LONGVARBINARY)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -305,7 +305,7 @@ namespace connectivity
 
         ORowSetValue& operator=(const OUString& _rRH);
         // the type isn't set it will be set to VARCHAR if the type is different change it
-        ORowSetValue& operator=(const css::uno::Sequence<sal_Int8>& _rRH);
+        ORowSetValue& operator=(const cpo::uno::Sequence<sal_Int8>& _rRH);
         // with the possibility to save an any for bookmarks
         ORowSetValue& operator=(const cpo::uno::Any& _rAny);
 
@@ -359,7 +359,7 @@ namespace connectivity
         css::util::Date                getDate()       const;
         css::util::Time                getTime()       const;
         css::util::DateTime            getDateTime()   const;
-        css::uno::Sequence<sal_Int8>   getSequence()   const;
+        cpo::uno::Sequence<sal_Int8>   getSequence()   const;
         // only use for anys
         const cpo::uno::Any&           getAny()        const { return *static_cast<cpo::uno::Any*>(m_aValue.m_pValue); }
         cpo::uno::Any                  makeAny()       const;

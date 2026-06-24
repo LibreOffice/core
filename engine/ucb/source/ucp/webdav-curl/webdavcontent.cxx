@@ -326,7 +326,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 
 // virtual
-uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 {
     bool bFolder = false;
     try
@@ -389,9 +389,9 @@ OUString SAL_CALL Content::getImplementationName()
 
 
 // virtual
-uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSNS { WEBDAV_CONTENT_SERVICE_NAME };
+    cpo::uno::Sequence<OUString> aSNS { WEBDAV_CONTENT_SERVICE_NAME };
     return aSNS;
 }
 
@@ -443,7 +443,7 @@ cpo::uno::Any SAL_CALL Content::execute(
         // getPropertyValues
 
 
-        uno::Sequence< beans::Property > Properties;
+        cpo::uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -463,7 +463,7 @@ cpo::uno::Any SAL_CALL Content::execute(
         // setPropertyValues
 
 
-        uno::Sequence< beans::PropertyValue > aProperties;
+        cpo::uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -1067,12 +1067,12 @@ void SAL_CALL Content::removeProperty( const OUString& Name )
 
 
 // virtual
-uno::Sequence< ucb::ContentInfo > SAL_CALL
+cpo::uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Sequence< ucb::ContentInfo > aSeq( 2 );
+    cpo::uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
     // document.
     aSeq.getArray()[ 0 ].Type = WEBDAV_CONTENT_TYPE;
@@ -1083,7 +1083,7 @@ Content::queryCreatableContentsInfo()
     beans::Property aProp;
     m_pProvider->getProperty( u"Title"_ustr, aProp );
 
-    uno::Sequence< beans::Property > aDocProps( 1 );
+    cpo::uno::Sequence< beans::Property > aDocProps( 1 );
     aDocProps.getArray()[ 0 ] = aProp;
     aSeq.getArray()[ 0 ].Properties = std::move(aDocProps);
 
@@ -1092,7 +1092,7 @@ Content::queryCreatableContentsInfo()
     aSeq.getArray()[ 1 ].Attributes
         = ucb::ContentInfoAttribute::KIND_FOLDER;
 
-    uno::Sequence< beans::Property > aFolderProps( 1 );
+    cpo::uno::Sequence< beans::Property > aFolderProps( 1 );
     aFolderProps.getArray()[0] = std::move(aProp);
     aSeq.getArray()[ 1 ].Properties = std::move(aFolderProps);
     return aSeq;
@@ -1188,7 +1188,7 @@ OUString Content::getParentURL()
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
     const uno::Reference< uno::XComponentContext >& rxContext,
-    const uno::Sequence< beans::Property >& rProperties,
+    const cpo::uno::Sequence< beans::Property >& rProperties,
     const ContentProperties& rData,
     const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
     const OUString& rContentId )
@@ -1302,7 +1302,7 @@ void GetPropsUsingHeadRequest(DAVResource& resource,
 }
 
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-                const uno::Sequence< beans::Property >& rProperties,
+                const cpo::uno::Sequence< beans::Property >& rProperties,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
     std::unique_ptr< ContentProperties > xProps;
@@ -1378,7 +1378,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 // Only DAV resources support PROPFIND
                 std::vector< OUString > aPropNames;
 
-                const uno::Sequence< beans::Property >& aProperties(rProperties);
+                const cpo::uno::Sequence< beans::Property >& aProperties(rProperties);
 
                 if ( aProperties.getLength() > 0 )
                     ContentProperties::UCBNamesToDAVNames(
@@ -1403,7 +1403,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                 {
                                     OUString aPropValue;
                                     bool    bValue;
-                                    uno::Sequence< ucb::LockEntry > aSupportedLocks;
+                                    cpo::uno::Sequence< ucb::LockEntry > aSupportedLocks;
                                     if( (*it).Value >>= aPropValue )
                                         SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getPropertyValues) - returned property: " << (*it).Name << ":" << aPropValue );
                                     else if( (*it).Value >>= bValue )
@@ -1683,7 +1683,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 u"CreatableContentsInfo"_ustr,
                 cpo::uno::Any( bFolder
                                   ? queryCreatableContentsInfo()
-                                  : uno::Sequence< ucb::ContentInfo >() ),
+                                  : cpo::uno::Sequence< ucb::ContentInfo >() ),
                 true );
         }
     }
@@ -1711,8 +1711,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 }
 
 
-uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
-                const uno::Sequence< beans::PropertyValue >& rValues,
+cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
+                const cpo::uno::Sequence< beans::PropertyValue >& rValues,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
@@ -1729,9 +1729,9 @@ uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess ) );
     }
 
-    uno::Sequence< cpo::uno::Any > aRet( rValues.getLength() );
+    cpo::uno::Sequence< cpo::uno::Any > aRet( rValues.getLength() );
     auto aRetRange = asNonConstRange(aRet);
-    uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
+    cpo::uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
     beans::PropertyChangeEvent aEvent;
@@ -2480,7 +2480,7 @@ void Content::insert(
     {
         SAL_WARN( "ucb.ucp.webdav", "Content::insert - Title missing!" );
 
-        uno::Sequence<OUString> aProps { u"Title"_ustr };
+        cpo::uno::Sequence<OUString> aProps { u"Title"_ustr };
         ucbhelper::cancelCommandExecution(
             cpo::uno::Any( ucb::MissingPropertiesException(
                                 OUString(),
@@ -3012,7 +3012,7 @@ Content::ResourceType Content::resourceTypeForLocks(
         //check if cache contains what we need, usually the first PROPFIND on the URI has supported lock
         if (m_xCachedProps)
         {
-            uno::Sequence< ucb::LockEntry > aSupportedLocks;
+            cpo::uno::Sequence< ucb::LockEntry > aSupportedLocks;
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
                  >>= aSupportedLocks )            //get the cached value for supportedlock
             {
@@ -3054,7 +3054,7 @@ Content::ResourceType Content::resourceTypeForLocks(
                         // we need only DAV:supportedlock
                         std::vector< DAVResource > resources;
                         std::vector< OUString > aPropNames;
-                        uno::Sequence< beans::Property > aProperties( 1 );
+                        cpo::uno::Sequence< beans::Property > aProperties( 1 );
                         aProperties.getArray()[ 0 ].Name = DAVProperties::SUPPORTEDLOCK;
 
                         ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );
@@ -3079,7 +3079,7 @@ Content::ResourceType Content::resourceTypeForLocks(
                                 if ( (*it).Name ==  DAVProperties::SUPPORTEDLOCK )
                                 {
                                     wasSupportedlockFound = true;
-                                    uno::Sequence< ucb::LockEntry > aSupportedLocks;
+                                    cpo::uno::Sequence< ucb::LockEntry > aSupportedLocks;
                                     if ( (*it).Value >>= aSupportedLocks )
                                     {
                                         for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
@@ -3263,7 +3263,7 @@ void Content::lock(
             aOwnerAny,
             180, // lock timeout in secs
             //-1, // infinite lock
-            uno::Sequence< OUString >() );
+            cpo::uno::Sequence< OUString >() );
 
         // OPTIONS may change as a consequence of the lock operation
         aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
@@ -3518,7 +3518,7 @@ bool Content::isFolder(
             return m_bCollection;
     }
 
-    uno::Sequence< beans::Property > aProperties( 1 );
+    cpo::uno::Sequence< beans::Property > aProperties( 1 );
     auto pProperties = aProperties.getArray();
     pProperties[ 0 ].Name   = u"IsFolder"_ustr;
     pProperties[ 0 ].Handle = -1;
@@ -3561,7 +3561,7 @@ cpo::uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
     {
         case SC_NOT_FOUND:
         {
-            uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(beans::PropertyValue(
+            cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(beans::PropertyValue(
                 u"Uri"_ustr, -1, cpo::uno::Any(aURL), beans::PropertyState_DIRECT_VALUE)) };
 
             aException <<=
@@ -3652,7 +3652,7 @@ cpo::uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
                 false ); // not SelfOwned
 #else
         {
-            uno::Sequence< cpo::uno::Any > aArgs( 1 );
+            cpo::uno::Sequence< cpo::uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= beans::PropertyValue(
                 OUString("Uri"), -1,
                 uno::makeAny(aURL),
@@ -3795,7 +3795,7 @@ Content::ResourceType Content::getResourceType(
                 // this is a DAV resource.
                 std::vector< DAVResource > resources;
                 std::vector< OUString > aPropNames;
-                uno::Sequence< beans::Property > aProperties( 5 );
+                cpo::uno::Sequence< beans::Property > aProperties( 5 );
                 auto pProperties = aProperties.getArray();
                 pProperties[ 0 ].Name = u"IsFolder"_ustr;
                 pProperties[ 1 ].Name = u"IsDocument"_ustr;
@@ -3818,7 +3818,7 @@ Content::ResourceType Content::getResourceType(
                         {
                             OUString aPropValue;
                             bool    bValue;
-                            uno::Sequence< ucb::LockEntry > aSupportedLocks;
+                            cpo::uno::Sequence< ucb::LockEntry > aSupportedLocks;
                             if((*it).Value >>= aPropValue )
                                 SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getResourceType) - ret'd prop: " << (*it).Name << ":" << aPropValue );
                             else if( (*it).Value >>= bValue )

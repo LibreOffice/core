@@ -34,7 +34,7 @@ namespace rtl
 class ByteSequence;
 }
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /** Template C++ class representing an IDL sequence. Template argument is the
@@ -220,7 +220,7 @@ public:
     @param rByteSequence a byte sequence
     @return a UNO byte sequence
 */
-inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
+inline ::cpo::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence );
 
 }

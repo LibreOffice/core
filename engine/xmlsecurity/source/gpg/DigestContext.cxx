@@ -14,7 +14,7 @@ using namespace css::uno;
 
 void SAL_CALL DigestContext::updateDigest(const Sequence<sal_Int8>& /*aData*/) {}
 
-uno::Sequence<sal_Int8> SAL_CALL DigestContext::finalizeDigestAndDispose()
+cpo::uno::Sequence<sal_Int8> SAL_CALL DigestContext::finalizeDigestAndDispose()
 {
     return Sequence<sal_Int8>();
 }

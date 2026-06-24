@@ -207,10 +207,10 @@ SwVbaSections::getServiceImplName()
     return u"SwVbaSections"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaSections::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Sections"_ustr
     };

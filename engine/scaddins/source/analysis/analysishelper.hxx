@@ -319,7 +319,7 @@ protected:
                                 */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const css::uno::Sequence< cpo::uno::Any >& rAnySeq,
+                                    const cpo::uno::Sequence< cpo::uno::Any >& rAnySeq,
                                     bool bIgnoreEmpty );
 
                                 /** @param rAnyConv  must be an initialized ScaAnyConmverter
@@ -329,7 +329,7 @@ protected:
                                 */
     void                        Append(
                                     const ScaAnyConverter& rAnyConv,
-                                    const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& rAnySeq,
+                                    const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& rAnySeq,
                                     bool bIgnoreEmpty );
 
 public:
@@ -342,10 +342,10 @@ public:
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                        Append( const css::uno::Sequence< css::uno::Sequence< double > >& rValueArr );
+    void                        Append( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValueArr );
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                        Append( const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rValueArr );
+    void                        Append( const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rValueArr );
 
                                 /** @param rAnyConv  is an initialized or uninitialized ScaAnyConverter
                                     @param bIgnoreEmpty  handling of empty Any's/strings: false = inserted as 0.0; true = omitted
@@ -355,7 +355,7 @@ public:
     void                        Append(
                                     ScaAnyConverter& rAnyConv,
                                     const css::uno::Reference< css::beans::XPropertySet >& xOpt,
-                                    const css::uno::Sequence< cpo::uno::Any >& rAnySeq );
+                                    const cpo::uno::Sequence< cpo::uno::Any >& rAnySeq );
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
@@ -478,10 +478,10 @@ public:
     inline void             Append( Complex&& pNew );
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                    Append( const css::uno::Sequence< css::uno::Sequence< OUString > >& rComplexNumList );
+    void                    Append( const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& rComplexNumList );
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    void                    Append( const css::uno::Sequence< cpo::uno::Any >& aMultPars );
+    void                    Append( const cpo::uno::Sequence< cpo::uno::Any >& aMultPars );
 };
 
 

@@ -60,7 +60,7 @@ namespace stringresource
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_StringResourcePersistenceImpl_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new StringResourcePersistenceImpl(context));
 }
@@ -1989,7 +1989,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem const * 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_StringResourceWithStorageImpl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new StringResourceWithStorageImpl(context));
 }
@@ -2263,7 +2263,7 @@ bool StringResourceWithStorageImpl::implLoadLocale(std::unique_lock<std::mutex>&
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_StringResourceWithLocationImpl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new StringResourceWithLocationImpl(context));
 }

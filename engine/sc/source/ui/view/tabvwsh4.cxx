@@ -532,7 +532,7 @@ void ScTabViewShell::WriteUserData(OUString& rData, bool /* bBrowse */)
     GetViewData().WriteUserData(rData);
 }
 
-void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue >& rSettings )
+void ScTabViewShell::WriteUserDataSequence (cpo::uno::Sequence < beans::PropertyValue >& rSettings )
 {
     GetViewData().WriteUserDataSequence(rSettings);
 }
@@ -543,13 +543,13 @@ void ScTabViewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
         DoReadUserData( rData );
 }
 
-void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings )
+void ScTabViewShell::ReadUserDataSequence (const cpo::uno::Sequence < beans::PropertyValue >& rSettings )
 {
     if ( !GetViewData().GetDocShell()->IsPreview() )
         DoReadUserDataSequence( rSettings );
 }
 
-void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::PropertyValue >& rSettings )
+void ScTabViewShell::DoReadUserDataSequence( const cpo::uno::Sequence < beans::PropertyValue >& rSettings )
 {
     vcl::Window* pOldWin = GetActiveWin();
     bool bFocus = pOldWin && pOldWin->HasFocus();
@@ -1910,8 +1910,8 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
 /*  For rows I am passing reference to already existing sequence, and comparing the required
  *  columns.
  */
-static bool lcl_CheckInArrayRows(std::vector<uno::Sequence<cpo::uno::Any>>& nUniqueRecords,
-                             const uno::Sequence<cpo::uno::Any>& nCurrentRecord,
+static bool lcl_CheckInArrayRows(std::vector<cpo::uno::Sequence<cpo::uno::Any>>& nUniqueRecords,
+                             const cpo::uno::Sequence<cpo::uno::Any>& nCurrentRecord,
                              const std::vector<int>& rSelectedEntries)
 {
     for (size_t m = 0; m < nUniqueRecords.size(); ++m)
@@ -1936,8 +1936,8 @@ static bool lcl_CheckInArrayRows(std::vector<uno::Sequence<cpo::uno::Any>>& nUni
 /*  For columns, I am creating a sequence for each, with only the checked entries
  *  in the dialog.
  */
-static bool lcl_CheckInArrayCols(std::vector<uno::Sequence<cpo::uno::Any>>& nUniqueRecords,
-                             const uno::Sequence<cpo::uno::Any>& nCurrentRecord,
+static bool lcl_CheckInArrayCols(std::vector<cpo::uno::Sequence<cpo::uno::Any>>& nUniqueRecords,
+                             const cpo::uno::Sequence<cpo::uno::Any>& nCurrentRecord,
                              const std::vector<int>& rSelectedEntries)
 {
     for (size_t m = 0; m < nUniqueRecords.size(); ++m)
@@ -2038,7 +2038,7 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
     rtl::Reference<ScCellRangeObj> xSheetRange(
             ActiveSheet->getScCellRangeByPosition(aRange.StartColumn, aRange.StartRow, aRange.EndColumn, aRange.EndRow));
 
-    uno::Sequence<uno::Sequence<cpo::uno::Any>> aDataArray = xSheetRange->getDataArray();
+    cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> aDataArray = xSheetRange->getDataArray();
 
     ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
 
@@ -2061,7 +2061,7 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
 
     if (bDuplicateRows)
     {
-        std::vector<uno::Sequence<cpo::uno::Any>> aUnionArray;
+        std::vector<cpo::uno::Sequence<cpo::uno::Any>> aUnionArray;
         sal_uInt32 nRow = bIncludesHeaders ? 1 : 0;
         sal_uInt32 lRows = aDataArray.getLength();
 
@@ -2086,13 +2086,13 @@ void ScTabViewShell::HandleDuplicateRecordsHighlight(const rtl::Reference<ScTabl
     }
     else
     {
-        std::vector<uno::Sequence<cpo::uno::Any>> aUnionArray;
+        std::vector<cpo::uno::Sequence<cpo::uno::Any>> aUnionArray;
         sal_uInt32 nColumn = bIncludesHeaders ? 1 : 0;
         sal_uInt32 lColumns = aDataArray[0].getLength();
 
         while (nColumn < lColumns)
         {
-            uno::Sequence<cpo::uno::Any> aSeq;
+            cpo::uno::Sequence<cpo::uno::Any> aSeq;
             aSeq.realloc(rSelectedEntries.size());
             for (size_t i = 0; i < rSelectedEntries.size(); ++i)
                 aSeq.getArray()[i] = aDataArray[rSelectedEntries[i]][nColumn];
@@ -2135,7 +2135,7 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
     rtl::Reference<ScCellRangeObj> xSheetRange(
             ActiveSheet->getScCellRangeByPosition(aRange.StartColumn, aRange.StartRow, aRange.EndColumn, aRange.EndRow));
 
-    uno::Sequence<uno::Sequence<cpo::uno::Any>> aDataArray = xSheetRange->getDataArray();
+    cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> aDataArray = xSheetRange->getDataArray();
 
     bool bAutoCalc = pModel->isAutomaticCalculationEnabled();
     ScDocument& rDoc = GetViewData().GetDocShell()->GetDocument();
@@ -2158,7 +2158,7 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
 
     if (bDuplicateRows)
     {
-        std::vector<uno::Sequence<cpo::uno::Any>> aUnionArray;
+        std::vector<cpo::uno::Sequence<cpo::uno::Any>> aUnionArray;
         SCROW nRow = bIncludesHeaders ? 1 : 0;
         SCROW lRows = aDataArray.getLength();
         sal_uInt32 nDeleteCount = 0;
@@ -2192,7 +2192,7 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
     }
     else
     {
-        std::vector<uno::Sequence<cpo::uno::Any>> aUnionArray;
+        std::vector<cpo::uno::Sequence<cpo::uno::Any>> aUnionArray;
         sal_uInt32 nDeleteCount = 0;
         SCCOL nColumn = bIncludesHeaders ? 1 : 0;
         SCCOL lColumns = aDataArray[0].getLength();
@@ -2201,7 +2201,7 @@ void ScTabViewShell::HandleDuplicateRecordsRemove(const rtl::Reference<ScTableSh
 
         while (nColumn < lColumns)
         {
-            uno::Sequence<cpo::uno::Any> aSeq;
+            cpo::uno::Sequence<cpo::uno::Any> aSeq;
             aSeq.realloc(rSelectedEntries.size());
             for (size_t i = 0; i < rSelectedEntries.size(); ++i)
                 aSeq.getArray()[i] = aDataArray[rSelectedEntries[i]][nColumn];

@@ -182,7 +182,7 @@ void ErrorBar::setPropertyValue( const OUString& rPropName, const cpo::uno::Any&
 
 namespace {
 
-OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aSequences, bool bPositive )
+OUString getSourceRangeStrFromLabeledSequences( const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aSequences, bool bPositive )
 {
     OUString aDirection;
     if(bPositive)
@@ -249,7 +249,7 @@ cpo::uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
         OUString aRange;
         if(meStyle == css::chart::ErrorBarStyle::FROM_DATA)
         {
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
+            cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
                 getDataSequences();
 
             aRange = getSourceRangeStrFromLabeledSequences( aSequences, true );
@@ -262,7 +262,7 @@ cpo::uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
         OUString aRange;
         if(meStyle == css::chart::ErrorBarStyle::FROM_DATA)
         {
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
+            cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
                 getDataSequences();
 
             aRange = getSourceRangeStrFromLabeledSequences( aSequences, false );
@@ -359,9 +359,9 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
         return beans::PropertyState_DIRECT_VALUE;
 }
 
-uno::Sequence< beans::PropertyState > ErrorBar::getPropertyStates( const uno::Sequence< OUString >& rPropNames )
+cpo::uno::Sequence< beans::PropertyState > ErrorBar::getPropertyStates( const cpo::uno::Sequence< OUString >& rPropNames )
 {
-    uno::Sequence< beans::PropertyState > aRet( rPropNames.getLength() );
+    cpo::uno::Sequence< beans::PropertyState > aRet( rPropNames.getLength() );
     auto aRetRange = asNonConstRange(aRet);
     for(sal_Int32 i = 0; i < rPropNames.getLength(); ++i)
     {
@@ -421,7 +421,7 @@ void SAL_CALL ErrorBar::disposing( const lang::EventObject& /* Source */ )
 }
 
 // ____ XDataSink ____
-void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aData )
+void SAL_CALL ErrorBar::setData( const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aData )
 {
     ModifyListenerHelper::removeListenerFromAllElements( m_aDataSequences, m_xModifyEventForwarder );
     EventListenerHelper::removeListenerFromAllElements( m_aDataSequences, this );
@@ -431,7 +431,7 @@ void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::da
 }
 
 // ____ XDataSource ____
-uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ErrorBar::getDataSequences()
+cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ErrorBar::getDataSequences()
 {
     return comphelper::containerToSequence( m_aDataSequences );
 }
@@ -446,7 +446,7 @@ bool SAL_CALL ErrorBar::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ErrorBar::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ErrorBar::getSupportedServiceNames()
 {
     return {
         lcl_aServiceName,
@@ -461,7 +461,7 @@ using impl::ErrorBar_Base;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ErrorBar_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ErrorBar);
 }

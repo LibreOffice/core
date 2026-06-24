@@ -138,8 +138,8 @@ namespace dbaui
         virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
         // css::lang::XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
@@ -211,7 +211,7 @@ namespace dbaui
         // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const override;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
+        virtual void            Execute(sal_uInt16 nId, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
         virtual void    startFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
         virtual void    stopFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;

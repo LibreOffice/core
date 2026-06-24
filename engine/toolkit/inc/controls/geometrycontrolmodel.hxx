@@ -112,7 +112,7 @@ namespace toolkit { class ScriptEventContainer; }
 
     protected:
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // OPropertySetHelper overridables
         virtual bool SAL_CALL convertFastPropertyValue(
@@ -183,8 +183,8 @@ namespace toolkit { class ScriptEventContainer; }
 
         // OAggregationArrayUsageHelper overridables
         virtual void fillProperties(
-            css::uno::Sequence< css::beans::Property >& _rProps,
-            css::uno::Sequence< css::beans::Property >& _rAggregateProps
+            cpo::uno::Sequence< css::beans::Property >& _rProps,
+            cpo::uno::Sequence< css::beans::Property >& _rAggregateProps
             ) const override;
 
         // OPropertySetAggregationHelper overridables
@@ -195,7 +195,7 @@ namespace toolkit { class ScriptEventContainer; }
             css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
     };
 
 
@@ -235,7 +235,7 @@ namespace toolkit { class ScriptEventContainer; }
             css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     private:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(

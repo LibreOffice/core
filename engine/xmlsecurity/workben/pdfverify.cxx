@@ -177,7 +177,7 @@ int pdfVerify(int nArgc, char** pArgv)
     std::cerr << "adding a new signature" << std::endl;
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
         = xSecurityContext->getSecurityEnvironment();
-    uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
+    cpo::uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
         = xSecurityEnvironment->getPersonalCertificates();
     if (!aCertificates.hasElements())
     {

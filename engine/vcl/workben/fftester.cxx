@@ -135,7 +135,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         // initialise unconfigured UCB:
         css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(comphelper::getProcessServiceFactory()->
             createInstance(u"com.sun.star.ucb.UniversalContentBroker"_ustr), css::uno::UNO_QUERY_THROW);
-        css::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(u"NoConfig"_ustr) };
+        cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(u"NoConfig"_ustr) };
         css::uno::Reference<css::ucb::XContentProvider> xFileProvider(comphelper::getProcessServiceFactory()->
             createInstanceWithArguments(u"com.sun.star.ucb.FileContentProvider"_ustr, aArgs), css::uno::UNO_QUERY_THROW);
         xUcb->registerContentProvider(xFileProvider, u"file"_ustr, true);

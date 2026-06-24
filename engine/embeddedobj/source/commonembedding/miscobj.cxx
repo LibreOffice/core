@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 
 
 OCommonEmbeddedObject::OCommonEmbeddedObject( uno::Reference< uno::XComponentContext > xContext,
-                                                const uno::Sequence< beans::NamedValue >& aObjProps )
+                                                const cpo::uno::Sequence< beans::NamedValue >& aObjProps )
 : m_bReadOnly( false )
 , m_bDisposed( false )
 , m_bClosed( false )
@@ -82,9 +82,9 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( uno::Reference< uno::XComponentCon
 
 OCommonEmbeddedObject::OCommonEmbeddedObject(
         uno::Reference< uno::XComponentContext > xContext,
-        const uno::Sequence< beans::NamedValue >& aObjProps,
-        const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-        const uno::Sequence< beans::PropertyValue >& aObjectDescr )
+        const cpo::uno::Sequence< beans::NamedValue >& aObjProps,
+        const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+        const cpo::uno::Sequence< beans::PropertyValue >& aObjectDescr )
 : m_bReadOnly( false )
 , m_bDisposed( false )
 , m_bClosed( false )
@@ -111,7 +111,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 }
 
 
-void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedValue >& aObjectProps )
+void OCommonEmbeddedObject::CommonInit_Impl( const cpo::uno::Sequence< beans::NamedValue >& aObjectProps )
 {
     OSL_ENSURE( m_xContext.is(), "No ServiceFactory is provided!" );
     if ( !m_xContext.is() )
@@ -170,9 +170,9 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
 
 
 void OCommonEmbeddedObject::LinkInit_Impl(
-                                const uno::Sequence< beans::NamedValue >& aObjectProps,
-                                const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-                                const uno::Sequence< beans::PropertyValue >& aObjectDescr )
+                                const cpo::uno::Sequence< beans::NamedValue >& aObjectProps,
+                                const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+                                const cpo::uno::Sequence< beans::PropertyValue >& aObjectDescr )
 {
     // setPersistance has no effect on own links, so the complete initialization must be done here
 
@@ -221,7 +221,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
 
     if(m_aLinkTempFile.is())
     {
-        uno::Sequence< beans::PropertyValue > aAlternativeMediaDescr(aMediaDescr.getLength());
+        cpo::uno::Sequence< beans::PropertyValue > aAlternativeMediaDescr(aMediaDescr.getLength());
         auto aAlternativeMediaDescrRange = asNonConstRange(aAlternativeMediaDescr);
 
         for ( sal_Int32 a(0); a < aMediaDescr.getLength(); a++ )
@@ -535,7 +535,7 @@ void SAL_CALL OCommonEmbeddedObject::release()
 }
 
 
-uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
 {
     if ( m_bDisposed )
         throw lang::DisposedException();
@@ -552,7 +552,7 @@ OUString SAL_CALL OCommonEmbeddedObject::getClassName()
 }
 
 void SAL_CALL OCommonEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
+                const cpo::uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
 {
     // the object class info can not be changed explicitly
     throw lang::NoSupportException(); //TODO:
@@ -750,14 +750,14 @@ bool SAL_CALL OCommonEmbeddedObject::supportsService(const OUString& ServiceName
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL OCommonEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OCommonEmbeddedObject::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.embed.OCommonEmbeddedObject"_ustr };
 }
 
-uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
+cpo::uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
 {
-    static const uno::Sequence<uno::Type> aTypes{
+    static const cpo::uno::Sequence<uno::Type> aTypes{
         cppu::UnoType<embed::XEmbeddedObject>::get(),
         cppu::UnoType<embed::XEmbedPersist2>::get(),
         cppu::UnoType<embed::XLinkageSupport>::get(),
@@ -771,12 +771,12 @@ uno::Sequence<uno::Type> SAL_CALL OCommonEmbeddedObject::getTypes()
     return aTypes;
 }
 
-uno::Sequence<sal_Int8> SAL_CALL OCommonEmbeddedObject::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL OCommonEmbeddedObject::getImplementationId()
 {
-    return uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL OCommonEmbeddedObject::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL OCommonEmbeddedObject::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     if (!rArguments.hasElements())
     {

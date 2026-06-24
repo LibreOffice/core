@@ -79,10 +79,10 @@ public:
                                     css::uno::Reference< css::view::XRenderable > const & rRenderable,
                                     const cpo::uno::Any& rSelection,
                                     const StringRangeEnumerator& rRangeEnum,
-                                    css::uno::Sequence< css::beans::PropertyValue >& rRenderOptions,
+                                    cpo::uno::Sequence< css::beans::PropertyValue >& rRenderOptions,
                                     sal_Int32 nPageCount );
 
-    bool                Export( const OUString& rFile, const css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
+    bool                Export( const OUString& rFile, const cpo::uno::Sequence< css::beans::PropertyValue >& rFilterData );
 
     void                showErrors( const std::set<vcl::pdf::PDFWriter::ErrorCode>& );
 };

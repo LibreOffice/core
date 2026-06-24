@@ -78,9 +78,9 @@ namespace vcl::unotools
             {
                 rendering::IntegerBitmapLayout      aCurrLayout;
                 geometry::IntegerRectangle2D        aRect;
-                uno::Sequence<sal_Int8>             aPixelData;
-                uno::Sequence<rendering::RGBColor>  aRGBColors;
-                uno::Sequence<rendering::ARGBColor> aARGBColors;
+                cpo::uno::Sequence<sal_Int8>             aPixelData;
+                cpo::uno::Sequence<rendering::RGBColor>  aRGBColors;
+                cpo::uno::Sequence<rendering::ARGBColor> aARGBColors;
 
                 for( aRect.Y1=0; aRect.Y1<nHeight; ++aRect.Y1 )
                 {
@@ -184,7 +184,7 @@ namespace vcl::unotools
                 if( xInputBitmap->hasAlpha() )
                 {
                     // determine alpha channel depth
-                    const uno::Sequence<sal_Int8> aTags(
+                    const cpo::uno::Sequence<sal_Int8> aTags(
                         aLayout.ColorSpace->getComponentTags() );
                     const sal_Int8* pStart(aTags.getConstArray());
                     const std::size_t  nLen(aTags.getLength());
@@ -228,12 +228,12 @@ namespace vcl::unotools
                         uno::Reference<rendering::XBitmapPalette> xPalette( aLayout.Palette );
                         uno::Reference<rendering::XColorSpace>    xPalColorSpace( xPalette->getColorSpace() );
 
-                        uno::Sequence<double> aPaletteEntry;
+                        cpo::uno::Sequence<double> aPaletteEntry;
                         for( sal_uInt16 j=0; j<nPaletteEntries; ++j )
                         {
                             bool b = xPalette->getIndex(aPaletteEntry,j);
                             ENSURE_OR_THROW(b, "transparent entry in palette unsupported");
-                            uno::Sequence<rendering::RGBColor> aColors=xPalColorSpace->convertToRGB(aPaletteEntry);
+                            cpo::uno::Sequence<rendering::RGBColor> aColors=xPalColorSpace->convertToRGB(aPaletteEntry);
                             ENSURE_OR_THROW(aColors.getLength() == 1,
                                             "Palette returned more or less than one entry");
                             const rendering::RGBColor& rColor=aColors[0];
@@ -395,13 +395,13 @@ namespace vcl::unotools
             class StandardColorSpace : public cppu::WeakImplHelper< css::rendering::XColorSpace >
             {
             private:
-                uno::Sequence< sal_Int8 > m_aComponentTags;
+                cpo::uno::Sequence< sal_Int8 > m_aComponentTags;
 
                 virtual ::sal_Int8 SAL_CALL getType(  ) override
                 {
                     return rendering::ColorSpaceType::RGB;
                 }
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) override
                 {
                     return m_aComponentTags;
                 }
@@ -409,20 +409,20 @@ namespace vcl::unotools
                 {
                     return rendering::RenderingIntent::PERCEPTUAL;
                 }
-                virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) override
+                virtual cpo::uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) override
                 {
-                    return uno::Sequence< beans::PropertyValue >();
+                    return cpo::uno::Sequence< beans::PropertyValue >();
                 }
-                virtual uno::Sequence< double > SAL_CALL convertColorSpace( const uno::Sequence< double >& deviceColor,
+                virtual cpo::uno::Sequence< double > SAL_CALL convertColorSpace( const cpo::uno::Sequence< double >& deviceColor,
                                                                             const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
                 {
                     // TODO(P3): if we know anything about target
                     // colorspace, this can be greatly sped up
-                    uno::Sequence<rendering::ARGBColor> aIntermediate(
+                    cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertToARGB(deviceColor));
                     return targetColorSpace->convertFromARGB(aIntermediate);
                 }
-                virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const double*  pIn( deviceColor.getConstArray() );
                     const std::size_t nLen( deviceColor.getLength() );
@@ -430,7 +430,7 @@ namespace vcl::unotools
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::RGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
                     for( std::size_t i=0; i<nLen; i+=4 )
                     {
@@ -439,7 +439,7 @@ namespace vcl::unotools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const double*  pIn( deviceColor.getConstArray() );
                     const std::size_t nLen( deviceColor.getLength() );
@@ -447,7 +447,7 @@ namespace vcl::unotools
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for( std::size_t i=0; i<nLen; i+=4 )
                     {
@@ -456,7 +456,7 @@ namespace vcl::unotools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const double*  pIn( deviceColor.getConstArray() );
                     const std::size_t nLen( deviceColor.getLength() );
@@ -464,7 +464,7 @@ namespace vcl::unotools
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for( std::size_t i=0; i<nLen; i+=4 )
                     {
@@ -473,11 +473,11 @@ namespace vcl::unotools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromRGB( const cpo::uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
                     const std::size_t             nLen( rgbColor.getLength() );
 
-                    uno::Sequence< double > aRes(nLen*4);
+                    cpo::uno::Sequence< double > aRes(nLen*4);
                     double* pColors=aRes.getArray();
                     for( const auto& rIn : rgbColor )
                     {
@@ -488,11 +488,11 @@ namespace vcl::unotools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
                     const std::size_t              nLen( rgbColor.getLength() );
 
-                    uno::Sequence< double > aRes(nLen*4);
+                    cpo::uno::Sequence< double > aRes(nLen*4);
                     double* pColors=aRes.getArray();
                     for( const auto& rIn : rgbColor )
                     {
@@ -503,11 +503,11 @@ namespace vcl::unotools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromPARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
                     const std::size_t              nLen( rgbColor.getLength() );
 
-                    uno::Sequence< double > aRes(nLen*4);
+                    cpo::uno::Sequence< double > aRes(nLen*4);
                     double* pColors=aRes.getArray();
                     for( const auto& rIn : rgbColor )
                     {
@@ -536,7 +536,7 @@ namespace vcl::unotools
             return new StandardColorSpace();
         }
 
-        uno::Sequence< double > colorToStdColorSpaceSequence( const Color& rColor )
+        cpo::uno::Sequence< double > colorToStdColorSpaceSequence( const Color& rColor )
         {
             return
             {
@@ -547,7 +547,7 @@ namespace vcl::unotools
             };
         }
 
-        Color stdColorSpaceSequenceToColor( const uno::Sequence< double >& rColor        )
+        Color stdColorSpaceSequenceToColor( const cpo::uno::Sequence< double >& rColor        )
         {
             ENSURE_ARG_OR_THROW( rColor.getLength() == 4,
                                  "color must have 4 channels" );
@@ -562,11 +562,11 @@ namespace vcl::unotools
             return aColor;
         }
 
-        uno::Sequence< double > colorToDoubleSequence(
+        cpo::uno::Sequence< double > colorToDoubleSequence(
             const Color&                                    rColor,
             const uno::Reference< rendering::XColorSpace >& xColorSpace )
         {
-            uno::Sequence<rendering::ARGBColor> aSeq
+            cpo::uno::Sequence<rendering::ARGBColor> aSeq
             {
                 {
                     toDoubleColor(rColor.GetAlpha()),
@@ -580,7 +580,7 @@ namespace vcl::unotools
         }
 
         Color doubleSequenceToColor(
-            const uno::Sequence< double >&                  rColor,
+            const cpo::uno::Sequence< double >&                  rColor,
             const uno::Reference< rendering::XColorSpace >& xColorSpace )
         {
             const rendering::ARGBColor aARGBColor(

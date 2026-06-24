@@ -43,7 +43,7 @@ private:
     {
         css::uno::Reference< css::frame::XDispatch >     xDispatch;
         css::util::URL                                   aTargetURL;
-        css::uno::Sequence< css::beans::PropertyValue >  aArgs;
+        cpo::uno::Sequence< css::beans::PropertyValue >  aArgs;
     };
 
     DECL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, void );

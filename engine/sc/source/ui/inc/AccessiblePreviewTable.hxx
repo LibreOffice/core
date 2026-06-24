@@ -58,8 +58,8 @@ public:
                             getAccessibleRowHeaders() override;
     virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
                             getAccessibleColumnHeaders() override;
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getSelectedAccessibleRows() override;
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getSelectedAccessibleColumns() override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getSelectedAccessibleRows() override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getSelectedAccessibleColumns() override;
     virtual bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow ) override;
     virtual bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL

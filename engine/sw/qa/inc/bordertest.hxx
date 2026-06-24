@@ -152,7 +152,7 @@ public:
             if (xServiceInfo->supportsService(u"com.sun.star.text.TextTable"_ustr))
             {
                 css::uno::Reference<css::text::XTextTable> const xTextTable(xServiceInfo, css::uno::UNO_QUERY_THROW);
-                css::uno::Sequence<OUString> const cells = xTextTable->getCellNames();
+                cpo::uno::Sequence<OUString> const cells = xTextTable->getCellNames();
 
                 if(currentTable == sal_Int32(1))
                     tempMap = &map1;

@@ -257,10 +257,10 @@ void KitClipboard::removeClipboardListener(
     std::erase(m_aListeners, listener);
 }
 KitTransferable::KitTransferable(const OUString& sMimeType,
-                                 const css::uno::Sequence<sal_Int8>& aSequence)
+                                 const cpo::uno::Sequence<sal_Int8>& aSequence)
 {
     m_aContent.reserve(1);
-    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
+    m_aFlavors = cpo::uno::Sequence<css::datatransfer::DataFlavor>(1);
     initFlavourFromMime(m_aFlavors.getArray()[0], sMimeType);
 
     cpo::uno::Any aContent;
@@ -278,7 +278,7 @@ KitTransferable::KitTransferable(const OUString& sMimeType,
 KitTransferable::KitTransferable()
 {
     m_aContent.reserve(1);
-    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(1);
+    m_aFlavors = cpo::uno::Sequence<css::datatransfer::DataFlavor>(1);
     initFlavourFromMime(m_aFlavors.getArray()[0], u"text/plain"_ustr);
     cpo::uno::Any aContent;
     aContent <<= OUString();
@@ -304,7 +304,7 @@ void KitTransferable::initFlavourFromMime(css::datatransfer::DataFlavor& rFlavor
     else if (aMimeType == "application/x-libreoffice-tsvc")
         rFlavor.DataType = cppu::UnoType<OUString>::get();
     else
-        rFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+        rFlavor.DataType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
     rFlavor.MimeType = aMimeType;
     rFlavor.HumanPresentableName = aMimeType;
 }
@@ -313,7 +313,7 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
                                  const size_t* pInSizes, const char** pInStreams)
 {
     m_aContent.reserve(nInCount);
-    m_aFlavors = css::uno::Sequence<css::datatransfer::DataFlavor>(nInCount);
+    m_aFlavors = cpo::uno::Sequence<css::datatransfer::DataFlavor>(nInCount);
     auto p_aFlavors = m_aFlavors.getArray();
     for (size_t i = 0; i < nInCount; ++i)
     {
@@ -323,7 +323,7 @@ KitTransferable::KitTransferable(const size_t nInCount, const char** pInMimeType
         if (m_aFlavors[i].DataType == cppu::UnoType<OUString>::get())
             aContent <<= OUString(pInStreams[i], pInSizes[i], RTL_TEXTENCODING_UTF8);
         else
-            aContent <<= css::uno::Sequence<sal_Int8>(
+            aContent <<= cpo::uno::Sequence<sal_Int8>(
                 reinterpret_cast<const sal_Int8*>(pInStreams[i]), pInSizes[i]);
         m_aContent.push_back(aContent);
     }
@@ -344,7 +344,7 @@ cpo::uno::Any SAL_CALL KitTransferable::getTransferData(const datatransfer::Data
     return {};
 }
 
-uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitTransferable::getTransferDataFlavors()
+cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitTransferable::getTransferDataFlavors()
 {
     return m_aFlavors;
 }
@@ -421,7 +421,7 @@ cpo::uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransf
         if (bText)
             aRet <<= OUString(pData, nSize, RTL_TEXTENCODING_UTF8);
         else
-            aRet <<= uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(pData), nSize);
+            aRet <<= cpo::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(pData), nSize);
     }
     free(pData);
 
@@ -429,7 +429,7 @@ cpo::uno::Any SAL_CALL KitProviderTransferable::getTransferData(const datatransf
     return aRet;
 }
 
-uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitProviderTransferable::getTransferDataFlavors()
+cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL KitProviderTransferable::getTransferDataFlavors()
 {
     return m_aFlavors;
 }
@@ -444,7 +444,7 @@ KitProviderTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& r
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_KitClipboard_get_implementation(css::uno::XComponentContext*,
-                                        css::uno::Sequence<cpo::uno::Any> const& /*args*/)
+                                        cpo::uno::Sequence<cpo::uno::Any> const& /*args*/)
 {
     SolarMutexGuard aGuard;
 

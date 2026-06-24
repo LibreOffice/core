@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <svl/svldllapi.h>
 
 namespace com::sun::star::lang {
@@ -57,7 +57,7 @@ public:
 
     void SetCharDistanceCompression(CharCompressType value);
 
-    static css::uno::Sequence< css::lang::Locale > GetStartEndCharLocales();
+    static cpo::uno::Sequence< css::lang::Locale > GetStartEndCharLocales();
 
     static bool GetStartEndChars(
         css::lang::Locale const & locale, OUString & startChars,

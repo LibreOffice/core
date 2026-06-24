@@ -435,12 +435,12 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTdf168135)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testExportControllerFromModel)
 {
     // Given a Writer, then a Draw document loaded, the Writer document is the current one:
-    uno::Sequence<beans::PropertyValue> aEmptyProps;
+    cpo::uno::Sequence<beans::PropertyValue> aEmptyProps;
     mxComponent2 = mxDesktop->loadComponentFromURL(u"private:factory/swriter"_ustr, u"_blank"_ustr,
                                                    0, aEmptyProps);
     CPPUNIT_ASSERT(mxComponent2);
-    uno::Sequence<beans::PropertyValue> aHiddenProps{ comphelper::makePropertyValue(u"Hidden"_ustr,
-                                                                                    true) };
+    cpo::uno::Sequence<beans::PropertyValue> aHiddenProps{ comphelper::makePropertyValue(
+        u"Hidden"_ustr, true) };
     mxComponent = mxDesktop->loadComponentFromURL(u"private:factory/sdraw"_ustr, u"_default"_ustr,
                                                   0, aHiddenProps);
     CPPUNIT_ASSERT(mxComponent);

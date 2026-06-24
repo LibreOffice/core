@@ -382,7 +382,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                 }
             }
 
-            uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence( nSequenceSize );
+            cpo::uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence( nSequenceSize );
             auto aSequenceRange = asNonConstRange(aSequence);
 
             int nPos = 0;

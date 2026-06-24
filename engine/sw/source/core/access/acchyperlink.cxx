@@ -203,7 +203,7 @@ bool SAL_CALL SwAccessibleHyperlink::isValid(  )
 
                 uno::Reference< css::container::XNameAccess > xLinks = xLTS->getLinks();
                 uno::Reference< css::container::XNameAccess > xSubLinks;
-                const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
+                const cpo::uno::Sequence< OUString > aNames( xLinks->getElementNames() );
 
                 for( const OUString& aLink : aNames )
                 {

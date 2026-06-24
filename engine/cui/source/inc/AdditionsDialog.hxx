@@ -88,7 +88,7 @@ public:
 
     AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag);
     ~AdditionsDialog() override;
-    css::uno::Sequence<css::uno::Sequence<css::uno::Reference<css::deployment::XPackage>>>
+    cpo::uno::Sequence<cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage>>>
     getInstalledExtensions();
     void SetProgress(const OUString& rProgress);
     void ClearList();

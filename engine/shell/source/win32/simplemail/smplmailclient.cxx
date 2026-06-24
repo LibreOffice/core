@@ -47,7 +47,7 @@
 using css::uno::UNO_QUERY;
 using css::uno::Reference;
 using css::uno::Exception;
-using css::uno::Sequence;
+using cpo::uno::Sequence;
 using css::lang::IllegalArgumentException;
 
 using css::system::XSimpleMailClient;

@@ -168,14 +168,14 @@ namespace canvas
             return maDeviceHelper.getPhysicalSize();
         }
 
-        virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > SAL_CALL createCompatibleLinePolyPolygon( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& points ) override
+        virtual css::uno::Reference< css::rendering::XLinePolyPolygon2D > SAL_CALL createCompatibleLinePolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& points ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.createCompatibleLinePolyPolygon( this, points );
         }
 
-        virtual css::uno::Reference< css::rendering::XBezierPolyPolygon2D > SAL_CALL createCompatibleBezierPolyPolygon( const css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > >& points ) override
+        virtual css::uno::Reference< css::rendering::XBezierPolyPolygon2D > SAL_CALL createCompatibleBezierPolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealBezierSegment2D > >& points ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -247,10 +247,10 @@ namespace canvas
             return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
                                               aServiceSpecifier,
-                                              css::uno::Sequence< cpo::uno::Any >()));
+                                              cpo::uno::Sequence< cpo::uno::Any >()));
         }
 
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& aServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override
         {
             return css::uno::Reference< css::rendering::XParametricPolyPolygon2D >(
                 ParametricPolyPolygon::create(this,
@@ -258,7 +258,7 @@ namespace canvas
                                               Arguments));
         }
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override
         {
             return ParametricPolyPolygon::getAvailableServiceNames();
         }

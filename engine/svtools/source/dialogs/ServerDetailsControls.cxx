@@ -31,6 +31,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 
 DetailsContainer::DetailsContainer(PlaceEditDialog* pDialog)
     : m_pDialog(pDialog)

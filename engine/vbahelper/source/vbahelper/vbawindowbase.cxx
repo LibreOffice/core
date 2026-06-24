@@ -36,7 +36,7 @@ VbaWindowBase::VbaWindowBase(
     construct( xController );
 }
 
-VbaWindowBase::VbaWindowBase( uno::Sequence< cpo::uno::Any > const & args,
+VbaWindowBase::VbaWindowBase( cpo::uno::Sequence< cpo::uno::Any > const & args,
         uno::Reference< uno::XComponentContext > const & xContext ) :
     WindowBaseImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0, false ), xContext )
 {
@@ -131,10 +131,10 @@ VbaWindowBase::getServiceImplName()
     return u"VbaWindowBase"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 VbaWindowBase::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.VbaWindowBase"_ustr
     };

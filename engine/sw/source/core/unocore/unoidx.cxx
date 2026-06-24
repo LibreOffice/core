@@ -183,7 +183,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL
         supportsService(const OUString& rServiceName) override;
-    virtual uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XElementAccess
@@ -223,7 +223,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL
         supportsService(const OUString& rServiceName) override;
-    virtual uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XElementAccess
@@ -435,12 +435,12 @@ SwXDocumentIndex::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::getSupportedServiceNames()
 {
     SolarMutexGuard g;
 
-    uno::Sequence< OUString > aRet(2);
+    cpo::uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = u"com.sun.star.text.BaseIndex"_ustr;
     switch (m_pImpl->m_eTOXType)
@@ -1180,7 +1180,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 SwTOXMarks aMarks;
                 const SwTOXType* pType = pTOXBase->GetTOXType();
                 pType->CollectTextMarks(aMarks);
-                uno::Sequence< uno::Reference<text::XDocumentIndexMark> > aXMarks(aMarks.size());
+                cpo::uno::Sequence< uno::Reference<text::XDocumentIndexMark> > aXMarks(aMarks.size());
                 uno::Reference<text::XDocumentIndexMark>* pxMarks = aXMarks.getArray();
                 for(size_t i = 0; i < aMarks.size(); ++i)
                 {
@@ -1682,13 +1682,13 @@ bool SAL_CALL SwXDocumentIndexMark::supportsService(const OUString& rServiceName
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexMark::getSupportedServiceNames()
 {
     SolarMutexGuard g;
 
     const sal_Int32 nCnt = (m_pImpl->m_eTOXType == TOX_INDEX) ? 4 : 3;
-    uno::Sequence< OUString > aRet(nCnt);
+    cpo::uno::Sequence< OUString > aRet(nCnt);
     OUString* pArray = aRet.getArray();
     pArray[0] = u"com.sun.star.text.BaseIndexMark"_ustr;
     pArray[1] = u"com.sun.star.text.TextContent"_ustr;
@@ -2033,7 +2033,7 @@ SwXDocumentIndexMark::getPropertySetInfo()
         const rtl::Reference< SfxItemPropertySetInfo > xInfo =
             m_pImpl->m_rPropSet.getPropertySetInfo();
         // extend PropertySetInfo!
-        const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
+        const cpo::uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         xInfos[nPos] = new SfxExtItemPropertySetInfo(
             aSwMapProvider.GetPropertyMapEntries(
                 PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
@@ -2330,7 +2330,7 @@ bool SAL_CALL SwXDocumentIndexes::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexes::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.DocumentIndexes"_ustr };
@@ -2412,7 +2412,7 @@ SwXDocumentIndexes::getByName(const OUString& rName)
     throw container::NoSuchElementException();
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndexes::getElementNames()
 {
     SolarMutexGuard aGuard;
@@ -2429,7 +2429,7 @@ SwXDocumentIndexes::getElementNames()
         }
     }
 
-    uno::Sequence< OUString > aRet(nCount);
+    cpo::uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
     sal_Int32 nCnt = 0;
     for( size_t n = 0; n < rFormats.size(); ++n )
@@ -2500,7 +2500,7 @@ SwXDocumentIndex::StyleAccess_Impl::supportsService(const OUString& rServiceName
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.DocumentIndexParagraphStyles"_ustr };
@@ -2519,7 +2519,7 @@ SwXDocumentIndex::StyleAccess_Impl::replaceByIndex(
 
     SwTOXBase & rTOXBase( m_xParent->m_pImpl->GetTOXSectionOrThrow() );
 
-    uno::Sequence<OUString> aSeq;
+    cpo::uno::Sequence<OUString> aSeq;
     if(!(rElement >>= aSeq))
     {
         throw lang::IllegalArgumentException();
@@ -2563,7 +2563,7 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
     const UIName& rStyles =
         rTOXBase.GetStyleNames(o3tl::narrowing<sal_uInt16>(nIndex));
     const sal_Int32 nStyles = comphelper::string::getTokenCount(rStyles.toString(), TOX_STYLE_DELIMITER);
-    uno::Sequence<OUString> aStyles(nStyles);
+    cpo::uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
     ProgName aString;
     sal_Int32 nPos = 0;
@@ -2575,14 +2575,14 @@ SwXDocumentIndex::StyleAccess_Impl::getByIndex(sal_Int32 nIndex)
             SwGetPoolIdFromName::TxtColl);
         pStyles[i] = aString.toString();
     }
-    cpo::uno::Any aRet(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
+    cpo::uno::Any aRet(&aStyles, cppu::UnoType<cpo::uno::Sequence<OUString>>::get());
     return aRet;
 }
 
 uno::Type SAL_CALL
 SwXDocumentIndex::StyleAccess_Impl::getElementType()
 {
-    return cppu::UnoType<uno::Sequence<OUString>>::get();
+    return cppu::UnoType<cpo::uno::Sequence<OUString>>::get();
 }
 
 bool SAL_CALL
@@ -2613,7 +2613,7 @@ bool SAL_CALL SwXDocumentIndex::TokenAccess_Impl::supportsService(
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.DocumentIndexLevelFormat"_ustr };
@@ -2655,7 +2655,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
         throw lang::IndexOutOfBoundsException();
     }
 
-    uno::Sequence<beans::PropertyValues> aSeq;
+    cpo::uno::Sequence<beans::PropertyValues> aSeq;
     if(!(rElement >>= aSeq))
     {
         throw lang::IllegalArgumentException();
@@ -2850,7 +2850,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         GetPattern(o3tl::narrowing<sal_uInt16>(nIndex));
 
     sal_Int32 nTokenCount = 0;
-    uno::Sequence< beans::PropertyValues > aRetSeq;
+    cpo::uno::Sequence< beans::PropertyValues > aRetSeq;
     ProgName aProgCharStyle;
     for(const SwFormToken& aToken : aPattern) // #i21237#
     {
@@ -2858,7 +2858,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
         aRetSeq.realloc(nTokenCount);
         beans::PropertyValues* pTokenProps = aRetSeq.getArray();
 
-        uno::Sequence< beans::PropertyValue >& rCurTokenSeq =
+        cpo::uno::Sequence< beans::PropertyValue >& rCurTokenSeq =
             pTokenProps[nTokenCount-1];
         SwStyleNameMapper::FillProgName(
                         aToken.sCharStyleName,
@@ -3080,7 +3080,7 @@ SwXDocumentIndex::TokenAccess_Impl::getByIndex(sal_Int32 nIndex)
 uno::Type SAL_CALL
 SwXDocumentIndex::TokenAccess_Impl::getElementType()
 {
-    return cppu::UnoType<uno::Sequence< beans::PropertyValues >>::get();
+    return cppu::UnoType<cpo::uno::Sequence< beans::PropertyValues >>::get();
 }
 
 bool SAL_CALL

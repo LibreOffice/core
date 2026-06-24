@@ -30,7 +30,7 @@ public:
     void TableStyles(sal_Int32 nCountStylesToWrite);
 
     /// Writes <w:cnfStyle .../> based on grab-bagged para, cell or row properties.
-    void CnfStyle(const css::uno::Sequence<css::beans::PropertyValue>& rAttributeList);
+    void CnfStyle(const cpo::uno::Sequence<css::beans::PropertyValue>& rAttributeList);
 
     void SetSerializer(const sax_fastparser::FSHelperPtr& pSerializer);
     DocxTableStyleExport(SwDoc& rDoc, const sax_fastparser::FSHelperPtr& pSerializer);

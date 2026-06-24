@@ -163,8 +163,8 @@ class ScDocCfg : public ScDocOptions
     DECL_LINK( CalcCommitHdl, ScLinkConfigItem&, void );
     DECL_LINK( LayoutCommitHdl, ScLinkConfigItem&, void );
 
-    static css::uno::Sequence<OUString> GetCalcPropertyNames();
-    static css::uno::Sequence<OUString> GetLayoutPropertyNames();
+    static cpo::uno::Sequence<OUString> GetCalcPropertyNames();
+    static cpo::uno::Sequence<OUString> GetLayoutPropertyNames();
 
 public:
             ScDocCfg();

@@ -229,7 +229,7 @@ namespace svxform
         bool                 HasModel() const { return m_bHasModel; }
         OUString             SetModel( const css::uno::Reference< css::xforms::XModel > & _xModel, int _nPagePos );
         void                 ClearModel();
-        OUString             LoadInstance(const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
+        OUString             LoadInstance(const cpo::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
 
         bool                 DoMenuAction(std::u16string_view rMenuID);
         void                 EnableMenuItems();
@@ -294,7 +294,7 @@ namespace svxform
         void                        SetPageModel(const OUString& rCurId);
         void                        ClearAllPageModels( bool bClearPages );
         void                        InitPages();
-        void                        CreateInstancePage( const css::uno::Sequence< css::beans::PropertyValue >& _xPropSeq );
+        void                        CreateInstancePage( const cpo::uno::Sequence< css::beans::PropertyValue >& _xPropSeq );
         bool                        HasFirstInstancePage() const;
         OUString                     GetNewPageId() const;
 

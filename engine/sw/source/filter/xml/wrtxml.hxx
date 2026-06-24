@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_FILTER_XML_WRTXML_HXX
 
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <shellio.hxx>
@@ -29,11 +29,13 @@
 
 namespace com::sun::star {
     namespace uno { template<class A> class Reference; }
-    namespace uno { template<class A> class Sequence; }
     namespace lang { class XComponent; }
     namespace beans { struct PropertyValue; }
 }
-namespace cpo::uno { class Any; }
+namespace cpo::uno {
+    class Any;
+    template<class A> class Sequence;
+}
 
 class SwXMLWriter : public StgWriter
 {
@@ -66,9 +68,9 @@ private:
         const css::uno::Reference<css::uno::XComponentContext> & rFactory,
         const char* pServiceName,       // service name of the component
         // the argument (XInitialization)
-        const css::uno::Sequence<cpo::uno::Any> & rArguments,
+        const cpo::uno::Sequence<cpo::uno::Any> & rArguments,
         // output descriptor
-        const css::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );
+        const cpo::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );
 
     // write a single output stream
     // (to be called either directly or by WriteThroughComponent(...))
@@ -77,8 +79,8 @@ private:
         const css::uno::Reference<css::lang::XComponent> & xComponent,
         const css::uno::Reference<css::uno::XComponentContext> & rFactory,
         const char* pServiceName,
-        const css::uno::Sequence<cpo::uno::Any> & rArguments,
-        const css::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );
+        const cpo::uno::Sequence<cpo::uno::Any> & rArguments,
+        const cpo::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_WRTXML_HXX

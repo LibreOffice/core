@@ -57,7 +57,7 @@ void SwAsyncRetrieveInputStreamThread::threadFunction()
 {
     osl_setThreadName("SwAsyncRetrieveInputStreamThread");
 
-    css::uno::Sequence < css::beans::PropertyValue > xProps{
+    cpo::uno::Sequence < css::beans::PropertyValue > xProps{
         comphelper::makePropertyValue(u"URL"_ustr, mrLinkedURL),
         comphelper::makePropertyValue(u"Referer"_ustr, mrReferer)
     };

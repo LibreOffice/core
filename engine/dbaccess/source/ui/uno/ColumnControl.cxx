@@ -25,7 +25,7 @@
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbu_OColumnControl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaui::OColumnControl(context));
 }
@@ -49,14 +49,14 @@ OUString SAL_CALL OColumnControl::getImplementationName()
 }
 bool SAL_CALL OColumnControl::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-css::uno::Sequence< OUString > SAL_CALL OColumnControl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OColumnControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.UnoControl"_ustr,u"com.sun.star.sdb.ColumnDescriptorControl"_ustr };
 }

@@ -202,7 +202,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
     bool has_x509 = false;
     bool has_openpgp_gpg = false;
     ::std::optional<int> oSelectRow;
-    uno::Sequence<uno::Reference< security::XCertificate>> xCerts;
+    cpo::uno::Sequence<uno::Reference< security::XCertificate>> xCerts;
     for (auto& secContext : mxSecurityContexts)
     {
         if (!secContext.is())
@@ -353,7 +353,7 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
     mbInitialized = true;
 }
 
-uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser::GetSelectedCertificates()
+cpo::uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser::GetSelectedCertificates()
 {
     std::vector< uno::Reference< css::security::XCertificate > > aRet;
     if (meAction == CertificateChooserUserAction::Encrypt)
@@ -403,7 +403,7 @@ OUString CertificateChooser::GetDescription() const
 
 OUString CertificateChooser::GetUsageText()
 {
-    uno::Sequence< uno::Reference<css::security::XCertificate> > xCerts =
+    cpo::uno::Sequence< uno::Reference<css::security::XCertificate> > xCerts =
         GetSelectedCertificates();
     return (xCerts.hasElements() && xCerts[0].is()) ?
         UsageInClearText(xCerts[0]->getCertificateUsage()) : OUString();

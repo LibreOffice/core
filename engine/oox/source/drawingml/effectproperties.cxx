@@ -121,7 +121,7 @@ css::beans::PropertyValue Effect::getEffect()
     if( msName.isEmpty() )
         return aRet;
 
-    css::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
+    cpo::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
     std::transform(maAttribs.begin(), maAttribs.end(), aSeq.getArray(),
                    [](const auto& attrib)
                    { return comphelper::makePropertyValue(attrib.first, attrib.second); });

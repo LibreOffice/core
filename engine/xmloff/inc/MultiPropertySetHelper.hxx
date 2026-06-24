@@ -19,7 +19,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <memory>
 #include <span>
 
@@ -67,14 +67,14 @@ class MultiPropertySetHelper
 
     /// the sequence of property names that the current (multi)
     /// property set implementation supports
-    css::uno::Sequence<OUString> aPropertySequence;
+    cpo::uno::Sequence<OUString> aPropertySequence;
 
     /// an array of indices that maps from pPropertyNames indices to
     /// aPropertySequence indices
     std::unique_ptr<sal_Int16[]> pSequenceIndex;
 
     /// the last set of values retrieved by getValues
-    css::uno::Sequence<cpo::uno::Any> aValues;
+    cpo::uno::Sequence<cpo::uno::Any> aValues;
 
     /// result of aValues.getConstArray()
     const cpo::uno::Any* pValues;

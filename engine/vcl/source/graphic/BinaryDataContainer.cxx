@@ -115,13 +115,13 @@ std::vector<unsigned char> BinaryDataContainer::calculateSHA1() const
     return aHashEngine.finalize();
 }
 
-css::uno::Sequence<sal_Int8> BinaryDataContainer::getCopyAsByteSequence() const
+cpo::uno::Sequence<sal_Int8> BinaryDataContainer::getCopyAsByteSequence() const
 {
     if (isEmpty())
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     assert(mpImpl);
 
-    css::uno::Sequence<sal_Int8> aData(getSize());
+    cpo::uno::Sequence<sal_Int8> aData(getSize());
 
     std::copy(mpImpl->mpData->cbegin(), mpImpl->mpData->cend(), aData.getArray());
 

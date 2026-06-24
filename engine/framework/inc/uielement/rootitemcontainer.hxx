@@ -63,7 +63,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
@@ -81,14 +81,14 @@ class RootItemContainer final : private cppu::BaseMutex,
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override
         {
-            return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
+            return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
         virtual bool SAL_CALL hasElements() override;
 
         // XSingleComponentFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
 
     private:
         //  OPropertySetHelper
@@ -104,7 +104,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
-        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         RootItemContainer& operator=( const RootItemContainer& ) = delete;
         RootItemContainer( const RootItemContainer& ) = delete;
@@ -112,7 +112,7 @@ class RootItemContainer final : private cppu::BaseMutex,
         rtl::Reference< ItemContainer > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer );
 
         mutable ShareableMutex                                            m_aShareMutex;
-        std::vector< css::uno::Sequence< css::beans::PropertyValue > >    m_aItemVector;
+        std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >    m_aItemVector;
         OUString                                                          m_aUIName;
 };
 

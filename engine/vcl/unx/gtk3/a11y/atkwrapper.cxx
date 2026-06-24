@@ -19,7 +19,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>

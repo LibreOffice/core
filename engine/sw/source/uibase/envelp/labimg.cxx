@@ -22,7 +22,7 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <tools/UnitConversion.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <unotools/useroptions.hxx>
 #include <swmodule.hxx>
 #include <labimg.hxx>
@@ -389,7 +389,7 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
 
 }
 
-void SwLabCfgItem::Notify( const css::uno::Sequence< OUString >& ) {}
+void SwLabCfgItem::Notify( const cpo::uno::Sequence< OUString >& ) {}
 
 void SwLabCfgItem::ImplCommit()
 {

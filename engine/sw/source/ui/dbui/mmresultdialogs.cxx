@@ -426,7 +426,7 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     uno::Reference< sdbcx::XColumnsSupplier > xColsSupp(xConfigItem->GetResultSet(), uno::UNO_QUERY);
     //get the name of the actual columns
     uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
-    uno::Sequence< OUString > aFields;
+    cpo::uno::Sequence< OUString > aFields;
     if (xColAccess.is())
         aFields = xColAccess->getElementNames();
 
@@ -590,7 +590,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
 
     if (m_xSaveAsOneRB->get_active())
     {
-        uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue(u"FilterName"_ustr, sFilter) };
+        cpo::uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue(u"FilterName"_ustr, sFilter) };
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
         ErrCode nErrorCode = ERRCODE_NONE;
@@ -621,7 +621,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 FILTER_XML,
                 SwDocShell::Factory().GetFilterContainer() );
 
-        uno::Sequence< beans::PropertyValue > aValues(1);
+        cpo::uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = u"FilterName"_ustr;
         pValues[0].Value <<= pSfxFlt->GetFilterName();
@@ -692,7 +692,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
                 pTargetView->GetDocShell()->GetBaseModel());
             rtl::Reference<SwXTextDocument> const xRetSet(
                 pTempView->GetDocShell()->GetBaseModel());
-            uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aInteropGrabBag;
             xThisSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
             xRetSet->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aInteropGrabBag));
 
@@ -838,7 +838,7 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame().GetObjectShell();
     SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
 
-    uno::Sequence aProps{ comphelper::makePropertyValue(u"MonitorVisible"_ustr, true),
+    cpo::uno::Sequence aProps{ comphelper::makePropertyValue(u"MonitorVisible"_ustr, true),
                           comphelper::makePropertyValue(u"Pages"_ustr, sPages) };
 
     pTargetView->ExecPrint( aProps, false, true );
@@ -1106,7 +1106,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
             FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
 
-    uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue(u"FilterName"_ustr, pTargetSfxFlt->GetFilterName()) };
+    cpo::uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue(u"FilterName"_ustr, pTargetSfxFlt->GetFilterName()) };
 
     uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( sTargetTempURL, aValues   );
@@ -1165,7 +1165,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
             sal_Int32 nOptionCount = (withFilterOptions && withPasswordOptions) ? 4 : withPasswordOptions ? 3 : withFilterOptions ? 2 : 1;
             sal_Int32 nOpt = 0;
-            uno::Sequence< beans::PropertyValue > aFilterValues(nOptionCount);
+            cpo::uno::Sequence< beans::PropertyValue > aFilterValues(nOptionCount);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();
 
             pFilterValues[nOpt].Name = u"FilterName"_ustr;

@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownText)
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
-        uno::Sequence<beans::PropertyValues> aListItems = {
+        cpo::uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
                 comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
@@ -342,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFComments)
     pView->GetViewFrame().GetDispatcher()->Execute(FN_POSTIT, SfxCallMode::SYNCHRON);
 
     // When exporting to PDF, exporting notes in master (and not as widgets):
-    uno::Sequence<beans::PropertyValue> aFilterData = {
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData = {
         comphelper::makePropertyValue(u"ExportFormFields"_ustr, true),
         comphelper::makePropertyValue(u"ExportNotes"_ustr, false),
         comphelper::makePropertyValue(u"ExportNotesInMargin"_ustr, true),

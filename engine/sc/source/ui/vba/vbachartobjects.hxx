@@ -39,7 +39,7 @@ public:
     ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, css::uno::Reference< css::drawing::XDrawPageSupplier >   _xDrawPageSupplier );
 
     /// @throws css::script::BasicErrorException
-    css::uno::Sequence< OUString > getChartObjectNames() const;
+    cpo::uno::Sequence< OUString > getChartObjectNames() const;
     void removeByName(const OUString& _sChartName);
 
     // XChartObjects
@@ -53,7 +53,7 @@ public:
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     // ChartObjects_BASE
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

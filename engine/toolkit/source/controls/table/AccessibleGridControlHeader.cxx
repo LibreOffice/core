@@ -25,7 +25,7 @@
 #include <vcl/unohelp.hxx>
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

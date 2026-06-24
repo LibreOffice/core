@@ -32,6 +32,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
+using namespace ::cpo::uno;
 
 namespace {
     // Helper functions from nss/lib/certdb/genname.c
@@ -53,7 +54,7 @@ namespace {
 }
 
 //Methods from XSanExtension
-css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames()
+cpo::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames()
 {
     if (m_Entries.empty())
     {
@@ -68,7 +69,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
         arena = PORT_NewArena(DER_DEFAULT_CHUNKSIZE);
 
         if (!arena)
-            return css::uno::Sequence<css::security::CertAltNameEntry>();
+            return cpo::uno::Sequence<css::security::CertAltNameEntry>();
 
         nameList = CERT_DecodeAltNameExtension(arena, &item);
 

@@ -1233,7 +1233,7 @@ namespace sw::mark {
         const Fieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         if (pListEntries != pParameters->end())
         {
-            uno::Sequence< OUString > vListEntries;
+            cpo::uno::Sequence< OUString > vListEntries;
             pListEntries->second >>= vListEntries;
             if (nCurrentIdx < vListEntries.getLength())
                 return vListEntries[nCurrentIdx];

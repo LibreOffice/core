@@ -117,14 +117,14 @@ class BinaryBindData : public connectivity::odbc::BindData
 {
 public:
     BinaryBindData(const void* p)
-        : value(*static_cast<const css::uno::Sequence<sal_Int8>*>(p))
+        : value(*static_cast<const cpo::uno::Sequence<sal_Int8>*>(p))
     {
     }
     void* data() override { return const_cast<sal_Int8*>(value.getConstArray()); }
     SQLLEN len() const override { return value.getLength(); }
 
 private:
-    css::uno::Sequence<sal_Int8> value; // ref-counted CoW
+    cpo::uno::Sequence<sal_Int8> value; // ref-counted CoW
 };
 }
 
@@ -1005,7 +1005,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex, SQLSMALLINT _nType, void con
                      * for an explanation of that apparently weird cast */
                 pData = reinterpret_cast<void*>(static_cast<sal_uIntPtr>(columnIndex));
                 sal_Int32 nLen
-                    = static_cast<const css::uno::Sequence<sal_Int8>*>(_pValue)->getLength();
+                    = static_cast<const cpo::uno::Sequence<sal_Int8>*>(_pValue)->getLength();
                 *pLen = SQL_LEN_DATA_AT_EXEC(nLen);
             }
             break;

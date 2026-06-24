@@ -112,8 +112,8 @@ class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
 public:
     XInputStreamHelper(const sal_uInt8* buf, size_t len);
 
-    virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
     virtual ::sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;
@@ -128,12 +128,12 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len) :
 {
 }
 
-sal_Int32 XInputStreamHelper::readBytes( uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
+sal_Int32 XInputStreamHelper::readBytes( cpo::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
 {
     return readSomeBytes( aData, nBytesToRead );
 }
 
-sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 XInputStreamHelper::readSomeBytes( cpo::uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
 {
     sal_Int32 nRet = 0;
     if( nMaxBytesToRead > 0 )
@@ -427,7 +427,7 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
     if (xSetInfo->hasPropertyByName(aGrabBagPropName))
     {
         //Add pProperty to the end of the Sequence for aGrabBagPropName
-        uno::Sequence<beans::PropertyValue> aTmp;
+        cpo::uno::Sequence<beans::PropertyValue> aTmp;
         xSet->getPropertyValue(aGrabBagPropName) >>= aTmp;
         std::vector<beans::PropertyValue> aGrabBag(comphelper::sequenceToContainer<std::vector<beans::PropertyValue> >(aTmp));
         aGrabBag.push_back(aProperty);

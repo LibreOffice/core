@@ -71,6 +71,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::packages;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
+using namespace ::cpo::uno;
 
 using ZipUtils::Inflater;
 
@@ -130,7 +131,7 @@ uno::Reference< xml::crypto::XDigestContext > ZipFile::StaticGetDigestContextFor
         uno::Reference< xml::crypto::XNSSInitializer > xDigestContextSupplier = xml::crypto::NSSInitializer::create( xContext );
 
         xDigestContext.set(xDigestContextSupplier->getDigestContext(
-                *xEncryptionData->m_oCheckAlg, uno::Sequence<beans::NamedValue>()),
+                *xEncryptionData->m_oCheckAlg, cpo::uno::Sequence<beans::NamedValue>()),
             uno::UNO_SET_THROW);
     }
     else if (*xEncryptionData->m_oCheckAlg == xml::crypto::DigestID::SHA1_1K)
@@ -157,7 +158,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
         throw ZipIOException(u"Invalid derived key length!"_ustr );
     }
 
-    uno::Sequence< sal_Int8 > aDerivedKey( xEncryptionData->m_nDerivedKeySize );
+    cpo::uno::Sequence< sal_Int8 > aDerivedKey( xEncryptionData->m_nDerivedKeySize );
     if (!xEncryptionData->m_oPBKDFIterationCount && !xEncryptionData->m_oArgon2Args
         && xEncryptionData->m_nDerivedKeySize == xEncryptionData->m_aKey.getLength())
     {
@@ -217,7 +218,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
 
         uno::Reference< xml::crypto::XNSSInitializer > xCipherContextSupplier = xml::crypto::NSSInitializer::create( xContext );
 
-        xResult = xCipherContextSupplier->getCipherContext( xEncryptionData->m_nEncAlg, aDerivedKey, xEncryptionData->m_aInitVector, bEncrypt, uno::Sequence< beans::NamedValue >() );
+        xResult = xCipherContextSupplier->getCipherContext( xEncryptionData->m_nEncAlg, aDerivedKey, xEncryptionData->m_aInitVector, bEncrypt, cpo::uno::Sequence< beans::NamedValue >() );
     }
     else if ( xEncryptionData->m_nEncAlg == xml::crypto::CipherID::BLOWFISH_CFB_8 )
     {
@@ -466,7 +467,7 @@ bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > const & r
 
 #if 0
 // for debugging purposes
-void CheckSequence( const uno::Sequence< sal_Int8 >& aSequence )
+void CheckSequence( const cpo::uno::Sequence< sal_Int8 >& aSequence )
 {
     if ( aSequence.getLength() )
     {
@@ -490,8 +491,8 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
 
     uno::Reference< xml::crypto::XCipherContext > xCipher( StaticGetCipher( rxContext, rData, false ), uno::UNO_SET_THROW );
 
-    uno::Sequence< sal_Int8 > aDecryptBuffer;
-    uno::Sequence< sal_Int8 > aDecryptBuffer2;
+    cpo::uno::Sequence< sal_Int8 > aDecryptBuffer;
+    cpo::uno::Sequence< sal_Int8 > aDecryptBuffer2;
     try
     {
         aDecryptBuffer = xCipher->convertWithCipherContext( aReadBuffer );
@@ -513,7 +514,7 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
     if ( aDecryptBuffer.getLength() > n_ConstDigestLength )
         aDecryptBuffer.realloc( n_ConstDigestLength );
 
-    uno::Sequence< sal_Int8 > aDigestSeq;
+    cpo::uno::Sequence< sal_Int8 > aDigestSeq;
     uno::Reference< xml::crypto::XDigestContext > xDigestContext( StaticGetDigestContextForChecksum( rxContext, rData ), uno::UNO_SET_THROW );
 
     xDigestContext->updateDigest( aDecryptBuffer );
@@ -623,7 +624,7 @@ public:
         }
 
         const sal_Int32 nBufSize = 8192;
-        uno::Sequence<sal_Int8> aBuf(nBufSize);
+        cpo::uno::Sequence<sal_Int8> aBuf(nBufSize);
         while (nRemaining > 0)
         {
             const sal_Int32 nBytes = xSrcStream->readBytes(aBuf, std::min(nBufSize, nRemaining));
@@ -634,7 +635,7 @@ public:
         }
     }
 
-    virtual sal_Int32 SAL_CALL readBytes( uno::Sequence<sal_Int8>& rData, sal_Int32 nBytesToRead ) override
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence<sal_Int8>& rData, sal_Int32 nBytesToRead ) override
     {
         if (!hasBytes())
             return 0;
@@ -668,7 +669,7 @@ public:
         return nReadSize;
     }
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::css::uno::Sequence<sal_Int8>& rData, sal_Int32 nMaxBytesToRead ) override
+    virtual sal_Int32 SAL_CALL readSomeBytes( ::cpo::uno::Sequence<sal_Int8>& rData, sal_Int32 nMaxBytesToRead ) override
     {
         return readBytes(rData, nMaxBytesToRead);
     }

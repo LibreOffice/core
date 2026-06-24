@@ -1606,7 +1606,7 @@ void builder_add_from_gtk3_file(GtkBuilder* pBuilder, const OUString& rUri)
     xWriter->setOutputStream(xTempOut);
     xSerializer->serialize(
         css::uno::Reference<css::xml::sax::XDocumentHandler>(xWriter, css::uno::UNO_QUERY_THROW),
-        css::uno::Sequence<css::beans::StringPair>());
+        cpo::uno::Sequence<css::beans::StringPair>());
 
     ensure_cairo_surface_type();
 
@@ -1614,7 +1614,7 @@ void builder_add_from_gtk3_file(GtkBuilder* pBuilder, const OUString& rUri)
     css::uno::Reference<css::io::XSeekable> xTempSeek(xTempStream, css::uno::UNO_QUERY_THROW);
     xTempSeek->seek(0);
     auto xInput = xTempStream->getInputStream();
-    css::uno::Sequence<sal_Int8> bytes;
+    cpo::uno::Sequence<sal_Int8> bytes;
     sal_Int32 nToRead = xInput->available();
     while (true)
     {

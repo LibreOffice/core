@@ -46,7 +46,7 @@ OUString SAL_CALL CMimeContentType::getFullMediaType( )
     return m_MediaType + "/" + m_MediaSubtype;
 }
 
-css::uno::Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
+cpo::uno::Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
 {
     return comphelper::mapKeysToSequence(m_ParameterMap);
 }

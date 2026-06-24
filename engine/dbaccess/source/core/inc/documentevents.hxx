@@ -29,7 +29,7 @@
 namespace dbaccess
 {
 
-    typedef std::map< OUString, css::uno::Sequence< css::beans::PropertyValue > >
+    typedef std::map< OUString, cpo::uno::Sequence< css::beans::PropertyValue > >
             DocumentEventsData;
 
     typedef ::cppu::WeakImplHelper<   css::container::XNameReplace
@@ -55,7 +55,7 @@ namespace dbaccess
 
         // XNameAccess
         virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess

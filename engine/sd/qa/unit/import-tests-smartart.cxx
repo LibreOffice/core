@@ -306,7 +306,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTextAutoRotation)
             xTxtProps->getPropertyValue(u"RotateAngle"_ustr).get<sal_Int32>());
 
         auto aGeomPropSeq = xTxtProps->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                                .get<uno::Sequence<beans::PropertyValue>>();
+                                .get<cpo::uno::Sequence<beans::PropertyValue>>();
         comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
 
         auto it = aCustomShapeGeometry.find(u"TextPreRotateAngle"_ustr);
@@ -1261,7 +1261,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testMissingBulletAndIndent)
 
     uno::Reference<container::XIndexAccess> xNumRule;
     xPara1->getPropertyValue(u"NumberingRules"_ustr) >>= xNumRule;
-    uno::Sequence<beans::PropertyValue> aBulletProps;
+    cpo::uno::Sequence<beans::PropertyValue> aBulletProps;
     xNumRule->getByIndex(1) >>= aBulletProps;
 
     for (beans::PropertyValue const& rProp : aBulletProps)

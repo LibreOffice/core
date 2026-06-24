@@ -510,7 +510,7 @@ OfficeDocumentsManager::queryDocumentModel( const OUString & rDocId )
 }
 
 
-uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
+cpo::uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
 {
     std::scoped_lock aGuard( m_aMtx );
 
@@ -561,7 +561,7 @@ bool OfficeDocumentsManager::isDocumentPreview(
     if ( !xModel.is() )
         return false;
 
-    uno::Sequence<beans::PropertyValue> props = xModel->getArgs2( { u"Preview"_ustr } );
+    cpo::uno::Sequence<beans::PropertyValue> props = xModel->getArgs2( { u"Preview"_ustr } );
     for (const auto & rProp : props)
         if (rProp.Name == "Preview")
         {

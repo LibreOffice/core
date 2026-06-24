@@ -59,14 +59,14 @@ class DispatchRecorderSupplier final : public  ::cppu::WeakImplHelper<
         /* interface XServiceInfo */
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XDispatchRecorderSupplier
 
         virtual void                                                 SAL_CALL setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder   ) override;
         virtual css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL getDispatchRecorder(                                                                         ) override;
         virtual void                                                 SAL_CALL dispatchAndRecord  ( const css::util::URL&                                       aURL        ,
-                                                                                                   const css::uno::Sequence< css::beans::PropertyValue >&      lArguments  ,
+                                                                                                   const cpo::uno::Sequence< css::beans::PropertyValue >&      lArguments  ,
                                                                                                    const css::uno::Reference< css::frame::XDispatch >&         xDispatcher ) override;
 
     // native interface

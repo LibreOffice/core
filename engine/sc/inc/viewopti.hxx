@@ -184,9 +184,9 @@ class ScViewCfg : public ScViewOptions
     void ReadDisplayCfg();
     void ReadGridCfg();
 
-    static css::uno::Sequence<OUString> GetLayoutPropertyNames();
-    static css::uno::Sequence<OUString> GetDisplayPropertyNames();
-    static css::uno::Sequence<OUString> GetGridPropertyNames();
+    static cpo::uno::Sequence<OUString> GetLayoutPropertyNames();
+    static cpo::uno::Sequence<OUString> GetDisplayPropertyNames();
+    static cpo::uno::Sequence<OUString> GetGridPropertyNames();
 
 public:
             ScViewCfg();

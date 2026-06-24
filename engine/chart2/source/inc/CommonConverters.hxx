@@ -165,17 +165,17 @@ css::awt::Size Direction3DToAWTSize( const css::drawing::Direction3D& rDirection
 /** Sequence<double> -> drawing::Position3D
 */
 css::drawing::Position3D
-                SequenceToPosition3D( const css::uno::Sequence< double >& rSeq );
+                SequenceToPosition3D( const cpo::uno::Sequence< double >& rSeq );
 
 /** chart2::XDataSequence -> uno::Sequence< double >
 */
 
 
-css::uno::Sequence< double > DataSequenceToDoubleSequence(
+cpo::uno::Sequence< double > DataSequenceToDoubleSequence(
     const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
 
 
-css::uno::Sequence< OUString > DataSequenceToStringSequence(
+cpo::uno::Sequence< OUString > DataSequenceToStringSequence(
     const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
 
 /** std::vector< std::vector< T > > -> std::vector< T >

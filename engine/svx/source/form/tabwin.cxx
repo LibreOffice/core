@@ -73,7 +73,7 @@ struct ColumnInfo
 
 void FmFieldWin::addToList(const uno::Reference< container::XNameAccess>& i_xColumns )
 {
-    const uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
+    const cpo::uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
     for ( const OUString& rEntry : aEntries )
     {
         uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(rEntry),UNO_QUERY_THROW);

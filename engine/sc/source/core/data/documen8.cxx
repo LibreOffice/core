@@ -1313,7 +1313,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, Transliteratio
                         nLanguage = static_cast<const SvxLanguageItem&>(GetAttr( nCol, nRow, nTab, nWhich )).GetValue();
                     }
 
-                    uno::Sequence<sal_Int32> aOffsets;
+                    cpo::uno::Sequence<sal_Int32> aOffsets;
                     OUString aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
 
                     if ( aNewStr != aOldStr )

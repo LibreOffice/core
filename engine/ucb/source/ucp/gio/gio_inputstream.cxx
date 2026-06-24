@@ -55,11 +55,11 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
     // Conservatively call readBytes and discard the read data, but given this
     // InputStream will always be wrapped in comphelper::OSeekableInputWrapper,
     // this function will never be called anyway:
-    css::uno::Sequence<sal_Int8> data;
+    cpo::uno::Sequence<sal_Int8> data;
     readBytes(data, nBytesToSkip);
 }
 
-sal_Int32 SAL_CALL InputStream::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL InputStream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if (!mpStream)
         throw css::io::NotConnectedException();
@@ -81,7 +81,7 @@ sal_Int32 SAL_CALL InputStream::readBytes( css::uno::Sequence< sal_Int8 >& aData
     return nBytesRead;
 }
 
-sal_Int32 SAL_CALL InputStream::readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL InputStream::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     return readBytes(aData, nMaxBytesToRead);
 }

@@ -29,7 +29,7 @@ using UcbPropertiesManager_Base = cppu::WeakImplHelper <
 
 class UcbPropertiesManager : public UcbPropertiesManager_Base
 {
-    css::uno::Sequence< css::beans::Property > m_pProps;
+    cpo::uno::Sequence< css::beans::Property > m_pProps;
 
 private:
     bool queryProperty( const OUString& rName,
@@ -42,10 +42,10 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySetInfo
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL
     getProperties() override;
     virtual css::beans::Property SAL_CALL
     getPropertyByName( const OUString& aName ) override;

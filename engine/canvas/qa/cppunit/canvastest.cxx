@@ -30,8 +30,8 @@ class CanvasTest : public test::BootstrapFixture
     uno::Reference<rendering::XGraphicDevice> mDevice;
     rendering::ViewState mViewState;
     rendering::RenderState mRenderState;
-    uno::Sequence<double> mColorBlack;
-    uno::Sequence<double> mColorBlue;
+    cpo::uno::Sequence<double> mColorBlack;
+    cpo::uno::Sequence<double> mColorBlue;
 
     // if enabled - check the result images with:
     // "xdg-open ./workdir/CppunitTest/canvas_test.test.core/"
@@ -111,8 +111,9 @@ public:
         mRenderState.AffineTransform = geometry::AffineMatrix2D(2, 0, 0, 0, 2, 0);
         mViewState.AffineTransform = geometry::AffineMatrix2D(5, 0, 0, 0, 5, 0);
 
-        uno::Sequence<uno::Sequence<geometry::RealPoint2D>> polygonPoints{ { { 10, 5 },
-                                                                             { 88, 5 } } };
+        cpo::uno::Sequence<cpo::uno::Sequence<geometry::RealPoint2D>> polygonPoints{
+            { { 10, 5 }, { 88, 5 } }
+        };
         uno::Reference<rendering::XLinePolyPolygon2D> polygon
             = mDevice->createCompatibleLinePolyPolygon(polygonPoints);
         polygon->setClosed(0, false);

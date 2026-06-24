@@ -40,10 +40,10 @@ public:
     static SC_DLLPUBLIC bool ConvertToTokenArray(
                         ScDocument& rDoc,
                         ScTokenArray& rTokenArray,
-                        const css::uno::Sequence< css::sheet::FormulaToken >& rSequence );
+                        const cpo::uno::Sequence< css::sheet::FormulaToken >& rSequence );
     static SC_DLLPUBLIC void ConvertToTokenSequence(
                         const ScDocument& rDoc,
-                        css::uno::Sequence< css::sheet::FormulaToken >& rSequence,
+                        cpo::uno::Sequence< css::sheet::FormulaToken >& rSequence,
                         const ScTokenArray& rTokenArray,
                         bool bIgnoreTableRefNoInnerReference = false );
 };
@@ -55,8 +55,8 @@ class ScFormulaParserObj final : public ::cppu::WeakImplHelper<
                         public SfxListener
 {
 private:
-    css::uno::Sequence< const css::sheet::FormulaOpCodeMapEntry > maOpCodeMapping;
-    css::uno::Sequence<css::sheet::ExternalLinkInfo> maExternalLinks;
+    cpo::uno::Sequence< const css::sheet::FormulaOpCodeMapEntry > maOpCodeMapping;
+    cpo::uno::Sequence<css::sheet::ExternalLinkInfo> maExternalLinks;
     ScCompiler::OpCodeMapPtr    mxOpCodeMap;
     ScDocShell*         mpDocShell;
     sal_Int16           mnConv;
@@ -74,10 +74,10 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XFormulaParser
-    virtual css::uno::Sequence< css::sheet::FormulaToken > SAL_CALL parseFormula(
+    virtual cpo::uno::Sequence< css::sheet::FormulaToken > SAL_CALL parseFormula(
                                     const OUString& aFormula,
                                     const css::table::CellAddress& rReferencePos ) override;
-    virtual OUString SAL_CALL printFormula( const css::uno::Sequence< css::sheet::FormulaToken >& aTokens,
+    virtual OUString SAL_CALL printFormula( const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens,
                                     const css::table::CellAddress& rReferencePos ) override;
 
                             // XPropertySet
@@ -98,7 +98,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScFormulaOpCodeMapperObj final : public formula::FormulaOpCodeMapperObj

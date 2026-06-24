@@ -43,8 +43,8 @@ template <class CONTROLMODEL>
 
 template <class CONTROLMODEL>
 void OGeometryControlModel<CONTROLMODEL>::fillProperties(
-    css::uno::Sequence<css::beans::Property>& _rProps,
-    css::uno::Sequence<css::beans::Property>& _rAggregateProps) const
+    cpo::uno::Sequence<css::beans::Property>& _rProps,
+    cpo::uno::Sequence<css::beans::Property>& _rAggregateProps) const
 {
     // our own properties
     OPropertyContainer::describeProperties(_rProps);
@@ -54,9 +54,9 @@ void OGeometryControlModel<CONTROLMODEL>::fillProperties(
 }
 
 template <class CONTROLMODEL>
-css::uno::Sequence<sal_Int8> SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 template <class CONTROLMODEL>

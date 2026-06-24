@@ -29,11 +29,11 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     //XFilter
     virtual bool SAL_CALL
-    filter(const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override;
+    filter(const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override;
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream& rInput, OUString& rTypeName) override;

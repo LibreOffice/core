@@ -48,18 +48,18 @@ private:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XGraphic
     virtual ::sal_Int8 SAL_CALL getType(  ) override;
 
     // XBitmap
     virtual css::awt::Size SAL_CALL getSize(  ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getDIB(  ) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getMaskDIB(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getDIB(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getMaskDIB(  ) override;
 
     // XGraphicTransformer
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL colorChange(

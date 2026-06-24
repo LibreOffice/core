@@ -294,7 +294,7 @@ short SvInsertOleDlg::run()
                     task::InteractionHandler::createWithParent(xContext, nullptr) );
 
                 // create MediaDescriptor for file to create object from
-                uno::Sequence < beans::PropertyValue > aMedium{
+                cpo::uno::Sequence < beans::PropertyValue > aMedium{
                     comphelper::makePropertyValue(u"URL"_ustr, aFileName),
                     comphelper::makePropertyValue(u"InteractionHandler"_ustr, xInteraction)
                 };

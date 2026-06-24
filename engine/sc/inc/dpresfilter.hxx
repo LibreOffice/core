@@ -17,7 +17,7 @@
 #include <vector>
 #include <unordered_map>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Sequence;
 }
@@ -118,7 +118,7 @@ public:
     void clear();
 
     const ValuesType*
-    getResults(const css::uno::Sequence<css::sheet::DataPilotFieldFilter>& rFilters) const;
+    getResults(const cpo::uno::Sequence<css::sheet::DataPilotFieldFilter>& rFilters) const;
 
     double getLeafResult(const css::sheet::DataPilotFieldFilter& rFilter) const;
 

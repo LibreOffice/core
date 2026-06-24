@@ -55,8 +55,8 @@ namespace
         BootstrapFixtureBase::setUp();
         OUString aURL = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/a2z.zip");
 
-        uno::Sequence<beans::NamedValue> aNVs{ { u"URL"_ustr, cpo::uno::Any(aURL) } };
-        uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(aNVs) };
+        cpo::uno::Sequence<beans::NamedValue> aNVs{ { u"URL"_ustr, cpo::uno::Any(aURL) } };
+        cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(aNVs) };
 
         uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
@@ -130,7 +130,7 @@ namespace
             {
                 sal_Int32 nSize = mxStrm->available();
 
-                uno::Sequence<sal_Int8> aBytes;
+                cpo::uno::Sequence<sal_Int8> aBytes;
                 while (nSize > 0)
                 {
                     sal_Int32 nBytesRead = mxStrm->readBytes(aBytes, 4096);
@@ -183,7 +183,7 @@ namespace
             CPPUNIT_ASSERT(xStrm.is());
             sal_Int32 nSize = xStrm->available();
 
-            uno::Sequence<sal_Int8> aBytes;
+            cpo::uno::Sequence<sal_Int8> aBytes;
             //Read chunks of increasing size
             nReadSize += 1024;
 
@@ -208,8 +208,8 @@ namespace
         // and have ZIP64 format "Data descriptor".
         OUString aURL2 = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/export64.zip");
 
-        uno::Sequence<beans::NamedValue> aNVs2{ { u"URL"_ustr, cpo::uno::Any(aURL2) } };
-        uno::Sequence<cpo::uno::Any> aArgs2{ cpo::uno::Any(aNVs2) };
+        cpo::uno::Sequence<beans::NamedValue> aNVs2{ { u"URL"_ustr, cpo::uno::Any(aURL2) } };
+        cpo::uno::Sequence<cpo::uno::Any> aArgs2{ cpo::uno::Any(aNVs2) };
 
         uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
         uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
@@ -234,7 +234,7 @@ namespace
         sal_Int32 nSize = xStrm->available();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1112), nSize);
 
-        uno::Sequence<sal_Int8> aBytes;
+        cpo::uno::Sequence<sal_Int8> aBytes;
         sal_Int32 nBytesRead = xStrm->readBytes(aBytes, nSize);
         const sal_Int8* p = aBytes.getArray();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1112), nBytesRead);

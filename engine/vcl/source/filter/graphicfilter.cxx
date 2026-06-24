@@ -106,7 +106,7 @@ class ImpFilterOutputStream : public ::cppu::WeakImplHelper< css::io::XOutputStr
 {
     SvStream&               mrStm;
 
-    virtual void SAL_CALL   writeBytes( const css::uno::Sequence< sal_Int8 >& rData ) override
+    virtual void SAL_CALL   writeBytes( const cpo::uno::Sequence< sal_Int8 >& rData ) override
         { mrStm.WriteBytes(rData.getConstArray(), rData.getLength()); }
     virtual void SAL_CALL   flush() override
         { mrStm.FlushBuffer(); }
@@ -1453,7 +1453,7 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
 }
 
 ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
-    sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
+    sal_uInt16 nFormat, const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
     SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
     ErrCode  nRetValue = ERRCODE_GRFILTER_FORMATERROR;
@@ -1475,7 +1475,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObje
 }
 
 ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_view rPath,
-    SvStream& rOStm, sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
+    SvStream& rOStm, sal_uInt16 nFormat, const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
     SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
     sal_uInt16 nFormatCount = GetExportFormatCount();
@@ -1743,7 +1743,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
 
                         css::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
                             css::xml::sax::Writer::create( xContext ), css::uno::UNO_QUERY_THROW);
-                        css::uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(
+                        cpo::uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(
                             aConfigItem.GetFilterData()) };
                         css::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
                             xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"com.sun.star.svg.SVGWriter"_ustr, aArguments, xContext),
@@ -1766,7 +1766,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
 
                                 xActiveDataSource->setOutputStream( css::uno::Reference< css::io::XOutputStream >(
                                     xStmIf, css::uno::UNO_QUERY ) );
-                                css::uno::Sequence< sal_Int8 > aMtfSeq( static_cast<sal_Int8 const *>(aMemStm.GetData()), aMemStm.Tell() );
+                                cpo::uno::Sequence< sal_Int8 > aMtfSeq( static_cast<sal_Int8 const *>(aMemStm.GetData()), aMemStm.Tell() );
                                 xSVGWriter->write( xSaxWriter, aMtfSeq );
                             }
                         }
@@ -1828,7 +1828,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
 
     sal_uInt16      nFormat = GRFILTER_FORMAT_DONTKNOW;
     OUString aShortName;
-    css::uno::Sequence< css::beans::PropertyValue > aFilterData;
+    cpo::uno::Sequence< css::beans::PropertyValue > aFilterData;
     switch( rData.mnFormat )
     {
         case ConvertDataFormat::BMP: aShortName = BMP_SHORTNAME; break;
@@ -1945,7 +1945,7 @@ ErrCode GraphicFilter::LoadGraphic(const OUString &rPath, const OUString &rFilte
 
 ErrCode GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream)
 {
-    css::uno::Sequence< css::beans::PropertyValue > aFilterData{ comphelper::makePropertyValue(
+    cpo::uno::Sequence< css::beans::PropertyValue > aFilterData{ comphelper::makePropertyValue(
         u"Compression"_ustr, sal_uInt32(9)) };
 
     sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName(u"PNG");

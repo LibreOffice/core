@@ -35,6 +35,7 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::form::runtime;
+    using namespace ::cpo::uno;
 
     OSingleFeatureDispatcher::OSingleFeatureDispatcher( URL _aFeatureURL, const sal_Int16 _nFormFeature,
             const Reference< XFormOperations >& _rxFormOperations, ::osl::Mutex& _rMutex )

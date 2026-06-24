@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::chart2::XAnyDescriptionAccess;
 using ::com::sun::star::chart::XComplexDescriptionAccess;
 using ::com::sun::star::chart::XChartData;
@@ -44,9 +44,9 @@ using ::com::sun::star::chart::XDateCategories;
 namespace
 {
 
-uno::Sequence< uno::Sequence< double > > lcl_getNANInsteadDBL_MIN( const uno::Sequence< uno::Sequence< double > >& rData )
+cpo::uno::Sequence< cpo::uno::Sequence< double > > lcl_getNANInsteadDBL_MIN( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rData )
 {
-    uno::Sequence< uno::Sequence< double > > aRet;
+    cpo::uno::Sequence< cpo::uno::Sequence< double > > aRet;
     const sal_Int32 nOuterSize = rData.getLength();
     aRet.realloc( nOuterSize );
     auto pRet = aRet.getArray();
@@ -66,9 +66,9 @@ uno::Sequence< uno::Sequence< double > > lcl_getNANInsteadDBL_MIN( const uno::Se
     return aRet;
 }
 
-uno::Sequence< uno::Sequence< double > > lcl_getDBL_MINInsteadNAN( const uno::Sequence< uno::Sequence< double > >& rData )
+cpo::uno::Sequence< cpo::uno::Sequence< double > > lcl_getDBL_MINInsteadNAN( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rData )
 {
-    uno::Sequence< uno::Sequence< double > > aRet;
+    cpo::uno::Sequence< cpo::uno::Sequence< double > > aRet;
     const sal_Int32 nOuterSize = rData.getLength();
     aRet.realloc( nOuterSize );
     auto pRet = aRet.getArray();
@@ -636,7 +636,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
 
     (void)DataSourceHelper::detectRangeSegmentation(
         xChartDoc,
@@ -646,7 +646,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
         bHasCategories = true;
 
     aRangeString = u"all"_ustr;
-    uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
+    cpo::uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 
     // -- locked controllers
@@ -694,7 +694,7 @@ bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ChartDataWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ChartDataWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartDataArray"_ustr,

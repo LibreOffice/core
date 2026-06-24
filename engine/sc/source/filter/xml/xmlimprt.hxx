@@ -177,12 +177,12 @@ public:
     ScXMLImport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlag,
-        const css::uno::Sequence< OUString > & sSupportedServiceNames = {});
+        const cpo::uno::Sequence< OUString > & sSupportedServiceNames = {});
 
     virtual ~ScXMLImport() noexcept override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<cpo::uno::Any>& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments ) override;
 
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
@@ -195,7 +195,7 @@ public:
     SvXMLImportContext *CreateBodyContext(
                                     const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
-    virtual void SetStatistics( const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
+    virtual void SetStatistics( const cpo::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
 
     ScDocumentImport& GetDoc();
 
@@ -242,9 +242,9 @@ public:
     ScXMLChangeTrackingImportHelper* GetChangeTrackingImportHelper();
     void InsertStyles();
 
-    void SetChangeTrackingViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& rChangeProps);
-    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
-    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
+    void SetChangeTrackingViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& rChangeProps);
+    virtual void SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper.get(); }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, std::u16string_view rCurrency);

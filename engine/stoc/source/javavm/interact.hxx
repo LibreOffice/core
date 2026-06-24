@@ -22,7 +22,7 @@
 
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -40,7 +40,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getRequest() override;
 
-    virtual css::uno::Sequence< css::uno::Reference<
+    virtual cpo::uno::Sequence< css::uno::Reference<
         css::task::XInteractionContinuation > > SAL_CALL
     getContinuations() override;
 
@@ -55,7 +55,7 @@ private:
     virtual ~InteractionRequest() override;
 
     cpo::uno::Any m_aRequest;
-    css::uno::Sequence< css::uno::Reference<
+    cpo::uno::Sequence< css::uno::Reference<
         css::task::XInteractionContinuation > > m_aContinuations;
     rtl::Reference< RetryContinuation > m_xRetryContinuation;
 };

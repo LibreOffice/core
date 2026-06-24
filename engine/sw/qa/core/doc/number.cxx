@@ -32,7 +32,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBadHeadingIndent)
     createSwDoc("bad-heading-indent.docx");
 
     // When marking that paragraph heading 1:
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"Style"_ustr, cpo::uno::Any(u"Heading 1"_ustr)),
         comphelper::makePropertyValue(u"FamilyName"_ustr, cpo::uno::Any(u"ParagraphStyles"_ustr)),
     };

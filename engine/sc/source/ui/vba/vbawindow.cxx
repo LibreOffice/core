@@ -172,7 +172,7 @@ public:
 
     }
 
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return comphelper::mapKeysToSequence( namesToIndices );
     }
@@ -199,7 +199,7 @@ ScVbaWindow::ScVbaWindow(
 }
 
 ScVbaWindow::ScVbaWindow(
-        const uno::Sequence< cpo::uno::Any >& args,
+        const cpo::uno::Sequence< cpo::uno::Any >& args,
         const uno::Reference< uno::XComponentContext >& xContext ) :
     WindowImpl_BASE( args, xContext ),
     m_xModel(dynamic_cast<ScModelObj*>(getXSomethingFromArgs< frame::XModel >( args, 1, false ).get()))
@@ -855,10 +855,10 @@ ScVbaWindow::getServiceImplName()
     return u"ScVbaWindow"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaWindow::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Window"_ustr
     };
@@ -867,7 +867,7 @@ ScVbaWindow::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaWindow_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaWindow(args, context));
 }

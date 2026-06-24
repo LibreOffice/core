@@ -22,7 +22,7 @@
 #include <unotools/searchopt.hxx>
 #include <tools/debug.hxx>
 #include <unotools/configitem.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.h>
 #include <osl/diagnose.h>
 #include <i18nutil/transliteration.hxx>
@@ -57,7 +57,7 @@ public:
     SvtSearchOptions_Impl();
     virtual ~SvtSearchOptions_Impl() override;
 
-    virtual void    Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void    Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
     bool            GetFlag( sal_uInt16 nOffset ) const;
     void            SetFlag( sal_uInt16 nOffset, bool bVal );

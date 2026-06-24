@@ -298,7 +298,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
     mpModel->SetChanged();
 }
 
-void SvxDrawPage::sort( const css::uno::Sequence< sal_Int32 >& sortOrder )
+void SvxDrawPage::sort( const cpo::uno::Sequence< sal_Int32 >& sortOrder )
 {
     SolarMutexGuard aGuard;
 
@@ -831,9 +831,9 @@ bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aSeq { u"com.sun.star.drawing.ShapeCollection"_ustr };
+    cpo::uno::Sequence<OUString> aSeq { u"com.sun.star.drawing.ShapeCollection"_ustr };
     return aSeq;
 }
 

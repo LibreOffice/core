@@ -30,6 +30,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::io;
 using namespace css::graphic;
+using namespace ::cpo::uno;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DContainer;
 using drawinglayer::primitive2d::Primitive2DReference;
@@ -1363,7 +1364,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBehaviourWhenWidthAndHeightIsOrIsNotSet)
 
         geometry::RealRectangle2D aRealRect;
         basegfx::B2DRange aRange;
-        uno::Sequence<beans::PropertyValue> aViewParameters;
+        cpo::uno::Sequence<beans::PropertyValue> aViewParameters;
 
         for (css::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aSequence)
         {
@@ -1388,7 +1389,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBehaviourWhenWidthAndHeightIsOrIsNotSet)
 
         geometry::RealRectangle2D aRealRect;
         basegfx::B2DRange aRange;
-        uno::Sequence<beans::PropertyValue> aViewParameters;
+        cpo::uno::Sequence<beans::PropertyValue> aViewParameters;
 
         for (css::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aSequence)
         {

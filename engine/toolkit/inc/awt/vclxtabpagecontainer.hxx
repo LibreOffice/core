@@ -59,7 +59,7 @@ public:
     virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
 
     // css::beans::XPropertiesChangeListener
-    virtual void SAL_CALL propertiesChange( const ::css::uno::Sequence< ::css::beans::PropertyChangeEvent >& aEvent ) override;
+    virtual void SAL_CALL propertiesChange( const ::cpo::uno::Sequence< ::css::beans::PropertyChangeEvent >& aEvent ) override;
 
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;

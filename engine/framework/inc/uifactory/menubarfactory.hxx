@@ -50,17 +50,17 @@ typedef ::cppu::WeakImplHelper<
                 return cppu::supportsService(this, ServiceName);
             }
 
-            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+            virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
             {
-                css::uno::Sequence< OUString > aSeq { u"com.sun.star.ui.UIElementFactory"_ustr };
+                cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.ui.UIElementFactory"_ustr };
                 return aSeq;
             }
 
             // XUIElementFactory
-            virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) override;
+            virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 
             static void CreateUIElement(const OUString& ResourceURL
-                        ,const css::uno::Sequence< css::beans::PropertyValue >& Args
+                        ,const cpo::uno::Sequence< css::beans::PropertyValue >& Args
                         ,std::u16string_view ResourceType
                         ,const css::uno::Reference< css::ui::XUIElement >& _xMenuBar
                         ,const css::uno::Reference< css::uno::XComponentContext >& _rxContext);

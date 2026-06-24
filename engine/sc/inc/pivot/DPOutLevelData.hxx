@@ -22,7 +22,7 @@
 #include <tools/long.hxx>
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
 
 struct ScDPOutLevelData
@@ -32,7 +32,7 @@ struct ScDPOutLevelData
     tools::Long mnLevel;
     tools::Long mnDimPos;
     sal_uInt32 mnSrcNumFmt; /// Prevailing number format used in the source data.
-    css::uno::Sequence<css::sheet::MemberResult> maResult;
+    cpo::uno::Sequence<css::sheet::MemberResult> maResult;
     OUString maName; /// Name is the internal field name.
     OUString maCaption; /// Caption is the name visible in the output table.
     bool mbHasHiddenMember : 1;
@@ -40,7 +40,7 @@ struct ScDPOutLevelData
     bool mbPageDim : 1;
 
     ScDPOutLevelData(tools::Long nDim, tools::Long nHier, tools::Long nLevel, tools::Long nDimPos,
-                     sal_uInt32 nSrcNumFmt, const css::uno::Sequence<css::sheet::MemberResult>& aResult,
+                     sal_uInt32 nSrcNumFmt, const cpo::uno::Sequence<css::sheet::MemberResult>& aResult,
                      OUString aName, OUString aCaption, bool bHasHiddenMember, bool bDataLayout,
                      bool bPageDim)
         : mnDim(nDim)

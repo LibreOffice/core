@@ -192,7 +192,7 @@ bool UseODFWholesomeEncryption(SvtSaveOptions::ODFSaneDefaultVersion const nODFV
 
 } // namespace sfx2
 
-bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
+bool GetEncryptionData_Impl( const SfxItemSet* pSet, cpo::uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
     bool bResult = false;
     if ( pSet )
@@ -351,7 +351,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     }
 
     // the default values, that should be used for ODF1.1 and older formats
-    uno::Sequence< beans::NamedValue > aEncryptionAlgs
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionAlgs
     {
         { u"StartKeyGenerationAlgorithm"_ustr, cpo::uno::Any(xml::crypto::DigestID::SHA1) },
         { u"EncryptionAlgorithm"_ustr, cpo::uno::Any(xml::crypto::CipherID::BLOWFISH_CFB_8) },
@@ -524,7 +524,7 @@ bool SfxObjectShell::DoInitNew()
 
 bool SfxObjectShell::ImportFromGeneratedStream_Impl(
                     const uno::Reference< io::XStream >& xStream,
-                    const uno::Sequence< beans::PropertyValue >& rMediaDescr )
+                    const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescr )
 {
     if ( !xStream.is() )
         return false;
@@ -1464,7 +1464,7 @@ bool SfxObjectShell::SaveTo_Impl
 
     rtl::Reference< comphelper::UNOMemoryStream > xODFDecryptedInnerPackageStream;
     uno::Reference<embed::XStorage> xODFDecryptedInnerPackage;
-    uno::Sequence<beans::NamedValue> aEncryptionData;
+    cpo::uno::Sequence<beans::NamedValue> aEncryptionData;
     if (GetEncryptionData_Impl(&rMedium.GetItemSet(), aEncryptionData))
     {
         assert(aEncryptionData.getLength() != 0);
@@ -1947,7 +1947,7 @@ bool SfxObjectShell::SaveTo_Impl
                         xTargetMetaInf->dispose();
 
                         // now check the copied signature
-                        uno::Sequence< security::DocumentSignatureInformation > aInfos =
+                        cpo::uno::Sequence< security::DocumentSignatureInformation > aInfos =
                             xDDSigns->verifyScriptingContentSignatures( xTarget,
                                                                         uno::Reference< io::XInputStream >() );
                         SignatureState nState = DocumentSignatures::getSignatureState(aInfos);
@@ -2517,7 +2517,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
     uno::Reference < lang::XMultiServiceFactory > xFilterFact (
                 xMan->createInstance( u"com.sun.star.document.FilterFactory"_ustr ), uno::UNO_QUERY );
 
-    uno::Sequence < beans::PropertyValue > aProps;
+    cpo::uno::Sequence < beans::PropertyValue > aProps;
     uno::Reference < container::XNameAccess > xFilters ( xFilterFact, uno::UNO_QUERY );
     if ( xFilters->hasByName( aFilterName ) )
     {
@@ -2536,7 +2536,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
     {
         try
         {
-            xLoader.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < cpo::uno::Any >() ), uno::UNO_QUERY );
+            xLoader.set( xFilterFact->createInstanceWithArguments( aFilterName, cpo::uno::Sequence < cpo::uno::Any >() ), uno::UNO_QUERY );
         }
         catch(const uno::Exception&)
         {
@@ -2571,7 +2571,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             // #i119492# During loading, some OLE objects like chart will be set
             // modified flag, so needs to reset the flag to false after loading
             bool bRtn = xLoader->filter(aArgs.getAsConstPropertyValueList());
-            const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+            const cpo::uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
             for ( const auto& rName : aNames )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
@@ -2671,7 +2671,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         uno::Reference < lang::XMultiServiceFactory > xFilterFact (
                 xMan->createInstance( u"com.sun.star.document.FilterFactory"_ustr ), uno::UNO_QUERY );
 
-        uno::Sequence < beans::PropertyValue > aProps;
+        cpo::uno::Sequence < beans::PropertyValue > aProps;
         uno::Reference < container::XNameAccess > xFilters ( xFilterFact, uno::UNO_QUERY );
         if ( xFilters->hasByName( aFilterName ) )
             xFilters->getByName( aFilterName ) >>= aProps;
@@ -2686,7 +2686,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         {
             try
             {
-                xExporter.set( xFilterFact->createInstanceWithArguments( aFilterName, uno::Sequence < cpo::uno::Any >() ), uno::UNO_QUERY );
+                xExporter.set( xFilterFact->createInstanceWithArguments( aFilterName, cpo::uno::Sequence < cpo::uno::Any >() ), uno::UNO_QUERY );
             }
             catch(const uno::Exception&)
             {
@@ -2963,7 +2963,7 @@ bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
 
 bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName,
                                        SfxItemSet& rItemSet,
-                                       const uno::Sequence<beans::PropertyValue>& rArgs)
+                                       const cpo::uno::Sequence<beans::PropertyValue>& rArgs)
 {
     if( aURL.HasError() )
     {
@@ -3111,7 +3111,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
 
 bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString& aFilterName,
                                       SfxItemSet const& rItemSet,
-                                      const uno::Sequence<beans::PropertyValue>& rArgs)
+                                      const cpo::uno::Sequence<beans::PropertyValue>& rArgs)
 {
     // copy all items stored in the itemset of the current medium
     std::shared_ptr<SfxAllItemSet> xMergedParams = std::make_shared<SfxAllItemSet>( pMedium->GetItemSet() );
@@ -3126,7 +3126,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
             = xMergedParams->GetItem<SfxUnoAnyItem>(SID_ENCRYPTIONDATA, false);
         if (pEncryptionDataItem)
         {
-            uno::Sequence<beans::NamedValue> aEncryptionData;
+            cpo::uno::Sequence<beans::NamedValue> aEncryptionData;
             pEncryptionDataItem->GetValue() >>= aEncryptionData;
             for (const auto& rItem : aEncryptionData)
             {
@@ -3199,7 +3199,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
 
         if (aFilterName == "writer_pdf_Export")
         {
-            uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions(2);
+            cpo::uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions(2);
             auto pSaveToFilterDataOptions = aSaveToFilterDataOptions.getArray();
             bool bRet = false;
 
@@ -3428,7 +3428,7 @@ bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
             // note: this could be needed in case no interaction handler is
             // provided (which CheckPasswd_Impl needs) but a password item is,
             // but it could be done in a better way
-            uno::Sequence< beans::NamedValue > aEncryptionData;
+            cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
             if ( GetEncryptionData_Impl(&pMedium->GetItemSet(), aEncryptionData) )
             {
                 try
@@ -3565,12 +3565,12 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SfxObjectCreateMode::EMBEDDED == eCreateMode,AutoSaveEvent,xStorage);
     }
 
-    uno::Sequence<OUString> aExceptions;
+    cpo::uno::Sequence<OUString> aExceptions;
     if (const SfxBoolItem* pNoEmbDS = rMedium.GetItemSet().GetItem(SID_NO_EMBEDDED_DS, false))
     {
         // Don't save data source in case a temporary is being saved for preview in MM wizard
         if (pNoEmbDS->GetValue())
-            aExceptions = uno::Sequence<OUString>{ u"EmbeddedDatabase"_ustr };
+            aExceptions = cpo::uno::Sequence<OUString>{ u"EmbeddedDatabase"_ustr };
     }
 
     return CopyStoragesOfUnknownMediaType(GetStorage(), xStorage, aExceptions);
@@ -3582,7 +3582,7 @@ bool SfxObjectShell::SaveCompletedChildren()
 
     if ( pImpl->mxObjectContainer )
     {
-        const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        const cpo::uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
         for ( const auto& rName : aNames )
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
@@ -3689,7 +3689,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
 
     try
     {
-        const uno::Sequence< OUString > aSubElements = xSource->getElementNames();
+        const cpo::uno::Sequence< OUString > aSubElements = xSource->getElementNames();
         for ( const auto& rSubElement : aSubElements )
         {
             if ( xSource->isStorageElement( rSubElement ) )
@@ -3804,7 +3804,7 @@ bool SfxObjectShell::SwitchPersistence( const uno::Reference< embed::XStorage >&
 
 bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed::XStorage >& xSource,
                                                     const uno::Reference< embed::XStorage >& xTarget,
-                                                    const uno::Sequence<OUString>& rExceptions)
+                                                    const cpo::uno::Sequence<OUString>& rExceptions)
 {
     if (!xSource.is())
     {
@@ -3817,7 +3817,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed:
 
     try
     {
-        const css::uno::Sequence<OUString> aSubElementNames = xSource->getElementNames();
+        const cpo::uno::Sequence<OUString> aSubElementNames = xSource->getElementNames();
         for (const OUString& rSubElement : aSubElementNames)
         {
             if (std::find(rExceptions.begin(), rExceptions.end(), rSubElement) != rExceptions.end())

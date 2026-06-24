@@ -49,7 +49,7 @@ public:
     virtual void SAL_CALL removeForbiddenCharacters( const css::lang::Locale& rLocale ) override final;
 
     // XSupportedLocales
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override final;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getLocales(  ) override final;
     virtual bool SAL_CALL hasLocale( const css::lang::Locale& aLocale ) override final;
 };
 

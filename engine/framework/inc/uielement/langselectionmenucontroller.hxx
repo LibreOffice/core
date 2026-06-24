@@ -39,7 +39,7 @@ namespace framework
             /* interface XServiceInfo */
             virtual OUString SAL_CALL getImplementationName() override;
             virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
             // XPopupMenuController
             virtual void SAL_CALL updatePopupMenu() override;
@@ -52,7 +52,7 @@ namespace framework
 
         private:
             // XInitialization
-            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
             virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
             enum Mode

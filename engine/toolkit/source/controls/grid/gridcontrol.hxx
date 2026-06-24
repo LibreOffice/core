@@ -66,7 +66,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"stardiv.Toolkit.GridControlModel"_ustr; }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         auto s(UnoControlModel::getSupportedServiceNames());
         s.realloc(s.getLength() + 1);
@@ -107,7 +107,7 @@ public:
     virtual void SAL_CALL selectAllRows() override;
     virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) override;
     virtual void SAL_CALL deselectAllRows() override;
-    virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() override;
+    virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() override;
     virtual bool SAL_CALL hasSelectedRows() override;
     virtual bool SAL_CALL isRowSelected(::sal_Int32 index) override;
     virtual void SAL_CALL addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
@@ -117,7 +117,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"stardiv.Toolkit.GridControl"_ustr; }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         auto s(UnoControlBase::getSupportedServiceNames());
         s.realloc(s.getLength() + 1);

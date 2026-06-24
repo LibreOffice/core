@@ -34,7 +34,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
-
+using namespace ::cpo::uno;
 using ::com::sun::star::security::XCertificateExtension ;
 
 
@@ -52,16 +52,16 @@ bool SAL_CALL SanExtensionImpl::isCritical() {
     return m_critical ;
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() {
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() {
     return m_xExtnId ;
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionValue() {
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionValue() {
     return m_xExtnValue ;
 }
 
 //Methods from XSanExtension
-css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames(){
+cpo::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames(){
 
     if (!m_Entries.hasElements())
     {

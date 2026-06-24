@@ -201,15 +201,15 @@ bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
 {
     return { u"com.sun.star.graphic.GraphicDescriptor"_ustr };
 }
 
 
-uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
 {
-    static const uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< uno::Type > aTypes {
         cppu::UnoType<uno::XAggregation>::get(),
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
@@ -219,9 +219,9 @@ uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
     return aTypes;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 

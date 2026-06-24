@@ -32,11 +32,11 @@ class OInputSeekStream final : public OInputSeekStream_BASE
 public:
     OInputSeekStream( OWriteStream_Impl& pImpl,
                       css::uno::Reference < css::io::XInputStream > const & xStream,
-                      const css::uno::Sequence< css::beans::PropertyValue >& aProps,
+                      const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
     OInputSeekStream( css::uno::Reference < css::io::XInputStream > const & xStream,
-                      const css::uno::Sequence< css::beans::PropertyValue >& aProps,
+                      const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
     virtual ~OInputSeekStream() override;

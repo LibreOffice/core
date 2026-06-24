@@ -66,7 +66,7 @@ namespace scripting_protocolhandler
 {
 
 void SAL_CALL ScriptProtocolHandler::initialize(
-    const css::uno::Sequence < cpo::uno::Any >& aArguments )
+    const cpo::uno::Sequence < cpo::uno::Any >& aArguments )
 {
     if ( m_bInitialised )
     {
@@ -418,7 +418,7 @@ Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_ScriptProtocolHandler_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScriptProtocolHandler(context));
 }

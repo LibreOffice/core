@@ -111,7 +111,7 @@ using namespace ::formula;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -123,7 +123,7 @@ Calc_XMLOasisImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisMetaImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -135,7 +135,7 @@ Calc_XMLOasisMetaImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisStylesImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -147,19 +147,19 @@ Calc_XMLOasisStylesImporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisContentImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ScXMLImport(
         context,
         u"com.sun.star.comp.Calc.XMLOasisContentImporter"_ustr,
         SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS,
-        uno::Sequence< OUString > { u"com.sun.star.comp.Calc.XMLOasisContentImporter"_ustr }));
+        cpo::uno::Sequence< OUString > { u"com.sun.star.comp.Calc.XMLOasisContentImporter"_ustr }));
 }
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_XMLOasisSettingsImporter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
         new ScXMLImport(
@@ -347,7 +347,7 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
 ScXMLImport::ScXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlag,
-    const css::uno::Sequence< OUString > & sSupportedServiceNames)
+    const cpo::uno::Sequence< OUString > & sSupportedServiceNames)
 :   SvXMLImport( rContext, implementationName, nImportFlag, sSupportedServiceNames ),
     mpDoc( nullptr ),
     mpPostProcessData(nullptr),
@@ -395,7 +395,7 @@ ScXMLImport::~ScXMLImport() noexcept
     moSolarMutexGuard.reset();
 }
 
-void ScXMLImport::initialize( const css::uno::Sequence<cpo::uno::Any>& aArguments )
+void ScXMLImport::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments )
 {
     SvXMLImport::initialize(aArguments);
 
@@ -468,7 +468,7 @@ SvXMLImportContext *ScXMLImport::CreateScriptContext()
     return pContext;
 }
 
-void ScXMLImport::SetStatistics(const uno::Sequence<beans::NamedValue> & i_rStats)
+void ScXMLImport::SetStatistics(const cpo::uno::Sequence<beans::NamedValue> & i_rStats)
 {
     static const char* const s_stats[] =
     { "TableCount", "CellCount", "ObjectCount", nullptr };
@@ -608,7 +608,7 @@ void ScXMLImport::ExamineDefaultStyle()
     }
 }
 
-void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& rChangeProps)
+void ScXMLImport::SetChangeTrackingViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& rChangeProps)
 {
     if (!mpDoc)
         return;
@@ -688,7 +688,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const css::uno::Sequence<css::be
     mpDoc->SetChangeViewSettings(aViewSettings);
 }
 
-void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aViewProps)
+void ScXMLImport::SetViewSettings(const cpo::uno::Sequence<beans::PropertyValue>& aViewProps)
 {
     sal_Int32 nHeight(0);
     sal_Int32 nLeft(0);
@@ -707,7 +707,7 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
             rViewProp.Value >>= nWidth;
         else if (sName == "TrackedChangesViewSettings")
         {
-            uno::Sequence<beans::PropertyValue> aChangeProps;
+            cpo::uno::Sequence<beans::PropertyValue> aChangeProps;
             if(rViewProp.Value >>= aChangeProps)
                 SetChangeTrackingViewSettings(aChangeProps);
         }
@@ -729,14 +729,14 @@ void ScXMLImport::SetViewSettings(const uno::Sequence<beans::PropertyValue>& aVi
     }
 }
 
-void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyValue>& aConfigProps)
+void ScXMLImport::SetConfigurationSettings(const cpo::uno::Sequence<beans::PropertyValue>& aConfigProps)
 {
     rtl::Reference<ScModelObj> xMultiServiceFactory(GetScModel());
     if (!xMultiServiceFactory.is())
         return;
 
     sal_Int32 nCount(aConfigProps.getLength());
-    css::uno::Sequence<css::beans::PropertyValue> aFilteredProps(nCount);
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilteredProps(nCount);
     auto pFilteredProps = aFilteredProps.getArray();
     sal_Int32 nFilteredPropsLen = 0;
     for (sal_Int32 i = nCount - 1; i >= 0; --i)
@@ -746,7 +746,7 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
             OUString sKey;
             if (aConfigProps[i].Value >>= sKey)
             {
-                uno::Sequence<sal_Int8> aPass;
+                cpo::uno::Sequence<sal_Int8> aPass;
                 ::comphelper::Base64::decode(aPass, sKey);
                 if (mpDoc && aPass.hasElements())
                 {
@@ -825,7 +825,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, std::u16string_vi
                 OUString sErrorMessage ="Error in Formatstring " +
                     sFormatString + " at position " +
                     OUString::number(rException.CheckPos);
-                uno::Sequence<OUString> aSeq { sErrorMessage };
+                cpo::uno::Sequence<OUString> aSeq { sErrorMessage };
                 uno::Reference<xml::sax::XLocator> xLocator;
                 SetError(XMLERROR_API | XMLERROR_FLAG_ERROR, aSeq, rException.Message, xLocator);
             }
@@ -994,7 +994,7 @@ void ScXMLImport::SetStyleToRanges()
                 }
 
                 // store first cell of first range for each style, once per sheet
-                uno::Sequence<table::CellRangeAddress> aAddresses(mxSheetCellRanges->getRangeAddresses());
+                cpo::uno::Sequence<table::CellRangeAddress> aAddresses(mxSheetCellRanges->getRangeAddresses());
                 pStyle->ApplyCondFormat(aAddresses);
                 if ( aAddresses.hasElements() )
                 {
@@ -1358,7 +1358,7 @@ void SAL_CALL ScXMLImport::endDocument()
             uno::Reference<container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
             if (xIndexAccess.is() && xIndexAccess->getCount() > 0)
             {
-                uno::Sequence< beans::PropertyValue > aSeq;
+                cpo::uno::Sequence< beans::PropertyValue > aSeq;
                 if (xIndexAccess->getByIndex(0) >>= aSeq)
                 {
                     for (const auto& rProp : aSeq)
@@ -1682,7 +1682,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
     uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
-    css::uno::Sequence<OUString> aUserData
+    cpo::uno::Sequence<OUString> aUserData
     {
         u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
         u""_ustr,
@@ -1692,17 +1692,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODS(SvStream &rStream)
         u""_ustr,
         u"true"_ustr
     };
-    uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
         { "UserData", cpo::uno::Any(aUserData) },
     }));
-    css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
+    cpo::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);
 
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "InputStream", cpo::uno::Any(xStream) },
         { "URL", cpo::uno::Any(u"private:stream"_ustr) },
@@ -1736,7 +1736,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
     uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
-    css::uno::Sequence<OUString> aUserData
+    cpo::uno::Sequence<OUString> aUserData
     {
         u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
         u""_ustr,
@@ -1746,17 +1746,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
         u""_ustr,
         u"true"_ustr
     };
-    uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
         { "UserData", cpo::uno::Any(aUserData) },
     }));
-    css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
+    cpo::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);
 
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "InputStream", cpo::uno::Any(xStream) },
         { "URL", cpo::uno::Any(u"private:stream"_ustr) },
@@ -1783,9 +1783,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODSExportXLS(SvStream &rStream)
 
         uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
 
-        uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
         }));
-        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
             { "FilterName", cpo::uno::Any(u"Excel 2010–365 Spreadsheet"_ustr) },
             { "OutputStream", cpo::uno::Any(xOutputStream) },
             { "FilterData", cpo::uno::Any(aFilterData) }
@@ -1813,7 +1813,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLSX(SvStream &rStream)
     uno::Reference<document::XFilter> xFilter(xMultiServiceFactory->createInstance(u"com.sun.star.comp.oox.xls.ExcelFilter"_ustr), uno::UNO_QUERY_THROW);
 
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "InputStream", cpo::uno::Any(xStream) },
         { "InputMode", cpo::uno::Any(true) },

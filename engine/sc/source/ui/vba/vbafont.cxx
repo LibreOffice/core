@@ -316,10 +316,10 @@ ScVbaFont::getServiceImplName()
     return u"ScVbaFont"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaFont::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Font"_ustr
     };

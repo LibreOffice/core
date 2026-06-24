@@ -691,7 +691,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     OUString sAlg;
     if ( eLang != LANGUAGE_SYSTEM )
     {
-        uno::Sequence<OUString> aAlgos = m_oColWrap->listCollatorAlgorithms(
+        cpo::uno::Sequence<OUString> aAlgos = m_oColWrap->listCollatorAlgorithms(
                 aNewSortData.aCollatorLocale );
         const int nSel = m_xLbAlgorithm->get_active();
         if ( nSel < aAlgos.getLength() )
@@ -881,7 +881,7 @@ void ScTabPageSortOptions::FillAlgor()
     else
     {
         lang::Locale aLocale( LanguageTag::convertToLocale( eLang ));
-        const uno::Sequence<OUString> aAlgos = m_oColWrap->listCollatorAlgorithms( aLocale );
+        const cpo::uno::Sequence<OUString> aAlgos = m_oColWrap->listCollatorAlgorithms( aLocale );
 
         nCount = aAlgos.getLength();
         for (const OUString& sAlg : aAlgos)

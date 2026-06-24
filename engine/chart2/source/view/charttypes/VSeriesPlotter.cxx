@@ -97,7 +97,7 @@ using namespace ::com::sun::star::chart;
 using namespace ::com::sun::star::chart2;
 using namespace ::chart::DataSeriesProperties;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 VDataSeriesGroup::CachedYValues::CachedYValues()
         : m_bValuesDirty(true)
@@ -778,7 +778,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
 namespace
 {
 double lcl_getErrorBarLogicLength(
-    const uno::Sequence< double > & rData,
+    const cpo::uno::Sequence< double > & rData,
     const uno::Reference< beans::XPropertySet >& xProp,
     sal_Int32 nErrorBarStyle,
     sal_Int32 nIndex,
@@ -996,7 +996,7 @@ void VSeriesPlotter::createErrorBar(
         drawing::Position3D aNegative(aMiddle);
         drawing::Position3D aPositive(aMiddle);
 
-        uno::Sequence< double > aData( bYError ? rVDataSeries.getAllY() : rVDataSeries.getAllX() );
+        cpo::uno::Sequence< double > aData( bYError ? rVDataSeries.getAllY() : rVDataSeries.getAllX() );
 
         if( bShowPositive )
         {
@@ -1186,8 +1186,8 @@ void VSeriesPlotter::createErrorRectangle(
         double fScaledX = fX;
         m_pPosHelper->doLogicScaling( &fScaledX, nullptr, nullptr );
 
-        const uno::Sequence< double >& aDataX( rVDataSeries.getAllX() );
-        const uno::Sequence< double >& aDataY( rVDataSeries.getAllY() );
+        const cpo::uno::Sequence< double >& aDataX( rVDataSeries.getAllX() );
+        const cpo::uno::Sequence< double >& aDataY( rVDataSeries.getAllY() );
 
         double fPosX = 0.0;
         double fPosY = 0.0;
@@ -1375,7 +1375,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
             xScalingY.set( aScales[1].Scaling );
         }
 
-        const uno::Sequence< geometry::RealPoint2D > aCalculatedPoints(
+        const cpo::uno::Sequence< geometry::RealPoint2D > aCalculatedPoints(
             xCalculator->getCurveValues(
                             fMinX, fMaxX, nPointCount,
                             xScalingX, xScalingY, bMaySkipPoints ));
@@ -2295,7 +2295,7 @@ std::vector<VDataSeries*> VSeriesPlotter::getAllSeries()
     return aAllSeries;
 }
 
-uno::Sequence<OUString> VSeriesPlotter::getSeriesNames() const
+cpo::uno::Sequence<OUString> VSeriesPlotter::getSeriesNames() const
 {
     std::vector<OUString> aRetVector;
 
@@ -2323,7 +2323,7 @@ uno::Sequence<OUString> VSeriesPlotter::getSeriesNames() const
     return comphelper::containerToSequence( aRetVector );
 }
 
-uno::Sequence<OUString> VSeriesPlotter::getAllSeriesNames() const
+cpo::uno::Sequence<OUString> VSeriesPlotter::getAllSeriesNames() const
 {
     std::vector<OUString> aRetVector;
 

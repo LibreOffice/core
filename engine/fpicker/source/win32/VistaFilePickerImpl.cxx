@@ -384,8 +384,8 @@ void VistaFilePickerImpl::impl_sta_appendFilter(Request& rRequest)
 
 void VistaFilePickerImpl::impl_sta_appendFilterGroup(Request& rRequest)
 {
-    const css::uno::Sequence< css::beans::StringPair > aFilterGroup  =
-        rRequest.getArgumentOrDefault(PROP_FILTER_GROUP, css::uno::Sequence< css::beans::StringPair >());
+    const cpo::uno::Sequence< css::beans::StringPair > aFilterGroup  =
+        rRequest.getArgumentOrDefault(PROP_FILTER_GROUP, cpo::uno::Sequence< css::beans::StringPair >());
 
     if ( m_lFilters.numFilter() > 0 && aFilterGroup.getLength() > 0 )
         m_lFilters.addFilter( STRING_SEPARATOR, "", true );
@@ -464,7 +464,7 @@ void VistaFilePickerImpl::impl_sta_InitDialog(Request& rRequest, DWORD nOrFlags)
     {
         css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xWindow,css::uno::UNO_QUERY);
         if(xSysDepWin.is()) {
-            css::uno::Sequence<sal_Int8> aProcessIdent(16);
+            cpo::uno::Sequence<sal_Int8> aProcessIdent(16);
             rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
             cpo::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,css::lang::SystemDependent::SYSTEM_WIN32);
             sal_Int64 tmp = 0;

@@ -839,7 +839,7 @@ namespace
     //what ui language will be selected by default if the user override of General::UILocale is unset ?
     LanguageTag GetInstalledLocaleForSystemUILanguage()
     {
-        css::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
+        cpo::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
         return LanguageTag(getInstalledLocaleForSystemUILanguage(inst, false)).makeFallback();
     }
 }

@@ -203,7 +203,7 @@ bool SAL_CALL AccessibleImageBullet::supportsService (const OUString& sServiceNa
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL AccessibleImageBullet::getSupportedServiceNames()
 {
     return { u"com.sun.star.accessibility.AccessibleContext"_ustr };
 }

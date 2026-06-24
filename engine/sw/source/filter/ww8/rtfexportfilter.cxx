@@ -39,7 +39,7 @@ RtfExportFilter::RtfExportFilter(uno::Reference<uno::XComponentContext> xCtx)
 
 RtfExportFilter::~RtfExportFilter() = default;
 
-bool RtfExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
+bool RtfExportFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& aDescriptor)
 {
     comphelper::SequenceAsHashMap aMediaDesc = aDescriptor;
     uno::Reference<io::XStream> xStream = aMediaDesc.getUnpackedValueOrDefault(
@@ -107,7 +107,7 @@ bool RtfExportFilter::supportsService(OUString const& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> RtfExportFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> RtfExportFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.Writer.RtfExport"_ustr };
 }
@@ -115,8 +115,8 @@ css::uno::Sequence<OUString> RtfExportFilter::getSupportedServiceNames()
 // UNO helpers
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
-com_sun_star_comp_Writer_RtfExport_get_implementation(uno::XComponentContext* pCtx,
-                                                      uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+com_sun_star_comp_Writer_RtfExport_get_implementation(
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new RtfExportFilter(pCtx));
 }

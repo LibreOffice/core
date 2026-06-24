@@ -280,7 +280,7 @@ Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_CmdMailSuppl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CmdMailSuppl(context));
 }

@@ -176,10 +176,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderDisable)
     pStream->WriteOString("{\\rtf1 paste}");
     pStream->Seek(0);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
-                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
-                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
-                                                             xBodyEnd) };
+    cpo::uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                                    comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                                    comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                                  xBodyEnd) };
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 
     // Then make sure the header stays on:
@@ -211,10 +211,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteHeaderEmptied)
     pStream->WriteOString("{\\rtf1 paste}");
     pStream->Seek(0);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
-                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
-                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
-                                                             xBodyEnd) };
+    cpo::uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                                    comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                                    comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                                  xBodyEnd) };
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 
     // Then make sure the header retains its contents:

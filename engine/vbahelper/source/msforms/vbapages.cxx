@@ -51,10 +51,10 @@ ScVbaPages::createEnumeration()
     return uno::Reference< container::XEnumeration >();
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaPages::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msform.Pages"_ustr
     };

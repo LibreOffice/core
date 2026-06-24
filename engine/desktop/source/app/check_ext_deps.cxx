@@ -129,7 +129,7 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
     bool bApprove = true;
 
     // We approve everything here
-    uno::Sequence< Reference< task::XInteractionContinuation > > conts( xRequest->getContinuations() );
+    cpo::uno::Sequence< Reference< task::XInteractionContinuation > > conts( xRequest->getContinuations() );
     Reference< task::XInteractionContinuation > const * pConts = conts.getConstArray();
     sal_Int32 len = conts.getLength();
 
@@ -192,7 +192,7 @@ constexpr OUString aAccessSrvc = u"com.sun.star.configuration.ConfigurationUpdat
 
 static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext > &xContext )
 {
-    uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
+    cpo::uno::Sequence< cpo::uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
     uno::Reference< deployment::XExtensionManager > xExtensionManager = deployment::ExtensionManager::get( xContext );
 
     if ( !xExtensionManager.is() )
@@ -220,7 +220,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
     sal_Int32 const nMax = 2;
 #endif
 
-    for (uno::Sequence<uno::Reference<deployment::XPackage>> const& xPackageList : xAllPackages)
+    for (cpo::uno::Sequence<uno::Reference<deployment::XPackage>> const& xPackageList : xAllPackages)
     {
         for ( sal_Int32 j = 0; (j<nMax) && (j < xPackageList.getLength()); ++j )
         {

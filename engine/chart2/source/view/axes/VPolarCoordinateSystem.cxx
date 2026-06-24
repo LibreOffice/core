@@ -42,10 +42,10 @@ VPolarCoordinateSystem::~VPolarCoordinateSystem()
 }
 
 //better performance for big data
-uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution(
+cpo::uno::Sequence< sal_Int32 > VPolarCoordinateSystem::getCoordinateSystemResolution(
             const awt::Size& rPageSize, const awt::Size& rPageResolution )
 {
-    uno::Sequence< sal_Int32 > aResolution( VCoordinateSystem::getCoordinateSystemResolution( rPageSize, rPageResolution) );
+    cpo::uno::Sequence< sal_Int32 > aResolution( VCoordinateSystem::getCoordinateSystemResolution( rPageSize, rPageResolution) );
 
     if( aResolution.getLength() >= 2 )
     {

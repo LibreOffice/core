@@ -64,7 +64,7 @@ using namespace ucbhelper;
 namespace {
 
 bool fillPlaceholders(OUString const & rInput,
-                      uno::Sequence< cpo::uno::Any > const & rReplacements,
+                      cpo::uno::Sequence< cpo::uno::Any > const & rReplacements,
                       OUString * pOutput)
 {
     sal_Unicode const * p = rInput.getStr();
@@ -288,7 +288,7 @@ bool SAL_CALL UniversalContentBroker::supportsService( const OUString& ServiceNa
 {
     return cppu::supportsService( this, ServiceName );
 }
-css::uno::Sequence< OUString > SAL_CALL UniversalContentBroker::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UniversalContentBroker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.UniversalContentBroker"_ustr };
 }
@@ -296,7 +296,7 @@ css::uno::Sequence< OUString > SAL_CALL UniversalContentBroker::getSupportedServ
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UniversalContentBroker_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UniversalContentBroker(context));
 }
@@ -306,7 +306,7 @@ ucb_UniversalContentBroker_get_implementation(
 
 
 // virtual
-void SAL_CALL UniversalContentBroker::initialize( const css::uno::Sequence< Any >& aArguments )
+void SAL_CALL UniversalContentBroker::initialize( const cpo::uno::Sequence< Any >& aArguments )
 {
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -420,14 +420,14 @@ void SAL_CALL UniversalContentBroker::deregisterContentProvider(
 
 
 // virtual
-css::uno::Sequence< ContentProviderInfo > SAL_CALL
+cpo::uno::Sequence< ContentProviderInfo > SAL_CALL
                             UniversalContentBroker::queryContentProviders()
 {
     // Return a list with information about active(!) content providers.
 
     osl::MutexGuard aGuard(m_aMutex);
 
-    css::uno::Sequence< ContentProviderInfo > aSeq( m_aProviders.size() );
+    cpo::uno::Sequence< ContentProviderInfo > aSeq( m_aProviders.size() );
     ContentProviderInfo* pInfo = aSeq.getArray();
 
     ProviderMap_Impl::const_iterator end = m_aProviders.end();
@@ -788,7 +788,7 @@ bool UniversalContentBroker::getContentProviderData(
         makeAndAppendXMLName( aFullPath, rKey2 );
         aFullPath.append( "']/ProviderData" );
 
-        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
             {"nodepath", cpo::uno::Any(aFullPath.makeStringAndClear())}
         }));
@@ -808,7 +808,7 @@ bool UniversalContentBroker::getContentProviderData(
         uno::Reference< container::XNameAccess > xNameAccess(
                                             xInterface, uno::UNO_QUERY_THROW );
 
-        const uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
+        const cpo::uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
 
         if ( aElems.hasElements() )
         {

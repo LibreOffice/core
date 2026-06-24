@@ -21,7 +21,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
 #include "ftools.hxx"
@@ -47,7 +47,7 @@ class ScfApiHelper
 public:
     /** Converts a non-empty vector into a UNO sequence containing elements of the same type. */
     template< typename Type >
-    static css::uno::Sequence< Type >
+    static cpo::uno::Sequence< Type >
                             VectorToSequence( const ::std::vector< Type >& rVector );
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
@@ -71,16 +71,16 @@ public:
 
     /** Opens a password dialog and returns the encryption data.
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */
-    static css::uno::Sequence< css::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,
+    static cpo::uno::Sequence< css::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,
                             ::comphelper::IDocPasswordVerifier& rVerifier,
                             const ::std::vector< OUString >* pDefaultPasswords );
 };
 
 template< typename Type >
-css::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< Type >& rVector )
+cpo::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< Type >& rVector )
 {
     OSL_ENSURE( !rVector.empty(), "ScfApiHelper::VectorToSequence - vector is empty" );
-    return css::uno::Sequence<Type>(rVector.data(), static_cast< sal_Int32 >(rVector.size()));
+    return cpo::uno::Sequence<Type>(rVector.data(), static_cast< sal_Int32 >(rVector.size()));
 }
 
 // Property sets ==============================================================
@@ -162,7 +162,7 @@ public:
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
-    void                GetProperties( css::uno::Sequence< cpo::uno::Any >& rValues, const css::uno::Sequence< OUString >& rPropNames ) const;
+    void                GetProperties( cpo::uno::Sequence< cpo::uno::Any >& rValues, const cpo::uno::Sequence< OUString >& rPropNames ) const;
 
     // Set properties ---------------------------------------------------------
 
@@ -189,7 +189,7 @@ public:
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
-    void                SetProperties( const css::uno::Sequence< OUString > & rPropNames, const css::uno::Sequence< cpo::uno::Any >& rValues );
+    void                SetProperties( const cpo::uno::Sequence< OUString > & rPropNames, const cpo::uno::Sequence< cpo::uno::Any >& rValues );
 
 private:
     css::uno::Reference< css::beans::XPropertySet >       mxPropSet;          /// The mandatory property set interface.
@@ -255,8 +255,8 @@ private:
     cpo::uno::Any*             GetNextAny();
 
 private:
-    css::uno::Sequence< OUString >       maNameSeq;          /// Sequence of property names.
-    css::uno::Sequence< cpo::uno::Any >  maValueSeq;         /// Sequence of property values.
+    cpo::uno::Sequence< OUString >       maNameSeq;          /// Sequence of property names.
+    cpo::uno::Sequence< cpo::uno::Any >  maValueSeq;         /// Sequence of property values.
     ScfInt32Vec         maNameOrder;        /// Maps initial order to alphabetical order.
     size_t              mnNextIdx;          /// Counter for next Any to be processed.
 };

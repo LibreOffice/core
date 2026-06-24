@@ -134,7 +134,7 @@ void dispatchExecute(SfxViewShell const * pViewShell, sal_uInt16 nSlot)
 }
 
 void
-dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString & aUrl, const uno::Sequence< beans::PropertyValue >& sProps )
+dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString & aUrl, const cpo::uno::Sequence< beans::PropertyValue >& sProps )
 {
     util::URL url;
     url.Complete = aUrl;
@@ -156,7 +156,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
     uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,u""_ustr,0);
 
     sal_Int32 nProps = sProps.getLength();
-    uno::Sequence<beans::PropertyValue> dispatchProps(nProps + 1);
+    cpo::uno::Sequence<beans::PropertyValue> dispatchProps(nProps + 1);
 
     if ( nProps )
     {
@@ -172,7 +172,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
 void
 dispatchRequests( const uno::Reference< frame::XModel>& xModel, const OUString& aUrl )
 {
-    uno::Sequence<beans::PropertyValue> dispatchProps;
+    cpo::uno::Sequence<beans::PropertyValue> dispatchProps;
     dispatchRequests( xModel, aUrl, dispatchProps );
 }
 
@@ -473,13 +473,13 @@ OUString getAnyAsString( const cpo::uno::Any& pvargItem )
 
 
 OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< OUString >&  _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator)
+ContainerUtilities::getUniqueName( const cpo::uno::Sequence< OUString >&  _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator)
 {
     return getUniqueName(_slist, _sElementName, _sSuffixSeparator, sal_Int32(2));
 }
 
 OUString
-ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator, sal_Int32 _nStartSuffix)
+ContainerUtilities::getUniqueName( const cpo::uno::Sequence< OUString >& _slist, const OUString& _sElementName, std::u16string_view _sSuffixSeparator, sal_Int32 _nStartSuffix)
 {
     if ( !_slist.hasElements() )
         return _sElementName;
@@ -497,7 +497,7 @@ ContainerUtilities::getUniqueName( const uno::Sequence< OUString >& _slist, cons
 }
 
 sal_Int32
-ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, const OUString& SearchString )
+ContainerUtilities::FieldInList( const cpo::uno::Sequence< OUString >& SearchList, const OUString& SearchString )
 {
     // I wonder why comparing lexicographically is done
     // when it's a match, is it interesting?
@@ -685,7 +685,7 @@ void setDefaultPropByIntrospection( const cpo::uno::Any& aObj, const cpo::uno::A
     xPropSet->setPropertyValue( xDflt->getDefaultPropertyName(), aValue );
 }
 
-cpo::uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName )
+cpo::uno::Any getPropertyValue( const cpo::uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName )
 {
     auto pProp = std::find_if(aProp.begin(), aProp.end(),
         [&aName](const beans::PropertyValue& rProp) { return rProp.Name == aName; });
@@ -694,7 +694,7 @@ cpo::uno::Any getPropertyValue( const uno::Sequence< beans::PropertyValue >& aPr
     return cpo::uno::Any();
 }
 
-bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue )
+bool setPropertyValue( cpo::uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue )
 {
     auto [begin, end] = asNonConstRange(aProp);
     auto pProp = std::find_if(begin, end,
@@ -707,7 +707,7 @@ bool setPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUStr
     return false;
 }
 
-void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue )
+void setOrAppendPropertyValue( cpo::uno::Sequence< beans::PropertyValue >& aProp, const OUString& aName, const cpo::uno::Any& aValue )
 {
     if( setPropertyValue( aProp, aName, aValue ) )
         return;

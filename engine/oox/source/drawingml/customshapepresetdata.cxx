@@ -364,7 +364,7 @@ void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, std::string_
         SAL_WARN("oox", "lcl_parseHandleRef: unexpected value: " << rValue);
 }
 
-uno::Sequence<beans::PropertyValue> lcl_parseHandle(std::string_view rValue)
+cpo::uno::Sequence<beans::PropertyValue> lcl_parseHandle(std::string_view rValue)
 {
     std::vector<beans::PropertyValue> aRet;
     sal_Int32 nLevel = 0;
@@ -414,7 +414,7 @@ uno::Sequence<beans::PropertyValue> lcl_parseHandle(std::string_view rValue)
     return comphelper::containerToSequence(aRet);
 }
 
-void lcl_parseHandles(std::vector<uno::Sequence<beans::PropertyValue>>& rHandles,
+void lcl_parseHandles(std::vector<cpo::uno::Sequence<beans::PropertyValue>>& rHandles,
                       std::string_view rValue)
 {
     sal_Int32 nLevel = 0;
@@ -432,7 +432,7 @@ void lcl_parseHandles(std::vector<uno::Sequence<beans::PropertyValue>>& rHandles
             nLevel--;
             if (!nLevel)
             {
-                uno::Sequence<beans::PropertyValue> aHandle = lcl_parseHandle(
+                cpo::uno::Sequence<beans::PropertyValue> aHandle = lcl_parseHandle(
                     rValue.substr(nStart + strlen("{ "), i - nStart - strlen(" },")));
                 rHandles.push_back(aHandle);
             }
@@ -947,7 +947,8 @@ void CustomShapeProperties::initializePresetDataMap()
                                              comphelper::containerToSequence(aAdjustmentValues));
                 }
                 else
-                    aPropertyMap.setProperty(PROP_AdjustmentValues, uno::Sequence<OUString>(0));
+                    aPropertyMap.setProperty(PROP_AdjustmentValues,
+                                             cpo::uno::Sequence<OUString>(0));
             }
             else if (std::string_view(aLine) == "Equations")
             {
@@ -966,14 +967,14 @@ void CustomShapeProperties::initializePresetDataMap()
                                              comphelper::containerToSequence(aEquations));
                 }
                 else
-                    aPropertyMap.setProperty(PROP_Equations, uno::Sequence<OUString>(0));
+                    aPropertyMap.setProperty(PROP_Equations, cpo::uno::Sequence<OUString>(0));
             }
             else if (std::string_view(aLine) == "Handles")
             {
                 aStream.ReadLine(aLine);
                 if (std::string_view(aLine) != "([][]com.sun.star.beans.PropertyValue) {}")
                 {
-                    std::vector<uno::Sequence<beans::PropertyValue>> aHandles;
+                    std::vector<cpo::uno::Sequence<beans::PropertyValue>> aHandles;
                     static constexpr std::string_view aExpectedPrefix(
                         "([][]com.sun.star.beans.PropertyValue) { ");
                     assert(o3tl::starts_with(aLine, aExpectedPrefix));
@@ -986,7 +987,7 @@ void CustomShapeProperties::initializePresetDataMap()
                                              comphelper::containerToSequence(aHandles));
                 }
                 else
-                    aPropertyMap.setProperty(PROP_Handles, uno::Sequence<OUString>(0));
+                    aPropertyMap.setProperty(PROP_Handles, cpo::uno::Sequence<OUString>(0));
             }
             else if (std::string_view(aLine) == "MirroredX")
             {

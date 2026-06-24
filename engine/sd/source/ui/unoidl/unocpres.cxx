@@ -68,7 +68,7 @@ bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& ServiceNam
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNames()
 {
     return { u"com.sun.star.presentation.CustomPresentation"_ustr };
 }
@@ -282,7 +282,7 @@ bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& Serv
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServiceNames()
 {
     return { u"com.sun.star.presentation.CustomPresentationAccess"_ustr };
 }
@@ -294,7 +294,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createIn
     return xRef;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstanceWithArguments( const uno::Sequence< cpo::uno::Any >& )
+uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     return createInstance();
 }
@@ -390,14 +390,14 @@ cpo::uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& a
     return cpo::uno::Any(xRef);
 }
 
-uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getElementNames()
 {
     SolarMutexGuard aGuard;
 
     SdCustomShowList* pList = GetCustomShowList();
     const sal_uInt32 nCount = pList ? pList->size() : 0;
 
-    uno::Sequence< OUString > aSequence( nCount );
+    cpo::uno::Sequence< OUString > aSequence( nCount );
     OUString* pStringList = aSequence.getArray();
 
     sal_uInt32 nIdx = 0;

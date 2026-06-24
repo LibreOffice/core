@@ -71,7 +71,7 @@ drawinglayer::primitive2d::Primitive2DContainer ChartHelper::tryToGetChartConten
         if(xShapeAccess->getCount())
         {
             const sal_Int32 nShapeCount(xShapeAccess->getCount());
-            const uno::Sequence< beans::PropertyValue > aParams;
+            const cpo::uno::Sequence< beans::PropertyValue > aParams;
             uno::Reference< drawing::XShape > xShape;
 
             for(sal_Int32 a(0); a < nShapeCount; a++)

@@ -34,7 +34,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 
@@ -109,7 +109,7 @@ static cpo::uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
     {
         if ( pMacro->GetScriptType() == STARBASIC )
         {
-            uno::Sequence < beans::PropertyValue > aProperties(3);
+            cpo::uno::Sequence < beans::PropertyValue > aProperties(3);
             beans::PropertyValue *pValues = aProperties.getArray();
 
             pValues[ 0 ].Name = PROP_EVENT_TYPE;
@@ -125,7 +125,7 @@ static cpo::uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
         }
         else if ( pMacro->GetScriptType() == EXTENDED_STYPE )
         {
-            uno::Sequence < beans::PropertyValue > aProperties(2);
+            cpo::uno::Sequence < beans::PropertyValue > aProperties(2);
             beans::PropertyValue *pValues = aProperties.getArray();
 
             pValues[ 0 ].Name = PROP_EVENT_TYPE;
@@ -138,7 +138,7 @@ static cpo::uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
         }
         else if ( pMacro->GetScriptType() == JAVASCRIPT )
         {
-            uno::Sequence < beans::PropertyValue > aProperties(2);
+            cpo::uno::Sequence < beans::PropertyValue > aProperties(2);
             beans::PropertyValue *pValues = aProperties.getArray();
 
             pValues[ 0 ].Name = PROP_EVENT_TYPE;
@@ -156,7 +156,7 @@ static cpo::uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
     }
     else
     {
-        uno::Sequence < beans::PropertyValue > aProperties;
+        cpo::uno::Sequence < beans::PropertyValue > aProperties;
         aEventData <<= aProperties;
     }
 

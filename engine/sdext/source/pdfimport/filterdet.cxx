@@ -121,7 +121,7 @@ bool FileEmitContext::write( const void* pBuf, unsigned int nLen )
     if( ! m_xOut.is() )
         return false;
 
-    uno::Sequence< sal_Int8 > aSeq( nLen );
+    cpo::uno::Sequence< sal_Int8 > aSeq( nLen );
     memcpy( aSeq.getArray(), pBuf, nLen );
     m_xOut->writeBytes( aSeq );
     return true;
@@ -145,7 +145,7 @@ bool FileEmitContext::copyOrigBytes( unsigned int nOrigOffset, unsigned int nLen
     if( osl_setFilePos( m_aReadHandle, osl_Pos_Absolut, nOrigOffset ) != osl_File_E_None )
         return false;
 
-    uno::Sequence< sal_Int8 > aSeq( nLen );
+    cpo::uno::Sequence< sal_Int8 > aSeq( nLen );
 
     sal_uInt64 nBytesRead = 0;
     if( osl_readFile( m_aReadHandle,
@@ -192,7 +192,7 @@ PDFDetector::PDFDetector( uno::Reference< uno::XComponentContext > xContext) :
 namespace
 {
 
-sal_Int32 fillAttributes(uno::Sequence<beans::PropertyValue> const& rFilterData, uno::Reference<io::XInputStream>& xInput, OUString& aURL, sal_Int32& nFilterNamePos, sal_Int32& nPasswordPos, OUString& aPassword)
+sal_Int32 fillAttributes(cpo::uno::Sequence<beans::PropertyValue> const& rFilterData, uno::Reference<io::XInputStream>& xInput, OUString& aURL, sal_Int32& nFilterNamePos, sal_Int32& nPasswordPos, OUString& aPassword)
 {
     sal_Int32 nAttribs = rFilterData.getLength();
     for (sal_Int32 i = 0; i < nAttribs; i++)
@@ -219,7 +219,7 @@ sal_Int32 fillAttributes(uno::Sequence<beans::PropertyValue> const& rFilterData,
 // read the first 1024 byte (see PDF reference implementation note 12)
 constexpr const sal_Int32 constHeaderSize = 1024;
 
-bool detectPDF(uno::Reference<io::XInputStream> const& xInput, uno::Sequence<sal_Int8>& aHeader, sal_uInt64& nHeaderReadSize)
+bool detectPDF(uno::Reference<io::XInputStream> const& xInput, cpo::uno::Sequence<sal_Int8>& aHeader, sal_uInt64& nHeaderReadSize)
 {
     try
     {
@@ -242,7 +242,7 @@ bool detectPDF(uno::Reference<io::XInputStream> const& xInput, uno::Sequence<sal
     return false;
 }
 
-bool copyToTemp(uno::Reference<io::XInputStream> const& xInput, oslFileHandle& rFileHandle, uno::Sequence<sal_Int8> const& aHeader, sal_uInt64 nHeaderReadSize)
+bool copyToTemp(uno::Reference<io::XInputStream> const& xInput, oslFileHandle& rFileHandle, cpo::uno::Sequence<sal_Int8> const& aHeader, sal_uInt64 nHeaderReadSize)
 {
     try
     {
@@ -250,7 +250,7 @@ bool copyToTemp(uno::Reference<io::XInputStream> const& xInput, oslFileHandle& r
         osl_writeFile(rFileHandle, aHeader.getConstArray(), nHeaderReadSize, &nWritten);
 
         const sal_uInt64 nBufferSize = 4096;
-        uno::Sequence<sal_Int8> aBuffer(nBufferSize);
+        cpo::uno::Sequence<sal_Int8> aBuffer(nBufferSize);
 
         // copy the bytes
         sal_uInt64 nRead = 0;
@@ -295,7 +295,7 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
                                             OUString& rOutMimetype,
                                             OUString& io_rPwd,
                                             const uno::Reference<uno::XComponentContext>& xContext,
-                                            const uno::Sequence<beans::PropertyValue>& rFilterData,
+                                            const cpo::uno::Sequence<beans::PropertyValue>& rFilterData,
                                             bool bMayUseUI)
 {
     uno::Reference<io::XStream> xEmbed;
@@ -409,7 +409,7 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
             auto xOut = xContextStream->getOutputStream();
             xSeek.set(xOut, uno::UNO_QUERY_THROW);
             // writeBytes wants a Uno::Sequence rather than the std::vector above, convert again
-            uno::Sequence<sal_Int8> aExtractedFileSeq(reinterpret_cast<sal_Int8 *>(aExtractedFileBuf.data()), aExtractedFileBuf.size());
+            cpo::uno::Sequence<sal_Int8> aExtractedFileSeq(reinterpret_cast<sal_Int8 *>(aExtractedFileBuf.data()), aExtractedFileBuf.size());
             xOut->writeBytes(aExtractedFileSeq);
 
             xEmbed = std::move(xContextStream);
@@ -424,7 +424,7 @@ uno::Reference<io::XStream> getEmbeddedFile(const OUString& rInPDFFileURL,
     return xEmbed;
 }
 // XExtendedFilterDetection
-OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rFilterData )
+OUString SAL_CALL PDFDetector::detect( cpo::uno::Sequence< beans::PropertyValue >& rFilterData )
 {
     std::unique_lock guard( m_aMutex );
     bool bSuccess = false;
@@ -445,7 +445,7 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
         return OUString();
 
 
-    uno::Sequence<sal_Int8> aHeader(constHeaderSize);
+    cpo::uno::Sequence<sal_Int8> aHeader(constHeaderSize);
     sal_uInt64 nHeaderReadSize = 0;
     bSuccess = detectPDF(xInput, aHeader, nHeaderReadSize);
 
@@ -596,7 +596,7 @@ bool PDFDetector::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> PDFDetector::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> PDFDetector::getSupportedServiceNames()
 {
     return {u"com.sun.star.document.ImportFilter"_ustr};
 }
@@ -704,7 +704,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
                                                    OUString&                                rOutMimetype,
                                                    OUString&                                io_rPwd,
                                                    const uno::Reference<uno::XComponentContext>& xContext,
-                                                   const uno::Sequence<beans::PropertyValue>&    rFilterData,
+                                                   const cpo::uno::Sequence<beans::PropertyValue>&    rFilterData,
                                                    bool                                          bMayUseUI )
 {
     uno::Reference< io::XStream > xEmbed;
@@ -833,7 +833,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 sdext_PDFDetector_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PDFDetector(context));
 }

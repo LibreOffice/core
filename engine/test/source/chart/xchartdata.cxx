@@ -74,7 +74,7 @@ void XChartData::testChartDataChangeEventListener()
         uno::Reference<chart::XChartDataChangeEventListener>(pListener1));
 
     uno::Reference<chart::XChartDataArray> xCDD(xCD, uno::UNO_QUERY_THROW);
-    uno::Sequence<uno::Sequence<double>> aData = xCDD->getData();
+    cpo::uno::Sequence<cpo::uno::Sequence<double>> aData = xCDD->getData();
     auto& rFirstCell = aData.getArray()[0].getArray()[0];
     rFirstCell += 1.0;
     xCDD->setData(aData);

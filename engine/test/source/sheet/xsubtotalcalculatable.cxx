@@ -16,7 +16,7 @@
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -30,7 +30,7 @@ void XSubTotalCalculatable::testCreateSubTotalDescriptor()
     uno::Reference< sheet::XSubTotalCalculatable > xSTC(init(), uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XSubTotalDescriptor > xSTD = xSTC->createSubTotalDescriptor(true);
 
-    uno::Sequence< sheet::SubTotalColumn > xCols{ { /* Column   */ 5,
+    cpo::uno::Sequence< sheet::SubTotalColumn > xCols{ { /* Column   */ 5,
                                                     /* Function */ sheet::GeneralFunction_SUM } };
 
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to create XSubTotalDescriptor", xSTD->addNew(xCols, 1));
@@ -42,7 +42,7 @@ void XSubTotalCalculatable::testApplyRemoveSubTotals()
     uno::Reference< sheet::XSubTotalCalculatable > xSTC(xSheet, UNO_QUERY_THROW);
 
     uno::Reference< sheet::XSubTotalDescriptor > xSTD = xSTC->createSubTotalDescriptor(true);
-    uno::Sequence< sheet::SubTotalColumn > xCols{ { /* Column   */ 0,
+    cpo::uno::Sequence< sheet::SubTotalColumn > xCols{ { /* Column   */ 0,
                                                     /* Function */ sheet::GeneralFunction_SUM } };
     xSTD->addNew(xCols, 1);
 

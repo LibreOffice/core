@@ -61,7 +61,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
@@ -178,7 +178,7 @@ void Access::initBroadcaster(
     initBroadcasterAndChanges(modifications, broadcaster, nullptr);
 }
 
-css::uno::Sequence< css::uno::Type > Access::getTypes()
+cpo::uno::Sequence< css::uno::Type > Access::getTypes()
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -231,12 +231,12 @@ css::uno::Sequence< css::uno::Type > Access::getTypes()
     return comphelper::containerToSequence(types);
 }
 
-css::uno::Sequence< sal_Int8 > Access::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > Access::getImplementationId()
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    return css::uno::Sequence< sal_Int8 >();
+    return cpo::uno::Sequence< sal_Int8 >();
 }
 
 OUString Access::getImplementationName()
@@ -252,7 +252,7 @@ bool Access::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > Access::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Access::getSupportedServiceNames()
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -415,7 +415,7 @@ cpo::uno::Any Access::getByName(OUString const & aName)
     return value;
 }
 
-css::uno::Sequence< OUString > Access::getElementNames()
+cpo::uno::Sequence< OUString > Access::getElementNames()
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -599,7 +599,7 @@ OUString Access::getExactName(OUString const & aApproximateName)
     return aApproximateName;
 }
 
-css::uno::Sequence< css::beans::Property > Access::getProperties()
+cpo::uno::Sequence< css::beans::Property > Access::getProperties()
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
@@ -885,8 +885,8 @@ void Access::removeVetoableChangeListener(
 }
 
 void Access::setPropertyValues(
-    css::uno::Sequence< OUString > const & aPropertyNames,
-    css::uno::Sequence< cpo::uno::Any > const & aValues)
+    cpo::uno::Sequence< OUString > const & aPropertyNames,
+    cpo::uno::Sequence< cpo::uno::Any > const & aValues)
 {
     assert(thisIs(IS_GROUP));
     Broadcaster bc;
@@ -916,12 +916,12 @@ void Access::setPropertyValues(
     bc.send();
 }
 
-css::uno::Sequence< cpo::uno::Any > Access::getPropertyValues(
-    css::uno::Sequence< OUString > const & aPropertyNames)
+cpo::uno::Sequence< cpo::uno::Any > Access::getPropertyValues(
+    cpo::uno::Sequence< OUString > const & aPropertyNames)
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
-    css::uno::Sequence< cpo::uno::Any > vals(aPropertyNames.getLength());
+    cpo::uno::Sequence< cpo::uno::Any > vals(aPropertyNames.getLength());
     auto aValsRange = asNonConstRange(vals);
     for (sal_Int32 i = 0; i < aPropertyNames.getLength(); ++i)
     {
@@ -935,7 +935,7 @@ css::uno::Sequence< cpo::uno::Any > Access::getPropertyValues(
 }
 
 void Access::addPropertiesChangeListener(
-    css::uno::Sequence< OUString > const &,
+    cpo::uno::Sequence< OUString > const &,
     css::uno::Reference< css::beans::XPropertiesChangeListener > const &
         xListener)
 {
@@ -970,12 +970,12 @@ void Access::removePropertiesChangeListener(
 }
 
 void Access::firePropertiesChangeEvent(
-    css::uno::Sequence< OUString > const & aPropertyNames,
+    cpo::uno::Sequence< OUString > const & aPropertyNames,
     css::uno::Reference< css::beans::XPropertiesChangeListener > const &
         xListener)
 {
     assert(thisIs(IS_GROUP));
-    css::uno::Sequence< css::beans::PropertyChangeEvent > events(
+    cpo::uno::Sequence< css::beans::PropertyChangeEvent > events(
         aPropertyNames.getLength());
     auto aEventsRange = asNonConstRange(events);
     for (sal_Int32 i = 0; i < events.getLength(); ++i) {
@@ -1036,8 +1036,8 @@ cpo::uno::Any Access::getHierarchicalPropertyValue(
 }
 
 void Access::setHierarchicalPropertyValues(
-    css::uno::Sequence< OUString > const & aHierarchicalPropertyNames,
-    css::uno::Sequence< cpo::uno::Any > const & Values)
+    cpo::uno::Sequence< OUString > const & aHierarchicalPropertyNames,
+    cpo::uno::Sequence< cpo::uno::Any > const & Values)
 {
     assert(thisIs(IS_GROUP));
     Broadcaster bc;
@@ -1072,12 +1072,12 @@ void Access::setHierarchicalPropertyValues(
     bc.send();
 }
 
-css::uno::Sequence< cpo::uno::Any > Access::getHierarchicalPropertyValues(
-    css::uno::Sequence< OUString > const & aHierarchicalPropertyNames)
+cpo::uno::Sequence< cpo::uno::Any > Access::getHierarchicalPropertyValues(
+    cpo::uno::Sequence< OUString > const & aHierarchicalPropertyNames)
 {
     assert(thisIs(IS_GROUP));
     osl::MutexGuard g(*lock_);
-    css::uno::Sequence< cpo::uno::Any > vals(
+    cpo::uno::Sequence< cpo::uno::Any > vals(
         aHierarchicalPropertyNames.getLength());
     auto aValsRange = asNonConstRange(vals);
     for (sal_Int32 i = 0; i < aHierarchicalPropertyNames.getLength(); ++i) {
@@ -1268,7 +1268,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
 }
 
 css::uno::Reference< css::uno::XInterface > Access::createInstanceWithArguments(
-    css::uno::Sequence< cpo::uno::Any > const & aArguments)
+    cpo::uno::Sequence< cpo::uno::Any > const & aArguments)
 {
     assert(thisIs(IS_SET|IS_UPDATE));
     if (aArguments.hasElements()) {
@@ -2015,7 +2015,7 @@ void Access::initBroadcasterAndChanges(
         }
     }
     if (!propChanges.empty()) {
-        css::uno::Sequence< css::beans::PropertyChangeEvent > seq(
+        cpo::uno::Sequence< css::beans::PropertyChangeEvent > seq(
             comphelper::containerToSequence(propChanges));
         for (auto const& propertyChangeListener : propertiesChangeListeners_)
         {

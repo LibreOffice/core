@@ -477,7 +477,7 @@ private:
     OUString   maHref;
     bool            mbMedia;
 
-    css::uno::Sequence< css::beans::PropertyValue > maParams;
+    cpo::uno::Sequence< css::beans::PropertyValue > maParams;
 
 public:
 

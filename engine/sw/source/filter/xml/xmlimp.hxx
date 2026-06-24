@@ -117,7 +117,7 @@ public:
     virtual void SAL_CALL endDocument() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     void                    InsertStyles( bool bAuto );
     void                    FinishStyles();
@@ -149,11 +149,11 @@ public:
     void MergeListsAtDocumentInsertPosition(SwDoc *pDoc);
 
     virtual void SetStatistics(
-        const css::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
-    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
-    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
+        const cpo::uno::Sequence< css::beans::NamedValue> & i_rStats) override;
+    virtual void SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
     virtual void SetDocumentSpecificSettings(const OUString& _rSettingsGroupName,
-                    const css::uno::Sequence<css::beans::PropertyValue>& _rSettings) override;
+                    const cpo::uno::Sequence<css::beans::PropertyValue>& _rSettings) override;
 
     // initialize XForms
     virtual void initXForms() override;

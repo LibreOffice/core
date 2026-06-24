@@ -56,13 +56,13 @@ public:
 
     css::uno::Reference<css::lang::XComponent>
     loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
-                    const css::uno::Sequence<css::beans::PropertyValue>& rExtra_args
-                    = css::uno::Sequence<css::beans::PropertyValue>());
+                    const cpo::uno::Sequence<css::beans::PropertyValue>& rExtra_args
+                    = cpo::uno::Sequence<css::beans::PropertyValue>());
 
     static cpo::uno::Any
     dispatchCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
                     const OUString& rCommand,
-                    const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
+                    const cpo::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
 
     static cpo::uno::Any
     queryDispatchStatus(css::uno::Reference<css::lang::XComponent> const& xComponent,
@@ -81,9 +81,9 @@ public:
     static bool IsValid(const css::uno::Reference<css::security::XCertificate>& cert,
                         const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env);
     static css::uno::Reference<css::security::XCertificate> GetValidCertificate(
-        const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
+        const cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
         const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env,
-        const css::uno::Sequence<css::beans::PropertyValue>& rFilterData = {});
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData = {});
 
 protected:
     css::uno::Reference<css::frame::XDesktop2> mxDesktop;

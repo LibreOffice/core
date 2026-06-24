@@ -145,7 +145,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(
             const OUString& rServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XPropertySet
@@ -172,9 +172,9 @@ public:
     // XPropertyState
     virtual css::beans::PropertyState SAL_CALL
         getPropertyState(const OUString& rPropertyName) override;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL
         getPropertyStates(
-            const css::uno::Sequence< OUString >& rPropertyNames) override;
+            const cpo::uno::Sequence< OUString >& rPropertyNames) override;
     virtual void SAL_CALL setPropertyToDefault(
             const OUString& rPropertyName) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault(
@@ -191,7 +191,7 @@ public:
     // XContentEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
         createContentEnumeration(const OUString& rServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames() override;
 
     // XTextRange
@@ -207,7 +207,7 @@ public:
     // XRedline
     virtual void SAL_CALL makeRedline(
             const OUString& rRedlineType,
-            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& RedlineProperties) override;
 
 private:
     const SfxItemPropertySet& m_rPropSet;

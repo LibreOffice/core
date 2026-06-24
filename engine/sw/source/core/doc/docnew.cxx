@@ -938,7 +938,7 @@ rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty)
 
     xRet->ReplaceStyles(*this);
 
-    uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     GetDocShell()->GetBaseModel()->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     pRetShell->GetBaseModel()->setPropertyValue(u"InteropGrabBag"_ustr, cpo::uno::Any(aInteropGrabBag));
 

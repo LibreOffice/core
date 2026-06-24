@@ -93,10 +93,10 @@ SwVbaListTemplates::getServiceImplName()
     return u"SwVbaListTemplates"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaListTemplates::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.ListTemplates"_ustr
     };

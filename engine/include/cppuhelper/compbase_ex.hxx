@@ -115,7 +115,7 @@ CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakComponentImplHelper_query(
     ::cppu::WeakComponentImplHelperBase * pBase );
 /** WeakComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
     class_data * cd );
 
 /** WeakAggComponentImplHelper
@@ -127,7 +127,7 @@ CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakAggComponentImplHelper_queryAgg(
     ::cppu::WeakAggComponentImplHelperBase * pBase );
 /** WeakAggComponentImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
     class_data * cd );
 
 }

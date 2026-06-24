@@ -135,7 +135,7 @@ ODefinitionContainer::~ODefinitionContainer()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( ODefinitionContainer,OContentHelper,ODefinitionContainer_Base)
-css::uno::Sequence< css::uno::Type > ODefinitionContainer::getTypes()
+cpo::uno::Sequence< css::uno::Type > ODefinitionContainer::getTypes()
 {
     return  ::comphelper::concatSequences(
         OContentHelper::getTypes( ),
@@ -144,9 +144,9 @@ css::uno::Sequence< css::uno::Type > ODefinitionContainer::getTypes()
 }
 
 
-css::uno::Sequence<sal_Int8> ODefinitionContainer::getImplementationId()
+cpo::uno::Sequence<sal_Int8> ODefinitionContainer::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

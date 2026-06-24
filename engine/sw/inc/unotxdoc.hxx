@@ -223,12 +223,12 @@ private:
 
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & rServiceName,
-        css::uno::Sequence<cpo::uno::Any> const * arguments);
+        cpo::uno::Sequence<cpo::uno::Any> const * arguments);
 
     // used for XRenderable implementation
     SfxViewShell *  GuessViewShell( /* out */ bool &rbIsSwSrcView, const css::uno::Reference< css::frame::XController >& rController = css::uno::Reference< css::frame::XController >() );
     SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const cpo::uno::Any& rSelection, bool bIsPDFExport );
-    SfxViewShell *  GetRenderView( bool &rbIsSwSrcView, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions, bool bIsPDFExport );
+    SfxViewShell *  GetRenderView( bool &rbIsSwSrcView, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions, bool bIsPDFExport );
 
     OUString           maBuildId;
 
@@ -256,12 +256,12 @@ public:
     virtual void SAL_CALL release(  ) noexcept override;
 
     //XWeak
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XTextDocument
     virtual css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
@@ -272,9 +272,9 @@ public:
     using SfxBaseModel::removeEventListener;
 
     //XModel
-    virtual bool SAL_CALL attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+    virtual bool SAL_CALL attachResource( const OUString& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual OUString SAL_CALL getURL(  ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) override;
     virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& xController ) override;
     virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& xController ) override;
     virtual void SAL_CALL lockControllers(  ) override;
@@ -323,9 +323,9 @@ public:
     virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL findNext(const css::uno::Reference< css::uno::XInterface > & xStartAt, const css::uno::Reference< css::util::XSearchDescriptor > & xDesc) override;
 
     //XPagePrintable
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPagePrintSettings() override;
-    virtual void SAL_CALL setPagePrintSettings(const css::uno::Sequence< css::beans::PropertyValue >& aSettings) override;
-    virtual void SAL_CALL printPages(const css::uno::Sequence< css::beans::PropertyValue >& xOptions) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPagePrintSettings() override;
+    virtual void SAL_CALL setPagePrintSettings(const cpo::uno::Sequence< css::beans::PropertyValue >& aSettings) override;
+    virtual void SAL_CALL printPages(const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions) override;
 
     //XReferenceMarksSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getReferenceMarks() override;
@@ -361,13 +361,13 @@ public:
     //XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
     virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier,
-                const css::uno::Sequence< cpo::uno::Any >& Arguments) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+                const cpo::uno::Sequence< cpo::uno::Any >& Arguments) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::drawing::XDrawPageSupplier
     virtual css::uno::Reference< css::drawing::XDrawPage >  SAL_CALL getDrawPage() override;
@@ -389,7 +389,7 @@ public:
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& rPropertyName ) override;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& rPropertyNames ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const cpo::uno::Sequence< OUString >& rPropertyNames ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& rPropertyName ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& rPropertyName ) override;
 
@@ -408,15 +408,15 @@ public:
     virtual void SAL_CALL updateLinks(  ) override;
 
     // css::view::XRenderable
-    virtual sal_Int32 SAL_CALL getRendererCount( const cpo::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
-    virtual void SAL_CALL render( sal_Int32 nRenderer, const cpo::uno::Any& aSelection, const css::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual sal_Int32 SAL_CALL getRendererCount( const cpo::uno::Any& aSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& aSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
+    virtual void SAL_CALL render( sal_Int32 nRenderer, const cpo::uno::Any& aSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions ) override;
 
     // css::xforms::XFormsSupplier
     virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getXForms(  ) override;
 
     // css::document::XDocumentLanguages
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getDocumentLanguages( ::sal_Int16 nScriptTypes, ::sal_Int16 nCount ) override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getDocumentLanguages( ::sal_Int16 nScriptTypes, ::sal_Int16 nCount ) override;
 
     // css::text::XFlatParagraphIteratorProvider:
     virtual css::uno::Reference< css::text::XFlatParagraphIterator > SAL_CALL getFlatParagraphIterator(::sal_Int32 nTextMarkupType, bool bAutomatic ) override;
@@ -453,7 +453,7 @@ public:
     /// @see vcl::ITiledRenderable::getDocWindow().
     virtual VclPtr<vcl::Window> getDocWindow() override;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
-    virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
+    virtual void initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
     /// @see vcl::ITiledRenderable::postKeyEvent().
     virtual void postKeyEvent(int nType, int nCharCode, int nKeyCode) override;
     /// @see vcl::ITiledRenderable::postMouseEvent().
@@ -588,7 +588,7 @@ public:
 
     //XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName(const OUString& Name) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
     //XElementAccess
@@ -598,7 +598,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void    Invalidate() {m_pxDoc = nullptr;}
 };
@@ -626,7 +626,7 @@ public:
 
     //XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName(const OUString& Name) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(const OUString& Name) override;
 
     //XElementAccess
@@ -648,7 +648,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 
@@ -680,7 +680,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class SwXDrawingObjectTarget final : public cppu::WeakImplHelper
@@ -708,7 +708,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 

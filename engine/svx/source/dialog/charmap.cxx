@@ -217,11 +217,11 @@ void SvxShowCharSet::loadFavCharacterList()
     maFavCharList.clear();
     maFavCharFontList.clear();
     //retrieve recent character list
-    css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
+    cpo::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
     comphelper::sequenceToContainer(maFavCharList, rFavCharList);
 
     //retrieve recent character font list
-    css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
+    cpo::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
     comphelper::sequenceToContainer(maFavCharFontList, rFavCharFontList);
 }
 
@@ -320,9 +320,9 @@ void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUStri
         maFavCharFontList.push_back(rFont);
     }
 
-    css::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
+    cpo::uno::Sequence< OUString > aFavCharList(maFavCharList.size());
     auto aFavCharListRange = asNonConstRange(aFavCharList);
-    css::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
+    cpo::uno::Sequence< OUString > aFavCharFontList(maFavCharFontList.size());
     auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
     for (size_t i = 0; i < maFavCharList.size(); ++i)

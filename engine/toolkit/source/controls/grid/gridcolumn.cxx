@@ -265,7 +265,7 @@ using namespace cpo::uno;
         return cppu::supportsService(this, i_serviceName);
     }
 
-    css::uno::Sequence< OUString > SAL_CALL GridColumn::getSupportedServiceNames(  )
+    cpo::uno::Sequence< OUString > SAL_CALL GridColumn::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.awt.grid.GridColumn"_ustr };
     }
@@ -280,7 +280,7 @@ using namespace cpo::uno;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_GridColumn_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::GridColumn());
 }

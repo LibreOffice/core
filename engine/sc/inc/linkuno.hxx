@@ -108,7 +108,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScSheetLinksObj final : public cppu::WeakImplHelper<
@@ -132,7 +132,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
@@ -150,7 +150,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScAreaLinkObj final : public cppu::WeakImplHelper<
@@ -217,7 +217,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScAreaLinksObj final : public cppu::WeakImplHelper<
@@ -260,7 +260,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 //! order of XNamed and DDELink changed to avoid "duplicate comdat" symbols
@@ -304,15 +304,15 @@ public:
     virtual void SAL_CALL   removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
 
                             // XDDELinkResults
-    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
         SAL_CALL getResults(  ) override;
     virtual void SAL_CALL setResults(
-        const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& aResults ) override;
+        const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aResults ) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScDDELinksObj final : public cppu::WeakImplHelper<
@@ -336,7 +336,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
@@ -359,7 +359,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScExternalSheetCacheObj final : public cppu::WeakImplHelper< css::sheet::XExternalSheetCache >
@@ -374,9 +374,9 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getCellValue(sal_Int32 nCol, sal_Int32 nRow) override;
 
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getAllRows() override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getAllRows() override;
 
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getAllColumns(sal_Int32 nRow) override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getAllColumns(sal_Int32 nRow) override;
 
     // Attributes
     virtual sal_Int32 SAL_CALL getTokenIndex() override;
@@ -402,7 +402,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
@@ -442,7 +442,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess

@@ -111,7 +111,7 @@ void VCLXRegion::xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRe
         maRegion.XOr( VCLUnoHelper::GetRegion( rxRegion ) );
 }
 
-css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
+cpo::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -119,7 +119,7 @@ css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
     maRegion.GetRegionRectangles(aRectangles);
 
 //    sal_uLong nRects = maRegion.GetRectCount();
-    css::uno::Sequence< css::awt::Rectangle > aRects(aRectangles.size());
+    cpo::uno::Sequence< css::awt::Rectangle > aRects(aRectangles.size());
     sal_uInt32 a(0);
 
     for(const auto& rRect : aRectangles)

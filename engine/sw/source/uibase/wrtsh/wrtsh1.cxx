@@ -704,7 +704,7 @@ void SwWrtShell::LaunchOLEObj(sal_Int32 nVerb)
     uno::Reference<lang::XInitialization> xOLEInit(xRef.GetObject(), uno::UNO_QUERY);
     if (xOLEInit.is())
     {
-        uno::Sequence<beans::PropertyValue> aArguments
+        cpo::uno::Sequence<beans::PropertyValue> aArguments
             = { comphelper::makePropertyValue(u"ReadOnly"_ustr, pCli->IsProtected()) };
         xOLEInit->initialize({ cpo::uno::Any(aArguments) });
     }
@@ -1484,9 +1484,9 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
     // SVX_NUM_NUMBER_NONE is a sentinel from SetDefaultHdl meaning "no
     // number preference at this level"; map back to ARABIC at lookup.
     // Empty sequence (or !bNum) skips lookups and uses ARABIC.
-    const uno::Sequence<sal_Int32> aDefaultNumbering = bNum
+    const cpo::uno::Sequence<sal_Int32> aDefaultNumbering = bNum
         ? officecfg::Office::Common::BulletsNumbering::DefaultListNumbering::get()
-        : uno::Sequence<sal_Int32>();
+        : cpo::uno::Sequence<sal_Int32>();
     auto fnNumberingTypeForLevel = [&aDefaultNumbering](sal_Int32 nLevel) -> SvxNumType
     {
         if (!aDefaultNumbering.hasElements())
@@ -1724,9 +1724,9 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
             {
                 static constexpr OUString sDefaultBulletSymbol = u"•"_ustr;
                 static constexpr OUString sDefaultBulletSymbolFont = u"OpenSymbol"_ustr;
-                uno::Sequence<OUString> aBulletSymbols(
+                cpo::uno::Sequence<OUString> aBulletSymbols(
                     officecfg::Office::Common::BulletsNumbering::DefaultListBullets::get());
-                uno::Sequence<OUString> aBulletSymbolsFonts(
+                cpo::uno::Sequence<OUString> aBulletSymbolsFonts(
                     officecfg::Office::Common::BulletsNumbering::DefaultListBulletsFonts::get());
                 if (!aBulletSymbols.hasElements())
                 {

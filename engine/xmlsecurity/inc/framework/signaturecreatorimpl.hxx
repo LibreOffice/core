@@ -77,19 +77,19 @@ public:
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 /// @throws css::uno::RuntimeException
 OUString SignatureCreatorImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  );
+cpo::uno::Sequence< OUString > SignatureCreatorImpl_getSupportedServiceNames(  );
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

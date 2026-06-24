@@ -34,7 +34,7 @@ public:
     virtual ::sal_Int32 SAL_CALL verifyCertificate(
         const css::uno::Reference<
         css::security::XCertificate >& xCert,
-        const css::uno::Sequence<
+        const cpo::uno::Sequence<
         css::uno::Reference< css::security::XCertificate > > &
         intermediateCerts) override;
 
@@ -42,24 +42,24 @@ public:
 
     virtual OUString SAL_CALL getSecurityEnvironmentInformation() override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
 
     /** We reinterpret the first parameter (originally issuerName) as keyId. We have no other way to identify a gpg key. */
-    virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& keyId, const css::uno::Sequence< sal_Int8 >& serialNumber ) override;
+    virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& keyId, const cpo::uno::Sequence< sal_Int8 >& serialNumber ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
+    virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
         const css::uno::Reference< css::security::XCertificate >& beginCert ) override;
 
     virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw(
-        const css::uno::Sequence< sal_Int8 >& rawCertificate ) override;
+        const cpo::uno::Sequence< sal_Int8 >& rawCertificate ) override;
     virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii(
         const OUString& asciiCertificate ) override;
 
     GpgME::Context& getGpgContext() { return *m_ctx; }
-    virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override;
 
 private:
-    css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > getCertificatesImpl( bool bPrivateOnly );
+    cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > getCertificatesImpl( bool bPrivateOnly );
 } ;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

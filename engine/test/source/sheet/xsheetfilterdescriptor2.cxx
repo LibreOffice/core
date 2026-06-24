@@ -13,7 +13,7 @@
 #include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -25,15 +25,15 @@ namespace apitest
 void XSheetFilterDescriptor2::testGetSetFilterFields2()
 {
     uno::Reference<sheet::XSheetFilterDescriptor2> xSFD(init(), uno::UNO_QUERY_THROW);
-    uno::Sequence<sheet::TableFilterField2> aDefaultTFF = xSFD->getFilterFields2();
+    cpo::uno::Sequence<sheet::TableFilterField2> aDefaultTFF = xSFD->getFilterFields2();
 
     CPPUNIT_ASSERT_MESSAGE("Unable to get TableFilterField", !aDefaultTFF.hasElements());
 
-    uno::Sequence<sheet::TableFilterField2> aTFF;
+    cpo::uno::Sequence<sheet::TableFilterField2> aTFF;
     aTFF.realloc(1);
 
     xSFD->setFilterFields2(aTFF);
-    uno::Sequence<sheet::TableFilterField2> aNewTFF = xSFD->getFilterFields2();
+    cpo::uno::Sequence<sheet::TableFilterField2> aNewTFF = xSFD->getFilterFields2();
     CPPUNIT_ASSERT_MESSAGE("Unable to set TableFilterField", aNewTFF != aDefaultTFF);
 }
 

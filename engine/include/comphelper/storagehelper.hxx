@@ -46,7 +46,7 @@ namespace com::sun::star {
     namespace uno { class XComponentContext; }
     namespace awt { class XWindow; }
 }
-namespace com::sun::star::uno { template <typename> class Sequence; }
+namespace cpo::uno { template <typename> class Sequence; }
 
 namespace comphelper {
 
@@ -136,7 +136,7 @@ public:
     /// @throws css::uno::Exception
     static void SetCommonStorageEncryptionData(
             const css::uno::Reference< css::embed::XStorage >& xStorage,
-            const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
+            const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 
     // the following method supports only storages of OOo formats
     /// @throws css::uno::Exception
@@ -171,11 +171,11 @@ public:
                             = css::uno::Reference< css::uno::XComponentContext >(),
             bool bRepairStorage = false );
 
-    static css::uno::Sequence< css::beans::NamedValue >
+    static cpo::uno::Sequence< css::beans::NamedValue >
         CreatePackageEncryptionData(
             std::u16string_view aPassword );
 
-    static css::uno::Sequence< css::beans::NamedValue >
+    static cpo::uno::Sequence< css::beans::NamedValue >
     CreateGpgPackageEncryptionData(const css::uno::Reference<css::awt::XWindow>& xParentWindow);
 
     static bool IsValidZipEntryFileName( std::u16string_view aName, bool bSlashAllowed );

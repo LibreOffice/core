@@ -85,8 +85,8 @@ public:
     virtual ~SwXMLTextBlockTokenHandler() override;
 
     //XFastTokenHandler
-    sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
+    sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
+    cpo::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
 
     //Much fast direct C++ shortcut to the method that matters
     virtual sal_Int32 getTokenDirect(std::string_view token) const override;
@@ -111,8 +111,8 @@ public:
     virtual ~SwXMLBlockListTokenHandler() override;
 
     //XFastTokenHandler
-    sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
+    sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
+    cpo::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
 
     //Much fast direct C++ shortcut to the method that matters
     virtual sal_Int32 getTokenDirect(std::string_view token) const override;

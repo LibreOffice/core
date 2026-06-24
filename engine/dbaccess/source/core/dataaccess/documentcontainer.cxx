@@ -111,12 +111,12 @@ ODocumentContainer::~ODocumentContainer()
 
 IMPLEMENT_FORWARD_XINTERFACE3( ODocumentContainer,ODefinitionContainer,ODocumentContainer_Base,OPropertyStateContainer)
 
-css::uno::Sequence<sal_Int8> ODocumentContainer::getImplementationId()
+cpo::uno::Sequence<sal_Int8> ODocumentContainer::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-css::uno::Sequence< css::uno::Type > ODocumentContainer::getTypes()
+cpo::uno::Sequence< css::uno::Type > ODocumentContainer::getTypes()
 {
     return  ::comphelper::concatSequences(
         ODefinitionContainer::getTypes( ),
@@ -130,7 +130,7 @@ OUString SAL_CALL ODocumentContainer::getImplementationName()
     };
 bool SAL_CALL ODocumentContainer::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
@@ -148,7 +148,7 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ODocumentContainer
 }
 ::cppu::IPropertyArrayHelper* ODocumentContainer::createArrayHelper( ) const
 {
-    css::uno::Sequence< css::beans::Property > aProps;
+    cpo::uno::Sequence< css::beans::Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }

@@ -144,7 +144,7 @@ IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, 
 void TabListenerMultiplexer::removed( sal_Int32 evt )
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, removed, ::sal_Int32 )
 
-void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< css::beans::NamedValue >& evt2 )
+void TabListenerMultiplexer::changed( sal_Int32 evt, const cpo::uno::Sequence< css::beans::NamedValue >& evt2 )
 {
     sal_Int32 aMulti( evt );
     std::unique_lock g(m_aMutex);

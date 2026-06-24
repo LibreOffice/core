@@ -106,7 +106,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptContext::crea
         {
             OUString aLanguage = xAttrList->getValue( XML_ELEMENT(SCRIPT, XML_LANGUAGE) );
 
-            uno::Sequence< beans::PropertyValue > aMedDescr = m_xModel->getArgs();
+            cpo::uno::Sequence< beans::PropertyValue > aMedDescr = m_xModel->getArgs();
             sal_Int32 nNewLen = aMedDescr.getLength() + 1;
             aMedDescr.realloc( nNewLen );
             auto pMedDescr = aMedDescr.getArray();

@@ -27,7 +27,7 @@
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/ChangesEvent.hpp>
 
 namespace com::sun::star {
@@ -68,7 +68,7 @@ public:
 
     void addPropertiesChangeNotification(
         css::uno::Reference< css::beans::XPropertiesChangeListener > const & listener,
-        css::uno::Sequence< css::beans::PropertyChangeEvent > const & event);
+        cpo::uno::Sequence< css::beans::PropertyChangeEvent > const & event);
 
     void addChangesNotification(
         css::uno::Reference< css::util::XChangesListener > const & listener,
@@ -109,11 +109,11 @@ private:
 
     struct PropertiesChangeNotification {
         css::uno::Reference< css::beans::XPropertiesChangeListener > listener;
-        css::uno::Sequence< css::beans::PropertyChangeEvent >        event;
+        cpo::uno::Sequence< css::beans::PropertyChangeEvent >        event;
 
         PropertiesChangeNotification(
             css::uno::Reference< css::beans::XPropertiesChangeListener > const & theListener,
-            css::uno::Sequence< css::beans::PropertyChangeEvent > const & theEvent);
+            cpo::uno::Sequence< css::beans::PropertyChangeEvent > const & theEvent);
     };
 
     struct ChangesNotification {

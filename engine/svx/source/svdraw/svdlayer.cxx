@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
@@ -48,7 +48,7 @@ void SdrLayerIDSet::operator&=(const SdrLayerIDSet& r2ndSet)
 */
 void SdrLayerIDSet::PutValue( const cpo::uno::Any & rAny )
 {
-    css::uno::Sequence< sal_Int8 > aSeq;
+    cpo::uno::Sequence< sal_Int8 > aSeq;
     if( !(rAny >>= aSeq) )
         return;
 
@@ -353,7 +353,7 @@ void SdrLayerAdmin::QueryValue(const SdrLayerIDSet& rViewLayerSet, cpo::uno::Any
             break;
         }
     }
-    css::uno::Sequence< sal_Int8 > aSeq( nNumBytesSet );
+    cpo::uno::Sequence< sal_Int8 > aSeq( nNumBytesSet );
     std::transform(aTmp, aTmp + nNumBytesSet, aSeq.getArray(),
                    [](const sal_uInt8 b) { return static_cast<sal_Int8>(b); });
     rAny <<= aSeq;

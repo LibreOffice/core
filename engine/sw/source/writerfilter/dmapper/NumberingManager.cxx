@@ -61,7 +61,7 @@ static beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T const & aValu
     return comphelper::makePropertyValue(getPropertyName(nNameID), aValue);
 }
 
-static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, std::u16string_view sName )
+static sal_Int32 lcl_findProperty( const cpo::uno::Sequence< beans::PropertyValue >& aProps, std::u16string_view sName )
 {
     sal_Int32 i = 0;
     sal_Int32 nLen = aProps.getLength( );
@@ -78,8 +78,8 @@ static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& 
     return nPos;
 }
 
-static void lcl_mergeProperties( const uno::Sequence< beans::PropertyValue >& aSrc,
-        uno::Sequence< beans::PropertyValue >& aDst )
+static void lcl_mergeProperties( const cpo::uno::Sequence< beans::PropertyValue >& aSrc,
+        cpo::uno::Sequence< beans::PropertyValue >& aDst )
 {
     for ( const auto& rProp : aSrc )
     {
@@ -155,9 +155,9 @@ void ListLevel::SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle )
     m_pParaStyle = pStyle;
 }
 
-uno::Sequence<beans::PropertyValue> ListLevel::GetProperties(bool bDefaults)
+cpo::uno::Sequence<beans::PropertyValue> ListLevel::GetProperties(bool bDefaults)
 {
-    uno::Sequence<beans::PropertyValue> aLevelProps = GetLevelProperties(bDefaults);
+    cpo::uno::Sequence<beans::PropertyValue> aLevelProps = GetLevelProperties(bDefaults);
     if (m_pParaStyle)
         AddParaProperties( &aLevelProps );
     return aLevelProps;
@@ -173,7 +173,7 @@ static bool IgnoreForCharStyle(std::u16string_view aStr, const bool bIsSymbol)
             || (bIsSymbol && aStr==u"CharFontName")
         );
 }
-uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
+cpo::uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
 {
     PropertyValueVector_t rProperties;
 
@@ -186,7 +186,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
     return comphelper::containerToSequence(rProperties);
 }
 
-uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults)
+cpo::uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults)
 {
     std::vector<beans::PropertyValue> aNumberingProperties;
 
@@ -279,9 +279,9 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
 }
 
 // Add the properties only if they do not already exist in the sequence.
-void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props )
+void ListLevel::AddParaProperties( cpo::uno::Sequence< beans::PropertyValue >* props )
 {
-    uno::Sequence< beans::PropertyValue >& aProps = *props;
+    cpo::uno::Sequence< beans::PropertyValue >& aProps = *props;
 
     const OUString sFirstLineIndent = getPropertyName(
             PROP_FIRST_LINE_INDENT );
@@ -387,10 +387,10 @@ void AbstractListDef::AddLevel( sal_uInt16 nLvl )
     m_pCurrentLevel = m_aLevels[nLvl];
 }
 
-uno::Sequence<uno::Sequence<beans::PropertyValue>> AbstractListDef::GetPropertyValues(bool bDefaults)
+cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> AbstractListDef::GetPropertyValues(bool bDefaults)
 {
-    uno::Sequence< uno::Sequence< beans::PropertyValue > > result( sal_Int32( m_aLevels.size( ) ) );
-    uno::Sequence< beans::PropertyValue >* aResult = result.getArray( );
+    cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > > result( sal_Int32( m_aLevels.size( ) ) );
+    cpo::uno::Sequence< beans::PropertyValue >* aResult = result.getArray( );
 
     int nLevels = m_aLevels.size( );
     for ( int i = 0; i < nLevels; i++ )
@@ -450,18 +450,18 @@ const OUString & ListDef::GetStyleName(sal_Int32 const nId,
     return m_StyleName;
 }
 
-uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyValues()
+cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyValues()
 {
     if (!m_pAbstractDef)
-        return uno::Sequence< uno::Sequence< beans::PropertyValue > >();
+        return cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > >();
 
     // [1] Call the same method on the abstract list
-    uno::Sequence<uno::Sequence<beans::PropertyValue>> aAbstract
+    cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aAbstract
         = m_pAbstractDef->GetPropertyValues(/*bDefaults=*/true);
     auto aAbstractRange = asNonConstRange(aAbstract);
 
     // [2] Call the upper class method
-    uno::Sequence<uno::Sequence<beans::PropertyValue>> aThis
+    cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aThis
         = AbstractListDef::GetPropertyValues(/*bDefaults=*/false);
 
     // Merge the results of [2] in [1]
@@ -469,7 +469,7 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyVal
     sal_Int32 nAbstractCount = aAbstract.getLength( );
     for ( sal_Int32 i = 0; i < nThisCount && i < nAbstractCount; i++ )
     {
-        const uno::Sequence< beans::PropertyValue >& level = aThis[i];
+        const cpo::uno::Sequence< beans::PropertyValue >& level = aThis[i];
         if (level.hasElements() && GetLevel(i)->HasValues())
         {
             // If the element contains something, merge it, but ignore stub overrides.
@@ -575,7 +575,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             return;
         }
 
-        uno::Sequence<uno::Sequence<beans::PropertyValue>> aProps = GetMergedPropertyValues();
+        cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aProps = GetMergedPropertyValues();
 
         sal_Int32 nAbstLevels = m_pAbstractDef ? m_pAbstractDef->Size() : 0;
         sal_Int32 nLevel = 0;
@@ -590,13 +590,13 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             // Get the char style
             auto aAbsCharStyleProps = pAbsLevel
                                     ? pAbsLevel->GetCharStyleProperties()
-                                    : uno::Sequence<beans::PropertyValue>();
+                                    : cpo::uno::Sequence<beans::PropertyValue>();
             if ( pLevel )
             {
-                uno::Sequence< beans::PropertyValue >& rAbsCharStyleProps = aAbsCharStyleProps;
-                uno::Sequence< beans::PropertyValue > aCharStyleProps =
+                cpo::uno::Sequence< beans::PropertyValue >& rAbsCharStyleProps = aAbsCharStyleProps;
+                cpo::uno::Sequence< beans::PropertyValue > aCharStyleProps =
                     pLevel->GetCharStyleProperties( );
-                uno::Sequence< beans::PropertyValue >& rCharStyleProps = aCharStyleProps;
+                cpo::uno::Sequence< beans::PropertyValue >& rCharStyleProps = aCharStyleProps;
                 lcl_mergeProperties( rAbsCharStyleProps, rCharStyleProps );
             }
 

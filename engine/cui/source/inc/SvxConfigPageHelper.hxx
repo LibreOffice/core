@@ -63,9 +63,9 @@ public:
                        sal_Int32 nIndex, OUString& rCommandURL, OUString& rLabel, sal_uInt16& rType,
                        bool& rIsVisible, sal_Int32& rStyle);
 
-    static css::uno::Sequence<css::beans::PropertyValue>
+    static cpo::uno::Sequence<css::beans::PropertyValue>
     ConvertSvxConfigEntry(const SvxConfigEntry* pEntry);
-    static css::uno::Sequence<css::beans::PropertyValue>
+    static cpo::uno::Sequence<css::beans::PropertyValue>
     ConvertToolbarEntry(const SvxConfigEntry* pEntry);
 
     static bool EntrySort(SvxConfigEntry const* a, SvxConfigEntry const* b);

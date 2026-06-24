@@ -73,7 +73,7 @@ private:
 class ScPrintCfg final : private ScPrintOptions, public utl::ConfigItem
 {
 private:
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
     void ReadCfg();
     virtual void    ImplCommit() override;
 
@@ -83,7 +83,7 @@ public:
     const ScPrintOptions& GetOptions() const { return *this; }
     void            SetOptions( const ScPrintOptions& rNew );
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,7 +57,7 @@ using namespace cpo::uno;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // XPropertySet
         virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
@@ -88,7 +88,7 @@ using namespace cpo::uno;
 
     Sequence<sal_Int8> SAL_CALL OAddressBookSourceDialogUno::getImplementationId(  )
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
 
@@ -98,7 +98,7 @@ using namespace cpo::uno;
     }
 
 
-    css::uno::Sequence<OUString> SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames()
     {
         return { u"com.sun.star.ui.AddressBookSourceDialog"_ustr };
     }
@@ -204,7 +204,7 @@ using namespace cpo::uno;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svtools_OAddressBookSourceDialogUno_get_implementation(
     css::uno::XComponentContext * context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new OAddressBookSourceDialogUno(context));
 }

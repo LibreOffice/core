@@ -229,7 +229,7 @@ private:
     SAL_DLLPRIVATE static SfxViewShell* LoadViewIntoFrame_Impl(
                             const SfxObjectShell& i_rDoc,
                             const css::uno::Reference< css::frame::XFrame >& i_rFrame,
-                            const css::uno::Sequence< css::beans::PropertyValue >& i_rLoadArgs,
+                            const cpo::uno::Sequence< css::beans::PropertyValue >& i_rLoadArgs,
                             const SfxInterfaceId i_nViewId,
                             const bool i_bHidden
                         );

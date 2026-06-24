@@ -109,8 +109,8 @@ private: //methods
 
 private: //member
     BarPositionHelper                    m_aMainPosHelper;
-    css::uno::Sequence< sal_Int32 >      m_aOverlapSequence;
-    css::uno::Sequence< sal_Int32 >      m_aGapwidthSequence;
+    cpo::uno::Sequence< sal_Int32 >      m_aOverlapSequence;
+    cpo::uno::Sequence< sal_Int32 >      m_aGapwidthSequence;
 };
 } //namespace chart
 

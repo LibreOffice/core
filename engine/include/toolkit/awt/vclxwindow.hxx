@@ -202,7 +202,7 @@ public:
     bool SAL_CALL hasFocus(  ) override;
 
     // css::beans::XPropertySetInfo
-    css::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) override;
+    cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties(  ) override;
     css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
     bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 

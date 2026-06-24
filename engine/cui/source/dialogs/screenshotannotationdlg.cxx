@@ -379,7 +379,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
         return;
 
     maLastFolderURL = xFilePicker->getDisplayDirectory();
-    const uno::Sequence< OUString > files(xFilePicker->getSelectedFiles());
+    const cpo::uno::Sequence< OUString > files(xFilePicker->getSelectedFiles());
 
     if (!files.hasElements())
         return;

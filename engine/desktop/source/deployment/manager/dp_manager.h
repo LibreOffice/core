@@ -63,7 +63,7 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
     OUString detectMediaType(
         ::ucbhelper::Content const & ucbContent, bool throw_exc = true );
     OUString insertToActivationLayer(
-        css::uno::Sequence<css::beans::NamedValue> const & properties,
+        cpo::uno::Sequence<css::beans::NamedValue> const & properties,
         OUString const & mediaType,
         ::ucbhelper::Content const & sourceContent,
         OUString const & title, ActivePackages::Data * dbData );
@@ -145,7 +145,7 @@ public:
 
     // XPackageManager
     virtual OUString SAL_CALL getContext() override;
-    virtual css::uno::Sequence<
+    virtual cpo::uno::Sequence<
         css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() override;
 
@@ -154,7 +154,7 @@ public:
 
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addPackage(
         OUString const & url,
-        css::uno::Sequence<css::beans::NamedValue> const & properties,
+        cpo::uno::Sequence<css::beans::NamedValue> const & properties,
         OUString const & mediaType,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -182,10 +182,10 @@ public:
         OUString const & id, OUString const & fileName,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+    cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
     getDeployedPackages_(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
-    virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
     SAL_CALL getDeployedPackages(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -201,7 +201,7 @@ public:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
+    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
     getExtensionsWithUnacceptedLicenses(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
 

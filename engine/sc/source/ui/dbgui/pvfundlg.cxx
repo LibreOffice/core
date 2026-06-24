@@ -40,7 +40,7 @@
 
 using namespace ::com::sun::star::sheet;
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace {
 

@@ -10,7 +10,7 @@
 #include <vcl/dllapi.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 #include <vector>
@@ -38,7 +38,7 @@ class VCL_DLLPUBLIC PngImageWriter
 public:
     PngImageWriter(SvStream& rStream);
 
-    void setParameters(css::uno::Sequence<css::beans::PropertyValue> const& rParameters);
+    void setParameters(cpo::uno::Sequence<css::beans::PropertyValue> const& rParameters);
     bool write(const Graphic& rGraphic);
 };
 

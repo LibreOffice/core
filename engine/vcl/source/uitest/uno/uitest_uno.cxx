@@ -37,7 +37,7 @@ public:
     bool SAL_CALL executeCommand(const OUString& rCommand) override;
 
     bool SAL_CALL executeCommandWithParameters(const OUString& rCommand,
-        const css::uno::Sequence< css::beans::PropertyValue >& rArgs) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs) override;
 
     bool SAL_CALL executeCommandForProvider(
         const OUString& rCommand,
@@ -58,7 +58,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 }
@@ -74,7 +74,7 @@ bool SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
 }
 
 bool SAL_CALL UITestUnoObj::executeCommandWithParameters(const OUString& rCommand,
-    const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
+    const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     SolarMutexGuard aGuard;
     return UITest::executeCommandWithParameters(rCommand,rArgs);
@@ -145,13 +145,13 @@ bool UITestUnoObj::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> UITestUnoObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UITestUnoObj::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.test.UITest"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-UITest_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
+UITest_get_implementation(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UITestUnoObj());
 }

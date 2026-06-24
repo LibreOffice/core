@@ -102,9 +102,9 @@ cpo::uno::Any SAL_CALL Svx3DSceneObject::queryInterface( const uno::Type & rType
 
 // XTypeProvider
 
-uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL Svx3DSceneObject::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 
@@ -417,7 +417,7 @@ bool Svx3DSceneObject::getPropertyValueImpl(const OUString& rName, const SfxItem
 }
 
 // css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -537,7 +537,7 @@ bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItem
 }
 
 // css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Svx3DCubeObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -642,7 +642,7 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
 }
 
 // css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Svx3DSphereObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -822,7 +822,7 @@ bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 }
 
 // css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Svx3DLatheObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -905,7 +905,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
 }
 
 // css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Svx3DExtrudeObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),
@@ -1041,7 +1041,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxI
 }
 
 // css::lang::XServiceInfo
-uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Svx3DPolygonObject::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxShape::getSupportedServiceNames(),

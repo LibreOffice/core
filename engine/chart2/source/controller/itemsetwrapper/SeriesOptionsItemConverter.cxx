@@ -90,7 +90,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
 
             sal_Int32 nAxisIndex = xDataSeries->getAttachedAxisIndex();
 
-            uno::Sequence< sal_Int32 > aBarPositionSequence;
+            cpo::uno::Sequence< sal_Int32 > aBarPositionSequence;
             if( xChartType.is() )
             {
                 if( xChartType->getPropertyValue( u"OverlapSequence"_ustr ) >>= aBarPositionSequence )
@@ -207,7 +207,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                 if( xChartType.is() )
                 {
                     sal_Int32 nAxisIndex = xDataSeries->getAttachedAxisIndex();
-                    uno::Sequence< sal_Int32 > aBarPositionSequence;
+                    cpo::uno::Sequence< sal_Int32 > aBarPositionSequence;
                     if( xChartType->getPropertyValue( aPropName ) >>= aBarPositionSequence )
                     {
                         bool bGroupBarsPerAxis =  rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS ).GetValue();

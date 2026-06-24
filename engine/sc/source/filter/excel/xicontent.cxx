@@ -62,7 +62,7 @@
 #include <oox/helper/helper.hxx>
 #include <sal/log.hxx>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 // Shared string table ========================================================
 

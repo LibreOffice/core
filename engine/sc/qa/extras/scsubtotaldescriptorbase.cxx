@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 using namespace css;
 
@@ -102,8 +102,10 @@ uno::Reference<uno::XInterface> ScSubTotalDescriptorBase::init()
     uno::Reference<sheet::XSubTotalCalculatable> xSTC(xSheet, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSubTotalDescriptor> xSTD = xSTC->createSubTotalDescriptor(true);
 
-    uno::Sequence<sheet::SubTotalColumn> xCols{ { /* Column   */ 5,
-                                                  /* Function */ sheet::GeneralFunction_SUM } };
+    cpo::uno::Sequence<sheet::SubTotalColumn> xCols{
+        { /* Column   */ 5,
+          /* Function */ sheet::GeneralFunction_SUM }
+    };
     xSTD->addNew(xCols, 10);
 
     return xSTD;

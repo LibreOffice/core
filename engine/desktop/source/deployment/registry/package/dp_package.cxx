@@ -593,7 +593,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
     css::uno::Reference< css::ucb::XCommandEnvironment > const & environment,
     DescriptionInfoset const & description)
 {
-    css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
+    cpo::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
         unsatisfied(dp_misc::Dependencies::check(description));
 
     if (!unsatisfied.hasElements()) {
@@ -769,7 +769,7 @@ uno::Reference< graphic::XGraphic > BackendImpl::PackageImpl::getIcon( bool bHig
         uno::Reference< XComponentContext > xContext( getMyBackend()->getComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xGraphProvider( graphic::GraphicProvider::create(xContext) );
 
-        uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(
+        cpo::uno::Sequence< beans::PropertyValue > aMediaProps{ comphelper::makePropertyValue(
             u"URL"_ustr, aFullIconURL) };
         xGraphic = xGraphProvider->queryGraphic( aMediaProps );
     }

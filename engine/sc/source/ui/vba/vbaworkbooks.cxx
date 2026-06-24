@@ -184,7 +184,7 @@ OUString
 ScVbaWorkbooks::getFileFilterType( const OUString& rFileName )
 {
     uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, mxContext), uno::UNO_QUERY_THROW );
-    uno::Sequence aMediaDesc{ comphelper::makePropertyValue(u"URL"_ustr, rFileName) };
+    cpo::uno::Sequence aMediaDesc{ comphelper::makePropertyValue(u"URL"_ustr, rFileName) };
     OUString sType = xTypeDetect->queryTypeByDescriptor( aMediaDesc, true );
     return sType;
 }
@@ -203,7 +203,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const cpo::uno::Any& /*UpdateLi
     else
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
 
-    uno::Sequence< beans::PropertyValue > sProps;
+    cpo::uno::Sequence< beans::PropertyValue > sProps;
 
     OUString sType = getFileFilterType( aURL );
     // A text file means it needs to be processed as a csv file
@@ -278,10 +278,10 @@ ScVbaWorkbooks::getServiceImplName()
     return u"ScVbaWorkbooks"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaWorkbooks::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.excel.Workbooks"_ustr
     };

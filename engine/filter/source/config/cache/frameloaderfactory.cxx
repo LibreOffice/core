@@ -42,12 +42,12 @@ FrameLoaderFactory::~FrameLoaderFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const OUString& sLoader)
 {
-    return createInstanceWithArguments(sLoader, css::uno::Sequence< cpo::uno::Any >());
+    return createInstanceWithArguments(sLoader, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
-                                                                                                     const css::uno::Sequence< cpo::uno::Any >& lArguments)
+                                                                                                     const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -68,7 +68,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
         //         lInitData[1] = lArguments[0]
         //         ...
         //         lInitData[n] = lArguments[n-1]
-        css::uno::Sequence< css::beans::PropertyValue > lConfig;
+        cpo::uno::Sequence< css::beans::PropertyValue > lConfig;
         aLoader >> lConfig;
 
         ::std::vector< cpo::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector<cpo::uno::Any> >(lArguments));
@@ -82,7 +82,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceNames()
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!
     return BaseContainer::getElementNames();
@@ -93,7 +93,7 @@ css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceN
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_FrameLoaderFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::FrameLoaderFactory(context));
 }

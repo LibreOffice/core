@@ -166,7 +166,7 @@ std::size_t SvInputStream::GetData(void * pData, std::size_t const nSize)
                              std::size_t(std::numeric_limits<sal_Int32>::max())));
             if (nRemain == 0)
                 break;
-            uno::Sequence< sal_Int8 > aBuffer;
+            cpo::uno::Sequence< sal_Int8 > aBuffer;
             sal_Int32 nCount;
             try
             {
@@ -203,7 +203,7 @@ std::size_t SvInputStream::GetData(void * pData, std::size_t const nSize)
                             std::size_t(std::numeric_limits<sal_Int32>::max())));
                 if (nRemain == 0)
                     break;
-                uno::Sequence< sal_Int8 > aBuffer;
+                cpo::uno::Sequence< sal_Int8 > aBuffer;
                 sal_Int32 nCount;
                 try
                 {
@@ -297,7 +297,7 @@ sal_uInt64 SvInputStream::SeekPos(sal_uInt64 const nPos)
         {
             // Read out the bytes
             sal_Int32 nRead = nPos - Tell();
-            uno::Sequence< sal_Int8 > aBuffer;
+            cpo::uno::Sequence< sal_Int8 > aBuffer;
             m_xStream->readBytes( aBuffer, nRead );
             return nPos;
         }
@@ -364,7 +364,7 @@ std::size_t SvOutputStream::PutData(void const * pData, std::size_t nSize)
             break;
         try
         {
-            m_xStream->writeBytes(uno::Sequence< sal_Int8 >(
+            m_xStream->writeBytes(cpo::uno::Sequence< sal_Int8 >(
                                       static_cast<const sal_Int8 * >(pData)
                                           + nWritten,
                                       nRemain));

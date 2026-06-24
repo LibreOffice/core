@@ -84,7 +84,7 @@ bool SAL_CALL LogarithmicScaling::supportsService( const OUString& rServiceName 
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL LogarithmicScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL LogarithmicScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_Logarithmic };
 }
@@ -130,7 +130,7 @@ bool SAL_CALL ExponentialScaling::supportsService( const OUString& rServiceName 
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ExponentialScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ExponentialScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_Exponential };
 }
@@ -180,7 +180,7 @@ bool SAL_CALL LinearScaling::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL LinearScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL LinearScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_Linear };
 }
@@ -229,7 +229,7 @@ bool SAL_CALL PowerScaling::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL PowerScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PowerScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_Power };
 }
@@ -238,28 +238,28 @@ css::uno::Sequence< OUString > SAL_CALL PowerScaling::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_chart2_LinearScaling_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::LinearScaling );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_chart2_ExponentialScaling_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::ExponentialScaling );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_chart2_LogarithmicScaling_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::LogarithmicScaling );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_chart2_PowerScaling_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::PowerScaling );
 }

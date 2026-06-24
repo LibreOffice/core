@@ -19,7 +19,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <o3tl/safeint.hxx>
 #include <osl/time.h>
@@ -1183,7 +1183,7 @@ public:
             bHasLoadedAll = true;
 
             css::uno::Reference<css::container::XNameAccess> xRef(ImageTree::get().getNameAccess());
-            const css::uno::Sequence< OUString > aAllIcons = xRef->getElementNames();
+            const cpo::uno::Sequence< OUString > aAllIcons = xRef->getElementNames();
 
             for (const auto& rIcon : aAllIcons)
             {

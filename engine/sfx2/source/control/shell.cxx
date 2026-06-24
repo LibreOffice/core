@@ -69,7 +69,7 @@ struct SfxShell_Impl: public SfxBroadcaster
     std::unique_ptr<svtools::AsynchronLink> pUpdater;
     std::vector<std::unique_ptr<SfxSlot> >  aSlotArr;
 
-    css::uno::Sequence < css::embed::VerbDescriptor > aVerbList;
+    cpo::uno::Sequence < css::embed::VerbDescriptor > aVerbList;
     ::sfx2::sidebar::ContextChangeBroadcaster maContextChangeBroadcaster;
 
     SfxShell_Impl()
@@ -292,7 +292,7 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
             {
                 css::uno::Reference<css::awt::XWindow> xDialogParent
                     = VCLUnoHelper::GetInterface(pViewShell->GetWindow());
-                css::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                     { { "ParentWindow", cpo::uno::Any(xDialogParent) } }));
                 xInit->initialize(aSeq);
             }
@@ -545,7 +545,7 @@ static void SfxStubSfxShellVerbState(SfxShell *, SfxItemSet& rSet)
     SfxShell::VerbState( rSet );
 }
 
-void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >& aVerbs)
+void SfxShell::SetVerbs(const cpo::uno::Sequence < css::embed::VerbDescriptor >& aVerbs)
 {
     SfxViewShell *pViewSh = dynamic_cast<SfxViewShell*>( this );
 
@@ -604,7 +604,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
     pBindings->Invalidate(SID_OBJECT, true, true);
 }
 
-const css::uno::Sequence < css::embed::VerbDescriptor >& SfxShell::GetVerbs() const
+const cpo::uno::Sequence < css::embed::VerbDescriptor >& SfxShell::GetVerbs() const
 {
     return pImpl->aVerbList;
 }
@@ -617,7 +617,7 @@ void SfxShell::VerbExec(SfxRequest& rReq)
         return;
 
     bool bReadOnly = pViewShell->GetObjectShell()->IsReadOnly();
-    const css::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
+    const cpo::uno::Sequence < css::embed::VerbDescriptor > aList = pViewShell->GetVerbs();
     sal_Int32 nVerb = 0;
     for (const auto& rVerb : aList)
     {
@@ -644,7 +644,7 @@ void SfxShell::VerbState(SfxItemSet& )
 
 const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
 {
-    css::uno::Sequence < css::embed::VerbDescriptor > rList = pImpl->aVerbList;
+    cpo::uno::Sequence < css::embed::VerbDescriptor > rList = pImpl->aVerbList;
 
     DBG_ASSERT(nId >= SID_VERB_START && nId <= SID_VERB_END,"Wrong VerbId!");
     sal_uInt16 nIndex = nId - SID_VERB_START;

@@ -95,7 +95,7 @@ class ODBExport : public SvXMLExport
     void                    exportDriverSettings(const TSettingsMap& _aSettings);
     void                    exportApplicationConnectionSettings(const TSettingsMap& _aSettings);
     void                    exportLogin();
-    void                    exportSequence(const css::uno::Sequence< OUString>& _aValue
+    void                    exportSequence(const cpo::uno::Sequence< OUString>& _aValue
                                         ,::xmloff::token::XMLTokenEnum _eTokenFilter
                                         ,::xmloff::token::XMLTokenEnum _eTokenType);
     void                    exportDelimiter();
@@ -140,8 +140,8 @@ protected:
     virtual void                    ExportFontDecls_() override;
     virtual SvXMLAutoStylePoolP*    CreateAutoStylePool() override;
 
-    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
-    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetViewSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetConfigurationSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
 
     virtual                 ~ODBExport() override {};
 public:

@@ -98,7 +98,7 @@ SvxXMLTabStopExport::SvxXMLTabStopExport(
 
 void SvxXMLTabStopExport::Export( const cpo::uno::Any& rAny )
 {
-    uno::Sequence< css::style::TabStop> aSeq;
+    cpo::uno::Sequence< css::style::TabStop> aSeq;
     if(!(rAny >>= aSeq))
     {
         OSL_FAIL( "SvxXMLTabStopExport needs a Sequence css::style::TabStop>" );

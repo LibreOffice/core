@@ -41,7 +41,7 @@ ChartGradientPaletteControl::ChartGradientPaletteControl(
 
 ChartGradientPaletteControl::~ChartGradientPaletteControl() = default;
 
-void ChartGradientPaletteControl::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void ChartGradientPaletteControl::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     svt::PopupWindowController::initialize(rArguments);
 
@@ -233,14 +233,14 @@ OUString ChartGradientPaletteControl::getImplementationName()
     return u"com.sun.star.comp.chart2.ChartGradientPaletteControl"_ustr;
 }
 
-uno::Sequence<OUString> ChartGradientPaletteControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ChartGradientPaletteControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_chart2_ChartGradientPaletteControl_get_implementation(
-    uno::XComponentContext* rContext, uno::Sequence<cpo::uno::Any> const&)
+    uno::XComponentContext* rContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ChartGradientPaletteControl(rContext));
 }

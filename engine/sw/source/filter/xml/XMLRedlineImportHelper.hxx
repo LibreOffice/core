@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/util/DateTime.hpp>
 #include <redline.hxx>
 
@@ -58,7 +58,7 @@ class XMLRedlineImportHelper final
     css::uno::Reference<css::beans::XPropertySet> m_xImportInfoPropertySet;
     bool m_bShowChanges;
     bool m_bRecordChanges;
-    css::uno::Sequence<sal_Int8> m_aProtectionKey;
+    cpo::uno::Sequence<sal_Int8> m_aProtectionKey;
 
 public:
 
@@ -116,7 +116,7 @@ public:
     void SetRecordChanges( bool bRecordChanges );
 
     // set redline protection key
-    void SetProtectionKey(const css::uno::Sequence<sal_Int8> & rKey );
+    void SetProtectionKey(const cpo::uno::Sequence<sal_Int8> & rKey );
 
 private:
 

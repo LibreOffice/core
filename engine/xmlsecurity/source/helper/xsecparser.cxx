@@ -1624,7 +1624,7 @@ void SAL_CALL XSecParser::setDocumentLocator( const css::uno::Reference< css::xm
  * XInitialization
  */
 void SAL_CALL XSecParser::initialize(
-    const css::uno::Sequence< cpo::uno::Any >& aArguments )
+    const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     aArguments[0] >>= m_xNextHandler;
 }

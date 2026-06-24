@@ -359,7 +359,7 @@ bool ResultSetDataSupplier::queryNamesOfChildren(std::unique_lock<std::mutex>& /
 {
     if ( !m_xNamesOfChildren )
     {
-        uno::Sequence< OUString > aNamesOfChildren;
+        cpo::uno::Sequence< OUString > aNamesOfChildren;
 
         if ( !m_xContent->getContentProvider()->queryNamesOfChildren(
                 m_xContent->getIdentifier()->getContentIdentifier(),

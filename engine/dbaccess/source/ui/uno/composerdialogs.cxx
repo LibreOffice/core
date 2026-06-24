@@ -32,13 +32,13 @@
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_uno_comp_sdb_RowsetOrderDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaui::RowsetOrderDialog(context));
 }
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_uno_comp_sdb_RowsetFilterDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaui::RowsetFilterDialog(context));
 }
@@ -73,9 +73,9 @@ using namespace cpo::uno;
 
     }
 
-    css::uno::Sequence<sal_Int8> ComposerDialog::getImplementationId()
+    cpo::uno::Sequence<sal_Int8> ComposerDialog::getImplementationId()
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
     css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ComposerDialog::getPropertySetInfo()
@@ -89,7 +89,7 @@ using namespace cpo::uno;
     }
     ::cppu::IPropertyArrayHelper* ComposerDialog::createArrayHelper( ) const
     {
-        css::uno::Sequence< css::beans::Property > aProps;
+        cpo::uno::Sequence< css::beans::Property > aProps;
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
@@ -155,14 +155,14 @@ using namespace cpo::uno;
     }
     bool SAL_CALL RowsetFilterDialog::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-    css::uno::Sequence< OUString > SAL_CALL RowsetFilterDialog::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > SAL_CALL RowsetFilterDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.FilterDialog"_ustr };
     }
@@ -211,14 +211,14 @@ using namespace cpo::uno;
     }
     bool SAL_CALL RowsetOrderDialog::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-    css::uno::Sequence< OUString > SAL_CALL RowsetOrderDialog::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > SAL_CALL RowsetOrderDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.sdb.OrderDialog"_ustr };
     }

@@ -182,7 +182,7 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
         }
     }
 
-    uno::Sequence< beans::PropertyValue > aArgs{
+    cpo::uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
             u"CellRangeRepresentation"_ustr, -1,
             cpo::uno::Any( aRangeString ), beans::PropertyState_DIRECT_VALUE ),
@@ -650,7 +650,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 {
                     css::uno::Reference< css::awt::XWindow > xParent
                         = new weld::TransportAsXWindow(pWin->GetFrameWeld());
-                    uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                    cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                     {
                         {"ParentWindow", cpo::uno::Any(xParent)},
                         {"ChartModel", cpo::uno::Any(xChartModel)}

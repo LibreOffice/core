@@ -25,7 +25,7 @@
 #include <svl/poolitem.hxx>
 #include <memory>
 
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 class SVL_DLLPUBLIC SfxStringListItem final : public SfxPoolItem
 {
@@ -52,8 +52,8 @@ public:
     void                    SetString( const OUString& );
     OUString                GetString();
 
-    void                    SetStringList( const css::uno::Sequence< OUString >& rList );
-    void                    GetStringList( css::uno::Sequence< OUString >& rList ) const;
+    void                    SetStringList( const cpo::uno::Sequence< OUString >& rList );
+    void                    GetStringList( cpo::uno::Sequence< OUString >& rList ) const;
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool            GetPresentation( SfxItemPresentation ePres,

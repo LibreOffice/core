@@ -33,7 +33,7 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace chart::wrapper
 {
@@ -143,7 +143,7 @@ bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL AreaWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL AreaWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.xml.UserDefinedAttributesSupplier"_ustr,

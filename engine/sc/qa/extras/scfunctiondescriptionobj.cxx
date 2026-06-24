@@ -16,7 +16,7 @@
 #include <com/sun/star/sheet/XFunctionDescriptions.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 using namespace css;
@@ -30,7 +30,7 @@ class ScFunctionDescriptionObj : public UnoApiTest, public apitest::FunctionDesc
 public:
     ScFunctionDescriptionObj();
 
-    virtual uno::Sequence<beans::PropertyValue> init() override;
+    virtual cpo::uno::Sequence<beans::PropertyValue> init() override;
 
     virtual void setUp() override;
 
@@ -47,7 +47,7 @@ ScFunctionDescriptionObj::ScFunctionDescriptionObj()
 {
 }
 
-uno::Sequence<beans::PropertyValue> ScFunctionDescriptionObj::init()
+cpo::uno::Sequence<beans::PropertyValue> ScFunctionDescriptionObj::init()
 {
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
@@ -56,9 +56,9 @@ uno::Sequence<beans::PropertyValue> ScFunctionDescriptionObj::init()
         xMSF->createInstance(u"com.sun.star.sheet.FunctionDescriptions"_ustr), UNO_QUERY_THROW);
 
     uno::Reference<container::XNameAccess> xNA(xFDs, UNO_QUERY_THROW);
-    uno::Sequence<OUString> names = xNA->getElementNames();
+    cpo::uno::Sequence<OUString> names = xNA->getElementNames();
 
-    uno::Sequence<beans::PropertyValue> sPropertyValues;
+    cpo::uno::Sequence<beans::PropertyValue> sPropertyValues;
     CPPUNIT_ASSERT(xNA->getByName(names[0]) >>= sPropertyValues);
     return sPropertyValues;
 }

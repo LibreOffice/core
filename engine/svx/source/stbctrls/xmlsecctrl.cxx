@@ -114,7 +114,7 @@ void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
             aState.QueryValue( a );
             INetURLObject aObj( m_aCommandURL );
 
-            css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+            cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
                 aObj.GetURLPath(), a) };
             execute( aArgs );
         }

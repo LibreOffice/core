@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 using namespace css;
 
@@ -152,7 +152,7 @@ uno::Reference<uno::XInterface> ScChartObj::init()
                                                   uno::UNO_SET_THROW);
     uno::Reference<sheet::XCellRangeAddressable> xCRA(xCellRange1, uno::UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aCRA{ xCRA->getRangeAddress() };
+    cpo::uno::Sequence<table::CellRangeAddress> aCRA{ xCRA->getRangeAddress() };
 
     uno::Reference<table::XTableChartsSupplier> xTCS(xSheet0, uno::UNO_QUERY_THROW);
     uno::Reference<table::XTableCharts> xTC = xTCS->getCharts();

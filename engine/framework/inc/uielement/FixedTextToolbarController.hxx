@@ -43,7 +43,7 @@ public:
 
 private:
     virtual void executeControlCommand(const css::frame::ControlCommand& rControlCommand) override;
-    virtual css::uno::Sequence<css::beans::PropertyValue>
+    virtual cpo::uno::Sequence<css::beans::PropertyValue>
     getExecuteArgs(sal_Int16 KeyModifier) const override;
 
     VclPtr<FixedTextControl> m_pFixedTextControl;

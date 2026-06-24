@@ -25,7 +25,7 @@
 #include <stack>
 #include <vector>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
@@ -821,7 +821,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScChangeTrack final : public utl::Con
     SCROW               mnContentRowsPerSlot;
     SCSIZE              mnContentSlots;
 
-    css::uno::Sequence< sal_Int8 >   aProtectPass;
+    cpo::uno::Sequence< sal_Int8 >   aProtectPass;
     ScChangeActionMap   aMap;
     ScChangeActionMap   aGeneratedMap;
     ScChangeActionMap   aPasteCutMap;
@@ -1120,9 +1120,9 @@ public:
     void                SetActionMax(sal_uLong nTempActionMax)
                             { nActionMax = nTempActionMax; } // only to use in the XML import
 
-    void                SetProtection( const css::uno::Sequence< sal_Int8 >& rPass )
+    void                SetProtection( const cpo::uno::Sequence< sal_Int8 >& rPass )
                             { aProtectPass = rPass; }
-    const css::uno::Sequence< sal_Int8 >& GetProtection() const
+    const cpo::uno::Sequence< sal_Int8 >& GetProtection() const
                                     { return aProtectPass; }
     bool IsProtected() const { return aProtectPass.hasElements(); }
 

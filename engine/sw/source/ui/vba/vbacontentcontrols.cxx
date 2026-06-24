@@ -31,7 +31,7 @@ static std::shared_ptr<SwContentControl>
 lcl_getContentControl(std::u16string_view sName, std::u16string_view sTag,
                       std::u16string_view sTitle, sal_Int32& rIndex,
                       const rtl::Reference<SwXTextDocument>& xTextDocument,
-                      uno::Sequence<OUString>* pElementNames = nullptr)
+                      cpo::uno::Sequence<OUString>* pElementNames = nullptr)
 {
     SwDoc* pDoc = xTextDocument->GetDocShell()->GetDoc();
     if (!pDoc)
@@ -166,10 +166,10 @@ public:
     }
 
     // XNameAccess
-    uno::Sequence<OUString> SAL_CALL getElementNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override
     {
         sal_Int32 nCount = SAL_MAX_INT32;
-        uno::Sequence<OUString> aSeq;
+        cpo::uno::Sequence<OUString> aSeq;
         lcl_getContentControl(u"", m_sTag, m_sTitle, nCount, mxTextDocument, &aSeq);
         return aSeq;
     }
@@ -263,9 +263,9 @@ cpo::uno::Any SwVbaContentControls::createCollectionObject(const cpo::uno::Any& 
 
 OUString SwVbaContentControls::getServiceImplName() { return u"SwVbaContentControls"_ustr; }
 
-uno::Sequence<OUString> SwVbaContentControls::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaContentControls::getServiceNames()
 {
-    static uno::Sequence<OUString> const sNames{ u"ooo.vba.word.ContentControls"_ustr };
+    static cpo::uno::Sequence<OUString> const sNames{ u"ooo.vba.word.ContentControls"_ustr };
     return sNames;
 }
 

@@ -132,7 +132,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawObjectLinkDeferred)
     // (which fetches the URL) during import. The link is deferred until the
     // user confirms link updates. Uses non-routable 192.0.2.1 so that an
     // actual fetch would hang/timeout.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -149,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testDrawImageRemoteNotFetched)
     // draw:image with a remote xlink:href must not fetch the URL during
     // import. Uses non-routable 192.0.2.1 so that an actual fetch would
     // hang/timeout causing this test to fail.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };

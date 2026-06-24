@@ -192,8 +192,8 @@ public:
     /** @return  <TRUE/>, if the row is selected. */
     virtual bool                    IsRowSelected( sal_Int32 _nRow ) const override;
     virtual bool                    IsColumnSelected( sal_Int32 _nColumn ) const override;
-    virtual void                    GetAllSelectedRows( css::uno::Sequence< sal_Int32 >& _rRows ) const override;
-    virtual void                    GetAllSelectedColumns( css::uno::Sequence< sal_Int32 >& _rColumns ) const override;
+    virtual void                    GetAllSelectedRows( cpo::uno::Sequence< sal_Int32 >& _rRows ) const override;
+    virtual void                    GetAllSelectedColumns( cpo::uno::Sequence< sal_Int32 >& _rColumns ) const override;
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual bool                    IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const override;

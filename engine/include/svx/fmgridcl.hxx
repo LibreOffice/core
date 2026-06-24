@@ -181,9 +181,9 @@ protected:
 
     FmXGridPeer* GetPeer() const {return m_pPeer;}
 
-    css::uno::Sequence< cpo::uno::Any>
+    cpo::uno::Sequence< cpo::uno::Any>
             getSelectionBookmarks();
-    bool selectBookmarks(const css::uno::Sequence< cpo::uno::Any>& _rBookmarks);
+    bool selectBookmarks(const cpo::uno::Sequence< cpo::uno::Any>& _rBookmarks);
 
     /** returns if a column is selected
         @param  _pColumn

@@ -26,7 +26,7 @@
 #include "com/sun/star/beans/XPropertyAccess.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/uno/Reference.h"
-#include "com/sun/star/uno/Sequence.hxx"
+#include "cpo/uno/Sequence.hxx"
 #include "sal/types.h"
 #include "cppuhelper/cppuhelperdllapi.h"
 
@@ -302,11 +302,11 @@ protected:
         sal_Int32 handle) SAL_OVERRIDE;
 
     // @see css::beans::XPropertyAccess::getPropertyValues
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() SAL_OVERRIDE;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() SAL_OVERRIDE;
 
     // @see css::beans::XPropertyAccess::setPropertyValues
     virtual void SAL_CALL setPropertyValues(
-        css::uno::Sequence< css::beans::PropertyValue > const & props) SAL_OVERRIDE;
+        cpo::uno::Sequence< css::beans::PropertyValue > const & props) SAL_OVERRIDE;
 
 private:
     PropertySetMixinImpl( const PropertySetMixinImpl&) SAL_DELETED_FUNCTION;
@@ -315,7 +315,7 @@ private:
     PropertySetMixinImpl(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         Implements implements,
-        css::uno::Sequence< rtl::OUString > const & absentOptional,
+        cpo::uno::Sequence< rtl::OUString > const & absentOptional,
         css::uno::Type const & type);
 
     class Impl;
@@ -384,7 +384,7 @@ protected:
     PropertySetMixin(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         Implements implements,
-        css::uno::Sequence< rtl::OUString > const & absentOptional):
+        cpo::uno::Sequence< rtl::OUString > const & absentOptional):
         PropertySetMixinImpl(
             context, implements, absentOptional, T::static_type())
     {}

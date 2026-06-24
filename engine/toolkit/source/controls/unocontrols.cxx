@@ -137,16 +137,16 @@ OUString UnoControlEditModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlEditModel"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoControlEditModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoControlEditModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlEditModel"_ustr, u"stardiv.vcl.controlmodel.Edit"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlEditModel"_ustr, u"stardiv.vcl.controlmodel.Edit"_ustr };
     return comphelper::concatSequences(UnoControlModel::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlEditModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlEditModel(context));
 }
@@ -466,16 +466,16 @@ OUString UnoEditControl::getImplementationName(  )
     return u"stardiv.Toolkit.UnoEditControl"_ustr;
 }
 
-uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > UnoEditControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlEdit"_ustr, u"stardiv.vcl.control.Edit"_ustr };
+    cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlEdit"_ustr, u"stardiv.vcl.control.Edit"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames( ), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoEditControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoEditControl());
 }
@@ -537,17 +537,17 @@ OUString UnoControlFileControlModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlFileControlModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlFileControlModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFileControlModel"_ustr, u"stardiv.vcl.controlmodel.FileControl"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFileControlModel"_ustr, u"stardiv.vcl.controlmodel.FileControl"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFileControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlFileControlModel(context));
 }
@@ -568,16 +568,16 @@ OUString UnoFileControl::getImplementationName()
     return u"stardiv.Toolkit.UnoFileControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoFileControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoFileControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFileControl"_ustr, u"stardiv.vcl.control.FileControl"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFileControl"_ustr, u"stardiv.vcl.control.FileControl"_ustr };
     return comphelper::concatSequences( UnoEditControl::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFileControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFileControl());
 }
@@ -713,16 +713,16 @@ OUString UnoControlButtonModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlButtonModel"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoControlButtonModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoControlButtonModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlButtonModel"_ustr, u"stardiv.vcl.controlmodel.Button"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlButtonModel"_ustr, u"stardiv.vcl.controlmodel.Button"_ustr };
     return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlButtonModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlButtonModel(context));
 }
@@ -880,16 +880,16 @@ OUString UnoButtonControl::getImplementationName()
     return u"stardiv.Toolkit.UnoButtonControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoButtonControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoButtonControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlButton"_ustr, u"stardiv.vcl.control.Button"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlButton"_ustr, u"stardiv.vcl.control.Button"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoButtonControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoButtonControl());
 }
@@ -913,10 +913,10 @@ OUString UnoControlImageControlModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlImageControlModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlImageControlModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals {
+    const cpo::uno::Sequence<OUString> vals {
         u"com.sun.star.awt.UnoControlImageButtonModel"_ustr,
         u"com.sun.star.awt.UnoControlImageControlModel"_ustr,
         u"stardiv.vcl.controlmodel.ImageButton"_ustr,
@@ -990,7 +990,7 @@ void UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( std::unique_
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlImageControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlImageControlModel(context));
 }
@@ -1043,9 +1043,9 @@ OUString UnoImageControlControl::getImplementationName()
     return u"stardiv.Toolkit.UnoImageControlControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoImageControlControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoImageControlControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals {
+    const cpo::uno::Sequence<OUString> vals {
         u"com.sun.star.awt.UnoControlImageButton"_ustr,
         u"com.sun.star.awt.UnoControlImageControl"_ustr,
         u"stardiv.vcl.control.ImageButton"_ustr,
@@ -1057,7 +1057,7 @@ css::uno::Sequence<OUString> UnoImageControlControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoImageControlControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoImageControlControl());
 }
@@ -1107,17 +1107,17 @@ OUString UnoControlRadioButtonModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlRadioButtonModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlRadioButtonModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr, u"stardiv.vcl.controlmodel.RadioButton"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr, u"stardiv.vcl.controlmodel.RadioButton"_ustr };
     return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlRadioButtonModel(context));
 }
@@ -1281,16 +1281,16 @@ OUString UnoRadioButtonControl::getImplementationName()
     return u"stardiv.Toolkit.UnoRadioButtonControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoRadioButtonControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoRadioButtonControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlRadioButton"_ustr, u"stardiv.vcl.control.RadioButton"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlRadioButton"_ustr, u"stardiv.vcl.control.RadioButton"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoRadioButtonControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoRadioButtonControl());
 }
@@ -1340,16 +1340,16 @@ OUString UnoControlCheckBoxModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlCheckBoxModel"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoControlCheckBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoControlCheckBoxModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr, u"stardiv.vcl.controlmodel.CheckBox"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCheckBoxModel"_ustr, u"stardiv.vcl.controlmodel.CheckBox"_ustr };
     return comphelper::concatSequences( GraphicControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlCheckBoxModel(context));
 }
@@ -1486,16 +1486,16 @@ OUString UnoCheckBoxControl::getImplementationName()
     return u"stardiv.Toolkit.UnoCheckBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoCheckBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoCheckBoxControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCheckBox"_ustr, u"stardiv.vcl.control.CheckBox"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCheckBox"_ustr, u"stardiv.vcl.control.CheckBox"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoCheckBoxControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoCheckBoxControl());
 }
@@ -1547,7 +1547,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlFixedHyperlinkModel::getProp
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFixedHyperlinkModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlFixedHyperlinkModel(context));
 }
@@ -1578,7 +1578,7 @@ cpo::uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rTyp
 IMPL_IMPLEMENTATION_ID( UnoFixedHyperlinkControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoFixedHyperlinkControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoFixedHyperlinkControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -1685,7 +1685,7 @@ void UnoFixedHyperlinkControl::removeActionListener(const uno::Reference< awt::X
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFixedHyperlinkControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFixedHyperlinkControl());
 }
@@ -1735,17 +1735,17 @@ OUString UnoControlFixedTextModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlFixedTextModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlFixedTextModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedTextModel"_ustr, u"stardiv.vcl.controlmodel.FixedText"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedTextModel"_ustr, u"stardiv.vcl.controlmodel.FixedText"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFixedTextModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlFixedTextModel(context));
 }
@@ -1775,7 +1775,7 @@ cpo::uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoFixedTextControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoFixedTextControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoFixedTextControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -1837,16 +1837,16 @@ OUString UnoFixedTextControl::getImplementationName()
     return u"stardiv.Toolkit.UnoFixedTextControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoFixedTextControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoFixedTextControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedText"_ustr, u"stardiv.vcl.control.FixedText"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedText"_ustr, u"stardiv.vcl.control.FixedText"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFixedTextControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFixedTextControl());
 }
@@ -1900,16 +1900,16 @@ OUString UnoControlGroupBoxModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlGroupBoxModel"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoControlGroupBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoControlGroupBoxModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr, u"stardiv.vcl.controlmodel.GroupBox"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr, u"stardiv.vcl.controlmodel.GroupBox"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlGroupBoxModel(context));
 }
@@ -1937,16 +1937,16 @@ OUString UnoGroupBoxControl::getImplementationName()
     return u"stardiv.Toolkit.UnoGroupBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoGroupBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoGroupBoxControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlGroupBox"_ustr, u"stardiv.vcl.control.GroupBox"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlGroupBox"_ustr, u"stardiv.vcl.control.GroupBox"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoGroupBoxControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoGroupBoxControl());
 }
@@ -2083,9 +2083,9 @@ OUString UnoControlListBoxModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlListBoxModel"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoControlListBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoControlListBoxModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlListBoxModel"_ustr, u"stardiv.vcl.controlmodel.ListBox"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlListBoxModel"_ustr, u"stardiv.vcl.controlmodel.ListBox"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
@@ -2140,7 +2140,7 @@ void UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( std::unique_lock<
         return;
 
     // reset selection
-    uno::Sequence<sal_Int16> aSeq;
+    cpo::uno::Sequence<sal_Int16> aSeq;
     setDependentFastPropertyValue( rGuard, BASEPROPERTY_SELECTEDITEMS, cpo::uno::Any(aSeq) );
 
     if ( m_xData->m_bSettingLegacyProperty )
@@ -2491,7 +2491,7 @@ void UnoControlListBoxModel::impl_notifyItemListEvent(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlListBoxModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlListBoxModel(context));
 }
@@ -2516,9 +2516,9 @@ OUString UnoListBoxControl::getImplementationName()
     return u"stardiv.Toolkit.UnoListBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoListBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoListBoxControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlListBox"_ustr, u"stardiv.vcl.control.ListBox"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlListBox"_ustr, u"stardiv.vcl.control.ListBox"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals);
 }
 
@@ -2538,7 +2538,7 @@ void UnoListBoxControl::ImplUpdateSelectedItemsProperty()
         uno::Reference < awt::XListBox > xListBox( getPeer(), uno::UNO_QUERY );
         DBG_ASSERT( xListBox.is(), "XListBox?" );
 
-        uno::Sequence<sal_Int16> aSeq = xListBox->getSelectedItemsPos();
+        cpo::uno::Sequence<sal_Int16> aSeq = xListBox->getSelectedItemsPos();
         ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ), cpo::uno::Any(aSeq), false );
     }
 }
@@ -2614,20 +2614,20 @@ void UnoListBoxControl::removeItemListener(const uno::Reference < awt::XItemList
 
 void UnoListBoxControl::addItem( const OUString& aItem, sal_Int16 nPos )
 {
-    uno::Sequence<OUString> aSeq { aItem };
+    cpo::uno::Sequence<OUString> aSeq { aItem };
     addItems( aSeq, nPos );
 }
 
-void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_Int16 nPos )
+void UnoListBoxControl::addItems( const cpo::uno::Sequence< OUString>& aItems, sal_Int16 nPos )
 {
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nNewItems = static_cast<sal_uInt16>(aItems.getLength());
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
     sal_uInt16 nNewLen = nOldLen + nNewItems;
 
-    uno::Sequence< OUString> aNewSeq( nNewLen );
+    cpo::uno::Sequence< OUString> aNewSeq( nNewLen );
 
     if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
         nPos = nOldLen;
@@ -2647,7 +2647,7 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
 void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
 {
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
     if ( !(nOldLen && ( nPos < nOldLen )) )
@@ -2658,7 +2658,7 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
 
     sal_uInt16 nNewLen = nOldLen - nCount;
 
-    uno::Sequence< OUString> aNewSeq( nNewLen );
+    cpo::uno::Sequence< OUString> aNewSeq( nNewLen );
 
     // Items before the Remove-Position
     auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.getArray());
@@ -2672,7 +2672,7 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
 sal_Int16 UnoListBoxControl::getItemCount()
 {
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return static_cast<sal_Int16>(aSeq.getLength());
 }
@@ -2681,17 +2681,17 @@ OUString UnoListBoxControl::getItem( sal_Int16 nPos )
 {
     OUString aItem;
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     if ( nPos < aSeq.getLength() )
         aItem = aSeq[nPos];
     return aItem;
 }
 
-uno::Sequence< OUString> UnoListBoxControl::getItems()
+cpo::uno::Sequence< OUString> UnoListBoxControl::getItems()
 {
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return aSeq;
 }
@@ -2707,9 +2707,9 @@ sal_Int16 UnoListBoxControl::getSelectedItemPos()
     return n;
 }
 
-uno::Sequence<sal_Int16> UnoListBoxControl::getSelectedItemsPos()
+cpo::uno::Sequence<sal_Int16> UnoListBoxControl::getSelectedItemsPos()
 {
-    uno::Sequence<sal_Int16> aSeq;
+    cpo::uno::Sequence<sal_Int16> aSeq;
     if ( getPeer().is() )
     {
         uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
@@ -2729,9 +2729,9 @@ OUString UnoListBoxControl::getSelectedItem()
     return aItem;
 }
 
-uno::Sequence< OUString> UnoListBoxControl::getSelectedItems()
+cpo::uno::Sequence< OUString> UnoListBoxControl::getSelectedItems()
 {
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     if ( getPeer().is() )
     {
         uno::Reference < awt::XListBox >  xListBox( getPeer(), uno::UNO_QUERY );
@@ -2750,7 +2750,7 @@ void UnoListBoxControl::selectItemPos( sal_Int16 nPos, bool bSelect )
     ImplUpdateSelectedItemsProperty();
 }
 
-void UnoListBoxControl::selectItemsPos( const uno::Sequence<sal_Int16>& aPositions, bool bSelect )
+void UnoListBoxControl::selectItemsPos( const cpo::uno::Sequence<sal_Int16>& aPositions, bool bSelect )
 {
     if ( getPeer().is() )
     {
@@ -2903,7 +2903,7 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoListBoxControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoListBoxControl());
 }
@@ -2921,9 +2921,9 @@ OUString UnoControlComboBoxModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlComboBoxModel"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoControlComboBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoControlComboBoxModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlComboBoxModel"_ustr, u"stardiv.vcl.controlmodel.ComboBox"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlComboBoxModel"_ustr, u"stardiv.vcl.controlmodel.ComboBox"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals);
 }
 
@@ -2987,7 +2987,7 @@ cpo::uno::Any UnoControlComboBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlComboBoxModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlComboBoxModel(context));
 }
@@ -3007,9 +3007,9 @@ OUString UnoComboBoxControl::getImplementationName()
     return u"stardiv.Toolkit.UnoComboBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoComboBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoComboBoxControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlComboBox"_ustr, u"stardiv.vcl.control.ComboBox"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlComboBox"_ustr, u"stardiv.vcl.control.ComboBox"_ustr };
     return comphelper::concatSequences( UnoEditControl::getSupportedServiceNames(), vals);
 }
 
@@ -3046,7 +3046,7 @@ cpo::uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoComboBoxControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoComboBoxControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoComboBoxControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<awt::XComboBox>::get(),
@@ -3204,20 +3204,20 @@ void SAL_CALL UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rE
 
 void UnoComboBoxControl::addItem( const OUString& aItem, sal_Int16 nPos )
 {
-    uno::Sequence<OUString> aSeq { aItem };
+    cpo::uno::Sequence<OUString> aSeq { aItem };
     addItems( aSeq, nPos );
 }
 
-void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_Int16 nPos )
+void UnoComboBoxControl::addItems( const cpo::uno::Sequence< OUString>& aItems, sal_Int16 nPos )
 {
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nNewItems = static_cast<sal_uInt16>(aItems.getLength());
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
     sal_uInt16 nNewLen = nOldLen + nNewItems;
 
-    uno::Sequence< OUString> aNewSeq( nNewLen );
+    cpo::uno::Sequence< OUString> aNewSeq( nNewLen );
 
     if ( ( nPos < 0 ) || ( nPos > nOldLen ) )
         nPos = nOldLen;
@@ -3237,7 +3237,7 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
 void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
 {
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     sal_uInt16 nOldLen = static_cast<sal_uInt16>(aSeq.getLength());
     if ( !nOldLen || ( nPos >= nOldLen ) )
@@ -3248,7 +3248,7 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
 
     sal_uInt16 nNewLen = nOldLen - nCount;
 
-    uno::Sequence< OUString> aNewSeq( nNewLen );
+    cpo::uno::Sequence< OUString> aNewSeq( nNewLen );
 
     // items before the deletion position
     auto it = std::copy(std::cbegin(aSeq), std::next(std::cbegin(aSeq), nPos), aNewSeq.getArray());
@@ -3262,7 +3262,7 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount )
 sal_Int16 UnoComboBoxControl::getItemCount()
 {
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return static_cast<sal_Int16>(aSeq.getLength());
 }
@@ -3271,17 +3271,17 @@ OUString UnoComboBoxControl::getItem( sal_Int16 nPos )
 {
     OUString aItem;
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     if ( nPos < aSeq.getLength() )
         aItem = aSeq[nPos];
     return aItem;
 }
 
-uno::Sequence< OUString> UnoComboBoxControl::getItems()
+cpo::uno::Sequence< OUString> UnoComboBoxControl::getItems()
 {
     cpo::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) );
-    uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     aVal >>= aSeq;
     return aSeq;
 }
@@ -3299,7 +3299,7 @@ sal_Int16 UnoComboBoxControl::getDropDownLineCount()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoComboBoxControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoComboBoxControl());
 }
@@ -3324,7 +3324,7 @@ cpo::uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoSpinFieldControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoSpinFieldControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoSpinFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -3443,17 +3443,17 @@ OUString UnoControlDateFieldModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlDateFieldModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlDateFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlDateFieldModel"_ustr, u"stardiv.vcl.controlmodel.DateField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlDateFieldModel"_ustr, u"stardiv.vcl.controlmodel.DateField"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlDateFieldModel(context));
 }
@@ -3483,7 +3483,7 @@ cpo::uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoDateFieldControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoDateFieldControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoDateFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -3656,16 +3656,16 @@ OUString UnoDateFieldControl::getImplementationName()
     return u"stardiv.Toolkit.UnoDateFieldControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoDateFieldControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoDateFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlDateField"_ustr, u"stardiv.vcl.control.DateField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlDateField"_ustr, u"stardiv.vcl.control.DateField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoDateFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoDateFieldControl());
 }
@@ -3711,17 +3711,17 @@ OUString UnoControlTimeFieldModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlTimeFieldModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlTimeFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlTimeFieldModel"_ustr, u"stardiv.vcl.controlmodel.TimeField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlTimeFieldModel"_ustr, u"stardiv.vcl.controlmodel.TimeField"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlTimeFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlTimeFieldModel(context));
 }
@@ -3750,7 +3750,7 @@ cpo::uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoTimeFieldControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoTimeFieldControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoTimeFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -3883,16 +3883,16 @@ OUString UnoTimeFieldControl::getImplementationName()
     return u"stardiv.Toolkit.UnoTimeFieldControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoTimeFieldControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoTimeFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlTimeField"_ustr, u"stardiv.vcl.control.TimeField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlTimeField"_ustr, u"stardiv.vcl.control.TimeField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoTimeFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoTimeFieldControl());
 }
@@ -3938,17 +3938,17 @@ OUString UnoControlNumericFieldModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlNumericFieldModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlNumericFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"stardiv.vcl.controlmodel.NumericField"_ustr, u"com.sun.star.awt.UnoControlNumericFieldModel"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"stardiv.vcl.controlmodel.NumericField"_ustr, u"com.sun.star.awt.UnoControlNumericFieldModel"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlNumericFieldModel(context));
 }
@@ -3977,7 +3977,7 @@ cpo::uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType 
 IMPL_IMPLEMENTATION_ID( UnoNumericFieldControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoNumericFieldControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoNumericFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -4083,9 +4083,9 @@ OUString UnoNumericFieldControl::getImplementationName()
     return u"stardiv.Toolkit.UnoNumericFieldControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoNumericFieldControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoNumericFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlNumericField"_ustr, u"stardiv.vcl.control.NumericField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlNumericField"_ustr, u"stardiv.vcl.control.NumericField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
@@ -4112,7 +4112,7 @@ sal_Int16 UnoNumericFieldControl::getDecimalDigits()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoNumericFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoNumericFieldControl());
 }
@@ -4160,17 +4160,17 @@ OUString UnoControlCurrencyFieldModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlCurrencyFieldModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlCurrencyFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCurrencyFieldModel"_ustr, u"stardiv.vcl.controlmodel.CurrencyField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCurrencyFieldModel"_ustr, u"stardiv.vcl.controlmodel.CurrencyField"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlCurrencyFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlCurrencyFieldModel(context));
 }
@@ -4199,7 +4199,7 @@ cpo::uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType
 IMPL_IMPLEMENTATION_ID( UnoCurrencyFieldControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoCurrencyFieldControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoCurrencyFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -4305,10 +4305,10 @@ OUString UnoCurrencyFieldControl::getImplementationName()
     return u"stardiv.Toolkit.UnoCurrencyFieldControl"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoCurrencyFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCurrencyField"_ustr, u"stardiv.vcl.control.CurrencyField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlCurrencyField"_ustr, u"stardiv.vcl.control.CurrencyField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
@@ -4335,7 +4335,7 @@ sal_Int16 UnoCurrencyFieldControl::getDecimalDigits()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoCurrencyFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoCurrencyFieldControl());
 }
@@ -4380,17 +4380,17 @@ OUString UnoControlPatternFieldModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlPatternFieldModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlPatternFieldModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlPatternFieldModel"_ustr, u"stardiv.vcl.controlmodel.PatternField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlPatternFieldModel"_ustr, u"stardiv.vcl.controlmodel.PatternField"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlPatternFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlPatternFieldModel(context));
 }
@@ -4441,7 +4441,7 @@ cpo::uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType 
 IMPL_IMPLEMENTATION_ID( UnoPatternFieldControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoPatternFieldControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoPatternFieldControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -4488,16 +4488,16 @@ OUString UnoPatternFieldControl::getImplementationName()
     return u"stardiv.Toolkit.UnoPatternFieldControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoPatternFieldControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoPatternFieldControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlPatternField"_ustr, u"stardiv.vcl.control.PatternField"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlPatternField"_ustr, u"stardiv.vcl.control.PatternField"_ustr };
     return comphelper::concatSequences( UnoSpinFieldControl::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoPatternFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoPatternFieldControl());
 }
@@ -4555,17 +4555,17 @@ OUString UnoControlProgressBarModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlProgressBarModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlProgressBarModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlProgressBarModel"_ustr, u"stardiv.vcl.controlmodel.ProgressBar"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlProgressBarModel"_ustr, u"stardiv.vcl.controlmodel.ProgressBar"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlProgressBarModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlProgressBarModel(context));
 }
@@ -4592,7 +4592,7 @@ cpo::uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType )
 IMPL_IMPLEMENTATION_ID( UnoProgressBarControl )
 
 // lang::XTypeProvider
-css::uno::Sequence< css::uno::Type > UnoProgressBarControl::getTypes()
+cpo::uno::Sequence< css::uno::Type > UnoProgressBarControl::getTypes()
 {
     static const ::cppu::OTypeCollection aTypeList(
         cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -4650,16 +4650,16 @@ OUString UnoProgressBarControl::getImplementationName()
     return u"stardiv.Toolkit.UnoProgressBarControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoProgressBarControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoProgressBarControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlProgressBar"_ustr, u"stardiv.vcl.control.ProgressBar"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlProgressBar"_ustr, u"stardiv.vcl.control.ProgressBar"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoProgressBarControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoProgressBarControl());
 }
@@ -4713,17 +4713,17 @@ OUString UnoControlFixedLineModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlFixedLineModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlFixedLineModel::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedLineModel"_ustr, u"stardiv.vcl.controlmodel.FixedLine"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedLineModel"_ustr, u"stardiv.vcl.controlmodel.FixedLine"_ustr };
     return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFixedLineModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlFixedLineModel(context));
 }
@@ -4751,16 +4751,16 @@ OUString UnoFixedLineControl::getImplementationName()
     return u"stardiv.Toolkit.UnoFixedLineControl"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoFixedLineControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoFixedLineControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedLine"_ustr, u"stardiv.vcl.control.FixedLine"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlFixedLine"_ustr, u"stardiv.vcl.control.FixedLine"_ustr };
     return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFixedLineControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoFixedLineControl());
 }

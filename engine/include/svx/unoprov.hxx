@@ -22,7 +22,7 @@
 
 #include <config_options.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/svxdllapi.h>
 #include <editeng/unoipset.hxx>
@@ -43,7 +43,7 @@ class UHashMap
 public:
     static std::optional<SdrObjKind> getId( const OUString& rCompareString );
     static OUString getNameFromId (SdrObjKind nId);
-    static css::uno::Sequence< OUString > getServiceNames();
+    static cpo::uno::Sequence< OUString > getServiceNames();
 };
 
 /**

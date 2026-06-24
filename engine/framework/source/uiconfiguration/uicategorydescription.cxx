@@ -57,7 +57,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
         // XNameAccess
         virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -350,7 +350,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.UICategoryDescription"_ustr};
     }
@@ -382,7 +382,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XComponentContext
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_UICategoryDescription_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UICategoryDescription(context));
 }

@@ -43,7 +43,7 @@ OSLInputStreamWrapper::~OSLInputStreamWrapper()
 }
 
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
     if (!m_pFile)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
@@ -60,14 +60,14 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8
     if (eError != FileBase::E_None)
         throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
-    // If the read character < MaxLength, adjust css::uno::Sequence
+    // If the read character < MaxLength, adjust cpo::uno::Sequence
     if (nRead < o3tl::make_unsigned(nBytesToRead))
         aData.realloc( sal::static_int_cast< sal_Int32 >(nRead) );
 
     return sal::static_int_cast< sal_Int32 >(nRead);
 }
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
+sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     if (!m_pFile)
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
@@ -143,7 +143,7 @@ OSLOutputStreamWrapper::OSLOutputStreamWrapper(osl::File & _rFile):
 
 OSLOutputStreamWrapper::~OSLOutputStreamWrapper() {}
 
-void SAL_CALL OSLOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData)
+void SAL_CALL OSLOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
 {
     sal_uInt64 nWritten;
     FileBase::RC eError = rFile.write(aData.getConstArray(),aData.getLength(), nWritten);

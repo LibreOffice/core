@@ -141,7 +141,7 @@ bool SAL_CALL KFFilePicker::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL KFFilePicker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL KFFilePicker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
              u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,

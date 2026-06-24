@@ -68,15 +68,15 @@ public:
             ,const TContentPtr& _pImpl
         );
 
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
 // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XRename
     virtual void SAL_CALL rename( const OUString& newName ) override;

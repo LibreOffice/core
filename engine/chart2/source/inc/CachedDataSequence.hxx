@@ -71,26 +71,26 @@ public:
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // ____ XDataSequence ____
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getData() override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL generateLabel(
+    virtual cpo::uno::Sequence< OUString > SAL_CALL generateLabel(
         css::chart2::data::LabelOrigin nLabelOrigin ) override;
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex ) override;
 
     // ____ XNumericalDataSequence ____
     /// @see css::chart::data::XNumericalDataSequence
-    virtual css::uno::Sequence< double > SAL_CALL getNumericalData() override;
+    virtual cpo::uno::Sequence< double > SAL_CALL getNumericalData() override;
 
     // ____ XTextualDataSequence ____
     /// @see css::chart::data::XTextualDataSequence
-    virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getTextualData() override;
 
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
@@ -102,7 +102,7 @@ private:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
@@ -123,19 +123,19 @@ private:
 
     /** is used by interface method getNumericalData().
      */
-    css::uno::Sequence< double > Impl_getNumericalData() const;
+    cpo::uno::Sequence< double > Impl_getNumericalData() const;
     /** is used by interface method getTextualData().
      */
-    css::uno::Sequence< OUString > Impl_getTextualData() const;
+    cpo::uno::Sequence< OUString > Impl_getTextualData() const;
     /** is used by interface method getData().
      */
-    css::uno::Sequence< cpo::uno::Any > Impl_getMixedData() const;
+    cpo::uno::Sequence< cpo::uno::Any > Impl_getMixedData() const;
 
     enum DataType                                          m_eCurrentDataType;
 
-    css::uno::Sequence< double >                           m_aNumericalSequence;
-    css::uno::Sequence< OUString >                         m_aTextualSequence;
-    css::uno::Sequence< cpo::uno::Any >                    m_aMixedSequence;
+    cpo::uno::Sequence< double >                           m_aNumericalSequence;
+    cpo::uno::Sequence< OUString >                         m_aTextualSequence;
+    cpo::uno::Sequence< cpo::uno::Any >                    m_aMixedSequence;
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };
 

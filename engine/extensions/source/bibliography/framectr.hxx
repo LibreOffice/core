@@ -79,13 +79,13 @@ public:
                                 virtual ~BibFrameController_Impl() override;
 
 
-    void                        ChangeDataSource(const css::uno::Sequence< css::beans::PropertyValue >& aArgs);
+    void                        ChangeDataSource(const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs);
     void                        RemoveFilter();
 
                                 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                                 // css::frame::XController
     virtual void                SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame > & xFrame ) override;
@@ -103,16 +103,16 @@ public:
 
                                 // css::frame::XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch >          SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
 
                                 //class css::frame::XDispatch
-    virtual void                SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
+    virtual void                SAL_CALL dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
     virtual void                SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
     virtual void                SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
                                 // css::frame::XDispatchInformationProvider
-    virtual css::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups(  ) override;
-    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) override;
+    virtual cpo::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups(  ) override;
+    virtual cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) override;
  };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

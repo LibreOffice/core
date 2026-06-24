@@ -186,7 +186,7 @@ void LineWidthPopup::SetWidthSelect(tools::Long lValue, bool bValuable, MapUnit 
     SvtViewOptions aWinOpt(EViewType::Window, u"PopupPanel_LineWidth"_ustr);
     if (aWinOpt.Exists())
     {
-        css::uno::Sequence<css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
+        cpo::uno::Sequence<css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
         OUString aTmp;
         if (aSeq.hasElements())
             aSeq[0].Value >>= aTmp;

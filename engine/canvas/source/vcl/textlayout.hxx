@@ -53,16 +53,16 @@ namespace vclcanvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XTextLayout
-        virtual css::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > SAL_CALL queryTextShapes(  ) override;
-        virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryInkMeasures(  ) override;
-        virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryMeasures(  ) override;
-        virtual css::uno::Sequence< double > SAL_CALL queryLogicalAdvancements(  ) override;
-        virtual void SAL_CALL applyLogicalAdvancements( const css::uno::Sequence< double >& aAdvancements ) override;
-        virtual css::uno::Sequence< bool > SAL_CALL queryKashidaPositions(  ) override;
-        virtual void SAL_CALL applyKashidaPositions( const css::uno::Sequence< bool >& aPositions ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > SAL_CALL queryTextShapes(  ) override;
+        virtual cpo::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryInkMeasures(  ) override;
+        virtual cpo::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryMeasures(  ) override;
+        virtual cpo::uno::Sequence< double > SAL_CALL queryLogicalAdvancements(  ) override;
+        virtual void SAL_CALL applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements ) override;
+        virtual cpo::uno::Sequence< bool > SAL_CALL queryKashidaPositions(  ) override;
+        virtual void SAL_CALL applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions ) override;
         virtual css::geometry::RealRectangle2D SAL_CALL queryTextBounds(  ) override;
         virtual double SAL_CALL justify( double nSize ) override;
-        virtual double SAL_CALL combinedJustify( const css::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
+        virtual double SAL_CALL combinedJustify( const cpo::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
         virtual css::rendering::TextHit SAL_CALL getTextHit( const css::geometry::RealPoint2D& aHitPoint ) override;
         virtual css::rendering::Caret SAL_CALL getCaret( sal_Int32 nInsertionIndex, bool bExcludeLigatures ) override;
         virtual sal_Int32 SAL_CALL getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, bool bExcludeLigatures ) override;
@@ -76,7 +76,7 @@ namespace vclcanvas
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         void draw( OutputDevice&                                   rOutDev,
                    const Point&                                    rOutpos,
@@ -85,13 +85,13 @@ namespace vclcanvas
 
     private:
         KernArray setupTextOffsets(
-                               const css::uno::Sequence< double >& inputOffsets,
+                               const cpo::uno::Sequence< double >& inputOffsets,
                                const css::rendering::ViewState&    viewState,
                                const css::rendering::RenderState&  renderState     ) const;
 
         css::rendering::StringContext                    maText;
-        css::uno::Sequence< double >                     maLogicalAdvancements;
-        css::uno::Sequence< bool >                   maKashidaPositions;
+        cpo::uno::Sequence< double >                     maLogicalAdvancements;
+        cpo::uno::Sequence< bool >                   maKashidaPositions;
         CanvasFont::Reference                            mpFont;
         css::uno::Reference< css::rendering::XGraphicDevice> mxDevice;
         OutDevProviderSharedPtr                          mpOutDevProvider;

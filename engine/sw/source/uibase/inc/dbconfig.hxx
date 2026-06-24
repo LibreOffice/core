@@ -27,7 +27,7 @@ struct SwDBData;
 class SW_DLLPUBLIC SwDBConfig final : public utl::ConfigItem
 {
 private:
-    SAL_DLLPRIVATE static const css::uno::Sequence<OUString>& GetPropertyNames();
+    SAL_DLLPRIVATE static const cpo::uno::Sequence<OUString>& GetPropertyNames();
     virtual void ImplCommit() override;
 
     std::unique_ptr<SwDBData> m_pAdrImpl;
@@ -40,7 +40,7 @@ public:
     void                    Load();
     const SwDBData&         GetAddressSource();
     const SwDBData&         GetBibliographySource();
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

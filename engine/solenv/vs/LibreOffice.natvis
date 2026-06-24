@@ -147,7 +147,7 @@
     <DisplayString Condition="nElements == 0">_sal_Sequence (empty)</DisplayString>
     <DisplayString>_sal_Sequence of {nElements,d} elements</DisplayString>
   </Type>
-  <Type Name="com::sun::star::uno::Sequence &lt; signed char &gt;">
+  <Type Name="cpo::uno::Sequence &lt; signed char &gt;">
     <DisplayString Condition="_pSequence->nElements == 0">Sequence (empty)</DisplayString>
     <DisplayString>Sequence of {_pSequence->nElements,d} signed char</DisplayString>
     <Expand>
@@ -157,7 +157,7 @@
       </ArrayItems>
     </Expand>
   </Type>
-  <Type Name="com::sun::star::uno::Sequence &lt; * &gt;">
+  <Type Name="cpo::uno::Sequence &lt; * &gt;">
     <DisplayString Condition="_pSequence->nElements == 0">Sequence (empty)</DisplayString>
     <DisplayString>Sequence of {_pSequence->nElements,d} {"$T1",sb}</DisplayString>
     <Expand>

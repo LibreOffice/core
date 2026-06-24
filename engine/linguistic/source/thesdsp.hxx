@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -57,22 +57,22 @@ public:
     virtual ~ThesaurusDispatcher() override;
 
     // XSupportedLocales
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales() override;
     virtual bool SAL_CALL
         hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XThesaurus
-    virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
         queryMeanings( const OUString& aTerm,
                 const css::lang::Locale& aLocale,
-                const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+                const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
 
     // LinguDispatcher
     virtual void
         SetServiceList( const css::lang::Locale &rLocale,
-                const css::uno::Sequence< OUString > &rSvcImplNames ) override;
-    virtual css::uno::Sequence< OUString >
+                const cpo::uno::Sequence< OUString > &rSvcImplNames ) override;
+    virtual cpo::uno::Sequence< OUString >
         GetServiceList( const css::lang::Locale &rLocale ) const override;
 };
 

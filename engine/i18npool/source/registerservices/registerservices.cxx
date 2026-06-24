@@ -78,7 +78,7 @@ using namespace i18npool;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
 i18npool_##ImplName##_get_implementation( \
     css::uno::XComponentContext *, \
-    css::uno::Sequence<cpo::uno::Any> const &) \
+    cpo::uno::Sequence<cpo::uno::Any> const &) \
 { \
     return cppu::acquire(new ImplName()); \
 }
@@ -87,7 +87,7 @@ i18npool_##ImplName##_get_implementation( \
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * \
 i18npool_##ImplName##_get_implementation( \
     css::uno::XComponentContext * context, \
-    css::uno::Sequence<cpo::uno::Any> const &) \
+    cpo::uno::Sequence<cpo::uno::Any> const &) \
 { \
     return cppu::acquire(new ImplName(context)); \
 }
@@ -387,7 +387,7 @@ SAL_DLLPUBLIC_EXPORT void* i18npool_component_getFactory( const char* sImplement
     {
         if( 0 == rtl_str_compare( sImplementationName, pArr->pImplementationNm ) )
         {
-            uno::Sequence< OUString > aServiceNames {
+            cpo::uno::Sequence< OUString > aServiceNames {
                 OUString::createFromAscii( pArr->pServiceNm ) };
             xFactory = ::cppu::createSingleFactory(
                     pServiceManager,

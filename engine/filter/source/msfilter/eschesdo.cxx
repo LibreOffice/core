@@ -158,7 +158,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
             if (xPropertySet.is())
             {
-                uno::Sequence<beans::PropertyValue> aGrabBag;
+                cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                 uno::Reference< XPropertySetInfo > xPropInfo = xPropertySet->getPropertySetInfo();
                 if ( xPropInfo.is() && xPropInfo->hasPropertyByName( u"InteropGrabBag"_ustr ) )
                 {

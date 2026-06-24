@@ -76,7 +76,7 @@
 using namespace com::sun::star;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;

@@ -152,8 +152,8 @@ namespace
 {
     struct OOXGenerateNoteCaption : public GenerateNoteCaption
     {
-        css::uno::Sequence<OUString> maPropertyNames;  /// import filter Caption object formatting property names
-        css::uno::Sequence<cpo::uno::Any> maPropertyValues; /// import filter Caption object formatting property values
+        cpo::uno::Sequence<OUString> maPropertyNames;  /// import filter Caption object formatting property names
+        cpo::uno::Sequence<cpo::uno::Any> maPropertyValues; /// import filter Caption object formatting property values
         std::shared_ptr<RichString> mxText;
         OUString msAuthorName;
 
@@ -208,9 +208,9 @@ void Comment::finalizeImport(const VmlDrawing::NoteShapesMap& rNoteShapesMap)
         // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
         // vvv TODO vvv TextFitToSize should be a drawing::TextFitToSizeType not bool
         xGenerator->maPropertyNames =
-            css::uno::Sequence<OUString>{ u"TextFitToSize"_ustr, u"MoveProtect"_ustr, u"TextHorizontalAdjust"_ustr, u"TextVerticalAdjust"_ustr };
+            cpo::uno::Sequence<OUString>{ u"TextFitToSize"_ustr, u"MoveProtect"_ustr, u"TextHorizontalAdjust"_ustr, u"TextVerticalAdjust"_ustr };
         xGenerator->maPropertyValues =
-            css::uno::Sequence<cpo::uno::Any>{ Any(maModel.mbAutoScale), Any(maModel.mbLocked),
+            cpo::uno::Sequence<cpo::uno::Any>{ Any(maModel.mbAutoScale), Any(maModel.mbLocked),
                                                Any(lcl_ToHorizAlign( maModel.mnTHA )), Any(lcl_ToVertAlign( maModel.mnTVA )) };
 
         tools::Rectangle aCaptionRect;

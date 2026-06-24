@@ -2606,7 +2606,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         if ( !IsRTFImport() )
         {
             cpo::uno::Any aValue = m_pImpl->GetPropertyFromParaStyleSheet(PROP_PARA_TAB_STOPS);
-            uno::Sequence< style::TabStop > aStyleTabStops;
+            cpo::uno::Sequence< style::TabStop > aStyleTabStops;
             if(aValue >>= aStyleTabStops)
             {
                 m_pImpl->InitTabStopFromStyle( aStyleTabStops );
@@ -4522,7 +4522,7 @@ void DomainMapper::ResetStyleProperties()
                             pContext->Insert(ePropertyId, cpo::uno::Any(style::ParagraphAdjust_LEFT));
                             break;
                         case PROP_PARA_TAB_STOPS:
-                            pContext->Insert(ePropertyId, cpo::uno::Any(uno::Sequence< style::TabStop >()));
+                            pContext->Insert(ePropertyId, cpo::uno::Any(cpo::uno::Sequence< style::TabStop >()));
                             break;
                         case PROP_FILL_STYLE:
                             pContext->Insert(ePropertyId, cpo::uno::Any(drawing::FillStyle_NONE));
@@ -4714,12 +4714,12 @@ void DomainMapper::lcl_utext(const sal_Unicode *const data_, size_t len)
                 // We have a field, insert the SDT properties to the field's grab-bag, so they won't be lost.
                 pContext = m_pImpl->GetTopFieldContext()->getProperties();
 
-            uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
             pContext->Insert(PROP_SDTPR, cpo::uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
         }
         else
         {
-            uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
             if (m_pImpl->GetSdtStarts().empty()
                 || (aControlType != SdtControlType::dropDown
                     && aControlType != SdtControlType::comboBox

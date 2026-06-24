@@ -48,16 +48,16 @@ QtTransferable::QtTransferable(const QMimeData* pMimeData)
     assert(pMimeData);
 }
 
-css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTransferDataFlavors()
+cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTransferDataFlavors()
 {
     if (!m_pMimeData)
-        return css::uno::Sequence<css::datatransfer::DataFlavor>();
+        return cpo::uno::Sequence<css::datatransfer::DataFlavor>();
 
     QStringList aFormatList(m_pMimeData->formats());
     // we might add the UTF-16 mime text variant later and if plaintext is available then add markdown as well
     const int nMimeTypeSeqSize = aFormatList.size() + 2;
     bool bHaveNoCharset = false, bHaveUTF16 = false, bHaveUTF8 = false, bHavePlainText = false;
-    css::uno::Sequence<css::datatransfer::DataFlavor> aMimeTypeSeq(nMimeTypeSeqSize);
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> aMimeTypeSeq(nMimeTypeSeqSize);
     auto pMimeTypeSeq = aMimeTypeSeq.getArray();
 
     css::datatransfer::DataFlavor aFlavor;
@@ -97,10 +97,10 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
             if (bIsUTF16)
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
             else
-                aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
+                aFlavor.DataType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
         }
         else
-            aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
+            aFlavor.DataType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
 
         aFlavor.MimeType = toOUString(rMimeType);
         assert(nMimeTypeCount < nMimeTypeSeqSize);
@@ -167,7 +167,7 @@ cpo::uno::Any SAL_CALL QtTransferable::getTransferData(const css::datatransfer::
     else
     {
         QByteArray aByteData(m_pMimeData->data(toQString(rFlavor.MimeType)));
-        css::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aByteData.data()),
+        cpo::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aByteData.data()),
                                           aByteData.size());
         aAny <<= aSeq;
     }
@@ -212,10 +212,10 @@ QtClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rF
     return aAny;
 }
 
-css::uno::Sequence<css::datatransfer::DataFlavor>
+cpo::uno::Sequence<css::datatransfer::DataFlavor>
     SAL_CALL QtClipboardTransferable::getTransferDataFlavors()
 {
-    css::uno::Sequence<css::datatransfer::DataFlavor> aSeq;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> aSeq;
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&, this]() {
         ensureConsistencyWithSystemClipboard();
@@ -288,7 +288,7 @@ QStringList QtMimeData::formats() const
     // that code would pick "text/html", but the HTML provided by LO apparently always contains a
     // trailing "</p>", so would always add a newline when pasted.
 
-    const css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+    const cpo::uno::Sequence<css::datatransfer::DataFlavor> aFormats
         = m_aContents->getTransferDataFlavors();
     QStringList aList;
     bool bHaveUTF16 = false;
@@ -337,7 +337,7 @@ QVariant QtMimeData::retrieveData(const QString& mimeType, QMetaType) const
 
     css::datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = toOUString(mimeType);
-    aFlavor.DataType = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
+    aFlavor.DataType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
 
     bool bWantNoCharset = false, bWantUTF16 = false, bWantUTF8 = false;
     if (lcl_textMimeInfo(aFlavor.MimeType, bWantNoCharset, bWantUTF16, bWantUTF8))
@@ -389,7 +389,7 @@ QVariant QtMimeData::retrieveData(const QString& mimeType, QMetaType) const
     }
     else
     {
-        css::uno::Sequence<sal_Int8> aData;
+        cpo::uno::Sequence<sal_Int8> aData;
         aValue >>= aData;
         aByteArray
             = QByteArray(reinterpret_cast<const char*>(aData.getConstArray()), aData.getLength());

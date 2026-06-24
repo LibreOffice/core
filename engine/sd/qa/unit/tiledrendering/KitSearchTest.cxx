@@ -44,7 +44,7 @@ void KitSearchTest::lcl_search(const OUString& rKey, bool bFindAll, bool bBackwa
     Scheduler::ProcessEventsToIdle();
     SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", cpo::uno::Any(rKey) },
         { "SearchItem.Backward", cpo::uno::Any(bBackwards) },
         { "SearchItem.Command", cpo::uno::Any(sal_uInt16(eSearch)) },
@@ -59,7 +59,7 @@ void KitSearchTest::lcl_replace(const OUString& rKey, const OUString& rReplace, 
 
     SvxSearchCmd eSearch = bAll ? SvxSearchCmd::REPLACE_ALL : SvxSearchCmd::REPLACE;
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", cpo::uno::Any(rKey) },
         { "SearchItem.ReplaceString", cpo::uno::Any(rReplace) },
         { "SearchItem.Command", cpo::uno::Any(sal_uInt16(eSearch)) },

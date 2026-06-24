@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/xmlevent.hxx>
 
@@ -32,7 +32,7 @@ public:
     virtual void Export(
         SvXMLExport& rExport,
         const OUString& rEventName,
-        const css::uno::Sequence<css::beans::PropertyValue> & rValues,
+        const cpo::uno::Sequence<css::beans::PropertyValue> & rValues,
         bool bUseWhitespace) override;
 };
 

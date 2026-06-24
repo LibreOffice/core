@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TXTFRM_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TXTFRM_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <svl/ctloptions.hxx>
 #include "cntfrm.hxx"
 #include "TextFrameIndex.hxx"
@@ -347,7 +347,7 @@ public:
     virtual const SvxFormatBreakItem& GetBreakItem() const override;
     virtual const SwFormatPageDesc& GetPageDescItem() const override;
 
-    css::uno::Sequence< css::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos ) override;
+    cpo::uno::Sequence< css::style::TabStop >  GetTabStopInfo( SwTwips CurrentPos ) override;
 
     /**
      * This is public, as it needs to be called by some methods in order to save the Prepare

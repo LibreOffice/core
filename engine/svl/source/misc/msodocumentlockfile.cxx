@@ -92,7 +92,7 @@ void MSODocumentLockFile::WriteEntryToStream(
     // Reallocate the date with the right size, different lock file size for different components
     int nLockFileSize = m_eAppType == AppType::Word ? MSO_WORD_LOCKFILE_SIZE
                                                     : MSO_EXCEL_AND_POWERPOINT_LOCKFILE_SIZE;
-    css::uno::Sequence<sal_Int8> aData(nLockFileSize);
+    cpo::uno::Sequence<sal_Int8> aData(nLockFileSize);
     auto pData = aData.getArray();
 
     // Write out the user name's length as a single byte integer
@@ -198,7 +198,7 @@ LockFileEntry MSODocumentLockFile::GetLockDataImpl(std::unique_lock<std::mutex>&
         throw css::uno::RuntimeException();
 
     const sal_Int32 nBufLen = 256;
-    css::uno::Sequence<sal_Int8> aBuf(nBufLen);
+    cpo::uno::Sequence<sal_Int8> aBuf(nBufLen);
     const sal_Int32 nRead = xInput->readBytes(aBuf, nBufLen);
     xInput->closeInput();
     if (nRead >= 162)

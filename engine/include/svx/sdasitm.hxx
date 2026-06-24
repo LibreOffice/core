@@ -23,7 +23,7 @@
 #include <svx/svddef.hxx>
 #include <svx/sdooitm.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 #include <unordered_map>
@@ -49,7 +49,7 @@ private:
     PropertyHashMap m_aPropHashMap;
     PropertyPairHashMap m_aPropPairHashMap;
 
-    css::uno::Sequence<css::beans::PropertyValue> m_aPropSeq;
+    cpo::uno::Sequence<css::beans::PropertyValue> m_aPropSeq;
 
     // For fast comparisons keep a hash of the content, computed on demand
     // (unusable state is if anyToHash() returns no hash).
@@ -62,14 +62,14 @@ private:
     mutable HashState m_aHashState = HashState::Unknown;
     mutable size_t m_aHash = 0xdeadbeef;
 
-    SAL_DLLPRIVATE void SetPropSeq(const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq);
+    SAL_DLLPRIVATE void SetPropSeq(const cpo::uno::Sequence<css::beans::PropertyValue>& rPropSeq);
     inline void UpdateHash() const;
     inline void InvalidateHash();
 
 public:
     SAL_DLLPRIVATE SdrCustomShapeGeometryItem();
     DECLARE_ITEM_TYPE_FUNCTION(SdrCustomShapeGeometryItem)
-    SdrCustomShapeGeometryItem(const css::uno::Sequence<css::beans::PropertyValue>&);
+    SdrCustomShapeGeometryItem(const cpo::uno::Sequence<css::beans::PropertyValue>&);
     virtual ~SdrCustomShapeGeometryItem() override;
 
     SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem const&) = default;

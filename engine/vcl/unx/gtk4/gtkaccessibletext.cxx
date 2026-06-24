@@ -126,7 +126,7 @@ static gboolean lo_accessible_text_get_selection(GtkAccessibleText* self, gsize*
 }
 
 static int
-convertUnoTextAttributesToGtk(const css::uno::Sequence<css::beans::PropertyValue>& rAttribs,
+convertUnoTextAttributesToGtk(const cpo::uno::Sequence<css::beans::PropertyValue>& rAttribs,
                               char*** attribute_names, char*** attribute_values)
 {
     std::vector<std::pair<OString, OUString>> aNameValuePairs;
@@ -176,13 +176,13 @@ static gboolean lo_accessible_text_get_attributes(GtkAccessibleText* self, unsig
         return false;
     }
 
-    css::uno::Sequence<css::beans::PropertyValue> aAttribs;
+    cpo::uno::Sequence<css::beans::PropertyValue> aAttribs;
     css::uno::Reference<css::accessibility::XAccessibleTextAttributes> xAttributes(
         xText, css::uno::UNO_QUERY);
     if (xAttributes.is())
-        aAttribs = xAttributes->getRunAttributes(offset, css::uno::Sequence<OUString>());
+        aAttribs = xAttributes->getRunAttributes(offset, cpo::uno::Sequence<OUString>());
     else
-        aAttribs = xText->getCharacterAttributes(offset, css::uno::Sequence<OUString>());
+        aAttribs = xText->getCharacterAttributes(offset, cpo::uno::Sequence<OUString>());
 
     const int nCount = convertUnoTextAttributesToGtk(aAttribs, attribute_names, attribute_values);
     if (nCount == 0)
@@ -215,8 +215,8 @@ static void lo_accessible_text_get_default_attributes(GtkAccessibleText* self,
     if (!xAttributes.is())
         return;
 
-    css::uno::Sequence<css::beans::PropertyValue> aAttribs
-        = xAttributes->getDefaultAttributes(css::uno::Sequence<OUString>());
+    cpo::uno::Sequence<css::beans::PropertyValue> aAttribs
+        = xAttributes->getDefaultAttributes(cpo::uno::Sequence<OUString>());
 
     convertUnoTextAttributesToGtk(aAttribs, attribute_names, attribute_values);
 }

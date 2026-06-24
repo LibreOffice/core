@@ -24,7 +24,7 @@ class ConstructorsTest
     : public cppu::WeakImplHelper<css::testuno::XArgumentStore, css::lang::XServiceInfo>
 {
 public:
-    explicit ConstructorsTest(css::uno::Sequence<cpo::uno::Any> const& args)
+    explicit ConstructorsTest(cpo::uno::Sequence<cpo::uno::Any> const& args)
         : m_aArgs(args)
     {
     }
@@ -39,22 +39,22 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.testuno.ImplicitConstructor"_ustr,
                  u"com.sun.star.testuno.ExplicitConstructors"_ustr };
     }
 
-    css::uno::Sequence<cpo::uno::Any> SAL_CALL getArguments() override { return m_aArgs; }
+    cpo::uno::Sequence<cpo::uno::Any> SAL_CALL getArguments() override { return m_aArgs; }
 
 private:
-    css::uno::Sequence<cpo::uno::Any> m_aArgs;
+    cpo::uno::Sequence<cpo::uno::Any> m_aArgs;
 };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_testuno_Constructors_get_implementation(
-    css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ConstructorsTest(args));
 }

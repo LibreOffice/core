@@ -26,7 +26,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <sal/log.hxx>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using namespace com::sun::star;
 using namespace ::xmloff::token;

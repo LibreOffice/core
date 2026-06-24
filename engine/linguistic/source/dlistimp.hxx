@@ -84,7 +84,7 @@ public:
 
     // XDictionaryList
     virtual ::sal_Int16 SAL_CALL getCount(  ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary > > SAL_CALL getDictionaries(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary > > SAL_CALL getDictionaries(  ) override;
     virtual css::uno::Reference< css::linguistic2::XDictionary > SAL_CALL getDictionaryByName( const OUString& aDictionaryName ) override;
     virtual bool SAL_CALL addDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
     virtual bool SAL_CALL removeDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
@@ -106,11 +106,11 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
     virtual void SAL_CALL
-    initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArguments*/) override;
+    initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/) override;
 
     // non UNO-specific
     void    SaveDics();

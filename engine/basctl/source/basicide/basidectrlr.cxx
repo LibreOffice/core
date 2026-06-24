@@ -84,7 +84,7 @@ Sequence< Type > Controller::getTypes()
 
 Sequence< sal_Int8 > Controller::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XPropertySet

@@ -27,6 +27,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
+using namespace ::cpo::uno;
 
 
 XMLBase64ImportContext::XMLBase64ImportContext(

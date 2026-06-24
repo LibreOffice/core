@@ -54,7 +54,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XProgressHandler
     virtual void SAL_CALL push( Any const & Status ) override;
@@ -94,7 +94,7 @@ bool ProgressLogImpl::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > ProgressLogImpl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ProgressLogImpl::getSupportedServiceNames()
 {
     // a private one
     return { u"com.sun.star.comp.deployment.ProgressLog"_ustr };
@@ -135,7 +135,7 @@ void ProgressLogImpl::pop()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_ProgressLog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new dp_log::ProgressLogImpl(args, context));
 }

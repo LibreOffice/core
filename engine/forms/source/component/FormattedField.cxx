@@ -238,9 +238,9 @@ IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed, void*, void)
         xSubmit->submit( Reference<XControl> (), css::awt::MouseEvent() );
 }
 
-css::uno::Sequence<OUString>  OFormattedControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString>  OFormattedControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
     OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-2] = FRM_SUN_CONTROL_FORMATTEDFIELD;
@@ -298,9 +298,9 @@ void SAL_CALL OFormattedModel::disposing()
 }
 
 // XServiceInfo
-css::uno::Sequence<OUString> OFormattedModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> OFormattedModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OEditBaseModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OEditBaseModel::getSupportedServiceNames();
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
     OUString* pStoreTo = aSupported.getArray() + nOldLen;
@@ -1011,7 +1011,7 @@ void OFormattedModel::resetNoBroadcast()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OFormattedControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFormattedControl(component));
 }

@@ -25,7 +25,7 @@
 #include <basic/sbx.hxx>
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <osl/file.hxx>
 #include <i18nlangtag/lang.h>
 
@@ -186,7 +186,7 @@ public:
     OUString sFullNameToBeChecked;
     std::optional<WildCard> moWildCard;
 
-    css::uno::Sequence< OUString > aDirSeq;
+    cpo::uno::Sequence< OUString > aDirSeq;
 
     SbiRTLData();
     ~SbiRTLData();

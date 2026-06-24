@@ -64,6 +64,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::cpo::uno;
 
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
@@ -253,7 +254,7 @@ void SfxToolBoxControl::Dispatch(
     }
 }
 
-void SfxToolBoxControl::Dispatch( const OUString& aCommand, css::uno::Sequence< css::beans::PropertyValue > const & aArgs )
+void SfxToolBoxControl::Dispatch( const OUString& aCommand, cpo::uno::Sequence< css::beans::PropertyValue > const & aArgs )
 {
     Reference < XController > xController;
 

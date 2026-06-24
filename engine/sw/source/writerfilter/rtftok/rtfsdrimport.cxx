@@ -968,7 +968,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
         if (!aShapeText.isEmpty())
         {
-            uno::Sequence<beans::PropertyValue> aSequence(comphelper::InitPropertySequence({
+            cpo::uno::Sequence<beans::PropertyValue> aSequence(comphelper::InitPropertySequence({
                 { "TextPath", cpo::uno::Any(true) },
             }));
             aCustomShapeGeometry[u"TextPath"_ustr] <<= aSequence;
@@ -990,11 +990,11 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         if (nType == ESCHER_ShpInst_Line)
         {
             // Line shape inside group shape: get the polygon sequence and transform it.
-            uno::Sequence<uno::Sequence<awt::Point>> aPolyPolySequence;
+            cpo::uno::Sequence<cpo::uno::Sequence<awt::Point>> aPolyPolySequence;
             if ((xPropertySet->getPropertyValue(u"PolyPolygon"_ustr) >>= aPolyPolySequence)
                 && aPolyPolySequence.hasElements())
             {
-                uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence.getArray()[0];
+                cpo::uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence.getArray()[0];
                 basegfx::B2DPolygon aPoly;
                 for (const awt::Point& rPoint : rPolygon)
                 {

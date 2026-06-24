@@ -72,7 +72,7 @@ public:
     const std::shared_ptr<DataTableView> & getDataTableView() { return m_pDataTableView; }
 
 protected: //methods
-    static size_t getIndexOfLongestLabel( const css::uno::Sequence<OUString>& rLabels );
+    static size_t getIndexOfLongestLabel( const cpo::uno::Sequence<OUString>& rLabels );
     void removeTextShapesFromTicks();
     void updateUnscaledValuesAtTicks( TickIter& rIter );
 
@@ -86,7 +86,7 @@ protected: //member
     css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
     AxisProperties                                            m_aAxisProperties;
     AxisLabelProperties                                       m_aAxisLabelProperties;
-    css::uno::Sequence< OUString >                            m_aTextLabels;
+    cpo::uno::Sequence< OUString >                            m_aTextLabels;
     bool                                                      m_bUseTextLabels;
 
     rtl::Reference< SvxShapeGroupAnyD > m_xGroupShape_Shapes;

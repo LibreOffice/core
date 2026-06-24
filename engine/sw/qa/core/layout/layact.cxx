@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIdleLayoutingAnyInput)
 
     // Given a document with 3 pages, the first page is visible:
     createSwDoc();
-    getSwTextDoc()->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    getSwTextDoc()->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertPageBreak();
     pWrtShell->InsertPageBreak();

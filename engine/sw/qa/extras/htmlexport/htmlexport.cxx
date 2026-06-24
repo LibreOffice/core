@@ -567,7 +567,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
 
     ImportFromReqif(createFileURL(u"reqif-png-img.xhtml"));
     verify(/*bExported=*/false);
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
@@ -635,7 +635,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfTableHeight)
 {
     // Given a document with a table in it, with an explicit row height:
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aTableProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aTableProperties = {
         comphelper::makePropertyValue(u"Rows"_ustr, static_cast<sal_Int32>(1)),
         comphelper::makePropertyValue(u"Columns"_ustr, static_cast<sal_Int32>(1)),
     };
@@ -801,7 +801,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTransparentImage)
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTransparentImageReqIf)
 {
     createSwDoc("transparent-image.odt");
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
@@ -935,7 +935,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testRTFOLEMimeType)
     ImportFromReqif(createFileURL(u"reqif-ole-data.xhtml"));
 
     // Export it.
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"RTFOLEMimeType"_ustr, aType),
     };
@@ -966,7 +966,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)
 {
     // Create a document with a comment in it.
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Text", cpo::uno::Any(u"some text"_ustr) },
         { "Author", cpo::uno::Any(u"me"_ustr) },
     });
@@ -1113,7 +1113,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PaintBitmapFormat)
     createSwDoc("paint-ole-bitmap-format.odt");
 
     // When exporting to reqif-xhtml with ExportImagesAsOLE enabled:
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
@@ -1448,13 +1448,13 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifImageToOle)
 {
     // Given a document with an image:
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"ole2.png")),
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
     // When exporting to XHTML:
-    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProperties = {
         comphelper::makePropertyValue(u"FilterOptions"_ustr, u"xhtmlns=reqif-xhtml"_ustr),
         comphelper::makePropertyValue(u"ExportImagesAsOLE"_ustr, true),
     };
@@ -1489,7 +1489,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedPNGDirectly)
 {
     // Given a document with an image:
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"ole2.png")),
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
@@ -1510,7 +1510,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedJPGDirectly)
 {
     // Given a document with an image:
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"reqif-ole-img.jpg")),
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);

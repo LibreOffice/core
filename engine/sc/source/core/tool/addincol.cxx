@@ -116,7 +116,7 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
             if ( xComp.is() && xFunction.is() )
             {
                 OUString aMethodName = xFunction->getName();
-                const uno::Sequence< sheet::LocalizedName> aCompNames( xComp->getCompatibilityNames( aMethodName ));
+                const cpo::uno::Sequence< sheet::LocalizedName> aCompNames( xComp->getCompatibilityNames( aMethodName ));
                 maCompNames.clear();
                 for (const sheet::LocalizedName& rCompName : aCompNames)
                 {
@@ -373,7 +373,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     const OUString sSlash('/');
 
     // get the list of add-ins (services)
-    const uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( u""_ustr );
+    const cpo::uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( u""_ustr );
 
     for ( const OUString& aServiceName : aServiceNames )
     {
@@ -381,7 +381,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
         OUString aFunctionsPath(aServiceName + sSlash + u"AddInFunctions"_ustr);
 
-        uno::Sequence<OUString> aFunctionNames = rAddInConfig.GetNodeNames( aFunctionsPath );
+        cpo::uno::Sequence<OUString> aFunctionNames = rAddInConfig.GetNodeNames( aFunctionsPath );
         sal_Int32 nNewCount = aFunctionNames.getLength();
 
         // allocate pointers
@@ -431,12 +431,12 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 OUString aFuncPropPath = aFunctionsPath + sSlash + pFuncNameArray[nFuncPos] + sSlash;
 
-                uno::Sequence<OUString> aFuncPropNames{
+                cpo::uno::Sequence<OUString> aFuncPropNames{
                     (aFuncPropPath + CFGSTR_DISPLAYNAME), // CFG_FUNCPROP_DISPLAYNAME
                     (aFuncPropPath + CFGSTR_DESCRIPTION), // CFG_FUNCPROP_DESCRIPTION
                     (aFuncPropPath + CFGSTR_CATEGORY)};   // CFG_FUNCPROP_CATEGORY
 
-                uno::Sequence<cpo::uno::Any> aFuncProperties = rAddInConfig.GetProperties( aFuncPropNames );
+                cpo::uno::Sequence<cpo::uno::Any> aFuncProperties = rAddInConfig.GetProperties( aFuncPropNames );
                 if ( aFuncProperties.getLength() == CFG_FUNCPROP_COUNT )
                 {
                     aFuncProperties[CFG_FUNCPROP_DISPLAYNAME] >>= aLocalName;
@@ -450,12 +450,12 @@ void ScUnoAddInCollection::ReadConfiguration()
                 // get English display name
 
                 OUString aDisplayNamePath(aFuncPropPath + CFGSTR_DISPLAYNAME);
-                uno::Sequence<OUString> aDisplayNamePropNames( &aDisplayNamePath, 1 );
+                cpo::uno::Sequence<OUString> aDisplayNamePropNames( &aDisplayNamePath, 1 );
 
-                uno::Sequence<cpo::uno::Any> aDisplayNameProperties = aAllLocalesConfig.GetProperties( aDisplayNamePropNames );
+                cpo::uno::Sequence<cpo::uno::Any> aDisplayNameProperties = aAllLocalesConfig.GetProperties( aDisplayNamePropNames );
                 if ( aDisplayNameProperties.getLength() == 1 )
                 {
-                    uno::Sequence<beans::PropertyValue> aLocalEntries;
+                    cpo::uno::Sequence<beans::PropertyValue> aLocalEntries;
                     if ( aDisplayNameProperties[0] >>= aLocalEntries )
                     {
                         for (const beans::PropertyValue& rConfig : aLocalEntries)
@@ -481,12 +481,12 @@ void ScUnoAddInCollection::ReadConfiguration()
                 ::std::vector<ScUnoAddInFuncData::LocalizedName> aCompNames;
 
                 OUString aCompPath(aFuncPropPath + u"CompatibilityName"_ustr);
-                uno::Sequence<OUString> aCompPropNames( &aCompPath, 1 );
+                cpo::uno::Sequence<OUString> aCompPropNames( &aCompPath, 1 );
 
-                uno::Sequence<cpo::uno::Any> aCompProperties = aAllLocalesConfig.GetProperties( aCompPropNames );
+                cpo::uno::Sequence<cpo::uno::Any> aCompProperties = aAllLocalesConfig.GetProperties( aCompPropNames );
                 if ( aCompProperties.getLength() == 1 )
                 {
-                    uno::Sequence<beans::PropertyValue> aLocalEntries;
+                    cpo::uno::Sequence<beans::PropertyValue> aLocalEntries;
                     if ( aCompProperties[0] >>= aLocalEntries )
                     {
                         for (const beans::PropertyValue& rConfig : aLocalEntries)
@@ -520,12 +520,12 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 OUString aArgumentsPath(aFuncPropPath + u"Parameters"_ustr);
 
-                const uno::Sequence<OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
+                const cpo::uno::Sequence<OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
                 sal_Int32 nArgumentCount = aArgumentNames.getLength();
                 if ( nArgumentCount )
                 {
                     // get DisplayName and Description for each argument
-                    uno::Sequence<OUString> aArgPropNames( nArgumentCount * 2 );
+                    cpo::uno::Sequence<OUString> aArgPropNames( nArgumentCount * 2 );
                     OUString* pPropNameArray = aArgPropNames.getArray();
 
                     sal_Int32 nIndex = 0;
@@ -539,7 +539,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                             + CFGSTR_DESCRIPTION;
                     }
 
-                    uno::Sequence<cpo::uno::Any> aArgProperties = rAddInConfig.GetProperties( aArgPropNames );
+                    cpo::uno::Sequence<cpo::uno::Any> aArgProperties = rAddInConfig.GetProperties( aArgPropNames );
                     if ( aArgProperties.getLength() == aArgPropNames.getLength() )
                     {
                         const OUString* pArgNameArray = aArgumentNames.getConstArray();
@@ -717,10 +717,10 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
 
                 OUString sName = xClass->getName();
                 return (
-                    IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int32> >>::get() ) ||
-                    IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<double> >>::get() ) ||
-                    IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<OUString> >>::get() ) ||
-                    IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<cpo::uno::Any> >>::get() ) );
+                    IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<sal_Int32> >>::get() ) ||
+                    IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<double> >>::get() ) ||
+                    IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<OUString> >>::get() ) ||
+                    IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> >>::get() ) );
             }
     }
 }
@@ -744,16 +744,16 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     //TODO: XIdlClass needs getType() method!
     OUString sName = xClass->getName();
 
-    if (IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int32> >>::get() ))
+    if (IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<sal_Int32> >>::get() ))
         return SC_ADDINARG_INTEGER_ARRAY;
 
-    if (IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<double> >>::get() ))
+    if (IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<double> >>::get() ))
         return SC_ADDINARG_DOUBLE_ARRAY;
 
-    if (IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<OUString> >>::get() ))
+    if (IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<OUString> >>::get() ))
         return SC_ADDINARG_STRING_ARRAY;
 
-    if (IsTypeName( sName, cppu::UnoType<uno::Sequence< uno::Sequence<cpo::uno::Any> >>::get() ))
+    if (IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> >>::get() ))
         return SC_ADDINARG_MIXED_ARRAY;
 
     if (IsTypeName( sName, cppu::UnoType<cpo::uno::Any>::get()))
@@ -765,7 +765,7 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     if (IsTypeName( sName, cppu::UnoType<beans::XPropertySet>::get()))
         return SC_ADDINARG_CALLER;
 
-    if (IsTypeName( sName, cppu::UnoType<uno::Sequence<cpo::uno::Any>>::get() ))
+    if (IsTypeName( sName, cppu::UnoType<cpo::uno::Sequence<cpo::uno::Any>>::get() ))
         return SC_ADDINARG_VARARGS;
 
     return SC_ADDINARG_NONE;
@@ -807,7 +807,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     if (!xAcc.is())
         return;
 
-    uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
+    cpo::uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
             xAcc->getMethods( beans::MethodConcept::ALL );
     sal_Int32 nNewCount = aMethods.getLength();
     if ( !nNewCount )
@@ -879,7 +879,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                 sal_Int32 nVisibleCount = 0;
                 sal_Int32 nCallerPos = SC_CALLERPOS_NONE;
 
-                uno::Sequence<reflection::ParamInfo> aParams =
+                cpo::uno::Sequence<reflection::ParamInfo> aParams =
                         xFunc->getParameterInfos();
                 sal_Int32 nParamCount = aParams.getLength();
                 const reflection::ParamInfo* pParArr = aParams.getConstArray();
@@ -1089,7 +1089,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     if (!xAcc.is())
         return;
 
-    const uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
+    const cpo::uno::Sequence< uno::Reference<reflection::XIdlMethod> > aMethods =
             xAcc->getMethods( beans::MethodConcept::ALL );
     for (const uno::Reference<reflection::XIdlMethod>& xFunc : aMethods)
     {
@@ -1113,7 +1113,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                 sal_Int32 nVisibleCount = 0;
                 sal_Int32 nCallerPos = SC_CALLERPOS_NONE;
 
-                const uno::Sequence<reflection::ParamInfo> aParams =
+                const cpo::uno::Sequence<reflection::ParamInfo> aParams =
                         xFunc->getParameterInfos();
                 sal_Int32 nParamCount = aParams.getLength();
                 const reflection::ParamInfo* pParArr = aParams.getConstArray();
@@ -1487,7 +1487,7 @@ void ScUnoAddInCall::ExecuteCall()
         }
 
         sal_Int32 nDestLen = nUserLen + 1;
-        uno::Sequence<cpo::uno::Any> aRealArgs( nDestLen );
+        cpo::uno::Sequence<cpo::uno::Any> aRealArgs( nDestLen );
         cpo::uno::Any* pDest = aRealArgs.getArray();
 
         pDest = std::copy_n(std::cbegin(aArgs), nCallPos, pDest);
@@ -1500,7 +1500,7 @@ void ScUnoAddInCall::ExecuteCall()
         ExecuteCallWithArgs( aArgs );
 }
 
-void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<cpo::uno::Any>& rCallArgs)
+void ScUnoAddInCall::ExecuteCallWithArgs(cpo::uno::Sequence<cpo::uno::Any>& rCallArgs)
 {
     //  rCallArgs may not match argument descriptions (because of caller)
 
@@ -1547,13 +1547,13 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<cpo::uno::Any>& rCallArgs
 }
 
 template <typename T>
-static sal_Int32 lcl_GetMaxColCount(const uno::Sequence< uno::Sequence<T> >* pRowSeq)
+static sal_Int32 lcl_GetMaxColCount(const cpo::uno::Sequence< cpo::uno::Sequence<T> >* pRowSeq)
 {
     if (!pRowSeq->hasElements())
         return 0;
 
     auto pRow = std::max_element(pRowSeq->begin(), pRowSeq->end(),
-        [](const uno::Sequence<T>& a, const uno::Sequence<T>& b) {
+        [](const cpo::uno::Sequence<T>& a, const cpo::uno::Sequence<T>& b) {
             return a.getLength() < b.getLength(); });
     return pRow->getLength();
 }
@@ -1611,12 +1611,12 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
             break;
 
         default:
-            if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int32> >>::get() ) )
+            if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<sal_Int32> >>::get() ) )
             {
-                const uno::Sequence< uno::Sequence<sal_Int32> >* pRowSeq = nullptr;
+                const cpo::uno::Sequence< cpo::uno::Sequence<sal_Int32> >* pRowSeq = nullptr;
 
                 //TODO: use pointer from any!
-                uno::Sequence< uno::Sequence<sal_Int32> > aSequence;
+                cpo::uno::Sequence< cpo::uno::Sequence<sal_Int32> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
 
@@ -1626,7 +1626,7 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
                     sal_Int32 nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
-                        const uno::Sequence<sal_Int32>* pRowArr = pRowSeq->getConstArray();
+                        const cpo::uno::Sequence<sal_Int32>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
@@ -1646,12 +1646,12 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
                     }
                 }
             }
-            else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<double> >>::get() ) )
+            else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<double> >>::get() ) )
             {
-                const uno::Sequence< uno::Sequence<double> >* pRowSeq = nullptr;
+                const cpo::uno::Sequence< cpo::uno::Sequence<double> >* pRowSeq = nullptr;
 
                 //TODO: use pointer from any!
-                uno::Sequence< uno::Sequence<double> > aSequence;
+                cpo::uno::Sequence< cpo::uno::Sequence<double> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
 
@@ -1661,7 +1661,7 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
                     sal_Int32 nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
-                        const uno::Sequence<double>* pRowArr = pRowSeq->getConstArray();
+                        const cpo::uno::Sequence<double>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
@@ -1681,12 +1681,12 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
                     }
                 }
             }
-            else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<OUString> >>::get() ) )
+            else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<OUString> >>::get() ) )
             {
-                const uno::Sequence< uno::Sequence<OUString> >* pRowSeq = nullptr;
+                const cpo::uno::Sequence< cpo::uno::Sequence<OUString> >* pRowSeq = nullptr;
 
                 //TODO: use pointer from any!
-                uno::Sequence< uno::Sequence<OUString> > aSequence;
+                cpo::uno::Sequence< cpo::uno::Sequence<OUString> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
 
@@ -1696,7 +1696,7 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
                     sal_Int32 nMaxColCount = lcl_GetMaxColCount(pRowSeq);
                     if ( nMaxColCount && nRowCount )
                     {
-                        const uno::Sequence<OUString>* pRowArr = pRowSeq->getConstArray();
+                        const cpo::uno::Sequence<OUString>* pRowArr = pRowSeq->getConstArray();
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount), 0.0);
@@ -1720,7 +1720,7 @@ void ScUnoAddInCall::SetResult( const cpo::uno::Any& rNewRes )
                     }
                 }
             }
-            else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<cpo::uno::Any> >>::get() ) )
+            else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> >>::get() ) )
             {
                 xMatrix = ScSequenceToMatrix::CreateMixedMatrix( rNewRes );
             }

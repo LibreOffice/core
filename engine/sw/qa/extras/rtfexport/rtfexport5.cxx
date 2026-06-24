@@ -729,7 +729,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo65090)
         uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
         // The first row had 3 cells, instead of a horizontally merged one and a normal one (2 -> 1 separator).
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)
                                  .getLength());
     };
@@ -881,7 +881,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69289)
         uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
         // There were only 2 cells (1 separators) in the table, should be 3 (2 separators).
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
-                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)
                                  .getLength());
     };
@@ -955,7 +955,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo75735)
 {
     auto verify = [this]() {
         // Number of tabstops in the second paragraph should be 3, was 6.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<uno::Sequence<style::TabStop>>(
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<cpo::uno::Sequence<style::TabStop>>(
                                                getParagraph(2), u"ParaTabStops"_ustr)
                                                .getLength());
     };

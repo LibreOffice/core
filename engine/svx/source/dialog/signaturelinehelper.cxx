@@ -130,7 +130,7 @@ uno::Reference<graphic::XGraphic> importSVG(std::u16string_view rSVG)
     uno::Reference<graphic::XGraphicProvider> xProvider
         = graphic::GraphicProvider::create(xContext);
 
-    uno::Sequence<beans::PropertyValue> aMediaProperties{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> aMediaProperties{ comphelper::makePropertyValue(
         u"InputStream"_ustr, xInputStream) };
     uno::Reference<graphic::XGraphic> xGraphic(xProvider->queryGraphic(aMediaProperties));
     return xGraphic;

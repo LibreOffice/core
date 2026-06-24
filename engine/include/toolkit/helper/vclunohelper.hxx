@@ -34,7 +34,7 @@
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <rtl/ref.hxx>
 
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 namespace com::sun::star::uno {
     class XInterface;
@@ -88,7 +88,7 @@ public:
     static vcl::Region                                   GetRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion );
 
     // Polygon
-    static tools::Polygon CreatePolygon( const css::uno::Sequence< sal_Int32 >& DataX, const css::uno::Sequence< sal_Int32 >& DataY );
+    static tools::Polygon CreatePolygon( const cpo::uno::Sequence< sal_Int32 >& DataX, const cpo::uno::Sequence< sal_Int32 >& DataY );
 
     /** convert Font to css::awt::FontDescriptor
         @param  rFont  Font to be converted

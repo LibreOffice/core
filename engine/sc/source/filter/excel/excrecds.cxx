@@ -53,7 +53,7 @@
 
 using namespace ::oox;
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 //--------------------------------------------------------- class ExcDummy_00 -
 const sal_uInt8     ExcDummy_00::pMyData[] = {

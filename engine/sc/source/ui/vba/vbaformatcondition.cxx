@@ -145,10 +145,10 @@ ScVbaFormatCondition::getServiceImplName()
     return u"ScVbaFormatCondition"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaFormatCondition::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.FormatCondition"_ustr
     };

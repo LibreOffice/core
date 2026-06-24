@@ -80,7 +80,7 @@ public:
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -119,7 +119,7 @@ public:
         const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme ) override;
     virtual void SAL_CALL setDiagramData(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
     virtual css::uno::Reference<css::chart2::XDataTable> SAL_CALL getDataTable() override;
     virtual void SAL_CALL setDataTable(const css::uno::Reference<css::chart2::XDataTable>& xDataTable) override;
@@ -129,9 +129,9 @@ public:
         const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
     virtual void SAL_CALL removeCoordinateSystem(
         const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > SAL_CALL getCoordinateSystems() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > SAL_CALL getCoordinateSystems() override;
     virtual void SAL_CALL setCoordinateSystems(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > >& aCoordinateSystems ) override;
+        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > >& aCoordinateSystems ) override;
 
     // ____ XTitled ____
     virtual css::uno::Reference<

@@ -94,8 +94,8 @@ public:
     css::uno::Reference< css::frame::XDispatch > getDispatchForURL(
                 const css::util::URL & rURL );
 
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > getDispatchesForURLs(
-                const css::uno::Sequence< css::frame::DispatchDescriptor > & aDescriptors );
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > getDispatchesForURLs(
+                const cpo::uno::Sequence< css::frame::DispatchDescriptor > & aDescriptors );
 
     void DisposeAndClear();
 

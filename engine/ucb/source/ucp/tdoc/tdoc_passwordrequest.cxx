@@ -111,7 +111,7 @@ DocumentPasswordRequest::DocumentPasswordRequest(
     setRequest( cpo::uno::Any( aRequest ) );
 
     // Fill continuations...
-    uno::Sequence<
+    cpo::uno::Sequence<
         uno::Reference< task::XInteractionContinuation > > aContinuations{
             new ucbhelper::InteractionAbort( this ),
             new ucbhelper::InteractionRetry( this ),

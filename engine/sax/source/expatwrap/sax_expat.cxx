@@ -109,7 +109,7 @@ public:
     SaxExpatParser();
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any> const& rArguments) override;
+    virtual void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any> const& rArguments) override;
 
     // The SAX-Parser-Interface
     virtual void SAL_CALL parseStream(  const InputSource& structSource) override;
@@ -123,7 +123,7 @@ public:
 
 public: // XServiceInfo
     OUString                     SAL_CALL getImplementationName() override;
-    css::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString >         SAL_CALL getSupportedServiceNames() override;
     bool                     SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
@@ -366,7 +366,7 @@ SaxExpatParser::SaxExpatParser(  )
 
 // css::lang::XInitialization:
 void SAL_CALL
-SaxExpatParser::initialize(css::uno::Sequence< cpo::uno::Any > const& rArguments)
+SaxExpatParser::initialize(cpo::uno::Sequence< cpo::uno::Any > const& rArguments)
 {
     // possible arguments: a string "DoSmeplease"
     if (rArguments.hasElements())
@@ -525,7 +525,7 @@ bool SaxExpatParser::supportsService(const OUString& ServiceName)
 }
 
 // XServiceInfo
-css::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SaxExpatParser::getSupportedServiceNames()
 {
     return { u"com.sun.star.xml.sax.Parser"_ustr };
 }
@@ -628,7 +628,7 @@ void SaxExpatParser_Impl::parse( )
     const int nBufSize = 16*1024;
 
     int nRead   = nBufSize;
-    css::uno::Sequence< sal_Int8 > seqOut(nBufSize);
+    cpo::uno::Sequence< sal_Int8 > seqOut(nBufSize);
 
     while( nRead ) {
         nRead = getEntity().converter.readAndConvert( seqOut , nBufSize );
@@ -947,7 +947,7 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SaxExpatParser);
 }

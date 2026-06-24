@@ -2233,7 +2233,7 @@ public:
     SC_DLLPUBLIC void           SetColBreak(SCCOL nCol, SCTAB nTab, bool bPage, bool bManual);
     void                        RemoveRowBreak(SCROW nRow, SCTAB nTab, bool bPage, bool bManual);
     void                        RemoveColBreak(SCCOL nCol, SCTAB nTab, bool bPage, bool bManual);
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::sheet::TablePageBreakData> GetRowBreakData(SCTAB nTab) const;
 
     SC_DLLPUBLIC bool           RowHidden(SCROW nRow, SCTAB nTab, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;

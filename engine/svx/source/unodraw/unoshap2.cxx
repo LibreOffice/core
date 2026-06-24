@@ -116,9 +116,9 @@ cpo::uno::Any SAL_CALL SvxShapeGroup::queryAggregation( const uno::Type & rType 
     return aAny;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxShapeGroup::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // css::drawing::XShape
@@ -368,14 +368,14 @@ SvxShapeConnector::~SvxShapeConnector() noexcept
 
 // XTypeProvider
 
-uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
 {
     return SvxShape::getTypes();
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // css::drawing::XShape
@@ -411,14 +411,14 @@ cpo::uno::Any SAL_CALL SvxShapeControl::queryAggregation( const uno::Type & rTyp
 
 // XTypeProvider
 
-uno::Sequence< uno::Type > SAL_CALL SvxShapeControl::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxShapeControl::getTypes()
 {
     return SvxShape::getTypes();
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxShapeControl::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxShapeControl::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // css::drawing::XShape
@@ -1098,12 +1098,12 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_VALUE_FILLBITMAP:
     {
-        if( auto pSeq = o3tl::tryAccess<uno::Sequence<sal_Int8>>(rValue) )
+        if( auto pSeq = o3tl::tryAccess<cpo::uno::Sequence<sal_Int8>>(rValue) )
         {
             SvMemoryStream  aMemStm;
             Graphic         aGraphic;
 
-            aMemStm.SetBuffer( const_cast<css::uno::Sequence<sal_Int8> *>(pSeq)->getArray(), pSeq->getLength(), pSeq->getLength() );
+            aMemStm.SetBuffer( const_cast<cpo::uno::Sequence<sal_Int8> *>(pSeq)->getArray(), pSeq->getLength(), pSeq->getLength() );
 
             if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
             {
@@ -1346,7 +1346,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
             SvMemoryStream aDestStrm( 65535, 65535 );
 
             ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, nullptr, false );
-            const uno::Sequence<sal_Int8> aSeq(
+            const cpo::uno::Sequence<sal_Int8> aSeq(
                 static_cast< const sal_Int8* >(aDestStrm.GetData()),
                 aDestStrm.GetEndOfData());
             rValue <<= aSeq;
@@ -1520,9 +1520,9 @@ cpo::uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType
     return aReturn;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxCustomShape::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // css::drawing::XShape

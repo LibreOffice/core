@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMailMergeInEditeng)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
 {
     loadFromURL(u"private:factory/swriter"_ustr);
-    uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
         { "Text", cpo::uno::Any(u"comment"_ustr) },
     });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aCommentProps);
@@ -99,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
         comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
         comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyTargetURL1)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, u"https://display.url/test1.pdf#page=1"_ustr),
         comphelper::makePropertyValue(u"TargetType"_ustr, u"1"_ustr),
@@ -696,7 +696,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
         xContentControlProps->setPropertyValue(u"DropDown"_ustr, cpo::uno::Any(true));
-        uno::Sequence<beans::PropertyValues> aListItems = {
+        cpo::uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
                 comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
@@ -753,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlImport)
     uno::Reference<text::XTextContent> xContentControl;
     xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValues> aListItems;
+    cpo::uno::Sequence<beans::PropertyValues> aListItems;
     xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
     // Without the accompanying fix in place, this failed with:
     // - Expected: 3
@@ -1103,7 +1103,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlAutostyleExport)
 
     // When saving that document to ODT, then make sure no assertion failure happens:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
         { "FilterName", cpo::uno::Any(u"writer8"_ustr) },
     });
     // Without the accompanying fix in place, this test would have failed, we had duplicated XML
@@ -1179,7 +1179,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableExport)
     // Given a document with a floating table:
     loadFromURL(u"private:factory/swriter"_ustr);
     // Insert a table:
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Rows"_ustr, static_cast<sal_Int32>(1)),
         comphelper::makePropertyValue(u"Columns"_ustr, static_cast<sal_Int32>(1)),
     };

@@ -217,7 +217,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
 }
 
 // css::io::XInputStream
-::sal_Int32 SAL_CALL SwitchablePersistenceStream::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
+::sal_Int32 SAL_CALL SwitchablePersistenceStream::readBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -231,7 +231,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     return m_pStreamData->m_xOrigInStream->readBytes( aData, nBytesToRead );
 }
 
-::sal_Int32 SAL_CALL SwitchablePersistenceStream::readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
+::sal_Int32 SAL_CALL SwitchablePersistenceStream::readSomeBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -260,7 +260,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
         return m_pStreamData->m_pByteReader->readSomeBytes( aData, nBytesToRead );
     else
     {
-        css::uno::Sequence < sal_Int8 > aSequence;
+        cpo::uno::Sequence < sal_Int8 > aSequence;
         sal_Int32 nBytesActuallyRead = m_pStreamData->m_xOrigInStream->readSomeBytes( aSequence, nBytesToRead );
         memcpy(aData, aSequence.getConstArray(), nBytesActuallyRead);
         return nBytesActuallyRead;
@@ -308,7 +308,7 @@ void SAL_CALL SwitchablePersistenceStream::closeInput()
 }
 
 // css::io::XOutputStream
-void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sal_Int8 >& aData )
+void SAL_CALL SwitchablePersistenceStream::writeBytes( const cpo::uno::Sequence< ::sal_Int8 >& aData )
 {
     std::scoped_lock aGuard( m_aMutex );
 

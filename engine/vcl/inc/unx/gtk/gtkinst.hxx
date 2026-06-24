@@ -67,7 +67,7 @@ struct read_transfer_result
     static void read_block_async_completed(GObject* source, GAsyncResult* res, gpointer user_data);
 
     OUString get_as_string() const;
-    css::uno::Sequence<sal_Int8> get_as_sequence() const;
+    cpo::uno::Sequence<sal_Int8> get_as_sequence() const;
 };
 
 #endif
@@ -76,9 +76,9 @@ struct VclToGtkHelper
 {
     std::vector<css::datatransfer::DataFlavor> aInfoToFlavor;
 #if GTK_CHECK_VERSION(4, 0, 0)
-    std::vector<OString> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+    std::vector<OString> FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
 #else
-    std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+    std::vector<GtkTargetEntry> FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
 #endif
 #if GTK_CHECK_VERSION(4, 0, 0)
     void setSelectionData(const css::uno::Reference<css::datatransfer::XTransferable> &rTrans,
@@ -119,7 +119,7 @@ protected:
 public:
     virtual cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
     virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() = 0;
-    virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    virtual cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
@@ -143,7 +143,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void SetFormatConversionRequest(GtkDnDTransferable *pRequest)
     {
@@ -186,7 +186,7 @@ public:
                           const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener);
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    std::vector<GtkTargetEntry> FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
+    std::vector<GtkTargetEntry> FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats);
 #endif
 
     void setActiveDragSource();
@@ -207,7 +207,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void dragFailed();
     void dragDelete();
@@ -272,7 +272,7 @@ public:
         createFolderPicker( const css::uno::Reference< css::uno::XComponentContext >& ) override;
 
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-    CreateClipboard(const css::uno::Sequence<cpo::uno::Any>& i_rArguments) override;
+    CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& i_rArguments) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

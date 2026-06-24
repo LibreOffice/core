@@ -38,7 +38,7 @@ public:
     using svt::ToolboxController::disposing;
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& aArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
     // XToolbarController
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createPopupWindow() override;
     // XStatusListener
@@ -65,10 +65,10 @@ class GenericPopupToolbarController final : public PopupMenuToolbarController
 {
 public:
     GenericPopupToolbarController(const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-                                  const css::uno::Sequence<cpo::uno::Any>& rxArgs);
+                                  const cpo::uno::Sequence<cpo::uno::Any>& rxArgs);
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rxArgs) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rxArgs) override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
@@ -78,7 +78,7 @@ public:
 
     virtual bool SAL_CALL supportsService(OUString const& rServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     bool m_bSplitButton, m_bReplaceWithLast;

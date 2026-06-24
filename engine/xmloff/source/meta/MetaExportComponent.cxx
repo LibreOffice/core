@@ -19,7 +19,7 @@
 
 #include <MetaExportComponent.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -96,7 +96,7 @@ ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                                                       xConvPropSet )
                     : getExportInfo();
 
-            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xDocHandler), cpo::uno::Any(xPropSet),
+            cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xDocHandler), cpo::uno::Any(xPropSet),
                                              cpo::uno::Any(GetModel()) };
 
             // get filter component
@@ -165,14 +165,14 @@ void XMLMetaExportComponent::ExportContent_() {}
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 XMLMetaExportComponent_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new XMLMetaExportComponent(context, u"XMLMetaExportComponent"_ustr, SvXMLExportFlags::META|SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 XMLMetaExportOOo_get_implementation(css::uno::XComponentContext* context,
-                                    css::uno::Sequence<cpo::uno::Any> const&)
+                                    cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(
         new XMLMetaExportComponent(context, u"XMLMetaExportOOo"_ustr, SvXMLExportFlags::META));

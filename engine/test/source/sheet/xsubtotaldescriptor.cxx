@@ -14,7 +14,7 @@
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -27,8 +27,10 @@ void XSubTotalDescriptor::testAddNew()
 {
     uno::Reference<sheet::XSubTotalDescriptor> xSTD(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<sheet::SubTotalColumn> xCols{ { /* Column   */ 5,
-                                                  /* Function */ sheet::GeneralFunction_SUM } };
+    cpo::uno::Sequence<sheet::SubTotalColumn> xCols{
+        { /* Column   */ 5,
+          /* Function */ sheet::GeneralFunction_SUM }
+    };
 
     CPPUNIT_ASSERT_NO_THROW_MESSAGE("Unable to add column", xSTD->addNew(xCols, 1));
 }

@@ -25,7 +25,7 @@ namespace i18npool {
 class transliteration_Numeric : public transliteration_commonclass {
 public:
         virtual OUString
-        transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >* pOffset ) override;
+        transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, cpo::uno::Sequence< sal_Int32 >* pOffset ) override;
 
         virtual sal_Unicode SAL_CALL
         transliterateChar2Char( sal_Unicode inChar) override;
@@ -34,12 +34,12 @@ public:
         virtual sal_Int16 SAL_CALL getType(  ) override;
 
         virtual OUString
-        foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 >* pOffset ) override;
+        foldingImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, cpo::uno::Sequence< sal_Int32 >* pOffset ) override;
 
         virtual bool SAL_CALL
         equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString > SAL_CALL
         transliterateRange( const OUString& str1, const OUString& str2 ) override;
 protected:
         sal_Int16 nNativeNumberMode;
@@ -50,7 +50,7 @@ private:
         /// @throws css::uno::RuntimeException
         OUString
         transliterateBullet( std::u16string_view inStr, sal_Int32 startPos, sal_Int32 nCount,
-                             css::uno::Sequence< sal_Int32 >* pOffset ) const;
+                             cpo::uno::Sequence< sal_Int32 >* pOffset ) const;
 };
 
 }

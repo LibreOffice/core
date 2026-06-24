@@ -17,7 +17,7 @@
 #include <com/sun/star/sheet/SortNumberBehavior.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -31,7 +31,7 @@ namespace apitest
 void SheetSortDescriptor2::testSheetSortDescriptor2Properties()
 {
     uno::Reference<util::XSortable> xSortable(init(), UNO_QUERY_THROW);
-    const uno::Sequence<beans::PropertyValue> values = xSortable->createSortDescriptor();
+    const cpo::uno::Sequence<beans::PropertyValue> values = xSortable->createSortDescriptor();
 
     std::vector<OUString> names;
     // Only test the get/read operation of the values, because set/write operation doesn't
@@ -72,7 +72,7 @@ void SheetSortDescriptor2::testSheetSortDescriptor2Properties()
         else if (value.Name == "SortFields")
         {
             names.push_back(value.Name);
-            uno::Sequence<table::TableSortField> sSortFields;
+            cpo::uno::Sequence<table::TableSortField> sSortFields;
             CPPUNIT_ASSERT(value.Value >>= sSortFields);
         }
         else if (value.Name == "MaxFieldCount")

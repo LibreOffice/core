@@ -129,7 +129,7 @@ public:
     // css::frame::XController2
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getComponentWindow() override;
     virtual OUString SAL_CALL getViewControllerName() override;
-    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getCreationArguments() override;
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getCreationArguments() override;
     virtual css::uno::Reference<css::ui::XSidebarProvider> SAL_CALL getSidebar() override;
 
     // css::lang::XComponent (base of XController)
@@ -148,8 +148,8 @@ public:
                             , const OUString& rTargetFrameName
                             , sal_Int32 nSearchFlags) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
-        queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor > & xDescripts) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+        queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor > & xDescripts) override;
 
     // css::view::XSelectionSupplier (optional interface)
     virtual bool SAL_CALL
@@ -189,7 +189,7 @@ public:
 
     virtual void SAL_CALL
         dispatch( const css::util::URL& aURL
-                    , const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+                    , const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
 
     virtual void SAL_CALL
         addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl
@@ -481,11 +481,11 @@ private:
     void executeDispatch_MoveSeries( bool bForward );
 
     bool EndTextEdit();
-    css::uno::Sequence< css::uno::Reference<css::chart2::XFormattedString >> GetFormattedTitle(
+    cpo::uno::Sequence< css::uno::Reference<css::chart2::XFormattedString >> GetFormattedTitle(
         const EditTextObject& aEdit, const css::uno::Reference< css::drawing::XShape >& xShape );
 
     void executeDispatch_View3D();
-    void executeDispatch_PositionAndSize( const ::css::uno::Sequence< ::css::beans::PropertyValue >* pArgs = nullptr );
+    void executeDispatch_PositionAndSize( const ::cpo::uno::Sequence< ::css::beans::PropertyValue >* pArgs = nullptr );
 
     void executeDispatch_EditData();
 
@@ -496,22 +496,22 @@ private:
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontName(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontHeight(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontItalic(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontUnderline(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontStrikeout(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontShadowed(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontColor(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontGrow(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontShrink(
@@ -520,7 +520,7 @@ private:
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontSpacing(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontSuperScript(
         const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontSubScript(
@@ -544,7 +544,7 @@ private:
     void sendPopupRequest(std::u16string_view rCID, tools::Rectangle aRectangle);
 
     void impl_ShapeControllerDispatch( const css::util::URL& rURL,
-        const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs );
 
     DECL_LINK( DoubleClickWaitingHdl, Timer*, void );
     void execute_DoubleClick( const Point* pMousePixel, bool &bEditText );

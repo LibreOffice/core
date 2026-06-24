@@ -100,7 +100,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL HistogramDataSequence::getPrope
 
 ::cppu::IPropertyArrayHelper* HistogramDataSequence::createArrayHelper() const
 {
-    uno::Sequence<beans::Property> aProperties;
+    cpo::uno::Sequence<beans::Property> aProperties;
     describeProperties(aProperties);
     return new ::cppu::OPropertyArrayHelper(aProperties);
 }
@@ -112,28 +112,28 @@ bool SAL_CALL HistogramDataSequence::supportsService(const OUString& rServiceNam
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL HistogramDataSequence::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL HistogramDataSequence::getSupportedServiceNames()
 {
     return { lcl_aServiceName, u"com.sun.star.chart2.data.DataSequence"_ustr,
              u"com.sun.star.chart2.data.NumericalDataSequence"_ustr,
              u"com.sun.star.chart2.data.TextualDataSequence"_ustr };
 }
 
-uno::Sequence<double> SAL_CALL HistogramDataSequence::getNumericalData()
+cpo::uno::Sequence<double> SAL_CALL HistogramDataSequence::getNumericalData()
 {
     ::osl::MutexGuard aGuard(GetMutex());
     ensureCalculated();
     return CommonFunctors::convertToSequence(mxValues, CommonFunctors::ToDouble());
 }
 
-uno::Sequence<OUString> SAL_CALL HistogramDataSequence::getTextualData()
+cpo::uno::Sequence<OUString> SAL_CALL HistogramDataSequence::getTextualData()
 {
     ::osl::MutexGuard aGuard(GetMutex());
     ensureCalculated();
     return CommonFunctors::convertToSequence(mxValues, CommonFunctors::ToString());
 }
 
-uno::Sequence<cpo::uno::Any> SAL_CALL HistogramDataSequence::getData()
+cpo::uno::Sequence<cpo::uno::Any> SAL_CALL HistogramDataSequence::getData()
 {
     ::osl::MutexGuard aGuard(GetMutex());
     ensureCalculated();
@@ -146,7 +146,7 @@ OUString SAL_CALL HistogramDataSequence::getSourceRangeRepresentation()
     return OUString();
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
     SAL_CALL HistogramDataSequence::generateLabel(css::chart2::data::LabelOrigin)
 {
     ::osl::MutexGuard aGuard(GetMutex());
@@ -208,7 +208,7 @@ void HistogramDataSequence::ensureCalculated()
     std::vector<double> rawData;
     try
     {
-        uno::Sequence<cpo::uno::Any> aRawAnyValues = m_xRawData->getData();
+        cpo::uno::Sequence<cpo::uno::Any> aRawAnyValues = m_xRawData->getData();
         for (const auto& aAny : aRawAnyValues)
         {
             double fValue = 0.0;

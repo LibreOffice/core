@@ -78,7 +78,7 @@ namespace x11 {
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool    SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() override;
     };
 
@@ -98,7 +98,7 @@ namespace x11 {
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool    SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() override;
 
         void initialize();
@@ -131,7 +131,7 @@ namespace x11 {
         // property used to transfer the data
         struct IncrementalTransfer
         {
-            css::uno::Sequence< sal_Int8 >  m_aData;
+            cpo::uno::Sequence< sal_Int8 >  m_aData;
             int                             m_nBufferPos;
             ::Window                        m_aRequestor;
             Atom                            m_aProperty;
@@ -152,8 +152,8 @@ namespace x11 {
             State                       m_eState;
             SelectionAdaptor*           m_pAdaptor;
             ::osl::Condition            m_aDataArrived;
-            css::uno::Sequence< sal_Int8 > m_aData;
-            css::uno::Sequence< css::datatransfer::DataFlavor >
+            cpo::uno::Sequence< sal_Int8 > m_aData;
+            cpo::uno::Sequence< css::datatransfer::DataFlavor >
                                         m_aTypes;
             std::vector< Atom >         m_aNativeTypes;
             // this is used for caching
@@ -257,7 +257,7 @@ namespace x11 {
                                     m_xDragSourceListener;
         // root coordinates
         int                         m_nLastDragX, m_nLastDragY;
-        css::uno::Sequence< css::datatransfer::DataFlavor >
+        cpo::uno::Sequence< css::datatransfer::DataFlavor >
                                     m_aDragFlavors;
         // the rectangle the pointer must leave until a new XdndPosition should
         // be sent. empty unless the drop target told to fill
@@ -350,13 +350,13 @@ namespace x11 {
         // coordinates on root ::Window
         void updateDragWindow( int nX, int nY, ::Window aRoot );
 
-        bool getPasteData( Atom selection, Atom type, css::uno::Sequence< sal_Int8 >& rData );
+        bool getPasteData( Atom selection, Atom type, cpo::uno::Sequence< sal_Int8 >& rData );
         // returns true if conversion was successful
         bool convertData( const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
                           Atom nType,
                           Atom nSelection,
                           int & rFormat,
-                          css::uno::Sequence< sal_Int8 >& rData );
+                          cpo::uno::Sequence< sal_Int8 >& rData );
         bool sendData( SelectionAdaptor* pAdaptor, ::Window requestor, Atom target, Atom property, Atom selection );
 
         // thread dispatch loop
@@ -398,11 +398,11 @@ namespace x11 {
         // multiple types to the same list
         void convertTypeToNative( const OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront = false );
         OUString convertTypeFromNative( Atom nType, Atom selection, int& rFormat );
-        void getNativeTypeList( const css::uno::Sequence< css::datatransfer::DataFlavor >& rTypes, std::list< Atom >& rOutTypeList, Atom targetselection );
+        void getNativeTypeList( const cpo::uno::Sequence< css::datatransfer::DataFlavor >& rTypes, std::list< Atom >& rOutTypeList, Atom targetselection );
 
         // methods for transferable
-        bool getPasteDataTypes( Atom selection, css::uno::Sequence< css::datatransfer::DataFlavor >& rTypes );
-        bool getPasteData( Atom selection, const OUString& rType, css::uno::Sequence< sal_Int8 >& rData );
+        bool getPasteDataTypes( Atom selection, cpo::uno::Sequence< css::datatransfer::DataFlavor >& rTypes );
+        bool getPasteData( Atom selection, const OUString& rType, cpo::uno::Sequence< sal_Int8 >& rData );
 
         // for XDropTarget to register/deregister itself
         void registerDropTarget(::Window aXLIB_Window, X11DropTarget* pTarget);
@@ -447,9 +447,9 @@ namespace x11 {
         virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
     };
 
-    css::uno::Sequence< OUString > Xdnd_getSupportedServiceNames();
+    cpo::uno::Sequence< OUString > Xdnd_getSupportedServiceNames();
 
-    css::uno::Sequence< OUString > Xdnd_dropTarget_getSupportedServiceNames();
+    cpo::uno::Sequence< OUString > Xdnd_dropTarget_getSupportedServiceNames();
 
 }
 

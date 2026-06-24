@@ -198,7 +198,7 @@ void GlobalSettings_Access::impl_initConfigAccess()
             css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
                  css::configuration::theDefaultProvider::get( m_xContext );
 
-            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
                 {"nodepath", cpo::uno::Any(u"/org.openoffice.Office.UI.GlobalSettings/Toolbars"_ustr)}
             }));

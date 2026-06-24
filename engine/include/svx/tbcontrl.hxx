@@ -165,7 +165,7 @@ public:
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& aArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;
@@ -177,7 +177,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
 #define MAX_FAMILIES 5
@@ -217,7 +217,7 @@ public:
     virtual ~SvxColorToolBoxControl() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments ) override;
 
     // XUpdatable
     virtual void SAL_CALL update() override;
@@ -239,7 +239,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
     void EnsurePaletteManager();
@@ -277,10 +277,10 @@ public:
 
     /** XServiceInfo **/
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /** XInitialization **/
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 };
 
 #endif // INCLUDED_SVX_TBCONTRL_HXX

@@ -40,8 +40,8 @@ using namespace ::com::sun::star;
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
-                                                                    const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-                                                                    const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                                                    const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+                                                                    const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
@@ -91,7 +91,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     }
     xSubStorage.clear();
 
-    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByMediaType( aMediaType );
+    cpo::uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByMediaType( aMediaType );
 
     // If the sequence is empty, fall back to the FileFormatVersion=6200 filter, Base only has that.
     if (!aObject.hasElements() && aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DATABASE)
@@ -119,8 +119,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
-        const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-        const uno::Sequence< beans::PropertyValue >& lObjArgs )
+        const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+        const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
@@ -134,7 +134,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
-    uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
+    cpo::uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
     // check if there is FilterName
     OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, false );
@@ -147,7 +147,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         // the object must be OOo embedded object, if it is not an exception must be thrown
         throw io::IOException(); // TODO:
     }
-    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
+    cpo::uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
     if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
@@ -169,11 +169,11 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceInitNew(
-                                            const uno::Sequence< sal_Int8 >& aClassID,
+                                            const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& /*aClassName*/,
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
-                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
@@ -189,7 +189,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
-    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
+    cpo::uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
     if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
@@ -204,20 +204,20 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     embed::EntryInitModes::TRUNCATE_INIT,
-                                    uno::Sequence< beans::PropertyValue >(),
+                                    cpo::uno::Sequence< beans::PropertyValue >(),
                                     lObjArgs );
 
     return xResult;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceUserInit(
-            const uno::Sequence< sal_Int8 >& aClassID,
+            const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& /*aClassName*/,
             const uno::Reference< embed::XStorage >& xStorage,
             const OUString& sEntName,
             sal_Int32 nEntryConnectionMode,
-            const uno::Sequence< beans::PropertyValue >& lArguments,
-            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+            const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     // the initialization is completely controlled by user
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
@@ -232,11 +232,11 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
-    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
+    cpo::uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
     if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
-    uno::Sequence< beans::PropertyValue > aTempMedDescr( lArguments );
+    cpo::uno::Sequence< beans::PropertyValue > aTempMedDescr( lArguments );
     if ( nEntryConnectionMode == embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT )
     {
         OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, aObject );
@@ -264,14 +264,14 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& /*xStorage*/,
                                             const OUString& /*sEntName*/,
-                                            const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                            const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+                                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
     uno::Reference< uno::XInterface > xResult;
 
-    uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
+    cpo::uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
     // check if there is URL, URL must exist
     OUString aURL;
@@ -291,7 +291,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         // the object must be OOo embedded object, if it is not an exception must be thrown
         throw io::IOException(); // TODO:
     }
-    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
+    cpo::uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
     if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
@@ -316,31 +316,31 @@ bool SAL_CALL OOoEmbeddedObjectFactory::supportsService( const OUString& Service
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.OOoEmbeddedObjectFactory"_ustr, u"com.sun.star.comp.embed.OOoEmbeddedObjectFactory"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoEmbeddedObjectFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OOoEmbeddedObjectFactory(context));
 }
 
 
 uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::createInstanceUserInit(
-            const uno::Sequence< sal_Int8 >& aClassID,
+            const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& /*aClassName*/,
             const uno::Reference< embed::XStorage >& /*xStorage*/,
             const OUString& /*sEntName*/,
             sal_Int32 /*nEntryConnectionMode*/,
-            const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
-            const uno::Sequence< beans::PropertyValue >& /*lObjArgs*/ )
+            const cpo::uno::Sequence< beans::PropertyValue >& /*lArguments*/,
+            const cpo::uno::Sequence< beans::PropertyValue >& /*lObjArgs*/ )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active embedded content is disabled!"_ustr);
-    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
+    cpo::uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
     if ( !aObject.hasElements() )
         throw io::IOException(); // unexpected mimetype of the storage
 
@@ -362,14 +362,14 @@ bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const OUString& 
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.OOoSpecialEmbeddedObjectFactory"_ustr, u"com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OOoSpecialEmbeddedObjectFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OOoSpecialEmbeddedObjectFactory(context));
 }

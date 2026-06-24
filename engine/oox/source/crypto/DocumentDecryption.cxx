@@ -70,7 +70,7 @@ DocumentDecryption::DocumentDecryption(css::uno::Reference<css::uno::XComponentC
 
         BinaryXInputStream aBinaryInputStream(xStream, true);
 
-        css::uno::Sequence<sal_Int8> oData;
+        cpo::uno::Sequence<sal_Int8> oData;
         sal_Int32 nStreamSize = aBinaryInputStream.size();
         sal_Int32 nReadBytes = aBinaryInputStream.readData(oData, nStreamSize);
 
@@ -167,7 +167,7 @@ bool DocumentDecryption::readEncryptionInfo()
         sDataSpaceName = u"StrongEncryptionDataSpace"_ustr;
     }
 
-    uno::Sequence<cpo::uno::Any> aArguments;
+    cpo::uno::Sequence<cpo::uno::Any> aArguments;
     mxPackageEncryption.set(
         mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             "com.sun.star.comp.oox.crypto." + sDataSpaceName, aArguments, mxContext),
@@ -182,10 +182,11 @@ bool DocumentDecryption::readEncryptionInfo()
     return mxPackageEncryption->readEncryptionInfo(maStreamsSequence);
 }
 
-uno::Sequence<beans::NamedValue> DocumentDecryption::createEncryptionData(const OUString& rPassword)
+cpo::uno::Sequence<beans::NamedValue>
+DocumentDecryption::createEncryptionData(const OUString& rPassword)
 {
     if (!mxPackageEncryption.is())
-        return uno::Sequence<beans::NamedValue>();
+        return cpo::uno::Sequence<beans::NamedValue>();
 
     return mxPackageEncryption->createEncryptionData(rPassword);
 }

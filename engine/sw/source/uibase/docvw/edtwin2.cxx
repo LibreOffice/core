@@ -175,7 +175,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                             *aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
                 SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
 
-                const uno::Sequence<beans::Property> aProperties
+                const cpo::uno::Sequence<beans::Property> aProperties
                         = xRange->getPropertySetInfo()->getProperties();
 
                 for (const beans::Property& rProperty : aProperties)

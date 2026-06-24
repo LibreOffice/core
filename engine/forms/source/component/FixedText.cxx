@@ -66,9 +66,9 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OFixedTextModel::createClo
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL OFixedTextModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OFixedTextModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -115,7 +115,7 @@ void SAL_CALL OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInSt
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OFixedTextModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFixedTextModel(component));
 }

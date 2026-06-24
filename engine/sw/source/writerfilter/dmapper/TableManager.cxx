@@ -441,7 +441,7 @@ void TableManager::HandleSmallerRows()
                 if (oSep)
                 {
                     auto const oldSeps{
-                        oSep->second.get<uno::Sequence<text::TableColumnSeparator>>()
+                        oSep->second.get<cpo::uno::Sequence<text::TableColumnSeparator>>()
                     };
                     ::std::remove_const_t<decltype(oldSeps)> newSeps{ oldSeps.getLength() + 1 };
                     auto const it{ ::std::transform(

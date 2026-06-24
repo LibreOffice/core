@@ -48,7 +48,7 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::drawing { struct Position3D; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::util { struct Date; }
 template <typename EnumT> struct SvXMLEnumMapEntry;
 template <typename EnumT> struct SvXMLEnumStringMapEntry;
@@ -287,11 +287,11 @@ public:
     static void convertNumLetterSync( OUStringBuffer& rBuffer,
                                   sal_Int16 nType );
 
-    static void convertPropertySet(css::uno::Sequence<css::beans::PropertyValue>& rProps,
+    static void convertPropertySet(cpo::uno::Sequence<css::beans::PropertyValue>& rProps,
                         const css::uno::Reference<css::beans::XPropertySet>& aProperties,
                         const std::initializer_list<std::u16string_view>* pOmitFalseValues = nullptr);
     static void convertPropertySet(css::uno::Reference<css::beans::XPropertySet> const & rProperties,
-                        const css::uno::Sequence<css::beans::PropertyValue>& aProps);
+                        const cpo::uno::Sequence<css::beans::PropertyValue>& aProps);
 
     OUString encodeStyleName( const OUString& rName,
                                      bool *pEncoded=nullptr ) const;

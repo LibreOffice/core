@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PACKAGE_INC_CRC32_HXX
 #define INCLUDED_PACKAGE_INC_CRC32_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star {
@@ -34,10 +34,10 @@ public:
     /// @throws css::uno::RuntimeException
     sal_Int64 updateStream (css::uno::Reference < css::io::XInputStream > const & xStream);
     /// @throws css::uno::RuntimeException
-    void updateSegment(const css::uno::Sequence< sal_Int8 > &b, sal_Int32 len);
+    void updateSegment(const cpo::uno::Sequence< sal_Int8 > &b, sal_Int32 len);
     void updateSegment(const sal_Int8* b, sal_Int32 len);
     /// @throws css::uno::RuntimeException
-    void update(const css::uno::Sequence< sal_Int8 > &b);
+    void update(const cpo::uno::Sequence< sal_Int8 > &b);
     /// @throws css::uno::RuntimeException
     sal_Int32 getValue() const;
     /// @throws css::uno::RuntimeException

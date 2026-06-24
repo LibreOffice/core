@@ -66,9 +66,9 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sHandler) override;
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const OUString&                     sHandler  ,
-                                                                                                 const css::uno::Sequence< cpo::uno::Any >& lArguments) override;
+                                                                                                 const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
 
     public:
@@ -76,7 +76,7 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
       // Overrides to resolve ambiguity
       virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override
         { return BaseContainer::getByName(aName); }
-      virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override
+      virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override
         { return BaseContainer::getElementNames(); }
       virtual bool SAL_CALL hasByName( const OUString& aName ) override
         { return BaseContainer::hasByName(aName); }
@@ -88,7 +88,7 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
 
       virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const OUString& Query ) override
         { return BaseContainer::createSubSetEnumerationByQuery(Query); }
-      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties( const css::uno::Sequence< css::beans::NamedValue >& Properties ) override
+      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties( const cpo::uno::Sequence< css::beans::NamedValue >& Properties ) override
         { return BaseContainer::createSubSetEnumerationByProperties(Properties); }
 
 

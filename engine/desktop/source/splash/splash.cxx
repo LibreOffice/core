@@ -108,7 +108,7 @@ public:
     virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) override;
 
     // XInitialize
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any>& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any>& aArguments ) override;
 
     virtual OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.office.comp.SplashScreen"_ustr; }
@@ -116,7 +116,7 @@ public:
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     { return { u"com.sun.star.office.SplashScreen"_ustr }; }
 };
 
@@ -242,7 +242,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
 
 // XInitialize
 void SAL_CALL
-SplashScreen::initialize( const css::uno::Sequence< cpo::uno::Any>& aArguments )
+SplashScreen::initialize( const cpo::uno::Sequence< cpo::uno::Any>& aArguments )
 {
     static std::mutex aMutex;
     std::lock_guard  aGuard( aMutex );
@@ -612,7 +612,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_SplashScreen_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SplashScreen());
 }

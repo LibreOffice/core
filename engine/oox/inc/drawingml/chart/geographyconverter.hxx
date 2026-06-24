@@ -10,7 +10,7 @@
 #pragma once
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace oox
 {
@@ -24,10 +24,10 @@ struct GeoClearModel;
 
 void convertGeography(const GeographyModel& rModel, PropertySet& rSeriesProp);
 
-css::uno::Sequence<css::beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel& rModel);
+cpo::uno::Sequence<css::beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel& rModel);
 
 GeoClearModel
-geoClearFromPropertyValues(const css::uno::Sequence<css::beans::PropertyValue>& rProps);
+geoClearFromPropertyValues(const cpo::uno::Sequence<css::beans::PropertyValue>& rProps);
 
 } // namespace oox::drawingml::chart
 

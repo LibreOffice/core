@@ -13,7 +13,7 @@
 #include <atomic>
 #include <initializer_list>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <sal/types.h>
 
 template <typename T> struct Sequence

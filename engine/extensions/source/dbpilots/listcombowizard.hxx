@@ -88,7 +88,7 @@ namespace dbp
 
     protected:
         css::uno::Reference< css::container::XNameAccess >  getTables() const;
-        css::uno::Sequence< OUString >                      getTableFields();
+        cpo::uno::Sequence< OUString >                      getTableFields();
     };
 
     class OContentTableSelection final : public OLCPage

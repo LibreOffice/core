@@ -91,18 +91,18 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     // XDataSequence
-    virtual css::uno::Sequence<cpo::uno::Any> SAL_CALL getData() override;
+    virtual cpo::uno::Sequence<cpo::uno::Any> SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL
+    virtual cpo::uno::Sequence<OUString> SAL_CALL
         generateLabel(css::chart2::data::LabelOrigin nOrigin) override;
 
     virtual sal_Int32 SAL_CALL getNumberFormatKeyByIndex(sal_Int32 nIndex) override;
 
     // XNumericalDataSequence
-    virtual css::uno::Sequence<double> SAL_CALL getNumericalData() override;
+    virtual cpo::uno::Sequence<double> SAL_CALL getNumericalData() override;
 
     // XTextualDataSequence
-    virtual css::uno::Sequence<OUString> SAL_CALL getTextualData() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getTextualData() override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
@@ -144,7 +144,7 @@ public:
 
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // Other
 

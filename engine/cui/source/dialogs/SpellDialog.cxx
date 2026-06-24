@@ -1258,7 +1258,7 @@ namespace
 
     void ExtractErrorDescription(const EECharAttrib& rEECharAttrib, SpellErrorDescription& rSpellErrorDescription)
     {
-        css::uno::Sequence<cpo::uno::Any> aSequence;
+        cpo::uno::Sequence<cpo::uno::Any> aSequence;
         const auto& rGrabBag = static_cast<const SfxGrabBagItem*>(rEECharAttrib.pAttr)->GetGrabBag();
         const auto iter = rGrabBag.find(u"SpellErrorDescription"_ustr);
         assert(iter != rGrabBag.end());
@@ -1989,7 +1989,7 @@ void SentenceEditWindow_Impl::SetAlternatives( const Reference< XSpellAlternativ
 {
     OUString aWord;
     lang::Locale    aLocale;
-    uno::Sequence< OUString >    aAlts;
+    cpo::uno::Sequence< OUString >    aAlts;
     if (xAlt.is())
     {
         aWord   = xAlt->getWord();

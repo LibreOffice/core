@@ -63,7 +63,7 @@ public:
     {
     }
     Primitive2DContainer(
-        const css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>&);
+        const cpo::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>&);
     Primitive2DContainer(const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>&);
 
     virtual void visit(const Primitive2DReference& rSource) override { append(rSource); }
@@ -88,7 +88,7 @@ public:
     basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& aViewInformation) const;
     Primitive2DContainer maybeInvert(bool bInvert = false);
 
-    css::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> toSequence() const;
+    cpo::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> toSequence() const;
 };
 
 } // end of namespace drawinglayer::primitive2d

@@ -31,7 +31,7 @@
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <mutex>
 
@@ -98,14 +98,14 @@ public:
                                    const OUString& rBaseURL,
                                    const OUString& rTypeName,
                                    const std::shared_ptr<SfxItemSet>& pSet = nullptr );
-                        SfxMedium( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
+                        SfxMedium( const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
                         virtual ~SfxMedium() override;
 
     DECL_DLLPRIVATE_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, void);
     bool CheckCanGetLockfile() const;
     void SetOriginallyReadOnly(bool val);
-    void AddEmbeddedFonts(const css::uno::Sequence<css::beans::StringPair>& fonts);
+    void AddEmbeddedFonts(const cpo::uno::Sequence<css::beans::StringPair>& fonts);
     // Transfers the embedded font list to another medium (passing ownership)
     void TransferEmbeddedFontsTo(const SfxMedium& target);
     void AddToCheckEditableWorkerList();
@@ -133,7 +133,7 @@ public:
     const OUString&     GetOrigURL() const;
 
     SfxItemSet&         GetItemSet() const;
-    void SetArgs(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    void SetArgs(const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     const comphelper::SequenceAsHashMap& GetArgs() const;
     void                Close(bool bInDestruction = false);
     void                CloseAndRelease();
@@ -200,7 +200,7 @@ public:
     [[nodiscard]] bool  IsExpired() const;
     void                SetName( const OUString& rName, bool bSetOrigURL = false );
 
-    const css::uno::Sequence < css::util::RevisionTag >&
+    const cpo::uno::Sequence < css::util::RevisionTag >&
                         GetVersionList( bool _bNoReload = false );
     [[nodiscard]] bool  IsReadOnly() const;
 
@@ -322,7 +322,7 @@ public:
 
     void SetHasEmbeddedObjects(bool bHasEmbeddedObjects);
 
-    static css::uno::Sequence < css::util::RevisionTag > GetVersionList(
+    static cpo::uno::Sequence < css::util::RevisionTag > GetVersionList(
                     const css::uno::Reference< css::embed::XStorage >& xStorage );
     static OUString CreateTempCopyWithExt( std::u16string_view aURL );
     static bool CallApproveHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler, const cpo::uno::Any& rRequest, bool bAllowAbort);

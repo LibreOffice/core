@@ -37,7 +37,7 @@ namespace basegfx {
 }
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 namespace drawinglayer::geometry
     {
@@ -100,7 +100,7 @@ namespace drawinglayer::geometry
                 const basegfx::B3DHomMatrix& rProjection,
                 const basegfx::B3DHomMatrix& rDeviceToView,
                 double fViewTime,
-                const css::uno::Sequence< css::beans::PropertyValue >& rExtendedParameters);
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rExtendedParameters);
 
             /** Constructor: Create a ViewInformation3D
 
@@ -109,7 +109,7 @@ namespace drawinglayer::geometry
                 other parameters. This constructor is fed completely with a sequence of PropertyValues
                 which will be parsed to be able to offer the most used ones in a convenient way.
             */
-            explicit ViewInformation3D(const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters);
+            explicit ViewInformation3D(const cpo::uno::Sequence< css::beans::PropertyValue >& rViewParameters);
 
             /// default (empty) constructor
             ViewInformation3D();
@@ -151,7 +151,7 @@ namespace drawinglayer::geometry
                 incarnations of ViewInformation3D without losing the only with PropertyValues
                 defined data. It does not contain a complete description.
             */
-            const css::uno::Sequence< css::beans::PropertyValue >& getExtendedInformationSequence() const;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& getExtendedInformationSequence() const;
         };
 
 } // end of namespace drawinglayer::geometry

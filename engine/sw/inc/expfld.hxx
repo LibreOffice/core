@@ -27,7 +27,7 @@
 #include <vector>
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 class SwTextNode;
@@ -301,7 +301,7 @@ class SW_DLLPUBLIC SwInputField final : public SwField
     OUString maToolTip;
     SwInputFieldSubType mnSubType;
     bool mbIsFormField;
-    css::uno::Sequence<css::beans::PropertyValue> maGrabBag;
+    cpo::uno::Sequence<css::beans::PropertyValue> maGrabBag;
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 
@@ -329,7 +329,7 @@ public:
     void applyFieldContent( const OUString& rNewFieldContent );
 
     bool isFormField() const;
-    const css::uno::Sequence<css::beans::PropertyValue> & getGrabBagParams() const { return maGrabBag; }
+    const cpo::uno::Sequence<css::beans::PropertyValue> & getGrabBagParams() const { return maGrabBag; }
 
     virtual OUString        GetFieldName() const override;
 

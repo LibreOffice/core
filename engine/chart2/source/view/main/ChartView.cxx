@@ -117,7 +117,7 @@ namespace chart {
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
 struct CreateShapeParam2D
@@ -191,7 +191,7 @@ void ChartView::init()
     }
 }
 
-void SAL_CALL ChartView::initialize( const uno::Sequence< cpo::uno::Any >& )
+void SAL_CALL ChartView::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     init();
 }
@@ -239,7 +239,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     // creating the graphic exporter
     uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( m_xCC );
 
-    uno::Sequence< beans::PropertyValue > aFilterData{
+    cpo::uno::Sequence< beans::PropertyValue > aFilterData{
         comphelper::makePropertyValue(u"ExportOnlyBackground"_ustr, false),
         comphelper::makePropertyValue(u"HighContrast"_ustr, bUseHighContrast),
         comphelper::makePropertyValue(u"Version"_ustr, sal_Int32(SOFFICE_FILEFORMAT_50)),
@@ -251,7 +251,7 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
         comphelper::makePropertyValue(u"ScaleYDenominator"_ustr, m_nScaleYDenominator)
     };
 
-    uno::Sequence< beans::PropertyValue > aProps{
+    cpo::uno::Sequence< beans::PropertyValue > aProps{
         comphelper::makePropertyValue(u"FilterName"_ustr, u"SVM"_ustr),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutStream),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData)
@@ -284,19 +284,19 @@ cpo::uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavo
 
     pStreamWrapper->seek(0);
     sal_Int32 nBytesToRead = pStreamWrapper->available();
-    uno::Sequence< sal_Int8 > aSeq( nBytesToRead );
+    cpo::uno::Sequence< sal_Int8 > aSeq( nBytesToRead );
     pStreamWrapper->readBytes( aSeq, nBytesToRead);
     aRet <<= aSeq;
     pStreamWrapper->closeInput();
 
     return aRet;
 }
-uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFlavors()
+cpo::uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFlavors()
 {
     return
     {
-        { lcl_aGDIMetaFileMIMEType, u"GDIMetaFile"_ustr, cppu::UnoType<uno::Sequence< sal_Int8 >>::get() },
-        { lcl_aGDIMetaFileMIMETypeHighContrast, u"GDIMetaFile"_ustr, cppu::UnoType<uno::Sequence< sal_Int8 >>::get() }
+        { lcl_aGDIMetaFileMIMEType, u"GDIMetaFile"_ustr, cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() },
+        { lcl_aGDIMetaFileMIMETypeHighContrast, u"GDIMetaFile"_ustr, cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() }
     };
 }
 bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
@@ -317,7 +317,7 @@ bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ChartView::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ChartView::getSupportedServiceNames()
 {
     return { CHART_VIEW_SERVICE_NAME };
 }
@@ -391,7 +391,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                                 uno::Reference< container::XNameAccess > xEmbeddedObjects( xTextEmbeddedObjectsSupplier->getEmbeddedObjects() );
                                 if( xEmbeddedObjects.is() )
                                 {
-                                    uno::Sequence< OUString > aNames( xEmbeddedObjects->getElementNames() );
+                                    cpo::uno::Sequence< OUString > aNames( xEmbeddedObjects->getElementNames() );
 
                                     sal_Int32 nCount = aNames.getLength();
                                     for( sal_Int32 nN=0; nN<nCount; nN++ )
@@ -1698,7 +1698,7 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
     else if( rPropertyName == "ZoomFactors" )
     {
         //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-        uno::Sequence< beans::PropertyValue > aZoomFactors;
+        cpo::uno::Sequence< beans::PropertyValue > aZoomFactors;
         if( ! (rValue >>= aZoomFactors) )
             throw lang::IllegalArgumentException( u"Property 'ZoomFactors' requires value of type Sequence< PropertyValue >"_ustr, nullptr, 0 );
 
@@ -1815,15 +1815,15 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
     return nullptr;
 }
 
-Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< cpo::uno::Any >& Arguments )
+Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
     OSL_ENSURE( Arguments.hasElements(), "ChartView::createInstanceWithArguments: arguments are ignored" );
     return createInstance( ServiceSpecifier );
 }
 
-uno::Sequence< OUString > ChartView::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > ChartView::getAvailableServiceNames()
 {
-    uno::Sequence< OUString > aServiceNames{ u"com.sun.star.drawing.DashTable"_ustr,
+    cpo::uno::Sequence< OUString > aServiceNames{ u"com.sun.star.drawing.DashTable"_ustr,
                                              u"com.sun.star.drawing.GradientTable"_ustr,
                                              u"com.sun.star.drawing.HatchTable"_ustr,
                                              u"com.sun.star.drawing.BitmapTable"_ustr,
@@ -2229,7 +2229,7 @@ awt::Rectangle ChartView::AddSubtractAxisTitleSizes(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartView_get_implementation(css::uno::XComponentContext *context,
-                                                         css::uno::Sequence<cpo::uno::Any> const &)
+                                                         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<::chart::ChartModel> pChartModel = new ::chart::ChartModel(context);
     return cppu::acquire(new ::chart::ChartView(context, *pChartModel));

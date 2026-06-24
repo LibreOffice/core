@@ -45,7 +45,7 @@ void LinearRegressionCurveCalculator::setRegressionProperties(
                                             0);
 }
 
-uno::Sequence< geometry::RealPoint2D > SAL_CALL LinearRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL LinearRegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,
@@ -56,7 +56,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL LinearRegressionCurveCalculator:
         isLinearScaling( xScalingY ))
     {
         // optimize result
-        uno::Sequence< geometry::RealPoint2D > aResult{ { min, getCurveValue( min ) },
+        cpo::uno::Sequence< geometry::RealPoint2D > aResult{ { min, getCurveValue( min ) },
                                                         { max, getCurveValue( max ) } };
 
         return aResult;

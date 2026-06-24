@@ -42,10 +42,10 @@ ScVbaPivotTable::getServiceImplName()
     return u"ScVbaPivotTable"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaPivotTable::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.PivotTable"_ustr
     };

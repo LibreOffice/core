@@ -2944,7 +2944,7 @@ bool SvxBoxItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             // 4 Borders and 5 distances
-            uno::Sequence< cpo::uno::Any > aSeq{
+            cpo::uno::Sequence< cpo::uno::Any > aSeq{
                 cpo::uno::Any(SvxBoxItem::SvxLineToLine(GetLeft(), bConvert)),
                 cpo::uno::Any(SvxBoxItem::SvxLineToLine(GetRight(), bConvert)),
                 cpo::uno::Any(SvxBoxItem::SvxLineToLine(GetBottom(), bConvert)),
@@ -3160,7 +3160,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            uno::Sequence< cpo::uno::Any > aSeq;
+            cpo::uno::Sequence< cpo::uno::Any > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ))
             {
                 // 4 Borders and 5 distances
@@ -3361,9 +3361,9 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
             // serialization for basic macro recording
             uno::Reference < script::XTypeConverter > xConverter
                     ( script::Converter::create(::comphelper::getProcessComponentContext()) );
-            uno::Sequence < cpo::uno::Any > aSeq;
+            cpo::uno::Sequence < cpo::uno::Any > aSeq;
             cpo::uno::Any aNew;
-            try { aNew = xConverter->convertTo( rVal, cppu::UnoType<uno::Sequence < cpo::uno::Any >>::get() ); }
+            try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < cpo::uno::Any >>::get() ); }
             catch (const uno::Exception&) {}
 
             aNew >>= aSeq;
@@ -3927,7 +3927,7 @@ bool SvxBoxInfoItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) cons
                 nVal |= 0x02;
             if ( IsMinDist() )
                 nVal |= 0x04;
-            css::uno::Sequence< cpo::uno::Any > aSeq{
+            cpo::uno::Sequence< cpo::uno::Any > aSeq{
                 cpo::uno::Any(SvxBoxItem::SvxLineToLine(mpHorizontalLine.get(), bConvert)),
                 cpo::uno::Any(SvxBoxItem::SvxLineToLine(mpVerticalLine.get(), bConvert)),
                 cpo::uno::Any(nVal),
@@ -3981,7 +3981,7 @@ bool SvxBoxInfoItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            css::uno::Sequence< cpo::uno::Any > aSeq;
+            cpo::uno::Sequence< cpo::uno::Any > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 5 ))
             {
                 // 2 BorderLines, flags, valid flags and distance
@@ -4030,8 +4030,8 @@ bool SvxBoxInfoItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
                 // serialization for basic macro recording
                 uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(::comphelper::getProcessComponentContext()) );
                 cpo::uno::Any aNew;
-                uno::Sequence < cpo::uno::Any > aSeq;
-                try { aNew = xConverter->convertTo( rVal, cppu::UnoType<uno::Sequence < cpo::uno::Any >>::get() ); }
+                cpo::uno::Sequence < cpo::uno::Any > aSeq;
+                try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < cpo::uno::Any >>::get() ); }
                 catch (const uno::Exception&) {}
 
                 if ((aNew >>= aSeq) &&
@@ -4064,10 +4064,10 @@ bool SvxBoxInfoItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
                 else
                     return false;
             }
-            else if (rVal.getValueType() == cppu::UnoType<css::uno::Sequence < sal_Int16 >>::get() )
+            else if (rVal.getValueType() == cppu::UnoType<cpo::uno::Sequence < sal_Int16 >>::get() )
             {
                 // serialization for basic macro recording
-                css::uno::Sequence < sal_Int16 > aSeq;
+                cpo::uno::Sequence < sal_Int16 > aSeq;
                 rVal >>= aSeq;
                 if (aSeq.getLength() >= 4 && aSeq.getLength() <= 6)
                 {

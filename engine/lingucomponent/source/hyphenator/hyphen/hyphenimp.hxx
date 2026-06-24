@@ -60,7 +60,7 @@ class Hyphenator :
         css::lang::XServiceDisplayName
     >
 {
-    css::uno::Sequence< css::lang::Locale > aSuppLocales;
+    cpo::uno::Sequence< css::lang::Locale > aSuppLocales;
     std::vector< HDInfo >                   mvDicts;
 
     ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> aEvtListeners;
@@ -82,13 +82,13 @@ public:
     virtual ~Hyphenator() override;
 
     // XSupportedLocales (for XHyphenator)
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() override;
     virtual bool SAL_CALL hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XHyphenator
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL hyphenate( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nMaxLeading, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL queryAlternativeSpelling( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nIndex, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XPossibleHyphens > SAL_CALL createPossibleHyphens( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL hyphenate( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nMaxLeading, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL queryAlternativeSpelling( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nIndex, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XPossibleHyphens > SAL_CALL createPossibleHyphens( const OUString& aWord, const css::lang::Locale& aLocale, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
 
     // XLinguServiceEventBroadcaster
     virtual bool SAL_CALL addLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
@@ -98,7 +98,7 @@ public:
     virtual OUString SAL_CALL getServiceDisplayName( const css::lang::Locale& rLocale ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;
@@ -108,7 +108,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void ensureLocales();

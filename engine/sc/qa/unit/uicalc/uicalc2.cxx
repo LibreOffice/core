@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf150499)
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
 
     // Without the fix in place, this test would have crashed here
@@ -634,7 +634,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf124778)
     ScDocument* pDoc = getScDoc();
 
     // Add a new comment
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Comment"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -658,7 +658,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf138428)
     ScDocShell* pDocSh = getScDocShell();
 
     // Add a new comment
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Comment"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -1761,7 +1761,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf152577)
     CPPUNIT_ASSERT(bInserted);
 
     insertNewSheet(*pDoc);
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(2)) } }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
@@ -1814,7 +1814,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf156174)
     CPPUNIT_ASSERT(bInserted);
 
     insertNewSheet(*pDoc);
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(3)) } }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
@@ -2025,11 +2025,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf170567_paste_Biff12_and_save_ODS)
             if (!isDataFlavorSupported(aFlavor))
                 return {};
             SvFileStream aStream(m_aFileURL, StreamMode::READ);
-            uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
+            cpo::uno::Sequence<sal_Int8> bytes(aStream.remainingSize());
             aStream.ReadBytes(bytes.getArray(), aStream.remainingSize());
             return cpo::uno::Any(bytes);
         }
-        uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
+        cpo::uno::Sequence<datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override
         {
             return { getBiff12Flavor() };
         }
@@ -2272,7 +2272,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf166791_PasteSpecialArrayOriginCell)
 
     // Helper lambda for Paste Special (values only).
     auto pasteSpecialValues = [this]() {
-        uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
             { { "Flags", cpo::uno::Any(u"V"_ustr) },
               { "FormulaCommand", cpo::uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
               { "SkipEmptyCells", cpo::uno::Any(false) },
@@ -2462,7 +2462,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSetHyperlinkKeepSelection)
 
     // When dispatching .uno:SetHyperlink with Hyperlink.Text differing from the cell content,
     // but marked as a hint:
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, cpo::uno::Any(u"mytext"_ustr)),
         comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, cpo::uno::Any(true)),
         comphelper::makePropertyValue(u"Hyperlink.URL"_ustr,

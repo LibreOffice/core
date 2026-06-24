@@ -26,7 +26,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -94,13 +94,13 @@ public:
     void                assignAll( const PropertyMap& rPropMap );
 
     /** Returns a sequence of property values, filled with all contained properties. */
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
                         makePropertyValueSequence() const;
 
     /** Fills the passed sequences of names and anys with all contained properties. */
     void                fillSequences(
-                            css::uno::Sequence< OUString >& rNames,
-                            css::uno::Sequence< cpo::uno::Any >& rValues ) const;
+                            cpo::uno::Sequence< OUString >& rNames,
+                            cpo::uno::Sequence< cpo::uno::Any >& rValues ) const;
 
     void                fillPropertyNameMap(PropertyNameMap& rMap) const;
 

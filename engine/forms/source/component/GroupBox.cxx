@@ -54,9 +54,9 @@ OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Referenc
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OGroupBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OGroupBoxModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -129,9 +129,9 @@ OGroupBoxControl::OGroupBoxControl(const Reference<XComponentContext>& _rxFactor
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL OGroupBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OGroupBoxControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -144,7 +144,7 @@ css::uno::Sequence<OUString> SAL_CALL OGroupBoxControl::getSupportedServiceNames
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OGroupBoxModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OGroupBoxModel(component));
 
@@ -152,7 +152,7 @@ com_sun_star_form_OGroupBoxModel_get_implementation(css::uno::XComponentContext*
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OGroupBoxControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OGroupBoxControl(component));
 }

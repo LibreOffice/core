@@ -41,7 +41,7 @@ namespace dbtools::param
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XParameters;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::XWeak;
@@ -131,7 +131,7 @@ namespace dbtools::param
     OUString ParameterWrapper::impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const
     {
         Reference< XPropertySetInfo >  xInfo = const_cast<ParameterWrapper*>( this )->getPropertySetInfo();
-        const css::uno::Sequence<Property> aProperties = xInfo->getProperties();
+        const cpo::uno::Sequence<Property> aProperties = xInfo->getProperties();
         for ( const Property& rProperty : aProperties )
         {
             if ( rProperty.Handle == _nHandle )

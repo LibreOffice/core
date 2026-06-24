@@ -220,7 +220,7 @@ public:
                                                                              const OUString&                                        sURL   ,
                                                                              const OUString&                                        sTarget,
                                                                                    sal_Int32                                               nFlags ,
-                                                                             const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  );
+                                                                             const cpo::uno::Sequence< css::beans::PropertyValue >&        lArgs  );
 
     /** @short  start loading of a resource
 
@@ -270,7 +270,7 @@ public:
                 the whole runtime can't be used any longer.
      */
     void startLoading(const OUString&                                           sURL            ,
-                           const css::uno::Sequence< css::beans::PropertyValue >&    lMediaDescriptor,
+                           const cpo::uno::Sequence< css::beans::PropertyValue >&    lMediaDescriptor,
                            const css::uno::Reference< css::frame::XFrame >&          xBaseFrame      ,
                            const OUString&                                           sTarget         ,
                                  sal_Int32                                           nSearchFlags    ,
@@ -333,7 +333,7 @@ public:
         @return     A suitable enum value, which classify the specified content.
      */
     static EContentType classifyContent(const OUString&                                 sURL            ,
-                                        const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor);
+                                        const cpo::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor);
 
     /** TODO document me ... */
     static  void initializeUIDefaults(

@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
 #include <com/sun/star/xml/dom/SAXDocumentBuilderState.hpp>
@@ -60,7 +60,7 @@ namespace DOM
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XFastDocumentHandler
         virtual void SAL_CALL startDocument() override;

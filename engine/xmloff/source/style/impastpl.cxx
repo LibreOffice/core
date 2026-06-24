@@ -403,8 +403,8 @@ void SvXMLAutoStylePoolP_Impl::RegisterDefinedName( XmlStyleFamily nFamily, cons
 
 
 void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
-    uno::Sequence<sal_Int32>& rFamilies,
-    uno::Sequence<OUString>& rNames )
+    cpo::uno::Sequence<sal_Int32>& rFamilies,
+    cpo::uno::Sequence<OUString>& rNames )
 {
     // collect registered names + families
     std::vector<sal_Int32> aFamilies;

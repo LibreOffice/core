@@ -176,17 +176,17 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
     return xAccessibleTable;
 }
 
-uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleRows(  )
+cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleRows(  )
 {
     OSL_FAIL("not implemented yet");
-    uno::Sequence< sal_Int32 > aSequence;
+    cpo::uno::Sequence< sal_Int32 > aSequence;
     return aSequence;
 }
 
-uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleColumns(  )
+cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleColumns(  )
 {
     OSL_FAIL("not implemented yet");
-    uno::Sequence< sal_Int32 > aSequence;
+    cpo::uno::Sequence< sal_Int32 > aSequence;
     return aSequence;
 }
 

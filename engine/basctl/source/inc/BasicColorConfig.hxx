@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <strings.hrc>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/resmgr.hxx>
@@ -43,10 +43,10 @@ private:
     OUString m_sCurrentColorScheme;
 
     // Names of all available scheme names
-    css::uno::Sequence<OUString> m_aSchemeNames;
+    cpo::uno::Sequence<OUString> m_aSchemeNames;
 
     // Names of default color schemes shipped with LibreOffice
-    css::uno::Sequence<OUString> m_aDefaultSchemes
+    cpo::uno::Sequence<OUString> m_aDefaultSchemes
         = { u"COLORSCHEME_LIBREOFFICE_LIGHT"_ustr, u"COLORSCHEME_LIBREOFFICE_DARK"_ustr,
             u"COLORSCHEME_BREEZE_LIGHT"_ustr,      u"COLORSCHEME_BREEZE_DARK"_ustr,
             u"COLORSCHEME_SOLARIZED_LIGHT"_ustr,   u"COLORSCHEME_SOLARIZED_DARK"_ustr };
@@ -60,10 +60,10 @@ public:
     BasicColorConfig();
     virtual ~BasicColorConfig() override;
 
-    virtual void Notify(const css::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void Notify(const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 
     ColorScheme GetColorScheme(const OUString& rScheme);
-    const css::uno::Sequence<OUString>& GetColorSchemeNames() { return m_aSchemeNames; }
+    const cpo::uno::Sequence<OUString>& GetColorSchemeNames() { return m_aSchemeNames; }
 
     // Returns the color scheme defined by the current Application Colors
     ColorScheme GetAutomaticColorScheme();

@@ -20,7 +20,7 @@
 #define INCLUDED_COMPHELPER_SEQSTREAM_HXX
 
 #include <config_options.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -46,9 +46,9 @@ public:
     MemoryInputStream(const sal_Int8* pData, sal_Int32 nDataLength);
 
 // css::io::XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead ) override final;
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead ) override final;
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead ) override final;
+    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead ) override final;
 
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override final;
 
@@ -72,10 +72,10 @@ private:
 class COMPHELPER_DLLPUBLIC SequenceInputStream final
     : public MemoryInputStream
 {
-    css::uno::Sequence<sal_Int8> const m_aData;
+    cpo::uno::Sequence<sal_Int8> const m_aData;
 
 public:
-    SequenceInputStream(css::uno::Sequence<sal_Int8> const & rData);
+    SequenceInputStream(cpo::uno::Sequence<sal_Int8> const & rData);
 };
 
 // don't export to avoid duplicate WeakImplHelper definitions with MSVC
@@ -86,7 +86,7 @@ class SAL_DLLPUBLIC_TEMPLATE OSequenceOutputStream_Base
 class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OSequenceOutputStream final : public OSequenceOutputStream_Base
 {
 private:
-    css::uno::Sequence< sal_Int8 >&                 m_rSequence;
+    cpo::uno::Sequence< sal_Int8 >&                 m_rSequence;
     double                                          m_nResizeFactor;
     sal_Int32 const                                 m_nMinimumResize;
     sal_Int32                                       m_nSize;
@@ -115,13 +115,13 @@ public:
         @see        closeOutput
     */
     OSequenceOutputStream(
-        css::uno::Sequence< sal_Int8 >& _rSeq,
+        cpo::uno::Sequence< sal_Int8 >& _rSeq,
         double _nResizeFactor = 1.3,
         sal_Int32 _nMinimumResize = 128
         );
 
     /// same as XOutputStream::writeBytes (as expected :)
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
     /// this is a dummy in this implementation, no buffering is used
     virtual void SAL_CALL flush(  ) override;
     /** closes the output stream. In the case of this class, this means that the sequence used for writing is

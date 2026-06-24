@@ -208,8 +208,8 @@ public:
     virtual cpo::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
 // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type> SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
 // css::lang::XComponent
     virtual void SAL_CALL dispose() override;
@@ -217,7 +217,7 @@ public:
 // css::lang::XServiceInfo
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 // css::awt::XControl
     virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent) override;
@@ -252,8 +252,8 @@ public:
     virtual void SAL_CALL setCurrentColumnPosition(sal_Int16 nPos) override;
 
 // css::form::XGridFieldDataSupplier (base of XGridControl)
-    virtual css::uno::Sequence< bool > SAL_CALL queryFieldDataType( const css::uno::Type& xType ) override;
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
+    virtual cpo::uno::Sequence< bool > SAL_CALL queryFieldDataType( const css::uno::Type& xType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
 
 // UnoControl
     virtual OUString GetComponentServiceName() const override;
@@ -265,7 +265,7 @@ public:
 // css::util::XModeSelector
     virtual void SAL_CALL setMode(const OUString& Mode) override;
     virtual OUString SAL_CALL getMode() override;
-    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedModes() override;
+    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedModes() override;
     virtual bool SAL_CALL supportsMode(const OUString& Mode) override;
 
 // css::container::XContainer
@@ -274,7 +274,7 @@ public:
 
 // css::frame::XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > SAL_CALL queryDispatches(const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > SAL_CALL queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
 
 // css::frame::XDispatchProviderInterception
     virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
@@ -416,8 +416,8 @@ public:
     virtual void SAL_CALL setCurrentColumnPosition(sal_Int16 nPos) override;
 
 // css::form::XGridFieldDataSupplier (base of XGridControl)
-    virtual css::uno::Sequence< bool > SAL_CALL queryFieldDataType( const css::uno::Type& xType ) override;
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
+    virtual cpo::uno::Sequence< bool > SAL_CALL queryFieldDataType( const css::uno::Type& xType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
 
 // css::sdb::XRowSetSupplier
     virtual css::uno::Reference< css::sdbc::XRowSet >  SAL_CALL getRowSet() override;
@@ -444,7 +444,7 @@ public:
 // css::util::XModeSelector
     virtual void SAL_CALL setMode(const OUString& Mode) override;
     virtual OUString SAL_CALL getMode() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedModes() override;
     virtual bool SAL_CALL supportsMode(const OUString& Mode) override;
 
 // css::container::XContainer
@@ -459,7 +459,7 @@ public:
 
 // css::frame::XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > SAL_CALL queryDispatches(const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > SAL_CALL queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
 
 // css::frame::XDispatchProviderInterception
     virtual void SAL_CALL registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
@@ -481,7 +481,7 @@ public:
 protected:
     virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle);
 
-    static css::uno::Sequence< css::util::URL>&       getSupportedURLs();
+    static cpo::uno::Sequence< css::util::URL>&       getSupportedURLs();
     static const std::vector<DbGridControlNavigationBarState>& getSupportedGridSlots();
     void    ConnectToDispatcher();
     void    DisConnectFromDispatcher();

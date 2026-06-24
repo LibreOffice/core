@@ -102,7 +102,7 @@ TextCharacterSpacingControl::~TextCharacterSpacingControl()
     if (mnLastCus == SPACING_CLOSE_BY_CUS_EDIT)
     {
         SvtViewOptions aWinOpt(EViewType::Window, SIDEBAR_SPACING_GLOBAL_VALUE);
-        css::uno::Sequence<css::beans::NamedValue> aSeq
+        cpo::uno::Sequence<css::beans::NamedValue> aSeq
             { { u"Spacing"_ustr, cpo::uno::Any(OUString::number(mnCustomKern)) } };
         aWinOpt.SetUserData(aSeq);
     }
@@ -122,7 +122,7 @@ void TextCharacterSpacingControl::Initialize()
     SvtViewOptions aWinOpt(EViewType::Window, SIDEBAR_SPACING_GLOBAL_VALUE);
     if(aWinOpt.Exists())
     {
-        css::uno::Sequence<css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
+        cpo::uno::Sequence<css::beans::NamedValue> aSeq = aWinOpt.GetUserData();
         OUString aTmp;
         if(aSeq.hasElements())
             aSeq[0].Value >>= aTmp;
@@ -166,7 +166,7 @@ void TextCharacterSpacingControl::ExecuteCharacterSpacing(tools::Long nValue, bo
     tools::Long nVal = OutputDevice::LogicToLogic(nValue, MapUnit::MapPoint, eUnit);
     short nKern = (nValue == 0) ? 0 : static_cast<short>(mxEditKerning->denormalize(nVal));
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs(1);
     css::beans::PropertyValue* pArgs = aArgs.getArray();
     pArgs[0].Name = u"Spacing"_ustr;
     pArgs[0].Value <<= sal_Int16(nSign * nKern);

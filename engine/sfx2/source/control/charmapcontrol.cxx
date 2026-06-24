@@ -160,11 +160,11 @@ void SfxCharmapContainer::loadFavCharacterList()
     m_aFavCharFontList.clear();
 
     //retrieve recent character list
-    const css::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
+    const cpo::uno::Sequence< OUString > rFavCharList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::get() );
     m_aFavCharList.insert( m_aFavCharList.end(), rFavCharList.begin(), rFavCharList.end() );
 
     //retrieve recent character font list
-    const css::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
+    const cpo::uno::Sequence< OUString > rFavCharFontList( officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::get() );
     m_aFavCharFontList.insert( m_aFavCharFontList.end(), rFavCharFontList.begin(), rFavCharFontList.end() );
 
     // tdf#135997: make sure that the two lists are same length
@@ -204,11 +204,11 @@ void SfxCharmapContainer::loadRecentCharacterList()
     m_aRecentCharFontList.clear();
 
     //retrieve recent character list
-    const css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
+    const cpo::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
     m_aRecentCharList.insert( m_aRecentCharList.end(), rRecentCharList.begin(), rRecentCharList.end() );
 
     //retrieve recent character font list
-    const css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
+    const cpo::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
     m_aRecentCharFontList.insert( m_aRecentCharFontList.end(), rRecentCharFontList.begin(), rRecentCharFontList.end() );
 
     // tdf#135997: make sure that the two lists are same length
@@ -327,9 +327,9 @@ void SfxCharmapContainer::updateRecentCharacterList(const OUString& sTitle, cons
     m_aRecentCharList.push_front(sTitle);
     m_aRecentCharFontList.push_front(rFont);
 
-    css::uno::Sequence< OUString > aRecentCharList(m_aRecentCharList.size());
+    cpo::uno::Sequence< OUString > aRecentCharList(m_aRecentCharList.size());
     auto aRecentCharListRange = asNonConstRange(aRecentCharList);
-    css::uno::Sequence< OUString > aRecentCharFontList(m_aRecentCharFontList.size());
+    cpo::uno::Sequence< OUString > aRecentCharFontList(m_aRecentCharFontList.size());
     auto aRecentCharFontListRange = asNonConstRange(aRecentCharFontList);
 
     for (size_t i = 0; i < m_aRecentCharList.size(); ++i)
@@ -365,9 +365,9 @@ void SfxCharmapContainer::updateFavCharacterList(const OUString& sTitle, const O
     m_aFavCharList.push_back(sTitle);
     m_aFavCharFontList.push_back(rFont);
 
-    css::uno::Sequence< OUString > aFavCharList(m_aFavCharList.size());
+    cpo::uno::Sequence< OUString > aFavCharList(m_aFavCharList.size());
     auto aFavCharListRange = asNonConstRange(aFavCharList);
-    css::uno::Sequence< OUString > aFavCharFontList(m_aFavCharFontList.size());
+    cpo::uno::Sequence< OUString > aFavCharFontList(m_aFavCharFontList.size());
     auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
     for (size_t i = 0; i < m_aFavCharList.size(); ++i)
@@ -392,9 +392,9 @@ void SfxCharmapContainer::deleteFavCharacterFromList(std::u16string_view sTitle,
         m_aFavCharFontList.erase( itChar2);
     }
 
-    css::uno::Sequence< OUString > aFavCharList(m_aFavCharList.size());
+    cpo::uno::Sequence< OUString > aFavCharList(m_aFavCharList.size());
     auto aFavCharListRange = asNonConstRange(aFavCharList);
-    css::uno::Sequence< OUString > aFavCharFontList(m_aFavCharFontList.size());
+    cpo::uno::Sequence< OUString > aFavCharFontList(m_aFavCharFontList.size());
     auto aFavCharFontListRange = asNonConstRange(aFavCharFontList);
 
     for (size_t i = 0; i < m_aFavCharList.size(); ++i)
@@ -428,9 +428,9 @@ IMPL_LINK(SfxCharmapContainer, RecentClearClickHdl, SvxCharView*, rView, void)
         m_aRecentCharFontList.erase( itChar2);
     }
 
-    css::uno::Sequence< OUString > aRecentCharList(m_aRecentCharList.size());
+    cpo::uno::Sequence< OUString > aRecentCharList(m_aRecentCharList.size());
     auto aRecentCharListRange = asNonConstRange(aRecentCharList);
-    css::uno::Sequence< OUString > aRecentCharFontList(m_aRecentCharFontList.size());
+    cpo::uno::Sequence< OUString > aRecentCharFontList(m_aRecentCharFontList.size());
     auto aRecentCharFontListRange = asNonConstRange(aRecentCharFontList);
 
     for (size_t i = 0; i < m_aRecentCharList.size(); ++i)

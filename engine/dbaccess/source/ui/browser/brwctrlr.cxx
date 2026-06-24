@@ -190,7 +190,7 @@ public:
     // XModeSelector, base of XFormController
     virtual void SAL_CALL setMode( const OUString& aMode ) override;
     virtual OUString SAL_CALL getMode(  ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) override;
     virtual bool SAL_CALL supportsMode( const OUString& aMode ) override;
 
     // XTabController, base of XFormController
@@ -198,7 +198,7 @@ public:
     virtual css::uno::Reference< css::awt::XTabControllerModel >  SAL_CALL getModel() override;
     virtual void SAL_CALL setContainer(const css::uno::Reference< css::awt::XControlContainer > & Container) override;
     virtual css::uno::Reference< css::awt::XControlContainer >  SAL_CALL getContainer() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl >  > SAL_CALL getControls() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControl >  > SAL_CALL getControls() override;
     virtual void SAL_CALL autoTabOrder() override;
     virtual void SAL_CALL activateTabOrder() override;
     virtual void SAL_CALL activateFirst() override;
@@ -486,7 +486,7 @@ Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  )
 
 Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType)

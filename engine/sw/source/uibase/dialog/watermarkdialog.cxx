@@ -109,7 +109,7 @@ IMPL_LINK_NOARG(SwWatermarkDialog, OKButtonHdl, weld::Button&, void)
 {
     OUString sText = m_xTextInput->get_text();
 
-    css::uno::Sequence<css::beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence(
+    cpo::uno::Sequence<css::beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence(
     {
         { "Text", cpo::uno::Any( sText ) },
         { "Font", cpo::uno::Any( m_xFont->get_active_text() ) },

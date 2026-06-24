@@ -195,7 +195,7 @@ void DocumentLockFile::WriteEntryToStream(
     }
 
     OString aStringData( OUStringToOString( aBuffer, RTL_TEXTENCODING_UTF8 ) );
-    uno::Sequence< sal_Int8 > aData( reinterpret_cast<sal_Int8 const *>(aStringData.getStr()), aStringData.getLength() );
+    cpo::uno::Sequence< sal_Int8 > aData( reinterpret_cast<sal_Int8 const *>(aStringData.getStr()), aStringData.getLength() );
     xOutput->writeBytes( aData );
 }
 
@@ -206,7 +206,7 @@ LockFileEntry DocumentLockFile::GetLockDataImpl(std::unique_lock<std::mutex>& rG
         throw uno::RuntimeException();
 
     const sal_Int32 nBufLen = 32000;
-    uno::Sequence< sal_Int8 > aBuffer( nBufLen );
+    cpo::uno::Sequence< sal_Int8 > aBuffer( nBufLen );
 
     sal_Int32 nRead = xInput->readBytes( aBuffer, nBufLen );
     xInput->closeInput();

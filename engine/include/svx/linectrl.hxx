@@ -44,11 +44,11 @@ public:
     SvxLineStyleToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<cpo::uno::Any>& rArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
@@ -59,7 +59,7 @@ public:
     void setLineStyleSelectFunction(const LineStyleSelectFunction& aLineStyleSelectFunction);
     // called when the line style changes, can be used to trigger disabling the arrows if the none line style is selected
     void setLineStyleIsNoneFunction(const LineStyleIsNoneFunction& aLineStyleIsNoneFunction);
-    void dispatchLineStyleCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    void dispatchLineStyleCommand(const OUString& rCommand, const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
 
 private:
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

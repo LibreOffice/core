@@ -26,7 +26,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace
 {
@@ -80,7 +80,7 @@ bool SAL_CALL PolarCoordinateSystem::supportsService( const OUString& rServiceNa
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem::getSupportedServiceNames()
 {
     return { CHART2_COOSYSTEM_POLAR_SERVICE_NAME };
 }
@@ -105,7 +105,7 @@ bool SAL_CALL PolarCoordinateSystem2d::supportsService( const OUString& rService
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem2d::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem2d::getSupportedServiceNames()
 {
     return {
         CHART2_COOSYSTEM_POLAR_SERVICE_NAME,
@@ -132,7 +132,7 @@ bool SAL_CALL PolarCoordinateSystem3d::supportsService( const OUString& rService
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem3d::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem3d::getSupportedServiceNames()
 {
     return {
         CHART2_COOSYSTEM_POLAR_SERVICE_NAME,
@@ -143,14 +143,14 @@ css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem3d::getSupportedSer
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_PolarCoordinateSystem2d_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::PolarCoordinateSystem2d);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_PolarCoordinateSystem3d_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::PolarCoordinateSystem3d);
 }

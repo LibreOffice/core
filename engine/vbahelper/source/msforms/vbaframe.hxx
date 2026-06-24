@@ -52,7 +52,7 @@ public:
     cpo::uno::Any SAL_CALL Controls( const cpo::uno::Any& rIndex ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 private:
     css::uno::Reference< css::awt::XControl > mxDialog;

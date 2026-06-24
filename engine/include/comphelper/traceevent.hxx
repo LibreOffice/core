@@ -25,7 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class E> class Sequence;
 }
@@ -105,7 +105,7 @@ public:
 
     static std::vector<OUString> getEventVectorAndClear();
 
-    static css::uno::Sequence<OUString> getRecordingAndClear();
+    static cpo::uno::Sequence<OUString> getRecordingAndClear();
 };
 
 class COMPHELPER_DLLPUBLIC NamedEvent : public TraceEvent

@@ -1209,7 +1209,7 @@ static bool ImplCutMonthName( OUString& rStr, std::u16string_view _rLookupMonthN
     return index >= 0;
 }
 
-static sal_uInt16 ImplGetMonthFromCalendarItem( OUString& rStr, const uno::Sequence< i18n::CalendarItem2 >& rMonths )
+static sal_uInt16 ImplGetMonthFromCalendarItem( OUString& rStr, const cpo::uno::Sequence< i18n::CalendarItem2 >& rMonths )
 {
     const sal_uInt16 nMonths = rMonths.getLength();
     for (sal_uInt16 i=0; i < nMonths; ++i)
@@ -1232,20 +1232,20 @@ static sal_uInt16 ImplCutMonthFromString( OUString& rStr, OUString& rCalendarNam
     rCalendarName = aDefaultCalendarName;
 
     // Search for a month name of the loaded default calendar.
-    const uno::Sequence< i18n::CalendarItem2 > aMonths = rCalendarWrapper.getMonths();
+    const cpo::uno::Sequence< i18n::CalendarItem2 > aMonths = rCalendarWrapper.getMonths();
     sal_uInt16 nMonth = ImplGetMonthFromCalendarItem( rStr, aMonths);
     if (nMonth > 0)
         return nMonth;
 
     // And also possessive genitive and partitive month names.
-    const uno::Sequence< i18n::CalendarItem2 > aGenitiveMonths = rCalendarWrapper.getGenitiveMonths();
+    const cpo::uno::Sequence< i18n::CalendarItem2 > aGenitiveMonths = rCalendarWrapper.getGenitiveMonths();
     if (aGenitiveMonths != aMonths)
     {
         nMonth = ImplGetMonthFromCalendarItem( rStr, aGenitiveMonths);
         if (nMonth > 0)
             return nMonth;
     }
-    const uno::Sequence< i18n::CalendarItem2 > aPartitiveMonths = rCalendarWrapper.getPartitiveMonths();
+    const cpo::uno::Sequence< i18n::CalendarItem2 > aPartitiveMonths = rCalendarWrapper.getPartitiveMonths();
     if (aPartitiveMonths != aMonths)
     {
         nMonth = ImplGetMonthFromCalendarItem( rStr, aPartitiveMonths);
@@ -1256,7 +1256,7 @@ static sal_uInt16 ImplCutMonthFromString( OUString& rStr, OUString& rCalendarNam
     // Check if there are more calendars and try them if so, as the long date
     // format is obtained from the number formatter this is possible (e.g.
     // ar_DZ "[~hijri] ...")
-    const uno::Sequence< i18n::Calendar2 > aCalendars =  rLocaleData.getAllCalendars();
+    const cpo::uno::Sequence< i18n::Calendar2 > aCalendars =  rLocaleData.getAllCalendars();
     if (aCalendars.getLength() > 1)
     {
         for (const auto& rCalendar : aCalendars)

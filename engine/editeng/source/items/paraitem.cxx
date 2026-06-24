@@ -21,7 +21,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/ParagraphHyphenationKeepType.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <libxml/xmlwriter.h>
 #include <comphelper/extract.hxx>
 #include <osl/diagnose.h>
@@ -1014,7 +1014,7 @@ bool SvxTabStopItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) cons
         case MID_TABSTOPS:
         {
             sal_uInt16 nCount = Count();
-            uno::Sequence< style::TabStop> aSeq(nCount);
+            cpo::uno::Sequence< style::TabStop> aSeq(nCount);
             style::TabStop* pArr = aSeq.getArray();
             for(sal_uInt16 i = 0; i < nCount; i++)
             {
@@ -1060,10 +1060,10 @@ bool SvxTabStopItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_TABSTOPS:
         {
-            uno::Sequence< style::TabStop> aSeq;
+            cpo::uno::Sequence< style::TabStop> aSeq;
             if(!(rVal >>= aSeq))
             {
-                uno::Sequence < uno::Sequence < cpo::uno::Any >  > aAnySeq;
+                cpo::uno::Sequence < cpo::uno::Sequence < cpo::uno::Any >  > aAnySeq;
                 if (!(rVal >>= aAnySeq))
                     return false;
                 auto aAnySeqRange = asNonConstRange(aAnySeq);
@@ -1072,7 +1072,7 @@ bool SvxTabStopItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
                 auto pSeq = aSeq.getArray();
                 for ( sal_Int32 n=0; n<nLength; n++ )
                 {
-                    uno::Sequence < cpo::uno::Any >& rAnySeq = aAnySeqRange[n];
+                    cpo::uno::Sequence < cpo::uno::Any >& rAnySeq = aAnySeqRange[n];
                     if ( rAnySeq.getLength() == 4 )
                     {
                         if (!(rAnySeq[0] >>= pSeq[n].Position)) return false;

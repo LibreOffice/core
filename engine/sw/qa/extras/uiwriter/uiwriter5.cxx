@@ -858,7 +858,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144272)
 
     // modify with track changes: Standard and Heading 2
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Standard"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -896,14 +896,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf101873)
     pWrtShell->Insert(u"something"_ustr);
 
     // Search for something which does not exist, twice.
-    uno::Sequence<beans::PropertyValue> aFirst(comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aFirst(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", cpo::uno::Any(u"fig"_ustr) },
         { "SearchItem.Backward", cpo::uno::Any(false) },
     }));
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aFirst);
     dispatchCommand(mxComponent, u".uno:ExecuteSearch"_ustr, aFirst);
 
-    uno::Sequence<beans::PropertyValue> aSecond(comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aSecond(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", cpo::uno::Any(u"something"_ustr) },
         { "SearchItem.Backward", cpo::uno::Any(false) },
     }));
@@ -1540,7 +1540,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTrackImageInsertion)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Insert an image with change tracking
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"ole2.png")),
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
@@ -1900,7 +1900,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf118311)
     createSwDoc("tdf118311.fodt");
 
     // Jump to the first cell, selecting its content
-    uno::Sequence<beans::PropertyValue> aSearch(comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aSearch(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", cpo::uno::Any(u"a"_ustr) },
         { "SearchItem.Backward", cpo::uno::Any(false) },
     }));

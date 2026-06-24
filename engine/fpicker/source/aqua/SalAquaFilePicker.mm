@@ -62,7 +62,7 @@ using namespace ::cpo::uno;
 
 namespace
 {
-    uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
     {
         return { "com.sun.star.ui.dialogs.FilePicker",
                  "com.sun.star.ui.dialogs.SystemFilePicker",
@@ -213,9 +213,9 @@ OUString SAL_CALL SalAquaFilePicker::getDisplayDirectory()
     return retVal;
 }
 
-uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getFiles()
+cpo::uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getFiles()
 {
-    uno::Sequence< OUString > aSelectedFiles = getSelectedFiles();
+    cpo::uno::Sequence< OUString > aSelectedFiles = getSelectedFiles();
     // multiselection doesn't really work with getFiles
     // so just retrieve the first url
     if (aSelectedFiles.getLength() > 1)
@@ -224,7 +224,7 @@ uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getFiles()
     return aSelectedFiles;
 }
 
-uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
+cpo::uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
 {
     SolarMutexGuard aGuard;
 
@@ -250,7 +250,7 @@ uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles()
     NSUInteger nFiles = [files count];
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
-    uno::Sequence< OUString > aSelectedFiles(nFiles);
+    cpo::uno::Sequence< OUString > aSelectedFiles(nFiles);
     OUString* pSelectedFiles = aSelectedFiles.getArray();
 
     for(NSUInteger nIndex = 0; nIndex < nFiles; nIndex += 1)
@@ -320,7 +320,7 @@ OUString SAL_CALL SalAquaFilePicker::getCurrentFilter()
 
 #pragma mark XFilterGroupManager
 
-void SAL_CALL SalAquaFilePicker::appendFilterGroup( const OUString&, const uno::Sequence<beans::StringPair>& aFilters )
+void SAL_CALL SalAquaFilePicker::appendFilterGroup( const OUString&, const cpo::uno::Sequence<beans::StringPair>& aFilters )
 {
     SolarMutexGuard aGuard;
 
@@ -369,7 +369,7 @@ OUString SAL_CALL SalAquaFilePicker::getLabel( sal_Int16 nControlId )
 
 #pragma mark XInitialization
 
-void SAL_CALL SalAquaFilePicker::initialize( const uno::Sequence<cpo::uno::Any>& aArguments )
+void SAL_CALL SalAquaFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments )
 {
     SolarMutexGuard aGuard;
 
@@ -482,7 +482,7 @@ bool SAL_CALL SalAquaFilePicker::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SalAquaFilePicker::getSupportedServiceNames()
 {
     return FilePicker_getSupportedServiceNames();
 }
@@ -585,7 +585,7 @@ void SalAquaFilePicker::filterControlChanged()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_SalAquaFilePicker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SalAquaFilePicker());
 }

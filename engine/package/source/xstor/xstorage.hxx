@@ -20,7 +20,7 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_XSTOR_XSTORAGE_HXX
 #define INCLUDED_PACKAGE_SOURCE_XSTOR_XSTORAGE_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/embed/XStorage2.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess2.hpp>
@@ -134,7 +134,7 @@ struct OStorage_Impl
     // valid only for root storage
     css::uno::Reference< css::io::XInputStream > m_xInputStream; // ??? may be stored in properties
     rtl::Reference< SwitchablePersistenceStream > m_xStream; // ??? may be stored in properties
-    css::uno::Sequence< css::beans::PropertyValue > m_xProperties;
+    cpo::uno::Sequence< css::beans::PropertyValue > m_xProperties;
     bool m_bHasCommonEncryptionData;
     ::comphelper::SequenceAsHashMap m_aCommonEncryptionData;
 
@@ -155,20 +155,20 @@ struct OStorage_Impl
     // the _rels substorage that is handled in a special way in embed::StorageFormats::OFOPXML
     SotElement_Impl* m_pRelStorElement;
     rtl::Reference< OStorage > m_xRelStorage;
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > m_aRelInfo;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > m_aRelInfo;
     css::uno::Reference< css::io::XInputStream > m_xNewRelInfoStream;
     sal_Int16 m_nRelInfoStatus;
 
     // Constructors
     OStorage_Impl(  css::uno::Reference< css::io::XInputStream > const & xInputStream,
                     sal_Int32 nMode,
-                    const css::uno::Sequence< css::beans::PropertyValue >& xProperties,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& xProperties,
                     css::uno::Reference< css::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 
     OStorage_Impl(  css::uno::Reference< css::io::XStream > const & xStream,
                     sal_Int32 nMode,
-                    const css::uno::Sequence< css::beans::PropertyValue >& xProperties,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& xProperties,
                     css::uno::Reference< css::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 
@@ -192,7 +192,7 @@ struct OStorage_Impl
     bool HasChildren();
     void GetStorageProperties();
 
-    css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > GetAllRelationshipsIfAny();
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > GetAllRelationshipsIfAny();
     void CopyLastCommitTo( const css::uno::Reference< css::embed::XStorage >& xNewStor );
 
     void InsertIntoPackageFolder(
@@ -224,7 +224,7 @@ struct OStorage_Impl
     void OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorageMode );
     void OpenSubStream( SotElement_Impl* pElement );
 
-    css::uno::Sequence< OUString > GetElementNames();
+    cpo::uno::Sequence< OUString > GetElementNames();
 
     void RemoveElement( OUString const & rName, SotElement_Impl* pElement );
     static void ClearElement( SotElement_Impl* pElement );
@@ -254,7 +254,7 @@ struct OStorage_Impl
         const css::uno::Reference< css::io::XStream >& xSource,
         const css::uno::Reference< css::io::XStream >& xDest,
         sal_Int32 nStorageType,
-        const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aRelInfo );
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >& aRelInfo );
 
 };
 
@@ -296,13 +296,13 @@ public:
 
     OStorage(   css::uno::Reference< css::io::XInputStream > const & xInputStream,
                 sal_Int32 nMode,
-                const css::uno::Sequence< css::beans::PropertyValue >& xProperties,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& xProperties,
                 css::uno::Reference< css::uno::XComponentContext > const & xContext,
                 sal_Int32 nStorageType );
 
     OStorage(   css::uno::Reference< css::io::XStream > const & xStream,
                 sal_Int32 nMode,
-                const css::uno::Sequence< css::beans::PropertyValue >& xProperties,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& xProperties,
                 css::uno::Reference< css::uno::XComponentContext > const & xContext,
                 sal_Int32 nStorageType );
 
@@ -326,9 +326,9 @@ public:
 
     //  XTypeProvider
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     //  XStorage
 
@@ -377,9 +377,9 @@ public:
 
     //  XStorage2
 
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL openEncryptedStream( const OUString& sStreamName, ::sal_Int32 nOpenMode, const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
+    virtual css::uno::Reference< css::io::XStream > SAL_CALL openEncryptedStream( const OUString& sStreamName, ::sal_Int32 nOpenMode, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL cloneEncryptedStream( const OUString& sStreamName, const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
+    virtual css::uno::Reference< css::io::XStream > SAL_CALL cloneEncryptedStream( const OUString& sStreamName, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 
     //  XStorageRawAccess
 
@@ -420,7 +420,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -447,16 +447,16 @@ public:
     //  XEncryptionProtectedSource2
 
     virtual void SAL_CALL setEncryptionData(
-            const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
+            const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 
     virtual bool SAL_CALL hasEncryptionData() override;
 
     //  XEncryptionProtectedStorage
 
-    virtual void SAL_CALL setEncryptionAlgorithms( const css::uno::Sequence< css::beans::NamedValue >& aAlgorithms ) override;
-    virtual void SAL_CALL setGpgProperties( const css::uno::Sequence< css::uno::Sequence< css::beans::NamedValue > >& aCryptProps ) override;
+    virtual void SAL_CALL setEncryptionAlgorithms( const cpo::uno::Sequence< css::beans::NamedValue >& aAlgorithms ) override;
+    virtual void SAL_CALL setGpgProperties( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::NamedValue > >& aCryptProps ) override;
 
-    virtual css::uno::Sequence< css::beans::NamedValue > SAL_CALL getEncryptionAlgorithms() override;
+    virtual cpo::uno::Sequence< css::beans::NamedValue > SAL_CALL getEncryptionAlgorithms() override;
 
     //  XPropertySet
 
@@ -483,7 +483,7 @@ public:
     //  XOptimizedStorage
     virtual void SAL_CALL insertRawNonEncrStreamElementDirect( const OUString& sStreamName, const css::uno::Reference< css::io::XInputStream >& xInStream ) override;
 
-    virtual void SAL_CALL insertStreamElementDirect( const OUString& sStreamName, const css::uno::Reference< css::io::XInputStream >& xInStream, const css::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual void SAL_CALL insertStreamElementDirect( const OUString& sStreamName, const css::uno::Reference< css::io::XInputStream >& xInStream, const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
     virtual void SAL_CALL copyElementDirectlyTo( const OUString& sSourceName, const css::uno::Reference< css::embed::XOptimizedStorage >& xTargetStorage, const OUString& sTargetName ) override;
 
@@ -502,17 +502,17 @@ public:
 
     virtual OUString SAL_CALL getTypeByID( const OUString& sID ) override;
 
-    virtual css::uno::Sequence< css::beans::StringPair > SAL_CALL getRelationshipByID( const OUString& sID ) override;
+    virtual cpo::uno::Sequence< css::beans::StringPair > SAL_CALL getRelationshipByID( const OUString& sID ) override;
 
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getRelationshipsByType( const OUString& sType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > SAL_CALL getRelationshipsByType( const OUString& sType ) override;
 
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getAllRelationships(  ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > SAL_CALL getAllRelationships(  ) override;
 
-    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const css::uno::Sequence< css::beans::StringPair >& aEntry, bool bReplace ) override;
+    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const cpo::uno::Sequence< css::beans::StringPair >& aEntry, bool bReplace ) override;
 
     virtual void SAL_CALL removeRelationshipByID( const OUString& sID ) override;
 
-    virtual void SAL_CALL insertRelationships( const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aEntries, bool bReplace ) override;
+    virtual void SAL_CALL insertRelationships( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >& aEntries, bool bReplace ) override;
 
     virtual void SAL_CALL clearRelationships(  ) override;
 
@@ -524,7 +524,7 @@ public:
     virtual void SAL_CALL removeStreamElementByHierarchicalName( const OUString& sElementPath ) override;
 
     // XHierarchicalStorageAccess2
-    virtual css::uno::Reference< css::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
+    virtual css::uno::Reference< css::embed::XExtendedStorageStream > SAL_CALL openEncryptedStreamByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 };
 
 #endif

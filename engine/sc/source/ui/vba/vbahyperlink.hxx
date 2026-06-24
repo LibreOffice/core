@@ -35,7 +35,7 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     ScVbaHyperlink(
-        const css::uno::Sequence< cpo::uno::Any >& rArgs,
+        const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     /// @throws css::uno::RuntimeException

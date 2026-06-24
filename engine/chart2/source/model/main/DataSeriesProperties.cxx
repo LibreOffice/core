@@ -35,7 +35,7 @@ void DataSeriesProperties::AddPropertiesToVector(
 {
     rOutProperties.emplace_back( "AttributedDataPoints",
                   PROP_DATASERIES_ATTRIBUTED_DATA_POINTS,
-                  cppu::UnoType<uno::Sequence< sal_Int32 >>::get(),
+                  cppu::UnoType<cpo::uno::Sequence< sal_Int32 >>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
@@ -66,7 +66,7 @@ void DataSeriesProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( "DeletedLegendEntries",
                   PROP_DATASERIES_DELETED_LEGEND_ENTRIES,
-                  cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
+                  cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
@@ -150,7 +150,7 @@ void DataSeriesProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( "SubtotalIndices",
                   PROP_DATASERIES_SUBTOTAL_INDICES,
-                  cppu::UnoType<uno::Sequence<sal_Int32>>::get(),
+                  cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
@@ -204,7 +204,7 @@ void DataSeriesProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( "GeoCacheClearData",
                   PROP_DATASERIES_GEOCACHE_CLEAR_DATA,
-                  cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(),
+                  cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 

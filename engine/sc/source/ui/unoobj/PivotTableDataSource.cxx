@@ -36,7 +36,7 @@ void PivotTableDataSource::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxHin
 {
 }
 
-uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> SAL_CALL
+cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> SAL_CALL
     PivotTableDataSource::getDataSequences()
 {
     SolarMutexGuard aGuard;

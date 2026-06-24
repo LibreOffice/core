@@ -111,7 +111,7 @@ namespace vclcanvas
         return cppu::supportsService( this, ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()
     {
         return { u"com.sun.star.rendering.CanvasCustomSprite"_ustr };
     }

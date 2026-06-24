@@ -43,7 +43,7 @@ namespace framework
             /* interface XServiceInfo */
             virtual OUString SAL_CALL getImplementationName() override;
             virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
             // XPopupMenuController
             virtual void SAL_CALL setPopupMenu( const css::uno::Reference< css::awt::XPopupMenu >& PopupMenu ) override;
@@ -68,10 +68,10 @@ namespace framework
 
         private:
             // XInitialization
-            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
-            static css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
+            static cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
             css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
             void addCommand( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
 

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
@@ -80,12 +80,12 @@ namespace cppcanvas::internal
             ::tools::Rectangle                                                              clipRect;
             css::uno::Reference< css::rendering::XPolyPolygon2D >                    xClipPoly;
 
-            css::uno::Sequence< double >                                             lineColor;
-            css::uno::Sequence< double >                                             fillColor;
-            css::uno::Sequence< double >                                             textColor;
-            css::uno::Sequence< double >                                             textFillColor;
-            css::uno::Sequence< double >                                             textOverlineColor;
-            css::uno::Sequence< double >                                             textLineColor;
+            cpo::uno::Sequence< double >                                             lineColor;
+            cpo::uno::Sequence< double >                                             fillColor;
+            cpo::uno::Sequence< double >                                             textColor;
+            cpo::uno::Sequence< double >                                             textFillColor;
+            cpo::uno::Sequence< double >                                             textOverlineColor;
+            cpo::uno::Sequence< double >                                             textLineColor;
 
             /** Current font.
 

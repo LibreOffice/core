@@ -82,7 +82,7 @@ bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.awt.RoadmapItem"_ustr };
 }
@@ -95,7 +95,7 @@ css::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(
 
 ::cppu::IPropertyArrayHelper* ORoadmapEntry::createArrayHelper() const
 {
-    css::uno::Sequence< css::beans::Property > aProps;
+    cpo::uno::Sequence< css::beans::Property > aProps;
     // describes all properties which have been registered in the ctor
     describeProperties( aProps );
 

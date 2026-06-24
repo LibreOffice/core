@@ -139,7 +139,7 @@ public:
     css::uno::Reference< css::sdbc::XConnection > getConnection(   const OUString& url,
                                             const OUString& user,
                                             const OUString& password,
-                                            const css::uno::Sequence< css::beans::PropertyValue >& _aInfo,
+                                            const cpo::uno::Sequence< css::beans::PropertyValue >& _aInfo,
                                             ODatabaseSource* _pDataSource);
     void addEventListener(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection, TConnectionMap::iterator const & _rIter);
 };
@@ -228,7 +228,7 @@ public:
     OUString                                     m_sUser;
     OUString                                     m_aPassword;    // transient !
     OUString                                     m_sFailedPassword;
-    css::uno::Sequence< css::beans::PropertyValue>
+    cpo::uno::Sequence< css::beans::PropertyValue>
                                                     m_aLayoutInformation;
     sal_Int32                                       m_nLoginTimeout;
     bool                                            m_bReadOnly : 1;
@@ -240,8 +240,8 @@ public:
     bool                                            m_bAskPassword;
     css::uno::Reference< css::beans::XPropertyBag >
                                                         m_xSettings;
-    css::uno::Sequence< OUString >                      m_aTableFilter;
-    css::uno::Sequence< OUString >                      m_aTableTypeFilter;
+    cpo::uno::Sequence< OUString >                      m_aTableFilter;
+    cpo::uno::Sequence< OUString >                      m_aTableTypeFilter;
     rtl::Reference< OSharedConnectionManager >          m_xSharedConnectionManager;
     sal_uInt16                                          m_nControllerLockCount;
 
@@ -303,7 +303,7 @@ public:
 
     void    setResource(
                 const OUString& _rURL,
-                const css::uno::Sequence< css::beans::PropertyValue >& _rArgs
+                const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs
             );
     void    setDocFileLocation(
                 const OUString& i_rLoadedFrom

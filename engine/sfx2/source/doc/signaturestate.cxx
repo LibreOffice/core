@@ -17,7 +17,7 @@ using namespace css;
 namespace DocumentSignatures
 {
 SignatureState
-getSignatureState(const uno::Sequence<security::DocumentSignatureInformation>& aSigInfo)
+getSignatureState(const cpo::uno::Sequence<security::DocumentSignatureInformation>& aSigInfo)
 {
     bool bCertValid = true;
     SignatureState nResult = SignatureState::NOSIGNATURES;

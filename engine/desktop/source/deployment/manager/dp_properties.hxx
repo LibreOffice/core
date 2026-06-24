@@ -43,7 +43,7 @@ public:
                         css::uno::Reference<css::uno::XComponentContext> const& xContext);
 
     ExtensionProperties(std::u16string_view urlExtension,
-                        css::uno::Sequence<css::beans::NamedValue> const& properties,
+                        cpo::uno::Sequence<css::beans::NamedValue> const& properties,
                         css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
                         css::uno::Reference<css::uno::XComponentContext> const& xContext);
 

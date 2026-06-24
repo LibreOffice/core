@@ -323,7 +323,7 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
             const OUString sFilter = aFilter.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
 
             cpo::uno::Any aProps = xFilterFactory->getByName(sFilter);
-            uno::Sequence< beans::PropertyValue > aFilterProperties;
+            cpo::uno::Sequence< beans::PropertyValue > aFilterProperties;
             aProps >>= aFilterProperties;
             OUString sUIName2;
             auto pProp = std::find_if(std::cbegin(aFilterProperties), std::cend(aFilterProperties),

@@ -65,13 +65,13 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE)
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static const cpo::uno::Sequence<sal_Int8>& getUnoTunnelId();
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& _rIdentifier) override;
+    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence<sal_Int8>& _rIdentifier) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -101,8 +101,8 @@ public:
     const OUString& getModelName() const { return m_aModelName; }
 
 protected:
-    static void clearAggregateProperties(css::uno::Sequence< css::beans::Property>& seqProps, bool bAllowDropDown);
-    static void setOwnProperties(css::uno::Sequence< css::beans::Property>& seqProps);
+    static void clearAggregateProperties(cpo::uno::Sequence< css::beans::Property>& seqProps, bool bAllowDropDown);
+    static void setOwnProperties(cpo::uno::Sequence< css::beans::Property>& seqProps);
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const = 0;
 };
@@ -120,7 +120,7 @@ protected:
 #define TYPE_TIMEFIELD      9
 
 // List of all known columns
-const css::uno::Sequence<OUString>& getColumnTypes();
+const cpo::uno::Sequence<OUString>& getColumnTypes();
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName);
 
 // Columns
@@ -136,8 +136,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -155,8 +155,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -174,8 +174,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -193,8 +193,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -212,8 +212,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -231,8 +231,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -250,8 +250,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -269,8 +269,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -288,8 +288,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;
@@ -307,8 +307,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     virtual void fillProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
         ) const override;
 
     virtual rtl::Reference<OGridColumn> createCloneColumn() const override;

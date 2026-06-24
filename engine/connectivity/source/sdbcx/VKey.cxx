@@ -42,7 +42,7 @@ OUString SAL_CALL OKey::getImplementationName(  )
     return u"com.sun.star.sdbcx.VKey"_ustr;
 }
 
-css::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.KeyDescriptor"_ustr:u"com.sun.star.sdbcx.Key"_ustr };
 }

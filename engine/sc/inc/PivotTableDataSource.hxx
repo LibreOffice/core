@@ -33,7 +33,7 @@ public:
     virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint) override;
 
     // XDataSource
-    virtual css::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence>> SAL_CALL
+    virtual cpo::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence>> SAL_CALL
         getDataSequences() override;
 
     // XServiceInfo
@@ -41,7 +41,7 @@ public:
 
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL
+    virtual cpo::uno::Sequence<OUString> SAL_CALL
         getSupportedServiceNames() override;
 
 private:

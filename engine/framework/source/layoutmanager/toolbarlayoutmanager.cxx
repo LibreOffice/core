@@ -452,7 +452,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
     {
         uno::Reference< ui::XUIElement > xUIElement;
 
-        uno::Sequence< beans::PropertyValue > aPropSeq{
+        cpo::uno::Sequence< beans::PropertyValue > aPropSeq{
             comphelper::makePropertyValue(u"Frame"_ustr, xFrame),
             comphelper::makePropertyValue(u"Persistent"_ustr, true)
         };
@@ -1075,12 +1075,12 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
     if (isPreviewFrame())
         return; // no addon toolbars for preview frame!
 
-    uno::Sequence< uno::Sequence< beans::PropertyValue > > aAddonToolBarData;
+    cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > > aAddonToolBarData;
     uno::Reference< ui::XUIElement >                       xUIElement;
 
     sal_uInt32 nCount = m_pAddonOptions->GetAddonsToolBarCount();
 
-    uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
+    cpo::uno::Sequence< beans::PropertyValue > aPropSeq( 2 );
     auto pPropSeq = aPropSeq.getArray();
     pPropSeq[0].Name = u"Frame"_ustr;
     pPropSeq[0].Value <<= xFrame;
@@ -1192,7 +1192,7 @@ void ToolbarLayoutManager::implts_createCustomToolBars()
     if (isPreviewFrame())
         return; // no custom toolbars for preview frame!
 
-    uno::Sequence< uno::Sequence< beans::PropertyValue > > aTbxSeq;
+    cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > > aTbxSeq;
     if ( xDocCfgMgr.is() )
     {
         aTbxSeq = xDocCfgMgr->getUIElementsInfo( ui::UIElementType::TOOLBAR );
@@ -1222,7 +1222,7 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
 
     try
     {
-        const uno::Sequence< OUString > aToolbarNames = xPersistentWindowState->getElementNames();
+        const cpo::uno::Sequence< OUString > aToolbarNames = xPersistentWindowState->getElementNames();
 
         if ( aToolbarNames.hasElements() )
         {
@@ -1272,9 +1272,9 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
     }
 }
 
-void ToolbarLayoutManager::implts_createCustomToolBars( const uno::Sequence< uno::Sequence< beans::PropertyValue > >& aTbxSeqSeq )
+void ToolbarLayoutManager::implts_createCustomToolBars( const cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > >& aTbxSeqSeq )
 {
-    for ( const uno::Sequence< beans::PropertyValue >& rTbxSeq : aTbxSeqSeq )
+    for ( const cpo::uno::Sequence< beans::PropertyValue >& rTbxSeq : aTbxSeqSeq )
     {
         OUString aTbxResName;
         OUString aTbxTitle;
@@ -1565,7 +1565,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
 
     try
     {
-        uno::Sequence<beans::PropertyValue> aWindowState{
+        cpo::uno::Sequence<beans::PropertyValue> aWindowState{
             comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_DOCKED, !rElementData.m_bFloating),
             comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_VISIBLE, rElementData.m_bVisible),
             comphelper::makePropertyValue(WINDOWSTATE_PROPERTY_DOCKINGAREA,
@@ -3122,14 +3122,14 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
 
     try
     {
-        const uno::Sequence< OUString > aWindowElements = xPersistentWindowState->getElementNames();
+        const cpo::uno::Sequence< OUString > aWindowElements = xPersistentWindowState->getElementNames();
         for ( OUString const & rWindowElementName : aWindowElements )
         {
             if ( rUIElement.m_aName != rWindowElementName )
             {
                 try
                 {
-                    uno::Sequence< beans::PropertyValue > aPropValueSeq;
+                    cpo::uno::Sequence< beans::PropertyValue > aPropValueSeq;
                     awt::Point                            aDockedPos;
                     ui::DockingArea                       nDockedArea( ui::DockingArea_DOCKINGAREA_DEFAULT );
 
@@ -3932,9 +3932,9 @@ uno::Reference< ui::XUIElement > ToolbarLayoutManager::getToolbar( std::u16strin
     return implts_findToolbar( aName ).m_xUIElement;
 }
 
-uno::Sequence< uno::Reference< ui::XUIElement > > ToolbarLayoutManager::getToolbars()
+cpo::uno::Sequence< uno::Reference< ui::XUIElement > > ToolbarLayoutManager::getToolbars()
 {
-    uno::Sequence< uno::Reference< ui::XUIElement > > aSeq;
+    cpo::uno::Sequence< uno::Reference< ui::XUIElement > > aSeq;
 
     SolarMutexGuard g;
     if ( !m_aUIElements.empty() )

@@ -413,7 +413,7 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 cpo::uno::Any a;
                 SfxUInt32Item aItem( SID_PSZ_FUNCTION, nSelect );
                 aItem.QueryValue( a );
-                css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
                     u"StatusBarFunc"_ustr, a) };
                 execute( u".uno:StatusBarFunc"_ustr, aArgs );
             }

@@ -61,7 +61,7 @@ namespace pcr
     {
     private:
         /// cache for getSupportedProperties
-        mutable css::uno::Sequence<css::beans::Property>
+        mutable cpo::uno::Sequence<css::beans::Property>
                                     m_aSupportedProperties;
         mutable bool                m_bSupportedPropertiesAreKnown;
 
@@ -89,9 +89,9 @@ namespace pcr
 
         // default implementations for XPropertyHandler
         virtual void SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
-        virtual css::uno::Sequence< css::beans::Property > SAL_CALL getSupportedProperties() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupersededProperties( ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getActuatingProperties( ) override;
+        virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getSupportedProperties() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupersededProperties( ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getActuatingProperties( ) override;
         virtual cpo::uno::Any SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
         virtual cpo::uno::Any SAL_CALL convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState  SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
@@ -108,7 +108,7 @@ namespace pcr
         virtual void SAL_CALL disposing() override;
 
         // own overridables
-        virtual css::uno::Sequence< css::beans::Property >
+        virtual cpo::uno::Sequence< css::beans::Property >
                     doDescribeSupportedProperties() const = 0;
 
         /// called when XPropertyHandler::inspect has been called, and we thus have a new component to inspect
@@ -350,7 +350,7 @@ namespace pcr
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override = 0;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override = 0;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override = 0;
     };
 
 

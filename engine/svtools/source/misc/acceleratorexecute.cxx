@@ -29,7 +29,7 @@
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -211,7 +211,7 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
         if (vcl::kit::isUnipoll())
         { // tdf#130382 - all synchronous really.
             try {
-                xDispatch->dispatch (aURL, css::uno::Sequence< css::beans::PropertyValue >());
+                xDispatch->dispatch (aURL, cpo::uno::Sequence< css::beans::PropertyValue >());
             }
             catch(const css::uno::Exception&ev)
             {
@@ -506,7 +506,7 @@ IMPL_LINK_NOARG(AsyncAccelExec, impl_ts_asyncCallback, LinkParamNone*, void)
         {
             if (m_xFrame.is())
                 m_xFrame->removeEventListener(this);
-            m_xDispatch->dispatch(m_aURL, css::uno::Sequence< css::beans::PropertyValue >());
+            m_xDispatch->dispatch(m_aURL, cpo::uno::Sequence< css::beans::PropertyValue >());
         }
         catch(const css::uno::Exception&)
         {

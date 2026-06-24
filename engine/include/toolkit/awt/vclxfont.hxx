@@ -56,10 +56,10 @@ public:
     css::awt::FontDescriptor           SAL_CALL getFontDescriptor(  ) override;
     css::awt::SimpleFontMetric         SAL_CALL getFontMetric(  ) override;
     sal_Int16                                       SAL_CALL getCharWidth( sal_Unicode c ) override;
-    css::uno::Sequence< sal_Int16 >    SAL_CALL getCharWidths( sal_Unicode nFirst, sal_Unicode nLast ) override;
+    cpo::uno::Sequence< sal_Int16 >    SAL_CALL getCharWidths( sal_Unicode nFirst, sal_Unicode nLast ) override;
     sal_Int32                                       SAL_CALL getStringWidth( const OUString& str ) override;
-    sal_Int32                                       SAL_CALL getStringWidthArray( const OUString& str, css::uno::Sequence< sal_Int32 >& rDXArray ) override;
-    void                                            SAL_CALL getKernPairs( css::uno::Sequence< sal_Unicode >& rnChars1, css::uno::Sequence< sal_Unicode >& rnChars2, css::uno::Sequence< sal_Int16 >& rnKerns ) override;
+    sal_Int32                                       SAL_CALL getStringWidthArray( const OUString& str, cpo::uno::Sequence< sal_Int32 >& rDXArray ) override;
+    void                                            SAL_CALL getKernPairs( cpo::uno::Sequence< sal_Unicode >& rnChars1, cpo::uno::Sequence< sal_Unicode >& rnChars2, cpo::uno::Sequence< sal_Int16 >& rnKerns ) override;
 
     // css::lang::XFont2
     bool                                        SAL_CALL hasGlyphs( const OUString& aText ) override;

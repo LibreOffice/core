@@ -109,7 +109,7 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Any;
 using ::std::vector;
@@ -246,7 +246,7 @@ public:
         const Sequence< OUString >& rSupportedMappings );
 
     void exportCandleStickSeries(
-        const css::uno::Sequence<
+        const cpo::uno::Sequence<
             css::uno::Reference< css::chart2::XDataSeries > > & aSeriesSeq,
         const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool bJapaneseCandleSticks,
@@ -293,7 +293,7 @@ public:
     bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
     bool mbRowSourceColumns;
     OUString msChartAddress;
-    css::uno::Sequence< sal_Int32 > maSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > maSequenceMapping;
 
     OUString msCLSID;
 
@@ -463,7 +463,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequ
             Reference< chart2::data::XDataSource > xDataSource( rSeries, uno::UNO_QUERY );
             if( !xDataSource.is() )
                 continue;
-            const uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
+            const cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
             aContainer.insert( aContainer.end(), aDataSequences.begin(), aDataSequences.end() );
         }
     }
@@ -644,10 +644,10 @@ sal_Int32 lcl_getMaxSequenceLength(
     return nResult;
 }
 
-uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
+cpo::uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
 {
-    uno::Sequence< OUString > aResult;
+    cpo::uno::Sequence< OUString > aResult;
     if(!xDataSequence.is())
         return aResult;
 
@@ -658,7 +658,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     }
     else
     {
-        uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
+        cpo::uno::Sequence< cpo::uno::Any > aValues = xDataSequence->getData();
         aResult.realloc(aValues.getLength());
         auto pResult = aResult.getArray();
 
@@ -674,7 +674,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     if(!xSeq.is())
         return aResult;
 
-    uno::Sequence< double > aValuesSequence;
+    cpo::uno::Sequence< double > aValuesSequence;
     Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
     if( xNumSeq.is() )
     {
@@ -704,7 +704,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
             {
                 //no double value is contained
                 //is there any text?
-                const uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
+                const cpo::uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
                 bool bHasText = std::any_of(aStrings.begin(), aStrings.end(),
                     [](const OUString& rString) { return !rString.isEmpty(); });
                 if( bHasText )
@@ -727,7 +727,7 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
     uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
     if( xProp.is() )
     {
-        uno::Sequence< sal_Int32 > aHiddenValues;
+        cpo::uno::Sequence< sal_Int32 > aHiddenValues;
         try
         {
             xProp->getPropertyValue(u"HiddenValues"_ustr) >>= aHiddenValues;
@@ -1119,7 +1119,7 @@ void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > co
     SAL_WARN_IF( !maAutoStyleNameQueue.empty(), "xmloff.chart", "There are still remaining autostyle names in the queue" );
 }
 
-static OUString lcl_GetStringFromNumberSequence( const css::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
+static OUString lcl_GetStringFromNumberSequence( const cpo::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
 {
     OUStringBuffer aBuf;
     bool bHasPredecessor = false;
@@ -2683,7 +2683,7 @@ namespace
         Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xDataSequence, uno::UNO_QUERY );
         if( xTextualDataSequence.is() )
         {
-            const uno::Sequence< OUString > aStrings( xTextualDataSequence->getTextualData() );
+            const cpo::uno::Sequence< OUString > aStrings( xTextualDataSequence->getTextualData() );
             if (std::any_of(aStrings.begin(), aStrings.end(), [](const OUString& rString) { return !rString.isEmpty(); }))
                 return true;//have text
         }
@@ -4130,7 +4130,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                       uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                                       cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SchXMLExport(pCtx, u"SchXMLExport.Compact"_ustr,
@@ -4142,7 +4142,7 @@ com_sun_star_comp_Chart_XMLExporter_get_implementation(uno::XComponentContext* p
 // Oasis format
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(uno::XComponentContext* pCtx,
-                                                            uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                                            cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Compact"_ustr,
@@ -4156,7 +4156,7 @@ com_sun_star_comp_Chart_XMLOasisExporter_get_implementation(uno::XComponentConte
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLStylesExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Styles"_ustr, SvXMLExportFlags::STYLES));
 }
@@ -4164,7 +4164,7 @@ com_sun_star_comp_Chart_XMLStylesExporter_get_implementation(
 // Oasis format
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Styles"_ustr,
                                           SvXMLExportFlags::STYLES | SvXMLExportFlags::OASIS));
@@ -4172,7 +4172,7 @@ com_sun_star_comp_Chart_XMLOasisStylesExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLContentExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Content"_ustr,
                                           SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
@@ -4181,7 +4181,7 @@ com_sun_star_comp_Chart_XMLContentExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Content"_ustr,
                                           SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT
@@ -4193,7 +4193,7 @@ com_sun_star_comp_Chart_XMLOasisContentExporter_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Chart_XMLOasisMetaExporter_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SchXMLExport(pCtx, u"SchXMLExport.Oasis.Meta"_ustr,
                                           SvXMLExportFlags::META | SvXMLExportFlags::OASIS));

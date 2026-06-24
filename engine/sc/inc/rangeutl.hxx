@@ -26,7 +26,7 @@
 
 namespace com::sun::star::table { struct CellAddress; }
 namespace com::sun::star::table { struct CellRangeAddress; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 class ScArea;
 class ScDocument;
@@ -216,7 +216,7 @@ public:
                             ScRefFlags nFormatFlags = ScRefFlags::VALID | ScRefFlags::TAB_3D );
     static void         GetStringFromRangeList(
                             OUString& rString,
-                            const css::uno::Sequence< css::table::CellRangeAddress >& rRangeSeq,
+                            const cpo::uno::Sequence< css::table::CellRangeAddress >& rRangeSeq,
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeparator = ' ' );

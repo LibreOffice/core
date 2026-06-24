@@ -38,6 +38,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
+using namespace ::cpo::uno;
 
 using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
@@ -80,7 +81,7 @@ public:
 
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 }
@@ -296,7 +297,7 @@ OUString SAL_CALL XMLSignature_NssImpl::getImplementationName()
 /* XServiceInfo */
 bool SAL_CALL XMLSignature_NssImpl::supportsService(const OUString& rServiceName)
 {
-    const css::uno::Sequence<OUString> aServiceNames = getSupportedServiceNames();
+    const cpo::uno::Sequence<OUString> aServiceNames = getSupportedServiceNames();
     for (OUString const & rCurrentServiceName : aServiceNames)
     {
         if (rCurrentServiceName == rServiceName)
@@ -313,7 +314,7 @@ Sequence<OUString> SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_XMLSignature_get_implementation(uno::XComponentContext* /*pCtx*/,
-                                                        uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                                        cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new XMLSignature_NssImpl);
 }

@@ -267,7 +267,7 @@ public:
     /// Extracts base64 data inside begin/end markers.
     static std::string_view extractCertificate(std::string_view rCert);
     /// Takes a single CA certificate to add them to the list of trusted certificates.
-    static css::uno::Reference<css::security::XCertificate> addCertificate(const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator, const css::uno::Sequence<sal_Int8>& rCert);
+    static css::uno::Reference<css::security::XCertificate> addCertificate(const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator, const cpo::uno::Sequence<sal_Int8>& rCert);
     /// Takes a CA chain (multiple certificates in base64 from inside begin/end markers)
     /// to add them to the list of trusted certificates.
     static void addCertificates(std::string_view rCerts);

@@ -70,7 +70,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     rtl::Reference<SignatureCreatorImpl> xSignatureCreator(new SignatureCreatorImpl);
 
-    css::uno::Sequence<cpo::uno::Any> args
+    cpo::uno::Sequence<cpo::uno::Any> args
     {
         Any(OUString::number(nSecurityId)),
         Any(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),

@@ -1247,8 +1247,8 @@ void SAL_CALL SdStyleSheet::removeVetoableChangeListener( const OUString& , cons
 
 // XMultiPropertySet
 
-void SAL_CALL SdStyleSheet::setPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames,
-                                              const css::uno::Sequence<cpo::uno::Any>& aValues)
+void SAL_CALL SdStyleSheet::setPropertyValues(const cpo::uno::Sequence<OUString>& aPropertyNames,
+                                              const cpo::uno::Sequence<cpo::uno::Any>& aValues)
 {
     const sal_Int32 nCount = aPropertyNames.getLength();
 
@@ -1276,14 +1276,14 @@ void SAL_CALL SdStyleSheet::setPropertyValues(const css::uno::Sequence<OUString>
     Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
-css::uno::Sequence<cpo::uno::Any>
-SAL_CALL SdStyleSheet::getPropertyValues(const css::uno::Sequence<OUString>& aPropertyNames)
+cpo::uno::Sequence<cpo::uno::Any>
+SAL_CALL SdStyleSheet::getPropertyValues(const cpo::uno::Sequence<OUString>& aPropertyNames)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
 
     const sal_Int32 nCount = aPropertyNames.getLength();
-    css::uno::Sequence<cpo::uno::Any> aValues(nCount);
+    cpo::uno::Sequence<cpo::uno::Any> aValues(nCount);
     Any* pAny = aValues.getArray();
 
     for (sal_Int32 i = 0; i < nCount; ++i)
@@ -1292,9 +1292,9 @@ SAL_CALL SdStyleSheet::getPropertyValues(const css::uno::Sequence<OUString>& aPr
     return aValues;
 }
 
-void SAL_CALL SdStyleSheet::addPropertiesChangeListener(const css::uno::Sequence<OUString>&, const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
+void SAL_CALL SdStyleSheet::addPropertiesChangeListener(const cpo::uno::Sequence<OUString>&, const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
 void SAL_CALL SdStyleSheet::removePropertiesChangeListener(const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
-void SAL_CALL SdStyleSheet::firePropertiesChangeEvent(const css::uno::Sequence<OUString>&, const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
+void SAL_CALL SdStyleSheet::firePropertiesChangeEvent(const cpo::uno::Sequence<OUString>&, const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
 
 // XPropertyState
 

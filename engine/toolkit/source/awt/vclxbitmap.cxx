@@ -34,16 +34,16 @@ css::awt::Size VCLXBitmap::getSize()
     return aSize;
 }
 
-css::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB()
+cpo::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB()
 {
     std::scoped_lock aGuard( GetMutex() );
 
     SvMemoryStream aMem;
     WriteDIB(maBitmap.CreateColorBitmap(), aMem, false, true);
-    return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
+    return cpo::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
-css::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB()
+cpo::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB()
 {
     std::scoped_lock aGuard( GetMutex() );
 

@@ -315,10 +315,10 @@ void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType )
 
 // XFormulaTokens
 
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens()
+cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens()
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<sheet::FormulaToken> aSequence;
+    cpo::uno::Sequence<sheet::FormulaToken> aSequence;
     ScRangeData* pData = GetRangeData_Impl();
     if (pData && pDocShell)
     {
@@ -329,7 +329,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens()
     return aSequence;
 }
 
-void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens )
+void SAL_CALL ScNamedRangeObj::setTokens( const cpo::uno::Sequence<sheet::FormulaToken>& rTokens )
 {
     SolarMutexGuard aGuard;
     if( pDocShell )
@@ -417,7 +417,7 @@ bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
 {
     return {SCNAMEDRANGEOBJ_SERVICE, SCLINKTARGET_SERVICE};
 }
@@ -649,7 +649,7 @@ cpo::uno::Any SAL_CALL ScNamedRangesObj::getByName( const OUString& aName )
     return cpo::uno::Any(uno::Reference< sheet::XNamedRange >(xRange));
 }
 
-uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -658,7 +658,7 @@ uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
         if (pNames)
         {
             tools::Long nVisCount = getCount();            // names with lcl_UserVisibleName
-            uno::Sequence<OUString> aSeq(nVisCount);
+            cpo::uno::Sequence<OUString> aSeq(nVisCount);
             OUString* pAry = aSeq.getArray();
             sal_uInt16 nVisPos = 0;
             for (const auto& rName : *pNames)

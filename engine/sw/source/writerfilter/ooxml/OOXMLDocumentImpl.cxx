@@ -58,7 +58,7 @@ namespace writerfilter::ooxml
 OOXMLDocument::OOXMLDocument(OOXMLStream::Pointer_t pStream,
                                      uno::Reference<task::XStatusIndicator> xStatusIndicator,
                                      bool bSkipImages,
-                                     const uno::Sequence<beans::PropertyValue>& rDescriptor,
+                                     const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor,
                                      const rtl::Reference<oox::shape::ShapeFilterBase>& rxShapeFilterBase)
     : mpStream(std::move(pStream))
     , mxStatusIndicator(std::move(xStatusIndicator))
@@ -580,10 +580,10 @@ void OOXMLDocument::resolveCustomXmlStream(Stream & rStream)
     static const char sCustomType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
     static const char sCustomTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/customXml";
     bool bFound = false;
-    const uno::Sequence<uno::Sequence< beans::StringPair>> aSeqs = xRelationshipAccess->getAllRelationships();
+    const cpo::uno::Sequence<cpo::uno::Sequence< beans::StringPair>> aSeqs = xRelationshipAccess->getAllRelationships();
     std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomList;
     std::vector<uno::Reference<xml::dom::XDocument>> aCustomXmlDomPropsList;
-    for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+    for (const cpo::uno::Sequence<beans::StringPair>& aSeq : aSeqs)
     {
         for (const beans::StringPair& aPair : aSeq)
         {
@@ -647,9 +647,9 @@ void OOXMLDocument::resolveGlossaryStream(Stream & /*rStream*/)
         return;
 
 
-    const uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
-    std::vector< uno::Sequence<beans::NamedValue> > aGlossaryDomList;
-    for (const uno::Sequence< beans::StringPair >& aSeq : aSeqs)
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
+    std::vector< cpo::uno::Sequence<beans::NamedValue> > aGlossaryDomList;
+    for (const cpo::uno::Sequence< beans::StringPair >& aSeq : aSeqs)
     {
         comphelper::NamedValueCollection aRelDefinition;
         for (const auto& [name, value] : aSeq)
@@ -728,8 +728,8 @@ void OOXMLDocument::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStrea
         bool bFound = false;
         bool bHeaderFooterFound = false;
         OOXMLStream::StreamType_t streamType = OOXMLStream::StreamType_t::UNKNOWN;
-        const uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
-        for (const uno::Sequence< beans::StringPair >& aSeq : aSeqs)
+        const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >aSeqs = xRelationshipAccess->getAllRelationships();
+        for (const cpo::uno::Sequence< beans::StringPair >& aSeq : aSeqs)
         {
             for (const beans::StringPair& aPair : aSeq)
             {
@@ -809,7 +809,7 @@ const uno::Reference<xml::dom::XDocument>& OOXMLDocument::getGlossaryDocDom() co
     return mxGlossaryDocDom;
 }
 
-const uno::Sequence<uno::Sequence< beans::NamedValue> >& OOXMLDocument::getGlossaryDomList() const
+const cpo::uno::Sequence<cpo::uno::Sequence< beans::NamedValue> >& OOXMLDocument::getGlossaryDomList() const
 {
     return mxGlossaryDomList;
 }
@@ -841,7 +841,7 @@ const rtl::Reference<SwFmDrawPage>& OOXMLDocument::getDrawPage() const
     return mxDrawPage;
 }
 
-const uno::Sequence<beans::PropertyValue>& OOXMLDocument::getMediaDescriptor() const
+const cpo::uno::Sequence<beans::PropertyValue>& OOXMLDocument::getMediaDescriptor() const
 {
     return maMediaDescriptor;
 }
@@ -876,17 +876,17 @@ const uno::Reference<xml::dom::XDocument> & OOXMLDocument::getThemeDom() const
     return mxThemeDom;
 }
 
-const uno::Sequence<uno::Reference<xml::dom::XDocument> >& OOXMLDocument::getCustomXmlDomList( ) const
+const cpo::uno::Sequence<uno::Reference<xml::dom::XDocument> >& OOXMLDocument::getCustomXmlDomList( ) const
 {
     return mxCustomXmlDomList;
 }
 
-const uno::Sequence<uno::Reference<xml::dom::XDocument> >& OOXMLDocument::getCustomXmlDomPropsList( ) const
+const cpo::uno::Sequence<uno::Reference<xml::dom::XDocument> >& OOXMLDocument::getCustomXmlDomPropsList( ) const
 {
     return mxCustomXmlDomPropsList;
 }
 
-const uno::Sequence<beans::PropertyValue >& OOXMLDocument::getEmbeddingsList( ) const
+const cpo::uno::Sequence<beans::PropertyValue >& OOXMLDocument::getEmbeddingsList( ) const
 {
     return mxEmbeddingsList;
 }
@@ -909,7 +909,7 @@ OOXMLDocument *
 OOXMLDocumentFactory::createDocument
 (const OOXMLStream::Pointer_t& pStream,
  const uno::Reference<task::XStatusIndicator>& xStatusIndicator,
- bool mbSkipImages, const uno::Sequence<beans::PropertyValue>& rDescriptor)
+ bool mbSkipImages, const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     return new OOXMLDocument(pStream, xStatusIndicator, mbSkipImages, rDescriptor, nullptr);
 }

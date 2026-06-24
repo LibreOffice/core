@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace lang { class XSingleS
 namespace com { namespace sun { namespace star { namespace registry { class XRegistryKey; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
-namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
+namespace cpo::uno { template <class E> class Sequence; }
 
 #define COMPONENT_GETENV            "component_getImplementationEnvironment"
 #define COMPONENT_GETENVEXT         "component_getImplementationEnvironmentExt"
@@ -135,7 +135,7 @@ CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory >
 SAL_CALL createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
-    css::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+    cpo::uno::Sequence< ::rtl::OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount = NULL );
 
 /** Creates a single service factory which holds the instance created only once.
@@ -152,7 +152,7 @@ CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory > S
 createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
-    css::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+    cpo::uno::Sequence< ::rtl::OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount = NULL );
 
 /** Deprecated.  The type of the instantiate function used as argument of the create*Factory functions.
@@ -183,7 +183,7 @@ createSingleFactory(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
-    const css::uno::Sequence< ::rtl::OUString > & rServiceNames,
+    const cpo::uno::Sequence< ::rtl::OUString > & rServiceNames,
     rtl_ModuleCount * pModCount = NULL  );
 
 /** Deprecated.  Creates a single service factory which holds the instance created only once.
@@ -205,7 +205,7 @@ createOneInstanceFactory(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
     ComponentInstantiation pCreateFunction,
-    const css::uno::Sequence< ::rtl::OUString > & rServiceNames,
+    const cpo::uno::Sequence< ::rtl::OUString > & rServiceNames,
     rtl_ModuleCount * pModCount = NULL  );
 
 /** Deprecated.  Creates a single service factory based on a registry.

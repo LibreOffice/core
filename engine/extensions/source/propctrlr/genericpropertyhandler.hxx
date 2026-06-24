@@ -96,11 +96,11 @@ namespace pcr
         virtual css::beans::PropertyState                           SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual void                                                SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void                                                SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual css::uno::Sequence< css::beans::Property >
+        virtual cpo::uno::Sequence< css::beans::Property >
                                                                     SAL_CALL getSupportedProperties() override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                                                     SAL_CALL getSupersededProperties() override;
-        virtual css::uno::Sequence< OUString >                      SAL_CALL getActuatingProperties() override;
+        virtual cpo::uno::Sequence< OUString >                      SAL_CALL getActuatingProperties() override;
         virtual css::inspection::LineDescriptor                     SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual bool                                            SAL_CALL isComposable( const OUString& _rPropertyName ) override;
         virtual css::inspection::InteractiveSelectionResult
@@ -115,7 +115,7 @@ namespace pcr
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         /** ensures that ->m_aProperties is initialized
             @precond

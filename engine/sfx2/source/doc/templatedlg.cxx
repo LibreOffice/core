@@ -698,7 +698,7 @@ IMPL_LINK(SfxTemplateManagerDlg, CreateContextMenuHdl, ThumbnailViewItem*, pItem
 
 IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    uno::Sequence< PropertyValue > aArgs{
+    cpo::uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, true),
         comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG),
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr, UpdateDocMode::ACCORDING_TO_CONFIG),
@@ -721,7 +721,7 @@ IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, voi
 
 IMPL_LINK(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    uno::Sequence< PropertyValue > aArgs{
+    cpo::uno::Sequence< PropertyValue > aArgs{
         comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
         comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, MacroExecMode::USE_CONFIG),
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr, UpdateDocMode::ACCORDING_TO_CONFIG)
@@ -954,7 +954,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(std::u16string_view sCatego
     if ( nCode != ERRCODE_NONE )
         return;
 
-    const css::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
+    const cpo::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
 
     if (!aFiles.hasElements())
         return;
@@ -1239,7 +1239,7 @@ static std::vector<OUString> lcl_getAllFactoryURLs ()
 {
     SvtModuleOptions aModOpt;
     std::vector<OUString> aList;
-    const css::uno::Sequence<OUString> aServiceNames = aModOpt.GetAllServiceNames();
+    const cpo::uno::Sequence<OUString> aServiceNames = aModOpt.GetAllServiceNames();
 
     for( const auto& rServiceName : aServiceNames )
     {

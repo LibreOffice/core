@@ -51,7 +51,7 @@ namespace svx
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::form::runtime::FeatureState;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::UNO_QUERY_THROW;

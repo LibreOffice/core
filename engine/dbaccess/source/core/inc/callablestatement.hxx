@@ -37,8 +37,8 @@ namespace dbaccess
             :OPreparedStatement(_xConn, _xStatement){}
 
     // css::lang::XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::uno::XInterface
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -47,7 +47,7 @@ namespace dbaccess
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // css::sdbc::XOutParameters
         virtual void SAL_CALL registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) override;
@@ -63,7 +63,7 @@ namespace dbaccess
         virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) override;
         virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) override;
         virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
         virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;

@@ -664,7 +664,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
         //TODO/LATER: what about "bLink"?
 
-        uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
+        cpo::uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
                                                                                       aStrURL) };
 
         comphelper::EmbeddedObjectContainer aCnt( xStorage );

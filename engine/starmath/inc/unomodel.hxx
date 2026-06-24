@@ -65,22 +65,22 @@ public:
     virtual void SAL_CALL release(  ) noexcept override;
 
     //XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
     //XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XRenderable
-    virtual sal_Int32 SAL_CALL getRendererCount( const cpo::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
-    virtual void SAL_CALL render( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual sal_Int32 SAL_CALL getRendererCount( const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRenderer( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
+    virtual void SAL_CALL render( sal_Int32 nRenderer, const cpo::uno::Any& rSelection, const cpo::uno::Sequence< css::beans::PropertyValue >& rxOptions ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) override;
 

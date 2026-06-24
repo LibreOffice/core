@@ -310,7 +310,7 @@ static void
 addFile(struct DocumentMetadataAccess_Impl const & i_rImpl,
     uno::Reference<rdf::XURI> const& i_xType,
     OUString const & i_rPath,
-    const uno::Sequence < uno::Reference< rdf::XURI > > * i_pTypes)
+    const cpo::uno::Sequence < uno::Reference< rdf::XURI > > * i_pTypes)
 {
     try {
         const uno::Reference<rdf::XURI> xURI( getURIForStream(
@@ -359,7 +359,7 @@ addContentOrStylesFileImpl(struct DocumentMetadataAccess_Impl const & i_rImpl,
 static void
 addMetadataFileImpl(struct DocumentMetadataAccess_Impl const & i_rImpl,
     const OUString & i_rPath,
-    const uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
+    const cpo::uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
 {
     addFile(i_rImpl,
             getURI<rdf::URIs::PKG_METADATAFILE>(i_rImpl.m_xContext),
@@ -912,7 +912,7 @@ DocumentMetadataAccess::getElementByURI(
     return getElementByMetadataReference( beans::StringPair(path, idref) );
 }
 
-uno::Sequence<uno::Reference<rdf::XURI>> SAL_CALL
+cpo::uno::Sequence<uno::Reference<rdf::XURI>> SAL_CALL
 DocumentMetadataAccess::getMetadataGraphsWithType(const uno::Reference<rdf::XURI>& i_xType)
 {
     if (!i_xType.is())
@@ -927,7 +927,7 @@ DocumentMetadataAccess::getMetadataGraphsWithType(const uno::Reference<rdf::XURI
 
 uno::Reference<rdf::XURI> SAL_CALL
 DocumentMetadataAccess::addMetadataFile(const OUString & i_rFileName,
-    const uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
+    const cpo::uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
 {
     if (!isFileNameValid(i_rFileName)) {
         throw lang::IllegalArgumentException(
@@ -968,7 +968,7 @@ DocumentMetadataAccess::importMetadataFile(::sal_Int16 i_Format,
     const uno::Reference< io::XInputStream > & i_xInStream,
     const OUString & i_rFileName,
     const uno::Reference< rdf::XURI > & i_xBaseURI,
-    const uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
+    const cpo::uno::Sequence < uno::Reference< rdf::XURI > > & i_rTypes)
 {
     if (!isFileNameValid(i_rFileName)) {
         throw lang::IllegalArgumentException(
@@ -1210,7 +1210,7 @@ void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
 
     // export metadata streams
     try {
-        const uno::Sequence<uno::Reference<rdf::XURI> > graphs(
+        const cpo::uno::Sequence<uno::Reference<rdf::XURI> > graphs(
             m_pImpl->m_xRepository->getGraphNames());
         const sal_Int32 len( baseURI.getLength() );
         for (const uno::Reference<rdf::XURI>& xName : graphs) {
@@ -1252,7 +1252,7 @@ void SAL_CALL DocumentMetadataAccess::storeMetadataToStorage(
 
 void SAL_CALL
 DocumentMetadataAccess::loadMetadataFromMedium(
-    const uno::Sequence< beans::PropertyValue > & i_rMedium)
+    const cpo::uno::Sequence< beans::PropertyValue > & i_rMedium)
 {
     uno::Reference<io::XInputStream> xIn;
     comphelper::SequenceAsHashMap md(i_rMedium);
@@ -1310,7 +1310,7 @@ DocumentMetadataAccess::loadMetadataFromMedium(
 
 void SAL_CALL
 DocumentMetadataAccess::storeMetadataToMedium(
-    const uno::Sequence< beans::PropertyValue > & i_rMedium)
+    const cpo::uno::Sequence< beans::PropertyValue > & i_rMedium)
 {
     comphelper::SequenceAsHashMap md(i_rMedium);
     OUString URL;

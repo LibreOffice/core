@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertySetInfoChangeListener.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
@@ -91,7 +91,7 @@ namespace fileaccess {
             ListenerMap&& pListeners );
 
         void notifyPropertyChanged(
-            const css::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged ) const;
+            const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& seqChanged ) const;
     };
 
 

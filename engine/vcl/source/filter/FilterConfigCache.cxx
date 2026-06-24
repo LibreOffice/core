@@ -164,7 +164,7 @@ void FilterConfigCache::ImplInit()
             continue;
 
         xTypeSet->getPropertyValue(u"MediaType"_ustr) >>= aEntry.sMediaType;
-        css::uno::Sequence<OUString> tmp;
+        cpo::uno::Sequence<OUString> tmp;
         if (xTypeSet->getPropertyValue(u"Extensions"_ustr) >>= tmp)
             aEntry.lExtensionList = comphelper::sequenceToContainer<std::vector<OUString>>(tmp);
 

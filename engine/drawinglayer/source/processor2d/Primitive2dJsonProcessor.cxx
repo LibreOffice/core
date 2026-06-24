@@ -117,7 +117,7 @@ void Primitive2dJsonProcessor::writeGraphicBase64(tools::JsonWriter& rWriter,
 
         if (pMime)
         {
-            css::uno::Sequence<sal_Int8> aSequence(
+            cpo::uno::Sequence<sal_Int8> aSequence(
                 reinterpret_cast<const sal_Int8*>(aLink.GetData()), aLink.GetDataSize());
             OStringBuffer aBase64(pMime);
             comphelper::Base64::encode(aBase64, aSequence);
@@ -131,7 +131,7 @@ void Primitive2dJsonProcessor::writeGraphicBase64(tools::JsonWriter& rWriter,
     SvMemoryStream aStream;
     if (GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::PNG) == ERRCODE_NONE)
     {
-        css::uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aStream.GetData()),
+        cpo::uno::Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aStream.GetData()),
                                                aStream.Tell());
         OStringBuffer aBase64("data:image/png;base64,");
         comphelper::Base64::encode(aBase64, aSequence);

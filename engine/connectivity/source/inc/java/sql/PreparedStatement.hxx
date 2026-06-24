@@ -55,7 +55,7 @@ namespace connectivity
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XPreparedStatement
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(  ) override;
@@ -73,7 +73,7 @@ namespace connectivity
         virtual void SAL_CALL setFloat( sal_Int32 parameterIndex, float x ) override;
         virtual void SAL_CALL setDouble( sal_Int32 parameterIndex, double x ) override;
         virtual void SAL_CALL setString( sal_Int32 parameterIndex, const OUString& x ) override;
-        virtual void SAL_CALL setBytes( sal_Int32 parameterIndex, const css::uno::Sequence< sal_Int8 >& x ) override;
+        virtual void SAL_CALL setBytes( sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x ) override;
         virtual void SAL_CALL setDate( sal_Int32 parameterIndex, const css::util::Date& x ) override;
         virtual void SAL_CALL setTime( sal_Int32 parameterIndex, const css::util::Time& x ) override;
         virtual void SAL_CALL setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) override;
@@ -89,7 +89,7 @@ namespace connectivity
         // XPreparedBatchExecution
         virtual void SAL_CALL addBatch(  ) override;
         virtual void SAL_CALL clearBatch(  ) override;
-        virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
+        virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
         // XResultSetMetaDataSupplier
         virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
 

@@ -230,10 +230,10 @@ class FilterCache : public cppu::BaseMutex
         std::vector<OUString> m_lChangedContentHandlers;
 
         /// standard property names for filter config keyed by EReadOption
-        css::uno::Sequence< OUString > m_aStandardProps[4];
+        cpo::uno::Sequence< OUString > m_aStandardProps[4];
 
         /// type property names for filter config keyed by EReadOption
-        css::uno::Sequence< OUString > m_aTypeProps[4];
+        cpo::uno::Sequence< OUString > m_aTypeProps[4];
 
         /// readonly access to the module configuration of OOo
         css::uno::Reference< css::container::XNameAccess > m_xModuleCfg;
@@ -919,7 +919,7 @@ class FilterCache : public cppu::BaseMutex
 
             @return the converted flag field.
          */
-        static SfxFilterFlags impl_convertFlagNames2FlagField(const css::uno::Sequence< OUString >& lNames);
+        static SfxFilterFlags impl_convertFlagNames2FlagField(const cpo::uno::Sequence< OUString >& lNames);
 
 
         /** @short  convert a flag field value to its list representation of flag names.
@@ -930,7 +930,7 @@ class FilterCache : public cppu::BaseMutex
             @return [seq< string >]
                     the converted flag name list.
          */
-        static css::uno::Sequence< OUString > impl_convertFlagField2FlagNames(SfxFilterFlags nFlags);
+        static cpo::uno::Sequence< OUString > impl_convertFlagField2FlagNames(SfxFilterFlags nFlags);
 };
 
 FilterCache& GetTheFilterCache();

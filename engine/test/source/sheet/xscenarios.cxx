@@ -12,7 +12,7 @@
 #include <com/sun/star/sheet/XScenarios.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -25,8 +25,8 @@ void XScenarios::testAddNewByName()
 {
     uno::Reference<sheet::XScenarios> xScenarios(init(), UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddresses{ table::CellRangeAddress(0, 0, 0, 0,
-                                                                                        0) };
+    cpo::uno::Sequence<table::CellRangeAddress> aCellRangeAddresses{ table::CellRangeAddress(
+        0, 0, 0, 0, 0) };
     xScenarios->addNewByName(u"XScenarios2"_ustr, aCellRangeAddresses, u"new"_ustr);
     CPPUNIT_ASSERT_MESSAGE("Unable to add new XScenario",
                            xScenarios->hasByName(u"XScenarios2"_ustr));

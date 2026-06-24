@@ -146,9 +146,9 @@ void SdtHelper::loadPropertiesXMLs()
     // TODO: some other property items?
 
     // Add custom XMLs
-    uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmls
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmls
         = m_rDM_Impl.getDocumentReference()->getCustomXmlDomList();
-    uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmlProps
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmlProps
         = m_rDM_Impl.getDocumentReference()->getCustomXmlDomPropsList();
     if (aCustomXmls.getLength())
     {
@@ -328,7 +328,7 @@ void SdtHelper::createDropDownControl()
             u"Items"_ustr, cpo::uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
 
         // add it into document
-        m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());
+        m_rDM_Impl.appendTextContent(xControlModel, cpo::uno::Sequence<beans::PropertyValue>());
 
         m_bHasElements = true;
     }
@@ -351,7 +351,7 @@ void SdtHelper::createDropDownControl()
         // add it into document
         createControlShape(
             lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), aDefaultText, m_aDropDownItems),
-            xControlModel, uno::Sequence<beans::PropertyValue>());
+            xControlModel, cpo::uno::Sequence<beans::PropertyValue>());
     }
 
     // clean up
@@ -416,7 +416,7 @@ void SdtHelper::createPlainTextControl()
                  || prop.Name == "ooxml:CT_SdtPr_dataBinding" || prop.Name == "ooxml:CT_SdtPr_color"
                  || prop.Name == "ooxml:CT_SdtPr_appearance" || prop.Name == "ooxml:CT_SdtPr_text")
         {
-            uno::Sequence<beans::PropertyValue> aInternalGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aInternalGrabBag;
             prop.Value >>= aInternalGrabBag;
             for (const beans::PropertyValue& internalProp : aInternalGrabBag)
             {
@@ -532,7 +532,7 @@ void SdtHelper::createDateContentControl()
 
 void SdtHelper::createControlShape(awt::Size aSize,
                                    uno::Reference<awt::XControlModel> const& xControlModel,
-                                   const uno::Sequence<beans::PropertyValue>& rGrabBag)
+                                   const cpo::uno::Sequence<beans::PropertyValue>& rGrabBag)
 {
     uno::Reference<drawing::XControlShape> xControlShape(
         m_rDM_Impl.GetTextDocument()->createInstance(u"com.sun.star.drawing.ControlShape"_ustr),
@@ -548,7 +548,7 @@ void SdtHelper::createControlShape(awt::Size aSize,
         xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, cpo::uno::Any(rGrabBag));
 
     uno::Reference<text::XTextContent> xTextContent(xControlShape, uno::UNO_QUERY);
-    m_rDM_Impl.appendTextContent(xTextContent, uno::Sequence<beans::PropertyValue>());
+    m_rDM_Impl.appendTextContent(xTextContent, cpo::uno::Sequence<beans::PropertyValue>());
     m_bHasElements = true;
 }
 
@@ -557,9 +557,9 @@ void SdtHelper::appendToInteropGrabBag(const beans::PropertyValue& rValue)
     m_aGrabBag.push_back(rValue);
 }
 
-uno::Sequence<beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
+cpo::uno::Sequence<beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
 {
-    uno::Sequence<beans::PropertyValue> aRet = comphelper::containerToSequence(m_aGrabBag);
+    cpo::uno::Sequence<beans::PropertyValue> aRet = comphelper::containerToSequence(m_aGrabBag);
     m_aGrabBag.clear();
     return aRet;
 }

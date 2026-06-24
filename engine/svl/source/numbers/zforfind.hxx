@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_SOURCE_NUMBERS_ZFORFIND_HXX
 #define INCLUDED_SVL_SOURCE_NUMBERS_ZFORFIND_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/date.hxx>
@@ -167,7 +167,7 @@ private:
         @see IsAcceptedDatePattern()
      */
     sal_Int32   nAcceptedDatePattern;
-    css::uno::Sequence< OUString >  sDateAcceptancePatterns;
+    cpo::uno::Sequence< OUString >  sDateAcceptancePatterns;
 
     /** If input matched a date acceptance pattern that starts at input
         particle sStrArray[nDatePatternStart].

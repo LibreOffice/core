@@ -55,12 +55,12 @@ OUString GraphicExportFilter::getImplementationName()
 {
     return u"com.sun.star.comp.GraphicExportFilter"_ustr;
 }
-css::uno::Sequence< OUString > GraphicExportFilter::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > GraphicExportFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ExportFilter"_ustr };
 }
 
-void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::PropertyValue > & rProperties )
+void GraphicExportFilter::gatherProperties( const cpo::uno::Sequence< beans::PropertyValue > & rProperties )
 {
     OUString aInternalFilterName;
 
@@ -145,7 +145,7 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
     }
 }
 
-bool SAL_CALL GraphicExportFilter::filter( const uno::Sequence< beans::PropertyValue > & rDescriptor )
+bool SAL_CALL GraphicExportFilter::filter( const cpo::uno::Sequence< beans::PropertyValue > & rDescriptor )
 {
     gatherProperties(rDescriptor);
 
@@ -204,7 +204,7 @@ bool GraphicExportFilter::filterRenderDocument() const
 }
 
 bool GraphicExportFilter::filterExportShape(
-        const css::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
+        const cpo::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
         const css::uno::Reference< css::drawing::XShapes > & rxShapes,
         const css::uno::Reference< css::drawing::XShape > & rxShape ) const
 {
@@ -223,7 +223,7 @@ bool GraphicExportFilter::filterExportShape(
 
     // Need to replace the internal filter name with the short name
     // (extension).
-    uno::Sequence< beans::PropertyValue > aDescriptor( rDescriptor);
+    cpo::uno::Sequence< beans::PropertyValue > aDescriptor( rDescriptor);
     for (sal_Int32 i = 0; i < aDescriptor.getLength(); ++i)
     {
         if (aDescriptor[i].Name == "FilterName")
@@ -246,13 +246,13 @@ void SAL_CALL GraphicExportFilter::setSourceDocument( const uno::Reference< lang
     mxDocument = xDocument;
 }
 
-void SAL_CALL GraphicExportFilter::initialize( const uno::Sequence< cpo::uno::Any > & )
+void SAL_CALL GraphicExportFilter::initialize( const cpo::uno::Sequence< cpo::uno::Any > & )
 {
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_GraphicExportFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GraphicExportFilter(context));
 }

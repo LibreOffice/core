@@ -261,10 +261,10 @@ SwVbaOptions::getServiceImplName()
     return u"SwVbaOptions"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaOptions::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Options"_ustr
     };

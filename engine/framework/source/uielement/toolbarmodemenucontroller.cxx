@@ -61,7 +61,7 @@ bool SAL_CALL ToolbarModeMenuController::supportsService( const OUString& sServi
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ToolbarModeMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ToolbarModeMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -286,7 +286,7 @@ void SAL_CALL ToolbarModeMenuController::setPopupMenu( const Reference< css::awt
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ToolbarModeMenuController_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ToolbarModeMenuController(context));
 }

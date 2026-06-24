@@ -24,11 +24,11 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& aName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XExtendedFilterDetection
     virtual OUString SAL_CALL
-    detect(css::uno::Sequence<css::beans::PropertyValue>& lDescriptor) override;
+    detect(cpo::uno::Sequence<css::beans::PropertyValue>& lDescriptor) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

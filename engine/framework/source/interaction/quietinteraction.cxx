@@ -49,7 +49,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     // analyze the request
     // We need XAbort as possible continuation as minimum!
     // An optional filter selection we can handle too.
-    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
     css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
     css::uno::Reference< css::task::XInteractionApprove >                            xApprove;
     css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilter;

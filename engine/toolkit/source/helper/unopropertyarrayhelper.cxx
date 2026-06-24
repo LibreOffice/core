@@ -25,7 +25,7 @@
 
 
 
-UnoPropertyArrayHelper::UnoPropertyArrayHelper( const css::uno::Sequence<sal_Int32>& rIDs )
+UnoPropertyArrayHelper::UnoPropertyArrayHelper( const cpo::uno::Sequence<sal_Int32>& rIDs )
 {
     for ( const sal_Int32 nID : rIDs )
         maIDs.insert( nID );
@@ -60,7 +60,7 @@ bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropName, 
     return bValid;
 }
 
-css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties()
+cpo::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties()
 {
     // Sort by names ...
 
@@ -79,7 +79,7 @@ css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties
     }
 
     sal_uInt32 nProps = aSortedPropsIds.size();   // could be more now
-    css::uno::Sequence< css::beans::Property> aProps( nProps );
+    cpo::uno::Sequence< css::beans::Property> aProps( nProps );
     css::beans::Property* pProps = aProps.getArray();
 
     sal_uInt32 n = 0;
@@ -122,7 +122,7 @@ sal_Int32 UnoPropertyArrayHelper::getHandleByName( const OUString & rPropertyNam
     return nId ? nId : -1;
 }
 
-sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const css::uno::Sequence< OUString > & rPropNames )
+sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const cpo::uno::Sequence< OUString > & rPropNames )
 {
     const OUString* pNames = rPropNames.getConstArray();
     sal_Int32 nValues = rPropNames.getLength();

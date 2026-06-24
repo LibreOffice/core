@@ -46,6 +46,7 @@ using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 using namespace css::xml::sax;
+using namespace ::cpo::uno;
 
 namespace DOM
 {

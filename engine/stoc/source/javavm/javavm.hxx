@@ -65,7 +65,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize(css::uno::Sequence< cpo::uno::Any > const &
+    initialize(cpo::uno::Sequence< cpo::uno::Any > const &
                    rArguments) override;
 
     // XServiceInfo
@@ -74,12 +74,12 @@ public:
     virtual bool SAL_CALL
     supportsService(OUString const & rServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     // XJavaVM
     virtual cpo::uno::Any SAL_CALL
-    getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId) override;
+    getJavaVM(cpo::uno::Sequence< sal_Int8 > const & rProcessId) override;
 
     virtual bool SAL_CALL isVMStarted() override;
 

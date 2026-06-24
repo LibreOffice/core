@@ -12,7 +12,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -31,7 +31,7 @@ void XServiceInfo::testGetSupportedServiceNames()
 {
     uno::Reference<lang::XServiceInfo> xSI(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<OUString> aServiceNames = xSI->getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aServiceNames = xSI->getSupportedServiceNames();
     CPPUNIT_ASSERT(aServiceNames.hasElements());
 }
 

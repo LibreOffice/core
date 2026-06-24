@@ -299,7 +299,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComp
 
     OUString aDockWinArgName = "DockingWindow" + OUString::number( nIndex );
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
         aDockWinArgName, bVisible) };
 
     css::uno::Reference< css::frame::XDispatchHelper > xDispatcher = css::frame::DispatchHelper::create( rxContext );

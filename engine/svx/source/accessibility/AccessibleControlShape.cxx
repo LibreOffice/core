@@ -546,7 +546,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
     AccessibleControlShape* pCtlAccShape = GetLabeledByControlShape();
     if(pCtlAccShape)
     {
-        css::uno::Sequence<css::uno::Reference<XAccessible>> aSequence { pCtlAccShape };
+        cpo::uno::Sequence<css::uno::Reference<XAccessible>> aSequence { pCtlAccShape };
         if( getAccessibleRole() == AccessibleRole::RADIO_BUTTON )
         {
             pRelationSetHelper->AddRelation( AccessibleRelation( AccessibleRelationType_MEMBER_OF, aSequence ) );

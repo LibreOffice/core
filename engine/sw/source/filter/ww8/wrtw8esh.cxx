@@ -370,7 +370,7 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat)
 void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> const & xPropSet)
 {
     OUString sSelected;
-    uno::Sequence<OUString> aListItems;
+    cpo::uno::Sequence<OUString> aListItems;
     xPropSet->getPropertyValue(u"StringItemList"_ustr) >>= aListItems;
     if (aListItems.hasElements())
     {
@@ -417,7 +417,7 @@ void WW8Export::DoComboBox(const OUString &rName,
                              const OUString &rHelp,
                              const OUString &rToolTip,
                              const OUString &rSelected,
-                             const uno::Sequence<OUString> &rListItems)
+                             const cpo::uno::Sequence<OUString> &rListItems)
 {
     OutputField(nullptr, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
              FieldFlags::Start | FieldFlags::CmdStart);

@@ -72,9 +72,9 @@ private:
     void postError(css::task::InteractionClassification classif, const char* kind, ErrCode code, const OUString &message);
 
     bool handleIOException(const css::uno::Reference<css::task::XInteractionRequest>& rRequest);
-    bool handleNetworkException(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
-    bool handlePasswordRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
-    static bool handleFilterOptionsRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
+    bool handleNetworkException(const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
+    bool handlePasswordRequest(const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
+    static bool handleFilterOptionsRequest(const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
 
 public:
     void SetPassword(char const* pPassword);
@@ -90,9 +90,9 @@ public:
 
     virtual bool SAL_CALL supportsService(OUString const & rServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    virtual void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any > const & rArguments) override;
+    virtual void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any > const & rArguments) override;
 
     virtual void SAL_CALL handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override;
 

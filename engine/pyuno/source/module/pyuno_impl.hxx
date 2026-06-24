@@ -82,11 +82,11 @@ void log( RuntimeCargo *cargo, sal_Int32 level, std::u16string_view logString );
 void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
 void logCall( RuntimeCargo *cargo, const char *intro,
               void * ptr, std::u16string_view aFunctionName,
-              const css::uno::Sequence< cpo::uno::Any > & args );
+              const cpo::uno::Sequence< cpo::uno::Any > & args );
 void logReply( RuntimeCargo *cargo, const char *intro,
               void * ptr, std::u16string_view aFunctionName,
               const cpo::uno::Any &returnValue,
-              const css::uno::Sequence< cpo::uno::Any > & args );
+              const cpo::uno::Sequence< cpo::uno::Any > & args );
 void logException( RuntimeCargo *cargo, const char *intro,
                    void * ptr, std::u16string_view aFunctionName,
                    const void * data, const css::uno::Type & type );
@@ -112,7 +112,7 @@ typedef std::unordered_map
 typedef std::unordered_map
 <
     OUString,
-    css::uno::Sequence< sal_Int16 >
+    cpo::uno::Sequence< sal_Int16 >
 > MethodOutIndexMap;
 
 typedef std::unordered_set< PyRef , PyRef::Hash > ClassSet;
@@ -188,7 +188,7 @@ PyRef PyUNO_service_constructor_new(
 PyObject* PyUNO_Type_new (const char *typeName , css::uno::TypeClass t , const Runtime &r );
 PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r );
 PyObject* PyUNO_char_new (sal_Unicode c , const Runtime &r);
-PyObject *PyUNO_ByteSequence_new( const css::uno::Sequence< sal_Int8 > &, const Runtime &r );
+PyObject *PyUNO_ByteSequence_new( const cpo::uno::Sequence< sal_Int8 > &, const Runtime &r );
 
 PyRef getTypeClass( const Runtime &);
 PyRef getEnumClass( const Runtime &);
@@ -256,20 +256,20 @@ class Adapter : public cppu::WeakImplHelper<
 {
     PyRef mWrappedObject;
     PyInterpreterState *mInterpreter;  // interpreters don't seem to be refcounted !
-    css::uno::Sequence< css::uno::Type > mTypes;
+    cpo::uno::Sequence< css::uno::Type > mTypes;
     MethodOutIndexMap m_methodOutIndexMap;
 
 private:
-    css::uno::Sequence< sal_Int16 > getOutIndexes( const OUString & functionName );
+    cpo::uno::Sequence< sal_Int16 > getOutIndexes( const OUString & functionName );
 
 public:
 public:
     Adapter( PyRef obj,
-             const css::uno::Sequence< css::uno::Type > & types );
+             const cpo::uno::Sequence< css::uno::Type > & types );
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+    static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     const PyRef& getWrappedObject() const { return mWrappedObject; }
-    const css::uno::Sequence< css::uno::Type >& getWrappedTypes() const { return mTypes; }
+    const cpo::uno::Sequence< css::uno::Type >& getWrappedTypes() const { return mTypes; }
     virtual ~Adapter() override;
 
     // XInvocation
@@ -277,9 +277,9 @@ public:
            SAL_CALL getIntrospection(  ) override;
     virtual cpo::uno::Any SAL_CALL invoke(
         const OUString& aFunctionName,
-        const css::uno::Sequence< cpo::uno::Any >& aParams,
-        css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
+        const cpo::uno::Sequence< cpo::uno::Any >& aParams,
+        cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
 
     virtual void SAL_CALL setValue(
         const OUString& aPropertyName,
@@ -291,7 +291,7 @@ public:
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(
-        const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 };
 
 

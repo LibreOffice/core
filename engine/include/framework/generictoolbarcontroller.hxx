@@ -56,7 +56,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) GenericToolbarController final : public sv
         {
             css::uno::Reference< css::frame::XDispatch >     xDispatch;
             css::util::URL                                   aTargetURL;
-            css::uno::Sequence< css::beans::PropertyValue >  aArgs;
+            cpo::uno::Sequence< css::beans::PropertyValue >  aArgs;
         };
 
     private:

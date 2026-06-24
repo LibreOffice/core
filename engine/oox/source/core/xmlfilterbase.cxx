@@ -1146,12 +1146,12 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     if (!xRelations.is())
         return;
 
-    const uno::Sequence<uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
+    const cpo::uno::Sequence<cpo::uno::Sequence<beans::StringPair>> aSeqs = xRelations->getAllRelationships();
 
     std::vector<StreamDataSequence> aCustomFragments;
     std::vector<OUString> aCustomFragmentTypes;
     std::vector<OUString> aCustomFragmentTargets;
-    for (const uno::Sequence<beans::StringPair>& aSeq : aSeqs)
+    for (const cpo::uno::Sequence<beans::StringPair>& aSeq : aSeqs)
     {
         OUString sType;
         OUString sTarget;
@@ -1205,7 +1205,7 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     aGrabBagProperties[u"OOXCustomXmlProps"_ustr] <<= comphelper::containerToSequence(aCustomXmlDomPropsList);
 
     // Save the [Content_Types].xml after parsing.
-    uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypeInfo;
+    cpo::uno::Sequence<cpo::uno::Sequence<beans::StringPair>> aContentTypeInfo;
     uno::Reference<io::XInputStream> xInputStream = openInputStream(u"[Content_Types].xml"_ustr);
     if (xInputStream.is())
         aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, getComponentContext());
@@ -1225,14 +1225,14 @@ void XmlFilterBase::exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS
     if (!xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         return;
 
-    uno::Sequence<uno::Reference<xml::dom::XDocument>> customXmlDomlist;
-    uno::Sequence<uno::Reference<xml::dom::XDocument>> customXmlDomPropslist;
-    uno::Sequence<StreamDataSequence> customFragments;
-    uno::Sequence<OUString> customFragmentTypes;
-    uno::Sequence<OUString> customFragmentTargets;
-    uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypes;
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> customXmlDomlist;
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> customXmlDomPropslist;
+    cpo::uno::Sequence<StreamDataSequence> customFragments;
+    cpo::uno::Sequence<OUString> customFragmentTypes;
+    cpo::uno::Sequence<OUString> customFragmentTargets;
+    cpo::uno::Sequence<cpo::uno::Sequence<beans::StringPair>> aContentTypes;
 
-    uno::Sequence<beans::PropertyValue> propList;
+    cpo::uno::Sequence<beans::PropertyValue> propList;
     xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
     for (const auto& rProp : propList)
     {
@@ -1278,7 +1278,7 @@ void XmlFilterBase::exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS
             uno::Reference<xml::sax::XWriter> writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
             writer->setOutputStream(openFragmentStream(fragmentPath, u"application/xml"_ustr));
             serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-                                  uno::Sequence<beans::StringPair>());
+                                  cpo::uno::Sequence<beans::StringPair>());
         }
 
         if (customXmlDomProps.is())
@@ -1288,7 +1288,7 @@ void XmlFilterBase::exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS
             writer->setOutputStream(openFragmentStream("customXml/itemProps"+OUString::number(j+1)+".xml",
                                     u"application/vnd.openxmlformats-officedocument.customXmlProperties+xml"_ustr));
             serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
-                                  uno::Sequence<beans::StringPair>());
+                                  cpo::uno::Sequence<beans::StringPair>());
 
             // Adding itemprops's relationship entry to item.xml.rels file
             addRelation(openFragmentStream(fragmentPath, u"application/xml"_ustr),

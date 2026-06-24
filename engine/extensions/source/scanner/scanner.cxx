@@ -25,6 +25,7 @@
 
 using namespace css::uno;
 using namespace css::scanner;
+using namespace ::cpo::uno;
 
 Reference< XInterface > ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ )
 {
@@ -63,7 +64,7 @@ bool ScannerManager::supportsService(OUString const & ServiceName)
 }
 
 
-css::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.scanner.ScannerManager"_ustr };
 }
@@ -74,7 +75,7 @@ bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     return configureScannerAndScan( rContext, nullptr );
 }
 
-void SAL_CALL ScannerManager::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL ScannerManager::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))
@@ -83,7 +84,7 @@ void SAL_CALL ScannerManager::initialize(const css::uno::Sequence<cpo::uno::Any>
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_ScannerManager_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScannerManager());
 }

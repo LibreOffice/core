@@ -86,7 +86,7 @@ class BackingWindow : public InterimItemWindow
     void dispatchURL(const OUString& i_rURL, const OUString& i_rTarget = u"_default"_ustr,
                      const css::uno::Reference<css::frame::XDispatchProvider>& i_xProv
                      = css::uno::Reference<css::frame::XDispatchProvider>(),
-                     const css::uno::Sequence<css::beans::PropertyValue>& = css::uno::Sequence<
+                     const cpo::uno::Sequence<css::beans::PropertyValue>& = cpo::uno::Sequence<
                          css::beans::PropertyValue>());
 
     DECL_LINK(ToggleHdl, weld::Toggleable&, void);

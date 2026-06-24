@@ -187,7 +187,7 @@ bool SAL_CALL DataTable::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL DataTable::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL DataTable::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.DataTable"_ustr, u"com.sun.star.beans.PropertySet"_ustr,
              u"com.sun.star.drawing.FillProperties"_ustr,
@@ -203,7 +203,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(DataTable, DataTable_Base, ::property::OPropert
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_chart2_DataTable_get_implementation(
     css::uno::XComponentContext* /*pComponentContext*/,
-    uno::Sequence<cpo::uno::Any> const& /*rAny*/)
+    cpo::uno::Sequence<cpo::uno::Any> const& /*rAny*/)
 {
     return cppu::acquire(new ::chart::DataTable);
 }

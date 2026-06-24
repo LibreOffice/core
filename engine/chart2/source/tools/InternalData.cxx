@@ -37,7 +37,7 @@
 #include <iterator>
 #include <limits>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 using namespace ::com::sun::star;
 

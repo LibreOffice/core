@@ -473,7 +473,7 @@ bool lcl_HasTblHeaderFromStyle(const SwFrameFormat* pTableFormat,
             sStyleId = rElement.second.get<OUString>();
         else if (rElement.first == "TableStyleLook")
         {
-            for (const auto& rTblLook : rElement.second.get<uno::Sequence<beans::PropertyValue>>())
+            for (const auto& rTblLook : rElement.second.get<cpo::uno::Sequence<beans::PropertyValue>>())
             {
                 if (rTblLook.Name == "val")
                 {
@@ -939,7 +939,7 @@ void SdtBlockHelper::EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerialize
     clearGrabbagValues();
 }
 
-void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt,
+void SdtBlockHelper::GetSdtParamsFromGrabBag(const cpo::uno::Sequence<beans::PropertyValue>& aGrabBagSdt,
                                              const SwPosition* pStartPosition)
 {
     if (m_bStartedSdt)
@@ -956,7 +956,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
         {
             m_oSdtPrToken = FSNS(XML_w14, XML_checkbox);
-            uno::Sequence<beans::PropertyValue> aGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : aGrabBag)
             {
@@ -973,7 +973,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pDataBindingAttrs.is())
         {
-            uno::Sequence<beans::PropertyValue> aGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : aGrabBag)
             {
@@ -990,7 +990,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text")
         {
-            uno::Sequence<beans::PropertyValue> aGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
             if (aGrabBag.hasElements())
             {
@@ -1009,7 +1009,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPlaceholder_docPart")
         {
-            uno::Sequence<beans::PropertyValue> aGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : aGrabBag)
             {
@@ -1019,7 +1019,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
         }
         else if (aPropertyValue.Name == "ooxml:CT_SdtPr_color")
         {
-            uno::Sequence<beans::PropertyValue> aGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : aGrabBag)
             {
@@ -1075,7 +1075,7 @@ void SdtBlockHelper::GetSdtParamsFromGrabBag(const uno::Sequence<beans::Property
             else if (aPropertyValue.Name == "ooxml:CT_SdtPr_docPartList")
                 m_oSdtPrToken = FSNS(XML_w, XML_docPartList);
 
-            uno::Sequence<beans::PropertyValue> aGrabBag;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
             aPropertyValue.Value >>= aGrabBag;
             for (const auto& rProp : aGrabBag)
             {
@@ -2571,13 +2571,13 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
 
     if ( rInfos.eType == ww::eFORMDROPDOWN )
     {
-        uno::Sequence< OUString> vListEntries;
+        cpo::uno::Sequence< OUString> vListEntries;
         SwMarkName sName;
         OUString sSelected;
 
         params.extractParam( ODF_FORMDROPDOWN_LISTENTRY, vListEntries );
         if (vListEntries.getLength() > ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT)
-            vListEntries = uno::Sequence< OUString>(vListEntries.getArray(), ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT);
+            vListEntries = cpo::uno::Sequence< OUString>(vListEntries.getArray(), ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT);
 
         sName = params.getName();
         sal_Int32 nSelectedIndex = 0;
@@ -2618,7 +2618,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
 }
 
-void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt)
+void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OUString& sDateFormat, const OUString& sLang, const cpo::uno::Sequence<beans::PropertyValue>& aGrabBagSdt)
 {
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
@@ -2653,7 +2653,7 @@ void DocxAttributeOutput::WriteFormDateStart(const OUString& sFullDate, const OU
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
 }
 
-void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt)
+void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const cpo::uno::Sequence<beans::PropertyValue>& aGrabBagSdt)
 {
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
@@ -2677,7 +2677,7 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
         {
             if (rProp.Name == "ooxml:CT_SdtPr_dataBinding")
             {
-                uno::Sequence<beans::PropertyValue> aDataBindingProps;
+                cpo::uno::Sequence<beans::PropertyValue> aDataBindingProps;
                 rProp.Value >>= aDataBindingProps;
                 for (const auto& rDBProp : aDataBindingProps)
                 {
@@ -2928,7 +2928,7 @@ void DocxAttributeOutput::WriteContentControlEnd()
 void DocxAttributeOutput::WriteSdtDropDownStart(
         OUString const& rName,
         OUString const& rSelected,
-        uno::Sequence<OUString> const& rListItems)
+        cpo::uno::Sequence<OUString> const& rListItems)
 {
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
@@ -2961,7 +2961,7 @@ void DocxAttributeOutput::WriteSdtDropDownStart(
 }
 
 void DocxAttributeOutput::WriteSdtDropDownEnd(OUString const& rSelected,
-        uno::Sequence<OUString> const& rListItems)
+        cpo::uno::Sequence<OUString> const& rListItems)
 {
     // note: rSelected might be empty?
     sal_Int32 nId = comphelper::findValue(rListItems, rSelected);
@@ -3008,7 +3008,7 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
         OUString sLang;
         params.extractParam( ODF_FORMDATE_DATEFORMAT_LANGUAGE, sLang );
 
-        uno::Sequence<beans::PropertyValue> aSdtParams;
+        cpo::uno::Sequence<beans::PropertyValue> aSdtParams;
         params.extractParam(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, aSdtParams);
 
         WriteFormDateStart( sFullDate, sDateFormat, sLang, aSdtParams);
@@ -3602,9 +3602,9 @@ std::optional<sal_Int32> lclGetElementIdForName(std::u16string_view rName)
     return std::optional<sal_Int32>();
 }
 
-void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<css::beans::PropertyValue>& rElements, sax_fastparser::FSHelperPtr const & pSerializer)
+void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const cpo::uno::Sequence<css::beans::PropertyValue>& rElements, sax_fastparser::FSHelperPtr const & pSerializer)
 {
-    css::uno::Sequence<css::beans::PropertyValue> aAttributes;
+    cpo::uno::Sequence<css::beans::PropertyValue> aAttributes;
     rtl::Reference<FastAttributeList> pAttributes = FastSerializerHelper::createAttrList();
     sal_Int32 nElements = 0;
 
@@ -3649,7 +3649,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
 
         for (const auto& rElement : rElements)
         {
-            css::uno::Sequence<css::beans::PropertyValue> aSumElements;
+            cpo::uno::Sequence<css::beans::PropertyValue> aSumElements;
 
             std::optional<sal_Int32> aSubElementId = lclGetElementIdForName(rElement.Name);
             if(aSubElementId)
@@ -3765,7 +3765,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         std::optional<sal_Int32> aElementId = lclGetElementIdForName(prop.Name);
         if(aElementId)
         {
-            uno::Sequence<beans::PropertyValue> aGrabBagSeq;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             prop.Value >>= aGrabBagSeq;
             lclProcessRecursiveGrabBag(*aElementId, aGrabBagSeq, m_pSerializer);
         }
@@ -3842,7 +3842,7 @@ void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
         return;
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
-    uno::Sequence< beans::PropertyValue > aGrabBag;
+    cpo::uno::Sequence< beans::PropertyValue > aGrabBag;
     if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
     {
         xPropSet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
@@ -3883,8 +3883,8 @@ std::optional<sal_Int32> DocxAttributeOutput::GetGrabBagParaSdtPrToken()
     if (!rMap.contains(u"SdtPr"_ustr))
         return std::nullopt;
 
-    const uno::Sequence<beans::PropertyValue> aGrabBagSdt
-        = rMap[u"SdtPr"_ustr].get<uno::Sequence<beans::PropertyValue>>();
+    const cpo::uno::Sequence<beans::PropertyValue> aGrabBagSdt
+        = rMap[u"SdtPr"_ustr].get<cpo::uno::Sequence<beans::PropertyValue>>();
     m_aParagraphSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, pStartPosition);
 
     return m_aParagraphSdt.m_oSdtPrToken;
@@ -4961,7 +4961,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
         std::map<OUString, cpo::uno::Any>::const_iterator it = rGrabBag.find(u"CellCnfStyle"_ustr);
         if (it != rGrabBag.end())
         {
-            uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
+            cpo::uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< cpo::uno::Sequence<beans::PropertyValue> >();
             m_pTableStyleExport->CnfStyle(aAttributes);
         }
     }
@@ -5123,7 +5123,7 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t c
         std::map<OUString, cpo::uno::Any>::const_iterator it = rGrabBag.find(u"RowCnfStyle"_ustr);
         if (it != rGrabBag.end())
         {
-            uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< uno::Sequence<beans::PropertyValue> >();
+            cpo::uno::Sequence<beans::PropertyValue> aAttributes = it->second.get< cpo::uno::Sequence<beans::PropertyValue> >();
             m_pTableStyleExport->CnfStyle(aAttributes);
         }
     }
@@ -5226,9 +5226,9 @@ DocxStringTokenMap const aExceptionTokens[] = {
 void DocxAttributeOutput::LatentStyles()
 {
     // Do we have latent styles available?
-    uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     m_rExport.m_xTextDoc->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
-    uno::Sequence<beans::PropertyValue> aLatentStyles;
+    cpo::uno::Sequence<beans::PropertyValue> aLatentStyles;
     auto pProp = std::find_if(std::cbegin(aInteropGrabBag), std::cend(aInteropGrabBag),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "latentStyles"; });
     if (pProp != std::cend(aInteropGrabBag))
@@ -5238,7 +5238,7 @@ void DocxAttributeOutput::LatentStyles()
 
     // Extract default attributes first.
     rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList = FastSerializerHelper::createAttrList();
-    uno::Sequence<beans::PropertyValue> aLsdExceptions;
+    cpo::uno::Sequence<beans::PropertyValue> aLsdExceptions;
     for (const auto& rLatentStyle : aLatentStyles)
     {
         if (sal_Int32 nToken = DocxStringGetToken(aDefaultTokens, rLatentStyle.Name))
@@ -5254,7 +5254,7 @@ void DocxAttributeOutput::LatentStyles()
     {
         pAttributeList = FastSerializerHelper::createAttrList();
 
-        uno::Sequence<beans::PropertyValue> aAttributes;
+        cpo::uno::Sequence<beans::PropertyValue> aAttributes;
         rLsdException.Value >>= aAttributes;
         for (const auto& rAttribute : aAttributes)
             if (sal_Int32 nToken = DocxStringGetToken(aExceptionTokens, rAttribute.Name))
@@ -6081,7 +6081,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
         OUString sText = xPropertySet->getPropertyValue(u"Text"_ustr).get<OUString>();
-        const uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue(u"StringItemList"_ustr).get< uno::Sequence<OUString> >();
+        const cpo::uno::Sequence<OUString> aItems = xPropertySet->getPropertyValue(u"StringItemList"_ustr).get< cpo::uno::Sequence<OUString> >();
 
         // output component
 
@@ -6254,7 +6254,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OSL_ASSERT(pFlyFrameFormat);
 
     // get interoperability information about embedded objects
-    uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
+    cpo::uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
     m_rExport.m_xTextDoc->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
     auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),
         [](const beans::PropertyValue& rProp) { return rProp.Name == "EmbeddedObjects"; });
@@ -7156,7 +7156,7 @@ static bool lcl_sourceWasDocx(const MSWordExportBase& rExport)
 {
     if (!rExport.m_xTextDoc.is())
         return false;
-    uno::Sequence<beans::PropertyValue> aDocGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aDocGrabBag;
     rExport.m_xTextDoc->getPropertyValue(u"InteropGrabBag"_ustr) >>= aDocGrabBag;
     return aDocGrabBag.hasElements();
 }
@@ -7192,7 +7192,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         const SwNumRule* pRule = m_rExport.m_pStyles->GetSwNumRule(nSlot);
         pRule->GetGrabBagItem(aAny);
     }
-    const uno::Sequence<beans::PropertyValue> aGrabBag = aAny.get< uno::Sequence<beans::PropertyValue> >();
+    const cpo::uno::Sequence<beans::PropertyValue> aGrabBag = aAny.get< cpo::uno::Sequence<beans::PropertyValue> >();
 
     for (const auto& rProp : aGrabBag)
     {
@@ -7937,7 +7937,7 @@ bool DocxAttributeOutput::EmbedFontStyle(std::u16string_view name, int tag, Font
             buffer[ i ] ^= fontKey[ i ];
             buffer[ i + 16 ] ^= fontKey[ i ];
         }
-        xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), 32 ));
+        xOutStream->writeBytes( cpo::uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), 32 ));
         for(;;)
         {
             bool eof;
@@ -7957,7 +7957,7 @@ bool DocxAttributeOutput::EmbedFontStyle(std::u16string_view name, int tag, Font
             }
             if( readSize == 0 )
                 break;
-            xOutStream->writeBytes( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
+            xOutStream->writeBytes( cpo::uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( buffer ), readSize ));
         }
         xOutStream->closeOutput();
         EmbeddedFontRef ref;
@@ -10758,7 +10758,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         }
         else if (rGrabBagElement.first == "CharThemeFill")
         {
-            uno::Sequence<beans::PropertyValue> aGrabBagSeq;
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             rGrabBagElement.second >>= aGrabBagSeq;
 
             bool bAddedValAttr = false;
@@ -10799,13 +10799,13 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         }
         else if (rGrabBagElement.first == "SdtPr")
         {
-            const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
-                    rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
+            const cpo::uno::Sequence<beans::PropertyValue> aGrabBagSdt =
+                    rGrabBagElement.second.get< cpo::uno::Sequence<beans::PropertyValue> >();
             m_aParagraphSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, m_rExport.m_pCurPam->Start());
         }
         else if (rGrabBagElement.first == "ParaCnfStyle")
         {
-            uno::Sequence<beans::PropertyValue> aAttributes = rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
+            cpo::uno::Sequence<beans::PropertyValue> aAttributes = rGrabBagElement.second.get< cpo::uno::Sequence<beans::PropertyValue> >();
             m_pTableStyleExport->CnfStyle(aAttributes);
         }
         else if (rGrabBagElement.first == "ParaSdtEndBefore")
@@ -10918,8 +10918,8 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         }
         else if (rGrabBagElement.first == "SdtPr")
         {
-            const uno::Sequence<beans::PropertyValue> aGrabBagSdt =
-                    rGrabBagElement.second.get< uno::Sequence<beans::PropertyValue> >();
+            const cpo::uno::Sequence<beans::PropertyValue> aGrabBagSdt =
+                    rGrabBagElement.second.get< cpo::uno::Sequence<beans::PropertyValue> >();
             m_aRunSdt.GetSdtParamsFromGrabBag(aGrabBagSdt, nullptr);
         }
         else

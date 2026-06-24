@@ -37,7 +37,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"BibiliographicType"_ustr, text::BibliographyDataType::WWW),
         comphelper::makePropertyValue(u"Identifier"_ustr, u"AT"_ustr),
         comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr),
@@ -99,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
     createSwDoc();
 
     // When inserting a refmark with text:
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"TypeName"_ustr, cpo::uno::Any(u"SetRef"_ustr)),
         comphelper::makePropertyValue(
             u"Name"_ustr, cpo::uno::Any(u"ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"_ustr)),

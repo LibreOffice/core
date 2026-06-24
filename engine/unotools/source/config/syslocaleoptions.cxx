@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -83,7 +83,7 @@ public:
                                 SvtSysLocaleOptions_Impl();
     virtual                     ~SvtSysLocaleOptions_Impl() override;
 
-    virtual void                Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void                Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
             const OUString&     GetLocaleString() const
                                     { return m_aLocaleString; }

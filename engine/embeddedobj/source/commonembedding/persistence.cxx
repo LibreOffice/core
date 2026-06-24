@@ -65,10 +65,10 @@
 using namespace ::com::sun::star;
 
 
-uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence< beans::PropertyValue >& aMedDescr,
+cpo::uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr,
                                                             bool bCanUseDocumentBaseURL )
 {
-    uno::Sequence< beans::PropertyValue > aResult;
+    cpo::uno::Sequence< beans::PropertyValue > aResult;
     sal_Int32 nResLen = 0;
 
     for ( beans::PropertyValue const & prop : aMedDescr )
@@ -92,11 +92,11 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
 }
 
 
-static uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans::PropertyValue >& aOrig )
+static cpo::uno::Sequence< beans::PropertyValue > addAsTemplate( const cpo::uno::Sequence< beans::PropertyValue >& aOrig )
 {
     bool bAsTemplateSet = false;
     sal_Int32 nLength = aOrig.getLength();
-    uno::Sequence< beans::PropertyValue > aResult( aOrig );
+    cpo::uno::Sequence< beans::PropertyValue > aResult( aOrig );
 
     for ( sal_Int32 nInd = 0; nInd < nLength; nInd++ )
     {
@@ -131,7 +131,7 @@ static uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory( embed::StorageFactory::create(xContext) );
 
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTempStream),
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTempStream),
                                      cpo::uno::Any(embed::ElementModes::READWRITE) };
     uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
@@ -222,7 +222,7 @@ static void SetDocToEmbedded( const uno::Reference< frame::XModel >& rDocument, 
     if (!rDocument.is())
         return;
 
-    uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue(u"SetEmbedded"_ustr, true) };
+    cpo::uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue(u"SetEmbedded"_ustr, true) };
     rDocument->attachResource( OUString(), aSeq );
 
     if ( !aModuleName.isEmpty() )
@@ -397,7 +397,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
         return nullptr;
 
     sal_Int32 nLen = m_bLinkHasPassword ? 3 : 2;
-    uno::Sequence< beans::PropertyValue > aArgs( m_aDocMediaDescriptor.getLength() + nLen );
+    cpo::uno::Sequence< beans::PropertyValue > aArgs( m_aDocMediaDescriptor.getLength() + nLen );
     auto pArgs = aArgs.getArray();
 
     OUString sURL;
@@ -455,7 +455,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
         {
             // check if there is a password to cache
             uno::Reference< frame::XModel > xModel( xLoadable, uno::UNO_QUERY_THROW );
-            const uno::Sequence< beans::PropertyValue > aProps = xModel->getArgs();
+            const cpo::uno::Sequence< beans::PropertyValue > aProps = xModel->getArgs();
             for ( beans::PropertyValue const & prop : aProps )
                 if ( prop.Name == "Password" && ( prop.Value >>= m_aLinkPassword ) )
                 {
@@ -646,7 +646,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     if ( aFilterName.isEmpty() )
         throw io::IOException(u"No filter name provided / Wrong document service name"_ustr); // TODO:
 
-    uno::Sequence< beans::PropertyValue > aArgs{
+    cpo::uno::Sequence< beans::PropertyValue > aArgs{
         comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xTempOut),
         comphelper::makePropertyValue(u"DocumentBaseURL"_ustr, aBaseURL),
@@ -702,7 +702,7 @@ OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
         try
         {
             uno::Reference< frame::XModel > xParentModel( m_xClientSite->getComponent(), uno::UNO_QUERY_THROW );
-            const uno::Sequence< beans::PropertyValue > aModelProps = xParentModel->getArgs();
+            const cpo::uno::Sequence< beans::PropertyValue > aModelProps = xParentModel->getArgs();
             for ( beans::PropertyValue const & prop : aModelProps )
                 if ( prop.Name == "DocumentBaseURL" )
                 {
@@ -732,8 +732,8 @@ OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
 
 
 OUString OCommonEmbeddedObject::GetBaseURLFrom_Impl(
-                    const uno::Sequence< beans::PropertyValue >& lArguments,
-                    const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                    const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                    const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     OUString aBaseURL;
 
@@ -772,7 +772,7 @@ void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< docum
 
 namespace {
 
-beans::PropertyValue getStringPropertyValue(const uno::Sequence<beans::PropertyValue>& rProps,
+beans::PropertyValue getStringPropertyValue(const cpo::uno::Sequence<beans::PropertyValue>& rProps,
                                             const OUString& rName)
 {
     OUString aStr;
@@ -793,8 +793,8 @@ beans::PropertyValue getStringPropertyValue(const uno::Sequence<beans::PropertyV
 
 void OCommonEmbeddedObject::StoreDocToStorage_Impl(
     const uno::Reference<embed::XStorage>& xStorage,
-    const uno::Sequence<beans::PropertyValue>& rMediaArgs,
-    const uno::Sequence<beans::PropertyValue>& rObjArgs,
+    const cpo::uno::Sequence<beans::PropertyValue>& rMediaArgs,
+    const cpo::uno::Sequence<beans::PropertyValue>& rObjArgs,
     sal_Int32 nStorageFormat,
     const OUString& aHierarchName,
     bool bAttachToTheStorage )
@@ -825,7 +825,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         if ( aFilterName.isEmpty() )
             throw io::IOException(); // TODO:
 
-        uno::Sequence<beans::PropertyValue> aArgs{
+        cpo::uno::Sequence<beans::PropertyValue> aArgs{
             comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName),
             comphelper::makePropertyValue(u"HierarchicalDocumentName"_ustr, aHierarchName),
             comphelper::makePropertyValue(u"DocumentBaseURL"_ustr, aBaseURL),
@@ -847,7 +847,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         // open storage based on document temporary file for reading
         uno::Reference < lang::XSingleServiceFactory > xStorageFactory = embed::StorageFactory::create(m_xContext);
 
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTempIn) };
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTempIn) };
         uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
                                                             uno::UNO_QUERY_THROW );
 
@@ -858,7 +858,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
 
 
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDescr_Impl(
-                                        const uno::Sequence< beans::PropertyValue >& aMedDescr )
+                                        const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr )
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
@@ -898,7 +898,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
 
     SAL_WARN_IF( !m_bIsLinkURL, "embeddedobj.common", "The object is not a linked one!" );
 
-    uno::Sequence< beans::PropertyValue > aTempMediaDescr;
+    cpo::uno::Sequence< beans::PropertyValue > aTempMediaDescr;
 
     sal_Int32 nStorageFormat = SOFFICE_FILEFORMAT_CURRENT;
     try {
@@ -960,8 +960,8 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
-                    const uno::Sequence< beans::PropertyValue >& lArguments,
-                    const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                    const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                    const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     // the type of the object must be already set
     // a kind of typedetection should be done in the factory
@@ -1073,8 +1073,8 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         }
         else if ( prop.Name == "OutplaceFrameProperties" )
         {
-            uno::Sequence< cpo::uno::Any > aOutFrameProps;
-            uno::Sequence< beans::NamedValue > aOutFramePropsTyped;
+            cpo::uno::Sequence< cpo::uno::Any > aOutFrameProps;
+            cpo::uno::Sequence< beans::NamedValue > aOutFramePropsTyped;
             if ( prop.Value >>= aOutFrameProps )
             {
                 m_xDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
@@ -1171,8 +1171,8 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
 
 void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& lArguments,
-                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                            const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1297,8 +1297,8 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 
 void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& lArguments,
-                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                            const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1632,8 +1632,8 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         }
 
         aGuard.clear();
-        uno::Sequence<beans::PropertyValue> aEmpty;
-        uno::Sequence<beans::PropertyValue> aMediaArgs{ comphelper::makePropertyValue(
+        cpo::uno::Sequence<beans::PropertyValue> aEmpty;
+        cpo::uno::Sequence<beans::PropertyValue> aMediaArgs{ comphelper::makePropertyValue(
             u"DocumentBaseURL"_ustr, GetBaseURL_Impl()) };
         StoreDocToStorage_Impl( m_xObjectStorage, aMediaArgs, aEmpty, nStorageFormat, m_aEntryName, true );
         aGuard.reset();
@@ -1670,8 +1670,8 @@ bool SAL_CALL OCommonEmbeddedObject::isReadonly()
 
 
 void SAL_CALL OCommonEmbeddedObject::reload(
-                const uno::Sequence< beans::PropertyValue >& lArguments,
-                const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                const cpo::uno::Sequence< beans::PropertyValue >& lArguments,
+                const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     // TODO: use lObjArgs
     // for now this method is used only to switch readonly state
@@ -1728,7 +1728,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
                 m_aLinkFilterName = aNewLinkFilter;
             else
             {
-                uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                cpo::uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
                     u"URL"_ustr, m_aLinkURL) };
                 m_aLinkFilterName = aHelper.UpdateMediaDescriptorWithFilterName( aArgs, false );
             }
@@ -1736,7 +1736,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
 
         if ( aOldLinkFilter != m_aLinkFilterName )
         {
-            uno::Sequence< beans::NamedValue > aObject = aHelper.GetObjectPropsByFilter( m_aLinkFilterName );
+            cpo::uno::Sequence< beans::NamedValue > aObject = aHelper.GetObjectPropsByFilter( m_aLinkFilterName );
 
             // TODO/LATER: probably the document holder could be cleaned explicitly as in the destructor
             m_xDocHolder.clear();

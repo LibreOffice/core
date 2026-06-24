@@ -51,9 +51,9 @@ bool OpenCLConfig::operator!= (const OpenCLConfig& r) const
 
 namespace {
 
-css::uno::Sequence<OUString> SetOfImplMatcherToStringSequence(const OpenCLConfig::ImplMatcherSet& rSet)
+cpo::uno::Sequence<OUString> SetOfImplMatcherToStringSequence(const OpenCLConfig::ImplMatcherSet& rSet)
 {
-    css::uno::Sequence<OUString> result(rSet.size());
+    cpo::uno::Sequence<OUString> result(rSet.size());
     auto resultRange = asNonConstRange(result);
     size_t n(0);
     for (const auto& rItem : rSet)
@@ -94,7 +94,7 @@ OUString getToken(std::u16string_view string, sal_Int32& index)
     return result.makeStringAndClear();
 }
 
-OpenCLConfig::ImplMatcherSet StringSequenceToSetOfImplMatcher(const css::uno::Sequence<OUString>& rSequence)
+OpenCLConfig::ImplMatcherSet StringSequenceToSetOfImplMatcher(const cpo::uno::Sequence<OUString>& rSequence)
 {
     OpenCLConfig::ImplMatcherSet result;
 

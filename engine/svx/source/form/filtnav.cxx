@@ -83,7 +83,7 @@ namespace svxform
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
 
 
 OFilterItemExchange::OFilterItemExchange()

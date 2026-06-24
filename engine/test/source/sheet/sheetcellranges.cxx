@@ -15,7 +15,7 @@
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <cppunit/TestAssert.h>
@@ -32,7 +32,7 @@ void SheetCellRanges::testSheetCellRangesProperties()
     OUString propName;
     cpo::uno::Any aNewValue;
 
-    uno::Sequence<beans::PropertyValue> aPropValue{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> aPropValue{ comphelper::makePropertyValue(
         u"StyleName"_ustr, u"Result2"_ustr) };
 
     propName = u"ConditionalFormat"_ustr;

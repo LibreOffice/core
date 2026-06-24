@@ -19,7 +19,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart {
 
-ChartToolbarController::ChartToolbarController(const css::uno::Sequence<cpo::uno::Any>& rProperties)
+ChartToolbarController::ChartToolbarController(const cpo::uno::Sequence<cpo::uno::Any>& rProperties)
 {
     for (const auto& rProperty : rProperties)
     {
@@ -57,7 +57,7 @@ void ChartToolbarController::click()
 
     css::util::URL aURL;
     aURL.Path = u"FormatSelection"_ustr;
-    xDispatch->dispatch(aURL, css::uno::Sequence<css::beans::PropertyValue>());
+    xDispatch->dispatch(aURL, cpo::uno::Sequence<css::beans::PropertyValue>());
 }
 
 void ChartToolbarController::doubleClick()
@@ -86,7 +86,7 @@ void ChartToolbarController::disposing(const css::lang::EventObject& /*rSource*/
 {
 }
 
-void ChartToolbarController::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rAny*/)
+void ChartToolbarController::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rAny*/)
 {
 }
 
@@ -105,7 +105,7 @@ bool ChartToolbarController::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> ChartToolbarController::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ChartToolbarController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -113,7 +113,7 @@ css::uno::Sequence<OUString> ChartToolbarController::getSupportedServiceNames()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-org_libreoffice_chart2_Chart2ToolboxController(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const & rProperties)
+org_libreoffice_chart2_Chart2ToolboxController(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const & rProperties)
 {
     return cppu::acquire(new ::chart::ChartToolbarController(rProperties));
 }

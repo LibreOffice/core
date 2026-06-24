@@ -1823,7 +1823,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
 
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
             { "OutputStream", cpo::uno::Any(xOutputStream) },
             { "FilterName", cpo::uno::Any(u"SVM"_ustr) }
         }));
@@ -2011,7 +2011,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDefaultsOfOutlineNumbering)
     css::lang::Locale alocale;
     alocale.Language = u"en"_ustr;
     alocale.Country = u"US"_ustr;
-    const uno::Sequence<beans::PropertyValues> aPropVal(xDefNum->getDefaultContinuousNumberingLevels(alocale));
+    const cpo::uno::Sequence<beans::PropertyValues> aPropVal(xDefNum->getDefaultContinuousNumberingLevels(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPropVal.getLength());
     for(const auto& rPropValues : aPropVal)
     {
@@ -2042,7 +2042,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDeleteTableRedlines)
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
-    uno::Sequence<beans::PropertyValue> aDescriptor;
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor;
     SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(u"A1"_ustr))), u"TableCellInsert", aDescriptor);
     SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(u"B1"_ustr))), u"TableCellInsert", aDescriptor);
     SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(u"C1"_ustr))), u"TableCellInsert", aDescriptor);
@@ -2081,12 +2081,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testXFlatParagraph)
     uno::Reference<text::XFlatParagraph> xFlatPara4(xFPIterator->getParaBefore(xFlatPara3));
     CPPUNIT_ASSERT_EQUAL(xFlatPara2->getText(), xFlatPara4->getText());
     //changing the attributes of last para
-    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
          { "CharWeight", cpo::uno::Any(css::awt::FontWeight::BOLD) }
     }));
     xFlatPara3->changeAttributes(sal_Int32(0), sal_Int32(5), aDescriptor);
     //checking Language Portions
-    uno::Sequence<::sal_Int32> aLangPortions(xFlatPara4->getLanguagePortions());
+    cpo::uno::Sequence<::sal_Int32> aLangPortions(xFlatPara4->getLanguagePortions());
     CPPUNIT_ASSERT(!aLangPortions.hasElements());
     //examining Language of text
     css::lang::Locale alocale = xFlatPara4->getLanguageOfText(sal_Int32(0), sal_Int32(4));
@@ -2104,14 +2104,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf81995)
     css::lang::Locale alocale;
     alocale.Language = u"en"_ustr;
     alocale.Country = u"US"_ustr;
-    const uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(alocale));
+    const cpo::uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aIndexAccess.getLength());
     for(const auto& rIndexAccess : aIndexAccess)
     {
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rIndexAccess->getCount());
         for(int j=0;j<rIndexAccess->getCount();j++)
         {
-            uno::Sequence<beans::PropertyValue> aProps;
+            cpo::uno::Sequence<beans::PropertyValue> aProps;
             rIndexAccess->getByIndex(j) >>= aProps;
             CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aProps.getLength());
             for (const beans::PropertyValue& rProp : aProps)

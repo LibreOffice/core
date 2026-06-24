@@ -40,11 +40,11 @@
 using namespace ::com::sun::star;
 
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitNew(
-                                            const uno::Sequence< sal_Int8 >& aClassID,
+                                            const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
-                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
@@ -72,15 +72,15 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         return xEmbCreator->createInstanceInitNew( aClassID, aClassName, xStorage, sEntName, lObjArgs );
 
     uno::Reference < embed::XEmbedObjectFactory > xEmbFact( xFact, uno::UNO_QUERY_THROW );
-    return xEmbFact->createInstanceUserInit( aClassID, aClassName, xStorage, sEntName, embed::EntryInitModes::TRUNCATE_INIT, uno::Sequence < beans::PropertyValue >(), lObjArgs);
+    return xEmbFact->createInstanceUserInit( aClassID, aClassName, xStorage, sEntName, embed::EntryInitModes::TRUNCATE_INIT, cpo::uno::Sequence < beans::PropertyValue >(), lObjArgs);
 }
 
 
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
-                                                                    const uno::Sequence< beans::PropertyValue >& aMedDescr,
-                                                                    const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                                                    const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr,
+                                                                    const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( u"No parent storage is provided!"_ustr,
@@ -180,7 +180,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
         uno::Reference < embed::XEmbedObjectFactory > xEmbFact( xFact, uno::UNO_QUERY );
         if ( xEmbFact.is() )
-            return xEmbFact->createInstanceUserInit( uno::Sequence< sal_Int8 >(), OUString(), xStorage, sEntName, embed::EntryInitModes::DEFAULT_INIT, aMedDescr, lObjArgs);
+            return xEmbFact->createInstanceUserInit( cpo::uno::Sequence< sal_Int8 >(), OUString(), xStorage, sEntName, embed::EntryInitModes::DEFAULT_INIT, aMedDescr, lObjArgs);
     }
 
     // the default object should be created, it will allow to store the contents on the next saving
@@ -241,8 +241,8 @@ static OUString HandleFilter(const OUString& rFilter)
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
-        const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-        const uno::Sequence< beans::PropertyValue >& lObjArgs )
+        const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+        const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
@@ -259,7 +259,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                             2 );
 
     uno::Reference< uno::XInterface > xResult;
-    uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
+    cpo::uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
     // check if there is FilterName
     OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, false );
@@ -299,13 +299,13 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
 
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceUserInit(
-        const uno::Sequence< sal_Int8 >& aClassID,
+        const cpo::uno::Sequence< sal_Int8 >& aClassID,
         const OUString& sClassName,
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
         sal_Int32 nEntryConnectionMode,
-        const uno::Sequence< beans::PropertyValue >& aArgs,
-        const uno::Sequence< beans::PropertyValue >& aObjectArgs )
+        const cpo::uno::Sequence< beans::PropertyValue >& aArgs,
+        const cpo::uno::Sequence< beans::PropertyValue >& aObjectArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
@@ -337,15 +337,15 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
-                                            const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                            const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+                                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
 
     uno::Reference< uno::XInterface > xResult;
 
-    uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
+    cpo::uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
     // check if there is URL, URL must exist
     OUString aURL;
@@ -411,14 +411,14 @@ bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& Service
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.EmbeddedObjectCreator"_ustr, u"com.sun.star.comp.embed.EmbeddedObjectCreator"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_UNOEmbeddedObjectCreator_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UNOEmbeddedObjectCreator(context));
 }

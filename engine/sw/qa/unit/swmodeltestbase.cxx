@@ -46,10 +46,10 @@ void SwModelTestBase::paste(std::u16string_view aFilename, const OUString& aInst
         m_directories.getURLFromSrc(u"/sw/qa/extras/") + aFilename, StreamMode::STD_READ);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, pStream->GetError());
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
-                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
-                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
-                                                             xTextRange) };
+    cpo::uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                                    comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                                    comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                                  xTextRange) };
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 }
 
@@ -245,7 +245,7 @@ sal_Int16 SwModelTestBase::getNumberingTypeOfParagraph(int nPara)
         properties->getPropertyValue(u"NumberingLevel"_ustr) >>= nNumberingLevel;
         if (nNumberingLevel >= 0 && nNumberingLevel < xLevels->getCount())
         {
-            uno::Sequence<beans::PropertyValue> aPropertyValue;
+            cpo::uno::Sequence<beans::PropertyValue> aPropertyValue;
             xLevels->getByIndex(nNumberingLevel) >>= aPropertyValue;
             auto pProp = std::find_if(
                 std::cbegin(aPropertyValue), std::cend(aPropertyValue),

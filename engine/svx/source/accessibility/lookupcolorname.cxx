@@ -25,7 +25,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>
@@ -52,7 +52,7 @@ private:
 
 ColorNameMap::ColorNameMap()
 {
-    css::uno::Sequence<OUString> aNames;
+    cpo::uno::Sequence<OUString> aNames;
     css::uno::Reference<css::container::XNameAccess> xNA;
 
     try

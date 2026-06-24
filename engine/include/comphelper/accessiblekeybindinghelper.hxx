@@ -41,7 +41,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OAccessibleKeyBindingHelper final : public OAccessibleKeyBindingHelper_Base
     {
     private:
-        typedef ::std::vector< css::uno::Sequence< css::awt::KeyStroke > > KeyBindings;
+        typedef ::std::vector< cpo::uno::Sequence< css::awt::KeyStroke > > KeyBindings;
         KeyBindings     m_aKeyBindings;
         std::mutex      m_aMutex;
 
@@ -51,13 +51,13 @@ namespace comphelper
         OAccessibleKeyBindingHelper();
 
         /// @throws css::uno::RuntimeException
-        void AddKeyBinding( const css::uno::Sequence< css::awt::KeyStroke >& rKeyBinding );
+        void AddKeyBinding( const cpo::uno::Sequence< css::awt::KeyStroke >& rKeyBinding );
         /// @throws css::uno::RuntimeException
         void AddKeyBinding( const css::awt::KeyStroke& rKeyStroke );
 
         // XAccessibleKeyBinding
         virtual sal_Int32 SAL_CALL getAccessibleKeyBindingCount() override;
-        virtual css::uno::Sequence< css::awt::KeyStroke > SAL_CALL getAccessibleKeyBinding( sal_Int32 nIndex ) override;
+        virtual cpo::uno::Sequence< css::awt::KeyStroke > SAL_CALL getAccessibleKeyBinding( sal_Int32 nIndex ) override;
     };
 
 

@@ -85,9 +85,9 @@ public:
         const css::uno::Reference< css::chart2::XChartType >& aChartType ) override;
     virtual void SAL_CALL removeChartType(
         const css::uno::Reference< css::chart2::XChartType >& aChartType ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > SAL_CALL getChartTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > SAL_CALL getChartTypes() override;
     virtual void SAL_CALL setChartTypes(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aChartTypes ) final override;
+        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aChartTypes ) final override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(

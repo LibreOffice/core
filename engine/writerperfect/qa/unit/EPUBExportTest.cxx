@@ -50,7 +50,7 @@ public:
 
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
     void createDoc(std::u16string_view rFile,
-                   const uno::Sequence<beans::PropertyValue>& rFilterData);
+                   const cpo::uno::Sequence<beans::PropertyValue>& rFilterData);
     /// Parses a CSS representation of the stream named rName and returns it.
     std::map<OUString, std::vector<OUString>> parseCss(const OUString& rName);
     /// Looks up a key of a class in rCss.
@@ -67,7 +67,7 @@ void EPUBExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 }
 
 void EPUBExportTest::createDoc(std::u16string_view rFile,
-                               const uno::Sequence<beans::PropertyValue>& rFilterData)
+                               const cpo::uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     // Import the bugdoc and export as EPUB.
     loadFromFile(rFile);
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMimetype)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUB2)
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { // Explicitly request EPUB2.
           { "EPUBVersion", cpo::uno::Any(static_cast<sal_Int32>(20)) } }));
     createDoc(u"hello.fodt", aFilterData);
@@ -192,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUB2)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayout)
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { // Explicitly request fixed layout.
           { "EPUBLayoutMethod",
             cpo::uno::Any(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED)) } }));
@@ -218,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayoutOption)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayoutImplicitBreak)
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { // Explicitly request fixed layout.
           { "EPUBLayoutMethod",
             cpo::uno::Any(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED)) } }));
@@ -239,7 +239,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testEPUBFixedLayoutImplicitBreak)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPageBreakSplit)
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { // Explicitly request split on page break (instead of on heading).
           { "EPUBSplitMethod",
             cpo::uno::Any(static_cast<sal_Int32>(libepubgen::EPUB_SPLIT_METHOD_PAGE_BREAK)) } }));
@@ -312,7 +312,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMetaXMP)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMetaAPI)
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "RVNGIdentifier", cpo::uno::Any(u"deadc0de-e394-4cd6-9b83-7172794612e5"_ustr) },
           { "RVNGTitle", cpo::uno::Any(u"unknown title from api"_ustr) },
           { "RVNGInitialCreator", cpo::uno::Any(u"unknown author from api"_ustr) },
@@ -335,7 +335,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMetaAPI)
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testCoverImage)
 {
     OUString aCoverURL = createFileURL(u"meta.cover-image.png");
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "RVNGCoverImage", cpo::uno::Any(aCoverURL) } }));
     createDoc(u"hello.fodt", aFilterData);
     xmlDocUniquePtr mpXmlDoc = parseExport(u"OEBPS/content.opf"_ustr);
@@ -731,7 +731,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopupAPI)
 {
     // Make sure that the popup works with data from a media directory.
     OUString aMediaDir = createFileURL(u"popup");
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "RVNGMediaDir", cpo::uno::Any(aMediaDir) } }));
     createDoc(u"popup-api.odt", aFilterData);
 
@@ -748,7 +748,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPopupAPI)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPageSize)
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "EPUBLayoutMethod",
             cpo::uno::Any(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED)) } }));
     createDoc(u"hello.fodt", aFilterData);
@@ -767,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testPageSize)
 
 CPPUNIT_TEST_FIXTURE(EPUBExportTest, testSVG)
 {
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
         { { "EPUBLayoutMethod",
             cpo::uno::Any(static_cast<sal_Int32>(libepubgen::EPUB_LAYOUT_METHOD_FIXED)) } }));
     createDoc(u"hello.fodt", aFilterData);

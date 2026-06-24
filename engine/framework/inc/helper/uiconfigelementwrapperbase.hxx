@@ -67,7 +67,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XComponent
         virtual  void SAL_CALL dispose() override = 0;
@@ -75,7 +75,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
         virtual  void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XInitialization
-        virtual  void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual  void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElementSettings
         virtual  void SAL_CALL updateSettings() override = 0;
@@ -119,7 +119,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
 
         virtual  void impl_fillNewData();
 
-        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         sal_Int16                                                                               m_nType;
         bool                                                                                    m_bPersistent : 1,

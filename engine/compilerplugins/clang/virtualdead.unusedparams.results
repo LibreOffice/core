@@ -47,10 +47,10 @@ canvas/inc/base/graphicdevicebase.hxx:318
     void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
     00
 canvas/inc/base/integerbitmapbase.hxx:57
-    void canvas::IntegerBitmapBase::setData(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
+    void canvas::IntegerBitmapBase::setData(const class cpo::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
     011
 canvas/inc/base/integerbitmapbase.hxx:71
-    void canvas::IntegerBitmapBase::setPixel(const class com::sun::star::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
+    void canvas::IntegerBitmapBase::setPixel(const class cpo::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
     011
 desktop/source/deployment/registry/inc/dp_backend.h:80
     void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
@@ -155,13 +155,13 @@ sd/source/console/PresenterScrollBar.hxx:179
     double sdext::presenter::PresenterScrollBar::GetMinor(const double,const double,)const
     10
 sdext/source/pdfimport/inc/contentsink.hxx:151
-    void pdfi::ContentSink::drawMask(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
+    void pdfi::ContentSink::drawMask(const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     10
 sdext/source/pdfimport/inc/contentsink.hxx:161
-    void pdfi::ContentSink::drawColorMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<class cpo::uno::Any> &,)
+    void pdfi::ContentSink::drawColorMaskedImage(const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class cpo::uno::Sequence<class cpo::uno::Any> &,)
     10
 sdext/source/pdfimport/inc/contentsink.hxx:165
-    void pdfi::ContentSink::drawMaskedImage(const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
+    void pdfi::ContentSink::drawMaskedImage(const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,_Bool,)
     110
 sdext/source/pdfimport/inc/treevisiting.hxx:46
     void pdfi::ElementTreeVisitor::visit(struct pdfi::HyperlinkElement &,const class __gnu_debug::_Safe_iterator<struct std::__cxx1998::_List_const_iterator<class std::unique_ptr<struct pdfi::Element> >, class std::list<class std::unique_ptr<struct pdfi::Element> > > &,)

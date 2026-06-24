@@ -104,9 +104,9 @@ class Content : public ::ucbhelper::ContentImplHelper,
     void initOptsCacheLifeTime();
 
 private:
-    virtual css::uno::Sequence< css::beans::Property >
+    virtual cpo::uno::Sequence< css::beans::Property >
     getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
-    virtual css::uno::Sequence< css::ucb::CommandInfo >
+    virtual cpo::uno::Sequence< css::ucb::CommandInfo >
     getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
     virtual OUString getParentURL() override;
 
@@ -115,12 +115,12 @@ private:
 
     /// @throws css::uno::Exception
     css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties,
+    getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /// @throws css::uno::Exception
-    css::uno::Sequence< cpo::uno::Any >
-    setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+    cpo::uno::Sequence< cpo::uno::Any >
+    setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     typedef rtl::Reference< Content > ContentRef;
@@ -230,14 +230,14 @@ public:
         noexcept override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     // XContent
@@ -266,7 +266,7 @@ public:
 
 
     // XContentCreator
-    virtual css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
+    virtual cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
    queryCreatableContentsInfo() override;
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
     createNewContent( const css::ucb::ContentInfo& Info ) override;
@@ -280,7 +280,7 @@ public:
     // Called from resultset data supplier.
     static css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rContext,
-                       const css::uno::Sequence< css::beans::Property >& rProperties,
+                       const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
                        const OUString& rContentId );

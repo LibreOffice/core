@@ -50,7 +50,7 @@ public:
     virtual void SAL_CALL
     dispatch(
         const css::util::URL& URL,
-        const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     virtual void SAL_CALL
     addStatusListener(
@@ -63,7 +63,7 @@ public:
         const css::util::URL& URL ) override;
 
     //XInterceptorInfo
-    virtual css::uno::Sequence< OUString >
+    virtual cpo::uno::Sequence< OUString >
     SAL_CALL getInterceptedURLs(  ) override;
 
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
@@ -73,9 +73,9 @@ public:
         const OUString& TargetFrameName,
         sal_Int32 SearchFlags ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
     queryDispatches(
-        const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
+        const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
     //XDispatchProviderInterceptor
     virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
@@ -101,7 +101,7 @@ private:
     css::uno::Reference< css::frame::XDispatchProvider > m_xSlaveDispatchProvider;
     css::uno::Reference< css::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
-    css::uno::Sequence< OUString >      m_aInterceptedURL;
+    cpo::uno::Sequence< OUString >      m_aInterceptedURL;
 
     typedef comphelper::OMultiTypeInterfaceContainerHelperVar3<css::frame::XStatusListener, OUString>
         StatusListenerContainer;

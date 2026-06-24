@@ -36,7 +36,7 @@
 #include <sfx2/module.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/propertyvalue.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 #include <unotools/localedatawrapper.hxx>
 
@@ -55,6 +55,7 @@ namespace
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+using namespace ::cpo::uno;
 
 CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings ) :
     GenericDialogController( pParent, u"svx/ui/compressgraphicdialog.ui"_ustr, u"CompressGraphicDialog"_ustr ),

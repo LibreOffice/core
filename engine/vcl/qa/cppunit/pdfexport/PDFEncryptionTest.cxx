@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_1_7)
     // Save PDF
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
-    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
         { { "SelectPdfVersion", cpo::uno::Any(sal_Int32(17)) },
           { "EncryptFile", cpo::uno::Any(true) },
           { "DocumentOpenPassword", cpo::uno::Any(u"secret"_ustr) } });
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(PDFEncryptionTest, testEncryptionRoundtrip_PDF_2_0)
     // Save PDF
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     maMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
-    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
         { { "SelectPdfVersion", cpo::uno::Any(sal_Int32(20)) },
           { "EncryptFile", cpo::uno::Any(true) },
           { "DocumentOpenPassword", cpo::uno::Any(u"secret"_ustr) } });

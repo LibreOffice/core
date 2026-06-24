@@ -183,7 +183,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
             xParent = new weld::TransportAsXWindow(pWin->GetFrameWeld());
         }
         //  initialize dialog
-        uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
         {
             {"ParentWindow", cpo::uno::Any(xParent)},
             {"ChartModel", cpo::uno::Any(xChartModel)}

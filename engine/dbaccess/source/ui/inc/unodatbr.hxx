@@ -134,8 +134,8 @@ namespace dbaui
         virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
         // css::beans::XPropertyChangeListener
         virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
@@ -161,7 +161,7 @@ namespace dbaui
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // XContainerListener
         virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
@@ -203,7 +203,7 @@ namespace dbaui
 
         virtual void            describeSupportedFeatures() override;
         virtual FeatureState    GetState(sal_uInt16 nId) const override;
-        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
+        virtual void            Execute(sal_uInt16 nId, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
         // IControlActionListener overridables
         virtual bool        requestQuickHelp(const void* pUserData, OUString& rText) const override;

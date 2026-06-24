@@ -59,7 +59,7 @@ namespace pcr
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::awt::XControlModel;
@@ -228,7 +228,7 @@ namespace pcr
     protected:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XPropertyHandler overriables
         virtual Any                         SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
@@ -813,7 +813,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_FormGeometryHandler_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::FormGeometryHandler(context));
 }

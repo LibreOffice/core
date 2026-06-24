@@ -543,7 +543,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                     {
                         //TODO/MBA: testing
                         OUString aName;
-                        uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue(
+                        cpo::uno::Sequence < beans::PropertyValue > aMedium{ comphelper::makePropertyValue(
                             u"URL"_ustr, aCurrentDropFile) };
 
                         uno::Reference < embed::XEmbeddedObject > xObj = mpDocSh->GetEmbeddedObjectContainer().

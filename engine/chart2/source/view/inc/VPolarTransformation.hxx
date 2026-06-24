@@ -31,7 +31,7 @@ public:
 
     // ____ XTransformation2 ____
     virtual css::drawing::Position3D transform(
-        const css::uno::Sequence< double >& rSourceValues ) const override;
+        const cpo::uno::Sequence< double >& rSourceValues ) const override;
     virtual css::drawing::Position3D transform(
         const css::drawing::Position3D& rSourceValues ) const override;
 

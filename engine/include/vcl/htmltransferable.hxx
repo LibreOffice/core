@@ -44,7 +44,7 @@ public:
     // css::datatransfer::XTransferable
     SAL_DLLPRIVATE cpo::uno::Any SAL_CALL
     getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
-    SAL_DLLPRIVATE css::uno::Sequence<css::datatransfer::DataFlavor>
+    SAL_DLLPRIVATE cpo::uno::Sequence<css::datatransfer::DataFlavor>
         SAL_CALL getTransferDataFlavors() override;
     SAL_DLLPRIVATE bool SAL_CALL
     isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;

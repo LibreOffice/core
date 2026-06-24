@@ -19,7 +19,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 
@@ -53,7 +53,7 @@ public:
         RangeSelectionListenerParent & rListenerParent );
     void stopRangeListening( bool bRemoveListener = true );
     bool verifyCellRange( const OUString & rRangeStr );
-    bool verifyArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
+    bool verifyArguments( const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments );
 
 private:
     css::uno::Reference< css::sheet::XRangeSelection >

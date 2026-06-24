@@ -86,13 +86,13 @@ public:
 
     virtual void SAL_CALL changeState( sal_Int32 nNewState ) override;
 
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getReachableStates() override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getReachableStates() override;
 
     virtual sal_Int32 SAL_CALL getCurrentState() override;
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID ) override;
 
-    virtual css::uno::Sequence< css::embed::VerbDescriptor > SAL_CALL getSupportedVerbs() override;
+    virtual cpo::uno::Sequence< css::embed::VerbDescriptor > SAL_CALL getSupportedVerbs() override;
 
     virtual void SAL_CALL setClientSite(
                 const css::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
@@ -124,16 +124,16 @@ public:
                     const css::uno::Reference< css::embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
-                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                    const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void SAL_CALL storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& lArguments, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual void SAL_CALL storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     virtual void SAL_CALL storeAsEntry(
                 const css::uno::Reference< css::embed::XStorage >& xStorage,
                 const OUString& sEntName,
-                const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     virtual void SAL_CALL saveCompleted( bool bUseNew ) override;
 
@@ -149,18 +149,18 @@ public:
     virtual bool SAL_CALL isReadonly() override;
 
     virtual void SAL_CALL reload(
-                const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
 
 // XClassifiedObject
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getClassID() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getClassID() override;
 
     virtual OUString SAL_CALL getClassName() override;
 
     virtual void SAL_CALL setClassInfo(
-                const css::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName ) override;
+                const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName ) override;
 
 
 // XComponentSupplier
@@ -191,7 +191,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

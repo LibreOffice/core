@@ -186,7 +186,7 @@ bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.Shapes"_ustr, u"com.sun.star.drawing.ShapeCollection"_ustr };
 }
@@ -194,7 +194,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_drawing_SvxShapeCollection_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvxShapeCollection);
 }

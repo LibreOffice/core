@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
 {
     // Given a document with a table shape, editing cell text:
     loadFromURL(u"private:factory/simpress"_ustr);
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"Rows"_ustr, sal_Int32(2)),
             comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(2)) };
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
@@ -227,7 +227,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoColorOnDarkBackground)
     pSdrPage->getSdrPageProperties().PutItemSet(aPageItems);
 
     // Insert a 3x1 table.
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"Rows"_ustr, sal_Int32(3)),
             comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(1)) };
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);

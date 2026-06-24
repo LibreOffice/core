@@ -42,7 +42,7 @@ namespace comphelper
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::Property;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::Exception;
     using ::cpo::uno::Any;
     using ::com::sun::star::uno::Type;

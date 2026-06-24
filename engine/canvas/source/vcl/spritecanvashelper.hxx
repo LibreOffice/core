@@ -57,7 +57,7 @@ namespace vclcanvas
 
         css::uno::Reference<
               css::rendering::XAnimatedSprite >        createSpriteFromBitmaps(
-                const css::uno::Sequence<
+                const cpo::uno::Sequence<
                       css::uno::Reference<
                             css::rendering::XBitmap > >& animationBitmaps,
                 sal_Int8                                              interpolationMode );

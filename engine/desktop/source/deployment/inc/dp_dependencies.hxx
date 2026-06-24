@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include "dp_misc_api.hxx"
 
 /// @HTML
@@ -48,7 +48,7 @@ namespace Dependencies {
        a list of the unsatisfied dependencies from <code>infoset</code> (in no
        specific order)
     */
-    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC css::uno::Sequence<
+    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC cpo::uno::Sequence<
         css::uno::Reference< css::xml::dom::XElement > >
     check(dp_misc::DescriptionInfoset const & infoset);
 }

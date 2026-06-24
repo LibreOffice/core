@@ -121,7 +121,7 @@ class OleComponentNative_Impl
 {
 public:
     sal::systools::COMReference< IUnknown > m_pObj;
-    uno::Sequence< datatransfer::DataFlavor > m_aSupportedGraphFormats;
+    cpo::uno::Sequence< datatransfer::DataFlavor > m_aSupportedGraphFormats;
 
     // The getters may return a proxy, that redirects the calls to another thread.
     // Thus, calls to methods of returned objects must be inside solar mutex releaser.
@@ -144,27 +144,27 @@ public:
         datatransfer::DataFlavor(
             "application/x-openoffice-emf;windows_formatname=\"Image EMF\"",
             "Windows Enhanced Metafile",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ),
+            cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ),
 
         datatransfer::DataFlavor(
             "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
             "Windows Metafile",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ),
+            cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ),
 
         datatransfer::DataFlavor(
             "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"",
             "Bitmap",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ),
+            cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ),
 
         datatransfer::DataFlavor(
             "image/png",
             "PNG",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ),
+            cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ),
 
         datatransfer::DataFlavor(
             "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
             "GDIMetafile",
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
+            cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() )
         };
     }
 
@@ -182,7 +182,7 @@ public:
 
     bool GraphicalFlavor( const datatransfer::DataFlavor& aFlavor );
 
-    uno::Sequence< datatransfer::DataFlavor > GetFlavorsForAspects( sal_uInt32 nSupportedAspects );
+    cpo::uno::Sequence< datatransfer::DataFlavor > GetFlavorsForAspects( sal_uInt32 nSupportedAspects );
 
     sal::systools::COMReference<IStorage> CreateNewStorage(const OUString& url);
 
@@ -246,7 +246,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
     bool bAnyIsReady = false;
 
     // try to convert data from Medium format to specified Flavor format
-    if ( aFlavor.DataType == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
+    if ( aFlavor.DataType == cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() )
     {
         // first the GDI-metafile must be generated
 
@@ -277,7 +277,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
                 {
                     if ( aFlavor.MimeType.match( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) )
                     {
-                        aResult <<= uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
+                        aResult <<= cpo::uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
                         bAnyIsReady = true;
                     }
                 }
@@ -294,7 +294,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
             {
                 if ( aFlavor.MimeType.match( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) )
                 {
-                    aResult <<= uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
+                    aResult <<= cpo::uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
                     bAnyIsReady = true;
                 }
             }
@@ -314,7 +314,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
             {
                 if ( aFlavor.MimeType.match( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) )
                 {
-                    aResult <<= uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
+                    aResult <<= cpo::uno::Sequence< sal_Int8 >( pBuf.get(), nBufSize );
                     bAnyIsReady = true;
                 }
             }
@@ -325,7 +325,7 @@ bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium,
             for (auto const& supportedFormat : m_aSupportedGraphFormats)
                 if ( aFlavor.MimeType.match( supportedFormat.MimeType )
                   && aFlavor.DataType == supportedFormat.DataType
-                  && aFlavor.DataType == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
+                  && aFlavor.DataType == cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() )
                 {
                     bAnyIsReady = ConvertBufferToFormat( pBuf.get(), nBufSize, aFormat, aResult );
                     break;
@@ -349,7 +349,7 @@ bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavor& a
 }
 
 
-static bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > const & aSeq, CLSID& aResult )
+static bool GetClassIDFromSequence_Impl( cpo::uno::Sequence< sal_Int8 > const & aSeq, CLSID& aResult )
 {
     if ( aSeq.getLength() == 16 )
     {
@@ -530,9 +530,9 @@ sal::systools::COMReference<IStorage> OleComponentNative_Impl::CreateNewStorage(
 }
 
 
-uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsForAspects( sal_uInt32 nSupportedAspects )
+cpo::uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsForAspects( sal_uInt32 nSupportedAspects )
 {
-    uno::Sequence< datatransfer::DataFlavor > aResult;
+    cpo::uno::Sequence< datatransfer::DataFlavor > aResult;
     for ( sal_uInt32 nAsp = 1; nAsp <= 8; nAsp *= 2 )
         if ( ( nSupportedAspects & nAsp ) == nAsp )
         {
@@ -767,7 +767,7 @@ void OleComponent::CreateObjectFromClipboard()
 }
 
 
-void OleComponent::CreateNewEmbeddedObject( const uno::Sequence< sal_Int8 >& aSeqCLSID )
+void OleComponent::CreateNewEmbeddedObject( const cpo::uno::Sequence< sal_Int8 >& aSeqCLSID )
 {
     CLSID aClsID;
 
@@ -1039,7 +1039,7 @@ void OleComponent::CloseObject()
 }
 
 
-uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
+cpo::uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
 {
     auto pOleObject(m_pNativeImpl->get<IOleObject>());
     if (!pOleObject)
@@ -1308,7 +1308,7 @@ sal_Int64 OleComponent::GetMiscStatus( sal_Int64 nAspect )
 }
 
 
-uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
+cpo::uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
 {
     auto pOleObject(m_pNativeImpl->get<IOleObject>());
     if (!pOleObject)
@@ -1676,7 +1676,7 @@ cpo::uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFl
 }
 
 
-uno::Sequence< datatransfer::DataFlavor > SAL_CALL OleComponent::getTransferDataFlavors()
+cpo::uno::Sequence< datatransfer::DataFlavor > SAL_CALL OleComponent::getTransferDataFlavors()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1738,11 +1738,11 @@ void SAL_CALL OleComponent::removeEventListener( const uno::Reference< lang::XEv
                                                 xListener );
 }
 
-sal_Int64 SAL_CALL OleComponent::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
+sal_Int64 SAL_CALL OleComponent::getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier )
 {
     try
     {
-        uno::Sequence < sal_Int8 > aCLSID = GetCLSID();
+        cpo::uno::Sequence < sal_Int8 > aCLSID = GetCLSID();
         if ( MimeConfigurationHelper::ClassIDsEqual( aIdentifier, aCLSID ) )
             return comphelper::getSomething_cast(m_pNativeImpl->m_pObj.get());
     }

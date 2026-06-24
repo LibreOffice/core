@@ -111,7 +111,7 @@ using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 
 namespace {

@@ -75,12 +75,12 @@ OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContai
     registerProperties();
 }
 
-css::uno::Sequence<sal_Int8> OCommandDefinition::getImplementationId()
+cpo::uno::Sequence<sal_Int8> OCommandDefinition::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-css::uno::Sequence< css::uno::Type > OCommandDefinition::getTypes()
+cpo::uno::Sequence< css::uno::Type > OCommandDefinition::getTypes()
 {
     return  ::comphelper::concatSequences(
         OCommandDefinition_Base::getTypes( ),
@@ -99,7 +99,7 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL OCommandDefinition
 }
 ::cppu::IPropertyArrayHelper* OCommandDefinition::createArrayHelper( ) const
 {
-    css::uno::Sequence< css::beans::Property > aProps;
+    cpo::uno::Sequence< css::beans::Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -110,7 +110,7 @@ OUString SAL_CALL OCommandDefinition::getImplementationName()
     return u"com.sun.star.comp.dba.OCommandDefinition"_ustr;
 }
 
-css::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.sdb.QueryDefinition"_ustr,
@@ -143,7 +143,7 @@ void SAL_CALL OCommandDefinition::rename( const OUString& newName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_OCommandDefinition(css::uno::XComponentContext* context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new dbaccess::OCommandDefinition(
             context, nullptr, std::make_shared<dbaccess::OCommandDefinition_Impl>() ));

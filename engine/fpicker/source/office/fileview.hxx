@@ -19,7 +19,7 @@
 #pragma once
 
 #include <memory>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <utility>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
@@ -60,7 +60,7 @@ class SvtFileView
 {
 private:
     std::unique_ptr<SvtFileView_Impl> mpImpl;
-    css::uno::Sequence<OUString> maDenyList;
+    cpo::uno::Sequence<OUString> maDenyList;
 
     DECL_LINK(HeaderSelect_Impl, int, void);
 
@@ -104,7 +104,7 @@ public:
                                 const OUString& rFolderURL,
                                 const OUString& rFilter,
                                 const FileViewAsyncAction* pAsyncDescriptor,
-                                const css::uno::Sequence< OUString >& rDenyList
+                                const cpo::uno::Sequence< OUString >& rDenyList
                             );
 
     /** reads the current content of the current folder again, and applies the given filter to it

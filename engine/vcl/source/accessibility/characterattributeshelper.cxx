@@ -59,7 +59,7 @@ std::vector< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes()
 }
 
 
-Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes( const css::uno::Sequence< OUString >& aRequestedAttributes )
+Sequence< PropertyValue > CharacterAttributesHelper::GetCharacterAttributes( const cpo::uno::Sequence< OUString >& aRequestedAttributes )
 {
     if ( !aRequestedAttributes.hasElements() )
         return comphelper::containerToSequence(GetCharacterAttributes());

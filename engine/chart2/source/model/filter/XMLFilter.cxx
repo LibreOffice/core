@@ -53,7 +53,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::osl::MutexGuard;
 
 namespace
@@ -283,7 +283,7 @@ ErrCode XMLFilter::impl_Import(
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory(xFactory, uno::UNO_QUERY);
         if (xServiceFactory.is())
         {
-            uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(xStorage) };
+            cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(xStorage) };
             xGraphicStorageHandler.set(
                 xServiceFactory->createInstanceWithArguments(
                     u"com.sun.star.comp.Svx.GraphicImportHelper"_ustr, aArgs), uno::UNO_QUERY);
@@ -313,7 +313,7 @@ ErrCode XMLFilter::impl_Import(
         uno::Reference<frame::XModel> const xModel(m_xTargetDoc, uno::UNO_QUERY);
         if( xModel.is() )
         {
-            const uno::Sequence< beans::PropertyValue > aModProps = xModel->getArgs();
+            const cpo::uno::Sequence< beans::PropertyValue > aModProps = xModel->getArgs();
             for( beans::PropertyValue const & prop : aModProps )
             {
                 if( prop.Name == "HierarchicalDocumentName" )
@@ -409,7 +409,7 @@ ErrCode XMLFilter::impl_ImportStream(
                 if( xImportInfo.is())
                     nArgs++;
 
-                uno::Sequence< cpo::uno::Any > aFilterCompArgs( nArgs );
+                cpo::uno::Sequence< cpo::uno::Any > aFilterCompArgs( nArgs );
                 auto aFilterCompArgsRange = asNonConstRange(aFilterCompArgs);
 
                 nArgs = 0;
@@ -430,7 +430,7 @@ ErrCode XMLFilter::impl_ImportStream(
                 {
                     try
                     {
-                        uno::Sequence< cpo::uno::Any > aArgs{
+                        cpo::uno::Sequence< cpo::uno::Any > aArgs{
                             cpo::uno::Any(beans::NamedValue(u"DocumentHandler"_ustr, cpo::uno::Any(xFilter))),
                             cpo::uno::Any(beans::NamedValue(u"Model"_ustr, cpo::uno::Any(m_xTargetDoc)))
                         };
@@ -533,7 +533,7 @@ ErrCode XMLFilter::impl_Export(
         {
             try
             {
-                uno::Sequence< cpo::uno::Any > aArgs{
+                cpo::uno::Sequence< cpo::uno::Any > aArgs{
                     cpo::uno::Any(beans::NamedValue(u"DocumentHandler"_ustr, cpo::uno::Any(xDocHandler))),
                     cpo::uno::Any(beans::NamedValue(u"Model"_ustr, cpo::uno::Any(xDocumentComp)))
                 };
@@ -572,7 +572,7 @@ ErrCode XMLFilter::impl_Export(
         if( xGraphicStorageHandler.is())
             nArgs++;
 
-        uno::Sequence< cpo::uno::Any > aFilterProperties( nArgs );
+        cpo::uno::Sequence< cpo::uno::Any > aFilterProperties( nArgs );
         {
             auto pFilterProperties = aFilterProperties.getArray();
             nArgs = 0;
@@ -716,7 +716,7 @@ bool SAL_CALL XMLFilter::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL XMLFilter::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL XMLFilter::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.document.ImportFilter"_ustr,
@@ -741,14 +741,14 @@ OUString XMLReportFilterHelper::getMediaType(bool )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_XMLFilter_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::XMLFilter(context));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_report_XMLFilter_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::XMLReportFilterHelper(context));
 }

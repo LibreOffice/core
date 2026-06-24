@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedOleObject.hpp>
@@ -133,7 +133,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    css::uno::Sequence< sal_Int8 > m_aClassID;
+    cpo::uno::Sequence< sal_Int8 > m_aClassID;
     OUString m_aClassName;
 
     css::uno::Reference< css::embed::XEmbeddedClient > m_xClientSite;
@@ -223,10 +223,10 @@ protected:
     css::uno::Reference< css::io::XOutputStream > GetStreamForSaving();
 
 
-    css::uno::Sequence< sal_Int32 > GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState );
+    cpo::uno::Sequence< sal_Int32 > GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState );
 
-    static css::uno::Sequence< sal_Int32 > GetReachableStatesList_Impl(
-                        const css::uno::Sequence< css::embed::VerbDescriptor >& aVerbList );
+    static cpo::uno::Sequence< sal_Int32 > GetReachableStatesList_Impl(
+                        const cpo::uno::Sequence< css::embed::VerbDescriptor >& aVerbList );
 #endif
 
     void Dispose(osl::ResettableMutexGuard* guard = nullptr);
@@ -246,7 +246,7 @@ protected:
     void StoreToLocation_Impl(
                             const css::uno::Reference< css::embed::XStorage >& xStorage,
                             const OUString& sEntName,
-                            const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs,
+                            const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs,
                             bool bSaveAs,
                             osl::ResettableMutexGuard& rGuard);
 #ifdef _WIN32
@@ -295,7 +295,7 @@ protected:
 public:
     // in case a new object must be created the class ID must be specified
     OleEmbeddedObject( css::uno::Reference< css::uno::XComponentContext > xContext,
-                        const css::uno::Sequence< sal_Int8 >& aClassID,
+                        const cpo::uno::Sequence< sal_Int8 >& aClassID,
                         OUString  aClassName );
 
     // in case object will be loaded from a persistent entry or from a file the class ID will be detected on loading
@@ -319,13 +319,13 @@ public:
 
     virtual void SAL_CALL changeState( sal_Int32 nNewState ) override;
 
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getReachableStates() override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getReachableStates() override;
 
     virtual sal_Int32 SAL_CALL getCurrentState() override;
 
     virtual void SAL_CALL doVerb( sal_Int32 nVerbID ) override;
 
-    virtual css::uno::Sequence< css::embed::VerbDescriptor > SAL_CALL getSupportedVerbs() override;
+    virtual cpo::uno::Sequence< css::embed::VerbDescriptor > SAL_CALL getSupportedVerbs() override;
 
     virtual void SAL_CALL setClientSite(
                 const css::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
@@ -358,16 +358,16 @@ public:
                     const css::uno::Reference< css::embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
-                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                    const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void SAL_CALL storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& lArguments, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual void SAL_CALL storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     virtual void SAL_CALL storeAsEntry(
                 const css::uno::Reference< css::embed::XStorage >& xStorage,
                 const OUString& sEntName,
-                const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     virtual void SAL_CALL saveCompleted( bool bUseNew ) override;
 
@@ -390,17 +390,17 @@ public:
     virtual bool SAL_CALL isReadonly() override;
 
     virtual void SAL_CALL reload(
-                const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
 // XClassifiedObject
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getClassID() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getClassID() override;
 
     virtual OUString SAL_CALL getClassName() override;
 
     virtual void SAL_CALL setClassInfo(
-                const css::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName ) override;
+                const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName ) override;
 
 // XStateChangeBroadcaster
     virtual void SAL_CALL addStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
@@ -436,7 +436,7 @@ public:
     virtual void SAL_CALL enableModeless( bool bEnable ) override;
 
     virtual void SAL_CALL translateAccelerators(
-                    const css::uno::Sequence< css::awt::KeyEvent >& aKeys ) override;
+                    const cpo::uno::Sequence< css::awt::KeyEvent >& aKeys ) override;
 
     // XChild ( only for wrapping scenario here )
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
@@ -447,12 +447,12 @@ public:
     css::uno::Reference<css::io::XStream> SAL_CALL getStream() override;
 
     // XInitialization
-    void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     css::awt::Size getVisualAreaSize_impl(sal_Int64 nAspect, osl::ResettableMutexGuard& guard);

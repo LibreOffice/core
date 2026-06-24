@@ -106,7 +106,7 @@ void SwDropDownField::SetItems(vector<OUString> && rItems)
     m_aSelectedItem.clear();
 }
 
-void SwDropDownField::SetItems(const uno::Sequence<OUString> & rItems)
+void SwDropDownField::SetItems(const cpo::uno::Sequence<OUString> & rItems)
 {
     m_aValues.clear();
 
@@ -115,7 +115,7 @@ void SwDropDownField::SetItems(const uno::Sequence<OUString> & rItems)
     m_aSelectedItem.clear();
 }
 
-uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
+cpo::uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
 {
     return comphelper::containerToSequence(m_aValues);
 }
@@ -202,7 +202,7 @@ bool SwDropDownField::PutValue(const cpo::uno::Any &rVal,
 
     case FIELD_PROP_STRINGS:
         {
-            uno::Sequence<OUString> aSeq;
+            cpo::uno::Sequence<OUString> aSeq;
             rVal >>= aSeq;
             SetItems(aSeq);
         }

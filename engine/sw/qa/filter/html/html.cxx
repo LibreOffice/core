@@ -296,11 +296,11 @@ CPPUNIT_TEST_FIXTURE(Test, testMailmergeCopy)
     // When copying that as HTML:
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = u"text/html"_ustr;
-    aFlavor.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+    aFlavor.DataType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
     cpo::uno::Any aData = xTransferable->getTransferData(aFlavor);
 
     // Then make sure the field value is part of the HTML produced from the clipboard document:
-    uno::Sequence<sal_Int8> aBytes;
+    cpo::uno::Sequence<sal_Int8> aBytes;
     aData >>= aBytes;
     SvMemoryStream aMemory;
     aMemory.WriteBytes(aBytes.getConstArray(), aBytes.getLength());

@@ -127,7 +127,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     {
         xTextContentAppend->appendTextContent(
             uno::Reference<text::XTextContent>(cppu::getXWeak(xTextFrame.get()), uno::UNO_QUERY),
-            uno::Sequence<beans::PropertyValue>());
+            cpo::uno::Sequence<beans::PropertyValue>());
     }
 
     // Link FLY and DRAW formats, so it becomes a text box (needed for syncProperty calls).
@@ -1771,7 +1771,7 @@ bool SwTextBoxHelper::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
         return false;
 
     bool bRet = false;
-    uno::Sequence<beans::PropertyValue> propList;
+    cpo::uno::Sequence<beans::PropertyValue> propList;
     xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
     auto pProp = std::find_if(
         std::cbegin(propList), std::cend(propList),

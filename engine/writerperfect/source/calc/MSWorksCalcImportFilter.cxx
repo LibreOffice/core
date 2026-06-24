@@ -50,7 +50,7 @@ getResultSet(const css::uno::Reference<css::ucb::XContent>& xPackageContent)
             ucbhelper::Content packageContent(xPackageContent,
                                               uno::Reference<ucb::XCommandEnvironment>(),
                                               comphelper::getProcessComponentContext());
-            uno::Sequence<OUString> lPropNames{ u"Title"_ustr };
+            cpo::uno::Sequence<OUString> lPropNames{ u"Title"_ustr };
             uno::Reference<sdbc::XResultSet> xResultSet(
                 packageContent.createCursor(lPropNames, ucbhelper::INCLUDE_DOCUMENTS_ONLY));
             return xResultSet;
@@ -295,7 +295,7 @@ bool MSWorksCalcImportFilter::doImportDocument(weld::Window* pParent,
 
 //XExtendedFilterDetection
 bool MSWorksCalcImportFilter::filter(
-    const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor)
 {
     OUString sUrl;
     css::uno::Reference<css::io::XInputStream> xInputStream;
@@ -465,7 +465,7 @@ bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString& rServiceN
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL MSWorksCalcImportFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL MSWorksCalcImportFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ImportFilter"_ustr,
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
@@ -473,7 +473,7 @@ css::uno::Sequence<OUString> SAL_CALL MSWorksCalcImportFilter::getSupportedServi
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Calc_MSWorksCalcImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const css::uno::Sequence<cpo::uno::Any>&)
+    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new MSWorksCalcImportFilter(context));
 }

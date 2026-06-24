@@ -183,7 +183,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             // transport the whole ODataAccessDescriptor as slot parameter
             svx::ODataAccessDescriptor aDesc = svx::ODataAccessObjectTransferable::extractObjectDescriptor(aDataHelper);
             cpo::uno::Any aDescAny;
-            uno::Sequence<beans::PropertyValue> aProperties = aDesc.createPropertyValueSequence();
+            cpo::uno::Sequence<beans::PropertyValue> aProperties = aDesc.createPropertyValueSequence();
             aDescAny <<= aProperties;
             SfxUnoAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
 
@@ -638,7 +638,7 @@ bool ScViewFunc::PasteDataFormatSource( SotClipboardFormatId nFormatId,
                     embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                         xTmpStor,
                                                         u"DummyName"_ustr,
-                                                        uno::Sequence< beans::PropertyValue >() );
+                                                        cpo::uno::Sequence< beans::PropertyValue >() );
 
                     // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
                     // for example whether the object should be an iconified one

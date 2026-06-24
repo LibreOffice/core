@@ -192,7 +192,7 @@ bool VAxisBase::prepareShapeCreation()
     return true;
 }
 
-size_t VAxisBase::getIndexOfLongestLabel( const uno::Sequence<OUString>& rLabels )
+size_t VAxisBase::getIndexOfLongestLabel( const cpo::uno::Sequence<OUString>& rLabels )
 {
     sal_Int32 nRet = 0;
     sal_Int32 nLength = 0;

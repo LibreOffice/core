@@ -57,7 +57,7 @@ public:
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -85,8 +85,8 @@ public:
     virtual void SAL_CALL setScaleData( const css::chart2::ScaleData& rScaleData ) override;
     virtual css::chart2::ScaleData SAL_CALL getScaleData() override;
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getGridProperties() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubGridProperties() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubTickProperties() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubGridProperties() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubTickProperties() override;
 
     // ____ XTitled ____
     virtual css::uno::Reference< css::chart2::XTitle > SAL_CALL getTitleObject() override;

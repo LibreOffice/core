@@ -100,14 +100,14 @@ void SmartTagHandler::handle(const uno::Reference<text::XTextRange>& xParagraph)
             continue;
 
         uno::Reference<rdf::XURI> xType = rdf::URI::create(m_xComponentContext, aTypeNS);
-        uno::Sequence<uno::Reference<rdf::XURI>> aGraphNames
+        cpo::uno::Sequence<uno::Reference<rdf::XURI>> aGraphNames
             = m_xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
         uno::Reference<rdf::XURI> xGraphName;
         if (aGraphNames.hasElements())
             xGraphName = aGraphNames[0];
         else
         {
-            uno::Sequence<uno::Reference<rdf::XURI>> xTypes = { xType };
+            cpo::uno::Sequence<uno::Reference<rdf::XURI>> xTypes = { xType };
             xGraphName = m_xDocumentMetadataAccess->addMetadataFile(aMetadataFilePath, xTypes);
         }
         uno::Reference<rdf::XNamedGraph> xGraph

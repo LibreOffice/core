@@ -563,7 +563,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             {
                 if ( !bSubTotalDefault )
                 {
-                    uno::Sequence<sal_Int16> aSeq(maSubTotalFuncs.size());
+                    cpo::uno::Sequence<sal_Int16> aSeq(maSubTotalFuncs.size());
                     for(size_t i = 0; i < maSubTotalFuncs.size(); ++i)
                         aSeq.getArray()[i] = static_cast<sal_Int16>(maSubTotalFuncs[i]);
                     xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL2, cpo::uno::Any(aSeq) );

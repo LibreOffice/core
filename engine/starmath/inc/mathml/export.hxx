@@ -228,12 +228,12 @@ public:
 
     /** Get's view settings and prepares them to export
      */
-    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetViewSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
 
     /** Get's configuration settings and prepares them to export
      */
     virtual void
-    GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    GetConfigurationSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

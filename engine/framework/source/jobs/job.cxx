@@ -154,7 +154,7 @@ void Job::setJobData( const JobData& aData )
                 In case the represented job is a configured one (which uses static
                 arguments too) all information will be merged!
 */
-void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
+void Job::execute( /*IN*/ const cpo::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
 {
     /* SAFE { */
     class SolarMutexAntiGuard {
@@ -184,7 +184,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
 
     css::uno::Reference< css::task::XAsyncJob >  xAJob;
     css::uno::Reference< css::task::XJob >       xSJob;
-    css::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
+    cpo::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
 
     // It's necessary to hold us self alive!
     // Otherwise we might die by ref count ...
@@ -338,9 +338,9 @@ void Job::die()
 
     @return A list which includes all mentioned sub lists.
 */
-css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
+cpo::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ const cpo::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
 {
-    css::uno::Sequence< css::beans::NamedValue > lAllArgs;
+    cpo::uno::Sequence< css::beans::NamedValue > lAllArgs;
 
     /* SAFE { */
     SolarMutexClearableGuard aReadLock;
@@ -357,7 +357,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         ++nLen;
     if (eMode==JobData::E_EVENT)
         ++nLen;
-    css::uno::Sequence< css::beans::NamedValue > lEnvArgs(nLen);
+    cpo::uno::Sequence< css::beans::NamedValue > lEnvArgs(nLen);
     auto plEnvArgs = lEnvArgs.getArray();
     plEnvArgs[0].Name = u"EnvType"_ustr;
     plEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
@@ -385,7 +385,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     // get the configuration data from the job data container ... if possible
     // Means: if this job has any configuration data. Note: only really
     // filled lists will be set to the return structure at the end of this method.
-    css::uno::Sequence< css::beans::NamedValue > lConfigArgs;
+    cpo::uno::Sequence< css::beans::NamedValue > lConfigArgs;
     std::vector< css::beans::NamedValue > lJobConfigArgs;
     if (eMode==JobData::E_ALIAS || eMode==JobData::E_EVENT)
     {

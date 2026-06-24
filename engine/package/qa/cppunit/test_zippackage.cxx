@@ -26,7 +26,7 @@ auto const ZipPackage(u"com.sun.star.packages.comp.ZipPackage"_ustr);
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDuplicate)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/duplicate-files.odt"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -37,7 +37,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDuplicate)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDuplicate)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeODT)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/unicode-path.odt"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeODT)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -85,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeODT)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeDOCX)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/unicode-path.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -97,7 +97,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeDOCX)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testUnicodeDOCX)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testAbsolutePathODT)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/slash.odt"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testAbsolutePathODT)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -145,7 +145,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testAbsolutePathODT)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDotPathDOCX)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/dot-slash.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDotPathDOCX)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -175,7 +175,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDotPathDOCX)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatODT)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/two-zips.odt"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -187,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatODT)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -205,7 +205,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatODT)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatDOCX)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/two-zips.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatDOCX)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -235,7 +235,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testConcatDOCX)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testCaseInsensitiveDOCX)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/casing.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url),
         cpo::uno::Any(
             beans::NamedValue(u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::OFOPXML)))
@@ -248,7 +248,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testCaseInsensitiveDOCX)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -266,7 +266,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testCaseInsensitiveDOCX)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testOverlapDOCX)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/overlap.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -278,7 +278,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testOverlapDOCX)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -296,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testOverlapDOCX)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testInnerGapDOCX)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/inner-gap.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -308,7 +308,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testInnerGapDOCX)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -326,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testInnerGapDOCX)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDeflatedDOCX)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/dd-deflated.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDeflatedDOCX)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -356,7 +356,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDeflatedDOCX)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorStoredDOCX)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/dd-stored.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url),
         cpo::uno::Any(
             beans::NamedValue(u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::OFOPXML)))
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorStoredDOCX)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(beans::NamedValue(u"StorageFormat"_ustr,
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorStoredDOCX)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testZip64End)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/zip64-eocd.docx"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url), cpo::uno::Any(beans::NamedValue(
                                 u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::ZIP)))
     };
@@ -399,7 +399,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testZip64End)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -417,7 +417,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testZip64End)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163364)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163364.ods"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url),
         cpo::uno::Any(
             beans::NamedValue(u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::PACKAGE)))
@@ -430,7 +430,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163364)
 
     try
     {
-        uno::Sequence<cpo::uno::Any> const args2{
+        cpo::uno::Sequence<cpo::uno::Any> const args2{
             cpo::uno::Any(url),
             cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
             cpo::uno::Any(
@@ -448,7 +448,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163364)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163341)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163341.ods"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url),
         cpo::uno::Any(
             beans::NamedValue(u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::PACKAGE)))
@@ -462,7 +462,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163341)
 CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163818)
 {
     auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163818.odg"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url),
         cpo::uno::Any(
             beans::NamedValue(u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::PACKAGE)))
@@ -474,7 +474,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163818)
                          css::packages::zip::ZipIOException);
 
     // recovery should work
-    uno::Sequence<cpo::uno::Any> const args2{
+    cpo::uno::Sequence<cpo::uno::Any> const args2{
         cpo::uno::Any(url),
         cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
         cpo::uno::Any(
@@ -488,7 +488,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDirectory)
 {
     auto const url(m_directories.getURLFromSrc(
         u"/package/qa/cppunit/data/vaidator-fine-libreoffice-no-open.odt"));
-    uno::Sequence<cpo::uno::Any> const args{
+    cpo::uno::Sequence<cpo::uno::Any> const args{
         cpo::uno::Any(url),
         cpo::uno::Any(
             beans::NamedValue(u"StorageFormat"_ustr, cpo::uno::Any(embed::StorageFormats::PACKAGE)))
@@ -500,7 +500,7 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testDataDescriptorDirectory)
                          css::packages::zip::ZipIOException);
 
     // recovery should work
-    uno::Sequence<cpo::uno::Any> const args2{
+    cpo::uno::Sequence<cpo::uno::Any> const args2{
         cpo::uno::Any(url),
         cpo::uno::Any(beans::NamedValue(u"RepairPackage"_ustr, cpo::uno::Any(true))),
         cpo::uno::Any(
@@ -525,9 +525,9 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf166862)
 {
     // This package is broken; but the actual issue was incorrect CRC calculation for an image
     OUString aURL = m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf166862.odt");
-    uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(aURL),
-                                       cpo::uno::Any(beans::NamedValue{ u"RepairPackage"_ustr,
-                                                                        cpo::uno::Any(true) }) };
+    cpo::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(aURL),
+                                            cpo::uno::Any(beans::NamedValue{
+                                                u"RepairPackage"_ustr, cpo::uno::Any(true) }) };
 
     auto xMgr = m_xContext->getServiceManager();
 

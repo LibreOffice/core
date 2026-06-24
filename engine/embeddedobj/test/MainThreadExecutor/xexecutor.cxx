@@ -43,7 +43,7 @@ IMPL_LINK_NOARG( MainThreadExecutor_Impl, executor, void*, void )
 }
 
 MainThreadExecutor_Impl::MainThreadExecutor_Impl( const uno::Reference< task::XJob >& xJob,
-                                                  const uno::Sequence< beans::NamedValue >& aArguments )
+                                                  const cpo::uno::Sequence< beans::NamedValue >& aArguments )
 : m_xJob( xJob )
 , m_aArgs( aArguments )
 , m_bExecuted( false )
@@ -51,7 +51,7 @@ MainThreadExecutor_Impl::MainThreadExecutor_Impl( const uno::Reference< task::XJ
 }
 
 
-cpo::uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::NamedValue >& aArguments )
+cpo::uno::Any SAL_CALL UNOMainThreadExecutor::execute( const cpo::uno::Sequence< beans::NamedValue >& aArguments )
     throw ( lang::IllegalArgumentException,
             uno::Exception,
             uno::RuntimeException )
@@ -64,9 +64,9 @@ cpo::uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< bean
     if ( !xJob.is() )
         throw lang::IllegalArgumentException();
 
-    uno::Sequence< beans::NamedValue > aArgsForJob;
+    cpo::uno::Sequence< beans::NamedValue > aArgsForJob;
     if ( aArguments.getLength() > 1 )
-        aArgsForJob = uno::Sequence< beans::NamedValue >( aArguments.getConstArray() + 1, aArguments.getLength() - 1 );
+        aArgsForJob = cpo::uno::Sequence< beans::NamedValue >( aArguments.getConstArray() + 1, aArguments.getLength() - 1 );
 
     MainThreadExecutor_Impl* pExecutor = new MainThreadExecutor_Impl( xJob, aArgsForJob );
     pExecutor->execute();
@@ -81,9 +81,9 @@ cpo::uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< bean
 }
 
 
-uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< OUString > aRet { "com.sun.star.comp.thread.MainThreadExecutor" };
+    cpo::uno::Sequence< OUString > aRet { "com.sun.star.comp.thread.MainThreadExecutor" };
     return aRet;
 }
 
@@ -114,7 +114,7 @@ bool SAL_CALL UNOMainThreadExecutor::supportsService( const OUString& ServiceNam
 }
 
 
-uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

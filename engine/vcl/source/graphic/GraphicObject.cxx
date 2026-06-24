@@ -42,7 +42,7 @@ using namespace css;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::beans::XPropertySet;
 
@@ -83,7 +83,7 @@ void SearchForGraphics(uno::Reference<uno::XInterface> const & xInterface,
     Reference<XNameContainer> xContainer(xInterface, UNO_QUERY);
     if (xContainer.is())
     {
-        const css::uno::Sequence<OUString> aElementNames = xContainer->getElementNames();
+        const cpo::uno::Sequence<OUString> aElementNames = xContainer->getElementNames();
         for (OUString const & rName : aElementNames)
         {
             uno::Reference<XInterface> xInnerInterface;

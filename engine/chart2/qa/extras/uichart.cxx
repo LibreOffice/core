@@ -13,6 +13,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 class Chart2UiChartTest : public ChartTest
 {
@@ -33,17 +34,17 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in origin file", nColumns,
                                  aExpectedColumnDescriptions.getLength());
 
-    uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
+    cpo::uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in origin file", nRows,
                                  aExpectedRowDescriptions.getLength());
 
     Sequence<Sequence<double>> aExpectedData = xChartData->getData();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"ToObject"_ustr, aObjectName),
     };
     dispatchCommand(mxComponent, u".uno:GoToObject"_ustr, aPropertyValues);
@@ -114,11 +115,11 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf99969)
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in origin file", nColumns,
                                  aExpectedColumnDescriptions.getLength());
 
-    uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
+    cpo::uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in origin file", nRows,
                                  aExpectedRowDescriptions.getLength());
 
@@ -203,13 +204,13 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
                                                     uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
-    uno::Sequence<OUString> aSeriesList = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence<OUString> aSeriesList = xChartData->getColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), aSeriesList.getLength());
 
     for (size_t i = 0; i < 5; ++i)
         CPPUNIT_ASSERT_EQUAL(aExpected[i], aSeriesList[i]);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"ToObject"_ustr, u"Object 1"_ustr),
     };
     dispatchCommand(mxComponent, u".uno:GoToObject"_ustr, aPropertyValues);
@@ -279,10 +280,10 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
 
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
-    uno::Sequence<OUString> aSeriesList = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence<OUString> aSeriesList = xChartData->getColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), aSeriesList.getLength());
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"ToObject"_ustr, u"Chart 2"_ustr),
     };
     dispatchCommand(mxComponent, u".uno:GoToObject"_ustr, aPropertyValues);
@@ -298,7 +299,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
                                                      uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc2.is());
     uno::Reference<chart::XChartDataArray> xChartData2(xChartDoc2->getData(), uno::UNO_QUERY_THROW);
-    uno::Sequence<OUString> aSeriesList2 = xChartData2->getColumnDescriptions();
+    cpo::uno::Sequence<OUString> aSeriesList2 = xChartData2->getColumnDescriptions();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 12
@@ -315,19 +316,19 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in origin file",
                                  static_cast<sal_Int32>(12),
                                  aExpectedColumnDescriptions.getLength());
 
-    uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
+    cpo::uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in origin file",
                                  static_cast<sal_Int32>(8), aExpectedRowDescriptions.getLength());
 
     Sequence<Sequence<double>> aExpectedData = xChartData->getData();
 
     // Create a copy of the sheet and move to the end
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "DocName", cpo::uno::Any(u"tdf101894"_ustr) },
                                            { "Index", cpo::uno::Any(sal_uInt16(32767)) },
                                            { "Copy", cpo::uno::Any(true) } }));
@@ -345,7 +346,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
         uno::Reference<chart::XChartDataArray> xChartData2(xChartDoc2->getData(),
                                                            uno::UNO_QUERY_THROW);
 
-        uno::Sequence<OUString> aColumnDescriptions = xChartData2->getColumnDescriptions();
+        cpo::uno::Sequence<OUString> aColumnDescriptions = xChartData2->getColumnDescriptions();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in origin file",
                                      static_cast<sal_Int32>(12), aColumnDescriptions.getLength());
         for (sal_Int32 i = 0; i < 12; ++i)
@@ -355,7 +356,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
                                          aColumnDescriptions[i]);
         }
 
-        uno::Sequence<OUString> aRowDescriptions = xChartData2->getRowDescriptions();
+        cpo::uno::Sequence<OUString> aRowDescriptions = xChartData2->getRowDescriptions();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in origin file",
                                      static_cast<sal_Int32>(8), aRowDescriptions.getLength());
         for (sal_Int32 i = 0; i < 8; ++i)
@@ -395,12 +396,12 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
+    cpo::uno::Sequence<OUString> aExpectedColumnDescriptions = xChartData->getColumnDescriptions();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in origin file",
                                  static_cast<sal_Int32>(4),
                                  aExpectedColumnDescriptions.getLength());
 
-    uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
+    cpo::uno::Sequence<OUString> aExpectedRowDescriptions = xChartData->getRowDescriptions();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in origin file",
                                  static_cast<sal_Int32>(7), aExpectedRowDescriptions.getLength());
 
@@ -409,7 +410,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Name", cpo::uno::Any(u"NewTab"_ustr) }, { "Index", cpo::uno::Any(sal_uInt16(2)) } }));
     dispatchCommand(mxComponent, u".uno:Insert"_ustr, aArgs);
 
@@ -427,7 +428,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
         uno::Reference<chart::XChartDataArray> xChartData2(xChartDoc2->getData(),
                                                            uno::UNO_QUERY_THROW);
 
-        uno::Sequence<OUString> aColumnDescriptions = xChartData2->getColumnDescriptions();
+        cpo::uno::Sequence<OUString> aColumnDescriptions = xChartData2->getColumnDescriptions();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of columns in origin file",
                                      static_cast<sal_Int32>(4), aColumnDescriptions.getLength());
         for (sal_Int32 i = 0; i < 4; ++i)
@@ -437,7 +438,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
                                          aColumnDescriptions[i]);
         }
 
-        uno::Sequence<OUString> aRowDescriptions = xChartData2->getRowDescriptions();
+        cpo::uno::Sequence<OUString> aRowDescriptions = xChartData2->getRowDescriptions();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Incorrect number of rows in origin file",
                                      static_cast<sal_Int32>(7), aRowDescriptions.getLength());
         for (sal_Int32 i = 0; i < 7; ++i)
@@ -486,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf158223)
     }
 
     // Remove last sheet
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(3)) } }));
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
 
@@ -529,7 +530,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf153706)
     css::uno::Reference xChartDoc(getChartDocFromSheet(0), css::uno::UNO_SET_THROW);
     auto xDataArray(xChartDoc->getDataProvider().queryThrow<chart::XChartDataArray>());
 
-    css::uno::Sequence<Sequence<double>> aData = xDataArray->getData();
+    cpo::uno::Sequence<Sequence<double>> aData = xDataArray->getData();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aData.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aData[0].getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aData[1].getLength());

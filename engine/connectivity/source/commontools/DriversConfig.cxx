@@ -30,9 +30,9 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    void lcl_convert(const uno::Sequence< OUString >& _aSource,cpo::uno::Any& _rDest)
+    void lcl_convert(const cpo::uno::Sequence< OUString >& _aSource,cpo::uno::Any& _rDest)
     {
-        uno::Sequence<cpo::uno::Any> aRet(_aSource.getLength());
+        cpo::uno::Sequence<cpo::uno::Any> aRet(_aSource.getLength());
         std::transform(_aSource.begin(), _aSource.end(), aRet.getArray(),
                        [](auto& str) { return cpo::uno::Any(str); });
         _rDest <<= aRet;
@@ -43,7 +43,7 @@ namespace
         if ( !aPropertiesNode.isValid() )
             return;
 
-        uno::Sequence< OUString > aStringSeq;
+        cpo::uno::Sequence< OUString > aStringSeq;
         for (auto& prop : aPropertiesNode.getNodeNames())
         {
             cpo::uno::Any aValue = aPropertiesNode.getNodeValue(prop + "/Value");
@@ -223,7 +223,7 @@ const ::comphelper::NamedValueCollection& DriversConfig::impl_get(std::u16string
     return *pRet;
 }
 
-uno::Sequence< OUString > DriversConfig::getURLs() const
+cpo::uno::Sequence< OUString > DriversConfig::getURLs() const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     return comphelper::mapKeysToSequence(rDrivers);

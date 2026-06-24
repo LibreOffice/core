@@ -56,8 +56,8 @@ bool parseSegment(
 }
 
 Partial::Partial(
-    css::uno::Sequence< OUString > const & includedPaths,
-    css::uno::Sequence< OUString > const & excludedPaths)
+    cpo::uno::Sequence< OUString > const & includedPaths,
+    cpo::uno::Sequence< OUString > const & excludedPaths)
 {
     // The Partial::Node tree built up here encodes the following information:
     // * Inner node, startInclude: an include starts here that contains excluded

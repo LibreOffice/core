@@ -573,7 +573,7 @@ void ScOptSolverDlg::SaveSolverSettings()
         // The solver engine hasn't changed, so we need to check if engine options changed
         // Query current engine options; here we start by creating a copy of maProperties
         // to ensure the order is the same
-        css::uno::Sequence<css::beans::PropertyValue> vCurOptions(maProperties);
+        cpo::uno::Sequence<css::beans::PropertyValue> vCurOptions(maProperties);
         m_pSolverSettings->GetEngineOptions(vCurOptions);
 
         for (sal_Int32 i = 0; i < vCurOptions.getLength(); i++)
@@ -961,7 +961,7 @@ void ScOptSolverDlg::CallSolver()
         ShowError( false, m_xEdVariableCells.get() );
         return;
     }
-    uno::Sequence<table::CellAddress> aVariables;
+    cpo::uno::Sequence<table::CellAddress> aVariables;
     sal_Int32 nVarPos = 0;
 
     for ( size_t nRangePos=0, nRange = aVarRanges.size(); nRangePos < nRange; ++nRangePos )
@@ -982,7 +982,7 @@ void ScOptSolverDlg::CallSolver()
                 pVariables[nVarPos++] = table::CellAddress( nTab, nCol, nRow );
     }
 
-    uno::Sequence<sheet::SolverConstraint> aConstraints;
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints;
     sal_Int32 nConstrPos = 0;
     for ( const auto& rConstr : m_aConditions )
     {
@@ -1086,7 +1086,7 @@ void ScOptSolverDlg::CallSolver()
     // copy old document values
 
     sal_Int32 nVarCount = aVariables.getLength();
-    uno::Sequence<double> aOldValues( nVarCount );
+    cpo::uno::Sequence<double> aOldValues( nVarCount );
     std::transform(std::cbegin(aVariables), std::cend(aVariables), aOldValues.getArray(),
         [this](const table::CellAddress& rVariable) -> double {
             ScAddress aCellPos;
@@ -1153,7 +1153,7 @@ void ScOptSolverDlg::CallSolver()
     if ( bSuccess )
     {
         // put solution into document so it is visible when asking
-        uno::Sequence<double> aSolution = pState->xSolver->getSolution();
+        cpo::uno::Sequence<double> aSolution = pState->xSolver->getSolution();
         if ( aSolution.getLength() == pState->nVarCount )
         {
             mpDocShell->LockPaint();
@@ -1322,11 +1322,11 @@ void ScOptSolverDlg::FinishSolve(bool bAccepted, const std::shared_ptr<SolveStat
             aOutput.writeString(ScResId(STR_SENSITIVITY_INCREASE));
             aOutput.newLine();
 
-            uno::Sequence<double> aSolution = rState->xSolver->getSolution();
-            uno::Sequence<double> aObjCoefficients = aSensitivity.ObjCoefficients;
-            uno::Sequence<double> aObjReducedCosts = aSensitivity.ObjReducedCosts;
-            uno::Sequence<double> aObjAllowableDecreases = aSensitivity.ObjAllowableDecreases;
-            uno::Sequence<double> aObjAllowableIncreases = aSensitivity.ObjAllowableIncreases;
+            cpo::uno::Sequence<double> aSolution = rState->xSolver->getSolution();
+            cpo::uno::Sequence<double> aObjCoefficients = aSensitivity.ObjCoefficients;
+            cpo::uno::Sequence<double> aObjReducedCosts = aSensitivity.ObjReducedCosts;
+            cpo::uno::Sequence<double> aObjAllowableDecreases = aSensitivity.ObjAllowableDecreases;
+            cpo::uno::Sequence<double> aObjAllowableIncreases = aSensitivity.ObjAllowableIncreases;
             sal_Int32 nRows = rState->aVariables.getLength();
             for (sal_Int32 i = 0; i < nRows; i++)
             {
@@ -1364,11 +1364,11 @@ void ScOptSolverDlg::FinishSolve(bool bAccepted, const std::shared_ptr<SolveStat
             aOutput.writeString(ScResId(STR_SENSITIVITY_INCREASE));
             aOutput.newLine();
 
-            uno::Sequence<double> aConstrValues = aSensitivity.ConstrValues;
-            uno::Sequence<double> aConstrRHS = aSensitivity.ConstrRHS;
-            uno::Sequence<double> aConstrShadowPrices = aSensitivity.ConstrShadowPrices;
-            uno::Sequence<double> aConstrAllowableDecreases = aSensitivity.ConstrAllowableDecreases;
-            uno::Sequence<double> aConstrAllowableIncreases = aSensitivity.ConstrAllowableIncreases;
+            cpo::uno::Sequence<double> aConstrValues = aSensitivity.ConstrValues;
+            cpo::uno::Sequence<double> aConstrRHS = aSensitivity.ConstrRHS;
+            cpo::uno::Sequence<double> aConstrShadowPrices = aSensitivity.ConstrShadowPrices;
+            cpo::uno::Sequence<double> aConstrAllowableDecreases = aSensitivity.ConstrAllowableDecreases;
+            cpo::uno::Sequence<double> aConstrAllowableIncreases = aSensitivity.ConstrAllowableIncreases;
             nRows = rState->aConstraints.getLength();
             for (sal_Int32 i = 0; i < nRows; i++)
             {

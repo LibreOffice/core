@@ -533,7 +533,7 @@ cpo::uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
     return cpo::uno::Any(uno::Reference< container::XNameContainer >(xFamily));
 }
 
-uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
 {
     return {SC_FAMILYNAME_CELL, SC_FAMILYNAME_PAGE, SC_FAMILYNAME_GRAPHIC};
 }
@@ -546,7 +546,7 @@ bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
 // style::XStyleLoader
 
 void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
-                        const uno::Sequence<beans::PropertyValue>& aOptions )
+                        const cpo::uno::Sequence<beans::PropertyValue>& aOptions )
 {
     //! use aOptions (like Writer)
     //! set flag to disable filter option dialogs when importing
@@ -580,7 +580,7 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
     loadStylesFromDocShell(pSource, aOptions);
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderOptions()
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderOptions()
 {
     //  return defaults for options (?)
     return comphelper::InitPropertySequence({
@@ -593,7 +593,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderO
 // style::XStyleLoader2
 
 void SAL_CALL ScStyleFamiliesObj::loadStylesFromDocument( const uno::Reference < lang::XComponent > & aSourceComponent,
-                        const uno::Sequence<beans::PropertyValue>& aOptions )
+                        const cpo::uno::Sequence<beans::PropertyValue>& aOptions )
 {
    // Source document docShell
    if ( !aSourceComponent.is() )
@@ -607,7 +607,7 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromDocument( const uno::Reference <
 // private
 
 void ScStyleFamiliesObj::loadStylesFromDocShell( ScDocShell* pSource,
-                        const uno::Sequence<beans::PropertyValue>& aOptions )
+                        const cpo::uno::Sequence<beans::PropertyValue>& aOptions )
 {
 
     if ( !(pSource && pDocShell) )
@@ -858,7 +858,7 @@ cpo::uno::Any SAL_CALL ScStyleFamilyObj::getByName( const OUString& aName )
     return cpo::uno::Any(uno::Reference< style::XStyle >(xObj));
 }
 
-uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
 {
     SolarMutexGuard aGuard;
     if ( pDocShell )
@@ -869,7 +869,7 @@ uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         sal_uInt16 nCount = aIter.Count();
 
-        uno::Sequence<OUString> aSeq(nCount);
+        cpo::uno::Sequence<OUString> aSeq(nCount);
         OUString* pAry = aSeq.getArray();
         SfxStyleSheetBase* pStyle = aIter.First();
         sal_uInt16 nPos = 0;
@@ -883,7 +883,7 @@ uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
         }
         return aSeq;
     }
-    return uno::Sequence<OUString>();
+    return cpo::uno::Sequence<OUString>();
 }
 
 bool SAL_CALL ScStyleFamilyObj::hasByName( const OUString& aName )
@@ -1256,12 +1256,12 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const OUString& aPro
     return getPropertyState_Impl( aPropertyName );
 }
 
-uno::Sequence<beans::PropertyState> SAL_CALL ScStyleObj::getPropertyStates( const uno::Sequence<OUString>& aPropertyNames )
+cpo::uno::Sequence<beans::PropertyState> SAL_CALL ScStyleObj::getPropertyStates( const cpo::uno::Sequence<OUString>& aPropertyNames )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    uno::Sequence<beans::PropertyState> aRet( aPropertyNames.getLength() );
+    cpo::uno::Sequence<beans::PropertyState> aRet( aPropertyNames.getLength() );
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.getArray(),
         [this](const OUString& rName) -> beans::PropertyState { return getPropertyState_Impl(rName); });
     return aRet;
@@ -1383,12 +1383,12 @@ cpo::uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aProperty
     return getPropertyDefault_Impl( aPropertyName );
 }
 
-uno::Sequence<cpo::uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults( const uno::Sequence<OUString>& aPropertyNames )
+cpo::uno::Sequence<cpo::uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults( const cpo::uno::Sequence<OUString>& aPropertyNames )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    uno::Sequence<cpo::uno::Any> aSequence( aPropertyNames.getLength() );
+    cpo::uno::Sequence<cpo::uno::Any> aSequence( aPropertyNames.getLength() );
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.getArray(),
         [this](const OUString& rName) -> cpo::uno::Any { return getPropertyDefault_Impl(rName); });
     return aSequence;
@@ -1396,8 +1396,8 @@ uno::Sequence<cpo::uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults( const uno
 
 // XMultiPropertySet
 
-void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames,
-                                                const uno::Sequence< cpo::uno::Any >& aValues )
+void SAL_CALL ScStyleObj::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames,
+                                                const cpo::uno::Sequence< cpo::uno::Any >& aValues )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
@@ -1415,18 +1415,18 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< OUString >& aP
     }
 }
 
-uno::Sequence<cpo::uno::Any> SAL_CALL ScStyleObj::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence<cpo::uno::Any> SAL_CALL ScStyleObj::getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
 
-    uno::Sequence<cpo::uno::Any> aSequence( aPropertyNames.getLength() );
+    cpo::uno::Sequence<cpo::uno::Any> aSequence( aPropertyNames.getLength() );
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aSequence.getArray(),
         [this](const OUString& rName) -> cpo::uno::Any { return getPropertyValue_Impl(rName); });
     return aSequence;
 }
 
-void SAL_CALL ScStyleObj::addPropertiesChangeListener( const uno::Sequence<OUString>& /* aPropertyNames */,
+void SAL_CALL ScStyleObj::addPropertiesChangeListener( const cpo::uno::Sequence<OUString>& /* aPropertyNames */,
                                     const uno::Reference<beans::XPropertiesChangeListener>& /* xListener */ )
 {
     // no bound properties
@@ -1438,7 +1438,7 @@ void SAL_CALL ScStyleObj::removePropertiesChangeListener(
     // no bound properties
 }
 
-void SAL_CALL ScStyleObj::firePropertiesChangeEvent( const uno::Sequence<OUString>& /* aPropertyNames */,
+void SAL_CALL ScStyleObj::firePropertiesChangeEvent( const cpo::uno::Sequence<OUString>& /* aPropertyNames */,
                                     const uno::Reference<beans::XPropertiesChangeListener>& /* xListener */ )
 {
     // no bound properties
@@ -1498,7 +1498,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
         static_cast<SfxStyleSheet*>(GetStyle_Impl())->Broadcast(SfxHint(SfxHintId::DataChanged));
 }
 
-void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<OUString>& aPropertyNames )
+void SAL_CALL ScStyleObj::setPropertiesToDefault( const cpo::uno::Sequence<OUString>& aPropertyNames )
 {
     SolarMutexGuard aGuard;
     GetStyle_Impl();
@@ -2055,7 +2055,7 @@ bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
 {
     if (eFamily == SfxStyleFamily::Page)
         return {SCSTYLE_SERVICE, SCPAGESTYLE_SERVICE};

@@ -115,7 +115,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool mbEncrypt = false;
 
     bool mbRestrictPermissions = false;
-    css::uno::Sequence< css::beans::NamedValue > maPreparedOwnerPassword;
+    cpo::uno::Sequence< css::beans::NamedValue > maPreparedOwnerPassword;
     sal_Int32 mnPrint = 0;
     sal_Int32 mnChangesAllowed = 0;
     bool mbCanCopyOrExtract = false;
@@ -152,11 +152,11 @@ public:
     friend class                ImpPDFTabLinksPage;
     friend class                ImpPDFTabSigningPage;
 
-    ImpPDFTabDialog(weld::Window* pParent, const css::uno::Sequence< css::beans::PropertyValue >& rFilterData,
+    ImpPDFTabDialog(weld::Window* pParent, const cpo::uno::Sequence< css::beans::PropertyValue >& rFilterData,
                     const css::uno::Reference< css::lang::XComponent >& rDoc);
     virtual                     ~ImpPDFTabDialog() override;
 
-    css::uno::Sequence< css::beans::PropertyValue >   GetFilterData();
+    cpo::uno::Sequence< css::beans::PropertyValue >   GetFilterData();
 
     ImpPDFTabOpnFtrPage*        getOpenPage() const;
     ImpPDFTabSecurityPage*      getSecurityPage() const;
@@ -332,7 +332,7 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     OUString                    msUserPwdTitle;
     bool                        mbHaveOwnerPassword;
     bool                        mbHaveUserPassword;
-    css::uno::Sequence< css::beans::NamedValue > maPreparedOwnerPassword;
+    cpo::uno::Sequence< css::beans::NamedValue > maPreparedOwnerPassword;
     OUString                    msOwnerPwdTitle;
 
     css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;

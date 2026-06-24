@@ -70,7 +70,7 @@ private:
     std::unique_ptr<PDFSignatureHelper> mpPDFSignatureHelper;
     SignatureInformations maCurrentSignatureInformations;
     DocumentSignatureMode const meSignatureMode;
-    css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> m_manifest;
+    cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>> m_manifest;
     css::uno::Reference<css::io::XStream> mxSignatureStream;
     css::uno::Reference<css::io::XStream> mxScriptingSignatureStream;
     css::uno::Reference<css::frame::XModel> mxModel;

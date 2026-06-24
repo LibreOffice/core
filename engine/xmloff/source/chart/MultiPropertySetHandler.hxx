@@ -155,7 +155,7 @@ private:
             containing the properties names.
         @return True if values could be derived.
     */
-    inline  bool    MultiGet    (const css::uno::Sequence<
+    inline  bool    MultiGet    (const cpo::uno::Sequence<
         OUString> & rNameList);
 
     /** @descr  Try to use the XPropertySet interface to get the property
@@ -164,7 +164,7 @@ private:
             containing the properties names.
         @return True if values could be derived.
     */
-    inline  bool    SingleGet   (const css::uno::Sequence<
+    inline  bool    SingleGet   (const cpo::uno::Sequence<
         OUString> & rNameList);
 
     /** @descr  STL map that maps from property names to polymorphic instances of
@@ -185,7 +185,7 @@ MultiPropertySetHandler::MultiPropertySetHandler (css::uno::Reference<
 
 bool    MultiPropertySetHandler::GetProperties()
 {
-    css::uno::Sequence< OUString> aNameList (aPropertyList.size());
+    cpo::uno::Sequence< OUString> aNameList (aPropertyList.size());
     auto aNameListRange = asNonConstRange(aNameList);
     int i = 0;
     for (const auto& rProperty : aPropertyList)
@@ -196,7 +196,7 @@ bool    MultiPropertySetHandler::GetProperties()
     return true;
 }
 
-bool    MultiPropertySetHandler::MultiGet   (const css::uno::Sequence<
+bool    MultiPropertySetHandler::MultiGet   (const cpo::uno::Sequence<
     OUString> & rNameList)
 {
     css::uno::Reference< css::beans::XMultiPropertySet> xMultiSet (
@@ -205,7 +205,7 @@ bool    MultiPropertySetHandler::MultiGet   (const css::uno::Sequence<
         try
         {
             int i = 0;
-            css::uno::Sequence< cpo::uno::Any> aValueList =
+            cpo::uno::Sequence< cpo::uno::Any> aValueList =
                 xMultiSet->getPropertyValues (rNameList);
             for (auto& rProperty : aPropertyList)
                 rProperty.second->SetValue (aValueList[i++]);
@@ -220,7 +220,7 @@ bool    MultiPropertySetHandler::MultiGet   (const css::uno::Sequence<
     return true;
 }
 
-bool    MultiPropertySetHandler::SingleGet  (const css::uno::Sequence<
+bool    MultiPropertySetHandler::SingleGet  (const cpo::uno::Sequence<
     OUString> & rNameList)
 {
     css::uno::Reference< css::beans::XPropertySet> xSingleSet (

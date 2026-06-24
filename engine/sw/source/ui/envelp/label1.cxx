@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/lineend.hxx>
 #include <svtools/unitconv.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <swtypes.hxx>
 #include <labimp.hxx>
 #include "swuilabimp.hxx"
@@ -417,7 +417,7 @@ void SwLabPage::InitDatabaseBox()
         return;
 
     m_xDatabaseLB->clear();
-    const css::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
+    const cpo::uno::Sequence<OUString> aDataNames = SwDBManager::GetExistingDatabaseNames();
     for (const OUString& rDataName : aDataNames)
         m_xDatabaseLB->append_text(rDataName);
     sal_Int32 nIdx{ 0 };

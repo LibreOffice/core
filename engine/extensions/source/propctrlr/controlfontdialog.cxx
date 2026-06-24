@@ -61,7 +61,7 @@ using namespace cpo::uno;
 
     Sequence<sal_Int8> SAL_CALL OControlFontDialog::getImplementationId(  )
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
 
@@ -71,7 +71,7 @@ using namespace cpo::uno;
     }
 
 
-    css::uno::Sequence<OUString> SAL_CALL OControlFontDialog::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> SAL_CALL OControlFontDialog::getSupportedServiceNames()
     {
         return { u"com.sun.star.form.ControlFontDialog"_ustr };
     }
@@ -140,7 +140,7 @@ using namespace cpo::uno;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_OControlFontDialog_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::OControlFontDialog(context));
 }

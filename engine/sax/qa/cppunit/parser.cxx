@@ -28,14 +28,14 @@ class DummyTokenHandler : public sax_fastparser::FastTokenHandlerBase
 public:
              DummyTokenHandler() {}
 
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence<sal_Int8>& ) override
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence<sal_Int8>& ) override
     {
         return FastToken::DONTKNOW;
     }
-    virtual uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 ) override
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "getUTF8Identifier: unexpected call", false );
-        return uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
     virtual sal_Int32 getTokenDirect(std::string_view /* token */) const override
     {
@@ -74,7 +74,7 @@ uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInpu
 {
     uno::Reference< io::XOutputStream > xPipe( io::Pipe::create(m_xContext) );
     uno::Reference< io::XInputStream > xInStream( xPipe, uno::UNO_QUERY );
-    uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(sInput.getStr()), sInput.getLength() );
+    cpo::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(sInput.getStr()), sInput.getLength() );
     xPipe->writeBytes( aSeq );
     xPipe->flush();
     xPipe->closeOutput();

@@ -235,7 +235,7 @@ UNOTOOLS_DLLPUBLIC void clearComponentDataEntry(comphelper::SequenceAsHashMap& r
     passed password verifier. If empty, no valid password has been
     found, or the user has chosen to cancel password input.
  */
-UNOTOOLS_DLLPUBLIC css::uno::Sequence<css::beans::NamedValue>
+UNOTOOLS_DLLPUBLIC cpo::uno::Sequence<css::beans::NamedValue>
 requestAndVerifyDocPassword(comphelper::SequenceAsHashMap& rMediaDescriptor,
                             comphelper::IDocPasswordVerifier& rVerifier,
                             comphelper::DocPasswordRequestType eRequestType,

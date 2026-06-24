@@ -68,7 +68,7 @@ namespace frm
 
         /// appends (!) the description of all font related properties to the given sequence
         static void describeFontRelatedProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps );
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps );
 
         void     getFastPropertyValue            ( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const;
         /// @throws css::lang::IllegalArgumentException

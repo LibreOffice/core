@@ -616,22 +616,22 @@ const OUString & SettingsTable::GetListSeparator() const
 }
 
 
-uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangProperties() const
+cpo::uno::Sequence<beans::PropertyValue> const & SettingsTable::GetThemeFontLangProperties() const
 {
     return m_pThemeFontLangProps;
 }
 
-uno::Sequence<beans::PropertyValue> const & SettingsTable::GetStylePaneFormatFilterProperties() const
+cpo::uno::Sequence<beans::PropertyValue> const & SettingsTable::GetStylePaneFormatFilterProperties() const
 {
     return m_pStylePaneFormatFilterProps;
 }
 
-uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings()
+cpo::uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings()
 {
     if ( GetWordCompatibilityMode() == -1 )
     {
         // the default value for an undefined compatibilityMode is 12 (Word 2007)
-        uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aCompatSetting( comphelper::InitPropertySequence({
             { "name", cpo::uno::Any(u"compatibilityMode"_ustr) },
             { "uri", cpo::uno::Any(u"http://schemas.microsoft.com/office/word"_ustr) },
             { "val", cpo::uno::Any(u"12"_ustr) } //12: Use word processing features specified in ECMA-376. This is the default.
@@ -647,12 +647,12 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings()
     return comphelper::containerToSequence(m_aCompatSettings);
 }
 
-uno::Sequence<beans::PropertyValue> SettingsTable::GetDocumentProtectionSettings() const
+cpo::uno::Sequence<beans::PropertyValue> SettingsTable::GetDocumentProtectionSettings() const
 {
     return m_pDocumentProtection->toSequence();
 }
 
-uno::Sequence<beans::PropertyValue> SettingsTable::GetWriteProtectionSettings() const
+cpo::uno::Sequence<beans::PropertyValue> SettingsTable::GetWriteProtectionSettings() const
 {
     return m_pWriteProtection->toSequence();
 }
@@ -702,7 +702,7 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     {
         // use dummy protection key to forbid disabling of Record changes without a notice
         // (extending the recent GrabBag support)    TODO support password verification...
-        css::uno::Sequence<sal_Int8> aDummyKey { 1 };
+        cpo::uno::Sequence<sal_Int8> aDummyKey { 1 };
         xDoc->setPropertyValue(u"RedlineProtectionKey"_ustr, cpo::uno::Any( aDummyKey ));
     }
 
@@ -792,7 +792,7 @@ std::pair<bool, bool> SettingsTable::GetCompatSettingHasAndValue( std::u16string
     {
         if (rProp.Name == "compatSetting") //always true
         {
-            css::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
+            cpo::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
             rProp.Value >>= aCurrentCompatSettings;
 
             OUString sName;
@@ -826,7 +826,7 @@ sal_Int32 SettingsTable::GetWordCompatibilityMode()
     {
         if (rProp.Name == "compatSetting") //always true
         {
-            css::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
+            cpo::uno::Sequence<css::beans::PropertyValue> aCurrentCompatSettings;
             rProp.Value >>= aCurrentCompatSettings;
 
             OUString sName;

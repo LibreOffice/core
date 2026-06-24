@@ -55,7 +55,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetFormulaParserMap()
         { SC_UNO_COMPILEENGLISH,       0,  cppu::UnoType<bool>::get(),                   0, 0 },
         { SC_UNO_IGNORELEADING,        0,  cppu::UnoType<bool>::get(),                   0, 0 },
         { SC_UNO_FORMULACONVENTION,    0,  cppu::UnoType<decltype(sheet::AddressConvention::UNSPECIFIED)>::get(), 0, 0 },
-        { SC_UNO_OPCODEMAP,            0,  cppu::UnoType<uno::Sequence< sheet::FormulaOpCodeMapEntry >>::get(), 0, 0 },
+        { SC_UNO_OPCODEMAP,            0,  cppu::UnoType<cpo::uno::Sequence< sheet::FormulaOpCodeMapEntry >>::get(), 0, 0 },
     };
     return aFormulaParserMap_Impl;
 }
@@ -127,11 +127,11 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
     rCompiler.SetRefConventionChartOOXML(mbRefConventionChartOOXML);
 }
 
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
+cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
     const OUString& aFormula, const table::CellAddress& rReferencePos )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<sheet::FormulaToken> aRet;
+    cpo::uno::Sequence<sheet::FormulaToken> aRet;
 
     if (mpDocShell)
     {
@@ -159,7 +159,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
 }
 
 OUString SAL_CALL ScFormulaParserObj::printFormula(
-        const uno::Sequence<sheet::FormulaToken>& aTokens, const table::CellAddress& rReferencePos )
+        const cpo::uno::Sequence<sheet::FormulaToken>& aTokens, const table::CellAddress& rReferencePos )
 {
     SolarMutexGuard aGuard;
     OUString aRet;
@@ -375,13 +375,13 @@ static void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefD
 }
 
 bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
-        ScTokenArray& rTokenArray, const uno::Sequence<sheet::FormulaToken>& rSequence )
+        ScTokenArray& rTokenArray, const cpo::uno::Sequence<sheet::FormulaToken>& rSequence )
 {
     return !rTokenArray.Fill(rSequence, rDoc.GetSharedStringPool(), rDoc.GetExternalRefManager());
 }
 
 void ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
-        uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray,
+        cpo::uno::Sequence<sheet::FormulaToken>& rSequence, const ScTokenArray& rTokenArray,
         bool bIgnoreTableRefNoInnerReference )
 {
     sal_Int32 nLen = static_cast<sal_Int32>(rTokenArray.GetLen());

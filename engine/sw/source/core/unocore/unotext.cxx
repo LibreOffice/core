@@ -214,10 +214,10 @@ SwXText::queryInterface(const uno::Type& rType)
     return aRet;
 }
 
-uno::Sequence< uno::Type > SAL_CALL
+cpo::uno::Sequence< uno::Type > SAL_CALL
 SwXText::getTypes()
 {
-    static const uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< uno::Type > aTypes {
         cppu::UnoType<text::XText>::get(),
         cppu::UnoType<text::XTextRangeCompare>::get(),
         cppu::UnoType<text::XRelativeTextContentInsert>::get(),
@@ -1131,7 +1131,7 @@ namespace
 
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::finishParagraph(
-        const uno::Sequence< beans::PropertyValue > & rProperties)
+        const cpo::uno::Sequence< beans::PropertyValue > & rProperties)
 {
     SolarMutexGuard g;
 
@@ -1140,7 +1140,7 @@ SwXText::finishParagraph(
 
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::finishParagraphInsert(
-        const uno::Sequence< beans::PropertyValue > & rProperties,
+        const cpo::uno::Sequence< beans::PropertyValue > & rProperties,
         const uno::Reference< text::XTextRange >& xInsertPosition)
 {
     SolarMutexGuard g;
@@ -1150,7 +1150,7 @@ SwXText::finishParagraphInsert(
 
 rtl::Reference< SwXParagraph >
 SwXText::finishSwParagraphInsert(
-        const uno::Sequence< beans::PropertyValue > & rProperties,
+        const cpo::uno::Sequence< beans::PropertyValue > & rProperties,
         const uno::Reference< text::XTextRange >& xInsertPosition)
 {
     SolarMutexGuard g;
@@ -1160,7 +1160,7 @@ SwXText::finishSwParagraphInsert(
 
 rtl::Reference<SwXParagraph>
 SwXText::finishOrAppendParagraph(
-        const uno::Sequence< beans::PropertyValue > & rProperties,
+        const cpo::uno::Sequence< beans::PropertyValue > & rProperties,
         const uno::Reference< text::XTextRange >& xInsertPosition)
 {
     if (!m_bIsValid)
@@ -1268,7 +1268,7 @@ SwXText::finishOrAppendParagraph(
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::insertTextPortion(
         const OUString& rText,
-        const uno::Sequence< beans::PropertyValue > &
+        const cpo::uno::Sequence< beans::PropertyValue > &
             rCharacterAndParagraphProperties,
         const uno::Reference<text::XTextRange>& xInsertPosition)
 {
@@ -1287,7 +1287,7 @@ rtl::Reference< SwXTextRange >
 SwXText::insertTextPortionImpl(
         SolarMutexGuard& /*rGuard*/,
         std::u16string_view rText,
-        const uno::Sequence< beans::PropertyValue > & rCharacterAndParagraphProperties,
+        const cpo::uno::Sequence< beans::PropertyValue > & rCharacterAndParagraphProperties,
         const rtl::Reference<SwXTextCursor>& xTextCursor)
 {
     bool bIllegalException = false;
@@ -1348,7 +1348,7 @@ SwXText::insertTextPortionImpl(
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::appendTextPortion(
         const OUString& rText,
-        const uno::Sequence< beans::PropertyValue > &
+        const cpo::uno::Sequence< beans::PropertyValue > &
             rCharacterAndParagraphProperties)
 {
     SolarMutexGuard aGuard;
@@ -1362,7 +1362,7 @@ SwXText::appendTextPortion(
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::insertTextContentWithProperties(
     const uno::Reference< text::XTextContent >& xTextContent,
-    const uno::Sequence< beans::PropertyValue >&
+    const cpo::uno::Sequence< beans::PropertyValue >&
         rCharacterAndParagraphProperties,
     const uno::Reference< text::XTextRange >& xInsertPosition)
 {
@@ -1421,7 +1421,7 @@ SwXText::insertTextContentWithProperties(
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::appendTextContent(
     const uno::Reference< text::XTextContent >& xTextContent,
-    const uno::Sequence< beans::PropertyValue >& rCharacterAndParagraphProperties
+    const cpo::uno::Sequence< beans::PropertyValue >& rCharacterAndParagraphProperties
     )
 {
     // Right now this doesn't need a guard, as it's just calling the insert
@@ -1478,7 +1478,7 @@ uno::Reference< text::XTextContent > SAL_CALL
 SwXText::convertToTextFrame(
     const uno::Reference< text::XTextRange >& xStart,
     const uno::Reference< text::XTextRange >& xEnd,
-    const uno::Sequence< beans::PropertyValue >& rFrameProperties)
+    const cpo::uno::Sequence< beans::PropertyValue >& rFrameProperties)
 {
     return static_cast<SwXFrame*>(convertToSwTextFrame(xStart, xEnd, comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(rFrameProperties)).get());
 }
@@ -1837,7 +1837,7 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
 }
 
 void SwXText::ConvertCell(
-    const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
+    const cpo::uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
     std::vector<SwNodeRange> & rRowNodes,
     SwNodeRange *const pLastCell)
 {
@@ -2056,11 +2056,11 @@ void SwXText::ConvertCell(
     }
 }
 
-typedef uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
+typedef cpo::uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
 
 static void
 lcl_ApplyRowProperties(
-    uno::Sequence<beans::PropertyValue> const& rRowProperties,
+    cpo::uno::Sequence<beans::PropertyValue> const& rRowProperties,
     cpo::uno::Any const& rRow,
     TableColumnSeparators & rRowSeparators)
 {
@@ -2092,7 +2092,7 @@ static sal_Int32 lcl_GetLeftPos(sal_Int32 nCell, TableColumnSeparators const& rR
 static void
 lcl_ApplyCellProperties(
     const sal_Int32 nLeftPos,
-    const uno::Sequence< beans::PropertyValue >& rCellProperties,
+    const cpo::uno::Sequence< beans::PropertyValue >& rCellProperties,
     const rtl::Reference< SwXCell >& xCell,
     std::vector<VerticallyMergedCell> & rMergedCells)
 {
@@ -2193,26 +2193,26 @@ lcl_MergeCells(std::vector<VerticallyMergedCell> & rMergedCells)
 
 uno::Reference< text::XTextTable > SAL_CALL
 SwXText::convertToTable(
-    const uno::Sequence< uno::Sequence< uno::Sequence<
+    const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Sequence<
         uno::Reference< text::XTextRange > > > >& rTableRanges,
-    const uno::Sequence< uno::Sequence< uno::Sequence<
+    const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Sequence<
         beans::PropertyValue > > >& rCellProperties,
-    const uno::Sequence< uno::Sequence< beans::PropertyValue > >&
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > >&
         rRowProperties,
-    const uno::Sequence< beans::PropertyValue >& rTableProperties)
+    const cpo::uno::Sequence< beans::PropertyValue >& rTableProperties)
 {
     return uno::Reference< text::XTextTable >(convertToSwTable(rTableRanges, rCellProperties, rRowProperties, rTableProperties));
 }
 
 rtl::Reference< SwXTextTable >
 SwXText::convertToSwTable(
-    const uno::Sequence< uno::Sequence< uno::Sequence<
+    const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Sequence<
         uno::Reference< text::XTextRange > > > >& rTableRanges,
-    const uno::Sequence< uno::Sequence< uno::Sequence<
+    const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Sequence<
         beans::PropertyValue > > >& rCellProperties,
-    const uno::Sequence< uno::Sequence< beans::PropertyValue > >&
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::PropertyValue > >&
         rRowProperties,
-    const uno::Sequence< beans::PropertyValue >& rTableProperties)
+    const cpo::uno::Sequence< beans::PropertyValue >& rTableProperties)
 {
     SolarMutexGuard aGuard;
 
@@ -2229,13 +2229,13 @@ SwXText::convertToSwTable(
     }
 
     //at first collect the text ranges as SwPaMs
-    const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >*
+    const cpo::uno::Sequence< cpo::uno::Sequence< uno::Reference< text::XTextRange > > >*
         pTableRanges = rTableRanges.getConstArray();
     std::vector< std::vector<SwNodeRange> > aTableNodes;
     for (sal_Int32 nRow = 0; nRow < rTableRanges.getLength(); ++nRow)
     {
         std::vector<SwNodeRange> aRowNodes;
-        const uno::Sequence< uno::Reference< text::XTextRange > >* pRow =
+        const cpo::uno::Sequence< uno::Reference< text::XTextRange > >* pRow =
             pTableRanges[nRow].getConstArray();
         const sal_Int32 nCells(pTableRanges[nRow].getLength());
 
@@ -2421,24 +2421,24 @@ bool SAL_CALL SwXBodyText::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXBodyText::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.Text"_ustr };
 }
 
-uno::Sequence< uno::Type > SAL_CALL
+cpo::uno::Sequence< uno::Type > SAL_CALL
 SwXBodyText::getTypes()
 {
-    const uno::Sequence< uno::Type > aTypes = SwXBodyText_Base::getTypes();
-    const uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
+    const cpo::uno::Sequence< uno::Type > aTypes = SwXBodyText_Base::getTypes();
+    const cpo::uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
     return ::comphelper::concatSequences(aTypes, aTextTypes);
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL
+cpo::uno::Sequence< sal_Int8 > SAL_CALL
 SwXBodyText::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 cpo::uno::Any SAL_CALL
@@ -2624,7 +2624,7 @@ bool SAL_CALL SwXHeadFootText::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL
+cpo::uno::Sequence<OUString> SAL_CALL
 SwXHeadFootText::getSupportedServiceNames()
 {
     return {u"com.sun.star.text.Text"_ustr};
@@ -2645,16 +2645,16 @@ const SwStartNode* SwXHeadFootText::GetStartNode() const
     return pSttNd;
 }
 
-uno::Sequence<uno::Type> SAL_CALL SwXHeadFootText::getTypes()
+cpo::uno::Sequence<uno::Type> SAL_CALL SwXHeadFootText::getTypes()
 {
     return ::comphelper::concatSequences(
         SwXHeadFootText_Base::getTypes(),
         SwXText::getTypes());
 }
 
-uno::Sequence<sal_Int8> SAL_CALL SwXHeadFootText::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL SwXHeadFootText::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 cpo::uno::Any SAL_CALL SwXHeadFootText::queryInterface(const uno::Type& rType)

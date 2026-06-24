@@ -388,7 +388,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     try
     {
         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument().GetVbaEventProcessor(), uno::UNO_SET_THROW );
-        uno::Sequence< cpo::uno::Any > aArgs;
+        cpo::uno::Sequence< cpo::uno::Any > aArgs;
         xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
     }
     catch( uno::Exception& )
@@ -457,7 +457,7 @@ void ExportAsFixedFormatHelper(
 
     OUString sRange(u"-"_ustr);
 
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData;
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData;
     if (nFrom || nTo)
     {
         if (nFrom)
@@ -491,7 +491,7 @@ void ExportAsFixedFormatHelper(
     }
 
     // init set of params for storeToURL() call
-    css::uno::Sequence<css::beans::PropertyValue> storeProps{
+    cpo::uno::Sequence<css::beans::PropertyValue> storeProps{
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
         comphelper::makePropertyValue(u"FilterName"_ustr, u"calc_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"URL"_ustr, sURL)
@@ -560,7 +560,7 @@ void SetDocInfoState(
             xDocPropsToFill->getUserDefinedProperties(), uno::UNO_QUERY);
         uno::Reference< beans::XPropertyContainer > xContainer(xSet, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
-        const uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+        const cpo::uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
         for (const beans::Property& rProp : lProps)
         {
             cpo::uno::Any aValue = xPropSet->getPropertyValue(rProp.Name);

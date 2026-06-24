@@ -57,7 +57,7 @@ void ScCondFormatMergeTest::testCondFormatMerge()
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xCondFormats->getLength());
 
-    uno::Sequence<uno::Reference<sheet::XConditionalFormat>> xCondFormatSeq
+    cpo::uno::Sequence<uno::Reference<sheet::XConditionalFormat>> xCondFormatSeq
         = xCondFormats->getConditionalFormats();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xCondFormatSeq.getLength());
 
@@ -76,7 +76,7 @@ void ScCondFormatMergeTest::testCondFormatMerge()
         CPPUNIT_ASSERT(aAny >>= xCellRanges);
         CPPUNIT_ASSERT(xCellRanges.is());
 
-        uno::Sequence<table::CellRangeAddress> aRanges = xCellRanges->getRangeAddresses();
+        cpo::uno::Sequence<table::CellRangeAddress> aRanges = xCellRanges->getRangeAddresses();
         CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(1), aRanges.getLength());
 
         table::CellRangeAddress aRange0 = aRanges[0];

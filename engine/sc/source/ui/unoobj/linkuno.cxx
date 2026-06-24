@@ -48,7 +48,7 @@
 using namespace com::sun::star;
 using namespace formula;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
 
@@ -518,7 +518,7 @@ bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
     return false;
 }
 
-uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames()
 {
     typedef std::unordered_set<OUString> StrSetType;
 
@@ -526,14 +526,14 @@ uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames()
     //  Name is the same as file name
 
     if (!pDocShell)
-        return uno::Sequence<OUString>();
+        return cpo::uno::Sequence<OUString>();
 
     StrSetType aNames;
     ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
 
     sal_Int32 nLinkCount = getCount();
-    uno::Sequence<OUString> aSeq(nLinkCount);
+    cpo::uno::Sequence<OUString> aSeq(nLinkCount);
     OUString* pAry = aSeq.getArray();
     size_t nPos = 0;
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
@@ -1109,10 +1109,10 @@ void SAL_CALL ScDDELinkObj::removeRefreshListener(
 
 // XDDELinkResults
 
-uno::Sequence< uno::Sequence< cpo::uno::Any > > ScDDELinkObj::getResults(  )
+cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > ScDDELinkObj::getResults(  )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< uno::Sequence< cpo::uno::Any > > aReturn;
+    cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > aReturn;
     bool bSuccess = false;
 
     if ( pDocShell )
@@ -1143,7 +1143,7 @@ uno::Sequence< uno::Sequence< cpo::uno::Any > > ScDDELinkObj::getResults(  )
     return aReturn;
 }
 
-void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< cpo::uno::Any > >& aResults )
+void ScDDELinkObj::setResults( const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aResults )
 {
     SolarMutexGuard aGuard;
     bool bSuccess = false;
@@ -1279,7 +1279,7 @@ cpo::uno::Any SAL_CALL ScDDELinksObj::getByName( const OUString& aName )
     return cpo::uno::Any(uno::Reference<sheet::XDDELink>(xLink));
 }
 
-uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -1288,7 +1288,7 @@ uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()
 
         ScDocument& rDoc = pDocShell->GetDocument();
         size_t nCount = pDocShell->GetDocument().GetDocLinkManager().getDdeLinkCount();
-        uno::Sequence<OUString> aSeq(nCount);
+        cpo::uno::Sequence<OUString> aSeq(nCount);
         OUString* pAry = aSeq.getArray();
 
         for (size_t i=0; i<nCount; i++)
@@ -1298,7 +1298,7 @@ uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()
         }
         return aSeq;
     }
-    return uno::Sequence<OUString>();
+    return cpo::uno::Sequence<OUString>();
 }
 
 bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )

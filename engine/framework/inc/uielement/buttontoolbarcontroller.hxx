@@ -56,7 +56,7 @@ class ButtonToolbarController final : public css::frame::XStatusListener,
         virtual void SAL_CALL release() noexcept override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUpdatable
         virtual void SAL_CALL update() override;

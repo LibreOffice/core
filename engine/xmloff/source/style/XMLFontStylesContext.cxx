@@ -305,7 +305,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bo
         SAL_WARN( "xmloff", "External URL for font file not handled." );
 }
 
-void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const ::css::uno::Sequence< sal_Int8 >& rData, const bool eot )
+void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const ::cpo::uno::Sequence< sal_Int8 >& rData, const bool eot )
 {
     const uno::Reference< io::XInputStream > xInput( new comphelper::SequenceInputStream( rData ) );
     const OUString fontName = font.familyName();

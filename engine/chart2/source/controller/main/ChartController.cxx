@@ -113,7 +113,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 ChartController::ChartController(uno::Reference<uno::XComponentContext> xContext) :
     m_aLifeTimeManager( nullptr ),
@@ -704,7 +704,7 @@ css::uno::Reference<css::awt::XWindow> SAL_CALL ChartController::getComponentWin
 
 OUString SAL_CALL ChartController::getViewControllerName() { return {}; }
 
-css::uno::Sequence<css::beans::PropertyValue> SAL_CALL ChartController::getCreationArguments()
+cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL ChartController::getCreationArguments()
 {
     return {};
 }
@@ -1056,9 +1056,9 @@ uno::Reference<frame::XDispatch> SAL_CALL
     return uno::Reference< frame::XDispatch > ();
 }
 
-uno::Sequence<uno::Reference<frame::XDispatch > >
+cpo::uno::Sequence<uno::Reference<frame::XDispatch > >
     ChartController::queryDispatches(
-        const uno::Sequence<frame::DispatchDescriptor>& xDescripts )
+        const cpo::uno::Sequence<frame::DispatchDescriptor>& xDescripts )
 {
     SolarMutexGuard g;
 
@@ -1066,14 +1066,14 @@ uno::Sequence<uno::Reference<frame::XDispatch > >
     {
         return m_aDispatchContainer.getDispatchesForURLs( xDescripts );
     }
-    return uno::Sequence<uno::Reference<frame::XDispatch > > ();
+    return cpo::uno::Sequence<uno::Reference<frame::XDispatch > > ();
 }
 
 // frame::XDispatch
 
 void SAL_CALL ChartController::dispatch(
     const util::URL& rURL,
-    const uno::Sequence< beans::PropertyValue >& rArgs )
+    const cpo::uno::Sequence< beans::PropertyValue >& rArgs )
 {
     OUString aCommand = rURL.Path;
 

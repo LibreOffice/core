@@ -26,7 +26,7 @@ namespace com::sun::star::awt
 {
 struct KeyStroke;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class E> class Sequence;
 }
@@ -39,7 +39,7 @@ namespace comphelper
  * @param    keySet    the key stroke sequence.
  */
 COMPHELPER_DLLPUBLIC OUString
-GetkeyBindingStrByXkeyBinding(const css::uno::Sequence<css::awt::KeyStroke>& keySet);
+GetkeyBindingStrByXkeyBinding(const cpo::uno::Sequence<css::awt::KeyStroke>& keySet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

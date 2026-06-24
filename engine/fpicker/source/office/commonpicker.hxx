@@ -145,9 +145,9 @@ namespace svt
 
         // XControlInformation functions
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedControls(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedControls(  ) override;
         virtual bool SAL_CALL isControlSupported( const OUString& aControlName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedControlProperties( const OUString& aControlName ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedControlProperties( const OUString& aControlName ) override;
         virtual bool SAL_CALL isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) override;
 
 
@@ -159,7 +159,7 @@ namespace svt
         // XInitialization functions
 
 
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
         // misc

@@ -20,7 +20,7 @@
 #include <scitems.hxx>
 #include <editeng/justifyitem.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <o3tl/unit_conversion.hxx>
@@ -573,7 +573,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 if ( aObj.ExportString( aString, nFormat ) )
                     bOK = SetString( aString );
             }
-            else if ( rFlavor.DataType.equals( cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ) )
+            else if ( rFlavor.DataType.equals( cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ) )
             {
                 //  SetObject converts a stream into an Int8-Sequence
                 bOK = SetObject( &aObj, SCTRANS_TYPE_IMPEX, rFlavor );

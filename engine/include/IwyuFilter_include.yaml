@@ -95,10 +95,10 @@ excludelist:
     - cpo/uno/Any.hxx
     include/cppuhelper/propertysetmixin.hxx:
     #Needed for implicit destructor
-    - com/sun/star/uno/Sequence.hxx
+    - cpo/uno/Sequence.hxx
     include/cppuhelper/interfacecontainer.h:
     #Needed for implicit destructor
-    - com/sun/star/uno/Sequence.hxx
+    - cpo/uno/Sequence.hxx
     include/ucbhelper/activedatasink.hxx:
     # base class has to be a complete type
     - com/sun/star/io/XActiveDataSink.hpp
@@ -752,7 +752,7 @@ excludelist:
     # Needed for macro defines
     - com/sun/star/drawing/PointSequence.hpp
     - com/sun/star/drawing/PointSequenceSequence.hpp
-    - com/sun/star/uno/Sequence.hxx
+    - cpo/uno/Sequence.hxx
     - com/sun/star/drawing/RectanglePoint.hpp
     - com/sun/star/awt/XBitmap.hpp
     - com/sun/star/awt/Gradient.hpp

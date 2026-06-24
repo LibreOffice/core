@@ -223,7 +223,7 @@ namespace dbtools
         void setFloat           ( sal_Int32 _nIndex, float x);
         void setDouble          ( sal_Int32 _nIndex, double x);
         void setString          ( sal_Int32 _nIndex, const OUString& x);
-        void setBytes           ( sal_Int32 _nIndex, const css::uno::Sequence< sal_Int8 >& x);
+        void setBytes           ( sal_Int32 _nIndex, const cpo::uno::Sequence< sal_Int8 >& x);
         void setDate            ( sal_Int32 _nIndex, const css::util::Date& x);
         void setTime            ( sal_Int32 _nIndex, const css::util::Time& x);
         void setTimestamp       ( sal_Int32 _nIndex, const css::util::DateTime& x);

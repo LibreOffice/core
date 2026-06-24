@@ -628,7 +628,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAnnotationRef)
 CPPUNIT_TEST_FIXTURE(Test, testBadFormulaResult)
 {
     // Given a loaded by not laid out document:
-    uno::Sequence<beans::PropertyValue> aFilterOptions = {
+    cpo::uno::Sequence<beans::PropertyValue> aFilterOptions = {
         comphelper::makePropertyValue(u"Hidden"_ustr, true),
     };
     mxComponent = loadFromDesktop(createFileURL(u"formula-result.fodt"),

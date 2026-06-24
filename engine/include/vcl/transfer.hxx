@@ -151,7 +151,7 @@ private:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     public:
 
@@ -180,7 +180,7 @@ public:
 
     // XTransferable
     virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
     virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
 
     // Transferable2
@@ -278,7 +278,7 @@ class VCL_DLLPUBLIC TransferableDataHelper final
 
 public:
 
-    static void                 FillDataFlavorExVector( const css::uno::Sequence< css::datatransfer::DataFlavor >& rDataFlavorSeq,
+    static void                 FillDataFlavorExVector( const cpo::uno::Sequence< css::datatransfer::DataFlavor >& rDataFlavorSeq,
                                                         DataFlavorExVector& rDataFlavorExVector );
 
                                 TransferableDataHelper();
@@ -346,8 +346,8 @@ public:
     bool                        GetFileList( SotClipboardFormatId nFormat, FileList& rFileList ) const;
     bool                        GetFileList( FileList& rFileList ) const;
 
-    css::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
-    css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
+    cpo::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc ) const;
+    cpo::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
     std::unique_ptr<SvStream>    GetSotStorageStream( SotClipboardFormatId nFormat ) const;
     std::unique_ptr<SvStream>    GetSotStorageStream( const css::datatransfer::DataFlavor& rFlavor ) const;
@@ -459,7 +459,7 @@ private:
     void                ImplConstruct();
 
                         // called by our own implementation of XDropTargetListener (DropTargetListener instance)
-    SAL_DLLPRIVATE void ImplBeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
+    SAL_DLLPRIVATE void ImplBeginDrag( const cpo::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors );
     SAL_DLLPRIVATE void ImplEndDrag();
 
 public:

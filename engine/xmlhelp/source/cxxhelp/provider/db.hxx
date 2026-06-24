@@ -56,7 +56,7 @@ namespace helpdatafileproxy {
         css::uno::Reference< css::ucb::XSimpleFileAccess3 >
                             m_xSFA;
 
-        css::uno::Sequence< sal_Int8 >
+        cpo::uno::Sequence< sal_Int8 >
                             m_aItData;
         int                 m_nItRead;
         int                 m_iItPos;

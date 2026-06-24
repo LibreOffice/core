@@ -40,7 +40,7 @@ namespace dbp
     public:
         explicit OUnoAutoPilot(const css::uno::Reference< css::uno::XComponentContext >& _rxORB,
                 OUString aImplementationName,
-                const css::uno::Sequence<OUString>& aSupportedServices)
+                const cpo::uno::Sequence<OUString>& aSupportedServices)
             : OUnoAutoPilot_Base(_rxORB),
               m_ImplementationName(std::move(aImplementationName)),
               m_SupportedServices(aSupportedServices)
@@ -49,9 +49,9 @@ namespace dbp
 
 
         // XTypeProvider
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override
+        virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override
         {
-            return css::uno::Sequence<sal_Int8>();
+            return cpo::uno::Sequence<sal_Int8>();
         }
 
         // XServiceInfo
@@ -60,7 +60,7 @@ namespace dbp
             return m_ImplementationName;
         }
 
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
         {
             return m_SupportedServices;
         }
@@ -80,7 +80,7 @@ namespace dbp
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override
         {
-            css::uno::Sequence< css::beans::Property > aProps;
+            cpo::uno::Sequence< css::beans::Property > aProps;
             describeProperties(aProps);
             return new ::cppu::OPropertyArrayHelper(aProps);
         }
@@ -107,7 +107,7 @@ namespace dbp
 
         css::uno::Reference< css::beans::XPropertySet >   m_xObjectModel;
         OUString m_ImplementationName;
-        css::uno::Sequence<OUString> m_SupportedServices;
+        cpo::uno::Sequence<OUString> m_SupportedServices;
 
     };
 

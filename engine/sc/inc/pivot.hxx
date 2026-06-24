@@ -46,7 +46,7 @@
 #include <memory>
 #include <optional>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
@@ -102,7 +102,7 @@ struct ScDPLabelData
         SC_DLLPUBLIC OUString const & getDisplayName() const;
     };
     std::vector<Member>                    maMembers;
-    css::uno::Sequence<OUString>           maHiers;        ///< Hierarchies.
+    cpo::uno::Sequence<OUString>           maHiers;        ///< Hierarchies.
     css::sheet::DataPilotFieldSortInfo     maSortInfo;     ///< Sorting info.
     css::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   ///< Layout info.
     css::sheet::DataPilotFieldAutoShowInfo maShowInfo;     ///< AutoShow info.

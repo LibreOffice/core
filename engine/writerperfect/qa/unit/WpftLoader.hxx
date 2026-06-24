@@ -12,7 +12,7 @@
 #include "wpftqahelperdllapi.h"
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -74,7 +74,7 @@ private:
     bool impl_load();
     void impl_dispose();
 
-    void impl_detectFilterName(css::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
+    void impl_detectFilterName(cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
                                const OUString& rTypeName);
 
 private:

@@ -95,7 +95,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool office_is_running();
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 oslProcess raiseProcess( OUString const & appURL,
-                         css::uno::Sequence< OUString > const & args );
+                         cpo::uno::Sequence< OUString > const & args );
 
 
 

@@ -51,8 +51,8 @@ public:
 
     // css::awt::XBitmap
     css::awt::Size                 SAL_CALL getSize() override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getDIB() override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() override;
+    cpo::uno::Sequence< sal_Int8 > SAL_CALL getDIB() override;
+    cpo::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() override;
 
     // XAccounting
     sal_Int64 SAL_CALL estimateUsage() override;

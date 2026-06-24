@@ -58,7 +58,7 @@ ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperI
     m_bIsMenu = sResourceUrl == ITEM_MENUBAR_URL;
 }
 
-uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemData( const OUString& sCommandURL,
+cpo::uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemData( const OUString& sCommandURL,
                                                                                    const OUString& sHelpURL,
                                                                                    const OUString& sLabel,
                                                                                    sal_uInt16 nType,
@@ -66,7 +66,7 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
                                                                                    bool isVisible,
                                                                                    bool isEnabled )
 {
-    uno::Sequence< beans::PropertyValue > aProps{
+    cpo::uno::Sequence< beans::PropertyValue > aProps{
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, sCommandURL),
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_HELPURL, sHelpURL),
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_LABEL, sLabel),
@@ -79,7 +79,7 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateMenuItemDat
     return aProps;
 }
 
-uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItemData( const OUString& sCommandURL,
+cpo::uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItemData( const OUString& sCommandURL,
                                                                                       const OUString& sHelpURL,
                                                                                       const OUString& sLabel,
                                                                                       sal_uInt16 nType,
@@ -87,7 +87,7 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
                                                                                       bool isVisible,
                                                                                       sal_Int32 nStyle )
 {
-    uno::Sequence< beans::PropertyValue > aProps{
+    cpo::uno::Sequence< beans::PropertyValue > aProps{
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, sCommandURL),
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_HELPURL, sHelpURL),
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_LABEL, sLabel),
@@ -118,7 +118,7 @@ ScVbaCommandBarControls::createCollectionObject( const cpo::uno::Any& aSource )
 {
     sal_Int32 nPosition = -1;
     aSource >>= nPosition;
-    uno::Sequence< beans::PropertyValue > aProps;
+    cpo::uno::Sequence< beans::PropertyValue > aProps;
     m_xIndexAccess->getByIndex( nPosition ) >>= aProps;
     uno::Reference< container::XIndexAccess > xSubMenu;
     getPropertyValue( aProps, ITEM_DESCRIPTOR_CONTAINER ) >>= xSubMenu;
@@ -193,7 +193,7 @@ ScVbaCommandBarControls::Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id
     }
 
     // create control
-    uno::Sequence< beans::PropertyValue > aProps;
+    cpo::uno::Sequence< beans::PropertyValue > aProps;
     sal_uInt16 nItemType = 0;
     if( m_bIsMenu )
     {
@@ -226,10 +226,10 @@ ScVbaCommandBarControls::getServiceImplName()
     return u"ScVbaCommandBarControls"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaCommandBarControls::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.CommandBarControls"_ustr
     };
@@ -297,9 +297,9 @@ OUString VbaDummyCommandBarControls::getServiceImplName()
     return u"VbaDummyCommandBarControls"_ustr;
 }
 
-uno::Sequence<OUString> VbaDummyCommandBarControls::getServiceNames()
+cpo::uno::Sequence<OUString> VbaDummyCommandBarControls::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.CommandBarControls"_ustr
     };

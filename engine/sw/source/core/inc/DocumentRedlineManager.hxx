@@ -137,10 +137,10 @@ public:
         /*[in]*/const SwPaM& rPam,
         /*[in]*/const OUString& rComment) override;
 
-    virtual const css::uno::Sequence <sal_Int8>& GetRedlinePassword() const override;
+    virtual const cpo::uno::Sequence <sal_Int8>& GetRedlinePassword() const override;
 
     virtual void SetRedlinePassword(
-        /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) override;
+        /*[in]*/const cpo::uno::Sequence <sal_Int8>& rNewPassword) override;
 
     // After nodes are removed, m_pContentNode's may not updated
     virtual void UpdateRedlineContentNode(
@@ -194,7 +194,7 @@ private:
     bool mbIsRedlineMove;    //< true: Redlines are moved into to / out of the section.
     sal_uInt16 mnAutoFormatRedlnCommentNo;  /**< SeqNo for conjoining of AutoFormat-Redlines.
                                          by the UI. Managed by SwAutoFormat! */
-    css::uno::Sequence <sal_Int8 > maRedlinePasswd;
+    cpo::uno::Sequence <sal_Int8 > maRedlinePasswd;
 
     /// this flag is necessary for file import because the ViewShell/layout is
     /// created "too late" and the ShowRedlineChanges item is not below "Views"

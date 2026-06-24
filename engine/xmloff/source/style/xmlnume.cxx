@@ -67,7 +67,7 @@ void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< css::containe
     for( sal_Int32 i=0; i<nCount; i++ )
     {
         cpo::uno::Any aEntry( xNumRule->getByIndex( i ) );
-        uno::Sequence<beans::PropertyValue> aSeq;
+        cpo::uno::Sequence<beans::PropertyValue> aSeq;
         if( aEntry >>= aSeq )
         {
             exportLevelStyle( i, aSeq, bOutline );
@@ -76,7 +76,7 @@ void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< css::containe
 }
 
 void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
-                                    const uno::Sequence<beans::PropertyValue>& rProps,
+                                    const cpo::uno::Sequence<beans::PropertyValue>& rProps,
                                     bool bOutline )
 {
     sal_Int16 eType = NumberingType::CHAR_SPECIAL;

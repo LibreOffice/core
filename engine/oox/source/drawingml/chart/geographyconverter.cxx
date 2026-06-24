@@ -19,7 +19,7 @@ namespace oox::drawingml::chart
 {
 namespace
 {
-uno::Sequence<beans::PropertyValue> addressToProps(const GeoAddressModel& rAddr)
+cpo::uno::Sequence<beans::PropertyValue> addressToProps(const GeoAddressModel& rAddr)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rAddr.mosAddress1.has_value())
@@ -46,7 +46,7 @@ uno::Sequence<beans::PropertyValue> addressToProps(const GeoAddressModel& rAddr)
     return comphelper::containerToSequence(aVec);
 }
 
-GeoAddressModel addressFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoAddressModel addressFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoAddressModel aAddr;
     for (const auto& rProp : rProps)
@@ -72,7 +72,7 @@ GeoAddressModel addressFromProps(const uno::Sequence<beans::PropertyValue>& rPro
     return aAddr;
 }
 
-uno::Sequence<beans::PropertyValue> locationToProps(const GeoLocationModel& rLoc)
+cpo::uno::Sequence<beans::PropertyValue> locationToProps(const GeoLocationModel& rLoc)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rLoc.mosLatitude.has_value())
@@ -93,7 +93,7 @@ uno::Sequence<beans::PropertyValue> locationToProps(const GeoLocationModel& rLoc
     return comphelper::containerToSequence(aVec);
 }
 
-GeoLocationModel locationFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoLocationModel locationFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoLocationModel aLoc;
     for (const auto& rProp : rProps)
@@ -124,7 +124,7 @@ GeoLocationModel locationFromProps(const uno::Sequence<beans::PropertyValue>& rP
         }
         else if (rProp.Name == "address")
         {
-            uno::Sequence<beans::PropertyValue> aInner;
+            cpo::uno::Sequence<beans::PropertyValue> aInner;
             if (rProp.Value >>= aInner)
                 aLoc.mxAddress = addressFromProps(aInner);
         }
@@ -132,7 +132,7 @@ GeoLocationModel locationFromProps(const uno::Sequence<beans::PropertyValue>& rP
     return aLoc;
 }
 
-uno::Sequence<beans::PropertyValue> locQueryToProps(const GeoLocationQueryModel& rQ)
+cpo::uno::Sequence<beans::PropertyValue> locQueryToProps(const GeoLocationQueryModel& rQ)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosCountryRegion.has_value())
@@ -153,7 +153,7 @@ uno::Sequence<beans::PropertyValue> locQueryToProps(const GeoLocationQueryModel&
     return comphelper::containerToSequence(aVec);
 }
 
-GeoLocationQueryModel locQueryFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoLocationQueryModel locQueryFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoLocationQueryModel aQ;
     for (const auto& rProp : rProps)
@@ -175,13 +175,13 @@ GeoLocationQueryModel locQueryFromProps(const uno::Sequence<beans::PropertyValue
     return aQ;
 }
 
-uno::Sequence<beans::PropertyValue> locResultToProps(const GeoLocationQueryResultModel& rR)
+cpo::uno::Sequence<beans::PropertyValue> locResultToProps(const GeoLocationQueryResultModel& rR)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxQuery.has_value())
         aVec.push_back({ u"query"_ustr, 0, cpo::uno::Any(locQueryToProps(*rR.mxQuery)),
                          beans::PropertyState_DIRECT_VALUE });
-    std::vector<uno::Sequence<beans::PropertyValue>> aLocs;
+    std::vector<cpo::uno::Sequence<beans::PropertyValue>> aLocs;
     for (const auto& rLoc : rR.maLocations)
         aLocs.push_back(locationToProps(rLoc));
     if (!aLocs.empty())
@@ -191,20 +191,21 @@ uno::Sequence<beans::PropertyValue> locResultToProps(const GeoLocationQueryResul
     return comphelper::containerToSequence(aVec);
 }
 
-GeoLocationQueryResultModel locResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoLocationQueryResultModel
+locResultFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoLocationQueryResultModel aR;
     for (const auto& rProp : rProps)
     {
         if (rProp.Name == "query")
         {
-            uno::Sequence<beans::PropertyValue> aInner;
+            cpo::uno::Sequence<beans::PropertyValue> aInner;
             if (rProp.Value >>= aInner)
                 aR.mxQuery = locQueryFromProps(aInner);
         }
         else if (rProp.Name == "locations")
         {
-            uno::Sequence<uno::Sequence<beans::PropertyValue>> aArr;
+            cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rL : aArr)
                     aR.maLocations.push_back(locationFromProps(rL));
@@ -213,7 +214,7 @@ GeoLocationQueryResultModel locResultFromProps(const uno::Sequence<beans::Proper
     return aR;
 }
 
-uno::Sequence<beans::PropertyValue> polygonToProps(const GeoPolygonModel& rP)
+cpo::uno::Sequence<beans::PropertyValue> polygonToProps(const GeoPolygonModel& rP)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rP.mosPolygonId.has_value())
@@ -228,7 +229,7 @@ uno::Sequence<beans::PropertyValue> polygonToProps(const GeoPolygonModel& rP)
     return comphelper::containerToSequence(aVec);
 }
 
-GeoPolygonModel polygonFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoPolygonModel polygonFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoPolygonModel aP;
     for (const auto& rProp : rProps)
@@ -246,7 +247,7 @@ GeoPolygonModel polygonFromProps(const uno::Sequence<beans::PropertyValue>& rPro
     return aP;
 }
 
-uno::Sequence<beans::PropertyValue> geoDataToProps(const GeoDataModel& rD)
+cpo::uno::Sequence<beans::PropertyValue> geoDataToProps(const GeoDataModel& rD)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rD.mosEntityName.has_value())
@@ -269,7 +270,7 @@ uno::Sequence<beans::PropertyValue> geoDataToProps(const GeoDataModel& rD)
             { u"south"_ustr, 0, cpo::uno::Any(*rD.mosSouth), beans::PropertyState_DIRECT_VALUE });
     if (!rD.maPolygons.empty())
     {
-        std::vector<uno::Sequence<beans::PropertyValue>> aPolys;
+        std::vector<cpo::uno::Sequence<beans::PropertyValue>> aPolys;
         for (const auto& rP : rD.maPolygons)
             aPolys.push_back(polygonToProps(rP));
         aVec.push_back({ u"polygons"_ustr, 0,
@@ -287,21 +288,21 @@ uno::Sequence<beans::PropertyValue> geoDataToProps(const GeoDataModel& rD)
     return comphelper::containerToSequence(aVec);
 }
 
-GeoDataModel geoDataFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoDataModel geoDataFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoDataModel aD;
     for (const auto& rProp : rProps)
     {
         if (rProp.Name == "polygons")
         {
-            uno::Sequence<uno::Sequence<beans::PropertyValue>> aArr;
+            cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rP : aArr)
                     aD.maPolygons.push_back(polygonFromProps(rP));
         }
         else if (rProp.Name == "copyrights")
         {
-            uno::Sequence<OUString> aArr;
+            cpo::uno::Sequence<OUString> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rC : aArr)
                     aD.maCopyrights.push_back({ rC });
@@ -328,7 +329,7 @@ GeoDataModel geoDataFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
     return aD;
 }
 
-uno::Sequence<beans::PropertyValue> dataEntityQueryToProps(const GeoDataEntityQueryModel& rQ)
+cpo::uno::Sequence<beans::PropertyValue> dataEntityQueryToProps(const GeoDataEntityQueryModel& rQ)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosEntityType.has_value())
@@ -340,7 +341,8 @@ uno::Sequence<beans::PropertyValue> dataEntityQueryToProps(const GeoDataEntityQu
     return comphelper::containerToSequence(aVec);
 }
 
-GeoDataEntityQueryModel dataEntityQueryFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoDataEntityQueryModel
+dataEntityQueryFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoDataEntityQueryModel aQ;
     for (const auto& rProp : rProps)
@@ -356,7 +358,8 @@ GeoDataEntityQueryModel dataEntityQueryFromProps(const uno::Sequence<beans::Prop
     return aQ;
 }
 
-uno::Sequence<beans::PropertyValue> dataEntityResultToProps(const GeoDataEntityQueryResultModel& rR)
+cpo::uno::Sequence<beans::PropertyValue>
+dataEntityResultToProps(const GeoDataEntityQueryResultModel& rR)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxQuery.has_value())
@@ -369,12 +372,12 @@ uno::Sequence<beans::PropertyValue> dataEntityResultToProps(const GeoDataEntityQ
 }
 
 GeoDataEntityQueryResultModel
-dataEntityResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+dataEntityResultFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoDataEntityQueryResultModel aR;
     for (const auto& rProp : rProps)
     {
-        uno::Sequence<beans::PropertyValue> aInner;
+        cpo::uno::Sequence<beans::PropertyValue> aInner;
         if (!(rProp.Value >>= aInner))
             continue;
         if (rProp.Name == "query")
@@ -385,7 +388,7 @@ dataEntityResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
     return aR;
 }
 
-uno::Sequence<beans::PropertyValue> ptQueryToProps(const GeoDataPointQueryModel& rQ)
+cpo::uno::Sequence<beans::PropertyValue> ptQueryToProps(const GeoDataPointQueryModel& rQ)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosEntityType.has_value())
@@ -400,7 +403,7 @@ uno::Sequence<beans::PropertyValue> ptQueryToProps(const GeoDataPointQueryModel&
     return comphelper::containerToSequence(aVec);
 }
 
-GeoDataPointQueryModel ptQueryFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoDataPointQueryModel ptQueryFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoDataPointQueryModel aQ;
     for (const auto& rProp : rProps)
@@ -418,7 +421,8 @@ GeoDataPointQueryModel ptQueryFromProps(const uno::Sequence<beans::PropertyValue
     return aQ;
 }
 
-uno::Sequence<beans::PropertyValue> ptEntityQueryToProps(const GeoDataPointToEntityQueryModel& rQ)
+cpo::uno::Sequence<beans::PropertyValue>
+ptEntityQueryToProps(const GeoDataPointToEntityQueryModel& rQ)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosEntityType.has_value())
@@ -431,7 +435,7 @@ uno::Sequence<beans::PropertyValue> ptEntityQueryToProps(const GeoDataPointToEnt
 }
 
 GeoDataPointToEntityQueryModel
-ptEntityQueryFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+ptEntityQueryFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoDataPointToEntityQueryModel aQ;
     for (const auto& rProp : rProps)
@@ -447,7 +451,8 @@ ptEntityQueryFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
     return aQ;
 }
 
-uno::Sequence<beans::PropertyValue> ptResultToProps(const GeoDataPointToEntityQueryResultModel& rR)
+cpo::uno::Sequence<beans::PropertyValue>
+ptResultToProps(const GeoDataPointToEntityQueryResultModel& rR)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxPointQuery.has_value())
@@ -461,12 +466,12 @@ uno::Sequence<beans::PropertyValue> ptResultToProps(const GeoDataPointToEntityQu
 }
 
 GeoDataPointToEntityQueryResultModel
-ptResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+ptResultFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoDataPointToEntityQueryResultModel aR;
     for (const auto& rProp : rProps)
     {
-        uno::Sequence<beans::PropertyValue> aInner;
+        cpo::uno::Sequence<beans::PropertyValue> aInner;
         if (!(rProp.Value >>= aInner))
             continue;
         if (rProp.Name == "pointQuery")
@@ -477,7 +482,7 @@ ptResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
     return aR;
 }
 
-uno::Sequence<beans::PropertyValue> childQueryToProps(const GeoChildEntitiesQueryModel& rQ)
+cpo::uno::Sequence<beans::PropertyValue> childQueryToProps(const GeoChildEntitiesQueryModel& rQ)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rQ.mosEntityId.has_value())
@@ -490,7 +495,8 @@ uno::Sequence<beans::PropertyValue> childQueryToProps(const GeoChildEntitiesQuer
     return comphelper::containerToSequence(aVec);
 }
 
-GeoChildEntitiesQueryModel childQueryFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoChildEntitiesQueryModel
+childQueryFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoChildEntitiesQueryModel aQ;
     for (const auto& rProp : rProps)
@@ -503,7 +509,7 @@ GeoChildEntitiesQueryModel childQueryFromProps(const uno::Sequence<beans::Proper
         }
         else if (rProp.Name == "entityTypes")
         {
-            uno::Sequence<OUString> aArr;
+            cpo::uno::Sequence<OUString> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rS : aArr)
                     aQ.maEntityTypes.push_back(rS);
@@ -512,7 +518,7 @@ GeoChildEntitiesQueryModel childQueryFromProps(const uno::Sequence<beans::Proper
     return aQ;
 }
 
-uno::Sequence<beans::PropertyValue> hierarchyEntityToProps(const GeoHierarchyEntityModel& rE)
+cpo::uno::Sequence<beans::PropertyValue> hierarchyEntityToProps(const GeoHierarchyEntityModel& rE)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rE.mosEntityName.has_value())
@@ -527,7 +533,8 @@ uno::Sequence<beans::PropertyValue> hierarchyEntityToProps(const GeoHierarchyEnt
     return comphelper::containerToSequence(aVec);
 }
 
-GeoHierarchyEntityModel hierarchyEntityFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoHierarchyEntityModel
+hierarchyEntityFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoHierarchyEntityModel aE;
     for (const auto& rProp : rProps)
@@ -545,7 +552,8 @@ GeoHierarchyEntityModel hierarchyEntityFromProps(const uno::Sequence<beans::Prop
     return aE;
 }
 
-uno::Sequence<beans::PropertyValue> childResultToProps(const GeoChildEntitiesQueryResultModel& rR)
+cpo::uno::Sequence<beans::PropertyValue>
+childResultToProps(const GeoChildEntitiesQueryResultModel& rR)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxQuery.has_value())
@@ -553,7 +561,7 @@ uno::Sequence<beans::PropertyValue> childResultToProps(const GeoChildEntitiesQue
                          beans::PropertyState_DIRECT_VALUE });
     if (!rR.maEntities.empty())
     {
-        std::vector<uno::Sequence<beans::PropertyValue>> aArr;
+        std::vector<cpo::uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rE : rR.maEntities)
             aArr.push_back(hierarchyEntityToProps(rE));
         aVec.push_back({ u"entities"_ustr, 0, cpo::uno::Any(comphelper::containerToSequence(aArr)),
@@ -563,20 +571,20 @@ uno::Sequence<beans::PropertyValue> childResultToProps(const GeoChildEntitiesQue
 }
 
 GeoChildEntitiesQueryResultModel
-childResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+childResultFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoChildEntitiesQueryResultModel aR;
     for (const auto& rProp : rProps)
     {
         if (rProp.Name == "query")
         {
-            uno::Sequence<beans::PropertyValue> aInner;
+            cpo::uno::Sequence<beans::PropertyValue> aInner;
             if (rProp.Value >>= aInner)
                 aR.mxQuery = childQueryFromProps(aInner);
         }
         else if (rProp.Name == "entities")
         {
-            uno::Sequence<uno::Sequence<beans::PropertyValue>> aArr;
+            cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rE : aArr)
                     aR.maEntities.push_back(hierarchyEntityFromProps(rE));
@@ -585,7 +593,8 @@ childResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
     return aR;
 }
 
-uno::Sequence<beans::PropertyValue> parentResultToProps(const GeoParentEntitiesQueryResultModel& rR)
+cpo::uno::Sequence<beans::PropertyValue>
+parentResultToProps(const GeoParentEntitiesQueryResultModel& rR)
 {
     std::vector<beans::PropertyValue> aVec;
     if (rR.mxQuery.has_value())
@@ -623,12 +632,12 @@ uno::Sequence<beans::PropertyValue> parentResultToProps(const GeoParentEntitiesQ
 }
 
 GeoParentEntitiesQueryResultModel
-parentResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
+parentResultFromProps(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoParentEntitiesQueryResultModel aR;
     for (const auto& rProp : rProps)
     {
-        uno::Sequence<beans::PropertyValue> aInner;
+        cpo::uno::Sequence<beans::PropertyValue> aInner;
         if (!(rProp.Value >>= aInner))
             continue;
         if (rProp.Name == "query")
@@ -671,13 +680,13 @@ parentResultFromProps(const uno::Sequence<beans::PropertyValue>& rProps)
 
 } // anonymous namespace
 
-uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel& rModel)
+cpo::uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel& rModel)
 {
     std::vector<beans::PropertyValue> aVec;
 
     if (!rModel.maLocResults.empty())
     {
-        std::vector<uno::Sequence<beans::PropertyValue>> aArr;
+        std::vector<cpo::uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maLocResults)
             aArr.push_back(locResultToProps(rR));
         aVec.push_back({ u"locResults"_ustr, 0,
@@ -686,7 +695,7 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
     }
     if (!rModel.maDataResults.empty())
     {
-        std::vector<uno::Sequence<beans::PropertyValue>> aArr;
+        std::vector<cpo::uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maDataResults)
             aArr.push_back(dataEntityResultToProps(rR));
         aVec.push_back({ u"dataResults"_ustr, 0,
@@ -695,7 +704,7 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
     }
     if (!rModel.maPtResults.empty())
     {
-        std::vector<uno::Sequence<beans::PropertyValue>> aArr;
+        std::vector<cpo::uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maPtResults)
             aArr.push_back(ptResultToProps(rR));
         aVec.push_back({ u"ptResults"_ustr, 0, cpo::uno::Any(comphelper::containerToSequence(aArr)),
@@ -703,7 +712,7 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
     }
     if (!rModel.maChildResults.empty())
     {
-        std::vector<uno::Sequence<beans::PropertyValue>> aArr;
+        std::vector<cpo::uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maChildResults)
             aArr.push_back(childResultToProps(rR));
         aVec.push_back({ u"childResults"_ustr, 0,
@@ -712,7 +721,7 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
     }
     if (!rModel.maParentResults.empty())
     {
-        std::vector<uno::Sequence<beans::PropertyValue>> aArr;
+        std::vector<cpo::uno::Sequence<beans::PropertyValue>> aArr;
         for (const auto& rR : rModel.maParentResults)
             aArr.push_back(parentResultToProps(rR));
         aVec.push_back({ u"parentResults"_ustr, 0,
@@ -723,42 +732,42 @@ uno::Sequence<beans::PropertyValue> geoClearToPropertyValues(const GeoClearModel
     return comphelper::containerToSequence(aVec);
 }
 
-GeoClearModel geoClearFromPropertyValues(const uno::Sequence<beans::PropertyValue>& rProps)
+GeoClearModel geoClearFromPropertyValues(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GeoClearModel aModel;
     for (const auto& rProp : rProps)
     {
         if (rProp.Name == "locResults")
         {
-            uno::Sequence<uno::Sequence<beans::PropertyValue>> aArr;
+            cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rR : aArr)
                     aModel.maLocResults.push_back(locResultFromProps(rR));
         }
         else if (rProp.Name == "dataResults")
         {
-            uno::Sequence<uno::Sequence<beans::PropertyValue>> aArr;
+            cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rR : aArr)
                     aModel.maDataResults.push_back(dataEntityResultFromProps(rR));
         }
         else if (rProp.Name == "ptResults")
         {
-            uno::Sequence<uno::Sequence<beans::PropertyValue>> aArr;
+            cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rR : aArr)
                     aModel.maPtResults.push_back(ptResultFromProps(rR));
         }
         else if (rProp.Name == "childResults")
         {
-            uno::Sequence<uno::Sequence<beans::PropertyValue>> aArr;
+            cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rR : aArr)
                     aModel.maChildResults.push_back(childResultFromProps(rR));
         }
         else if (rProp.Name == "parentResults")
         {
-            uno::Sequence<uno::Sequence<beans::PropertyValue>> aArr;
+            cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aArr;
             if (rProp.Value >>= aArr)
                 for (const auto& rR : aArr)
                     aModel.maParentResults.push_back(parentResultFromProps(rR));

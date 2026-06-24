@@ -89,10 +89,10 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl(osl::ResettableMutexG
 }
 
 
-uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
-                                                        const uno::Sequence< embed::VerbDescriptor >& aVerbList )
+cpo::uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
+                                                        const cpo::uno::Sequence< embed::VerbDescriptor >& aVerbList )
 {
-    uno::Sequence< sal_Int32 > aStates { embed::EmbedStates::LOADED, embed::EmbedStates::RUNNING };
+    cpo::uno::Sequence< sal_Int32 > aStates { embed::EmbedStates::LOADED, embed::EmbedStates::RUNNING };
     for ( embed::VerbDescriptor const & vd : aVerbList )
         if ( vd.VerbID == embed::EmbedVerbs::MS_OLEVERB_OPEN )
         {
@@ -105,7 +105,7 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
 }
 
 
-uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState )
+cpo::uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState )
 {
     SAL_WARN_IF( m_nObjectState == embed::EmbedStates::LOADED, "embeddedobj.ole", "Loaded object is switched to running state without verbs using!" );
 
@@ -115,7 +115,7 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl(
         return { embed::EmbedVerbs::MS_OLEVERB_OPEN };
     }
 
-    return uno::Sequence< sal_Int32 >();
+    return cpo::uno::Sequence< sal_Int32 >();
 }
 #endif
 
@@ -277,7 +277,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
 
             OUString aDocServiceName;
             cpo::uno::Any aFilterAnyData = xFilterFactory->getByName( m_aFilterName );
-            uno::Sequence< beans::PropertyValue > aFilterData;
+            cpo::uno::Sequence< beans::PropertyValue > aFilterData;
             if ( aFilterAnyData >>= aFilterData )
             {
                 for (beans::PropertyValue const& prop : aFilterData)
@@ -288,7 +288,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
             if ( !aDocServiceName.isEmpty() )
             {
                 // create the model
-                uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(
+                cpo::uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(
                     beans::NamedValue( u"EmbeddedObject"_ustr, cpo::uno::Any( true ))) };
 
                 uno::Reference< util::XCloseable > xDocument( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDocServiceName, aArguments, m_xContext ), uno::UNO_QUERY_THROW );
@@ -297,12 +297,12 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
 
                 // let the model behave as embedded one
                 uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
-                uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue(
+                cpo::uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue(
                     u"SetEmbedded"_ustr, true) };
                 xModel->attachResource( OUString(), aSeq );
 
                 // load the model from the stream
-                uno::Sequence< beans::PropertyValue > aArgs{
+                cpo::uno::Sequence< beans::PropertyValue > aArgs{
                     comphelper::makePropertyValue(u"HierarchicalDocumentName"_ustr, m_aEntryName),
                     comphelper::makePropertyValue(u"ReadOnly"_ustr, true),
                     comphelper::makePropertyValue(u"FilterName"_ustr, m_aFilterName),
@@ -315,7 +315,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
 
                 // the model is successfully loaded, create a new storage and store the model to the storage
                 uno::Reference< embed::XStorage > xTmpStorage = CreateTemporarySubstorage( aStorageName );
-                xStorDoc->storeToStorage( xTmpStorage, uno::Sequence< beans::PropertyValue >() );
+                xStorDoc->storeToStorage( xTmpStorage, cpo::uno::Sequence< beans::PropertyValue >() );
                 xDocument->close( true );
                 uno::Reference< beans::XPropertySet > xStorProps( xTmpStorage, uno::UNO_QUERY_THROW );
                 OUString aMediaType;
@@ -349,7 +349,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
                 m_xParentStorage->renameElement( aStorageName, m_aEntryName );
 
                 nStep = 4;
-                m_xWrappedObject.set( xEmbCreator->createInstanceInitFromEntry( m_xParentStorage, m_aEntryName, uno::Sequence< beans::PropertyValue >(), uno::Sequence< beans::PropertyValue >() ), uno::UNO_QUERY_THROW );
+                m_xWrappedObject.set( xEmbCreator->createInstanceInitFromEntry( m_xParentStorage, m_aEntryName, cpo::uno::Sequence< beans::PropertyValue >(), cpo::uno::Sequence< beans::PropertyValue >() ), uno::UNO_QUERY_THROW );
 
                 // remember parent document name to show in the title bar
                 m_xWrappedObject->setContainerName( m_aContainerName );
@@ -592,7 +592,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 }
 
 
-uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
+cpo::uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -630,7 +630,7 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
     else
 #endif
     {
-        return uno::Sequence< sal_Int32 >();
+        return cpo::uno::Sequence< sal_Int32 >();
     }
 }
 
@@ -666,7 +666,7 @@ namespace
             return false;
 
         const sal_Int32 nChunkSize = 4096;
-        uno::Sequence< sal_Int8 > aData(nChunkSize);
+        cpo::uno::Sequence< sal_Int8 > aData(nChunkSize);
         sal_Int32 nTotalRead = 0;
         sal_Int32 nRead;
         do
@@ -691,7 +691,7 @@ namespace
             uno::UNO_SET_THROW);
         uno::Reference < io::XStream > xStream(xNativeTempFile);
 
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xObjectStream),
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xObjectStream),
                                          cpo::uno::Any(true) }; // do not create copy
         uno::Reference< container::XNameContainer > xNameContainer(
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -741,7 +741,7 @@ namespace
                 const uno::Reference<io::XInputStream> xIn = xOle10Native->getInputStream();
                 xIn->skipBytes(4); //size of the entire stream minus 4 bytes
                 xIn->skipBytes(2); //word that represent the directory type
-                uno::Sequence< sal_Int8 > aData(1);
+                cpo::uno::Sequence< sal_Int8 > aData(1);
                 sal_Int32 nRead;
                 do
                 {
@@ -759,7 +759,7 @@ namespace
                 {
                     nRead = xIn->readBytes(aData, 1);
                 } while (nRead == 1 && aData[0] != 0);  // Actual string representing the file path
-                uno::Sequence< sal_Int8 > aLenData(4);
+                cpo::uno::Sequence< sal_Int8 > aLenData(4);
                 nRead = xIn->readBytes(aLenData, 4); //len of attachment
                 if (nRead == 4)
                 {
@@ -971,7 +971,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 }
 
 
-uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedVerbs()
+cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedVerbs()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1008,7 +1008,7 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
         // tdf#140079 Claim support for the OleEmbeddedObject::doVerb -9 fallback.
         // So in SfxViewFrame::GetState_Impl in case SID_OBJECT hasVerbs is not
         // empty, so that the doVerb attempt with -9 fallback is attempted
-        uno::Sequence<embed::VerbDescriptor> aRet(1);
+        cpo::uno::Sequence<embed::VerbDescriptor> aRet(1);
         aRet.getArray()[0].VerbID = -9;
         return aRet;
     }

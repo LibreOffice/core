@@ -137,12 +137,12 @@ sal_Int32 ExportDialog::GetDefaultUnit() const
 }
 
 static basegfx::B2DRange GetShapeRangeForXShape( const uno::Reference< drawing::XShape >& rxShape,
-    const uno::Reference< graphic::XPrimitiveFactory2D >& rxPrimitiveFactory2D, const uno::Sequence< beans::PropertyValue >& rViewInformation )
+    const uno::Reference< graphic::XPrimitiveFactory2D >& rxPrimitiveFactory2D, const cpo::uno::Sequence< beans::PropertyValue >& rViewInformation )
 {
     basegfx::B2DRange aShapeRange;
 
-    const uno::Sequence< beans::PropertyValue > aParams;
-    const uno::Sequence< uno::Reference< graphic::XPrimitive2D > > aPrimitiveSequence( rxPrimitiveFactory2D->createPrimitivesFromXShape( rxShape, aParams ) );
+    const cpo::uno::Sequence< beans::PropertyValue > aParams;
+    const cpo::uno::Sequence< uno::Reference< graphic::XPrimitive2D > > aPrimitiveSequence( rxPrimitiveFactory2D->createPrimitivesFromXShape( rxShape, aParams ) );
 
     for( const auto& rPrimitive : aPrimitiveSequence )
     {
@@ -153,7 +153,7 @@ static basegfx::B2DRange GetShapeRangeForXShape( const uno::Reference< drawing::
     return aShapeRange;
 }
 
-uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateConfig )
+cpo::uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateConfig )
 {
     if ( bUpdateConfig )
     {
@@ -192,7 +192,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
          pFilterOptions = mpFilterOptionsItem.get();
     else
     {
-        uno::Sequence< beans::PropertyValue > aFilterData( mpFilterOptionsItem->GetFilterData() );
+        cpo::uno::Sequence< beans::PropertyValue > aFilterData( mpFilterOptionsItem->GetFilterData() );
         pFilterOptions = new FilterConfigItem( &aFilterData );
     }
 
@@ -307,7 +307,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
 
     }
 
-    uno::Sequence< beans::PropertyValue > aRet( pFilterOptions->GetFilterData() );
+    cpo::uno::Sequence< beans::PropertyValue > aRet( pFilterOptions->GetFilterData() );
     if ( !bUpdateConfig )
         delete pFilterOptions;
     return aRet;
@@ -346,7 +346,7 @@ awt::Size ExportDialog::GetOriginalSize()
         aTransformation.m11 = aViewTransformation.get(1,1);
         aTransformation.m12 = aViewTransformation.get(1,2);
 
-        uno::Sequence< beans::PropertyValue > aViewInformation{ comphelper::makePropertyValue(
+        cpo::uno::Sequence< beans::PropertyValue > aViewInformation{ comphelper::makePropertyValue(
             u"ViewTransformation"_ustr, aTransformation) };
 
         if ( mxShape.is() )
@@ -420,8 +420,8 @@ void ExportDialog::GetGraphicStream()
 
     bool bRecreateOutputStream = mpTempStream->Tell() == 0;
 
-    static uno::Sequence< beans::PropertyValue > aOldFilterData;
-    uno::Sequence< beans::PropertyValue > aNewFilterData( GetFilterData( false ) );
+    static cpo::uno::Sequence< beans::PropertyValue > aOldFilterData;
+    cpo::uno::Sequence< beans::PropertyValue > aNewFilterData( GetFilterData( false ) );
     if ( aOldFilterData != aNewFilterData )
     {
         aOldFilterData = aNewFilterData;
@@ -492,7 +492,7 @@ void ExportDialog::GetGraphicStream()
                     uno::Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
 
                     OUString sFormat( maExt );
-                    uno::Sequence< beans::PropertyValue > aDescriptor{
+                    cpo::uno::Sequence< beans::PropertyValue > aDescriptor{
                         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),
                         comphelper::makePropertyValue(u"FilterName"_ustr, sFormat),
                         comphelper::makePropertyValue(u"FilterData"_ustr, aNewFilterData)

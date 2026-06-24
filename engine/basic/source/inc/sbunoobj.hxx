@@ -157,7 +157,7 @@ class SbUnoMethod final : public SbxMethod
     friend void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
     css::uno::Reference< css::reflection::XIdlMethod > m_xUnoMethod;
-    std::unique_ptr<css::uno::Sequence< css::reflection::ParamInfo >> pParamInfoSeq;
+    std::unique_ptr<cpo::uno::Sequence< css::reflection::ParamInfo >> pParamInfoSeq;
 
     // #67781 reference to the previous and the next method in the method list
     SbUnoMethod* pPrev;
@@ -172,7 +172,7 @@ public:
     virtual ~SbUnoMethod() override;
     virtual SbxInfo* GetInfo() override;
 
-    const css::uno::Sequence< css::reflection::ParamInfo >& getParamInfos();
+    const cpo::uno::Sequence< css::reflection::ParamInfo >& getParamInfos();
 
     bool isInvocationBased() const
         { return mbInvocation; }
@@ -314,13 +314,13 @@ public:
 
 class AutomationNamedArgsSbxArray final : public SbxArray
 {
-    css::uno::Sequence< OUString >      maNameSeq;
+    cpo::uno::Sequence< OUString >      maNameSeq;
 public:
     AutomationNamedArgsSbxArray( sal_Int32 nSeqSize )
         : maNameSeq( nSeqSize )
     {}
 
-    css::uno::Sequence< OUString >& getNames()
+    cpo::uno::Sequence< OUString >& getNames()
         { return maNameSeq; }
 };
 

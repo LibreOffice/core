@@ -90,7 +90,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             // doc export
             xWriter->setOutputStream( xOut );
 
-            uno::Sequence< cpo::uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
+            cpo::uno::Sequence< cpo::uno::Any > aArgs( xObjectResolver.is() ? 3 : 2 );
             auto pArgs = aArgs.getArray();
             pArgs[0] <<= xHandler;
             pArgs[1] <<= xGraphicStorageHandler;
@@ -111,7 +111,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
                 {
                     xExporter->setSourceDocument( xSourceDoc );
 
-                    uno::Sequence< beans::PropertyValue > aDescriptor( 0 );
+                    cpo::uno::Sequence< beans::PropertyValue > aDescriptor( 0 );
                     bDocRet = xFilter->filter( aDescriptor );
                 }
             }

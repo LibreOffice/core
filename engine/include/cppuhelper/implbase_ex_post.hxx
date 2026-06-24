@@ -52,9 +52,9 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelper##N \
 public: \
     virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return ImplHelper_query( rType, (class_data *)&s_cd, this ); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return ImplHelper_getTypes( (class_data *)&s_cd ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< __CLASS_IFC##N > \
@@ -74,9 +74,9 @@ public: \
         { OWeakObject::acquire(); } \
     virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE \
         { OWeakObject::release(); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return WeakImplHelper_getTypes( (class_data *)&s_cd ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< __CLASS_IFC##N > \
@@ -98,9 +98,9 @@ public: \
         { OWeakAggObject::acquire(); } \
     virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE \
         { OWeakAggObject::release(); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return WeakAggImplHelper_getTypes( (class_data *)&s_cd ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< __CLASS_IFC##N > \
@@ -124,9 +124,9 @@ public: \
         { BaseClass::acquire(); } \
     virtual void SAL_CALL release() SAL_NOEXCEPT \
         { BaseClass::release(); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() \
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() \
         { return ImplInhHelper_getTypes( (class_data *)&s_cd, BaseClass::getTypes() ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() \
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< class BaseClass, __CLASS_IFC##N > \
@@ -152,9 +152,9 @@ public: \
         { BaseClass::acquire(); } \
     virtual void SAL_CALL release() SAL_NOEXCEPT \
         { BaseClass::release(); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() \
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() \
         { return ImplInhHelper_getTypes( (class_data *)&s_cd, BaseClass::getTypes() ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() \
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< class BaseClass, __CLASS_IFC##N > \

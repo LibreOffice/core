@@ -49,7 +49,7 @@ void VCLXWindow::SetSystemParent_Impl(const cpo::uno::Any& rHandle)
     bool bThrow = false;
     if (!(rHandle >>= nHandle))
     {
-        css::uno::Sequence<css::beans::NamedValue> aProps;
+        cpo::uno::Sequence<css::beans::NamedValue> aProps;
         if (rHandle >>= aProps)
         {
             for (const css::beans::NamedValue& rProp : aProps)

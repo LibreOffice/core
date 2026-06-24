@@ -79,7 +79,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XCancellable
     virtual void SAL_CALL cancel() override;
@@ -93,7 +93,7 @@ public:
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
     // XElementAccess
@@ -146,9 +146,9 @@ OUString SAL_CALL SvxUnoMarkerTable::getImplementationName()
     return u"SvxUnoMarkerTable"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames(  )
 {
-    uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.MarkerTable"_ustr };
+    cpo::uno::Sequence<OUString> aSNS { u"com.sun.star.drawing.MarkerTable"_ustr };
     return aSNS;
 }
 
@@ -345,7 +345,7 @@ static void createNamesForPool( SfxItemPool const * pPool, SfxItemType eItemType
     }
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
 {
     SolarMutexGuard aGuard;
 

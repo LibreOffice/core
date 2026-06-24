@@ -55,7 +55,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
     bool m_bOutputClosed;
 
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
-    css::uno::Sequence<css::uno::Type> m_aTypes;
+    cpo::uno::Sequence<css::uno::Type> m_aTypes;
 
 public:
     explicit OFSStreamContainer( const css::uno::Reference < css::io::XStream >& xStream );
@@ -67,8 +67,8 @@ public:
     virtual void SAL_CALL release() noexcept override;
 
     //  XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XStream
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;
@@ -85,14 +85,14 @@ public:
     virtual sal_Int64 SAL_CALL getLength() override;
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
     virtual sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
     virtual void SAL_CALL flush(  ) override;
     virtual void SAL_CALL closeOutput(  ) override;
 

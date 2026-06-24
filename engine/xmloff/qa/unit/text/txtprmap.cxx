@@ -36,7 +36,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartExport)
     // Given a document with a floating table:
     loadFromURL(u"private:factory/swriter"_ustr);
     // Insert a table:
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Rows"_ustr, static_cast<sal_Int32>(1)),
         comphelper::makePropertyValue(u"Columns"_ustr, static_cast<sal_Int32>(1)),
     };

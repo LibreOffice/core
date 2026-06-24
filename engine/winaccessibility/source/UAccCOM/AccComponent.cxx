@@ -30,6 +30,7 @@
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
+using namespace cpo::uno;
 
 CAccComponent::CAccComponent() {}
 

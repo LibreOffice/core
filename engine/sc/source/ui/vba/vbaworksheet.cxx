@@ -136,7 +136,7 @@ openNewDoc(const OUString& aSheetName )
         uno::Reference<lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL(
                 u"private:factory/scalc"_ustr,
                 u"_blank"_ustr, 0,
-                uno::Sequence < css::beans::PropertyValue >() ) );
+                cpo::uno::Sequence < css::beans::PropertyValue >() ) );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xComponent, uno::UNO_QUERY_THROW );
         removeAllSheets(xSpreadDoc,aSheetName);
         xModel.set(xSpreadDoc,uno::UNO_QUERY_THROW);
@@ -153,7 +153,7 @@ ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent
 {
 }
 
-ScVbaWorksheet::ScVbaWorksheet( uno::Sequence< cpo::uno::Any> const & args,
+ScVbaWorksheet::ScVbaWorksheet( cpo::uno::Sequence< cpo::uno::Any> const & args,
     uno::Reference< uno::XComponentContext> const & xContext ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) ), mbVeryHidden( false )
 {
     if ( args.getLength() < 3 )
@@ -171,7 +171,7 @@ ScVbaWorksheet::~ScVbaWorksheet()
 {
 }
 
-const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
+const cpo::uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theScVbaWorksheetUnoTunnelId;
     return theScVbaWorksheetUnoTunnelId.getSeq();
@@ -893,7 +893,7 @@ ScVbaWorksheet::getIntrospection(  )
 }
 
 cpo::uno::Any SAL_CALL
-ScVbaWorksheet::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< cpo::uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
+ScVbaWorksheet::invoke( const OUString& /*aFunctionName*/, const cpo::uno::Sequence< cpo::uno::Any >& /*aParams*/, cpo::uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
     throw uno::RuntimeException(u"Unsupported"_ustr); // unsupported operation
 }
@@ -1004,10 +1004,10 @@ ScVbaWorksheet::getEnableCalculation(  )
     return xCalculatable->isAutomaticCalculationEnabled();
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaWorksheet::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Worksheet"_ustr
     };
@@ -1057,14 +1057,14 @@ ScVbaWorksheet::ExportAsFixedFormat(const cpo::uno::Any& Type, const cpo::uno::A
 }
 
 sal_Int64 SAL_CALL
-ScVbaWorksheet::getSomething(const uno::Sequence<sal_Int8 > & rId)
+ScVbaWorksheet::getSomething(const cpo::uno::Sequence<sal_Int8 > & rId)
 {
     return comphelper::getSomethingImpl(rId, this);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaWorksheet_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaWorksheet(args, context));
 }

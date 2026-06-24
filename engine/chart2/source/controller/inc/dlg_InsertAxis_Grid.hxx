@@ -19,14 +19,14 @@
 #pragma once
 
 #include <vcl/weld.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace chart
 {
 struct InsertAxisOrGridDialogData
 {
-    css::uno::Sequence<bool> aPossibilityList;
-    css::uno::Sequence<bool> aExistenceList;
+    cpo::uno::Sequence<bool> aPossibilityList;
+    cpo::uno::Sequence<bool> aExistenceList;
 
     InsertAxisOrGridDialogData();
 };

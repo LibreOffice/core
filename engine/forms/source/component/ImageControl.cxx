@@ -189,9 +189,9 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OImageControlModel::create
 
 // XServiceInfo
 
-css::uno::Sequence<OUString>  OImageControlModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString>  OImageControlModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -704,9 +704,9 @@ Any SAL_CALL OImageControlControl::queryAggregation(const Type& _rType)
 }
 
 
-css::uno::Sequence<OUString>  OImageControlControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString>  OImageControlControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -972,14 +972,14 @@ void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OImageControlModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageControlModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OImageControlControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageControlControl(component));
 }

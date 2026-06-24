@@ -85,10 +85,10 @@ SwVbaAutoTextEntry::getServiceImplName()
     return u"SwVbaAutoTextEntry"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaAutoTextEntry::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.AutoTextEntry"_ustr
     };
@@ -124,10 +124,10 @@ SwVbaAutoTextEntries::getServiceImplName()
     return u"SwVbaAutoTextEntries"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaAutoTextEntries::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.AutoTextEntries"_ustr
     };

@@ -27,7 +27,7 @@
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <rtl/ustring.hxx>
@@ -729,7 +729,7 @@ bool DataFlavorMapper::isValidMimeContentType(const OUString& contentType) const
   return result;
 }
 
-NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors, bool bIsSystemClipboard) const
+NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const cpo::uno::Sequence<css::datatransfer::DataFlavor>& flavors, bool bIsSystemClipboard) const
 {
   sal_uInt32 nFlavors = flavors.getLength();
   NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity: 1];
@@ -766,7 +766,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<c
   return [array autorelease];
 }
 
-css::uno::Sequence<css::datatransfer::DataFlavor> DataFlavorMapper::typesArrayToFlavorSequence(NSArray* types) const
+cpo::uno::Sequence<css::datatransfer::DataFlavor> DataFlavorMapper::typesArrayToFlavorSequence(NSArray* types) const
 {
   int nFormats = [types count];
   Sequence<DataFlavor> flavors;

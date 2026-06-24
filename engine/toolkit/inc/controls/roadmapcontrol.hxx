@@ -104,7 +104,7 @@ namespace toolkit
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     sal_Int32 SAL_CALL getCount() override;
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
@@ -127,7 +127,7 @@ namespace toolkit
 
 
     virtual css::uno::Reference< XInterface > SAL_CALL createInstance(  ) override;
-    virtual css::uno::Reference< XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     virtual css::uno::Type SAL_CALL getElementType() override;
 
@@ -175,7 +175,7 @@ namespace toolkit
     // css::lang::XServiceInfo
     OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 
 

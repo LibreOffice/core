@@ -66,7 +66,7 @@ Deflater::Deflater(sal_Int32 nSetLevel, bool bNowrap)
     init(nSetLevel, bNowrap);
 }
 
-sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
+sal_Int32 Deflater::doDeflateBytes (cpo::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength)
 {
     sal_Int32 nResult;
     pStream->next_in   = reinterpret_cast<const unsigned char*>( sInBuffer.getConstArray() + nOffset );
@@ -105,7 +105,7 @@ sal_Int32 Deflater::doDeflateBytes (uno::Sequence < sal_Int8 > &rBuffer, sal_Int
     }
 }
 
-void Deflater::setInputSegment( const uno::Sequence< sal_Int8 >& rBuffer )
+void Deflater::setInputSegment( const cpo::uno::Sequence< sal_Int8 >& rBuffer )
 {
     sInBuffer = rBuffer;
     nOffset = 0;
@@ -120,7 +120,7 @@ void Deflater::finish(  )
 {
     bFinish = true;
 }
-sal_Int32 Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewLength )
+sal_Int32 Deflater::doDeflateSegment( cpo::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewLength )
 {
     OSL_ASSERT( !(nNewLength < 0 || nNewLength > rBuffer.getLength()));
     return doDeflateBytes(rBuffer, /*nNewOffset*/0, nNewLength);

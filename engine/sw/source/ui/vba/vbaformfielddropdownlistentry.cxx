@@ -47,9 +47,9 @@ OUString SwVbaFormFieldDropDownListEntry::getServiceImplName()
     return u"SwVbaFormFieldDropDownListEntry"_ustr;
 }
 
-uno::Sequence<OUString> SwVbaFormFieldDropDownListEntry::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaFormFieldDropDownListEntry::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.ListEntry"_ustr };
+    static cpo::uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.ListEntry"_ustr };
     return aServiceNames;
 }
 

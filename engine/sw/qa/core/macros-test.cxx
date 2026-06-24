@@ -358,7 +358,7 @@ void SwMacrosTest::testTdf151846()
 
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
-    uno::Sequence<OUString> aSeq(xAccess->getElementNames());
+    cpo::uno::Sequence<OUString> aSeq(xAccess->getElementNames());
 
     // Check number of embedded objects.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());

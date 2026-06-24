@@ -21,13 +21,13 @@
 
 #include <vcl/image.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <vector>
 
 struct NotebookBarAddonsItem
 {
     std::vector<Image> aImageValues;
-    std::vector<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>> aAddonValues;
+    std::vector<cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>> aAddonValues;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

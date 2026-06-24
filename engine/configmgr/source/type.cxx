@@ -75,22 +75,22 @@ css::uno::Type const & mapType(Type type) {
     case TYPE_STRING:
         return cppu::UnoType< OUString >::get();
     case TYPE_HEXBINARY:
-        return cppu::UnoType< css::uno::Sequence< sal_Int8 > >::get();
+        return cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get();
     case TYPE_BOOLEAN_LIST:
-        return cppu::UnoType< css::uno::Sequence< bool > >::get();
+        return cppu::UnoType< cpo::uno::Sequence< bool > >::get();
     case TYPE_SHORT_LIST:
-        return cppu::UnoType< css::uno::Sequence< sal_Int16 > >::get();
+        return cppu::UnoType< cpo::uno::Sequence< sal_Int16 > >::get();
     case TYPE_INT_LIST:
-        return cppu::UnoType< css::uno::Sequence< sal_Int32 > >::get();
+        return cppu::UnoType< cpo::uno::Sequence< sal_Int32 > >::get();
     case TYPE_LONG_LIST:
-        return cppu::UnoType< css::uno::Sequence< sal_Int64 > >::get();
+        return cppu::UnoType< cpo::uno::Sequence< sal_Int64 > >::get();
     case TYPE_DOUBLE_LIST:
-        return cppu::UnoType< css::uno::Sequence< double > >::get();
+        return cppu::UnoType< cpo::uno::Sequence< double > >::get();
     case TYPE_STRING_LIST:
-        return cppu::UnoType< css::uno::Sequence< OUString > >::get();
+        return cppu::UnoType< cpo::uno::Sequence< OUString > >::get();
     case TYPE_HEXBINARY_LIST:
         return cppu::UnoType<
-            css::uno::Sequence< css::uno::Sequence< sal_Int8 > > >::get();
+            cpo::uno::Sequence< cpo::uno::Sequence< sal_Int8 > > >::get();
     default:
         assert(false);
         throw css::uno::RuntimeException(u"this cannot happen"_ustr);

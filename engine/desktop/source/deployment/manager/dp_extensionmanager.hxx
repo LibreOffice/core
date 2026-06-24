@@ -53,7 +53,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 //    XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(
@@ -62,7 +62,7 @@ public:
        css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
 
 //XExtensionManager
-    virtual css::uno::Sequence<
+    virtual cpo::uno::Sequence<
         css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
         getSupportedPackageTypes() override;
 
@@ -71,7 +71,7 @@ public:
 
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addExtension(
         OUString const & url,
-        css::uno::Sequence<css::beans::NamedValue> const & properties,
+        cpo::uno::Sequence<css::beans::NamedValue> const & properties,
         OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -98,7 +98,7 @@ public:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
         SAL_CALL getDeployedExtensions(
         OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const &,
@@ -111,13 +111,13 @@ public:
         OUString const & filename,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
     SAL_CALL getExtensionsWithSameIdentifier(
         OUString const & identifier,
         OUString const & filename,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual css::uno::Sequence< css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > >
+    virtual cpo::uno::Sequence< cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > >
         SAL_CALL getAllExtensions(
         css::uno::Reference<css::task::XAbortChannel> const &,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
@@ -131,7 +131,7 @@ public:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
+    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
     getExtensionsWithUnacceptedLicenses(
         OUString const & repository,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
@@ -163,7 +163,7 @@ private:
                         OUString const & filename);
 
     static bool isUserDisabled(
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExtSameId);
+        cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExtSameId);
 
     void activateExtension(
         OUString const & identifier,
@@ -173,7 +173,7 @@ private:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     static void activateExtension(
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
+        cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
         bool bUserDisabled, bool bStartup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
@@ -199,7 +199,7 @@ private:
 
     void addExtensionsToMap(
         id2extensions & mapExt,
-        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
+        cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
         std::u16string_view repository);
 
     /// @throws css::lang::IllegalArgumentException
@@ -214,7 +214,7 @@ private:
     /// @throws css::uno::RuntimeException
     bool doChecksForAddExtension(
         css::uno::Reference<css::deployment::XPackageManager> const & xPackageMgr,
-        css::uno::Sequence<css::beans::NamedValue> const & properties,
+        cpo::uno::Sequence<css::beans::NamedValue> const & properties,
         css::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,

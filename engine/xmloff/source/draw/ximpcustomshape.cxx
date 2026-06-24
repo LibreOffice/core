@@ -480,7 +480,7 @@ static void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
     if ( vNum.empty() )
         return;
 
-    uno::Sequence< awt::Size > aSizeSeq((vNum.size() + 1) / 2);
+    cpo::uno::Sequence< awt::Size > aSizeSeq((vNum.size() + 1) / 2);
     std::vector< sal_Int32 >::const_iterator aIter = vNum.begin();
     std::vector< sal_Int32 >::const_iterator aEnd = vNum.end();
     awt::Size* pValues = aSizeSeq.getArray();
@@ -1264,8 +1264,8 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                 case EAS_Coordinates :
                 case EAS_GluePoints :
                 {
-                    uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > const & rSeq =
-                        *o3tl::doAccess<uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > >(
+                    cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > const & rSeq =
+                        *o3tl::doAccess<cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > >(
                             rPathItem.Value);
                     for ( const auto& rElem : rSeq )
                     {
@@ -1276,8 +1276,8 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
                 break;
                 case EAS_TextFrames :
                 {
-                    uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > const & rSeq =
-                        *o3tl::doAccess<uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > >(
+                    cpo::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > const & rSeq =
+                        *o3tl::doAccess<cpo::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > >(
                             rPathItem.Value);
                     for ( const auto& rElem : rSeq )
                     {

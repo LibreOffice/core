@@ -20,11 +20,13 @@
 #include <limits>
 #include <string.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
+
 
 #include "streamhelper.hxx"
 

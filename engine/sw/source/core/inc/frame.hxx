@@ -524,9 +524,9 @@ protected:
     virtual const IDocumentDrawModelAccess& getIDocumentDrawModelAccess( );
 
 public:
-    virtual css::uno::Sequence< css::style::TabStop > GetTabStopInfo( SwTwips )
+    virtual cpo::uno::Sequence< css::style::TabStop > GetTabStopInfo( SwTwips )
     {
-        return css::uno::Sequence< css::style::TabStop >();
+        return cpo::uno::Sequence< css::style::TabStop >();
     }
 
 

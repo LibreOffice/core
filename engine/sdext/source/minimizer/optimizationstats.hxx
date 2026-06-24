@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include "pppoptimizertoken.hxx"
@@ -37,7 +37,7 @@ class OptimizationStats
         const cpo::uno::Any* GetStatusValue( const PPPOptimizerTokenEnum eStat ) const;
 
         void InitializeStatusValuesFromDocument( const css::uno::Reference< css::frame::XModel >& rxModel );
-        void InitializeStatusValues( const css::uno::Sequence< css::beans::PropertyValue >& rOptimizationStats );
+        void InitializeStatusValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rOptimizationStats );
 
         css::beans::PropertyValues GetStatusSequence();
 };

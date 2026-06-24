@@ -34,7 +34,7 @@ namespace chart
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::document::XUndoManager;
     using ::com::sun::star::document::XUndoAction;

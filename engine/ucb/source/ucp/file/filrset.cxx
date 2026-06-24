@@ -44,8 +44,8 @@ using namespace com::sun::star;
 XResultSet_impl::XResultSet_impl( TaskManager* pMyShell,
                                   const OUString& aUnqPath,
                                   sal_Int32 OpenMode,
-                                  const uno::Sequence< beans::Property >& seq,
-                                  const uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
+                                  const cpo::uno::Sequence< beans::Property >& seq,
+                                  const cpo::uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
     : m_pMyShell( pMyShell )
     , m_nRow( -1 )
     , m_nWasNull ( false )
@@ -488,7 +488,7 @@ XResultSet_impl::setListener(
     aInfo <<= ucb::WelcomeDynamicResultSetStruct( this, /* "old" */
                                                   this /* "new" */ );
 
-    uno::Sequence< ucb::ListAction > aActions( 1 );
+    cpo::uno::Sequence< ucb::ListAction > aActions( 1 );
     aActions.getArray()[ 0 ] = ucb::ListAction( 0, // Position; not used
                                                 0, // Count; not used
                                                 ucb::ListActionType::WELCOME,
@@ -575,7 +575,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL
 XResultSet_impl::getPropertySetInfo()
 {
 
-    uno::Sequence< beans::Property > seq
+    cpo::uno::Sequence< beans::Property > seq
     {
         { u"RowCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(), beans::PropertyAttribute::READONLY },
         { u"IsRowCountFinal"_ustr, -1, cppu::UnoType<bool>::get(), beans::PropertyAttribute::READONLY }

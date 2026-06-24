@@ -23,7 +23,7 @@
 #include <string_view>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/status.hxx>
 
@@ -50,7 +50,7 @@ namespace StatusbarMerger
 {
     bool IsCorrectContext( std::u16string_view aContext );
 
-    bool ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
+    bool ConvertSeqSeqToVector( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                        AddonStatusbarItemContainer& rContainer );
 
     sal_uInt16 FindReferencePos( StatusBar* pStatusbar,

@@ -42,6 +42,7 @@
 
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 class SfxPickListImpl : public SfxListener
 {

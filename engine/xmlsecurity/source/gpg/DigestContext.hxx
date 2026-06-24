@@ -17,8 +17,8 @@ class DigestContext : public cppu::WeakImplHelper<css::xml::crypto::XDigestConte
 {
 public:
     // XDigestContext
-    virtual void SAL_CALL updateDigest(const css::uno::Sequence<::sal_Int8>& aData) override;
-    virtual css::uno::Sequence<::sal_Int8> SAL_CALL finalizeDigestAndDispose() override;
+    virtual void SAL_CALL updateDigest(const cpo::uno::Sequence<::sal_Int8>& aData) override;
+    virtual cpo::uno::Sequence<::sal_Int8> SAL_CALL finalizeDigestAndDispose() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

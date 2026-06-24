@@ -64,10 +64,10 @@ SwVbaParagraph::getServiceImplName()
     return u"SwVbaParagraph"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaParagraph::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Paragraph"_ustr
     };
@@ -173,10 +173,10 @@ SwVbaParagraphs::getServiceImplName()
     return u"SwVbaParagraphs"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaParagraphs::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Paragraphs"_ustr
     };

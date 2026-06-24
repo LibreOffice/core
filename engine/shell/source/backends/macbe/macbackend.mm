@@ -343,14 +343,14 @@ bool SAL_CALL MacOSXBackend::supportsService(const OUString& aServiceName)
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
+cpo::uno::Sequence<OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(void)
 {
     return { "com.sun.star.configuration.backend.MacOSXBackend" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_MacOSXBackend_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new MacOSXBackend());
 }

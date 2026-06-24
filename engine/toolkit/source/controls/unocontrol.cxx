@@ -260,7 +260,7 @@ void UnoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal
             rPropName == "StringItemList"  )
         {
             OUString aValue;
-            uno::Sequence< OUString > aSeqValue;
+            cpo::uno::Sequence< OUString > aSeqValue;
             if ( aConvertedValue >>= aValue )
             {
                 if ( ImplCheckLocalize( aValue ) )

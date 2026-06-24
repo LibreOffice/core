@@ -324,7 +324,7 @@ OUString SAXEventKeeperImpl::printBufferNode(
     return rc.makeStringAndClear();
 }
 
-css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
+cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
     SAXEventKeeperImpl::collectChildWorkingElement(BufferNode const * pBufferNode)
 /****** SAXEventKeeperImpl/collectChildWorkingElement ************************
  *
@@ -344,7 +344,7 @@ css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >
 {
     std::vector< std::unique_ptr<BufferNode> > const & vChildren = pBufferNode->getChildren();
 
-    css::uno::Sequence < css::uno::Reference<
+    cpo::uno::Sequence < css::uno::Reference<
         css::xml::wrapper::XXMLElementWrapper > > aChildrenCollection ( vChildren.size());
 
     std::transform(vChildren.begin(), vChildren.end(), aChildrenCollection.getArray(),
@@ -406,7 +406,7 @@ void SAXEventKeeperImpl::smashBufferNode(
          */
         if (bClearRoot)
         {
-            css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
+            cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
                 aChildElements = collectChildWorkingElement(m_pRootBufferNode.get());
 
             /*
@@ -457,7 +457,7 @@ void SAXEventKeeperImpl::smashBufferNode(
          */
         if ( bIsNotBlocking || bIsBlockInside || bIsBlockingAfterward )
         {
-            css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
+            cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
                 aChildElements = collectChildWorkingElement(pBufferNode);
 
             /*
@@ -997,7 +997,7 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
     if (!m_bIsForwarding)
     {
         sal_Int32 nLength = xAttribs->getLength();
-        css::uno::Sequence< css::xml::csax::XMLAttribute > aAttributes (nLength);
+        cpo::uno::Sequence< css::xml::csax::XMLAttribute > aAttributes (nLength);
         auto aAttributesRange = asNonConstRange(aAttributes);
 
         for ( int i = 0; i<nLength; ++i )
@@ -1113,7 +1113,7 @@ void SAL_CALL SAXEventKeeperImpl::setDocumentLocator( const css::uno::Reference<
 }
 
 /* XInitialization */
-void SAL_CALL SAXEventKeeperImpl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SAXEventKeeperImpl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_ASSERT(aArguments.getLength() == 1);
 
@@ -1130,7 +1130,7 @@ OUString SAXEventKeeperImpl_getImplementationName ()
     return u"com.sun.star.xml.security.framework.SAXEventKeeperImpl"_ustr;
 }
 
-css::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  )
 {
     return { u"com.sun.star.xml.crypto.sax.SAXEventKeeper"_ustr };
 }
@@ -1146,7 +1146,7 @@ bool SAL_CALL SAXEventKeeperImpl::supportsService( const OUString& rServiceName 
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL SAXEventKeeperImpl::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SAXEventKeeperImpl::getSupportedServiceNames(  )
 {
     return SAXEventKeeperImpl_getSupportedServiceNames();
 }

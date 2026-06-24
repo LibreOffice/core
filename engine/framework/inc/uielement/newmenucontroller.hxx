@@ -38,7 +38,7 @@ namespace framework
             /* interface XServiceInfo */
             virtual OUString SAL_CALL getImplementationName() override;
             virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
             // XStatusListener
             virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
@@ -52,13 +52,13 @@ namespace framework
 
         private:
             // XInitialization
-            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
             virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
 
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             static void retrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
-                                                     const css::uno::Sequence< OUString >& rCommands,
+                                                     const cpo::uno::Sequence< OUString >& rCommands,
                                                      std::vector< vcl::KeyCode >& aMenuShortCuts );
             void setAccelerators();
             void determineAndSetNewDocAccel(const css::awt::KeyEvent& rKeyCode);

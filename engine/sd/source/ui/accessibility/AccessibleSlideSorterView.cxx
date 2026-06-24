@@ -456,12 +456,12 @@ bool SAL_CALL AccessibleSlideSorterView::supportsService (const OUString& sServi
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString> SAL_CALL
        AccessibleSlideSorterView::getSupportedServiceNames()
 {
     ThrowIfDisposed ();
 
-    return uno::Sequence<OUString> {
+    return cpo::uno::Sequence<OUString> {
             u"com.sun.star.accessibility.AccessibleContext"_ustr,
             u"com.sun.star.drawing.AccessibleSlideSorterView"_ustr
     };

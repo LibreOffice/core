@@ -47,7 +47,7 @@ public:
     virtual                                 ~ScannerManager() override;
 
     // XScannerManager
-    virtual css::uno::Sequence< css::scanner::ScannerContext > SAL_CALL  getAvailableScanners() override;
+    virtual cpo::uno::Sequence< css::scanner::ScannerContext > SAL_CALL  getAvailableScanners() override;
     virtual bool SAL_CALL               configureScanner( css::scanner::ScannerContext& scanner_context ) override;
     virtual bool SAL_CALL               configureScannerAndScan( css::scanner::ScannerContext& scanner_context, const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
     virtual void SAL_CALL                   startScan( const css::scanner::ScannerContext& scanner_context, const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
@@ -56,16 +56,16 @@ public:
 
     // XBitmap
     virtual css::awt::Size SAL_CALL              getSize() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL        getDIB() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL        getMaskDIB() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL        getDIB() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL        getMaskDIB() override;
 
     OUString SAL_CALL getImplementationName() override;
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    virtual void SAL_CALL                   initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL                   initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
 #ifdef _WIN32
     void*                                   GetData() const { return mpData; }

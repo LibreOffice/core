@@ -304,10 +304,10 @@ public:
     void                SetDateValue( sal_Int32 nPropId, const css::util::Date& rValue );
     /** Inserts a thumbnail property from the passed meta file. */
     void                SetThumbnailValue( sal_Int32 nPropId,
-                            const css::uno::Sequence<sal_Int8> & i_rData);
+                            const cpo::uno::Sequence<sal_Int8> & i_rData);
     /** Inserts a BLOB property with the passed data. */
     void                SetBlobValue( sal_Int32 nPropId,
-                            const css::uno::Sequence<sal_Int8> & i_rData);
+                            const cpo::uno::Sequence<sal_Int8> & i_rData);
 
     /** Returns the value of the property with the passed ID in a UNO any. */
     cpo::uno::Any GetAnyValue( sal_Int32 nPropId ) const;

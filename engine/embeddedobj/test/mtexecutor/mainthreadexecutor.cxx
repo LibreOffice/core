@@ -25,7 +25,7 @@
 using namespace ::com::sun::star;
 
 
-uno::Sequence< OUString > SAL_CALL MainThreadExecutor::impl_staticGetSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL MainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     return
     {
@@ -48,13 +48,13 @@ uno::Reference< uno::XInterface > SAL_CALL MainThreadExecutor::impl_staticCreate
 }
 
 
-cpo::uno::Any SAL_CALL MainThreadExecutor::execute( const uno::Sequence< beans::NamedValue >& aArguments )
+cpo::uno::Any SAL_CALL MainThreadExecutor::execute( const cpo::uno::Sequence< beans::NamedValue >& aArguments )
     throw ( lang::IllegalArgumentException,
             uno::Exception,
             uno::RuntimeException )
 {
     uno::Reference< task::XJob > xJob;
-    uno::Sequence< beans::NamedValue > aValues;
+    cpo::uno::Sequence< beans::NamedValue > aValues;
     sal_Int32 nValuesSize = 0;
 
     for ( sal_Int32 nInd = 0; nInd < aArguments.getLength(); nInd++ )
@@ -99,7 +99,7 @@ bool SAL_CALL MainThreadExecutor::supportsService( const OUString& ServiceName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL MainThreadExecutor::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL MainThreadExecutor::getSupportedServiceNames()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();
@@ -107,7 +107,7 @@ uno::Sequence< OUString > SAL_CALL MainThreadExecutor::getSupportedServiceNames(
 
 
 MainThreadExecutorRequest::MainThreadExecutorRequest( const uno::Reference< task::XJob >& xJob,
-                                                    const uno::Sequence< beans::NamedValue >& aValues )
+                                                    const cpo::uno::Sequence< beans::NamedValue >& aValues )
 : m_xJob( xJob )
 , m_aValues( aValues )
 {

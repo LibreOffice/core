@@ -57,7 +57,7 @@ public:
     bool ShowAxisOrigin() const { return m_bShowAxisOrigin;}
     bool IsCrossingAxisIsCategoryAxis() const { return m_bIsCrossingAxisIsCategoryAxis;}
     bool IsSupportingCategoryPositioning() const { return m_bSupportingCategoryPositioning;}
-    const css::uno::Sequence< OUString >& GetCategories() const { return m_aCategories;}
+    const cpo::uno::Sequence< OUString >& GetCategories() const { return m_aCategories;}
 
     const rtl::Reference<::chart::ChartModel>&
         getDocument() const { return m_xChartDocument;}
@@ -92,7 +92,7 @@ private:
     bool m_bShowAxisOrigin;
     bool m_bIsCrossingAxisIsCategoryAxis;
     bool m_bSupportingCategoryPositioning;
-    css::uno::Sequence< OUString > m_aCategories;
+    cpo::uno::Sequence< OUString > m_aCategories;
 
     rtl::Reference<::chart::ChartModel> m_xChartDocument;
 

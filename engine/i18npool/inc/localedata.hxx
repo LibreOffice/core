@@ -23,7 +23,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/i18n/Calendar.hpp>
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
@@ -78,7 +78,7 @@ public:
 
     static rtl::Reference<LocaleDataImpl> get() { return new LocaleDataImpl; }
 
-    static css::uno::Sequence< css::i18n::CalendarItem > downcastCalendarItems( const css::uno::Sequence< css::i18n::CalendarItem2 > & rCi );
+    static cpo::uno::Sequence< css::i18n::CalendarItem > downcastCalendarItems( const cpo::uno::Sequence< css::i18n::CalendarItem2 > & rCi );
     static css::i18n::Calendar downcastCalendar( const css::i18n::Calendar2 & rC );
 
     /** Generates a <Language>_<Country> or <Variant> (if Language=="qlt")
@@ -90,37 +90,37 @@ public:
 
     virtual css::i18n::LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const css::lang::Locale& rLocale ) override;
     virtual css::i18n::LocaleDataItem SAL_CALL getLocaleItem( const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< css::i18n::Calendar2 > SAL_CALL getAllCalendars2( const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< css::i18n::Calendar > SAL_CALL getAllCalendars( const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< css::i18n::Currency > SAL_CALL getAllCurrencies( const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< css::i18n::Currency2 > SAL_CALL getAllCurrencies2( const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< css::i18n::FormatElement > SAL_CALL getAllFormats( const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< css::i18n::Implementation > SAL_CALL getCollatorImplementations( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Calendar2 > SAL_CALL getAllCalendars2( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Calendar > SAL_CALL getAllCalendars( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Currency > SAL_CALL getAllCurrencies( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Currency2 > SAL_CALL getAllCurrencies2( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::FormatElement > SAL_CALL getAllFormats( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::Implementation > SAL_CALL getCollatorImplementations( const css::lang::Locale& rLocale ) override;
     /// @throws css::uno::RuntimeException
     OUString getCollatorRuleByAlgorithm( const css::lang::Locale& rLocale, std::u16string_view algorithm );
-    virtual css::uno::Sequence< OUString > SAL_CALL getTransliterations( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getTransliterations( const css::lang::Locale& rLocale ) override;
     virtual css::i18n::ForbiddenCharacters SAL_CALL getForbiddenCharacters( const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getReservedWord( const css::lang::Locale& rLocale ) override ;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getReservedWord( const css::lang::Locale& rLocale ) override ;
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > getBreakIteratorRules( const css::lang::Locale& rLocale ) ;
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getAllInstalledLocaleNames() override;
+    cpo::uno::Sequence< OUString > getBreakIteratorRules( const css::lang::Locale& rLocale ) ;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getAllInstalledLocaleNames() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSearchOptions( const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getCollationOptions( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSearchOptions( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getCollationOptions( const css::lang::Locale& rLocale ) override;
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > getContinuousNumberingLevels( const css::lang::Locale& rLocale );
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getContinuousNumberingLevels( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > getOutlineNumberingLevels( const css::lang::Locale& rLocale );
+    cpo::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > getOutlineNumberingLevels( const css::lang::Locale& rLocale );
 
     // XLocaleData4
-    virtual css::uno::Sequence< OUString > SAL_CALL getDateAcceptancePatterns( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getDateAcceptancePatterns( const css::lang::Locale& rLocale ) override;
 
     // XLocaleData5
     virtual css::i18n::LocaleDataItem2 SAL_CALL getLocaleItem2( const css::lang::Locale& rLocale ) override;
 
     // following methods are used by indexentry service
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > getIndexAlgorithm( const css::lang::Locale& rLocale );
+    cpo::uno::Sequence< OUString > getIndexAlgorithm( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
     OUString getDefaultIndexAlgorithm( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
@@ -129,9 +129,9 @@ public:
     /// @throws css::uno::RuntimeException
     OUString getIndexModuleByAlgorithm( const css::lang::Locale& rLocale, std::u16string_view algorithm );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::i18n::UnicodeScript > getUnicodeScripts( const css::lang::Locale& rLocale );
+    cpo::uno::Sequence< css::i18n::UnicodeScript > getUnicodeScripts( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > getFollowPageWords( const css::lang::Locale& rLocale );
+    cpo::uno::Sequence< OUString > getFollowPageWords( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
     bool hasPhonetic( const css::lang::Locale& rLocale );
     /// @throws css::uno::RuntimeException
@@ -142,7 +142,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     ::std::optional< LocaleDataLookupTableItem > moCachedItem;
@@ -154,22 +154,22 @@ private:
     OUString const * getIndexArray(const css::lang::Locale& rLocale, sal_Int16& indexCount);
     OUString const * getIndexArrayForAlgorithm(const css::lang::Locale& rLocale, std::u16string_view rAlgorithm);
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::i18n::CalendarItem2 > &
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > &
         getCalendarItemByName(const OUString& name,
         const css::lang::Locale& rLocale,
-        const css::uno::Sequence< css::i18n::Calendar2 >& calendarsSeq,
+        const cpo::uno::Sequence< css::i18n::Calendar2 >& calendarsSeq,
         sal_Int16 item);
 
     /// Helper to obtain a sequence of days, months, gmonths or eras.
     ///
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< css::i18n::CalendarItem2 > getCalendarItems(
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > getCalendarItems(
             OUString const * allCalendars,
             sal_Int16 & rnOffset,
             const sal_Int16 nWhichItem,
             const sal_Int16 nCalendar,
             const css::lang::Locale & rLocale,
-            const css::uno::Sequence< css::i18n::Calendar2 > & calendarsSeq );
+            const cpo::uno::Sequence< css::i18n::Calendar2 > & calendarsSeq );
 
 };
 

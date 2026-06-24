@@ -13,7 +13,7 @@
 #include <com/sun/star/table/XCell.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -38,7 +38,7 @@ void XCalculatable::testCalculate()
     uno::Reference<sheet::XCalculatable> xCalculatable(init(), UNO_QUERY_THROW);
     xCalculatable->enableAutomaticCalculation(false);
 
-    uno::Sequence<uno::Reference<table::XCell>> xCells = getXCells();
+    cpo::uno::Sequence<uno::Reference<table::XCell>> xCells = getXCells();
 
     double dProduct = xCells[2]->getValue();
     double dFactor1 = xCells[0]->getValue();
@@ -56,7 +56,7 @@ void XCalculatable::testCalculateAll()
     uno::Reference<sheet::XCalculatable> xCalculatable(init(), UNO_QUERY_THROW);
     xCalculatable->enableAutomaticCalculation(false);
 
-    uno::Sequence<uno::Reference<table::XCell>> xCells = getXCells();
+    cpo::uno::Sequence<uno::Reference<table::XCell>> xCells = getXCells();
 
     double dProduct = xCells[2]->getValue();
     double dFactor1 = xCells[0]->getValue();

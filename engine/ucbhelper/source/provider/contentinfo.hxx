@@ -46,7 +46,7 @@ class PropertySetInfo :
 {
     css::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
-    std::optional<css::uno::Sequence< css::beans::Property >>
+    std::optional<cpo::uno::Sequence< css::beans::Property >>
                                 m_xProps;
     std::mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;
@@ -54,7 +54,7 @@ class PropertySetInfo :
 private:
     bool queryProperty( std::u16string_view rName,
                             css::beans::Property& rProp );
-    const css::uno::Sequence< css::beans::Property > & getPropertiesImpl();
+    const cpo::uno::Sequence< css::beans::Property > & getPropertiesImpl();
 
 public:
     PropertySetInfo( css::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
@@ -62,7 +62,7 @@ public:
     virtual ~PropertySetInfo() override;
 
     // XPropertySetInfo
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
     virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
     virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
@@ -83,7 +83,7 @@ class CommandProcessorInfo :
 {
     css::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
-    std::optional<css::uno::Sequence< css::ucb::CommandInfo >>
+    std::optional<cpo::uno::Sequence< css::ucb::CommandInfo >>
                                 m_xCommands;
     std::mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;
@@ -93,7 +93,7 @@ private:
                            css::ucb::CommandInfo& rCommand );
     bool queryCommand( sal_Int32 nHandle,
                            css::ucb::CommandInfo& rCommand );
-    const css::uno::Sequence< css::ucb::CommandInfo > & getCommandsImpl();
+    const cpo::uno::Sequence< css::ucb::CommandInfo > & getCommandsImpl();
 
 public:
     CommandProcessorInfo( css::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
@@ -101,7 +101,7 @@ public:
     virtual ~CommandProcessorInfo() override;
 
     // XCommandInfo
-    virtual css::uno::Sequence< css::ucb::CommandInfo > SAL_CALL getCommands() override;
+    virtual cpo::uno::Sequence< css::ucb::CommandInfo > SAL_CALL getCommands() override;
     virtual css::ucb::CommandInfo SAL_CALL getCommandInfoByName( const OUString& Name ) override;
     virtual css::ucb::CommandInfo SAL_CALL getCommandInfoByHandle( sal_Int32 Handle ) override;
     virtual bool SAL_CALL hasCommandByName( const OUString& Name ) override;

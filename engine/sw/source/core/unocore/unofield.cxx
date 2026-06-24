@@ -512,7 +512,7 @@ bool SAL_CALL SwXFieldMaster::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SwXFieldMaster::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.TextFieldMaster"_ustr, getServiceName(m_pImpl->m_nResTypeId) };
@@ -822,7 +822,7 @@ SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             //fill all text fields into a sequence
             std::vector<SwFormatField*> vpFields;
             pType->GatherFields(vpFields);
-            uno::Sequence<uno::Reference <text::XDependentTextField> > aSeq(vpFields.size());
+            cpo::uno::Sequence<uno::Reference <text::XDependentTextField> > aSeq(vpFields.size());
             std::transform(vpFields.begin(), vpFields.end(), aSeq.getArray(),
                     [this](SwFormatField* pF) { return uno::Reference<text::XDependentTextField>(SwXTextField::CreateXTextField(m_pImpl->m_pDoc, pF)); });
             aRet <<= aSeq;
@@ -867,7 +867,7 @@ SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             aRet <<= m_pImpl->m_nParam2;
         else if(rPropertyName == UNO_NAME_DEPENDENT_TEXT_FIELDS )
         {
-            uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(0);
+            cpo::uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(0);
             aRet <<= aRetSeq;
         }
         else
@@ -1047,8 +1047,8 @@ struct SwFieldProperties_Impl
     OUString    sPar7;
     Date            aDate;
     double          fDouble;
-    uno::Sequence<beans::PropertyValue> aPropSeq;
-    uno::Sequence<OUString> aStrings;
+    cpo::uno::Sequence<beans::PropertyValue> aPropSeq;
+    cpo::uno::Sequence<OUString> aStrings;
     std::unique_ptr<util::DateTime> pDateTime;
 
     sal_Int32       nSubType;
@@ -2156,7 +2156,7 @@ SwXTextField::getPropertySetInfo()
                     lcl_GetPropertyMapOfService(m_pImpl->m_nServiceId));
     const rtl::Reference<SfxItemPropertySetInfo> xInfo = pPropSet->getPropertySetInfo();
     // extend PropertySetInfo!
-    const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
+    const cpo::uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
     aRef = new SfxExtItemPropertySetInfo(
         aSwMapProvider.GetPropertyMapEntries(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
         aPropSeq );
@@ -2354,7 +2354,7 @@ cpo::uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyN
         break;
     case FN_UNO_ANCHOR_TYPES:
         {
-            uno::Sequence<text::TextContentAnchorType> aTypes { text::TextContentAnchorType_AS_CHARACTER };
+            cpo::uno::Sequence<text::TextContentAnchorType> aTypes { text::TextContentAnchorType_AS_CHARACTER };
             aRet <<= aTypes;
         }
         break;
@@ -2621,7 +2621,7 @@ bool SAL_CALL SwXTextField::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()
 {
     const OUString sServiceName =
         SwXServiceProvider::GetProviderName(m_pImpl->m_nServiceId);
@@ -2631,7 +2631,7 @@ uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()
     const OUString sServiceNameCC(  OldNameToNewName_Impl( sServiceName ) );
     sal_Int32 nLen = sServiceName == sServiceNameCC ? 2 : 3;
 
-    uno::Sequence< OUString > aRet( nLen );
+    cpo::uno::Sequence< OUString > aRet( nLen );
     OUString* pArray = aRet.getArray();
     *pArray++ = sServiceName;
     if (nLen == 3)
@@ -2685,9 +2685,9 @@ bool SwXTextFieldMasters::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextFieldMasters"_ustr };
+    cpo::uno::Sequence<OUString> aRet { u"com.sun.star.text.TextFieldMasters"_ustr };
     return aRet;
 }
 
@@ -2812,7 +2812,7 @@ bool SwXTextFieldMasters::getInstanceName(
     return true;
 }
 
-uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
+cpo::uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -2880,9 +2880,9 @@ bool SwXTextFieldTypes::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { u"com.sun.star.text.TextFields"_ustr };
+    cpo::uno::Sequence<OUString> aRet { u"com.sun.star.text.TextFields"_ustr };
     return aRet;
 }
 
@@ -3036,7 +3036,7 @@ bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL
+cpo::uno::Sequence<OUString> SAL_CALL
 SwXFieldEnumeration::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.FieldEnumeration"_ustr };

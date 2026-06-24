@@ -115,7 +115,7 @@ IMPL_LINK_NOARG(ExecuteWrapper, ExecuteActionHdl, Timer*, void)
 
 }
 
-void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rPropValues)
+void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const cpo::uno::Sequence<css::beans::PropertyValue>& rPropValues)
 {
     auto aIdle = std::make_unique<Idle>("UI Test Idle Handler");
     aIdle->SetPriority(TaskPriority::HIGHEST);
@@ -154,11 +154,11 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
     Scheduler::ProcessEventsToIdle();
 }
 
-css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
+cpo::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
 {
     SolarMutexGuard aGuard;
     StringMap aMap = mpObj->get_state();
-    css::uno::Sequence<css::beans::PropertyValue> aProps(aMap.size());
+    cpo::uno::Sequence<css::beans::PropertyValue> aProps(aMap.size());
     std::transform(aMap.begin(), aMap.end(), aProps.getArray(),
                    [](auto const& elem)
                    { return comphelper::makePropertyValue(elem.first, elem.second); });
@@ -166,7 +166,7 @@ css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
     return aProps;
 }
 
-css::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
+cpo::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
 {
     std::set<OUString> aChildren;
 
@@ -175,7 +175,7 @@ css::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
         aChildren = mpObj->get_children();
     }
 
-    css::uno::Sequence<OUString> aRet(aChildren.size());
+    cpo::uno::Sequence<OUString> aRet(aChildren.size());
     std::copy(aChildren.begin(), aChildren.end(), aRet.getArray());
 
     return aRet;
@@ -197,7 +197,7 @@ bool UIObjectUnoObj::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> UIObjectUnoObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UIObjectUnoObj::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.test.UIObject"_ustr };
 }

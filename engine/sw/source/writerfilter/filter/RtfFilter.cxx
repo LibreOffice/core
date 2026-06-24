@@ -58,7 +58,7 @@ public:
     explicit RtfFilter(uno::Reference<uno::XComponentContext> xContext);
 
     // XFilter
-    bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    bool SAL_CALL filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor) override;
     void SAL_CALL cancel() override;
 
     // XImporter
@@ -68,12 +68,12 @@ public:
     void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XInitialization
-    void SAL_CALL initialize(const uno::Sequence<cpo::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 }
 
@@ -82,7 +82,7 @@ RtfFilter::RtfFilter(uno::Reference<uno::XComponentContext> xContext)
 {
 }
 
-bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+bool RtfFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     if (m_xSrcDoc.is())
     {
@@ -193,7 +193,7 @@ void RtfFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
     assert(m_xDstDoc);
 }
 
-void RtfFilter::initialize(const uno::Sequence<cpo::uno::Any>& /*aArguments*/)
+void RtfFilter::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/)
 {
     // The DOCX exporter here extracts 'type' of the filter, ie 'Word' or
     // 'Word Template' but we don't need it for RTF.
@@ -206,16 +206,16 @@ bool RtfFilter::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> RtfFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> RtfFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { u"com.sun.star.document.ImportFilter"_ustr,
-                                     u"com.sun.star.document.ExportFilter"_ustr };
+    cpo::uno::Sequence<OUString> aRet = { u"com.sun.star.document.ImportFilter"_ustr,
+                                          u"com.sun.star.document.ExportFilter"_ustr };
     return aRet;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_RtfFilter_get_implementation(
-    uno::XComponentContext* pComponent, uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
+    uno::XComponentContext* pComponent, cpo::uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
 {
     return cppu::acquire(new RtfFilter(pComponent));
 }

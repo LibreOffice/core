@@ -849,7 +849,7 @@ static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet&
     uno::Reference<beans::XPropertySetInfo> xInfo(rSource.getPropertySetInfo());
     if (xInfo.is())
     {
-        const uno::Sequence<beans::Property> aSeq(xInfo->getProperties());
+        const cpo::uno::Sequence<beans::Property> aSeq(xInfo->getProperties());
         for (const beans::Property& rProp : aSeq)
         {
             OUString aName(rProp.Name);
@@ -1038,7 +1038,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
 //! merge loop with ScFunctionAccess::callFunction
 
 static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
-                        const uno::Sequence< uno::Sequence<cpo::uno::Any> >& aData )
+                        const cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> >& aData )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
@@ -1078,7 +1078,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     bool bError = false;
     SCROW nDocRow = nStartRow;
-    for (const uno::Sequence<cpo::uno::Any>& rColSeq : aData)
+    for (const cpo::uno::Sequence<cpo::uno::Any>& rColSeq : aData)
     {
         if ( rColSeq.getLength() == nCols )
         {
@@ -1138,7 +1138,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                     // accept Sequence<FormulaToken> for formula cells
                     case uno::TypeClass_SEQUENCE:
                     {
-                        uno::Sequence< sheet::FormulaToken > aTokens;
+                        cpo::uno::Sequence< sheet::FormulaToken > aTokens;
                         if ( rElement >>= aTokens )
                         {
                             ScTokenArray aTokenArray(rDoc);
@@ -1183,7 +1183,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 }
 
 static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
-        const uno::Sequence< uno::Sequence<OUString> >& aData,
+        const cpo::uno::Sequence< cpo::uno::Sequence<OUString> >& aData,
         const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -1223,7 +1223,7 @@ static bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 
     bool bError = false;
     SCROW nDocRow = nStartRow;
-    for (const uno::Sequence<OUString>& rColSeq : aData)
+    for (const cpo::uno::Sequence<OUString>& rColSeq : aData)
     {
         if ( rColSeq.getLength() == nCols )
         {
@@ -1793,14 +1793,14 @@ beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const OUString
     return GetOnePropertyState( nItemWhich, pEntry );
 }
 
-uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates(
-                                const uno::Sequence<OUString>& aPropertyNames )
+cpo::uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates(
+                                const cpo::uno::Sequence<OUString>& aPropertyNames )
 {
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
 
-    uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
+    cpo::uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), aRet.getArray(),
         [this, &rPropertyMap](const auto& rName) -> beans::PropertyState {
             sal_uInt16 nItemWhich = 0;
@@ -2540,8 +2540,8 @@ void SAL_CALL ScCellRangesBase::removeVetoableChangeListener( const OUString&,
 
 // XMultiPropertySet
 
-void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames,
-                                    const uno::Sequence< cpo::uno::Any >& aValues )
+void SAL_CALL ScCellRangesBase::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames,
+                                    const cpo::uno::Sequence< cpo::uno::Any >& aValues )
 {
     SolarMutexGuard aGuard;
 
@@ -2626,14 +2626,14 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
         pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), *pNewPattern, true );
 }
 
-uno::Sequence<cpo::uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
-                                const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence<cpo::uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
+                                const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     SolarMutexGuard aGuard;
 
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
 
-    uno::Sequence<cpo::uno::Any> aRet(aPropertyNames.getLength());
+    cpo::uno::Sequence<cpo::uno::Any> aRet(aPropertyNames.getLength());
     cpo::uno::Any* pProperties = aRet.getArray();
     for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
     {
@@ -2643,7 +2643,7 @@ uno::Sequence<cpo::uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
     return aRet;
 }
 
-void SAL_CALL ScCellRangesBase::addPropertiesChangeListener( const uno::Sequence< OUString >& /* aPropertyNames */,
+void SAL_CALL ScCellRangesBase::addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& /* aPropertyNames */,
                                     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
@@ -2654,7 +2654,7 @@ void SAL_CALL ScCellRangesBase::removePropertiesChangeListener( const uno::Refer
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< OUString >& /* aPropertyNames */,
+void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& /* aPropertyNames */,
                                     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
 {
     OSL_FAIL("not implemented");
@@ -2673,8 +2673,8 @@ IMPL_LINK( ScCellRangesBase, ValueListenerHdl, const SfxHint&, rHint, void )
 }
 
 // XTolerantMultiPropertySet
-uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::setPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames,
-                                    const uno::Sequence< cpo::uno::Any >& aValues )
+cpo::uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::setPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames,
+                                    const cpo::uno::Sequence< cpo::uno::Any >& aValues )
 {
     SolarMutexGuard aGuard;
 
@@ -2685,7 +2685,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
 
     if ( pDocShell && nCount )
     {
-        uno::Sequence < beans::SetPropertyTolerantFailed > aReturns(nCount);
+        cpo::uno::Sequence < beans::SetPropertyTolerantFailed > aReturns(nCount);
         beans::SetPropertyTolerantFailed* pReturns = aReturns.getArray();
 
         const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
@@ -2788,15 +2788,15 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
 
         return aReturns;
     }
-    return uno::Sequence < beans::SetPropertyTolerantFailed >();
+    return cpo::uno::Sequence < beans::SetPropertyTolerantFailed >();
 }
 
-uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::getPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::getPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     SolarMutexGuard aGuard;
 
     sal_Int32 nCount(aPropertyNames.getLength());
-    uno::Sequence < beans::GetPropertyTolerantResult > aReturns(nCount);
+    cpo::uno::Sequence < beans::GetPropertyTolerantResult > aReturns(nCount);
     beans::GetPropertyTolerantResult* pReturns = aReturns.getArray();
 
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
@@ -2820,12 +2820,12 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::get
     return aReturns;
 }
 
-uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBase::getDirectPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBase::getDirectPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     SolarMutexGuard aGuard;
 
     sal_Int32 nCount(aPropertyNames.getLength());
-    uno::Sequence < beans::GetDirectPropertyTolerantResult > aReturns(nCount);
+    cpo::uno::Sequence < beans::GetDirectPropertyTolerantResult > aReturns(nCount);
     beans::GetDirectPropertyTolerantResult* pReturns = aReturns.getArray();
 
     const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
@@ -2934,7 +2934,7 @@ std::unique_ptr<ScMemChart> ScCellRangesBase::CreateMemChart_Impl() const
     return nullptr;
 }
 
-uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
+cpo::uno::Sequence< cpo::uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
@@ -2943,11 +2943,11 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
         sal_Int32 nColCount = pMemChart->GetColCount();
         sal_Int32 nRowCount = static_cast<sal_Int32>(pMemChart->GetRowCount());
 
-        uno::Sequence< uno::Sequence<double> > aRowSeq( nRowCount );
-        uno::Sequence<double>* pRowAry = aRowSeq.getArray();
+        cpo::uno::Sequence< cpo::uno::Sequence<double> > aRowSeq( nRowCount );
+        cpo::uno::Sequence<double>* pRowAry = aRowSeq.getArray();
         for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
         {
-            uno::Sequence<double> aColSeq( nColCount );
+            cpo::uno::Sequence<double> aColSeq( nColCount );
             double* pColAry = aColSeq.getArray();
             for (sal_Int32 nCol = 0; nCol < nColCount; nCol++)
                 pColAry[nCol] = pMemChart->GetData( nCol, nRow );
@@ -2994,7 +2994,7 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( sal_Int32 nDataColu
     return new ScRangeList(aRanges);        // as-is
 }
 
-void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<double> >& aData )
+void SAL_CALL ScCellRangesBase::setData( const cpo::uno::Sequence< cpo::uno::Sequence<double> >& aData )
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
@@ -3014,7 +3014,7 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
             {
                 for (sal_Int32 nRow=0; nRow<nRowCount; nRow++)
                 {
-                    const uno::Sequence<double>& rRowSeq = aData[nRow];
+                    const cpo::uno::Sequence<double>& rRowSeq = aData[nRow];
                     const double* pArray = rRowSeq.getConstArray();
                     nColCount = rRowSeq.getLength();
                     for (sal_Int32 nCol=0; nCol<nColCount; nCol++)
@@ -3046,14 +3046,14 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
         throw uno::RuntimeException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
+cpo::uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
     if ( pMemChart )
     {
         sal_Int32 nRowCount = static_cast<sal_Int32>(pMemChart->GetRowCount());
-        uno::Sequence<OUString> aSeq( nRowCount );
+        cpo::uno::Sequence<OUString> aSeq( nRowCount );
         OUString* pAry = aSeq.getArray();
         for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
             pAry[nRow] = pMemChart->GetRowText(nRow);
@@ -3064,7 +3064,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
 }
 
 void SAL_CALL ScCellRangesBase::setRowDescriptions(
-                        const uno::Sequence<OUString>& aRowDescriptions )
+                        const cpo::uno::Sequence<OUString>& aRowDescriptions )
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
@@ -3115,14 +3115,14 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
         throw uno::RuntimeException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
+cpo::uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
     if ( pMemChart )
     {
         sal_Int32 nColCount = pMemChart->GetColCount();
-        uno::Sequence<OUString> aSeq( nColCount );
+        cpo::uno::Sequence<OUString> aSeq( nColCount );
         OUString* pAry = aSeq.getArray();
         for (sal_Int32 nCol = 0; nCol < nColCount; nCol++)
             pAry[nCol] = pMemChart->GetColText(nCol);
@@ -3133,7 +3133,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
 }
 
 void SAL_CALL ScCellRangesBase::setColumnDescriptions(
-    const uno::Sequence<OUString>& aColumnDescriptions )
+    const cpo::uno::Sequence<OUString>& aColumnDescriptions )
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
@@ -3996,7 +3996,7 @@ rtl::Reference<ScCellRangeObj> ScCellRangesObj::GetObjectByIndex_Impl(sal_Int32 
     return nullptr;        // no DocShell or wrong index
 }
 
-uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddresses()
+cpo::uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddresses()
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -4005,7 +4005,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddress
     if ( pDocSh && nCount )
     {
         table::CellRangeAddress aRangeAddress;
-        uno::Sequence<table::CellRangeAddress> aSeq(nCount);
+        cpo::uno::Sequence<table::CellRangeAddress> aSeq(nCount);
         table::CellRangeAddress* pAry = aSeq.getArray();
         for ( size_t i=0; i < nCount; i++)
         {
@@ -4113,7 +4113,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddress( const table::CellRangeAddress
     }
 }
 
-void SAL_CALL ScCellRangesObj::addRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRanges,
+void SAL_CALL ScCellRangesObj::addRangeAddresses( const cpo::uno::Sequence<table::CellRangeAddress >& rRanges,
                                     bool bMergeRanges )
 {
     SolarMutexGuard aGuard;
@@ -4136,7 +4136,7 @@ void ScCellRangesObj::addRangeAddresses( const ScRangeList& rRanges, bool bMerge
         AddRange(rRange, bMergeRanges);
 }
 
-void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::CellRangeAddress >& rRangeSeq )
+void SAL_CALL ScCellRangesObj::removeRangeAddresses( const cpo::uno::Sequence<table::CellRangeAddress >& rRangeSeq )
 {
     // use sometimes a better/faster implementation
     for (const table::CellRangeAddress& rRange : rRangeSeq)
@@ -4383,7 +4383,7 @@ static bool lcl_FindEntryName( const std::vector<ScCellRangesObj::ScNamedEntry>&
     return false;
 }
 
-uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -4395,7 +4395,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
         ScDocument& rDoc = pDocSh->GetDocument();
         size_t nCount = rRanges.size();
 
-        uno::Sequence<OUString> aSeq(nCount);
+        cpo::uno::Sequence<OUString> aSeq(nCount);
         OUString* pAry = aSeq.getArray();
         for (size_t i=0; i < nCount; i++)
         {
@@ -4474,7 +4474,7 @@ bool SAL_CALL ScCellRangesObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
 {
     return {SCSHEETCELLRANGES_SERVICE,
             SCCELLPROPERTIES_SERVICE,
@@ -4810,13 +4810,13 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const OUString& aFormula )
 }
 
 // XArrayFormulaTokens
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
+cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
 {
     SolarMutexGuard aGuard;
 
     // same cell logic as in getArrayFormula
 
-    uno::Sequence<sheet::FormulaToken> aSequence;
+    cpo::uno::Sequence<sheet::FormulaToken> aSequence;
     ScDocShell* pDocSh = GetDocShell();
     if (!pDocSh)
         return aSequence;
@@ -4844,7 +4844,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
     return aSequence;
 }
 
-void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::FormulaToken>& rTokens )
+void SAL_CALL ScCellRangeObj::setArrayTokens( const cpo::uno::Sequence<sheet::FormulaToken>& rTokens )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -4879,7 +4879,7 @@ void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::Formula
 
 // XCellRangeData
 
-uno::Sequence< uno::Sequence<cpo::uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
+cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> > SAL_CALL ScCellRangeObj::getDataArray()
 {
     SolarMutexGuard aGuard;
 
@@ -4896,7 +4896,7 @@ uno::Sequence< uno::Sequence<cpo::uno::Any> > SAL_CALL ScCellRangeObj::getDataAr
         // bAllowNV = TRUE: errors as void
         if ( ScRangeToSequence::FillMixedArray( aAny, pDocSh->GetDocument(), aRange, true ) )
         {
-            uno::Sequence< uno::Sequence<cpo::uno::Any> > aSeq;
+            cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> > aSeq;
             if ( aAny >>= aSeq )
                 return aSeq;            // success
         }
@@ -4906,7 +4906,7 @@ uno::Sequence< uno::Sequence<cpo::uno::Any> > SAL_CALL ScCellRangeObj::getDataAr
 }
 
 void SAL_CALL ScCellRangeObj::setDataArray(
-                        const uno::Sequence< uno::Sequence<cpo::uno::Any> >& aArray )
+                        const cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> >& aArray )
 {
     SolarMutexGuard aGuard;
 
@@ -4924,7 +4924,7 @@ void SAL_CALL ScCellRangeObj::setDataArray(
 
 // XCellRangeFormula
 
-uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArray()
+cpo::uno::Sequence< cpo::uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArray()
 {
     SolarMutexGuard aGuard;
 
@@ -4945,11 +4945,11 @@ uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArra
         SCROW nRowCount = nEndRow + 1 - nStartRow;
         SCTAB nTab = aRange.aStart.Tab();
 
-        uno::Sequence< uno::Sequence<OUString> > aRowSeq( nRowCount );
-        uno::Sequence<OUString>* pRowAry = aRowSeq.getArray();
+        cpo::uno::Sequence< cpo::uno::Sequence<OUString> > aRowSeq( nRowCount );
+        cpo::uno::Sequence<OUString>* pRowAry = aRowSeq.getArray();
         for (SCROW nRowIndex = 0; nRowIndex < nRowCount; nRowIndex++)
         {
-            uno::Sequence<OUString> aColSeq( nColCount );
+            cpo::uno::Sequence<OUString> aColSeq( nColCount );
             OUString* pColAry = aColSeq.getArray();
             for (SCCOL nColIndex = 0; nColIndex < nColCount; nColIndex++)
                 pColAry[nColIndex] = lcl_GetInputString( pDocSh->GetDocument(),
@@ -4965,7 +4965,7 @@ uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArra
 }
 
 void SAL_CALL ScCellRangeObj::setFormulaArray(
-                        const uno::Sequence< uno::Sequence<OUString> >& aArray )
+                        const cpo::uno::Sequence< cpo::uno::Sequence<OUString> >& aArray )
 {
     SolarMutexGuard aGuard;
 
@@ -5198,7 +5198,7 @@ void SAL_CALL ScCellRangeObj::autoFormat( const OUString& aName )
 
 // XSortable
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createSortDescriptor()
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createSortDescriptor()
 {
     SolarMutexGuard aGuard;
     ScSortParam aParam;
@@ -5223,12 +5223,12 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createSortDescripto
         }
     }
 
-    uno::Sequence<beans::PropertyValue> aSeq( ScSortDescriptor::GetPropertyCount() );
+    cpo::uno::Sequence<beans::PropertyValue> aSeq( ScSortDescriptor::GetPropertyCount() );
     ScSortDescriptor::FillProperties( aSeq, aParam );
     return aSeq;
 }
 
-void SAL_CALL ScCellRangeObj::sort( const uno::Sequence<beans::PropertyValue>& aDescriptor )
+void SAL_CALL ScCellRangeObj::sort( const cpo::uno::Sequence<beans::PropertyValue>& aDescriptor )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5549,7 +5549,7 @@ void SAL_CALL ScCellRangeObj::removeSubTotals()
     aFunc.DoSubTotals( nTab, aParam, true, true );    // are must be created
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createImportDescriptor( bool bEmpty )
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createImportDescriptor( bool bEmpty )
 {
     SolarMutexGuard aGuard;
     ScImportParam aParam;
@@ -5562,12 +5562,12 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScCellRangeObj::createImportDescrip
             pData->GetImportParam(aParam);
     }
 
-    uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
+    cpo::uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
     ScImportDescriptor::FillProperties( aSeq, aParam );
     return aSeq;
 }
 
-void SAL_CALL ScCellRangeObj::doImport( const uno::Sequence<beans::PropertyValue>& aDescriptor )
+void SAL_CALL ScCellRangeObj::doImport( const cpo::uno::Sequence<beans::PropertyValue>& aDescriptor )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -5684,7 +5684,7 @@ bool SAL_CALL ScCellRangeObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
 {
     return {SCSHEETCELLRANGE_SERVICE,
             SCCELLRANGE_SERVICE,
@@ -6187,10 +6187,10 @@ sal_Int32 SAL_CALL ScCellObj::getError()
 
 // XFormulaTokens
 
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens()
+cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens()
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<sheet::FormulaToken> aSequence;
+    cpo::uno::Sequence<sheet::FormulaToken> aSequence;
     ScDocShell* pDocSh = GetDocShell();
     if (!pDocSh)
         return aSequence;
@@ -6206,7 +6206,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens()
     return aSequence;
 }
 
-void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens )
+void SAL_CALL ScCellObj::setTokens( const cpo::uno::Sequence<sheet::FormulaToken>& rTokens )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6339,7 +6339,7 @@ bool SAL_CALL ScCellObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
 {
     return {SCSHEETCELL_SERVICE,
             SCCELL_SERVICE,
@@ -6615,7 +6615,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScTableSheetObj::getCellRangeByPositi
     return ScCellRangeObj::getCellRangeByPosition(nLeft,nTop,nRight,nBottom);
 }
 
-uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPageBreaks()
+cpo::uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPageBreaks()
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6640,7 +6640,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
                 ++nCount;
 
         sheet::TablePageBreakData aData;
-        uno::Sequence<sheet::TablePageBreakData> aSeq(nCount);
+        cpo::uno::Sequence<sheet::TablePageBreakData> aSeq(nCount);
         sheet::TablePageBreakData* pAry = aSeq.getArray();
         sal_uInt16 nPos = 0;
         for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, rDoc.MaxCol()))
@@ -6659,7 +6659,7 @@ uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getColumnPage
     return {};
 }
 
-uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBreaks()
+cpo::uno::Sequence<sheet::TablePageBreakData> SAL_CALL ScTableSheetObj::getRowPageBreaks()
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6886,7 +6886,7 @@ void ScTableSheetObj::PrintAreaUndo_Impl( std::unique_ptr<ScPrintRangeSaver> pOl
     pDocSh->SetDocumentModified();
 }
 
-uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
+cpo::uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -6897,7 +6897,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
         sal_uInt16 nCount = rDoc.GetPrintRangeCount( nTab );
 
         table::CellRangeAddress aRangeAddress;
-        uno::Sequence<table::CellRangeAddress> aSeq(nCount);
+        cpo::uno::Sequence<table::CellRangeAddress> aSeq(nCount);
         table::CellRangeAddress* pAry = aSeq.getArray();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
@@ -6912,11 +6912,11 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
         }
         return aSeq;
     }
-    return uno::Sequence<table::CellRangeAddress>();
+    return cpo::uno::Sequence<table::CellRangeAddress>();
 }
 
 void SAL_CALL ScTableSheetObj::setPrintAreas(
-                    const uno::Sequence<table::CellRangeAddress>& aPrintAreas )
+                    const cpo::uno::Sequence<table::CellRangeAddress>& aPrintAreas )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7508,7 +7508,7 @@ void SAL_CALL ScTableSheetObj::setScenarioComment( const OUString& aScenarioComm
     pDocSh->ModifyScenario( nTab, aName, aComment, aColor, nFlags );
 }
 
-void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAddress>& rScenRanges )
+void SAL_CALL ScTableSheetObj::addRanges( const cpo::uno::Sequence<table::CellRangeAddress>& rScenRanges )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7564,7 +7564,7 @@ void SAL_CALL ScTableSheetObj::apply()
 
 // XScenarioEnhanced
 
-uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
+cpo::uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -7576,7 +7576,7 @@ uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
         if (pRangeList)
         {
             size_t nCount = pRangeList->size();
-            uno::Sequence< table::CellRangeAddress > aRetRanges( nCount );
+            cpo::uno::Sequence< table::CellRangeAddress > aRetRanges( nCount );
             table::CellRangeAddress* pAry = aRetRanges.getArray();
             for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
             {
@@ -7591,7 +7591,7 @@ uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
             return aRetRanges;
         }
     }
-    return uno::Sequence< table::CellRangeAddress > ();
+    return cpo::uno::Sequence< table::CellRangeAddress > ();
 }
 
 // XExternalSheetName
@@ -8131,7 +8131,7 @@ bool SAL_CALL ScTableSheetObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
 {
     return {SCSPREADSHEET_SERVICE,
             SCSHEETCELLRANGE_SERVICE,

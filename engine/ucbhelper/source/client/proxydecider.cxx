@@ -300,7 +300,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
                 configuration::theDefaultProvider::get( rxContext );
 
-        uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(CONFIG_ROOT_KEY) };
+        cpo::uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(CONFIG_ROOT_KEY) };
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
                         u"com.sun.star.configuration.ConfigurationAccess"_ustr,

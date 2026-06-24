@@ -250,21 +250,21 @@ OUString SAL_CALL QtFilePicker::getDisplayDirectory()
     return ret;
 }
 
-uno::Sequence<OUString> SAL_CALL QtFilePicker::getFiles()
+cpo::uno::Sequence<OUString> SAL_CALL QtFilePicker::getFiles()
 {
-    uno::Sequence<OUString> seq = getSelectedFiles();
+    cpo::uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
         seq.realloc(1);
     return seq;
 }
 
-uno::Sequence<OUString> SAL_CALL QtFilePicker::getSelectedFiles()
+cpo::uno::Sequence<OUString> SAL_CALL QtFilePicker::getSelectedFiles()
 {
     SolarMutexGuard g;
     QList<QUrl> urls;
     GetQtInstance().RunInMainThread([&urls, this]() { urls = m_pFileDialog->selectedUrls(); });
 
-    uno::Sequence<OUString> seq(urls.size());
+    cpo::uno::Sequence<OUString> seq(urls.size());
     auto seqRange = asNonConstRange(seq);
 
     auto const trans = css::uri::ExternalUriReferenceTranslator::create(m_context);
@@ -352,7 +352,7 @@ OUString SAL_CALL QtFilePicker::getCurrentFilter()
 }
 
 void SAL_CALL QtFilePicker::appendFilterGroup(const OUString& rGroupTitle,
-                                              const uno::Sequence<beans::StringPair>& filters)
+                                              const cpo::uno::Sequence<beans::StringPair>& filters)
 {
     SolarMutexGuard g;
     QtInstance& rQtInstance = GetQtInstance();
@@ -806,7 +806,7 @@ void QtFilePicker::addCustomControl(sal_Int16 controlId)
     }
 }
 
-void SAL_CALL QtFilePicker::initialize(const uno::Sequence<cpo::uno::Any>& args)
+void SAL_CALL QtFilePicker::initialize(const cpo::uno::Sequence<cpo::uno::Any>& args)
 {
     // parameter checking
     if (args.getLength() == 0)
@@ -895,7 +895,7 @@ bool SAL_CALL QtFilePicker::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL QtFilePicker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL QtFilePicker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
              u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,
@@ -948,7 +948,7 @@ void QtFilePicker::currentChanged(const QString&)
 
 OUString QtFilePicker::getDirectory()
 {
-    uno::Sequence<OUString> seq = getSelectedFiles();
+    cpo::uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
         seq.realloc(1);
     return seq.hasElements() ? seq[0] : OUString();

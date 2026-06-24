@@ -74,7 +74,7 @@ using com::sun::star::lang::IndexOutOfBoundsException;
 using cpo::uno::Any;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::uno::XInterface;
@@ -300,7 +300,7 @@ EvaluationContext Binding::getEvaluationContext() const
 }
 
 
-css::uno::Sequence<sal_Int8> Binding::getUnoTunnelId()
+cpo::uno::Sequence<sal_Int8> Binding::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit aImplementationId;
     return aImplementationId.getSeq();
@@ -932,7 +932,7 @@ void Binding::_checkBindingID()
 // XValueBinding
 
 
-css::uno::Sequence<css::uno::Type> Binding::getSupportedValueTypes()
+cpo::uno::Sequence<css::uno::Type> Binding::getSupportedValueTypes()
 {
     return Convert::get().getTypes();
 }
@@ -1149,7 +1149,7 @@ void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEve
 // lang::XUnoTunnel
 
 
-sal_Int64 Binding::getSomething( const css::uno::Sequence<sal_Int8>& xId )
+sal_Int64 Binding::getSomething( const cpo::uno::Sequence<sal_Int8>& xId )
 {
     return comphelper::getSomethingImpl(xId, this);
 }

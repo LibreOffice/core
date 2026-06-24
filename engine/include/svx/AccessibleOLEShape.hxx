@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -80,12 +80,12 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
     //=====  XTypeProvider  ===================================================
 
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type> SAL_CALL
         getTypes() override;
 // ====== XAccessibleExtendedAttributes =====================================
     virtual OUString SAL_CALL getExtendedAttributes() override;

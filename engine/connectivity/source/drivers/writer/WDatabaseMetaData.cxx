@@ -43,7 +43,7 @@ OUString SAL_CALL OWriterDatabaseMetaData::getURL()
 
 uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
     const cpo::uno::Any& /*catalog*/, const OUString& /*schemaPattern*/,
-    const OUString& tableNamePattern, const uno::Sequence<OUString>& types)
+    const OUString& tableNamePattern, const cpo::uno::Sequence<OUString>& types)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -84,7 +84,7 @@ uno::Reference<sdbc::XResultSet> SAL_CALL OWriterDatabaseMetaData::getTables(
     uno::Reference<container::XNameAccess> xTables = xDoc->getTextTables();
     if (!xTables.is())
         throw sdbc::SQLException();
-    uno::Sequence<OUString> aTableNames = xTables->getElementNames();
+    cpo::uno::Sequence<OUString> aTableNames = xTables->getElementNames();
 
     ODatabaseMetaDataResultSet::ORows aRows;
     sal_Int32 nTableCount = aTableNames.getLength();

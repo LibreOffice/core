@@ -21,7 +21,7 @@
 #define INCLUDED_PACKAGE_DEFLATER_HXX
 
 #include <config_options.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <package/packagedllapi.hxx>
 #include <memory>
 
@@ -33,7 +33,7 @@ class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) Deflater final
 {
     typedef struct z_stream_s z_stream;
 
-    css::uno::Sequence< sal_Int8 > sInBuffer;
+    cpo::uno::Sequence< sal_Int8 > sInBuffer;
     bool                    bFinish;
     bool                    bFinished;
     sal_Int64               nOffset, nLength;
@@ -42,16 +42,16 @@ class UNLESS_MERGELIBS(DLLPUBLIC_PACKAGE) Deflater final
     std::unique_ptr<z_stream> pStream;
 
     void init (sal_Int32 nLevel, bool bNowrap);
-    sal_Int32 doDeflateBytes (css::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
+    sal_Int32 doDeflateBytes (cpo::uno::Sequence < sal_Int8 > &rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength);
 
 public:
     ~Deflater();
     Deflater(sal_Int32 nSetLevel, bool bNowrap);
-    void setInputSegment( const css::uno::Sequence< sal_Int8 >& rBuffer );
+    void setInputSegment( const cpo::uno::Sequence< sal_Int8 >& rBuffer );
     bool needsInput() const;
     void finish(  );
     bool finished() const { return bFinished;}
-    sal_Int32 doDeflateSegment( css::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewLength );
+    sal_Int32 doDeflateSegment( cpo::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewLength );
     sal_Int64 getTotalIn() const;
     sal_Int64 getTotalOut() const;
     void reset(  );

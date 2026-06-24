@@ -112,7 +112,7 @@ void VclFiltersTest::checkExportImport(std::u16string_view aFilterShortName)
     SvMemoryStream aStream;
     aStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
-    css::uno::Sequence< css::beans::PropertyValue > aFilterData{
+    cpo::uno::Sequence< css::beans::PropertyValue > aFilterData{
         comphelper::makePropertyValue(u"Interlaced"_ustr, sal_Int32(0)),
         comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
         comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(90))

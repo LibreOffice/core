@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #if !defined WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -33,29 +33,29 @@
     input:
     aMetaFilePict - a sequence of bytes containing a METAFILEPICT struct
 ------------------------------------------------------------------------*/
-css::uno::Sequence<sal_Int8> WinMFPictToOOMFPict(css::uno::Sequence<sal_Int8>& aMetaFilePict);
-css::uno::Sequence<sal_Int8> WinENHMFPictToOOMFPict(HENHMETAFILE hEnhMetaFile);
+cpo::uno::Sequence<sal_Int8> WinMFPictToOOMFPict(cpo::uno::Sequence<sal_Int8>& aMetaFilePict);
+cpo::uno::Sequence<sal_Int8> WinENHMFPictToOOMFPict(HENHMETAFILE hEnhMetaFile);
 
 /*------------------------------------------------------------------------
     input:
     aByteStream - a sequence of bytes containing a LibreOffice metafile
                   picture with a leading METAFILEHEADER
 ------------------------------------------------------------------------*/
-HMETAFILEPICT OOMFPictToWinMFPict(css::uno::Sequence<sal_Int8> const& aOOMetaFilePict);
-HENHMETAFILE OOMFPictToWinENHMFPict(css::uno::Sequence<sal_Int8> const& aOOMetaFilePict);
+HMETAFILEPICT OOMFPictToWinMFPict(cpo::uno::Sequence<sal_Int8> const& aOOMetaFilePict);
+HENHMETAFILE OOMFPictToWinENHMFPict(cpo::uno::Sequence<sal_Int8> const& aOOMetaFilePict);
 
 /*------------------------------------------------------------------------
     input:
     aWinDIB - sequence of bytes containing a windows device independent
               bitmap
 ------------------------------------------------------------------------*/
-css::uno::Sequence<sal_Int8> WinDIBToOOBMP(const css::uno::Sequence<sal_Int8>& aWinDIB);
+cpo::uno::Sequence<sal_Int8> WinDIBToOOBMP(const cpo::uno::Sequence<sal_Int8>& aWinDIB);
 
 /*------------------------------------------------------------------------
     input:
     HBITMAP - a windows bitmap handle
 ------------------------------------------------------------------------*/
-css::uno::Sequence<sal_Int8> WinBITMAPToOOBMP(HBITMAP);
+cpo::uno::Sequence<sal_Int8> WinBITMAPToOOBMP(HBITMAP);
 
 /*------------------------------------------------------------------------
     input:
@@ -63,7 +63,7 @@ css::uno::Sequence<sal_Int8> WinBITMAPToOOBMP(HBITMAP);
     May contain CF_DIBV5 or CF_DIB, but removing the BITMAPFILEHEADER
     is always the same size
 ------------------------------------------------------------------------*/
-css::uno::Sequence<sal_Int8> OOBmpToWinDIB(css::uno::Sequence<sal_Int8>& aOOBmp);
+cpo::uno::Sequence<sal_Int8> OOBmpToWinDIB(cpo::uno::Sequence<sal_Int8>& aOOBmp);
 
 /*------------------------------------------------------------------------
     input:
@@ -72,13 +72,13 @@ css::uno::Sequence<sal_Int8> OOBmpToWinDIB(css::uno::Sequence<sal_Int8>& aOOBmp)
     the Format is described in the MSDN Library under HTML Clipboard
     Format
 ------------------------------------------------------------------------*/
-css::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(css::uno::Sequence<sal_Int8> const& aTextHtml);
+cpo::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(cpo::uno::Sequence<sal_Int8> const& aTextHtml);
 
 /**
     Return a FileList in which Windows Shell Links (lnk) are resolved.
     If for whatever reason a resolution is not possible leave the
     original lnk file.
 */
-css::uno::Sequence<sal_Int8> CF_HDROPToFileList(HGLOBAL hGlobal);
+cpo::uno::Sequence<sal_Int8> CF_HDROPToFileList(HGLOBAL hGlobal);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

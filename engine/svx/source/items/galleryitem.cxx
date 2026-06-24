@@ -22,7 +22,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 
@@ -52,7 +52,7 @@ SvxGalleryItem::~SvxGalleryItem()
 
 bool SvxGalleryItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /* nMemberId */ ) const
 {
-    css::uno::Sequence< css::beans::PropertyValue > aSeq{
+    cpo::uno::Sequence< css::beans::PropertyValue > aSeq{
         comphelper::makePropertyValue(SVXGALLERYITEM_TYPE, m_nType),
         comphelper::makePropertyValue(SVXGALLERYITEM_URL, m_aURL),
         comphelper::makePropertyValue(SVXGALLERYITEM_FILTER, m_aURL),
@@ -68,7 +68,7 @@ bool SvxGalleryItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /* nMemberId */ 
 
 bool SvxGalleryItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /* nMemberId */)
 {
-    css::uno::Sequence< css::beans::PropertyValue > aSeq;
+    cpo::uno::Sequence< css::beans::PropertyValue > aSeq;
 
     if ( !( rVal >>= aSeq ) || ( aSeq.getLength() < SVXGALLERYITEM_PARAMS ) )
         return false;

@@ -150,9 +150,9 @@ protected:
     {
         return u"ScVbaBorder"_ustr;
     }
-    virtual css::uno::Sequence<OUString> getServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override
     {
-        static uno::Sequence< OUString > const aServiceNames
+        static cpo::uno::Sequence< OUString > const aServiceNames
         {
             u"ooo.vba.excel.Border"_ustr
         };
@@ -579,10 +579,10 @@ ScVbaBorders::getServiceImplName()
     return u"ScVbaBorders"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaBorders::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Borders"_ustr
     };

@@ -281,7 +281,7 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
         return retVal.isEmpty() ? _rRawString : retVal;
     }
 
-    OUString GetHexString( const css::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
+    OUString GetHexString( const cpo::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak )
     {
         OUStringBuffer          aStr;
         const char              pHexDigs[ 17 ] = "0123456789ABCDEF";
@@ -319,7 +319,7 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
 
         css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSE
             = xSecurityContext->getSecurityEnvironment();
-        css::uno::Sequence<css::uno::Reference<css::security::XCertificate>> xCertificates
+        cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>> xCertificates
             = xSE->getPersonalCertificates();
 
         auto aCertsIter = asNonConstRange(xCertificates);

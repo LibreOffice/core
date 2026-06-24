@@ -125,14 +125,14 @@ OUString SAL_CALL OTableContainer::getImplementationName()
     }
 bool SAL_CALL OTableContainer::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-css::uno::Sequence< OUString > SAL_CALL OTableContainer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OTableContainer::getSupportedServiceNames()
 {
     return { SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES };
 }

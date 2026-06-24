@@ -27,7 +27,7 @@
 #include <libxml/parserInternals.h>
 
 #include <com/sun/star/xml/csax/XMLAttribute.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #ifndef XMLSEC_NO_XSLT
 #include "libxslt/xslt.h"
@@ -59,7 +59,7 @@ static xmlChar* ous_to_nxmlstr( std::u16string_view oustr, int& length )
  * The return value and the referenced value must be NULL terminated.
  * The application has the responsibility to deallocate the return value.
  */
-static const xmlChar** attrlist_to_nxmlstr( const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
+static const xmlChar** attrlist_to_nxmlstr( const cpo::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
 {
     xmlChar* attname = nullptr ;
     xmlChar* attvalue = nullptr ;
@@ -259,7 +259,7 @@ void SAXHelper::endDocument()
  */
 void SAXHelper::startElement(
     std::u16string_view aName,
-    const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
+    const cpo::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
 {
     const xmlChar* fullName = nullptr ;
     const xmlChar** attrs = nullptr ;

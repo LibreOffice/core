@@ -67,7 +67,7 @@ public:
     // XUIElementFactory
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
         const OUString& rsResourceURL,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 
     OUString SAL_CALL getImplementationName() override
     { return u"org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"_ustr; }
@@ -75,7 +75,7 @@ public:
     bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     { return {u"com.sun.star.ui.UIElementFactory"_ustr}; }
 };
 
@@ -85,7 +85,7 @@ SwPanelFactory::SwPanelFactory()
 
 Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     const OUString& rsResourceURL,
-    const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     Reference<ui::XUIElement> xElement;
 
@@ -234,7 +234,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_apache_openoffice_comp_sw_sidebar_SwPanelFactory_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SwPanelFactory());
 }

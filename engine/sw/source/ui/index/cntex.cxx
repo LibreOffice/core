@@ -194,12 +194,12 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         sLevel = rDesc.GetStyleNames(i).toString();
                     const sal_Int32 nStyles =
                         comphelper::string::getTokenCount(sLevel, TOX_STYLE_DELIMITER);
-                    uno::Sequence<OUString> aStyles(nStyles);
+                    cpo::uno::Sequence<OUString> aStyles(nStyles);
                     OUString* pArr = aStyles.getArray();
                     sal_Int32 nPos {0};
                     for(sal_Int32 nStyle = 0; nStyle < nStyles; ++nStyle)
                         pArr[nStyle] = sLevel.getToken(0, TOX_STYLE_DELIMITER, nPos);
-                    cpo::uno::Any aAny(&aStyles, cppu::UnoType<uno::Sequence<OUString>>::get());
+                    cpo::uno::Any aAny(&aStyles, cppu::UnoType<cpo::uno::Sequence<OUString>>::get());
                     xAcc->replaceByIndex(i, aAny);
                 }
             }
@@ -260,7 +260,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 for(sal_uInt16 nCurrLevel = nStartLevel; nCurrLevel <= nEndLevel; nCurrLevel++)
                 {
                     OUString sTokenType;
-                    uno::Sequence< beans::PropertyValues> aSequPropVals(10);
+                    cpo::uno::Sequence< beans::PropertyValues> aSequPropVals(10);
                     tools::Long nTokenIndex = 0;
                     tools::Long nParamCount = 2;
 
@@ -344,7 +344,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
                     uno::Reference< container::XIndexReplace >  xFormatAccess;
                     aFormatAccess >>= xFormatAccess;
-                    cpo::uno::Any aLevelProp(&aSequPropVals, cppu::UnoType<uno::Sequence<beans::PropertyValues>>::get());
+                    cpo::uno::Any aLevelProp(&aSequPropVals, cppu::UnoType<cpo::uno::Sequence<beans::PropertyValues>>::get());
                     xFormatAccess->replaceByIndex(nCurrLevel, aLevelProp);
                 }
             }

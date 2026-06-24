@@ -398,7 +398,7 @@ using namespace cpo::uno;
         return u"stardiv.Toolkit.UnoControlFormattedFieldModel"_ustr;
     }
 
-    css::uno::Sequence<OUString>
+    cpo::uno::Sequence<OUString>
     UnoControlFormattedFieldModel::getSupportedServiceNames()
     {
         auto s(UnoControlModel::getSupportedServiceNames());
@@ -445,7 +445,7 @@ using namespace cpo::uno;
         return u"stardiv.Toolkit.UnoFormattedFieldControl"_ustr;
     }
 
-    css::uno::Sequence<OUString>
+    cpo::uno::Sequence<OUString>
     UnoFormattedFieldControl::getSupportedServiceNames()
     {
         auto s(UnoEditControl::getSupportedServiceNames());
@@ -461,7 +461,7 @@ using namespace cpo::uno;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoControlFormattedFieldModel(context));
 }
@@ -469,7 +469,7 @@ stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoFormattedFieldControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoFormattedFieldControl());
 }

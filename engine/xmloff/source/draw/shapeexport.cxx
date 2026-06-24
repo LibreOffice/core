@@ -264,7 +264,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
-                    uno::Sequence< cpo::uno::Any > aArguments {
+                    cpo::uno::Sequence< cpo::uno::Any > aArguments {
                         cpo::uno::Any(comphelper::makePropertyValue(u"CustomShape"_ustr, xShape)),
                         cpo::uno::Any(comphelper::makePropertyValue(u"ForceGroupWithText"_ustr, true)) };
                     uno::Reference< uno::XInterface > xInterface(
@@ -1088,7 +1088,7 @@ void FixZOrder(uno::Reference<drawing::XShapes> const& xShapes,
     {
         return; // nothing to do
     }
-    uno::Sequence<sal_Int32> aNewOrder(nCount);
+    cpo::uno::Sequence<sal_Int32> aNewOrder(nCount);
     auto iterInsert(aNewOrder.getArray());
     for (auto const& rLayer : layers)
     {
@@ -1308,7 +1308,7 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
 
     drawing::GluePoint2 aGluePoint;
 
-    const uno::Sequence< sal_Int32 > aIdSequence( xGluePoints->getIdentifiers() );
+    const cpo::uno::Sequence< sal_Int32 > aIdSequence( xGluePoints->getIdentifiers() );
 
     for( const sal_Int32 nIdentifier : aIdSequence )
     {
@@ -1739,7 +1739,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
     OUString aStrLibrary;
     OUString aStrBookmark;
 
-    uno::Sequence< beans::PropertyValue > aClickProperties;
+    cpo::uno::Sequence< beans::PropertyValue > aClickProperties;
     if( xEvents->hasByName( gsOnClick ) && (xEvents->getByName( gsOnClick ) >>= aClickProperties) )
     {
         for (const auto& rProperty : aClickProperties)
@@ -3309,7 +3309,7 @@ void XMLShapeExport::ImpExportPluginShape(
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, true, true);
 
         // export parameters
-        uno::Sequence< beans::PropertyValue > aCommands;
+        cpo::uno::Sequence< beans::PropertyValue > aCommands;
         xPropSet->getPropertyValue(u"PluginCommands"_ustr) >>= aCommands;
         for (const auto& rCommand : aCommands)
         {
@@ -3427,7 +3427,7 @@ void ExportGraphicPreview(const uno::Reference<graphic::XGraphic>& xGraphic, SvX
         }
 
         uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
-        uno::Sequence< beans::PropertyValue > aArgs{
+        cpo::uno::Sequence< beans::PropertyValue > aArgs{
             comphelper::makePropertyValue(u"MimeType"_ustr, rMimeType ),
                 comphelper::makePropertyValue(u"OutputStream"_ustr, xPictureStream->getOutputStream())
         };
@@ -4001,7 +4001,7 @@ static void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::Enh
     }
 }
 
-static void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUString >& rEquations )
+static void ImpExportEquations( SvXMLExport& rExport, const cpo::uno::Sequence< OUString >& rEquations )
 {
     sal_Int32 i;
     for ( i = 0; i < rEquations.getLength(); i++ )
@@ -4026,7 +4026,7 @@ static void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUStr
     }
 }
 
-static void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::PropertyValues >& rHandles )
+static void ImpExportHandles( SvXMLExport& rExport, const cpo::uno::Sequence< beans::PropertyValues >& rHandles )
 {
     if ( !rHandles.hasElements() )
         return;
@@ -4034,7 +4034,7 @@ static void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::
     OUString       aStr;
     OUStringBuffer aStrBuffer;
 
-    for ( const uno::Sequence< beans::PropertyValue >& rPropSeq : rHandles )
+    for ( const cpo::uno::Sequence< beans::PropertyValue >& rPropSeq : rHandles )
     {
         bool bPosition = false;
         for ( const beans::PropertyValue& rPropVal : rPropSeq )
@@ -4210,8 +4210,8 @@ static void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::
 }
 
 static void ImpExportEnhancedPath( SvXMLExport& rExport,
-                            const uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& rCoordinates,
-                            const uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& rSegments,
+                            const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& rCoordinates,
+                            const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& rSegments,
                             bool bExtended = false )
 {
 
@@ -4372,15 +4372,15 @@ static void ImpExportEnhancedPath( SvXMLExport& rExport,
 static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< beans::XPropertySet >& xPropSet )
 {
     bool bEquations = false;
-    uno::Sequence< OUString > aEquations;
+    cpo::uno::Sequence< OUString > aEquations;
 
     bool bHandles = false;
-    uno::Sequence< beans::PropertyValues > aHandles;
+    cpo::uno::Sequence< beans::PropertyValues > aHandles;
 
-    uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
-    uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
+    cpo::uno::Sequence< css::drawing::EnhancedCustomShapeSegment > aSegments;
+    cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > aCoordinates;
 
-    uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentValues;
+    cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentValues;
 
     OUString       aStr;
     OUStringBuffer aStrBuffer;
@@ -4395,7 +4395,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
     if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sCustomShapeGeometry ) )
     {
         cpo::uno::Any aGeoPropSet( xPropSet->getPropertyValue( sCustomShapeGeometry ) );
-        uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+        cpo::uno::Sequence< beans::PropertyValue > aGeoPropSeq;
 
         if ( aGeoPropSet >>= aGeoPropSeq )
         {
@@ -4449,7 +4449,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                     break;
                     case EAS_Extrusion :
                     {
-                        uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
+                        cpo::uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
                         if ( rGeoProp.Value >>= aExtrusionPropSeq )
                         {
                             bool bSkewValuesProvided = false;
@@ -4819,7 +4819,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                     break;
                     case EAS_TextPath :
                     {
-                        uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
+                        cpo::uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
                         if ( rGeoProp.Value >>= aTextPathPropSeq )
                         {
                             for (const beans::PropertyValue& rProp : aTextPathPropSeq)
@@ -4879,7 +4879,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                     break;
                     case EAS_Path :
                     {
-                        uno::Sequence< beans::PropertyValue > aPathPropSeq;
+                        cpo::uno::Sequence< beans::PropertyValue > aPathPropSeq;
                         if ( rGeoProp.Value >>= aPathPropSeq )
                         {
                             for (const beans::PropertyValue& rProp : aPathPropSeq)
@@ -4893,7 +4893,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         {
                                             continue;
                                         }
-                                        uno::Sequence< awt::Size > aSubViewSizes;
+                                        cpo::uno::Sequence< awt::Size > aSubViewSizes;
                                         rProp.Value >>= aSubViewSizes;
 
                                         for ( int nIdx = 0; nIdx < aSubViewSizes.getLength(); nIdx++ )
@@ -4934,7 +4934,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                     break;
                                     case EAS_GluePoints :
                                     {
-                                        css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> aGluePoints;
+                                        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair> aGluePoints;
                                         if ( rProp.Value >>= aGluePoints )
                                         {
                                             if ( aGluePoints.hasElements() )
@@ -4992,7 +4992,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                     break;
                                     case EAS_TextFrames :
                                     {
-                                        css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aPathTextFrames;
+                                        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > aPathTextFrames;
                                         if ( rProp.Value >>= aPathTextFrames )
                                         {
                                             if ( aPathTextFrames.hasElements() )

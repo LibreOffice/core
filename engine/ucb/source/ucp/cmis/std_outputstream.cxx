@@ -48,7 +48,7 @@ namespace cmis
         OWeakObject::release();
     }
 
-    void SAL_CALL StdOutputStream::writeBytes ( const uno::Sequence< sal_Int8 >& aData )
+    void SAL_CALL StdOutputStream::writeBytes ( const cpo::uno::Sequence< sal_Int8 >& aData )
     {
         std::scoped_lock aGuard( m_aMutex );
 

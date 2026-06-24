@@ -106,7 +106,7 @@ namespace accessibility
         /// @throws css::uno::RuntimeException
         cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType );
         /// @throws css::uno::RuntimeException
-        css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
+        cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
 
     private:
         OProxyAggregation( const OProxyAggregation& ) = delete;

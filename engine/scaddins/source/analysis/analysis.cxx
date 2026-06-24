@@ -133,7 +133,7 @@ bool SAL_CALL AnalysisAddIn::supportsService( const OUString& aName )
     return cppu::supportsService(this, aName);
 }
 
-uno::Sequence< OUString > SAL_CALL AnalysisAddIn::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL AnalysisAddIn::getSupportedServiceNames()
 {
     return { ADDIN_SERVICE, MY_SERVICE };
 }
@@ -303,16 +303,16 @@ inline const lang::Locale& AnalysisAddIn::GetLocale( sal_uInt32 nInd )
         return aFuncLoc;
 }
 
-uno::Sequence< sheet::LocalizedName > SAL_CALL AnalysisAddIn::getCompatibilityNames( const OUString& aProgrammaticName )
+cpo::uno::Sequence< sheet::LocalizedName > SAL_CALL AnalysisAddIn::getCompatibilityNames( const OUString& aProgrammaticName )
 {
     auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticName ) );
     if( it == pFD->end() )
-        return uno::Sequence< sheet::LocalizedName >( 0 );
+        return cpo::uno::Sequence< sheet::LocalizedName >( 0 );
 
     const std::vector<OUString>& r = it->GetCompNameList();
     sal_uInt32                   nCount = r.size();
 
-    uno::Sequence< sheet::LocalizedName >                aRet( nCount );
+    cpo::uno::Sequence< sheet::LocalizedName >                aRet( nCount );
 
     sheet::LocalizedName*  pArray = aRet.getArray();
 
@@ -485,8 +485,8 @@ sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( sal_Int32 nVal )
 }
 
 double SAL_CALL
-AnalysisAddIn::getMultinomial( const uno::Reference< beans::XPropertySet >& xOpt, const uno::Sequence< uno::Sequence< sal_Int32 > >& aVLst,
-                               const uno::Sequence< cpo::uno::Any >& aOptVLst )
+AnalysisAddIn::getMultinomial( const uno::Reference< beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& aVLst,
+                               const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst )
 {
     ScaDoubleListGE0 aValList;
 
@@ -515,7 +515,7 @@ AnalysisAddIn::getMultinomial( const uno::Reference< beans::XPropertySet >& xOpt
     return finiteOrThrow( fRet );
 }
 
-double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const uno::Sequence< uno::Sequence< double > >& aCoeffList )
+double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aCoeffList )
 {
     double                          fRet = 0.0;
 
@@ -525,7 +525,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 
     if( fX != 0.0 )
     {
-        for( const uno::Sequence< double >& rList : aCoeffList )
+        for( const cpo::uno::Sequence< double >& rList : aCoeffList )
         {
             for( const double fCoef : rList )
             {
@@ -575,7 +575,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax )
     return finiteOrThrow( fRet );
 }
 
-double SAL_CALL AnalysisAddIn::getGcd( const uno::Reference< beans::XPropertySet >& xOpt, const uno::Sequence< uno::Sequence< double > >& aVLst, const uno::Sequence< cpo::uno::Any >& aOptVLst )
+double SAL_CALL AnalysisAddIn::getGcd( const uno::Reference< beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst )
 {
     ScaDoubleListGT0 aValList;
 
@@ -594,7 +594,7 @@ double SAL_CALL AnalysisAddIn::getGcd( const uno::Reference< beans::XPropertySet
     return finiteOrThrow( f );
 }
 
-double SAL_CALL AnalysisAddIn::getLcm( const uno::Reference< beans::XPropertySet >& xOpt, const uno::Sequence< uno::Sequence< double > >& aVLst, const uno::Sequence< cpo::uno::Any >& aOptVLst )
+double SAL_CALL AnalysisAddIn::getLcm( const uno::Reference< beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst )
 {
     ScaDoubleListGE0 aValList;
 
@@ -871,7 +871,7 @@ OUString SAL_CALL AnalysisAddIn::getImlog2( const OUString& aNum )
     return z.GetString();
 }
 
-OUString SAL_CALL AnalysisAddIn::getImproduct( const uno::Reference< beans::XPropertySet >&, const uno::Sequence< uno::Sequence< OUString > >& aNum1, const uno::Sequence< cpo::uno::Any >& aNL )
+OUString SAL_CALL AnalysisAddIn::getImproduct( const uno::Reference< beans::XPropertySet >&, const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aNum1, const cpo::uno::Sequence< cpo::uno::Any >& aNL )
 {
     ComplexList     z_list;
 
@@ -912,7 +912,7 @@ OUString SAL_CALL AnalysisAddIn::getImsub( const OUString& aNum1, const OUString
     return z.GetString();
 }
 
-OUString SAL_CALL AnalysisAddIn::getImsum( const uno::Reference< beans::XPropertySet >&, const uno::Sequence< uno::Sequence< OUString > >& aNum1, const uno::Sequence< cpo::uno::Any >& aFollowingPars )
+OUString SAL_CALL AnalysisAddIn::getImsum( const uno::Reference< beans::XPropertySet >&, const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aNum1, const cpo::uno::Sequence< cpo::uno::Any >& aFollowingPars )
 {
     ComplexList     z_list;
 
@@ -1050,7 +1050,7 @@ OUString AnalysisAddIn::AnalysisResId(TranslateId aResId)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_AnalysisAddIn_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new AnalysisAddIn(context));
 }

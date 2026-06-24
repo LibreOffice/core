@@ -213,7 +213,7 @@ embeddedobj/source/msole/olecomponent.hxx:97
 embeddedobj/source/msole/olecomponent.hxx:98
     void OleComponent::CreateObjectFromClipboard()
 embeddedobj/source/msole/olecomponent.hxx:99
-    void OleComponent::CreateNewEmbeddedObject(const com::sun::star::uno::Sequence<signed char> &)
+    void OleComponent::CreateNewEmbeddedObject(const cpo::uno::Sequence<signed char> &)
 embeddedobj/source/msole/olecomponent.hxx:100
     void OleComponent::CreateObjectFromData(const com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> &)
 embeddedobj/source/msole/olecomponent.hxx:102
@@ -227,7 +227,7 @@ embeddedobj/source/msole/olecomponent.hxx:107
 embeddedobj/source/msole/olecomponent.hxx:108
     void OleComponent::CloseObject()
 embeddedobj/source/msole/olecomponent.hxx:110
-    com::sun::star::uno::Sequence<struct com::sun::star::embed::VerbDescriptor> OleComponent::GetVerbList()
+    cpo::uno::Sequence<struct com::sun::star::embed::VerbDescriptor> OleComponent::GetVerbList()
 embeddedobj/source/msole/olecomponent.hxx:112
     void OleComponent::ExecuteVerb(int)
 embeddedobj/source/msole/olecomponent.hxx:113
@@ -243,7 +243,7 @@ embeddedobj/source/msole/olecomponent.hxx:118
 embeddedobj/source/msole/olecomponent.hxx:120
     long OleComponent::GetMiscStatus(long)
 embeddedobj/source/msole/olecomponent.hxx:122
-    com::sun::star::uno::Sequence<signed char> OleComponent::GetCLSID()
+    cpo::uno::Sequence<signed char> OleComponent::GetCLSID()
 embeddedobj/source/msole/olecomponent.hxx:124
     _Bool OleComponent::IsWorkaroundActive() const
 embeddedobj/source/msole/olecomponent.hxx:125
@@ -509,7 +509,7 @@ include/comphelper/multiinterfacecontainer3.hxx:174
 include/comphelper/multiinterfacecontainer4.hxx:174
     void comphelper::OMultiTypeInterfaceContainerHelperVar4::clear(std::unique_lock<std::mutex> &)
 include/comphelper/namedvaluecollection.hxx:79
-    void comphelper::NamedValueCollection::assign(const com::sun::star::uno::Sequence<cpo::uno::Any> &)
+    void comphelper::NamedValueCollection::assign(const cpo::uno::Sequence<cpo::uno::Any> &)
 include/comphelper/profilezone.hxx:56
      comphelper::ProfileZone::ProfileZone(const char *,const std::map<rtl::OUString, rtl::OUString> &)
 include/comphelper/propagg.hxx:59
@@ -519,7 +519,7 @@ include/comphelper/propagg.hxx:60
 include/comphelper/proparrhlp.hxx:83
     cppu::IPropertyArrayHelper * comphelper::OAggregationArrayUsageHelper::createArrayHelper() const
 include/comphelper/propertycontainer2.hxx:56
-    com::sun::star::uno::Sequence<com::sun::star::uno::Type> comphelper::OPropertyContainer2::getBaseTypes()
+    cpo::uno::Sequence<com::sun::star::uno::Type> comphelper::OPropertyContainer2::getBaseTypes()
 include/comphelper/PropertyInfoHash.hxx:36
      comphelper::PropertyInfo::PropertyInfo(const rtl::OUString &,int,const com::sun::star::uno::Type &,short)
 include/comphelper/propmultiplex2.hxx:59
@@ -555,7 +555,7 @@ include/comphelper/traceevent.hxx:210
 include/comphelper/unique_disposing_ptr.hxx:47
     type-parameter-?-? & comphelper::unique_disposing_ptr::operator*() const
 include/comphelper/unwrapargs.hxx:51
-    void comphelper::detail::unwrapArgs(const com::sun::star::uno::Sequence<cpo::uno::Any> &,int,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
+    void comphelper::detail::unwrapArgs(const cpo::uno::Sequence<cpo::uno::Any> &,int,const com::sun::star::uno::Reference<com::sun::star::uno::XInterface> &)
 include/connectivity/dbcharset.hxx:138
     const dbtools::OCharsetMap::CharsetIterator & dbtools::OCharsetMap::CharsetIterator::operator--()
 include/connectivity/FValue.hxx:346
@@ -745,7 +745,7 @@ include/oox/drawingml/ThemeFilterBase.hxx:35
 include/oox/export/DMLPresetShapeExport.hxx:100
     _Bool oox::drawingml::DMLPresetShapeExporter::HasHandleValue() const
 include/oox/export/DMLPresetShapeExport.hxx:129
-    cpo::uno::Any oox::drawingml::DMLPresetShapeExporter::FindHandleValue(com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue>,std::basic_string_view<char16_t>)
+    cpo::uno::Any oox::drawingml::DMLPresetShapeExporter::FindHandleValue(cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue>,std::basic_string_view<char16_t>)
 include/oox/export/drawingml.hxx:340
     _Bool oox::drawingml::DrawingML::EqualGradients(const struct com::sun::star::awt::Gradient2 &,const struct com::sun::star::awt::Gradient2 &)
 include/oox/export/drawingml.hxx:377

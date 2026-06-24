@@ -362,9 +362,9 @@ void SwXDocumentSettings::release ()
     OWeakObject::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
+cpo::uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
 {
-    static const uno::Sequence< uno::Type > aTypes {
+    static const cpo::uno::Sequence< uno::Type > aTypes {
         // from MasterPropertySet
         cppu::UnoType<XPropertySet>::get(),
         cppu::UnoType<XPropertyState>::get(),
@@ -375,9 +375,9 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     return aTypes;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void SwXDocumentSettings::_preSetValues ()
@@ -836,7 +836,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_MODIFYPASSWORDINFO:
         {
-            uno::Sequence< beans::PropertyValue > aInfo;
+            cpo::uno::Sequence< beans::PropertyValue > aInfo;
             if ( !( rValue >>= aInfo ) )
                 throw lang::IllegalArgumentException(
                     u"Value of type Sequence<PropertyValue> expected!"_ustr,

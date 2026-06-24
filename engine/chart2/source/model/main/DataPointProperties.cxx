@@ -502,7 +502,7 @@ void DataPointProperties::AddPropertiesToVector(
 
     rOutProperties.emplace_back( CHART_UNONAME_CUSTOM_LABEL_FIELDS,
                   PROP_DATAPOINT_CUSTOM_LABEL_FIELDS,
-                  cppu::UnoType<uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>>>::get(),
+                  cppu::UnoType<cpo::uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>>>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT);
 
@@ -609,7 +609,7 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH_NAME);
     PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_TRANS, sal_Int16(0));
 
-    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields(0);
+    cpo::uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields(0);
     PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_CUSTOM_LABEL_FIELDS, aFields);
 }
 

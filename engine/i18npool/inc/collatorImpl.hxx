@@ -61,16 +61,16 @@ public:
         sal_Int32 collatorOptions) override;
 
     virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString& impl, const css::lang::Locale& rLocale,
-        const css::uno::Sequence< sal_Int32 >& collatorOptions) override;
+        const cpo::uno::Sequence< sal_Int32 >& collatorOptions) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const css::lang::Locale& rLocale ) override;
 
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& collatorAlgorithmName ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& collatorAlgorithmName ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
     css::lang::Locale nLocale;

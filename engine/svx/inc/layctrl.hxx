@@ -31,12 +31,12 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
-    void TableDialog(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    void TableDialog(const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     void CloseAndShowTableDialog();
 };
 
@@ -51,12 +51,12 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
-    void InsertColumns(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+    void InsertColumns(const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

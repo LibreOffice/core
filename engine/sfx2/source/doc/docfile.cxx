@@ -448,7 +448,7 @@ public:
 
     svtools::AsynchronLink  aDoneLink;
 
-    uno::Sequence < util::RevisionTag > aVersions;
+    cpo::uno::Sequence < util::RevisionTag > aVersions;
 
     std::unique_ptr<MediumTempFile> pTempFile;
 
@@ -592,7 +592,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
     {
         ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( cpo::uno::Any(
             document::ChangedByOthersRequest() ) );
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
+        cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
             new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() ),
             new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() )
         };
@@ -1037,7 +1037,7 @@ bool SfxMedium::SetEncryptionDataToStorage_Impl()
     if ( !pImpl->xStorage.is() || !pImpl->m_pSet )
         return false;
 
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
     if ( !GetEncryptionData_Impl( pImpl->m_pSet.get(), aEncryptionData ) )
         return false;
 
@@ -1169,7 +1169,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             }
         }
 
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations(nContinuations);
+        cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations(nContinuations);
         auto pContinuations = aContinuations.getArray();
         pContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
         pContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
@@ -1269,7 +1269,7 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
                 break;
         }
 
-        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
+        cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
             new ::ucbhelper::InteractionAbort(xIgnoreRequestImpl.get()),
             new ::ucbhelper::InteractionApprove(xIgnoreRequestImpl.get())
         };
@@ -1432,7 +1432,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                                 aLockData[LockFileComponent::SYSUSERNAME]
                                     = aOwnData[LockFileComponent::SYSUSERNAME];
 
-                                uno::Sequence<css::ucb::Lock> aLocks;
+                                cpo::uno::Sequence<css::ucb::Lock> aLocks;
                                 // getting the property, send a PROPFIND to the server over the net
                                 if ((aContentToLock.getPropertyValue(u"DAV:lockdiscovery"_ustr) >>= aLocks) && aLocks.hasElements())
                                 {
@@ -1821,7 +1821,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
     if ( pImpl->xStorage.is() || pImpl->m_bTriedStorage )
         return pImpl->xStorage;
 
-    uno::Sequence< cpo::uno::Any > aArgs( 2 );
+    cpo::uno::Sequence< cpo::uno::Any > aArgs( 2 );
     auto pArgs = aArgs.getArray();
 
     // the medium should be retrieved before temporary file creation
@@ -1849,7 +1849,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         if( pxProgressItem && ( pxProgressItem->GetValue() >>= xStatusIndicator ) )
             xProgressHandler.set( new utl::ProgressHandlerWrap( xStatusIndicator ) );
 
-        uno::Sequence< beans::PropertyValue > aAddProps{
+        cpo::uno::Sequence< beans::PropertyValue > aAddProps{
             comphelper::makePropertyValue(u"RepairPackage"_ustr, true),
             comphelper::makePropertyValue(u"StatusIndicator"_ustr, xProgressHandler)
         };
@@ -1871,7 +1871,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
             // Forward NoFileSync to the storage factory.
             aArgs.realloc(3); // ??? this may re-write the data added above for pRepairItem
             pArgs = aArgs.getArray();
-            uno::Sequence<beans::PropertyValue> aProperties(
+            cpo::uno::Sequence<beans::PropertyValue> aProperties(
                 comphelper::InitPropertySequence({ { "NoFileSync", cpo::uno::Any(true) } }));
             pArgs[2] <<= aProperties;
         }
@@ -3620,7 +3620,7 @@ SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode
     Init_Impl();
 }
 
-SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
+SfxMedium::SfxMedium( const cpo::uno::Sequence<beans::PropertyValue>& aArgs ) :
     pImpl(new SfxMedium_Impl)
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
@@ -3688,7 +3688,7 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     Init_Impl();
 }
 
-void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
+void SfxMedium::SetArgs(const cpo::uno::Sequence<beans::PropertyValue>& rArgs)
 {
     pImpl->m_aArgs << rArgs;
     pImpl->m_aArgs.erase(u"Stream"_ustr);
@@ -3868,7 +3868,7 @@ css::uno::Reference< css::io::XInputStream > const &  SfxMedium::GetInputStream(
     return pImpl->xInputStream;
 }
 
-const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoReload )
+const cpo::uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoReload )
 {
     // if the medium has no name, then this medium should represent a new document and can have no version info
     if ( ( !_bNoReload || !pImpl->m_bVersionsAlreadyLoaded ) && !pImpl->aVersions.hasElements() &&
@@ -3891,7 +3891,7 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
     return pImpl->aVersions;
 }
 
-uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Reference < embed::XStorage >& xStorage )
+cpo::uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Reference < embed::XStorage >& xStorage )
 {
     uno::Reference < document::XDocumentRevisionListPersistence > xReader =
         document::DocumentRevisionListPersistence::create( comphelper::getProcessComponentContext() );
@@ -3903,7 +3903,7 @@ uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Refere
     {
     }
 
-    return uno::Sequence < util::RevisionTag >();
+    return cpo::uno::Sequence < util::RevisionTag >();
 }
 
 void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
@@ -4038,7 +4038,7 @@ void SfxMedium::TransferEmbeddedFontsTo(const SfxMedium& target)
 }
 
 void SfxMedium::AddEmbeddedFonts(
-    const css::uno::Sequence<css::beans::StringPair>& fonts)
+    const cpo::uno::Sequence<css::beans::StringPair>& fonts)
 {
     for (const auto& [ name, url ] : fonts)
         pImpl->m_aEmbeddedFontsToActivate.emplace_back(name, url);
@@ -4715,7 +4715,7 @@ bool SfxMedium::CallApproveHandler(const uno::Reference< task::XInteractionHandl
     {
         try
         {
-            uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( bAllowAbort ? 2 : 1 );
+            cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( bAllowAbort ? 2 : 1 );
             auto pContinuations = aContinuations.getArray();
 
             ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
@@ -4993,7 +4993,7 @@ IMPL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, p, void)
                 OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
         if (xInteractionRequestImpl != nullptr)
         {
-            uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations{
+            cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>> aContinuations{
                 new ::ucbhelper::InteractionAbort(xInteractionRequestImpl.get()),
                 new ::ucbhelper::InteractionApprove(xInteractionRequestImpl.get())
             };

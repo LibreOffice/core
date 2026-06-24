@@ -2814,7 +2814,7 @@ void Edit::dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& rDT
         mpDDInfo.reset(new DragDropInfo);
     }
     // search for string data type
-    const css::uno::Sequence<css::datatransfer::DataFlavor>& rFlavors(rDTDE.SupportedDataFlavors);
+    const cpo::uno::Sequence<css::datatransfer::DataFlavor>& rFlavors(rDTDE.SupportedDataFlavors);
     mpDDInfo->bIsStringSupported = std::any_of(rFlavors.begin(), rFlavors.end(),
         [](const css::datatransfer::DataFlavor& rFlavor) {
             sal_Int32 nIndex = 0;

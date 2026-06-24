@@ -31,7 +31,7 @@ namespace com::sun::star::frame { class XFrame; }
 namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::uno { class XInterface; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 // class AddressList_Impl ------------------------------------------------
 typedef ::std::vector< OUString > AddressList_Impl;
@@ -63,7 +63,7 @@ private:
                                                  std::u16string_view rType,
                                                  bool bModified,
                                                  sal_Int32& rNumArgs,
-                                                 css::uno::Sequence< css::beans::PropertyValue >& rArgs );
+                                                 cpo::uno::Sequence< css::beans::PropertyValue >& rArgs );
 
 public:
     enum SendMailResult

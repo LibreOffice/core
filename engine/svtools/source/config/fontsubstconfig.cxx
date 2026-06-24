@@ -20,7 +20,7 @@
 #include <svtools/fontsubstconfig.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>

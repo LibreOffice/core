@@ -120,17 +120,17 @@ public:
     using OWeakObject::acquire;
     using OWeakObject::release;
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes() override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId() override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual void SAL_CALL dispose() override;
@@ -150,7 +150,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByName(
         OUString const & aName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getElementNames() override;
 
     virtual bool SAL_CALL hasByName(OUString const & aName) override;
@@ -183,7 +183,7 @@ public:
     virtual OUString SAL_CALL getExactName(
         OUString const & aApproximateName) override;
 
-    virtual css::uno::Sequence< css::beans::Property >
+    virtual cpo::uno::Sequence< css::beans::Property >
     SAL_CALL getProperties() override;
 
     virtual css::beans::Property SAL_CALL getPropertyByName(
@@ -234,16 +234,16 @@ public:
             css::beans::XVetoableChangeListener > const & aListener) override;
 
     virtual void SAL_CALL setPropertyValues(
-        css::uno::Sequence< OUString > const & aPropertyNames,
-        css::uno::Sequence< cpo::uno::Any > const &
+        cpo::uno::Sequence< OUString > const & aPropertyNames,
+        cpo::uno::Sequence< cpo::uno::Any > const &
             aValues) override;
 
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
     getPropertyValues(
-        css::uno::Sequence< OUString > const & aPropertyNames) override;
+        cpo::uno::Sequence< OUString > const & aPropertyNames) override;
 
     virtual void SAL_CALL addPropertiesChangeListener(
-        css::uno::Sequence< OUString > const & aPropertyNames,
+        cpo::uno::Sequence< OUString > const & aPropertyNames,
         css::uno::Reference<
             css::beans::XPropertiesChangeListener > const &
                 xListener) override;
@@ -254,7 +254,7 @@ public:
                 xListener) override;
 
     virtual void SAL_CALL firePropertiesChangeEvent(
-        css::uno::Sequence< OUString > const & aPropertyNames,
+        cpo::uno::Sequence< OUString > const & aPropertyNames,
         css::uno::Reference<
             css::beans::XPropertiesChangeListener > const &
                 xListener) override;
@@ -272,14 +272,14 @@ public:
         OUString const & aHierarchicalPropertyName) override;
 
     virtual void SAL_CALL setHierarchicalPropertyValues(
-        css::uno::Sequence< OUString > const &
+        cpo::uno::Sequence< OUString > const &
             aHierarchicalPropertyNames,
-        css::uno::Sequence< cpo::uno::Any > const &
+        cpo::uno::Sequence< cpo::uno::Any > const &
             Values) override;
 
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
     getHierarchicalPropertyValues(
-        css::uno::Sequence< OUString > const &
+        cpo::uno::Sequence< OUString > const &
             aHierarchicalPropertyNames) override;
 
     virtual css::beans::Property SAL_CALL
@@ -301,7 +301,7 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface >
     SAL_CALL createInstanceWithArguments(
-        css::uno::Sequence< cpo::uno::Any > const &
+        cpo::uno::Sequence< cpo::uno::Any > const &
             aArguments) override;
 
 protected:

@@ -349,7 +349,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf80708)
         uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
         // This was 2, i.e. the second table had 3 cols, now 2 as expected.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1),
-                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)
                                  .getLength());
     };
@@ -747,7 +747,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104085)
         uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xLevels(
             properties->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aProps;
+        cpo::uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(0) >>= aProps;
         for (beans::PropertyValue const& prop : aProps)
         {
@@ -995,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLeveljcCenter)
         uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xLevels(
             properties->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aProps;
+        cpo::uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(0) >>= aProps;
         for (beans::PropertyValue const& prop : aProps)
         {
@@ -1050,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104937)
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
-        auto aSeparators = getProperty<uno::Sequence<text::TableColumnSeparator>>(
+        auto aSeparators = getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
             xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr);
         // First table's second row had 9 cells (so 8 separators).
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), aSeparators.getLength());
@@ -1072,7 +1072,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112507)
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
-        auto aSeparators = getProperty<uno::Sequence<text::TableColumnSeparator>>(
+        auto aSeparators = getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
             xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr);
         // First table's second row had 3 cells (so 2 separators).
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeparators.getLength());

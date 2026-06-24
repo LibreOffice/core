@@ -29,7 +29,7 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Any;
 
@@ -153,7 +153,7 @@ bool SAL_CALL UncachedDataSequence::supportsService( const OUString& rServiceNam
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL UncachedDataSequence::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UncachedDataSequence::getSupportedServiceNames()
 {
     return {
         lcl_aServiceName,

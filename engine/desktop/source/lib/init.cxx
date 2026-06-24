@@ -325,7 +325,7 @@ public:
 
     static void flushRecordings()
     {
-        const css::uno::Sequence<OUString> aEvents =
+        const cpo::uno::Sequence<OUString> aEvents =
             comphelper::TraceEvent::getRecordingAndClear();
         OStringBuffer aOutput;
         for (const auto &s : aEvents)
@@ -544,7 +544,7 @@ static void unoAnyToJson(tools::JsonWriter& rJson, std::string_view pNodeName, c
         rJson.put("value", OString::number(anyItem.get<sal_Int32>()));
     else if (aType == "[]any")
     {
-        uno::Sequence<cpo::uno::Any> aSeq;
+        cpo::uno::Sequence<cpo::uno::Any> aSeq;
         if (anyItem >>= aSeq)
         {
             auto valueNode = rJson.startNode("value");
@@ -1014,9 +1014,9 @@ void hideSidebar()
         SetLastExceptionMsg(u"No view shell or sidebar"_ustr);
 }
 
-css::uno::Sequence<css::lang::Locale> setLanguageToolConfig()
+cpo::uno::Sequence<css::lang::Locale> setLanguageToolConfig()
 {
-    css::uno::Sequence<css::lang::Locale> aLTLocales;
+    cpo::uno::Sequence<css::lang::Locale> aLTLocales;
 
     const char* pEnabled = ::getenv("LANGUAGETOOL_ENABLED");
     const char* pBaseUrlString = ::getenv("LANGUAGETOOL_BASEURL");
@@ -3124,7 +3124,7 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
         // set AsTemplate explicitly false to be able to load template files
         // as regular files, otherwise we cannot save them; it will try
         // to bring saveas dialog which cannot work with COKit case
-        uno::Sequence<css::beans::PropertyValue> aFilterOptions{
+        cpo::uno::Sequence<css::beans::PropertyValue> aFilterOptions{
             comphelper::makePropertyValue(u"FilterOptions"_ustr, aOptions),
             comphelper::makePropertyValue(u"InteractionHandler"_ustr, uno::Reference<task::XInteractionHandler2>(pInteraction)),
             comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, nMacroExecMode),
@@ -3346,7 +3346,7 @@ static int lo_runMacro(COKit* pThis, const char *pURL)
     }
 
     uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xD, uno::UNO_QUERY_THROW );
-    uno::Sequence<css::beans::PropertyValue> aEmpty;
+    cpo::uno::Sequence<css::beans::PropertyValue> aEmpty;
     css::beans::PropertyValue aErr;
     cpo::uno::Any aRet = xSyncDisp->dispatchWithReturnValue( aURL, aEmpty );
     aRet >>= aErr;
@@ -3407,7 +3407,7 @@ static char* lo_extractRequest(COKit* /*pThis*/, const char* pFilePath)
         {
             try
             {
-                uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
+                cpo::uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
                 {
                     {u"Hidden"_ustr, cpo::uno::Any(true)},
                     {u"ReadOnly"_ustr, cpo::uno::Any(true)}
@@ -3457,7 +3457,7 @@ static char* lo_extractDocumentStructureRequest(COKit* /*pThis*/, const char* pF
         {
             try
             {
-                uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
+                cpo::uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
                 {
                     {u"Hidden"_ustr, cpo::uno::Any(true)},
                     {u"ReadOnly"_ustr, cpo::uno::Any(true)}
@@ -5520,7 +5520,7 @@ static void updateConfig(const OUString& rConfigPath)
                 // wsd/DocumentBroker.cpp (the upload side). No shared symbol
                 // exists across the kit<->wsd boundary, so edits here need
                 // the mirror edit there.
-                const uno::Sequence<OUString> aAllowedSubset{
+                const cpo::uno::Sequence<OUString> aAllowedSubset{
                     u"/org.openoffice.Office.Calc/Grid"_ustr,
                     u"/org.openoffice.Office.Calc/Print"_ustr,
                     u"/org.openoffice.Office.Calc/Content/Display/ObjectGraphic"_ustr,
@@ -6327,7 +6327,7 @@ static bool getFromTransferable(
         || aMimeType == "application/x-libreoffice-markdown-annotated")
         aFlavor.DataType = cppu::UnoType<OUString>::get();
     else
-        aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
+        aFlavor.DataType = cppu::UnoType< cpo::uno::Sequence<sal_Int8> >::get();
 
     if (!xTransferable->isDataFlavorSupported(aFlavor))
     {
@@ -6373,7 +6373,7 @@ static bool getFromTransferable(
     }
     else
     {
-        uno::Sequence<sal_Int8> aSequence;
+        cpo::uno::Sequence<sal_Int8> aSequence;
         aAny >>= aSequence;
         aRet = OString(reinterpret_cast<const char*>(aSequence.getConstArray()), aSequence.getLength());
     }
@@ -6554,7 +6554,7 @@ static int doc_getClipboard(COKitDocument* pThis,
     std::vector<OString> aMimeTypes;
     if (!pMimeTypes) // everything
     {
-        const uno::Sequence< css::datatransfer::DataFlavor > flavors = xTransferable->getTransferDataFlavors();
+        const cpo::uno::Sequence< css::datatransfer::DataFlavor > flavors = xTransferable->getTransferDataFlavors();
         if (!flavors.getLength())
         {
             SetLastExceptionMsg(u"Flavourless selection"_ustr);
@@ -6697,7 +6697,7 @@ static bool doc_paste(COKitDocument* pThis, const char* pMimeType, const char* p
     if (!doc_setClipboard(pThis, 1, pInMimeTypes, pInSizes, pInStreams))
         return false;
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"AnchorType", cpo::uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
         {"IgnoreComments", cpo::uno::Any(true)},
@@ -6810,8 +6810,8 @@ static void addLocale(boost::property_tree::ptree& rValues, css::lang::Locale co
 
 static char* getLanguages(const char* pCommand)
 {
-    css::uno::Sequence< css::lang::Locale > aLocales;
-    css::uno::Sequence< css::lang::Locale > aGrammarLocales;
+    cpo::uno::Sequence< css::lang::Locale > aLocales;
+    cpo::uno::Sequence< css::lang::Locale > aGrammarLocales;
 
     if (xContext.is())
     {
@@ -7015,7 +7015,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
     {
         return nullptr;
     }
-    const uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
+    const cpo::uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
     static constexpr OUString aWriterStyles[] =
     {
@@ -7052,7 +7052,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
             }
         }
 
-        const uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
+        const cpo::uno::Sequence<OUString> aStyles = xStyleFamily->getElementNames();
         for (const OUString& rStyle: aStyles )
         {
             // Filter out the default styles - they are already at the top
@@ -7081,7 +7081,7 @@ static char* getComponentStyles(const css::uno::Reference<css::lang::XComponent>
 
         if (xStyleFamilies->hasByName(sPageStyles) && (xStyleFamilies->getByName(sPageStyles) >>= xContainer))
         {
-            const uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
+            const cpo::uno::Sequence<OUString> aSeqNames = xContainer->getElementNames();
             for (OUString const & sName : aSeqNames)
             {
                 bool bIsPhysical;
@@ -7885,7 +7885,7 @@ static void doc_postWindow(COKitDocument* /*pThis*/, unsigned nKitWindowId, int 
     {
 #ifndef IOS
         OUString aMimeType;
-        css::uno::Sequence<sal_Int8> aData;
+        cpo::uno::Sequence<sal_Int8> aData;
         std::vector<beans::PropertyValue> aArgs(jsonToPropertyValuesVector(pData));
         {
             aArgs.size() == 2 &&
@@ -7982,7 +7982,7 @@ static bool doc_addCertificate(COKitDocument* pThis,
     if (!xCertificateCreator.is())
         return false;
 
-    uno::Sequence<sal_Int8> aCertificateSequence;
+    cpo::uno::Sequence<sal_Int8> aCertificateSequence;
 
     std::string_view aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
     std::string_view aCertificateBase64String = KitHelper::extractCertificate(aCertificateString);
@@ -8329,11 +8329,11 @@ static char* lo_getFilterTypes(COKit* pThis)
     }
 
     uno::Reference<container::XNameAccess> xTypeDetection(xSFactory->createInstance(u"com.sun.star.document.TypeDetection"_ustr), uno::UNO_QUERY);
-    const uno::Sequence<OUString> aTypes = xTypeDetection->getElementNames();
+    const cpo::uno::Sequence<OUString> aTypes = xTypeDetection->getElementNames();
     tools::JsonWriter aJson;
     for (const OUString& rType : aTypes)
     {
-        uno::Sequence<beans::PropertyValue> aValues;
+        cpo::uno::Sequence<beans::PropertyValue> aValues;
         if (xTypeDetection->getByName(rType) >>= aValues)
         {
             auto it = std::find_if(std::cbegin(aValues), std::cend(aValues), [](const beans::PropertyValue& rValue) { return rValue.Name == "MediaType"; });
@@ -8553,7 +8553,7 @@ static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIn
 static void preLoadShortCutAccelerators()
 {
     std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = KitHelper::getAcceleratorConfs();
-    css::uno::Sequence<OUString> installedLocales(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
+    cpo::uno::Sequence<OUString> installedLocales(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
     OUString actualLang = officecfg::Setup::L10N::ooLocale::get();
 
     for (sal_Int32 i = 0; i < installedLocales.getLength(); i++)
@@ -8598,7 +8598,7 @@ static void preLoadTypeDetection()
         aMemory.WriteBytes(aMinimalZip, std::size(aMinimalZip));
         uno::Reference<io::XStream> xInputStream = new utl::OStreamWrapper(aMemory);
 
-        uno::Sequence<beans::PropertyValue> aMediaDesc(2);
+        cpo::uno::Sequence<beans::PropertyValue> aMediaDesc(2);
         auto pArgs = aMediaDesc.getArray();
         pArgs[0].Name = u"URL"_ustr;
         pArgs[0].Value <<= u"private:stream"_ustr;
@@ -8637,7 +8637,7 @@ static void preloadData()
     std::cerr << "\n";
 
     // setup LanguageTool config before spell checking init
-    css::uno::Sequence<css::lang::Locale> aLTLocales = setLanguageToolConfig();
+    cpo::uno::Sequence<css::lang::Locale> aLTLocales = setLanguageToolConfig();
     if (aLTLocales.getLength())
     {
         std::cerr << "Remote linguistic service languages: ";
@@ -8654,7 +8654,7 @@ static void preloadData()
 
     std::cerr << "Preloading local dictionaries: ";
     css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
-    uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
+    cpo::uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
     for (const auto& it : aLocales)
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
@@ -8702,7 +8702,7 @@ static void preloadData()
     {
         css::uno::Reference< css::i18n::XBreakIterator > xBreakIterator = css::i18n::BreakIterator::create(xContext);
         css::i18n::LineBreakUserOptions aUserOptions;
-        css::i18n::LineBreakHyphenationOptions aHyphOptions( LinguMgr::GetHyphenator(), css::uno::Sequence<beans::PropertyValue>(), 1 );
+        css::i18n::LineBreakHyphenationOptions aHyphOptions( LinguMgr::GetHyphenator(), cpo::uno::Sequence<beans::PropertyValue>(), 1 );
         xBreakIterator->getLineBreak(u""_ustr, /*nMaxBreakPos*/0, aLocales[0], /*nMinBreakPos*/0, aHyphOptions, aUserOptions);
     }
 
@@ -8785,7 +8785,7 @@ static void preloadData()
     uno::Reference<frame::XDesktop2> xCompLoader(frame::Desktop::create(xContext));
 
     // Preload and close each of the main components once to initialize global state
-    uno::Sequence<css::beans::PropertyValue> szEmptyArgs(0);
+    cpo::uno::Sequence<css::beans::PropertyValue> szEmptyArgs(0);
     for (const auto& component : preloadComponents)
     {
         auto xComp = xCompLoader->loadComponentFromURL(component.factory, u"_blank"_ustr, 0, szEmptyArgs);

@@ -22,7 +22,7 @@
 #include <vector>
 #include "optimizationstats.hxx"
 #include "configurationaccess.hxx"
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -83,7 +83,7 @@ private:
 
 public:
     SlidesPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog);
-    void Init(const css::uno::Sequence<OUString>& rCustomShowList);
+    void Init(const cpo::uno::Sequence<OUString>& rCustomShowList);
     void UpdateControlStates(bool bDeleteUnusedMasterPages, bool bDeleteHiddenSlides, bool bDeleteNotesPages);
     OUString Get_TK_CustomShowName() const
     {
@@ -221,7 +221,7 @@ public:
 
     OptimizationStats maStats;
 
-    void UpdateStatus( const css::uno::Sequence< css::beans::PropertyValue >& rStatus );
+    void UpdateStatus( const cpo::uno::Sequence< css::beans::PropertyValue >& rStatus );
 
     // the ConfigurationAccess is updated to actual control settings
     void UpdateConfiguration();

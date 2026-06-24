@@ -132,7 +132,7 @@ public:
 
 // css::container::XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
 // css::container::XNameReplace
@@ -159,12 +159,12 @@ public:
 
 // css::script::XEventAttacherManager
     virtual void SAL_CALL registerScriptEvent( sal_Int32 nIndex, const css::script::ScriptEventDescriptor& aScriptEvent ) override;
-    virtual void SAL_CALL registerScriptEvents( sal_Int32 nIndex, const css::uno::Sequence< css::script::ScriptEventDescriptor >& aScriptEvents ) override;
+    virtual void SAL_CALL registerScriptEvents( sal_Int32 nIndex, const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& aScriptEvents ) override;
     virtual void SAL_CALL revokeScriptEvent( sal_Int32 nIndex, const OUString& aListenerType, const OUString& aEventMethod, const OUString& aRemoveListenerParam ) override;
     virtual void SAL_CALL revokeScriptEvents( sal_Int32 nIndex ) override;
     virtual void SAL_CALL insertEntry( sal_Int32 nIndex ) override;
     virtual void SAL_CALL removeEntry( sal_Int32 nIndex ) override;
-    virtual css::uno::Sequence< css::script::ScriptEventDescriptor > SAL_CALL getScriptEvents( sal_Int32 Index ) override;
+    virtual cpo::uno::Sequence< css::script::ScriptEventDescriptor > SAL_CALL getScriptEvents( sal_Int32 Index ) override;
     virtual void SAL_CALL attach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject, const cpo::uno::Any& aHelper ) override;
     virtual void SAL_CALL detach( sal_Int32 nIndex, const css::uno::Reference< css::uno::XInterface >& xObject ) override;
     virtual void SAL_CALL addScriptListener( const css::uno::Reference< css::script::XScriptListener >& xListener ) override;
@@ -279,7 +279,7 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, ::cppu::OComponentHelper)
 
     virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;

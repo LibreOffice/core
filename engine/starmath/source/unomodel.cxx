@@ -309,7 +309,7 @@ static const rtl::Reference<PropertySetInfo> & lcl_createModelPropertyInfo ()
         { u"LoadReadonly"_ustr                     , HANDLE_LOAD_READONLY                      ,  cppu::UnoType<bool>::get(),                                            PROPERTY_NONE,  0                     },
         // #i972#
         { u"BaseLine"_ustr                         , HANDLE_BASELINE                           ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
-        { u"InteropGrabBag"_ustr                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),           PROPERTY_NONE,  0                     },
+        { u"InteropGrabBag"_ustr                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get(),           PROPERTY_NONE,  0                     },
         { u"SyntaxVersion"_ustr                    , HANDLE_STARMATH_VERSION                   ,  ::cppu::UnoType<sal_Int16>::get(),                             PROPERTY_NONE,  0                     },
         { u"WindowState"_ustr                      , HANDLE_WINDOWSTATE                        ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
     };
@@ -353,23 +353,23 @@ void SAL_CALL SmModel::release() noexcept
     OWeakObject::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  )
+cpo::uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  )
 {
     return comphelper::concatSequences(SfxBaseModel::getTypes(),
-        uno::Sequence  {
+        cpo::uno::Sequence  {
             cppu::UnoType<XServiceInfo>::get(),
             cppu::UnoType<XPropertySet>::get(),
             cppu::UnoType<XMultiPropertySet>::get(),
             cppu::UnoType<XRenderable>::get() });
 }
 
-const uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
+const cpo::uno::Sequence< sal_Int8 > & SmModel::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theSmModelUnoTunnelId;
     return theSmModelUnoTunnelId.getSeq();
 }
 
-sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL SmModel::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     return comphelper::getSomethingImpl(rId, this,
                                         comphelper::FallbackToGetSomethingOf<SfxBaseModel>{});
@@ -395,11 +395,11 @@ bool SmModel::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SmModel::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SmModel::getSupportedServiceNames()
 {
     static constexpr OUString service1 = u"com.sun.star.document.OfficeDocument"_ustr;
     static constexpr OUString service2 = u"com.sun.star.formula.FormulaProperties"_ustr;
-    return uno::Sequence<OUString>{ service1, service2 };
+    return cpo::uno::Sequence<OUString>{ service1, service2 };
 }
 
 void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* pValues)
@@ -950,15 +950,15 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 
 sal_Int32 SAL_CALL SmModel::getRendererCount(
         const cpo::uno::Any& /*rSelection*/,
-        const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
+        const cpo::uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
 {
     return 1;
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         sal_Int32 nRenderer,
         const cpo::uno::Any& /*rSelection*/,
-        const uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
+        const cpo::uno::Sequence< beans::PropertyValue >& /*rxOptions*/ )
 {
     SolarMutexGuard aGuard;
 
@@ -984,7 +984,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MapUnit::Map100thMM);
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
-    uno::Sequence< beans::PropertyValue > aRenderer(1);
+    cpo::uno::Sequence< beans::PropertyValue > aRenderer(1);
     PropertyValue  &rValue = aRenderer.getArray()[0];
     rValue.Name  = u"PageSize"_ustr;
     rValue.Value <<= aPageSize;
@@ -999,7 +999,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
 void SAL_CALL SmModel::render(
         sal_Int32 nRenderer,
         const cpo::uno::Any& rSelection,
-        const uno::Sequence< beans::PropertyValue >& rxOptions )
+        const cpo::uno::Sequence< beans::PropertyValue >& rxOptions )
 {
     SolarMutexGuard aGuard;
 

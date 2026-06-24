@@ -117,10 +117,10 @@ public:
 
 class DummyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 {
-    virtual sal_Int32 SAL_CALL readBytes( uno::Sequence< sal_Int8 >&, sal_Int32 ) override
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< sal_Int8 >&, sal_Int32 ) override
         { return 0; }
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< sal_Int8 >&, sal_Int32 ) override
+    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< sal_Int8 >&, sal_Int32 ) override
         { return 0; }
 
     virtual void SAL_CALL skipBytes( sal_Int32 ) override
@@ -230,10 +230,10 @@ void ZipPackage::parseManifest()
                 {
                     uno::Reference < XManifestReader > xReader = ManifestReader::create( m_xContext );
 
-                    const uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
+                    const cpo::uno::Sequence < cpo::uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                     const Any *pKeyInfo = nullptr;
 
-                    for ( const uno::Sequence<PropertyValue>& rSequence : aManifestSequence )
+                    for ( const cpo::uno::Sequence<PropertyValue>& rSequence : aManifestSequence )
                     {
                         OUString sPath, sMediaType, sVersion;
                         const Any *pSalt = nullptr, *pVector = nullptr, *pCount = nullptr, *pSize = nullptr, *pDigest = nullptr, *pDigestAlg = nullptr, *pEncryptionAlg = nullptr, *pStartKeyAlg = nullptr, *pDerivedKeySize = nullptr;
@@ -302,7 +302,7 @@ void ZipPackage::parseManifest()
                                             && pEncryptionAlg->get<sal_Int32>() == xml::crypto::CipherID::AES_GCM_W3C)
                                         || (pDigest && pDigestAlg)))
                                 {
-                                    uno::Sequence < sal_Int8 > aSequence;
+                                    cpo::uno::Sequence < sal_Int8 > aSequence;
                                     sal_Int64 nSize = 0;
                                     ::std::optional<sal_Int32> oDigestAlg;
                                     sal_Int32 nEncryptionAlg = 0;
@@ -368,7 +368,7 @@ void ZipPackage::parseManifest()
                                         || (pDigest && pDigestAlg)))
 
                                 {
-                                    uno::Sequence < sal_Int8 > aSequence;
+                                    cpo::uno::Sequence < sal_Int8 > aSequence;
                                     sal_Int64 nSize = 0;
                                     ::std::optional<sal_Int32> oDigestAlg;
                                     sal_Int32 nKDF = 0;
@@ -394,7 +394,7 @@ void ZipPackage::parseManifest()
 
                                     if (pArgon2Args)
                                     {
-                                        uno::Sequence<sal_Int32> args;
+                                        cpo::uno::Sequence<sal_Int32> args;
                                         *pArgon2Args >>= args;
                                         assert(args.getLength() == 3);
                                         ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgs;
@@ -483,7 +483,7 @@ void ZipPackage::parseManifest()
             if ( xMimeInStream.is() )
             {
                 // Mediatypes longer than 1024 symbols should not appear here
-                uno::Sequence< sal_Int8 > aData( 1024 );
+                cpo::uno::Sequence< sal_Int8 > aData( 1024 );
                 sal_Int32 nRead = xMimeInStream->readBytes( aData, 1024 );
                 if ( nRead > aData.getLength() )
                     nRead = aData.getLength();
@@ -576,7 +576,7 @@ void ZipPackage::parseContentType()
             if ( xInStream.is() )
             {
                 // here aContentTypeInfo[0] - Defaults, and aContentTypeInfo[1] - Overrides
-                const uno::Sequence< uno::Sequence< beans::StringPair > > aContentTypeInfo =
+                const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aContentTypeInfo =
                     ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, m_xContext );
 
                 if ( aContentTypeInfo.getLength() != 2 )
@@ -703,7 +703,7 @@ void ZipPackage::getZipFileContents()
     }
 }
 
-void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
+void SAL_CALL ZipPackage::initialize( const cpo::uno::Sequence< Any >& aArguments )
 {
     beans::NamedValue aNamedValue;
 
@@ -1107,7 +1107,7 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstance()
     return xRef;
 }
 
-uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const uno::Sequence< Any >& aArguments )
+uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const cpo::uno::Sequence< Any >& aArguments )
 {
     bool bArg = false;
     uno::Reference < XInterface > xRef;
@@ -1130,7 +1130,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     auto pEntry = std::make_unique<ZipEntry>();
     sal_Int32 nBufferLength = m_xRootFolder->GetMediaType().getLength();
     OString sMediaType = OUStringToOString( m_xRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
-    const uno::Sequence< sal_Int8 > aType( reinterpret_cast<sal_Int8 const *>(sMediaType.getStr()),
+    const cpo::uno::Sequence< sal_Int8 > aType( reinterpret_cast<sal_Int8 const *>(sMediaType.getStr()),
                                      nBufferLength );
 
     pEntry->sPath = sMime;
@@ -1159,7 +1159,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     }
 }
 
-void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< uno::Sequence < PropertyValue > >& aManList )
+void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< cpo::uno::Sequence < PropertyValue > >& aManList )
 {
     // Write the manifest
     uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( m_xContext );
@@ -1188,7 +1188,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< uno
     aZipOut.rawCloseEntry();
 }
 
-void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector< uno::Sequence < PropertyValue > >& aManList )
+void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector< cpo::uno::Sequence < PropertyValue > >& aManList )
 {
     auto pEntry = std::make_unique<ZipEntry>();
     rtl::Reference<ZipPackageBuffer> pBuffer = new ZipPackageBuffer;
@@ -1200,7 +1200,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
     pEntry->nTime = ZipOutputStream::getCurrentDosTime();
 
     // Add at least the standard default entries.
-    uno::Sequence< beans::StringPair > aDefaultsSequence
+    cpo::uno::Sequence< beans::StringPair > aDefaultsSequence
     {
         { u"fntdata"_ustr, u"application/x-fontdata"_ustr },
         { u"jpeg"_ustr, u"image/jpeg"_ustr },
@@ -1209,7 +1209,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
         { u"xml"_ustr, u"application/xml"_ustr }
     };
 
-    uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());
+    cpo::uno::Sequence< beans::StringPair > aOverridesSequence(aManList.size());
     auto aOverridesSequenceRange = asNonConstRange(aOverridesSequence);
     sal_Int32 nOverSeqLength = 0;
     for (const auto& rMan : aManList)
@@ -1359,7 +1359,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         }
 
         // Create a vector to store data for the manifest.xml file
-        std::vector < uno::Sequence < PropertyValue > > aManList;
+        std::vector < cpo::uno::Sequence < PropertyValue > > aManList;
 
         const bool bIsGpgEncrypt = m_aGpgProps.hasElements();
 
@@ -1367,7 +1367,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         // filtered out later in ManifestExport
         if ( m_nFormat == embed::StorageFormats::PACKAGE )
         {
-            uno::Sequence < PropertyValue > aPropSeq(
+            cpo::uno::Sequence < PropertyValue > aPropSeq(
                 bIsGpgEncrypt ? PKG_SIZE_NOENCR_MNFST+1 : PKG_SIZE_NOENCR_MNFST );
             auto pPropSeq = aPropSeq.getArray();
             pPropSeq [PKG_MNFST_MEDIATYPE].Name = u"MediaType"_ustr;
@@ -1514,7 +1514,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
             aArg.Mode        = OpenMode::DOCUMENT;
             aArg.Priority    = 0; // unused
             aArg.Sink       = xSink;
-            aArg.Properties = uno::Sequence< Property >( 0 ); // unused
+            aArg.Properties = cpo::uno::Sequence< Property >( 0 ); // unused
 
             aOriginalContent.executeCommand(u"open"_ustr, Any( aArg ) );
         }
@@ -1744,9 +1744,9 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
                                     Any ( aException ) );
 }
 
-uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
+cpo::uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()
 {
-    uno::Sequence< sal_Int8 > aResult;
+    cpo::uno::Sequence< sal_Int8 > aResult;
 
     if ( m_aStorageEncryptionKeys.hasElements() )
     {
@@ -1779,7 +1779,7 @@ bool SAL_CALL ZipPackage::hasPendingChanges()
 }
 Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges()
 {
-    return uno::Sequence < ElementChange > ();
+    return cpo::uno::Sequence < ElementChange > ();
 }
 
 
@@ -1832,7 +1832,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     }
     else if ( aPropertyName == ENCRYPTION_ALGORITHMS_PROPERTY )
     {
-        uno::Sequence< beans::NamedValue > aAlgorithms;
+        cpo::uno::Sequence< beans::NamedValue > aAlgorithms;
         if ( m_pZipFile || !( aValue >>= aAlgorithms ) || !aAlgorithms.hasElements() )
         {
             // the algorithms can not be changed if the file has a persistence based on the algorithms ( m_pZipFile )
@@ -1902,7 +1902,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
     }
     else if ( aPropertyName == ENCRYPTION_GPG_PROPERTIES )
     {
-        uno::Sequence< uno::Sequence< beans::NamedValue > > aGpgProps;
+        cpo::uno::Sequence< cpo::uno::Sequence< beans::NamedValue > > aGpgProps;
         if ( !( aValue >>= aGpgProps ) || !aGpgProps.hasElements() )
         {
             throw IllegalArgumentException(u"unexpected Gpg properties are provided."_ustr, uno::Reference< uno::XInterface >(), 2 );
@@ -1993,7 +1993,7 @@ void SAL_CALL ZipPackage::removeVetoableChangeListener( const OUString& /*Proper
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_ZipPackage_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ZipPackage(context));
 }
@@ -2003,7 +2003,7 @@ extern "C" bool TestImportZip(SvStream& rStream)
     // explicitly tests the "RepairPackage" recovery mode
     rtl::Reference<ZipPackage> xPackage(new ZipPackage(comphelper::getProcessComponentContext()));
     css::uno::Reference<css::io::XInputStream> xStream(new utl::OInputStreamWrapper(rStream));
-    css::uno::Sequence<Any> aArgs{ Any(xStream), Any(NamedValue(u"RepairPackage"_ustr, Any(true))) };
+    cpo::uno::Sequence<Any> aArgs{ Any(xStream), Any(NamedValue(u"RepairPackage"_ustr, Any(true))) };
     xPackage->initialize(aArgs);
     return true;
 }

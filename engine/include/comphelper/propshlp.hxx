@@ -81,7 +81,7 @@ public:
 
         @throws css::uno::RuntimeException
      */
-    static css::uno::Sequence<css::uno::Type> getTypes();
+    static cpo::uno::Sequence<css::uno::Type> getTypes();
 
     /**
        Send a disposing notification to the listeners
@@ -141,21 +141,21 @@ public:
 
     // XMultiPropertySet
     virtual void SAL_CALL
-    setPropertyValues(const css::uno::Sequence<::rtl::OUString>& PropertyNames,
-                      const css::uno::Sequence<cpo::uno::Any>& Values) override;
+    setPropertyValues(const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
+                      const cpo::uno::Sequence<cpo::uno::Any>& Values) override;
 
-    virtual css::uno::Sequence<cpo::uno::Any> SAL_CALL
-    getPropertyValues(const css::uno::Sequence<::rtl::OUString>& PropertyNames) override final;
+    virtual cpo::uno::Sequence<cpo::uno::Any> SAL_CALL
+    getPropertyValues(const cpo::uno::Sequence<::rtl::OUString>& PropertyNames) override final;
 
     virtual void SAL_CALL addPropertiesChangeListener(
-        const css::uno::Sequence<::rtl::OUString>& PropertyNames,
+        const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     virtual void SAL_CALL removePropertiesChangeListener(
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     virtual void SAL_CALL firePropertiesChangeEvent(
-        const css::uno::Sequence<::rtl::OUString>& PropertyNames,
+        const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
         const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     /**

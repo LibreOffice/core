@@ -289,7 +289,7 @@ namespace dbtools
         @return
             an array of strings containing the names of the columns (aka fields) of the object
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Sequence< OUString >
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Sequence< OUString >
         getFieldNamesByCommandDescriptor(
             const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const sal_Int32 _nCommandType,
@@ -519,7 +519,7 @@ namespace dbtools
     /** creates a unique name which is not already used in the given name array
     */
     OOO_DLLPUBLIC_DBTOOLS OUString createUniqueName(
-        const css::uno::Sequence< OUString >& _rNames,
+        const cpo::uno::Sequence< OUString >& _rNames,
         const OUString& _rBaseName,
         bool _bStartWithNumber
     );

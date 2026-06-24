@@ -22,14 +22,14 @@
 #include <sal/config.h>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <ooo/vba/word/WdSaveFormat.hpp>
 
 namespace
 {
 inline bool setFilterPropsFromFormat(sal_Int32 nFormat,
-                                     css::uno::Sequence<css::beans::PropertyValue>& rProps)
+                                     cpo::uno::Sequence<css::beans::PropertyValue>& rProps)
 {
     auto[begin, end] = asNonConstRange(rProps);
     auto pProp = std::find_if(begin, end, [](const css::beans::PropertyValue& rProp) {

@@ -20,7 +20,7 @@
 #define INCLUDED_UNOTOOLS_VIEWOPTIONS_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -187,8 +187,8 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final
                         Every view can handle its own user defined data set.
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/
-        css::uno::Sequence< css::beans::NamedValue > GetUserData(                                                                                     ) const;
-        void                                         SetUserData( const css::uno::Sequence< css::beans::NamedValue >& lData );
+        cpo::uno::Sequence< css::beans::NamedValue > GetUserData(                                                                                     ) const;
+        void                                         SetUserData( const cpo::uno::Sequence< css::beans::NamedValue >& lData );
 
         /*-****************************************************************************************************
             @short      use it to set/get ONE special user data item directly

@@ -172,7 +172,7 @@ bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& Servi
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedContentResultSetStub"_ustr };
 }
@@ -509,7 +509,7 @@ bool SAL_CALL CachedContentResultSetStubFactory::supportsService( const OUString
 {
     return cppu::supportsService( this, ServiceName );
 }
-css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStubFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStubFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedContentResultSetStubFactory"_ustr };
 }
@@ -519,7 +519,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStubFactory::getSu
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_CachedContentResultSetStubFactory_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CachedContentResultSetStubFactory());
 }

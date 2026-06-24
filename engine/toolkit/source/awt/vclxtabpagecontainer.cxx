@@ -206,7 +206,7 @@ void SAL_CALL VCLXTabPageContainer::elementReplaced( const css::container::Conta
 {
 }
 
-void VCLXTabPageContainer::propertiesChange(const::css::uno::Sequence<PropertyChangeEvent>& rEvents)
+void VCLXTabPageContainer::propertiesChange(const::cpo::uno::Sequence<PropertyChangeEvent>& rEvents)
 {
     SolarMutexGuard aGuard;
     VclPtr<TabControl> pTabCtrl = GetAs<TabControl>();

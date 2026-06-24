@@ -373,7 +373,7 @@ static void lcl_commitGrammarMarkUp(
 }
 
 void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
-    const uno::Sequence< text::TextMarkupDescriptor > &rMarkups )
+    const cpo::uno::Sequence< text::TextMarkupDescriptor > &rMarkups )
 {
     SolarMutexGuard aGuard;
 

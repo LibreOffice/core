@@ -32,13 +32,13 @@ void CertificateExtension_CertExtn::setCertExtn(const unsigned char* value, unsi
     if( value != nullptr && vlen != 0 ) {
         m_xExtnValue = comphelper::arrayToSequence<sal_Int8>(value, vlen);
     } else {
-        m_xExtnValue = css::uno::Sequence<sal_Int8>();
+        m_xExtnValue = cpo::uno::Sequence<sal_Int8>();
     }
 
     if( id != nullptr && idlen != 0 ) {
         m_xExtnId = comphelper::arrayToSequence<sal_Int8>(id, idlen);
     } else {
-        m_xExtnId = css::uno::Sequence<sal_Int8>();
+        m_xExtnId = cpo::uno::Sequence<sal_Int8>();
     }
 
     m_critical = critical ;

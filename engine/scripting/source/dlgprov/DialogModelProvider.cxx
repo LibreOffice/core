@@ -39,7 +39,7 @@ DialogModelProvider::DialogModelProvider(Reference< XComponentContext > const & 
 {}
 
 // lang::XInitialization:
-void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments)
+void SAL_CALL DialogModelProvider::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     if ( aArguments.getLength() != 1 )
         return;
@@ -87,7 +87,7 @@ cpo::uno::Any SAL_CALL DialogModelProvider::getByName(const OUString & aName)
     return m_xDialogModel->getByName(aName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getElementNames()
 {
     return m_xDialogModel->getElementNames();
 }
@@ -148,7 +148,7 @@ bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName)
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.UnoControlDialogModelProvider"_ustr };
 }
@@ -157,7 +157,7 @@ css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedService
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_DialogModelProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new dlgprov::DialogModelProvider(context));
 }

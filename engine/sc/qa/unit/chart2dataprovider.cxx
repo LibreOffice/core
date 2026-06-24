@@ -40,7 +40,7 @@ static void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cel
     uno::Reference<chart2::data::XDataProvider> xDataProvider = new ScChart2DataProvider(&rDoc);
     CPPUNIT_ASSERT(xDataProvider.is());
 
-    uno::Sequence<beans::PropertyValue> aArgs{
+    cpo::uno::Sequence<beans::PropertyValue> aArgs{
         comphelper::makePropertyValue(u"CellRangeRepresentation"_ustr, cellRange),
         comphelper::makePropertyValue(u"HasCategories"_ustr, hasCategories),
         comphelper::makePropertyValue(u"FirstCellAsLabel"_ustr, firstCellAsLabel),
@@ -50,7 +50,7 @@ static void lcl_createAndCheckDataProvider(ScDocument& rDoc, const OUString& cel
     uno::Reference<chart2::data::XDataSource> xDataSource = xDataProvider->createDataSource(aArgs);
     CPPUNIT_ASSERT(xDataSource.is());
 
-    css::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> xSequences
+    cpo::uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>> xSequences
         = xDataSource->getDataSequences();
 
     CPPUNIT_ASSERT_EQUAL(expectedRows, xSequences.getLength());

@@ -217,7 +217,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848_2, "tdf95848_2.docx")
         CPPUNIT_ASSERT_EQUAL(u"1)"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
         // check indent of list style
         auto xLevels = getProperty<uno::Reference<container::XIndexAccess>>(xPara, u"NumberingRules"_ustr);
-        uno::Sequence<beans::PropertyValue> aLevel;
+        cpo::uno::Sequence<beans::PropertyValue> aLevel;
         xLevels->getByIndex(0) >>= aLevel; // top level
         sal_Int32 nIndent = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "FirstLineIndent"; })->Value.get<sal_Int32>();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-635), nIndent);
@@ -235,7 +235,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95848_2, "tdf95848_2.docx")
         CPPUNIT_ASSERT_EQUAL(listId, getProperty<OUString>(xPara, u"ListId"_ustr));
         // check indent of list style - override
         auto xLevels = getProperty<uno::Reference<container::XIndexAccess>>(xPara, u"NumberingRules"_ustr);
-        uno::Sequence<beans::PropertyValue> aLevel;
+        cpo::uno::Sequence<beans::PropertyValue> aLevel;
         xLevels->getByIndex(0) >>= aLevel; // top level
         sal_Int32 nIndent = std::find_if(std::cbegin(aLevel), std::cend(aLevel), [](const beans::PropertyValue& rValue) { return rValue.Name == "FirstLineIndent"; })->Value.get<sal_Int32>();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(9366), nIndent);
@@ -648,7 +648,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInputListExport)
     uno::Reference<text::XTextContent> xContentControl;
     xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValues> aListItems;
+    cpo::uno::Sequence<beans::PropertyValues> aListItems;
     xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aListItems.getLength());
     comphelper::SequenceAsHashMap aMap0(aListItems[0]);
@@ -1228,7 +1228,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
         uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
         uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(true, xServiceInfo->supportsService(u"com.sun.star.form.component.ComboBox"_ustr));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<OUString> >(xPropertySet, u"StringItemList"_ustr).getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< cpo::uno::Sequence<OUString> >(xPropertySet, u"StringItemList"_ustr).getLength());
     }
     else
     {
@@ -1241,7 +1241,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
         uno::Reference<text::XTextContent> xContentControl;
         xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
         uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValues> aListItems;
+        cpo::uno::Sequence<beans::PropertyValues> aListItems;
         xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aListItems.getLength());
     }

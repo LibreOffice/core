@@ -187,16 +187,16 @@ void SAL_CALL Storage::release()
 
 
 // virtual
-uno::Sequence< uno::Type > SAL_CALL Storage::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL Storage::getTypes()
 {
     return m_xWrappedTypeProv->getTypes();
 }
 
 
 // virtual
-uno::Sequence< sal_Int8 > SAL_CALL Storage::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL Storage::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 
@@ -254,7 +254,7 @@ cpo::uno::Any SAL_CALL Storage::getByName( const OUString& aName )
 
 
 // virtual
-uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
 {
     return m_xWrappedStorage->getElementNames();
 }
@@ -534,16 +534,16 @@ cpo::uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
 
 
 // virtual
-uno::Sequence< uno::Type > SAL_CALL OutputStream::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL OutputStream::getTypes()
 {
     return m_xWrappedTypeProv->getTypes();
 }
 
 
 // virtual
-uno::Sequence< sal_Int8 > SAL_CALL OutputStream::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL OutputStream::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 
@@ -552,7 +552,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OutputStream::getImplementationId()
 
 // virtual
 void SAL_CALL
-OutputStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
+OutputStream::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     m_xWrappedStream->writeBytes( aData );
 }
@@ -702,16 +702,16 @@ cpo::uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
 
 
 // virtual
-uno::Sequence< uno::Type > SAL_CALL Stream::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL Stream::getTypes()
 {
     return m_xWrappedTypeProv->getTypes();
 }
 
 
 // virtual
-uno::Sequence< sal_Int8 > SAL_CALL Stream::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL Stream::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 
@@ -736,7 +736,7 @@ uno::Reference< io::XOutputStream > SAL_CALL Stream::getOutputStream()
 
 
 // virtual
-void SAL_CALL Stream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
+void SAL_CALL Stream::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     if ( m_xWrappedOutputStream.is() )
     {
@@ -790,7 +790,7 @@ void SAL_CALL Stream::truncate()
 
 
 // virtual
-sal_Int32 SAL_CALL Stream::readBytes( uno::Sequence< sal_Int8 >& aData,
+sal_Int32 SAL_CALL Stream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData,
                                       sal_Int32 nBytesToRead )
 {
     return m_xWrappedInputStream->readBytes( aData, nBytesToRead );
@@ -798,7 +798,7 @@ sal_Int32 SAL_CALL Stream::readBytes( uno::Sequence< sal_Int8 >& aData,
 
 
 // virtual
-sal_Int32 SAL_CALL Stream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
+sal_Int32 SAL_CALL Stream::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData,
                                           sal_Int32 nMaxBytesToRead )
 {
     return m_xWrappedInputStream->readSomeBytes( aData, nMaxBytesToRead );

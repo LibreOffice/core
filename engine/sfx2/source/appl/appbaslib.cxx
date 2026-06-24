@@ -158,7 +158,7 @@ bool SfxBasicManagerHolder::ImgVersion12PsswdBinaryLimitExceeded( std::vector< O
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SfxApplication::GetBasicManager();
     css::uno::XInterface* pRet = static_cast<css::script::XLibraryContainer*>(SfxGetpApp()->GetDialogContainer());
@@ -170,7 +170,7 @@ com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SfxApplication::GetBasicManager();
     css::uno::XInterface* pRet = static_cast<css::script::XLibraryContainer*>(SfxGetpApp()->GetBasicContainer());

@@ -90,11 +90,11 @@ namespace sd
         virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
         // XMultiPropertySet
-        virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues ) override;
-        virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
-        virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+        virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
+        virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
         virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-        virtual void SAL_CALL firePropertiesChangeEvent( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+        virtual void SAL_CALL firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
@@ -102,13 +102,13 @@ namespace sd
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // DocumentSettingsSerializer cf. xmloff
-        virtual uno::Sequence<beans::PropertyValue>
+        virtual cpo::uno::Sequence<beans::PropertyValue>
                 filterStreamsFromStorage(OUString const & referer,
                                          const uno::Reference< embed::XStorage > &xStorage,
-                                         const uno::Sequence<beans::PropertyValue>& aConfigProps ) override;
-        virtual uno::Sequence<beans::PropertyValue>
+                                         const cpo::uno::Sequence<beans::PropertyValue>& aConfigProps ) override;
+        virtual cpo::uno::Sequence<beans::PropertyValue>
                 filterStreamsToStorage(const uno::Reference< embed::XStorage > &xStorage,
-                                       const uno::Sequence<beans::PropertyValue>& aConfigProps ) override;
+                                       const cpo::uno::Sequence<beans::PropertyValue>& aConfigProps ) override;
 
     protected:
         virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const cpo::uno::Any* pValues ) override;
@@ -178,7 +178,7 @@ enum SdDocumentSettingsPropertyHandles
         {
             { u"DefaultTabStop"_ustr,        HANDLE_TABSTOP,             ::cppu::UnoType<sal_Int32>::get(),    0,  0 },
             { u"PrinterName"_ustr,           HANDLE_PRINTERNAME,         ::cppu::UnoType<OUString>::get(),     0,  0 },
-            { u"PrinterSetup"_ustr,          HANDLE_PRINTERJOB,          cppu::UnoType<uno::Sequence < sal_Int8 >>::get(),  0, MID_PRINTER },
+            { u"PrinterSetup"_ustr,          HANDLE_PRINTERJOB,          cppu::UnoType<cpo::uno::Sequence < sal_Int8 >>::get(),  0, MID_PRINTER },
             { u"PrinterPaperFromSetup"_ustr, HANDLE_PRINTERPAPERSIZE,    cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
 
             { u"IsPrintPageName"_ustr,       HANDLE_PRINTPAGENAME,       cppu::UnoType<bool>::get(),                0,  MID_PRINTER },
@@ -210,7 +210,7 @@ enum SdDocumentSettingsPropertyHandles
             { u"PrinterIndependentLayout"_ustr,HANDLE_PRINTER_INDEPENDENT_LAYOUT,::cppu::UnoType<sal_Int16>::get(), 0,  0 },
             // --> #i33095#
             { u"LoadReadonly"_ustr,          HANDLE_LOAD_READONLY,       cppu::UnoType<bool>::get(),                0,  0 },
-            { u"ModifyPasswordInfo"_ustr,    HANDLE_MODIFY_PASSWD,       cppu::UnoType<uno::Sequence < beans::PropertyValue >>::get(),  0,  0 },
+            { u"ModifyPasswordInfo"_ustr,    HANDLE_MODIFY_PASSWD,       cppu::UnoType<cpo::uno::Sequence < beans::PropertyValue >>::get(),  0,  0 },
             { u"SaveVersionOnClose"_ustr,    HANDLE_SAVE_VERSION,        cppu::UnoType<bool>::get(),                0,  0 },
             { u"EmbedFonts"_ustr,              HANDLE_EMBED_FONTS,                cppu::UnoType<bool>::get(), 0,  0 },
             { u"EmbedOnlyUsedFonts"_ustr,      HANDLE_EMBED_USED_FONTS,           cppu::UnoType<bool>::get(), 0,  0 },
@@ -309,13 +309,13 @@ static OUString getNameOfType( XPropertyListType t )
     return OUString();
 }
 
-uno::Sequence<beans::PropertyValue>
+cpo::uno::Sequence<beans::PropertyValue>
         DocumentSettings::filterStreamsFromStorage(
                 OUString const & referer,
                 const uno::Reference< embed::XStorage > &xStorage,
-                const uno::Sequence<beans::PropertyValue>& aConfigProps )
+                const cpo::uno::Sequence<beans::PropertyValue>& aConfigProps )
 {
-    uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
+    cpo::uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
     auto aRetRange = asNonConstRange(aRet);
     int nRet = 0;
     for( const auto& rConfigProp : aConfigProps )
@@ -334,12 +334,12 @@ uno::Sequence<beans::PropertyValue>
     return aRet;
 }
 
-uno::Sequence<beans::PropertyValue>
+cpo::uno::Sequence<beans::PropertyValue>
         DocumentSettings::filterStreamsToStorage(
                 const uno::Reference< embed::XStorage > &xStorage,
-                const uno::Sequence<beans::PropertyValue>& aConfigProps )
+                const cpo::uno::Sequence<beans::PropertyValue>& aConfigProps )
 {
-    uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
+    cpo::uno::Sequence<beans::PropertyValue> aRet( aConfigProps.getLength() );
 
     bool bHasEmbed = false;
     SdDrawDocument* pDoc = mxModel->GetDoc();
@@ -945,7 +945,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
 
             case HANDLE_MODIFY_PASSWD:
             {
-                uno::Sequence< beans::PropertyValue > aInfo;
+                cpo::uno::Sequence< beans::PropertyValue > aInfo;
                 if ( !( *pValues >>= aInfo ) )
                     throw lang::IllegalArgumentException(
                         u"Value of type Sequence<PropertyValue> expected!"_ustr,

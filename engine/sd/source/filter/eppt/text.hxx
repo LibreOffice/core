@@ -183,7 +183,7 @@ class ParagraphObj : public PropStateValue, public SOParagraph
 
     public:
 
-        css::uno::Sequence< css::style::TabStop > maTabStop;
+        cpo::uno::Sequence< css::style::TabStop > maTabStop;
 
         sal_uInt32          mnTextSize;
 

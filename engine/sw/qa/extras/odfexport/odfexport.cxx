@@ -519,7 +519,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOOoxmlEmbedded)
     saveAndReload(TestFilter::ODT);
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
-    uno::Sequence<OUString> aSeq(xAccess->getElementNames());
+    cpo::uno::Sequence<OUString> aSeq(xAccess->getElementNames());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), aSeq.getLength());
     uno::Reference<document::XEmbeddedObjectSupplier> xEOSupplier1(xAccess->getByName(u"Object1"_ustr), uno::UNO_QUERY);
     uno::Reference<lang::XComponent> xObj1(xEOSupplier1->getEmbeddedObject());
@@ -771,9 +771,9 @@ DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
     uno::Reference<container::XIndexReplace> xLevels(
         getProperty< uno::Reference<container::XIndexReplace> >(xTOCProps,
             u"LevelParagraphStyles"_ustr));
-    uno::Sequence<OUString> seq { u"Heading"_ustr };
+    cpo::uno::Sequence<OUString> seq { u"Heading"_ustr };
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(seq), xLevels->getByIndex(1));
-    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(uno::Sequence<OUString>()), xLevels->getByIndex(2));
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(cpo::uno::Sequence<OUString>()), xLevels->getByIndex(2));
 }
 
 DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
@@ -924,9 +924,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo58949)
 
     save(TestFilter::ODT);
 
-    uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
+    cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr, aArgs), uno::UNO_QUERY);
-    const css::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    const cpo::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
     // The exported document must have three objects named ObjNNN. The names are assigned in
     // OLEHandler::copyOLEOStream using a static counter, and actual numbers depend on previous
     // tests; so just count the matching names here.
@@ -953,7 +953,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134987)
     saveAndReload(TestFilter::ODT);
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
-    uno::Sequence<OUString> aSeq(xAccess->getElementNames());
+    cpo::uno::Sequence<OUString> aSeq(xAccess->getElementNames());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aSeq.getLength());
 
     OUString aMediaType;
@@ -1195,16 +1195,16 @@ CPPUNIT_TEST_FIXTURE(Test, testProtectionKey)
         uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xSect0(xSections->getByIndex(0), uno::UNO_QUERY);
-        uno::Sequence<sal_Int8> const key0(getProperty<uno::Sequence<sal_Int8>>(xSect0, u"ProtectionKey"_ustr));
+        cpo::uno::Sequence<sal_Int8> const key0(getProperty<cpo::uno::Sequence<sal_Int8>>(xSect0, u"ProtectionKey"_ustr));
         CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key0, password));
         uno::Reference<beans::XPropertySet> xSect1(xSections->getByIndex(1), uno::UNO_QUERY);
-        uno::Sequence<sal_Int8> const key1(getProperty<uno::Sequence<sal_Int8>>(xSect1, u"ProtectionKey"_ustr));
+        cpo::uno::Sequence<sal_Int8> const key1(getProperty<cpo::uno::Sequence<sal_Int8>>(xSect1, u"ProtectionKey"_ustr));
         CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key1, password));
         uno::Reference<beans::XPropertySet> xSect2(xSections->getByIndex(2), uno::UNO_QUERY);
-        uno::Sequence<sal_Int8> const key2(getProperty<uno::Sequence<sal_Int8>>(xSect2, u"ProtectionKey"_ustr));
+        cpo::uno::Sequence<sal_Int8> const key2(getProperty<cpo::uno::Sequence<sal_Int8>>(xSect2, u"ProtectionKey"_ustr));
         CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key2, password));
         uno::Reference<beans::XPropertySet> xSect3(xSections->getByIndex(3), uno::UNO_QUERY);
-        uno::Sequence<sal_Int8> const key3(getProperty<uno::Sequence<sal_Int8>>(xSect3, u"ProtectionKey"_ustr));
+        cpo::uno::Sequence<sal_Int8> const key3(getProperty<cpo::uno::Sequence<sal_Int8>>(xSect3, u"ProtectionKey"_ustr));
         CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key3, password));
     };
 
@@ -1264,7 +1264,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103091)
     uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
     uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
             u"Text body"_ustr), uno::UNO_QUERY);
-    auto conditions(getProperty<uno::Sequence<beans::NamedValue>>(xStyle1, u"ParaStyleConditions"_ustr));
+    auto conditions(getProperty<cpo::uno::Sequence<beans::NamedValue>>(xStyle1, u"ParaStyleConditions"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(28), conditions.getLength());
     CPPUNIT_ASSERT_EQUAL(u"TableHeader"_ustr, conditions[0].Name);
@@ -1464,8 +1464,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_images)
         uno::Reference<graphic::XGraphic> xGraphic = Graphic(aImage.GetBitmap()).GetXGraphic();
         CPPUNIT_ASSERT(xGraphic.is());
 
-        uno::Sequence<OUString> aImportURL{ u".uno:OpenFromWriter"_ustr };
-        uno::Sequence<uno::Reference<graphic::XGraphic>> aImportGraph{ xGraphic };
+        cpo::uno::Sequence<OUString> aImportURL{ u".uno:OpenFromWriter"_ustr };
+        cpo::uno::Sequence<uno::Reference<graphic::XGraphic>> aImportGraph{ xGraphic };
 
         css::uno::Reference<css::ui::XImageManager> xImgMgr(getUIConfigManager()->getImageManager(),
                                                             uno::UNO_QUERY);
@@ -1540,12 +1540,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_directories)
     // to access that reference from outside the class. So, we inspect the zipfile
     // directly.
 
-    uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
+    cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(maTempFile.GetURL()) };
     uno::Reference<container::XNameAccess> xNameAccess(
         m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
                                                  aArgs),
         uno::UNO_QUERY);
-    const css::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    const cpo::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
 
     int nMatches = 0;
     for (const OUString& sName : aNames)

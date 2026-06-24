@@ -147,9 +147,9 @@ private:
             return false;
         }
 
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
         {
-            return css::uno::Sequence<OUString>();
+            return cpo::uno::Sequence<OUString>();
         }
    };
 };

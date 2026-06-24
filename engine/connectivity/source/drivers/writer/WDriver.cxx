@@ -36,7 +36,7 @@ OUString SAL_CALL ODriver::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 connectivity_writer_ODriver(css::uno::XComponentContext* context,
-                            css::uno::Sequence<cpo::uno::Any> const& /*rArguments*/)
+                            cpo::uno::Sequence<cpo::uno::Any> const& /*rArguments*/)
 {
     try
     {
@@ -48,8 +48,8 @@ connectivity_writer_ODriver(css::uno::XComponentContext* context,
     return nullptr;
 }
 
-uno::Reference<sdbc::XConnection>
-    SAL_CALL ODriver::connect(const OUString& url, const uno::Sequence<beans::PropertyValue>& info)
+uno::Reference<sdbc::XConnection> SAL_CALL
+ODriver::connect(const OUString& url, const cpo::uno::Sequence<beans::PropertyValue>& info)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (ODriver_BASE::rBHelper.bDisposed)
@@ -67,8 +67,9 @@ uno::Reference<sdbc::XConnection>
 
 bool SAL_CALL ODriver::acceptsURL(const OUString& url) { return url.startsWith("sdbc:writer:"); }
 
-uno::Sequence<sdbc::DriverPropertyInfo> SAL_CALL
-ODriver::getPropertyInfo(const OUString& url, const uno::Sequence<beans::PropertyValue>& /*info*/)
+cpo::uno::Sequence<sdbc::DriverPropertyInfo>
+    SAL_CALL ODriver::getPropertyInfo(const OUString& url,
+                                      const cpo::uno::Sequence<beans::PropertyValue>& /*info*/)
 {
     if (!acceptsURL(url))
     {

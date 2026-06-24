@@ -26,7 +26,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
@@ -175,7 +175,7 @@ void writeValueContent_(TempFile &handle, std::u16string_view value) {
 }
 
 void writeValueContent_(
-    TempFile &handle, css::uno::Sequence< sal_Int8 > const & value)
+    TempFile &handle, cpo::uno::Sequence< sal_Int8 > const & value)
 {
     for (const auto & v : value) {
         static char const hexDigit[16] = {
@@ -201,7 +201,7 @@ template< typename T > void writeListValue(
     TempFile &handle, cpo::uno::Any const & value)
 {
     handle.writeString(">");
-    css::uno::Sequence< T > val;
+    cpo::uno::Sequence< T > val;
     value >>= val;
     for (sal_Int32 i = 0; i < val.getLength(); ++i) {
         if (i != 0) {
@@ -216,7 +216,7 @@ template< typename T > void writeItemListValue(
     TempFile &handle, cpo::uno::Any const & value)
 {
     handle.writeString(">");
-    css::uno::Sequence< T > val;
+    cpo::uno::Sequence< T > val;
     value >>= val;
     for (const auto & i : val) {
         handle.writeString("<it>");
@@ -247,7 +247,7 @@ void writeValue(TempFile &handle, Type type, cpo::uno::Any const & value) {
         writeSingleValue< OUString >(handle, value);
         break;
     case TYPE_HEXBINARY:
-        writeSingleValue< css::uno::Sequence< sal_Int8 > >(handle, value);
+        writeSingleValue< cpo::uno::Sequence< sal_Int8 > >(handle, value);
         break;
     case TYPE_BOOLEAN_LIST:
         writeListValue< bool >(handle, value);
@@ -268,7 +268,7 @@ void writeValue(TempFile &handle, Type type, cpo::uno::Any const & value) {
         writeItemListValue< OUString >(handle, value);
         break;
     case TYPE_HEXBINARY_LIST:
-        writeItemListValue< css::uno::Sequence< sal_Int8 > >(handle, value);
+        writeItemListValue< cpo::uno::Sequence< sal_Int8 > >(handle, value);
         break;
     default: // TYPE_ERROR, TYPE_NIL, TYPE_ANY
         assert(false); // this cannot happen

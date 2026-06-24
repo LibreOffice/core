@@ -30,9 +30,9 @@
 
 using namespace css;
 
-ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
-                                             css::uno::Sequence<uno::Sequence<cpo::uno::Any>>& rData,
-                                             ScViewData& rViewData, ScRange& rRange)
+ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(
+    weld::Window* pParent, cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& rData,
+    ScViewData& rViewData, ScRange& rRange)
     : weld::GenericDialogController(pParent, u"modules/scalc/ui/duplicaterecordsdlg.ui"_ustr,
                                     u"DuplicateRecordsDialog"_ustr)
     , m_xIncludesHeaders(m_xBuilder->weld_check_button(u"includesheaders"_ustr))

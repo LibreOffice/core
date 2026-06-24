@@ -357,7 +357,7 @@ void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
         return;
 
     if (m_xFrame.is()) {
-        uno::Sequence<beans::PropertyValue> aArgs{
+        cpo::uno::Sequence<beans::PropertyValue> aArgs{
             comphelper::makePropertyValue(u"Symbols"_ustr, sGlyph),
             comphelper::makePropertyValue(u"FontName"_ustr, m_aFont.GetFamilyName())
         };
@@ -624,7 +624,7 @@ OString SvxCharacterMap::encodeCharGraphic(sal_UCS4 cChar)
 
     SvMemoryStream aOStm(65535, 65535);
     // Match the iconview's own encoding: fastest compression.
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
     };
     vcl::PngImageWriter aPNGWriter(aOStm);
@@ -632,7 +632,7 @@ OString SvxCharacterMap::encodeCharGraphic(sal_UCS4 cChar)
     if (!aPNGWriter.write(aBitmap))
         return OString();
 
-    css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()), aOStm.Tell());
+    cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()), aOStm.Tell());
     OStringBuffer aBuffer("data:image/png;base64,");
     ::comphelper::Base64::encode(aBuffer, aSeq);
     return aBuffer.makeStringAndClear();

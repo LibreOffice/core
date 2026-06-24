@@ -80,7 +80,7 @@ namespace dbaui
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -148,7 +148,7 @@ namespace dbaui
     public:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // XCopyTableWizard
         virtual ::sal_Int16 SAL_CALL getOperation() override;
@@ -401,7 +401,7 @@ OUString SAL_CALL CopyTableWizard::getImplementationName()
     return u"org.openoffice.comp.dbu.CopyTableWizard"_ustr;
 }
 
-css::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL CopyTableWizard::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.application.CopyTableWizard"_ustr };
 }
@@ -1521,7 +1521,7 @@ void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_CopyTableWizard_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ::dbaui::CopyTableWizard(context));
 }

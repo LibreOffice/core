@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_CANVASTOOLS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
@@ -81,7 +81,7 @@ namespace vcl::unotools
             Note that this method assumes a color space equivalent to
             the one returned from createStandardColorSpace()
          */
-        css::uno::Sequence< double >
+        cpo::uno::Sequence< double >
             VCL_DLLPUBLIC colorToStdColorSpaceSequence( const Color& rColor );
 
         /** Convert color to device color sequence
@@ -92,7 +92,7 @@ namespace vcl::unotools
             @param xColorSpace
             Color space to convert into
          */
-        css::uno::Sequence< double >
+        cpo::uno::Sequence< double >
         VCL_DLLPUBLIC colorToDoubleSequence( const Color&                                              rColor,
                                              const css::uno::Reference< css::rendering::XColorSpace >& xColorSpace );
 
@@ -102,7 +102,7 @@ namespace vcl::unotools
             the one returned from createStandardColorSpace()
          */
         Color VCL_DLLPUBLIC stdColorSpaceSequenceToColor(
-            const css::uno::Sequence< double >& rColor );
+            const cpo::uno::Sequence< double >& rColor );
 
         /** Convert color to device color sequence
 
@@ -112,7 +112,7 @@ namespace vcl::unotools
             @param xColorSpace
             Color space to convert from
          */
-        Color VCL_DLLPUBLIC doubleSequenceToColor( const css::uno::Sequence< double >& rColor,
+        Color VCL_DLLPUBLIC doubleSequenceToColor( const cpo::uno::Sequence< double >& rColor,
                                                    const css::uno::Reference< css::rendering::XColorSpace >& xColorSpace );
 
         /// Convert [0,1] double value to [0,255] int

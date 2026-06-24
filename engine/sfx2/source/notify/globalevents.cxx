@@ -82,9 +82,9 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.GlobalEventBroadcaster"_ustr };
+        cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.GlobalEventBroadcaster"_ustr };
         return aSeq;
     }
 
@@ -395,7 +395,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
     if (m_disposed) {
         throw css::lang::DisposedException();
     }
-    uno::Sequence<cpo::uno::Any> models(m_lModels.size());
+    cpo::uno::Sequence<cpo::uno::Any> models(m_lModels.size());
     auto modelsRange = asNonConstRange(models);
     for (size_t i = 0; i < m_lModels.size(); ++i)
     {
@@ -461,7 +461,7 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const document::D
     {
         if ( events->hasByName( aEvent.EventName ) )
         {
-            uno::Sequence < beans::PropertyValue > aAny = events->getByName2(aEvent.EventName);
+            cpo::uno::Sequence < beans::PropertyValue > aAny = events->getByName2(aEvent.EventName);
             SfxEvents_Impl::Execute(aAny, aEvent, nullptr);
         }
     }
@@ -507,7 +507,7 @@ TModelList::iterator SfxGlobalEvents_Impl::impl_searchDoc(const uno::Reference< 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxGlobalEvents_Impl(context));
 }

@@ -13,7 +13,7 @@
 #include <rtl/byteseq.hxx>
 
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cstring>
 #include <memory>
@@ -88,7 +88,7 @@ public:
             if (nLen > mnMaximumSize)
             {
                 if (mbWriteToOutStream)
-                    mxOutputStream->writeBytes( css::uno::Sequence<sal_Int8>(pStr, nLen) );
+                    mxOutputStream->writeBytes( cpo::uno::Sequence<sal_Int8>(pStr, nLen) );
                 else
                     mpForMerge->append( Int8Sequence(pStr, nLen) );
                 return;
@@ -105,7 +105,7 @@ public:
         // resize the Sequence to written size
         pSeq->nElements = mnCacheWrittenSize;
         if (mbWriteToOutStream)
-            mxOutputStream->writeBytes( css::uno::toUnoSequence(maCache) );
+            mxOutputStream->writeBytes( cpo::uno::toUnoSequence(maCache) );
         else
             mpForMerge->append( maCache );
         // and next time write to the beginning

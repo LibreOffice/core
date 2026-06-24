@@ -21,7 +21,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.hxx>
 
 using namespace css;
@@ -93,13 +93,13 @@ void ScSolverSettingsObj::testXSolverSettings()
     xSolverModel->setObjectiveType(sheet::SolverObjectiveType::MAXIMIZE);
 
     // Variable cells (E3:E17)
-    uno::Sequence<cpo::uno::Any> aVarCells(1);
+    cpo::uno::Sequence<cpo::uno::Any> aVarCells(1);
     auto pVarCells = aVarCells.getArray();
     pVarCells[0] <<= table::CellRangeAddress(0, 4, 2, 4, 16);
     xSolverModel->setVariableCells(aVarCells);
 
     // Constraints
-    uno::Sequence<sheet::ModelConstraint> aConstraints(2);
+    cpo::uno::Sequence<sheet::ModelConstraint> aConstraints(2);
     auto pConstraints = aConstraints.getArray();
     pConstraints[0].Left <<= u"$E$3:$E$17"_ustr;
     pConstraints[0].Operator = sheet::SolverConstraintOperator_BINARY;
@@ -110,7 +110,7 @@ void ScSolverSettingsObj::testXSolverSettings()
 
     // Set solver engine options
     xSolverModel->setEngine(u"com.sun.star.comp.Calc.CoinMPSolver"_ustr);
-    uno::Sequence<beans::PropertyValue> aEngineOptions{
+    cpo::uno::Sequence<beans::PropertyValue> aEngineOptions{
         comphelper::makePropertyValue(u"Timeout"_ustr, cpo::uno::Any(static_cast<sal_Int32>(10))),
         comphelper::makePropertyValue(u"NonNegative"_ustr, true),
     };
@@ -128,12 +128,12 @@ void ScSolverSettingsObj::testXSolverSettings()
     // Check objective function and variable cells
     testCellAddress(aObjCell, xSolverModel->getObjectiveCell());
     CPPUNIT_ASSERT_EQUAL(sheet::SolverObjectiveType::MAXIMIZE, xSolverModel->getObjectiveType());
-    uno::Sequence<cpo::uno::Any> aSeq = xSolverModel->getVariableCells();
+    cpo::uno::Sequence<cpo::uno::Any> aSeq = xSolverModel->getVariableCells();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aSeq.getLength());
     testCellRangeAddress(aVarCells[0], aSeq[0]);
 
     // Check if constraints were set
-    uno::Sequence<sheet::ModelConstraint> aSeqConstr = xSolverModel->getConstraints();
+    cpo::uno::Sequence<sheet::ModelConstraint> aSeqConstr = xSolverModel->getConstraints();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeqConstr.getLength());
     CPPUNIT_ASSERT_EQUAL(sheet::SolverConstraintOperator::SolverConstraintOperator_BINARY,
                          aSeqConstr[0].Operator);
@@ -152,7 +152,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.comp.Calc.CoinMPSolver"_ustr, xSolverModel->getEngine());
 
     // Check solver engine options
-    uno::Sequence<beans::PropertyValue> aEngProps = xSolverModel->getEngineOptions();
+    cpo::uno::Sequence<beans::PropertyValue> aEngProps = xSolverModel->getEngineOptions();
     CPPUNIT_ASSERT_EQUAL(u"EpsilonLevel"_ustr, aEngProps[0].Name);
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(static_cast<sal_Int32>(0)), aEngProps[0].Value);
     CPPUNIT_ASSERT_EQUAL(u"GenSensitivityReport"_ustr, aEngProps[1].Name);
@@ -180,12 +180,12 @@ void ScSolverSettingsObj::testXSolverSettings()
     CPPUNIT_ASSERT_EQUAL(sheet::SolverObjectiveType::MAXIMIZE, xSolverModel2->getObjectiveType());
 
     // Check variable cells
-    uno::Sequence<cpo::uno::Any> aVarCells2 = xSolverModel2->getVariableCells();
+    cpo::uno::Sequence<cpo::uno::Any> aVarCells2 = xSolverModel2->getVariableCells();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aVarCells2.getLength());
     testCellRangeAddress(aVarCells[0], aVarCells2[0]);
 
     // Check constraints
-    uno::Sequence<sheet::ModelConstraint> aSeqConstr2 = xSolverModel2->getConstraints();
+    cpo::uno::Sequence<sheet::ModelConstraint> aSeqConstr2 = xSolverModel2->getConstraints();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeqConstr2.getLength());
     CPPUNIT_ASSERT_EQUAL(sheet::SolverConstraintOperator::SolverConstraintOperator_BINARY,
                          aSeqConstr2[0].Operator);
@@ -197,7 +197,7 @@ void ScSolverSettingsObj::testXSolverSettings()
     testCellRangeAddress(cpo::uno::Any(aRight2), aSeqConstr2[1].Right);
 
     // Check solver engine options
-    uno::Sequence<beans::PropertyValue> aEngProps2 = xSolverModel2->getEngineOptions();
+    cpo::uno::Sequence<beans::PropertyValue> aEngProps2 = xSolverModel2->getEngineOptions();
     CPPUNIT_ASSERT_EQUAL(u"EpsilonLevel"_ustr, aEngProps2[0].Name);
     CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(static_cast<sal_Int32>(0)), aEngProps2[0].Value);
     CPPUNIT_ASSERT_EQUAL(u"GenSensitivityReport"_ustr, aEngProps2[1].Name);

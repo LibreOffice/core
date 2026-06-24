@@ -35,7 +35,7 @@ ODigestContext::~ODigestContext()
     }
 }
 
-void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& aData )
+void SAL_CALL ODigestContext::updateDigest( const cpo::uno::Sequence< ::sal_Int8 >& aData )
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -48,7 +48,7 @@ void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& a
     if (m_b1KData && m_nDigested >= 1024)
         return;
 
-    uno::Sequence< sal_Int8 > aToDigest = aData;
+    cpo::uno::Sequence< sal_Int8 > aToDigest = aData;
     if ( m_b1KData && m_nDigested + aData.getLength() > 1024 )
         aToDigest.realloc( 1024 - m_nDigested );
 
@@ -63,7 +63,7 @@ void SAL_CALL ODigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& a
     m_nDigested += aToDigest.getLength();
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL ODigestContext::finalizeDigestAndDispose()
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL ODigestContext::finalizeDigestAndDispose()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -73,7 +73,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL ODigestContext::finalizeDigestAndDispose()
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    uno::Sequence< sal_Int8 > aResult( m_nDigestLength );
+    cpo::uno::Sequence< sal_Int8 > aResult( m_nDigestLength );
     unsigned int nResultLen = 0;
     if ( PK11_DigestFinal( m_pContext, reinterpret_cast< unsigned char* >( aResult.getArray() ), &nResultLen, aResult.getLength() ) != SECSuccess )
     {

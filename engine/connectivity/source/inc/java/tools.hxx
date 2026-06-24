@@ -24,7 +24,7 @@
 #include <memory>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #if defined __clang__
 #pragma clang diagnostic push
@@ -48,7 +48,7 @@ namespace connectivity
 
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    std::unique_ptr<java_util_Properties> createStringPropertyArray(const css::uno::Sequence< css::beans::PropertyValue >& info );
+    std::unique_ptr<java_util_Properties> createStringPropertyArray(const cpo::uno::Sequence< css::beans::PropertyValue >& info );
 
     jobject convertTypeMapToJavaMap(const css::uno::Reference< css::container::XNameAccess > & _rMap);
 

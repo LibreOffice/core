@@ -52,7 +52,7 @@ public:
     ~RtfExportFilter() override;
 
     // XFilter
-    bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
+    bool SAL_CALL filter(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
     void SAL_CALL cancel() override;
 
     // XExporter
@@ -61,7 +61,7 @@ public:
 
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(OUString const& ServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     Writer& GetWriter() { return m_aWriter; }
 };

@@ -97,7 +97,7 @@ void GetSignatureLineShape(const uno::Reference<frame::XModel>& xModel, sal_Int3
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
     aMediaDescriptor[u"OutputStream"_ustr] <<= xStream;
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "Selection", cpo::uno::Any(xShapes) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     xStorable->storeToURL(u"private:stream"_ustr, aMediaDescriptor.getAsConstPropertyValueList());
@@ -481,11 +481,11 @@ SignatureInformations const& PDFSignatureHelper::GetSignatureInformations() cons
     return m_aSignatureInfos;
 }
 
-uno::Sequence<security::DocumentSignatureInformation>
+cpo::uno::Sequence<security::DocumentSignatureInformation>
 PDFSignatureHelper::GetDocumentSignatureInformations(
     const uno::Reference<xml::crypto::XSecurityEnvironment>& xSecEnv) const
 {
-    uno::Sequence<security::DocumentSignatureInformation> aRet(m_aSignatureInfos.size());
+    cpo::uno::Sequence<security::DocumentSignatureInformation> aRet(m_aSignatureInfos.size());
     auto aRetRange = asNonConstRange(aRet);
 
     for (size_t i = 0; i < m_aSignatureInfos.size(); ++i)

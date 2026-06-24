@@ -71,7 +71,7 @@ const SfxItemPropertyMapEntry* SfxItemPropertyMap::getByName( std::u16string_vie
     return *it;
 }
 
-uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
+cpo::uno::Sequence<beans::Property> const & SfxItemPropertyMap::getProperties() const
 {
     if( !m_aPropSeq.hasElements() )
     {

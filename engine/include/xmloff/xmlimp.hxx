@@ -298,7 +298,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL,
-        const css::uno::Sequence< OUString > & sSupportedServiceNames = {});
+        const cpo::uno::Sequence< OUString > & sSupportedServiceNames = {});
 
     void cleanup() noexcept;
 
@@ -337,28 +337,28 @@ public:
     virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override final;
     virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override final;
     virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override final;
-    virtual void SAL_CALL setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override final;
+    virtual void SAL_CALL setCustomEntityNames( const ::cpo::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override final;
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel(  ) override final;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) final override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
 
     // may be called by certain subclasses that handle document meta-data
     // override to provide customized handling of document statistics
     // the base class implementation initializes the progress bar and should
     // be called by overriding methods
-    virtual void SetStatistics(const css::uno::Sequence< css::beans::NamedValue > & i_rStats);
+    virtual void SetStatistics(const cpo::uno::Sequence< css::beans::NamedValue > & i_rStats);
 
     // get import helper for text
     inline rtl::Reference< XMLTextImportHelper > const & GetTextImport();
@@ -435,10 +435,10 @@ public:
 
     void AddNumberStyle(sal_Int32 nKey, const OUString& sName);
 
-    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps);
-    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps);
+    virtual void SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps);
+    virtual void SetConfigurationSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps);
     virtual void SetDocumentSpecificSettings(const OUString& _rSettingsGroupName,
-                    const css::uno::Sequence<css::beans::PropertyValue>& _rSettings);
+                    const cpo::uno::Sequence<css::beans::PropertyValue>& _rSettings);
 
     XMLFontStylesContext *GetFontDecls();
     SvXMLStylesContext *GetStyles();
@@ -470,7 +470,7 @@ public:
         /// error ID, may contain an error flag
         sal_Int32 nId,
         /// string parameters for the error message
-        const css::uno::Sequence< OUString > & rMsgParams,
+        const cpo::uno::Sequence< OUString > & rMsgParams,
         /// original exception message (if applicable)
         const OUString& rExceptionMessage,
         /// error location (if applicable)
@@ -478,7 +478,7 @@ public:
 
     void SetError(
         sal_Int32 nId,
-        const css::uno::Sequence< OUString> & rMsgParams = {});
+        const cpo::uno::Sequence< OUString> & rMsgParams = {});
 
     void SetError( sal_Int32 nId, const OUString& rMsg1 );
 

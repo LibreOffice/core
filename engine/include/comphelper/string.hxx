@@ -33,7 +33,7 @@
 namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::i18n { class XCollator; }
 namespace com::sun::star::uno { class XComponentContext; }
-namespace com::sun::star::uno { template <typename> class Sequence; }
+namespace cpo::uno { template <typename> class Sequence; }
 
 // OUString helper functions that are not widespread or mature enough to
 // go into the stable URE API:
@@ -276,7 +276,7 @@ COMPHELPER_DLLPUBLIC OUString removeAny(std::u16string_view rIn,
                     list, interspersed with the string ", ".
  */
 COMPHELPER_DLLPUBLIC OUString convertCommaSeparated(
-    css::uno::Sequence< OUString > const & i_rSeq);
+    cpo::uno::Sequence< OUString > const & i_rSeq);
 
 /// Return a string which is the concatenation of the strings in the sequence.
 COMPHELPER_DLLPUBLIC OString join(std::string_view rSeparator, const std::vector<OString>& rSequence);
@@ -314,7 +314,7 @@ COMPHELPER_DLLPUBLIC std::vector<OUString>
     @return         A sequence of strings resulting from splitting the given
                     string at ',' tokens and stripping whitespace.
  */
-COMPHELPER_DLLPUBLIC css::uno::Sequence< OUString >
+COMPHELPER_DLLPUBLIC cpo::uno::Sequence< OUString >
     convertCommaSeparated( std::u16string_view i_rString );
 
 /**

@@ -89,9 +89,9 @@ public:
             throw container::NoSuchElementException();
         return cpo::uno::Any( *cachePos );
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
-        uno::Sequence< OUString > sNames( mSheetMap.size() );
+        cpo::uno::Sequence< OUString > sNames( mSheetMap.size() );
         OUString* pString = sNames.getArray();
 
         for ( const auto& rItem : mSheetMap )
@@ -428,9 +428,9 @@ ScVbaWorksheets::Item(const cpo::uno::Any& Index, const cpo::uno::Any& Index2)
     if ( Index.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
         const uno::Reference< script::XTypeConverter >& xConverter = getTypeConverter(mxContext);
-        cpo::uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<uno::Sequence< cpo::uno::Any >>::get() );
+        cpo::uno::Any aConverted = xConverter->convertTo( Index, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Any >>::get() );
         SheetMap aSheets;
-        uno::Sequence< cpo::uno::Any > sIndices;
+        cpo::uno::Sequence< cpo::uno::Any > sIndices;
         aConverted >>= sIndices;
         for (const auto& rIndex : sIndices)
         {
@@ -453,10 +453,10 @@ ScVbaWorksheets::getServiceImplName()
     return u"ScVbaWorksheets"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaWorksheets::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.excel.Worksheets"_ustr
     };

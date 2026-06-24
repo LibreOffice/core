@@ -50,7 +50,7 @@ void createBitmapAndExportForType(SvStream& rStream, std::u16string_view sType,
 {
     Bitmap aBitmap = createBitmap(aSize, bAlpha);
 
-    uno::Sequence<beans::PropertyValue> aFilterData;
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName(sType);
     rGraphicFilter.ExportGraphic(aBitmap, u"none", rStream, nFilterFormat, &aFilterData);

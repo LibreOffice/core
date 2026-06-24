@@ -60,14 +60,14 @@ public:
         //XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
         /// @throws css::uno::RuntimeException
         OUString getNativeNumberString(const OUString& rNumberString,
                                        const css::lang::Locale& rLocale,
                                        sal_Int16 nNativeNumberMode,
-                                       css::uno::Sequence<sal_Int32>* pOffset,
+                                       cpo::uno::Sequence<sal_Int32>* pOffset,
                                        std::u16string_view rNativeNumberParams = std::u16string_view());
         /// @throws css::uno::RuntimeException
         static sal_Unicode getNativeNumberChar( const sal_Unicode inChar,

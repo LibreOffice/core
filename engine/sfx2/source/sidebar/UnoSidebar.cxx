@@ -60,7 +60,7 @@ void SAL_CALL SfxUnoSidebar::setVisible(const bool bVisible)
         const util::URL aURL(Tools::GetURL(u".uno:Sidebar"_ustr));
         uno::Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(xFrame, aURL));
         if (xDispatch.is())
-            xDispatch->dispatch(aURL, uno::Sequence<beans::PropertyValue>());
+            xDispatch->dispatch(aURL, cpo::uno::Sequence<beans::PropertyValue>());
     }
 }
 

@@ -45,15 +45,15 @@ public:
              DispatchDisabler(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
     // XInitialization
-    virtual void SAL_CALL initialize( const ::css::uno::Sequence< ::cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const ::cpo::uno::Sequence< ::cpo::uno::Any >& aArguments ) override;
 
     // XDispatchProvider
     virtual ::css::uno::Reference< ::css::frame::XDispatch > SAL_CALL
         queryDispatch( const ::css::util::URL& URL,
                const OUString& TargetFrameName,
                ::sal_Int32 SearchFlags ) override;
-    virtual ::css::uno::Sequence< ::css::uno::Reference< ::css::frame::XDispatch > > SAL_CALL
-        queryDispatches( const ::css::uno::Sequence< ::css::frame::DispatchDescriptor >& Requests ) override;
+    virtual ::cpo::uno::Sequence< ::css::uno::Reference< ::css::frame::XDispatch > > SAL_CALL
+        queryDispatches( const ::cpo::uno::Sequence< ::css::frame::DispatchDescriptor >& Requests ) override;
 
     // XDispatchProviderInterceptor
     virtual ::css::uno::Reference< ::css::frame::XDispatchProvider > SAL_CALL
@@ -66,7 +66,7 @@ public:
         setMasterDispatchProvider( const ::css::uno::Reference< ::css::frame::XDispatchProvider >& NewSupplier ) override;
 
     // XInterceptorInfo
-    virtual ::css::uno::Sequence< OUString > SAL_CALL
+    virtual ::cpo::uno::Sequence< OUString > SAL_CALL
         getInterceptedURLs() override;
 
     // XElementAccess
@@ -75,7 +75,7 @@ public:
 
     // XNameAccess
     virtual ::cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual ::css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual ::cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XNameReplace
@@ -88,7 +88,7 @@ public:
     /* interface XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 } // namespace framework

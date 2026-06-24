@@ -115,9 +115,9 @@ public:
     ErrCode exportDoc(enum ::xmloff::token::XMLTokenEnum eClass
                       = ::xmloff::token::XML_TOKEN_INVALID) override;
 
-    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    virtual void GetViewSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
     virtual void
-    GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps) override;
+    GetConfigurationSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps) override;
 
     bool GetSuccess() const { return bSuccess; }
 };

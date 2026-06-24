@@ -24,6 +24,7 @@
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::cpo::uno;
 
 VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator(Menu* pParent, sal_uInt16 nItemPos)
     : OAccessibleMenuItemComponent(pParent, nItemPos, nullptr)

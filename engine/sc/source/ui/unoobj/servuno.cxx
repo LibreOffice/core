@@ -92,7 +92,7 @@ class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container:
 public:
     explicit ScVbaObjectForCodeNameProvider( ScDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
-        uno::Sequence< cpo::uno::Any > aArgs{
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{
             // access the application object ( parent for workbook )
             cpo::uno::Any(ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", {} )),
             cpo::uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(mpDocShell->GetModel())))
@@ -128,7 +128,7 @@ public:
                         uno::Reference<sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), uno::UNO_SET_THROW );
                         uno::Reference< container::XIndexAccess > xIndexAccess( xSheets, uno::UNO_QUERY_THROW );
                         uno::Reference< sheet::XSpreadsheet > xSheet( xIndexAccess->getByIndex( i ), uno::UNO_QUERY_THROW );
-                        uno::Sequence< cpo::uno::Any > aArgs{ maWorkbook, cpo::uno::Any(uno::Reference< frame::XModel >(xSpreadDoc)), cpo::uno::Any(sSheetName) };
+                        cpo::uno::Sequence< cpo::uno::Any > aArgs{ maWorkbook, cpo::uno::Any(uno::Reference< frame::XModel >(xSpreadDoc)), cpo::uno::Any(sSheetName) };
                         // use the convenience function
                         maCachedObject <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
                         break;
@@ -146,12 +146,12 @@ public:
             throw css::container::NoSuchElementException();
         return maCachedObject;
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         SolarMutexGuard aGuard;
         ScDocument& rDoc = mpDocShell->GetDocument();
         SCTAB nCount = rDoc.GetTableCount();
-        uno::Sequence< OUString > aNames( nCount + 1 );
+        cpo::uno::Sequence< OUString > aNames( nCount + 1 );
         auto pNames = aNames.getArray();
         SCTAB index = 0;
         OUString sCodeName;
@@ -588,7 +588,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 cpo::uno::Any aGlobs;
                 if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( u"VBAGlobals"_ustr, aGlobs ) )
                 {
-                    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(pDocShell->GetModel()))) };
+                    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference(static_cast<css::sheet::XSpreadsheetDocument*>(pDocShell->GetModel()))) };
                     xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.excel.Globals"_ustr, aArgs );
                     pDocShell->GetBasicManager()->SetGlobalUNOConstant( u"VBAGlobals"_ustr, cpo::uno::Any( xRet ) );
                     BasicManager* pAppMgr = SfxApplication::GetBasicManager();
@@ -610,10 +610,10 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
     return xRet;
 }
 
-uno::Sequence<OUString> ScServiceProvider::GetAllServiceNames()
+cpo::uno::Sequence<OUString> ScServiceProvider::GetAllServiceNames()
 {
     const sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
-    uno::Sequence<OUString> aRet(nEntries);
+    cpo::uno::Sequence<OUString> aRet(nEntries);
     OUString* pArray = aRet.getArray();
     for (sal_uInt16 i = 0; i < nEntries; i++)
     {

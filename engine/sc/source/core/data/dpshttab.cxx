@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 ScSheetDPData::ScSheetDPData(const ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache) :
     ScDPTableData(pD),

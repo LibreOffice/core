@@ -43,8 +43,8 @@ class SvxMacro;
 
 class SfxEvents_Impl final : public ::cppu::WeakImplHelper< css::container::XNameReplace, css::document::XDocumentEventListener >
 {
-    css::uno::Sequence< OUString >     maEventNames;
-    std::vector< css::uno::Sequence < css::beans::PropertyValue > >  maEventData;
+    cpo::uno::Sequence< OUString >     maEventNames;
+    std::vector< cpo::uno::Sequence < css::beans::PropertyValue > >  maEventData;
     css::uno::Reference< css::document::XDocumentEventBroadcaster >  mxBroadcaster;
     std::mutex                     maMutex;
     SfxObjectShell                 *mpObjShell;
@@ -59,7 +59,7 @@ public:
 
     //  --- XNameAccess ( parent of XNameReplace ) ---
     virtual cpo::uno::Any SAL_CALL        getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL   hasByName( const OUString& aName ) override;
 
     //  --- XElementAccess ( parent of XNameAccess ) ---
@@ -79,7 +79,7 @@ public:
                                     const ::comphelper::NamedValueCollection& i_eventDescriptor,
                                     ::comphelper::NamedValueCollection& o_normalizedDescriptor,
                                     SfxObjectShell* i_document );
-    static void Execute( css::uno::Sequence < css::beans::PropertyValue > const & aEventData, const css::document::DocumentEvent& aTrigger, SfxObjectShell* pDoc );
+    static void Execute( cpo::uno::Sequence < css::beans::PropertyValue > const & aEventData, const css::document::DocumentEvent& aTrigger, SfxObjectShell* pDoc );
 
 private:
     /// Check if script URL whitelist exists, and if so, if current script url is part of it

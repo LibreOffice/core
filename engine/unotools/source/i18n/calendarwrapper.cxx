@@ -67,7 +67,7 @@ void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const css::lang::
     }
 }
 
-css::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const css::lang::Locale& rLocale ) const
+cpo::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const css::lang::Locale& rLocale ) const
 {
     try
     {
@@ -237,7 +237,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     return 0;
 }
 
-css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getMonths() const
+cpo::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getMonths() const
 {
     try
     {
@@ -251,7 +251,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getMonths() cons
     return {};
 }
 
-css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getDays() const
+cpo::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getDays() const
 {
     try
     {
@@ -311,7 +311,7 @@ css::i18n::Calendar2 CalendarWrapper::getLoadedCalendar() const
     return css::i18n::Calendar2();
 }
 
-css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonths() const
+cpo::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonths() const
 {
     try
     {
@@ -325,7 +325,7 @@ css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getGenitiveMonth
     return {};
 }
 
-css::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMonths() const
+cpo::uno::Sequence< css::i18n::CalendarItem2 > CalendarWrapper::getPartitiveMonths() const
 {
     try
     {

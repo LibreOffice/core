@@ -90,7 +90,7 @@ void SwUiWriterTest4::mergeDocs(const char* aDestDoc, const char* aInsertDoc)
     // insert the same document at current cursor position
     {
         const OUString insertFileid = createFileURL(OUString::createFromAscii(aInsertDoc));
-        uno::Sequence<beans::PropertyValue> aPropertyValues(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(
             comphelper::InitPropertySequence({ { "Name", cpo::uno::Any(insertFileid) } }));
         dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aPropertyValues);
     }
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96515)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XParagraphAppend> xParagraphAppend(xTextDocument->getText(),
                                                             uno::UNO_QUERY);
-    xParagraphAppend->finishParagraph(uno::Sequence<beans::PropertyValue>());
+    xParagraphAppend->finishParagraph(cpo::uno::Sequence<beans::PropertyValue>());
     calcLayout();
 
     // This was 2, a new page was created for the new paragraph.
@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96536)
     uno::Reference<text::XParagraphAppend> xParagraphAppend(xTextDocument->getText(),
                                                             uno::UNO_QUERY);
     const uno::Reference<text::XTextRange> xInsertPos = getRun(getParagraph(1), 1);
-    xParagraphAppend->finishParagraphInsert(uno::Sequence<beans::PropertyValue>(), xInsertPos);
+    xParagraphAppend->finishParagraphInsert(cpo::uno::Sequence<beans::PropertyValue>(), xInsertPos);
     calcLayout();
     pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "height").toInt32()
@@ -1029,14 +1029,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testClassificationPaste)
                          checkShells(pSourceShell, pDestinationShell));
 
     // Classified source, not classified destination.
-    uno::Sequence<beans::PropertyValue> aInternalOnly
+    cpo::uno::Sequence<beans::PropertyValue> aInternalOnly
         = comphelper::InitPropertySequence({ { "Name", cpo::uno::Any(u"Internal Only"_ustr) } });
     dispatchCommand(xSourceComponent, u".uno:ClassificationApply"_ustr, aInternalOnly);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::TargetDocNotClassified),
                          checkShells(pSourceShell, pDestinationShell));
 
     // Classified source and classified destination -- internal only has a higher level than confidential.
-    uno::Sequence<beans::PropertyValue> aConfidential
+    cpo::uno::Sequence<beans::PropertyValue> aConfidential
         = comphelper::InitPropertySequence({ { "Name", cpo::uno::Any(u"Confidential"_ustr) } });
     dispatchCommand(mxComponent, u".uno:ClassificationApply"_ustr, aConfidential);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow),
@@ -1326,7 +1326,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
 
     // Select the first redline.
     pWrtShell->StartOfSection();
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         { { "NextTrackedChange",
             cpo::uno::Any(o3tl::narrowing<sal_uInt16>(rTable[0]->GetId())) } }));
     dispatchCommand(mxComponent, u".uno:NextTrackedChange"_ustr, aPropertyValues);
@@ -1498,7 +1498,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testLandscape)
 {
     // Set page orientation to landscape.
     createSwDoc();
-    uno::Sequence<beans::PropertyValue> aPropertyValues(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(
         comphelper::InitPropertySequence({ { "AttributePage.Landscape", cpo::uno::Any(true) } }));
     dispatchCommand(mxComponent, u".uno:AttributePage"_ustr, aPropertyValues);
 
@@ -2264,7 +2264,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCreateDocxAnnotation)
 
     // insert an annotation with a text
     static constexpr OUString aSomeText(u"some text"_ustr);
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Text", cpo::uno::Any(aSomeText) },
         { "Author", cpo::uno::Any(u"me"_ustr) },
     });

@@ -71,7 +71,7 @@ Wall::~Wall()
 {}
 
 // ____ XTypeProvider ____
-uno::Sequence< css::uno::Type > SAL_CALL Wall::getTypes()
+cpo::uno::Sequence< css::uno::Type > SAL_CALL Wall::getTypes()
 {
     return ::comphelper::concatSequences(
         impl::Wall_Base::getTypes(),

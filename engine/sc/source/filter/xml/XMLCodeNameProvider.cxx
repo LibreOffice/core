@@ -28,7 +28,7 @@ using namespace com::sun::star;
 
 bool XMLCodeNameProvider::_getCodeName( const cpo::uno::Any& aAny, OUString& rCodeName )
 {
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     if( !(aAny >>= aProps) )
         return false;
 
@@ -85,7 +85,7 @@ cpo::uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
     if( aName == gsDocName )
     {
         OUString sUCodeName( mpDoc->GetCodeName() );
-        aRet <<= uno::Sequence{ comphelper::makePropertyValue(gsCodeNameProp, sUCodeName) };
+        aRet <<= cpo::uno::Sequence{ comphelper::makePropertyValue(gsCodeNameProp, sUCodeName) };
         return aRet;
     }
 
@@ -96,7 +96,7 @@ cpo::uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
         if( mpDoc->GetName( i, sSheetName ) && sSheetName == aName )
         {
             mpDoc->GetCodeName( i, sCodeName );
-            aRet <<= uno::Sequence{ comphelper::makePropertyValue(gsCodeNameProp, sCodeName) };
+            aRet <<= cpo::uno::Sequence{ comphelper::makePropertyValue(gsCodeNameProp, sCodeName) };
             return aRet;
         }
     }
@@ -104,7 +104,7 @@ cpo::uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
     return aRet;
 }
 
-uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
 {
     SCTAB nCount = mpDoc->GetTableCount() + 1;
     std::vector< OUString > aNames;
@@ -129,7 +129,7 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
 
 uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
 {
-    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
+    return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
 bool SAL_CALL XMLCodeNameProvider::hasElements()

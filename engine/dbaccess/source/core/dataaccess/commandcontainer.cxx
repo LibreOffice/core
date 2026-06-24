@@ -49,7 +49,7 @@ OCommandContainer::~OCommandContainer()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)
-css::uno::Sequence< css::uno::Type > OCommandContainer::getTypes()
+cpo::uno::Sequence< css::uno::Type > OCommandContainer::getTypes()
 {
     return  ::comphelper::concatSequences(
         ODefinitionContainer::getTypes( ),
@@ -57,9 +57,9 @@ css::uno::Sequence< css::uno::Type > OCommandContainer::getTypes()
     );
 }
 
-css::uno::Sequence<sal_Int8> OCommandContainer::getImplementationId()
+cpo::uno::Sequence<sal_Int8> OCommandContainer::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Reference< XContent > OCommandContainer::createObject( const OUString& _rName)

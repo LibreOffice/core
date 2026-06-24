@@ -51,7 +51,7 @@ class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< 
         OUString                           getFactorySpecifierFromTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule ) const;
         void                                    addFactorySpecifierToTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule, const OUString& aServiceSpecifier );
         void                                    removeFactorySpecifierFromTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule );
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >   getFactoriesDescription() const;
+        cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >   getFactoriesDescription() const;
 
         // container.XContainerListener
     virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;

@@ -119,7 +119,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         // (or better speaking: the list of dictionaries using the
         // new configuration entries).
         std::vector< SvtLinguConfigDictionaryEntry > aDics;
-        uno::Sequence< OUString > aFormatList;
+        cpo::uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( u"SpellCheckers"_ustr,
                 u"org.openoffice.lingu.MySpellSpellChecker"_ustr, aFormatList );
         for (auto const& format : aFormatList)
@@ -148,8 +148,8 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
             std::set<OUString> aLocaleNamesSet;
             for (auto const& dict : aDics)
             {
-                const uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
-                uno::Sequence< OUString > aLocations( dict.aLocations );
+                const cpo::uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
+                cpo::uno::Sequence< OUString > aLocations( dict.aLocations );
                 SAL_WARN_IF(
                     aLocaleNames.hasElements() && !aLocations.hasElements(),
                     "lingucomponent", "no locations");
@@ -195,7 +195,7 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 if (dict.aLocaleNames.hasElements() &&
                     dict.aLocations.hasElements())
                 {
-                    const uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
+                    const cpo::uno::Sequence< OUString > aLocaleNames( dict.aLocaleNames );
 
                     // currently only one language per dictionary is supported in the actual implementation...
                     // Thus here we work-around this by adding the same dictionary several times.
@@ -384,7 +384,7 @@ sal_Int16 SpellChecker::GetSpellFailure(const OUString &rWord, const Locale &rLo
 }
 
 bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
-            const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -526,7 +526,7 @@ Reference< XSpellAlternatives >
 
 Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
         const OUString& rWord, const Locale& rLocale,
-        const css::uno::Sequence< css::beans::PropertyValue >& rProperties )
+        const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -653,7 +653,7 @@ Sequence< OUString > SAL_CALL SpellChecker::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_SpellChecker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SpellChecker());
 }

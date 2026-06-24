@@ -123,10 +123,10 @@ ScVbaPictureFormat::getServiceImplName()
     return u"ScVbaPictureFormat"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaPictureFormat::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msform.PictureFormat"_ustr
     };

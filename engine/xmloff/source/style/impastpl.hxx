@@ -142,8 +142,8 @@ public:
     void RegisterName( XmlStyleFamily nFamily, const OUString& rName );
     void RegisterDefinedName( XmlStyleFamily nFamily, const OUString& rName );
     void GetRegisteredNames(
-        css::uno::Sequence<sal_Int32>& aFamilies,
-        css::uno::Sequence<OUString>& aNames );
+        cpo::uno::Sequence<sal_Int32>& aFamilies,
+        cpo::uno::Sequence<OUString>& aNames );
 
     bool Add(
         OUString& rName, XmlStyleFamily nFamily,

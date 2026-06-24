@@ -231,7 +231,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
-        uno::Sequence<beans::PropertyValues> aListItems = {
+        cpo::uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
                 comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
@@ -669,7 +669,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiSelectionTextSelectionCallback)
     comphelper::COKit::setActive(true);
     createSwDoc();
     SwXTextDocument* pTextDocument = getSwTextDoc();
-    pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     int nViewId = KitHelper::getView(*pWrtShell->GetSfxViewShell());
     pWrtShell->Insert(u"ABC"_ustr);

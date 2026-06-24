@@ -68,7 +68,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::osl::MutexGuard;
 
 namespace
@@ -242,14 +242,14 @@ void SAL_CALL ChartModel::store()
 
 void SAL_CALL ChartModel::storeAsURL(
     const OUString& rURL,
-    const uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
+    const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall(true)) //start LongLastingCall
         return; //behave passive if already disposed or closed or throw exception @todo?
 
     apphelper::MediaDescriptorHelper aMediaDescriptorHelper(rMediaDescriptor);
-    const uno::Sequence< beans::PropertyValue >& aReducedMediaDescriptor(
+    const cpo::uno::Sequence< beans::PropertyValue >& aReducedMediaDescriptor(
         aMediaDescriptorHelper.getReducedForModel() );
 
     m_bReadOnly = false;
@@ -267,7 +267,7 @@ void SAL_CALL ChartModel::storeAsURL(
 
 void SAL_CALL ChartModel::storeToURL(
     const OUString& rURL,
-    const uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
+    const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
     apphelper::LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall(true)) //start LongLastingCall
@@ -277,7 +277,7 @@ void SAL_CALL ChartModel::storeToURL(
     aGuard.clear();
 
     apphelper::MediaDescriptorHelper aMediaDescriptorHelper(rMediaDescriptor);
-    const uno::Sequence< beans::PropertyValue >& aReducedMediaDescriptor(
+    const cpo::uno::Sequence< beans::PropertyValue >& aReducedMediaDescriptor(
         aMediaDescriptorHelper.getReducedForModel() );
 
     if ( rURL == "private:stream" )
@@ -568,7 +568,7 @@ void ChartModel::impl_loadGraphics(
 
         if( xGraphicsStorage.is() )
         {
-            const uno::Sequence< OUString > aElementNames(
+            const cpo::uno::Sequence< OUString > aElementNames(
                 xGraphicsStorage->getElementNames() );
 
             for( OUString const & streamName : aElementNames )
@@ -691,8 +691,8 @@ void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
         uno::Reference<chart2::data::XDataProvider> xDataProvider(rEvenObject.Source, uno::UNO_QUERY);
         try
         {
-            uno::Sequence<beans::PropertyValue> aArguments =
-                DataSourceHelper::createArguments(u"PivotChart"_ustr, uno::Sequence<sal_Int32>(), true, true, true);
+            cpo::uno::Sequence<beans::PropertyValue> aArguments =
+                DataSourceHelper::createArguments(u"PivotChart"_ustr, cpo::uno::Sequence<sal_Int32>(), true, true, true);
 
             Reference<chart2::data::XDataSource> xDataSource(xDataProvider->createDataSource(aArguments));
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = getTypeManager();

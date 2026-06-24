@@ -57,12 +57,12 @@ public:
     virtual void setVolumeDB( sal_Int16 nVolumeDB ) override;
     virtual sal_Int16 getVolumeDB() override;
     virtual css::awt::Size getPreferredPlayerWindowSize(  ) override;
-    virtual css::uno::Reference< css::media::XPlayerWindow > createPlayerWindow( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< css::media::XPlayerWindow > createPlayerWindow( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
     virtual css::uno::Reference< css::media::XFrameGrabber > createFrameGrabber(  ) override;
     // XServiceInfo
     virtual OUString getImplementationName() override;
     virtual bool supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     AVPlayer* getAVPlayer() const { return mpPlayer; }
     virtual bool handleObservation( NSString* pKeyPath ) override;

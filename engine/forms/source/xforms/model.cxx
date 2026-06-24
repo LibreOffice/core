@@ -46,7 +46,7 @@
 #include <com/sun/star/xml/dom/XCharacterData.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -578,7 +578,7 @@ void Model::update()
 
 Sequence<sal_Int8> Model::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 OUString Model::getImplementationName()
@@ -591,14 +591,14 @@ bool Model::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> Model::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> Model::getSupportedServiceNames()
 {
     return {u"com.sun.star.xforms.Model"_ustr};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_Model_get_implementation(css::uno::XComponentContext*,
-                                            css::uno::Sequence<cpo::uno::Any> const &)
+                                            cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new xforms::Model());
 }

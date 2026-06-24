@@ -94,7 +94,7 @@ class VCLSession:
         return cppu::supportsService(this, ServiceName);
     }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override {
         return {u"com.sun.star.frame.SessionManagerClient"_ustr};
     }
 
@@ -411,7 +411,7 @@ void VCLSession::disposing(std::unique_lock<std::mutex>& rGuard) {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_frame_VCLSessionManagerClient_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new VCLSession);
 }

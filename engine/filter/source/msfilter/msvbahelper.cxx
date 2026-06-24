@@ -443,7 +443,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
             }
 
             // get list of global template Names
-            uno::Sequence< OUString > sTemplateNames = xPrjNameCache->getElementNames();
+            cpo::uno::Sequence< OUString > sTemplateNames = xPrjNameCache->getElementNames();
             sal_Int32 nLen = sTemplateNames.getLength();
             for ( sal_Int32 index = 0; ( bSearchGlobalTemplates && index < nLen ); ++index )
             {
@@ -481,7 +481,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 }
 
 // Treat the args as possible inputs (conversion at bottom of method)
-bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequence< cpo::uno::Any >& aArgs, cpo::uno::Any& aRet, const cpo::uno::Any& /*aCaller*/)
+bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, cpo::uno::Sequence< cpo::uno::Any >& aArgs, cpo::uno::Any& aRet, const cpo::uno::Any& /*aCaller*/)
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
@@ -496,8 +496,8 @@ bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequ
         return bRes;
     OUString sUrl = makeMacroURL( sMacroName );
 
-    uno::Sequence< sal_Int16 > aOutArgsIndex;
-    uno::Sequence< cpo::uno::Any > aOutArgs;
+    cpo::uno::Sequence< sal_Int16 > aOutArgsIndex;
+    cpo::uno::Sequence< cpo::uno::Any > aOutArgs;
 
     try
     {
@@ -546,14 +546,14 @@ bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService )
     return cppu::supportsService(this, rService);
 }
 
-uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames()
 {
     return { u"com.sun.star.script.vba.VBAMacroResolver"_ustr };
 }
 
 // com.sun.star.lang.XInitialization interface --------------------------------
 
-void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< cpo::uno::Any >& rArgs )
+void SAL_CALL VBAMacroResolver::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
 {
     OSL_ENSURE( rArgs.getLength() > 1, "VBAMacroResolver::initialize - missing arguments" );
     if( rArgs.getLength() < 2 )
@@ -771,7 +771,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_VBAMacroResolver_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ooo::vba::VBAMacroResolver());
 }

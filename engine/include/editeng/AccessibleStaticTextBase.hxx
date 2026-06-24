@@ -168,7 +168,7 @@ public:
     virtual sal_Int32 SAL_CALL getCaretPosition() override final;
     virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override final;
     virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override final;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
     virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override final;
     virtual sal_Int32 SAL_CALL getCharacterCount() override final;
     virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override final;
@@ -190,8 +190,8 @@ public:
     virtual bool SAL_CALL scrollSubstringTo( sal_Int32 nStartIndex, sal_Int32 nEndIndex, css::accessibility::AccessibleScrollType aScrollType) override final;
 
     // XAccessibleTextAttributes
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& RequestedAttributes ) override final;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes ) override final;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const cpo::uno::Sequence< OUString >& RequestedAttributes ) override final;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 Index, const cpo::uno::Sequence< OUString >& RequestedAttributes ) override final;
 
     // child-related methods from XAccessibleContext
     /// @throws css::uno::RuntimeException

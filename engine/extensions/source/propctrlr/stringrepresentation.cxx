@@ -67,14 +67,14 @@ public:
     // lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // inspection::XStringRepresentation:
     virtual OUString SAL_CALL convertToControlValue(const cpo::uno::Any & PropertyValue) override;
     virtual cpo::uno::Any SAL_CALL convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType) override;
 
     // lang::XInitialization:
-    virtual void SAL_CALL initialize(const uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
 private:
     virtual ~StringRepresentation() override {}
@@ -123,8 +123,8 @@ private:
     uno::Reference< uno::XComponentContext >                                m_xContext;
     uno::Reference< script::XTypeConverter >                                m_xTypeConverter;
     uno::Reference< reflection::XConstantsTypeDescription >                 m_xTypeDescription;
-    uno::Sequence< OUString >                                        m_aValues;
-    uno::Sequence< uno::Reference< reflection::XConstantTypeDescription> >  m_aConstants;
+    cpo::uno::Sequence< OUString >                                        m_aValues;
+    cpo::uno::Sequence< uno::Reference< reflection::XConstantTypeDescription> >  m_aConstants;
 
 };
 
@@ -145,7 +145,7 @@ bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNames()
+cpo::uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNames()
 {
     return { u"com.sun.star.inspection.StringRepresentation"_ustr };
 }
@@ -232,7 +232,7 @@ struct CompareConstants {
 }
 
 // lang::XInitialization:
-void SAL_CALL StringRepresentation::initialize(const uno::Sequence< cpo::uno::Any > & aArguments)
+void SAL_CALL StringRepresentation::initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     sal_Int32 nLength = aArguments.getLength();
     if ( !nLength )
@@ -254,7 +254,7 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< cpo::uno::An
         uno::UNO_QUERY_THROW );
 
     m_xTypeDescription.set( xTypeDescProv->getByHierarchicalName( sConstantName ), uno::UNO_QUERY_THROW );
-    uno::Sequence<
+    cpo::uno::Sequence<
         uno::Reference< reflection::XConstantTypeDescription > >
         cs(m_xTypeDescription->getConstants());
     auto [begin, end] = asNonConstRange(cs);
@@ -591,7 +591,7 @@ bool StringRepresentation::convertStringToGenericValue( const OUString& _rString
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_StringRepresentation_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::StringRepresentation(context));
 }

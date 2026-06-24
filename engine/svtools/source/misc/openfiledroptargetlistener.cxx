@@ -138,7 +138,7 @@ void SAL_CALL OpenFileDropTargetListener::dropActionChanged( const css::datatran
 {
 }
 
-void OpenFileDropTargetListener::implts_BeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors )
+void OpenFileDropTargetListener::implts_BeginDrag( const cpo::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors )
 {
     /* SAFE { */
     SolarMutexGuard aGuard;
@@ -203,7 +203,7 @@ void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )
         // Create a new task or recycle an existing one
         css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, u"_default"_ustr, 0 );
         if ( xDispatcher.is() )
-            xDispatcher->dispatch( aURL, css::uno::Sequence < css::beans::PropertyValue >() );
+            xDispatcher->dispatch( aURL, cpo::uno::Sequence < css::beans::PropertyValue >() );
     }
     /* } SAFE */
 }

@@ -809,7 +809,7 @@ namespace sw::mark
         if (nIndex < 0)
             rParameters[ODF_FORMDROPDOWN_RESULT] >>= nIndex;
 
-        uno::Sequence<OUString> aSeq;
+        cpo::uno::Sequence<OUString> aSeq;
         rParameters[ODF_FORMDROPDOWN_LISTENTRY] >>= aSeq;
         nIndex = std::min(nIndex, aSeq.getLength() - 1);
 
@@ -840,7 +840,7 @@ namespace sw::mark
      */
     void DropDownFieldmark::AddContent(const OUString& rText, sal_Int32* pIndex)
     {
-        uno::Sequence<OUString> aSeq;
+        cpo::uno::Sequence<OUString> aSeq;
         sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         (*pParameters)[ODF_FORMDROPDOWN_LISTENTRY] >>= aSeq;
 
@@ -896,7 +896,7 @@ namespace sw::mark
         if (!pIndex && !pText)
             return;
 
-        uno::Sequence<OUString> aSeq;
+        cpo::uno::Sequence<OUString> aSeq;
         sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
         (*pParameters)[ODF_FORMDROPDOWN_LISTENTRY] >>= aSeq;
         const sal_Int32 nLen = aSeq.getLength();
@@ -944,7 +944,7 @@ namespace sw::mark
     void DropDownFieldmark::DelContent(sal_Int32 nDelIndex)
     {
         sw::mark::Fieldmark::parameter_map_t* pParameters = GetParameters();
-        uno::Sequence<OUString> aSeq;
+        cpo::uno::Sequence<OUString> aSeq;
         if (nDelIndex < 0)
         {
             pParameters->erase(ODF_FORMDROPDOWN_RESULT);
@@ -1004,7 +1004,7 @@ namespace sw::mark
         // List items
         auto pParameters = this->GetParameters();
         auto pListEntriesIter = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
-        css::uno::Sequence<OUString> vListEntries;
+        cpo::uno::Sequence<OUString> vListEntries;
         if (pListEntriesIter != pParameters->end())
         {
             pListEntriesIter->second >>= vListEntries;

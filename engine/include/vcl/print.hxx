@@ -37,7 +37,7 @@
 #include <vcl/jobset.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/view/PrintableState.hpp>
 
 #include <memory>
@@ -380,8 +380,8 @@ public:
         For convenience a second sequence will be merged in to get a combined sequence.
         In case of duplicate property names, the value of i_MergeList wins.
     */
-    css::uno::Sequence< css::beans::PropertyValue >
-                                        getJobProperties(const css::uno::Sequence< css::beans::PropertyValue >& i_rMergeList ) const;
+    cpo::uno::Sequence< css::beans::PropertyValue >
+                                        getJobProperties(const cpo::uno::Sequence< css::beans::PropertyValue >& i_rMergeList ) const;
 
     /// Get the PropertyValue of a Property
     css::beans::PropertyValue*          getValue( const OUString& i_rPropertyName );
@@ -404,21 +404,21 @@ public:
     SAL_DLLPRIVATE void                 setValue( const css::beans::PropertyValue& i_rValue );
 
     /** @return The currently active UI options. These are the same that were passed to setUIOptions. */
-    const css::uno::Sequence< css::beans::PropertyValue >&
+    const cpo::uno::Sequence< css::beans::PropertyValue >&
                                         getUIOptions() const;
 
     /** Set possible UI options.
 
         should only be done once before passing the PrinterListener to Printer::PrintJob
     */
-    void                                setUIOptions( const css::uno::Sequence< css::beans::PropertyValue >& );
+    void                                setUIOptions( const cpo::uno::Sequence< css::beans::PropertyValue >& );
 
     /// Enable/disable an option; this can be used to implement dialog logic.
     bool                                isUIOptionEnabled( const OUString& rPropName ) const;
     SAL_DLLPRIVATE bool                 isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
 
     /// Defines which options in a UI element should be disabled or enabled.
-    void                                setUIChoicesDisabled(const OUString& rPropName, css::uno::Sequence<bool>& rChoicesDisabled);
+    void                                setUIChoicesDisabled(const OUString& rPropName, cpo::uno::Sequence<bool>& rChoicesDisabled);
 
     /** MakeEnabled will change the property rPropName depends on to the value
 
@@ -445,7 +445,7 @@ public:
 
         @return Page size in 1/100th mm
     */
-    virtual css::uno::Sequence< css::beans::PropertyValue >
+    virtual cpo::uno::Sequence< css::beans::PropertyValue >
                                         getPageParameters( int i_nPage ) const = 0;
     /// App must override this
     virtual void                        printPage(int i_nPage) const = 0;
@@ -493,7 +493,7 @@ public:
     SAL_DLLPRIVATE    void              setupPrinter( weld::Window* i_pDlgParent );
 
     SAL_DLLPRIVATE    int               getPageCountProtected() const;
-    SAL_DLLPRIVATE    css::uno::Sequence< css::beans::PropertyValue >
+    SAL_DLLPRIVATE    cpo::uno::Sequence< css::beans::PropertyValue >
                                         getPageParametersProtected( int i_nPage ) const;
 
     SAL_DLLPRIVATE    DrawModeFlags     removeTransparencies( GDIMetaFile const & i_rIn, GDIMetaFile& o_rOut );
@@ -519,14 +519,14 @@ public:
 
         merges changed properties and returns "true" if any occurred
     */
-    bool                 processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp );
+    bool                 processProperties( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rNewProp );
 
     /** Append to a sequence of property values the ui property sequence passed at creation
 
         as the "ExtraPrintUIOptions" property. if that sequence was empty, no "ExtraPrintUIOptions" property
         will be appended.
     */
-    void                 appendPrintUIOptions( css::uno::Sequence< css::beans::PropertyValue >& io_rProps ) const;
+    void                 appendPrintUIOptions( cpo::uno::Sequence< css::beans::PropertyValue >& io_rProps ) const;
 
     /** @return An empty Any for not existing properties */
     cpo::uno::Any        getValue( const OUString& i_rPropertyName ) const;
@@ -574,8 +574,8 @@ public:
     // transported via UTF16 strings.
 
     /// Show general control
-    static cpo::uno::Any setUIControlOpt( const css::uno::Sequence< OUString >& i_rIDs, const OUString& i_rTitle,
-                             const css::uno::Sequence< OUString >& i_rHelpId, const OUString& i_rType,
+    static cpo::uno::Any setUIControlOpt( const cpo::uno::Sequence< OUString >& i_rIDs, const OUString& i_rTitle,
+                             const cpo::uno::Sequence< OUString >& i_rHelpId, const OUString& i_rType,
                              const css::beans::PropertyValue* i_pValue = nullptr,
                              const UIControlOptions& i_rControlOptions = UIControlOptions());
 
@@ -594,17 +594,17 @@ public:
 
     /// Show a set of choices in a list box
     static cpo::uno::Any setChoiceListControlOpt( const OUString&  i_rID, const OUString& i_rTitle,
-                             const css::uno::Sequence< OUString >& i_rHelpId, const OUString& i_rProperty,
-                             const css::uno::Sequence< OUString >& i_rChoices, sal_Int32 i_nValue,
-                             const css::uno::Sequence< bool >& i_rDisabledChoices = css::uno::Sequence< bool >(),
+                             const cpo::uno::Sequence< OUString >& i_rHelpId, const OUString& i_rProperty,
+                             const cpo::uno::Sequence< OUString >& i_rChoices, sal_Int32 i_nValue,
+                             const cpo::uno::Sequence< bool >& i_rDisabledChoices = cpo::uno::Sequence< bool >(),
                              const UIControlOptions& i_rControlOptions = UIControlOptions());
 
     /// Show a set of choices as radio buttons
-    static cpo::uno::Any setChoiceRadiosControlOpt( const css::uno::Sequence< OUString >& i_rIDs,
-                             const OUString& i_rTitle,  const css::uno::Sequence< OUString >& i_rHelpId,
-                             const OUString& i_rProperty, const css::uno::Sequence< OUString >& i_rChoices,
+    static cpo::uno::Any setChoiceRadiosControlOpt( const cpo::uno::Sequence< OUString >& i_rIDs,
+                             const OUString& i_rTitle,  const cpo::uno::Sequence< OUString >& i_rHelpId,
+                             const OUString& i_rProperty, const cpo::uno::Sequence< OUString >& i_rChoices,
                              sal_Int32 i_nValue,
-                             const css::uno::Sequence< bool >& i_rDisabledChoices = css::uno::Sequence< bool >(),
+                             const cpo::uno::Sequence< bool >& i_rDisabledChoices = cpo::uno::Sequence< bool >(),
                              const UIControlOptions& i_rControlOptions  = UIControlOptions());
 
     /** Show an integer range (e.g. a spin field)

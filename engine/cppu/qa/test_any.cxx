@@ -43,7 +43,7 @@
 #include <Struct2b.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <osl/interlck.h>
@@ -292,11 +292,11 @@ void Test::testVoid() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>", !(a >>= b));
+            "cpo::uno::Sequence<OUString>", !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>", sal_Int32(2), b.getLength());
+            "cpo::uno::Sequence<OUString>", sal_Int32(2), b.getLength());
     }
     {
         Enum1 b = Enum1_M2;
@@ -395,12 +395,12 @@ void Test::testBoolean() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -500,12 +500,12 @@ void Test::testByte() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -605,12 +605,12 @@ void Test::testShort() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -712,12 +712,12 @@ void Test::testUnsignedShort() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -817,12 +817,12 @@ void Test::testLong() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -922,12 +922,12 @@ void Test::testUnsignedLong() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1027,12 +1027,12 @@ void Test::testHyper() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1132,12 +1132,12 @@ void Test::testUnsignedHyper() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1237,12 +1237,12 @@ void Test::testFloat() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1342,12 +1342,12 @@ void Test::testDouble() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1448,12 +1448,12 @@ void Test::testChar() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1553,12 +1553,12 @@ void Test::testString() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1656,12 +1656,12 @@ void Test::testType() {
             "css::uno::Type", cppu::UnoType<sal_Int32>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1690,10 +1690,10 @@ void Test::testType() {
 
 void Test::testSequence() {
     sal_Int32 n = 1;
-    cpo::uno::Any a(css::uno::Sequence< sal_Int32 >(&n, 1));
+    cpo::uno::Any a(cpo::uno::Sequence< sal_Int32 >(&n, 1));
     CPPUNIT_ASSERT(
         bool(a.getValueType()
-        == cppu::UnoType<css::uno::Sequence<sal_Int32>>::get()));
+        == cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get()));
     {
         bool b = true;
         CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b));
@@ -1764,24 +1764,24 @@ void Test::testSequence() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
-        css::uno::Sequence< sal_Int32 > b(2);
+        cpo::uno::Sequence< sal_Int32 > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<sal_Int32>",
+            "cpo::uno::Sequence<sal_Int32>",
             (a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<sal_Int32>",
+            "cpo::uno::Sequence<sal_Int32>",
             sal_Int32(1), b.getLength());
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<sal_Int32>",
+            "cpo::uno::Sequence<sal_Int32>",
             sal_Int32(1), b[0]);
     }
     {
@@ -1808,8 +1808,8 @@ void Test::testSequence() {
     }
     {
         // The two default-constructed sequences both refer to the same static cppu::g_emptySeq
-        css::uno::Sequence<sal_Int32> aEmptyIntSequence;
-        css::uno::Sequence<OUString> aEmptyStringSequence;
+        cpo::uno::Sequence<sal_Int32> aEmptyIntSequence;
+        cpo::uno::Sequence<OUString> aEmptyStringSequence;
         a <<= aEmptyStringSequence;
         CPPUNIT_ASSERT(!(a >>= aEmptyIntSequence));
     }
@@ -1888,12 +1888,12 @@ void Test::testEnum() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -1998,12 +1998,12 @@ void Test::testStruct() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -2051,11 +2051,11 @@ void Test::testStruct() {
 
 void Test::testPoly() {
     cpo::uno::Any a;
-    a <<= Poly< css::uno::Sequence< ::sal_Unicode > >();
+    a <<= Poly< cpo::uno::Sequence< ::sal_Unicode > >();
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "type name", u"Poly<[]char>"_ustr, a.getValueTypeName() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "constructor",
-        cpo::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()), a);
+        cpo::uno::Any(Poly< cpo::uno::Sequence< ::sal_Unicode > >()), a);
 }
 
 void Test::testException() {
@@ -2134,12 +2134,12 @@ void Test::testException() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -2264,12 +2264,12 @@ void Test::testInterface() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {
@@ -2390,12 +2390,12 @@ void Test::testNull() {
             cppu::UnoType<OUString>::get(), b);
     }
     {
-        css::uno::Sequence< OUString > b(2);
+        cpo::uno::Sequence< OUString > b(2);
         CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             !(a >>= b));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
-            "css::uno::Sequence<OUString>",
+            "cpo::uno::Sequence<OUString>",
             sal_Int32(2), b.getLength());
     }
     {

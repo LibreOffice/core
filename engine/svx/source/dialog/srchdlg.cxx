@@ -494,7 +494,7 @@ void SvxSearchDialog::Construct_Impl()
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
                 configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
-        uno::Sequence< cpo::uno::Any > aArgs {
+        cpo::uno::Sequence< cpo::uno::Any > aArgs {
                     Any(u"/org.openoffice.Office.Common/SearchOptions/"_ustr) };
 
         uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
@@ -1455,7 +1455,7 @@ IMPL_LINK(SvxSearchDialog, CommandHdl_Impl, weld::Button&, rBtn, void)
     }
     else if (&rBtn == m_xSearchComponent1PB.get() || &rBtn == m_xSearchComponent2PB.get())
     {
-        uno::Sequence < beans::PropertyValue > aArgs(2);
+        cpo::uno::Sequence < beans::PropertyValue > aArgs(2);
         beans::PropertyValue* pArgs = aArgs.getArray();
         pArgs[0].Name = u"SearchString"_ustr;
         pArgs[0].Value <<= m_xSearchLB->get_active_text();

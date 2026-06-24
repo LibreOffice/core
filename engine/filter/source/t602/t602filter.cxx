@@ -159,7 +159,7 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
     if (!mxInputStream.is())
         return OUString();
 
-    css::uno::Sequence< sal_Int8 > aData;
+    cpo::uno::Sequence< sal_Int8 > aData;
     const size_t numBytes = 4;
     size_t numBytesRead = mxInputStream->readSomeBytes (aData, numBytes);
 
@@ -1052,12 +1052,12 @@ sal_Int16 SAL_CALL T602ImportFilterDialog::execute()
         return css::ui::dialogs::ExecutableDialogResults::CANCEL;
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL T602ImportFilterDialog::getPropertyValues()
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL T602ImportFilterDialog::getPropertyValues()
 {
-    return uno::Sequence<beans::PropertyValue>();
+    return cpo::uno::Sequence<beans::PropertyValue>();
 }
 
-void SAL_CALL T602ImportFilterDialog::setPropertyValues( const uno::Sequence<beans::PropertyValue>& )
+void SAL_CALL T602ImportFilterDialog::setPropertyValues( const cpo::uno::Sequence<beans::PropertyValue>& )
 {
 }
 
@@ -1082,14 +1082,14 @@ Sequence< OUString > SAL_CALL T602ImportFilterDialog::getSupportedServiceNames( 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_T602ImportFilterDialog_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new T602ImportFilter::T602ImportFilterDialog());
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_T602ImportFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new T602ImportFilter::T602ImportFilter(context));
 }

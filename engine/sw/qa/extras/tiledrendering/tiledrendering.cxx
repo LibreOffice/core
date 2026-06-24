@@ -332,7 +332,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertShape)
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
-    comphelper::dispatchCommand(u".uno:BasicShapes.circle"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:BasicShapes.circle"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     // check that the shape was inserted in the visible area, not outside
     IDocumentDrawModelAccess &rDrawModelAccess = pWrtShell->GetDoc()->getIDocumentDrawModelAccess();
@@ -347,7 +347,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertShape)
 
 static void lcl_search(bool bBackward)
 {
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", cpo::uno::Any(u"shape"_ustr)},
                 {"SearchItem.Backward", cpo::uno::Any(bBackward)}
@@ -408,7 +408,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchViewArea)
     // Go back to the first page, search while the cursor is there, but the
     // visible area is the second page.
     pWrtShell->GotoPage(1, false);
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", cpo::uno::Any(u"Heading"_ustr)},
                 {"SearchItem.Backward", cpo::uno::Any(false)},
@@ -425,7 +425,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchTextFrame)
     createDoc("search.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", cpo::uno::Any(u"TextFrame"_ustr)},
                 {"SearchItem.Backward", cpo::uno::Any(false)},
@@ -440,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchTextFrameWrapAround)
     createDoc("search.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", cpo::uno::Any(u"TextFrame"_ustr)},
                 {"SearchItem.Backward", cpo::uno::Any(false)},
@@ -474,7 +474,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAll)
     createDoc("search.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", cpo::uno::Any(u"shape"_ustr)},
                 {"SearchItem.Backward", cpo::uno::Any(false)},
@@ -494,7 +494,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAllNotifications)
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
     // Reset notification counter before search.
     m_nSelectionBeforeSearchResult = 0;
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"SearchItem.SearchString", cpo::uno::Any(u"shape"_ustr)},
                 {"SearchItem.Backward", cpo::uno::Any(false)},
@@ -512,14 +512,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAllNotifications)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPageDownInvalidation)
 {
     SwXTextDocument* pXTextDocument = createDoc("pagedown-invalidation.odt");
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {".uno:HideWhitespace", cpo::uno::Any(true)},
                 }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
-    comphelper::dispatchCommand(u".uno:PageDown"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:PageDown"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     // This was 2.
     CPPUNIT_ASSERT_EQUAL(0, m_nInvalidations);
@@ -612,7 +612,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeViewCursors)
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwTestViewCallback aView1;
     KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwTestViewCallback aView2;
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
 
@@ -647,7 +647,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursorVisibility)
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwTestViewCallback aView1;
     KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwTestViewCallback aView2;
     // This failed, initially the view cursor in the second view wasn't visible.
     CPPUNIT_ASSERT(aView2.m_bViewCursorVisible);
@@ -671,7 +671,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursorCleanup)
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwTestViewCallback aView1;
     int nView2 = KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     {
         SwTestViewCallback aView2;
 
@@ -701,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewLock)
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwTestViewCallback aView1;
     KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwTestViewCallback aView2;
 
     // Begin text edit in the second view and assert that the first gets a lock
@@ -726,7 +726,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTextEditViewInvalidations)
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
     SwTestViewCallback aView1;
     KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwTestViewCallback aView2;
 
     // Begin text edit in the second view.
@@ -753,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoInvalidations)
     SwTestViewCallback aView1;
     int nView1 = KitHelper::getCurrentView();
     KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwTestViewCallback aView2;
     KitHelper::setView(nView1);
 
@@ -784,7 +784,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoLimiting)
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = KitHelper::getCurrentView();
     int nView2 = KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     // Insert a character the end of the document in the second view.
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
@@ -810,7 +810,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReordering)
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = KitHelper::getCurrentView();
     int nView2 = KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SplitNode();
     KitHelper::setView(nView1);
@@ -850,7 +850,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo)
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = KitHelper::getCurrentView();
     int nView2 = KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SplitNode();
     KitHelper::setView(nView1);
@@ -896,7 +896,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo2)
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = KitHelper::getCurrentView();
     int nView2 = KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
 
     // Type in the first view.
@@ -938,7 +938,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingMulti)
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = KitHelper::getCurrentView();
     int nView2 = KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SplitNode();
     KitHelper::setView(nView1);
@@ -981,7 +981,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoShapeLimiting)
     SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = KitHelper::getCurrentView();
     int nView2 = KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
 
     // Start shape text in the second view.
@@ -1015,7 +1015,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoDispatch)
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     int nView1 = KitHelper::getCurrentView();
     KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     int nView2 = KitHelper::getCurrentView();
 
     // Insert a character in the first view.
@@ -1052,7 +1052,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairDispatch)
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     int nView1 = KitHelper::getCurrentView();
     KitHelper::createView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     int nView2 = KitHelper::getCurrentView();
 
     // Insert a character in the first view.
@@ -1071,7 +1071,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairDispatch)
     // But the same is allowed in repair mode.
     KitHelper::setView(nView2);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"Repair", cpo::uno::Any(true)}
                 }));
@@ -1186,7 +1186,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChanges)
     SwRangeRedline* pRedline = rTable[0];
 
     // Reject the change by id, while the cursor does not cover the tracked change.
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
                 {"RejectTrackedChange", cpo::uno::Any(o3tl::narrowing<sal_uInt16>(pRedline->GetId()))}
                 }));
@@ -1323,7 +1323,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({});
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({});
         comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     }
     CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXTextDocument->getViewRenderState());
@@ -1368,7 +1368,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
             }
@@ -1385,7 +1385,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
@@ -1403,7 +1403,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
             }
@@ -1426,7 +1426,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
@@ -1443,7 +1443,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
@@ -1457,7 +1457,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
             }
@@ -1475,7 +1475,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
             }
@@ -1494,7 +1494,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     {
         SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
@@ -1521,7 +1521,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
 
     {
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }
@@ -1531,7 +1531,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
     CPPUNIT_ASSERT_EQUAL("1c1c1c"_ostr, aView.m_aDocColor);
 
     {
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Light"_ustr) },
             }
@@ -1689,7 +1689,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
 
     // Add a comment.
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
             {"Text", cpo::uno::Any(u"some text"_ustr)},
             {"Author", cpo::uno::Any(u"me"_ustr)},
@@ -1777,7 +1777,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairResult)
     int nView1 = KitHelper::getCurrentView();
     KitHelper::createView();
     rtl::Reference<TestResultListener> pResult2 = new TestResultListener();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     int nView2 = KitHelper::getCurrentView();
 
     // Insert a character in the second view.
@@ -1807,7 +1807,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedoRepairResult)
     int nView1 = KitHelper::getCurrentView();
     KitHelper::createView();
     rtl::Reference<TestResultListener> pResult2 = new TestResultListener();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     int nView2 = KitHelper::getCurrentView();
 
     // Insert a character in the second view.
@@ -2029,7 +2029,7 @@ namespace {
 
     void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, TypedWhichId<SfxStringListItem> nWhich, bool bValue)
     {
-        uno::Sequence<OUString> aSeq;
+        cpo::uno::Sequence<OUString> aSeq;
         SfxPoolItemHolder aResult;
         pViewShell->GetDispatcher()->QueryState(nWhich, aResult);
         const SfxStringListItem* pListItem(static_cast<const SfxStringListItem*>(aResult.getItem()));
@@ -2112,13 +2112,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf115088)
     pXTextDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
     pXTextDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
     Scheduler::ProcessEventsToIdle();
-    comphelper::dispatchCommand(u".uno:Copy"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:Copy"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
 
     // Move cursor to the beginning of the first line and paste
     pXTextDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
     pXTextDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
     Scheduler::ProcessEventsToIdle();
-    comphelper::dispatchCommand(u".uno:PasteUnformatted"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:PasteUnformatted"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
     // Check the resulting text in the document. (it was 1Text\n1\n1\n1)
@@ -2202,7 +2202,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 
     // status: "a"
 
-    comphelper::dispatchCommand(u".uno:Bold"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:Bold"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"b"_ustr);
@@ -2230,7 +2230,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     // status: "a<bold>b</bold>\n
     //          <bold>a</bold>\n"
 
-    comphelper::dispatchCommand(u".uno:Bold"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:Bold"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"b"_ustr);
@@ -2246,7 +2246,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     //          <bold>a</bold>\n"
     //          b"
 
-    comphelper::dispatchCommand(u".uno:Bold"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:Bold"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
@@ -2258,7 +2258,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem3->GetWeight());
 
-    comphelper::dispatchCommand(u".uno:Bold"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:Bold"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"b"_ustr);
@@ -2307,7 +2307,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
 
     // delete all characters
 
-    comphelper::dispatchCommand(u".uno:SelectAll"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:SelectAll"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
     pXTextDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
@@ -2326,7 +2326,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
 
     comphelper::dispatchCommand(
         u".uno:StyleApply?Style:string=Heading 2&FamilyName:string=ParagraphStyles"_ustr,
-        uno::Sequence<beans::PropertyValue>());
+        cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
 
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"b"_ustr);
@@ -2606,7 +2606,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeselectCustomShape)
     aStart.setX(aStart.getX() - 1000);
     aStart.setY(aStart.getY() - 1000);
 
-    comphelper::dispatchCommand(u".uno:BasicShapes.hexagon"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:BasicShapes.hexagon"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount());
 
@@ -2927,7 +2927,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testLanguageStatus)
     auto pStringListItem = dynamic_cast<SfxStringListItem*>(pItem.get());
     CPPUNIT_ASSERT(pStringListItem);
 
-    uno::Sequence< OUString > aList;
+    cpo::uno::Sequence< OUString > aList;
     pStringListItem->GetStringList(aList);
     CPPUNIT_ASSERT_EQUAL(u"English (USA);en-US"_ustr, aList[0]);
 }
@@ -3175,7 +3175,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMoveShapeHandle)
         lcl_extractHandleParameters(m_ShapeSelection, id, x ,y);
         sal_Int32 oldX = x;
         sal_Int32 oldY = y;
-        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
             {"HandleNum", cpo::uno::Any(id)},
             {"NewPosX", cpo::uno::Any(x+1)},
@@ -3270,7 +3270,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTableCommentRemoveCallback)
     SwTestViewCallback aView;
 
     // delete all characters
-    comphelper::dispatchCommand(u".uno:SelectAll"_ustr, uno::Sequence<beans::PropertyValue>());
+    comphelper::dispatchCommand(u".uno:SelectAll"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     Scheduler::ProcessEventsToIdle();
     pXTextDocument->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 0, KEY_DELETE);
     pXTextDocument->postKeyEvent(KIT_KEYEVENT_KEYUP, 0, KEY_DELETE);
@@ -3288,7 +3288,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellOnlineRenderParameter)
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     bool bSet = pOpt->IsOnlineSpell();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {".uno:SpellOnline", cpo::uno::Any(!bSet)},
     }));
@@ -3455,7 +3455,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCondCollCopy)
 {
     // Given a document with a custom Text Body cond style:
     SwXTextDocument* pXTextDocument = createDoc("cond-coll-copy.odt");
-    uno::Sequence<beans::PropertyValue> aPropertyValues
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
         = { comphelper::makePropertyValue(u"Style"_ustr, u"Text body"_ustr),
             comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr) };
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
@@ -3578,7 +3578,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControl)
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
-        uno::Sequence<beans::PropertyValues> aListItems = {
+        cpo::uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
                 comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
@@ -3762,7 +3762,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
     SwXTextDocument* pXTextDocument = createDoc();
     static constexpr OUString sAuthor(u"Abcd Xyz"_ustr);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
     {
         {".uno:Author", cpo::uno::Any(sAuthor)},
     }));
@@ -3800,7 +3800,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
 {
     SwXTextDocument* pXTextDocument = createDoc("savedauthorfield.odt");
     static constexpr OUString sAuthor(u"XYZ ABCD"_ustr);
-    uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues1(comphelper::InitPropertySequence(
     {
         {".uno:Author", cpo::uno::Any(sAuthor)},
     }));
@@ -3851,7 +3851,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testToggleFormattingMarks)
 
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
 
     KitHelper::setView(nView1);
     SwTestViewCallback aView1;
@@ -3881,7 +3881,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
 
     SwView* pView = getSwDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         {
             { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
         }
@@ -3930,7 +3930,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPrintDarkModeChart)
 
     SwView* pView = getSwDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         {
             { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
         }
@@ -3938,7 +3938,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPrintDarkModeChart)
     comphelper::dispatchCommand(u".uno:ChangeTheme"_ustr, xFrame, aPropertyValues);
     CPPUNIT_ASSERT_EQUAL("S;Dark"_ostr, pXTextDocument->getViewRenderState());
 
-    uno::Sequence<css::beans::PropertyValue> args{
+    cpo::uno::Sequence<css::beans::PropertyValue> args{
         comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL())
     };
@@ -4087,7 +4087,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFindAndReplaceInComments)
     Scheduler::ProcessEventsToIdle();
     setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
         { "SearchItem.SearchString", cpo::uno::Any(u"test"_ustr) },
     }));
     comphelper::dispatchCommand(u".uno:ExecuteSearch"_ustr, aPropertyValues);

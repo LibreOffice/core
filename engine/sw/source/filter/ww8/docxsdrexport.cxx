@@ -50,10 +50,10 @@ using namespace sax_fastparser;
 
 namespace
 {
-uno::Sequence<beans::PropertyValue> lclGetProperty(const uno::Reference<drawing::XShape>& rShape,
-                                                   const OUString& rPropName)
+cpo::uno::Sequence<beans::PropertyValue>
+lclGetProperty(const uno::Reference<drawing::XShape>& rShape, const OUString& rPropName)
 {
-    uno::Sequence<beans::PropertyValue> aResult;
+    cpo::uno::Sequence<beans::PropertyValue> aResult;
     uno::Reference<beans::XPropertySet> xPropertySet(rShape, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
 
@@ -79,7 +79,7 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
         aGrabBagName = u"FrameInteropGrabBag"_ustr;
     else
         aGrabBagName = u"InteropGrabBag"_ustr;
-    const uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, aGrabBagName);
+    const cpo::uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, aGrabBagName);
     auto pProp
         = std::find_if(propList.begin(), propList.end(),
                        [](const beans::PropertyValue& rProp) { return rProp.Name == "AnchorId"; });
@@ -1386,7 +1386,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
 
 static bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
 {
-    const uno::Sequence<beans::PropertyValue> propList
+    const cpo::uno::Sequence<beans::PropertyValue> propList
         = lclGetProperty(xShape, u"InteropGrabBag"_ustr);
     /*
      * Export as Locked Canvas only if the property
@@ -1870,7 +1870,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         m_pImpl->setDMLandVMLTextFrameRotation(0_deg100);
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
         {
-            uno::Sequence<beans::PropertyValue> propList;
+            cpo::uno::Sequence<beans::PropertyValue> propList;
             xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
             auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
                                       [](const beans::PropertyValue& rProp) {
@@ -1906,7 +1906,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame const* pParentFrame, bool bText
         OUString shapeType = u"rect"_ustr;
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
         {
-            uno::Sequence<beans::PropertyValue> propList;
+            cpo::uno::Sequence<beans::PropertyValue> propList;
             xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
             auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
                                       [](const beans::PropertyValue& rProp) {

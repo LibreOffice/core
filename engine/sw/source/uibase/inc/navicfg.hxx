@@ -38,7 +38,7 @@ class SwNavigationConfig final : public utl::ConfigItem
 
     sal_Int32 m_nSortAlphabeticallyBlock = 0; // persists content type alphabetical sort setting
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
@@ -47,7 +47,7 @@ public:
     virtual ~SwNavigationConfig() override;
 
     void Load();
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
     ContentTypeId GetRootType()const {return m_nRootType;}
     void        SetRootType(ContentTypeId nSet){

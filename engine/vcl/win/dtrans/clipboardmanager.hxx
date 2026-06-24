@@ -56,7 +56,7 @@ namespace dtrans
 
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         /*
          * XComponent
@@ -80,7 +80,7 @@ namespace dtrans
 
         virtual void SAL_CALL removeClipboard( const OUString& aName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL listClipboardNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL listClipboardNames(  ) override;
 
     };
 

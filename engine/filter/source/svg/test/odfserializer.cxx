@@ -22,7 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 using namespace ::com::sun::star;
 
@@ -58,8 +58,8 @@ public:
 
 private:
     uno::Reference<io::XOutputStream> m_xOutStream;
-    uno::Sequence<sal_Int8>           m_aLineFeed;
-    uno::Sequence<sal_Int8>           m_aBuf;
+    cpo::uno::Sequence<sal_Int8>           m_aLineFeed;
+    cpo::uno::Sequence<sal_Int8>           m_aBuf;
 };
 
 void SAL_CALL ODFSerializer::startDocument(  )

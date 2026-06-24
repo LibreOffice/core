@@ -21,7 +21,7 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace chart
 {

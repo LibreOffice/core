@@ -66,7 +66,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService (const OUString& sServiceName) override;
-    virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
 
     /** Set the edit engine offset
 

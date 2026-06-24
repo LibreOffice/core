@@ -215,7 +215,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testTdf162283)
 
     CPPUNIT_ASSERT(xPropSet.is());
     auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                            .get<uno::Sequence<beans::PropertyValue>>();
+                            .get<cpo::uno::Sequence<beans::PropertyValue>>();
     auto aGeomPropVec
         = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomPropSeq);
 
@@ -237,7 +237,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testTdf162283)
         [](const beans::PropertyValue& rValue) { return rValue.Name == u"AdjustmentValues"_ustr; });
     if (aIt2 != aGeomPropVec.end())
     {
-        uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment;
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment;
         aIt2->Value >>= aAdjustment;
         aAdjustment[0].Value >>= nAdjValue;
     }

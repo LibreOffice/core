@@ -20,12 +20,12 @@
 #pragma once
 
 #include <sal/config.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <sal/types.h>
 
 namespace detail
 {
-sal_Int32 findPos(const OUString& aStr, const css::uno::Sequence<OUString>& rList);
+sal_Int32 findPos(const OUString& aStr, const cpo::uno::Sequence<OUString>& rList);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

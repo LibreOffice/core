@@ -76,7 +76,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, Bitmap& rBitmap, doub
     rStream.ReadBytes(aBuffer.data(), nSize);
     aBuffer[nSize] = 0;
 
-    uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
+    cpo::uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
     uno::Reference<io::XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
 
     const Primitive2DSequence aPrimitiveSequence = xSvgParser->getDecomposition(aInputStream, sPath);
@@ -84,7 +84,7 @@ void loadFromSvg(SvStream& rStream, const OUString& sPath, Bitmap& rBitmap, doub
     if (!aPrimitiveSequence.hasElements())
         return;
 
-    uno::Sequence<beans::PropertyValue> aViewParameters;
+    cpo::uno::Sequence<beans::PropertyValue> aViewParameters;
 
     geometry::RealRectangle2D aRealRect;
     basegfx::B2DRange aRange;
@@ -542,7 +542,7 @@ void DrawAndClipBitmap(const Point& rPos, const Size& rSize, const Bitmap& rBitm
     }
 }
 
-css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp)
+cpo::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp)
 {
     if ( aBmp.HasAlpha() )
     {
@@ -551,10 +551,10 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(Bitmap const & aBmp)
         // for backwards compatibility for extensions, we need to convert from alpha to transparency
         aMask.Invert();
         WriteDIB(aMask.GetBitmap(), aMem, false, true);
-        return css::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
+        return cpo::uno::Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
     }
 
-    return css::uno::Sequence< sal_Int8 >();
+    return cpo::uno::Sequence< sal_Int8 >();
 }
 
 /**
@@ -738,7 +738,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
     }
 }
 
-    uno::Sequence< sal_Int8 > CanvasExtractBitmapData(Bitmap const & rBitmap, const geometry::IntegerRectangle2D& rect)
+    cpo::uno::Sequence< sal_Int8 > CanvasExtractBitmapData(Bitmap const & rBitmap, const geometry::IntegerRectangle2D& rect)
     {
         BitmapScopedReadAccess pReadAccess( rBitmap );
         assert( pReadAccess );
@@ -747,7 +747,7 @@ void CanvasCairoExtractBitmapData( const Bitmap & aBitmap, unsigned char*& data,
         const Size aBmpSize( rBitmap.GetSizePixel() );
 
         // for the time being, always return as BGRA
-        uno::Sequence< sal_Int8 > aRes( 4*aBmpSize.Width()*aBmpSize.Height() );
+        cpo::uno::Sequence< sal_Int8 > aRes( 4*aBmpSize.Width()*aBmpSize.Height() );
         sal_Int8* pRes = aRes.getArray();
 
         int nCurrPos(0);

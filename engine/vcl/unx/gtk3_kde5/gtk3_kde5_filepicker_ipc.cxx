@@ -78,7 +78,7 @@ void readIpcArg(std::istream& stream, OUString& str)
     str = OUString::fromUtf8(std::string_view(buffer.data(), buffer.size()));
 }
 
-void readIpcArg(std::istream& stream, css::uno::Sequence<OUString>& seq)
+void readIpcArg(std::istream& stream, cpo::uno::Sequence<OUString>& seq)
 {
     uint32_t numFiles = 0;
     stream >> numFiles;

@@ -37,7 +37,7 @@ namespace connectivity::flat
         OFlatConnection(ODriver*    _pDriver);
         virtual ~OFlatConnection() override;
 
-        virtual void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo ) override;
+        virtual void construct(const OUString& _rUrl,const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo ) override;
 
         // own methods
         bool     isHeaderLine()          const { return m_bHeaderLine;       }

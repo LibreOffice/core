@@ -134,8 +134,8 @@ void SAL_CALL SwWordBasic::FileSaveAs(
     sal_Int32 nFileFormat = word::WdSaveFormat::wdFormatDocument;
     Format >>= nFileFormat;
 
-    uno::Sequence aProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()),
-                          comphelper::makePropertyValue(u"FileName"_ustr, sURL) };
+    cpo::uno::Sequence aProps{ comphelper::makePropertyValue(u"FilterName"_ustr, cpo::uno::Any()),
+                               comphelper::makePropertyValue(u"FileName"_ustr, sURL) };
 
     setFilterPropsFromFormat(nFileFormat, aProps);
 

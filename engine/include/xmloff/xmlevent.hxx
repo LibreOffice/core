@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 
 /**
@@ -94,7 +94,7 @@ public:
     virtual void Export(
         SvXMLExport& rExport,                   /// the current XML export
         const OUString& rEventQName,     /// the XML name of the event
-        const css::uno::Sequence<css::beans::PropertyValue> & rValues, /// the values for the event
+        const cpo::uno::Sequence<css::beans::PropertyValue> & rValues, /// the values for the event
         bool bUseWhitespace) = 0;  /// create whitespace around elements?
 };
 

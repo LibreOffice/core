@@ -663,7 +663,7 @@ void FileDialogHelper_Impl::updateVersions()
                 if ( !xStorage.is() )
                     throw uno::RuntimeException();
 
-                const uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
+                const cpo::uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 
                 aEntries.realloc( xVersions.getLength() + 1 );
                 aEntries.getArray()[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION );
@@ -925,7 +925,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     sal_Int16 nDialog,
     weld::Window* pFrameWeld,
     const OUString& sPreselectedDir,
-    const css::uno::Sequence< OUString >& rDenyList
+    const cpo::uno::Sequence< OUString >& rDenyList
     )
     :msPreselectedDir( sPreselectedDir )
     ,maPreviewIdle("sfx2 FileDialogHelper_Impl maPreviewIdle")
@@ -1404,7 +1404,7 @@ void FileDialogHelper_Impl::implStartExecute()
     }
 }
 
-ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
+ErrCode FileDialogHelper_Impl::execute( cpo::uno::Sequence<OUString>& rpURLList,
                                         std::optional<SfxAllItemSet>& rpSet,
                                         OUString&       rFilter,
                                         SignatureState const nScriptingSignatureState)
@@ -1584,7 +1584,7 @@ ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
             bool bGpg = false;
             if ( ( aValue >>= bGpg ) && bGpg )
             {
-                uno::Sequence< beans::NamedValue > aEncryptionData;
+                cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
                 while(true)
                 {
                     try
@@ -2421,7 +2421,7 @@ FileDialogHelper::FileDialogHelper(
     SfxFilterFlags nMust,
     SfxFilterFlags nDont,
     const OUString& rPreselectedDir,
-    const css::uno::Sequence< OUString >& rDenyList,
+    const cpo::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent)
     :   m_nError(0),
         mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog, pPreferredParent, rPreselectedDir, rDenyList ) )
@@ -2443,7 +2443,7 @@ FileDialogHelper::FileDialogHelper(
     const OUString& aFilterUIName,
     std::u16string_view aExtName,
     const OUString& rPreselectedDir,
-    const css::uno::Sequence< OUString >& rDenyList,
+    const cpo::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent )
     :   m_nError(0),
         mpImpl( new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, pPreferredParent, rPreselectedDir, rDenyList ) )
@@ -2603,7 +2603,7 @@ IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker, void*, void)
 }
 
 // rDirPath has to be a directory
-ErrCode FileDialogHelper::Execute( css::uno::Sequence<OUString>& rpURLList,
+ErrCode FileDialogHelper::Execute( cpo::uno::Sequence<OUString>& rpURLList,
                                    std::optional<SfxAllItemSet>& rpSet,
                                    OUString&       rFilter,
                                    const OUString& rDirPath )
@@ -2623,7 +2623,7 @@ ErrCode FileDialogHelper::Execute( std::optional<SfxAllItemSet>& rpSet,
                                    SignatureState const nScriptingSignatureState)
 {
     ErrCode nRet;
-    css::uno::Sequence<OUString> rURLList;
+    cpo::uno::Sequence<OUString> rURLList;
     nRet = mpImpl->execute(rURLList, rpSet, rFilter, nScriptingSignatureState);
     return nRet;
 }
@@ -2813,12 +2813,12 @@ void FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              sal_Int16 nDialogType,
                              FileDialogFlags nFlags,
-                             css::uno::Sequence<OUString>& rpURLList,
+                             cpo::uno::Sequence<OUString>& rpURLList,
                              OUString& rFilter,
                              std::optional<SfxAllItemSet>& rpSet,
                              const OUString* pPath,
                              sal_Int16 nDialog,
-                             const css::uno::Sequence< OUString >& rDenyList,
+                             const cpo::uno::Sequence< OUString >& rDenyList,
                              std::optional<bool>& rShowFilterDialog )
 {
     ErrCode nRet;
@@ -2871,7 +2871,7 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
 
     if ( rPasswordToOpen.getLength() )
     {
-        css::uno::Sequence< css::beans::NamedValue > aEncryptionData;
+        cpo::uno::Sequence< css::beans::NamedValue > aEncryptionData;
 
         if ( bMSType )
         {
@@ -2884,8 +2884,8 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
             }
             else
             {
-                uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
-                uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( rPasswordToOpen, aUniqueID );
+                cpo::uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
+                cpo::uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( rPasswordToOpen, aUniqueID );
 
                 if ( aEncryptionKey.hasElements() )
                 {
@@ -2926,7 +2926,7 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
     {
         if (bOOXML)
         {
-            uno::Sequence<beans::PropertyValue> aModifyPasswordInfo
+            cpo::uno::Sequence<beans::PropertyValue> aModifyPasswordInfo
                 = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(
                     rPasswordToModify);
             if (aModifyPasswordInfo.hasElements() && pSet)
@@ -2945,7 +2945,7 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
     }
     else
     {
-        uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( rPasswordToModify );
+        cpo::uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( rPasswordToModify );
         if ( aModifyPasswordInfo.hasElements() && pSet)
             pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, cpo::uno::Any( aModifyPasswordInfo ) ) );
     }

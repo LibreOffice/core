@@ -117,14 +117,14 @@ bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
 {
     return { u"com.sun.star.gallery.GalleryItem"_ustr };
 }
 
-uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
 {
-    static const uno::Sequence aTypes {
+    static const cpo::uno::Sequence aTypes {
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<gallery::XGalleryItem>::get(),
@@ -134,9 +134,9 @@ uno::Sequence< uno::Type > SAL_CALL GalleryItem::getTypes()
     return aTypes;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL GalleryItem::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 

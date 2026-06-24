@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -68,7 +68,7 @@ private:
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return ServiceName == getSupportedServiceNames()[0]; }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
     { return { u"com.sun.star.configuration.backend.DesktopBackend"_ustr }; }
 
@@ -273,7 +273,7 @@ css::uno::Reference< css::uno::XInterface > createBackend(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_DesktopBackend_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     // Fall back to the default if the specific backend is not available:
     css::uno::Reference< css::uno::XInterface > backend;

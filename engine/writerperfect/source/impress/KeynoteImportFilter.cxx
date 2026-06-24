@@ -49,7 +49,7 @@ bool KeynoteImportFilter::doDetectFormat(librevenge::RVNGInputStream& rInput, OU
 
 // XExtendedFilterDetection
 OUString SAL_CALL
-KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descriptor)
+KeynoteImportFilter::detect(cpo::uno::Sequence<css::beans::PropertyValue>& Descriptor)
 {
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 nNewLength = nLength + 2;
@@ -61,8 +61,8 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
     const beans::PropertyValue* pValue = Descriptor.getConstArray();
     css::uno::Reference<css::io::XInputStream> xInputStream;
     css::uno::Reference<ucb::XContent> xContent;
-    css::uno::Sequence<beans::NamedValue> lComponentDataNV;
-    css::uno::Sequence<beans::PropertyValue> lComponentDataPV;
+    cpo::uno::Sequence<beans::NamedValue> lComponentDataNV;
+    cpo::uno::Sequence<beans::PropertyValue> lComponentDataPV;
     bool bComponentDataNV = true;
 
     for (sal_Int32 i = 0; i < nLength; i++)
@@ -232,7 +232,7 @@ bool SAL_CALL KeynoteImportFilter::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ImportFilter"_ustr,
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
@@ -240,7 +240,7 @@ css::uno::Sequence<OUString> SAL_CALL KeynoteImportFilter::getSupportedServiceNa
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Impress_KeynoteImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const css::uno::Sequence<cpo::uno::Any>&)
+    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new KeynoteImportFilter(context));
 }

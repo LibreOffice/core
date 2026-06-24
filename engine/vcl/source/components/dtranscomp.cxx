@@ -189,7 +189,7 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 vcl_SystemClipboard_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     SolarMutexGuard aGuard;
     auto xClipboard = ImplGetSVData()->mpDefInst->CreateClipboard( args );
@@ -232,7 +232,7 @@ public:
     bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     { return getSupportedServiceNames_static(); }
 
     static Sequence< OUString > getSupportedServiceNames_static()
@@ -306,7 +306,7 @@ public:
     bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     { return getSupportedServiceNames_static(); }
 
     static Sequence< OUString > getSupportedServiceNames_static()

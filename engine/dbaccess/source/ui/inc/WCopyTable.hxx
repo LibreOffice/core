@@ -109,10 +109,10 @@ namespace dbaui
         */
         virtual void                copyUISettingsTo( const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const = 0;
         /// retrieves the column names of the to-be-copied object
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                     getColumnNames() const = 0;
         /// retrieves the names of the primary keys of the to-be-copied object
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const = 0;
         /// creates a OFieldDescription for the given column of the to-be-copied object
         virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const = 0;
@@ -157,9 +157,9 @@ namespace dbaui
         virtual bool                isView() const override;
         virtual void                copyUISettingsTo( const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
         virtual void                copyFilterAndSortingTo(const css::uno::Reference< css::sdbc::XConnection >& _xConnection, const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                     getColumnNames() const override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const override;
         virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const override;
         virtual OUString     getSelectStatement() const override;
@@ -191,9 +191,9 @@ namespace dbaui
         virtual bool                isView() const override;
         virtual void                copyUISettingsTo( const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
         virtual void                copyFilterAndSortingTo(const css::uno::Reference< css::sdbc::XConnection >& _xConnection,const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                     getColumnNames() const override;
-        virtual css::uno::Sequence< OUString >
+        virtual cpo::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const override;
         virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const override;
         virtual OUString     getSelectStatement() const override;

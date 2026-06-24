@@ -1485,7 +1485,7 @@ void VCLXListBox::addItem( const OUString& aItem, sal_Int16 nPos )
         pBox->InsertEntry( aItem, nPos );
 }
 
-void VCLXListBox::addItems( const css::uno::Sequence< OUString>& aItems, sal_Int16 nPos )
+void VCLXListBox::addItems( const cpo::uno::Sequence< OUString>& aItems, sal_Int16 nPos )
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
@@ -1536,16 +1536,16 @@ OUString VCLXListBox::getItem( sal_Int16 nPos )
     return aItem;
 }
 
-css::uno::Sequence< OUString> VCLXListBox::getItems()
+cpo::uno::Sequence< OUString> VCLXListBox::getItems()
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
         auto n = pBox->GetEntryCount();
-        aSeq = css::uno::Sequence< OUString>( n );
+        aSeq = cpo::uno::Sequence< OUString>( n );
         while (n)
         {
             --n;
@@ -1568,16 +1568,16 @@ sal_Int16 VCLXListBox::getSelectedItemPos()
     return nPos;
 }
 
-css::uno::Sequence<sal_Int16> VCLXListBox::getSelectedItemsPos()
+cpo::uno::Sequence<sal_Int16> VCLXListBox::getSelectedItemsPos()
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Sequence<sal_Int16> aSeq;
+    cpo::uno::Sequence<sal_Int16> aSeq;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
         const sal_Int32 nSelEntries = pBox->GetSelectedEntryCount();
-        aSeq = css::uno::Sequence<sal_Int16>( nSelEntries );
+        aSeq = cpo::uno::Sequence<sal_Int16>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = pBox->GetSelectedEntryPos( n );
     }
@@ -1595,16 +1595,16 @@ OUString VCLXListBox::getSelectedItem()
     return aItem;
 }
 
-css::uno::Sequence< OUString> VCLXListBox::getSelectedItems()
+cpo::uno::Sequence< OUString> VCLXListBox::getSelectedItems()
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
         const sal_Int32 nSelEntries = pBox->GetSelectedEntryCount();
-        aSeq = css::uno::Sequence< OUString>( nSelEntries );
+        aSeq = cpo::uno::Sequence< OUString>( nSelEntries );
         for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = pBox->GetSelectedEntry( n );
     }
@@ -1630,7 +1630,7 @@ void VCLXListBox::selectItemPos( sal_Int16 nPos, bool bSelect )
     }
 }
 
-void VCLXListBox::selectItemsPos( const css::uno::Sequence<sal_Int16>& aPositions, bool bSelect )
+void VCLXListBox::selectItemsPos( const cpo::uno::Sequence<sal_Int16>& aPositions, bool bSelect )
 {
     SolarMutexGuard aGuard;
 
@@ -1818,7 +1818,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const cpo::uno::Any
         break;
         case BASEPROPERTY_STRINGITEMLIST:
         {
-            css::uno::Sequence< OUString> aItems;
+            cpo::uno::Sequence< OUString> aItems;
             if ( Value >>= aItems )
             {
                 pListBox->Clear();
@@ -1828,7 +1828,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const cpo::uno::Any
         break;
         case BASEPROPERTY_SELECTEDITEMS:
         {
-            css::uno::Sequence<sal_Int16> aItems;
+            cpo::uno::Sequence<sal_Int16> aItems;
             if ( Value >>= aItems )
             {
                 for ( auto n = pListBox->GetEntryCount(); n; )
@@ -1919,7 +1919,7 @@ cpo::uno::Any VCLXListBox::getProperty( const OUString& PropertyName )
             case BASEPROPERTY_STRINGITEMLIST:
             {
                 const sal_Int32 nItems = pListBox->GetEntryCount();
-                css::uno::Sequence< OUString> aSeq( nItems );
+                cpo::uno::Sequence< OUString> aSeq( nItems );
                 OUString* pStrings = aSeq.getArray();
                 for ( sal_Int32 n = 0; n < nItems; ++n )
                     pStrings[n] = pListBox->GetEntry( n );
@@ -2108,7 +2108,7 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent )
 
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
-    const uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
+    const cpo::uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
     for ( const auto& rItem : aItems )
     {
         OUString aLocalizationKey( rItem.First );
@@ -2543,7 +2543,7 @@ void SAL_CALL VCLXMultiPage::removeTabListener( const uno::Reference< awt::XTabL
     maTabListeners.removeInterface( xListener );
 }
 
-void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< beans::NamedValue >& Properties )
+void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const cpo::uno::Sequence< beans::NamedValue >& Properties )
 {
     SolarMutexGuard aGuard;
     TabControl *pTabControl = getTabControl();
@@ -2563,14 +2563,14 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
     }
 }
 
-uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int32 ID )
+cpo::uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int32 ID )
 {
     SolarMutexGuard aGuard;
     TabControl *pTabControl = getTabControl();
     if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == nullptr )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Sequence< beans::NamedValue > props
+    cpo::uno::Sequence< beans::NamedValue > props
     {
         { u"Title"_ustr,    cpo::uno::Any(pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) )) },
         { u"Position"_ustr, cpo::uno::Any(pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) )) }
@@ -3993,7 +3993,7 @@ void VCLXComboBox::addItem( const OUString& aItem, sal_Int16 nPos )
         pBox->InsertEntry( aItem, nPos );
 }
 
-void VCLXComboBox::addItems( const css::uno::Sequence< OUString>& aItems, sal_Int16 nPos )
+void VCLXComboBox::addItems( const cpo::uno::Sequence< OUString>& aItems, sal_Int16 nPos )
 {
     SolarMutexGuard aGuard;
 
@@ -4045,16 +4045,16 @@ OUString VCLXComboBox::getItem( sal_Int16 nPos )
     return aItem;
 }
 
-css::uno::Sequence< OUString> VCLXComboBox::getItems()
+cpo::uno::Sequence< OUString> VCLXComboBox::getItems()
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Sequence< OUString> aSeq;
+    cpo::uno::Sequence< OUString> aSeq;
     VclPtr< ComboBox > pBox = GetAs< ComboBox >();
     if ( pBox )
     {
         auto n = pBox->GetEntryCount();
-        aSeq = css::uno::Sequence< OUString>( n );
+        aSeq = cpo::uno::Sequence< OUString>( n );
         while ( n )
         {
             --n;
@@ -4118,7 +4118,7 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const cpo::uno::An
         break;
         case BASEPROPERTY_STRINGITEMLIST:
         {
-            css::uno::Sequence< OUString> aItems;
+            cpo::uno::Sequence< OUString> aItems;
             if ( Value >>= aItems )
             {
                 pComboBox->Clear();
@@ -4195,7 +4195,7 @@ cpo::uno::Any VCLXComboBox::getProperty( const OUString& PropertyName )
             case BASEPROPERTY_STRINGITEMLIST:
             {
                 const sal_Int32 nItems = pComboBox->GetEntryCount();
-                css::uno::Sequence< OUString> aSeq( nItems );
+                cpo::uno::Sequence< OUString> aSeq( nItems );
                 OUString* pStrings = aSeq.getArray();
                 for ( sal_Int32 n = 0; n < nItems; ++n )
                     pStrings[n] = pComboBox->GetEntry( n );
@@ -4400,7 +4400,7 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent )
 
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
-    const uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
+    const cpo::uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
     for ( const auto& rItem : aItems )
     {
         OUString aLocalizationKey( rItem.First );

@@ -44,7 +44,7 @@ bool SAL_CALL SystemExec::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL SystemExec::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SystemExec::getSupportedServiceNames()
 {
     return { SERVICENAME_PROTOCOLHANDLER };
 }
@@ -68,10 +68,10 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch(
     return xDispatcher;
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL SystemExec::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL SystemExec::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -84,13 +84,13 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Syst
 }
 
 void SAL_CALL SystemExec::dispatch( const css::util::URL&                                  aURL       ,
-                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+                                    const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
 void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
-                                                    const css::uno::Sequence< css::beans::PropertyValue >&,
+                                                    const cpo::uno::Sequence< css::beans::PropertyValue >&,
                                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // convert "systemexec:file:///c:/temp/test.html" => "file:///c:/temp/test.html"
@@ -148,7 +148,7 @@ void SystemExec::impl_notifyResultListener(const css::uno::Reference< css::frame
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_SystemExecute_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::SystemExec(context));
 }

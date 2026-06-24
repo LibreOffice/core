@@ -78,9 +78,9 @@ namespace framework
                 return cppu::supportsService(this, ServiceName);
             }
 
-            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+            virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
             {
-                css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.LayoutManager"_ustr };
+                cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.LayoutManager"_ustr };
                 return aSeq;
             }
 
@@ -94,7 +94,7 @@ namespace framework
             virtual void SAL_CALL destroyElement( const OUString& aName ) override;
             virtual bool SAL_CALL requestElement( const OUString& ResourceURL ) override;
             virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL getElement( const OUString& aName ) override;
-            virtual css::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > SAL_CALL getElements(  ) override;
+            virtual cpo::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > SAL_CALL getElements(  ) override;
             virtual bool SAL_CALL showElement( const OUString& aName ) override;
             virtual bool SAL_CALL hideElement( const OUString& aName ) override;
             virtual bool SAL_CALL dockWindow( const OUString& aName, css::ui::DockingArea DockingArea, const css::awt::Point& Pos ) override;

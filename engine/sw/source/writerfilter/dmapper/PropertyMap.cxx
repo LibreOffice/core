@@ -111,7 +111,7 @@ const std::vector<css::beans::PropertyValue> & PropertyMap::GetPropertyValues( b
             nCellGrabBag++;
         else if ( rPropPair.first == PROP_CELL_INTEROP_GRAB_BAG )
         {
-            uno::Sequence< beans::PropertyValue > aSeq;
+            cpo::uno::Sequence< beans::PropertyValue > aSeq;
             rPropPair.second.getValue() >>= aSeq;
             nCellGrabBag += aSeq.getLength();
         }
@@ -133,10 +133,10 @@ const std::vector<css::beans::PropertyValue> & PropertyMap::GetPropertyValues( b
         m_aValues.push_back( makePropertyValue(getPropertyName( PROP_NUMBERING_RULES ), pNumRuleProp->getValue() ) );
 
     // If there are any grab bag properties, we need one slot for them.
-    uno::Sequence< beans::PropertyValue > aCharGrabBagValues( nCharGrabBag );
-    uno::Sequence< beans::PropertyValue > aParaGrabBagValues( nParaGrabBag );
-    uno::Sequence< beans::PropertyValue > aCellGrabBagValues( nCellGrabBag );
-    uno::Sequence< beans::PropertyValue > aRowGrabBagValues ( nRowGrabBag );
+    cpo::uno::Sequence< beans::PropertyValue > aCharGrabBagValues( nCharGrabBag );
+    cpo::uno::Sequence< beans::PropertyValue > aParaGrabBagValues( nParaGrabBag );
+    cpo::uno::Sequence< beans::PropertyValue > aCellGrabBagValues( nCellGrabBag );
+    cpo::uno::Sequence< beans::PropertyValue > aRowGrabBagValues ( nRowGrabBag );
     beans::PropertyValue* pCharGrabBagValues = aCharGrabBagValues.getArray();
     beans::PropertyValue* pParaGrabBagValues = aParaGrabBagValues.getArray();
     beans::PropertyValue* pCellGrabBagValues = aCellGrabBagValues.getArray();
@@ -182,7 +182,7 @@ const std::vector<css::beans::PropertyValue> & PropertyMap::GetPropertyValues( b
             }
             else if ( rPropPair.first == PROP_CELL_INTEROP_GRAB_BAG )
             {
-                uno::Sequence< beans::PropertyValue > aSeq;
+                cpo::uno::Sequence< beans::PropertyValue > aSeq;
                 rPropPair.second.getValue() >>= aSeq;
                 std::copy(std::cbegin(aSeq), std::cend(aSeq), pCellGrabBagValues + nCellGrabBagValue);
                 nCellGrabBagValue += aSeq.getLength();
@@ -521,7 +521,7 @@ void SectionPropertyMap::removeXTextContent(uno::Reference<text::XText> const& r
         return;
     rxText->setString(OUString());
     uno::Reference<text::XParagraphAppend> const xAppend(rxText, uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XComponent> const xParagraph(xAppend->finishParagraph(uno::Sequence<beans::PropertyValue>()), uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XComponent> const xParagraph(xAppend->finishParagraph(cpo::uno::Sequence<beans::PropertyValue>()), uno::UNO_QUERY_THROW);
     xParagraph->dispose();
 }
 
@@ -771,8 +771,8 @@ void SectionPropertyMap::SetBorderDistance( const rtl::Reference<SwXPageStyle>& 
     }
 
     // Change the margins with the border distance
-    uno::Sequence<OUString> aProperties { sMarginName, sBorderDistanceName };
-    uno::Sequence<cpo::uno::Any> aValues { cpo::uno::Any( nMargin ), cpo::uno::Any( nDistance ) };
+    cpo::uno::Sequence<OUString> aProperties { sMarginName, sBorderDistanceName };
+    cpo::uno::Sequence<cpo::uno::Any> aValues { cpo::uno::Any( nMargin ), cpo::uno::Any( nDistance ) };
     xStyle->setPropertyValues( aProperties, aValues );
 }
 
@@ -862,7 +862,7 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( 
 
             sal_Int32 nRefValue = xColumns->getReferenceValue();
             double fRel = nColSum ? double( nRefValue ) / double( nColSum ) : 0.0;
-            uno::Sequence< text::TextColumn > aColumns( m_nColumnCount );
+            cpo::uno::Sequence< text::TextColumn > aColumns( m_nColumnCount );
             text::TextColumn* pColumn = aColumns.getArray();
 
             nColSum = 0;
@@ -1070,14 +1070,14 @@ void copyHeaderFooter(const DomainMapper_Impl& rDM_Impl,
     xStyle->getPropertyValue(sFooterIsOn) >>= bHasFooter;
 
     // Set all properties at once before the copy, to avoid needless SwPageDesc copying.
-    uno::Sequence<OUString> aNames = {
+    cpo::uno::Sequence<OUString> aNames = {
         sHeaderIsOn,
         sFooterIsOn,
         sHeaderIsShared,
         sFooterIsShared,
         sFirstIsShared,
     };
-    uno::Sequence<cpo::uno::Any> aValues = {
+    cpo::uno::Sequence<cpo::uno::Any> aValues = {
         cpo::uno::Any(bPreviousHasHeader || bHasHeader),
         cpo::uno::Any(bPreviousHasFooter || bHasFooter),
         cpo::uno::Any(!bEvenAndOdd),
@@ -1513,7 +1513,7 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
 
     rtl::Reference<SwXPageStyle> pageProperties(m_aPageStyle);
     uno::Reference<beans::XPropertySetInfo> pagePropertiesInfo(pageProperties->getPropertySetInfo());
-    const uno::Sequence<beans::Property> propertyList(pagePropertiesInfo->getProperties());
+    const cpo::uno::Sequence<beans::Property> propertyList(pagePropertiesInfo->getProperties());
 
     if (rDM_Impl.IsNewDoc())
     {
@@ -2205,8 +2205,8 @@ void SectionPropertyMap::ApplyProperties_( const rtl::Reference<SwXPageStyle>& x
         const std::vector< beans::PropertyValue >& vPropVals = GetPropertyValues();
 
         //Temporarily store the items that are in grab bags
-        uno::Sequence< beans::PropertyValue > vCharVals;
-        uno::Sequence< beans::PropertyValue > vParaVals;
+        cpo::uno::Sequence< beans::PropertyValue > vCharVals;
+        cpo::uno::Sequence< beans::PropertyValue > vParaVals;
         auto pCharGrabBag = std::find_if( vPropVals.begin(), vPropVals.end(), NamedPropertyValue( u"CharInteropGrabBag"_ustr ) );
         if ( pCharGrabBag != vPropVals.end() )
             (pCharGrabBag->Value) >>= vCharVals;

@@ -141,7 +141,7 @@ Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 math_FormatDetector_get_implementation(uno::XComponentContext* /*pCtx*/,
-                                       uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                       cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmFilterDetect);
 }

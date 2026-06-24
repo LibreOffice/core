@@ -329,7 +329,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf89702, "tdf89702.docx")
     uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
     auto xLevels
         = getProperty<uno::Reference<container::XIndexAccess>>(xParagraph, u"NumberingRules"_ustr);
-    uno::Sequence<beans::PropertyValue> aLevel;
+    cpo::uno::Sequence<beans::PropertyValue> aLevel;
     xLevels->getByIndex(1) >>= aLevel; // 2nd level
     OUString aCharStyleName = std::find_if(std::cbegin(aLevel), std::cend(aLevel),
                                            [](const beans::PropertyValue& rValue) {
@@ -467,7 +467,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92124, "tdf92124.docx")
     uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
     auto xLevels
         = getProperty<uno::Reference<container::XIndexAccess>>(xParagraph, u"NumberingRules"_ustr);
-    uno::Sequence<beans::PropertyValue> aLevel;
+    cpo::uno::Sequence<beans::PropertyValue> aLevel;
     xLevels->getByIndex(0) >>= aLevel; // 1st level
     OUString aSuffix
         = std::find_if(std::cbegin(aLevel), std::cend(aLevel),
@@ -598,7 +598,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95213, "tdf95213.docx")
     uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
     auto xLevels
         = getProperty<uno::Reference<container::XIndexAccess>>(xParagraph, u"NumberingRules"_ustr);
-    uno::Sequence<beans::PropertyValue> aLevel;
+    cpo::uno::Sequence<beans::PropertyValue> aLevel;
     xLevels->getByIndex(1) >>= aLevel; // 2nd level
     OUString aName = std::find_if(std::cbegin(aLevel), std::cend(aLevel),
                                   [](const beans::PropertyValue& rValue) {

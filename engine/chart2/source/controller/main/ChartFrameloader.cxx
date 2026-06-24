@@ -68,14 +68,14 @@ bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.SynchronousFrameLoader"_ustr };
 }
 
 // frame::XFrameLoader
 
-bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyValue >& rMediaDescriptor, const uno::Reference<frame::XFrame >& xFrame )
+bool SAL_CALL ChartFrameLoader::load( const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor, const uno::Reference<frame::XFrame >& xFrame )
 {
     //@todo ? need to add as terminate listener to desktop?
 
@@ -138,7 +138,7 @@ bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyValue 
                     aMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL] <<= aURL;
                 }
                 utl::MediaDescriptor::addInputStream(aMediaDescriptor);
-                uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;
+                cpo::uno::Sequence< beans::PropertyValue > aCompleteMediaDescriptor;
                 aMediaDescriptor >> aCompleteMediaDescriptor;
                 apphelper::MediaDescriptorHelper aMDHelper( aCompleteMediaDescriptor );
 
@@ -177,7 +177,7 @@ void SAL_CALL ChartFrameLoader::cancel()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartFrameLoader_get_implementation(css::uno::XComponentContext *context,
-                                                             css::uno::Sequence<cpo::uno::Any> const &)
+                                                             cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::ChartFrameLoader(context));
 }

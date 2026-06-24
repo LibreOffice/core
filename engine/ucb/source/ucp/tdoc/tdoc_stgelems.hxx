@@ -93,9 +93,9 @@ public:
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId() override;
 
     // XComponent ( one of XStorage bases )
@@ -109,7 +109,7 @@ public:
     // XNameAccess ( one of XStorage bases )
     virtual cpo::uno::Any SAL_CALL
     getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getElementNames() override;
     virtual bool SAL_CALL
     hasByName( const OUString& aName ) override;
@@ -204,14 +204,14 @@ public:
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId() override;
 
     // XOutputStream
     virtual void SAL_CALL
-    writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+    writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
     virtual void SAL_CALL
     flush(  ) override;
     // Note: We need to intercept this one.
@@ -264,9 +264,9 @@ public:
 
     // XTypeProvider (implemented by base, but needs to be overridden for
     //                delegating to aggregate)
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId() override;
 
     // XStream
@@ -278,7 +278,7 @@ public:
 
     // XOutputStream
     virtual void SAL_CALL
-    writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+    writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
 
     virtual void SAL_CALL
     flush() override;
@@ -292,11 +292,11 @@ public:
 
     // XInputStream
     virtual sal_Int32 SAL_CALL
-    readBytes( css::uno::Sequence< sal_Int8 >& aData,
+    readBytes( cpo::uno::Sequence< sal_Int8 >& aData,
                sal_Int32 nBytesToRead ) override;
 
     virtual sal_Int32 SAL_CALL
-    readSomeBytes( css::uno::Sequence< sal_Int8 >& aData,
+    readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData,
                    sal_Int32 nMaxBytesToRead ) override;
 
     virtual void SAL_CALL

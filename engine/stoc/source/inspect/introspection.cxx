@@ -1507,7 +1507,7 @@ private:
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL
+    virtual cpo::uno::Sequence<OUString> SAL_CALL
     getSupportedServiceNames() override
     {
         Sequence<OUString> s { u"com.sun.star.beans.Introspection"_ustr };
@@ -2374,7 +2374,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_stoc_Introspection_get_implementation(
     css::uno::XComponentContext * context,
-    css::uno::Sequence<cpo::uno::Any> const & arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     SAL_WARN_IF(
         arguments.hasElements(), "stoc", "unexpected singleton arguments");

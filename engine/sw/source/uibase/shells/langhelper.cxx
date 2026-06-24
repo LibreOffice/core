@@ -79,7 +79,7 @@ namespace SwLangHelper
             aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
         // build sequence for status value
-        uno::Sequence<OUString> aSeq{ aCurrentLang,
+        cpo::uno::Sequence<OUString> aSeq{ aCurrentLang,
                                         aScriptTypesInUse,
                                         aKeyboardLang,
                                         SwLangHelper::GetTextForLanguageGuessing(&rEditEngine, aSelection)

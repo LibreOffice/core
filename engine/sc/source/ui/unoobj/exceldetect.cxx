@@ -37,7 +37,7 @@ bool ScExcelBiffDetect::supportsService( const OUString& aName )
     return cppu::supportsService(this, aName);
 }
 
-uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
@@ -129,7 +129,7 @@ bool isTemplate(std::u16string_view rType)
 
 }
 
-OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
+OUString ScExcelBiffDetect::detect( cpo::uno::Sequence<beans::PropertyValue>& lDescriptor )
 {
     comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
     OUString aType;
@@ -191,7 +191,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_calc_ExcelBiffFormatDetector_get_implementation(css::uno::XComponentContext* /*context*/,
-                                                                  css::uno::Sequence<cpo::uno::Any> const &)
+                                                                  cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScExcelBiffDetect);
 }

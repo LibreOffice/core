@@ -577,7 +577,7 @@ uno::Reference< XAccessible> SAL_CALL
     return pChild;
 }
 
-css::uno::Sequence<uno::Reference<XAccessible>> SAL_CALL
+cpo::uno::Sequence<uno::Reference<XAccessible>> SAL_CALL
     SwAccessibleContext::getAccessibleChildren()
 {
     SolarMutexGuard aGuard;

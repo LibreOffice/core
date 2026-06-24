@@ -59,7 +59,7 @@ void ListPropListener::setValueEvent( const cpo::uno::Any& value )
 
 cpo::uno::Any ListPropListener::getValueEvent()
 {
-    uno::Sequence< OUString > sList;
+    cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
     cpo::uno::Any aRet;
@@ -75,7 +75,7 @@ cpo::uno::Any ListPropListener::getValueEvent()
             throw uno::RuntimeException( u"Bad column Index"_ustr );
     else // List() ( e.g. no args )
     {
-        uno::Sequence< uno::Sequence< OUString > > sReturnArray( nLength );
+        cpo::uno::Sequence< cpo::uno::Sequence< OUString > > sReturnArray( nLength );
         auto pReturnArray = sReturnArray.getArray();
         for ( sal_Int32 i = 0; i < nLength; ++i )
         {
@@ -93,7 +93,7 @@ ListControlHelper::AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any&
     if ( !pvargItem.hasValue()  )
         return;
 
-    uno::Sequence< OUString > sList;
+    cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
 
     sal_Int32 nIndex = sList.getLength();
@@ -141,7 +141,7 @@ ListControlHelper::removeItem( const cpo::uno::Any& index )
     if ( !(index >>= nIndex)  )
         return;
 
-    uno::Sequence< OUString > sList;
+    cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
         throw uno::RuntimeException( u"Invalid index"_ustr , uno::Reference< uno::XInterface > () );
@@ -164,7 +164,7 @@ ListControlHelper::Clear(  )
 {
     // urk, setValue doesn't seem to work !!
     //setValue( uno::makeAny( sal_Int16() ) );
-    m_xProps->setPropertyValue( u"StringItemList"_ustr, cpo::uno::Any( uno::Sequence< OUString >() ) );
+    m_xProps->setPropertyValue( u"StringItemList"_ustr, cpo::uno::Any( cpo::uno::Sequence< OUString >() ) );
 }
 
 void
@@ -177,7 +177,7 @@ ListControlHelper::setRowSource( std::u16string_view _rowsource )
 sal_Int32
 ListControlHelper::getListCount()
 {
-    uno::Sequence< OUString > sList;
+    cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     return sList.getLength();
 }

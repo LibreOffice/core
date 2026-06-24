@@ -105,7 +105,7 @@ public:
     ~OWriterConnection() override;
 
     void construct(const OUString& rURL,
-                   const css::uno::Sequence<css::beans::PropertyValue>& rInfo) override;
+                   const cpo::uno::Sequence<css::beans::PropertyValue>& rInfo) override;
 
     // XServiceInfo
     DECLARE_SERVICE_INFO();

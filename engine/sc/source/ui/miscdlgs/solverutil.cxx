@@ -36,8 +36,8 @@ using namespace com::sun::star;
 
 constexpr OUString SCSOLVER_SERVICE = u"com.sun.star.sheet.Solver"_ustr;
 
-void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
-                                       uno::Sequence<OUString>& rDescriptions )
+void ScSolverUtil::GetImplementations( cpo::uno::Sequence<OUString>& rImplNames,
+                                       cpo::uno::Sequence<OUString>& rDescriptions )
 {
     rImplNames.realloc(0);      // clear
     rDescriptions.realloc(0);
@@ -133,9 +133,9 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( std::u16string_view rImp
     return xSolver;
 }
 
-uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( std::u16string_view rImplName )
+cpo::uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( std::u16string_view rImplName )
 {
-    uno::Sequence<beans::PropertyValue> aDefaults;
+    cpo::uno::Sequence<beans::PropertyValue> aDefaults;
 
     uno::Reference<sheet::XSolver> xSolver = GetSolver( rImplName );
     uno::Reference<beans::XPropertySet> xPropSet( xSolver, uno::UNO_QUERY );
@@ -152,7 +152,7 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( std::u16string_vi
     if ( !xInfo.is() )
         return aDefaults;
 
-    const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
+    const cpo::uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
     const sal_Int32 nSize = aPropSeq.getLength();
     aDefaults.realloc(nSize);
     auto pDefaults = aDefaults.getArray();

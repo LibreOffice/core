@@ -85,7 +85,7 @@ static JSTreeView* g_DragSource;
 
 JSDropTarget::JSDropTarget() {}
 
-void JSDropTarget::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArgs*/) {}
+void JSDropTarget::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArgs*/) {}
 
 void JSDropTarget::addDropTargetListener(
     const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
@@ -121,9 +121,9 @@ bool JSDropTarget::supportsService(OUString const& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> JSDropTarget::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> JSDropTarget::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aRet{ u"com.sun.star.datatransfer.dnd.JSDropTarget"_ustr };
+    cpo::uno::Sequence<OUString> aRet{ u"com.sun.star.datatransfer.dnd.JSDropTarget"_ustr };
     return aRet;
 }
 

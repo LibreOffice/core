@@ -39,7 +39,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -56,7 +56,7 @@ OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName()
     return u"SvxUnoTransGradientTable"_ustr;
 }
 
-uno::Sequence<OUString> SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.TransparencyGradientTable"_ustr };
 }

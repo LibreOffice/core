@@ -125,10 +125,10 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPresetAdjustValue)
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
     aGeoPropMap.getValue(u"AdjustmentValues"_ustr) >>= aAdjustmentSeq;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aAdjustmentSeq.getLength());
     // Without the accompanying fix in place, this test would have failed with:
@@ -161,7 +161,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartDataLabelCharColor)
 
     uno::Reference<beans::XPropertySet> xDataPoint = xDataSeries->getDataPointByIndex(0);
 
-    uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aLabels;
+    cpo::uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aLabels;
     xDataPoint->getPropertyValue(u"CustomLabelFields"_ustr) >>= aLabels;
     uno::Reference<beans::XPropertySet> xLabel = aLabels[0];
 
@@ -607,7 +607,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testVert270AndTextRot)
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
 
@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTextRot)
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
 
@@ -664,7 +664,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf113187ConstantArcTo)
                                                  uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
 

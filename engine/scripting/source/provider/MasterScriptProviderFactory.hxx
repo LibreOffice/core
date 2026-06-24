@@ -60,7 +60,7 @@ public:
     virtual bool SAL_CALL
         supportsService( OUString const & serviceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // XScriptProviderFactory

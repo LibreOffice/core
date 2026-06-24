@@ -60,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
         = xSEInitializer->createSecurityContext(OUString());
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
         = xSecurityContext->getSecurityEnvironment();
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"SignPDF"_ustr, true),
         comphelper::makePropertyValue(
             u"SignCertificateSubjectName"_ustr,
@@ -84,7 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
 
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfDecompositionSize)
     loadFromURL(u"private:factory/swriter"_ustr);
 
     // When inserting a 267 points wide PDF image into the document:
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FileName"_ustr, createFileURL(u"picture.pdf")),
     };
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
@@ -149,7 +149,7 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
     if (comphelper::COKit::isActive())
     {
         vcl::ITiledRenderable* pTiledDoc = dynamic_cast<vcl::ITiledRenderable*>(mxComponent.get());
-        pTiledDoc->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+        pTiledDoc->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     }
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
     uno::Reference<document::XFilter> xFilter(
@@ -158,9 +158,9 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
     xExporter->setSourceDocument(mxComponent);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
         u"ExportNotesInMargin"_ustr, commentsInMarginEnabled) };
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),
@@ -223,11 +223,11 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkColor)
     xExporter->setSourceDocument(mxComponent);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Watermark"_ustr, u"X"_ustr),
         comphelper::makePropertyValue(u"WatermarkColor"_ustr, static_cast<sal_Int32>(0xff0000)),
     };
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),
@@ -268,11 +268,11 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontHeight)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     sal_Int32 nExpectedFontSize = 100;
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Watermark"_ustr, u"X"_ustr),
         comphelper::makePropertyValue(u"WatermarkFontHeight"_ustr, nExpectedFontSize),
     };
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),
@@ -313,11 +313,11 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontName)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     OUString aExpectedFontName(u"Liberation Serif"_ustr);
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Watermark"_ustr, u"X"_ustr),
         comphelper::makePropertyValue(u"WatermarkFontName"_ustr, aExpectedFontName),
     };
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),
@@ -359,11 +359,11 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkRotateAngle)
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     // 45.0 degrees, counter-clockwise.
     sal_Int32 nExpectedRotateAngle = 45;
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Watermark"_ustr, u"X"_ustr),
         comphelper::makePropertyValue(u"WatermarkRotateAngle"_ustr, nExpectedRotateAngle * 10),
     };
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),
@@ -419,7 +419,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificatePEM)
     SvFileStream aCaStream(aCaPath, StreamMode::READ);
     OUString aCaPem
         = OUString::fromUtf8(read_uInt8s_ToOString(aCaStream, aCaStream.remainingSize()));
-    uno::Sequence<beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"SignPDF"_ustr, true),
         comphelper::makePropertyValue(u"SignCertificateCertPem"_ustr, aCertPem),
         comphelper::makePropertyValue(u"SignCertificateKeyPem"_ustr, aKeyPem),
@@ -436,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificatePEM)
     xExporter->setSourceDocument(mxComponent);
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor{
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor{
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer_pdf_Export"_ustr),
         comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
         comphelper::makePropertyValue(u"OutputStream"_ustr, xOutputStream),

@@ -243,7 +243,7 @@ OUString OutputDevice::GetRenderBackendName() const
 cpo::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();
-    css::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(&aSysData),
+    cpo::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(&aSysData),
                                                       aSysData.nSize );
 
     return cpo::uno::Any(aSeq);

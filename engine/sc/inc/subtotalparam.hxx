@@ -15,7 +15,7 @@
 #include <span>
 
 namespace com::sun::star::sheet { struct SubTotalColumn; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 struct SC_DLLPUBLIC ScSubTotalParam
 {
@@ -63,9 +63,9 @@ struct SC_DLLPUBLIC ScSubTotalParam
         void AllocCustFuncs(SCCOL n);
         void AllocSubLabels(SCCOL n);
         void AllocNumFmts(SCCOL n);
-        void SetSubtotals(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
-        //void SetCustFuncs(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
-        //void SetSublabels(const css::uno::Sequence<css::sheet::SubTotalColumn>& seq);
+        void SetSubtotals(const cpo::uno::Sequence<css::sheet::SubTotalColumn>& seq);
+        //void SetCustFuncs(const cpo::uno::Sequence<css::sheet::SubTotalColumn>& seq);
+        //void SetSublabels(const cpo::uno::Sequence<css::sheet::SubTotalColumn>& seq);
 
         // Totals
         std::span<Pair> subtotals() { return std::span(pSubTotals.get(), nSubTotals); }

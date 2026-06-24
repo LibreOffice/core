@@ -60,8 +60,8 @@ namespace XSLT
         static const sal_Int32 OUTPUT_BUFFER_SIZE;
         static const sal_Int32 INPUT_BUFFER_SIZE;
         rtl::Reference<LibXSLTTransformer> m_transformer;
-        css::uno::Sequence<sal_Int8> m_readBuf;
-        css::uno::Sequence<sal_Int8> m_writeBuf;
+        cpo::uno::Sequence<sal_Int8> m_readBuf;
+        cpo::uno::Sequence<sal_Int8> m_writeBuf;
 
         std::mutex m_mutex;
         xsltTransformContextPtr m_tcontext;
@@ -128,7 +128,7 @@ namespace XSLT
         //  XServiceInfo
         virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XActiveDataSink
         virtual void SAL_CALL
@@ -150,7 +150,7 @@ namespace XSLT
         virtual void SAL_CALL
         terminate() override;
         virtual void SAL_CALL
-        initialize(const css::uno::Sequence<cpo::uno::Any>& params) override;
+        initialize(const cpo::uno::Sequence<cpo::uno::Any>& params) override;
 
         void
         done();

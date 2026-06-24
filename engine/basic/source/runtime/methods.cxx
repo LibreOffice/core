@@ -54,7 +54,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -1196,7 +1196,7 @@ void SbRtl_Replace(StarBASIC *, SbxArray & rPar, bool)
 
     OUString aSrcStr(aExpStr);
     sal_Int32 nPrevPos = std::min(lStartPos, aSrcStr.getLength());
-    css::uno::Sequence<sal_Int32> aOffset;
+    cpo::uno::Sequence<sal_Int32> aOffset;
     if (bCaseInsensitive)
     {
         // tdf#132389: case-insensitive operation for non-ASCII characters

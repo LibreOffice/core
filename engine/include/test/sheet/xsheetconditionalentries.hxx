@@ -13,7 +13,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
@@ -24,7 +24,7 @@ class OOO_DLLPUBLIC_TEST XSheetConditionalEntries
 {
 public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
-    virtual css::uno::Sequence<css::beans::PropertyValue> createCondition(const sal_Int32 nr) = 0;
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> createCondition(const sal_Int32 nr) = 0;
 
     void testAddNew();
     void testClear();

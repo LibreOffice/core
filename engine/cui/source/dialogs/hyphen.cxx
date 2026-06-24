@@ -171,7 +171,7 @@ void SvxHyphenWordDialog::InitControls_Impl()
     {
         lang::Locale aLocale( LanguageTag::convertToLocale(m_nActLanguage) );
         m_xPossHyph = m_xHyphenator->createPossibleHyphens( m_aActWord, aLocale,
-                                                        uno::Sequence< beans::PropertyValue >() );
+                                                        cpo::uno::Sequence< beans::PropertyValue >() );
         if (m_xPossHyph.is())
             m_aEditWord = EraseUnusableHyphens_Impl();
     }
@@ -200,7 +200,7 @@ void SvxHyphenWordDialog::ContinueHyph_Impl( sal_Int32 nInsPos )
             // start of the word into account:
             nIdxPos += m_nHyphenationPositionsOffset;
 
-            uno::Sequence< sal_Int16 > aSeq = m_xPossHyph->getHyphenationPositions();
+            cpo::uno::Sequence< sal_Int16 > aSeq = m_xPossHyph->getHyphenationPositions();
             sal_Int32 nLen = aSeq.getLength();
             DBG_ASSERT(nLen, "empty sequence");
             DBG_ASSERT(0 <= nIdxPos && nIdxPos < nLen, "index out of range");

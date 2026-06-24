@@ -51,7 +51,7 @@ namespace vclcanvas
         const CanvasFont& operator=(const CanvasFont&) = delete;
 
         CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
-                    const css::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
                     const css::geometry::Matrix2D&                                         rFontMatrix,
                     css::rendering::XGraphicDevice&                                        rDevice,
                     const OutDevProviderSharedPtr&                                                      rOutDevProvider );
@@ -63,13 +63,13 @@ namespace vclcanvas
         virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
         virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) override;
         virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) override;
-        virtual css::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) override;
+        virtual cpo::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         vcl::Font const & getVCLFont() const;
 

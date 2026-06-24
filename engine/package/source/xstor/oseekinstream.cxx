@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
                                     uno::Reference < io::XInputStream > const & xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    const cpo::uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
     : OInputSeekStream_BASE(pImpl, xStream, aProps, nStorageType)
 {
@@ -39,7 +39,7 @@ OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
 }
 
 OInputSeekStream::OInputSeekStream( uno::Reference < io::XInputStream > const & xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    const cpo::uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
     : OInputSeekStream_BASE(xStream, aProps, nStorageType)
 {

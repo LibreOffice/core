@@ -35,7 +35,7 @@ public:
 
     // XTheme
     OUString SAL_CALL getName() override;
-    css::uno::Sequence<sal_Int32> SAL_CALL getColorSet() override;
+    cpo::uno::Sequence<sal_Int32> SAL_CALL getColorSet() override;
 };
 
 namespace model::theme

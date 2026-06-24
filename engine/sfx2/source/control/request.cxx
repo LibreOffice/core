@@ -21,7 +21,7 @@
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -92,7 +92,7 @@ struct SfxRequest_Impl: public SfxListener
 
     void                SetPool( SfxItemPool *pNewPool );
     virtual void        Notify( SfxBroadcaster &rBC, const SfxHint &rHint ) override;
-    void                Record( const uno::Sequence < beans::PropertyValue >& rArgs );
+    void                Record( const cpo::uno::Sequence < beans::PropertyValue >& rArgs );
 };
 
 
@@ -125,7 +125,7 @@ SfxRequest::~SfxRequest()
 {
     // Leave out Done() marked requests with 'rem'
     if ( pImpl->xRecorder.is() && !pImpl->bDone && !pImpl->bIgnored )
-        pImpl->Record( uno::Sequence < beans::PropertyValue >() );
+        pImpl->Record( cpo::uno::Sequence < beans::PropertyValue >() );
 
     // Clear object
     pArgs.reset();
@@ -236,7 +236,7 @@ SfxRequest::SfxRequest
 SfxRequest::SfxRequest
 (
     const SfxSlot* pSlot,       // executed <Slot-Id>
-    const css::uno::Sequence < css::beans::PropertyValue >& rArgs,
+    const cpo::uno::Sequence < css::beans::PropertyValue >& rArgs,
     SfxCallMode     nMode,      // Synch/API/...
     SfxItemPool&   rPool        // necessary for the SfxItemSet for parameters
 )
@@ -321,7 +321,7 @@ const SfxItemSet* SfxRequest::GetInternalArgs_Impl() const
 
 void SfxRequest_Impl::Record
 (
-    const uno::Sequence < beans::PropertyValue >& rArgs  // current Parameter
+    const cpo::uno::Sequence < beans::PropertyValue >& rArgs  // current Parameter
 )
 
 /*  [Description]
@@ -595,7 +595,7 @@ void SfxRequest::Done_Impl
         const SfxItemState eState(bItemStateSet ? pSet->GetItemState( nWhich, false, &pItem ) : SfxItemState::DEFAULT);
         SAL_WARN_IF( !bItemStateSet || SfxItemState::SET != eState, "sfx", "Recording property not available: "
                      << pImpl->pSlot->GetSlotId() );
-        uno::Sequence < beans::PropertyValue > aSeq;
+        cpo::uno::Sequence < beans::PropertyValue > aSeq;
 
         if ( bItemStateSet && SfxItemState::SET == eState )
             aSeq = TransformItems(pImpl->pSlot->GetSlotId(), *pSet, pImpl->pSlot).getAsConstPropertyValueList();
@@ -606,7 +606,7 @@ void SfxRequest::Done_Impl
     // record everything in a single statement?
     else if ( pImpl->pSlot->IsMode(SfxSlotMode::RECORDPERSET) )
     {
-        uno::Sequence < beans::PropertyValue > aSeq;
+        cpo::uno::Sequence < beans::PropertyValue > aSeq;
         if ( pSet )
             aSeq = TransformItems(pImpl->pSlot->GetSlotId(), *pSet, pImpl->pSlot).getAsConstPropertyValueList();
         pImpl->Record( aSeq );
@@ -642,7 +642,7 @@ void SfxRequest::Done_Impl
         else
         {
           //HACK(think about this again)
-            pImpl->Record( uno::Sequence < beans::PropertyValue >() );
+            pImpl->Record( cpo::uno::Sequence < beans::PropertyValue >() );
         }
     }
 }

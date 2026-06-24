@@ -24,7 +24,7 @@
 
 
 using css::uno::Reference;
-using css::uno::Sequence;
+using cpo::uno::Sequence;
 using cpo::uno::Any;
 
 using namespace ::com::sun::star;

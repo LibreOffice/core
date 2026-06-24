@@ -36,7 +36,7 @@ void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelation
         vcl::Window* pParentWindow = pWindow->GetParent();
         if( pParentWindow )
         {
-            uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pParentWindow->GetAccessible() };
+            cpo::uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pParentWindow->GetAccessible() };
             rRelationSet.AddRelation(AccessibleRelation(AccessibleRelationType_SUB_WINDOW_OF, aSequence));
         }
     }

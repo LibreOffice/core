@@ -734,7 +734,7 @@ void writePROJECTMODULES(SvStream& rStrm,
                          const std::vector<sal_Int32>& rLibraryMap,
                          const rtl_TextEncoding eTextEncoding)
 {
-    const css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    const cpo::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
     css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
     assert(xModuleInfo.is());
@@ -834,7 +834,7 @@ void exportPROJECTStream(SvStream& rStrm,
                          const OUString& projectName, const std::vector<sal_Int32>& rLibraryMap,
                          const rtl_TextEncoding eTextEncoding)
 {
-    const css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    const cpo::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
     css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
     assert(xModuleInfo.is());
@@ -941,7 +941,7 @@ void exportPROJECTStream(SvStream& rStrm,
 }
 
 // section 2.3.3.1 NAMEMAP
-void writeNAMEMAP(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames,
+void writeNAMEMAP(SvStream& rStrm, const cpo::uno::Sequence<OUString>& rElementNames,
         const std::vector<sal_Int32>& rLibraryMap, const rtl_TextEncoding eTextEncoding)
 {
     int n = rElementNames.getLength();
@@ -956,7 +956,7 @@ void writeNAMEMAP(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementN
 }
 
 // section 2.3.3 PROJECTwm Stream
-void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames,
+void exportPROJECTwmStream(SvStream& rStrm, const cpo::uno::Sequence<OUString>& rElementNames,
         const std::vector<sal_Int32>& rLibraryMap, const rtl_TextEncoding eTextEncoding)
 {
     writeNAMEMAP(rStrm, rElementNames, rLibraryMap, eTextEncoding);
@@ -965,7 +965,7 @@ void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& 
 
 void getCorrectExportOrder(const css::uno::Reference<css::container::XNameContainer>& xNameContainer, std::vector<sal_Int32>& rLibraryMap)
 {
-    const css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    const cpo::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
     css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
 
@@ -1028,7 +1028,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     if (!xNameContainer.is()) {
         return;
     }
-    const css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    const cpo::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength(); // get the number of modules
     // export the elements in the order MSO expects them
     // we store the index of the

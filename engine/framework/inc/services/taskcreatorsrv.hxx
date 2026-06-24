@@ -51,7 +51,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.frame.TaskCreator"_ustr };
     }
@@ -60,7 +60,7 @@ public:
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance() override;
 
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
-    createInstanceWithArguments(const css::uno::Sequence<cpo::uno::Any>& lArguments) override;
+    createInstanceWithArguments(const cpo::uno::Sequence<cpo::uno::Any>& lArguments) override;
 
 private:
     css::uno::Reference<css::awt::XWindow>

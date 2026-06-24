@@ -26,6 +26,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::cpo::uno;
 using namespace ::osl;
 using namespace ::cppu;
 
@@ -54,12 +55,12 @@ OQueryDescriptor::~OQueryDescriptor()
 {
 }
 
-css::uno::Sequence<sal_Int8> OQueryDescriptor::getImplementationId()
+cpo::uno::Sequence<sal_Int8> OQueryDescriptor::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-css::uno::Sequence< css::uno::Type > OQueryDescriptor::getTypes()
+cpo::uno::Sequence< css::uno::Type > OQueryDescriptor::getTypes()
 {
     return  ::comphelper::concatSequences(
         OQueryDescriptor_Base::getTypes( ),

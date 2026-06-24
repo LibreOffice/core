@@ -18,14 +18,13 @@
 
 using namespace com::sun::star;
 
-CoinMpSolveResult coinmpSolveLinearModel(const uno::Sequence<table::CellAddress>& rVariables,
-                                         const uno::Sequence<sheet::SolverConstraint>& rConstraints,
-                                         const table::CellAddress& rObjective,
-                                         const ScSolverCellHashMap& rCells,
-                                         const std::vector<double>& rLowerBounds,
-                                         const std::vector<double>& rUpperBounds,
-                                         const std::vector<char>& rColumnType, bool bMaximize,
-                                         double fTimeoutSeconds)
+CoinMpSolveResult
+coinmpSolveLinearModel(const cpo::uno::Sequence<table::CellAddress>& rVariables,
+                       const cpo::uno::Sequence<sheet::SolverConstraint>& rConstraints,
+                       const table::CellAddress& rObjective, const ScSolverCellHashMap& rCells,
+                       const std::vector<double>& rLowerBounds,
+                       const std::vector<double>& rUpperBounds,
+                       const std::vector<char>& rColumnType, bool bMaximize, double fTimeoutSeconds)
 {
     CoinMpSolveResult aResult;
 

@@ -99,8 +99,8 @@ public:
     /** Creates a defined name in the Calc document. */
     void                createNameObject( sal_Int32 nIndex );
     /** Converts the formula string or BIFF token array for this defined name. */
-    void                convertFormula( const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks );
-    std::unique_ptr<ScTokenArray> getScTokens( const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks );
+    void                convertFormula( const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks );
+    std::unique_ptr<ScTokenArray> getScTokens( const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks );
     /** Returns true, if this defined name is global in the document. */
     bool         isGlobalName() const { return mnCalcSheet < 0; }
     /** Returns true, if this defined name is a special builtin name. */
@@ -118,7 +118,7 @@ public:
     sal_Int32    getTokenIndex() const { return mnTokenIndex; }
     /** Tries to resolve the defined name to an absolute cell range. */
     bool                getAbsoluteRange( ScRange& orRange ) const;
-    bool isValid(const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks) const;
+    bool isValid(const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks) const;
 
 private:
     typedef ::std::unique_ptr< StreamDataSequence >   StreamDataSeqPtr;

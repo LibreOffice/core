@@ -100,7 +100,7 @@ WpftLoader ImportTest::createLoader(const OUString& rUrl, const OUString& rFacto
     comphelper::SequenceAsHashMap aDesc;
     aDesc[utl::MediaDescriptor::PROP_URL] <<= rUrl;
     aDesc[utl::MediaDescriptor::PROP_READONLY] <<= true;
-    uno::Sequence<beans::PropertyValue> lDesc(aDesc.getAsConstPropertyValueList());
+    cpo::uno::Sequence<beans::PropertyValue> lDesc(aDesc.getAsConstPropertyValueList());
     m_xTypeDetection->queryTypeByDescriptor(lDesc, true);
     aDesc = lDesc;
     OUString sFilter;

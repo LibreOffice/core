@@ -38,7 +38,7 @@ namespace com::sun::star {
     namespace sheet { struct FormulaToken; }
 }
 
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 namespace formula { class FormulaTokenArray; }
 
 namespace svl {
@@ -471,7 +471,7 @@ public:
         @return true        when an error occurs
     */
     bool Fill(
-        const css::uno::Sequence<css::sheet::FormulaToken>& rSequence,
+        const cpo::uno::Sequence<css::sheet::FormulaToken>& rSequence,
         svl::SharedStringPool& rSPool, ExternalReferenceHelper* pExtRef );
 
     /**

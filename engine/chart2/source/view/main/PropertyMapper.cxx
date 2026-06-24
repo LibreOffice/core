@@ -156,7 +156,7 @@ void PropertyMapper::setMappedProperties(
     }
 }
 
-css::uno::Sequence<css::beans::PropertyValue> PropertyMapper::getPropVals(
+cpo::uno::Sequence<css::beans::PropertyValue> PropertyMapper::getPropVals(
          const uno::Reference< beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap )
 {
@@ -193,9 +193,9 @@ void PropertyMapper::getValueMap(
     uno::Reference< beans::XMultiPropertySet > xMultiPropSet(xSourceProp, uno::UNO_QUERY);
     if((false) && xMultiPropSet.is())
     {
-        uno::Sequence< OUString > aPropSourceNames(rNameMap.size());
+        cpo::uno::Sequence< OUString > aPropSourceNames(rNameMap.size());
         auto aPropSourceNamesRange = asNonConstRange(aPropSourceNames);
-        uno::Sequence< OUString > aPropTargetNames(rNameMap.size());
+        cpo::uno::Sequence< OUString > aPropTargetNames(rNameMap.size());
         auto aPropTargetNamesRange = asNonConstRange(aPropTargetNames);
         sal_Int32 i = 0;
         for (auto const& elem : rNameMap)
@@ -205,7 +205,7 @@ void PropertyMapper::getValueMap(
             ++i;
         }
 
-        uno::Sequence< cpo::uno::Any > xValues = xMultiPropSet->getPropertyValues(aPropSourceNames);
+        cpo::uno::Sequence< cpo::uno::Any > xValues = xMultiPropSet->getPropertyValues(aPropSourceNames);
         sal_Int32 n = rNameMap.size();
         for(i = 0;i < n; ++i)
         {

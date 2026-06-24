@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -47,7 +47,7 @@ public:
 
     static rtl::OUString SAL_CALL static_getImplementationName();
 
-    static css::uno::Sequence<rtl::OUString> SAL_CALL static_getSupportedServiceNames();
+    static cpo::uno::Sequence<rtl::OUString> SAL_CALL static_getSupportedServiceNames();
 
 private:
     explicit Provider(css::uno::Reference<css::uno::XComponentContext> const& context)
@@ -68,7 +68,7 @@ private:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override
     {
         return static_getSupportedServiceNames();
     }
@@ -76,11 +76,11 @@ private:
     virtual css::uno::Reference<css::frame::XDispatch>
         SAL_CALL queryDispatch(css::util::URL const&, rtl::OUString const&, sal_Int32) override;
 
-    virtual css::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> SAL_CALL
-    queryDispatches(css::uno::Sequence<css::frame::DispatchDescriptor> const& Requests) override;
+    virtual cpo::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> SAL_CALL
+    queryDispatches(cpo::uno::Sequence<css::frame::DispatchDescriptor> const& Requests) override;
 
     virtual void SAL_CALL dispatch(css::util::URL const&,
-                                   css::uno::Sequence<css::beans::PropertyValue> const&) override;
+                                   cpo::uno::Sequence<css::beans::PropertyValue> const&) override;
 
     virtual void SAL_CALL addStatusListener(css::uno::Reference<css::frame::XStatusListener> const&,
                                             css::util::URL const&) override
@@ -100,10 +100,10 @@ rtl::OUString Provider::static_getImplementationName()
     return u"org.libreoffice.test.desktop.deployment.crashextension.impl"_ustr;
 }
 
-css::uno::Sequence<rtl::OUString> Provider::static_getSupportedServiceNames()
+cpo::uno::Sequence<rtl::OUString> Provider::static_getSupportedServiceNames()
 {
     rtl::OUString name(u"org.libreoffice.test.desktop.deployment.crashextension"_ustr);
-    return css::uno::Sequence<rtl::OUString>(&name, 1);
+    return cpo::uno::Sequence<rtl::OUString>(&name, 1);
 }
 
 css::uno::Reference<css::frame::XDispatch> Provider::queryDispatch(css::util::URL const&,
@@ -112,10 +112,10 @@ css::uno::Reference<css::frame::XDispatch> Provider::queryDispatch(css::util::UR
     return this;
 }
 
-css::uno::Sequence<css::uno::Reference<css::frame::XDispatch>>
-Provider::queryDispatches(css::uno::Sequence<css::frame::DispatchDescriptor> const& Requests)
+cpo::uno::Sequence<css::uno::Reference<css::frame::XDispatch>>
+Provider::queryDispatches(cpo::uno::Sequence<css::frame::DispatchDescriptor> const& Requests)
 {
-    css::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> s(Requests.getLength());
+    cpo::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> s(Requests.getLength());
     auto const elems = s.getArray();
     for (sal_Int32 i = 0; i < s.getLength(); ++i)
     {
@@ -125,7 +125,7 @@ Provider::queryDispatches(css::uno::Sequence<css::frame::DispatchDescriptor> con
     return s;
 }
 
-void Provider::dispatch(css::util::URL const&, css::uno::Sequence<css::beans::PropertyValue> const&)
+void Provider::dispatch(css::util::URL const&, cpo::uno::Sequence<css::beans::PropertyValue> const&)
 {
     // Crash LibreOffice
     char volatile* p = nullptr;

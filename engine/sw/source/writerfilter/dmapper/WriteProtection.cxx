@@ -120,9 +120,9 @@ void WriteProtection::lcl_attribute(Id nName, const Value& val)
 
 void WriteProtection::lcl_sprm(Sprm& /*rSprm*/) {}
 
-uno::Sequence<beans::PropertyValue> WriteProtection::toSequence() const
+cpo::uno::Sequence<beans::PropertyValue> WriteProtection::toSequence() const
 {
-    uno::Sequence<beans::PropertyValue> aResult;
+    cpo::uno::Sequence<beans::PropertyValue> aResult;
     if (!m_sAlgorithmName.isEmpty() && !m_sSalt.isEmpty() && !m_sHash.isEmpty()
         && m_sCryptAlgorithmClass == "hash" && m_sCryptAlgorithmType == "typeAny")
     {

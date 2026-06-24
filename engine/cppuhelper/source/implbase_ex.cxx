@@ -239,10 +239,10 @@ Any SAL_CALL ImplHelper_queryNoXInterface(
     return Any();
 }
 
-css::uno::Sequence<sal_Int8> ImplHelper_getImplementationId(
+cpo::uno::Sequence<sal_Int8> ImplHelper_getImplementationId(
     SAL_UNUSED_PARAMETER class_data *)
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Sequence< Type > SAL_CALL ImplHelper_getTypes(

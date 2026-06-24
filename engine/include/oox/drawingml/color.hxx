@@ -24,7 +24,7 @@
 
 #include <unordered_map>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -118,7 +118,7 @@ public:
     ::model::ComplexColor createComplexColor(const GraphicHelper& rGraphicHelper, sal_Int16 nPhClrTheme) const;
 
     /** Returns the unaltered list of transformations for interoperability purposes */
-    const css::uno::Sequence< css::beans::PropertyValue >& getTransformations() const { return maInteropTransformations;}
+    const cpo::uno::Sequence< css::beans::PropertyValue >& getTransformations() const { return maInteropTransformations;}
 
     /** Translates between color transformation tokens and their names */
     static OUString     getColorTransformationName( sal_Int32 nElement );
@@ -157,7 +157,7 @@ private:
     sal_Int32           mnAlpha;        /// Alpha value (color opacity).
     OUString            msSchemeName;   /// Scheme name from the a:schemeClr element for interoperability purposes
     ::model::ThemeColorType meThemeColorType;
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
                         maInteropTransformations;   /// Unaltered list of transformations for interoperability purposes
 };
 

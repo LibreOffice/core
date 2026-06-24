@@ -380,7 +380,7 @@ public:
             OUString DefaultFilter;  // supports saving of the default format without losing data
             OUString Extension;      // file extension of the default filter
             OUString Title;          // can be used as "DisplayName" on every recovery UI!
-            css::uno::Sequence< OUString >
+            cpo::uno::Sequence< OUString >
                             ViewNames;      // names of the view which were active at emergency-save time
 
             sal_Int32 ID;
@@ -506,7 +506,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.frame.AutoRecovery"_ustr};
     }
@@ -522,11 +522,11 @@ public:
     void initListeners();
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // css.frame.XDispatch
     virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
-                                   const css::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
+                                   const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
 
     virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                             const css::util::URL&                                     aURL     ) override;
@@ -1288,7 +1288,7 @@ Sequence< css::uno::Type > SAL_CALL AutoRecovery::getTypes(  )
 }
 
 void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                                  aURL      ,
-                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
+                                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
     SAL_INFO("fwk.autorecovery", "AutoRecovery::dispatch() starts ..." << aURL.Complete);
 
@@ -1918,7 +1918,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
         OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(u"Type"_ustr, OUString());
         ::comphelper::SequenceAsHashMap       lTypeProps          (xTypeCFG->getByName(sTypeRegistration));
-        css::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(u"Extensions"_ustr, css::uno::Sequence< OUString >());
+        cpo::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(u"Extensions"_ustr, cpo::uno::Sequence< OUString >());
         if (lExtensions.hasElements())
         {
             rInfo.Extension = "." + lExtensions[0];
@@ -3041,9 +3041,9 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // if the document was loaded with a password, it should be
     // stored with password
     comphelper::SequenceAsHashMap lNewArgs;
-    css::uno::Sequence< css::beans::NamedValue > aEncryptionData =
+    cpo::uno::Sequence< css::beans::NamedValue > aEncryptionData =
         lOldArgs.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ENCRYPTIONDATA,
-                css::uno::Sequence< css::beans::NamedValue >());
+                cpo::uno::Sequence< css::beans::NamedValue >());
     if (aEncryptionData.hasElements())
         lNewArgs[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
 
@@ -4001,7 +4001,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(cpo::uno::Any& aValue ,
     }
 }
 
-css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor()
+cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor()
 {
     return
     {
@@ -4295,7 +4295,7 @@ void AutoRecovery::st_impl_removeLockFile()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_AutoRecovery_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<AutoRecovery> xAutoRecovery = new AutoRecovery(context);
     // 2nd phase initialization needed

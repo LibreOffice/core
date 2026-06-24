@@ -76,7 +76,7 @@ protected:
 public:
                             // properties: Referer, PostMimeType
     static UcbLockBytesRef  CreateLockBytes( const css::uno::Reference < css::ucb::XContent >& xContent,
-                                            const css::uno::Sequence < css::beans::PropertyValue >& rProps,
+                                            const cpo::uno::Sequence < css::beans::PropertyValue >& rProps,
                                             StreamMode eMode,
                                             const css::uno::Reference < css::task::XInteractionHandler >& xInter );
 

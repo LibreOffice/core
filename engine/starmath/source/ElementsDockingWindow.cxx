@@ -655,7 +655,7 @@ void SmElementsControl::addElements(int nCategory)
     }
     else
     {
-        css::uno::Sequence<OUString> sNames = SmModule::get()->GetConfig()->LoadUserDefinedNames();
+        cpo::uno::Sequence<OUString> sNames = SmModule::get()->GetConfig()->LoadUserDefinedNames();
         OUString sFormula;
         for (int i = 0; i < sNames.getLength(); i++)
         {

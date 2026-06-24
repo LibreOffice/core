@@ -215,7 +215,7 @@ namespace
         if (!rContainer.HasEmbeddedObjects())
             return;
 
-        const uno::Sequence<OUString> aNames = rContainer.GetObjectNames();
+        const cpo::uno::Sequence<OUString> aNames = rContainer.GetObjectNames();
         for (const auto& rName : aNames)
         {
             uno::Reference<embed::XEmbeddedObject> xEmbeddedObj
@@ -562,7 +562,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                                                              u".uno:CloseDoc"_ustr,
                                                              u"_self"_ustr,
                                                              0,
-                                                             uno::Sequence<beans::PropertyValue>());
+                                                             cpo::uno::Sequence<beans::PropertyValue>());
                             css::frame::DispatchResultEvent aEvent;
                             bDispatchOk = (aResult >>= aEvent) && (aEvent.State == frame::DispatchResultState::SUCCESS);
                         }
@@ -976,8 +976,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 if ( xLayoutManager.is() )
                 {
-                    css::uno::Sequence<OUString> aMandatoryToolbars;
-                    css::uno::Sequence<OUString> aUserToolbars;
+                    cpo::uno::Sequence<OUString> aMandatoryToolbars;
+                    cpo::uno::Sequence<OUString> aUserToolbars;
                     std::vector<OUString> aBackupList;
                     OUString aSidebarMode;
 
@@ -1008,8 +1008,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                         if ( aCommandArg == aNewName )
                         {
-                            aMandatoryToolbars = aModeNode.getNodeValue( u"Toolbars"_ustr ).get< uno::Sequence<OUString> >();
-                            aUserToolbars = aModeNode.getNodeValue( u"UserToolbars"_ustr ).get< uno::Sequence<OUString> >();
+                            aMandatoryToolbars = aModeNode.getNodeValue( u"Toolbars"_ustr ).get< cpo::uno::Sequence<OUString> >();
+                            aUserToolbars = aModeNode.getNodeValue( u"UserToolbars"_ustr ).get< cpo::uno::Sequence<OUString> >();
                             aSidebarMode = comphelper::getString( aModeNode.getNodeValue( u"Sidebar"_ustr ) );
                             break;
                         }
@@ -1094,7 +1094,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     // Save settings
                     if ( pViewFrame == SfxViewFrame::Current() )
                     {
-                        css::uno::Sequence<OUString> aBackup( comphelper::containerToSequence(aBackupList) );
+                        cpo::uno::Sequence<OUString> aBackup( comphelper::containerToSequence(aBackupList) );
 
                         for ( const auto& rModeNodeName : aModeNodeNames )
                         {

@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 
 namespace xmloff
@@ -46,19 +46,19 @@ namespace xmloff
     */
     class OEventDescriptorMapper : public OEventDescriptorMapper_Base
     {
-        typedef std::map< OUString, css::uno::Sequence < css::beans::PropertyValue > > MapString2PropertyValueSequence;
+        typedef std::map< OUString, cpo::uno::Sequence < css::beans::PropertyValue > > MapString2PropertyValueSequence;
         MapString2PropertyValueSequence m_aMappedEvents;
 
     public:
         explicit OEventDescriptorMapper(
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents);
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents);
 
         // XNameReplace
         virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
         // XNameAccess
         virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess

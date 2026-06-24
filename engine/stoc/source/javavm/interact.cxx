@@ -91,7 +91,7 @@ cpo::uno::Any SAL_CALL InteractionRequest::getRequest()
     return m_aRequest;
 }
 
-css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
+cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
 SAL_CALL InteractionRequest::getContinuations()
 {
     return m_aContinuations;

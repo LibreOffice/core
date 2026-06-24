@@ -197,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
         {
             css::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeCont(
                 rCooSys, uno::UNO_QUERY_THROW);
-            uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq
+            cpo::uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq
                 = xChartTypeCont->getChartTypes();
             CPPUNIT_ASSERT(xChartTypeSeq.hasElements());
         }
@@ -223,7 +223,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
         {
             css::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeCont(
                 rCooSys, uno::UNO_QUERY_THROW);
-            uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq
+            cpo::uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq
                 = xChartTypeCont->getChartTypes();
             CPPUNIT_ASSERT(xChartTypeSeq.hasElements());
         }

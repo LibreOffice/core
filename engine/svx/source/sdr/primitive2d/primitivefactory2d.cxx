@@ -26,11 +26,11 @@
 
 using namespace com::sun::star;
 
-css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
+cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/ )
+    const cpo::uno::Sequence< beans::PropertyValue >& /*aParms*/ )
 {
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
+    cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
     if(xShape.is())
     {
@@ -50,7 +50,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
 
 void PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/,
+    const cpo::uno::Sequence< beans::PropertyValue >& /*aParms*/,
     drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
 {
     if(xShape.is())
@@ -65,11 +65,11 @@ void PrimitiveFactory2D::createPrimitivesFromXShape(
     }
 }
 
-css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
+cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/ )
+    const cpo::uno::Sequence< beans::PropertyValue >& /*aParms*/ )
 {
-    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
+    cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
     if(xDrawPage.is())
     {
@@ -90,7 +90,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_graphic_PrimitiveFactory2D_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new PrimitiveFactory2D);
 }

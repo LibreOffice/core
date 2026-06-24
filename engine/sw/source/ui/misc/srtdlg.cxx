@@ -60,6 +60,7 @@ static sal_Unicode    cDeli  = '\t';
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::cpo::uno;
 
 // determine lines and columns for table selection
 static bool lcl_GetSelTable( SwWrtShell const &rSh, sal_uInt16& rX, sal_uInt16& rY )

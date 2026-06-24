@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
@@ -141,7 +141,7 @@ public:
     /// Return this object's role.
     virtual sal_Int16 SAL_CALL getAccessibleRole() override;
     //=====  XAccessibleGroupPosition  =========================================
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
         getGroupPosition( const cpo::uno::Any& rAny ) override;
     virtual OUString SAL_CALL getObjectLink( const cpo::uno::Any& accoject ) override;
     /** The destructor releases its children manager and text engine if
@@ -284,12 +284,12 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
     //=====  XTypeProvider  ===================================================
 
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type> SAL_CALL
         getTypes() override;
 
     //=====  IAccessibleViewForwarderListener  ================================
@@ -319,7 +319,7 @@ public:
         virtual sal_Int32 SAL_CALL getCaretPosition(  ) override;
         virtual bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
         virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;//Shen Zhen Jie changed sal_Unicode to sal_uInt32; change back to sal_Unicode
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
         virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
         virtual sal_Int32 SAL_CALL getCharacterCount(  ) override;
         virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;

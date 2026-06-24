@@ -29,7 +29,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/dllapi.h>
@@ -235,7 +235,7 @@ public:
 
     // access to DiagramHelper
     DiagramHelper_oox* getDiagramHelper() const { return mpDiagramHelper; }
-    SAL_DLLPRIVATE css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
+    SAL_DLLPRIVATE cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
     void                setTxbxHasLinkedTxtBox( const bool rhs){ mbHasLinkedTxbx = rhs; };
@@ -329,7 +329,7 @@ protected:
     SAL_DLLPRIVATE void putPropertyToGrabBag(
                             const css::beans::PropertyValue& pProperty );
     SAL_DLLPRIVATE void putPropertiesToGrabBag(
-                            const css::uno::Sequence< css::beans::PropertyValue >& aProperties );
+                            const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties );
 
     SAL_DLLPRIVATE FillProperties      getActualFillProperties(const Theme* pTheme, const FillProperties* pParentShapeFillProps) const;
     SAL_DLLPRIVATE LineProperties      getActualLineProperties(const Theme* pTheme) const;

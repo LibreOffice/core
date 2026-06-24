@@ -56,7 +56,7 @@ void SdTiledRenderingTest::tearDown()
 
 SdXImpressDocument*
 SdTiledRenderingTest::createDoc(const char* pName,
-                                const uno::Sequence<beans::PropertyValue>& rArguments)
+                                const cpo::uno::Sequence<beans::PropertyValue>& rArguments)
 {
     loadFromFile(OUString::createFromAscii(pName));
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -95,7 +95,7 @@ std::vector<OUString> lcl_convertSeparated(std::u16string_view rString, sal_Unic
 
 void lcl_convertRectangle(std::u16string_view rString, ::tools::Rectangle& rRectangle)
 {
-    uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
+    cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
     CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
     rRectangle.SetLeft(aSeq[0].toInt32());
     rRectangle.SetTop(aSeq[1].toInt32());
@@ -233,7 +233,7 @@ void SdTestViewCallback::callbackImpl(int nType, const char* pPayload)
             OString text(pPayload);
             if (!text.startsWith("EMPTY"))
             {
-                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
+                cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
                     OUString::createFromAscii(pPayload));
                 CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
                 tools::Rectangle aInvalidationRect;

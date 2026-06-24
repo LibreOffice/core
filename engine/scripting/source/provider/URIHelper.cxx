@@ -71,7 +71,7 @@ ScriptingFrameworkURIHelper::~ScriptingFrameworkURIHelper()
 
 void SAL_CALL
 ScriptingFrameworkURIHelper::initialize(
-    const uno::Sequence < cpo::uno::Any >& args )
+    const cpo::uno::Sequence < cpo::uno::Any >& args )
 {
     if ( args.getLength() != 2 ||
          args[0].getValueType() != ::cppu::UnoType<OUString>::get() ||
@@ -138,7 +138,7 @@ ScriptingFrameworkURIHelper::initBaseURI()
         return false;
     }
 
-    const uno::Sequence< OUString > children =
+    const cpo::uno::Sequence< OUString > children =
         m_xSimpleFileAccess->getFolderContents( uri, true );
 
     auto pChild = std::find_if(children.begin(), children.end(), [&test](const OUString& child) {
@@ -234,7 +234,7 @@ ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
     return cppu::supportsService( this, serviceName );
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 ScriptingFrameworkURIHelper::getSupportedServiceNames()
 {
     return { u"com.sun.star.script.provider.ScriptURIHelper"_ustr };
@@ -242,7 +242,7 @@ ScriptingFrameworkURIHelper::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scripting_ScriptingFrameworkURIHelper_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScriptingFrameworkURIHelper(context));
 }

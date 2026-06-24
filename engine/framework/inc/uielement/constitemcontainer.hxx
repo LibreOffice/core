@@ -57,7 +57,7 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
         // XElementAccess
         virtual css::uno::Type SAL_CALL getElementType() override
         {
-            return cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get();
+            return cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get();
         }
 
         virtual bool SAL_CALL hasElements() override;
@@ -77,12 +77,12 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
 
     private:
         static ::cppu::IPropertyArrayHelper& getInfoHelper();
-        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
-        void copyItemContainer( const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& rSourceVector );
+        void copyItemContainer( const std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >& rSourceVector );
         static rtl::Reference< ConstItemContainer > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer );
 
-        std::vector< css::uno::Sequence< css::beans::PropertyValue > >       m_aItemVector;
+        std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >       m_aItemVector;
         OUString                                                             m_aUIName;
 };
 

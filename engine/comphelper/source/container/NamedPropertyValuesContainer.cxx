@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -30,7 +30,7 @@
 namespace com::sun::star::uno { class XComponentContext; }
 using namespace com::sun::star;
 
-typedef std::map< OUString, uno::Sequence<beans::PropertyValue> > NamedPropertyValues;
+typedef std::map< OUString, cpo::uno::Sequence<beans::PropertyValue> > NamedPropertyValues;
 
 namespace {
 
@@ -48,7 +48,7 @@ public:
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
@@ -58,7 +58,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
     NamedPropertyValues maProperties;
@@ -76,7 +76,7 @@ void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName,
     if( maProperties.find( aName ) != maProperties.end() )
         throw container::ElementExistException();
 
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     if( !(aElement >>= aProps ) )
         throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
 
@@ -99,7 +99,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
     if( aIter == maProperties.end() )
         throw container::NoSuchElementException();
 
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     if( !(aElement >>= aProps) )
         throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
     (*aIter).second = std::move(aProps);
@@ -119,7 +119,7 @@ cpo::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& 
     return aElement;
 }
 
-css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElementNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElementNames(  )
 {
     return comphelper::mapKeysToSequence(maProperties);
 }
@@ -133,7 +133,7 @@ bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName )
 // XElementAccess
 css::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
 {
-    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
+    return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
 bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
@@ -152,7 +152,7 @@ bool SAL_CALL NamedPropertyValuesContainer::supportsService( const OUString& Ser
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.NamedPropertyValues"_ustr };
 }
@@ -160,7 +160,7 @@ css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getSupport
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 NamedPropertyValuesContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new NamedPropertyValuesContainer());
 }

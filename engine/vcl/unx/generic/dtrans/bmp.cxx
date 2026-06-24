@@ -736,8 +736,8 @@ Pixmap PixmapHolder::setBitmapData( const sal_uInt8* pData )
     return m_aPixmap;
 }
 
-css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
-    css::uno::Sequence<sal_Int8> const & data, int depth)
+cpo::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
+    cpo::uno::Sequence<sal_Int8> const & data, int depth)
 {
     if (depth < 4) {
         depth = 1;
@@ -773,7 +773,7 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
     }
     SvMemoryStream out;
     WriteDIB(bm, out, false, true);
-    return css::uno::Sequence<sal_Int8>(
+    return cpo::uno::Sequence<sal_Int8>(
         static_cast<sal_Int8 const *>(out.GetData()), out.GetEndOfData());
 }
 

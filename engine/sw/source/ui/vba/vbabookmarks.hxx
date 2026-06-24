@@ -51,7 +51,7 @@ public:
     // SwVbaBookmarks_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     // XBookmarks
     virtual sal_Int32 SAL_CALL getDefaultSorting() override;

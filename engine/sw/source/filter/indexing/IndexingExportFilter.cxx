@@ -24,7 +24,7 @@ using namespace css;
 
 namespace sw
 {
-bool IndexingExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDescriptor)
+bool IndexingExportFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& aDescriptor)
 {
     bool bReturn = false;
 
@@ -54,7 +54,7 @@ bool IndexingExportFilter::filter(const uno::Sequence<beans::PropertyValue>& aDe
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_IndexingExportFilter_get_implementation(
-    css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new sw::IndexingExportFilter());
 }

@@ -4384,7 +4384,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             try
             {
                 cpo::uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                uno::Sequence< sal_Int8 > aSeq;
+                cpo::uno::Sequence< sal_Int8 > aSeq;
                 aData >>= aSeq;
                 {
                     SvMemoryStream aODFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
@@ -4407,7 +4407,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 try
                 {
                     cpo::uno::Any aData = rxDataObj->getTransferData(aFlavor);
-                    uno::Sequence< sal_Int8 > aSeq;
+                    cpo::uno::Sequence< sal_Int8 > aSeq;
                     aData >>= aSeq;
                     {
                         SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
@@ -4442,7 +4442,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 try
                 {
                     cpo::uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                    uno::Sequence< sal_Int8 > aSeq;
+                    cpo::uno::Sequence< sal_Int8 > aSeq;
                     aData >>= aSeq;
                     {
                         SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
@@ -4494,7 +4494,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                 try
                 {
                     cpo::uno::Any aData = rxDataObj->getTransferData(aFlavor);
-                    uno::Sequence<sal_Int8> aSeq;
+                    cpo::uno::Sequence<sal_Int8> aSeq;
                     aData >>= aSeq;
                     SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
                     aNewSelection = Read(aHtmlStream, rBaseURL, EETextFormat::Html, EditSelection(rPaM));

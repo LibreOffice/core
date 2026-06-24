@@ -42,7 +42,7 @@ OUString SAL_CALL OColumn::getImplementationName(  )
     return u"com.sun.star.sdbcx.VColumn"_ustr;
 }
 
-css::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.ColumnDescriptor"_ustr:u"com.sun.star.sdbcx.Column"_ustr };
 }

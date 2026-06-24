@@ -22,7 +22,7 @@
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
-namespace com::sun::star::uno {
+namespace cpo::uno {
     template<typename T> class Sequence;
 }
 
@@ -64,7 +64,7 @@ namespace basegfx::utils
                 need key stop lerping in the first place). All
                 elements must be of monotonically increasing value.
              */
-            explicit KeyStopLerp( const css::uno::Sequence<double>& rKeyStops );
+            explicit KeyStopLerp( const cpo::uno::Sequence<double>& rKeyStops );
 
             /** Find two nearest bucket index & interpolate
 

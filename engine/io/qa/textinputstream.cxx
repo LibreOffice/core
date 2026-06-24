@@ -17,7 +17,7 @@
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XTextInputStream2.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppunit/TestAssert.h>
@@ -41,12 +41,12 @@ public:
 private:
     virtual ~Input() override {}
 
-    sal_Int32 SAL_CALL readBytes(css::uno::Sequence<sal_Int8> &, sal_Int32)
+    sal_Int32 SAL_CALL readBytes(cpo::uno::Sequence<sal_Int8> &, sal_Int32)
         override
     { CPPUNIT_FAIL("readLine is supposed to call readSomeBytes instead"); }
 
     sal_Int32 SAL_CALL readSomeBytes(
-        css::uno::Sequence<sal_Int8 > & aData, sal_Int32 nMaxBytesToRead) override
+        cpo::uno::Sequence<sal_Int8 > & aData, sal_Int32 nMaxBytesToRead) override
     {
         assert(nMaxBytesToRead >= 0);
         osl::MutexGuard g(mutex_);

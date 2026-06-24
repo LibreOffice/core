@@ -1780,14 +1780,14 @@ ErrCode OutlineViewShell::ReadRtf(SvStream& rInput)
     return bRet;
 }
 
-void OutlineViewShell::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rSequence )
+void OutlineViewShell::WriteUserDataSequence ( cpo::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     WriteFrameViewData();
 
     ViewShell::WriteUserDataSequence( rSequence );
 }
 
-void OutlineViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence )
+void OutlineViewShell::ReadUserDataSequence ( const cpo::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     WriteFrameViewData();
 

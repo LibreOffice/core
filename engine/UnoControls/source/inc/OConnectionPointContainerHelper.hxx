@@ -70,7 +70,7 @@ public:
 
     //  XConnectionPointContainer
 
-    virtual css::uno::Sequence< css::uno::Type > getConnectionPointTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type > getConnectionPointTypes() override;
 
     virtual css::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
         const css::uno::Type& aType

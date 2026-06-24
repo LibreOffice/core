@@ -187,8 +187,8 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 1);
 
     // Check latent styles
-    uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);
-    uno::Sequence<beans::PropertyValue> aLatentStyles;
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< cpo::uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);
+    cpo::uno::Sequence<beans::PropertyValue> aLatentStyles;
     for (beans::PropertyValue const& prop : aGrabBag)
         if (prop.Name == "latentStyles")
             prop.Value >>= aLatentStyles;
@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
 
     // Check latent style default attributes
     OUString aCount;
-    uno::Sequence<beans::PropertyValue> aLatentStyleExceptions;
+    cpo::uno::Sequence<beans::PropertyValue> aLatentStyleExceptions;
     for (beans::PropertyValue const& prop : aLatentStyles)
     {
         if (prop.Name == "count")
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     CPPUNIT_ASSERT_EQUAL(u"371"_ustr, aCount); // This check the "count" attribute.
 
     // Check exceptions to the latent style defaults.
-    uno::Sequence<beans::PropertyValue> aLatentStyleException;
+    cpo::uno::Sequence<beans::PropertyValue> aLatentStyleException;
     aLatentStyleExceptions[0].Value >>= aLatentStyleException;
     OUString aName;
     for (beans::PropertyValue const& prop : aLatentStyleException)
@@ -428,7 +428,7 @@ DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGrabBag(0);
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag(0);
     xTextDocumentPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
 
@@ -529,7 +529,7 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGrabBag(0);
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag(0);
     xTextDocumentPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
     CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
     bool CustomXml = false;
@@ -539,7 +539,7 @@ DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
         {
             CustomXml = true;
             uno::Reference<xml::dom::XDocument> aCustomXmlDom;
-            uno::Sequence<uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
+            cpo::uno::Sequence<uno::Reference<xml::dom::XDocument> > aCustomXmlDomList;
             CPPUNIT_ASSERT(prop.Value >>= aCustomXmlDomList); // PropertyValue of proper type
             sal_Int32 length = aCustomXmlDomList.getLength();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), length);

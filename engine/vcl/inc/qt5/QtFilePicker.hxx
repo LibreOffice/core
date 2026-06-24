@@ -107,7 +107,7 @@ public:
     // XFilterGroupManager functions
     virtual void SAL_CALL
     appendFilterGroup(const OUString& rGroupTitle,
-                      const css::uno::Sequence<css::beans::StringPair>& rFilters) override;
+                      const cpo::uno::Sequence<css::beans::StringPair>& rFilters) override;
 
     // XCancellable
     virtual void SAL_CALL cancel() override;
@@ -126,7 +126,7 @@ public:
     virtual void SAL_CALL setDefaultName(const OUString& rName) override;
     virtual void SAL_CALL setDisplayDirectory(const OUString& rDirectory) override;
     virtual OUString SAL_CALL getDisplayDirectory() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getFiles() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getFiles() override;
 
     // XFilePickerControlAccess functions
     virtual void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction,
@@ -138,10 +138,10 @@ public:
     virtual OUString SAL_CALL getLabel(sal_Int16 nControlId) override;
 
     // XFilePicker2 functions
-    virtual css::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XEventListener
     void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
@@ -150,7 +150,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XFolderPicker functions
     virtual OUString SAL_CALL getDirectory() override;

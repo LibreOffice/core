@@ -92,12 +92,12 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
 
         // XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
-                                                       const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
+                                                       const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         // XDispatch
         virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
-                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
+                                       const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
 
         virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL&                                     aURL     ) override;
@@ -107,11 +107,11 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
 
         // XSynchronousDispatch
         virtual cpo::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL&                                  aURL      ,
-                                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
+                                                                const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     private:
         cpo::uno::Any impl_dispatch( const css::util::URL& rURL,
-                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
+                                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
 }; // class LoadDispatcher
 

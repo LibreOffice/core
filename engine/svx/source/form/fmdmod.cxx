@@ -56,7 +56,7 @@ using namespace ::svxform;
 }
 
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames()
+::cpo::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames()
 {
     static constexpr OUString aSvxComponentServiceNameList[] =
     {
@@ -81,7 +81,7 @@ using namespace ::svxform;
         FM_SUN_COMPONENT_IMAGECONTROL
     };
 
-    ::com::sun::star::uno::Sequence< OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
+    ::cpo::uno::Sequence< OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
     return comphelper::concatSequences(aParentSeq, aSvxComponentServiceNameList);
 }
 

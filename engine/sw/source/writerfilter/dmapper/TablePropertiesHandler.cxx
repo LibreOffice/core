@@ -109,7 +109,7 @@ namespace writerfilter::dmapper {
 
                     // Add the 'track changes' properties to the 'table row' via UNO.
                     // This way - in the SW core - when it receives this - it will create a new 'Table Redline' object for that row
-                    uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
+                    cpo::uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
                     pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , cpo::uno::Any( aTableRedlineProperties ));
                     insertRowProps(pPropMap);
                 }
@@ -140,7 +140,7 @@ namespace writerfilter::dmapper {
 
                     // Add the 'track changes' properties to the 'table row' via UNO.
                     // This way - in the SW core - when it receives this - it will create a new 'Table Redline' object for that row
-                    uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
+                    cpo::uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
                     pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , cpo::uno::Any( aTableRedlineProperties ));
                     cellProps(pPropMap);
                 }

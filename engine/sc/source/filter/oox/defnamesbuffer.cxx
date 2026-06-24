@@ -46,6 +46,7 @@ namespace oox::xls {
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 
@@ -252,7 +253,7 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
 }
 
 bool DefinedName::isValid(
-    const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks) const
+    const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks) const
 {
     ScRange aRange;
     OUString aExternDocName;
@@ -269,7 +270,7 @@ bool DefinedName::isValid(
 }
 
 std::unique_ptr<ScTokenArray> DefinedName::getScTokens(
-        const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
+        const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
 {
     ScAddress aReferenceAddr(0, 0, (mnCalcSheet < 0 ? 0 : mnCalcSheet));
     ScDocument& rDoc = getScDocument();
@@ -301,7 +302,7 @@ std::unique_ptr<ScTokenArray> DefinedName::getScTokens(
     return pArray;
 }
 
-void DefinedName::convertFormula( const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
+void DefinedName::convertFormula( const cpo::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
 {
     ScRangeData* pScRangeData = maScRangeData.first;
     // macro function or vba procedure

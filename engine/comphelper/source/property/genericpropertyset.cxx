@@ -195,9 +195,9 @@ void SAL_CALL GenericPropertySet::release() noexcept
     OWeakObject::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
 {
-    return uno::Sequence {
+    return cpo::uno::Sequence {
         cppu::UnoType<XAggregation>::get(),
         cppu::UnoType<XServiceInfo>::get(),
         cppu::UnoType<XTypeProvider>::get(),
@@ -205,9 +205,9 @@ uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
         cppu::UnoType<XMultiPropertySet>::get() };
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL GenericPropertySet::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL GenericPropertySet::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

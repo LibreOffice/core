@@ -868,9 +868,9 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 }
 
 
-uno::Sequence< OUString > SfxObjectShell::GetEventNames()
+cpo::uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 {
-    static uno::Sequence< OUString > s_EventNameContainer(rtl::Reference<GlobalEventConfig>(new GlobalEventConfig)->getElementNames());
+    static cpo::uno::Sequence< OUString > s_EventNameContainer(rtl::Reference<GlobalEventConfig>(new GlobalEventConfig)->getElementNames());
 
     return s_EventNameContainer;
 }
@@ -1156,7 +1156,7 @@ void SfxObjectShell::SetProtectionPassword( const OUString & /*rPassword*/ )
 }
 
 
-bool SfxObjectShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > & /*rPasswordHash*/ )
+bool SfxObjectShell::GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > & /*rPasswordHash*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
     SAL_WARN( "sfx.doc", "function not implemented" );

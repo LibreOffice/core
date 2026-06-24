@@ -45,11 +45,11 @@ public:
         const css::uno::Reference<css::uno::XComponentContext>& rContext);
 
     // XInitialization
-    void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void SAL_CALL execute(sal_Int16 nKeyModifier) override;
     void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;

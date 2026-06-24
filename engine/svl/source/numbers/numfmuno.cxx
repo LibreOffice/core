@@ -336,7 +336,7 @@ bool SAL_CALL SvNumberFormatterServiceObj::supportsService( const OUString& Serv
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SvNumberFormatterServiceObj::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.NumberFormatter"_ustr };
 }
@@ -365,7 +365,7 @@ uno::Reference<beans::XPropertySet> SAL_CALL SvNumberFormatsObj::getByKey( sal_I
     return new SvNumberFormatObj( *m_xSupplier, nKey, m_aMutex );
 }
 
-uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType,
+cpo::uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType,
                                                                  const lang::Locale& nLocale,
                                                                  bool bCreate )
 {
@@ -381,7 +381,7 @@ uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType
                                     pFormatter->ChangeCL( static_cast<SvNumFormatType>(nType), nIndex, eLang ) :
                                     pFormatter->GetEntryTable( static_cast<SvNumFormatType>(nType), nIndex, eLang );
     sal_uInt32 nCount = rTable.size();
-    uno::Sequence<sal_Int32> aSeq(nCount);
+    cpo::uno::Sequence<sal_Int32> aSeq(nCount);
     sal_Int32* pAry = aSeq.getArray();
     sal_uInt32 i=0;
     for (const auto& rEntry : rTable)
@@ -631,7 +631,7 @@ bool SAL_CALL SvNumberFormatsObj::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SvNumberFormatsObj::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.NumberFormats"_ustr };
 }
@@ -777,7 +777,7 @@ void SAL_CALL SvNumberFormatObj::removeVetoableChangeListener( const OUString&,
 
 // XPropertyAccess
 
-uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValues()
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValues()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -805,7 +805,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
     pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
     lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
 
-    uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
             { PROPERTYNAME_FMTSTR, cpo::uno::Any(aFmtStr) },
             { PROPERTYNAME_LOCALE, cpo::uno::Any(aLocale) },
             { PROPERTYNAME_TYPE, cpo::uno::Any(sal_Int16( pFormat->GetType() )) },
@@ -824,7 +824,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
     return aSeq;
 }
 
-void SAL_CALL SvNumberFormatObj::setPropertyValues( const uno::Sequence<beans::PropertyValue>& )
+void SAL_CALL SvNumberFormatObj::setPropertyValues( const cpo::uno::Sequence<beans::PropertyValue>& )
 {
     throw beans::UnknownPropertyException(); // Everything is read-only
 }
@@ -841,7 +841,7 @@ bool SAL_CALL SvNumberFormatObj::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SvNumberFormatObj::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.NumberFormatProperties"_ustr };
 }
@@ -967,7 +967,7 @@ bool SAL_CALL SvNumberFormatSettingsObj::supportsService( const OUString& Servic
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.NumberFormatSettings"_ustr };
 }
@@ -975,7 +975,7 @@ uno::Sequence<OUString> SAL_CALL SvNumberFormatSettingsObj::getSupportedServiceN
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation(css::uno::XComponentContext*,
-                                                                                css::uno::Sequence<cpo::uno::Any> const &)
+                                                                                cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SvNumberFormatterServiceObj());
 }

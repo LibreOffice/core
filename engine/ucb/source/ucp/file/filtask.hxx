@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 
 #include <osl/mutex.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -340,8 +340,8 @@ namespace fileaccess
         ls( sal_Int32 CommandId,
             const OUString& aUnqPath,
             const sal_Int32 OpenMode,
-            const css::uno::Sequence< css::beans::Property >& sProperty,
-            const css::uno::Sequence< css::ucb::NumberedSortingInfo > & sSortingInfo );
+            const cpo::uno::Sequence< css::beans::Property >& sProperty,
+            const cpo::uno::Sequence< css::ucb::NumberedSortingInfo > & sSortingInfo );
 
 
         /**
@@ -361,9 +361,9 @@ namespace fileaccess
          *  Sets the values of the properties belonging to fileURL aUnqPath
          */
 
-        css::uno::Sequence< cpo::uno::Any >
+        cpo::uno::Sequence< cpo::uno::Any >
         setv( const OUString& aUnqPath,
-              const css::uno::Sequence< css::beans::PropertyValue >& values );
+              const cpo::uno::Sequence< css::beans::PropertyValue >& values );
 
 
         /**
@@ -374,7 +374,7 @@ namespace fileaccess
         css::uno::Reference< css::sdbc::XRow >
         getv( sal_Int32 CommandId,
               const OUString& aUnqPath,
-              const css::uno::Sequence< css::beans::Property >& properties );
+              const cpo::uno::Sequence< css::beans::Property >& properties );
 
 
         /********************************************************************************/
@@ -456,7 +456,7 @@ namespace fileaccess
 
         void insertDefaultProperties( const OUString& aUnqPath );
 
-        static css::uno::Sequence< css::ucb::ContentInfo >
+        static cpo::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo();
 
 
@@ -508,7 +508,7 @@ namespace fileaccess
 
         static void notifyPropertyChanges(
             const std::vector<PropertyChangeNotifier>& listeners,
-            const css::uno::Sequence<css::beans::PropertyChangeEvent>& seqChanged);
+            const cpo::uno::Sequence<css::beans::PropertyChangeEvent>& seqChanged);
 
         static void notifyContentExchanged(
             const std::vector<ContentEventNotifier>& listeners_vec);
@@ -556,7 +556,7 @@ namespace fileaccess
         // is returned by osl::DirectoryItem::getNextItem()
 
         bool
-        getv( const css::uno::Sequence< css::beans::Property >& properties,
+        getv( const cpo::uno::Sequence< css::beans::Property >& properties,
               osl::DirectoryItem& DirItem,
               OUString& aUnqPath,
               bool&      bIsRegular,
@@ -592,7 +592,7 @@ namespace fileaccess
         static void
         getMaskFromProperties(
             sal_Int32& n_Mask,
-            const css::uno::Sequence< css::beans::Property >& seq );
+            const cpo::uno::Sequence< css::beans::Property >& seq );
 
 
         // Helper function for public copy
@@ -631,7 +631,7 @@ namespace fileaccess
     private:
 
         PropertySet                                   m_aDefaultProperties;
-        css::uno::Sequence< css::ucb::CommandInfo >   m_sCommandInfo;
+        cpo::uno::Sequence< css::ucb::CommandInfo >   m_sCommandInfo;
 
     public:
         // Miscellaneous:

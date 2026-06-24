@@ -44,7 +44,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchWindowInstance(
@@ -71,7 +71,7 @@ bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName 
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.HatchWindowFactory"_ustr, u"com.sun.star.comp.embed.HatchWindowFactory"_ustr };
 }
@@ -81,7 +81,7 @@ uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_embed_HatchWindowFactory_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new OHatchWindowFactory);
 }

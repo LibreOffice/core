@@ -21,7 +21,7 @@
 
 #include <functional>
 #include <memory>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/outliner.hxx>
@@ -602,7 +602,7 @@ public:
 
     // Used as a fallback in *::ReadUserDataSequence() to process common properties
     void ReadUserDataSequenceValue(const css::beans::PropertyValue *pValue);
-    void WriteUserDataSequence(css::uno::Sequence < css::beans::PropertyValue >& rValues);
+    void WriteUserDataSequence(cpo::uno::Sequence < css::beans::PropertyValue >& rValues);
 
     /** returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType GetPageNumType() const;
@@ -613,7 +613,7 @@ public:
 
     bool IsInDestruction() const { return mbInDestruction;}
 
-    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+    static const cpo::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     /** enables (true) or disables (false) recording of undo actions
         If undo actions are added while undo is disabled, they are deleted.

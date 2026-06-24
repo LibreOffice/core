@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 using ::cpo::uno::Any;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::chart::TimeIncrement;
 
 namespace chart::wrapper

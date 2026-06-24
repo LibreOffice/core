@@ -58,10 +58,10 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteBulletListStyleName)
     std::unique_ptr<SvStream> pStream(
         new SvFileStream(createFileURL(u"clipboard-bullets.rtf"), StreamMode::READ));
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-    uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
-                               comphelper::makePropertyValue(u"InsertMode"_ustr, true),
-                               comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
-                                                             xBodyEnd) };
+    cpo::uno::Sequence aDescriptor{ comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
+                                    comphelper::makePropertyValue(u"InsertMode"_ustr, true),
+                                    comphelper::makePropertyValue(u"TextInsertModeRange"_ustr,
+                                                                  xBodyEnd) };
     CPPUNIT_ASSERT(xFilter->filter(aDescriptor));
 
     // Then make sure we don't create new list styles, but reuse the existing ones:

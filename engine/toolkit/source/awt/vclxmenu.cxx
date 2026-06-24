@@ -180,18 +180,18 @@ OUString SAL_CALL VCLXMenu::getImplementationName(  )
     return implName;
 }
 
-css::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
 {
     std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
     aGuard.unlock();
 
     if ( bIsPopupMenu )
-        return css::uno::Sequence<OUString>{
+        return cpo::uno::Sequence<OUString>{
             u"com.sun.star.awt.PopupMenu"_ustr,
             u"stardiv.vcl.PopupMenu"_ustr};
     else
-        return css::uno::Sequence<OUString>{
+        return cpo::uno::Sequence<OUString>{
             u"com.sun.star.awt.MenuBar"_ustr,
             u"stardiv.vcl.MenuBar"_ustr};
 }
@@ -227,7 +227,7 @@ cpo::uno::Any VCLXMenu::queryInterface(
 }
 
 
-css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
+cpo::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
 {
     std::unique_lock aGuard( maMutex );
     const bool bIsPopupMenu = IsPopupMenu();
@@ -252,9 +252,9 @@ css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
 }
 
 
-css::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void VCLXMenu::addMenuListener(
@@ -864,7 +864,7 @@ VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( static_cast<Menu *>(pM
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXMenuBar_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXMenuBar());
 }
@@ -884,7 +884,7 @@ VCLXPopupMenu::~VCLXPopupMenu() = default;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXPopupMenu_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXPopupMenu());
 }

@@ -12,7 +12,7 @@
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -25,7 +25,7 @@ void XSheetPageBreak::testGetColumnPageBreaks()
 {
     uno::Reference< sheet::XSheetPageBreak > xSheetPageBreak(init(), UNO_QUERY_THROW);
 
-    uno::Sequence< sheet::TablePageBreakData > xColPageBreak = xSheetPageBreak->getColumnPageBreaks();
+    cpo::uno::Sequence< sheet::TablePageBreakData > xColPageBreak = xSheetPageBreak->getColumnPageBreaks();
     CPPUNIT_ASSERT_MESSAGE("Unable to get column page breaks", xColPageBreak.hasElements());
 }
 
@@ -33,7 +33,7 @@ void XSheetPageBreak::testGetRowPageBreaks()
 {
     uno::Reference< sheet::XSheetPageBreak > xSheetPageBreak(init(), UNO_QUERY_THROW);
 
-    uno::Sequence< sheet::TablePageBreakData > xRowPageBreak = xSheetPageBreak->getRowPageBreaks();
+    cpo::uno::Sequence< sheet::TablePageBreakData > xRowPageBreak = xSheetPageBreak->getRowPageBreaks();
     CPPUNIT_ASSERT_MESSAGE("Unable to get row page breaks", xRowPageBreak.hasElements());
 }
 
@@ -43,7 +43,7 @@ void XSheetPageBreak::testRemoveAllManualPageBreaks()
 
     xSheetPageBreak->removeAllManualPageBreaks();
 
-    const uno::Sequence< sheet::TablePageBreakData > xColPageBreak = xSheetPageBreak->getColumnPageBreaks();
+    const cpo::uno::Sequence< sheet::TablePageBreakData > xColPageBreak = xSheetPageBreak->getColumnPageBreaks();
     sal_Int32 manualColPageBreaks = 0;
     for ( const auto & data : xColPageBreak )
     {
@@ -53,7 +53,7 @@ void XSheetPageBreak::testRemoveAllManualPageBreaks()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Found manual column page break",
                                  sal_Int32(0), manualColPageBreaks);
 
-    const uno::Sequence< sheet::TablePageBreakData > xRowPageBreak = xSheetPageBreak->getRowPageBreaks();
+    const cpo::uno::Sequence< sheet::TablePageBreakData > xRowPageBreak = xSheetPageBreak->getRowPageBreaks();
     sal_Int32 manualRowPageBreaks = 0;
     for ( const auto & data : xRowPageBreak )
     {

@@ -289,7 +289,7 @@ OUString FilterHelper::getCurrentFilter(  )
     return sReturn;
 }
 
-void FilterHelper::appendFilterGroup( const css::uno::Sequence< css::beans::StringPair >& aFilters )
+void FilterHelper::appendFilterGroup( const cpo::uno::Sequence< css::beans::StringPair >& aFilters )
 {
     SolarMutexGuard aGuard;
 

@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -57,7 +57,7 @@ namespace binaryurp {
 
 namespace {
 
-css::uno::Sequence< sal_Int8 > read(
+cpo::uno::Sequence< sal_Int8 > read(
     css::uno::Reference< css::connection::XConnection > const & connection,
     sal_uInt32 size, bool eofOk)
 {
@@ -66,10 +66,10 @@ css::uno::Sequence< sal_Int8 > read(
         throw css::uno::RuntimeException(
             u"binaryurp::Reader: block size too large"_ustr);
     }
-    css::uno::Sequence< sal_Int8 > buf;
+    cpo::uno::Sequence< sal_Int8 > buf;
     sal_Int32 n = connection->read(buf, static_cast< sal_Int32 >(size));
     if (n == 0 && eofOk) {
-        return css::uno::Sequence< sal_Int8 >();
+        return cpo::uno::Sequence< sal_Int8 >();
     }
     if (o3tl::make_unsigned(n) != size) {
         throw css::io::IOException(
@@ -102,7 +102,7 @@ void Reader::execute() {
         css::uno::Reference< css::connection::XConnection > con(
             bridge_->getConnection());
         for (;;) {
-            css::uno::Sequence< sal_Int8 > s(read(con, 8, true));
+            cpo::uno::Sequence< sal_Int8 > s(read(con, 8, true));
             if (!s.hasElements()) {
                 break;
             }

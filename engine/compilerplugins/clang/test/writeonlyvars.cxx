@@ -14,7 +14,7 @@
 #include <vector>
 #include <ostream>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 // See 1d0bc2139759f087d50432f8a2116060676f34e1 "use std::experimental::source_location in
 // uno::Exception" modification to
@@ -151,7 +151,7 @@ void ReadOnlyAnalysis4()
     // expected-error@+1 {{write m_writeonly [loplugin:writeonlyvars]}}
     std::vector<int> m_writeonly;
     // expected-error@+1 {{read m_readonlyCss [loplugin:writeonlyvars]}}
-    css::uno::Sequence<sal_Int32> m_readonlyCss;
+    cpo::uno::Sequence<sal_Int32> m_readonlyCss;
 
     // expected-error@+1 {{write x [loplugin:writeonlyvars]}}
     int x = m_readonly[0];

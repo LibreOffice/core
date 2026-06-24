@@ -833,7 +833,7 @@ bool UpdateFieldContents(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     {
         bNeverExpand = pNeverExpand->GetValue();
     }
-    uno::Sequence<beans::PropertyValues> aFields;
+    cpo::uno::Sequence<beans::PropertyValues> aFields;
     pFields->GetValue() >>= aFields;
 
     SwDoc* pDoc = rWrtSh.GetDoc();
@@ -909,7 +909,7 @@ void UpdateFieldContent(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     {
         return;
     }
-    uno::Sequence<beans::PropertyValue> aField;
+    cpo::uno::Sequence<beans::PropertyValue> aField;
     pField->GetValue() >>= aField;
 
     SwPosition& rCursor = *rWrtSh.GetCursor()->GetPoint();

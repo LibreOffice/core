@@ -155,7 +155,7 @@ public:
 
     static bool StaticHasValidPassword (
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const css::uno::Sequence< sal_Int8 > &aReadBuffer,
+            const cpo::uno::Sequence< sal_Int8 > &aReadBuffer,
             const ::rtl::Reference < EncryptionData > &rData );
 
     css::uno::Reference< css::io::XInputStream > getInputStream(

@@ -144,7 +144,7 @@ cpo::uno::Any convertToException(GError *pError, const css::uno::Reference< css:
 
     OUString sName;
 
-    css::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(sName) };
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(sName) };
 
     switch (eCode)
     {
@@ -435,7 +435,7 @@ static css::util::DateTime getDateFromUnix (time_t t)
 }
 
 css::uno::Reference< css::sdbc::XRow > Content::getPropertyValues(
-                const css::uno::Sequence< css::beans::Property >& rProperties,
+                const cpo::uno::Sequence< css::beans::Property >& rProperties,
                 const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
 {
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xContext );
@@ -657,8 +657,8 @@ void Content::getFileInfo(
     }
 }
 
-css::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
-    const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
+    const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
 {
     GError *pError=nullptr;
@@ -687,10 +687,10 @@ css::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
 
     sal_Int32 nChanged = 0, nTitlePos = -1;
     OUString aNewTitle;
-    css::uno::Sequence< css::beans::PropertyChangeEvent > aChanges(nCount);
+    cpo::uno::Sequence< css::beans::PropertyChangeEvent > aChanges(nCount);
     auto aChangesRange = asNonConstRange(aChanges);
 
-    css::uno::Sequence< cpo::uno::Any > aRet( nCount );
+    cpo::uno::Sequence< cpo::uno::Any > aRet( nCount );
     auto aRetRange = asNonConstRange(aRet);
     const css::beans::PropertyValue* pValues = rValues.getConstArray();
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -831,7 +831,7 @@ const int TRANSFER_BUFFER_SIZE = 65536;
 void Content::copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
     const css::uno::Reference< css::io::XOutputStream >& xOut )
 {
-    css::uno::Sequence< sal_Int8 > theData( TRANSFER_BUFFER_SIZE );
+    cpo::uno::Sequence< sal_Int8 > theData( TRANSFER_BUFFER_SIZE );
 
     g_return_if_fail( xIn.is() && xOut.is() );
 
@@ -877,7 +877,7 @@ cpo::uno::Any Content::open(const css::ucb::OpenCommandArgument2 & rOpenCommand,
 
     if (!g_file_query_exists(getGFile(), nullptr))
     {
-        css::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(
             m_xIdentifier->getContentIdentifier()) };
         cpo::uno::Any aErr(
             css::ucb::InteractiveAugmentedIOException(OUString(), getXWeak(),
@@ -945,7 +945,7 @@ cpo::uno::Any SAL_CALL Content::execute(
 
     if ( aCommand.Name == "getPropertyValues" )
     {
-        css::uno::Sequence< css::beans::Property > Properties;
+        cpo::uno::Sequence< css::beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= getPropertyValues( Properties, xEnv );
@@ -970,7 +970,7 @@ cpo::uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "setPropertyValues" )
     {
-        css::uno::Sequence< css::beans::PropertyValue > aProperties;
+        cpo::uno::Sequence< css::beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) || !aProperties.hasElements() )
             ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
         aRet <<= setPropertyValues( aProperties, xEnv );
@@ -1123,14 +1123,14 @@ void Content::transfer( const css::ucb::TransferInfo& aTransferInfo, const css::
     }
 }
 
-css::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo(
+cpo::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo(
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv)
 {
     if ( isFolder( xEnv ) )
     {
 
         // Minimum set of props we really need
-        css::uno::Sequence< css::beans::Property > props
+        cpo::uno::Sequence< css::beans::Property > props
         {
             { u"Title"_ustr, -1, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID | css::beans::PropertyAttribute::BOUND }
         };
@@ -1147,7 +1147,7 @@ css::uno::Sequence< css::ucb::ContentInfo > Content::queryCreatableContentsInfo(
     }
 }
 
-css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
+cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
 {
     return queryCreatableContentsInfo( css::uno::Reference< css::ucb::XCommandEnvironment >() );
 }
@@ -1188,7 +1188,7 @@ css::uno::Reference< css::ucb::XContent >
     }
 }
 
-css::uno::Sequence< css::uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< css::uno::Type > SAL_CALL Content::getTypes()
 {
     if ( isFolder( css::uno::Reference< css::ucb::XCommandEnvironment >() ) )
     {
@@ -1224,7 +1224,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL Content::getTypes()
     }
 }
 
-css::uno::Sequence< css::beans::Property > Content::getProperties(
+cpo::uno::Sequence< css::beans::Property > Content::getProperties(
     const css::uno::Reference< css::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     static const css::beans::Property aGenericProperties[] =
@@ -1263,15 +1263,15 @@ css::uno::Sequence< css::beans::Property > Content::getProperties(
             -1, cppu::UnoType<bool>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( u"CreatableContentsInfo"_ustr,
-            -1, cppu::UnoType<css::uno::Sequence< css::ucb::ContentInfo >>::get(),
+            -1, cppu::UnoType<cpo::uno::Sequence< css::ucb::ContentInfo >>::get(),
             css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY )
     };
 
     const int nProps = SAL_N_ELEMENTS(aGenericProperties);
-    return css::uno::Sequence< css::beans::Property > ( aGenericProperties, nProps );
+    return cpo::uno::Sequence< css::beans::Property > ( aGenericProperties, nProps );
 }
 
-css::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv)
+cpo::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv)
 {
     static const css::ucb::CommandInfo aCommandInfoTable[] =
     {
@@ -1284,10 +1284,10 @@ css::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const css::uno
           -1, cppu::UnoType<void>::get() ),
         css::ucb::CommandInfo
         ( u"getPropertyValues"_ustr,
-          -1, cppu::UnoType<css::uno::Sequence< css::beans::Property >>::get() ),
+          -1, cppu::UnoType<cpo::uno::Sequence< css::beans::Property >>::get() ),
         css::ucb::CommandInfo
         ( u"setPropertyValues"_ustr,
-          -1, cppu::UnoType<css::uno::Sequence< css::beans::PropertyValue >>::get() ),
+          -1, cppu::UnoType<cpo::uno::Sequence< css::beans::PropertyValue >>::get() ),
 
         // Optional standard commands
         css::ucb::CommandInfo
@@ -1310,7 +1310,7 @@ css::uno::Sequence< css::ucb::CommandInfo > Content::getCommands( const css::uno
     };
 
     const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
-    return css::uno::Sequence< css::ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
+    return cpo::uno::Sequence< css::ucb::CommandInfo >(aCommandInfoTable, isFolder(xEnv) ? nProps : nProps - 2);
 }
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
@@ -1336,9 +1336,9 @@ OUString SAL_CALL Content::getImplementationName()
        return u"com.sun.star.comp.GIOContent"_ustr;
 }
 
-css::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
-       css::uno::Sequence<OUString> aSNS { u"com.sun.star.ucb.GIOContent"_ustr };
+       cpo::uno::Sequence<OUString> aSNS { u"com.sun.star.ucb.GIOContent"_ustr };
        return aSNS;
 }
 

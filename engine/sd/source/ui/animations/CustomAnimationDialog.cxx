@@ -74,7 +74,7 @@ using namespace ::com::sun::star::presentation;
 
 using ::com::sun::star::uno::UNO_QUERY;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::drawing::XShape;

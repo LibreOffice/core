@@ -40,23 +40,23 @@ protected:
     {
         return cppu::supportsService(this, ServiceName);
     }
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.graphic.GraphicMapper"_ustr };
     }
 
     // XTypeProvider
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
+    cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     {
-        static const uno::Sequence<uno::Type> aTypes{
+        static const cpo::uno::Sequence<uno::Type> aTypes{
             cppu::UnoType<lang::XServiceInfo>::get(), cppu::UnoType<lang::XTypeProvider>::get(),
             cppu::UnoType<graphic::XGraphicMapper>::get()
         };
         return aTypes;
     }
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
     // XGraphicMapper
@@ -79,7 +79,7 @@ protected:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_graphic_GraphicMapper_get_implementation(css::uno::XComponentContext*,
-                                                           css::uno::Sequence<cpo::uno::Any> const&)
+                                                           cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GraphicMapper);
 }

@@ -38,7 +38,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 
 XMLIndexChapterInfoEntryContext::XMLIndexChapterInfoEntryContext(
@@ -159,7 +159,7 @@ void XMLIndexChapterInfoEntryContext::startFastElement(
 }
 
 void XMLIndexChapterInfoEntryContext::FillPropertyValues(
-    css::uno::Sequence<css::beans::PropertyValue> & rValues)
+    cpo::uno::Sequence<css::beans::PropertyValue> & rValues)
 {
     // entry name and (optionally) style name in parent class
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);

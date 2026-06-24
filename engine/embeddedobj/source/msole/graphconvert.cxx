@@ -19,7 +19,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -57,29 +57,29 @@ bool ConvertBufferToFormat( void* pBuf,
         if (rFilter.CanImportGraphic(u"", aMemoryStream, GRFILTER_FORMAT_DONTKNOW, &nRetFormat) == ERRCODE_NONE &&
                 rFilter.GetImportFormatMediaType(nRetFormat) == aMimeType)
         {
-            aResult <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemoryStream.GetData() ), aMemoryStream.TellEnd() );
+            aResult <<= cpo::uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemoryStream.GetData() ), aMemoryStream.TellEnd() );
             return true;
         }
 
-        uno::Sequence < sal_Int8 > aData( static_cast<sal_Int8*>(pBuf), nBufSize );
+        cpo::uno::Sequence < sal_Int8 > aData( static_cast<sal_Int8*>(pBuf), nBufSize );
         uno::Reference < io::XInputStream > xIn = new comphelper::SequenceInputStream( aData );
         try
         {
             uno::Reference < graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(comphelper::getProcessComponentContext()));
-            uno::Sequence< beans::PropertyValue > aMediaProperties{ comphelper::makePropertyValue(
+            cpo::uno::Sequence< beans::PropertyValue > aMediaProperties{ comphelper::makePropertyValue(
                 "InputStream", xIn) };
             uno::Reference< graphic::XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
             if( xGraphic.is() )
             {
                 SvMemoryStream aNewStream( 65535, 65535 );
                 uno::Reference < io::XStream > xOut = new utl::OStreamWrapper( aNewStream );
-                uno::Sequence< beans::PropertyValue > aOutMediaProperties{
+                cpo::uno::Sequence< beans::PropertyValue > aOutMediaProperties{
                     comphelper::makePropertyValue("OutputStream", xOut),
                     comphelper::makePropertyValue("MimeType", aMimeType)
                 };
 
                 xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
-                aResult <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aNewStream.GetData() ), aNewStream.TellEnd() );
+                aResult <<= cpo::uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aNewStream.GetData() ), aNewStream.TellEnd() );
                 return true;
             }
         }

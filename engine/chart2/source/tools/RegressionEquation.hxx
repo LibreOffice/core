@@ -56,7 +56,7 @@ public:
     virtual bool SAL_CALL
         supportsService( const OUString& ServiceName )
         override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
         override;
 
@@ -93,9 +93,9 @@ private:
         const css::lang::EventObject& Source ) override;
 
     // ____ XTitle ____
-    virtual css::uno::Sequence<
+    virtual cpo::uno::Sequence<
         css::uno::Reference< css::chart2::XFormattedString > > SAL_CALL getText() override;
-    virtual void SAL_CALL setText( const css::uno::Sequence<
+    virtual void SAL_CALL setText( const cpo::uno::Sequence<
                                    css::uno::Reference<
                                    css::chart2::XFormattedString > >& Strings ) override;
 
@@ -106,7 +106,7 @@ private:
 
     void fireModifyEvent();
 
-    css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
+    cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };

@@ -29,7 +29,7 @@ class ScVbaPages : public ScVbaPages_BASE
 {
 protected:
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 public:
     /// @throws css::lang::IllegalArgumentException
     ScVbaPages( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPages );

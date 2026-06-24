@@ -43,19 +43,19 @@ class TextualDataProvider : public ::cppu::WeakImplHelper<
         >
 {
 public:
-    explicit TextualDataProvider( const uno::Sequence< OUString >& rTextSequence )
+    explicit TextualDataProvider( const cpo::uno::Sequence< OUString >& rTextSequence )
         : m_aTextSequence( rTextSequence )
     {
     }
 
     //XTextualDataSequence
-    virtual uno::Sequence< OUString > SAL_CALL getTextualData() override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getTextualData() override
     {
         return m_aTextSequence;
     }
 
 private: //member
-    uno::Sequence< OUString > m_aTextSequence;
+    cpo::uno::Sequence< OUString > m_aTextSequence;
 };
 
 }

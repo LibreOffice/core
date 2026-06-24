@@ -285,7 +285,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                 rPropertySet->setPropertyValue(u"ParaFirstLineIndent"_ustr, cpo::uno::Any(nFirstLineIndent));
                 if (nLabelFollowedBy == SvxNumberFormat::LabelFollowedBy::LISTTAB)
                 {
-                    css::uno::Sequence<css::style::TabStop> stops;
+                    cpo::uno::Sequence<css::style::TabStop> stops;
                     rPropertySet->getPropertyValue(u"ParaTabStops"_ustr) >>= stops;
                     css::style::TabStop tabStop{};
                     tabStop.Position = nListtabStopPosition;
@@ -316,10 +316,10 @@ SwVbaListFormat::getServiceImplName()
     return u"SwVbaListFormat"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaListFormat::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.ListFormat"_ustr
     };

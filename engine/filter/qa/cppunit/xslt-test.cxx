@@ -96,7 +96,7 @@ void XsltFilterTest::testXsltCopyNew()
 
     OUString source(
             m_directories.getURLFromSrc(u"/filter/source/xsltfilter/xsltfilter.component"));
-    uno::Sequence<cpo::uno::Any> args{
+    cpo::uno::Sequence<cpo::uno::Any> args{
         cpo::uno::Any(beans::NamedValue(u"StylesheetURL"_ustr,
             cpo::uno::Any(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")))),
         cpo::uno::Any(beans::NamedValue(u"SourceURL"_ustr, cpo::uno::Any(source))),
@@ -152,7 +152,7 @@ void XsltFilterTest::testXsltCopyOld()
 
     OUString source(
             m_directories.getURLFromSrc(u"/filter/source/xsltfilter/xsltfilter.component"));
-    uno::Sequence<cpo::uno::Any> args{
+    cpo::uno::Sequence<cpo::uno::Any> args{
         cpo::uno::Any(beans::NamedValue(u"StylesheetURL"_ustr,
             cpo::uno::Any(m_directories.getURLFromSrc(u"/filter/qa/cppunit/data/xslt/copy.xslt")))),
         cpo::uno::Any(beans::NamedValue(u"SourceURL"_ustr, cpo::uno::Any(source))),

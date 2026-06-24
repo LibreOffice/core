@@ -32,6 +32,7 @@ namespace svx
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::cpo::uno;
 
 SFX_IMPL_TOOLBOX_CONTROL( FormatPaintBrushToolBoxControl, SfxBoolItem );
 

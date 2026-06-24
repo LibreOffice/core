@@ -26,7 +26,7 @@ using namespace dbtools;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
-BlobHelper::BlobHelper(const css::uno::Sequence< sal_Int8 >& _val) : m_aValue(_val)
+BlobHelper::BlobHelper(const cpo::uno::Sequence< sal_Int8 >& _val) : m_aValue(_val)
 {
 }
 
@@ -35,11 +35,11 @@ BlobHelper::BlobHelper(const css::uno::Sequence< sal_Int8 >& _val) : m_aValue(_v
     return m_aValue.getLength();
 }
 
-css::uno::Sequence< ::sal_Int8 > SAL_CALL BlobHelper::getBytes( ::sal_Int64 pos, ::sal_Int32 _length )
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL BlobHelper::getBytes( ::sal_Int64 pos, ::sal_Int32 _length )
 {
     if ( sal_Int32(pos + _length) > m_aValue.getLength() )
         throw css::sdbc::SQLException();
-    return css::uno::Sequence< ::sal_Int8 >(m_aValue.getConstArray() + sal_Int32(pos),_length);
+    return cpo::uno::Sequence< ::sal_Int8 >(m_aValue.getConstArray() + sal_Int32(pos),_length);
 }
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL BlobHelper::getBinaryStream(  )
@@ -47,7 +47,7 @@ css::uno::Reference< css::io::XInputStream > SAL_CALL BlobHelper::getBinaryStrea
     return new ::comphelper::SequenceInputStream(m_aValue);
 }
 
-::sal_Int64 SAL_CALL BlobHelper::position( const css::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ )
+::sal_Int64 SAL_CALL BlobHelper::position( const cpo::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XBlob::position"_ustr, *this );
 }

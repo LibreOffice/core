@@ -29,7 +29,7 @@ class ScVbaOLEObjects : public OLEObjectsImpl_BASE
 protected:
     virtual cpo::uno::Any getItemByStringIndex(const OUString& sIndex) override;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 public:
     ScVbaOLEObjects(const css::uno::Reference<ov::XHelperInterface>& xParent,

@@ -130,7 +130,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
     task::InteractionClassification eClassification,
     ErrCode nErrorCode,
     std::vector< OUString > const & rArguments,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
@@ -303,7 +303,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
 void
 UUIInteractionHelper::handleLoadReadOnlyRequest(
     const OUString& sDocumentURL,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
     rContinuations)
 {
     std::locale aLocale(Translate::Create("uui"));

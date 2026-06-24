@@ -22,7 +22,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -114,8 +114,8 @@ public:
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
     void                setProperties(
-                            const css::uno::Sequence< OUString >& rPropNames,
-                            const css::uno::Sequence< cpo::uno::Any >& rValues );
+                            const cpo::uno::Sequence< OUString >& rPropNames,
+                            const cpo::uno::Sequence< cpo::uno::Any >& rValues );
 
     /** Puts the passed property map into the property set. Tries to use the XMultiPropertySet interface.
         @param rPropertyMap  The property map. */

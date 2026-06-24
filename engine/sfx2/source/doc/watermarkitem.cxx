@@ -56,7 +56,7 @@ bool SfxWatermarkItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
 
 bool SfxWatermarkItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSequence;
+    cpo::uno::Sequence<css::beans::PropertyValue> aSequence;
 
     if ( rVal >>= aSequence )
     {

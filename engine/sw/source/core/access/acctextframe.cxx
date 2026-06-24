@@ -244,7 +244,7 @@ SwFlyFrame* SwAccessibleTextFrame::getFlyFrame() const
 
 AccessibleRelation SwAccessibleTextFrame::makeRelation(AccessibleRelationType eType, const SwFlyFrame* pFrame )
 {
-    uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pFrame) };
+    cpo::uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pFrame) };
     return AccessibleRelation(eType, aSequence);
 }
 

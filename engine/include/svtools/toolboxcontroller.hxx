@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/compbase.hxx>
 #include <comphelper/propcontainerimplhelper.hxx>
 #include <tools/link.hxx>
@@ -85,7 +85,7 @@ class SVT_DLLPUBLIC ToolboxController :
         void updateStatus();
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments ) override;
 
         // XUpdatable
         virtual void SAL_CALL update() override;
@@ -109,7 +109,7 @@ class SVT_DLLPUBLIC ToolboxController :
         const OUString& getCommandURL() const { return  m_aCommandURL; }
         const OUString& getModuleName() const { return m_sModuleName; }
 
-        void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString &rTarget = OUString() );
+        void dispatchCommand( const OUString& sCommandURL, const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString &rTarget = OUString() );
 
         void enable( bool bEnable );
 
@@ -133,11 +133,11 @@ class SVT_DLLPUBLIC ToolboxController :
         {
             css::uno::Reference< css::frame::XDispatch > mxDispatch;
             const css::util::URL maURL;
-            const css::uno::Sequence< css::beans::PropertyValue > maArgs;
+            const cpo::uno::Sequence< css::beans::PropertyValue > maArgs;
 
             DispatchInfo( css::uno::Reference< css::frame::XDispatch > xDispatch,
                           css::util::URL aURL,
-                          const css::uno::Sequence< css::beans::PropertyValue >& rArgs )
+                          const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs )
                 : mxDispatch(std::move( xDispatch ))
                 , maURL(std::move( aURL ))
                 , maArgs( rArgs )

@@ -730,7 +730,7 @@ void SolverSettings::WriteDoubleParamValue(SolverParameter eParam, std::u16strin
     m_pRangeName->insert(pNewEntry);
 }
 
-void SolverSettings::GetEngineOptions(css::uno::Sequence<css::beans::PropertyValue>& aOptions)
+void SolverSettings::GetEngineOptions(cpo::uno::Sequence<css::beans::PropertyValue>& aOptions)
 {
     sal_Int32 nOptionsSize = aOptions.getLength();
     auto pParamValues = aOptions.getArray();
@@ -778,7 +778,7 @@ void SolverSettings::GetEngineOptions(css::uno::Sequence<css::beans::PropertyVal
 }
 
 // Updates the object members related to solver engine options using aOptions info
-void SolverSettings::SetEngineOptions(const css::uno::Sequence<css::beans::PropertyValue>& aOptions)
+void SolverSettings::SetEngineOptions(const cpo::uno::Sequence<css::beans::PropertyValue>& aOptions)
 {
     sal_Int32 nOptionsSize = aOptions.getLength();
 
@@ -856,14 +856,14 @@ void SolverSettings::ResetToDefaults()
     m_sVariableCells = u""_ustr;
     m_sMSEngineId = u"1"_ustr;
 
-    css::uno::Sequence<OUString> aEngineNames;
-    css::uno::Sequence<OUString> aDescriptions;
+    cpo::uno::Sequence<OUString> aEngineNames;
+    cpo::uno::Sequence<OUString> aDescriptions;
     ScSolverUtil::GetImplementations(aEngineNames, aDescriptions);
 
     // tdf#162760 Set the parameters of all available solver engines to the default values
     for (const auto& sEngine : aEngineNames)
     {
-        css::uno::Sequence<css::beans::PropertyValue> aEngineProps
+        cpo::uno::Sequence<css::beans::PropertyValue> aEngineProps
             = ScSolverUtil::GetDefaults(sEngine);
         SetEngineOptions(aEngineProps);
     }

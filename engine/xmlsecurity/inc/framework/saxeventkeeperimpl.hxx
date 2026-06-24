@@ -186,7 +186,7 @@ private:
     OUString printBufferNode(
         BufferNode const * pBufferNode, sal_Int32 nIndent) const;
 
-    static css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
+    static cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >
         collectChildWorkingElement(BufferNode const * pBufferNode);
 
     void smashBufferNode(
@@ -271,19 +271,19 @@ public:
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 /// @throws css::uno::RuntimeException
 OUString SAXEventKeeperImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  );
+cpo::uno::Sequence< OUString > SAXEventKeeperImpl_getSupportedServiceNames(  );
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

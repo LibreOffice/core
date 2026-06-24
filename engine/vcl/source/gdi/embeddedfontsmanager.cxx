@@ -266,7 +266,7 @@ EmbeddedFontsManager::~EmbeddedFontsManager()
         // This helps to decide if the document is allowed to switch to edit mode.
         try
         {
-            uno::Sequence<beans::StringPair> fonts(m_aAccumulatedFonts.size());
+            cpo::uno::Sequence<beans::StringPair> fonts(m_aAccumulatedFonts.size());
             std::transform(m_aAccumulatedFonts.begin(), m_aAccumulatedFonts.end(), fonts.getArray(),
                            [](const auto& el) { return beans::StringPair(el.first, el.second); });
             xModel2->setArgs({ comphelper::makePropertyValue(u"EmbeddedFonts"_ustr, fonts) });
@@ -300,7 +300,7 @@ bool EmbeddedFontsManager::addEmbeddedFont( const uno::Reference< io::XInputStre
     fontData.reserve( 1000000 );
     for(;;)
     {
-        uno::Sequence< sal_Int8 > buffer;
+        cpo::uno::Sequence< sal_Int8 > buffer;
         sal_uInt64 read = stream->readBytes( buffer, 1024 );
         auto bufferRange = asNonConstRange(buffer);
         for( sal_uInt64 pos = 0;

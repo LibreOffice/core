@@ -26,7 +26,7 @@
 #include <vector>
 #include <rtl/ustring.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include "DAVResource.hxx"
 
 namespace com::sun::star::beans {
@@ -87,7 +87,7 @@ public:
     // DAVResourceAccess::PROPFIND. The result from PROPFIND
     // (vector< DAVResource >) can be used to create a ContentProperties
     // instance which can map DAV properties back to UCB properties.
-    static void UCBNamesToDAVNames( const css::uno::Sequence< css::beans::Property > & rProps,
+    static void UCBNamesToDAVNames( const cpo::uno::Sequence< css::beans::Property > & rProps,
                                     std::vector< OUString > & resources );
 
     // Maps the UCB property names contained in rProps with their HTTP header
@@ -97,14 +97,14 @@ public:
     // DAVResourceAccess::HEAD. The result from HEAD (vector< DAVResource >)
     // can be used to create a ContentProperties instance which can map header
     // names back to UCB properties.
-    static void UCBNamesToHTTPNames( const css::uno::Sequence< css::beans::Property > & rProps,
+    static void UCBNamesToHTTPNames( const cpo::uno::Sequence< css::beans::Property > & rProps,
                                     std::vector< OUString > & resources );
 
     // return true, if all properties contained in rProps are contained in
     // this ContentProperties instance. Otherwise, false will be returned.
     // rNamesNotContained contain the missing names.
     bool containsAllNames(
-                    const css::uno::Sequence< css::beans::Property >& rProps,
+                    const cpo::uno::Sequence< css::beans::Property >& rProps,
                     std::vector< OUString > & rNamesNotContained ) const;
 
     // adds all properties described by rProps that are actually contained in
@@ -158,7 +158,7 @@ public:
     void addProperties( const std::vector< DAVPropertyValue > & rProps );
 
     bool containsAllNames(
-                    const css::uno::Sequence< css::beans::Property >& rProps,
+                    const cpo::uno::Sequence< css::beans::Property >& rProps,
                     std::vector< OUString > & rNamesNotContained ) const
     { return m_aProps.containsAllNames( rProps, rNamesNotContained ); }
 

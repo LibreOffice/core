@@ -1245,7 +1245,7 @@ void SAL_CALL IUnknownWrapper::initialize( const Sequence< Any >& aArguments )
 
 
 // XDirectInvocation
-cpo::uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const uno::Sequence< cpo::uno::Any >& aParams )
+cpo::uno::Any SAL_CALL IUnknownWrapper::directInvoke( const OUString& aName, const cpo::uno::Sequence< cpo::uno::Any >& aParams )
 {
     Any aResult;
 

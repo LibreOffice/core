@@ -66,7 +66,7 @@ namespace connectivity::sdbcx
         virtual void insert(const OUString& _sName, const css::uno::Reference< css::beans::XPropertySet >& _xObject) = 0;
         virtual bool rename(const OUString& _sOldName, const OUString& _sNewName) = 0;
         virtual sal_Int32 size() = 0;
-        virtual css::uno::Sequence< OUString > getElementNames() = 0;
+        virtual cpo::uno::Sequence< OUString > getElementNames() = 0;
         virtual OUString getName(sal_Int32 _nIndex) = 0;
         virtual void disposeAndErase(sal_Int32 _nIndex) = 0;
         virtual void disposeElements() = 0;
@@ -176,7 +176,7 @@ namespace connectivity::sdbcx
 
         // XInterface
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
         // css::container::XElementAccess
         virtual css::uno::Type SAL_CALL getElementType(  ) override;
@@ -187,7 +187,7 @@ namespace connectivity::sdbcx
 
             // css::container::XNameAccess
         virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
         // XEnumerationAccess
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;

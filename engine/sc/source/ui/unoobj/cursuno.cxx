@@ -402,7 +402,7 @@ bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
 {
     //  SheetCellCursor should be first (?)
     return comphelper::concatSequences<OUString>(

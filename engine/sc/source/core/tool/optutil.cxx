@@ -54,7 +54,7 @@ void ScLinkConfigItem::SetNotifyLink( const Link<ScLinkConfigItem&,void>& rLink 
     aNotifyLink = rLink;
 }
 
-void ScLinkConfigItem::Notify( const css::uno::Sequence<OUString>& /* aPropertyNames */ )
+void ScLinkConfigItem::Notify( const cpo::uno::Sequence<OUString>& /* aPropertyNames */ )
 {
     aNotifyLink.Call(*this);
 }

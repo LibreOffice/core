@@ -339,7 +339,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                 {
                     cpo::uno::Any aAny = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
-                    uno::Sequence<beans::PropertyValue> aProperties;
+                    cpo::uno::Sequence<beans::PropertyValue> aProperties;
                     if ( aAny >>= aProperties )
                         aDesc.initializeFrom( aProperties );
                 }
@@ -1798,7 +1798,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
             }
             else
             {
-                css::uno::Sequence< sal_Int8 > aPass;
+                cpo::uno::Sequence< sal_Int8 > aPass;
                 SvPasswordHelper::GetHashPassword( aPass, aPassword );
                 pChangeTrack->SetProtection( aPass );
             }
@@ -2896,7 +2896,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
         {
             OString aFmtByte(OUStringToOString(m_aDdeTextFmt,
                 osl_getThreadTextEncoding()));
-            rValue <<= css::uno::Sequence< sal_Int8 >(
+            rValue <<= cpo::uno::Sequence< sal_Int8 >(
                                         reinterpret_cast<const sal_Int8*>(aFmtByte.getStr()),
                                         aFmtByte.getLength() + 1 );
             return true;
@@ -2914,7 +2914,7 @@ bool ScDocShell::DdeGetData( const OUString& rItem,
             if( aObj.ExportByteString( aData, osl_getThreadTextEncoding(),
                                         SotClipboardFormatId::SYLK ) )
             {
-                rValue <<= css::uno::Sequence< sal_Int8 >(
+                rValue <<= cpo::uno::Sequence< sal_Int8 >(
                                             reinterpret_cast<const sal_Int8*>(aData.getStr()),
                                             aData.getLength() + 1 );
                 return true;
@@ -3211,7 +3211,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
     {
         mod->SetInSharedDocLoading(true);
         uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
-        uno::Sequence aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
+        cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr, true) };
 
         if ( GetMedium() )
         {

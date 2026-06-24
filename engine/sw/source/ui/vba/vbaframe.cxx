@@ -49,10 +49,10 @@ SwVbaFrame::getServiceImplName()
     return u"SwVbaFrame"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaFrame::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Frame"_ustr
     };

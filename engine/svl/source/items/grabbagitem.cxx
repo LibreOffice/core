@@ -12,7 +12,7 @@
 
 #include <sal/log.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/hash_combine.hxx>
 
 using namespace com::sun::star;
@@ -57,7 +57,7 @@ SfxGrabBagItem* SfxGrabBagItem::Clone(SfxItemPool* /*pPool*/) const
 bool SfxGrabBagItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
-    uno::Sequence<beans::PropertyValue> aValue;
+    cpo::uno::Sequence<beans::PropertyValue> aValue;
     if (rVal >>= aValue)
     {
         m_aMap.clear();
@@ -74,7 +74,7 @@ bool SfxGrabBagItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/
 
 bool SfxGrabBagItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
-    uno::Sequence<beans::PropertyValue> aValue(m_aMap.size());
+    cpo::uno::Sequence<beans::PropertyValue> aValue(m_aMap.size());
     beans::PropertyValue* pValue = aValue.getArray();
     for (const auto& i : m_aMap)
     {

@@ -23,7 +23,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <ooo/vba/XWindowBase.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -55,7 +55,7 @@ public:
         const css::uno::Reference< css::frame::XController >& xController );
     /// @throws css::uno::RuntimeException
     VbaWindowBase(
-        css::uno::Sequence< cpo::uno::Any > const& aArgs,
+        cpo::uno::Sequence< cpo::uno::Any > const& aArgs,
         css::uno::Reference< css::uno::XComponentContext > const& xContext );
 
     // XWindowBase
@@ -72,7 +72,7 @@ public:
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 protected:
     /// @throws css::uno::RuntimeException

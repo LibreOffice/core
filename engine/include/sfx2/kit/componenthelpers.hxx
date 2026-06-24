@@ -17,7 +17,7 @@
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::uno { template<class E> class Sequence; }
+namespace cpo::uno { template<class E> class Sequence; }
 
 class SfxInPlaceClient;
 class SfxViewShell;
@@ -44,7 +44,7 @@ public:
     tools::Rectangle GetChartBoundingBox();
     void Invalidate();
 
-    void Dispatch(const OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
+    void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 
     bool Hit(const Point& aPos);
     static bool HitAny(const Point& aPos, bool bNegativeX = false);
@@ -73,7 +73,7 @@ public:
     const SfxViewShell* GetSmViewShell();
     tools::Rectangle GetBoundingBox() const;
 
-    void Dispatch(const OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
+    void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 
     bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
                         double fPPTScaleX, double fPPTScaleY);

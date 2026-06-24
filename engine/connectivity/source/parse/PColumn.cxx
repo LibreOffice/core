@@ -262,7 +262,7 @@ void OOrderColumn::construct()
     return *OOrderColumn_PROP::getArrayHelper();
 }
 
-css::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sdb.OrderColumn"_ustr };
 }

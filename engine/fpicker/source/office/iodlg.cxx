@@ -1624,13 +1624,13 @@ void SvtFileDialog::FilterSelect()
 }
 
 
-void SvtFileDialog::SetDenyList( const css::uno::Sequence< OUString >& rDenyList )
+void SvtFileDialog::SetDenyList( const cpo::uno::Sequence< OUString >& rDenyList )
 {
     m_xImpl->SetDenyList( rDenyList );
 }
 
 
-const css::uno::Sequence< OUString >& SvtFileDialog::GetDenyList() const
+const cpo::uno::Sequence< OUString >& SvtFileDialog::GetDenyList() const
 {
     return m_xImpl->GetDenyList();
 }

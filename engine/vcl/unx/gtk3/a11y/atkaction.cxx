@@ -159,7 +159,7 @@ action_wrapper_get_name (AtkAction *action,
 */
 
 static void
-appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& rKeyStrokes)
+appendKeyStrokes(OStringBuffer& rBuffer, const cpo::uno::Sequence< awt::KeyStroke >& rKeyStrokes)
 {
     for( const auto& rKeyStroke : rKeyStrokes )
     {

@@ -11,7 +11,7 @@
 
 #include <sal/types.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace svl
 {
@@ -30,7 +30,7 @@ public:
     /// Returns the SHA-256 thumbprint.
     ///
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() = 0;
+    virtual cpo::uno::Sequence<sal_Int8> getSHA256Thumbprint() = 0;
 
     /// Same as getSubjectPublicKeyAlgorithm(), but returns an ID, not a string.
     virtual svl::crypto::SignatureMethodAlgorithm getSignatureMethodAlgorithm() = 0;

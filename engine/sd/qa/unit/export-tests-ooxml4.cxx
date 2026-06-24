@@ -957,7 +957,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf74670)
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
         = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
                                                       maTempFile.GetURL());
-    const uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    const cpo::uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
     int nImageFiles = 0;
     for (const auto& rElementName : aNames)
         if (rElementName.startsWith("ppt/media/image"))
@@ -981,12 +981,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf109169_OctagonBevel)
 
     auto xPropSet(getShapeFromPage(0, 0));
     auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                            .get<uno::Sequence<beans::PropertyValue>>();
+                            .get<cpo::uno::Sequence<beans::PropertyValue>>();
     comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
-    auto aPathSeq((aCustomShapeGeometry[u"Path"_ustr]).get<uno::Sequence<beans::PropertyValue>>());
+    auto aPathSeq((aCustomShapeGeometry[u"Path"_ustr]).get<cpo::uno::Sequence<beans::PropertyValue>>());
     comphelper::SequenceAsHashMap aPath(aPathSeq);
     auto aCoordinates((aPath[u"Coordinates"_ustr])
-                          .get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
+                          .get<cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(40), aCoordinates.getLength());
 }
 
@@ -1001,12 +1001,12 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf109169_DiamondBevel)
 
     auto xPropSet(getShapeFromPage(0, 0));
     auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                            .get<uno::Sequence<beans::PropertyValue>>();
+                            .get<cpo::uno::Sequence<beans::PropertyValue>>();
     comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
-    auto aPathSeq((aCustomShapeGeometry[u"Path"_ustr]).get<uno::Sequence<beans::PropertyValue>>());
+    auto aPathSeq((aCustomShapeGeometry[u"Path"_ustr]).get<cpo::uno::Sequence<beans::PropertyValue>>());
     comphelper::SequenceAsHashMap aPath(aPathSeq);
     auto aCoordinates((aPath[u"Coordinates"_ustr])
-                          .get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
+                          .get<cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aCoordinates.getLength());
 }
 
@@ -1207,7 +1207,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testLinkedOLE)
 {
     // The linked OLE object needs its link completed during load so it can
     // be exported. Use FULL_UPDATE since the default test mode defers links.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::FULL_UPDATE)),
     };

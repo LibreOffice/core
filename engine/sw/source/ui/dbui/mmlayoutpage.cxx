@@ -101,7 +101,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage(weld::Container* pPage, SwMailMerge
     }
     SwView& rView = m_pWizard->GetSwView();
     // Don't save embedded data set! It would steal it from current document.
-    uno::Sequence< beans::PropertyValue > aValues =
+    cpo::uno::Sequence< beans::PropertyValue > aValues =
     {
         comphelper::makePropertyValue(u"FilterName"_ustr, pSfxFlt->GetFilterName()),
         comphelper::makePropertyValue(u"NoEmbDataSet"_ustr, true)

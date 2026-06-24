@@ -59,12 +59,12 @@ IMPL_LINK(SvxThesaurusDialog, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     return false;
 }
 
-uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::queryMeanings_Impl(
+cpo::uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::queryMeanings_Impl(
         OUString& rTerm,
         const lang::Locale& rLocale,
         const beans::PropertyValues& rProperties )
 {
-    uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings(
+    cpo::uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings(
             xThesaurus->queryMeanings( rTerm, rLocale, rProperties ) );
 
     // text with '.' at the end?
@@ -86,8 +86,8 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::que
 bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
 {
     lang::Locale aLocale( LanguageTag::convertToLocale( nLookUpLanguage ) );
-    uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings = queryMeanings_Impl(
-            aLookUpText, aLocale, uno::Sequence< beans::PropertyValue >() );
+    cpo::uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings = queryMeanings_Impl(
+            aLookUpText, aLocale, cpo::uno::Sequence< beans::PropertyValue >() );
     const sal_Int32 nMeanings = aMeanings.getLength();
 
     m_xAlternativesCT->freeze();
@@ -97,7 +97,7 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
     for (sal_Int32 i = 0;  i < nMeanings;  ++i)
     {
         OUString rMeaningTxt = aMeanings[i]->getMeaning();
-        uno::Sequence<OUString> aSynonyms(aMeanings[i]->querySynonyms());
+        cpo::uno::Sequence<OUString> aSynonyms(aMeanings[i]->querySynonyms());
         DBG_ASSERT( !rMeaningTxt.isEmpty(), "meaning with empty text" );
         DBG_ASSERT(aSynonyms.hasElements(), "meaning without synonym");
 
@@ -282,7 +282,7 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     m_xLeftBtn->set_sensitive(false);
 
     // fill language menu button list
-    uno::Sequence< lang::Locale > aLocales;
+    cpo::uno::Sequence< lang::Locale > aLocales;
     if (xThesaurus.is())
         aLocales = xThesaurus->getLocales();
     m_xLangLB->clear();

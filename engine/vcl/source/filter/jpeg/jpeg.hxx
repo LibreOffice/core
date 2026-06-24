@@ -23,13 +23,13 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, ImportOutput& rImportOutput, GraphicFilterImportFlags nImportFlags, BitmapScopedWriteAccess* ppAccess );
 
 bool ExportJPEG(SvStream& rOutputStream,
                     const Graphic& rGraphic,
-                    const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                     bool* pExportWasGrey);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

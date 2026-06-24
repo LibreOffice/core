@@ -88,7 +88,7 @@ bool DocumentEncryption::encrypt()
         Reference<XOutputStream> xOutputStream(mrOleStorage.openOutputStream(aStream.Name), UNO_SET_THROW);
         BinaryXOutputStream aBinaryOutputStream(xOutputStream, true);
 
-        css::uno::Sequence<sal_Int8> aStreamSequence;
+        cpo::uno::Sequence<sal_Int8> aStreamSequence;
         aStream.Value >>= aStreamSequence;
 
         aBinaryOutputStream.writeData(aStreamSequence);

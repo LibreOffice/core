@@ -113,7 +113,7 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
                 }
 
                 // send notification
-                uno::Sequence< beans::NamedValue > aInfo { { u"List"_ustr, cpo::uno::Any(aList) } };
+                cpo::uno::Sequence< beans::NamedValue > aInfo { { u"List"_ustr, cpo::uno::Any(aList) } };
                 addNotifyInfo( u"ListChanged"_ustr,
                             getDispatchFromCommand( m_aCommandURL ),
                             aInfo );
@@ -138,7 +138,7 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
                     m_aCurrentSelection = m_aDropdownMenuList[nPos].mLabel;
 
                     // send notification
-                    uno::Sequence< beans::NamedValue > aInfo { { u"ItemChecked"_ustr, cpo::uno::Any(nPos) } };
+                    cpo::uno::Sequence< beans::NamedValue > aInfo { { u"ItemChecked"_ustr, cpo::uno::Any(nPos) } };
                     addNotifyInfo( u"Pos"_ustr,
                                 getDispatchFromCommand( m_aCommandURL ),
                                 aInfo );

@@ -37,11 +37,11 @@ public:
 
     // XExtendedFilterDetection
 
-    virtual OUString SAL_CALL detect(css::uno::Sequence<css::beans::PropertyValue>& lDescriptor) override;
+    virtual OUString SAL_CALL detect(cpo::uno::Sequence<css::beans::PropertyValue>& lDescriptor) override;
 
     // XInitialization
 
-    virtual void SAL_CALL initialize( const css::uno::Sequence<cpo::uno::Any>& aArguments) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
 
     // XServiceInfo
 
@@ -49,11 +49,11 @@ public:
 
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 OUString PlainTextFilterDetect_getImplementationName();
 
-css::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames();
+cpo::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

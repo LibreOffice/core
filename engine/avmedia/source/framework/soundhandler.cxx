@@ -45,7 +45,7 @@ bool SoundHandler::supportsService( const OUString& sServiceName )
 }
 
 // XServiceInfo
-css::uno::Sequence< OUString > SoundHandler::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SoundHandler::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ContentHandler"_ustr };
 }
@@ -103,7 +103,7 @@ SoundHandler::~SoundHandler()
     @threadsafe yes
 *//*-*************************************************************************************************************/
 void SoundHandler::dispatchWithNotification(const css::util::URL&                                             aURL      ,
-                                                     const css::uno::Sequence< css::beans::PropertyValue >&            lDescriptor,
+                                                     const cpo::uno::Sequence< css::beans::PropertyValue >&            lDescriptor,
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // SAFE {
@@ -153,7 +153,7 @@ void SoundHandler::dispatchWithNotification(const css::util::URL&               
 }
 
 void SoundHandler::dispatch( const css::util::URL&                                  aURL       ,
-                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
+                                      const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
@@ -179,7 +179,7 @@ void SoundHandler::dispatch( const css::util::URL&                              
     @onerror    We return nothing.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-OUString SoundHandler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
+OUString SoundHandler::detect( cpo::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
 {
     // Our default is "nothing". So we can return it, if detection failed or file type is really unknown.
     OUString sTypeName;
@@ -257,7 +257,7 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify, Timer *, void)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_framework_SoundHandler_get_implementation(css::uno::XComponentContext*,
-                                                            css::uno::Sequence<cpo::uno::Any> const &)
+                                                            cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new avmedia::SoundHandler);
 }

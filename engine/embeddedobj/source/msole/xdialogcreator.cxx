@@ -83,7 +83,7 @@ typedef UINT STDAPICALLTYPE OleUIInsertObjectA_Type(LPOLEUIINSERTOBJECTA);
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-static uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_Int8 >& aClassID )
+static cpo::uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const cpo::uno::Sequence< sal_Int8 >& aClassID )
 {
     // Writer
     if ( MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SW_OLE_EMBED_CLASSID_60 ) )
@@ -122,10 +122,10 @@ static uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence<
 embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDialog(
             const uno::Reference< embed::XStorage >& xStorage,
             const OUString& sEntName,
-            const uno::Sequence< beans::PropertyValue >& aInObjArgs )
+            const cpo::uno::Sequence< beans::PropertyValue >& aInObjArgs )
 {
     embed::InsertedObjectInfo aObjectInfo;
-    uno::Sequence< beans::PropertyValue > aObjArgs( aInObjArgs );
+    cpo::uno::Sequence< beans::PropertyValue > aObjArgs( aInObjArgs );
 
 #ifdef _WIN32
 
@@ -164,7 +164,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     {
         uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator = embed::EmbeddedObjectCreator::create( m_xContext );
 
-        uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID( io.clsid.Data1,
+        cpo::uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID( io.clsid.Data1,
                                                                                           io.clsid.Data2,
                                                                                           io.clsid.Data3,
                                                                                           io.clsid.Data4[0],
@@ -189,7 +189,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
         if ( osl::FileBase::getFileURLFromSystemPath( aFileName, aFileURL ) != osl::FileBase::E_None )
             throw uno::RuntimeException();
 
-        uno::Sequence< beans::PropertyValue > aMediaDescr{ comphelper::makePropertyValue("URL",
+        cpo::uno::Sequence< beans::PropertyValue > aMediaDescr{ comphelper::makePropertyValue("URL",
                                                                                          aFileURL) };
 
         // TODO: use config helper for type detection
@@ -237,7 +237,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
         if ( pMF )
         {
             sal_uInt32 nBufSize = GetMetaFileBitsEx( pMF->hMF, 0, nullptr );
-            uno::Sequence< sal_Int8 > aMetafile( nBufSize + 22 );
+            cpo::uno::Sequence< sal_Int8 > aMetafile( nBufSize + 22 );
             sal_Int8* pBuf = aMetafile.getArray();
             *reinterpret_cast<long*>( pBuf ) = 0x9ac6cdd7L;
             *reinterpret_cast<short*>( pBuf+6 ) = SHORT(0);
@@ -251,7 +251,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
                 datatransfer::DataFlavor aFlavor(
                     "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
                     "Image WMF",
-                    cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+                    cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() );
 
                 aObjectInfo.Options = { { "Icon", cpo::uno::Any(aMetafile) },
                                         { "IconFormat", cpo::uno::Any(aFlavor) } };
@@ -275,7 +275,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitFromClipboard(
                 const uno::Reference< embed::XStorage >& xStorage,
                 const OUString& sEntryName,
-                const uno::Sequence< beans::PropertyValue >& aObjectArgs )
+                const cpo::uno::Sequence< beans::PropertyValue >& aObjectArgs )
 {
     embed::InsertedObjectInfo aObjectInfo;
 
@@ -297,7 +297,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
     xPersist->setPersistentEntry( xStorage,
                                     sEntryName,
                                     embed::EntryInitModes::DEFAULT_INIT,
-                                    uno::Sequence< beans::PropertyValue >(),
+                                    cpo::uno::Sequence< beans::PropertyValue >(),
                                     aObjectArgs );
 
     aObjectInfo.Object = xResult;
@@ -327,7 +327,7 @@ bool SAL_CALL MSOLEDialogObjectCreator::supportsService( const OUString& Service
 }
 
 
-uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedServiceNames()
 {
     return { "com.sun.star.embed.MSOLEObjectSystemCreator",
              "com.sun.star.comp.embed.MSOLEObjectSystemCreator" };
@@ -335,7 +335,7 @@ uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedService
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_MSOLEDialogObjectCreator_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new MSOLEDialogObjectCreator(context));
 }

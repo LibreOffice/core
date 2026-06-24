@@ -433,7 +433,7 @@ Sequence< Type > ODatabaseSource::getTypes()
 
 Sequence< sal_Int8 > ODatabaseSource::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // css::uno::XInterface
@@ -1222,7 +1222,7 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
     return Reference< XOfficeDatabaseDocument >( static_cast<cppu::OWeakObject*>(xModel.get()), UNO_QUERY_THROW );
 }
 
-void SAL_CALL ODatabaseSource::initialize( css::uno::Sequence< cpo::uno::Any > const & )
+void SAL_CALL ODatabaseSource::initialize( cpo::uno::Sequence< cpo::uno::Any > const & )
 {
 }
 
@@ -1235,7 +1235,7 @@ Reference< XInterface > ODatabaseSource::getThis() const
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseSource(css::uno::XComponentContext* context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     css::uno::Reference<XInterface> inst(
         DatabaseContext::create(context)->createInstance());

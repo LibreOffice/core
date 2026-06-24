@@ -154,7 +154,7 @@ const char * const ExportedTextAttributes[TEXT_ATTRIBUTE_LAST] =
 /*****************************************************************************/
 
 static gchar*
-get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
+get_value( const cpo::uno::Sequence< beans::PropertyValue >& rAttributeList,
            sal_Int32 nIndex, AtkTextAttrFunc func )
 {
     if( nIndex != -1 )
@@ -225,7 +225,7 @@ static css::uno::Reference<css::accessibility::XAccessibleComponent>
 }
 
 static gchar*
-get_color_value(const uno::Sequence< beans::PropertyValue >& rAttributeList,
+get_color_value(const cpo::uno::Sequence< beans::PropertyValue >& rAttributeList,
                 const sal_Int32 * pIndexArray,
                 ExportedAttribute attr,
                 AtkText * text)
@@ -743,7 +743,7 @@ const gchar* const relief[] = { "none", "emboss", "engrave" };
 const gchar * const outline  = "outline";
 
 static gchar *
-get_font_effect(const uno::Sequence< beans::PropertyValue >& rAttributeList,
+get_font_effect(const cpo::uno::Sequence< beans::PropertyValue >& rAttributeList,
                 sal_Int32 nContourIndex, sal_Int32 nReliefIndex)
 {
     if( nContourIndex != -1 )
@@ -777,7 +777,7 @@ enum
 const gchar* const decorations[] = { "none", "blink", "underline", "line-through" };
 
 static gchar *
-get_text_decoration(const uno::Sequence< beans::PropertyValue >& rAttributeList,
+get_text_decoration(const cpo::uno::Sequence< beans::PropertyValue >& rAttributeList,
                     sal_Int32 nBlinkIndex, sal_Int32 nUnderlineIndex,
                     sal_Int16 nStrikeoutIndex)
 {
@@ -917,7 +917,7 @@ LineSpacing2LineHeight( const cpo::uno::Any& rAny )
 static gchar *
 TabStopList2String( const cpo::uno::Any& rAny, bool default_tabs )
 {
-    uno::Sequence< style::TabStop > theTabStops;
+    cpo::uno::Sequence< style::TabStop > theTabStops;
     gchar * ret = nullptr;
 
     if( rAny >>= theTabStops)
@@ -1028,7 +1028,7 @@ attr_compare(const void *p1,const void *p2)
 
 static void
 find_exported_attributes( sal_Int32 *pArray,
-    const css::uno::Sequence< css::beans::PropertyValue >& rAttributeList )
+    const cpo::uno::Sequence< css::beans::PropertyValue >& rAttributeList )
 {
     for( sal_Int32 i = 0; i < rAttributeList.getLength(); i++ )
     {
@@ -1067,7 +1067,7 @@ attribute_set_prepend( AtkAttributeSet* attribute_set,
 
 AtkAttributeSet*
 attribute_set_new_from_property_values(
-    const uno::Sequence< beans::PropertyValue >& rAttributeList,
+    const cpo::uno::Sequence< beans::PropertyValue >& rAttributeList,
     bool run_attributes_only,
     AtkText *text)
 {
@@ -1347,10 +1347,10 @@ constexpr AtkTextAttrMapping g_TextAttrMap[]
 bool
 attribute_set_map_to_property_values(
     AtkAttributeSet* attribute_set,
-    uno::Sequence< beans::PropertyValue >& rValueList )
+    cpo::uno::Sequence< beans::PropertyValue >& rValueList )
 {
     // Ensure enough space ..
-    uno::Sequence< beans::PropertyValue > aAttributeList (SAL_N_ELEMENTS(g_TextAttrMap));
+    cpo::uno::Sequence< beans::PropertyValue > aAttributeList (SAL_N_ELEMENTS(g_TextAttrMap));
     auto pAttributeList = aAttributeList.getArray();
 
     sal_Int32 nIndex = 0;

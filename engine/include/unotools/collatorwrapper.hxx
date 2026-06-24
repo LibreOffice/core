@@ -22,7 +22,7 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star::uno {
         class XComponentContext;
@@ -45,7 +45,7 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
         compareString (
                 const OUString& s1, const OUString& s2) const;
 
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
         listCollatorAlgorithms (
                 const css::lang::Locale& rLocale) const;
 

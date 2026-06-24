@@ -499,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf97035)
         // First cell width of the second row should be 2300
         uno::Reference<table::XTableRows> xTableRows = xTable->getRows();
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2300),
-                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0]
                                  .Position);
     };
@@ -675,7 +675,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf44986)
         // Check the first row of the table, it should have two cells (one separator).
         // This was 0: the first row had no separators, so it had only one cell, which was too wide.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
-                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)
                                  .getLength());
     };
@@ -769,12 +769,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105852)
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTableRows->getCount());
         // The first row must have 4 cells.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
-                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)
                                  .getLength());
         // The third row must have 1 merged cell.
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(2), u"TableColumnSeparators"_ustr)
                                  .getLength());
     };
@@ -815,8 +815,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105729)
 CPPUNIT_TEST_FIXTURE(Test, testTdf106694)
 {
     auto verify = [this]() {
-        auto aTabs
-            = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), u"ParaTabStops"_ustr);
+        auto aTabs = getProperty<cpo::uno::Sequence<style::TabStop>>(getParagraph(1),
+                                                                     u"ParaTabStops"_ustr);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
         // This was 0, tab position was incorrect, looked like it was missing.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(14605), aTabs[0].Position);

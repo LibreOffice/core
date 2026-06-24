@@ -46,14 +46,14 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.ToolBarFactory"_ustr};
     }
 
     // XUIElementFactory
     virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement(
-            const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) override;
+            const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 };
 
 ToolBarFactory::ToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
@@ -76,7 +76,7 @@ Reference< XUIElement > SAL_CALL ToolBarFactory::createUIElement(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_ToolBarFactory_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ToolBarFactory(context));
 }

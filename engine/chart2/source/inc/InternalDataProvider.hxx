@@ -81,15 +81,15 @@ public:
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ XInternalDataProvider ____
     virtual bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange ) override;
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
         getDataByRangeRepresentation( const OUString& aRange ) override;
     virtual void SAL_CALL setDataByRangeRepresentation(
         const OUString& aRange,
-        const css::uno::Sequence< cpo::uno::Any >& aNewData ) override;
+        const cpo::uno::Sequence< cpo::uno::Any >& aNewData ) override;
     virtual void SAL_CALL insertSequence( ::sal_Int32 nAfterIndex ) override;
     virtual void SAL_CALL deleteSequence( ::sal_Int32 nAtIndex ) override;
     virtual void SAL_CALL appendSequence() override;
@@ -104,10 +104,10 @@ public:
 
     // ____ XDataProvider (base of XInternalDataProvider) ____
     virtual bool SAL_CALL createDataSourcePossible(
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource(
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments(
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
     virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation ) override;
@@ -127,39 +127,39 @@ public:
         const OUString& aXMLRange ) override;
 
     // ____ XDateCategories ____
-    virtual css::uno::Sequence< double > SAL_CALL getDateCategories() override;
-    virtual void SAL_CALL setDateCategories( const css::uno::Sequence< double >& rDates ) override;
+    virtual cpo::uno::Sequence< double > SAL_CALL getDateCategories() override;
+    virtual void SAL_CALL setDateCategories( const cpo::uno::Sequence< double >& rDates ) override;
 
     // ____ XAnyDescriptionAccess ____
-    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > SAL_CALL
         getAnyRowDescriptions() override;
     virtual void SAL_CALL setAnyRowDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& aRowDescriptions ) override;
-    virtual css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > > SAL_CALL
+        const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aRowDescriptions ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > SAL_CALL
         getAnyColumnDescriptions() override;
     virtual void SAL_CALL setAnyColumnDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& aColumnDescriptions ) override;
+        const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aColumnDescriptions ) override;
 
     // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
-    virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL
         getComplexRowDescriptions() override;
     virtual void SAL_CALL setComplexRowDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< OUString > >& aRowDescriptions ) override;
-    virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL
+        const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aRowDescriptions ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL
         getComplexColumnDescriptions() override;
     virtual void SAL_CALL setComplexColumnDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< OUString > >& aColumnDescriptions ) override;
+        const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aColumnDescriptions ) override;
 
     // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
-    virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL getData() override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< double > > SAL_CALL getData() override;
     virtual void SAL_CALL setData(
-        const css::uno::Sequence< css::uno::Sequence< double > >& aData ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getRowDescriptions() override;
+        const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aData ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getRowDescriptions() override;
     virtual void SAL_CALL setRowDescriptions(
-        const css::uno::Sequence< OUString >& aRowDescriptions ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getColumnDescriptions() override;
+        const cpo::uno::Sequence< OUString >& aRowDescriptions ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getColumnDescriptions() override;
     virtual void SAL_CALL setColumnDescriptions(
-        const css::uno::Sequence< OUString >& aColumnDescriptions ) override;
+        const cpo::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
     // ____ XChartData (base of XChartDataArray) ____
     virtual void SAL_CALL addChartDataChangeEventListener(
@@ -173,7 +173,7 @@ public:
     // ____ XCloneable ____
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     void setChartModel(ChartModel* pChartModel);
 

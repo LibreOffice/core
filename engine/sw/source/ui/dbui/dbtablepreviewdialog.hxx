@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_DBTABLEPREVIEWDIALOG_HXX
 
 #include <sfx2/basedlgs.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 namespace com::sun::star{
     namespace beans{  struct PropertyValue; }
@@ -36,7 +36,7 @@ class SwDBTablePreviewDialog : public SfxDialogController
     rtl::Reference<DBTablePreviewFrame> m_xFrameListener;
 public:
     SwDBTablePreviewDialog(weld::Window* pParent,
-            css::uno::Sequence< css::beans::PropertyValue> const & rValues  );
+            cpo::uno::Sequence< css::beans::PropertyValue> const & rValues  );
     virtual ~SwDBTablePreviewDialog() override;
 };
 

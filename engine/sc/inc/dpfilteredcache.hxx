@@ -30,7 +30,7 @@
 
 #include <mdds/flat_segment_tree.hpp>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Sequence;
 }
@@ -145,7 +145,7 @@ public:
         result to rTabData.  This method is used, for example, to generate
         a drill-down data table. */
     void filterTable(const std::vector<Criterion>& rCriteria,
-                     css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>& rTabData,
+                     cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& rTabData,
                      const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     void clear();

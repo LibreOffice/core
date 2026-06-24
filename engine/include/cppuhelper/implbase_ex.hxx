@@ -21,7 +21,7 @@
 #define INCLUDED_CPPUHELPER_IMPLBASE_EX_HXX
 
 #include "cpo/uno/Any.h"
-#include "com/sun/star/uno/Sequence.h"
+#include "cpo/uno/Sequence.h"
 #include "com/sun/star/uno/Type.h"
 #include "com/sun/star/uno/genfunc.h"
 #include "cppuhelper/cppuhelperdllapi.h"
@@ -113,18 +113,18 @@ CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
     void * that );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type >
 SAL_CALL ImplHelper_getTypes(
     class_data * cd );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type >
 SAL_CALL ImplInhHelper_getTypes(
     class_data * cd,
-    css::uno::Sequence< css::uno::Type > const & rAddTypes );
+    cpo::uno::Sequence< css::uno::Type > const & rAddTypes );
 /** ImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Sequence< sal_Int8 >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< sal_Int8 >
 SAL_CALL ImplHelper_getImplementationId(
     class_data * cd );
 
@@ -137,7 +137,7 @@ CPPUHELPER_DLLPUBLIC cpo::uno::Any SAL_CALL WeakImplHelper_query(
     ::cppu::OWeakObject * pBase );
 /** WeakImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type >
 SAL_CALL WeakImplHelper_getTypes(
     class_data * cd );
 
@@ -151,7 +151,7 @@ SAL_CALL WeakAggImplHelper_queryAgg(
     ::cppu::OWeakAggObject * pBase );
 /** WeakAggImplHelper
 */
-CPPUHELPER_DLLPUBLIC css::uno::Sequence< css::uno::Type >
+CPPUHELPER_DLLPUBLIC cpo::uno::Sequence< css::uno::Type >
 SAL_CALL WeakAggImplHelper_getTypes(
     class_data * cd );
 

@@ -842,7 +842,7 @@ double PieChart::getMaxOffset()
 
     if(!m_bSizeExcludesLabelsAndExplodedSegments)
     {
-        uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+        cpo::uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
         // "AttributedDataPoints"
         if( xSeries->getFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS ) >>= aAttributedDataPointIndexList )
         {

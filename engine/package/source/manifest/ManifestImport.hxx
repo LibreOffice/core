@@ -53,14 +53,14 @@ typedef ::std::vector< ManifestScopeEntry > ManifestStack;
 class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
     std::vector< css::beans::NamedValue > aKeyInfoSequence;
-    std::vector< css::uno::Sequence< css::beans::NamedValue > > aKeys;
+    std::vector< cpo::uno::Sequence< css::beans::NamedValue > > aKeys;
     std::vector< css::beans::PropertyValue > aSequence;
     OUStringBuffer aCurrentCharacters{64};
     ManifestStack aStack;
     bool bIgnoreEncryptData;
     bool bPgpEncryption;
     sal_Int32 nDerivedKeySize;
-    ::std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rManVector;
+    ::std::vector < cpo::uno::Sequence < css::beans::PropertyValue > > & rManVector;
     OUString m_PackageVersion; // on root element
 
 
@@ -71,7 +71,7 @@ class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocum
     OUString ConvertName( const OUString& aName );
 
 public:
-    ManifestImport( std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rNewVector );
+    ManifestImport( std::vector < cpo::uno::Sequence < css::beans::PropertyValue > > & rNewVector );
     virtual ~ManifestImport() override;
     virtual void SAL_CALL startDocument(  ) override;
     virtual void SAL_CALL endDocument(  ) override;

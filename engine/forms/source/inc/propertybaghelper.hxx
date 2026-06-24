@@ -38,8 +38,8 @@ namespace frm
         virtual ::osl::Mutex&   getMutex() = 0;
 
         virtual void            describeFixedAndAggregateProperties(
-            css::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
-            css::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
+            cpo::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
+            cpo::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
         ) const = 0;
 
         virtual css::uno::Reference< css::beans::XMultiPropertySet >
@@ -75,8 +75,8 @@ namespace frm
         void removeProperty( const OUString& _rName );
 
         // XPropertyAccess equivalent
-        css::uno::Sequence< css::beans::PropertyValue > getPropertyValues();
-        void setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& _rProps );
+        cpo::uno::Sequence< css::beans::PropertyValue > getPropertyValues();
+        void setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& _rProps );
 
         // forwards to m_aDynamicProperties
         inline void getDynamicFastPropertyValue( sal_Int32 _nHandle, cpo::uno::Any& _out_rValue ) const;

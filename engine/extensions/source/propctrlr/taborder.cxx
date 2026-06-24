@@ -39,6 +39,7 @@ namespace pcr
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::datatransfer;
+    using namespace ::cpo::uno;
 
     namespace {
 

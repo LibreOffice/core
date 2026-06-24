@@ -222,7 +222,7 @@ void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScFunctionAccess_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
+ScFunctionAccess_get_implementation(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
@@ -240,7 +240,7 @@ bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
 {
     return {SCFUNCTIONACCESS_SERVICE, SCDOCSETTINGS_SERVICE};
 }
@@ -422,7 +422,7 @@ public:
 template< class seq >
 class SequencesContainer
 {
-    uno::Sequence< uno::Sequence< seq > > maSeq;
+    cpo::uno::Sequence< cpo::uno::Sequence< seq > > maSeq;
 
     sal_Int32& mrDocRow;
     bool mbOverflow;
@@ -443,7 +443,7 @@ public:
         sal_Int32 nStartRow = mrDocRow;
         sal_Int32 nRowCount = maSeq.getLength();
         sal_Int32 nMaxColCount = 0;
-        for (const uno::Sequence<seq>& rRow : maSeq)
+        for (const cpo::uno::Sequence<seq>& rRow : maSeq)
         {
             sal_Int32 nColCount = rRow.getLength();
             if ( nColCount > nMaxColCount )
@@ -486,7 +486,7 @@ static void processSequences( ScDocument* pDoc, const cpo::uno::Any& rArg, ScTok
 }
 
 cpo::uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
-                            const uno::Sequence<cpo::uno::Any>& aArguments )
+                            const cpo::uno::Sequence<cpo::uno::Any>& aArguments )
 {
     SolarMutexGuard aGuard;
 
@@ -561,23 +561,23 @@ cpo::uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
             rArg >>= aUStr;
             aTokenArr.AddString(rSPool.intern(aUStr));
         }
-        else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int16> >>::get() ) )
+        else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<sal_Int16> >>::get() ) )
         {
             ArrayOfArrayProc<sal_Int16>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<sal_Int32> >>::get() ) )
+        else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<sal_Int32> >>::get() ) )
         {
             ArrayOfArrayProc<sal_Int32>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<double> >>::get() ) )
+        else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<double> >>::get() ) )
         {
             ArrayOfArrayProc<double>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<OUString> >>::get() ) )
+        else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<OUString> >>::get() ) )
         {
             ArrayOfArrayProc<OUString>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if ( aType.equals( cppu::UnoType<uno::Sequence< uno::Sequence<cpo::uno::Any> >>::get() ) )
+        else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any> >>::get() ) )
         {
             ArrayOfArrayProc<cpo::uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }

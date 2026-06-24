@@ -888,7 +888,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf103345)
         getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     for (beans::PropertyValue const& prop : aProps)
@@ -1142,7 +1142,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
     //start with level 1, 0 is the header level
     for (sal_Int32 nLevel = 1; nLevel < xLevelFormats->getCount(); ++nLevel)
     {
-        css::uno::Sequence<css::beans::PropertyValues> aLevel;
+        cpo::uno::Sequence<css::beans::PropertyValues> aLevel;
         xLevelFormats->getByIndex(nLevel) >>= aLevel;
 
         sal_Int32 nTabStop = levelTabStops[nLevel - 1];
@@ -1200,7 +1200,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154695)
     //start with level 1, 0 is the header level
     for (sal_Int32 nLevel = 1; nLevel < xLevelFormats->getCount(); ++nLevel)
     {
-        css::uno::Sequence<css::beans::PropertyValues> aLevel;
+        cpo::uno::Sequence<css::beans::PropertyValues> aLevel;
         xLevelFormats->getByIndex(nLevel) >>= aLevel;
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aLevel.getLength());
@@ -1227,10 +1227,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156078)
     createSwDoc("tdf156078_rightTabOutsideParaRightIndent.docx");
 
     // Export it to a PNG (96 ppi)
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PixelWidth", cpo::uno::Any(sal_Int32(816)) },
                                            { "PixelHeight", cpo::uno::Any(sal_Int32(1056)) } }));
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         { { "FilterName", cpo::uno::Any(u"writer_png_Export"_ustr) },
           { "FilterData", cpo::uno::Any(aFilterData) } }));
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

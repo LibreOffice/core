@@ -41,7 +41,7 @@ PDFDialog::~PDFDialog()
 
 Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 
@@ -157,7 +157,7 @@ void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_PDFDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PDFDialog(context));
 }

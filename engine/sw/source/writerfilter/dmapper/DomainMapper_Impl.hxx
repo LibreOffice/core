@@ -837,7 +837,7 @@ public:
     void applyToggleAttributes( const PropertyMapPtr& pPropertyMap );
     void MergeAtContentImageRedlineWithNext(const css::uno::Reference<css::text::XTextAppend>& xTextAppend);
     void appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap );
-    void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const css::uno::Sequence<css::beans::PropertyValue>&);
+    void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const cpo::uno::Sequence<css::beans::PropertyValue>&);
     void appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOleHandler );
     void appendStarMath( const Value& v);
     void adjustLastPara(sal_Int8 nAlign);
@@ -906,9 +906,9 @@ public:
     // this method deletes the current m_pGraphicImport after import
     void    ImportGraphic(const writerfilter::Reference<Properties>::Pointer_t&);
 
-    void InitTabStopFromStyle(const css::uno::Sequence<css::style::TabStop>& rInitTabStops);
+    void InitTabStopFromStyle(const cpo::uno::Sequence<css::style::TabStop>& rInitTabStops);
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
-    css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
+    cpo::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
 
     void SetCurrentParaStyleName(const OUString& rString) { m_StreamStateStack.top().sCurrentParaStyleName = rString; }
     OUString  GetCurrentParaStyleName();

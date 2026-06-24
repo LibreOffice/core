@@ -214,7 +214,7 @@ void Window::ImplLayoutVideoWindow()
     }
 }
 
-bool Window::create( const uno::Sequence< cpo::uno::Any >& rArguments )
+bool Window::create( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     static WNDCLASSW* mpWndClass = lcl_getWndClass();
 
@@ -479,7 +479,7 @@ bool Window::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > Window::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > Window::getSupportedServiceNames(  )
 {
     return { AVMEDIA_WIN_WINDOW_SERVICENAME };
 }

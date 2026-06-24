@@ -1250,15 +1250,15 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148501_OctagonBevel)
     CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
 }
 
-bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
+bool lcl_getShapeSegments(cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
                           const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
     cpo::uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
-    uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
+    cpo::uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aCustomShapeGeometry)
     {
         if (rProp.Name == "Path")
@@ -1290,7 +1290,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148714_CurvedArrows)
     for (sal_Int32 nShapeIndex = 0; nShapeIndex < 4; nShapeIndex++)
     {
         uno::Reference<drawing::XShape> xShape(getShape(nShapeIndex));
-        uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
         CPPUNIT_ASSERT(lcl_getShapeSegments(aSegments, xShape));
 
         if (nShapeIndex == 0 || nShapeIndex == 3)
@@ -1342,15 +1342,16 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148707_two_commands_B_V)
     }
 }
 
-bool lcl_getShapeCoordinates(uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rCoordinates,
-                             const uno::Reference<drawing::XShape>& xShape)
+bool lcl_getShapeCoordinates(
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>& rCoordinates,
+    const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
     cpo::uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
-    uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
+    cpo::uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aCustomShapeGeometry)
     {
         if (rProp.Name == "Path")
@@ -1386,9 +1387,9 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf153000_MS0_SPT_25_31)
     for (sal_uInt8 i = 0; i < 7; i++)
     {
         uno::Reference<drawing::XShape> xShape(getShape(i));
-        uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
         CPPUNIT_ASSERT(lcl_getShapeSegments(aSegments, xShape));
-        uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
         CPPUNIT_ASSERT(lcl_getShapeCoordinates(aCoordinates, xShape));
         CPPUNIT_ASSERT_EQUAL(aExpected[i], aCoordinates.getLength());
     }

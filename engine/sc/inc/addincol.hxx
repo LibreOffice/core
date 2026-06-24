@@ -22,7 +22,7 @@
 #include <memory>
 #include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <formula/errorcodes.hxx>
 #include <i18nlangtag/lang.h>
 #include "scdllapi.h"
@@ -196,8 +196,8 @@ class ScUnoAddInCall
 {
 private:
     const ScUnoAddInFuncData*   pFuncData;
-    css::uno::Sequence<cpo::uno::Any>         aArgs;
-    css::uno::Sequence<cpo::uno::Any>         aVarArg;
+    cpo::uno::Sequence<cpo::uno::Any>         aArgs;
+    cpo::uno::Sequence<cpo::uno::Any>         aVarArg;
     css::uno::Reference<css::uno::XInterface> xCaller;
     ScDocument&                 mrDoc;
     bool                        bValidCount;
@@ -209,7 +209,7 @@ private:
     ScMatrixRef                 xMatrix;
     css::uno::Reference<css::sheet::XVolatileResult> xVarRes;
 
-    void            ExecuteCallWithArgs(css::uno::Sequence<cpo::uno::Any>& rCallArgs);
+    void            ExecuteCallWithArgs(cpo::uno::Sequence<cpo::uno::Any>& rCallArgs);
 
 public:
                     // exact name

@@ -12,7 +12,7 @@
 #include <com/sun/star/sheet/XScenario.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -26,7 +26,7 @@ void XScenario::testScenario()
     uno::Reference<sheet::XScenario> xScenario(getScenarioSpreadsheet(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("Sheet is not a Scenario sheet", xScenario->getIsScenario());
 
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
+    cpo::uno::Sequence<table::CellRangeAddress> aCellRangeAddr(1);
     xScenario->addRanges(aCellRangeAddr);
     xScenario->apply();
 

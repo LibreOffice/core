@@ -347,7 +347,7 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
     {
         if( !aIter.isEmpty() )
         {
-            uno::Sequence<sal_Int8> aPass;
+            cpo::uno::Sequence<sal_Int8> aPass;
             ::comphelper::Base64::decode( aPass, aIter.toString() );
             pChangeTrackingImportHelper->SetProtection(aPass);
         }

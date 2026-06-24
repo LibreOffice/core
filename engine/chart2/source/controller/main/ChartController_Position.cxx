@@ -102,7 +102,7 @@ static void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::
     rPosAndSize = awt::Rectangle(nPosX,nPosY,nSizX,nSizY);
 }
 
-void ChartController::executeDispatch_PositionAndSize(const ::css::uno::Sequence< ::css::beans::PropertyValue >* pArgs)
+void ChartController::executeDispatch_PositionAndSize(const ::cpo::uno::Sequence< ::css::beans::PropertyValue >* pArgs)
 {
     const OUString aCID( m_aSelection.getSelectedCID() );
 

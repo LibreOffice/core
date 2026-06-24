@@ -28,10 +28,12 @@ class SvXMLImportContext;
 
 namespace com::sun::star {
     namespace uno { template<typename T> class Reference; }
-    namespace uno { template <typename > class Sequence; }
     namespace beans { class XPropertySet; struct PropertyValue; }
     namespace frame { class XModel; }
     namespace container { class XNameAccess; }
+}
+namespace cpo::uno {
+    template <typename > class Sequence;
 }
 
 /** create import context for xforms:model element. */
@@ -66,7 +68,7 @@ void bindXFormsSubmission(
 */
 void XMLOFF_DLLPUBLIC applyXFormsSettings(
         const css::uno::Reference< css::container::XNameAccess >& _rXForms,
-        const css::uno::Sequence< css::beans::PropertyValue >& _rSettings
+        const cpo::uno::Sequence< css::beans::PropertyValue >& _rSettings
     );
 
 #endif

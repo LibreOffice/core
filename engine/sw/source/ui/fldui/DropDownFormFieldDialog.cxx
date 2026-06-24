@@ -109,7 +109,7 @@ void DropDownFormFieldDialog::InitControls()
         auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         if (pListEntries != pParameters->end())
         {
-            css::uno::Sequence<OUString> vListEntries;
+            cpo::uno::Sequence<OUString> vListEntries;
             pListEntries->second >>= vListEntries;
             for (const OUString& rItem : vListEntries)
                 m_xListItemsTreeView->append_text(rItem);
@@ -176,7 +176,7 @@ void DropDownFormFieldDialog::Apply()
 
     mark::Fieldmark::parameter_map_t* pParameters = m_pDropDownField->GetParameters();
 
-    css::uno::Sequence<OUString> vListEntries(m_xListItemsTreeView->n_children());
+    cpo::uno::Sequence<OUString> vListEntries(m_xListItemsTreeView->n_children());
     auto vListEntriesRange = asNonConstRange(vListEntries);
     for (int nIndex = 0; nIndex < m_xListItemsTreeView->n_children(); ++nIndex)
     {

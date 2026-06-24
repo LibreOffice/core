@@ -15,7 +15,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XDataPilotTable2.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <test/testdllapi.hxx>
 
@@ -38,7 +38,7 @@ public:
 protected:
 
 private:
-    static void checkDrillDownSheetContent(css::uno::Reference< css::sheet::XSpreadsheet > const & xSheet, const css::uno::Sequence< css::uno::Sequence < cpo::uno::Any > >& aData);
+    static void checkDrillDownSheetContent(css::uno::Reference< css::sheet::XSpreadsheet > const & xSheet, const cpo::uno::Sequence< cpo::uno::Sequence < cpo::uno::Any > >& aData);
 
     void getOutputRanges(css::uno::Reference< css::sheet::XDataPilotTable2 > const &);
     void buildDataFields(css::uno::Reference< css::sheet::XDataPilotTable2 > const &);

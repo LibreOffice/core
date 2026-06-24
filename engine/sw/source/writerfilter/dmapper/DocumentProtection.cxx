@@ -114,7 +114,7 @@ void DocumentProtection::lcl_attribute(Id nName, const Value& val)
 
 void DocumentProtection::lcl_sprm(Sprm& /*rSprm*/) {}
 
-uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
+cpo::uno::Sequence<beans::PropertyValue> DocumentProtection::toSequence() const
 {
     std::vector<beans::PropertyValue> documentProtection;
 

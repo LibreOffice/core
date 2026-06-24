@@ -334,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     {
         xContentControlProps->setPropertyValue(u"DropDown"_ustr, cpo::uno::Any(true));
-        uno::Sequence<beans::PropertyValues> aListItems = {
+        cpo::uno::Sequence<beans::PropertyValues> aListItems = {
             {
                 comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
                 comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
@@ -731,14 +731,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153082_semicolon, "custom-styles-TOC-semicolon.d
     // check styles
     uno::Reference<container::XIndexAccess> xParaStyles =
         getProperty<uno::Reference<container::XIndexAccess>>(xTOC, u"LevelParagraphStyles"_ustr);
-    uno::Sequence<OUString> styles;
+    cpo::uno::Sequence<OUString> styles;
     xParaStyles->getByIndex(0) >>= styles;
-    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{}, styles);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Sequence<OUString>{}, styles);
     xParaStyles->getByIndex(1) >>= styles;
-    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{}, styles);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Sequence<OUString>{}, styles);
     xParaStyles->getByIndex(2) >>= styles;
     // the first one is built-in Word style "Intense Quote" that was localised DE "Intensives Zitat" in the file
-    CPPUNIT_ASSERT_EQUAL((uno::Sequence<OUString>{u"Intensives Zitat"_ustr, u"Custom1"_ustr, u"_MyStyle0"_ustr}), styles);
+    CPPUNIT_ASSERT_EQUAL((cpo::uno::Sequence<OUString>{u"Intensives Zitat"_ustr, u"Custom1"_ustr, u"_MyStyle0"_ustr}), styles);
     xTOC->update();
     OUString const tocContent(xTOC->getAnchor()->getString());
     CPPUNIT_ASSERT(tocContent.startsWith("Table of Contents"));
@@ -755,14 +755,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153082_comma, "custom-styles-TOC-comma.docx")
     // check styles
     uno::Reference<container::XIndexAccess> xParaStyles =
         getProperty<uno::Reference<container::XIndexAccess>>(xTOC, u"LevelParagraphStyles"_ustr);
-    uno::Sequence<OUString> styles;
+    cpo::uno::Sequence<OUString> styles;
     xParaStyles->getByIndex(0) >>= styles;
-    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{u"_MyStyle0"_ustr}, styles);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Sequence<OUString>{u"_MyStyle0"_ustr}, styles);
     xParaStyles->getByIndex(1) >>= styles;
-    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{u"Custom1"_ustr}, styles);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Sequence<OUString>{u"Custom1"_ustr}, styles);
     xParaStyles->getByIndex(2) >>= styles;
     // the first one is built-in Word style "Intense Quote" that was localised DE "Intensives Zitat" in the file
-    CPPUNIT_ASSERT_EQUAL(uno::Sequence<OUString>{u"Intensives Zitat"_ustr}, styles);
+    CPPUNIT_ASSERT_EQUAL(cpo::uno::Sequence<OUString>{u"Intensives Zitat"_ustr}, styles);
     xTOC->update();
     OUString const tocContent(xTOC->getAnchor()->getString());
     CPPUNIT_ASSERT(tocContent.startsWith("Table of Contents"));

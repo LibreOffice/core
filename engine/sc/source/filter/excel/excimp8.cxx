@@ -92,7 +92,7 @@ public:
             throw container::NoSuchElementException();
         return cpo::uno::Any( it->second );
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         std::unique_lock aGuard( m_aMutex );
         return comphelper::mapKeysToSequence( IdToOleNameHash);

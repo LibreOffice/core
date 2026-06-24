@@ -44,7 +44,7 @@ bool SAL_CALL ServiceHandler::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ServiceHandler::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ServiceHandler::getSupportedServiceNames()
 {
     return { SERVICENAME_PROTOCOLHANDLER };
 }
@@ -91,10 +91,10 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispa
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
 */
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL ServiceHandler::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL ServiceHandler::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -117,7 +117,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Serv
                     list of optional arguments for this request
 */
 void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                                  aURL       ,
-                                        const css::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ )
+                                        const cpo::uno::Sequence< css::beans::PropertyValue >& /*lArguments*/ )
 {
     // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
     // So we should hold us self alive till this call ends.
@@ -139,7 +139,7 @@ void SAL_CALL ServiceHandler::dispatch( const css::util::URL&                   
                     optional listener for state events
 */
 void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&                                             aURL      ,
-                                                        const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
+                                                        const cpo::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
@@ -252,7 +252,7 @@ void SAL_CALL ServiceHandler::removeStatusListener( const css::uno::Reference< c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ServiceHandler_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ServiceHandler(context));
 }

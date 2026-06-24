@@ -20,7 +20,7 @@
 #include <OPropertySet.hxx>
 #include <CloneHelper.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <algorithm>
@@ -29,7 +29,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::osl::MutexGuard;
 
@@ -117,7 +117,7 @@ Sequence< uno::Type > SAL_CALL
 Sequence< sal_Int8 > SAL_CALL
     OPropertySet::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // ____ XPropertyState ____

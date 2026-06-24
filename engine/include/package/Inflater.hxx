@@ -21,7 +21,7 @@
 #define INCLUDED_PACKAGE_INFLATER_HXX
 
 #include <config_options.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <package/packagedllapi.hxx>
 #include <memory>
 
@@ -33,10 +33,10 @@ public:
     Inflater() = default;
     virtual ~Inflater() = default;
 
-    virtual void setInput(const css::uno::Sequence<sal_Int8>& rBuffer) = 0;
+    virtual void setInput(const cpo::uno::Sequence<sal_Int8>& rBuffer) = 0;
     virtual bool needsDictionary() const = 0;
     virtual bool finished() const = 0;
-    virtual sal_Int32 doInflateSegment(css::uno::Sequence<sal_Int8>& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength) = 0;
+    virtual sal_Int32 doInflateSegment(cpo::uno::Sequence<sal_Int8>& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength) = 0;
     virtual void end() = 0;
     virtual sal_Int32 getLastInflateError() const = 0;
 };

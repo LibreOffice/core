@@ -117,10 +117,10 @@ class MakePropertyValueTest : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(u"ADDIN ZOTERO_ITEM"_ustr, aSecond.Value.get<OUString>());
         beans::PropertyValue aThird = aRet[2];
         CPPUNIT_ASSERT_EQUAL(u"Fields"_ustr, aThird.Name);
-        uno::Sequence<uno::Sequence<beans::PropertyValue>> aSeqs;
+        cpo::uno::Sequence<cpo::uno::Sequence<beans::PropertyValue>> aSeqs;
         aThird.Value >>= aSeqs;
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aSeqs.getLength());
-        uno::Sequence<beans::PropertyValue> aFirstSeq = aSeqs[0];
+        cpo::uno::Sequence<beans::PropertyValue> aFirstSeq = aSeqs[0];
         CPPUNIT_ASSERT_EQUAL(u"FieldType"_ustr, aFirstSeq[0].Name);
         CPPUNIT_ASSERT_EQUAL(u"FieldCommand"_ustr, aFirstSeq[1].Name);
         CPPUNIT_ASSERT_EQUAL(u"ADDIN ZOTERO_ITEM new command 1"_ustr,

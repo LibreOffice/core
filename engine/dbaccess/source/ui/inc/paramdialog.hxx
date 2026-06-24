@@ -61,7 +61,7 @@ namespace dbaui
         Timer                  m_aResetVisitFlag;
             // we reset the "visited flag" 1 second after and entry has been selected
 
-        css::uno::Sequence< css::beans::PropertyValue >
+        cpo::uno::Sequence< css::beans::PropertyValue >
                                m_aFinalValues;     /// the final values as entered by the user
 
         // the controls
@@ -78,7 +78,7 @@ namespace dbaui
             const css::uno::Reference< css::uno::XComponentContext >& rxContext);
         virtual ~OParameterDialog() override;
 
-        const css::uno::Sequence< css::beans::PropertyValue >&
+        const cpo::uno::Sequence< css::beans::PropertyValue >&
                     getValues() const { return m_aFinalValues; }
 
     private:

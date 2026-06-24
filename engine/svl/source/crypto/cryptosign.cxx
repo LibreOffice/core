@@ -34,7 +34,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/kit.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #if USE_CRYPTO_NSS
@@ -894,7 +894,7 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     return false;
 #else
     // Create the PKCS#7 object.
-    css::uno::Sequence<sal_Int8> aDerEncoded;
+    cpo::uno::Sequence<sal_Int8> aDerEncoded;
     if (m_rSigningContext.m_xCertificate.is())
     {
         aDerEncoded = m_rSigningContext.m_xCertificate->getEncoded();
@@ -1740,7 +1740,7 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
 
         // this calls NSS_Init
         xNSSInitializer->getDigestContext(css::xml::crypto::DigestID::SHA256,
-                                          uno::Sequence<beans::NamedValue>());
+                                          cpo::uno::Sequence<beans::NamedValue>());
     }
 #endif
 } // anonymous namespace
@@ -1872,7 +1872,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     }
     else
     {
-        uno::Sequence<sal_Int8> aDerCert(pCertificate->derCert.len);
+        cpo::uno::Sequence<sal_Int8> aDerCert(pCertificate->derCert.len);
         auto aDerCertRange = asNonConstRange(aDerCert);
         for (size_t i = 0; i < pCertificate->derCert.len; ++i)
             aDerCertRange[i] = pCertificate->derCert.data[i];
@@ -2064,7 +2064,7 @@ bool Signing::Verify(const std::vector<unsigned char>& aData,
     else
     {
         // Write rInformation.ouX509Certificate.
-        uno::Sequence<sal_Int8> aDerCert(pSignerCertContext->cbCertEncoded);
+        cpo::uno::Sequence<sal_Int8> aDerCert(pSignerCertContext->cbCertEncoded);
         std::copy_n(pSignerCertContext->pbCertEncoded, pSignerCertContext->cbCertEncoded,
                     aDerCert.getArray());
         OUStringBuffer aBuffer;

@@ -22,7 +22,7 @@
 #include <vcl/event.hxx>
 #include <vcl/weld.hxx>
 #include <editeng/hangulhanja.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <svtools/valueset.hxx>
 
@@ -135,7 +135,7 @@ namespace svx
         OUString  GetCurrentString( ) const;
         void    SetCurrentString(
                     const OUString& _rNewString,
-                    const css::uno::Sequence< OUString >& _rSuggestions,
+                    const cpo::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument
                 );
 
@@ -168,7 +168,7 @@ namespace svx
         DECL_LINK( ClickByCharacterHdl, weld::Toggleable&, void );
 
         /// fill the suggestion list box with suggestions for the actual input
-        void FillSuggestions( const css::uno::Sequence< OUString >& _rSuggestions );
+        void FillSuggestions( const cpo::uno::Sequence< OUString >& _rSuggestions );
     };
 
 

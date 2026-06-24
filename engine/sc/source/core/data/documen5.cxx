@@ -56,7 +56,7 @@ static void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument
     if ( !xProvider.is() )
         return;
 
-    const uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xDataSource ) );
+    const cpo::uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xDataSource ) );
 
     for (const beans::PropertyValue& rProp : aArgs)
     {
@@ -80,7 +80,7 @@ static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataRec
     if ( !xReceiver.is() )
         return;
 
-    uno::Sequence< beans::PropertyValue > aArgs{
+    cpo::uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
             u"CellRangeRepresentation"_ustr, -1,
             cpo::uno::Any( rRanges ), beans::PropertyState_DIRECT_VALUE ),
@@ -189,7 +189,7 @@ void ScDocument::SetChartRanges( std::u16string_view rChartName, const ::std::ve
         return;
 
     sal_Int32 nCount = static_cast<sal_Int32>( rRangesVector.size() );
-    uno::Sequence< OUString > aRangeStrings(nCount);
+    cpo::uno::Sequence< OUString > aRangeStrings(nCount);
     auto aRangeStringsRange = asNonConstRange(aRangeStrings);
     for( sal_Int32 nN=0; nN<nCount; nN++ )
     {
@@ -378,7 +378,7 @@ void ScDocument::RestoreChartListener( const OUString& rName )
     if ( !xChartDoc.is() || !xReceiver.is() || xChartDoc->hasInternalDataProvider() )
         return;
 
-    const uno::Sequence<OUString> aRepresentations( xReceiver->getUsedRangeRepresentations() );
+    const cpo::uno::Sequence<OUString> aRepresentations( xReceiver->getUsedRangeRepresentations() );
     ScRangeListRef aRanges = new ScRangeList;
     for ( const auto& rRepresentation : aRepresentations )
     {

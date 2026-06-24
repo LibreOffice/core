@@ -490,8 +490,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL
     return xReturn;
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
-    BibInterceptorHelper::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
+    BibInterceptorHelper::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts )
 {
     Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
     Reference< XDispatch >* pReturn = aReturn.getArray();
@@ -1214,7 +1214,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                 aAny <<= ListSourceType_VALUELIST;
                 xPropSet->setPropertyValue(u"ListSourceType"_ustr, aAny);
 
-                uno::Sequence<OUString> aListSource(TYPE_COUNT);
+                cpo::uno::Sequence<OUString> aListSource(TYPE_COUNT);
                 OUString* pListSourceArr = aListSource.getArray();
                 //pListSourceArr[0] = "select TypeName, TypeIndex from TypeNms";
                 for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
@@ -1223,7 +1223,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
                 xPropSet->setPropertyValue(u"ListSource"_ustr, aAny);
 
-                uno::Sequence<OUString> aValues(TYPE_COUNT + 1);
+                cpo::uno::Sequence<OUString> aValues(TYPE_COUNT + 1);
                 OUString* pValuesArr = aValues.getArray();
                 pValuesArr[0] = BibResId(ST_TYPE_ARTICLE);
                 pValuesArr[1] = BibResId(ST_TYPE_BOOK);

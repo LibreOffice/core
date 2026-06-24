@@ -30,7 +30,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
 namespace
@@ -112,12 +112,12 @@ OUString SAL_CALL BubbleChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE;
 }
 
-uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
+cpo::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedMandatoryRoles()
 {
     return { u"label"_ustr, u"values-x"_ustr, u"values-y"_ustr, u"values-size"_ustr };
 }
 
-uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedPropertyRoles()
+cpo::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
@@ -162,7 +162,7 @@ bool SAL_CALL BubbleChartType::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE,
@@ -174,7 +174,7 @@ css::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_BubbleChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::BubbleChartType);
 }

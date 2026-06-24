@@ -134,7 +134,7 @@ void OEnumerationByName::impl_stopDisposeListening()
 sal_Int32 OEnumerationByName::getLength() const
 {
     if (m_aNames.index() == 0)
-        return std::get<css::uno::Sequence<OUString>>(m_aNames).getLength();
+        return std::get<cpo::uno::Sequence<OUString>>(m_aNames).getLength();
     else
         return std::get<std::vector<OUString>>(m_aNames).size();
 }
@@ -142,7 +142,7 @@ sal_Int32 OEnumerationByName::getLength() const
 const OUString& OEnumerationByName::getElement(sal_Int32 nIndex) const
 {
     if (m_aNames.index() == 0)
-        return std::get<css::uno::Sequence<OUString>>(m_aNames)[nIndex];
+        return std::get<cpo::uno::Sequence<OUString>>(m_aNames)[nIndex];
     else
         return std::get<std::vector<OUString>>(m_aNames)[nIndex];
 }
@@ -242,7 +242,7 @@ void OEnumerationByIndex::impl_stopDisposeListening()
     osl_atomic_decrement(&m_refCount);
 }
 
-OAnyEnumeration::OAnyEnumeration(const css::uno::Sequence< cpo::uno::Any >& lItems)
+OAnyEnumeration::OAnyEnumeration(const cpo::uno::Sequence< cpo::uno::Any >& lItems)
     :m_nPos(0)
     ,m_lItems(lItems)
 {

@@ -51,14 +51,14 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OPatternModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // css::io::XPersistObject
     virtual OUString SAL_CALL getServiceName() override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
 protected:
@@ -84,7 +84,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OPatternControl"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

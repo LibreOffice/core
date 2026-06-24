@@ -61,7 +61,7 @@ void SAL_CALL SvxAccessibleTextPropertySet::release()
 }
 
 // XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes()
 {
     static ::cppu::OTypeCollection ourTypeCollection(
                 ::cppu::UnoType<beans::XPropertySet>::get(),
@@ -73,9 +73,9 @@ uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes()
     return ourTypeCollection.getTypes() ;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

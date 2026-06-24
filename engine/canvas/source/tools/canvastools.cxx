@@ -76,7 +76,7 @@ namespace canvastools
             // setup identity transform
             setIdentityAffineMatrix2D( renderState.AffineTransform );
             renderState.Clip.clear();
-            renderState.DeviceColor = uno::Sequence< double >();
+            renderState.DeviceColor = cpo::uno::Sequence< double >();
             renderState.CompositeOperation = rendering::CompositeOperation::OVER;
 
             return renderState;
@@ -175,14 +175,14 @@ namespace canvastools
             class StandardColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
             {
             private:
-                uno::Sequence< sal_Int8 >  maComponentTags;
-                uno::Sequence< sal_Int32 > maBitCounts;
+                cpo::uno::Sequence< sal_Int8 >  maComponentTags;
+                cpo::uno::Sequence< sal_Int32 > maBitCounts;
 
                 virtual ::sal_Int8 SAL_CALL getType(  ) override
                 {
                     return rendering::ColorSpaceType::RGB;
                 }
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) override
                 {
                     return maComponentTags;
                 }
@@ -190,27 +190,27 @@ namespace canvastools
                 {
                     return rendering::RenderingIntent::PERCEPTUAL;
                 }
-                virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) override
+                virtual cpo::uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) override
                 {
-                    return uno::Sequence< beans::PropertyValue >();
+                    return cpo::uno::Sequence< beans::PropertyValue >();
                 }
-                virtual uno::Sequence< double > SAL_CALL convertColorSpace( const uno::Sequence< double >& deviceColor,
+                virtual cpo::uno::Sequence< double > SAL_CALL convertColorSpace( const cpo::uno::Sequence< double >& deviceColor,
                                                                             const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
                 {
                     // TODO(P3): if we know anything about target
                     // colorspace, this can be greatly sped up
-                    uno::Sequence<rendering::ARGBColor> aIntermediate(
+                    cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertToARGB(deviceColor));
                     return targetColorSpace->convertFromARGB(aIntermediate);
                 }
-                virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::RGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -218,7 +218,7 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     SAL_WARN_IF(!deviceColor.hasElements(), "canvas", "empty deviceColor argument");
                     const sal_Int32 nLen(deviceColor.getLength());
@@ -226,7 +226,7 @@ namespace canvastools
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -234,14 +234,14 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -252,9 +252,9 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromRGB( const cpo::uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -265,9 +265,9 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -278,9 +278,9 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromPARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -297,7 +297,7 @@ namespace canvastools
                 {
                     return 32;
                 }
-                virtual uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) override
+                virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) override
                 {
                     return maBitCounts;
                 }
@@ -305,7 +305,7 @@ namespace canvastools
                 {
                     return util::Endianness::LITTLE;
                 }
-                virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+                virtual cpo::uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                      const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
                 {
                     if( dynamic_cast<StandardColorSpace*>(targetColorSpace.get()) )
@@ -315,7 +315,7 @@ namespace canvastools
                                              "number of channels no multiple of 4",
                                              static_cast<rendering::XColorSpace*>(this), 0);
 
-                        uno::Sequence<double> aRes(nLen);
+                        cpo::uno::Sequence<double> aRes(nLen);
                         std::transform(deviceColor.begin(), deviceColor.end(), aRes.getArray(),
                                        [](auto c) { return vcl::unotools::toDoubleColor(c); });
                         return aRes;
@@ -324,12 +324,12 @@ namespace canvastools
                     {
                         // TODO(P3): if we know anything about target
                         // colorspace, this can be greatly sped up
-                        uno::Sequence<rendering::ARGBColor> aIntermediate(
+                        cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
                             convertIntegerToARGB(deviceColor));
                         return targetColorSpace->convertFromARGB(aIntermediate);
                     }
                 }
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                          const uno::Reference< rendering::XIntegerBitmapColorSpace >& targetColorSpace ) override
                 {
                     if( dynamic_cast<StandardColorSpace*>(targetColorSpace.get()) )
@@ -341,19 +341,19 @@ namespace canvastools
                     {
                         // TODO(P3): if we know anything about target
                         // colorspace, this can be greatly sped up
-                        uno::Sequence<rendering::ARGBColor> aIntermediate(
+                        cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
                             convertIntegerToARGB(deviceColor));
                         return targetColorSpace->convertIntegerFromARGB(aIntermediate);
                     }
                 }
-                virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::RGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -365,14 +365,14 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -385,14 +385,14 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -406,9 +406,9 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const cpo::uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -420,9 +420,9 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -434,9 +434,9 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -470,14 +470,14 @@ namespace canvastools
             class StandardNoAlphaColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
             {
             private:
-                uno::Sequence< sal_Int8 >  maComponentTags;
-                uno::Sequence< sal_Int32 > maBitCounts;
+                cpo::uno::Sequence< sal_Int8 >  maComponentTags;
+                cpo::uno::Sequence< sal_Int32 > maBitCounts;
 
                 virtual ::sal_Int8 SAL_CALL getType(  ) override
                 {
                     return rendering::ColorSpaceType::RGB;
                 }
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getComponentTags(  ) override
                 {
                     return maComponentTags;
                 }
@@ -485,27 +485,27 @@ namespace canvastools
                 {
                     return rendering::RenderingIntent::PERCEPTUAL;
                 }
-                virtual uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) override
+                virtual cpo::uno::Sequence< beans::PropertyValue > SAL_CALL getProperties(  ) override
                 {
-                    return uno::Sequence< beans::PropertyValue >();
+                    return cpo::uno::Sequence< beans::PropertyValue >();
                 }
-                virtual uno::Sequence< double > SAL_CALL convertColorSpace( const uno::Sequence< double >& deviceColor,
+                virtual cpo::uno::Sequence< double > SAL_CALL convertColorSpace( const cpo::uno::Sequence< double >& deviceColor,
                                                                             const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
                 {
                     // TODO(P3): if we know anything about target
                     // colorspace, this can be greatly sped up
-                    uno::Sequence<rendering::ARGBColor> aIntermediate(
+                    cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertToARGB(deviceColor));
                     return targetColorSpace->convertFromARGB(aIntermediate);
                 }
-                virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::RGBColor > SAL_CALL convertToRGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::RGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -513,14 +513,14 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToARGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -528,14 +528,14 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const uno::Sequence< double >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertToPARGB( const cpo::uno::Sequence< double >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -543,9 +543,9 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromRGB( const cpo::uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -556,9 +556,9 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -569,9 +569,9 @@ namespace canvastools
                     }
                     return aRes;
                 }
-                virtual uno::Sequence< double > SAL_CALL convertFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< double > SAL_CALL convertFromPARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<double> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<double> aRes(rgbColor.getLength() * 4);
                     double* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -588,7 +588,7 @@ namespace canvastools
                 {
                     return 32;
                 }
-                virtual uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) override
+                virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) override
                 {
                     return maBitCounts;
                 }
@@ -596,7 +596,7 @@ namespace canvastools
                 {
                     return util::Endianness::LITTLE;
                 }
-                virtual uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+                virtual cpo::uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                      const uno::Reference< rendering::XColorSpace >& targetColorSpace ) override
                 {
                     if( dynamic_cast<StandardNoAlphaColorSpace*>(targetColorSpace.get()) )
@@ -606,7 +606,7 @@ namespace canvastools
                                              "number of channels no multiple of 4",
                                              static_cast<rendering::XColorSpace*>(this), 0);
 
-                        uno::Sequence<double> aRes(nLen);
+                        cpo::uno::Sequence<double> aRes(nLen);
                         double* pOut( aRes.getArray() );
                         for (sal_Int32 i = 0; i < nLen; i += 4)
                         {
@@ -621,12 +621,12 @@ namespace canvastools
                     {
                         // TODO(P3): if we know anything about target
                         // colorspace, this can be greatly sped up
-                        uno::Sequence<rendering::ARGBColor> aIntermediate(
+                        cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
                             convertIntegerToARGB(deviceColor));
                         return targetColorSpace->convertFromARGB(aIntermediate);
                     }
                 }
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const uno::Sequence< ::sal_Int8 >& deviceColor,
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor,
                                                                                          const uno::Reference< rendering::XIntegerBitmapColorSpace >& targetColorSpace ) override
                 {
                     if( dynamic_cast<StandardNoAlphaColorSpace*>(targetColorSpace.get()) )
@@ -638,19 +638,19 @@ namespace canvastools
                     {
                         // TODO(P3): if we know anything about target
                         // colorspace, this can be greatly sped up
-                        uno::Sequence<rendering::ARGBColor> aIntermediate(
+                        cpo::uno::Sequence<rendering::ARGBColor> aIntermediate(
                             convertIntegerToARGB(deviceColor));
                         return targetColorSpace->convertIntegerFromARGB(aIntermediate);
                     }
                 }
-                virtual uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::RGBColor > SAL_CALL convertIntegerToRGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::RGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::RGBColor > aRes(nLen/4);
                     rendering::RGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -662,14 +662,14 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -682,14 +682,14 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const uno::Sequence< ::sal_Int8 >& deviceColor ) override
+                virtual cpo::uno::Sequence< rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const cpo::uno::Sequence< ::sal_Int8 >& deviceColor ) override
                 {
                     const sal_Int32 nLen(deviceColor.getLength());
                     ENSURE_ARG_OR_THROW2(nLen%4==0,
                                          "number of channels no multiple of 4",
                                          static_cast<rendering::XColorSpace*>(this), 0);
 
-                    uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
+                    cpo::uno::Sequence< rendering::ARGBColor > aRes(nLen/4);
                     rendering::ARGBColor* pOut( aRes.getArray() );
                     for (sal_Int32 i = 0; i < nLen; i += 4)
                     {
@@ -702,9 +702,9 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const uno::Sequence< rendering::RGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const cpo::uno::Sequence< rendering::RGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -716,9 +716,9 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -730,9 +730,9 @@ namespace canvastools
                     return aRes;
                 }
 
-                virtual uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const uno::Sequence< rendering::ARGBColor >& rgbColor ) override
+                virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const cpo::uno::Sequence< rendering::ARGBColor >& rgbColor ) override
                 {
-                    uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
+                    cpo::uno::Sequence<sal_Int8> aRes(rgbColor.getLength() * 4);
                     sal_Int8* pColors=aRes.getArray();
                     for (auto& color : rgbColor)
                     {
@@ -790,9 +790,9 @@ namespace canvastools
             return aLayout;
         }
 
-        uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor )
+        cpo::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor )
         {
-            uno::Sequence<sal_Int8> aRet(4);
+            cpo::uno::Sequence<sal_Int8> aRet(4);
             sal_Int8* pCols( aRet.getArray() );
 #ifdef OSL_BIGENDIAN
             pCols[0] = rColor.GetRed();
@@ -991,8 +991,8 @@ namespace canvastools
                                             ::basegfx::fround( rRange.getHeight() ) ) );
         }
 
-        uno::Sequence< cpo::uno::Any >& getDeviceInfo( const uno::Reference< rendering::XCanvas >& i_rxCanvas,
-                                                  uno::Sequence< cpo::uno::Any >&                  o_rxParams )
+        cpo::uno::Sequence< cpo::uno::Any >& getDeviceInfo( const uno::Reference< rendering::XCanvas >& i_rxCanvas,
+                                                  cpo::uno::Sequence< cpo::uno::Any >&                  o_rxParams )
         {
             o_rxParams.realloc( 0 );
 
@@ -1193,7 +1193,7 @@ namespace canvastools
                 rOutDev.SetClipRegion( aClipRegion );
         }
 
-        void extractExtraFontProperties(const uno::Sequence<beans::PropertyValue>& rExtraFontProperties,
+        void extractExtraFontProperties(const cpo::uno::Sequence<beans::PropertyValue>& rExtraFontProperties,
                         sal_uInt32 &rEmphasisMark)
         {
             for(const beans::PropertyValue& rPropVal : rExtraFontProperties)

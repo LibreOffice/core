@@ -44,14 +44,14 @@ class OComboBoxModel final
     OUString                   m_aDefaultText;         // DefaultText
     cpo::uno::Any              m_aLastKnownValue;
 
-    css::uno::Sequence<OUString>                          m_aDesignModeStringItems;
+    cpo::uno::Sequence<OUString>                          m_aDesignModeStringItems;
 
     css::form::ListSourceType  m_eListSourceType;      // ListSource's type
     bool                       m_bEmptyIsNull;         // Empty string is interpreted as NULL
 
     ::std::unique_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
 
-    virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes() override;
 
 public:
     OComboBoxModel(
@@ -78,7 +78,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OComboBoxModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OComboBoxModel, OBoundControlModel)
@@ -93,10 +93,10 @@ public:
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
     virtual void describeAggregateProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const override;
 
     // XEventListener
@@ -135,7 +135,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OComboBoxControl"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

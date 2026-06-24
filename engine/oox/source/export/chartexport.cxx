@@ -220,7 +220,7 @@ std::vector<Sequence<Reference<chart2::XDataSeries> > > splitDataSeriesByAxis(co
                 nVectorPos = it->second;
             }
 
-            uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
+            cpo::uno::Sequence<Reference<chart2::XDataSeries> >& rAxisSeriesSeq = aSplitSeries[nVectorPos];
             sal_Int32 nLength = rAxisSeriesSeq.getLength();
             rAxisSeriesSeq.realloc(nLength + 1);
             rAxisSeriesSeq.getArray()[nLength] = xSeries;
@@ -248,7 +248,7 @@ bool lclGetAutoHistogramBinning(const css::uno::Reference<css::chart2::XDataSeri
         return false;
     }
 
-    css::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence>> aSeqs
+    cpo::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence>> aSeqs
         = xSource->getDataSequences();
 
     css::uno::Reference<css::chart2::data::XDataSequence> xValuesY;
@@ -286,7 +286,7 @@ bool lclGetAutoHistogramBinning(const css::uno::Reference<css::chart2::XDataSeri
     }
 
     std::vector<double> aRawData;
-    css::uno::Sequence<cpo::uno::Any> aValues = xValuesY->getData();
+    cpo::uno::Sequence<cpo::uno::Any> aValues = xValuesY->getData();
     aRawData.reserve(aValues.getLength());
 
     for (const auto& rAny : aValues)
@@ -784,14 +784,14 @@ sal_Int32 ChartExport::getChartType( )
 
 namespace {
 
-uno::Sequence< beans::PropertyValue > createArguments(
+cpo::uno::Sequence< beans::PropertyValue > createArguments(
     const OUString & rRangeRepresentation, bool bUseColumns)
 {
     css::chart::ChartDataRowSource eRowSource = css::chart::ChartDataRowSource_ROWS;
     if (bUseColumns)
         eRowSource = css::chart::ChartDataRowSource_COLUMNS;
 
-    uno::Sequence<beans::PropertyValue> aArguments{
+    cpo::uno::Sequence<beans::PropertyValue> aArguments{
         { u"DataRowSource"_ustr, -1, cpo::uno::Any(eRowSource), beans::PropertyState_DIRECT_VALUE },
         { u"FirstCellAsLabel"_ustr, -1, cpo::uno::Any(false), beans::PropertyState_DIRECT_VALUE },
         { u"HasCategories"_ustr, -1, cpo::uno::Any(false), beans::PropertyState_DIRECT_VALUE },
@@ -847,7 +847,7 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
                         if (xDataSeries.is())
                         {
                             uno::Reference< chart2::data::XDataSource > xSeriesSource(xDataSeries, uno::UNO_QUERY);
-                            const uno::Sequence< beans::PropertyValue > rArguments = xDataProvider->detectArguments(xSeriesSource);
+                            const cpo::uno::Sequence< beans::PropertyValue > rArguments = xDataProvider->detectArguments(xSeriesSource);
                             for (const beans::PropertyValue& rProperty : rArguments)
                             {
                                 if (rProperty.Name == "DataRowSource")
@@ -975,7 +975,7 @@ OUString ChartExport::parseFormula( const OUString& rRange )
          * getSourceRangeRepresentation(css::sheet::AddressConvention) to
          * return the ranges in a specific convention than converting them with
          * the overhead of creating an XFormulaParser for each... */
-        uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( rRange, CellAddress( 0, 0, 0 ) );
+        cpo::uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( rRange, CellAddress( 0, 0, 0 ) );
         if( xParserProps.is() )
         {
             xParserProps->setPropertyValue(u"FormulaConvention"_ustr, cpo::uno::Any(css::sheet::AddressConvention::XL_OOX) );
@@ -2633,7 +2633,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
 }
 
 void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsChartex,
-    const css::uno::Sequence< uno::Reference< css::chart2::XFormattedString > >& xFormattedSubTitle )
+    const cpo::uno::Sequence< uno::Reference< css::chart2::XFormattedString > >& xFormattedSubTitle )
 {
     Sequence< uno::Reference< chart2::XFormattedString > > xFormattedTitle;
     Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -3496,7 +3496,7 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
 
         if (xTypeProp.is() && GetProperty(xTypeProp, u"GapwidthSequence"_ustr))
         {
-            uno::Sequence< sal_Int32 > aBarPositionSequence;
+            cpo::uno::Sequence< sal_Int32 > aBarPositionSequence;
             mAny >>= aBarPositionSequence;
             if (aBarPositionSequence.hasElements())
             {
@@ -3534,7 +3534,7 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
         //overlap
         if (!mbIs3DChart && xTypeProp.is() && GetProperty(xTypeProp, u"OverlapSequence"_ustr))
         {
-            uno::Sequence< sal_Int32 > aBarPositionSequence;
+            cpo::uno::Sequence< sal_Int32 > aBarPositionSequence;
             mAny >>= aBarPositionSequence;
             if (aBarPositionSequence.hasElements())
             {
@@ -3789,7 +3789,7 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
 }
 
 void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType >& xChartType,
-        const css::uno::Sequence<css::uno::Reference<chart2::XDataSeries>>* pSeries)
+        const cpo::uno::Sequence<css::uno::Reference<chart2::XDataSeries>>* pSeries)
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_scatterChart));
@@ -4280,7 +4280,7 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
                 cpo::uno::Any aQM = xSeriesProp->getPropertyValue(u"QuartileMethod"_ustr);
                 bool bHasQM = (aQM >>= sQuartileMethod);
 
-                uno::Sequence<sal_Int32> aSubtotalIndices;
+                cpo::uno::Sequence<sal_Int32> aSubtotalIndices;
                 cpo::uno::Any aSubtotals = xSeriesProp->getPropertyValue(u"SubtotalIndices"_ustr);
                 bool bHasSubtotals = (aSubtotals >>= aSubtotalIndices);
 
@@ -5388,7 +5388,7 @@ void ChartExport::exportOneAxis_chartex(
                                     Reference<beans::XPropertySet> xTypeProp(aChartTypes[0], uno::UNO_QUERY);
                                     if (xTypeProp.is() && GetProperty(xTypeProp, u"GapwidthSequence"_ustr))
                                     {
-                                        uno::Sequence<sal_Int32> aGapSeq;
+                                        cpo::uno::Sequence<sal_Int32> aGapSeq;
                                         mAny >>= aGapSeq;
                                         if (aGapSeq.hasElements())
                                             oGapWidth = aGapSeq[0] / 100.0;
@@ -5898,7 +5898,7 @@ void ChartExport::exportDataLabels(
         pFS->startElement(FSNS(XML_c, XML_dLbls));
     }
 
-    uno::Sequence<sal_Int32> aAttrLabelIndices;
+    cpo::uno::Sequence<sal_Int32> aAttrLabelIndices;
     xPropSet->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aAttrLabelIndices;
 
     // We must not export label placement property when the chart type doesn't
@@ -6552,7 +6552,7 @@ const char* getErrorBarStyle(sal_Int32 nErrorBarStyle)
 }
 
 Reference< chart2::data::XDataSequence>  getLabeledSequence(
-        const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aSequences,
+        const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aSequences,
         bool bPositive )
 {
     OUString aDirection;

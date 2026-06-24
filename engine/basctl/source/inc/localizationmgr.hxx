@@ -84,10 +84,10 @@ public:
 
     void handleTranslationbar();
 
-    void handleAddLocales( const css::uno::Sequence
+    void handleAddLocales( const cpo::uno::Sequence
         < css::lang::Locale >& aLocaleSeq );
 
-    void handleRemoveLocales( const css::uno::Sequence
+    void handleRemoveLocales( const cpo::uno::Sequence
         < css::lang::Locale >& aLocaleSeq );
 
     void handleSetDefaultLocale(const css::lang::Locale& rLocale);

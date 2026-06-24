@@ -18,7 +18,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
 #include <cppunit/TestAssert.h>
@@ -39,7 +39,7 @@ void XStyleLoader::testLoadStylesFromURL()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(getTargetDoc(), uno::UNO_SET_THROW);
     const OUString aFileURL = getTestURL();
 
-    uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
+    cpo::uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
     xStyleLoader->loadStylesFromURL(aFileURL, aOptions);
 
     uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xDoc, UNO_QUERY_THROW);
@@ -53,7 +53,7 @@ void XStyleLoader::testLoadStylesFromDocument()
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(getTargetDoc(), uno::UNO_SET_THROW);
     uno::Reference<lang::XComponent> xSrcComponent(getSourceComponent(), UNO_SET_THROW);
 
-    uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
+    cpo::uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
     xStyleLoader->loadStylesFromDocument(xSrcComponent, aOptions);
 
     uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xDoc, UNO_QUERY_THROW);
@@ -69,7 +69,7 @@ void XStyleLoader::testLoadStylesFromStream()
     const uno::Reference<io::XInputStream> xInputStream
         = OStorageHelper::GetInputStreamFromURL(aFileURL, getProcessComponentContext());
 
-    uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
+    cpo::uno::Sequence<beans::PropertyValue> aOptions = xStyleLoader->getStyleLoaderOptions();
     auto nLength = aOptions.getLength();
     aOptions.realloc(nLength + 1);
     beans::PropertyValue aInputStream;

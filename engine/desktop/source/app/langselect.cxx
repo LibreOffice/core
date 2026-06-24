@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
@@ -75,7 +75,7 @@ bool prepareLocale() {
     setMsLangIdFallback(officecfg::System::L10N::SystemLocale::get());
     // #i32939# Use system locale to set document default locale:
     setMsLangIdFallback(officecfg::System::L10N::Locale::get());
-    css::uno::Sequence<OUString> inst(
+    cpo::uno::Sequence<OUString> inst(
         officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
     OUString locale(officecfg::Office::Linguistic::General::UILocale::get());
     if (!locale.isEmpty()) {

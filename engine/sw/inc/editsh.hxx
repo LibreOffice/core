@@ -92,7 +92,7 @@ enum class RedlineFlags;
 enum class TransliterationFlags;
 enum class GraphicType;
 
-namespace com::sun::star::uno { template < class > class Sequence; }
+namespace cpo::uno { template < class > class Sequence; }
 namespace com::sun::star::linguistic2 { class XSpellAlternatives; }
 namespace com::sun::star::linguistic2 { struct ProofreadingResult; }
 
@@ -828,7 +828,7 @@ public:
     bool GetGrammarCorrection( css::linguistic2::ProofreadingResult /*out*/ &rResult,
             sal_Int32 /*out*/ &rErrorPosInText,
             sal_Int32 /*out*/ &rErrorIndexInResult,
-            css::uno::Sequence< OUString > /*out*/ &rSuggestions,
+            cpo::uno::Sequence< OUString > /*out*/ &rSuggestions,
             const Point* pPt, SwRect& rSelectRect );
 
     static void IgnoreGrammarErrorAt( SwPaM& rErrorPosition );

@@ -34,6 +34,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::io;
 using namespace css::graphic;
+using namespace ::cpo::uno;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DContainer;
 
@@ -66,7 +67,7 @@ Primitive2DSequence Test::parseEmf(std::u16string_view aSource)
 
     Sequence<sal_Int8> aData(pBuffer.get(), nSize + 1);
     Reference<XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
-    css::uno::Sequence<css::beans::PropertyValue> aEmptyValues;
+    cpo::uno::Sequence<css::beans::PropertyValue> aEmptyValues;
 
     return xEmfParser->getDecomposition(aInputStream, aPath, aEmptyValues);
 }

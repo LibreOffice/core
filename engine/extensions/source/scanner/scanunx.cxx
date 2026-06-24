@@ -30,6 +30,7 @@
 
 using namespace css::uno;
 using namespace css::scanner;
+using namespace ::cpo::uno;
 
 BitmapTransporter::BitmapTransporter()
 {

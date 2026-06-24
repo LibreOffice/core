@@ -62,11 +62,11 @@ namespace connectivity
         // XServiceInfo
         DECLARE_SERVICE_INFO();
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
         /** method to create unique ids
             @param  _rURL
                 The URL.
@@ -80,7 +80,7 @@ namespace connectivity
                 The password.
         */
         static void createUniqueId( const OUString& _rURL
-                    ,css::uno::Sequence< css::beans::PropertyValue >& _rInfo
+                    ,cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo
                     ,sal_uInt8* _pBuffer
                     ,const OUString& _rUserName = OUString()
                     ,const OUString& _rPassword = OUString());

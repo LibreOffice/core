@@ -82,11 +82,11 @@ public:
                 getAccessibleColumnHeaders(  ) override;
 
     /// Returns the selected rows in a table.
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
                 getSelectedAccessibleRows(  ) override;
 
     /// Returns the selected columns in a table.
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
                 getSelectedAccessibleColumns(  ) override;
 
     /// Returns a boolean value indicating whether the specified row is selected.

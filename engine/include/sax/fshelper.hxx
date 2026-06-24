@@ -21,7 +21,7 @@
 #define INCLUDED_SAX_FSHELPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <sax/saxdllapi.h>
@@ -144,8 +144,8 @@ public:
     static rtl::Reference<FastAttributeList> createAttrList();
 
     void mark(sal_Int32 nTag,
-            const css::uno::Sequence< sal_Int32 >& rOrder =
-            css::uno::Sequence< sal_Int32 >() );
+            const cpo::uno::Sequence< sal_Int32 >& rOrder =
+            cpo::uno::Sequence< sal_Int32 >() );
     void mergeTopMarks(sal_Int32 nTag,
             MergeMarks eMergeType = MergeMarks::APPEND );
 

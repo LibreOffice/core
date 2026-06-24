@@ -809,11 +809,11 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessib
     return xAccessibleTable;
 }
 
-uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
+cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    uno::Sequence<sal_Int32> aSequence;
+    cpo::uno::Sequence<sal_Int32> aSequence;
     if (IsFormulaMode())
     {
         return aSequence;
@@ -839,11 +839,11 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessib
     return aSequence;
 }
 
-uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleColumns(  )
+cpo::uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleColumns(  )
 {
     SolarMutexGuard aGuard;
     ensureAlive();
-    uno::Sequence<sal_Int32> aSequence;
+    cpo::uno::Sequence<sal_Int32> aSequence;
     if (IsFormulaMode() || !mpViewShell)
         return aSequence;
 

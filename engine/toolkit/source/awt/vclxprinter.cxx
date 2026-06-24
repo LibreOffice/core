@@ -81,7 +81,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getP
 ::cppu::IPropertyArrayHelper& VCLXPrinterPropertySet::getInfoHelper()
 {
     static ::cppu::OPropertyArrayHelper s_PropertyArrayHelper(
-            css::uno::Sequence<css::beans::Property>{
+            cpo::uno::Sequence<css::beans::Property>{
                     css::beans::Property( u"Orientation"_ustr, PROPERTY_Orientation, cppu::UnoType<sal_Int16>::get(), 0 ),
                     css::beans::Property( u"Horizontal"_ustr, PROPERTY_Horizontal, cppu::UnoType<bool>::get(), 0 )},
             false);
@@ -178,12 +178,12 @@ void VCLXPrinterPropertySet::setHorizontal( bool bHorizontal )
     setFastPropertyValue( PROPERTY_Horizontal, aValue );
 }
 
-css::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  )
+cpo::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     const sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
-    css::uno::Sequence< OUString > aDescriptions( nPaperBinCount );
+    cpo::uno::Sequence< OUString > aDescriptions( nPaperBinCount );
     for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {
         // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
@@ -202,17 +202,17 @@ void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription )
     GetPrinter()->SetPaperBin( nPaperBin );
 }
 
-css::uno::Sequence< sal_Int8 > VCLXPrinterPropertySet::getBinarySetup(  )
+cpo::uno::Sequence< sal_Int8 > VCLXPrinterPropertySet::getBinarySetup(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     SvMemoryStream aMem;
     aMem.WriteUInt32( BINARYSETUPMARKER );
     WriteJobSetup( aMem, GetPrinter()->GetJobSetup() );
-    return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
+    return cpo::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
-void VCLXPrinterPropertySet::setBinarySetup( const css::uno::Sequence< sal_Int8 >& data )
+void VCLXPrinterPropertySet::setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -320,12 +320,12 @@ css::uno::Reference< css::awt::XDevice > VCLXInfoPrinter::createDevice(  )
 //    ----------------------------------------------------
 
 // css::awt::XPrinterServer2
-css::uno::Sequence< OUString > VCLXPrinterServer::getPrinterNames(  )
+cpo::uno::Sequence< OUString > VCLXPrinterServer::getPrinterNames(  )
 {
     const std::vector<OUString>& rQueues = Printer::GetPrinterQueues();
     sal_uInt32 nPrinters = rQueues.size();
 
-    css::uno::Sequence< OUString > aNames( nPrinters );
+    cpo::uno::Sequence< OUString > aNames( nPrinters );
     for ( sal_uInt32 n = 0; n < nPrinters; n++ )
         aNames.getArray()[n] = rQueues[n];
 
@@ -359,16 +359,16 @@ bool VCLXPrinterServer::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> VCLXPrinterServer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> VCLXPrinterServer::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         u"com.sun.star.awt.PrinterServer"_ustr, u"stardiv.vcl.PrinterServer"_ustr};
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXPrinterServer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VCLXPrinterServer);
 }

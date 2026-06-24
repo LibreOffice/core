@@ -48,7 +48,7 @@ public:
 
   virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
 
-  virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
+  virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
 
   virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
@@ -62,7 +62,7 @@ public:
                            const css::datatransfer::DataFlavor& rhs );
 
 private:
-  css::uno::Sequence< css::datatransfer::DataFlavor > mFlavorList;
+  cpo::uno::Sequence< css::datatransfer::DataFlavor > mFlavorList;
   css::uno::Reference< css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   NSPasteboard* mPasteboard;

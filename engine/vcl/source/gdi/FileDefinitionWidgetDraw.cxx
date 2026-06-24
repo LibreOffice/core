@@ -511,7 +511,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                     aFileStream.ReadBytes(aBuffer.data(), nSize);
                     aBuffer[nSize] = 0;
 
-                    uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
+                    cpo::uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);
                     uno::Reference<io::XInputStream> aInputStream(
                         new comphelper::SequenceInputStream(aData));
 

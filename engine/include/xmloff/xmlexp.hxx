@@ -180,7 +180,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
         // <office:master-styles>
     SAL_DLLPRIVATE void ImplExportContent(); // <office:body>
     virtual void SetBodyAttributes();
-    void GetViewSettingsAndViews(css::uno::Sequence<css::beans::PropertyValue>& rProps);
+    void GetViewSettingsAndViews(cpo::uno::Sequence<css::beans::PropertyValue>& rProps);
 
     OUString embedFontFile(OUString const& rFileUrl, OUString const& rFamilyName);
     std::unordered_set<OUString> getUsedFontList();
@@ -232,8 +232,8 @@ protected:
     virtual XMLPageExport* CreatePageExport();
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
     xmloff::OFormLayerXMLExport* CreateFormExport();
-    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps);
-    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& aProps);
+    virtual void GetViewSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps);
+    virtual void GetConfigurationSettings(cpo::uno::Sequence<css::beans::PropertyValue>& aProps);
 
     virtual bool getEmbedFonts() { return false; }
     virtual bool getEmbedOnlyUsedFonts() { return false; }
@@ -244,11 +244,11 @@ protected:
     struct SettingsGroup
     {
         ::xmloff::token::XMLTokenEnum                     eGroupName;
-        css::uno::Sequence< css::beans::PropertyValue >   aSettings;
+        cpo::uno::Sequence< css::beans::PropertyValue >   aSettings;
 
         SettingsGroup(
                 const ::xmloff::token::XMLTokenEnum _eGroupName,
-                const css::uno::Sequence< css::beans::PropertyValue >& _rSettings )
+                const cpo::uno::Sequence< css::beans::PropertyValue >& _rSettings )
             :eGroupName( _eGroupName )
             ,aSettings( _rSettings )
         {
@@ -321,11 +321,11 @@ public:
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XNamed
     virtual OUString SAL_CALL getName(  ) override final;
@@ -334,7 +334,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) final override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
 
     /** ensures that the given namespace is in scope at the next started
         element.
@@ -527,7 +527,7 @@ public:
         /// error ID, may contain an error flag
         sal_Int32 nId,
         /// string parameters for the error message
-        const css::uno::Sequence< OUString> & rMsgParams,
+        const cpo::uno::Sequence< OUString> & rMsgParams,
         /// original exception message (if applicable)
         const OUString& rExceptionMessage,
         /// error location (if applicable)
@@ -535,7 +535,7 @@ public:
 
     void SetError(
         sal_Int32 nId,
-        const css::uno::Sequence< OUString> & rMsgParams);
+        const cpo::uno::Sequence< OUString> & rMsgParams);
 
     virtual void DisposingModel();
 

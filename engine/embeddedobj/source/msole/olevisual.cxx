@@ -55,7 +55,7 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
         );
     uno::Reference< io::XSeekable > xSeekable( xCachedVisRepr, uno::UNO_QUERY_THROW );
 
-    uno::Sequence< sal_Int8 > aSeq( 2 );
+    cpo::uno::Sequence< sal_Int8 > aSeq( 2 );
     xInStream->readBytes( aSeq, 2 );
     xSeekable->seek( 0 );
     if ( aSeq.getLength() == 2 && aSeq[0] == 'B' && aSeq[1] == 'M' )
@@ -64,7 +64,7 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
         aVisualRepr.Flavor = datatransfer::DataFlavor(
             u"application/x-openoffice-bitmap;windows_formatname=\"Bitmap\""_ustr,
             u"Bitmap"_ustr,
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+            cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() );
     }
     else
     {
@@ -72,11 +72,11 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
         aVisualRepr.Flavor = datatransfer::DataFlavor(
             u"application/x-openoffice-wmf;windows_formatname=\"Image WMF\""_ustr,
             u"Windows Metafile"_ustr,
-            cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+            cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() );
     }
 
     sal_Int32 nStreamLength = static_cast<sal_Int32>(xSeekable->getLength());
-    uno::Sequence< sal_Int8 > aRepresent( nStreamLength );
+    cpo::uno::Sequence< sal_Int8 > aRepresent( nStreamLength );
     xInStream->readBytes( aRepresent, nStreamLength );
     aVisualRepr.Data <<= aRepresent;
 
@@ -369,7 +369,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
             datatransfer::DataFlavor aDataFlavor(
                     "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
                     "Windows Metafile",
-                    cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+                    cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() );
 
             embed::VisualRepresentation aVisualRepr;
             {
@@ -380,7 +380,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
             }
             aVisualRepr.Flavor = aDataFlavor;
 
-            uno::Sequence< sal_Int8 > aVisReplSeq;
+            cpo::uno::Sequence< sal_Int8 > aVisReplSeq;
             aVisualRepr.Data >>= aVisReplSeq;
             if ( aVisReplSeq.getLength() )
             {

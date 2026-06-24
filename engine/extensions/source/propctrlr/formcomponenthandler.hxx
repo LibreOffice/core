@@ -99,7 +99,7 @@ namespace pcr
     protected:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
@@ -111,8 +111,8 @@ namespace pcr
         virtual css::beans::PropertyState              SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
         virtual void                                   SAL_CALL addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual void                                   SAL_CALL removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual css::uno::Sequence< OUString >         SAL_CALL getSupersededProperties() override;
-        virtual css::uno::Sequence< OUString >         SAL_CALL getActuatingProperties() override;
+        virtual cpo::uno::Sequence< OUString >         SAL_CALL getSupersededProperties() override;
+        virtual cpo::uno::Sequence< OUString >         SAL_CALL getActuatingProperties() override;
         virtual css::inspection::LineDescriptor        SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual css::inspection::InteractiveSelectionResult
                                                        SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
@@ -120,7 +120,7 @@ namespace pcr
         virtual bool                               SAL_CALL suspend( bool _bSuspend ) override;
 
         // PropertyHandler
-        virtual css::uno::Sequence< css::beans::Property >
+        virtual cpo::uno::Sequence< css::beans::Property >
                                                     doDescribeSupportedProperties() const override;
         virtual void onNewComponent() override;
 

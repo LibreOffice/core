@@ -126,7 +126,7 @@ class SwChartDataProvider final :
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::chart2::data::XDataSource > Impl_createDataSource( const css::uno::Sequence< css::beans::PropertyValue >& aArguments, bool bTestOnly = false );
+    css::uno::Reference< css::chart2::data::XDataSource > Impl_createDataSource( const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments, bool bTestOnly = false );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::chart2::data::XDataSequence > Impl_createDataSequenceByRangeRepresentation( std::u16string_view aRangeRepresentation, bool bTestOnly = false );
@@ -138,9 +138,9 @@ public:
     virtual ~SwChartDataProvider() override;
 
     // XDataProvider
-    virtual bool SAL_CALL createDataSourcePossible( const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource( const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments( const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
+    virtual bool SAL_CALL createDataSourcePossible( const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+    virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource( const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments( const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
     virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible( const OUString& aRangeRepresentation ) override;
     virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation( const OUString& aRangeRepresentation ) override;
     virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection(  ) override;
@@ -161,7 +161,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     void        AddDataSequence( const SwTable &rTable, rtl::Reference< SwChartDataSequence > const &rxDataSequence );
     void        RemoveDataSequence( const SwTable &rTable, rtl::Reference< SwChartDataSequence > const &rxDataSequence );
@@ -186,23 +186,23 @@ SwChartDataSourceBaseClass;
 class SwChartDataSource final :
     public SwChartDataSourceBaseClass
 {
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::chart2::data::XLabeledDataSequence > > m_aLDS;
 
     SwChartDataSource( const SwChartDataSource & ) = delete;
     SwChartDataSource & operator = ( const SwChartDataSource & ) = delete;
 
 public:
-    SwChartDataSource( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > &rLDS );
+    SwChartDataSource( const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > &rLDS );
     virtual ~SwChartDataSource() override;
 
     // XDataSource
-    virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences(  ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 typedef cppu::WeakImplHelper
@@ -249,16 +249,16 @@ public:
     virtual ~SwChartDataSequence() override;
 
     // XDataSequence
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getData() override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL generateLabel( css::chart2::data::LabelOrigin eLabelOrigin ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL generateLabel( css::chart2::data::LabelOrigin eLabelOrigin ) override;
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex ) override;
 
     // XTextualDataSequence
-    virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getTextualData() override;
 
     // XNumericalDataSequence
-    virtual css::uno::Sequence< double > SAL_CALL getNumericalData() override;
+    virtual cpo::uno::Sequence< double > SAL_CALL getNumericalData() override;
 
     // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
@@ -275,7 +275,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XModifiable
     virtual bool SAL_CALL isModified(  ) override;
@@ -344,7 +344,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

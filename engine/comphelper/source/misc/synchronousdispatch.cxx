@@ -37,7 +37,7 @@ uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         const uno::Reference< uno::XInterface > &xStartPoint,
         const OUString &sURL,
         const OUString &sTarget,
-        const uno::Sequence< beans::PropertyValue > &lArguments )
+        const cpo::uno::Sequence< beans::PropertyValue > &lArguments )
 {
     util::URL aURL;
     aURL.Complete = sURL;

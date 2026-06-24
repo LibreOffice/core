@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf114428_ignore_xml_declaration)
     OUString aURL = createFileURL(u"tdf114428.xhtml");
     SvFileStream aStream(aURL, StreamMode::READ);
     uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor
         = { comphelper::makePropertyValue(u"DocumentService"_ustr,
                                           u"com.sun.star.text.TextDocument"_ustr),
             comphelper::makePropertyValue(u"InputStream"_ustr, xStream),
@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
     CPPUNIT_ASSERT(supportsService(mxComponent, u"com.sun.star.text.TextDocument"_ustr));
     {
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aArgs = xModel->getArgs();
+        cpo::uno::Sequence<beans::PropertyValue> aArgs = xModel->getArgs();
         comphelper::SequenceAsHashMap aMap(aArgs);
         OUString aFilterName;
         aMap[u"FilterName"_ustr] >>= aFilterName;
@@ -243,7 +243,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf163295)
                         ->createInstance(u"com.sun.star.document.TypeDetection"_ustr)
                         .queryThrow<document::XTypeDetection>());
     OUString url = createFileURL(u"test_pseudo_pwi.xml");
-    css::uno::Sequence mediaDescriptor{ comphelper::makePropertyValue(u"URL"_ustr, url) };
+    cpo::uno::Sequence mediaDescriptor{ comphelper::makePropertyValue(u"URL"_ustr, url) };
     OUString detection = xDetection->queryTypeByDescriptor(mediaDescriptor, true);
     // Without the fix, this was "writer_PocketWord_File"
     CPPUNIT_ASSERT_EQUAL(u"generic_Text"_ustr, detection);
@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testMarkdownDetect)
     OUString aURL = createFileURL(u"sample-markdown.md");
     SvFileStream aStream(aURL, StreamMode::READ);
     uno::Reference<io::XInputStream> xStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor
         = { comphelper::makePropertyValue(u"DocumentService"_ustr,
                                           u"com.sun.star.text.TextDocument"_ustr),
             comphelper::makePropertyValue(u"InputStream"_ustr, xStream),

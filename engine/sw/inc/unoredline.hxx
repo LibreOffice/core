@@ -46,8 +46,8 @@ public:
     virtual void SAL_CALL acquire(  ) noexcept override {OWeakObject::acquire();}
     virtual void SAL_CALL release(  ) noexcept override {OWeakObject::release();}
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     //XText
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
@@ -79,8 +79,8 @@ public:
     virtual void SAL_CALL acquire(  ) noexcept override {OWeakObject::acquire();}
     virtual void SAL_CALL release(  ) noexcept override {OWeakObject::release();}
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     //XText
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;

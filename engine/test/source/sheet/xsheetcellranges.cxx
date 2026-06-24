@@ -14,7 +14,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -34,7 +34,7 @@ void XSheetCellRanges::testGetCells()
 void XSheetCellRanges::testGetRangeAddresses()
 {
     uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges(init(), UNO_QUERY_THROW);
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddress
+    cpo::uno::Sequence<table::CellRangeAddress> aCellRangeAddress
         = xSheetCellRanges->getRangeAddresses();
     CPPUNIT_ASSERT_MESSAGE("Unable to get RangeAddresses", aCellRangeAddress.getLength() > 2);
 }

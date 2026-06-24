@@ -51,14 +51,14 @@ public:
     // following 4 methods are implemented in collatorImpl.
     sal_Int32 SAL_CALL loadDefaultCollator( const css::lang::Locale&,  sal_Int32) override {throw css::uno::RuntimeException();}
     void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString&, const css::lang::Locale&,
-        const css::uno::Sequence< sal_Int32 >&) override {throw css::uno::RuntimeException();}
-    css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const css::lang::Locale&) override {throw css::uno::RuntimeException();}
-    css::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& ) override {throw css::uno::RuntimeException();}
+        const cpo::uno::Sequence< sal_Int32 >&) override {throw css::uno::RuntimeException();}
+    cpo::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const css::lang::Locale&) override {throw css::uno::RuntimeException();}
+    cpo::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& ) override {throw css::uno::RuntimeException();}
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     std::unique_ptr<icu::RuleBasedCollator> uca_base, collator;

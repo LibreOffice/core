@@ -45,7 +45,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
 
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
 
     virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
@@ -68,7 +68,7 @@ private:
     css::datatransfer::DataFlavor formatEtcToDataFlavor(sal_uInt32 cfFormat);
 
     void tryToGetIDataObjectIfAbsent();
-    css::uno::Sequence<sal_Int8> getClipboardData(CFormatEtc& aFormatEtc);
+    cpo::uno::Sequence<sal_Int8> getClipboardData(CFormatEtc& aFormatEtc);
     OUString synthesizeUnicodeText( );
 
     LCID getLocaleFromClipboard( );
@@ -79,7 +79,7 @@ private:
 private:
     css::uno::WeakReference<css::datatransfer::clipboard::XClipboard> m_xClipboard;
     sal::systools::COMReference<IDataObject>                          m_rDataObject;
-    css::uno::Sequence< css::datatransfer::DataFlavor >               m_FlavorList;
+    cpo::uno::Sequence< css::datatransfer::DataFlavor >               m_FlavorList;
     const css::uno::Reference< css::uno::XComponentContext >          m_xContext;
     CDataFormatTranslator                                             m_DataFormatTranslator;
     css::uno::Reference< css::datatransfer::XMimeContentTypeFactory > m_rXMimeCntFactory;

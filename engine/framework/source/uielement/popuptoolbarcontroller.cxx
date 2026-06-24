@@ -90,7 +90,7 @@ void PopupMenuToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 void SAL_CALL PopupMenuToolbarController::initialize(
-    const css::uno::Sequence< cpo::uno::Any >& aArguments )
+    const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     ToolboxController::initialize( aArguments );
 
@@ -206,7 +206,7 @@ void PopupMenuToolbarController::createPopupMenuController()
     }
     else
     {
-        css::uno::Sequence<cpo::uno::Any> aArgs {
+        cpo::uno::Sequence<cpo::uno::Any> aArgs {
             cpo::uno::Any(comphelper::makePropertyValue(u"Frame"_ustr, m_xFrame)),
             cpo::uno::Any(comphelper::makePropertyValue(u"ModuleIdentifier"_ustr, m_sModuleName)),
             cpo::uno::Any(comphelper::makePropertyValue(u"InToolbar"_ustr, true))
@@ -244,7 +244,7 @@ void PopupMenuToolbarController::createPopupMenuController()
 
 GenericPopupToolbarController::GenericPopupToolbarController(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-    const css::uno::Sequence< cpo::uno::Any >& rxArgs )
+    const cpo::uno::Sequence< cpo::uno::Any >& rxArgs )
     : PopupMenuToolbarController( xContext )
     , m_bReplaceWithLast( false )
 {
@@ -274,12 +274,12 @@ bool GenericPopupToolbarController::supportsService(OUString const & rServiceNam
     return cppu::supportsService( this, rServiceName );
 }
 
-css::uno::Sequence<OUString> GenericPopupToolbarController::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> GenericPopupToolbarController::getSupportedServiceNames()
 {
     return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
 
-void GenericPopupToolbarController::initialize( const css::uno::Sequence< cpo::uno::Any >& rxArgs )
+void GenericPopupToolbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rxArgs )
 {
     PopupMenuToolbarController::initialize( rxArgs );
     if ( m_bReplaceWithLast )
@@ -358,7 +358,7 @@ public:
     explicit SaveToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XSubToolbarController
     // Make ToolBarManager ask our controller for updated image, in case of icon theme change.
@@ -382,7 +382,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( OUString const & rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     bool m_bReadOnly;
@@ -400,7 +400,7 @@ SaveToolbarController::SaveToolbarController( const css::uno::Reference< css::un
 {
 }
 
-void SaveToolbarController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SaveToolbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     PopupMenuToolbarController::initialize( aArguments );
 
@@ -546,7 +546,7 @@ bool SaveToolbarController::supportsService( OUString const & rServiceName )
     return cppu::supportsService( this, rServiceName );
 }
 
-css::uno::Sequence< OUString > SaveToolbarController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SaveToolbarController::getSupportedServiceNames()
 {
     return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
@@ -563,9 +563,9 @@ public:
 
     virtual bool SAL_CALL supportsService(OUString const & rServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XSubToolbarController
     // Make ToolBarManager ask our controller for updated image, in case of icon theme change.
@@ -602,12 +602,12 @@ bool NewToolbarController::supportsService(OUString const & rServiceName)
     return cppu::supportsService( this, rServiceName );
 }
 
-css::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> NewToolbarController::getSupportedServiceNames()
 {
     return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
 
-void SAL_CALL NewToolbarController::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL NewToolbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     PopupMenuToolbarController::initialize( aArguments );
 
@@ -662,7 +662,7 @@ void SAL_CALL NewToolbarController::execute( sal_Int16 /*KeyModifier*/ )
     // open with the same settings
     PersistentWindowState::SaveWindowStateToConfig(m_xContext, m_xFrame);
 
-    css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
         u"Referer"_ustr, u"private:user"_ustr) };
 
     dispatchCommand( aURL, aArgs, aTarget );
@@ -729,7 +729,7 @@ void SAL_CALL NewToolbarController::updateImage()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &args)
+    cpo::uno::Sequence<cpo::uno::Any> const &args)
 {
     return cppu::acquire(new GenericPopupToolbarController(context, args));
 }
@@ -737,7 +737,7 @@ com_sun_star_comp_framework_GenericPopupToolbarController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SaveToolbarController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SaveToolbarController(context));
 }
@@ -745,7 +745,7 @@ com_sun_star_comp_framework_SaveToolbarController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_apache_openoffice_comp_framework_NewToolbarController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new NewToolbarController(context));
 }

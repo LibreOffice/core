@@ -1032,7 +1032,7 @@ FIELD_INSERT:
         {
             aFieldCommandPrefix = pFieldCommandPrefix->GetValue();
         }
-        uno::Sequence<beans::PropertyValues> aFields;
+        cpo::uno::Sequence<beans::PropertyValues> aFields;
         const SfxUnoAnyItem* pFields = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
         if (pFields)
         {
@@ -1531,7 +1531,7 @@ FIELD_INSERT:
         {
             aFieldCommandPrefix = pFieldCommandPrefix->GetValue();
         }
-        uno::Sequence<beans::PropertyValue> aField;
+        cpo::uno::Sequence<beans::PropertyValue> aField;
         const SfxUnoAnyItem* pFields = rReq.GetArg<SfxUnoAnyItem>(FN_PARAM_3);
         if (pFields)
         {

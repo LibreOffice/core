@@ -45,7 +45,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
     return E_NOT_INTERCEPTED;
 }
 
-css::uno::Reference< css::task::XInteractionContinuation > InterceptedInteraction::extractContinuation(const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
+css::uno::Reference< css::task::XInteractionContinuation > InterceptedInteraction::extractContinuation(const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
                                                                                                        const css::uno::Type&                                                                   aType         )
 {
     const css::uno::Reference< css::task::XInteractionContinuation >* pContinuations = std::find_if(lContinuations.begin(), lContinuations.end(),
@@ -97,7 +97,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
 {
     cpo::uno::Any                                                                    aRequest       = xRequest->getRequest();
     const css::uno::Type&                                                            aRequestType   = aRequest.getValueType();
-    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
 
     // check against the list of static requests
     auto pIt = std::find_if(m_lInterceptions.begin(), m_lInterceptions.end(),

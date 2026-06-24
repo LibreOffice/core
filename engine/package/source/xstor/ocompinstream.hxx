@@ -47,18 +47,18 @@ protected:
     css::uno::Reference < css::io::XInputStream > m_xStream;
     comphelper::ByteReader* m_pByteReader;
     std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pInterfaceContainer;
-    css::uno::Sequence < css::beans::PropertyValue > m_aProperties;
+    cpo::uno::Sequence < css::beans::PropertyValue > m_aProperties;
     bool m_bDisposed;
     sal_Int32 m_nStorageType;
 
 public:
     OInputCompStream( OWriteStream_Impl& pImpl,
                       css::uno::Reference< css::io::XInputStream > xStream,
-                      const css::uno::Sequence< css::beans::PropertyValue >& aProps,
+                      const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
     OInputCompStream( css::uno::Reference< css::io::XInputStream > xStream,
-                      const css::uno::Sequence< css::beans::PropertyValue >& aProps,
+                      const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
     virtual ~OInputCompStream() override;
@@ -69,8 +69,8 @@ public:
     virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
     virtual sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;
@@ -88,12 +88,12 @@ public:
     virtual bool SAL_CALL hasByID( const OUString& sID ) override;
     virtual OUString SAL_CALL getTargetByID( const OUString& sID ) override;
     virtual OUString SAL_CALL getTypeByID( const OUString& sID ) override;
-    virtual css::uno::Sequence< css::beans::StringPair > SAL_CALL getRelationshipByID( const OUString& sID ) override;
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getRelationshipsByType( const OUString& sType ) override;
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > > SAL_CALL getAllRelationships(  ) override;
-    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const css::uno::Sequence< css::beans::StringPair >& aEntry, bool bReplace ) override;
+    virtual cpo::uno::Sequence< css::beans::StringPair > SAL_CALL getRelationshipByID( const OUString& sID ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > SAL_CALL getRelationshipsByType( const OUString& sType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > SAL_CALL getAllRelationships(  ) override;
+    virtual void SAL_CALL insertRelationshipByID( const OUString& sID, const cpo::uno::Sequence< css::beans::StringPair >& aEntry, bool bReplace ) override;
     virtual void SAL_CALL removeRelationshipByID( const OUString& sID ) override;
-    virtual void SAL_CALL insertRelationships( const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aEntries, bool bReplace ) override;
+    virtual void SAL_CALL insertRelationships( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >& aEntries, bool bReplace ) override;
     virtual void SAL_CALL clearRelationships(  ) override;
 
     //XPropertySet

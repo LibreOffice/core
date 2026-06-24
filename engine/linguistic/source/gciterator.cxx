@@ -416,7 +416,7 @@ void GrammarCheckingIterator::ProcessResult(
             {
                 // length = number of found errors + 1 sentence markup
                 sal_Int32 nErrors = rRes.aErrors.getLength();
-                uno::Sequence< text::TextMarkupDescriptor > aDescriptors( nErrors + 1 );
+                cpo::uno::Sequence< text::TextMarkupDescriptor > aDescriptors( nErrors + 1 );
                 text::TextMarkupDescriptor * pDescriptors = aDescriptors.getArray();
 
                 uno::Reference< linguistic2::XDictionary > xIgnoreAll = ::GetIgnoreAllList();
@@ -620,7 +620,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
     return xRes;
 }
 
-static uno::Sequence<beans::PropertyValue>
+static cpo::uno::Sequence<beans::PropertyValue>
 lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara, sal_Int32 nProofInfo)
 {
     uno::Reference<beans::XPropertySet> const xProps(
@@ -698,7 +698,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                             if (xGC.is())
                             {
                                 aGuard.clear();
-                                uno::Sequence<beans::PropertyValue> const aProps(
+                                cpo::uno::Sequence<beans::PropertyValue> const aProps(
                                     lcl_makeProperties(xFlatPara, PROOFINFO_MARK_PARAGRAPH));
                                 aRes = xGC->doProofreading(aCurDocId, aCurTxt, aCurLocale,
                                                            nStartPos, nSuggestedEnd, aProps);
@@ -856,7 +856,7 @@ linguistic2::ProofreadingResult SAL_CALL GrammarCheckingIterator::checkSentenceA
             sal_Int32 nEndPos = -1;
             if (xGC.is())
             {
-                uno::Sequence<beans::PropertyValue> const aProps(
+                cpo::uno::Sequence<beans::PropertyValue> const aProps(
                     lcl_makeProperties(xFlatPara, PROOFINFO_GET_PROOFRESULT));
                 aTmpRes = xGC->doProofreading(aDocId, rText, aCurLocale, nStartPos,
                                               nSuggestedEndOfSentencePos, aProps);
@@ -1139,7 +1139,7 @@ uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdate
             beans::PropertyValue aValue;
             aValue.Name  = u"nodepath"_ustr;
             aValue.Value <<= u"org.openoffice.Office.Linguistic/ServiceManager"_ustr;
-            uno::Sequence< cpo::uno::Any > aProps{ cpo::uno::Any(aValue) };
+            cpo::uno::Sequence< cpo::uno::Any > aProps{ cpo::uno::Any(aValue) };
             m_xUpdateAccess.set(
                     xConfigurationProvider->createInstanceWithArguments(
                         u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, aProps ),
@@ -1163,11 +1163,11 @@ void GrammarCheckingIterator::GetConfiguredGCSvcs_Impl()
         // get node names (locale iso strings) for configured grammar checkers
         uno::Reference< container::XNameAccess > xNA( GetUpdateAccess(), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( u"GrammarCheckerList"_ustr ), uno::UNO_QUERY_THROW );
-        const uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
+        const cpo::uno::Sequence< OUString > aElementNames( xNA->getElementNames() );
 
         for (const OUString& rElementName : aElementNames)
         {
-            uno::Sequence< OUString > aImplNames;
+            cpo::uno::Sequence< OUString > aImplNames;
             cpo::uno::Any aTmp( xNA->getByName( rElementName ) );
             if (aTmp >>= aImplNames)
             {
@@ -1213,7 +1213,7 @@ OUString SAL_CALL GrammarCheckingIterator::getImplementationName(  )
 }
 
 
-uno::Sequence< OUString > SAL_CALL GrammarCheckingIterator::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL GrammarCheckingIterator::getSupportedServiceNames(  )
 {
     return  { u"com.sun.star.linguistic2.ProofreadingIterator"_ustr };
 }
@@ -1221,7 +1221,7 @@ uno::Sequence< OUString > SAL_CALL GrammarCheckingIterator::getSupportedServiceN
 
 void GrammarCheckingIterator::SetServiceList(
     const lang::Locale &rLocale,
-    const uno::Sequence< OUString > &rSvcImplNames )
+    const cpo::uno::Sequence< OUString > &rSvcImplNames )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
 
@@ -1240,7 +1240,7 @@ void GrammarCheckingIterator::SetServiceList(
 }
 
 
-uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
+cpo::uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
     const lang::Locale &rLocale ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
@@ -1255,7 +1255,7 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_GrammarCheckingIterator_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GrammarCheckingIterator());
 }

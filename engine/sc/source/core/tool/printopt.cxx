@@ -18,7 +18,7 @@
  */
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
 #include <printopt.hxx>
@@ -125,6 +125,6 @@ void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
     Commit();
 }
 
-void ScPrintCfg::Notify( const css::uno::Sequence< OUString >& ) { ReadCfg(); }
+void ScPrintCfg::Notify( const cpo::uno::Sequence< OUString >& ) { ReadCfg(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

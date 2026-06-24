@@ -20,7 +20,7 @@
 #ifndef INCLUDED_PACKAGE_THREADEDDEFLATER_HXX
 #define INCLUDED_PACKAGE_THREADEDDEFLATER_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/threadpool.hxx>
@@ -41,9 +41,9 @@ class ThreadedDeflater final
     // of the data.
     std::vector<std::vector<sal_Int8>> outBuffers;
     std::shared_ptr<comphelper::ThreadTaskTag> threadTaskTag;
-    css::uno::Sequence<sal_Int8> inBuffer;
-    css::uno::Sequence<sal_Int8> prevDataBlock;
-    std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)> maProcessOutputFunc;
+    cpo::uno::Sequence<sal_Int8> inBuffer;
+    cpo::uno::Sequence<sal_Int8> prevDataBlock;
+    std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)> maProcessOutputFunc;
     sal_Int64 totalIn;
     sal_Int64 totalOut;
     int zlibLevel;
@@ -53,9 +53,9 @@ public:
     ThreadedDeflater(sal_Int32 nSetLevel);
     ~ThreadedDeflater();
     void deflateWrite(const css::uno::Reference<css::io::XInputStream>& xInStream,
-                      const std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)>&
+                      const std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)>&
                           rProcessInputFunc,
-                      const std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)>&
+                      const std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)>&
                           rProcessOutputFunc);
     sal_Int64 getTotalIn() const { return totalIn; }
     sal_Int64 getTotalOut() const { return totalOut; }

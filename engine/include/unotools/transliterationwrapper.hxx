@@ -26,7 +26,7 @@
 #include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>
 
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 namespace com::sun::star::i18n { class XExtendedTransliteration; }
 namespace com::sun::star::uno { class XComponentContext; }
 enum class TransliterationFlags;
@@ -85,7 +85,7 @@ public:
     // Wrapper implementations of class Transliteration
     OUString transliterate( const OUString& rStr, LanguageType nLanguage,
                         sal_Int32 nStart, sal_Int32 nLen,
-                        css::uno::Sequence <sal_Int32>* pOffset );
+                        cpo::uno::Sequence <sal_Int32>* pOffset );
 
     /** If two strings are equal per this transliteration.
         Returns the number of matched code points in any case, even if strings

@@ -42,7 +42,7 @@ private:
     void setDistance( const OUString& sName, float _distance );
 
 public:
-    SwVbaWrapFormat(  css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    SwVbaWrapFormat(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     virtual ::sal_Int32 SAL_CALL getType() override;
     virtual void SAL_CALL setType( ::sal_Int32 _type ) override;
@@ -58,7 +58,7 @@ public:
     virtual void SAL_CALL setDistanceRight( float _distanceright ) override;
 
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAWRAPFORMAT_HXX

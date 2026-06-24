@@ -31,12 +31,12 @@
 class MainThreadExecutorRequest
 {
     css::uno::Reference< css::task::XJob > m_xJob;
-    css::uno::Sequence< css::beans::NamedValue > m_aValues;
+    cpo::uno::Sequence< css::beans::NamedValue > m_aValues;
 
     public:
         MainThreadExecutorRequest(
             const css::uno::Reference< css::task::XJob >& xJob,
-            const css::uno::Sequence< css::beans::NamedValue >& aValues );
+            const cpo::uno::Sequence< css::beans::NamedValue >& aValues );
 
         void doIt();
 };
@@ -51,7 +51,7 @@ public:
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     {}
 
-    static css::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+    static cpo::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
 
     static OUString SAL_CALL impl_staticGetImplementationName();
 
@@ -61,12 +61,12 @@ public:
     DECL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, void );
 
     // XJob
-       virtual cpo::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
+       virtual cpo::uno::Any SAL_CALL execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
 };
 

@@ -85,9 +85,9 @@ SvxConfigPageHelper::GetGraphic(const css::uno::Reference<css::ui::XImageManager
     if (xImageManager.is())
     {
         // TODO handle large graphics
-        css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq;
+        cpo::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq;
 
-        css::uno::Sequence<OUString> aImageCmdSeq{ rCommandURL };
+        cpo::uno::Sequence<OUString> aImageCmdSeq{ rCommandURL };
 
         try
         {
@@ -238,7 +238,7 @@ OUString SvxConfigPageHelper::GetUIModuleName(
     try
     {
         cpo::uno::Any a = rModuleManager->getByName(aModuleId);
-        css::uno::Sequence<css::beans::PropertyValue> aSeq;
+        cpo::uno::Sequence<css::beans::PropertyValue> aSeq;
 
         if (a >>= aSeq)
         {
@@ -273,7 +273,7 @@ bool SvxConfigPageHelper::GetMenuItemData(
 {
     try
     {
-        css::uno::Sequence<css::beans::PropertyValue> aProps;
+        cpo::uno::Sequence<css::beans::PropertyValue> aProps;
         if (rItemContainer->getByIndex(nIndex) >>= aProps)
         {
             for (css::beans::PropertyValue const& rProp : aProps)
@@ -316,7 +316,7 @@ bool SvxConfigPageHelper::GetToolbarItemData(
 {
     try
     {
-        css::uno::Sequence<css::beans::PropertyValue> aProps;
+        cpo::uno::Sequence<css::beans::PropertyValue> aProps;
         if (rItemContainer->getByIndex(nIndex) >>= aProps)
         {
             for (css::beans::PropertyValue const& rProp : aProps)
@@ -353,7 +353,7 @@ bool SvxConfigPageHelper::GetToolbarItemData(
     return false;
 }
 
-css::uno::Sequence<css::beans::PropertyValue>
+cpo::uno::Sequence<css::beans::PropertyValue>
 SvxConfigPageHelper::ConvertSvxConfigEntry(const SvxConfigEntry* pEntry)
 {
     // If the name has not been changed, then the label can be stored
@@ -363,7 +363,7 @@ SvxConfigPageHelper::ConvertSvxConfigEntry(const SvxConfigEntry* pEntry)
     if (pEntry->HasChangedName() || pEntry->GetCommand().isEmpty())
         sLabel = pEntry->GetName();
 
-    css::uno::Sequence<css::beans::PropertyValue> aPropSeq{
+    cpo::uno::Sequence<css::beans::PropertyValue> aPropSeq{
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, pEntry->GetCommand()),
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE, css::ui::ItemType::DEFAULT),
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_LABEL, sLabel),
@@ -374,7 +374,7 @@ SvxConfigPageHelper::ConvertSvxConfigEntry(const SvxConfigEntry* pEntry)
     return aPropSeq;
 }
 
-css::uno::Sequence<css::beans::PropertyValue>
+cpo::uno::Sequence<css::beans::PropertyValue>
 SvxConfigPageHelper::ConvertToolbarEntry(const SvxConfigEntry* pEntry)
 {
     // If the name has not been changed, then the label can be stored
@@ -384,7 +384,7 @@ SvxConfigPageHelper::ConvertToolbarEntry(const SvxConfigEntry* pEntry)
     if (pEntry->HasChangedName() || pEntry->GetCommand().isEmpty())
         sLabel = pEntry->GetName();
 
-    css::uno::Sequence<css::beans::PropertyValue> aPropSeq{
+    cpo::uno::Sequence<css::beans::PropertyValue> aPropSeq{
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_COMMANDURL, pEntry->GetCommand()),
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE, css::ui::ItemType::DEFAULT),
         comphelper::makePropertyValue(ITEM_DESCRIPTOR_LABEL, sLabel),

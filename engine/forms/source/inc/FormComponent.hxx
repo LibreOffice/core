@@ -194,8 +194,8 @@ protected:
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
 // XTypeProvider
-    virtual css::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -213,7 +213,7 @@ protected:
 
 // XServiceInfo
     virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
     virtual OUString SAL_CALL    getImplementationName() override = 0;
 
 // XControl
@@ -229,10 +229,10 @@ protected:
     virtual bool                                    SAL_CALL isTransparent() override;
 
 protected:
-    virtual css::uno::Sequence< css::uno::Type>   _getTypes();
+    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes();
         // overwrite this and call the base class if you have additional types
 
-    css::uno::Sequence< OUString > getAggregateServiceNames() const;
+    cpo::uno::Sequence< OUString > getAggregateServiceNames() const;
 
 private:
     void    impl_resetStateGuard_nothrow();
@@ -273,7 +273,7 @@ public:
     virtual void SAL_CALL disposing() override;
 
 protected:
-    virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes() override;
     // implement the lock setting
     void         _setLock(bool _bLock);
 };
@@ -352,7 +352,7 @@ protected:
 
     using OComponentHelper::m_rBHelper;
 
-    virtual css::uno::Sequence< css::uno::Type>   _getTypes();
+    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes();
 
     void    readHelpTextCompatibly(const css::uno::Reference< css::io::XObjectInputStream >& _rxInStream);
     void    writeHelpTextCompatibly(const css::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream);
@@ -360,15 +360,15 @@ protected:
     void    doSetDelegator();
     void    doResetDelegator();
 
-    css::uno::Sequence< OUString > getAggregateServiceNames() const;
+    cpo::uno::Sequence< OUString > getAggregateServiceNames() const;
 
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper)
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
 // XTypeProvider
-    virtual css::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence<sal_Int8>           SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type>   SAL_CALL getTypes() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -379,12 +379,12 @@ public:
 
 // XServiceInfo
     virtual bool SAL_CALL           supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL     getSupportedServiceNames() override;
     virtual OUString SAL_CALL    getImplementationName() override = 0;
 
 // XServiceInfo - static version(s)
     /// @throws css::uno::RuntimeException
-    static  css::uno::Sequence<OUString> getSupportedServiceNames_Static();
+    static  cpo::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
 // XPersistObject
     virtual OUString SAL_CALL    getServiceName() override = 0;
@@ -420,8 +420,8 @@ public:
     virtual void SAL_CALL removeProperty( const OUString& Name ) override;
 
 // XPropertyAccess
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
+    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
 protected:
     using OPropertySetAggregationHelper::setPropertyValues;
@@ -443,14 +443,14 @@ protected:
         Derived classes usually call the base class first, and then append own properties.
     */
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const;
 
     // IPropertyBagHelperContext
     virtual ::osl::Mutex&   getMutex() override;
     virtual void            describeFixedAndAggregateProperties(
-        css::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
-        css::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
+        cpo::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
+        cpo::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
     ) const override;
     virtual css::uno::Reference< css::beans::XMultiPropertySet >
                             getPropertiesInterface() override;
@@ -463,7 +463,7 @@ protected:
         aggregate properties.
     */
     virtual void describeAggregateProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const;
 
 public:
@@ -738,7 +738,7 @@ protected:
 
         The default implementation returns the type of our value property.
     */
-    virtual css::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes();
 
     /** translates the given value, which was obtained from the current external value binding,
@@ -890,7 +890,7 @@ protected:
     */
     virtual void            resetNoBroadcast();
 
-    virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type>   _getTypes() override;
 
     /// sets m_xField to the given new value, without notifying our listeners
     void    impl_setField_noNotify(
@@ -907,7 +907,7 @@ protected:
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
 public:
@@ -930,11 +930,11 @@ public:
     virtual void SAL_CALL removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
 
     // XServiceInfo
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) override;
 
     // XServiceInfo - static version
     /// @throws css::uno::RuntimeException
-    static  css::uno::Sequence<OUString> getSupportedServiceNames_Static();
+    static  cpo::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
     // XChild
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;

@@ -515,7 +515,7 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< cpo::uno::Any > const & Arguments,
+        cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;
@@ -533,7 +533,7 @@ SingletonFactory::createInstanceWithContext(
 
 css::uno::Reference< css::uno::XInterface >
 SingletonFactory::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< cpo::uno::Any > const & Arguments,
+    cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
     manager_->loadImplementation(Context, implementation_);
@@ -567,7 +567,7 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< cpo::uno::Any > const & Arguments,
+        cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context) override;
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
@@ -575,13 +575,13 @@ private:
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
-        css::uno::Sequence< cpo::uno::Any > const & Arguments) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;
@@ -601,7 +601,7 @@ ImplementationWrapper::createInstanceWithContext(
 
 css::uno::Reference< css::uno::XInterface >
 ImplementationWrapper::createInstanceWithArgumentsAndContext(
-    css::uno::Sequence< cpo::uno::Any > const & Arguments,
+    cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
@@ -619,7 +619,7 @@ ImplementationWrapper::createInstance()
 
 css::uno::Reference< css::uno::XInterface >
 ImplementationWrapper::createInstanceWithArguments(
-    css::uno::Sequence< cpo::uno::Any > const & Arguments)
+    cpo::uno::Sequence< cpo::uno::Any > const & Arguments)
 {
     return createInstanceWithArgumentsAndContext(
         Arguments, manager_->getContext());
@@ -637,7 +637,7 @@ bool ImplementationWrapper::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ImplementationWrapper::getSupportedServiceNames()
 {
     std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
@@ -677,7 +677,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
 css::uno::Reference<css::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     css::uno::Reference<css::uno::XComponentContext> const & context,
-    bool singletonRequest, css::uno::Sequence<cpo::uno::Any> const & arguments)
+    bool singletonRequest, cpo::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     css::uno::Reference<css::uno::XInterface> inst;
     if (isSingleInstance) {
@@ -699,7 +699,7 @@ cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
 {
     if (constructorFn) {
         return css::uno::Reference<css::uno::XInterface>(
-            constructorFn(context.get(), css::uno::Sequence<cpo::uno::Any>()),
+            constructorFn(context.get(), cpo::uno::Sequence<cpo::uno::Any>()),
             SAL_NO_ACQUIRE);
     } else if (factory1.is()) {
         return factory1->createInstanceWithContext(context);
@@ -712,7 +712,7 @@ cppuhelper::ServiceManager::Data::Implementation::doCreateInstance(
 css::uno::Reference<css::uno::XInterface>
 cppuhelper::ServiceManager::Data::Implementation::doCreateInstanceWithArguments(
     css::uno::Reference<css::uno::XComponentContext> const & context,
-    css::uno::Sequence<cpo::uno::Any> const & arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const & arguments)
 {
     if (constructorFn) {
         css::uno::Reference<css::uno::XInterface> inst(
@@ -928,7 +928,7 @@ void cppuhelper::ServiceManager::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 void cppuhelper::ServiceManager::initialize(
-    css::uno::Sequence<cpo::uno::Any> const & aArguments)
+    cpo::uno::Sequence<cpo::uno::Any> const & aArguments)
 {
     OUString arg;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= arg)
@@ -953,7 +953,7 @@ bool cppuhelper::ServiceManager::supportsService(
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 cppuhelper::ServiceManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.lang.MultiServiceFactory"_ustr, u"com.sun.star.lang.ServiceManager"_ustr };
@@ -970,19 +970,19 @@ cppuhelper::ServiceManager::createInstance(
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
-    css::uno::Sequence< cpo::uno::Any > const & Arguments)
+    cpo::uno::Sequence< cpo::uno::Any > const & Arguments)
 {
     assert(context_.is());
     return createInstanceWithArgumentsAndContext(
         ServiceSpecifier, Arguments, context_);
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 cppuhelper::ServiceManager::getAvailableServiceNames()
 {
     std::unique_lock g(m_aMutex);
     if (m_bDisposed) {
-        return css::uno::Sequence< OUString >();
+        return cpo::uno::Sequence< OUString >();
     }
     if (data_.services.size() > o3tl::make_unsigned(SAL_MAX_INT32)) {
         throw css::uno::RuntimeException(
@@ -1006,7 +1006,7 @@ cppuhelper::ServiceManager::createInstanceWithContext(
 css::uno::Reference< css::uno::XInterface >
 cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
     OUString const & ServiceSpecifier,
-    css::uno::Sequence< cpo::uno::Any > const & Arguments,
+    cpo::uno::Sequence< cpo::uno::Any > const & Arguments,
     css::uno::Reference< css::uno::XComponentContext > const & Context)
 {
     std::shared_ptr< Data::Implementation > impl(
@@ -1045,7 +1045,7 @@ bool cppuhelper::ServiceManager::has(cpo::uno::Any const &)
 
 void cppuhelper::ServiceManager::insert(cpo::uno::Any const & aElement)
 {
-    css::uno::Sequence< css::beans::NamedValue > args;
+    cpo::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
         std::vector< OUString > uris;
         css::uno::Reference< css::uno::XComponentContext > alienContext;
@@ -1090,7 +1090,7 @@ void cppuhelper::ServiceManager::insert(cpo::uno::Any const & aElement)
 
 void cppuhelper::ServiceManager::remove(cpo::uno::Any const & aElement)
 {
-    css::uno::Sequence< css::beans::NamedValue > args;
+    cpo::uno::Sequence< css::beans::NamedValue > args;
     if (aElement >>= args) {
         std::vector< OUString > uris;
         for (const auto & i : args) {
@@ -1258,7 +1258,7 @@ void cppuhelper::ServiceManager::removeVetoableChangeListener(
     return removeEventListener(aListener);
 }
 
-css::uno::Sequence< css::beans::Property >
+cpo::uno::Sequence< css::beans::Property >
 cppuhelper::ServiceManager::getProperties() {
     return { getDefaultContextProperty() };
 }
@@ -1562,7 +1562,7 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
         extra.namedImplementations.emplace(name, impl);
     }
     extra.dynamicImplementations.emplace(factoryInfo, impl);
-    const css::uno::Sequence< OUString > services(
+    const cpo::uno::Sequence< OUString > services(
         factoryInfo->getSupportedServiceNames());
     for (const auto & i : services) {
         impl->services.push_back(i);

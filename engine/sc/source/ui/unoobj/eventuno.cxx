@@ -82,7 +82,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const cpo:
     OUString aScript;
     if ( aElement.hasValue() )      // empty Any -> reset event
     {
-        uno::Sequence<beans::PropertyValue> aPropSeq;
+        cpo::uno::Sequence<beans::PropertyValue> aPropSeq;
         if ( aElement >>= aPropSeq )
         {
             for (const beans::PropertyValue& rProp : aPropSeq)
@@ -131,7 +131,7 @@ cpo::uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     cpo::uno::Any aRet;
     if (pScript)
     {
-        uno::Sequence<beans::PropertyValue> aPropSeq( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aPropSeq( comphelper::InitPropertySequence({
                 { "EventType", cpo::uno::Any( u"Script"_ustr ) },
                 { "Script", cpo::uno::Any( *pScript ) }
             }));
@@ -141,9 +141,9 @@ cpo::uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     return aRet;
 }
 
-uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames()
 {
-    auto aNames = uno::Sequence<OUString>(int(ScSheetEventId::COUNT));
+    auto aNames = cpo::uno::Sequence<OUString>(int(ScSheetEventId::COUNT));
     auto pNames = aNames.getArray();
     for (sal_Int32 nEvent=0; nEvent<int(ScSheetEventId::COUNT); ++nEvent)
         pNames[nEvent] = ScSheetEvents::GetEventName(static_cast<ScSheetEventId>(nEvent));
@@ -160,7 +160,7 @@ bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName )
 
 uno::Type SAL_CALL ScSheetEventsObj::getElementType()
 {
-    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
+    return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
 bool SAL_CALL ScSheetEventsObj::hasElements()

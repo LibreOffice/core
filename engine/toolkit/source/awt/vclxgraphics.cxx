@@ -343,7 +343,7 @@ void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, s
     }
 }
 
-void VCLXGraphics::drawPolyLine( const uno::Sequence< sal_Int32 >& DataX, const uno::Sequence< sal_Int32 >& DataY )
+void VCLXGraphics::drawPolyLine( const cpo::uno::Sequence< sal_Int32 >& DataX, const cpo::uno::Sequence< sal_Int32 >& DataY )
 {
     SolarMutexGuard aGuard;
 
@@ -354,7 +354,7 @@ void VCLXGraphics::drawPolyLine( const uno::Sequence< sal_Int32 >& DataX, const 
     }
 }
 
-void VCLXGraphics::drawPolygon( const uno::Sequence< sal_Int32 >& DataX, const uno::Sequence< sal_Int32 >& DataY )
+void VCLXGraphics::drawPolygon( const cpo::uno::Sequence< sal_Int32 >& DataX, const cpo::uno::Sequence< sal_Int32 >& DataY )
 {
     SolarMutexGuard aGuard;
 
@@ -365,7 +365,7 @@ void VCLXGraphics::drawPolygon( const uno::Sequence< sal_Int32 >& DataX, const u
     }
 }
 
-void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int32 > >& DataX, const uno::Sequence< uno::Sequence< sal_Int32 > >& DataY )
+void VCLXGraphics::drawPolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& DataX, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& DataY )
 {
     SolarMutexGuard aGuard;
 
@@ -455,7 +455,7 @@ void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const OUString& rText )
     }
 }
 
-void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rText, const uno::Sequence< sal_Int32 >& rLongs )
+void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rText, const cpo::uno::Sequence< sal_Int32 >& rLongs )
 {
     SolarMutexGuard aGuard;
 

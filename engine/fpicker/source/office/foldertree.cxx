@@ -175,7 +175,7 @@ void FolderTree::SetTreePath( std::u16string_view sUrl )
     }
 }
 
-void FolderTree::SetDenyList( const css::uno::Sequence< OUString >& rDenyList )
+void FolderTree::SetDenyList( const cpo::uno::Sequence< OUString >& rDenyList )
 {
     m_aDenyList = rDenyList;
 }

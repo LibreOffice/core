@@ -21,7 +21,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppu/unotype.hxx>
 
@@ -76,7 +76,7 @@ public:
 
 ScFunctionListObj::ScFunctionListObj()
     : UnoApiTest(u"/sc/qa/extras/testdocuments"_ustr)
-    , XElementAccess(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get())
+    , XElementAccess(cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get())
     , XIndexAccess(426)
     , XNameAccess(u"IF"_ustr)
     , XServiceInfo(u"stardiv.StarCalc.ScFunctionListObj"_ustr,

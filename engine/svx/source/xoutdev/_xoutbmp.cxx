@@ -171,7 +171,7 @@ static OUString isKnownRasterFormat(const GfxLink& rLink, std::u16string_view rF
 ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                  const OUString& rFilterName, const XOutFlags nFlags,
                                  const Size* pMtfSize_100TH_MM,
-                                 const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
+                                 const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                                  OUString* pMediaType )
 {
     if( rGraphic.GetType() == GraphicType::NONE )
@@ -375,7 +375,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, b
         SAL_WARN("svx", "XOutBitmap::GraphicToBase64() invalid Graphic? error: " << nErr );
         return false;
     }
-    css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.TellEnd() );
+    cpo::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.TellEnd() );
     OUStringBuffer aStrBuffer;
     ::comphelper::Base64::encode(aStrBuffer,aOStmSeq);
     rOUString = aStrBuffer.makeStringAndClear();
@@ -392,7 +392,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, b
 
 ErrCode XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const sal_uInt16 nFormat,
-                                  const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
+                                  const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
     DBG_ASSERT( rURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::ExportGraphic(...): invalid URL" );
 

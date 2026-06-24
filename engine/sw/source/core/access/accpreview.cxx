@@ -21,7 +21,7 @@
 #include <strings.hrc>
 #include "accpreview.hxx"
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 SwAccessiblePreview::SwAccessiblePreview(std::shared_ptr<SwAccessibleMap> const& pMap)
     : SwAccessibleDocumentBase(pMap)

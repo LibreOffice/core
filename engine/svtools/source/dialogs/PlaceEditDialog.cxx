@@ -11,7 +11,7 @@
 
 #include <svtools/PlaceEditDialog.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/strings.hrc>
@@ -20,6 +20,7 @@
 #include "ServerDetailsControls.hxx"
 
 using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 
 PlaceEditDialog::PlaceEditDialog(weld::Window* pParent)
     : GenericDialogController(pParent, u"svt/ui/placeedit.ui"_ustr, u"PlaceEditDialog"_ustr)

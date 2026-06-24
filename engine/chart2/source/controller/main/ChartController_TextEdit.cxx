@@ -141,7 +141,7 @@ bool ChartController::EndTextEdit()
         // lock controllers till end of block
         ControllerLockGuardUNO aCLGuard( getChartModel() );
 
-        uno::Sequence< uno::Reference< chart2::XFormattedString > > aNewFormattedTitle =
+        cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > aNewFormattedTitle =
             GetFormattedTitle(pParaObj->GetTextObject(), pTextObject->getUnoShape());
 
         Title* pTitle = dynamic_cast<Title*>(xPropSet.get());
@@ -155,7 +155,7 @@ bool ChartController::EndTextEdit()
     return true;
 }
 
-uno::Sequence< uno::Reference< chart2::XFormattedString > > ChartController::GetFormattedTitle(
+cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > ChartController::GetFormattedTitle(
     const EditTextObject& aEdit, const uno::Reference< drawing::XShape >& xShape )
 {
     std::vector < uno::Reference< chart2::XFormattedString > > aNewStrings;

@@ -25,7 +25,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sot/exchange.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <sfx2/docfac.hxx>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -234,7 +234,7 @@ static OUString impl_getFilter( const OUString& _rURL )
         {
             comphelper::SequenceAsHashMap aDescr;
             aDescr[ utl::MediaDescriptor::PROP_URL ] <<= _rURL;
-            css::uno::Sequence< css::beans::PropertyValue > aDescrList =
+            cpo::uno::Sequence< css::beans::PropertyValue > aDescrList =
                 aDescr.getAsConstPropertyValueList();
             OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, true );
             if ( !sType.isEmpty() )

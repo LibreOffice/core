@@ -213,14 +213,14 @@ bool IsValidObject( const XclObj& rObj )
         if (!xCooSysContainer.is())
             return false;
 
-        const uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSeq = xCooSysContainer->getCoordinateSystems();
+        const cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSeq = xCooSysContainer->getCoordinateSystems();
         for (const auto& rCooSys : xCooSysSeq)
         {
             Reference<chart2::XChartTypeContainer> xChartTypeCont(rCooSys, uno::UNO_QUERY);
             if (!xChartTypeCont.is())
                 return false;
 
-            uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq = xChartTypeCont->getChartTypes();
+            cpo::uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq = xChartTypeCont->getChartTypes();
             if (!xChartTypeSeq.hasElements())
                 // No chart type.  Not good.
                 return false;

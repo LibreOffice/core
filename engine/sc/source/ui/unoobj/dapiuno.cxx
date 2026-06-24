@@ -75,7 +75,7 @@ using ::cpo::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 
@@ -109,10 +109,10 @@ std::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotDescriptorBaseMap()
         { SC_UNO_DP_DRILLDOWN,    0,  cppu::UnoType<bool>::get(),  0, 0 },
         { SC_UNO_DP_GRANDTOTAL_NAME,0,cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID, 0 },
         { SC_UNO_DP_IGNORE_EMPTYROWS,   0,  cppu::UnoType<bool>::get(),  0, 0 },
-        { SC_UNO_DP_IMPORTDESC,   0,  cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0, 0 },
+        { SC_UNO_DP_IMPORTDESC,   0,  cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get(), 0, 0 },
         { SC_UNO_DP_REPEATEMPTY,     0,  cppu::UnoType<bool>::get(),  0, 0 },
         { SC_UNO_DP_ROWGRAND,     0,  cppu::UnoType<bool>::get(),  0, 0 },
-        { SC_UNO_DP_SERVICEARG,   0,  cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get(), 0, 0 },
+        { SC_UNO_DP_SERVICEARG,   0,  cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get(), 0, 0 },
         { SC_UNO_DP_SHOWFILTER,     0,  cppu::UnoType<bool>::get(),  0, 0 },
         { SC_UNO_DP_SOURCESERVICE,   0,  cppu::UnoType<OUString>::get(), 0, 0 },
     };
@@ -739,7 +739,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
         }
         else if ( aPropertyName == SC_UNO_DP_IMPORTDESC )
         {
-            uno::Sequence<beans::PropertyValue> aArgSeq;
+            cpo::uno::Sequence<beans::PropertyValue> aArgSeq;
             if ( aValue >>= aArgSeq )
             {
                 ScImportSourceDesc aImportDesc(&pDocShell->GetDocument());
@@ -787,7 +787,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
         }
         else if ( aPropertyName == SC_UNO_DP_SERVICEARG )
         {
-            uno::Sequence<beans::PropertyValue> aArgSeq;
+            cpo::uno::Sequence<beans::PropertyValue> aArgSeq;
             if ( aValue >>= aArgSeq )
             {
                 ScDPServiceDesc aServiceDesc(u""_ustr, u""_ustr, u""_ustr, u""_ustr, u""_ustr);
@@ -893,14 +893,14 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                     aParam.bSql       = ( pImportDesc->nType == sheet::DataImportMode_SQL );
                     aParam.nType      = static_cast<sal_uInt8>(( pImportDesc->nType == sheet::DataImportMode_QUERY ) ? ScDbQuery : ScDbTable);
 
-                    uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
+                    cpo::uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
                     ScImportDescriptor::FillProperties( aSeq, aParam );
                     aRet <<= aSeq;
                 }
                 else
                 {
                     // empty sequence
-                    uno::Sequence<beans::PropertyValue> aEmpty(0);
+                    cpo::uno::Sequence<beans::PropertyValue> aEmpty(0);
                     aRet <<= aEmpty;
                 }
             }
@@ -917,7 +917,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
                 if (pServiceDesc)
                 {
-                    uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+                    cpo::uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
                             { SC_UNO_DP_SOURCENAME, Any(pServiceDesc->aParSource) },
                             { SC_UNO_DP_OBJECTNAME, Any(pServiceDesc->aParName) },
                             { SC_UNO_DP_USERNAME, Any(pServiceDesc->aParUser) },
@@ -928,7 +928,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 else
                 {
                     // empty sequence
-                    uno::Sequence<beans::PropertyValue> aEmpty;
+                    cpo::uno::Sequence<beans::PropertyValue> aEmpty;
                     aRet <<= aEmpty;
                 }
             }
@@ -1033,7 +1033,7 @@ Sequence< uno::Type > SAL_CALL ScDataPilotTableObj::getTypes()
 
 Sequence<sal_Int8> SAL_CALL ScDataPilotTableObj::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 ScDPObject* ScDataPilotTableObj::GetDPObject() const
@@ -1736,7 +1736,7 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     }
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
     {
-        uno::Sequence<sheet::GeneralFunction> aSeq;
+        cpo::uno::Sequence<sheet::GeneralFunction> aSeq;
         if( aValue >>= aSeq)
         {
             std::vector< ScGeneralFunction > aSubTotals(aSeq.getLength());
@@ -1869,8 +1869,8 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
         aRet <<= getFunction();
     else if ( aPropertyName == SC_UNONAME_SUBTOTALS )
     {
-        const uno::Sequence<sal_Int16> aSeq = getSubtotals();
-        uno::Sequence<sheet::GeneralFunction>  aNewSeq(aSeq.getLength());
+        const cpo::uno::Sequence<sal_Int16> aSeq = getSubtotals();
+        cpo::uno::Sequence<sheet::GeneralFunction>  aNewSeq(aSeq.getLength());
         std::transform(aSeq.begin(), aSeq.end(), aNewSeq.getArray(),
             [](sal_Int16 nFunc) -> sheet::GeneralFunction {
                 if (nFunc == sheet::GeneralFunction2::MEDIAN)

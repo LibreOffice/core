@@ -103,7 +103,7 @@ bool ScDatabaseSettingItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId 
     {
         case 0:
         {
-            css::uno::Sequence<css::beans::PropertyValue> aSeq{
+            cpo::uno::Sequence<css::beans::PropertyValue> aSeq{
                 comphelper::makePropertyValue(u"ContainsHeader"_ustr, mbHeaderRow),
                 comphelper::makePropertyValue(u"UseFirstColumnFormatting"_ustr, mbFirstCol),
                 comphelper::makePropertyValue(u"UseLastColumnFormatting"_ustr, mbLastCol),
@@ -155,7 +155,7 @@ bool ScDatabaseSettingItem::PutValue(const cpo::uno::Any& rVal, sal_uInt8 nMembe
     {
         case 0:
         {
-            css::uno::Sequence<css::beans::PropertyValue> aSeq;
+            cpo::uno::Sequence<css::beans::PropertyValue> aSeq;
             if ((rVal >>= aSeq) && (aSeq.getLength() == DBSETTING_PARAMS))
             {
                 OUString sTmpID;

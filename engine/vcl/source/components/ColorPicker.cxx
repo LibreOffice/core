@@ -31,17 +31,17 @@ public:
     explicit ColorPicker();
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XPropertyAccess
-    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getPropertyValues() override;
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getPropertyValues() override;
     virtual void SAL_CALL
-    setPropertyValues(const css::uno::Sequence<css::beans::PropertyValue>& rProperties) override;
+    setPropertyValues(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties) override;
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle(const OUString& rTitle) override;
@@ -59,7 +59,7 @@ ColorPicker::ColorPicker()
 {
 }
 
-void SAL_CALL ColorPicker::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL ColorPicker::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     if (rArguments.getLength() == 1)
     {
@@ -77,20 +77,20 @@ bool SAL_CALL ColorPicker::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL ColorPicker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ColorPicker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.ColorPicker"_ustr };
 }
 
-css::uno::Sequence<css::beans::PropertyValue> SAL_CALL ColorPicker::getPropertyValues()
+cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL ColorPicker::getPropertyValues()
 {
-    css::uno::Sequence<css::beans::PropertyValue> aProps{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<css::beans::PropertyValue> aProps{ comphelper::makePropertyValue(
         COLOR_PROPERTY_NAME, m_aColor) };
     return aProps;
 }
 
 void SAL_CALL
-ColorPicker::setPropertyValues(const css::uno::Sequence<css::beans::PropertyValue>& rProperties)
+ColorPicker::setPropertyValues(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties)
 {
     for (const css::beans::PropertyValue& rProp : rProperties)
     {
@@ -112,7 +112,7 @@ sal_Int16 SAL_CALL ColorPicker::execute()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_cui_ColorPicker_get_implementation(css::uno::XComponentContext*,
-                                                const css::uno::Sequence<cpo::uno::Any>&)
+                                                const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new ColorPicker);
 }

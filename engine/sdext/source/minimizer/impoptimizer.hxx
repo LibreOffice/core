@@ -21,7 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_IMPOPTIMIZER_HXX
 
 #include "optimizationstats.hxx"
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -61,7 +61,7 @@ public:
             const css::uno::Reference< css::frame::XModel >& rxModel );
         ~ImpOptimizer();
 
-        void     Optimize( const css::uno::Sequence< css::beans::PropertyValue >& rArguments );
+        void     Optimize( const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments );
         void     DispatchStatus();
 };
 

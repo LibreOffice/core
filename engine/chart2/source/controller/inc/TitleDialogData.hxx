@@ -19,7 +19,7 @@
 #pragma once
 
 #include <ReferenceSizeProvider.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -30,9 +30,9 @@ class ChartModel;
 
 struct TitleDialogData
 {
-    css::uno::Sequence< bool > aPossibilityList;
-    css::uno::Sequence< bool > aExistenceList;
-    css::uno::Sequence< OUString > aTextList;
+    cpo::uno::Sequence< bool > aPossibilityList;
+    cpo::uno::Sequence< bool > aExistenceList;
+    cpo::uno::Sequence< OUString > aTextList;
     std::optional< ReferenceSizeProvider > apReferenceSizeProvider;
 
     TitleDialogData(std::optional<ReferenceSizeProvider> pReferenzeSizeProvider = std::nullopt);

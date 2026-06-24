@@ -63,7 +63,7 @@ private:
 
     css::uno::Reference<css::io::XInputStream> mxStream;
     css::uno::Reference<css::io::XSeekable> mxSeekable;
-    css::uno::Sequence<sal_Int8> maData;
+    cpo::uno::Sequence<sal_Int8> maData;
     std::unique_ptr<OLEStorageImpl> mpOLEStorage;
     std::unique_ptr<ZipStorageImpl> mpZipStorage;
     sal_Int64 mnLength;

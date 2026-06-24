@@ -120,7 +120,7 @@ void Hyphenator::ensureLocales()
         // (or better speaking: the list of dictionaries using the
         // new configuration entries).
         std::vector< SvtLinguConfigDictionaryEntry > aDics;
-        uno::Sequence< OUString > aFormatList;
+        cpo::uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( u"Hyphenators"_ustr,
                 u"org.openoffice.lingu.LibHnjHyphenator"_ustr, aFormatList );
         for (const auto& rFormat : aFormatList)
@@ -381,7 +381,7 @@ const HDInfo* Hyphenator::getMatchingDict(const css::lang::Locale& aLocale)
 Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWord,
        const css::lang::Locale& aLocale,
        sal_Int16 nMaxLeading,
-       const css::uno::Sequence< css::beans::PropertyValue >& aProperties )
+       const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties )
 {
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);
@@ -469,14 +469,14 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                     // get morphological analysis of the word
                     if ( ( bAnalyzed && xTmpRes.is() ) || ( xSpell.is() && xSpell->isValid(
                             u"<?xml?>"_ustr, LanguageTag::convertToLocale(nLanguage),
-                            uno::Sequence< beans::PropertyValue >() ) ) )
+                            cpo::uno::Sequence< beans::PropertyValue >() ) ) )
                     {
                         if ( !bAnalyzed )
                         {
                             xTmpRes = xSpell->spell( "<?xml?><query type='analyze'><word>" +
                                                        aWord + "</word></query>",
                                                LanguageTag::convertToLocale(nLanguage),
-                                               uno::Sequence< beans::PropertyValue >() );
+                                               cpo::uno::Sequence< beans::PropertyValue >() );
                             bAnalyzed = true;
 
                             if (xTmpRes.is())
@@ -680,7 +680,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         const OUString& aWord,
         const css::lang::Locale& aLocale,
         sal_Int16 nIndex,
-        const css::uno::Sequence< css::beans::PropertyValue >& aProperties )
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties )
 {
     // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
     for (int extrachar = 1; extrachar <= 2; extrachar++)
@@ -694,7 +694,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
 
 Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const OUString& aWord,
         const css::lang::Locale& aLocale,
-        const css::uno::Sequence< css::beans::PropertyValue >& aProperties )
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties )
 {
     PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);
@@ -736,7 +736,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             if (result.hyphens[i] & 1)
             {
                 // linguistic::PossibleHyphens is stuck with
-                // css::uno::Sequence<sal_Int16> because of
+                // cpo::uno::Sequence<sal_Int16> because of
                 // css.linguistic2.XPossibleHyphens.getHyphenationPositions, so
                 // any further positions need to be ignored:
                 assert(i >= SAL_MIN_INT16);
@@ -872,7 +872,7 @@ Sequence< OUString > SAL_CALL Hyphenator::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_Hyphenator_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Hyphenator());
 }

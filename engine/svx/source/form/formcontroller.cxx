@@ -117,7 +117,7 @@ namespace svxform
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::PropertyValue;
@@ -630,7 +630,7 @@ Any SAL_CALL FormController::queryInterface( const Type& _rType )
 
 Sequence< sal_Int8 > SAL_CALL FormController::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Sequence< Type > SAL_CALL FormController::getTypes(  )

@@ -307,7 +307,7 @@ void exportGeography(const uno::Reference<beans::XPropertySet>& xSeriesProp,
     cpo::uno::Any aBinary = xSeriesProp->getPropertyValue(u"GeoCacheBinary"_ustr);
     bool bHasBinary = (aBinary >>= sBinary);
 
-    uno::Sequence<beans::PropertyValue> aClearData;
+    cpo::uno::Sequence<beans::PropertyValue> aClearData;
     cpo::uno::Any aClear = xSeriesProp->getPropertyValue(u"GeoCacheClearData"_ustr);
     bool bHasClear = (aClear >>= aClearData) && aClearData.hasElements();
 

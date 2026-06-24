@@ -71,7 +71,7 @@ public:
     OutlineToImpressFinalizer (
         ::sd::ViewShellBase& rBase,
         SdDrawDocument& rDocument,
-        css::uno::Sequence<sal_Int8> const & rBytes);
+        cpo::uno::Sequence<sal_Int8> const & rBytes);
     void operator() (bool bEventSeen);
 private:
     ::sd::ViewShellBase& mrBase;
@@ -240,7 +240,7 @@ bool SdModule::OutlineToImpress(SfxRequest const & rRequest)
 
     if (pSet)
     {
-        css::uno::Sequence<sal_Int8> pBytes = static_cast<const SfxLockBytesItem&>(pSet->Get(SID_OUTLINE_TO_IMPRESS)).GetValue();
+        cpo::uno::Sequence<sal_Int8> pBytes = static_cast<const SfxLockBytesItem&>(pSet->Get(SID_OUTLINE_TO_IMPRESS)).GetValue();
 
         if (pBytes.getLength())
         {
@@ -519,7 +519,7 @@ namespace {
 OutlineToImpressFinalizer::OutlineToImpressFinalizer (
     ::sd::ViewShellBase& rBase,
     SdDrawDocument& rDocument,
-    css::uno::Sequence<sal_Int8> const & rBytes)
+    cpo::uno::Sequence<sal_Int8> const & rBytes)
     : mrBase(rBase),
       mrDocument(rDocument)
 {

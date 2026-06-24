@@ -320,7 +320,7 @@ public:
     void                importExternalSheets( SequenceInputStream& rStrm );
 
     /** Returns the sequence of link infos needed by the XML formula parser. */
-    css::uno::Sequence< css::sheet::ExternalLinkInfo >
+    cpo::uno::Sequence< css::sheet::ExternalLinkInfo >
                         getLinkInfos() const;
 
     /** Returns the external link for the passed reference identifier. */

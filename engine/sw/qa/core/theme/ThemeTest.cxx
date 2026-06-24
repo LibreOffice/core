@@ -526,7 +526,7 @@ class TestSimpleFileTransferable : public cppu::WeakImplHelper<css::datatransfer
 public:
     TestSimpleFileTransferable(const OUString& fileURL);
     cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& flavor) override;
-    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& flavor) override;
 
 private:
@@ -546,7 +546,7 @@ TestSimpleFileTransferable::getTransferData(const css::datatransfer::DataFlavor&
         auto xSFA(ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()));
         auto xInputStream = xSFA->openFileRead(m_fileURL);
         sal_Int32 bytes = xInputStream->available();
-        css::uno::Sequence<sal_Int8> data;
+        cpo::uno::Sequence<sal_Int8> data;
         CPPUNIT_ASSERT_EQUAL(bytes, xInputStream->readBytes(data, bytes));
         return cpo::uno::Any(data);
     }
@@ -556,14 +556,14 @@ TestSimpleFileTransferable::getTransferData(const css::datatransfer::DataFlavor&
         aDesc.maClassName = SvGlobalName(SO3_SW_CLASSID);
         SvMemoryStream aMemStm(1024, 1024);
         WriteTransferableObjectDescriptor(aMemStm, aDesc);
-        css::uno::Sequence<sal_Int8> data(static_cast<const sal_Int8*>(aMemStm.GetData()),
+        cpo::uno::Sequence<sal_Int8> data(static_cast<const sal_Int8*>(aMemStm.GetData()),
                                           aMemStm.GetSize());
         return cpo::uno::Any(data);
     }
     return {};
 }
 
-css::uno::Sequence<css::datatransfer::DataFlavor>
+cpo::uno::Sequence<css::datatransfer::DataFlavor>
 TestSimpleFileTransferable::getTransferDataFlavors()
 {
     css::datatransfer::DataFlavor embed_source;

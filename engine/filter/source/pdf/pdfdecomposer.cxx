@@ -37,14 +37,14 @@ public:
     XPdfDecomposer& operator=(const XPdfDecomposer&) = delete;
 
     // XPdfDecomposer
-    uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
-    getDecomposition(const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
-                     const uno::Sequence<beans::PropertyValue>& xDecompositionParameters) override;
+    cpo::uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL getDecomposition(
+        const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
+        const cpo::uno::Sequence<beans::PropertyValue>& xDecompositionParameters) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString&) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 XPdfDecomposer::XPdfDecomposer(uno::Reference<uno::XComponentContext> const&) {}
@@ -73,9 +73,9 @@ bool getPdfPageSizeMM100(const BinaryDataContainer& rDataContainer, sal_Int32 nP
     return true;
 }
 
-uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
+cpo::uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
 XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
-                                 const uno::Sequence<beans::PropertyValue>& xParameters)
+                                 const cpo::uno::Sequence<beans::PropertyValue>& xParameters)
 {
     sal_Int32 nPageIndex = -1;
 
@@ -117,7 +117,7 @@ bool SAL_CALL XPdfDecomposer::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL XPdfDecomposer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL XPdfDecomposer::getSupportedServiceNames()
 {
     return { u"com.sun.star.graphic.PdfTools"_ustr };
 }
@@ -125,7 +125,7 @@ uno::Sequence<OUString> SAL_CALL XPdfDecomposer::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_PdfDecomposer_get_implementation(css::uno::XComponentContext* context,
-                                        css::uno::Sequence<cpo::uno::Any> const&)
+                                        cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new XPdfDecomposer(context));
 }

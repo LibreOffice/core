@@ -193,7 +193,7 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
     sal_Int32 nSequence = 32;
     sal_Int32 nFound    = 0;
 
-    uno::Sequence < uno::Reference< uno::XInterface >  > aSeq( nSequence );
+    cpo::uno::Sequence < uno::Reference< uno::XInterface >  > aSeq( nSequence );
 
     uno::Reference< uno::XInterface > * pArray = aSeq.getArray();
 
@@ -733,7 +733,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const 
 
 /* ================================================================= */
 
-SdUnoFindAllAccess::SdUnoFindAllAccess( uno::Sequence< uno::Reference< uno::XInterface >  > const & rSequence ) noexcept
+SdUnoFindAllAccess::SdUnoFindAllAccess( cpo::uno::Sequence< uno::Reference< uno::XInterface >  > const & rSequence ) noexcept
 :maSequence( rSequence )
 {
 }

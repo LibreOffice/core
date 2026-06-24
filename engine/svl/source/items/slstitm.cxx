@@ -21,7 +21,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/poolitem.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -124,13 +124,13 @@ OUString SfxStringListItem::GetString()
 }
 
 
-void SfxStringListItem::SetStringList( const css::uno::Sequence< OUString >& rList )
+void SfxStringListItem::SetStringList( const cpo::uno::Sequence< OUString >& rList )
 {
     mpList = std::make_shared<std::vector<OUString>>(
         comphelper::sequenceToContainer<std::vector<OUString>>(rList));
 }
 
-void SfxStringListItem::GetStringList( css::uno::Sequence< OUString >& rList ) const
+void SfxStringListItem::GetStringList( cpo::uno::Sequence< OUString >& rList ) const
 {
     size_t nCount = mpList->size();
 
@@ -143,7 +143,7 @@ void SfxStringListItem::GetStringList( css::uno::Sequence< OUString >& rList ) c
 // virtual
 bool SfxStringListItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
-    css::uno::Sequence< OUString > aValue;
+    cpo::uno::Sequence< OUString > aValue;
     if ( rVal >>= aValue )
     {
         SetStringList( aValue );
@@ -157,7 +157,7 @@ bool SfxStringListItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 // virtual
 bool SfxStringListItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
-    css::uno::Sequence< OUString > aStringList;
+    cpo::uno::Sequence< OUString > aStringList;
     GetStringList( aStringList );
     rVal <<= aStringList;
     return true;

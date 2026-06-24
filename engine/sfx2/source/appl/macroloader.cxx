@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 
-SfxMacroLoader::SfxMacroLoader(const css::uno::Sequence< cpo::uno::Any >& aArguments)
+SfxMacroLoader::SfxMacroLoader(const cpo::uno::Sequence< cpo::uno::Any >& aArguments)
 {
     Reference < XFrame > xFrame;
     if ( aArguments.hasElements() )
@@ -64,7 +64,7 @@ bool SAL_CALL SfxMacroLoader::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SfxMacroLoader::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ProtocolHandler"_ustr };
 }
@@ -107,11 +107,11 @@ uno::Reference<frame::XDispatch> SAL_CALL SfxMacroLoader::queryDispatch(
 }
 
 
-uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
-                SfxMacroLoader::queryDispatches( const uno::Sequence < frame::DispatchDescriptor >& seqDescriptor )
+cpo::uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
+                SfxMacroLoader::queryDispatches( const cpo::uno::Sequence < frame::DispatchDescriptor >& seqDescriptor )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
-    uno::Sequence< uno::Reference<frame::XDispatch> > lDispatcher(nCount);
+    cpo::uno::Sequence< uno::Reference<frame::XDispatch> > lDispatcher(nCount);
     std::transform(seqDescriptor.begin(), seqDescriptor.end(), lDispatcher.getArray(),
         [this](const frame::DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
             return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
@@ -120,7 +120,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
 
 
 void SAL_CALL SfxMacroLoader::dispatchWithNotification(
-    const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& /*lArgs*/,
+    const util::URL& aURL, const cpo::uno::Sequence<beans::PropertyValue>& /*lArgs*/,
     const uno::Reference<frame::XDispatchResultListener>& xListener )
 {
     SolarMutexGuard aGuard;
@@ -144,7 +144,7 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification(
 }
 
 cpo::uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
-    const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& )
+    const util::URL& aURL, const cpo::uno::Sequence<beans::PropertyValue>& )
 {
     cpo::uno::Any aRet;
     ErrCode nErr = loadMacro( aURL.Complete, aRet, GetObjectShell_Impl() );
@@ -168,7 +168,7 @@ cpo::uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
 }
 
 void SAL_CALL SfxMacroLoader::dispatch(
-    const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& /*lArgs*/ )
+    const util::URL& aURL, const cpo::uno::Sequence<beans::PropertyValue>& /*lArgs*/ )
 {
     SolarMutexGuard aGuard;
 
@@ -337,7 +337,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, cpo::uno::Any& rRetval,
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_SfxMacroLoader_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &arguments)
+    cpo::uno::Sequence<cpo::uno::Any> const &arguments)
 {
     return cppu::acquire(new SfxMacroLoader(arguments));
 }

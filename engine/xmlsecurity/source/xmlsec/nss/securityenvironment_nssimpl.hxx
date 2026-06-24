@@ -71,12 +71,12 @@ private:
             const OUString& ServiceName
         ) override ;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
 
         virtual ::sal_Int32 SAL_CALL verifyCertificate(
             const css::uno::Reference<
             css::security::XCertificate >& xCert,
-            const css::uno::Sequence<
+            const cpo::uno::Sequence<
             css::uno::Reference< css::security::XCertificate > > &
             intermediateCerts) override ;
 
@@ -92,25 +92,25 @@ private:
         /// @throws css::uno::RuntimeException
         void adoptSymKey( PK11SymKey* aSymKey ) ;
 
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override ;
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override
-        { return css::uno::Sequence< css::uno::Reference< css::security::XCertificate > >(); }
+        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override ;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override
+        { return cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > >(); }
 
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& issuerName, const css::uno::Sequence< sal_Int8 >& serialNumber ) override ;
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& issuerName, const cpo::uno::Sequence< sal_Int8 >& serialNumber ) override ;
 
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath( const css::uno::Reference< css::security::XCertificate >& beginCert ) override ;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath( const css::uno::Reference< css::security::XCertificate >& beginCert ) override ;
 
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw( const css::uno::Sequence< sal_Int8 >& rawCertificate ) override ;
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw( const cpo::uno::Sequence< sal_Int8 >& rawCertificate ) override ;
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii( const OUString& asciiCertificate ) override ;
 
         // Methods of XCertificateCreator
         css::uno::Reference<css::security::XCertificate> SAL_CALL addDERCertificateToTheDatabase(
-                css::uno::Sequence<sal_Int8> const & raDERCertificate,
+                cpo::uno::Sequence<sal_Int8> const & raDERCertificate,
                 OUString const & raTrustString) override;
 
         css::uno::Reference<css::security::XCertificate> SAL_CALL createDERCertificateWithPrivateKey(
-                css::uno::Sequence<sal_Int8> const & raDERCertificate,
-                css::uno::Sequence<sal_Int8> const & raPrivateKey) override;
+                cpo::uno::Sequence<sal_Int8> const & raDERCertificate,
+                cpo::uno::Sequence<sal_Int8> const & raPrivateKey) override;
 
         //Native methods
         /// @throws css::uno::RuntimeException
@@ -124,11 +124,11 @@ private:
         void updateSlots();
 
         static rtl::Reference<X509Certificate_NssImpl> createAndAddCertificateFromPackage(
-                                    const css::uno::Sequence<sal_Int8>& raDerCertificate,
+                                    const cpo::uno::Sequence<sal_Int8>& raDerCertificate,
                                     std::u16string_view raString);
-        static SECKEYPrivateKey* insertPrivateKey(css::uno::Sequence<sal_Int8> const & raPrivateKey);
+        static SECKEYPrivateKey* insertPrivateKey(cpo::uno::Sequence<sal_Int8> const & raPrivateKey);
 
-        static rtl::Reference<X509Certificate_NssImpl> createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& raDerCertificate);
+        static rtl::Reference<X509Certificate_NssImpl> createX509CertificateFromDER(const cpo::uno::Sequence<sal_Int8>& raDerCertificate);
 
           /// @throws css::uno::Exception
           /// @throws css::uno::RuntimeException

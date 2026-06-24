@@ -576,7 +576,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { getImplementationName() };
     }
@@ -896,7 +896,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { getImplementationName() };
     }
@@ -926,7 +926,7 @@ VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ooo_vba_EventListener_get_implementation(css::uno::XComponentContext*,
-                                         css::uno::Sequence<cpo::uno::Any> const &)
+                                         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new EventListener);
 }
@@ -934,7 +934,7 @@ ooo_vba_EventListener_get_implementation(css::uno::XComponentContext*,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ooo_vba_VBAToOOEventDesc_get_implementation(css::uno::XComponentContext*,
-                                            css::uno::Sequence<cpo::uno::Any> const &)
+                                            cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new VBAToOOEventDescGen);
 }

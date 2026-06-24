@@ -18,7 +18,7 @@
 #include "swdllapi.h"
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 class SwTextNode;
 class SwXTextDocument;
@@ -35,18 +35,18 @@ class SW_DLLPUBLIC SwRDFHelper
 {
 public:
     /// Gets all graph-names in RDF of a given type.
-    static css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
+    static cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
     getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
                   const css::uno::Reference<css::rdf::XURI>& xType);
 
     /// Gets all graph-names in RDF of a given type.
-    static css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
+    static cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
     getGraphNames(const rtl::Reference<SwXTextDocument>& xModel, const OUString& rType);
 
     /// Gets all (XResource, key, value) statements in RDF graphs given the graph-names.
     static std::map<OUString, OUString>
     getStatements(const rtl::Reference<SwXTextDocument>& xModel,
-                  const css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>& rGraphNames,
+                  const cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>>& rGraphNames,
                   const css::uno::Reference<css::rdf::XResource>& xSubject);
 
     /// Gets all (XResource, key, value) statements in RDF graphs of type rType.

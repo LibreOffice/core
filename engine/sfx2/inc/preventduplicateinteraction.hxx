@@ -201,7 +201,7 @@ class PreventDuplicateInteraction final :
     // uno interface
     public:
 
-        virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+        virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
         /**
             @interface  XInteractionHandler

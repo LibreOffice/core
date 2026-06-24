@@ -137,7 +137,7 @@ void SwMailMergeAddressBlockPage::Activate()
     m_xDocumentIndexFI->set_label(m_sDocument.replaceFirst("%1", "1"));
 
     m_xSettings->Clear();
-    const uno::Sequence< OUString> aBlocks =
+    const cpo::uno::Sequence< OUString> aBlocks =
                 m_pWizard->GetConfigItem().GetAddressBlocks();
     for(const auto& rAddress : aBlocks)
         m_xSettings->AddAddress(rAddress);
@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, SettingsHdl_Impl, weld::Button&, vo
     if (aDlg.run() == RET_OK)
     {
         //the dialog provides the selected address at the first position!
-        const uno::Sequence< OUString> aBlocks = aDlg.GetAddressBlocks();
+        const cpo::uno::Sequence< OUString> aBlocks = aDlg.GetAddressBlocks();
         rConfig.SetAddressBlocks(aBlocks);
         m_xSettings->Clear();
         for(const auto& rAddress : aBlocks)
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AssignHdl_Impl, weld::Button&, void
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
-    const uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
+    const cpo::uno::Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
     SwAssignFieldsDialog aDlg(m_pWizard->getDialog(), m_pWizard->GetConfigItem(), aBlocks[nSel], true);
     if(RET_OK == aDlg.run())
     {
@@ -244,7 +244,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, weld::Toggleable&, 
 IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkParamNone*, void)
 {
     const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
-    const uno::Sequence< OUString> aBlocks =
+    const cpo::uno::Sequence< OUString> aBlocks =
                 m_pWizard->GetConfigItem().GetAddressBlocks();
     m_xPreview->SetAddress(SwAddressPreview::FillData(aBlocks[nSel],
                                                          m_pWizard->GetConfigItem()));
@@ -289,7 +289,7 @@ void SwMailMergeAddressBlockPage::InsertDataHdl(const weld::Button* pButton)
         {
             //Fill data into preview
             const sal_uInt16 nSel = m_xSettings->GetSelectedAddress();
-            const uno::Sequence< OUString> aBlocks =
+            const cpo::uno::Sequence< OUString> aBlocks =
                         m_pWizard->GetConfigItem().GetAddressBlocks();
             m_xPreview->SetAddress(SwAddressPreview::FillData(aBlocks[nSel], rConfig));
         }
@@ -347,7 +347,7 @@ SwSelectAddressBlockDialog::~SwSelectAddressBlockDialog()
 {
 }
 
-void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< OUString>& rBlocks,
+void SwSelectAddressBlockDialog::SetAddressBlocks(const cpo::uno::Sequence< OUString>& rBlocks,
         sal_uInt16 nSelectedAddress)
 {
     m_aAddressBlocks = rBlocks;
@@ -357,13 +357,13 @@ void SwSelectAddressBlockDialog::SetAddressBlocks(const uno::Sequence< OUString>
 }
 
 // return the address blocks and put the selected one to the first position
-const uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks()
+const cpo::uno::Sequence< OUString >&    SwSelectAddressBlockDialog::GetAddressBlocks()
 {
     //put the selected block to the first position
     const sal_Int32 nSelect = static_cast<sal_Int32>(m_xPreview->GetSelectedAddress());
     if(nSelect)
     {
-        uno::Sequence< OUString >aTemp(m_aAddressBlocks.getLength());
+        cpo::uno::Sequence< OUString >aTemp(m_aAddressBlocks.getLength());
         auto it = aTemp.getArray();
         *it = m_aAddressBlocks[nSelect];
         it = std::copy_n(std::cbegin(m_aAddressBlocks), nSelect - 1, std::next(it));
@@ -847,14 +847,14 @@ void SwAssignFieldsControl::Init(SwAssignFieldsDialog* pDialog, SwMailMergeConfi
     uno::Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), uno::UNO_QUERY);
     //get the name of the actual columns
     uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
-    uno::Sequence< OUString > aFields;
+    cpo::uno::Sequence< OUString > aFields;
     if(xColAccess.is())
         aFields = xColAccess->getElementNames();
 
     //get the current assignment list
     //each position in this sequence matches the position in the header array rHeaders
     //if no assignment is available an empty sequence will be returned
-    uno::Sequence< OUString> aAssignments = rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
+    cpo::uno::Sequence< OUString> aAssignments = rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
     Link<weld::ComboBox&,void> aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
     Link<weld::Widget&,void> aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
 
@@ -1012,9 +1012,9 @@ SwAssignFieldsDialog::~SwAssignFieldsDialog()
 {
 }
 
-uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
+cpo::uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
 {
-    uno::Sequence< OUString > aAssignments(
+    cpo::uno::Sequence< OUString > aAssignments(
             m_rConfigItem.GetDefaultAddressHeaders().size());
     OUString* pAssignments = aAssignments.getArray();
     sal_Int32 nIndex = 0;
@@ -1037,7 +1037,7 @@ IMPL_LINK_NOARG(SwAssignFieldsDialog, OkHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamNone*, void)
 {
-    uno::Sequence< OUString > aAssignments = CreateAssignments();
+    cpo::uno::Sequence< OUString > aAssignments = CreateAssignments();
     const OUString sPreview = SwAddressPreview::FillData(
             m_rPreviewString, m_rConfigItem, &aAssignments);
     m_xPreview->SetAddress(sPreview);

@@ -74,7 +74,7 @@ Sequence< Type > OPreparedStatement::getTypes()
 
 Sequence< sal_Int8 > OPreparedStatement::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // css::uno::XInterface

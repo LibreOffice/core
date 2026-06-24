@@ -61,7 +61,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XComponent
         virtual  void SAL_CALL dispose() override = 0;
@@ -69,7 +69,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         virtual  void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XInitialization
-        virtual  void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual  void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUpdatable
         virtual  void SAL_CALL update() override;
@@ -97,7 +97,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         virtual  ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper() override;
         virtual  css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
-        static css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
+        static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         comphelper::OMultiTypeInterfaceContainerHelper2        m_aListenerContainer;   /// container for ALL Listener
         OUString                                               m_aResourceURL;

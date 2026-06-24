@@ -31,11 +31,11 @@ class XPropertySetInfo_impl : public cppu::WeakImplHelper<
     {
     public:
         XPropertySetInfo_impl( TaskManager* pMyShell,const OUString& aUnqPath );
-        XPropertySetInfo_impl( TaskManager* pMyShell,const css::uno::Sequence< css::beans::Property >& seq );
+        XPropertySetInfo_impl( TaskManager* pMyShell,const cpo::uno::Sequence< css::beans::Property >& seq );
 
         virtual ~XPropertySetInfo_impl() override;
 
-        virtual css::uno::Sequence< css::beans::Property > SAL_CALL
+        virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL
         getProperties() override;
 
         virtual css::beans::Property SAL_CALL
@@ -46,7 +46,7 @@ class XPropertySetInfo_impl : public cppu::WeakImplHelper<
 
     private:
         TaskManager*                                               m_pMyShell;
-        css::uno::Sequence< css::beans::Property >           m_seq;
+        cpo::uno::Sequence< css::beans::Property >           m_seq;
     };
 }
 

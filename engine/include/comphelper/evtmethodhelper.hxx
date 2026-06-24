@@ -26,14 +26,14 @@ namespace com::sun::star::uno
 {
 class Type;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class E> class Sequence;
 }
 
 namespace comphelper
 {
-COMPHELPER_DLLPUBLIC css::uno::Sequence<OUString>
+COMPHELPER_DLLPUBLIC cpo::uno::Sequence<OUString>
 getEventMethodsForType(const css::uno::Type& type);
 
 } // namespace comphelper

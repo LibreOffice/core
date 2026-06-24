@@ -136,12 +136,12 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
     OSL_ENSURE(!m_pImpl->m_aProps.aTitle.isEmpty(), "OComponentDefinition::OComponentDefinition : invalid name !");
 }
 
-css::uno::Sequence<sal_Int8> OComponentDefinition::getImplementationId()
+cpo::uno::Sequence<sal_Int8> OComponentDefinition::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-css::uno::Sequence< css::uno::Type > OComponentDefinition::getTypes()
+cpo::uno::Sequence< css::uno::Type > OComponentDefinition::getTypes()
 {
     return  ::comphelper::concatSequences(
         ODataSettings::getTypes( ),
@@ -275,7 +275,7 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_OComponentDefinition(css::uno::XComponentContext* context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new dbaccess::OComponentDefinition(
             context, nullptr, std::make_shared<dbaccess::OComponentDefinition_Impl>()));

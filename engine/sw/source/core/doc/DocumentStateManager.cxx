@@ -240,7 +240,7 @@ public:
 
     void execute() override
     {
-        uno::Sequence<sal_Int8> buf;
+        cpo::uno::Sequence<sal_Int8> buf;
         while (m_xConnection->read(buf, 4) == 4)
         {
             sal_Int32 const size{static_cast<sal_uInt8>(buf[0])
@@ -253,7 +253,7 @@ public:
                 break;
             }
             SAL_INFO("sw.yrs", "YRS receive " << size);
-            ::std::unique_ptr<uno::Sequence<sal_Int8>> pBuf{new uno::Sequence<sal_Int8>(size)};
+            ::std::unique_ptr<cpo::uno::Sequence<sal_Int8>> pBuf{new cpo::uno::Sequence<sal_Int8>(size)};
             m_xConnection->read(*pBuf, size);
             Application::PostUserEvent(LINK(this, YrsThread, HandleMessage), pBuf.release());
         }
@@ -1071,7 +1071,7 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
     }
     // wrap this, not strictly needed but can't hurt?
     m_pDSM->m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()->StartAllAction();
-    ::std::unique_ptr<uno::Sequence<sal_Int8>> const pBuf{static_cast<uno::Sequence<sal_Int8>*>(pVoid)};
+    ::std::unique_ptr<cpo::uno::Sequence<sal_Int8>> const pBuf{static_cast<cpo::uno::Sequence<sal_Int8>*>(pVoid)};
     uint32_t const length{pBuf->size()};
     assert(length != 0);
     switch ((*pBuf)[0])
@@ -1082,7 +1082,7 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
             YTransaction *const pTxn{m_pDSM->m_pYrsSupplier->GetWriteTransaction()};
             uint32_t len{0};
             char * pSV = ytransaction_state_vector_v1(pTxn, &len);
-            uno::Sequence<sal_Int8> buf(5 + len);
+            cpo::uno::Sequence<sal_Int8> buf(5 + len);
             sal_Int8 * it{buf.getArray()};
             writeLength(it, len+1);
             *it = ::std::underlying_type_t<Message>(Message::SendStateVector);
@@ -1107,7 +1107,7 @@ IMPL_LINK(YrsThread, HandleMessage, void*, pVoid, void)
             uint32_t len{0};
             char * pUpdate = ytransaction_state_diff_v1(pTxn,
                 reinterpret_cast<char const*>(pBuf->begin()) + 1, length - 1, &len);
-            uno::Sequence<sal_Int8> buf(5 + len);
+            cpo::uno::Sequence<sal_Int8> buf(5 + len);
             sal_Int8 * it{buf.getArray()};
             writeLength(it, len+1);
             *it = ::std::underlying_type_t<Message>(Message::SendStateDiff);
@@ -1624,8 +1624,8 @@ void DocumentStateManager::YrsInitAcceptor()
         m_xAcceptor = css::connection::Acceptor::create(xContext);
         // TODO move to thread?
         uno::Reference<connection::XConnection> xConnection = m_xAcceptor->accept(conn);
-        uno::Sequence<sal_Int8> buf(4);
-        uno::Sequence<sal_Int8> data;
+        cpo::uno::Sequence<sal_Int8> buf(4);
+        cpo::uno::Sequence<sal_Int8> data;
         if (SfxMedium const*const pMedium{m_rDoc.GetDocShell()->GetMedium()})
         {
             OUString const url{pMedium->GetOrigURL()};
@@ -1647,7 +1647,7 @@ void DocumentStateManager::YrsInitAcceptor()
                     }
                     else
                     {
-                        ::std::vector<uno::Sequence<sal_Int8>> bufs;
+                        ::std::vector<cpo::uno::Sequence<sal_Int8>> bufs;
                         bool isDone{false};
                         do
                         {
@@ -1809,7 +1809,7 @@ void DocumentStateManager::YrsCommitModified(bool const isUnfinishedUndo)
         }
         if (m_pYrsReader.is())
         {
-            uno::Sequence<sal_Int8> buf(5);
+            cpo::uno::Sequence<sal_Int8> buf(5);
             sal_Int8 * it{buf.getArray()};
             writeLength(it, 1);
             *it = ::std::underlying_type_t<Message>(Message::RequestStateVector);

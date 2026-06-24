@@ -223,7 +223,7 @@ DECL_LISTENERMULTIPLEXER_END
 DECL_LISTENERMULTIPLEXER_START( TabListenerMultiplexer, css::awt::XTabListener )
     void SAL_CALL inserted( ::sal_Int32 ID ) override;
     void SAL_CALL removed( ::sal_Int32 ID ) override;
-    void SAL_CALL changed( ::sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& Properties ) override;
+    void SAL_CALL changed( ::sal_Int32 ID, const cpo::uno::Sequence< css::beans::NamedValue >& Properties ) override;
     void SAL_CALL activated( ::sal_Int32 ID ) override;
     void SAL_CALL deactivated( ::sal_Int32 ID ) override;
 DECL_LISTENERMULTIPLEXER_END

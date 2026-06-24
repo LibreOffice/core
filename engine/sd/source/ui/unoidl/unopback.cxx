@@ -170,7 +170,7 @@ bool SAL_CALL SdUnoPageBackground::supportsService( const OUString& ServiceName 
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames()
 {
     return { sUNO_Service_PageBackground, sUNO_Service_FillProperties };
 }
@@ -336,13 +336,13 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
     }
 }
 
-uno::Sequence< beans::PropertyState > SAL_CALL SdUnoPageBackground::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
+cpo::uno::Sequence< beans::PropertyState > SAL_CALL SdUnoPageBackground::getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName )
 {
     SolarMutexGuard aGuard;
 
     sal_Int32 nCount = aPropertyName.getLength();
 
-    uno::Sequence< beans::PropertyState > aPropertyStateSequence( nCount );
+    cpo::uno::Sequence< beans::PropertyState > aPropertyStateSequence( nCount );
 
     std::transform(aPropertyName.begin(), aPropertyName.end(), aPropertyStateSequence.getArray(),
         [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });

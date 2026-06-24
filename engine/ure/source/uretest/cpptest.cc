@@ -20,7 +20,7 @@
 
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
+#include "cpo/uno/Sequence.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
@@ -66,9 +66,9 @@ rtl::OUString getImplementationName() {
     return rtl::OUString("test.cpp.cpptest.Component");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
+cpo::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     rtl::OUString s("test.types.CppTest");
-    return css::uno::Sequence< rtl::OUString >(&s, 1);
+    return cpo::uno::Sequence< rtl::OUString >(&s, 1);
 }
 
 }

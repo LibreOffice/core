@@ -209,7 +209,7 @@ OUString SAL_CALL
     return u"AccessiblePageShape"_ustr;
 }
 
-css::uno::Sequence< OUString> SAL_CALL
+cpo::uno::Sequence< OUString> SAL_CALL
     AccessiblePageShape::getSupportedServiceNames()
 {
     ensureAlive();

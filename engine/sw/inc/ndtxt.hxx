@@ -80,10 +80,8 @@ namespace sw {
     namespace mark { enum class RestoreMode; }
 }
 
-namespace com::sun::star {
-    namespace uno {
-        template < class > class Sequence;
-    }
+namespace cpo::uno {
+    template < class > class Sequence;
 }
 
 typedef o3tl::sorted_vector< sal_Int32 > SwSoftPageBreakList;
@@ -412,7 +410,7 @@ public:
             const OUString & rText );
     void ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
             std::u16string_view aText,
-            const css::uno::Sequence<sal_Int32>& rOffsets );
+            const cpo::uno::Sequence<sal_Int32>& rOffsets );
 
     /// Virtual methods from ContentNode.
     virtual SwContentFrame *MakeFrame( SwFrame* ) override;

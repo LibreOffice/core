@@ -19,7 +19,7 @@
 #include <com/sun/star/table/CellContentType.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <comphelper/propertyvalue.hxx>
 #include <cppunit/TestAssert.h>
@@ -106,7 +106,7 @@ void SheetCell::testSheetCellProperties()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Able to set PropertyValue FormulaResultType2",
                                  aFormulaResultType2Get, aFormulaResultType2Set);
 
-    uno::Sequence<beans::PropertyValue> aPropValue{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> aPropValue{ comphelper::makePropertyValue(
         u"StyleName"_ustr, u"Result2"_ustr) };
 
     propName = u"ConditionalFormat"_ustr;

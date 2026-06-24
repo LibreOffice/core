@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
 
 namespace com::sun::star::ucb { class XCommandEnvironment; }
@@ -22,7 +22,7 @@ private:
     weld::Window* m_pTopLevel;
     rtl::Reference< ::ucbhelper::CommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;
-    css::uno::Sequence< OUString > m_aDenyList;
+    cpo::uno::Sequence< OUString > m_aDenyList;
 
     OUString m_sLastUpdatedDir;
 
@@ -43,7 +43,7 @@ public:
     void FillTreeEntry(const weld::TreeIter& rEntry);
     void FillTreeEntry(const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders);
     void SetTreePath(std::u16string_view sUrl);
-    void SetDenyList(const css::uno::Sequence< OUString >& rDenyList);
+    void SetDenyList(const cpo::uno::Sequence< OUString >& rDenyList);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

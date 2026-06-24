@@ -533,7 +533,7 @@ ScViewDataTable::ScViewDataTable(const ScDocument& rDoc) :
     nPixPosY[0]=nPixPosY[1]=0;
 }
 
-void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB nTab) const
+void ScViewDataTable::WriteUserDataSequence(cpo::uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB nTab) const
 {
     rSettings.realloc(SC_TABLE_VIEWSETTINGS_COUNT);
     beans::PropertyValue* pSettings = rSettings.getArray();
@@ -615,7 +615,7 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
     rViewData.GetDocument().GetDrawLayer()->WriteUserDataSequence(rSettings);
 }
 
-void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& aSettings, ScViewData& rViewData, SCTAB nTab, bool& rHasZoom )
+void ScViewDataTable::ReadUserDataSequence(const cpo::uno::Sequence <beans::PropertyValue>& aSettings, ScViewData& rViewData, SCTAB nTab, bool& rHasZoom )
 {
     rHasZoom = false;
 
@@ -3844,7 +3844,7 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
     // RecalcPixPos or so - also nMPos - also for ReadUserData ??!?!
 }
 
-void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings) const
+void ScViewData::WriteUserDataSequence(cpo::uno::Sequence <beans::PropertyValue>& rSettings) const
 {
     rSettings.realloc(SC_VIEWSETTINGS_COUNT);
     // + 1, because we have to put the view id in the sequence
@@ -3860,7 +3860,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     {
         if (maTabData[nTab])
         {
-            uno::Sequence <beans::PropertyValue> aTableViewSettings;
+            cpo::uno::Sequence <beans::PropertyValue> aTableViewSettings;
             maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
             OUString sTabName;
             GetDocument().GetName( nTab, sTabName );
@@ -3954,7 +3954,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     GetDocument().GetDrawLayer()->WriteUserDataSequence(rSettings);
 }
 
-void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>& rSettings)
+void ScViewData::ReadUserDataSequence(const cpo::uno::Sequence <beans::PropertyValue>& rSettings)
 {
     std::vector<bool> aHasZoomVect( GetDocument().GetTableCount(), false );
 
@@ -3974,14 +3974,14 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             uno::Reference<container::XNameContainer> xNameContainer;
             if ((rSetting.Value >>= xNameContainer) && xNameContainer->hasElements())
             {
-                const uno::Sequence< OUString > aNames(xNameContainer->getElementNames());
+                const cpo::uno::Sequence< OUString > aNames(xNameContainer->getElementNames());
                 for (const OUString& sTabName : aNames)
                 {
                     SCTAB nTab(0);
                     if (GetDocument().GetTable(sTabName, nTab))
                     {
                         cpo::uno::Any aAny = xNameContainer->getByName(sTabName);
-                        uno::Sequence<beans::PropertyValue> aTabSettings;
+                        cpo::uno::Sequence<beans::PropertyValue> aTabSettings;
                         if (aAny >>= aTabSettings)
                         {
                             EnsureTabDataSize(nTab + 1);

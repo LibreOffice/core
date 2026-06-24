@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -53,7 +53,7 @@ public:
 
     virtual bool SAL_CALL supportsService(OUString const & serviceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual OUString SAL_CALL
@@ -76,9 +76,9 @@ bool Translator::supportsService(OUString const & serviceName)
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > Translator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > Translator::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { u"com.sun.star.uri.ExternalUriReferenceTranslator"_ustr };
+    cpo::uno::Sequence< OUString > s { u"com.sun.star.uri.ExternalUriReferenceTranslator"_ustr };
     return s;
 }
 
@@ -179,7 +179,7 @@ OUString Translator::translateToExternal(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation(css::uno::XComponentContext* ,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return ::cppu::acquire(new Translator);
 }

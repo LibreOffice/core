@@ -33,11 +33,11 @@ namespace com::sun::star {
     namespace document { class XEventsSupplier; }
 }
 
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 typedef ::std::pair<
             OUString,
-            css::uno::Sequence<css::beans::PropertyValue> > EventNameValuesPair;
+            cpo::uno::Sequence<css::beans::PropertyValue> > EventNameValuesPair;
 
 /**
  * Import <script:events> element.
@@ -72,7 +72,7 @@ public:
 
     void AddEventValues(
         const OUString& rEventName,
-        const css::uno::Sequence<css::beans::PropertyValue> & rValues);
+        const cpo::uno::Sequence<css::beans::PropertyValue> & rValues);
 
     /// if the import operates in delayed mode, you can use this method
     /// to set all events that have been read on the XEventsSupplier
@@ -88,7 +88,7 @@ public:
     /// to obtain the value sequence for a specific event
     void GetEventSequence(
         const OUString& rName,
-        css::uno::Sequence<css::beans::PropertyValue> & rSequence );
+        cpo::uno::Sequence<css::beans::PropertyValue> & rSequence );
 
 protected:
 

@@ -89,7 +89,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
             @onerror    An empty list is returned.
         */
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) override;
 
         //  XIndexAccess
 

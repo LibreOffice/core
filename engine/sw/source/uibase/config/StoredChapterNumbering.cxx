@@ -93,7 +93,7 @@ public:
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override
     {
-        return ::cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
+        return ::cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
     }
 
     virtual bool SAL_CALL hasElements() override
@@ -127,7 +127,7 @@ public:
         }
         assert(pCharStyleName);
         ProgName dummy; // pass in empty HeadingStyleName - can't import anyway
-        uno::Sequence<beans::PropertyValue> const ret(
+        cpo::uno::Sequence<beans::PropertyValue> const ret(
             SwXNumberingRules::GetPropertiesForNumFormat(
                 *pNumFormat, *pCharStyleName, &dummy, u""_ustr));
         return cpo::uno::Any(ret);
@@ -139,7 +139,7 @@ public:
     {
         if (nIndex < 0 || MAXLEVEL <= nIndex)
             throw lang::IndexOutOfBoundsException();
-        uno::Sequence<beans::PropertyValue> props;
+        cpo::uno::Sequence<beans::PropertyValue> props;
         if (!(rElement >>= props))
             throw lang::IllegalArgumentException(u"invalid type"_ustr,
                     getXWeak(), 1);

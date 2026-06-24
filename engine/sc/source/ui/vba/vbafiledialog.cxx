@@ -109,7 +109,7 @@ sal_Int32 ScVbaFileDialog::Show()
                     break;
                 }
 
-                const uno::Sequence<OUString> aSelectedFiles = xFilePicker->getSelectedFiles();
+                const cpo::uno::Sequence<OUString> aSelectedFiles = xFilePicker->getSelectedFiles();
                 for( const auto& sURL : aSelectedFiles )
                 {
                     OUString sPath;
@@ -161,10 +161,10 @@ ScVbaFileDialog::getServiceImplName()
     return u"ScVbaFileDialog"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaFileDialog::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.FileDialog"_ustr
     };

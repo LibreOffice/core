@@ -41,7 +41,7 @@ namespace pcr
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::Property;
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;

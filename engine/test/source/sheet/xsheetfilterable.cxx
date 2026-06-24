@@ -18,7 +18,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -32,7 +32,7 @@ void XSheetFilterable::testCreateFilterDescriptor()
     uno::Reference< sheet::XSheetFilterable > xFA(init(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetFilterDescriptor > xSFD = xFA->createFilterDescriptor(true);
 
-    uno::Sequence< sheet::TableFilterField > xTFF{
+    cpo::uno::Sequence< sheet::TableFilterField > xTFF{
         { /* Connection   */ {},
           /* Field        */ 0,
           /* Operator     */ sheet::FilterOperator_GREATER_EQUAL,
@@ -57,7 +57,7 @@ void XSheetFilterable::testFilter()
     uno::Reference< sheet::XSheetFilterable > xFA(xSheet, UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetFilterDescriptor > xSFD = xFA->createFilterDescriptor(true);
 
-    uno::Sequence< sheet::TableFilterField > xTFF{
+    cpo::uno::Sequence< sheet::TableFilterField > xTFF{
         { /* Connection   */ {},
           /* Field        */ 0,
           /* Operator     */ sheet::FilterOperator_GREATER_EQUAL,

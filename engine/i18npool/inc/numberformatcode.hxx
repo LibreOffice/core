@@ -22,7 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/i18n/XNumberFormatCode.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <deque>
@@ -46,21 +46,21 @@ public:
 
     virtual css::i18n::NumberFormatCode SAL_CALL getDefault( sal_Int16 nFormatType, sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) override;
     virtual css::i18n::NumberFormatCode SAL_CALL getFormatCode( sal_Int16 nFormatIndex, const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL getAllFormatCode( sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) override;
-    virtual css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL getAllFormatCodes( const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL getAllFormatCode( sal_Int16 nFormatUsage, const css::lang::Locale& rLocale ) override;
+    virtual cpo::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL getAllFormatCodes( const css::lang::Locale& rLocale ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     std::mutex maMutex;
     css::uno::Reference < css::i18n::XLocaleData5 > m_xLocaleData;
-    typedef std::pair< css::lang::Locale, css::uno::Sequence< css::i18n::FormatElement > > FormatElementCacheItem;
+    typedef std::pair< css::lang::Locale, cpo::uno::Sequence< css::i18n::FormatElement > > FormatElementCacheItem;
     std::deque < FormatElementCacheItem > m_aFormatElementCache;
 
-    const css::uno::Sequence< css::i18n::FormatElement >& getFormats( const css::lang::Locale& rLocale );
+    const cpo::uno::Sequence< css::i18n::FormatElement >& getFormats( const css::lang::Locale& rLocale );
     static OUString mapElementTypeShortToString(sal_Int16 formatType);
     static sal_Int16 mapElementTypeStringToShort(std::u16string_view formatType);
     static OUString mapElementUsageShortToString(sal_Int16 formatUsage);

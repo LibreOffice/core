@@ -83,7 +83,7 @@ namespace frm
         void SetURL(const OUString& rURL);
         void DataAvailable();
 
-        css::uno::Sequence< css::uno::Type> _getTypes() override;
+        cpo::uno::Sequence< css::uno::Type> _getTypes() override;
         bool isDispatchUrlInternal() const { return m_bDispatchUrlInternal; }
         void     setDispatchUrlInternal(bool _bDispatch) { m_bDispatchUrlInternal = _bDispatch; }
 
@@ -136,7 +136,7 @@ namespace frm
         virtual void SAL_CALL setSubmission( const css::uno::Reference< css::form::submission::XSubmission >& _submission ) override;
 
         // XServiceInfo
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XEventListener
         using OControlModel::disposing;
@@ -204,7 +204,7 @@ namespace frm
         virtual void SAL_CALL removeSubmissionVetoListener( const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
 
         // XServiceInfo
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XEventListener
         using OControl::disposing;
@@ -234,7 +234,7 @@ namespace frm
     protected:
         virtual void actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& rEvt );
 
-        css::uno::Sequence< css::uno::Type > _getTypes() override;
+        cpo::uno::Sequence< css::uno::Type > _getTypes() override;
 
         /** approves the action by calling the approve listeners
             @return <TRUE/> if and only if the action has <em>not</em> been cancelled by a listener

@@ -42,7 +42,7 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
     if ((nSize < nIndex) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
 
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     if (!(aElement >>= aProps))
         throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
     if (nSize == nIndex)
@@ -66,7 +66,7 @@ void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, 
     if ((nIndex >= nSize) || (nIndex < 0))
         throw lang::IndexOutOfBoundsException();
 
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     if (!(aElement >>= aProps))
         throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
     maProperties[nIndex] = std::move(aProps);
@@ -90,7 +90,7 @@ cpo::uno::Any SAL_CALL IndexedPropertyValuesContainer::getByIndex( sal_Int32 nIn
 // XElementAccess
 css::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
 {
-    return cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
+    return cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get();
 }
 
 bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
@@ -109,7 +109,7 @@ bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& S
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.IndexedPropertyValues"_ustr };
 }
@@ -119,7 +119,7 @@ css::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSuppo
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 IndexedPropertyValuesContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new comphelper::IndexedPropertyValuesContainer());
 }

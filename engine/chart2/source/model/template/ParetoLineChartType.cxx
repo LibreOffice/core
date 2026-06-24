@@ -46,7 +46,7 @@ OUString SAL_CALL ParetoLineChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE;
 }
 
-uno::Sequence<OUString> ParetoLineChartType::getSupportedPropertyRoles()
+cpo::uno::Sequence<OUString> ParetoLineChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
@@ -61,7 +61,7 @@ bool SAL_CALL ParetoLineChartType::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL ParetoLineChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ParetoLineChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_PARETOLINE, u"com.sun.star.chart2.ChartType"_ustr };
 }
@@ -70,7 +70,7 @@ css::uno::Sequence<OUString> SAL_CALL ParetoLineChartType::getSupportedServiceNa
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_chart_ParetoLineChartType_get_implementation(
-    css::uno::XComponentContext* /*context*/, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* /*context*/, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::chart::ParetoLineChartType);
 }

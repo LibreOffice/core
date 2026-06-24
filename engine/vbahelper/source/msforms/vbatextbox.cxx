@@ -170,10 +170,10 @@ ScVbaTextBox::getServiceImplName()
     return u"ScVbaTextBox"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaTextBox::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.TextBox"_ustr
     };

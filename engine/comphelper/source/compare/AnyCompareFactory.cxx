@@ -20,7 +20,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -130,7 +130,7 @@ Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 AnyCompareFactory_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new AnyCompareFactory(context));
 }

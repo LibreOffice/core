@@ -37,7 +37,7 @@ namespace svt::table
 
 
     using css::uno::Reference;
-    using css::uno::Sequence;
+    using cpo::uno::Sequence;
     using css::uno::UNO_QUERY_THROW;
     using css::uno::UNO_QUERY;
     using css::awt::grid::XGridColumn;

@@ -845,7 +845,7 @@ Bitmap TemplateLocalView::scaleImg (const Bitmap &rImg, tools::Long width, tools
 bool TemplateLocalView::IsDefaultTemplate(const OUString& rPath)
 {
     SvtModuleOptions aModOpt;
-    const css::uno::Sequence<OUString> aServiceNames = aModOpt.GetAllServiceNames();
+    const cpo::uno::Sequence<OUString> aServiceNames = aModOpt.GetAllServiceNames();
 
     return std::any_of(aServiceNames.begin(), aServiceNames.end(), [&rPath](const OUString& rName) {
         return SfxObjectFactory::GetStandardTemplate(rName).match(rPath); });
@@ -900,7 +900,7 @@ bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)
 {
     const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::thePathSettings::get(xContext);
-    uno::Sequence<OUString> aInternalTemplateDirs;
+    cpo::uno::Sequence<OUString> aInternalTemplateDirs;
     cpo::uno::Any aAny = xPathSettings->getPropertyValue(u"Template_internal"_ustr);
     aAny >>= aInternalTemplateDirs;
     SfxURLRelocator_Impl aRelocator(xContext);

@@ -172,7 +172,7 @@ bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
         cpo::uno::Any a;
         aViewLayout.QueryValue( a );
 
-        css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"ViewLayout"_ustr,
+        cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"ViewLayout"_ustr,
                                                                                             a) };
         execute( aArgs );
     }

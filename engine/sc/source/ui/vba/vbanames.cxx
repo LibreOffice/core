@@ -248,10 +248,10 @@ ScVbaNames::getServiceImplName()
     return u"ScVbaNames"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaNames::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.NamedRanges"_ustr
     };

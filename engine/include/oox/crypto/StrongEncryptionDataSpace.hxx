@@ -35,7 +35,7 @@ class StrongEncryptionDataSpace final
     std::unique_ptr<CryptoEngine> mCryptoEngine;
 
     css::uno::Reference<css::io::XInputStream>
-    getStream(const css::uno::Sequence<css::beans::NamedValue>& rStreams,
+    getStream(const cpo::uno::Sequence<css::beans::NamedValue>& rStreams,
               std::u16string_view sStreamName);
 
 public:
@@ -45,7 +45,7 @@ public:
 
     virtual bool SAL_CALL generateEncryptionKey(const OUString& rPassword) override;
     virtual bool SAL_CALL
-    readEncryptionInfo(const css::uno::Sequence<css::beans::NamedValue>& aStreams) override;
+    readEncryptionInfo(const cpo::uno::Sequence<css::beans::NamedValue>& aStreams) override;
     virtual bool SAL_CALL
     decrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
             css::uno::Reference<css::io::XOutputStream>& rxOutputStream) override;
@@ -54,19 +54,19 @@ public:
 
     // Encryption
 
-    virtual css::uno::Sequence<css::beans::NamedValue>
+    virtual cpo::uno::Sequence<css::beans::NamedValue>
         SAL_CALL encrypt(const css::uno::Reference<css::io::XInputStream>& rxInputStream) override;
 
     virtual bool SAL_CALL
-    setupEncryption(const css::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
+    setupEncryption(const cpo::uno::Sequence<css::beans::NamedValue>& rMediaEncData) override;
 
-    virtual css::uno::Sequence<css::beans::NamedValue>
+    virtual cpo::uno::Sequence<css::beans::NamedValue>
         SAL_CALL createEncryptionData(const OUString& rPassword) override;
 
     // com.sun.star.lang.XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 } // namespace oox::crypto

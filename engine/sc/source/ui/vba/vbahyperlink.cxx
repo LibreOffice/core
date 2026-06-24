@@ -34,7 +34,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaHyperlink::ScVbaHyperlink( const uno::Sequence< cpo::uno::Any >& rArgs,
+ScVbaHyperlink::ScVbaHyperlink( const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
         const uno::Reference< uno::XComponentContext >& rxContext ) :
     HyperlinkImpl_BASE( getXSomethingFromArgs< XHelperInterface >( rArgs, 0 ), rxContext ),
     mxCell( getXSomethingFromArgs< table::XCell >( rArgs, 1, false ) ),
@@ -227,7 +227,7 @@ void ScVbaHyperlink::setUrlComponents( const UrlComponents& rUrlComp )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaHyperlink_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaHyperlink(args, context));
 }

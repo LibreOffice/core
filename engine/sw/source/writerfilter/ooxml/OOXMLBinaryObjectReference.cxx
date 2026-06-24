@@ -39,7 +39,7 @@ OOXMLBinaryObjectReference::~OOXMLBinaryObjectReference()
 void OOXMLBinaryObjectReference::read()
 {
     sal_uInt32 nMaxReadBytes = 1024*1024;
-    uno::Sequence<sal_Int8> aSeq(nMaxReadBytes);
+    cpo::uno::Sequence<sal_Int8> aSeq(nMaxReadBytes);
     uno::Reference<io::XInputStream> xInputStream =
         mpStream->getDocumentStream();
 

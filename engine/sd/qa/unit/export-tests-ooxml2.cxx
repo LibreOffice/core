@@ -775,7 +775,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92527)
     xPage1->add(xShape1);
     xShape1->setSize(awt::Size(10000, 10000));
     xShape1->setPosition(awt::Point(1000, 1000));
-    uno::Sequence<beans::PropertyValue> aShapeGeometry(comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aShapeGeometry(comphelper::InitPropertySequence({
         { "Type", cpo::uno::Any(u"diamond"_ustr) },
     }));
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
@@ -788,20 +788,20 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf92527)
                                               uno::UNO_QUERY_THROW);
     uno::Reference<drawing::XShape> xShape2(xPage2->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet2(xShape2, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xPropertySet2->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aProps;
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
-            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+            aPathProps = rProp.Value.get<cpo::uno::Sequence<beans::PropertyValue>>();
     }
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
     for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "Coordinates")
             aCoordinates
-                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+                = rProp.Value.get<cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
     }
 
     // 4 coordinate pairs

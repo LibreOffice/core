@@ -148,7 +148,7 @@ bool SAL_CALL SalAquaFolderPicker::supportsService( const OUString& sServiceName
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SalAquaFolderPicker::getSupportedServiceNames()
 {
     return { "com.sun.star.ui.dialogs.SystemFolderPicker", "com.sun.star.ui.dialogs.AquaFolderPicker" };
 }
@@ -170,7 +170,7 @@ void SAL_CALL SalAquaFolderPicker::disposing( const lang::EventObject& )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_SalAquaFolderPicker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SalAquaFolderPicker());
 }

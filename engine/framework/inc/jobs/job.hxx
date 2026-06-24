@@ -166,12 +166,12 @@ class Job final : public  ::cppu::WeakImplHelper<
         void     setDispatchResultFake( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,
                                         const css::uno::Reference< css::uno::XInterface >&                xSourceFake  );
         void     setJobData           ( const JobData&                                                    aData        );
-        void     execute              ( const css::uno::Sequence< css::beans::NamedValue >&               lDynamicArgs );
+        void     execute              ( const cpo::uno::Sequence< css::beans::NamedValue >&               lDynamicArgs );
         void     die                  (                                                                                );
 
     private:
 
-        css::uno::Sequence< css::beans::NamedValue > impl_generateJobArgs  ( const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs );
+        cpo::uno::Sequence< css::beans::NamedValue > impl_generateJobArgs  ( const cpo::uno::Sequence< css::beans::NamedValue >& lDynamicArgs );
         void                                         impl_reactForJobResult( const cpo::uno::Any&                                aResult      );
         void                                         impl_startListening   (                                                                  );
         void                                         impl_stopListening    (                                                                  );

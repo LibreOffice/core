@@ -65,12 +65,12 @@ public:
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     void updateSignature( const css::uno::Reference< css::xml::crypto::XXMLSignature >& xSignature,
                           const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& xContext ) { m_xXMLSignature = xSignature; m_xXMLSecurityContext = xContext; }
@@ -80,7 +80,7 @@ public:
 OUString SignatureVerifierImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  );
+cpo::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  );
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

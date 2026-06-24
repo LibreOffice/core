@@ -137,7 +137,7 @@ namespace cmis
                 = ::comphelper::getProcessComponentContext();
             uno::Reference<task::XPasswordContainer2> xMasterPasswd
                 = task::PasswordContainer::create(xContext);
-            uno::Sequence<OUString> aPasswd{ STD_TO_OUSTR(refreshToken) };
+            cpo::uno::Sequence<OUString> aPasswd{ STD_TO_OUSTR(refreshToken) };
             if (xMasterPasswd->isPersistentStoringAllowed())
             {
                 if (xMasterPasswd->hasMasterPassword())

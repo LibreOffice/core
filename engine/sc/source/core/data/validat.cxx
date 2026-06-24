@@ -207,7 +207,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     OUString aPosStr(rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDocument, rDocument.GetAddressConvention()));
 
     // Set up parameters
-    css::uno::Sequence< cpo::uno::Any > aParams{ aParam0, cpo::uno::Any(aPosStr) };
+    cpo::uno::Sequence< cpo::uno::Any > aParams{ aParam0, cpo::uno::Any(aPosStr) };
 
     //  use link-update flag to prevent closing the document
     //  while the macro is running
@@ -219,8 +219,8 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
         rDocument.LockTable( rPos.Tab() );
 
     cpo::uno::Any aRet;
-    css::uno::Sequence< sal_Int16 > aOutArgsIndex;
-    css::uno::Sequence< cpo::uno::Any > aOutArgs;
+    cpo::uno::Sequence< sal_Int16 > aOutArgsIndex;
+    cpo::uno::Sequence< cpo::uno::Any > aOutArgs;
 
     ErrCode eRet = pDocSh->CallXScript(
         aErrorTitle, aParams, aRet, aOutArgsIndex, aOutArgs );

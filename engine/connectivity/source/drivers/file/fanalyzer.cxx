@@ -29,6 +29,7 @@ using namespace ::connectivity::file;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::cpo::uno;
 
 OSQLAnalyzer::OSQLAnalyzer(OConnection* _pConnection)
                :m_pConnection(_pConnection)

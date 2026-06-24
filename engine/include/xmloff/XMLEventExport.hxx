@@ -38,7 +38,7 @@ namespace com::sun::star {
 }
 
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 typedef ::std::map< OUString, std::unique_ptr<XMLEventExportHandler> > HandlerMap;
 typedef ::std::map< OUString, XMLEventName > NameMap;
@@ -103,7 +103,7 @@ public:
 
     /// export a single event (writes <office:events> element)
     void ExportSingleEvent(
-        const css::uno::Sequence<css::beans::PropertyValue>& rEventValues,
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rEventValues,
         const OUString& rApiEventName,
         bool bUseWhitespace = true );
 
@@ -111,7 +111,7 @@ private:
 
     /// export one event (start container-element if necessary)
     SAL_DLLPRIVATE void ExportEvent(
-        const css::uno::Sequence<css::beans::PropertyValue>& rEventValues,
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rEventValues,
         const XMLEventName& rXmlEventName,
         bool bUseWhitespace,
         bool& rExported);

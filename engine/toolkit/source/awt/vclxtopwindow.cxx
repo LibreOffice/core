@@ -40,12 +40,12 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 
-cpo::uno::Any VCLXTopWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
+cpo::uno::Any VCLXTopWindow::getWindowHandle( const cpo::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {
     SolarMutexGuard aGuard;
 

@@ -54,13 +54,13 @@ public:
 
     // XTypeProvider
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -81,7 +81,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XCachedDynamicResultSetStubFactory
 
@@ -93,7 +93,7 @@ public:
     virtual void SAL_CALL connectToCache(
                   const css::uno::Reference< css::ucb::XDynamicResultSet > & Source
                 , const css::uno::Reference< css::ucb::XDynamicResultSet > & TargetCache
-                , const css::uno::Sequence< css::ucb::NumberedSortingInfo > & SortingInfo
+                , const cpo::uno::Sequence< css::ucb::NumberedSortingInfo > & SortingInfo
                 , const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory
                 ) override;
 };

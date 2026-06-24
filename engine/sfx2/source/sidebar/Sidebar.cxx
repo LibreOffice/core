@@ -54,7 +54,7 @@ void Sidebar::ShowDeck(std::u16string_view rsDeckId, SfxViewFrame* pViewFrame, b
         const util::URL aURL(Tools::GetURL(u".uno:Sidebar"_ustr));
         css::uno::Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(pViewFrame->GetFrame().GetFrameInterface(), aURL));
         if (xDispatch.is())
-            xDispatch->dispatch(aURL, css::uno::Sequence<beans::PropertyValue>());
+            xDispatch->dispatch(aURL, cpo::uno::Sequence<beans::PropertyValue>());
     }
     else
     {

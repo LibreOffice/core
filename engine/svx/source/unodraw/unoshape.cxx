@@ -242,13 +242,13 @@ cpo::uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type& rType )
     return SvxShape_UnoImplHelper::queryAggregation(rType);
 }
 
-const css::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() noexcept
+const cpo::uno::Sequence< sal_Int8 > & SvxShape::getUnoTunnelId() noexcept
 {
     static const comphelper::UnoIdInit theSvxShapeUnoTunnelId;
     return theSvxShapeUnoTunnelId.getSeq();
 }
 
-sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL SvxShape::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     return comphelper::getSomethingImpl(rId, this);
 }
@@ -645,7 +645,7 @@ cpo::uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
             nullptr,
             false);
 
-        const uno::Sequence<sal_Int8> aSeq(
+        const cpo::uno::Sequence<sal_Int8> aSeq(
             static_cast< const sal_Int8* >(aDestStrm.GetData()),
             aDestStrm.GetEndOfData());
 
@@ -709,7 +709,7 @@ cpo::uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     return aAny;
 }
 
-uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
 {
     if( mpImpl->mpMaster )
     {
@@ -722,7 +722,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
 }
 
 
-uno::Sequence< uno::Type > const & SvxShape::_getTypes()
+cpo::uno::Sequence< uno::Type > const & SvxShape::_getTypes()
 {
     switch( mpImpl->mnObjId )
     {
@@ -738,7 +738,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     case SdrObjKind::Media:
     case SdrObjKind::Table:
         {
-            static uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -758,7 +758,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // group shape
     case SdrObjKind::Group:
         {
-            static uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -780,7 +780,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // connector shape
     case SdrObjKind::Edge:
         {
-            static uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -805,7 +805,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // control shape
     case SdrObjKind::UNO:
         {
-            static uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -826,7 +826,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     // 3d scene shape
     case SdrObjKind::E3D_Scene:
         {
-            static uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -846,7 +846,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
         }
     case SdrObjKind::CustomShape:
         {
-            static uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -887,7 +887,7 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
     case SdrObjKind::OLE2: // #i118485# Moved to shapes with text
     default:
         {
-            static uno::Sequence<uno::Type> aTypeSequence{
+            static cpo::uno::Sequence<uno::Type> aTypeSequence{
                 cppu::UnoType<drawing::XShape>::get(),
                 cppu::UnoType<lang::XComponent>::get(),
                 cppu::UnoType<beans::XPropertySet>::get(),
@@ -913,9 +913,9 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
 }
 
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) noexcept
@@ -1669,7 +1669,7 @@ cpo::uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
 
 
 // XMultiPropertySet
-void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues )
+void SAL_CALL SvxShape::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues )
 {
     ::SolarMutexGuard aSolarGuard;
 
@@ -1739,12 +1739,12 @@ void SvxShape::endSetPropertyValues()
 }
 
 
-css::uno::Sequence< cpo::uno::Any > SAL_CALL SvxShape::getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL SvxShape::getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     const sal_Int32 nCount = aPropertyNames.getLength();
     const OUString* pNames = aPropertyNames.getConstArray();
 
-    uno::Sequence< cpo::uno::Any > aRet( nCount );
+    cpo::uno::Sequence< cpo::uno::Any > aRet( nCount );
     cpo::uno::Any* pValue = aRet.getArray();
 
     if( mpImpl->mpMaster )
@@ -1782,7 +1782,7 @@ css::uno::Sequence< cpo::uno::Any > SAL_CALL SvxShape::getPropertyValues( const 
     return aRet;
 }
 
-void SAL_CALL SvxShape::addPropertiesChangeListener( const css::uno::Sequence< OUString >& , const css::uno::Reference< css::beans::XPropertiesChangeListener >&  )
+void SAL_CALL SvxShape::addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& , const css::uno::Reference< css::beans::XPropertiesChangeListener >&  )
 {
 }
 
@@ -1790,7 +1790,7 @@ void SAL_CALL SvxShape::removePropertiesChangeListener( const css::uno::Referenc
 {
 }
 
-void SAL_CALL SvxShape::firePropertiesChangeEvent( const css::uno::Sequence< OUString >& , const css::uno::Reference< css::beans::XPropertiesChangeListener >&  )
+void SAL_CALL SvxShape::firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& , const css::uno::Reference< css::beans::XPropertiesChangeListener >&  )
 {
 }
 
@@ -2922,7 +2922,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                     if ( aLnk.GetType() == GfxLinkType::NativeWmf )
                     {
                         bIsWMF = true;
-                        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const *>(aLnk.GetData()), static_cast<sal_Int32>(aLnk.GetDataSize()));
+                        cpo::uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const *>(aLnk.GetData()), static_cast<sal_Int32>(aLnk.GetDataSize()));
                         rValue <<= aSeq;
                     }
                 }
@@ -2932,7 +2932,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                     GDIMetaFile aMtf(pGraphic->GetGDIMetaFile());
                     SvMemoryStream aDestStrm( 65535, 65535 );
                     ConvertGDIMetaFileToWMF( aMtf, aDestStrm, nullptr, false );
-                    const uno::Sequence<sal_Int8> aSeq(
+                    const cpo::uno::Sequence<sal_Int8> aSeq(
                         static_cast< const sal_Int8* >(aDestStrm.GetData()),
                         aDestStrm.GetEndOfData());
                     rValue <<= aSeq;
@@ -3027,10 +3027,10 @@ bool SvxShape::setPropertyToDefaultImpl( const SfxItemPropertyMapEntry* pPropert
 }
 
 
-uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
+cpo::uno::Sequence< beans::PropertyState > SAL_CALL SvxShape::getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName )
 {
     const sal_Int32 nCount = aPropertyName.getLength();
-    uno::Sequence< beans::PropertyState > aRet( nCount );
+    cpo::uno::Sequence< beans::PropertyState > aRet( nCount );
 
     std::transform(aPropertyName.begin(), aPropertyName.end(), aRet.getArray(),
         [this](const OUString& rName) -> beans::PropertyState { return getPropertyState(rName); });
@@ -3138,20 +3138,20 @@ void SvxShape::setAllPropertiesToDefault()
 }
 
 void SvxShape::setPropertiesToDefault(
-    const uno::Sequence<OUString>& aPropertyNames )
+    const cpo::uno::Sequence<OUString>& aPropertyNames )
 {
     for ( const auto& rPropertyName : aPropertyNames )
         setPropertyToDefault( rPropertyName );
 }
 
-uno::Sequence<cpo::uno::Any> SvxShape::getPropertyDefaults(
-    const uno::Sequence<OUString>& aPropertyNames )
+cpo::uno::Sequence<cpo::uno::Any> SvxShape::getPropertyDefaults(
+    const cpo::uno::Sequence<OUString>& aPropertyNames )
 {
     ::std::vector<cpo::uno::Any> ret;
     ret.reserve(aPropertyNames.getLength());
     std::transform(aPropertyNames.begin(), aPropertyNames.end(), std::back_inserter(ret),
         [this](const OUString& rName) -> cpo::uno::Any { return getPropertyDefault(rName); });
-    return uno::Sequence<cpo::uno::Any>( ret.data(), ret.size() );
+    return cpo::uno::Sequence<cpo::uno::Any>( ret.data(), ret.size() );
 }
 
 
@@ -3206,7 +3206,7 @@ constexpr OUString sUNO_service_drawing_ConnectorShape    = u"com.sun.star.drawi
 constexpr OUString sUNO_service_drawing_MediaShape        = u"com.sun.star.drawing.MediaShape"_ustr;
 
 
-uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
 {
     if( mpImpl->mpMaster )
     {
@@ -3218,7 +3218,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
     }
 }
 
-uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 {
     ::SolarMutexGuard aGuard;
 
@@ -3230,14 +3230,14 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         {
         case SdrObjKind::Group:
             {
-                static const uno::Sequence<OUString> aSvxShape_GroupServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_GroupServices
                         = { sUNO_service_drawing_GroupShape,
                             sUNO_service_drawing_Shape };
                 return aSvxShape_GroupServices;
             }
         case SdrObjKind::CustomShape:
             {
-                static const uno::Sequence<OUString> aSvxShape_CustomShapeServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_CustomShapeServices
                         = { sUNO_service_drawing_CustomShape,
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_CustomShapeProperties,
@@ -3256,7 +3256,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
             }
         case SdrObjKind::Line:
             {
-                static const uno::Sequence<OUString> aSvxShape_LineServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_LineServices
                         = { sUNO_service_drawing_LineShape,
 
                             sUNO_service_drawing_Shape,
@@ -3278,7 +3278,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::Rectangle:
             {
-                static const uno::Sequence<OUString> aSvxShape_RectServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_RectServices
                         = { sUNO_service_drawing_RectangleShape,
 
                             sUNO_service_drawing_Shape,
@@ -3302,7 +3302,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         case SdrObjKind::CircleArc:
         case SdrObjKind::CircleCut:
             {
-                static const uno::Sequence<OUString> aSvxShape_CircServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_CircServices
                         = { sUNO_service_drawing_EllipseShape,
 
                             sUNO_service_drawing_Shape,
@@ -3325,7 +3325,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         case SdrObjKind::PathPolyLine:
         case SdrObjKind::PolyLine:
             {
-                static const uno::Sequence<OUString> aSvxShape_PathServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_PathServices
                         = { sUNO_service_drawing_PolyLineShape,
 
                             sUNO_service_drawing_Shape,
@@ -3349,7 +3349,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         case SdrObjKind::PathPoly:
         case SdrObjKind::Polygon:
             {
-                static const uno::Sequence<OUString> aSvxShape_PolyServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_PolyServices
                         = { sUNO_service_drawing_PolyPolygonShape,
 
                             sUNO_service_drawing_Shape,
@@ -3374,7 +3374,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         case SdrObjKind::FreehandLine:
         case SdrObjKind::PathLine:
             {
-                static const uno::Sequence<OUString> aSvxShape_FreeLineServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_FreeLineServices
                         = { sUNO_service_drawing_OpenBezierShape,
 
                             sUNO_service_drawing_Shape,
@@ -3399,7 +3399,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         case SdrObjKind::FreehandFill:
         case SdrObjKind::PathFill:
             {
-                static const uno::Sequence<OUString> aSvxShape_FreeFillServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_FreeFillServices
                         = { sUNO_service_drawing_ClosedBezierShape,
 
                             sUNO_service_drawing_Shape,
@@ -3425,7 +3425,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         case SdrObjKind::TitleText:
         case SdrObjKind::Text:
             {
-                static const uno::Sequence<OUString> aSvxShape_TextServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_TextServices
                         = { sUNO_service_drawing_TextShape,
 
                             sUNO_service_drawing_Shape,
@@ -3446,7 +3446,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
             }
         case SdrObjKind::Annotation:
             {
-                static const uno::Sequence<OUString> aSvxShape_AnnotationServices = {
+                static const cpo::uno::Sequence<OUString> aSvxShape_AnnotationServices = {
                             sUNO_service_drawing_AnnotationShape,
 
                             sUNO_service_drawing_Shape,
@@ -3469,7 +3469,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::Graphic:
             {
-                static const uno::Sequence<OUString> aSvxShape_GrafServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_GrafServices
                         = { sUNO_service_drawing_GraphicObjectShape,
 
                             sUNO_service_drawing_Shape,
@@ -3489,7 +3489,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::OLE2:
             {
-                static const uno::Sequence<OUString> aSvxShape_Ole2Services
+                static const cpo::uno::Sequence<OUString> aSvxShape_Ole2Services
                         = { sUNO_service_drawing_OLE2Shape,
                             sUNO_service_drawing_Shape,
 
@@ -3509,7 +3509,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::Caption:
             {
-                static const uno::Sequence<OUString> aSvxShape_CaptionServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_CaptionServices
                         = { sUNO_service_drawing_CaptionShape,
 
                             sUNO_service_drawing_Shape,
@@ -3531,7 +3531,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::Page:
             {
-                static const uno::Sequence<OUString> aSvxShape_PageServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_PageServices
                         = { sUNO_service_drawing_PageShape,
                             sUNO_service_drawing_Shape };
                 return aSvxShape_PageServices;
@@ -3539,7 +3539,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::Measure:
             {
-                static const uno::Sequence<OUString> aSvxShape_MeasureServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_MeasureServices
                         = { sUNO_service_drawing_MeasureShape,
 
                             sUNO_service_drawing_MeasureProperties,
@@ -3563,7 +3563,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::OLEPluginFrame:
             {
-                static const uno::Sequence<OUString> aSvxShape_FrameServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_FrameServices
                         = { sUNO_service_drawing_FrameShape,
                             sUNO_service_drawing_Shape };
                 return aSvxShape_FrameServices;
@@ -3571,7 +3571,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::UNO:
             {
-                static const uno::Sequence<OUString> aSvxShape_UnoServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_UnoServices
                         = { sUNO_service_drawing_ControlShape,
                             sUNO_service_drawing_Shape };
                 return aSvxShape_UnoServices;
@@ -3579,7 +3579,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
 
         case SdrObjKind::Edge:
             {
-                static const uno::Sequence<OUString> aSvxShape_EdgeServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_EdgeServices
                         = { sUNO_service_drawing_ConnectorShape,
                             sUNO_service_drawing_ConnectorProperties,
 
@@ -3601,7 +3601,7 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
             }
         case SdrObjKind::Media:
             {
-                static const uno::Sequence<OUString> aSvxShape_MediaServices
+                static const cpo::uno::Sequence<OUString> aSvxShape_MediaServices
                         = { sUNO_service_drawing_MediaShape,
                             sUNO_service_drawing_Shape };
                 return aSvxShape_MediaServices;
@@ -3615,13 +3615,13 @@ uno::Sequence< OUString > SvxShape::_getSupportedServiceNames()
         const SdrObjKind nIdent = GetSdrObject()->GetObjIdentifier();
         OSL_ENSURE( nIdent == SdrObjKind::UNO, "SvxShape::_getSupportedServiceNames: SdrInventor::FmForm, but no UNO object?" );
 #endif
-        static const uno::Sequence<OUString> aSvxShape_UnoServices
+        static const cpo::uno::Sequence<OUString> aSvxShape_UnoServices
                 = { sUNO_service_drawing_ControlShape,
                     sUNO_service_drawing_Shape };
         return aSvxShape_UnoServices;
     }
     OSL_FAIL( "SvxShape::_getSupportedServiceNames: could not determine object type!" );
-    uno::Sequence< OUString > aSeq;
+    cpo::uno::Sequence< OUString > aSeq;
     return aSeq;
 }
 
@@ -3860,7 +3860,7 @@ OUString SAL_CALL SvxShapeText::getImplementationName()
 }
 
 
-uno::Sequence< OUString > SAL_CALL SvxShapeText::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxShapeText::getSupportedServiceNames()
 {
     return SvxShape::getSupportedServiceNames();
 }
@@ -3873,12 +3873,12 @@ bool SAL_CALL SvxShapeText::supportsService( const OUString& ServiceName )
 
     // XTypeProvider
 
-uno::Sequence< uno::Type > SAL_CALL SvxShapeText::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxShapeText::getTypes()
 {
     return SvxShape::getTypes();
 }
 
-sal_Int64 SAL_CALL SvxShapeText::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL SvxShapeText::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     const sal_Int64 nReturn = SvxShape::getSomething( rId );
     if( nReturn )
@@ -3888,9 +3888,9 @@ sal_Int64 SAL_CALL SvxShapeText::getSomething( const css::uno::Sequence< sal_Int
 }
 
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxShapeText::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxShapeText::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 
@@ -4020,7 +4020,7 @@ cpo::uno::Any SAL_CALL SvxShapeRect::queryAggregation( const uno::Type & rType )
 
 // XServiceInfo
 
-uno::Sequence< OUString > SvxShapeRect::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SvxShapeRect::getSupportedServiceNames()
 {
     return SvxShape::getSupportedServiceNames();
 }

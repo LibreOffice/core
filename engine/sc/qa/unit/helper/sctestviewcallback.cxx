@@ -49,7 +49,7 @@ void ScTestEditCursorMessage::parseMessage(const char* pMessage)
     else
         return; // happens in testTextBoxInsert test
 
-    uno::Sequence<OUString> aSeq
+    cpo::uno::Sequence<OUString> aSeq
         = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aSeq.getLength());
     m_aRefPoint.setX(aSeq[0].toInt32());
@@ -97,7 +97,7 @@ void ScTestTextSelectionMessage::parseMessage(const char* pMessage)
         = (nRefDelimStart == std::string::npos)
               ? std::string("0, 0")
               : aStr.substr(nRefDelimStart + 2, aStr.length() - 2 - nRefDelimStart);
-    uno::Sequence<OUString> aSeq
+    cpo::uno::Sequence<OUString> aSeq
         = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aRefPointString));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aSeq.getLength());
     m_aRefPoint.setX(aSeq[0].toInt32());
@@ -188,7 +188,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
         case KIT_CALLBACK_CELL_CURSOR:
         {
             m_bOwnCursorInvalidated = true;
-            uno::Sequence<OUString> aSeq
+            cpo::uno::Sequence<OUString> aSeq
                 = comphelper::string::convertCommaSeparated(OUString::createFromAscii(pPayload));
             m_aCellCursorBounds = tools::Rectangle();
             if (aSeq.getLength() == 6)
@@ -239,7 +239,7 @@ void ScTestViewCallback::callbackImpl(int nType, const char* pPayload)
             }
             else
             {
-                uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
+                cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
                     OUString::createFromAscii(pPayload));
                 CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 6);
                 tools::Rectangle aInvalidationRect;

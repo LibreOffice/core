@@ -20,7 +20,7 @@
 #define INCLUDED_VBAHELPER_VBAGLOBALBASE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <ooo/vba/XGlobalsBase.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -44,15 +44,15 @@ class VBAHELPER_DLLPUBLIC VbaGlobalsBase : public Globals_BASE
     const OUString msDocCtxName;
 protected:
     bool hasServiceName( const OUString& serviceName );
-    void init(  const css::uno::Sequence< css::beans::PropertyValue >& aInitArgs );
+    void init(  const cpo::uno::Sequence< css::beans::PropertyValue >& aInitArgs );
 
 public:
     VbaGlobalsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const OUString& sDocCtxName );
     virtual ~VbaGlobalsBase() override;
     // XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 };
 #endif
 

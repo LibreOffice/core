@@ -831,7 +831,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventList
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 eventattacher_EventAttacher(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new comp_EventAttacher::EventAttacherImpl(context));
 }

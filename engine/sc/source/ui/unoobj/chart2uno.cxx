@@ -88,7 +88,7 @@ std::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {
-        { SC_UNONAME_HIDDENVALUES, 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(),                 0, 0 },
+        { SC_UNONAME_HIDDENVALUES, 0, cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),                 0, 0 },
         { SC_UNONAME_ROLE, 0, cppu::UnoType<css::chart2::data::DataSequenceRole>::get(),                  0, 0 },
         { SC_UNONAME_INCLUDEHIDDENCELLS, 0,        cppu::UnoType<bool>::get(),                  0, 0 },
     };
@@ -1010,7 +1010,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
 }
 
-bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Sequence< beans::PropertyValue >& aArguments )
+bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const cpo::uno::Sequence< beans::PropertyValue >& aArguments )
 {
     SolarMutexGuard aGuard;
     if( ! m_pDocument )
@@ -1421,7 +1421,7 @@ void shrinkToDataRange(ScDocument* pDoc, std::vector<ScTokenRef>& rRefTokens)
 
 uno::Reference< chart2::data::XDataSource> SAL_CALL
 ScChart2DataProvider::createDataSource(
-    const uno::Sequence< beans::PropertyValue >& aArguments )
+    const cpo::uno::Sequence< beans::PropertyValue >& aArguments )
 {
     SolarMutexGuard aGuard;
     if ( ! m_pDocument )
@@ -1432,7 +1432,7 @@ ScChart2DataProvider::createDataSource(
     bool bCategories = false;
     bool bOrientCol = true;
     OUString aRangeRepresentation;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
     bool bTimeBased = false;
     for(const auto& rArgument : aArguments)
     {
@@ -1795,7 +1795,7 @@ std::pair<OUString, OUString> constructKey(const uno::Reference< chart2::data::X
 
 } //end anonymous namespace
 
-uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArguments(
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArguments(
     const uno::Reference< chart2::data::XDataSource >& xDataSource )
 {
     std::vector< beans::PropertyValue > aResult;
@@ -1823,7 +1823,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         sal_Int32 nDataInCols = 0;
         bool bRowSourceAmbiguous = false;
 
-        const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
+        const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
         const sal_Int32 nCount( aSequences.getLength());
         RangeAnalyzer aPrevLabel,aPrevValues;
         for( const uno::Reference< chart2::data::XLabeledDataSequence >& xLS : aSequences )
@@ -2023,9 +2023,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
         if( xDataSource.is() && xCompareDataSource.is() )
         {
-            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aOldSequences =
+            const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aOldSequences =
                 xCompareDataSource->getDataSequences();
-            const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aNewSequences =
+            const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aNewSequences =
                 xDataSource->getDataSequences();
 
             std::map<std::pair<OUString, OUString>,sal_Int32> aOldEntryToIndex;
@@ -2126,7 +2126,7 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRange
 }
 
 bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossible(
-    const uno::Sequence<sheet::FormulaToken>& aTokens )
+    const cpo::uno::Sequence<sheet::FormulaToken>& aTokens )
 {
     if (!aTokens.hasElements())
         return false;
@@ -2183,7 +2183,7 @@ bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossible(
 
 uno::Reference<chart2::data::XDataSequence> SAL_CALL
 ScChart2DataProvider::createDataSequenceByFormulaTokens(
-    const uno::Sequence<sheet::FormulaToken>& aTokens )
+    const cpo::uno::Sequence<sheet::FormulaToken>& aTokens )
 {
     uno::Reference<chart2::data::XDataSequence> xResult;
     if (!aTokens.hasElements())
@@ -2413,7 +2413,7 @@ void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     }
 }
 
-uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > SAL_CALL
+cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > SAL_CALL
 ScChart2DataSource::getDataSequences()
 {
     SolarMutexGuard aGuard;
@@ -3015,7 +3015,7 @@ void ScChart2DataSequence::ExternalRefListener::addFileId(sal_uInt16 nFileId)
     maFileIds.insert(nFileId);
 }
 
-uno::Sequence< cpo::uno::Any> SAL_CALL ScChart2DataSequence::getData()
+cpo::uno::Sequence< cpo::uno::Any> SAL_CALL ScChart2DataSequence::getData()
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
@@ -3052,7 +3052,7 @@ uno::Sequence< cpo::uno::Any> SAL_CALL ScChart2DataSequence::getData()
 
 // XNumericalDataSequence --------------------------------------------------
 
-uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
+cpo::uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
@@ -3061,7 +3061,7 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
     BuildDataCache();
 
     sal_Int32 nCount = m_xDataArray->size();
-    uno::Sequence<double> aSeq(nCount);
+    cpo::uno::Sequence<double> aSeq(nCount);
     double* pArr = aSeq.getArray();
     for (const Item& rItem : *m_xDataArray)
     {
@@ -3074,10 +3074,10 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
 
 // XTextualDataSequence --------------------------------------------------
 
-uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
+cpo::uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aSeq;
+    cpo::uno::Sequence<OUString> aSeq;
     if ( !m_pDocument )
         throw uno::RuntimeException();
 
@@ -3086,7 +3086,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
     sal_Int32 nCount = m_xDataArray->size();
     if ( nCount > 0 )
     {
-        aSeq =  uno::Sequence<OUString>(nCount);
+        aSeq =  cpo::uno::Sequence<OUString>(nCount);
         OUString* pArr = aSeq.getArray();
         for (const Item& rItem : *m_xDataArray)
         {
@@ -3098,7 +3098,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
     {
         if( m_aTokens.front()->GetType() == svString )
         {
-            aSeq = uno::Sequence<OUString> { static_cast<FormulaStringToken*>(m_aTokens.front().get())->GetString().getString() };
+            aSeq = cpo::uno::Sequence<OUString> { static_cast<FormulaStringToken*>(m_aTokens.front().get())->GetString().getString() };
         }
     }
 
@@ -3155,7 +3155,7 @@ class GenerateLabelStrings
 public:
     GenerateLabelStrings(const ScDocument* pDoc, sal_Int32 nSize, chart2::data::LabelOrigin eOrigin, bool bColumn) :
         mpDoc(pDoc),
-        mpLabels(std::make_shared<uno::Sequence<OUString>>(nSize)),
+        mpLabels(std::make_shared<cpo::uno::Sequence<OUString>>(nSize)),
         meOrigin(eOrigin),
         mnCount(0),
         mbColumn(bColumn) {}
@@ -3196,11 +3196,11 @@ public:
         }
     }
 
-    const uno::Sequence<OUString>& getLabels() const { return *mpLabels; }
+    const cpo::uno::Sequence<OUString>& getLabels() const { return *mpLabels; }
 
 private:
     const ScDocument*                   mpDoc;
-    std::shared_ptr<uno::Sequence<OUString>>    mpLabels;
+    std::shared_ptr<cpo::uno::Sequence<OUString>>    mpLabels;
     chart2::data::LabelOrigin           meOrigin;
     sal_Int32                           mnCount;
     bool                                mbColumn;
@@ -3208,7 +3208,7 @@ private:
 
 }
 
-uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::data::LabelOrigin eOrigin)
+cpo::uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::data::LabelOrigin eOrigin)
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
@@ -3234,14 +3234,14 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::d
             bColumn = eOrigin != chart2::data::LabelOrigin_SHORT_SIDE;
         }
         else
-            return uno::Sequence<OUString>();
+            return cpo::uno::Sequence<OUString>();
     }
 
     // Generate label strings based on the info so far.
     sal_Int32 nCount = bColumn ? nCols : nRows;
     GenerateLabelStrings genLabels(m_pDocument, nCount, eOrigin, bColumn);
     genLabels = ::std::for_each(m_aTokens.begin(), m_aTokens.end(), genLabels);
-    uno::Sequence<OUString> aSeq = genLabels.getLabels();
+    cpo::uno::Sequence<OUString> aSeq = genLabels.getLabels();
 
     return aSeq;
 }

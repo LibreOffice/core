@@ -62,12 +62,12 @@ private:
     // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // css::chart2::data::XDataProvider:
-    virtual bool SAL_CALL createDataSourcePossible(const css::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource(const css::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments(const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource) override;
+    virtual bool SAL_CALL createDataSourcePossible(const cpo::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
+    virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource(const cpo::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments(const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource) override;
     virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible(const OUString & aRangeRepresentation) override;
     virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(const OUString & aRangeRepresentation) override;
 
@@ -82,7 +82,7 @@ private:
     virtual OUString SAL_CALL convertRangeFromXML(const OUString & aXMLRange) override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::beans::XPropertySet:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
@@ -94,10 +94,10 @@ private:
     virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
 
     // css::chart2::data::XDatabaseDataProvider:
-    virtual css::uno::Sequence< OUString > SAL_CALL getMasterFields() override;
-    virtual void SAL_CALL setMasterFields(const css::uno::Sequence< OUString > & the_value) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getDetailFields() override;
-    virtual void SAL_CALL setDetailFields(const css::uno::Sequence< OUString > & the_value) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getMasterFields() override;
+    virtual void SAL_CALL setMasterFields(const cpo::uno::Sequence< OUString > & the_value) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getDetailFields() override;
+    virtual void SAL_CALL setDetailFields(const cpo::uno::Sequence< OUString > & the_value) override;
     virtual OUString SAL_CALL getCommand() override;
     virtual void SAL_CALL setCommand(const OUString & the_value) override;
     virtual ::sal_Int32 SAL_CALL getCommandType() override;
@@ -132,7 +132,7 @@ private:
     virtual void SAL_CALL setFloat(sal_Int32 parameterIndex, float x) override;
     virtual void SAL_CALL setDouble(sal_Int32 parameterIndex, double x) override;
     virtual void SAL_CALL setString(sal_Int32 parameterIndex, const OUString& x) override;
-    virtual void SAL_CALL setBytes(sal_Int32 parameterIndex, const css::uno::Sequence< sal_Int8 >& x) override;
+    virtual void SAL_CALL setBytes(sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x) override;
     virtual void SAL_CALL setDate(sal_Int32 parameterIndex, const css::util::Date& x) override;
     virtual void SAL_CALL setTime(sal_Int32 parameterIndex, const css::util::Time& x) override;
     virtual void SAL_CALL setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x) override;
@@ -176,18 +176,18 @@ private:
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // ____ XComplexDescriptionAccess ____
-    virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL        getComplexRowDescriptions() override;
-    virtual void SAL_CALL setComplexRowDescriptions(        const css::uno::Sequence<        css::uno::Sequence< OUString > >& aRowDescriptions ) override;
-    virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL        getComplexColumnDescriptions() override;
-    virtual void SAL_CALL setComplexColumnDescriptions(         const css::uno::Sequence<        css::uno::Sequence< OUString > >& aColumnDescriptions ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL        getComplexRowDescriptions() override;
+    virtual void SAL_CALL setComplexRowDescriptions(        const cpo::uno::Sequence<        cpo::uno::Sequence< OUString > >& aRowDescriptions ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL        getComplexColumnDescriptions() override;
+    virtual void SAL_CALL setComplexColumnDescriptions(         const cpo::uno::Sequence<        cpo::uno::Sequence< OUString > >& aColumnDescriptions ) override;
 
     // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
-    virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL getData() override;
-    virtual void SAL_CALL setData(        const css::uno::Sequence< css::uno::Sequence< double > >& aData ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getRowDescriptions() override;
-    virtual void SAL_CALL setRowDescriptions(        const css::uno::Sequence< OUString >& aRowDescriptions ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getColumnDescriptions() override;
-    virtual void SAL_CALL setColumnDescriptions(        const css::uno::Sequence< OUString >& aColumnDescriptions ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< double > > SAL_CALL getData() override;
+    virtual void SAL_CALL setData(        const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aData ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getRowDescriptions() override;
+    virtual void SAL_CALL setRowDescriptions(        const cpo::uno::Sequence< OUString >& aRowDescriptions ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getColumnDescriptions() override;
+    virtual void SAL_CALL setColumnDescriptions(        const cpo::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
     // ____ XChartData (base of XChartDataArray) ____
     virtual void SAL_CALL addChartDataChangeEventListener(const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
@@ -207,7 +207,7 @@ private:
 
     void impl_fillRowSet_throw();
     bool impl_fillParameters_nothrow( ::osl::ResettableMutexGuard& _rClearForNotifies);
-    void impl_fillInternalDataProvider_throw(bool _bHasCategories,const css::uno::Sequence< OUString >& i_aColumnNames);
+    void impl_fillInternalDataProvider_throw(bool _bHasCategories,const cpo::uno::Sequence< OUString >& i_aColumnNames);
     void impl_invalidateParameter_nothrow();
     cpo::uno::Any impl_getNumberFormatKey_nothrow(const OUString & _sRangeRepresentation) const;
 
@@ -242,8 +242,8 @@ private:
     css::uno::Reference< css::uno::XAggregation>                  m_xAggregate;
     css::uno::Reference< css::beans::XPropertySet>                m_xAggregateSet;
     css::uno::Reference< css::uno::XInterface>                    m_xParent;
-    css::uno::Sequence< OUString >                                m_MasterFields;
-    css::uno::Sequence< OUString >                                m_DetailFields;
+    cpo::uno::Sequence< OUString >                                m_MasterFields;
+    cpo::uno::Sequence< OUString >                                m_DetailFields;
 
     OUString     m_Command;
     OUString     m_DataSourceName;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_MMCONFIGITEM_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MMCONFIGITEM_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <memory>
@@ -110,9 +110,9 @@ public:
     bool IsRecordIncluded(sal_uInt32 nRecord) const;
     bool IsRecordExcluded(sal_uInt32 nRecord) const;
     void ExcludeRecord(sal_Int32 nRecord, bool bExclude);
-    css::uno::Sequence< cpo::uno::Any> GetSelection() const;
+    cpo::uno::Sequence< cpo::uno::Any> GetSelection() const;
 
-    const css::uno::Sequence<OUString>& GetSavedDocuments() const;
+    const cpo::uno::Sequence<OUString>& GetSavedDocuments() const;
 
     bool IsOutputToLetter()const;
     void SetOutputToLetter(bool bSet);
@@ -123,8 +123,8 @@ public:
     bool IsHideEmptyParagraphs() const;
     void SetHideEmptyParagraphs(bool bSet);
 
-    css::uno::Sequence<OUString> GetAddressBlocks() const;
-    void SetAddressBlocks(const css::uno::Sequence< OUString>& rBlocks);
+    cpo::uno::Sequence<OUString> GetAddressBlocks() const;
+    void SetAddressBlocks(const cpo::uno::Sequence< OUString>& rBlocks);
 
     void SetCurrentAddressBlockIndex( sal_Int32 nSet );
     sal_Int32 GetCurrentAddressBlockIndex() const;
@@ -139,8 +139,8 @@ public:
     bool IsGreetingLine(bool bInEMail) const;
     void SetGreetingLine(bool bSet, bool bInEMail);
 
-    css::uno::Sequence<OUString> GetGreetings(Gender eType) const;
-    void SetGreetings(Gender eType, const css::uno::Sequence< OUString>& rBlocks);
+    cpo::uno::Sequence<OUString> GetGreetings(Gender eType) const;
+    void SetGreetings(Gender eType, const cpo::uno::Sequence< OUString>& rBlocks);
 
     sal_Int32 GetCurrentGreeting(Gender eType) const;
     void SetCurrentGreeting(Gender eType, sal_Int32 nIndex);
@@ -150,10 +150,10 @@ public:
     void SetFemaleGenderValue(const OUString& rValue);
 
     //returns the assignment in the order of the default headers (GetDefaultAddressHeaders())
-    css::uno::Sequence<OUString> GetColumnAssignment( const SwDBData& rDBData ) const;
+    cpo::uno::Sequence<OUString> GetColumnAssignment( const SwDBData& rDBData ) const;
     void SetColumnAssignment(
         const SwDBData& rDBData,
-        const css::uno::Sequence< OUString>& );
+        const cpo::uno::Sequence< OUString>& );
 
     bool IsAddressFieldsAssigned() const;
     bool IsGreetingFieldsAssigned() const;

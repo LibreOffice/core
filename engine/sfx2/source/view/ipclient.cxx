@@ -156,7 +156,7 @@ public:
     virtual uno::Reference< frame::XDispatchProvider > SAL_CALL getInplaceDispatchProvider() override;
     virtual awt::Rectangle SAL_CALL getPlacement() override;
     virtual awt::Rectangle SAL_CALL getClipRectangle() override;
-    virtual void SAL_CALL translateAccelerators( const uno::Sequence< awt::KeyEvent >& aKeys ) override;
+    virtual void SAL_CALL translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& aKeys ) override;
     virtual void SAL_CALL scrollObject( const awt::Size& aOffset ) override;
     virtual void SAL_CALL changedPlacement( const awt::Rectangle& aPosRect ) override;
 
@@ -495,7 +495,7 @@ awt::Rectangle SAL_CALL SfxInPlaceClient_Impl::getClipRectangle()
 }
 
 
-void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
+void SAL_CALL SfxInPlaceClient_Impl::translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
@@ -917,7 +917,7 @@ ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                 try
                 {
                     SfxStoringHelper aHelper;
-                    uno::Sequence< beans::PropertyValue > aDispatchArgs{
+                    cpo::uno::Sequence< beans::PropertyValue > aDispatchArgs{
                         comphelper::makePropertyValue(u"SaveTo"_ustr, true)
                     };
 

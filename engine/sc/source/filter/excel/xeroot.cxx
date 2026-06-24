@@ -255,7 +255,7 @@ void XclExpRoot::InitializeGlobals()
             // Sequence<...> to Sequence<const ...> if directly created or passed,
             // conversion through Any works around.
             cpo::uno::Any aAny( aOpCodeProvider.getOoxParserMap());
-            uno::Sequence< const sheet::FormulaOpCodeMapEntry > aOpCodeMapping;
+            cpo::uno::Sequence< const sheet::FormulaOpCodeMapEntry > aOpCodeMapping;
             if (!(aAny >>= aOpCodeMapping))
             {
                 SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no OpCodeMap");
@@ -317,9 +317,9 @@ bool XclExpRoot::IsDocumentEncrypted() const
     return GetEncryptionData().hasElements();
 }
 
-uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( std::u16string_view aPass )
+cpo::uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( std::u16string_view aPass )
 {
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
 
     if ( !aPass.empty() && aPass.size() < 16 )
     {
@@ -338,9 +338,9 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( std::u16s
     return aEncryptionData;
 }
 
-uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
+cpo::uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
 {
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
     const SfxUnoAnyItem* pEncryptionDataItem = GetMedium().GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
     if ( pEncryptionDataItem )
         pEncryptionDataItem->GetValue() >>= aEncryptionData;
@@ -355,7 +355,7 @@ uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
     return aEncryptionData;
 }
 
-uno::Sequence< beans::NamedValue > XclExpRoot::GenerateDefaultEncryptionData()
+cpo::uno::Sequence< beans::NamedValue > XclExpRoot::GenerateDefaultEncryptionData()
 {
     return GenerateEncryptionData( GetDefaultPassword() );
 }

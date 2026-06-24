@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include "content.hxx"
 
@@ -31,7 +31,7 @@ using namespace com::sun::star;
 using namespace chelp;
 
 // virtual
-uno::Sequence< beans::Property > Content::getProperties(
+cpo::uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     bool withMediaType = m_aURLParameter.isFile() || m_aURLParameter.isRoot();
@@ -42,7 +42,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     if( isModule ) num+=6;
     if( isFile )   num++;
 
-    uno::Sequence< beans::Property > props(num);
+    cpo::uno::Sequence< beans::Property > props(num);
     auto pprops = props.getArray();
 
     sal_Int32 idx = 0;
@@ -109,35 +109,35 @@ uno::Sequence< beans::Property > Content::getProperties(
             beans::Property(
                 u"KeywordList"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< OUString >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< OUString >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
                 u"KeywordRef"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
                 u"KeywordTitleForRef"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
                 u"KeywordAnchorForRef"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< uno::Sequence< OUString > >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence< OUString > >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
 
         pprops[idx++] =
             beans::Property(
                 u"SearchScopes"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< OUString >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< OUString >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY );
     }
 
@@ -155,7 +155,7 @@ uno::Sequence< beans::Property > Content::getProperties(
 }
 
 // virtual
-uno::Sequence< ucb::CommandInfo > Content::getCommands(
+cpo::uno::Sequence< ucb::CommandInfo > Content::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     // Supported commands
@@ -178,12 +178,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         ucb::CommandInfo(
             u"getPropertyValues"_ustr,
             -1,
-            cppu::UnoType<uno::Sequence< beans::Property >>::get()
+            cppu::UnoType<cpo::uno::Sequence< beans::Property >>::get()
         ),
         ucb::CommandInfo(
             u"setPropertyValues"_ustr,
             -1,
-            cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
+            cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get()
         ),
         ucb::CommandInfo(
             u"open"_ustr,
@@ -192,7 +192,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         )
     };
 
-    return uno::Sequence< ucb::CommandInfo >(
+    return cpo::uno::Sequence< ucb::CommandInfo >(
         aCommandInfoTable, COMMAND_COUNT );
 }
 

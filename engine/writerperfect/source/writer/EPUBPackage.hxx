@@ -11,7 +11,7 @@
 
 #include <libepubgen/EPUBPackage.h>
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star
@@ -50,7 +50,7 @@ class EPUBPackage : public libepubgen::EPUBPackage
 
 public:
     explicit EPUBPackage(css::uno::Reference<css::uno::XComponentContext> xContext,
-                         const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
+                         const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
 
     ~EPUBPackage() override;
 

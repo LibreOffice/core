@@ -16,7 +16,7 @@
 #include <com/sun/star/sheet/XSheetFilterable.hpp>
 #include <com/sun/star/sheet/XSheetFilterableEx.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -33,7 +33,7 @@ void XSheetFilterableEx::testCreateFilterDescriptorByObject()
     uno::Reference<sheet::XSheetFilterDescriptor> xSFD = xSFEx->createFilterDescriptorByObject(xSF);
     CPPUNIT_ASSERT_MESSAGE("no XSheetFilterDescriptor", xSFD.is());
 
-    const uno::Sequence<sheet::TableFilterField> xTFF = xSFD->getFilterFields();
+    const cpo::uno::Sequence<sheet::TableFilterField> xTFF = xSFD->getFilterFields();
     CPPUNIT_ASSERT_MESSAGE("The gained XSheetFilterDescriptor is empty", xTFF.hasElements());
 
     for (const auto& field : xTFF)

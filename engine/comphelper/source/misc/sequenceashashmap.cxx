@@ -47,7 +47,7 @@ cpo::uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
     boost::property_tree::ptree aNodeNull, aNodeValue, aNodeField;
     const std::string aType = aTree.get<std::string>("type", "");
     const std::string aValueStr = aTree.get<std::string>("value", "");
-    uno::Sequence<uno::Reference<reflection::XIdlField>> aFields;
+    cpo::uno::Sequence<uno::Reference<reflection::XIdlField>> aFields;
     uno::Reference<reflection::XIdlClass> xIdlClass
         = css::reflection::theCoreReflection::get(comphelper::getProcessComponentContext())
               ->forName(OUString::fromUtf8(aType));
@@ -111,17 +111,17 @@ SequenceAsHashMap::SequenceAsHashMap(const cpo::uno::Any& aSource)
 }
 
 
-SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< cpo::uno::Any >& lSource)
+SequenceAsHashMap::SequenceAsHashMap(const cpo::uno::Sequence< cpo::uno::Any >& lSource)
 {
     (*this) << lSource;
 }
 
-SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::beans::PropertyValue >& lSource)
+SequenceAsHashMap::SequenceAsHashMap(const cpo::uno::Sequence< css::beans::PropertyValue >& lSource)
 {
     (*this) << lSource;
 }
 
-SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::beans::NamedValue >& lSource)
+SequenceAsHashMap::SequenceAsHashMap(const cpo::uno::Sequence< css::beans::NamedValue >& lSource)
 {
     (*this) << lSource;
 }
@@ -135,14 +135,14 @@ void SequenceAsHashMap::operator<<(const cpo::uno::Any& aSource)
         return;
     }
 
-    css::uno::Sequence< css::beans::NamedValue > lN;
+    cpo::uno::Sequence< css::beans::NamedValue > lN;
     if (aSource >>= lN)
     {
         (*this) << lN;
         return;
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > lP;
+    cpo::uno::Sequence< css::beans::PropertyValue > lP;
     if (aSource >>= lP)
     {
         (*this) << lP;
@@ -155,7 +155,7 @@ void SequenceAsHashMap::operator<<(const cpo::uno::Any& aSource)
 }
 
 
-void SequenceAsHashMap::operator<<(const css::uno::Sequence< cpo::uno::Any >& lSource)
+void SequenceAsHashMap::operator<<(const cpo::uno::Sequence< cpo::uno::Any >& lSource)
 {
     sal_Int32 c = lSource.getLength();
     sal_Int32 i = 0;
@@ -199,7 +199,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< cpo::uno::Any >& lS
     }
 }
 
-void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::PropertyValue >& lSource)
+void SequenceAsHashMap::operator<<(const cpo::uno::Sequence< css::beans::PropertyValue >& lSource)
 {
     clear();
 
@@ -208,7 +208,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::Propert
         (*this)[rSource.Name] = rSource.Value;
 }
 
-void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::NamedValue >& lSource)
+void SequenceAsHashMap::operator<<(const cpo::uno::Sequence< css::beans::NamedValue >& lSource)
 {
     clear();
 
@@ -217,7 +217,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::NamedVa
         (*this)[rSource.Name] = rSource.Value;
 }
 
-void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::PropertyValue >& lDestination) const
+void SequenceAsHashMap::operator>>(cpo::uno::Sequence< css::beans::PropertyValue >& lDestination) const
 {
     sal_Int32 c = static_cast<sal_Int32>(size());
     lDestination.realloc(c);
@@ -234,7 +234,7 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::PropertyValue
     }
 }
 
-void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >& lDestination) const
+void SequenceAsHashMap::operator>>(cpo::uno::Sequence< css::beans::NamedValue >& lDestination) const
 {
     sal_Int32 c = static_cast<sal_Int32>(size());
     lDestination.realloc(c);
@@ -261,16 +261,16 @@ cpo::uno::Any SequenceAsHashMap::getAsConstAny(bool bAsPropertyValueList) const
     return aDestination;
 }
 
-css::uno::Sequence< css::beans::NamedValue > SequenceAsHashMap::getAsConstNamedValueList() const
+cpo::uno::Sequence< css::beans::NamedValue > SequenceAsHashMap::getAsConstNamedValueList() const
 {
-    css::uno::Sequence< css::beans::NamedValue > lReturn;
+    cpo::uno::Sequence< css::beans::NamedValue > lReturn;
     (*this) >> lReturn;
     return lReturn;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsConstPropertyValueList() const
+cpo::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsConstPropertyValueList() const
 {
-    css::uno::Sequence< css::beans::PropertyValue > lReturn;
+    cpo::uno::Sequence< css::beans::PropertyValue > lReturn;
     (*this) >> lReturn;
     return lReturn;
 }
@@ -343,7 +343,7 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::propert
             aNodeValue = rPair.second.get_child("value", aNodeNull);
             if (aNodeValue != aNodeNull && aNodeValue.size() == 0)
             {
-                uno::Sequence<sal_Int8> aSeqByte(reinterpret_cast<const sal_Int8*>(aValueStr.c_str()),
+                cpo::uno::Sequence<sal_Int8> aSeqByte(reinterpret_cast<const sal_Int8*>(aValueStr.c_str()),
                                                  aValueStr.size());
                 aValue.Value <<= aSeqByte;
             }
@@ -361,7 +361,7 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::propert
             aNodeValue = rPair.second.get_child("value", aNodeNull);
             if (aNodeValue != aNodeNull && !aNodeValue.empty())
             {
-                uno::Sequence<cpo::uno::Any> aSeq(aNodeValue.size());
+                cpo::uno::Sequence<cpo::uno::Any> aSeq(aNodeValue.size());
                 std::transform(aNodeValue.begin(), aNodeValue.end(), aSeq.getArray(),
                                [](const auto& rSeqPair) { return jsonToUnoAny(rSeqPair.second); });
                 aValue.Value <<= aSeq;
@@ -375,7 +375,7 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::propert
         else if (aType == "[][]com.sun.star.beans.PropertyValue")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
-            std::vector<uno::Sequence<beans::PropertyValue>> aSeqs;
+            std::vector<cpo::uno::Sequence<beans::PropertyValue>> aSeqs;
             for (const auto& rItem : aNodeValue)
             {
                 aSeqs.push_back(comphelper::containerToSequence(JsonToPropertyValues(rItem.second)));

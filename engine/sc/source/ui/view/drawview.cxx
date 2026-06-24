@@ -483,7 +483,7 @@ void ScDrawView::MarkListHasChanged()
 
     SfxViewFrame& rViewFrame = pViewSh->GetViewFrame();
     bool bOle = pViewSh->GetViewFrame().GetFrame().IsInPlace();
-    uno::Sequence< embed::VerbDescriptor > aVerbs;
+    cpo::uno::Sequence< embed::VerbDescriptor > aVerbs;
     if ( pOle2Obj && !bOle )
     {
         const uno::Reference < embed::XEmbeddedObject >& xObj = pOle2Obj->GetObjRef();

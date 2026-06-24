@@ -66,7 +66,7 @@ namespace connectivity::file
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
         /// @throws css::uno::DeploymentException
-        virtual void construct(const OUString& _rUrl, const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
+        virtual void construct(const OUString& _rUrl, const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -99,8 +99,8 @@ namespace connectivity::file
         virtual cpo::uno::Any SAL_CALL getWarnings(  ) override;
         virtual void SAL_CALL clearWarnings(  ) override;
         //XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
         // no interface methods
         css::uno::Reference< css::ucb::XDynamicResultSet > getDir() const;

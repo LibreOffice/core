@@ -114,7 +114,7 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
             task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xFactory), nullptr) );
 
         sal_Int32 nLen = bPluginMode ? 6 : 5;
-        uno::Sequence<beans::PropertyValue> aSeq( nLen );
+        cpo::uno::Sequence<beans::PropertyValue> aSeq( nLen );
         auto pSeq = aSeq.getArray();
         pSeq[0] = beans::PropertyValue(
             "Model",
@@ -161,7 +161,7 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
             0,
             aSeq);
 
-        const uno::Sequence< beans::PropertyValue > aResArgs = m_xDocument->getArgs();
+        const cpo::uno::Sequence< beans::PropertyValue > aResArgs = m_xDocument->getArgs();
         for ( beans::PropertyValue const & prop : aResArgs )
             if ( prop.Name == "MacroExecutionMode" )
             {
@@ -252,7 +252,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
     // initialize the office as, with hwnd as parentwindow
     cpo::uno::Any                      aAny;
-    uno::Sequence<sal_Int8> aProcessIdent(16);
+    cpo::uno::Sequence<sal_Int8> aProcessIdent(16);
     rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
 
     try
@@ -555,7 +555,7 @@ BOOL DocumentHolder::InPlaceMenuCreate()
 
     uno::Reference<awt::XSystemDependentWindowPeer> xSysDepWin(m_xContainerWindow,uno::UNO_QUERY);
     if(xSysDepWin.is()) {
-        uno::Sequence<sal_Int8> aProcessIdent(16);
+        cpo::uno::Sequence<sal_Int8> aProcessIdent(16);
         rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
         cpo::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
         sal_Int64 tmp;
@@ -701,7 +701,7 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, b
     if ( m_xDocument.is() && !m_bLink )
     {
         // set the document mode to embedded
-        uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue("SetEmbedded",
+        cpo::uno::Sequence< beans::PropertyValue > aSeq{ comphelper::makePropertyValue("SetEmbedded",
                                                                                   true) };
         m_xDocument->attachResource(OUString(),aSeq);
     }
@@ -914,7 +914,7 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
         if(m_aFilterName.getLength() == 0)
         {
             OUString aFilterName;
-            uno::Sequence<beans::PropertyValue> aSeq;
+            cpo::uno::Sequence<beans::PropertyValue> aSeq;
             if(m_xDocument.is())
             {
                 aSeq = m_xDocument->getArgs();
@@ -1003,7 +1003,7 @@ IDispatch* DocumentHolder::GetIDispatch()
 
         if ( xSupplier.is() )
         {
-            uno::Sequence< sal_Int8 > aProcId( 16 );
+            cpo::uno::Sequence< sal_Int8 > aProcId( 16 );
             rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(aProcId.getArray()) );
 
             try {
@@ -1035,11 +1035,11 @@ HRESULT DocumentHolder::GetDocumentBorder( RECT *pRect )
 {
     if ( pRect && m_xDocument.is() )
     {
-        const uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
+        const cpo::uno::Sequence< beans::PropertyValue > aArgs = m_xDocument->getArgs();
         for ( beans::PropertyValue const & prop : aArgs )
             if ( prop.Name == "DocumentBorder" )
             {
-                uno::Sequence< sal_Int32 > aRect;
+                cpo::uno::Sequence< sal_Int32 > aRect;
                 if ( ( prop.Value >>= aRect ) && aRect.getLength() == 4 )
                 {
                     pRect->left   = aRect[0];
@@ -1194,7 +1194,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
         HWND hWnd;
         m_pIOleIPFrame->GetWindow(&hWnd);
 
-        uno::Sequence<sal_Int8> aProcessIdent(16);
+        cpo::uno::Sequence<sal_Int8> aProcessIdent(16);
         rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
 
         xWin.set(

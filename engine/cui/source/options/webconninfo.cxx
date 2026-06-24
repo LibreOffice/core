@@ -90,7 +90,7 @@ void WebConnectionInfoDialog::FillPasswordList()
             uno::Reference< task::XInteractionHandler > xInteractionHandler =
                 task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr);
 
-            const uno::Sequence< task::UrlRecord > aURLEntries = xMasterPasswd->getAllPersistent( xInteractionHandler );
+            const cpo::uno::Sequence< task::UrlRecord > aURLEntries = xMasterPasswd->getAllPersistent( xInteractionHandler );
             sal_Int32 nCount = 0;
             for ( task::UrlRecord const & urlEntry : aURLEntries )
             {
@@ -105,7 +105,7 @@ void WebConnectionInfoDialog::FillPasswordList()
             // remember pos of first url container entry.
             m_nPos = nCount;
 
-            const uno::Sequence< OUString > aUrls
+            const cpo::uno::Sequence< OUString > aUrls
                 = xMasterPasswd->getUrls( true /* OnlyPersistent */ );
 
             for ( OUString const & url : aUrls )
@@ -161,7 +161,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl, weld::Button&, v
         // should the master password be requested before?
         xPasswdContainer->removeAllPersistent();
 
-        const uno::Sequence< OUString > aUrls
+        const cpo::uno::Sequence< OUString > aUrls
             = xPasswdContainer->getUrls( true /* OnlyPersistent */ );
         for ( OUString const & url : aUrls )
             xPasswdContainer->removeUrl( url );
@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl, weld::Button&, void)
 
             if ( pPasswordRequest->isPassword() )
             {
-                uno::Sequence<OUString> aPasswd { pPasswordRequest->getPassword() };
+                cpo::uno::Sequence<OUString> aPasswd { pPasswordRequest->getPassword() };
 
                 uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
                     task::PasswordContainer::create(comphelper::getProcessComponentContext()));

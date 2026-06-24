@@ -79,26 +79,26 @@ public:
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // ____ XDataSequence ____
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getData() override;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL generateLabel(
+    virtual cpo::uno::Sequence< OUString > SAL_CALL generateLabel(
         css::chart2::data::LabelOrigin nLabelOrigin ) override;
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex ) override;
 
     // ____ XNumericalDataSequence ____
     /// @see css::chart::data::XNumericalDataSequence
-    virtual css::uno::Sequence< double > SAL_CALL getNumericalData() override;
+    virtual cpo::uno::Sequence< double > SAL_CALL getNumericalData() override;
 
     // ____ XTextualDataSequence ____
     /// @see css::chart::data::XTextualDataSequence
-    virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getTextualData() override;
 
     // ____ XIndexReplace ____
     virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const cpo::uno::Any& Element ) override;

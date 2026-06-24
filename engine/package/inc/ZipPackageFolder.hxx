@@ -113,9 +113,9 @@ public:
     void setRemoveOnInsertMode_Impl( bool bRemove ) { mbAllowRemoveOnInsert = bRemove; }
 
     virtual bool saveChild( const OUString &rPath,
-                            std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
+                            std::vector < cpo::uno::Sequence < css::beans::PropertyValue > > &rManList,
                             ZipOutputStream & rZipOut,
-                            const css::uno::Sequence < sal_Int8 >& rEncryptionKey,
+                            const cpo::uno::Sequence < sal_Int8 >& rEncryptionKey,
                             ::std::optional<sal_Int32> oPBKDF2IterationCount,
                             ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) override;
 
@@ -123,9 +123,9 @@ public:
     /// @throws css::uno::RuntimeException
     void saveContents(
             const OUString &rPath,
-            std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,
+            std::vector < cpo::uno::Sequence < css::beans::PropertyValue > > &rManList,
             ZipOutputStream & rZipOut,
-            const css::uno::Sequence< sal_Int8 > &rEncryptionKey,
+            const cpo::uno::Sequence< sal_Int8 > &rEncryptionKey,
             ::std::optional<sal_Int32> oPBKDF2IterationCount,
             ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> oArgon2Args) const;
 
@@ -142,7 +142,7 @@ public:
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XNameReplace
@@ -155,7 +155,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 #endif
 

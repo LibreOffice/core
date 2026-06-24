@@ -65,7 +65,7 @@ public:
     }
 
     /// @throws uno::RuntimeException
-    uno::Sequence<sheet::TablePageBreakData> getAllPageBreaks()
+    cpo::uno::Sequence<sheet::TablePageBreakData> getAllPageBreaks()
     {
         if( m_bColumn )
             return mxSheetPageBreak->getColumnPageBreaks();
@@ -118,7 +118,7 @@ sal_Int32 SAL_CALL RangePageBreaks::getCount(  )
     uno::Reference< excel::XRange > xRange = xWorksheet->getUsedRange();
     sal_Int32 nUsedStart = getAPIStartofRange( xRange );
     sal_Int32 nUsedEnd = getAPIEndIndexofRange( xRange, nUsedStart );
-    const uno::Sequence<sheet::TablePageBreakData> aTablePageBreakData = getAllPageBreaks();
+    const cpo::uno::Sequence<sheet::TablePageBreakData> aTablePageBreakData = getAllPageBreaks();
 
     auto pPageBreak = std::find_if(aTablePageBreakData.begin(), aTablePageBreakData.end(),
         [nUsedEnd](const sheet::TablePageBreakData& rPageBreak) { return rPageBreak.Position > nUsedEnd + 1; });
@@ -152,7 +152,7 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
     uno::Reference< excel::XRange > xRange = xWorksheet->getUsedRange();
     sal_Int32 nUsedStart = getAPIStartofRange( xRange );
     sal_Int32 nUsedEnd = getAPIEndIndexofRange( xRange, nUsedStart );
-    const uno::Sequence<sheet::TablePageBreakData> aTablePageBreakDataList = getAllPageBreaks();
+    const cpo::uno::Sequence<sheet::TablePageBreakData> aTablePageBreakDataList = getAllPageBreaks();
 
     for( const auto& rTablePageBreakData : aTablePageBreakDataList )
     {
@@ -253,10 +253,10 @@ ScVbaHPageBreaks::getServiceImplName()
     return u"ScVbaHPageBreaks"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaHPageBreaks::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.HPageBreaks"_ustr
     };
@@ -310,10 +310,10 @@ ScVbaVPageBreaks::getServiceImplName()
     return u"ScVbaVPageBreaks"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaVPageBreaks::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.VPageBreaks"_ustr
     };

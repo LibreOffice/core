@@ -1043,7 +1043,7 @@ void SdrObject::GetGrabBagItem(cpo::uno::Any& rVal) const
     if (m_pGrabBagItem != nullptr)
         m_pGrabBagItem->QueryValue(rVal);
     else
-        rVal <<= uno::Sequence<beans::PropertyValue>();
+        rVal <<= cpo::uno::Sequence<beans::PropertyValue>();
 }
 
 void SdrObject::SetGrabBagItem(const cpo::uno::Any& rVal)
@@ -2168,8 +2168,8 @@ void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClear
         {
             cpo::uno::Any aAnyGrabBag;
             GetGrabBagItem(aAnyGrabBag);
-            uno::Sequence<beans::PropertyValue> aSeqGrabBag
-                = aAnyGrabBag.get<uno::Sequence<beans::PropertyValue>>();
+            cpo::uno::Sequence<beans::PropertyValue> aSeqGrabBag
+                = aAnyGrabBag.get<cpo::uno::Sequence<beans::PropertyValue>>();
             auto it = std::find_if(aSeqGrabBag.begin(), aSeqGrabBag.end(),
                                    [](const beans::PropertyValue& rProp) {
                                        return rProp.Name == u"3DEffectProperties"_ustr;

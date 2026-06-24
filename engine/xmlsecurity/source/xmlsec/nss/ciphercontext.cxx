@@ -33,7 +33,7 @@ constexpr size_t nAESGCMTagSize = 16;
 
 using namespace ::com::sun::star;
 
-uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANISM_TYPE nNSSCipherID, const uno::Sequence< ::sal_Int8 >& aKey, const uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding )
+uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANISM_TYPE nNSSCipherID, const cpo::uno::Sequence< ::sal_Int8 >& aKey, const cpo::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding )
 {
     ::rtl::Reference< OCipherContext > xResult = new OCipherContext;
 
@@ -145,7 +145,7 @@ void OCipherContext::Dispose()
     m_bDisposed = true;
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( const uno::Sequence< ::sal_Int8 >& aData )
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( const cpo::uno::Sequence< ::sal_Int8 >& aData )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -167,7 +167,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
         return {};
     }
 
-    uno::Sequence< sal_Int8 > aToConvert;
+    cpo::uno::Sequence< sal_Int8 > aToConvert;
     if ( aData.hasElements() )
     {
         sal_Int32 nOldLastBlockLen = m_aLastBlock.getLength();
@@ -218,7 +218,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
         }
     }
 
-    uno::Sequence< sal_Int8 > aResult;
+    cpo::uno::Sequence< sal_Int8 > aResult;
     assert(aToConvert.getLength() % m_nBlockSize == 0);
     if ( aToConvert.hasElements() )
     {
@@ -238,7 +238,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
     return aResult;
 }
 
-uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDispose()
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDispose()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -250,7 +250,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
 
     if (m_AESGCMIV.getLength())
     {
-        uno::Sequence<sal_Int8> aResult;
+        cpo::uno::Sequence<sal_Int8> aResult;
         unsigned outLen;
         if (m_bEncryption)
         {
@@ -333,7 +333,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     // finally should the last block be smaller than two standard blocks
     assert(m_aLastBlock.getLength() < m_nBlockSize * 2);
 
-    uno::Sequence< sal_Int8 > aResult;
+    cpo::uno::Sequence< sal_Int8 > aResult;
     if ( m_aLastBlock.hasElements() )
     {
         int nPrefResLen = 0;

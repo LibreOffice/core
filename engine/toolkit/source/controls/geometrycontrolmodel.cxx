@@ -393,7 +393,7 @@ using namespace cpo::uno;
             Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
             Reference< XNameContainer > xCloneEventCont = pOwnClone->getEvents();
 
-            const css::uno::Sequence< OUString > aNames =
+            const cpo::uno::Sequence< OUString > aNames =
                 xEventCont->getElementNames();
 
             for( const OUString& aName : aNames )
@@ -429,7 +429,7 @@ using namespace cpo::uno;
 
 
     typedef std::unordered_map< OUString, sal_Int32 > HashMapString2Int;
-    typedef std::vector< css::uno::Sequence< css::beans::Property > >   PropSeqArray;
+    typedef std::vector< cpo::uno::Sequence< css::beans::Property > >   PropSeqArray;
     typedef std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
 
     // for creating class-unique PropertySetInfo's, we need some info:
@@ -560,7 +560,7 @@ using namespace cpo::uno;
 
     Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  )
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
     namespace {

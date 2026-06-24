@@ -98,10 +98,10 @@ SwVbaListLevels::getServiceImplName()
     return u"SwVbaListLevels"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaListLevels::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.ListLevels"_ustr
     };

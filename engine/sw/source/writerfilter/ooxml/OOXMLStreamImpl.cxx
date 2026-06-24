@@ -93,8 +93,8 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     if (maIdCache.empty())
     {
         // Cache is empty? Then let's build it!
-        const uno::Sequence< uno::Sequence<beans::StringPair> >aSeqs = xRelationshipAccess->getAllRelationships();
-        for (const uno::Sequence<beans::StringPair>& rSeq : aSeqs)
+        const cpo::uno::Sequence< cpo::uno::Sequence<beans::StringPair> >aSeqs = xRelationshipAccess->getAllRelationships();
+        for (const cpo::uno::Sequence<beans::StringPair>& rSeq : aSeqs)
         {
             OUString aId;
             OUString aTarget;
@@ -228,10 +228,10 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
 
     if (xRelationshipAccess.is())
     {
-        const uno::Sequence< uno::Sequence< beans::StringPair > >aSeqs =
+        const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >aSeqs =
             xRelationshipAccess->getAllRelationships();
 
-        for (const uno::Sequence< beans::StringPair > &rSeq : aSeqs)
+        for (const cpo::uno::Sequence< beans::StringPair > &rSeq : aSeqs)
         {
             bool bExternalTarget = false;
             OUString sMyTarget;

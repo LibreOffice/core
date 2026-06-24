@@ -68,8 +68,8 @@ public:
                                 const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override;
 
     // XPropertyAccess
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
-    virtual void SAL_CALL setPropertyValues(const css::uno::Sequence< css::beans::PropertyValue >& PropertyValues_) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
+    virtual void SAL_CALL setPropertyValues(const cpo::uno::Sequence< css::beans::PropertyValue >& PropertyValues_) override;
 };
 
 class SbxArray;

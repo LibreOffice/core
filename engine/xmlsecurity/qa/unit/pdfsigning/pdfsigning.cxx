@@ -133,7 +133,7 @@ bool PDFSigningTest::sign(const OUString& rInURL, const OUString& rOutURL,
     {
         uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
             = xSecurityContext->getSecurityEnvironment();
-        uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
+        cpo::uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
             = xSecurityEnvironment->getPersonalCertificates();
         for (auto& cert : asNonConstRange(aCertificates))
         {

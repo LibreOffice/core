@@ -103,7 +103,7 @@ public:
         return cpo::uno::Any( aIter->second );
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override
     {
         return comphelper::mapKeysToSequence(maItems);
     }

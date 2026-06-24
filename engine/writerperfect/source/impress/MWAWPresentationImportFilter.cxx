@@ -90,7 +90,7 @@ bool SAL_CALL MWAWPresentationImportFilter::supportsService(const OUString& rSer
 {
     return cppu::supportsService(this, rServiceName);
 }
-css::uno::Sequence<OUString> SAL_CALL MWAWPresentationImportFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL MWAWPresentationImportFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ImportFilter"_ustr,
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
@@ -98,7 +98,7 @@ css::uno::Sequence<OUString> SAL_CALL MWAWPresentationImportFilter::getSupported
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Impress_MWAWPresentationImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const css::uno::Sequence<cpo::uno::Any>&)
+    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new MWAWPresentationImportFilter(context));
 }

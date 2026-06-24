@@ -54,7 +54,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const& ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void fire_dragEnd(sal_Int8 nAction, bool bSuccessful);
 };
@@ -86,7 +86,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(OUString const& ServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void handleDragEnterEvent(QDragEnterEvent& rEvent, qreal fScaleFactor = 1.0);
     void handleDragMoveEvent(QDragMoveEvent& rEvent, qreal fScaleFactor = 1.0);

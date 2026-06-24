@@ -27,7 +27,7 @@ class SwToolbarConfigItem final : public utl::ConfigItem
 {
     sal_Int32 m_aTbxIdArray[5];
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
@@ -35,7 +35,7 @@ public:
     SwToolbarConfigItem(bool bWeb);
     virtual ~SwToolbarConfigItem() override;
 
-    virtual void Notify(const css::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void Notify(const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 
     void SetTopToolbar(SelectionType nSelType, ToolbarId eBarId);
 };

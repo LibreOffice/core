@@ -31,7 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <o3tl/string_view.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -98,31 +98,31 @@ namespace chelp {
         private:
 
             OUString key;
-            css::uno::Sequence< OUString > listId;
-            css::uno::Sequence< OUString > listAnchor;
-            css::uno::Sequence< OUString > listTitle;
+            cpo::uno::Sequence< OUString > listId;
+            cpo::uno::Sequence< OUString > listAnchor;
+            cpo::uno::Sequence< OUString > listTitle;
 
             void init( Databases const *pDatabases,helpdatafileproxy::Hdf* pHdf, std::u16string_view ids );
         };
 
         explicit KeywordInfo( const std::vector< KeywordElement >& aVector );
 
-        css::uno::Sequence< OUString >&
+        cpo::uno::Sequence< OUString >&
         getKeywordList() { return listKey; }
 
-        css::uno::Sequence< css::uno::Sequence< OUString > >&
+        cpo::uno::Sequence< cpo::uno::Sequence< OUString > >&
         getIdList() { return listId; }
 
-        css::uno::Sequence< css::uno::Sequence< OUString > >&
+        cpo::uno::Sequence< cpo::uno::Sequence< OUString > >&
         getAnchorList() { return listAnchor; }
 
-        css::uno::Sequence< css::uno::Sequence< OUString > >&
+        cpo::uno::Sequence< cpo::uno::Sequence< OUString > >&
         getTitleList() { return listTitle; }
 
     private:
 
-        css::uno::Sequence< OUString > listKey;
-        css::uno::Sequence< css::uno::Sequence< OUString > > listId,listAnchor,listTitle;
+        cpo::uno::Sequence< OUString > listKey;
+        cpo::uno::Sequence< cpo::uno::Sequence< OUString > > listId,listAnchor,listTitle;
     };  // end class KeywordInfo
 
     class Databases
@@ -340,15 +340,15 @@ namespace chelp {
         OUString                                              m_aInitialModule;
         OUString                                              m_aLanguage;
 
-        css::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< css::uno::Reference
             < css::deployment::XPackage > >                   m_aUserPackagesSeq;
         bool                                                  m_bUserPackagesLoaded;
 
-        css::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< css::uno::Reference
             < css::deployment::XPackage > >                   m_aSharedPackagesSeq;
         bool                                                  m_bSharedPackagesLoaded;
 
-        css::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< css::uno::Reference
             < css::deployment::XPackage > >                   m_aBundledPackagesSeq;
         bool                                                  m_bBundledPackagesLoaded;
 

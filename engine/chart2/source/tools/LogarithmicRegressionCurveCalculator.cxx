@@ -40,8 +40,8 @@ LogarithmicRegressionCurveCalculator::~LogarithmicRegressionCurveCalculator()
 
 // ____ XRegressionCurve ____
 void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
-    const uno::Sequence< double >& aXValues,
-    const uno::Sequence< double >& aYValues )
+    const cpo::uno::Sequence< double >& aXValues,
+    const cpo::uno::Sequence< double >& aYValues )
 {
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup(
@@ -96,7 +96,7 @@ double SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValue( double x )
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValues(
     double min, double max, ::sal_Int32 nPointCount,
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,
@@ -107,7 +107,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalcul
         isLinearScaling( xScalingY ))
     {
         // optimize result
-        uno::Sequence< geometry::RealPoint2D > aResult{ { min, getCurveValue( min ) },
+        cpo::uno::Sequence< geometry::RealPoint2D > aResult{ { min, getCurveValue( min ) },
                                                         { max, getCurveValue( max ) } };
 
         return aResult;

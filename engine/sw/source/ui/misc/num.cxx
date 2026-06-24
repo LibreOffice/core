@@ -1001,9 +1001,9 @@ IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, SetDefaultHdl, weld::Button&, void)
     if (nLevels == 0)
         return;
 
-    css::uno::Sequence<sal_Int32> aNumbering(nLevels);
-    css::uno::Sequence<OUString> aBullets(nLevels);
-    css::uno::Sequence<OUString> aFonts(nLevels);
+    cpo::uno::Sequence<sal_Int32> aNumbering(nLevels);
+    cpo::uno::Sequence<OUString> aBullets(nLevels);
+    cpo::uno::Sequence<OUString> aFonts(nLevels);
     auto* pNumberingData = aNumbering.getArray();
     auto* pBulletsData = aBullets.getArray();
     auto* pFontsData = aFonts.getArray();

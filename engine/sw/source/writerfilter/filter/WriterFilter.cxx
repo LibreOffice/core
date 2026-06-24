@@ -99,7 +99,7 @@ class WriterFilter
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<lang::XComponent> m_xSrcDoc;
     rtl::Reference<SwXTextDocument> m_xDstDoc;
-    uno::Sequence<cpo::uno::Any> m_xInitializationArguments;
+    cpo::uno::Sequence<cpo::uno::Any> m_xInitializationArguments;
 
 public:
     explicit WriterFilter(uno::Reference<uno::XComponentContext> xContext)
@@ -108,7 +108,7 @@ public:
     }
 
     // XFilter
-    bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    bool SAL_CALL filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor) override;
     void SAL_CALL cancel() override;
 
     // XImporter
@@ -118,16 +118,16 @@ public:
     void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XInitialization
-    void SAL_CALL initialize(const uno::Sequence<cpo::uno::Any>& rArguments) override;
+    void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 }
 
-bool WriterFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+bool WriterFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     if (m_xSrcDoc.is())
     {
@@ -345,7 +345,7 @@ void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDo
     m_xSrcDoc = xDoc;
 }
 
-void WriterFilter::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void WriterFilter::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     m_xInitializationArguments = rArguments;
 }
@@ -360,16 +360,16 @@ bool WriterFilter::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet = { u"com.sun.star.document.ImportFilter"_ustr,
-                                     u"com.sun.star.document.ExportFilter"_ustr };
+    cpo::uno::Sequence<OUString> aRet = { u"com.sun.star.document.ImportFilter"_ustr,
+                                          u"com.sun.star.document.ExportFilter"_ustr };
     return aRet;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Writer_WriterFilter_get_implementation(
-    uno::XComponentContext* component, uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
+    uno::XComponentContext* component, cpo::uno::Sequence<cpo::uno::Any> const& /*rSequence*/)
 {
     return cppu::acquire(new WriterFilter(component));
 }

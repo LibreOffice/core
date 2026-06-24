@@ -34,7 +34,7 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <rtl/ustring>
 #include <rtl/ustrbuf.hxx>

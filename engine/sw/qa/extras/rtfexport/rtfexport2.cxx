@@ -1176,10 +1176,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44053)
         uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
         // The with of the table's A1 and A2 cell should equal.
-        CPPUNIT_ASSERT_EQUAL(getProperty<uno::Sequence<text::TableColumnSeparator>>(
+        CPPUNIT_ASSERT_EQUAL(getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0]
                                  .Position,
-                             getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                             getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                  xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0]
                                  .Position);
     };
@@ -1290,7 +1290,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo59638)
             getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xLevels(
             xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aProps;
+        cpo::uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(0) >>= aProps; // 1st level
 
         for (beans::PropertyValue const& rProp : aProps)

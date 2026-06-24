@@ -2825,7 +2825,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 try
                 {
-                    const css::uno::Sequence< css::scanner::ScannerContext >
+                    const cpo::uno::Sequence< css::scanner::ScannerContext >
                         aContexts( mxScannerManager->getAvailableScanners() );
 
                     if( aContexts.hasElements() )
@@ -2837,7 +2837,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             //  initialize dialog
                             weld::Window* pWindow = rReq.GetFrameWeld();
-                            uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
+                            cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                             {
                                 {"ParentWindow", pWindow ? cpo::uno::Any(pWindow->GetXWindow()) : cpo::uno::Any(Reference<awt::XWindow>())}
                             }));
@@ -2865,7 +2865,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 try
                 {
-                    const css::uno::Sequence< css::scanner::ScannerContext > aContexts( mxScannerManager->getAvailableScanners() );
+                    const cpo::uno::Sequence< css::scanner::ScannerContext > aContexts( mxScannerManager->getAvailableScanners() );
 
                     if( aContexts.hasElements() )
                     {
@@ -4570,7 +4570,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 uno::Reference<frame::XDispatch> xDispatch(xProvider->queryDispatch(aURL, OUString(), 0));
                 if (xDispatch.is())
                 {
-                    xDispatch->dispatch(aURL, uno::Sequence< beans::PropertyValue >());
+                    xDispatch->dispatch(aURL, cpo::uno::Sequence< beans::PropertyValue >());
                 }
             }
             Cancel();

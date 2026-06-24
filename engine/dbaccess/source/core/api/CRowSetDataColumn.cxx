@@ -64,7 +64,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ORowSetDataColumn::createArrayHelper( ) const
 {
-    css::uno::Sequence< css::beans::Property> aDescriptor
+    cpo::uno::Sequence< css::beans::Property> aDescriptor
     {
         { PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY },
         { PROPERTY_DISPLAYSIZE, PROPERTY_ID_DISPLAYSIZE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY },
@@ -175,7 +175,7 @@ bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedValue
 
 Sequence< sal_Int8 > ORowSetDataColumn::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void ORowSetDataColumn::fireValueChange(const ORowSetValue& _rOldValue)

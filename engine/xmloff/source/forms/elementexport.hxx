@@ -38,7 +38,7 @@ namespace xmloff
     //= OElementExport
     class OElementExport : public OPropertyExport
     {
-        css::uno::Sequence< css::script::ScriptEventDescriptor >
+        cpo::uno::Sequence< css::script::ScriptEventDescriptor >
                                 m_aEvents;
 
         std::unique_ptr<SvXMLElementExport> m_pXMLElement;          // XML element doing the concrete startElement etc.
@@ -46,7 +46,7 @@ namespace xmloff
     public:
         OElementExport(IFormsExportContext& _rContext,
             const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents);
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents);
         virtual ~OElementExport();
 
         void doExport();
@@ -116,7 +116,7 @@ namespace xmloff
             const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
             OUString _sControlId,
             OUString _sReferringControls,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
 
     protected:
         /// start the XML element
@@ -266,7 +266,7 @@ namespace xmloff
         OColumnExport(IFormsExportContext& _rContext,
             const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
             const OUString& _rControlId,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
 
         virtual ~OColumnExport() override;
 
@@ -296,7 +296,7 @@ namespace xmloff
         */
         OFormExport(IFormsExportContext& _rContext,
             const css::uno::Reference< css::beans::XPropertySet >& _rxForm,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents
             );
 
     protected:

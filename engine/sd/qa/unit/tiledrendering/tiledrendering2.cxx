@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testInsertSignatureLineExternal)
 {
     // Given a PDF to be signed:
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
     createTempCopy(u"empty.pdf");
     loadWithParams(maTempFile.GetURL(), aArgs);
@@ -136,7 +136,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesViewInvalidations)
     aView.invalidatedAll = false;
 
     // Switching to notes view.
-    dispatchCommand(mxComponent, u".uno:NotesMode"_ustr, uno::Sequence<beans::PropertyValue>());
+    dispatchCommand(mxComponent, u".uno:NotesMode"_ustr,
+                    cpo::uno::Sequence<beans::PropertyValue>());
 
     CPPUNIT_ASSERT_EQUAL(true, aView.invalidatedAll);
     CPPUNIT_ASSERT_EQUAL(1, aView.partOfInvalidation);
@@ -185,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideBackgroundRemoteNotFetched)
     // the URL during paint when link updates are not allowed.
     // The assert in createNewSdrFillGraphicAttribute will fire if
     // a remote fetch is attempted.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -215,7 +216,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterPageBackgroundRemoteNotFetc
     // background lands on the master's presentation style sheet, not on the
     // page item set, so the link is registered through the SfxStyleSheet path
     // rather than the SdrPage one.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -243,7 +244,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testBulletImageRemoteNotFetched)
     // GraphicExternalLink graphics (GraphicType::Default is not handled
     // by create2DDecompositionOfGraphic). If someone adds fetching here,
     // this test should catch it.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -263,7 +264,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeFillRemoteNotFetched)
     // the URL during paint when link updates are not allowed.
     // The assert in createNewSdrFillGraphicAttribute will fire if
     // a remote fetch is attempted.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -281,7 +282,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testFormImageRemoteNotFetched)
 {
     // Form image button with a remote ImageURL must not fetch the
     // URL during import when link updates are not allowed.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };

@@ -29,13 +29,13 @@
 # include <utility>
 
 #include "osl/interlck.h"
-#include "com/sun/star/uno/Sequence.h"
+#include "cpo/uno/Sequence.h"
 #include "typelib/typedescription.h"
 #include "uno/data.h"
 #include "com/sun/star/uno/genfunc.hxx"
 #include "cppu/unotype.hxx"
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /// @cond INTERNAL
@@ -46,10 +46,10 @@ typelib_TypeDescriptionReference * Sequence< E >::s_pType = NULL;
 template< class E >
 inline Sequence< E >::Sequence()
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        NULL, 0, cpp_acquire );
+        NULL, 0, css::uno::cpp_acquire );
     // no bad_alloc, because empty sequence is statically allocated in cppu
 }
 
@@ -70,12 +70,12 @@ inline Sequence< E >::Sequence(
 template< class E >
 inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
 
     bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        const_cast< E * >( pElements ), len, cpp_acquire );
+        const_cast< E * >( pElements ), len, css::uno::cpp_acquire );
     if (! success)
         throw ::std::bad_alloc();
 }
@@ -83,11 +83,11 @@ inline Sequence< E >::Sequence( const E * pElements, sal_Int32 len )
 template< class E >
 inline Sequence< E >::Sequence( sal_Int32 len )
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_construct(
         &_pSequence, rType.getTypeLibType(),
-        NULL, len, cpp_acquire );
+        NULL, len, css::uno::cpp_acquire );
     if (! success)
         throw ::std::bad_alloc();
 }
@@ -95,7 +95,7 @@ inline Sequence< E >::Sequence( sal_Int32 len )
 template<typename E> Sequence<E>::Sequence(std::initializer_list<E> init) {
     if (!uno_type_sequence_construct(
             &_pSequence, cppu::getTypeFavourUnsigned(static_cast<Sequence const *>(NULL)).getTypeLibType(),
-            const_cast<E *>(init.begin()), init.size(), cpp_acquire))
+            const_cast<E *>(init.begin()), init.size(), css::uno::cpp_acquire))
     {
         throw std::bad_alloc();
     }
@@ -106,18 +106,18 @@ inline Sequence< E >::~Sequence()
 {
     if (osl_atomic_decrement( &_pSequence->nRefCount ) == 0)
     {
-        const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+        const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
         uno_type_sequence_destroy(
-            _pSequence, rType.getTypeLibType(), cpp_release );
+            _pSequence, rType.getTypeLibType(), css::uno::cpp_release );
     }
 }
 
 template< class E >
 inline Sequence< E > & Sequence< E >::operator = ( const Sequence & rSeq )
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     ::uno_type_sequence_assign(
-        &_pSequence, rSeq._pSequence, rType.getTypeLibType(), cpp_release );
+        &_pSequence, rSeq._pSequence, rType.getTypeLibType(), css::uno::cpp_release );
     return *this;
 }
 
@@ -133,12 +133,12 @@ inline bool Sequence< E >::operator == ( const Sequence & rSeq ) const
         return true;
     if (_pSequence->nElements != rSeq._pSequence->nElements)
         return false;
-    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     return ::uno_type_equalData(
         const_cast< Sequence * >( this ), rType.getTypeLibType(),
         const_cast< Sequence * >( &rSeq ), rType.getTypeLibType(),
-        cpp_queryInterface,
-        cpp_release );
+        css::uno::cpp_queryInterface,
+        css::uno::cpp_release );
 }
 
 template< class E >
@@ -150,11 +150,11 @@ inline bool Sequence< E >::operator != ( const Sequence & rSeq ) const
 template< class E >
 inline E * Sequence< E >::getArray()
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_reference2One(
         &_pSequence, rType.getTypeLibType(),
-        cpp_acquire, cpp_release );
+        css::uno::cpp_acquire, css::uno::cpp_release );
     if (! success)
         throw ::std::bad_alloc();
     return reinterpret_cast< E * >( _pSequence->elements );
@@ -177,11 +177,11 @@ inline const E & Sequence< E >::operator [] ( sal_Int32 nIndex ) const
 template< class E >
 inline void Sequence< E >::realloc( sal_Int32 nSize )
 {
-    const Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
+    const css::uno::Type & rType = ::cppu::getTypeFavourUnsigned( static_cast<Sequence const *>(NULL) );
     bool success =
     ::uno_type_sequence_realloc(
         &_pSequence, rType.getTypeLibType(), nSize,
-        cpp_acquire, cpp_release );
+        css::uno::cpp_acquire, css::uno::cpp_release );
     if (!success)
         throw ::std::bad_alloc();
 }
@@ -191,10 +191,10 @@ template <class E> inline void Sequence<E>::swap(Sequence& other)
     std::swap(_pSequence, other._pSequence);
 }
 
-inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
+inline ::cpo::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence )
 {
-    return * reinterpret_cast< const ::com::sun::star::uno::Sequence< sal_Int8 > * >( &rByteSequence );
+    return * reinterpret_cast< const ::cpo::uno::Sequence< sal_Int8 > * >( &rByteSequence );
 }
 
 /// @cond INTERNAL
@@ -243,7 +243,7 @@ void sequence_output_bytes( std::basic_ostream<charT, traits> &os, const value_t
    macros, for example).
 */
 template< typename value_t, typename charT, typename traits >
-inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &os, css::uno::Sequence<value_t> const& v)
+inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, traits> &os, cpo::uno::Sequence<value_t> const& v)
 {
     const value_t *pAry = v.getConstArray();
     sal_Int32 nLen = v.getLength();
@@ -255,7 +255,7 @@ inline std::basic_ostream<charT, traits> &operator<<(std::basic_ostream<charT, t
     return os;
 }
 
-template <class E> inline auto asNonConstRange(css::uno::Sequence<E>& s)
+template <class E> inline auto asNonConstRange(cpo::uno::Sequence<E>& s)
 {
     // Two iterators [begin, end] representing the non-const range of the Sequence.
     // It only calls Sequence::getArray once, to avoid the second COW overhead when
@@ -280,24 +280,24 @@ namespace cppu {
 
 template< typename T > inline ::com::sun::star::uno::Type const &
 getTypeFavourUnsigned(
-    SAL_UNUSED_PARAMETER ::com::sun::star::uno::Sequence< T > const *)
+    SAL_UNUSED_PARAMETER ::cpo::uno::Sequence< T > const *)
 {
-    if (::com::sun::star::uno::Sequence< T >::s_pType == NULL) {
+    if (::cpo::uno::Sequence< T >::s_pType == NULL) {
         ::typelib_static_sequence_type_init(
-            &::com::sun::star::uno::Sequence< T >::s_pType,
+            &::cpo::uno::Sequence< T >::s_pType,
             (::cppu::getTypeFavourUnsigned(
                 static_cast<
-                typename ::com::sun::star::uno::Sequence< T >::ElementType * >(
+                typename ::cpo::uno::Sequence< T >::ElementType * >(
                     NULL)).
              getTypeLibType()));
     }
     return detail::getTypeFromTypeDescriptionReference(
-        &::com::sun::star::uno::Sequence< T >::s_pType);
+        &::cpo::uno::Sequence< T >::s_pType);
 }
 
 template< typename T > inline ::com::sun::star::uno::Type const &
 getTypeFavourChar(
-    SAL_UNUSED_PARAMETER ::com::sun::star::uno::Sequence< T > const *)
+    SAL_UNUSED_PARAMETER ::cpo::uno::Sequence< T > const *)
 {
     //TODO  On certain platforms with weak memory models, the following code can
     // result in some threads observing that td points to garbage:
@@ -307,7 +307,7 @@ getTypeFavourChar(
             &td,
             (::cppu::getTypeFavourChar(
                 static_cast<
-                typename ::com::sun::star::uno::Sequence< T >::ElementType * >(
+                typename ::cpo::uno::Sequence< T >::ElementType * >(
                     NULL)).
              getTypeLibType()));
     }
@@ -320,10 +320,10 @@ getTypeFavourChar(
 template< class E >
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuType(
-    SAL_UNUSED_PARAMETER const ::com::sun::star::uno::Sequence< E > * )
+    SAL_UNUSED_PARAMETER const ::cpo::uno::Sequence< E > * )
 {
     return ::cppu::getTypeFavourUnsigned(
-        static_cast< ::com::sun::star::uno::Sequence< E > * >(0));
+        static_cast< ::cpo::uno::Sequence< E > * >(0));
 }
 
 // generic sequence template for given element type (e.g. C++ arrays)
@@ -331,14 +331,14 @@ template< class E >
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
 {
-    if (! ::com::sun::star::uno::Sequence< E >::s_pType)
+    if (! ::cpo::uno::Sequence< E >::s_pType)
     {
         ::typelib_static_sequence_type_init(
-            & ::com::sun::star::uno::Sequence< E >::s_pType,
+            & ::cpo::uno::Sequence< E >::s_pType,
             rElementType.getTypeLibType() );
     }
     return * reinterpret_cast< const ::com::sun::star::uno::Type * >(
-        & ::com::sun::star::uno::Sequence< E >::s_pType );
+        & ::cpo::uno::Sequence< E >::s_pType );
 }
 
 // char sequence

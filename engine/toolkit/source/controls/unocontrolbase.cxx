@@ -50,7 +50,7 @@ bool UnoControlBase::ImplHasProperty( const OUString& aPropertyName )
     return xInfo->hasPropertyByName( aPropertyName );
 }
 
-void UnoControlBase::ImplSetPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< cpo::uno::Any >& aValues, bool bUpdateThis )
+void UnoControlBase::ImplSetPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues, bool bUpdateThis )
 {
     css::uno::Reference< css::beans::XMultiPropertySet > xMPS( mxModel, css::uno::UNO_QUERY );
     if ( !mxModel.is() )

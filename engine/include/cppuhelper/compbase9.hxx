@@ -63,9 +63,9 @@ namespace cppu
             { WeakComponentImplHelperBase::addEventListener(xListener); }
         virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & xListener) SAL_OVERRIDE
             { WeakComponentImplHelperBase::removeEventListener(xListener); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 
@@ -95,9 +95,9 @@ namespace cppu
             { WeakComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakComponentImplHelperBase::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 
@@ -136,9 +136,9 @@ namespace cppu
             { WeakAggComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { WeakAggComponentImplHelperBase::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakAggComponentImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 }

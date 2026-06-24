@@ -111,7 +111,7 @@ OLEVariant::OLEVariant(IDispatch* pDispInterface)
     setIDispatch( pDispInterface );
 }
 
-OLEVariant::OLEVariant(const css::uno::Sequence< sal_Int8 >& x)
+OLEVariant::OLEVariant(const cpo::uno::Sequence< sal_Int8 >& x)
 {
     VariantInit(this);
 
@@ -363,12 +363,12 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
 }
 
 
-css::uno::Sequence< sal_Int8 > OLEVariant::getByteSequence() const
+cpo::uno::Sequence< sal_Int8 > OLEVariant::getByteSequence() const
 {
-    css::uno::Sequence< sal_Int8 > aRet;
+    cpo::uno::Sequence< sal_Int8 > aRet;
     if(V_VT(this) == VT_BSTR)
     {
-        aRet = css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8*>(V_BSTR(this)),
+        aRet = cpo::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8*>(V_BSTR(this)),
                                             ::SysStringByteLen(V_BSTR(this)));
     }
     else if(!isNull())

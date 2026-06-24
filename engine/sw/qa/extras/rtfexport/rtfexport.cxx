@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49683)
             mxComponent, uno::UNO_QUERY);
         uno::Reference<document::XDocumentProperties> xDocumentProperties(
             xDocumentPropertiesSupplier->getDocumentProperties());
-        uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
+        cpo::uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aKeywords.getLength());
         CPPUNIT_ASSERT_EQUAL(u"one"_ustr, aKeywords[0]);
         CPPUNIT_ASSERT_EQUAL(u"two"_ustr, aKeywords[1]);
@@ -516,16 +516,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo53113)
      * xray oCoordinates(1).Second.Value ' 102
      */
 
-    const uno::Sequence<beans::PropertyValue> aProps
-        = getProperty<uno::Sequence<beans::PropertyValue>>(getShape(1),
+    const cpo::uno::Sequence<beans::PropertyValue> aProps
+        = getProperty<cpo::uno::Sequence<beans::PropertyValue>>(getShape(1),
                                                            u"CustomShapeGeometry"_ustr);
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aProps)
     {
         if (rProp.Name == "Path")
             rProp.Value >>= aPathProps;
     }
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
     for (beans::PropertyValue const& rProp : aPathProps)
     {
         if (rProp.Name == "Coordinates")
@@ -668,7 +668,7 @@ CPPUNIT_TEST_FIXTURE(Test, testI120928)
             getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xLevels(
             xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aProps;
+        cpo::uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(0) >>= aProps; // 1st level
 
         uno::Reference<awt::XBitmap> xBitmap;
@@ -886,7 +886,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo66682)
             getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xLevels(
             xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValue> aProps;
+        cpo::uno::Sequence<beans::PropertyValue> aProps;
         xLevels->getByIndex(0) >>= aProps; // 1st level
 
         OUString aListFormat;

@@ -36,7 +36,7 @@ using namespace ::com::sun::star::sdb;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_OSQLMessageDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new OSQLMessageDialog(context));
 }
@@ -60,7 +60,7 @@ OSQLMessageDialog::OSQLMessageDialog(const Reference< XComponentContext >& _rxOR
 
 Sequence<sal_Int8> SAL_CALL OSQLMessageDialog::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 OUString SAL_CALL OSQLMessageDialog::getImplementationName()
@@ -68,7 +68,7 @@ OUString SAL_CALL OSQLMessageDialog::getImplementationName()
     return u"org.openoffice.comp.dbu.OSQLMessageDialog"_ustr;
 }
 
-css::uno::Sequence<OUString> SAL_CALL OSQLMessageDialog::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OSQLMessageDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.ErrorMessageDialog"_ustr };
 }

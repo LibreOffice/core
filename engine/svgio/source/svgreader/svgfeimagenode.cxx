@@ -79,7 +79,7 @@ void SvgFeImageNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
     if (!maData.isEmpty())
     {
         // use embedded base64 encoded data
-        css::uno::Sequence<sal_Int8> aPass;
+        cpo::uno::Sequence<sal_Int8> aPass;
         ::comphelper::Base64::decode(aPass, maData);
 
         if (aPass.hasElements())

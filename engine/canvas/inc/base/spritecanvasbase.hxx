@@ -103,7 +103,7 @@ namespace canvas
             return BaseType::maCanvasHelper.createSpriteFromAnimation(animation);
         }
 
-        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const css::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
+        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const cpo::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
                                                                                                                                    sal_Int8                                                                                                           interpolationMode ) override
         {
             canvastools::verifyArgs(animationBitmaps,

@@ -260,7 +260,7 @@ private:
 
     SVL_DLLPRIVATE static sal_Int32
     ImpGetFormatCodeIndex(const SvNFLanguageData& rCurrentLanguage,
-                          css::uno::Sequence<css::i18n::NumberFormatCode>& rSeq,
+                          cpo::uno::Sequence<css::i18n::NumberFormatCode>& rSeq,
                           const NfIndexTableOffset nTabOff);
 
     SVL_DLLPRIVATE static void ImpAdjustFormatCodeDefault(const SvNFLanguageData& rCurrentLanguage,

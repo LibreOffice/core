@@ -141,13 +141,13 @@ void SfxStatusDispatcher::sendStatusChanged(const OUString& rURL, const css::fra
     );
 }
 
-void SAL_CALL SfxStatusDispatcher::dispatch( const css::util::URL&, const css::uno::Sequence< css::beans::PropertyValue >& )
+void SAL_CALL SfxStatusDispatcher::dispatch( const css::util::URL&, const cpo::uno::Sequence< css::beans::PropertyValue >& )
 {
 }
 
 void SAL_CALL SfxStatusDispatcher::dispatchWithNotification(
     const css::util::URL&,
-    const css::uno::Sequence< css::beans::PropertyValue >&,
+    const cpo::uno::Sequence< css::beans::PropertyValue >&,
     const css::uno::Reference< css::frame::XDispatchResultListener >& )
 {
 }
@@ -231,7 +231,7 @@ std::unique_ptr< css::uno::ContextLayer > EnsureJavaContext()
 }
 #endif
 
-void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
+void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs )
 {
     // ControllerItem is the Impl class
     if ( pImpl )
@@ -261,7 +261,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
 }
 
 void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL& aURL,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
     // ControllerItem is the Impl class
@@ -418,7 +418,7 @@ void SfxDispatchController_Impl::UnBindController()
     }
 }
 
-void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL, css::uno::Sequence< css::beans::PropertyValue >& rArgs )
+void SfxDispatchController_Impl::addParametersToArgs( const css::util::URL& aURL, cpo::uno::Sequence< css::beans::PropertyValue >& rArgs )
 {
     // Extract the parameter from the URL and put them into the property value sequence
     sal_Int32 nQueryIndex = aURL.Complete.indexOf( '?' );
@@ -516,7 +516,7 @@ OUString SfxDispatchController_Impl::getSlaveCommand( const css::util::URL& rURL
 namespace {
 
 OUString parseArguments(std::u16string_view rAction,
-                              const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+                              const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     OUStringBuffer aBuffer(rAction);
 
@@ -556,7 +556,7 @@ OUString parseArguments(std::u16string_view rAction,
     return aBuffer.makeStringAndClear();
 }
 
-void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
+void collectUIInformation(const util::URL& rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     static const char* pFile = std::getenv("LO_COLLECT_UIINFO");
     if (!pFile)
@@ -568,7 +568,7 @@ void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::
 }
 
 void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
     collectUIInformation(aURL, aArgs);
@@ -604,7 +604,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
     if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
 
-    css::uno::Sequence< css::beans::PropertyValue > lNewArgs;
+    cpo::uno::Sequence< css::beans::PropertyValue > lNewArgs;
     sal_Int32 nCount = aArgs.getLength();
 
     // Support for URL based arguments
@@ -1129,7 +1129,7 @@ OString StringOrStrSeqPayload(sal_uInt16, SfxViewFrame*,
     {
         if (OUString sValue; aEvent.State >>= sValue)
             aBuffer.append(sValue.toUtf8());
-        else if (css::uno::Sequence<OUString> aSeq; aEvent.State >>= aSeq)
+        else if (cpo::uno::Sequence<OUString> aSeq; aEvent.State >>= aSeq)
             aBuffer.append(aSeq[0].toUtf8());
     }
     return aBuffer.makeStringAndClear();
@@ -1141,7 +1141,7 @@ OString StrSeqPayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateE
     OString json;
     if (aEvent.IsEnabled)
     {
-        if (css::uno::Sequence<OUString> aSeq; aEvent.State >>= aSeq)
+        if (cpo::uno::Sequence<OUString> aSeq; aEvent.State >>= aSeq)
         {
             tools::JsonWriter aTree;
             for (const auto& s : aSeq)
@@ -1168,7 +1168,7 @@ OString TableStylePayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureSt
     aTree.put("commandName", aEvent.FeatureURL.Complete);
     aTree.put("enabled", !!aEvent.IsEnabled); // use boolean
 
-    css::uno::Sequence<css::beans::PropertyValue> aSeq;
+    cpo::uno::Sequence<css::beans::PropertyValue> aSeq;
     if (aEvent.IsEnabled && (aEvent.State >>= aSeq))
     {
         auto aState = aTree.startNode("state");

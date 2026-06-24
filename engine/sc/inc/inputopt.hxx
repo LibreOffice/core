@@ -80,7 +80,7 @@ public:
 class ScInputCfg final : private ScInputOptions,
                   public utl::ConfigItem
 {
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
     void ReadCfg();
     virtual void    ImplCommit() override;
 
@@ -90,7 +90,7 @@ public:
     const ScInputOptions& GetOptions() const { return *this; }
     void            SetOptions( const ScInputOptions& rNew );
 
-    virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
+    virtual void    Notify( const cpo::uno::Sequence<OUString>& aPropertyNames ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -176,7 +176,7 @@ public:
 
     }
 
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return comphelper::mapKeysToSequence( namesToIndices );
     }
@@ -273,7 +273,7 @@ cpo::uno::Any VbaDocumentsBase::createDocument()
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-cpo::uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const cpo::uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps )
+cpo::uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const cpo::uno::Any& ReadOnly, const cpo::uno::Sequence< beans::PropertyValue >& rProps )
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
@@ -299,7 +299,7 @@ cpo::uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const c
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( mxContext );
 
-    uno::Sequence< beans::PropertyValue > sProps( rProps );
+    cpo::uno::Sequence< beans::PropertyValue > sProps( rProps );
     sProps.realloc( sProps.getLength() + 1 );
     auto pProps = sProps.getArray();
     pProps[ sProps.getLength() - 1 ].Name = u"MacroExecutionMode"_ustr;

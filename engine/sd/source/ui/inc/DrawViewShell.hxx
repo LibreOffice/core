@@ -304,8 +304,8 @@ public:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow, sal_uInt16 nPage, SdrLayerID nLayer ) override;
 
-    virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& ) override;
-    virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& ) override;
+    virtual void    WriteUserDataSequence ( cpo::uno::Sequence < css::beans::PropertyValue >& ) override;
+    virtual void    ReadUserDataSequence ( const cpo::uno::Sequence < css::beans::PropertyValue >& ) override;
 
     virtual void    VisAreaChanged(const ::tools::Rectangle& rRect) override;
 

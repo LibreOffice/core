@@ -49,7 +49,7 @@ public:
     virtual void SAL_CALL release() noexcept override { OWeakObject::release(); }
 
     // XOutputStream
-   virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+   virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData ) override;
 
    virtual void SAL_CALL flush() override;
 

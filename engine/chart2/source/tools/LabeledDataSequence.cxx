@@ -27,7 +27,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace chart
 {
@@ -160,7 +160,7 @@ bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rServiceName
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.data.LabeledDataSequence"_ustr };
 }
@@ -169,7 +169,7 @@ css::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedService
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_LabeledDataSequence_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::LabeledDataSequence );
 }

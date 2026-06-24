@@ -138,7 +138,7 @@ bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceNa
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.task.OfficeRestartManager"_ustr };
 }
@@ -149,7 +149,7 @@ uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNam
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_task_OfficeRestartManager(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new comphelper::OOfficeRestartManager(context));
 }

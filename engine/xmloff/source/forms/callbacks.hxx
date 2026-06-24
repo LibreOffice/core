@@ -55,7 +55,7 @@ namespace xmloff
     public:
         virtual void registerEvents(
             const css::uno::Reference< css::beans::XPropertySet >& _rxElement,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             ) = 0;
 
     protected:
@@ -67,7 +67,7 @@ namespace xmloff
     {
     public:
         virtual void registerEvents(
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             ) = 0;
 
     protected:

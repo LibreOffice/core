@@ -151,10 +151,10 @@ ScVbaToggleButton::getServiceImplName()
     return u"ScVbaToggleButton"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaToggleButton::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.ToggleButton"_ustr
     };

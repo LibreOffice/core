@@ -21,7 +21,7 @@
 
 #include <span>
 #include <unordered_map>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vector>
 #include <comphelper/sequenceashashmap.hxx>
@@ -114,11 +114,11 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
                     But it doesn't provide a "pack" mechanism to
                     ignore properties with empty (means "void") values.
 
-            @return css::uno::Sequence< css::beans::PropertyValue >
+            @return cpo::uno::Sequence< css::beans::PropertyValue >
                     as a list of all properties of this cacheitem,
                     where empty properties was removed.
          */
-        css::uno::Sequence< css::beans::PropertyValue > getAsPackedPropertyValueList(bool bFinalized, bool bMandatory) const;
+        cpo::uno::Sequence< css::beans::PropertyValue > getAsPackedPropertyValueList(bool bFinalized, bool bMandatory) const;
 };
 
 

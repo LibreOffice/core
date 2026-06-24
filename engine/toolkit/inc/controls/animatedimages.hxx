@@ -49,7 +49,7 @@ namespace toolkit
 
         // XServiceInfo
         OUString SAL_CALL getImplementationName(  ) override;
-        css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XAnimatedImages
         virtual ::sal_Int32 SAL_CALL getStepTime() override;
@@ -59,9 +59,9 @@ namespace toolkit
         virtual ::sal_Int16 SAL_CALL getScaleMode() override;
         virtual void SAL_CALL setScaleMode( ::sal_Int16 _scalemode ) override;
         virtual ::sal_Int32 SAL_CALL getImageSetCount(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getImageSet( ::sal_Int32 i_index ) override;
-        virtual void SAL_CALL insertImageSet( ::sal_Int32 i_index, const css::uno::Sequence< OUString >& i_imageURLs ) override;
-        virtual void SAL_CALL replaceImageSet( ::sal_Int32 i_index, const css::uno::Sequence< OUString >& i_imageURLs ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getImageSet( ::sal_Int32 i_index ) override;
+        virtual void SAL_CALL insertImageSet( ::sal_Int32 i_index, const cpo::uno::Sequence< OUString >& i_imageURLs ) override;
+        virtual void SAL_CALL replaceImageSet( ::sal_Int32 i_index, const cpo::uno::Sequence< OUString >& i_imageURLs ) override;
         virtual void SAL_CALL removeImageSet( ::sal_Int32 i_index ) override;
 
         // XAnimatedImages::XContainer
@@ -79,7 +79,7 @@ namespace toolkit
 
     private:
         comphelper::OInterfaceContainerHelper4<css::container::XContainerListener> maContainerListeners;
-        std::vector< css::uno::Sequence< OUString > >    maImageSets;
+        std::vector< cpo::uno::Sequence< OUString > >    maImageSets;
     };
 
 

@@ -20,7 +20,7 @@
 
 #include <memory>
 #include "bibconfig.hxx"
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/processfactory.hxx>
@@ -193,7 +193,7 @@ void BibConfig::SetBibliographyURL(const BibDBDescriptor& rDesc)
     SetModified();
 };
 
-void BibConfig::Notify( const css::uno::Sequence<OUString>& )
+void BibConfig::Notify( const cpo::uno::Sequence<OUString>& )
 {
 }
 

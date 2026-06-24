@@ -128,7 +128,7 @@ namespace vclcanvas
                                                css::rendering::XPolyPolygon2D >&   xPolyPolygon,
                                        const css::rendering::ViewState&        viewState,
                                        const css::rendering::RenderState&      renderState,
-                                       const css::uno::Sequence<
+                                       const cpo::uno::Sequence<
                                                css::rendering::Texture >&      textures,
                                        const css::rendering::StrokeAttributes& strokeAttributes );
         css::uno::Reference< css::rendering::XCachedPrimitive >
@@ -137,7 +137,7 @@ namespace vclcanvas
                                                     css::rendering::XPolyPolygon2D >&  xPolyPolygon,
                                             const css::rendering::ViewState&           viewState,
                                             const css::rendering::RenderState&         renderState,
-                                            const css::uno::Sequence<
+                                            const cpo::uno::Sequence<
                                                     css::rendering::Texture >&         textures,
                                             const css::uno::Reference<
                                                     css::geometry::XMapping2D >&       xMapping,
@@ -161,7 +161,7 @@ namespace vclcanvas
                                              css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                      const css::rendering::ViewState&          viewState,
                                      const css::rendering::RenderState&        renderState,
-                                     const css::uno::Sequence<
+                                     const cpo::uno::Sequence<
                                              css::rendering::Texture >&        textures );
         css::uno::Reference< css::rendering::XCachedPrimitive >
             fillTextureMappedPolyPolygon( const css::rendering::XCanvas*           rCanvas,
@@ -169,7 +169,7 @@ namespace vclcanvas
                                                   css::rendering::XPolyPolygon2D >&    xPolyPolygon,
                                           const css::rendering::ViewState&         viewState,
                                           const css::rendering::RenderState&       renderState,
-                                          const css::uno::Sequence<
+                                          const cpo::uno::Sequence<
                                                   css::rendering::Texture >&       textures,
                                           const css::uno::Reference<
                                                   css::geometry::XMapping2D >&         xMapping );
@@ -177,14 +177,14 @@ namespace vclcanvas
         css::uno::Reference< css::rendering::XCanvasFont >
             createFont( const css::rendering::XCanvas*         rCanvas,
                         const css::rendering::FontRequest&     fontRequest,
-                        const css::uno::Sequence<
+                        const cpo::uno::Sequence<
                             css::beans::PropertyValue >&       extraFontProperties,
                         const css::geometry::Matrix2D&         fontMatrix );
 
-        css::uno::Sequence< css::rendering::FontInfo >
+        cpo::uno::Sequence< css::rendering::FontInfo >
             queryAvailableFonts( const css::rendering::XCanvas*        rCanvas,
                                  const css::rendering::FontInfo&       aFilter,
-                                 const css::uno::Sequence<
+                                 const cpo::uno::Sequence<
                                          css::beans::PropertyValue >&  aFontProperties );
 
         css::uno::Reference< css::rendering::XCachedPrimitive >
@@ -230,11 +230,11 @@ namespace vclcanvas
             getScaledBitmap( const css::geometry::RealSize2D&  newSize,
                              bool                              beFast );
 
-        css::uno::Sequence< sal_Int8 >
+        cpo::uno::Sequence< sal_Int8 >
             getData( css::rendering::IntegerBitmapLayout&      bitmapLayout,
                      const css::geometry::IntegerRectangle2D&  rect );
 
-        css::uno::Sequence< sal_Int8 >
+        cpo::uno::Sequence< sal_Int8 >
             getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                       const css::geometry::IntegerPoint2D& pos );
 

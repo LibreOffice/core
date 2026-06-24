@@ -391,12 +391,12 @@ void SwXTextPortion::GetPropertyValue(
     }
 }
 
-uno::Sequence< cpo::uno::Any > SwXTextPortion::GetPropertyValues_Impl(
-        const uno::Sequence< OUString >& rPropertyNames )
+cpo::uno::Sequence< cpo::uno::Any > SwXTextPortion::GetPropertyValues_Impl(
+        const cpo::uno::Sequence< OUString >& rPropertyNames )
 {
     sal_Int32 nLength = rPropertyNames.getLength();
     const OUString *pPropertyNames = rPropertyNames.getConstArray();
-    uno::Sequence< cpo::uno::Any > aValues(nLength);
+    cpo::uno::Sequence< cpo::uno::Any > aValues(nLength);
     cpo::uno::Any *pValues = aValues.getArray();
     SwUnoCursor& rUnoCursor = GetCursor();
 
@@ -420,13 +420,13 @@ cpo::uno::Any SwXTextPortion::getPropertyValue(
     const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aPropertyNames { rPropertyName };
+    cpo::uno::Sequence< OUString > aPropertyNames { rPropertyName };
     return GetPropertyValues_Impl(aPropertyNames).getConstArray()[0];
 }
 
 void SwXTextPortion::SetPropertyValues_Impl(
-    const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< cpo::uno::Any >& rValues )
+    const cpo::uno::Sequence< OUString >& rPropertyNames,
+    const cpo::uno::Sequence< cpo::uno::Any >& rValues )
 {
     if (rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException(u"lengths do not match"_ustr,
@@ -438,7 +438,7 @@ void SwXTextPortion::SetPropertyValues_Impl(
         const OUString* pPropertyNames = rPropertyNames.getConstArray();
         const cpo::uno::Any* pValues = rValues.getConstArray();
         const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
-        uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
+        cpo::uno::Sequence< beans::PropertyValue > aValues( rPropertyNames.getLength() );
         auto aValuesRange = asNonConstRange(aValues);
         for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
         {
@@ -456,8 +456,8 @@ void SwXTextPortion::SetPropertyValues_Impl(
 }
 
 void SwXTextPortion::setPropertyValues(
-    const uno::Sequence< OUString >& rPropertyNames,
-    const uno::Sequence< cpo::uno::Any >& rValues )
+    const cpo::uno::Sequence< OUString >& rPropertyNames,
+    const cpo::uno::Sequence< cpo::uno::Any >& rValues )
 {
     SolarMutexGuard aGuard;
 
@@ -476,11 +476,11 @@ void SwXTextPortion::setPropertyValues(
     }
 }
 
-uno::Sequence< cpo::uno::Any > SwXTextPortion::getPropertyValues(
-    const uno::Sequence< OUString >& rPropertyNames )
+cpo::uno::Sequence< cpo::uno::Any > SwXTextPortion::getPropertyValues(
+    const cpo::uno::Sequence< OUString >& rPropertyNames )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< cpo::uno::Any > aValues;
+    cpo::uno::Sequence< cpo::uno::Any > aValues;
 
     // workaround for bad designed API
     try
@@ -504,9 +504,9 @@ uno::Sequence< cpo::uno::Any > SwXTextPortion::getPropertyValues(
 }
 
 /* disabled for #i46921# */
-uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyValuesTolerant(
-        const uno::Sequence< OUString >& rPropertyNames,
-        const uno::Sequence< cpo::uno::Any >& rValues )
+cpo::uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyValuesTolerant(
+        const cpo::uno::Sequence< OUString >& rPropertyNames,
+        const cpo::uno::Sequence< cpo::uno::Any >& rValues )
 {
     SolarMutexGuard aGuard;
 
@@ -521,7 +521,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
     const cpo::uno::Any *pValue = rValues.getConstArray();
 
     sal_Int32 nFailed = 0;
-    uno::Sequence< beans::SetPropertyTolerantFailed > aFailed( nProps );
+    cpo::uno::Sequence< beans::SetPropertyTolerantFailed > aFailed( nProps );
     beans::SetPropertyTolerantFailed *pFailed = aFailed.getArray();
 
     const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
@@ -572,30 +572,30 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
     return aFailed;
 }
 
-uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPropertyValuesTolerant(
-        const uno::Sequence< OUString >& rPropertyNames )
+cpo::uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPropertyValuesTolerant(
+        const cpo::uno::Sequence< OUString >& rPropertyNames )
 {
     SolarMutexGuard aGuard;
 
-    const uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
+    const cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > aTmpRes(
             GetPropertyValuesTolerant_Impl( rPropertyNames, false ) );
 
     // copy temporary result to final result type
     sal_Int32 nLen = aTmpRes.getLength();
-    uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
+    cpo::uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
     std::copy(aTmpRes.begin(), aTmpRes.end(), aRes.getArray());
     return aRes;
 }
 
-uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::getDirectPropertyValuesTolerant(
-        const uno::Sequence< OUString >& rPropertyNames )
+cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::getDirectPropertyValuesTolerant(
+        const cpo::uno::Sequence< OUString >& rPropertyNames )
 {
     SolarMutexGuard aGuard;
     return GetPropertyValuesTolerant_Impl( rPropertyNames, true );
 }
 
-uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPropertyValuesTolerant_Impl(
-        const uno::Sequence< OUString >& rPropertyNames,
+cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPropertyValuesTolerant_Impl(
+        const cpo::uno::Sequence< OUString >& rPropertyNames,
         bool bDirectValuesOnly )
 {
     SolarMutexGuard aGuard;
@@ -614,7 +614,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPrope
         const SfxItemPropertyMap& rPropMap = m_pPropSet->getPropertyMap();
 
 
-        uno::Sequence< beans::PropertyState > aPropertyStates;
+        cpo::uno::Sequence< beans::PropertyState > aPropertyStates;
         if (m_bIsListAutoFormat)
         {
             SwTextNode* pTextNode = rUnoCursor.GetPointNode().GetTextNode();
@@ -713,7 +713,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::GetPrope
 }
 
 void SwXTextPortion::addPropertiesChangeListener(
-    const uno::Sequence< OUString >& /*aPropertyNames*/,
+    const cpo::uno::Sequence< OUString >& /*aPropertyNames*/,
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 {}
 
@@ -722,7 +722,7 @@ void SwXTextPortion::removePropertiesChangeListener(
 {}
 
 void SwXTextPortion::firePropertiesChangeEvent(
-    const uno::Sequence< OUString >& /*aPropertyNames*/,
+    const cpo::uno::Sequence< OUString >& /*aPropertyNames*/,
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 {}
 
@@ -767,13 +767,13 @@ beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyN
     return eRet;
 }
 
-uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
-        const uno::Sequence< OUString >& rPropertyNames)
+cpo::uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
+        const cpo::uno::Sequence< OUString >& rPropertyNames)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
 
-    uno::Sequence< beans::PropertyState > aRet =
+    cpo::uno::Sequence< beans::PropertyState > aRet =
         SwUnoCursorHelper::GetPropertyStates(rUnoCursor, *m_pPropSet,
                 rPropertyNames, SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION);
 
@@ -818,7 +818,7 @@ uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumerat
     return SwXParaFrameEnumeration::Create(rUnoCursor, PARAFRAME_PORTION_CHAR, m_pFrameFormat);
 }
 
-uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames()
 {
     return { u"com.sun.star.text.TextContent"_ustr };
 }
@@ -833,7 +833,7 @@ bool SwXTextPortion::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.TextPortion"_ustr,
             u"com.sun.star.style.CharacterProperties"_ustr,

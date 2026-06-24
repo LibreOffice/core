@@ -108,7 +108,7 @@ public:
                                   OUString &rText, const IntlWrapper& ) const override;
 
     // ConfigItem
-    virtual void            Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
+    virtual void            Notify( const cpo::uno::Sequence< OUString > &rPropertyNames ) override;
 
     bool equalsIgnoring(const SvxSearchItem& rSItem, bool bIgnoreReplace,
                         bool bIgnoreCommand) const;

@@ -85,14 +85,14 @@ public:
     bool HasValues() const;
 
     // UNO mapping functions
-    css::uno::Sequence<css::beans::PropertyValue> GetProperties(bool bDefaults);
+    cpo::uno::Sequence<css::beans::PropertyValue> GetProperties(bool bDefaults);
 
-    css::uno::Sequence<css::beans::PropertyValue> GetCharStyleProperties();
+    cpo::uno::Sequence<css::beans::PropertyValue> GetCharStyleProperties();
 private:
 
-    css::uno::Sequence<css::beans::PropertyValue> GetLevelProperties(bool bDefaults);
+    cpo::uno::Sequence<css::beans::PropertyValue> GetLevelProperties(bool bDefaults);
 
-    void AddParaProperties(css::uno::Sequence<css::beans::PropertyValue>* pProps);
+    void AddParaProperties(cpo::uno::Sequence<css::beans::PropertyValue>* pProps);
 };
 
 /// Represents a numbering picture bullet: an id and a graphic.
@@ -154,7 +154,7 @@ public:
 
     const ListLevel::Pointer&  GetCurrentLevel( ) const { return m_pCurrentLevel; };
 
-    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues(bool bDefaults);
+    cpo::uno::Sequence< cpo::uno::Sequence<css::beans::PropertyValue> > GetPropertyValues(bool bDefaults);
 
     void                  SetNumStyleLink(const OUString& sValue) { m_sNumStyleLink = sValue; };
     const OUString&       GetNumStyleLink() const { return m_sNumStyleLink; };
@@ -191,7 +191,7 @@ public:
     const OUString & GetStyleName() const { return m_StyleName; };
     const OUString & GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles, const DomainMapper& rDMapper);
 
-    css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
+    cpo::uno::Sequence< cpo::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 
     sal_uInt16 GetChapterNumberingWeight() const;
     void CreateNumberingRules(DomainMapper& rDMapper, rtl::Reference<SwXTextDocument> const& xTextDoc, sal_Int16 nOutline);

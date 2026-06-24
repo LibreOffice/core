@@ -279,7 +279,7 @@ bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName)
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.JobManager"_ustr };
 }
@@ -418,7 +418,7 @@ void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_util_comp_FinalThreadManager_get_implementation(css::uno::XComponentContext* context,
-                                css::uno::Sequence<cpo::uno::Any> const &)
+                                cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FinalThreadManager(context));
 }

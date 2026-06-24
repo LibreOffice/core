@@ -42,12 +42,12 @@ ContentHandlerFactory::~ContentHandlerFactory()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstance(const OUString& sHandler)
 {
-    return createInstanceWithArguments(sHandler, css::uno::Sequence< cpo::uno::Any >());
+    return createInstanceWithArguments(sHandler, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
-                                                                                                        const css::uno::Sequence< cpo::uno::Any >& lArguments)
+                                                                                                        const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     css::uno::Reference< css::uno::XInterface > xHandler;
 
@@ -70,7 +70,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
         //         lInitData[1] = lArguments[0]
         //         ...
         //         lInitData[n] = lArguments[n-1]
-        css::uno::Sequence< css::beans::PropertyValue > lConfig;
+        cpo::uno::Sequence< css::beans::PropertyValue > lConfig;
         aHandler >> lConfig;
 
         ::std::vector< cpo::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< cpo::uno::Any > >(lArguments));
@@ -84,7 +84,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServiceNames()
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!
     return BaseContainer::getElementNames();
@@ -94,7 +94,7 @@ css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServi
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_ContentHandlerFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new filter::config::ContentHandlerFactory(context));
 }

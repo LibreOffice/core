@@ -20,7 +20,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/SchXMLImportHelper.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
@@ -33,8 +33,8 @@ private:
 
     bool mbHasRowPermutation;
     bool mbHasColumnPermutation;
-    css::uno::Sequence< sal_Int32 > maRowPermutation;
-    css::uno::Sequence< sal_Int32 > maColumnPermutation;
+    cpo::uno::Sequence< sal_Int32 > maRowPermutation;
+    cpo::uno::Sequence< sal_Int32 > maColumnPermutation;
 
 public:
     SchXMLTableContext( SvXMLImport& rImport,
@@ -49,8 +49,8 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    void setRowPermutation( const css::uno::Sequence< sal_Int32 > & rPermutation );
-    void setColumnPermutation( const css::uno::Sequence< sal_Int32 > & rPermutation );
+    void setRowPermutation( const cpo::uno::Sequence< sal_Int32 > & rPermutation );
+    void setColumnPermutation( const cpo::uno::Sequence< sal_Int32 > & rPermutation );
 };
 
 class SchXMLTableHelper

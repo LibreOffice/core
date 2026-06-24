@@ -35,7 +35,7 @@ using namespace ::com::sun::star::ucb;
 namespace utl
 {
 
-css::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, bool bFolder )
+cpo::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, bool bFolder )
 {
     std::vector< OUString > vFiles;
     try
@@ -44,7 +44,7 @@ css::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUStri
             rFolder, Reference< XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         Reference< css::sdbc::XResultSet > xResultSet;
-        css::uno::Sequence< OUString > aProps { u"Url"_ustr };
+        cpo::uno::Sequence< OUString > aProps { u"Url"_ustr };
 
         try
         {

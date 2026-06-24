@@ -36,7 +36,7 @@
 #include <set>
 #endif
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 static constexpr bool HAS_NAMESPACE(sal_Int32 x) { return (x & 0xffff0000) != 0; }
 static constexpr sal_Int32 NAMESPACE(sal_Int32 x) { return x >> 16; }

@@ -71,7 +71,7 @@ void TablePositionHandler::lcl_attribute(Id nId, const Value& rVal)
 
 void TablePositionHandler::lcl_sprm(Sprm& /*rSprm*/) {}
 
-uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() const
+cpo::uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() const
 {
     comphelper::SequenceAsHashMap aFrameProperties;
 

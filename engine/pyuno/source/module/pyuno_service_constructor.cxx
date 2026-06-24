@@ -51,7 +51,7 @@ void PyUNO_service_constructor_Internals::ensureParamTypes()
     if (bTypesInitialized)
         return;
 
-    css::uno::Sequence<css::uno::Reference<css::reflection::XParameter>> aParams
+    cpo::uno::Sequence<css::uno::Reference<css::reflection::XParameter>> aParams
         = xConstructor->getParameters();
 
     for (const auto& xParameter : aParams)
@@ -140,7 +140,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
             return nullptr;
         }
 
-        css::uno::Sequence<cpo::uno::Any> aParams(nParams - 1);
+        cpo::uno::Sequence<cpo::uno::Any> aParams(nParams - 1);
         cpo::uno::Any* pParams = aParams.getArray();
 
         for (sal_Int32 i = 0; i < nParams - 1; ++i)

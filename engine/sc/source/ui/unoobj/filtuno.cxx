@@ -40,7 +40,7 @@
 
 #include <optutil.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <memory>
@@ -126,7 +126,7 @@ ScFilterOptionsObj::~ScFilterOptionsObj()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-Calc_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
+Calc_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
@@ -135,14 +135,14 @@ Calc_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*, css::u
 
 // XPropertyAccess
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValues()
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValues()
 {
     return comphelper::InitPropertySequence({
         { SC_UNONAME_FILTEROPTIONS, Any(aFilterOptions) }
     });
 }
 
-void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::PropertyValue>& aProps )
+void SAL_CALL ScFilterOptionsObj::setPropertyValues( const cpo::uno::Sequence<beans::PropertyValue>& aProps )
 {
     for (const beans::PropertyValue& rProp : aProps)
     {
@@ -367,7 +367,7 @@ void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::
 
 // XInitialization
 
-void SAL_CALL ScFilterOptionsObj::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL ScFilterOptionsObj::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"ParentWindow"_ustr))

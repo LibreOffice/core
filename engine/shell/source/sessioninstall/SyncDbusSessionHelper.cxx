@@ -69,7 +69,7 @@ namespace
 
 void request(
     char const * method,
-    css::uno::Sequence<OUString> const & resources,
+    cpo::uno::Sequence<OUString> const & resources,
     std::u16string_view interaction)
 {
     // Keep strings alive until after call to g_dbus_proxy_call_sync
@@ -120,63 +120,63 @@ bool SAL_CALL SyncDbusSessionHelper::supportsService(const OUString& aServiceNam
 }
 
 void SyncDbusSessionHelper::InstallPackageFiles(
-    css::uno::Sequence<OUString> const & files,
+    cpo::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
     request("InstallPackageFiles", files, interaction);
 }
 
 void SyncDbusSessionHelper::InstallProvideFiles(
-    css::uno::Sequence<OUString> const & files,
+    cpo::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
     request("InstallProvideFiles", files, interaction);
 }
 
 void SyncDbusSessionHelper::InstallCatalogs(
-    css::uno::Sequence<OUString> const & files,
+    cpo::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
     request("InstallCatalogs", files, interaction);
 }
 
 void SyncDbusSessionHelper::InstallPackageNames(
-    css::uno::Sequence<OUString> const & packages,
+    cpo::uno::Sequence<OUString> const & packages,
     OUString const & interaction)
 {
     request("InstallPackageNames", packages, interaction);
 }
 
 void SyncDbusSessionHelper::InstallMimeTypes(
-    css::uno::Sequence<OUString> const & mimeTypes,
+    cpo::uno::Sequence<OUString> const & mimeTypes,
     OUString const & interaction)
 {
     request("InstallMimeTypes", mimeTypes, interaction);
 }
 
 void SyncDbusSessionHelper::InstallFontconfigResources(
-    css::uno::Sequence<OUString> const & resources,
+    cpo::uno::Sequence<OUString> const & resources,
     OUString const & interaction)
 {
     request("InstallFontconfigResources", resources, interaction);
 }
 
 void SyncDbusSessionHelper::InstallGStreamerResources(
-    css::uno::Sequence<OUString> const & resources,
+    cpo::uno::Sequence<OUString> const & resources,
     OUString const & interaction)
 {
     request("InstallGStreamerResources", resources, interaction);
 }
 
 void SyncDbusSessionHelper::RemovePackageByFiles(
-    css::uno::Sequence<OUString> const & files,
+    cpo::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
     request("RemovePackageByFiles", files, interaction);
 }
 
 void SyncDbusSessionHelper::InstallPrinterDrivers(
-    css::uno::Sequence<OUString> const & files,
+    cpo::uno::Sequence<OUString> const & files,
     OUString const & interaction)
 {
     request("InstallPrinterDrivers", files, interaction);
@@ -203,7 +203,7 @@ void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_sessioninstall_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SyncDbusSessionHelper(context));
 }

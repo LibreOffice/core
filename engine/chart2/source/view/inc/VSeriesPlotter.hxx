@@ -244,14 +244,14 @@ public:
     ExplicitCategoriesProvider* getExplicitCategoriesProvider() { return m_pExplicitCategoriesProvider; }
 
     //get series names for the z axis labels
-    css::uno::Sequence<OUString> getSeriesNames() const;
+    cpo::uno::Sequence<OUString> getSeriesNames() const;
 
     //get all series names
-    css::uno::Sequence<OUString> getAllSeriesNames() const;
+    cpo::uno::Sequence<OUString> getAllSeriesNames() const;
 
     void setPageReferenceSize( const css::awt::Size & rPageRefSize );
     //better performance for big data
-    void setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
+    void setCoordinateSystemResolution( const cpo::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
     bool PointsWereSkipped() const { return m_bPointsWereSkipped;}
     void setPieLabelsAllowToMove( bool bIsPieOrDonut ) { m_bPieLabelsAllowToMove = bIsPieOrDonut; };
     void setAvailableOuterRect( const basegfx::B2IRectangle& aAvailableOuterRect ) { m_aAvailableOuterRect = aAvailableOuterRect; };
@@ -427,7 +427,7 @@ protected:
     ExplicitCategoriesProvider*    m_pExplicitCategoriesProvider;
 
     //better performance for big data
-    css::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
+    cpo::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
     bool m_bPointsWereSkipped;
     bool m_bPieLabelsAllowToMove;
     basegfx::B2IRectangle m_aAvailableOuterRect;

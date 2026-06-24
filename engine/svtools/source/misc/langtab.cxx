@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.h>
 
 #include <comphelper/kit.hxx>
@@ -210,7 +210,7 @@ void SvtLanguageTableImpl::Build()
     }
 
     auto xNA = officecfg::VCL::ExtraLanguages::get();
-    const uno::Sequence <OUString> rElementNames = xNA->getElementNames();
+    const cpo::uno::Sequence <OUString> rElementNames = xNA->getElementNames();
     for (const OUString& rBcp47 : rElementNames)
     {
         OUString aName;

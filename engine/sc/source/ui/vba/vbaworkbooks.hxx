@@ -45,7 +45,7 @@ public:
     // ScVbaWorkbooks_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     // XWorkbooks
     virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& Template ) override;

@@ -689,7 +689,7 @@ Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName )
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL OInterfaceContainer::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL OInterfaceContainer::getElementNames()
 {
     return comphelper::mapKeysToSequence(m_aMap);
 }

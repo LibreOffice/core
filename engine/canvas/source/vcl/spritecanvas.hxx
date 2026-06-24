@@ -103,7 +103,7 @@ namespace vclcanvas
                          public RepaintTarget
     {
     public:
-        SpriteCanvas( const css::uno::Sequence<
+        SpriteCanvas( const cpo::uno::Sequence<
                             cpo::uno::Any >&               aArguments,
                       const css::uno::Reference<
                             css::uno::XComponentContext >& rxContext );
@@ -134,7 +134,7 @@ namespace vclcanvas
         virtual OUString SAL_CALL getServiceName(  ) override;
 
         // XServiceInfo
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
         virtual OUString SAL_CALL getImplementationName() override;
         virtual bool SAL_CALL supportsService(const OUString&) override;
 
@@ -152,7 +152,7 @@ namespace vclcanvas
         BackBufferSharedPtr const & getBackBuffer() const { return maDeviceHelper.getBackBuffer(); }
 
     private:
-        css::uno::Sequence< cpo::uno::Any >                maArguments;
+        cpo::uno::Sequence< cpo::uno::Any >                maArguments;
     };
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;

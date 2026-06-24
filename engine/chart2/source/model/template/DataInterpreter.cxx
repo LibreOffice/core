@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 #ifdef DEBUG_CHART2_TEMPLATE
 namespace
@@ -370,7 +370,7 @@ bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.DataInterpreter"_ustr };
 }

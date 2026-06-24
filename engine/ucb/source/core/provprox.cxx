@@ -59,7 +59,7 @@ bool SAL_CALL UcbContentProviderProxyFactory::supportsService( const OUString& S
 {
     return cppu::supportsService( this, ServiceName );
 }
-css::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxyFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxyFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.ContentProviderProxyFactory"_ustr };
 }
@@ -69,7 +69,7 @@ css::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxyFactory::getSuppo
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbContentProviderProxyFactory_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UcbContentProviderProxyFactory(context));
 }
@@ -152,7 +152,7 @@ bool SAL_CALL UcbContentProviderProxy::supportsService( const OUString& ServiceN
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxy::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UcbContentProviderProxy::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.ContentProviderProxy"_ustr };
 }

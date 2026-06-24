@@ -134,7 +134,7 @@ namespace svxform
         css::uno::Reference< css::task::XInteractionHandler >             m_xInteractionHandler;
         css::uno::Reference< css::form::runtime::XFormControllerContext > m_xFormControllerContext;
 
-        css::uno::Sequence< css::uno::Reference< css::awt::XControl> >   m_aControls;
+        cpo::uno::Sequence< css::uno::Reference< css::awt::XControl> >   m_aControls;
         ::comphelper::OInterfaceContainerHelper3<css::form::XFormControllerListener>
                                     m_aActivateListeners;
         ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>
@@ -213,11 +213,11 @@ namespace svxform
         virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XDispatch
-        virtual void SAL_CALL dispatch( const css::util::URL& _rURL, const css::uno::Sequence< css::beans::PropertyValue >& _rArgs ) override;
+        virtual void SAL_CALL dispatch( const css::util::URL& _rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs ) override;
         virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxListener, const css::util::URL& _rURL ) override;
         virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxListener, const css::util::URL& _rURL ) override;
 
@@ -250,7 +250,7 @@ namespace svxform
         virtual void SAL_CALL removeFilterControllerListener( const css::uno::Reference< css::form::runtime::XFilterControllerListener >& Listener ) override;
         virtual void SAL_CALL setPredicateExpression( ::sal_Int32 Component, ::sal_Int32 Term, const OUString& PredicateExpression ) override;
         virtual css::uno::Reference< css::awt::XControl > SAL_CALL getFilterComponent( ::sal_Int32 Component ) override;
-        virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL getPredicateExpressions() override;
+        virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL getPredicateExpressions() override;
         virtual void SAL_CALL removeDisjunctiveTerm( ::sal_Int32 Term ) override;
         virtual void SAL_CALL appendEmptyDisjunctiveTerm() override;
         virtual ::sal_Int32 SAL_CALL getActiveTerm() override;
@@ -278,7 +278,7 @@ namespace svxform
     // XModeSelector
         virtual void SAL_CALL setMode(const OUString& Mode) override;
         virtual OUString SAL_CALL getMode() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedModes() override;
         virtual bool SAL_CALL supportsMode(const OUString& Mode) override;
 
     // css::container::XIndexAccess
@@ -333,7 +333,7 @@ namespace svxform
         virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) override;
 
     // XTabController
-        virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl> > SAL_CALL getControls() override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControl> > SAL_CALL getControls() override;
 
         virtual void SAL_CALL setModel(const css::uno::Reference< css::awt::XTabControllerModel>& Model) override;
         virtual css::uno::Reference< css::awt::XTabControllerModel> SAL_CALL getModel() override;
@@ -389,23 +389,23 @@ namespace svxform
     // XServiceInfo
         virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
 
     // XResetListener
         virtual bool SAL_CALL approveReset(const css::lang::EventObject& rEvent) override;
         virtual void SAL_CALL resetted(const css::lang::EventObject& rEvent) override;
 
         // XFeatureInvalidation
-        virtual void SAL_CALL invalidateFeatures( const css::uno::Sequence< ::sal_Int16 >& Features ) override;
+        virtual void SAL_CALL invalidateFeatures( const cpo::uno::Sequence< ::sal_Int16 >& Features ) override;
         virtual void SAL_CALL invalidateAllFeatures(  ) override;
 
 // method for registration
-        static  css::uno::Sequence< OUString > const &  getSupportedServiceNames_Static();
+        static  cpo::uno::Sequence< OUString > const &  getSupportedServiceNames_Static();
 
         // comphelper::OPropertyArrayUsageHelper
         virtual void fillProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
             ) const override;
 
         // DispatchInterceptor
@@ -476,7 +476,7 @@ namespace svxform
         void startFormListening( const css::uno::Reference< css::beans::XPropertySet >& _rxForm, bool _bPropertiesOnly  );
         void stopFormListening( const css::uno::Reference< css::beans::XPropertySet >& _rxForm, bool _bPropertiesOnly );
 
-        css::uno::Reference< css::awt::XControl> findControl( css::uno::Sequence< css::uno::Reference< css::awt::XControl> >& rCtrls, const css::uno::Reference< css::awt::XControlModel>& rxCtrlModel, bool _bRemove, bool _bOverWrite ) const;
+        css::uno::Reference< css::awt::XControl> findControl( cpo::uno::Sequence< css::uno::Reference< css::awt::XControl> >& rCtrls, const css::uno::Reference< css::awt::XControlModel>& rxCtrlModel, bool _bRemove, bool _bOverWrite ) const;
 
         void insertControl(const css::uno::Reference< css::awt::XControl>& xControl);
         void removeControl(const css::uno::Reference< css::awt::XControl>& xControl);

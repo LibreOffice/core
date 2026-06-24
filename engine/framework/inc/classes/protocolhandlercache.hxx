@@ -138,7 +138,7 @@ class HandlerCFGAccess final : public ::utl::ConfigItem
         void     read            ( HandlerHash& rHandlerHash, PatternHash& rPatternHash );
 
         void setCache(HandlerCache* pCache) {m_pCache = pCache;};
-        virtual void Notify(const css::uno::Sequence< OUString >& lPropertyNames) override;
+        virtual void Notify(const cpo::uno::Sequence< OUString >& lPropertyNames) override;
 };
 
 } // namespace framework

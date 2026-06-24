@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <vector>
 #include <valarray>
@@ -33,11 +33,11 @@ public:
 
     void createDefaultData();
 
-    void setData( const css::uno::Sequence< css::uno::Sequence< double > > & rDataInRows );
-    css::uno::Sequence< css::uno::Sequence< double > > getData() const;
+    void setData( const cpo::uno::Sequence< cpo::uno::Sequence< double > > & rDataInRows );
+    cpo::uno::Sequence< cpo::uno::Sequence< double > > getData() const;
 
-    css::uno::Sequence< double > getColumnValues( sal_Int32 nColumnIndex ) const;
-    css::uno::Sequence< double > getRowValues( sal_Int32 nRowIndex ) const;
+    cpo::uno::Sequence< double > getColumnValues( sal_Int32 nColumnIndex ) const;
+    cpo::uno::Sequence< double > getRowValues( sal_Int32 nRowIndex ) const;
 
     void setColumnValues( sal_Int32 nColumnIndex, const std::vector< double > & rNewData );
     void setRowValues( sal_Int32 nRowIndex, const std::vector< double > & rNewData );

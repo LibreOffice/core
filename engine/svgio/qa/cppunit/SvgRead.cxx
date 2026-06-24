@@ -49,7 +49,7 @@ uno::Reference<io::XInputStream> TestParsing::parseSvg(const OUString& aSource)
     aFileStream.ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
 
-    uno::Sequence<sal_Int8> aData(pBuffer.get(), nSize + 1);
+    cpo::uno::Sequence<sal_Int8> aData(pBuffer.get(), nSize + 1);
     uno::Reference<io::XInputStream> aInputStream(new comphelper::SequenceInputStream(aData));
 
     return aInputStream;

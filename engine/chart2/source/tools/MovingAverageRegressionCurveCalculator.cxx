@@ -41,8 +41,8 @@ MovingAverageRegressionCurveCalculator::~MovingAverageRegressionCurveCalculator(
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL MovingAverageRegressionCurveCalculator::recalculateRegression(
-    const uno::Sequence< double >& aXValues,
-    const uno::Sequence< double >& aYValues )
+    const cpo::uno::Sequence< double >& aXValues,
+    const cpo::uno::Sequence< double >& aYValues )
 {
     m_fCorrelationCoefficient = std::numeric_limits<double>::quiet_NaN();
 
@@ -140,14 +140,14 @@ double SAL_CALL MovingAverageRegressionCurveCalculator::getCurveValue( double /*
     return std::numeric_limits<double>::quiet_NaN();
 }
 
-uno::Sequence< geometry::RealPoint2D > SAL_CALL MovingAverageRegressionCurveCalculator::getCurveValues(
+cpo::uno::Sequence< geometry::RealPoint2D > SAL_CALL MovingAverageRegressionCurveCalculator::getCurveValues(
     double /*min*/, double /*max*/, sal_Int32 /*nPointCount*/,
     const uno::Reference< chart2::XScaling >& /*xScalingX*/,
     const uno::Reference< chart2::XScaling >& /*xScalingY*/,
     bool /*bMaySkipPointsInCalculation*/ )
 {
     size_t nSize = std::min(aXList.size(), aYList.size());
-    uno::Sequence< geometry::RealPoint2D > aResult( nSize );
+    cpo::uno::Sequence< geometry::RealPoint2D > aResult( nSize );
     std::transform(aXList.begin(), aXList.begin() + nSize, aYList.begin(), aResult.getArray(),
                    [](const auto& x, const auto& y) { return geometry::RealPoint2D(x, y); });
     return aResult;

@@ -60,7 +60,7 @@ protected:
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(
         const css::util::URL& URL,
-        const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed

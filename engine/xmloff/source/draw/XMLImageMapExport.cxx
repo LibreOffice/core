@@ -23,7 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -45,7 +45,7 @@ using namespace ::xmloff::token;
 
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XIndexContainer;

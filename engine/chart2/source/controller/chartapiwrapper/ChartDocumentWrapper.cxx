@@ -70,7 +70,7 @@ using namespace ::com::sun::star::chart;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
 namespace
@@ -287,7 +287,7 @@ void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOu
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( !DataSourceHelper::detectRangeSegmentation(
             m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
@@ -312,7 +312,7 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyValue( const Reference
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( DataSourceHelper::detectRangeSegmentation(
             m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
@@ -377,7 +377,7 @@ void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& 
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( !DataSourceHelper::detectRangeSegmentation(
             m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
@@ -402,7 +402,7 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyValue( const Refere
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( DataSourceHelper::detectRangeSegmentation(
             m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
@@ -1019,7 +1019,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
                 cpo::uno::Any aParam;
                 uno::Reference< css::chart::XChartDocument > xDoc;
                 aParam <<= xDoc;
-                uno::Sequence< cpo::uno::Any > aSeq( &aParam, 1 );
+                cpo::uno::Sequence< cpo::uno::Any > aSeq( &aParam, 1 );
                 xInit->initialize( aSeq );
             }
         }
@@ -1071,7 +1071,7 @@ void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAdd
         cpo::uno::Any aParam;
         uno::Reference< XChartDocument > xDoc(this);
         aParam <<= xDoc;
-        uno::Sequence< cpo::uno::Any > aSeq( &aParam, 1 );
+        cpo::uno::Sequence< cpo::uno::Any > aSeq( &aParam, 1 );
         xInit->initialize( aSeq );
     }
 }
@@ -1318,7 +1318,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
                     xDia.set( xTemplate->createDiagramByDataSource(
                                   uno::Reference< chart2::data::XDataSource >(),
-                                  uno::Sequence< beans::PropertyValue >()));
+                                  cpo::uno::Sequence< beans::PropertyValue >()));
                     xChartDoc->setFirstDiagram( xDia );
                 }
 
@@ -1417,14 +1417,14 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
 
 uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
-    const uno::Sequence< cpo::uno::Any >& Arguments )
+    const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
     OSL_ENSURE( Arguments.hasElements(), "createInstanceWithArguments: Warning: Arguments are ignored" );
 
     return createInstance( ServiceSpecifier );
 }
 
-uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getAvailableServiceNames()
 {
     return comphelper::mapKeysToSequence( lcl_getStaticServiceNameMap() );
 }
@@ -1542,7 +1542,7 @@ bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServiceNam
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartDocument"_ustr,
@@ -1556,7 +1556,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServic
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation(css::uno::XComponentContext *context,
-                                                                css::uno::Sequence<cpo::uno::Any> const &)
+                                                                cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::wrapper::ChartDocumentWrapper(context));
 }

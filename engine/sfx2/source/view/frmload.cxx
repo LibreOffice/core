@@ -86,7 +86,7 @@ using ::cpo::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_SET_THROW;
@@ -109,12 +109,12 @@ public:
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 
     // XSynchronousFrameLoader
 
-    virtual bool SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
+    virtual bool SAL_CALL load( const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
     virtual void SAL_CALL cancel() override;
 
 protected:
@@ -654,7 +654,7 @@ bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
         auto const conn = u"pipe,name=ytest"_ustr;
         auto const xConnector = css::connection::Connector::create(m_aContext);
         xConnection = xConnector->connect(conn);
-        uno::Sequence<sal_Int8> buf;
+        cpo::uno::Sequence<sal_Int8> buf;
         if (xConnection->read(buf, 4) != 4)
         {
             abort();
@@ -666,7 +666,7 @@ bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
         if (size != 0)
         {
             SAL_INFO("sfx.yrs", "YRS connect reading file of size " << size);
-            uno::Sequence<sal_Int8> buff(size);
+            cpo::uno::Sequence<sal_Int8> buff(size);
             if (xConnection->read(buff, size) != size)
             {
                 abort();
@@ -825,7 +825,7 @@ bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
         Reference<lang::XInitialization> xInit(xController, UNO_QUERY);
         if (xInit.is())
         {
-            uno::Sequence<cpo::uno::Any> aArgs; // empty for now.
+            cpo::uno::Sequence<cpo::uno::Any> aArgs; // empty for now.
             xInit->initialize(aArgs);
         }
 
@@ -882,7 +882,7 @@ Sequence< OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_office_FrameLoader_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxFrameLoader_Impl(context));
 }

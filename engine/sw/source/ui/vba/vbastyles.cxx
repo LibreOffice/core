@@ -194,7 +194,7 @@ public:
             throw container::NoSuchElementException();
         return m_cachePos;
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return mxParaStyles->getElementNames();
     }
@@ -223,7 +223,7 @@ public:
         }
         else
         {
-            const uno::Sequence< OUString > sElementNames = mxParaStyles->getElementNames();
+            const cpo::uno::Sequence< OUString > sElementNames = mxParaStyles->getElementNames();
             auto pStyleName = std::find_if(sElementNames.begin(), sElementNames.end(),
                 [&aName](const OUString& rStyleName) { return rStyleName.equalsIgnoreAsciiCase( aName ); });
             if (pStyleName != sElementNames.end())
@@ -365,10 +365,10 @@ SwVbaStyles::getServiceImplName()
     return u"SwVbaStyles"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaStyles::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.XStyles"_ustr
     };

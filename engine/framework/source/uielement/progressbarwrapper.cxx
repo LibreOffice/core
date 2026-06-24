@@ -252,7 +252,7 @@ void ProgressBarWrapper::reset()
 }
 
 // XInitialization
-void SAL_CALL ProgressBarWrapper::initialize( const uno::Sequence< cpo::uno::Any >& )
+void SAL_CALL ProgressBarWrapper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     // dummy - do nothing
 }

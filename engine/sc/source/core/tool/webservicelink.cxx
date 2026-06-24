@@ -73,7 +73,7 @@ sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, co
         return ERROR_GENERAL;
 
     const sal_Int32 BUF_LEN = 8000;
-    css::uno::Sequence<sal_Int8> buffer(BUF_LEN);
+    cpo::uno::Sequence<sal_Int8> buffer(BUF_LEN);
     OStringBuffer aBuffer(64000);
 
     sal_Int32 nRead = 0;

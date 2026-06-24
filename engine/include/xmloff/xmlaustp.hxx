@@ -36,7 +36,7 @@ class SvXMLUnitConverter;
 struct XMLPropertyState;
 enum class XmlStyleFamily;
 
-namespace com::sun::star::uno {
+namespace cpo::uno {
     template<typename A> class Sequence;
 }
 
@@ -102,13 +102,13 @@ public:
 
     /// retrieve the registered names (names + families)
     void GetRegisteredNames(
-        css::uno::Sequence<sal_Int32>& aFamilies,
-        css::uno::Sequence<OUString>& aNames );
+        cpo::uno::Sequence<sal_Int32>& aFamilies,
+        cpo::uno::Sequence<OUString>& aNames );
 
     /// register (families + names)
     void RegisterNames(
-        css::uno::Sequence<sal_Int32> const & aFamilies,
-        css::uno::Sequence<OUString> const & aNames );
+        cpo::uno::Sequence<sal_Int32> const & aFamilies,
+        cpo::uno::Sequence<OUString> const & aNames );
 
     /// Add an item set to the pool and return its generated name.
     OUString Add( XmlStyleFamily nFamily, ::std::vector< XMLPropertyState >&& rProperties );

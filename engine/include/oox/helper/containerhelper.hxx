@@ -24,7 +24,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -232,12 +232,12 @@ public:
 
         @param rMatrix  The matrix to be converted to a sequence of sequences.
 
-        @return  A com.sun.star.uno.Sequence object containing
-            com.sun.star.uno.Sequence objects with copies of all objects
+        @return  A cpo.uno.Sequence object containing
+            cpo.uno.Sequence objects with copies of all objects
             contained in the passed matrix.
      */
     template< typename MatrixType >
-    static css::uno::Sequence< css::uno::Sequence< typename MatrixType::value_type > >
+    static cpo::uno::Sequence< cpo::uno::Sequence< typename MatrixType::value_type > >
                             matrixToSequenceSequence( const MatrixType& rMatrix );
 };
 
@@ -275,17 +275,17 @@ template< typename MapType >
 }
 
 template< typename MatrixType >
-/*static*/ css::uno::Sequence< css::uno::Sequence< typename MatrixType::value_type > > ContainerHelper::matrixToSequenceSequence( const MatrixType& rMatrix )
+/*static*/ cpo::uno::Sequence< cpo::uno::Sequence< typename MatrixType::value_type > > ContainerHelper::matrixToSequenceSequence( const MatrixType& rMatrix )
 {
     typedef typename MatrixType::value_type ValueType;
-    css::uno::Sequence< css::uno::Sequence< ValueType > > aSeq;
+    cpo::uno::Sequence< cpo::uno::Sequence< ValueType > > aSeq;
     if( !rMatrix.empty() )
     {
         aSeq.realloc( static_cast< sal_Int32 >( rMatrix.height() ) );
         auto pSeq = aSeq.getArray();
         for( size_t nRow = 0, nHeight = rMatrix.height(); nRow < nHeight; ++nRow )
             pSeq[ static_cast< sal_Int32 >( nRow ) ] =
-                css::uno::Sequence< ValueType >( &rMatrix.row_front( nRow ), static_cast< sal_Int32 >( rMatrix.width() ) );
+                cpo::uno::Sequence< ValueType >( &rMatrix.row_front( nRow ), static_cast< sal_Int32 >( rMatrix.width() ) );
     }
     return aSeq;
 }

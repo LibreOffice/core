@@ -28,7 +28,7 @@
 #include <cppu/unotype.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 using namespace css;
 using namespace css::uno;

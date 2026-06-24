@@ -48,7 +48,7 @@ public:
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName(OUString const & aName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName(OUString const & aName) override;
 
     // XIndexAccess
@@ -62,7 +62,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 }

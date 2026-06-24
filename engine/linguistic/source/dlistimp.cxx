@@ -230,7 +230,7 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
     if (0 != nCondensedEvt)
     {
         // build DictionaryListEvent to pass on to listeners
-        uno::Sequence< DictionaryEvent > aDicEvents;
+        cpo::uno::Sequence< DictionaryEvent > aDicEvents;
         DictionaryListEvent aEvent( xMyDicList, nCondensedEvt, aDicEvents );
 
         // pass on event
@@ -275,7 +275,7 @@ void DicList::SearchForDictionaries(
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    const uno::Sequence< OUString > aDirCnt( utl::LocalFileHelper::
+    const cpo::uno::Sequence< OUString > aDirCnt( utl::LocalFileHelper::
                                         GetFolderContents( rDicDirURL, false ) );
     SvtSysLocale aSysLocale;
 
@@ -375,7 +375,7 @@ sal_Int16 SAL_CALL DicList::getCount()
     return static_cast< sal_Int16 >(GetOrCreateDicList().size());
 }
 
-uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
         DicList::getDictionaries()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -597,7 +597,7 @@ void SAL_CALL
         aEvtListeners.removeInterface( rxListener );
 }
 
-void SAL_CALL DicList::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
+void SAL_CALL DicList::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
 {
     osl::MutexGuard aGuard(GetLinguMutex());
 
@@ -642,7 +642,7 @@ void DicList::CreateDicList(bool bDispatchEvents)
     //! configuration with incorrect arguments during the following
     //! activation of the dictionaries
     mxDicEvtLstnrHelper->BeginCollectEvents();
-    const uno::Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
+    const cpo::uno::Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
     for (const OUString& rActiveDic : aActiveDics)
     {
         if (!rActiveDic.isEmpty())
@@ -705,7 +705,7 @@ bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.linguistic2.DictionaryList"_ustr };
 }
@@ -821,7 +821,7 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 linguistic_DicList_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new DicList());
 }

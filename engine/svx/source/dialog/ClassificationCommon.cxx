@@ -58,7 +58,8 @@ OUString getProperty(uno::Reference<beans::XPropertyContainer> const& rxProperty
     return OUString();
 }
 
-bool containsProperty(uno::Sequence<beans::Property> const& rProperties, std::u16string_view rName)
+bool containsProperty(cpo::uno::Sequence<beans::Property> const& rProperties,
+                      std::u16string_view rName)
 {
     return std::any_of(rProperties.begin(), rProperties.end(),
                        [&](const beans::Property& rProperty) { return rProperty.Name == rName; });
@@ -67,7 +68,7 @@ bool containsProperty(uno::Sequence<beans::Property> const& rProperties, std::u1
 void removeAllProperties(uno::Reference<beans::XPropertyContainer> const& rxPropertyContainer)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(rxPropertyContainer, uno::UNO_QUERY);
-    const uno::Sequence<beans::Property> aProperties
+    const cpo::uno::Sequence<beans::Property> aProperties
         = xPropertySet->getPropertySetInfo()->getProperties();
 
     for (const beans::Property& rProperty : aProperties)

@@ -38,7 +38,7 @@ public:
     virtual void SAL_CALL setValue( const cpo::uno::Any& _value ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     // XDefaultProperty
     OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
 };

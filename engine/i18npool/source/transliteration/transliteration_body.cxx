@@ -39,6 +39,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
+using namespace ::cpo::uno;
 
 namespace i18npool {
 
@@ -145,7 +146,7 @@ Transliteration_body::transliterateImpl(
             j += map.nmap;
         }
 
-        *pOffset = css::uno::Sequence< sal_Int32 >(offsetData, offsetDataEnd - offsetData);
+        *pOffset = cpo::uno::Sequence< sal_Int32 >(offsetData, offsetDataEnd - offsetData);
     }
     else
     {

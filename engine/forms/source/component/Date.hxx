@@ -34,7 +34,7 @@ class ODateModel
     bool               m_bDateTimeField;
 
 protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     ODateModel(
@@ -60,14 +60,14 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.ODateModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySet
     using OEditBaseModel::getFastPropertyValue;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
 protected:
@@ -78,7 +78,7 @@ protected:
 
     virtual cpo::uno::Any
                             translateControlValueToExternalValue( ) const override;
-    virtual css::uno::Sequence< css::uno::Type >
+    virtual cpo::uno::Sequence< css::uno::Type >
                             getSupportedBindingTypes() override;
     virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
 
@@ -97,7 +97,7 @@ protected:
 class ODateControl: public OBoundControl
 {
 protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     explicit ODateControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -107,7 +107,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.ODateControl"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

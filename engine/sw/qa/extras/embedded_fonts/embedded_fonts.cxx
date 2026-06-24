@@ -75,7 +75,7 @@ public:
     }
 
     bool handleRestrictedFontRequest(
-        const uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
+        const cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
         const cpo::uno::Any& rRequest)
     {
         document::FontsDisallowEditingRequest aRequest;
@@ -165,7 +165,7 @@ public:
 
 private:
     uno::Reference<awt::XFontMappingUse> mxFontMappingUse;
-    uno::Sequence<awt::XFontMappingUseItem> maFontMappingUseData;
+    cpo::uno::Sequence<awt::XFontMappingUseItem> maFontMappingUseData;
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testOpenODTWithRestrictedEmbeddedFont)

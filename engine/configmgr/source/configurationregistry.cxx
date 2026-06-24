@@ -39,7 +39,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -79,7 +79,7 @@ private:
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
     { return { u"com.sun.star.configuration.ConfigurationRegistry"_ustr }; }
 
@@ -152,32 +152,32 @@ private:
 
     virtual void SAL_CALL setLongValue(sal_Int32) override;
 
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getLongListValue() override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getLongListValue() override;
 
     virtual void SAL_CALL setLongListValue(
-        css::uno::Sequence< sal_Int32 > const &) override;
+        cpo::uno::Sequence< sal_Int32 > const &) override;
 
     virtual OUString SAL_CALL getAsciiValue() override;
 
     virtual void SAL_CALL setAsciiValue(OUString const &) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getAsciiListValue() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAsciiListValue() override;
 
     virtual void SAL_CALL setAsciiListValue(
-        css::uno::Sequence< OUString > const &) override;
+        cpo::uno::Sequence< OUString > const &) override;
 
     virtual OUString SAL_CALL getStringValue() override;
 
     virtual void SAL_CALL setStringValue(OUString const &) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getStringListValue() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getStringListValue() override;
 
     virtual void SAL_CALL setStringListValue(
-        css::uno::Sequence< OUString > const &) override;
+        cpo::uno::Sequence< OUString > const &) override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBinaryValue() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinaryValue() override;
 
-    virtual void SAL_CALL setBinaryValue(css::uno::Sequence< sal_Int8 > const &) override;
+    virtual void SAL_CALL setBinaryValue(cpo::uno::Sequence< sal_Int8 > const &) override;
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL openKey(
         OUString const & aKeyName) override;
@@ -190,10 +190,10 @@ private:
     virtual void SAL_CALL deleteKey(OUString const &) override;
 
     virtual
-    css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
     SAL_CALL openKeys() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getKeyNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getKeyNames() override;
 
     virtual bool SAL_CALL createLink(
         OUString const &, OUString const &) override;
@@ -243,7 +243,7 @@ void Service::open(OUString const & rURL, bool bReadOnly, bool)
     if (access_.is()) {
         doClose();
     }
-    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(
+    cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(
         css::beans::NamedValue(u"nodepath"_ustr, cpo::uno::Any(rURL))) };
     try {
         access_ = provider_->createInstanceWithArguments(
@@ -387,13 +387,13 @@ css::registry::RegistryValueType RegistryKey::getValueType()
     case css::uno::TypeClass_STRING:
         return css::registry::RegistryValueType_STRING;
     case css::uno::TypeClass_SEQUENCE:
-        if (t == cppu::UnoType< css::uno::Sequence< sal_Int8 > >::get()) {
+        if (t == cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get()) {
             return css::registry::RegistryValueType_BINARY;
-        } else if (t == cppu::UnoType< css::uno::Sequence< sal_Int32 > >::get())
+        } else if (t == cppu::UnoType< cpo::uno::Sequence< sal_Int32 > >::get())
         {
             return css::registry::RegistryValueType_LONGLIST;
         } else if (t ==
-                   cppu::UnoType< css::uno::Sequence< OUString > >::get())
+                   cppu::UnoType< cpo::uno::Sequence< OUString > >::get())
         {
             return css::registry::RegistryValueType_STRINGLIST;
         }
@@ -427,11 +427,11 @@ void RegistryKey::setLongValue(sal_Int32)
         getXWeak());
 }
 
-css::uno::Sequence< sal_Int32 > RegistryKey::getLongListValue()
+cpo::uno::Sequence< sal_Int32 > RegistryKey::getLongListValue()
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid();
-    css::uno::Sequence< sal_Int32 > v;
+    cpo::uno::Sequence< sal_Int32 > v;
     if (value_ >>= v) {
         return v;
     }
@@ -440,7 +440,7 @@ css::uno::Sequence< sal_Int32 > RegistryKey::getLongListValue()
         getXWeak());
 }
 
-void RegistryKey::setLongListValue(css::uno::Sequence< sal_Int32 > const &)
+void RegistryKey::setLongListValue(cpo::uno::Sequence< sal_Int32 > const &)
 {
     throw css::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
@@ -467,11 +467,11 @@ void RegistryKey::setAsciiValue(OUString const &)
         getXWeak());
 }
 
-css::uno::Sequence< OUString > RegistryKey::getAsciiListValue()
+cpo::uno::Sequence< OUString > RegistryKey::getAsciiListValue()
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid();
-    css::uno::Sequence< OUString > v;
+    cpo::uno::Sequence< OUString > v;
     if (value_ >>= v) {
         return v;
     }
@@ -480,7 +480,7 @@ css::uno::Sequence< OUString > RegistryKey::getAsciiListValue()
         getXWeak());
 }
 
-void RegistryKey::setAsciiListValue(css::uno::Sequence< OUString > const &)
+void RegistryKey::setAsciiListValue(cpo::uno::Sequence< OUString > const &)
 {
     throw css::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
@@ -507,11 +507,11 @@ void RegistryKey::setStringValue(OUString const &)
         getXWeak());
 }
 
-css::uno::Sequence< OUString > RegistryKey::getStringListValue()
+cpo::uno::Sequence< OUString > RegistryKey::getStringListValue()
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid();
-    css::uno::Sequence< OUString > v;
+    cpo::uno::Sequence< OUString > v;
     if (value_ >>= v) {
         return v;
     }
@@ -521,18 +521,18 @@ css::uno::Sequence< OUString > RegistryKey::getStringListValue()
 }
 
 void RegistryKey::setStringListValue(
-    css::uno::Sequence< OUString > const &)
+    cpo::uno::Sequence< OUString > const &)
 {
     throw css::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
         getXWeak());
 }
 
-css::uno::Sequence< sal_Int8 > RegistryKey::getBinaryValue()
+cpo::uno::Sequence< sal_Int8 > RegistryKey::getBinaryValue()
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid();
-    css::uno::Sequence< sal_Int8 > v;
+    cpo::uno::Sequence< sal_Int8 > v;
     if (value_ >>= v) {
         return v;
     }
@@ -541,7 +541,7 @@ css::uno::Sequence< sal_Int8 > RegistryKey::getBinaryValue()
         getXWeak());
 }
 
-void RegistryKey::setBinaryValue(css::uno::Sequence< sal_Int8 > const &)
+void RegistryKey::setBinaryValue(cpo::uno::Sequence< sal_Int8 > const &)
 {
     throw css::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
@@ -584,7 +584,7 @@ void RegistryKey::deleteKey(OUString const &)
         getXWeak());
 }
 
-css::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
 RegistryKey::openKeys()
 {
     throw css::uno::RuntimeException(
@@ -592,7 +592,7 @@ RegistryKey::openKeys()
         getXWeak());
 }
 
-css::uno::Sequence< OUString > RegistryKey::getKeyNames()
+cpo::uno::Sequence< OUString > RegistryKey::getKeyNames()
 {
     throw css::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
@@ -630,7 +630,7 @@ OUString RegistryKey::getResolvedName(OUString const & aKeyName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ConfigurationRegistry_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Service(context));
 }

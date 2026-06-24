@@ -74,7 +74,7 @@ namespace dbaui
         /** translate the current dialog SfxItems into driver relevant PropertyValues
             @see successfullyConnected
         */
-        bool    getCurrentSettings(css::uno::Sequence< css::beans::PropertyValue >& _rDriverParams);
+        bool    getCurrentSettings(cpo::uno::Sequence< css::beans::PropertyValue >& _rDriverParams);
 
         /** to be called if the settings got from getCurrentSettings have been used for successfully connecting
             @see getCurrentSettings
@@ -141,7 +141,7 @@ namespace dbaui
     private:
         /** fill a data source info array with the settings from a given item set
         */
-        void fillDatasourceInfo(const SfxItemSet& _rSource, css::uno::Sequence< css::beans::PropertyValue >& _rInfo);
+        void fillDatasourceInfo(const SfxItemSet& _rSource, cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo);
 
         /// translate the given value into an SfxPoolItem, put this into the given set under the given id
         void        implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const cpo::uno::Any& _rValue);

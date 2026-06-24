@@ -130,7 +130,7 @@ SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager,
 {
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
         = rSignatureManager.getSecurityEnvironment();
-    const uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
+    const cpo::uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
         = xSecurityEnvironment->getPersonalCertificates();
 
     for (const auto& xCertificate : aCertificates)
@@ -427,9 +427,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLRemoveAll)
     uno::Reference<io::XStream> xStream
         = xStorage->openStreamElement(u"[Content_Types].xml"_ustr, embed::ElementModes::READWRITE);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
-    uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypeInfo
+    cpo::uno::Sequence<cpo::uno::Sequence<beans::StringPair>> aContentTypeInfo
         = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, m_xContext);
-    const uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
+    const cpo::uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
     CPPUNIT_ASSERT(
         std::none_of(rOverrides.begin(), rOverrides.end(), [](const beans::StringPair& rPair) {
             return rPair.First.startsWith("/_xmlsignatures/sig");
@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFUnsignedTimestamp)
     CPPUNIT_ASSERT_MESSAGE(
         (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
-    uno::Sequence<security::DocumentSignatureInformation> const infos(
+    cpo::uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
     // was: 66666666
@@ -512,7 +512,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, aaa_testODFX509CertificateChain)
     CPPUNIT_ASSERT_MESSAGE(
         (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
-    uno::Sequence<security::DocumentSignatureInformation> const infos(
+    cpo::uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
     // check that the signing certificate was picked, not one of the 2 CA ones
@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Data)
     CPPUNIT_ASSERT_MESSAGE(
         (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
-    uno::Sequence<security::DocumentSignatureInformation> const infos(
+    cpo::uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
     // the signature in this manipulated document is technically valid but we can't tell who signed
@@ -555,7 +555,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFTripleX509Data)
     // here, libxmlsec will pick the 1st X509Data but signing key is the 2nd
     CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
                                  SignatureState::BROKEN, nActual);
-    uno::Sequence<security::DocumentSignatureInformation> const infos(
+    cpo::uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
     // the signature in this manipulated document is technically valid but we can't tell who signed
@@ -575,7 +575,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFMacroDoubleX509Data)
     CPPUNIT_ASSERT_MESSAGE(
         (OString::number(o3tl::to_underlying(nActual)).getStr()),
         (nActual == SignatureState::NOTVALIDATED || nActual == SignatureState::OK));
-    uno::Sequence<security::DocumentSignatureInformation> const infos(
+    cpo::uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(true));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
     // the signature in this manipulated document is technically valid but we can't tell who signed
@@ -601,7 +601,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Certificate)
 #endif
                       ));
     CPPUNIT_ASSERT_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()), nTemp);
-    uno::Sequence<security::DocumentSignatureInformation> const infos(
+    cpo::uno::Sequence<security::DocumentSignatureInformation> const infos(
         pObjectShell->GetDocumentSignatureInformation(false));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), infos.getLength());
     // the signature in this manipulated document is technically valid but we can't tell who signed
@@ -747,7 +747,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPDFAddVisibleSignature)
     createTempCopy(u"add-visible-signature.pdf");
 
     // Open it.
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"ReadOnly"_ustr, true) };
     loadWithParams(maTempFile.GetURL(), aArgs);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
@@ -821,7 +821,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Calc)
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
 
     // Save a copy
-    uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> descSaveACopy(comphelper::InitPropertySequence(
         { { "SaveACopy", cpo::uno::Any(true) }, { "FilterName", cpo::uno::Any(u"calc8"_ustr) } }));
     xDocStorable->storeToURL(maTempFile.GetURL(), descSaveACopy);
 
@@ -848,7 +848,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, test96097Doc)
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY_THROW);
 
     // Save a copy
-    uno::Sequence<beans::PropertyValue> descSaveACopy(
+    cpo::uno::Sequence<beans::PropertyValue> descSaveACopy(
         comphelper::InitPropertySequence({ { "SaveACopy", cpo::uno::Any(true) },
                                            { "FilterName", cpo::uno::Any(u"writer8"_ustr) } }));
     xDocStorable->storeToURL(maTempFile.GetURL(), descSaveACopy);
@@ -1150,7 +1150,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineOOXML)
             embed::ElementModes::READ);
     CPPUNIT_ASSERT(xStorage.is());
 
-    uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
+    cpo::uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
         = xSignatures->verifyScriptingContentSignatures(xStorage,
                                                         uno::Reference<io::XInputStream>());
 
@@ -1172,7 +1172,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
     SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
     CPPUNIT_ASSERT(pObjectShell);
 
-    uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
+    cpo::uno::Sequence<security::DocumentSignatureInformation> xSignatureInfo
         = pObjectShell->GetDocumentSignatureInformation(false);
 
     CPPUNIT_ASSERT(xSignatureInfo.getLength());
@@ -1325,7 +1325,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testInvalidZIP)
     ::rtl::Reference<ucbhelper::InterceptedInteraction> pIH(new ucbhelper::InterceptedInteraction);
     pIH->setInterceptions(std::move(interceptions));
 
-    uno::Sequence<beans::PropertyValue> args = { comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> args = { comphelper::makePropertyValue(
         u"InteractionHandler"_ustr, uno::Reference<task::XInteractionHandler>(pIH)) };
     loadWithParams(createFileURL(u"signature-forgery-cdh-lfh.docx"), args);
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());

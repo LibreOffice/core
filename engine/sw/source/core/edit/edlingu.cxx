@@ -944,7 +944,7 @@ bool SwEditShell::GetGrammarCorrection(
     linguistic2::ProofreadingResult /*out*/ &rResult, // the complete result
     sal_Int32 /*out*/ &rErrorPosInText,               // offset of error position in string that was grammar checked...
     sal_Int32 /*out*/ &rErrorIndexInResult,           // index of error in rResult.aGrammarErrors
-    uno::Sequence< OUString > /*out*/ &rSuggestions,  // suggestions to be used for the error found
+    cpo::uno::Sequence< OUString > /*out*/ &rSuggestions,  // suggestions to be used for the error found
     const Point *pPt, SwRect &rSelectRect )
 {
     bool bRes = false;

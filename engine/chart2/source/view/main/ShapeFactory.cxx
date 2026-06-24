@@ -41,7 +41,7 @@
 #include <com/sun/star/drawing/XShapes2.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.hxx>
 
 #include <editeng/unoprnms.hxx>
@@ -71,7 +71,7 @@ namespace chart
 namespace
 {
 
-void lcl_addProperty(uno::Sequence<OUString> & rPropertyNames, uno::Sequence<cpo::uno::Any> & rPropertyValues,
+void lcl_addProperty(cpo::uno::Sequence<OUString> & rPropertyNames, cpo::uno::Sequence<cpo::uno::Any> & rPropertyValues,
                  OUString const & rName, cpo::uno::Any const & rAny)
 {
     rPropertyNames.realloc(rPropertyNames.getLength() + 1);
@@ -452,14 +452,14 @@ rtl::Reference<Svx3DExtrudeObject>
         aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY,
                              rPosition.PositionZ - (fDepth / 2.0));
 
-        uno::Sequence<OUString> aPropertyNames {
+        cpo::uno::Sequence<OUString> aPropertyNames {
             UNO_NAME_3D_EXTRUDE_DEPTH,
             UNO_NAME_3D_PERCENT_DIAGONAL,
             UNO_NAME_3D_POLYPOLYGON3D,
             UNO_NAME_3D_TRANSFORM_MATRIX,
         };
 
-        uno::Sequence<cpo::uno::Any> aPropertyValues {
+        cpo::uno::Sequence<cpo::uno::Any> aPropertyValues {
             cpo::uno::Any(sal_Int32(fDepth)), // Depth
             cpo::uno::Any(nPercentDiagonal),  // PercentDiagonal
             createPolyPolygon_Cube(rSize, double(nPercentDiagonal) / 200.0, bRounded),
@@ -690,7 +690,7 @@ rtl::Reference<Svx3DLatheObject>
         aHomMatrix.scale(1.0,1.0,rSize.DirectionZ/rSize.DirectionX);
         aHomMatrix.translate(rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ);
 
-        uno::Sequence<OUString> aPropertyNames{
+        cpo::uno::Sequence<OUString> aPropertyNames{
             UNO_NAME_3D_PERCENT_DIAGONAL,
             UNO_NAME_3D_POLYPOLYGON3D,
             UNO_NAME_3D_TRANSFORM_MATRIX,
@@ -699,7 +699,7 @@ rtl::Reference<Svx3DLatheObject>
             UNO_NAME_3D_REDUCED_LINE_GEOMETRY
         };
 
-        uno::Sequence<cpo::uno::Any> aPropertyValues {
+        cpo::uno::Sequence<cpo::uno::Any> aPropertyValues {
             cpo::uno::Any(sal_Int16(5)),  // PercentDiagonal
             aPPolygon,               // Polygon
             cpo::uno::Any(B3DHomMatrixToHomogenMatrix(aHomMatrix)), // Matrix
@@ -1028,7 +1028,7 @@ rtl::Reference<Svx3DPolygonObject>
     //set properties
     try
     {
-        uno::Sequence<OUString> aPropertyNames{
+        cpo::uno::Sequence<OUString> aPropertyNames{
             UNO_NAME_3D_POLYPOLYGON3D,
             UNO_NAME_3D_TEXTUREPOLYGON3D,
             UNO_NAME_3D_NORMALSPOLYGON3D,
@@ -1036,7 +1036,7 @@ rtl::Reference<Svx3DPolygonObject>
             UNO_NAME_3D_DOUBLE_SIDED
         };
 
-        uno::Sequence<cpo::uno::Any> aPropertyValues {
+        cpo::uno::Sequence<cpo::uno::Any> aPropertyValues {
             rStripe.getPolyPolygonShape3D(),            // Polygon
             Stripe::getTexturePolygon(nRotatedTexture), // TexturePolygon
             rStripe.getNormalsPolygon(),                // Normals Polygon
@@ -1084,14 +1084,14 @@ rtl::Reference<Svx3DExtrudeObject>
     //set properties
     try
     {
-        uno::Sequence<OUString> aPropertyNames{
+        cpo::uno::Sequence<OUString> aPropertyNames{
             UNO_NAME_3D_EXTRUDE_DEPTH,
             UNO_NAME_3D_PERCENT_DIAGONAL,
             UNO_NAME_3D_POLYPOLYGON3D,
             UNO_NAME_3D_DOUBLE_SIDED,
         };
 
-        uno::Sequence<cpo::uno::Any> aPropertyValues {
+        cpo::uno::Sequence<cpo::uno::Any> aPropertyValues {
             cpo::uno::Any(sal_Int32(fDepth)), // depth
             cpo::uno::Any(sal_Int16(0)),      // PercentDiagonal
             cpo::uno::Any(aUnoPolyPolygon),      // Polygon
@@ -1203,7 +1203,7 @@ static drawing::PointSequenceSequence createPolyPolygon_Symbol( const drawing::P
 
     aPP.realloc(1);
 
-    uno::Sequence<awt::Point>* pOuterSequence = aPP.getArray();
+    cpo::uno::Sequence<awt::Point>* pOuterSequence = aPP.getArray();
 
     pOuterSequence->realloc(nPointCount);
 
@@ -1801,12 +1801,12 @@ rtl::Reference<Svx3DPolygonObject>
     //set properties
     try
     {
-        uno::Sequence<OUString> aPropertyNames {
+        cpo::uno::Sequence<OUString> aPropertyNames {
             UNO_NAME_3D_POLYPOLYGON3D,
             UNO_NAME_3D_LINEONLY
         };
 
-        uno::Sequence<cpo::uno::Any> aPropertyValues {
+        cpo::uno::Sequence<cpo::uno::Any> aPropertyValues {
             cpo::uno::Any(aUnoPoly),  // Polygon
             cpo::uno::Any(true)      // LineOnly
         };
@@ -2097,7 +2097,7 @@ rtl::Reference<SvxShapeText>
 
 rtl::Reference<SvxShapeText>
     ShapeFactory::createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                , const uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString
+                , const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString
                 , const tNameSequence& rPropNames
                 , const tAnySequence& rPropValues
                 , const cpo::uno::Any& rATransformation )
@@ -2184,7 +2184,7 @@ rtl::Reference<SvxShapeText>
         ShapeFactory::createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
                 const awt::Size& rSize,
                 const awt::Point& rPos,
-                uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString,
+                cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString,
                 const uno::Reference<
                 beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth )
@@ -2260,7 +2260,7 @@ rtl::Reference<SvxShapeText>
                         if (nLBreaks-- > 0)
                             aLabel += OUStringChar('\r');
                         uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
-                        uno::Sequence<beans::PropertyValue> aPropVals =
+                        cpo::uno::Sequence<beans::PropertyValue> aPropVals =
                             PropertyMapper::getPropVals(xSourceProps,
                                 PropertyMapper::getPropertyNameMapForTextShapeProperties());
                         xShape->appendTextPortion(aLabel, aPropVals);
@@ -2274,7 +2274,7 @@ rtl::Reference<SvxShapeText>
                     if (!rxFS->getString().isEmpty())
                     {
                         uno::Reference< beans::XPropertySet > xSourceProps(rxFS, uno::UNO_QUERY);
-                        uno::Sequence<beans::PropertyValue> aPropVals =
+                        cpo::uno::Sequence<beans::PropertyValue> aPropVals =
                             PropertyMapper::getPropVals(xSourceProps,
                                 PropertyMapper::getPropertyNameMapForTextShapeProperties());
                         xShape->appendTextPortion(rxFS->getString(), aPropVals);
@@ -2299,13 +2299,13 @@ rtl::Reference<SvxShapeText>
             fFontHeight = convertPointToMm100(fFontHeight);
             sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.18f ) );
             sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * 0.30f ) );
-            uno::Sequence<OUString> aPropNames {
+            cpo::uno::Sequence<OUString> aPropNames {
                 u"TextLeftDistance"_ustr,
                 u"TextRightDistance"_ustr,
                 u"TextUpperDistance"_ustr,
                 u"TextLowerDistance"_ustr,
             };
-            uno::Sequence<cpo::uno::Any> aPropVals {
+            cpo::uno::Sequence<cpo::uno::Any> aPropVals {
                 cpo::uno::Any( nXDistance ),
                 cpo::uno::Any( nXDistance ),
                 cpo::uno::Any( nYDistance ),
@@ -2321,11 +2321,11 @@ rtl::Reference<SvxShapeText>
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( -basegfx::deg2rad(nRotation) );//#i78696#->#i80521#
         aM.translate( nXPos, nYPos );
-        uno::Sequence<OUString> aPropNames {
+        cpo::uno::Sequence<OUString> aPropNames {
              u"Transformation"_ustr,
              u"ParaAdjust"_ustr
         };
-        uno::Sequence<cpo::uno::Any> aPropVals {
+        cpo::uno::Sequence<cpo::uno::Any> aPropVals {
             cpo::uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ),
             cpo::uno::Any( style::ParagraphAdjust_CENTER )
         };

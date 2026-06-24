@@ -39,7 +39,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -63,7 +63,7 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context):
         cppu::PropertySetMixin< css::lang::XComponent >(
             context, static_cast< Implements >(0),
-            css::uno::Sequence< OUString >())
+            cpo::uno::Sequence< OUString >())
     {}
 
     virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
@@ -121,7 +121,7 @@ public:
             static_cast< Implements >(
                 IMPLEMENTS_PROPERTY_SET | IMPLEMENTS_FAST_PROPERTY_SET
                 | IMPLEMENTS_PROPERTY_ACCESS),
-            css::uno::Sequence< OUString >())
+            cpo::uno::Sequence< OUString >())
     {}
 
     virtual cpo::uno::Any SAL_CALL queryInterface(css::uno::Type const & type)
@@ -167,8 +167,8 @@ cpo::uno::Any Empty2::queryInterface(css::uno::Type const & type)
             type);
 }
 
-css::uno::Sequence< OUString > sequenceThird() {
-    css::uno::Sequence<OUString> s { OUString("Third") };
+cpo::uno::Sequence< OUString > sequenceThird() {
+    cpo::uno::Sequence<OUString> s { OUString("Third") };
     return s;
 }
 
@@ -384,7 +384,7 @@ OUString SAL_CALL getImplementationName() {
             "test.cppuhelper.propertysetmixin.comp.CppSupplier");
 }
 
-css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
 {
     return { "test.cppuhelper.propertysetmixin.CppSupplier" };
 }

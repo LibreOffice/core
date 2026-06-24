@@ -18,7 +18,7 @@ excludelist:
     # Actually used
     - vector
     - com/sun/star/uno/XInterface.hpp
-    - com/sun/star/uno/Sequence.hxx
+    - cpo/uno/Sequence.hxx
     configmgr/source/configurationprovider.cxx:
     # Actually used
     - com/sun/star/uno/XInterface.hpp

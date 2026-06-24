@@ -53,7 +53,7 @@ XMLDocumentWrapper_XmlSecImpl::XMLDocumentWrapper_XmlSecImpl()
     /*
      * creates the virtual root element
      */
-    saxHelper.startElement(u"root", uno::Sequence<css::xml::csax::XMLAttribute>());
+    saxHelper.startElement(u"root", cpo::uno::Sequence<css::xml::csax::XMLAttribute>());
 
     m_pRootElement = saxHelper.getCurrentNode();
     m_pCurrentElement = m_pRootElement;
@@ -629,7 +629,7 @@ OUString SAL_CALL XMLDocumentWrapper_XmlSecImpl::getNodeName( const uno::Referen
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::clearUselessData(
     const uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node,
-    const uno::Sequence< uno::Reference< css::xml::wrapper::XXMLElementWrapper > >& reservedDescendants,
+    const cpo::uno::Sequence< uno::Reference< css::xml::wrapper::XXMLElementWrapper > >& reservedDescendants,
     const uno::Reference< css::xml::wrapper::XXMLElementWrapper >& stopAtNode )
 {
     xmlNodePtr pTargetNode = checkElement(node);
@@ -796,7 +796,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::endDocument(  )
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::startElement( const OUString& aName, const uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
 {
     sal_Int32 nLength = xAttribs->getLength();
-    uno::Sequence< css::xml::csax::XMLAttribute > aAttributes (nLength);
+    cpo::uno::Sequence< css::xml::csax::XMLAttribute > aAttributes (nLength);
     auto aAttributesRange = asNonConstRange(aAttributes);
 
     for (int i = 0; i < nLength; ++i)
@@ -842,7 +842,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedEndDocument(  )
 {
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedStartElement( const OUString& aName, const uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::compressedStartElement( const OUString& aName, const cpo::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
 {
     saxHelper.startElement(aName, aAttributes);
     m_pCurrentElement = saxHelper.getCurrentNode();
@@ -885,14 +885,14 @@ bool SAL_CALL XMLDocumentWrapper_XmlSecImpl::supportsService( const OUString& rS
     return cppu::supportsService( this, rServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.xml.wrapper.XMLDocumentWrapper"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_wrapper_XMLDocumentWrapper_get_implementation(
-    uno::XComponentContext* /*pCtx*/, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new XMLDocumentWrapper_XmlSecImpl());
 }

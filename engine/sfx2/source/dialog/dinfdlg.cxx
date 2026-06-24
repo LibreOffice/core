@@ -194,7 +194,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
-        const uno::Sequence<document::CmisProperty>& i_cmisProps,
+        const cpo::uno::Sequence<document::CmisProperty>& i_cmisProps,
         bool bIs, bool _bIs, sal_Int64 _nFileSize )
     : SfxStringItem( SID_DOCINFO, rFile )
     , m_AutoloadDelay( i_xDocProps->getAutoloadSecs() )
@@ -1004,7 +1004,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
         if (!pShell)
             break;
         const SfxUnoAnyItem* pEncryptionDataItem = pShell->GetMedium()->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
-        uno::Sequence< beans::NamedValue > aEncryptionData;
+        cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
         if (pEncryptionDataItem)
             pEncryptionDataItem->GetValue() >>= aEncryptionData;
         else
@@ -1265,7 +1265,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     // Check for cmis properties where otherwise unavailable
     if ( rInfoItem.isCmisDocument( ) )
     {
-        const uno::Sequence< document::CmisProperty >& aCmisProps = rInfoItem.GetCmisProperties();
+        const cpo::uno::Sequence< document::CmisProperty >& aCmisProps = rInfoItem.GetCmisProperties();
         for ( const auto& rCmisProp : aCmisProps )
         {
             if ( rCmisProp.Id == "cmis:contentStreamLength" &&
@@ -2672,7 +2672,7 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
 
     m_xPropertiesCtrl->ClearAllLines();
     const SfxDocumentInfoItem& rInfoItem = rItemSet->Get(SID_DOCINFO);
-    uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
+    cpo::uno::Sequence< document::CmisProperty > aCmisProps = rInfoItem.GetCmisProperties();
     for ( auto& rCmisProp : asNonConstRange(aCmisProps) )
     {
         m_xPropertiesCtrl->AddLine(rCmisProp.Id,

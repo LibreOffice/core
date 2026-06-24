@@ -134,7 +134,7 @@ namespace connectivity::ado
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
         // XResultSet
@@ -166,7 +166,7 @@ namespace connectivity::ado
         virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) override;
         virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) override;
         virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
         virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;

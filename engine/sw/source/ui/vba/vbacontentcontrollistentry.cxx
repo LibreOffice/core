@@ -152,9 +152,9 @@ OUString SwVbaContentControlListEntry::getServiceImplName()
     return u"SwVbaContentControlListEntry"_ustr;
 }
 
-uno::Sequence<OUString> SwVbaContentControlListEntry::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaContentControlListEntry::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{
+    static cpo::uno::Sequence<OUString> const aServiceNames{
         u"ooo.vba.word.ContentControlListEntry"_ustr
     };
     return aServiceNames;

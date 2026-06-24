@@ -20,7 +20,7 @@
 #include <com/sun/star/sheet/XSubTotalField.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
 using namespace css;
@@ -62,8 +62,10 @@ uno::Reference<uno::XInterface> ScSubTotalFieldObj::init()
     uno::Reference<sheet::XSubTotalDescriptor> xSubTotalDesc
         = xSubTotalCalc->createSubTotalDescriptor(true);
 
-    uno::Sequence<sheet::SubTotalColumn> xCols{ { /* Column   */ 5,
-                                                  /* Function */ sheet::GeneralFunction_SUM } };
+    cpo::uno::Sequence<sheet::SubTotalColumn> xCols{
+        { /* Column   */ 5,
+          /* Function */ sheet::GeneralFunction_SUM }
+    };
     xSubTotalDesc->addNew(xCols, 1);
 
     uno::Reference<container::XIndexAccess> xDescIndex(xSubTotalDesc, uno::UNO_QUERY_THROW);

@@ -167,9 +167,9 @@ Any StdTabController::queryAggregation( const Type & rType )
 IMPL_IMPLEMENTATION_ID( StdTabController )
 
 // XTypeProvider
-css::uno::Sequence< css::uno::Type > StdTabController::getTypes()
+cpo::uno::Sequence< css::uno::Type > StdTabController::getTypes()
 {
-    static const css::uno::Sequence< css::uno::Type > aTypeList {
+    static const cpo::uno::Sequence< css::uno::Type > aTypeList {
         cppu::UnoType<css::lang::XTypeProvider>::get(),
         cppu::UnoType<XTabController>::get(),
         cppu::UnoType<XServiceInfo>::get()
@@ -376,9 +376,9 @@ bool StdTabController::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> StdTabController::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> StdTabController::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         u"com.sun.star.awt.TabController"_ustr,
         u"stardiv.vcl.control.TabController"_ustr};
 }
@@ -408,7 +408,7 @@ Reference< XControl >  StdTabController::FindControl( Sequence< Reference< XCont
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_StdTabController_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new StdTabController());
 }

@@ -19,7 +19,7 @@
 
 
 #include <svl/imageitm.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 
 SfxPoolItem* SfxImageItem::CreateDefault() { return new SfxImageItem; }
@@ -54,7 +54,7 @@ bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 
 bool SfxImageItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 {
-    css::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(GetValue()),
+    cpo::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(GetValue()),
                                               cpo::uno::Any(sal_Int16(mnAngle)),
                                               cpo::uno::Any(mbMirrored),
                                               cpo::uno::Any(maURL) };
@@ -64,7 +64,7 @@ bool SfxImageItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 ) const
 
 bool SfxImageItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
-    css::uno::Sequence< cpo::uno::Any > aSeq;
+    cpo::uno::Sequence< cpo::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {
         sal_Int16     nVal = sal_Int16();

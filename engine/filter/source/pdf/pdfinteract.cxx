@@ -43,7 +43,7 @@ void SAL_CALL PDFInteractionHandler::handle( const Reference< task::XInteraction
     handleInteractionRequest( i_xRequest );
 }
 
-void SAL_CALL PDFInteractionHandler::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL PDFInteractionHandler::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has(u"Parent"_ustr))
@@ -82,14 +82,14 @@ bool SAL_CALL PDFInteractionHandler::supportsService( const OUString& rServiceNa
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL PDFInteractionHandler::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL PDFInteractionHandler::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.filter.pdfexport.PDFExportInteractionHandler"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_PDFExportInteractionHandler_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PDFInteractionHandler());
 }

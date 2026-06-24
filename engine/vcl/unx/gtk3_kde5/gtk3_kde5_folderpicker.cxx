@@ -55,7 +55,7 @@ OUString SAL_CALL Gtk3KDE5FolderPicker::getDisplayDirectory()
 OUString SAL_CALL Gtk3KDE5FolderPicker::getDirectory()
 {
     auto id = m_ipc.sendCommand(Commands::GetSelectedFiles);
-    uno::Sequence<OUString> seq;
+    cpo::uno::Sequence<OUString> seq;
     m_ipc.readResponse(id, seq);
     return seq.hasElements() ? seq[0] : OUString();
 }

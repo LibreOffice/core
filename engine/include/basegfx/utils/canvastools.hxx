@@ -46,7 +46,7 @@ namespace com::sun::star::awt
     struct Rectangle;
 }
 
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 namespace basegfx
@@ -77,25 +77,25 @@ namespace basegfx::unotools
                                             const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
 
-        css::uno::Sequence<
-              css::uno::Sequence< css::geometry::RealBezierSegment2D > >
+        cpo::uno::Sequence<
+              cpo::uno::Sequence< css::geometry::RealBezierSegment2D > >
                     bezierSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
-        css::uno::Sequence<
-              css::uno::Sequence< css::geometry::RealPoint2D > >
+        cpo::uno::Sequence<
+              cpo::uno::Sequence< css::geometry::RealPoint2D > >
                     pointSequenceSequenceFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly );
 
         ::basegfx::B2DPolygon polygonFromPoint2DSequence(
-            const css::uno::Sequence< css::geometry::RealPoint2D >& rPoints );
+            const cpo::uno::Sequence< css::geometry::RealPoint2D >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence(
-            const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& rPoints );
+            const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealPoint2D > >& rPoints );
 
         ::basegfx::B2DPolygon polygonFromBezier2DSequence(
-            const css::uno::Sequence< css::geometry::RealBezierSegment2D >& rPoints );
+            const cpo::uno::Sequence< css::geometry::RealBezierSegment2D >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence(
-            const css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > >& rPoints );
+            const cpo::uno::Sequence< cpo::uno::Sequence< css::geometry::RealBezierSegment2D > >& rPoints );
 
         BASEGFX_DLLPUBLIC ::basegfx::B2DPolyPolygon b2DPolyPolygonFromXPolyPolygon2D(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >& rPoly );

@@ -49,7 +49,7 @@ public:
     WriteProtection();
     virtual ~WriteProtection() override;
 
-    css::uno::Sequence<css::beans::PropertyValue> toSequence() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> toSequence() const;
 
     bool getRecommended() const { return m_bRecommended; }
 };

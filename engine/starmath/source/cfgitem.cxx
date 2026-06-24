@@ -661,7 +661,7 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
     OSL_ENSURE( bOK, "read FontFormat failed" );
 }
 
-const css::uno::Sequence<OUString> & SmMathConfig::LoadUserDefinedNames()
+const cpo::uno::Sequence<OUString> & SmMathConfig::LoadUserDefinedNames()
 {
     m_sUserDefinedNames = GetNodeNames(USER_DEFINED_LIST);
     return m_sUserDefinedNames;
@@ -669,7 +669,7 @@ const css::uno::Sequence<OUString> & SmMathConfig::LoadUserDefinedNames()
 
 void SmMathConfig::GetUserDefinedFormula(std::u16string_view sName, OUString &sFormula)
 {
-    css::uno::Sequence<OUString> aNames(1);
+    cpo::uno::Sequence<OUString> aNames(1);
     OUString* pName = aNames.getArray();
     pName[0] = USER_DEFINED_LIST + "/" + sName + "/FormulaText";
     const Sequence<Any> aValues(GetProperties(aNames));
@@ -1423,7 +1423,7 @@ void SmMathConfig::SetShowFormulaCursor( bool bVal )
     SetOtherIfNotEqual( pOther->bFormulaCursor, bVal );
 }
 
-void SmMathConfig::Notify( const css::uno::Sequence< OUString >& rNames )
+void SmMathConfig::Notify( const cpo::uno::Sequence< OUString >& rNames )
 {
     Clear();
     if (std::find(rNames.begin(), rNames.end(), "Misc/IgnoreSpacesRight") != rNames.end())

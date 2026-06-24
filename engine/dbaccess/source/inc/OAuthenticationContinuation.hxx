@@ -49,11 +49,11 @@ public:
     void SAL_CALL setUserName( const OUString& UserName ) override;
     bool SAL_CALL canSetPassword(  ) override;
     void SAL_CALL setPassword( const OUString& Password ) override;
-    css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberPasswordModes( css::ucb::RememberAuthentication& Default ) override;
+    cpo::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberPasswordModes( css::ucb::RememberAuthentication& Default ) override;
     void SAL_CALL setRememberPassword( css::ucb::RememberAuthentication Remember ) override;
     bool SAL_CALL canSetAccount(  ) override;
     void SAL_CALL setAccount( const OUString& Account ) override;
-    css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberAccountModes( css::ucb::RememberAuthentication& Default ) override;
+    cpo::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberAccountModes( css::ucb::RememberAuthentication& Default ) override;
     void SAL_CALL setRememberAccount( css::ucb::RememberAuthentication Remember ) override;
 
     void            setCanChangeUserName( bool bVal )  { m_bCanSetUserName = bVal; }

@@ -85,17 +85,17 @@ css::awt::DeviceInfo VCLXDevice::getInfo()
     return aInfo;
 }
 
-css::uno::Sequence< css::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  )
+cpo::uno::Sequence< css::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Sequence< css::awt::FontDescriptor> aFonts;
+    cpo::uno::Sequence< css::awt::FontDescriptor> aFonts;
     if( mpOutputDevice )
     {
         int nFonts = mpOutputDevice->GetFontFaceCollectionCount();
         if ( nFonts )
         {
-            aFonts = css::uno::Sequence< css::awt::FontDescriptor>( nFonts );
+            aFonts = cpo::uno::Sequence< css::awt::FontDescriptor>( nFonts );
             css::awt::FontDescriptor* pFonts = aFonts.getArray();
             for ( int n = 0; n < nFonts; n++ )
                 pFonts[n] = VCLUnoHelper::CreateFontDescriptor( mpOutputDevice->GetFontMetricFromCollection( n ) );

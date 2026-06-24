@@ -32,7 +32,7 @@ public:
     MathTypeFilter();
 
     // XFilter
-    bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    bool SAL_CALL filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor) override;
     void SAL_CALL cancel() override;
 
     // XImporter
@@ -41,13 +41,13 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 }
 
 MathTypeFilter::MathTypeFilter() = default;
 
-bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
+bool MathTypeFilter::filter(const cpo::uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     bool bSuccess = false;
     try
@@ -105,14 +105,14 @@ bool MathTypeFilter::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ImportFilter"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_comp_Math_MathTypeFilter_get_implementation(
-    uno::XComponentContext* /*pCtx*/, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* /*pCtx*/, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new MathTypeFilter);
 }

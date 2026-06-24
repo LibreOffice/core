@@ -166,19 +166,19 @@ public:
     static std::vector< rtl::Reference< ::chart::GridProperties > >
             getAllGrids( const rtl::Reference< ::chart::Diagram >& xDiagram );
 
-    static void getAxisOrGridPossibilities( css::uno::Sequence< bool >& rPossibilityList
+    static void getAxisOrGridPossibilities( cpo::uno::Sequence< bool >& rPossibilityList
         , const rtl::Reference< ::chart::Diagram>& xDiagram, bool bAxis=true );
 
-    static void getAxisOrGridExistence( css::uno::Sequence< bool >& rExistenceList
+    static void getAxisOrGridExistence( cpo::uno::Sequence< bool >& rExistenceList
         , const rtl::Reference< ::chart::Diagram>& xDiagram, bool bAxis=true );
 
     static bool changeVisibilityOfGrids( const rtl::Reference< ::chart::Diagram>& xDiagram
-                        , const css::uno::Sequence< bool >& rOldExistenceList
-                        , const css::uno::Sequence< bool >& rNewExistenceList );
+                        , const cpo::uno::Sequence< bool >& rOldExistenceList
+                        , const cpo::uno::Sequence< bool >& rNewExistenceList );
 
     static bool changeVisibilityOfAxes( const rtl::Reference< ::chart::Diagram>& xDiagram
-                        , const css::uno::Sequence< bool >& rOldExistenceList
-                        , const css::uno::Sequence< bool >& rNewExistenceList
+                        , const cpo::uno::Sequence< bool >& rOldExistenceList
+                        , const cpo::uno::Sequence< bool >& rNewExistenceList
                         , const css::uno::Reference< css::uno::XComponentContext >& xContext
                         , ReferenceSizeProvider * pRefSizeProvider );
 

@@ -214,7 +214,7 @@ private:
     }
 
     virtual void SAL_CALL propertiesChange(
-        css::uno::Sequence< css::beans::PropertyChangeEvent > const &) override
+        cpo::uno::Sequence< css::beans::PropertyChangeEvent > const &) override
     {
         SolarMutexGuard g;
         m_Editor.SetFont();

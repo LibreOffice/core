@@ -1344,7 +1344,7 @@ void SAL_CALL OOXMLSecParser::setDocumentLocator(const uno::Reference<xml::sax::
         m_xNextHandler->setDocumentLocator(xLocator);
 }
 
-void SAL_CALL OOXMLSecParser::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void SAL_CALL OOXMLSecParser::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     rArguments[0] >>= m_xNextHandler;
 }

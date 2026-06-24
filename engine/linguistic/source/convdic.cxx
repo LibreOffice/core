@@ -361,7 +361,7 @@ void SAL_CALL ConvDic::clear(  )
 }
 
 
-uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
+cpo::uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
         const OUString& aText,
         sal_Int32 nStartPos,
         sal_Int32 nLength,
@@ -371,7 +371,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
     MutexGuard  aGuard( GetLinguMutex() );
 
     if (!pFromRight && eDirection != ConversionDirection_FROM_LEFT)
-        return uno::Sequence< OUString >();
+        return cpo::uno::Sequence< OUString >();
 
     if (bNeedEntries)
         Load();
@@ -393,13 +393,13 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
 }
 
 
-uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
+cpo::uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
         ConversionDirection eDirection )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
     if (!pFromRight && eDirection != ConversionDirection_FROM_LEFT)
-        return uno::Sequence< OUString >();
+        return cpo::uno::Sequence< OUString >();
 
     if (bNeedEntries)
         Load();
@@ -574,7 +574,7 @@ bool SAL_CALL ConvDic::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL ConvDic::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL ConvDic::getSupportedServiceNames(  )
 {
     return { SN_CONV_DICTIONARY };
 }

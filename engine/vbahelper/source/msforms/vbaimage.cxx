@@ -33,10 +33,10 @@ ScVbaImage::getServiceImplName()
     return u"ScVbaImage"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaImage::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.Image"_ustr
     };

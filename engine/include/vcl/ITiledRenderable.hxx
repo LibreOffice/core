@@ -23,7 +23,7 @@
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 namespace vcl { class Window; }
 namespace tools { class JsonWriter; }
 
@@ -165,7 +165,7 @@ public:
      * Setup various document properties that are needed for the document to
      * be renderable via tiled rendering.
      */
-    virtual void initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments) = 0;
+    virtual void initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) = 0;
 
     /**
      * Posts a keyboard event on the document.

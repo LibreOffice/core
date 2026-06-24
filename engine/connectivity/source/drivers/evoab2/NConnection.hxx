@@ -58,7 +58,7 @@ namespace connectivity::evoab {
     public:
         explicit OEvoabConnection( OEvoabDriver const & _rDriver );
         /// @throws css::sdbc::SQLException
-        void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo );
+        void construct(const OUString& _rUrl,const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo );
 
         void         setPassword( OString const & aStr ) { m_aPassword = aStr; }
         // own methods

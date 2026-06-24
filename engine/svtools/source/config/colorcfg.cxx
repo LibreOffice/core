@@ -23,7 +23,7 @@
 
 #include <svtools/colorcfg.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
@@ -31,7 +31,7 @@
 #include <unotools/confignode.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configpaths.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <svl/poolitem.hxx>
 #include <mutex>
 #include <vcl/window.hxx>
@@ -82,7 +82,7 @@ public:
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
     void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
-    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void                    Notify( const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 
     const ColorConfigValue&         GetColorConfigValue(ColorConfigEntry eValue) const
                                                             {return m_aConfigValues[eValue];}
@@ -91,7 +91,7 @@ public:
 
     const OUString&            GetLoadedScheme() const {return m_sLoadedScheme;}
 
-    uno::Sequence< OUString> GetSchemeNames();
+    cpo::uno::Sequence< OUString> GetSchemeNames();
 
     void                            AddScheme(const OUString& rNode);
     void                            RemoveScheme(const OUString& rNode);
@@ -110,9 +110,9 @@ public:
 
 namespace {
 
-uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
+cpo::uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
 {
-    uno::Sequence<OUString> aNames(3 * ColorConfigEntryCount);
+    cpo::uno::Sequence<OUString> aNames(3 * ColorConfigEntryCount);
     OUString* pNames = aNames.getArray();
     int nIndex = 0;
     OUString sBase = "ColorSchemes/"
@@ -138,7 +138,7 @@ ColorConfig_Impl::ColorConfig_Impl() :
     ConfigItem(u"Office.UI/ColorScheme"_ustr)
 {
     //try to register on the root node - if possible
-    uno::Sequence < OUString > aNames(1);
+    cpo::uno::Sequence < OUString > aNames(1);
     EnableNotification( aNames );
 
     if (!comphelper::IsFuzzing())
@@ -160,8 +160,8 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     if(sScheme.isEmpty())
     {
         //detect current scheme name
-        uno::Sequence < OUString > aCurrent { u"CurrentColorScheme"_ustr };
-        uno::Sequence< cpo::uno::Any > aCurrentVal = GetProperties( aCurrent );
+        cpo::uno::Sequence < OUString > aCurrent { u"CurrentColorScheme"_ustr };
+        cpo::uno::Sequence< cpo::uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     }
     m_sLoadedScheme = sScheme;
@@ -169,7 +169,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     // use automatic theme as the fallback, in case the theme extension was removed
     if (ThemeColors::IsCustomTheme(sScheme))
     {
-        uno::Sequence<OUString> aSchemes = GetSchemeNames();
+        cpo::uno::Sequence<OUString> aSchemes = GetSchemeNames();
         bool bFound = std::any_of(aSchemes.begin(), aSchemes.end(),
             [&sScheme](const OUString& rSchemeName) { return sScheme == rSchemeName; });
 
@@ -177,8 +177,8 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
             sScheme = AUTOMATIC_COLOR_SCHEME;
     }
 
-    uno::Sequence < OUString > aColorNames = GetPropertyNames(sScheme);
-    uno::Sequence< cpo::uno::Any > aColors = GetProperties( aColorNames );
+    cpo::uno::Sequence < OUString > aColorNames = GetPropertyNames(sScheme);
+    cpo::uno::Sequence< cpo::uno::Any > aColors = GetProperties( aColorNames );
     const cpo::uno::Any* pColors = aColors.getConstArray();
     const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
@@ -203,7 +203,7 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     }
 }
 
-void ColorConfig_Impl::Notify(const uno::Sequence<OUString>& rProperties)
+void ColorConfig_Impl::Notify(const cpo::uno::Sequence<OUString>& rProperties)
 {
     const OUString sOldLoadedScheme = m_sLoadedScheme;
 
@@ -262,8 +262,8 @@ void ColorConfig_Impl::Notify(const uno::Sequence<OUString>& rProperties)
 
 void ColorConfig_Impl::ImplCommit()
 {
-    uno::Sequence < OUString > aColorNames = GetPropertyNames(m_sLoadedScheme);
-    uno::Sequence < beans::PropertyValue > aPropValues(aColorNames.getLength());
+    cpo::uno::Sequence < OUString > aColorNames = GetPropertyNames(m_sLoadedScheme);
+    cpo::uno::Sequence < beans::PropertyValue > aPropValues(aColorNames.getLength());
     beans::PropertyValue* pPropValues = aPropValues.getArray();
     const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
@@ -295,8 +295,8 @@ void ColorConfig_Impl::ImplCommit()
 void ColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
-    uno::Sequence < OUString > aCurrent { u"CurrentColorScheme"_ustr };
-    uno::Sequence< cpo::uno::Any > aCurrentVal(1);
+    cpo::uno::Sequence < OUString > aCurrent { u"CurrentColorScheme"_ustr };
+    cpo::uno::Sequence< cpo::uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
     ThemeColors::GetThemeColors().SetThemeName(m_sLoadedScheme);
@@ -311,7 +311,7 @@ void ColorConfig_Impl::SetColorConfigValue(ColorConfigEntry eValue, const ColorC
     }
 }
 
-uno::Sequence< OUString> ColorConfig_Impl::GetSchemeNames()
+cpo::uno::Sequence< OUString> ColorConfig_Impl::GetSchemeNames()
 {
     return GetNodeNames(u"ColorSchemes"_ustr);
 }
@@ -327,7 +327,7 @@ void ColorConfig_Impl::AddScheme(const OUString& rScheme)
 
 void ColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
-    uno::Sequence< OUString > aElements { rScheme };
+    cpo::uno::Sequence< OUString > aElements { rScheme };
     ClearNodeElements(u"ColorSchemes"_ustr, aElements);
 }
 
@@ -688,7 +688,7 @@ const OUString& ColorConfig::GetCurrentSchemeName()
 
 const OUString& ColorConfig_Impl::GetCurrentSchemeName()
 {
-    uno::Sequence<OUString> aNames = GetSchemeNames();
+    cpo::uno::Sequence<OUString> aNames = GetSchemeNames();
     OUString aCurrentSchemeName = officecfg::Office::UI::ColorScheme::CurrentColorScheme::get().value();
 
     for (const OUString& rSchemeName : aNames)
@@ -728,7 +728,7 @@ EditableColorConfig::~EditableColorConfig()
         m_pImpl->Commit();
 }
 
-uno::Sequence< OUString >  EditableColorConfig::GetSchemeNames() const
+cpo::uno::Sequence< OUString >  EditableColorConfig::GetSchemeNames() const
 {
     return m_pImpl->GetSchemeNames();
 }

@@ -58,12 +58,12 @@ public:
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
     // ____ XFilter ____
     virtual bool SAL_CALL filter(
-        const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel() override;
 
     // ____ XImporter ____
@@ -83,14 +83,14 @@ protected:
     * \param _rMediaDescriptor
     * \param _rOutOASIS
     */
-    virtual void isOasisFormat(const css::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS );
+    virtual void isOasisFormat(const cpo::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor, bool & _rOutOASIS );
 
 private:
     // methods
 
     /// @return a warning code, or 0 for successful operation
     ErrCode impl_Import( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
-                           const css::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
+                           const cpo::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
     ErrCode impl_ImportStream(
         const OUString & rStreamName,
@@ -102,7 +102,7 @@ private:
 
     /// @return a warning code, or 0 for successful operation
     ErrCode impl_Export( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
-                           const css::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
+                           const cpo::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
     ErrCode impl_ExportStream(
         const OUString & rStreamName,
@@ -110,14 +110,14 @@ private:
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const css::uno::Reference< css::xml::sax::XWriter >& xActiveDataSource,
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xFactory,
-        const css::uno::Sequence< cpo::uno::Any > & rFilterProperties );
+        const cpo::uno::Sequence< cpo::uno::Any > & rFilterProperties );
 
     // members
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XComponent >       m_xTargetDoc;
     css::uno::Reference< css::lang::XComponent >       m_xSourceDoc;
 
-    css::uno::Sequence<css::beans::PropertyValue> m_aMediaDescriptor;
+    cpo::uno::Sequence<css::beans::PropertyValue> m_aMediaDescriptor;
 
     OUString                                m_sDocumentHandler; // when set it will be set as doc handler
     ::osl::Mutex                                   m_aMutex;
@@ -125,7 +125,7 @@ private:
 
 class XMLReportFilterHelper final : public XMLFilter
 {
-    virtual void isOasisFormat(const css::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
+    virtual void isOasisFormat(const cpo::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
                                bool & _rOutOASIS ) override;
 public:
     explicit XMLReportFilterHelper( css::uno::Reference< css::uno::XComponentContext > const & _xContext )

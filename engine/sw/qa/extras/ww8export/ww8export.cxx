@@ -266,7 +266,7 @@ DECLARE_WW8EXPORT_TEST(testN823651, "n823651.doc")
 
     // tdf#164845 - inherit the two tab stops from the "Header" paragraph style
     auto aTabStops
-        = getProperty<uno::Sequence<style::TabStop>>(xHeaderParagraph, u"ParaTabStops"_ustr);
+        = getProperty<cpo::uno::Sequence<style::TabStop>>(xHeaderParagraph, u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(2), aTabStops.size());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7620), aTabStops[0].Position); // 7.62cm
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(15240), aTabStops[1].Position); // 15.24 cm
@@ -334,7 +334,7 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
 
-    uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);
+    cpo::uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< cpo::uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);
     sal_Int32 nPasswordHash = 0;
     for ( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )
     {
@@ -638,7 +638,7 @@ DECLARE_WW8EXPORT_TEST(testTdf95576, "tdf95576.doc")
         // get the numbering level of this paragraph, and the properties
         // associated with that numbering level
         int numLevel = getProperty<sal_Int32>(xPara, u"NumberingLevel"_ustr);
-        uno::Sequence< beans::PropertyValue > aPropertyValues;
+        cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
         xNumRules->getByIndex(numLevel) >>= aPropertyValues;
 
         // Now look through these properties for the indent and
@@ -831,7 +831,7 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, u"urn:bails"_ustr);
     uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent, uno::UNO_QUERY);
-    uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
+    cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
     // This failed, no graphs had the urn:bails type.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aGraphNames.getLength());
     uno::Reference<rdf::XURI> xGraphName = aGraphNames[0];
@@ -1546,7 +1546,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
             xPara, u"NumberingRules"_ustr);
 
     int numLevel = getProperty<sal_Int32>(xPara, u"NumberingLevel"_ustr);
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
     xNumRules->getByIndex(numLevel) >>= aPropertyValues;
     OUString charStyleName;
     for(int j = 0 ; j< aPropertyValues.getLength() ; ++j)

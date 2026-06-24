@@ -124,7 +124,7 @@ namespace pcr
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XController
         virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
@@ -193,14 +193,14 @@ namespace pcr
         virtual css::uno::Reference< css::inspection::XObjectInspectorModel > SAL_CALL getInspectorModel() override;
         virtual void SAL_CALL setInspectorModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) override;
         virtual css::uno::Reference< css::inspection::XObjectInspectorUI > SAL_CALL getInspectorUI() override;
-        virtual void SAL_CALL inspect( const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects ) override;
+        virtual void SAL_CALL inspect( const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects ) override;
 
         // XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) override;
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void UpdateUI();

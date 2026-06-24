@@ -108,9 +108,9 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
     bool bModuleNameSet = false;
     bool bDispProvSet = false;
 
-    uno::Sequence< beans::PropertyValue > aSourceProps;
+    cpo::uno::Sequence< beans::PropertyValue > aSourceProps;
     xSourceMenu->getByIndex( nSourceIndex ) >>= aSourceProps;
-    uno::Sequence< beans::PropertyValue > aTargetProps( aSourceProps.getLength() );
+    cpo::uno::Sequence< beans::PropertyValue > aTargetProps( aSourceProps.getLength() );
     auto aTargetPropsRange = asNonConstRange(aTargetProps);
     for ( nInd = 0; nInd < aSourceProps.getLength(); nInd++ )
     {
@@ -435,7 +435,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         // create a frame based on the specified window
         uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);
 
-        uno::Sequence< cpo::uno::Any > aArgs( xContFrame.is() ? 2 : 1 );
+        cpo::uno::Sequence< cpo::uno::Any > aArgs( xContFrame.is() ? 2 : 1 );
         auto pArgs = aArgs.getArray();
         beans::NamedValue aArg;
 
@@ -558,7 +558,7 @@ void DocumentHolder::FindConnectPoints(
     nConnectPoints[1] = -1;
     for ( sal_Int32 nInd = 0; nInd < xMenu->getCount(); nInd++ )
     {
-        uno::Sequence< beans::PropertyValue > aProps;
+        cpo::uno::Sequence< beans::PropertyValue > aProps;
         xMenu->getByIndex( nInd ) >>= aProps;
         OUString aCommand;
         for (beans::PropertyValue const& prop : aProps)
@@ -985,7 +985,7 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
     {
         uno::Reference < frame::XSynchronousFrameLoader > xLoader( m_xComponent, uno::UNO_QUERY );
         if ( xLoader.is() )
-            return xLoader->load( uno::Sequence < beans::PropertyValue >(), m_xFrame );
+            return xLoader->load( cpo::uno::Sequence < beans::PropertyValue >(), m_xFrame );
         else
             return false;
     }

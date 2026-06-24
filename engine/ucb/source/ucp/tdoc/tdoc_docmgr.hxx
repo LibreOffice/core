@@ -116,7 +116,7 @@ namespace tdoc_ucp {
         css::uno::Reference< css::frame::XModel >
         queryDocumentModel( const OUString & rDocId );
 
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
         queryDocuments();
 
         OUString

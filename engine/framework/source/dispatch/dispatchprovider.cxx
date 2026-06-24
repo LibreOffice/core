@@ -123,12 +123,12 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDis
 
     @threadsafe yes
 */
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL DispatchProvider::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL DispatchProvider::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions )
 {
     // Create return list - which must have the same size as the given descriptor.
     // It's not allowed to pack it!
     sal_Int32                                                          nCount     = lDescriptions.getLength();
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     // Step over all descriptors and try to get a dispatcher for it.
     for( sal_Int32 i=0; i<nCount; ++i )
@@ -480,7 +480,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                     try
                     {
                         // but do it only, if all context information is OK
-                        css::uno::Sequence< cpo::uno::Any > lContext{ cpo::uno::Any(xOwner) };
+                        cpo::uno::Sequence< cpo::uno::Any > lContext{ cpo::uno::Any(xOwner) };
                         xInit->initialize(lContext);
                     }
                     catch(const css::uno::Exception&) {}
@@ -576,7 +576,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 // static
 bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL )
 {
-    LoadEnv::EContentType eType = LoadEnv::classifyContent(aURL.Complete, css::uno::Sequence< css::beans::PropertyValue >());
+    LoadEnv::EContentType eType = LoadEnv::classifyContent(aURL.Complete, cpo::uno::Sequence< css::beans::PropertyValue >());
     return ( eType == LoadEnv::E_CAN_BE_LOADED );
 }
 

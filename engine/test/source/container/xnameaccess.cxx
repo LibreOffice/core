@@ -13,7 +13,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -35,7 +35,7 @@ void XNameAccess::testGetByName()
 void XNameAccess::testGetElementNames()
 {
     uno::Reference<container::XNameAccess> xNA(init(), uno::UNO_QUERY_THROW);
-    uno::Sequence<OUString> aNames = xNA->getElementNames();
+    cpo::uno::Sequence<OUString> aNames = xNA->getElementNames();
 
     CPPUNIT_ASSERT(aNames.hasElements());
 }

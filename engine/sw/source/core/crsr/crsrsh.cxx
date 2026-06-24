@@ -4352,7 +4352,7 @@ void SwCursorShell::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 static void lcl_FillRecognizerData( std::vector< OUString >& rSmartTagTypes,
-                             uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
+                             cpo::uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                              const SwWrongList& rSmartTagList, sal_Int32 nCurrent )
 {
     // Insert smart tag information
@@ -4395,7 +4395,7 @@ static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
 }
 
 void SwCursorShell::GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
-                                   uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
+                                   cpo::uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                                    uno::Reference< text::XTextRange>& rRange ) const
 {
     if ( !SwSmartTagMgr::Get().IsSmartTagsEnabled() )

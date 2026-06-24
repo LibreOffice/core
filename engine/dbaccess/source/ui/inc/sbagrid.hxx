@@ -58,15 +58,15 @@ namespace dbaui
         virtual cpo::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
         // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
         virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
         virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
@@ -97,10 +97,10 @@ namespace dbaui
         virtual void SAL_CALL release() noexcept override { FmXGridPeer::release(); }
         virtual cpo::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
         virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
         virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
@@ -118,7 +118,7 @@ namespace dbaui
         struct DispatchArgs
         {
             css::util::URL                                                 aURL;
-            css::uno::Sequence< css::beans::PropertyValue >   aArgs;
+            cpo::uno::Sequence< css::beans::PropertyValue >   aArgs;
         };
         std::queue< DispatchArgs >    m_aDispatchArgs;
         DECL_LINK( OnDispatchEvent, void*, void );

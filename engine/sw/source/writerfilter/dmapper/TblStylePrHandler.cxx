@@ -218,7 +218,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                 // Just pass a non-empty string, the array will have a single element anyway.
                 m_rDMapper.enableInteropGrabBag(u"TblStylePrHandler"_ustr);
                 m_rDMapper.sprm( rSprm );
-                uno::Sequence<beans::PropertyValue> aGrabBag = m_rDMapper.getInteropGrabBag().Value.get< uno::Sequence<beans::PropertyValue> >();
+                cpo::uno::Sequence<beans::PropertyValue> aGrabBag = m_rDMapper.getInteropGrabBag().Value.get< cpo::uno::Sequence<beans::PropertyValue> >();
                 if (aGrabBag.hasElements())
                     m_aInteropGrabBag.push_back(aGrabBag[0]);
                 m_rDMapper.PopStyleSheetProperties( true );

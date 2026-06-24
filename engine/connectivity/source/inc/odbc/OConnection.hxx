@@ -72,7 +72,7 @@ namespace connectivity::odbc
     public:
         const Functions& functions() const;
         /// @throws css::sdbc::SQLException
-        SQLRETURN       Construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
+        SQLRETURN       Construct( const OUString& url,const cpo::uno::Sequence< css::beans::PropertyValue >& info);
 
         OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*  _pDriver);
         //  OConnection(const SQLHANDLE _pConnectionHandle);

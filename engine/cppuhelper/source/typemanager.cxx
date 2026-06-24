@@ -42,7 +42,7 @@
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <cppu/unotype.hxx>
@@ -163,7 +163,7 @@ private:
     { return name_; }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMembers() override;
 
@@ -172,13 +172,13 @@ private:
     rtl::Reference< unoidl::ModuleEntity > entity_;
 };
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 ModuleDescription::getMembers() {
     try {
         std::vector< OUString > names(entity_->getMemberNames());
         assert(names.size() <= SAL_MAX_INT32);
         sal_Int32 n = static_cast< sal_Int32 >(names.size());
-        css::uno::Sequence<
+        cpo::uno::Sequence<
             css::uno::Reference< css::reflection::XTypeDescription > > s(n);
         auto r = asNonConstRange(s);
         for (sal_Int32 i = 0; i != n; ++i) {
@@ -217,19 +217,19 @@ private:
     virtual sal_Int32 SAL_CALL getDefaultEnumValue() override
     { return entity_->getMembers()[0].value; }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getEnumNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getEnumNames() override;
 
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL getEnumValues() override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getEnumValues() override;
 
     OUString name_;
     rtl::Reference< unoidl::EnumTypeEntity > entity_;
 };
 
-css::uno::Sequence< OUString > EnumTypeDescription::getEnumNames()
+cpo::uno::Sequence< OUString > EnumTypeDescription::getEnumNames()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence< OUString > s(n);
+    cpo::uno::Sequence< OUString > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
         r[i] = entity_->getMembers()[i].name;
@@ -237,11 +237,11 @@ css::uno::Sequence< OUString > EnumTypeDescription::getEnumNames()
     return s;
 }
 
-css::uno::Sequence< sal_Int32 > EnumTypeDescription::getEnumValues()
+cpo::uno::Sequence< sal_Int32 > EnumTypeDescription::getEnumValues()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence< sal_Int32 > s(n);
+    cpo::uno::Sequence< sal_Int32 > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
         r[i] = entity_->getMembers()[i].value;
@@ -280,20 +280,20 @@ private:
     }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getTypeParameters() override
-    { return css::uno::Sequence< OUString >(); }
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getTypeParameters() override
+    { return cpo::uno::Sequence< OUString >(); }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getTypeArguments() override {
-        return css::uno::Sequence<
+        return cpo::uno::Sequence<
             css::uno::Reference< css::reflection::XTypeDescription > >();
     }
 
@@ -302,12 +302,12 @@ private:
     rtl::Reference< unoidl::PlainStructTypeEntity > entity_;
 };
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 PlainStructTypeDescription::getMemberTypes()
 {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -316,11 +316,11 @@ PlainStructTypeDescription::getMemberTypes()
     return s;
 }
 
-css::uno::Sequence< OUString > PlainStructTypeDescription::getMemberNames()
+cpo::uno::Sequence< OUString > PlainStructTypeDescription::getMemberNames()
 {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
-    css::uno::Sequence< OUString > s(n);
+    cpo::uno::Sequence< OUString > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
         r[i] = entity_->getDirectMembers()[i].name;
@@ -380,19 +380,19 @@ private:
     { return css::uno::Reference< css::reflection::XTypeDescription >(); }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getTypeParameters() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getTypeParameters() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getTypeArguments() override {
-        return css::uno::Sequence<
+        return cpo::uno::Sequence<
             css::uno::Reference< css::reflection::XTypeDescription > >();
     }
 
@@ -401,12 +401,12 @@ private:
     rtl::Reference< unoidl::PolymorphicStructTypeTemplateEntity > entity_;
 };
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 PolymorphicStructTypeTemplateDescription::getMemberTypes()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -418,12 +418,12 @@ PolymorphicStructTypeTemplateDescription::getMemberTypes()
     return s;
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 PolymorphicStructTypeTemplateDescription::getMemberNames()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence< OUString > s(n);
+    cpo::uno::Sequence< OUString > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
         r[i] = entity_->getMembers()[i].name;
@@ -431,12 +431,12 @@ PolymorphicStructTypeTemplateDescription::getMemberNames()
     return s;
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 PolymorphicStructTypeTemplateDescription::getTypeParameters()
 {
     assert(entity_->getTypeParameters().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getTypeParameters().size());
-    css::uno::Sequence< OUString > s(n);
+    cpo::uno::Sequence< OUString > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
         r[i] = entity_->getTypeParameters()[i];
@@ -475,17 +475,17 @@ private:
     { return css::uno::Reference< css::reflection::XTypeDescription >(); }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getTypeParameters() override
-    { return css::uno::Sequence< OUString >(); }
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getTypeParameters() override
+    { return cpo::uno::Sequence< OUString >(); }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getTypeArguments() override;
 
@@ -495,12 +495,12 @@ private:
     std::vector< OUString > arguments_;
 };
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -519,24 +519,24 @@ InstantiatedPolymorphicStructTypeDescription::getMemberTypes()
     return s;
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 InstantiatedPolymorphicStructTypeDescription::getMemberNames()
 {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence< OUString > s(n);
+    cpo::uno::Sequence< OUString > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
         r[i] = entity_->getMembers()[i].name;
     }
     return s;
 }
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 InstantiatedPolymorphicStructTypeDescription::getTypeArguments()
 {
     assert(arguments_.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(arguments_.size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -576,22 +576,22 @@ private:
     }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getMemberNames() override;
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
     OUString name_;
     rtl::Reference< unoidl::ExceptionTypeEntity > entity_;
 };
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 ExceptionTypeDescription::getMemberTypes() {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -600,11 +600,11 @@ ExceptionTypeDescription::getMemberTypes() {
     return s;
 }
 
-css::uno::Sequence< OUString > ExceptionTypeDescription::getMemberNames()
+cpo::uno::Sequence< OUString > ExceptionTypeDescription::getMemberNames()
 {
     assert(entity_->getDirectMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getDirectMembers().size());
-    css::uno::Sequence< OUString > s(n);
+    cpo::uno::Sequence< OUString > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
         r[i] = entity_->getDirectMembers()[i].name;
@@ -652,12 +652,12 @@ private:
     { return attribute_.bound; }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
     SAL_CALL getGetExceptions() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
     SAL_CALL getSetExceptions() override;
 
@@ -667,12 +667,12 @@ private:
     sal_Int32 position_;
 };
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XCompoundTypeDescription > >
 AttributeDescription::getGetExceptions() {
     assert(attribute_.getExceptions.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(attribute_.getExceptions.size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -683,12 +683,12 @@ AttributeDescription::getGetExceptions() {
     return s;
 }
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XCompoundTypeDescription > >
 AttributeDescription::getSetExceptions() {
     assert(attribute_.setExceptions.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(attribute_.setExceptions.size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -781,12 +781,12 @@ private:
     { return false; }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XMethodParameter > >
     SAL_CALL getParameters() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getExceptions() override;
 
@@ -796,11 +796,11 @@ private:
     sal_Int32 position_;
 };
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XMethodParameter > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XMethodParameter > >
 MethodDescription::getParameters() {
     assert(method_.parameters.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(method_.parameters.size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XMethodParameter > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -809,11 +809,11 @@ MethodDescription::getParameters() {
     return s;
 }
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 MethodDescription::getExceptions() {
     assert(method_.exceptions.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(method_.exceptions.size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -858,7 +858,7 @@ void BaseOffset::calculateBases(
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > const &
         description)
 {
-    const css::uno::Sequence<
+    const cpo::uno::Sequence<
         css::uno::Reference < css::reflection::XTypeDescription > > bases(
             description->getBaseTypes());
     for (const auto & i : bases) {
@@ -910,18 +910,18 @@ private:
     }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference<
              css::reflection::XInterfaceMemberTypeDescription > >
     SAL_CALL getMembers() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getBaseTypes() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
     SAL_CALL getOptionalBaseTypes() override;
 
@@ -930,7 +930,7 @@ private:
     rtl::Reference< unoidl::InterfaceTypeEntity > entity_;
 };
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XInterfaceMemberTypeDescription > >
 InterfaceTypeDescription::getMembers() {
     assert(
@@ -940,7 +940,7 @@ InterfaceTypeDescription::getMembers() {
     sal_Int32 n1 = static_cast< sal_Int32 >(
         entity_->getDirectAttributes().size());
     sal_Int32 n2 = static_cast< sal_Int32 >(entity_->getDirectMethods().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > s(n1 + n2);
     auto r = asNonConstRange(s);
@@ -958,12 +958,12 @@ InterfaceTypeDescription::getMembers() {
     return s;
 }
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 InterfaceTypeDescription::getBaseTypes() {
     assert(entity_->getDirectMandatoryBases().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
         entity_->getDirectMandatoryBases().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -972,13 +972,13 @@ InterfaceTypeDescription::getBaseTypes() {
     return s;
 }
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XTypeDescription > >
 InterfaceTypeDescription::getOptionalBaseTypes()
 {
     assert(entity_->getDirectOptionalBases().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
         entity_->getDirectOptionalBases().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -1075,7 +1075,7 @@ private:
     { return name_; }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XConstantTypeDescription > >
     SAL_CALL getConstants() override;
 
@@ -1083,12 +1083,12 @@ private:
     rtl::Reference< unoidl::ConstantGroupEntity > entity_;
 };
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XConstantTypeDescription > >
 ConstantGroupDescription::getConstants() {
     assert(entity_->getMembers().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getMembers().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XConstantTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -1189,12 +1189,12 @@ private:
     { return constructor_.name; }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XParameter > >
     SAL_CALL getParameters() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
     SAL_CALL getExceptions() override;
 
@@ -1202,11 +1202,11 @@ private:
     unoidl::SingleInterfaceBasedServiceEntity::Constructor constructor_;
 };
 
-css::uno::Sequence< css::uno::Reference< css::reflection::XParameter > >
+cpo::uno::Sequence< css::uno::Reference< css::reflection::XParameter > >
 ConstructorDescription::getParameters() {
     assert(constructor_.parameters.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(constructor_.parameters.size());
-    css::uno::Sequence< css::uno::Reference< css::reflection::XParameter > > s(
+    cpo::uno::Sequence< css::uno::Reference< css::reflection::XParameter > > s(
         n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -1216,12 +1216,12 @@ ConstructorDescription::getParameters() {
     return s;
 }
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XCompoundTypeDescription > >
 ConstructorDescription::getExceptions() {
     assert(constructor_.exceptions.size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(constructor_.exceptions.size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XCompoundTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -1259,49 +1259,49 @@ private:
     { return name_; }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > >
     SAL_CALL getMandatoryServices() override
     {
-        return css::uno::Sequence<
+        return cpo::uno::Sequence<
             css::uno::Reference< css::reflection::XServiceTypeDescription > >();
     }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > >
     SAL_CALL getOptionalServices() override
     {
-        return css::uno::Sequence<
+        return cpo::uno::Sequence<
             css::uno::Reference< css::reflection::XServiceTypeDescription > >();
     }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
     SAL_CALL getMandatoryInterfaces() override
     {
-        return css::uno::Sequence<
+        return cpo::uno::Sequence<
             css::uno::Reference<
                 css::reflection::XInterfaceTypeDescription > >();
     }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
     SAL_CALL getOptionalInterfaces() override
     {
-        return css::uno::Sequence<
+        return cpo::uno::Sequence<
             css::uno::Reference<
                 css::reflection::XInterfaceTypeDescription > >();
     }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XPropertyTypeDescription > >
     SAL_CALL getProperties() override
     {
-        return css::uno::Sequence<
+        return cpo::uno::Sequence<
             css::uno::Reference<
                 css::reflection::XPropertyTypeDescription > >();
     }
@@ -1314,7 +1314,7 @@ private:
     { return manager_->resolve(entity_->getBase()); }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceConstructorDescription > >
     SAL_CALL getConstructors() override;
 
@@ -1323,13 +1323,13 @@ private:
     rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > entity_;
 };
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XServiceConstructorDescription > >
 SingleInterfaceBasedServiceDescription::getConstructors()
 {
     assert(entity_->getConstructors().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(entity_->getConstructors().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceConstructorDescription > >
             s(n);
     auto r = asNonConstRange(s);
@@ -1397,27 +1397,27 @@ private:
     { return name_; }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > >
     SAL_CALL getMandatoryServices() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > >
     SAL_CALL getOptionalServices() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
     SAL_CALL getMandatoryInterfaces() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
     SAL_CALL getOptionalInterfaces() override;
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XPropertyTypeDescription > >
     SAL_CALL getProperties() override;
 
@@ -1429,11 +1429,11 @@ private:
     { return css::uno::Reference< css::reflection::XTypeDescription >(); }
 
     virtual
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceConstructorDescription > >
     SAL_CALL getConstructors() override
     {
-        return css::uno::Sequence<
+        return cpo::uno::Sequence<
             css::uno::Reference<
                 css::reflection::XServiceConstructorDescription > >();
     }
@@ -1443,14 +1443,14 @@ private:
     rtl::Reference< unoidl::AccumulationBasedServiceEntity > entity_;
 };
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XServiceTypeDescription > >
 AccumulationBasedServiceDescription::getMandatoryServices()
 {
     assert(entity_->getDirectMandatoryBaseServices().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
         entity_->getDirectMandatoryBaseServices().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -1462,14 +1462,14 @@ AccumulationBasedServiceDescription::getMandatoryServices()
     return s;
 }
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XServiceTypeDescription > >
 AccumulationBasedServiceDescription::getOptionalServices()
 {
     assert(entity_->getDirectOptionalBaseServices().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
         entity_->getDirectOptionalBaseServices().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XServiceTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -1480,14 +1480,14 @@ AccumulationBasedServiceDescription::getOptionalServices()
     return s;
 }
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
 AccumulationBasedServiceDescription::getMandatoryInterfaces()
 {
     assert(entity_->getDirectMandatoryBaseInterfaces().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
         entity_->getDirectMandatoryBaseInterfaces().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > > s(
             n);
     auto r = asNonConstRange(s);
@@ -1501,14 +1501,14 @@ AccumulationBasedServiceDescription::getMandatoryInterfaces()
     return s;
 }
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XInterfaceTypeDescription > >
 AccumulationBasedServiceDescription::getOptionalInterfaces()
 {
     assert(entity_->getDirectOptionalBaseInterfaces().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
         entity_->getDirectOptionalBaseInterfaces().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XInterfaceTypeDescription > > s(
             n);
     auto r = asNonConstRange(s);
@@ -1522,14 +1522,14 @@ AccumulationBasedServiceDescription::getOptionalInterfaces()
     return s;
 }
 
-css::uno::Sequence<
+cpo::uno::Sequence<
     css::uno::Reference< css::reflection::XPropertyTypeDescription > >
 AccumulationBasedServiceDescription::getProperties()
 {
     assert(entity_->getDirectProperties().size() <= SAL_MAX_INT32);
     sal_Int32 n = static_cast< sal_Int32 >(
         entity_->getDirectProperties().size());
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::reflection::XPropertyTypeDescription > > s(n);
     auto r = asNonConstRange(s);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -1635,7 +1635,7 @@ public:
         rtl::Reference< cppuhelper::TypeManager > const & manager,
         OUString const & prefix,
         rtl::Reference< unoidl::MapCursor > const & cursor,
-        css::uno::Sequence< css::uno::TypeClass > const & types, bool deep):
+        cpo::uno::Sequence< css::uno::TypeClass > const & types, bool deep):
         manager_(manager), types_(types), deep_(deep)
     {
         assert(manager.is());
@@ -1691,7 +1691,7 @@ private:
     };
 
     rtl::Reference< cppuhelper::TypeManager > manager_;
-    css::uno::Sequence< css::uno::TypeClass > types_;
+    cpo::uno::Sequence< css::uno::TypeClass > types_;
     bool deep_;
 
     std::mutex mutex_;
@@ -1910,7 +1910,7 @@ bool cppuhelper::TypeManager::supportsService(
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 cppuhelper::TypeManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.reflection.TypeDescriptionManager"_ustr }; //TODO
@@ -1989,7 +1989,7 @@ void cppuhelper::TypeManager::remove(cpo::uno::Any const & aElement)
 css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
 cppuhelper::TypeManager::createTypeDescriptionEnumeration(
     OUString const & moduleName,
-    css::uno::Sequence< css::uno::TypeClass > const & types,
+    cpo::uno::Sequence< css::uno::TypeClass > const & types,
     css::reflection::TypeDescriptionSearchDepth depth)
 {
     rtl::Reference< unoidl::MapCursor > cursor;
@@ -2146,7 +2146,7 @@ cpo::uno::Any cppuhelper::TypeManager::getInterfaceMember(
         return cpo::uno::Any();
     }
     std::u16string_view member = name.substr(separator + std::strlen("::"));
-    const css::uno::Sequence<
+    const cpo::uno::Sequence<
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > mems(
                 ifc->getMembers());

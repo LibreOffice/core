@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -308,9 +308,9 @@ namespace canvastools
 
             @return A reference to the resulting sequence of parameters
         */
-        CANVASTOOLS_DLLPUBLIC css::uno::Sequence< cpo::uno::Any >& getDeviceInfo(
+        CANVASTOOLS_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Any >& getDeviceInfo(
             const css::uno::Reference< css::rendering::XCanvas >& i_rxCanvas,
-            css::uno::Sequence< cpo::uno::Any >& o_rxParams );
+            cpo::uno::Sequence< cpo::uno::Any >& o_rxParams );
 
         /** Return a color space for a default RGBA integer format
 
@@ -336,7 +336,7 @@ namespace canvastools
             const css::geometry::IntegerSize2D& rBitmapSize );
 
         /// Convert standard 8888 RGBA color to vcl color
-        CANVASTOOLS_DLLPUBLIC css::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
+        CANVASTOOLS_DLLPUBLIC cpo::uno::Sequence<sal_Int8> colorToStdIntSequence( const ::Color& rColor );
 
         // Modelled closely after boost::numeric_cast, only that we
         // issue some trace output here and throw a RuntimeException
@@ -536,7 +536,7 @@ namespace canvastools
                         const css::rendering::RenderState& renderState,
                         OutputDevice& rOutDev);
 
-        CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const css::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,
+        CANVASTOOLS_DLLPUBLIC void extractExtraFontProperties(const cpo::uno::Sequence<css::beans::PropertyValue>& rExtraFontProperties,
                         sal_uInt32& rEmphasisMark);
 }
 

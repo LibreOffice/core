@@ -328,11 +328,11 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
 
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement(u"_rels"_ustr, nOpenMode);
     uno::Reference<io::XInputStream> xRelStream(xSubStorage->openStreamElement(u"origin.sigs.rels"_ustr, nOpenMode), uno::UNO_QUERY);
-    uno::Sequence< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, u"origin.sigs.rels", mxCtx);
+    cpo::uno::Sequence< cpo::uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, u"origin.sigs.rels", mxCtx);
 
     for (sal_Int32 i = 0; i < aRelationsInfo.getLength(); ++i)
     {
-        const uno::Sequence<beans::StringPair>& rRelation = aRelationsInfo[i];
+        const cpo::uno::Sequence<beans::StringPair>& rRelation = aRelationsInfo[i];
         if (std::any_of(rRelation.begin(), rRelation.end(), lcl_isSignatureType))
         {
             auto it = std::find_if(rRelation.begin(), rRelation.end(), [](const beans::StringPair& rPair) { return rPair.First == "Target"; });
@@ -369,7 +369,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
                     SAL_WARN("xmlsecurity.helper", "bogus signature size: " << nSize);
                     continue;
                 }
-                uno::Sequence<sal_Int8> aData;
+                cpo::uno::Sequence<sal_Int8> aData;
                 xInputStream->readBytes(aData, nSize);
                 mpXSecController->setSignatureBytes(aData);
             }
@@ -418,12 +418,12 @@ void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css:
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement(u"_rels"_ustr, nOpenMode);
     uno::Reference<io::XInputStream> xRelStream(xSubStorage->openStreamElement(u".rels"_ustr, nOpenMode), uno::UNO_QUERY);
-    std::vector< uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::sequenceToContainer< std::vector< uno::Sequence<beans::StringPair> > >(comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, u".rels", mxCtx));
+    std::vector< cpo::uno::Sequence<beans::StringPair> > aRelationsInfo = comphelper::sequenceToContainer< std::vector< cpo::uno::Sequence<beans::StringPair> > >(comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(xRelStream, u".rels", mxCtx));
 
     // Do we have a relation already?
     bool bHaveRelation = false;
     int nCount = 0;
-    for (const uno::Sequence<beans::StringPair>& rRelation : aRelationsInfo)
+    for (const cpo::uno::Sequence<beans::StringPair>& rRelation : aRelationsInfo)
     {
         auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rRelation);
         if (std::any_of(aRelation.begin(), aRelation.end(), lcl_isSignatureOriginType))
@@ -446,7 +446,7 @@ void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css:
     else if (bHaveRelation && !bAdd)
     {
         // Yes, and need to remove it.
-        for (std::vector< uno::Sequence<beans::StringPair> >::iterator it = aRelationsInfo.begin(); it != aRelationsInfo.end();)
+        for (std::vector< cpo::uno::Sequence<beans::StringPair> >::iterator it = aRelationsInfo.begin(); it != aRelationsInfo.end();)
         {
             auto aRelation = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(*it);
             if (std::any_of(aRelation.begin(), aRelation.end(), lcl_isSignatureOriginType))
@@ -481,7 +481,7 @@ void XMLSignatureHelper::ExportSignatureRelations(const css::uno::Reference<css:
     // Write the relations.
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement(u"_rels"_ustr, nOpenMode);
     uno::Reference<io::XOutputStream> xRelStream(xSubStorage->openStreamElement(u"origin.sigs.rels"_ustr, nOpenMode), uno::UNO_QUERY);
-    std::vector< uno::Sequence<beans::StringPair> > aRelations;
+    std::vector< cpo::uno::Sequence<beans::StringPair> > aRelations;
     for (int i = 0; i < nSignatureCount; ++i)
     {
         std::vector<beans::StringPair> aRelation;
@@ -499,7 +499,7 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
 {
     uno::Reference<io::XStream> xStream = xStorage->openStreamElement(u"[Content_Types].xml"_ustr, embed::ElementModes::READWRITE);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();
-    uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxCtx);
+    cpo::uno::Sequence< cpo::uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, mxCtx);
     if (aContentTypeInfo.getLength() < 2)
     {
         SAL_WARN("xmlsecurity.helper", "no defaults or overrides in aContentTypeInfo");
@@ -508,7 +508,7 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
     auto pContentTypeInfo = aContentTypeInfo.getArray();
 
     // Append rels and sigs to defaults, if it's not there already.
-    uno::Sequence<beans::StringPair>& rDefaults = pContentTypeInfo[0];
+    cpo::uno::Sequence<beans::StringPair>& rDefaults = pContentTypeInfo[0];
     auto aDefaults = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rDefaults);
     if (std::none_of(std::cbegin(rDefaults), std::cend(rDefaults), [](const beans::StringPair& rPair) { return rPair.First == "rels"; }))
         aDefaults.emplace_back("rels", "application/vnd.openxmlformats-package.relationships+xml");
@@ -518,7 +518,7 @@ void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<c
     rDefaults = comphelper::containerToSequence(aDefaults);
 
     // Remove existing signature overrides.
-    uno::Sequence<beans::StringPair>& rOverrides = pContentTypeInfo[1];
+    cpo::uno::Sequence<beans::StringPair>& rOverrides = pContentTypeInfo[1];
     auto aOverrides = comphelper::sequenceToContainer< std::vector<beans::StringPair> >(rOverrides);
     std::erase_if(aOverrides, [](const beans::StringPair& rPair)
     {

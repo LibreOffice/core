@@ -169,7 +169,7 @@ void Connection::importConnection( const AttributeList& rAttribs )
     // workaround for finding correct XML id of xr16:uid
     if (auto xFastAttributeList = rAttribs.getFastAttributeList())
     {
-        css::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
+        cpo::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
 
         for (auto& attr : aFast)
         {
@@ -336,11 +336,11 @@ void Connection::importXFifteenRangePr(const AttributeList& rAttribs)
             = getSequenceOfAny(xFastAttributeList);
 }
 
-css::uno::Sequence<cpo::uno::Any> Connection::getSequenceOfAny(
+cpo::uno::Sequence<cpo::uno::Any> Connection::getSequenceOfAny(
     const css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList)
 {
-    css::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
-    css::uno::Sequence<css::xml::Attribute> aUnk = xFastAttributeList->getUnknownAttributes();
+    cpo::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
+    cpo::uno::Sequence<css::xml::Attribute> aUnk = xFastAttributeList->getUnknownAttributes();
     return { cpo::uno::Any(aFast), cpo::uno::Any(aUnk) };
 }
 

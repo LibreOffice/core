@@ -81,11 +81,11 @@ public:
     virtual bool isPasswordEmpty() const = 0;
     virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const = 0;
     virtual void setPassword(const OUString& aPassText) = 0;
-    virtual css::uno::Sequence<sal_Int8> getPasswordHash(
+    virtual cpo::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHas2 = PASSHASH_UNSPECIFIED) const = 0;
     virtual const ScOoxPasswordHash& getPasswordHash() const = 0;
     virtual void setPasswordHash(
-        const css::uno::Sequence<sal_Int8>& aPassword,
+        const cpo::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) = 0;
     virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount ) = 0;
@@ -113,11 +113,11 @@ public:
     virtual bool isPasswordEmpty() const override;
     virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPassword(const OUString& aPassText) override;
-    SC_DLLPUBLIC virtual css::uno::Sequence<sal_Int8> getPasswordHash(
+    SC_DLLPUBLIC virtual cpo::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual const ScOoxPasswordHash& getPasswordHash() const override;
     SC_DLLPUBLIC virtual void setPasswordHash(
-        const css::uno::Sequence<sal_Int8>& aPassword,
+        const cpo::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount ) override;
@@ -197,11 +197,11 @@ public:
     virtual bool isPasswordEmpty() const override;
     virtual bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual void setPassword(const OUString& aPassText) override;
-    virtual css::uno::Sequence<sal_Int8> getPasswordHash(
+    virtual cpo::uno::Sequence<sal_Int8> getPasswordHash(
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const override;
     virtual const ScOoxPasswordHash& getPasswordHash() const override;
     virtual void setPasswordHash(
-        const css::uno::Sequence<sal_Int8>& aPassword,
+        const cpo::uno::Sequence<sal_Int8>& aPassword,
         ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) override;
     virtual void setPasswordHash( const OUString& rAlgorithmName, const OUString& rHashValue,
             const OUString& rSaltValue, sal_uInt32 nSpinCount ) override;

@@ -22,7 +22,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -94,7 +94,7 @@ bool GraphicNativeTransform::rotateGeneric(Degree10 aRotation, std::u16string_vi
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Interlaced"_ustr, sal_Int32(0)),
         comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(9)),
         comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(90))

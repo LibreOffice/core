@@ -360,7 +360,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     rtl::Reference<::utl::AccessibleRelationSetHelper> pRelationSet = new utl::AccessibleRelationSetHelper;
 
     //this mxshape is the captioned shape
-    uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { mpParent->GetAccessibleCaption(mxShape) };
+    cpo::uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { mpParent->GetAccessibleCaption(mxShape) };
     if(aSequence[0])
     {
         pRelationSet->AddRelation(
@@ -786,23 +786,23 @@ OUString SAL_CALL
 }
 
 
-uno::Sequence<OUString> SAL_CALL
+cpo::uno::Sequence<OUString> SAL_CALL
     AccessibleShape::getSupportedServiceNames()
 {
     ensureAlive();
-    const css::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleShape"_ustr };
+    const cpo::uno::Sequence<OUString> vals { u"com.sun.star.drawing.AccessibleShape"_ustr };
     return comphelper::concatSequences(AccessibleContextBase::getSupportedServiceNames(), vals);
 }
 
 // XTypeProvider
-uno::Sequence<uno::Type> SAL_CALL
+cpo::uno::Sequence<uno::Type> SAL_CALL
     AccessibleShape::getTypes()
 {
     ensureAlive();
     // Get list of types from the context base implementation, ...
-    uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
+    cpo::uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
     // ... define local types
-    uno::Sequence<uno::Type> localTypesList = {
+    cpo::uno::Sequence<uno::Type> localTypesList = {
         cppu::UnoType<lang::XEventListener>::get(),
         cppu::UnoType<document::XEventListener>::get(),
         cppu::UnoType<lang::XUnoTunnel>::get()
@@ -1051,14 +1051,14 @@ struct XShapePosCompareHelper
 //end of group position
 
 // XAccessibleGroupPosition
-uno::Sequence< sal_Int32 > SAL_CALL
+cpo::uno::Sequence< sal_Int32 > SAL_CALL
 AccessibleShape::getGroupPosition( const cpo::uno::Any& )
 {
     // we will return the:
     // [0] group level
     // [1] similar items counts in the group
     // [2] the position of the object in the group
-    uno::Sequence< sal_Int32 > aRet{ 0, 0, 0 };
+    cpo::uno::Sequence< sal_Int32 > aRet{ 0, 0, 0 };
 
     css::uno::Reference<XAccessible> xParent = getAccessibleParent();
     if (!xParent.is())
@@ -1200,9 +1200,9 @@ sal_Int32 SAL_CALL AccessibleShape::getHyperLinkIndex( sal_Int32 )
 sal_Int32 SAL_CALL AccessibleShape::getCaretPosition(  ){return 0;}
 bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ){return false;}
 sal_Unicode SAL_CALL AccessibleShape::getCharacter( sal_Int32 ){return 0;}
-css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleShape::getCharacterAttributes( sal_Int32, const css::uno::Sequence< OUString >& )
+cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleShape::getCharacterAttributes( sal_Int32, const cpo::uno::Sequence< OUString >& )
 {
-    uno::Sequence< css::beans::PropertyValue > aValues(0);
+    cpo::uno::Sequence< css::beans::PropertyValue > aValues(0);
     return aValues;
 }
 css::awt::Rectangle SAL_CALL AccessibleShape::getCharacterBounds( sal_Int32 )

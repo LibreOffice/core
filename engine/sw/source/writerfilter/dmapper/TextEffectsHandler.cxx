@@ -797,7 +797,7 @@ sal_uInt8 TextEffectsHandler::GetTextFillSolidFillAlpha(const css::beans::Proper
         return 0;
     }
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues;
     rValue.Value >>= aPropertyValues;
     comphelper::SequenceAsHashMap aMap(aPropertyValues);
     auto it = aMap.find(u"solidFill"_ustr);
@@ -905,7 +905,7 @@ void TextFillHandler::updateComplexColor()
         return nVal;
     };
     auto fillProps = getInteropGrabBag();
-    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues;
     fillProps.Value >>= aPropertyValues;
     comphelper::SequenceAsHashMap aSolidFillMap(aPropertyValues);
     auto it = aSolidFillMap.find(u"srgbClr"_ustr);

@@ -398,7 +398,7 @@ SmXMLImport::SmXMLImport(const css::uno::Reference<css::uno::XComponentContext>&
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_XMLImporter_get_implementation(uno::XComponentContext* pCtx,
-                                    uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                    cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(
         new SmXMLImport(pCtx, u"com.sun.star.comp.Math.XMLImporter"_ustr, SvXMLImportFlags::ALL));
@@ -406,7 +406,7 @@ Math_XMLImporter_get_implementation(uno::XComponentContext* pCtx,
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_XMLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
-                                             uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                             cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmXMLImport(pCtx, u"com.sun.star.comp.Math.XMLOasisMetaImporter"_ustr,
                                          SvXMLImportFlags::META));
@@ -414,7 +414,7 @@ Math_XMLOasisMetaImporter_get_implementation(uno::XComponentContext* pCtx,
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 Math_XMLOasisSettingsImporter_get_implementation(uno::XComponentContext* pCtx,
-                                                 uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+                                                 cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SmXMLImport(
         pCtx, u"com.sun.star.comp.Math.XMLOasisSettingsImporter"_ustr, SvXMLImportFlags::SETTINGS));

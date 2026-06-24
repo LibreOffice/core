@@ -460,11 +460,11 @@ void FormulaCompiler::OpCodeMap::putExternalSoftly( const OUString & rSymbol, co
     }
 }
 
-uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(
-        const FormulaCompiler& rCompiler, const uno::Sequence< OUString >& rNames ) const
+cpo::uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(
+        const FormulaCompiler& rCompiler, const cpo::uno::Sequence< OUString >& rNames ) const
 {
     const sal_Int32 nLen = rNames.getLength();
-    uno::Sequence< sheet::FormulaToken > aTokens( nLen);
+    cpo::uno::Sequence< sheet::FormulaToken > aTokens( nLen);
     sheet::FormulaToken* pToken = aTokens.getArray();
     OUString const * pName = rNames.getConstArray();
     OUString const * const pStop = pName + nLen;
@@ -498,12 +498,12 @@ uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceO
     return aTokens;
 }
 
-uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::createSequenceOfAvailableMappings(
+cpo::uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::createSequenceOfAvailableMappings(
         const FormulaCompiler& rCompiler, const sal_Int32 nGroups ) const
 {
     using namespace sheet;
 
-    // Unfortunately uno::Sequence can't grow without cumbersome reallocs. As
+    // Unfortunately cpo::uno::Sequence can't grow without cumbersome reallocs. As
     // we don't know in advance how many elements it will have we use a
     // temporary vector to add elements and then copy to Sequence :-(
     ::std::vector< FormulaOpCodeMapEntry > aVec;
@@ -662,7 +662,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                     ::std::min< sal_uInt16 >( ocStopErrors, mnSymbols ) );
         }
     }
-    return uno::Sequence< FormulaOpCodeMapEntry >(aVec.data(), aVec.size());
+    return cpo::uno::Sequence< FormulaOpCodeMapEntry >(aVec.data(), aVec.size());
 }
 
 
@@ -937,7 +937,7 @@ OUString FormulaCompiler::FindAddInFunction( const OUString& /*rUpperName*/, boo
 }
 
 FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
-        const uno::Sequence<
+        const cpo::uno::Sequence<
         const sheet::FormulaOpCodeMapEntry > & rMapping,
         bool bEnglish )
 {

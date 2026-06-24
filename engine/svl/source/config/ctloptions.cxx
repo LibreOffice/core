@@ -25,7 +25,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <cpo/uno/Any.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>

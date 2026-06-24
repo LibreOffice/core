@@ -36,7 +36,7 @@
 
 namespace com::sun::star::sheet { struct DataResult; }
 namespace com::sun::star::sheet { struct MemberResult; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 class ScDPSource;
 class ScDPDimension;
@@ -389,13 +389,13 @@ public:
                                         const ::std::vector<SCROW>& aDataMembers,
                                         const ::std::vector<ScDPValue>& aValues );
     void FillMemberResults(
-        css::uno::Sequence< css::sheet::MemberResult>* pSequences,
+        cpo::uno::Sequence< css::sheet::MemberResult>* pSequences,
         tools::Long& rPos, tools::Long nMeasure, bool bRoot, const OUString* pMemberName, const OUString* pMemberCaption );
 
     void FillDataResults(
         const ScDPResultMember* pRefMember,
         ScDPResultFilterContext& rFilterCxt,
-        css::uno::Sequence< css::uno::Sequence<  css::sheet::DataResult> >& rSequence,
+        cpo::uno::Sequence< cpo::uno::Sequence<  css::sheet::DataResult> >& rSequence,
         tools::Long nMeasure) const;
 
     void                UpdateDataResults( const ScDPResultMember* pRefMember, tools::Long nMeasure ) const;
@@ -464,7 +464,7 @@ public:
     void FillDataRow(
         const ScDPResultMember* pRefMember,
         ScDPResultFilterContext& rFilterCxt,
-        css::uno::Sequence<css::sheet::DataResult>& rSequence,
+        cpo::uno::Sequence<css::sheet::DataResult>& rSequence,
         tools::Long nMeasure, bool bIsSubTotalRow,
         const ScDPSubTotalState& rSubState) const;
 
@@ -547,15 +547,15 @@ public:
                                      const ScDPResultDimension* pDataDim,
                                      const ::std::vector<SCROW>& aDataMembers,
                                      const ::std::vector<ScDPValue>& aValues ) const;   //! Test
-    void                FillMemberResults( css::uno::Sequence<
+    void                FillMemberResults( cpo::uno::Sequence<
                                                 css::sheet::MemberResult>* pSequences,
                                             tools::Long nStart, tools::Long nMeasure );
 
     void FillDataResults(
         const ScDPResultMember* pRefMember,
         ScDPResultFilterContext& rFilterCxt,
-        css::uno::Sequence<
-            css::uno::Sequence<
+        cpo::uno::Sequence<
+            cpo::uno::Sequence<
                 css::sheet::DataResult> >& rSequence,
         tools::Long nMeasure) const;
 
@@ -628,7 +628,7 @@ public:
     void FillDataRow(
         const ScDPResultDimension* pRefDim,
         ScDPResultFilterContext& rFilterCxt,
-        css::uno::Sequence<css::sheet::DataResult>& rSequence,
+        cpo::uno::Sequence<css::sheet::DataResult>& rSequence,
         tools::Long nMeasure, bool bIsSubTotalRow, const ScDPSubTotalState& rSubState) const;
 
     void                UpdateDataRow( const ScDPResultDimension* pRefDim, tools::Long nMeasure, bool bIsSubTotalRow,

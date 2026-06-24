@@ -262,7 +262,7 @@ static bool lcl_MayBeDBase( SvStream& rStream )
     return ( 0x0d == nEndFlag );
 }
 
-OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
+OUString SAL_CALL ScFilterDetect::detect( cpo::uno::Sequence<beans::PropertyValue>& lDescriptor )
 {
     comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
     OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_TYPENAME, OUString() );
@@ -339,14 +339,14 @@ bool ScFilterDetect::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ExtendedTypeDetection"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_calc_FormatDetector_get_implementation(css::uno::XComponentContext* /*context*/,
-                                                         css::uno::Sequence<cpo::uno::Any> const &)
+                                                         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ScFilterDetect);
 }

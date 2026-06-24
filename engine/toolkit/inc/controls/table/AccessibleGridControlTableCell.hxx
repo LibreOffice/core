@@ -102,8 +102,8 @@ public:
     virtual sal_Int32 SAL_CALL getCaretPosition() override;
     virtual bool SAL_CALL setCaretPosition(sal_Int32 nIndex) override;
     virtual sal_Unicode SAL_CALL getCharacter(sal_Int32 nIndex) override;
-    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getCharacterAttributes(
-        sal_Int32 nIndex, const css::uno::Sequence<OUString>& aRequestedAttributes) override;
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getCharacterAttributes(
+        sal_Int32 nIndex, const cpo::uno::Sequence<OUString>& aRequestedAttributes) override;
     virtual css::awt::Rectangle SAL_CALL getCharacterBounds(sal_Int32 nIndex) override;
     virtual sal_Int32 SAL_CALL getCharacterCount() override;
     virtual sal_Int32 SAL_CALL getIndexAtPoint(const css::awt::Point& aPoint) override;

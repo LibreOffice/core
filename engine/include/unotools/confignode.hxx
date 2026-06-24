@@ -116,7 +116,7 @@ namespace utl
         bool            setNodeValue(const OUString& _rPath, const cpo::uno::Any& _rValue) const noexcept;
 
         /// return the names of the existing children
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
                             getNodeNames() const noexcept;
 
         /// invalidate the object

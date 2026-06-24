@@ -330,7 +330,7 @@ OUString SAL_CALL ScVbaControlObjectBase::getOnAction()
 {
     uno::Reference< script::XEventAttacherManager > xEventMgr( mxFormIC, uno::UNO_QUERY_THROW );
     sal_Int32 nIndex = getModelIndexInForm();
-    const uno::Sequence< script::ScriptEventDescriptor > aEvents = xEventMgr->getScriptEvents( nIndex );
+    const cpo::uno::Sequence< script::ScriptEventDescriptor > aEvents = xEventMgr->getScriptEvents( nIndex );
     if( aEvents.hasElements() )
     {
         const script::ScriptEventDescriptor* pEvent = std::find_if(aEvents.begin(), aEvents.end(),

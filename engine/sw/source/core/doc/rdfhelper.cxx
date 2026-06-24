@@ -26,7 +26,7 @@
 
 using namespace com::sun::star;
 
-css::uno::Sequence<css::uno::Reference<css::rdf::XURI>> SwRDFHelper::getGraphNames(
+cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>> SwRDFHelper::getGraphNames(
     const rtl::Reference<SwXTextDocument>& xModel,
     const css::uno::Reference<rdf::XURI>& xType)
 {
@@ -36,11 +36,11 @@ css::uno::Sequence<css::uno::Reference<css::rdf::XURI>> SwRDFHelper::getGraphNam
     }
     catch (const uno::RuntimeException&)
     {
-        return uno::Sequence<uno::Reference<rdf::XURI>>();
+        return cpo::uno::Sequence<uno::Reference<rdf::XURI>>();
     }
 }
 
-css::uno::Sequence<uno::Reference<css::rdf::XURI>>
+cpo::uno::Sequence<uno::Reference<css::rdf::XURI>>
 SwRDFHelper::getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
                            const OUString& rType)
 {
@@ -56,13 +56,13 @@ SwRDFHelper::getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
     }
     catch (const ::css::uno::Exception&)
     {
-        return uno::Sequence<uno::Reference<rdf::XURI>>();
+        return cpo::uno::Sequence<uno::Reference<rdf::XURI>>();
     }
 }
 
 std::map<OUString, OUString>
 SwRDFHelper::getStatements(const rtl::Reference<SwXTextDocument>& xModel,
-                           const uno::Sequence<uno::Reference<css::rdf::XURI>>& rGraphNames,
+                           const cpo::uno::Sequence<uno::Reference<css::rdf::XURI>>& rGraphNames,
                            const css::uno::Reference<css::rdf::XResource>& xSubject)
 {
     std::map<OUString, OUString> aRet;
@@ -103,13 +103,13 @@ void SwRDFHelper::addStatement(const rtl::Reference<SwXTextDocument>& xModel,
 {
     const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
-    const uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
+    const cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
     uno::Reference<rdf::XURI> xGraphName;
     if (aGraphNames.hasElements())
         xGraphName = aGraphNames[0];
     else
     {
-        uno::Sequence< uno::Reference<rdf::XURI> > xTypes = { xType };
+        cpo::uno::Sequence< uno::Reference<rdf::XURI> > xTypes = { xType };
         xGraphName = xModel->addMetadataFile(rPath, xTypes);
     }
     uno::Reference<rdf::XNamedGraph> xGraph = xModel->getRDFRepository()->getGraph(xGraphName);
@@ -132,7 +132,7 @@ void SwRDFHelper::removeStatement(const rtl::Reference<SwXTextDocument>& xModel,
 {
     const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
-    const uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
+    const cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
     if (!aGraphNames.hasElements())
         return;
 
@@ -148,7 +148,7 @@ void SwRDFHelper::clearStatements(const rtl::Reference<SwXTextDocument>& xModel,
 {
     const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
-    const uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
+    const cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
     if (!aGraphNames.hasElements())
         return;
 
@@ -192,7 +192,7 @@ void SwRDFHelper::removeTextNodeStatement(const OUString& rType, SwTextNode& rTe
     if (!pShell)
         return;
     rtl::Reference<SwXTextDocument> xModel(pShell->GetBaseModel());
-    const uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
+    const cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
     if (!aGraphNames.hasElements())
         return;
 
@@ -212,7 +212,7 @@ void SwRDFHelper::updateTextNodeStatement(const OUString& rType, const OUString&
     if (!pShell)
         return;
     rtl::Reference<SwXTextDocument> xModel(pShell->GetBaseModel());
-    const uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
+    const cpo::uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = getGraphNames(xModel, xType);
     uno::Reference<rdf::XURI> xGraphName;
     if (aGraphNames.hasElements())
     {
@@ -220,7 +220,7 @@ void SwRDFHelper::updateTextNodeStatement(const OUString& rType, const OUString&
     }
     else
     {
-        uno::Sequence< uno::Reference<rdf::XURI> > xTypes = { xType };
+        cpo::uno::Sequence< uno::Reference<rdf::XURI> > xTypes = { xType };
         xGraphName = xModel->addMetadataFile(rPath, xTypes);
     }
 

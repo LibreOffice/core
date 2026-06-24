@@ -367,7 +367,7 @@ Sequence< Type> SAL_CALL FmXGridControl::getTypes(  )
 
 Sequence<sal_Int8> SAL_CALL FmXGridControl::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo
@@ -381,7 +381,7 @@ OUString SAL_CALL FmXGridControl::getImplementationName()
     return u"com.sun.star.form.FmXGridControl"_ustr;
 }
 
-css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedServiceNames()
 {
     return { FM_SUN_CONTROL_GRIDCONTROL, u"com.sun.star.awt.UnoControl"_ustr };
 }
@@ -953,10 +953,10 @@ OUString SAL_CALL FmXGridControl::getMode()
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedModes()
+cpo::uno::Sequence<OUString> SAL_CALL FmXGridControl::getSupportedModes()
 {
     Reference< css::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
-    return xPeer.is() ? xPeer->getSupportedModes() : css::uno::Sequence<OUString>();
+    return xPeer.is() ? xPeer->getSupportedModes() : cpo::uno::Sequence<OUString>();
 }
 
 
@@ -2334,9 +2334,9 @@ OUString FmXGridPeer::getMode()
 }
 
 
-css::uno::Sequence<OUString> FmXGridPeer::getSupportedModes()
+cpo::uno::Sequence<OUString> FmXGridPeer::getSupportedModes()
 {
-    static css::uno::Sequence<OUString> const aModes
+    static cpo::uno::Sequence<OUString> const aModes
     {
         u"DataMode"_ustr,
         u"FilterMode"_ustr
@@ -2347,7 +2347,7 @@ css::uno::Sequence<OUString> FmXGridPeer::getSupportedModes()
 
 bool FmXGridPeer::supportsMode(const OUString& Mode)
 {
-    css::uno::Sequence<OUString> aModes(getSupportedModes());
+    cpo::uno::Sequence<OUString> aModes(getSupportedModes());
     return comphelper::findValue(aModes, Mode) != -1;
 }
 

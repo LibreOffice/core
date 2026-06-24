@@ -175,7 +175,7 @@ bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sService
     return cppu::supportsService( this, sServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames()
 {
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
@@ -267,18 +267,18 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
     return uno::Reference< frame::XDispatch > ();
 }
 
-uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispatches( const uno::Sequence<DispatchDescriptor>& aDescripts )
+cpo::uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispatches( const cpo::uno::Sequence<DispatchDescriptor>& aDescripts )
 {
-    uno::Sequence< uno::Reference< XDispatch > > aDispatches( aDescripts.getLength() );
+    cpo::uno::Sequence< uno::Reference< XDispatch > > aDispatches( aDescripts.getLength() );
     auto aDispatchesRange = asNonConstRange(aDispatches);
     for ( sal_Int32 i=0; i<aDescripts.getLength(); ++i )
         aDispatchesRange[i] = queryDispatch( aDescripts[i].FeatureURL, aDescripts[i].FrameName, aDescripts[i].SearchFlags );
     return aDispatches;
 }
 
-uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedCommandGroups()
+cpo::uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedCommandGroups()
 {
-    uno::Sequence< ::sal_Int16 > aDispatchInfo{ frame::CommandGroup::EDIT,
+    cpo::uno::Sequence< ::sal_Int16 > aDispatchInfo{ frame::CommandGroup::EDIT,
                                                 frame::CommandGroup::DOCUMENT,
                                                 frame::CommandGroup::DATA,
                                                 frame::CommandGroup::VIEW };
@@ -286,7 +286,7 @@ uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedComma
     return aDispatchInfo;
 }
 
-uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::getConfigurableDispatchInformation( ::sal_Int16 nCommandGroup )
+cpo::uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::getConfigurableDispatchInformation( ::sal_Int16 nCommandGroup )
 {
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 
@@ -375,7 +375,7 @@ static vcl::Window* lcl_GetFocusChild( vcl::Window const * pParent )
 }
 
 //class XDispatch
-void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequence< beans::PropertyValue >& aArgs)
+void BibFrameController_Impl::dispatch(const util::URL& _rURL, const cpo::uno::Sequence< beans::PropertyValue >& aArgs)
 {
     if ( m_bDisposing )
         return;
@@ -400,7 +400,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         {
             try
             {
-                uno::Sequence< beans::PropertyValue > aNewDataSource
+                cpo::uno::Sequence< beans::PropertyValue > aNewDataSource
                 {
                     comphelper::makePropertyValue( {}, OUString() ),
                     comphelper::makePropertyValue( {}, aURL )
@@ -802,7 +802,7 @@ void BibFrameController_Impl::RemoveFilter()
     }
 }
 
-void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::PropertyValue >& aArgs)
+void BibFrameController_Impl::ChangeDataSource(const cpo::uno::Sequence< beans::PropertyValue >& aArgs)
 {
     cpo::uno::Any aValue = aArgs[0].Value;
     OUString aDBTableName;
@@ -842,7 +842,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             aEvent.Source     = static_cast<XDispatch *>(this);
             aEvent.FeatureDescriptor=m_xDatMan->getQueryField();
 
-            uno::Sequence<OUString> aStringSeq=m_xDatMan->getQueryFields();
+            cpo::uno::Sequence<OUString> aStringSeq=m_xDatMan->getQueryFields();
             aEvent.State <<= aStringSeq;
 
             pObj->xListener->statusChanged( aEvent );

@@ -98,13 +98,13 @@ public:
      Only those DataFlavors for which a suitable mapping to a system
      type exist will be contained in the returned types array.
    */
-  NSArray* flavorSequenceToTypesArray(const css::uno::Sequence<css::datatransfer::DataFlavor>& flavors, bool bIsSystemClipboard = false) const;
+  NSArray* flavorSequenceToTypesArray(const cpo::uno::Sequence<css::datatransfer::DataFlavor>& flavors, bool bIsSystemClipboard = false) const;
 
   /* Translate an NSArray of system types into a sequence of DataFlavors.
      Only those types for which a suitable mapping to a DataFlavor
      exist will be contained in the new DataFlavor Sequence.
   */
-  css::uno::Sequence<css::datatransfer::DataFlavor> typesArrayToFlavorSequence(NSArray* types) const;
+  cpo::uno::Sequence<css::datatransfer::DataFlavor> typesArrayToFlavorSequence(NSArray* types) const;
 
   /* Returns an NSArray containing all pasteboard types supported by OOo
    */

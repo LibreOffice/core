@@ -99,7 +99,7 @@ JobResult::JobResult(/*IN*/ const cpo::uno::Any& aResult)
     pIt = aProtocol.find(JobConst::ANSWER_SAVE_ARGUMENTS);
     if (pIt != aProtocol.end())
     {
-        css::uno::Sequence<css::beans::NamedValue> aTmp;
+        cpo::uno::Sequence<css::beans::NamedValue> aTmp;
         pIt->second >>= aTmp;
         comphelper::sequenceToContainer(m_lArguments, aTmp);
         if (m_lArguments.empty())

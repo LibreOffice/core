@@ -88,7 +88,7 @@ bool WpftLoader::impl_load()
 {
     // create an empty frame
     m_xDoc.set(m_xDesktop->loadComponentFromURL(m_aFactoryURL, u"_blank"_ustr, 0,
-                                                uno::Sequence<beans::PropertyValue>()),
+                                                cpo::uno::Sequence<beans::PropertyValue>()),
                uno::UNO_SET_THROW);
 
     // Find the model and frame. We need them later.
@@ -122,7 +122,7 @@ bool WpftLoader::impl_load()
 
         xImporter->setTargetDocument(m_xDoc);
 
-        uno::Sequence<beans::PropertyValue> aDescriptor(3);
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor(3);
         auto pDescriptor = aDescriptor.getArray();
         pDescriptor[0].Name = u"URL"_ustr;
         pDescriptor[0].Value <<= m_aURL;
@@ -178,7 +178,7 @@ void WpftLoader::impl_dispose()
     m_xFrame.clear();
 }
 
-void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDescriptor,
+void WpftLoader::impl_detectFilterName(cpo::uno::Sequence<beans::PropertyValue>& rDescriptor,
                                        const OUString& rTypeName)
 {
     bool bHasFilterName
@@ -187,7 +187,7 @@ void WpftLoader::impl_detectFilterName(uno::Sequence<beans::PropertyValue>& rDes
     if (bHasFilterName)
         return;
 
-    uno::Sequence<beans::PropertyValue> aTypes;
+    cpo::uno::Sequence<beans::PropertyValue> aTypes;
     if (m_xTypeMap->getByName(rTypeName) >>= aTypes)
     {
         for (const auto& rType : aTypes)

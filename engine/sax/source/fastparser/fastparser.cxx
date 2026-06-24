@@ -257,7 +257,7 @@ public:
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
     // Fake DTD file
     void setCustomEntityNames(
-       const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements);
+       const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements);
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -953,7 +953,7 @@ void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHand
 }
 
 void FastSaxParserImpl::setCustomEntityNames(
-    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+    const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
 {
     m_Replacements.resize(replacements.size());
     for (size_t i = 0; i < replacements.size(); ++i)
@@ -1462,7 +1462,7 @@ FastSaxParser::~FastSaxParser()
 }
 
 void SAL_CALL
-FastSaxParser::initialize(css::uno::Sequence< cpo::uno::Any > const& rArguments)
+FastSaxParser::initialize(cpo::uno::Sequence< cpo::uno::Any > const& rArguments)
 {
     if (!rArguments.hasElements())
         return;
@@ -1539,7 +1539,7 @@ OUString FastSaxParser::getImplementationName()
 }
 
 void FastSaxParser::setCustomEntityNames(
-    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+    const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
 {
     mpImpl->setCustomEntityNames(replacements);
 }
@@ -1549,7 +1549,7 @@ bool FastSaxParser::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
 {
     return { u"com.sun.star.xml.sax.FastParser"_ustr };
 }
@@ -1559,7 +1559,7 @@ uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FastSaxParser);
 }

@@ -41,8 +41,8 @@ using namespace ::com::sun::star;
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
-                                                                    const uno::Sequence< beans::PropertyValue >& aMedDescr,
-                                                                    const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                                                    const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr,
+                                                                    const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
@@ -103,8 +103,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
-        const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-        const uno::Sequence< beans::PropertyValue >& lObjArgs )
+        const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+        const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
@@ -134,11 +134,11 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
 
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitNew(
-                                            const uno::Sequence< sal_Int8 >& aClassID,
+                                            const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
-                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
@@ -160,7 +160,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     embed::EntryInitModes::TRUNCATE_INIT,
-                                    uno::Sequence< beans::PropertyValue >(),
+                                    cpo::uno::Sequence< beans::PropertyValue >(),
                                     lObjArgs );
 
     return xResult;
@@ -170,8 +170,8 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
-                                            const uno::Sequence< beans::PropertyValue >& aMediaDescr,
-                                            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+                                            const cpo::uno::Sequence< beans::PropertyValue >& aMediaDescr,
+                                            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if ( officecfg::Office::Common::Security::Scripting::DisableActiveContent::get() )
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
@@ -201,13 +201,13 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
 
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceUserInit(
-            const uno::Sequence< sal_Int8 >& aClassID,
+            const cpo::uno::Sequence< sal_Int8 >& aClassID,
             const OUString& aClassName,
             const uno::Reference< embed::XStorage >& xStorage,
             const OUString& sEntName,
             sal_Int32 /*nEntryConnectionMode*/,
-            const uno::Sequence< beans::PropertyValue >& /*lArguments*/,
-            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+            const cpo::uno::Sequence< beans::PropertyValue >& /*lArguments*/,
+            const cpo::uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
     if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
         throw lang::NoSupportException(u"Active OLE content is disabled!"_ustr);
@@ -230,7 +230,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     xPersist->setPersistentEntry( xStorage,
                                   sEntName,
                                   embed::EntryInitModes::DEFAULT_INIT,
-                                  uno::Sequence< beans::PropertyValue >(),
+                                  cpo::uno::Sequence< beans::PropertyValue >(),
                                   lObjArgs );
 
     return xResult;
@@ -248,7 +248,7 @@ bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& Service
 }
 
 
-uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.embed.OLEEmbeddedObjectFactory"_ustr,
              u"com.sun.star.comp.embed.OLEEmbeddedObjectFactory"_ustr };
@@ -256,7 +256,7 @@ uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::getSupportedService
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 embeddedobj_OleEmbeddedObjectFactory_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OleEmbeddedObjectFactory(context));
 }

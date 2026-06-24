@@ -32,7 +32,7 @@ public:
 
     void LoadSourceFromFile(const OUString& sName, const OUString& sMacroFileURL);
 
-    SbxVariableRef Run(const css::uno::Sequence<cpo::uno::Any>& rArgs);
+    SbxVariableRef Run(const cpo::uno::Sequence<cpo::uno::Any>& rArgs);
 
     SbxVariableRef Run();
 

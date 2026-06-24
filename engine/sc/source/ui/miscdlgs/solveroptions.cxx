@@ -56,10 +56,10 @@ struct ScSolverOptionsEntry
 }
 
 ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
-                        const uno::Sequence<OUString>& rImplNames,
-                        const uno::Sequence<OUString>& rDescriptions,
+                        const cpo::uno::Sequence<OUString>& rImplNames,
+                        const cpo::uno::Sequence<OUString>& rDescriptions,
                         OUString aEngine,
-                        const uno::Sequence<beans::PropertyValue>& rProperties )
+                        const cpo::uno::Sequence<beans::PropertyValue>& rProperties )
     : GenericDialogController(pParent, u"modules/scalc/ui/solveroptionsdialog.ui"_ustr, u"SolverOptionsDialog"_ustr)
     , maImplNames(rImplNames)
     , maEngine(std::move(aEngine))
@@ -119,7 +119,7 @@ ScSolverOptionsDialog::~ScSolverOptionsDialog()
     assert(!m_xValDialog);
 }
 
-const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties()
+const cpo::uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties()
 {
     // update maProperties from list box content
     // order of entries in list box and maProperties is the same
@@ -171,7 +171,7 @@ void ScSolverOptionsDialog::FillListBox()
 
     // also update maProperties to the order of descriptions
 
-    uno::Sequence<beans::PropertyValue> aNewSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aNewSeq;
     aNewSeq.realloc( nCount );
     std::transform(aDescriptions.begin(), aDescriptions.end(), aNewSeq.getArray(),
         [this](const ScSolverOptionsEntry& rDescr) -> beans::PropertyValue { return maProperties[ rDescr.nPosition ]; });

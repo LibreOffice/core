@@ -18,9 +18,9 @@ class CipherContext : public cppu::WeakImplHelper<css::xml::crypto::XCipherConte
 private:
 public:
     // XCipherContext
-    virtual css::uno::Sequence<::sal_Int8>
-        SAL_CALL convertWithCipherContext(const css::uno::Sequence<::sal_Int8>& aData) override;
-    virtual css::uno::Sequence<::sal_Int8> SAL_CALL finalizeCipherContextAndDispose() override;
+    virtual cpo::uno::Sequence<::sal_Int8>
+        SAL_CALL convertWithCipherContext(const cpo::uno::Sequence<::sal_Int8>& aData) override;
+    virtual cpo::uno::Sequence<::sal_Int8> SAL_CALL finalizeCipherContextAndDispose() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

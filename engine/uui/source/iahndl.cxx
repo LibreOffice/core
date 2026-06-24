@@ -86,7 +86,7 @@
 #include "nameclashdlg.hxx"
 #include <comphelper/string.hxx>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::task::XInteractionContinuation;
@@ -242,7 +242,7 @@ UUIInteractionHelper::replaceMessageWithArguments(
 
 bool
 UUIInteractionHelper::isInformationalErrorMessageRequest(
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
 {
     // Only requests with a single continuation (user has no choice, request
@@ -917,7 +917,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog(weld::Window *p
 void
 UUIInteractionHelper::handleNameClashResolveRequest(
     ucb::NameClashResolveRequest const & rRequest,
-    uno::Sequence< uno::Reference<
+    cpo::uno::Sequence< uno::Reference<
         task::XInteractionContinuation > > const & rContinuations)
 {
     OSL_ENSURE(!rRequest.TargetFolderURL.isEmpty(),
@@ -972,7 +972,7 @@ UUIInteractionHelper::handleNameClashResolveRequest(
 void
 UUIInteractionHelper::handleGenericErrorRequest(
     ErrCodeMsg nErrorCode,
-    uno::Sequence< uno::Reference<
+    cpo::uno::Sequence< uno::Reference<
         task::XInteractionContinuation > > const & rContinuations,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
@@ -1035,8 +1035,8 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     const OUString& aDocumentURL,
     const uno::Reference< embed::XStorage >& xZipStorage,
     const OUString& aDocumentVersion,
-    const uno::Sequence< security::DocumentSignatureInformation >& aSignInfo,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    const cpo::uno::Sequence< security::DocumentSignatureInformation >& aSignInfo,
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations )
 {
     uno::Reference< task::XInteractionAbort > xAbort;
@@ -1070,7 +1070,7 @@ UUIInteractionHelper::handleMacroConfirmRequest(
 void
 UUIInteractionHelper::handleBrokenPackageRequest(
     std::vector< OUString > const & rArguments,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,

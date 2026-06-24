@@ -987,7 +987,7 @@ void DAVResourceAccess::UNLOCK(
     while ( bRetry );
 }
 
-void DAVResourceAccess::setFlags( const uno::Sequence< beans::NamedValue >& rFlags )
+void DAVResourceAccess::setFlags( const cpo::uno::Sequence< beans::NamedValue >& rFlags )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_aFlags = rFlags;
@@ -1080,7 +1080,7 @@ void DAVResourceAccess::getUserRequestHeaders(
     if ( !xDAVEnv.is() )
         return;
 
-    uno::Sequence< beans::StringPair > aRequestHeaders
+    cpo::uno::Sequence< beans::StringPair > aRequestHeaders
         = xDAVEnv->getUserRequestHeaders( rURI, eMethod );
 
     for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )

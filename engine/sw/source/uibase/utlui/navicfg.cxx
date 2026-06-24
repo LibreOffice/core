@@ -23,7 +23,7 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <map>
 
 using namespace ::utl;
@@ -52,7 +52,7 @@ namespace {
 
 Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         u"RootType"_ustr,
         u"SelectedPosition"_ustr,
         u"OutlineLevel"_ustr,
@@ -179,7 +179,7 @@ void SwNavigationConfig::ImplCommit()
     PutProperties(aNames, aValues);
 }
 
-void SwNavigationConfig::Notify( const css::uno::Sequence< OUString >& )
+void SwNavigationConfig::Notify( const cpo::uno::Sequence< OUString >& )
 {
     Load();
 }

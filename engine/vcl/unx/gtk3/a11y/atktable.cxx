@@ -384,7 +384,7 @@ table_wrapper_get_summary( AtkTable *table )
 /*****************************************************************************/
 
 static gint
-convertToGIntArray( const uno::Sequence< ::sal_Int32 >& aSequence, gint **pSelected )
+convertToGIntArray( const cpo::uno::Sequence< ::sal_Int32 >& aSequence, gint **pSelected )
 {
     if( aSequence.hasElements() )
     {

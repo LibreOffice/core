@@ -37,7 +37,7 @@ public:
     // SwVbaDocuments_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     // Methods
     virtual cpo::uno::Any SAL_CALL Add( const cpo::uno::Any& Template, const cpo::uno::Any& NewTemplate, const cpo::uno::Any& DocumentType, const cpo::uno::Any& Visible ) override;

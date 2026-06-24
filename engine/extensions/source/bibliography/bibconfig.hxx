@@ -102,7 +102,7 @@ class BibConfig : public utl::ConfigItem
 
     OUString               aColumnDefaults[COLUMN_COUNT];
 
-    static css::uno::Sequence<OUString> const & GetPropertyNames();
+    static cpo::uno::Sequence<OUString> const & GetPropertyNames();
 
     virtual void    ImplCommit() override;
 
@@ -110,7 +110,7 @@ public:
     BibConfig();
     virtual ~BibConfig() override;
 
-    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void            Notify( const cpo::uno::Sequence<OUString>& aPropertyNames) override;
 
     BibDBDescriptor         GetBibliographyURL();
     void                    SetBibliographyURL(const BibDBDescriptor& rDesc);
@@ -141,12 +141,12 @@ public:
 
 class DBChangeDialogConfig_Impl
 {
-    css::uno::Sequence<OUString> aSourceNames;
+    cpo::uno::Sequence<OUString> aSourceNames;
 public:
     DBChangeDialogConfig_Impl();
     ~DBChangeDialogConfig_Impl();
 
-    const css::uno::Sequence<OUString>& GetDataSourceNames();
+    const cpo::uno::Sequence<OUString>& GetDataSourceNames();
 
 };
 

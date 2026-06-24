@@ -99,10 +99,10 @@ void SAL_CALL ScVbaLabel::setAutoSize( bool bAutoSize )
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaLabel::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.Label"_ustr
     };

@@ -21,7 +21,7 @@
 #include <memory>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <unotools/confignode.hxx>
@@ -158,8 +158,8 @@ public:
             void                FileSelect();
             void                FilterSelect() override;
 
-    void                        SetDenyList( const css::uno::Sequence< OUString >& rDenyList ) override;
-    const css::uno::Sequence< OUString >& GetDenyList() const override;
+    void                        SetDenyList( const cpo::uno::Sequence< OUString >& rDenyList ) override;
+    const cpo::uno::Sequence< OUString >& GetDenyList() const override;
     std::vector<OUString>       GetPathList() const override;        // for MultiSelection
 
             void                AddFilter( const OUString& rFilter,
@@ -167,7 +167,7 @@ public:
 
             void                AddFilterGroup(
                                   const OUString& _rFilter,
-                                  const css::uno::Sequence< css::beans::StringPair >& rFilters ) override;
+                                  const cpo::uno::Sequence< css::beans::StringPair >& rFilters ) override;
 
             void                SetCurFilter( const OUString& rFilter ) override;
             OUString            GetCurFilter() const override;

@@ -41,7 +41,7 @@ typedef ::std::vector< FilterEntry >           FilterList;     // can be maintai
 typedef ::std::vector< ElementEntry_Impl >     ElementList;
 
 typedef css::beans::StringPair                 UnoFilterEntry;
-typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
+typedef cpo::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
 
 // class SvtFilePicker ---------------------------------------------------
 
@@ -70,7 +70,7 @@ protected:
     OUString            m_aOldDisplayDirectory;
     OUString            m_aOldHideDirectory;
 
-    css::uno::Sequence< OUString >
+    cpo::uno::Sequence< OUString >
                         m_aDenyList;
 
     css::uno::Reference< css::ui::dialogs::XFilePickerListener >
@@ -102,8 +102,8 @@ public:
     virtual void SAL_CALL           setDefaultName( const OUString& aName ) override;
     virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) override;
     virtual OUString SAL_CALL    getDisplayDirectory() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getFiles() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSelectedFiles() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getFiles() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSelectedFiles() override;
 
 
     // XFilePickerControlAccess functions
@@ -126,7 +126,7 @@ public:
     // XFilePreview functions
 
 
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats() override;
+    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats() override;
     virtual sal_Int32 SAL_CALL      getTargetColorDepth() override;
     virtual sal_Int32 SAL_CALL      getAvailableWidth() override;
     virtual sal_Int32 SAL_CALL      getAvailableHeight() override;
@@ -145,7 +145,7 @@ public:
 
     // XFilterGroupManager functions
 
-    virtual void SAL_CALL           appendFilterGroup( const OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters ) override;
+    virtual void SAL_CALL           appendFilterGroup( const OUString& sGroupTitle, const cpo::uno::Sequence< css::beans::StringPair >& aFilters ) override;
 
 
     // these methods are here because they're ambiguous
@@ -163,7 +163,7 @@ public:
     // XInitialization functions
 
 
-    virtual void SAL_CALL           initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL           initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 
     // XServiceInfo functions
@@ -172,7 +172,7 @@ public:
     /* XServiceInfo */
     virtual OUString SAL_CALL       getImplementationName() override;
     virtual bool SAL_CALL       supportsService( const OUString& sServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
                                     getSupportedServiceNames() override;
 
 protected:
@@ -212,7 +212,7 @@ public:
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& sServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
                                     getSupportedServiceNames() override;
 };
 

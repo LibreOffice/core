@@ -47,7 +47,7 @@ StarOfficeSHA1DigestContext::~StarOfficeSHA1DigestContext()
     }
 }
 
-void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& aData)
+void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const cpo::uno::Sequence<::sal_Int8>& aData)
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_pDigest )
@@ -62,13 +62,13 @@ void SAL_CALL StarOfficeSHA1DigestContext::updateDigest(const uno::Sequence<::sa
     }
 }
 
-uno::Sequence<::sal_Int8> SAL_CALL StarOfficeSHA1DigestContext::finalizeDigestAndDispose()
+cpo::uno::Sequence<::sal_Int8> SAL_CALL StarOfficeSHA1DigestContext::finalizeDigestAndDispose()
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_pDigest )
         throw lang::DisposedException();
 
-    uno::Sequence< sal_Int8 > aResult( RTL_DIGEST_LENGTH_SHA1 );
+    cpo::uno::Sequence< sal_Int8 > aResult( RTL_DIGEST_LENGTH_SHA1 );
     if ( rtl_Digest_E_None != rtl_digest_getSHA1( m_pDigest, reinterpret_cast< sal_uInt8* >( aResult.getArray() ), aResult.getLength() ) )
     {
         rtl_digest_destroySHA1( m_pDigest );
@@ -96,7 +96,7 @@ CorrectSHA1DigestContext::~CorrectSHA1DigestContext()
 {
 }
 
-void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_Int8>& rData)
+void SAL_CALL CorrectSHA1DigestContext::updateDigest(const cpo::uno::Sequence<::sal_Int8>& rData)
 {
     std::scoped_lock aGuard(m_Mutex);
     if (m_bDisposed)
@@ -105,7 +105,7 @@ void SAL_CALL CorrectSHA1DigestContext::updateDigest(const uno::Sequence<::sal_I
     m_Hash.update(rData.getConstArray(), rData.getLength());
 }
 
-uno::Sequence<::sal_Int8> SAL_CALL CorrectSHA1DigestContext::finalizeDigestAndDispose()
+cpo::uno::Sequence<::sal_Int8> SAL_CALL CorrectSHA1DigestContext::finalizeDigestAndDispose()
 {
     std::scoped_lock aGuard(m_Mutex);
     if (m_bDisposed)
@@ -113,7 +113,7 @@ uno::Sequence<::sal_Int8> SAL_CALL CorrectSHA1DigestContext::finalizeDigestAndDi
 
     m_bDisposed = true;
     std::vector<unsigned char> const sha1(m_Hash.finalize());
-    return uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const*>(sha1.data()), sha1.size());
+    return cpo::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const*>(sha1.data()), sha1.size());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

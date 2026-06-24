@@ -1502,7 +1502,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(const uno::Reference<beans
         sal_uInt16 nAngle = 0;
         if ( rSource == "MetaFile" )
         {
-            auto & aSeq = *o3tl::doAccess<uno::Sequence<sal_Int8>>(aAny);
+            auto & aSeq = *o3tl::doAccess<cpo::uno::Sequence<sal_Int8>>(aAny);
             const sal_Int8* pArray = aSeq.getConstArray();
             sal_uInt32 nArrayLength = aSeq.getLength();
 
@@ -2440,7 +2440,7 @@ static void ConvertEnhancedCustomShapeEquation(
     std::vector< EnhancedCustomShapeEquation >& rEquations,
     std::vector< sal_Int32 >& rEquationOrder )
 {
-    uno::Sequence< OUString > sEquationSource;
+    cpo::uno::Sequence< OUString > sEquationSource;
     const SdrCustomShapeGeometryItem& rGeometryItem =
         rSdrObjCustomShape.GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const cpo::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( u"Equations"_ustr );
@@ -2592,7 +2592,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
     SdrObjCustomShape& rSdrObjCustomShape = *pSdrObjCustomShape;
     cpo::uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
-    uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+    cpo::uno::Sequence< beans::PropertyValue > aGeoPropSeq;
     if ( !(aGeoPropSet >>= aGeoPropSeq) )
         return;
 
@@ -2605,7 +2605,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     cpo::uno::Any aPathCoordinatesProp;
 
     sal_Int32 nAdjustmentsWhichNeedsToBeConverted = 0;
-    uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
+    cpo::uno::Sequence< beans::PropertyValues > aHandlesPropSeq;
     bool bPredefinedHandlesUsed = true;
     const bool bIsDefaultObject(
         IsDefaultObject(
@@ -2664,7 +2664,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
         }
         else if ( rProp.Name == sExtrusion )
         {
-            uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue > aExtrusionPropSeq;
             if ( rProp.Value >>= aExtrusionPropSeq )
             {
                 sal_uInt32 nLightFaceFlagsOrg, nLightFaceFlags;
@@ -2990,7 +2990,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
         }
         else if ( rProp.Name == u"Path"_ustr )
         {
-            uno::Sequence< beans::PropertyValue > aPathPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue > aPathPropSeq;
             if ( rProp.Value >>= aPathPropSeq )
             {
                 sal_uInt32 nPathFlags, nPathFlagsOrg;
@@ -3051,7 +3051,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     {
                         if (!bIsDefaultObject && !bUseDefaultObject)
                         {
-                            uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
+                            cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aGluePoints;
                             if ( rrProp.Value >>= aGluePoints )
                             {
                                 // creating the vertices
@@ -3091,7 +3091,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     {
                         if (!bIsDefaultObject && !bUseDefaultObject)
                         {
-                            uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+                            cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
                             if ( rrProp.Value >>= aSegments )
                             {
                                 // creating seginfo
@@ -3229,7 +3229,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                     {
                         if (!bIsDefaultObject && !bUseDefaultObject)
                         {
-                            uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aPathTextFrames;
+                            cpo::uno::Sequence<drawing::EnhancedCustomShapeTextFrame> aPathTextFrames;
                             if ( rrProp.Value >>= aPathTextFrames )
                             {
                                 if ( aPathTextFrames.hasElements() )
@@ -3270,7 +3270,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
         }
         else if ( rProp.Name == sTextPath )
         {
-            uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue > aTextPathPropSeq;
             if ( rProp.Value >>= aTextPathPropSeq )
             {
                 sal_uInt32 nTextPathFlagsOrg, nTextPathFlags;
@@ -3499,7 +3499,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             sal_Int32 nYRangeMin = 0x80000000;
                             sal_Int32 nYRangeMax = 0x7fffffff;
 
-                            const uno::Sequence< beans::PropertyValue >& rPropSeq = aHandlesPropSeq[ k ];
+                            const cpo::uno::Sequence< beans::PropertyValue >& rPropSeq = aHandlesPropSeq[ k ];
                             for ( const beans::PropertyValue& rPropVal: rPropSeq )
                             {
                                 if ( rPropVal.Name == "Position" )
@@ -3650,7 +3650,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     }
     if ( bAdjustmentValuesProp )
     {
-        uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
         if ( aAdjustmentValuesProp >>= aAdjustmentSeq )
         {
             if ( bPredefinedHandlesUsed )
@@ -3670,7 +3670,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     if( !bPathCoordinatesProp )
         return;
 
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates;
     if ( !(aPathCoordinatesProp >>= aCoordinates) )
         return;
 
@@ -3710,7 +3710,7 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
         try
         {
             cpo::uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
-            uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
                 sal_Int32 i, nCount = aGeoPropSeq.getLength();
@@ -4219,17 +4219,17 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                     if (nErrCode == ERRCODE_NONE)
                     {
                         sal_uInt32 nGIFSreamLen = aGIFStream.Tell();
-                        uno::Sequence<sal_Int8> aGIFSeq( nGIFSreamLen );
+                        cpo::uno::Sequence<sal_Int8> aGIFSeq( nGIFSreamLen );
                         sal_Int8* pSeq = aGIFSeq.getArray();
                         aGIFStream.Seek( STREAM_SEEK_TO_BEGIN );
                         aGIFStream.ReadBytes(pSeq, nGIFSreamLen);
                         beans::PropertyValue aChunkProp, aFilterProp;
                         aChunkProp.Name = u"msOG"_ustr;
                         aChunkProp.Value <<= aGIFSeq;
-                        uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ std::move(aChunkProp) };
+                        cpo::uno::Sequence<beans::PropertyValue> aAdditionalChunkSequence{ std::move(aChunkProp) };
                         aFilterProp.Name = u"AdditionalChunks"_ustr;
                         aFilterProp.Value <<= aAdditionalChunkSequence;
-                        uno::Sequence<beans::PropertyValue> aFilterData{ std::move(aFilterProp) };
+                        cpo::uno::Sequence<beans::PropertyValue> aFilterData{ std::move(aFilterProp) };
                         nErrCode = rFilter.ExportGraphic( aGraphic, u"", aStream,
                                                           rFilter.GetExportFormatNumberForShortName( u"PNG" ), &aFilterData );
                     }

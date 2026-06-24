@@ -723,7 +723,7 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
     return aVector;
 }
 
-css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL GtkTransferable::getTransferDataFlavors()
+cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL GtkTransferable::getTransferDataFlavors()
 {
     return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
 }
@@ -774,9 +774,9 @@ OUString read_transfer_result::get_as_string() const
     return OUString(pStr, aVector.size(), RTL_TEXTENCODING_UTF8).replaceAll("\r\n", "\n");
 }
 
-css::uno::Sequence<sal_Int8> read_transfer_result::get_as_sequence() const
+cpo::uno::Sequence<sal_Int8> read_transfer_result::get_as_sequence() const
 {
-    return css::uno::Sequence<sal_Int8>(aVector.data(), aVector.size());
+    return cpo::uno::Sequence<sal_Int8>(aVector.data(), aVector.size());
 }
 #endif
 
@@ -1421,9 +1421,9 @@ VclGtkClipboard::~VclGtkClipboard()
 }
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-std::vector<OString> VclToGtkHelper::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+std::vector<OString> VclToGtkHelper::FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
 #else
-std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
+std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const cpo::uno::Sequence<css::datatransfer::DataFlavor> &rFormats)
 #endif
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -1502,7 +1502,7 @@ void VclGtkClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
 {
-    css::uno::Sequence<css::datatransfer::DataFlavor> aFormats;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> aFormats;
     if (xTrans.is())
     {
         aFormats = xTrans->getTransferDataFlavors();
@@ -1647,7 +1647,7 @@ bool SAL_CALL GtkInstDropTarget::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL GtkInstDropTarget::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL GtkInstDropTarget::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { u"com.sun.star.datatransfer.dnd.GtkDropTarget"_ustr };
     return aRet;
@@ -1717,7 +1717,7 @@ bool SAL_CALL GtkInstDragSource::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL GtkInstDragSource::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { u"com.sun.star.datatransfer.dnd.GtkDragSource"_ustr };
     return aRet;
@@ -4396,7 +4396,7 @@ namespace
         for (;;)
         {
             const sal_Int32 nSize(2048);
-            uno::Sequence<sal_Int8> aData(nSize);
+            cpo::uno::Sequence<sal_Int8> aData(nSize);
             sal_Int32 nRead = xInputStream->readBytes(aData, nSize);
             pStream->WriteBytes(aData.getConstArray(), nRead);
             if (nRead < nSize)
@@ -4442,7 +4442,7 @@ namespace
         SvMemoryStream aMemStm;
 
         // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
-        css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
+        cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
             u"Compression"_ustr, sal_Int32(1)) };
         auto aBitmap = aImage.GetBitmap();
         vcl::PngImageWriter aWriter(aMemStm);
@@ -4469,7 +4469,7 @@ namespace
         SvStream* pStream = xRet->GetStream(StreamMode::WRITE);
 
         // We "know" that this gets passed to zlib's deflateInit2_(). 1 means best speed.
-        css::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
+        cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{ comphelper::makePropertyValue(
             u"Compression"_ustr, sal_Int32(1)) };
         auto aBitmap = aImage.GetBitmap();
         vcl::PngImageWriter aWriter(*pStream);

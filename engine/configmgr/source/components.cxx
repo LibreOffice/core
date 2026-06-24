@@ -419,8 +419,8 @@ void Components::removeExtensionXcuFile(
 
 void Components::insertModificationXcuFile(
     OUString const & fileUri,
-    css::uno::Sequence< OUString > const & includedPaths,
-    css::uno::Sequence< OUString > const & excludedPaths,
+    cpo::uno::Sequence< OUString > const & includedPaths,
+    cpo::uno::Sequence< OUString > const & excludedPaths,
     Modifications * modifications)
 {
     assert(modifications != nullptr);

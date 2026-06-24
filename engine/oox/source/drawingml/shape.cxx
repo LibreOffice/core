@@ -1249,7 +1249,7 @@ Reference< XShape > const & Shape::createAndInsert(
     }
 
     // special for lineshape
-    uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
+    cpo::uno::Sequence< cpo::uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
     if (bLineShape)
     {
         ::basegfx::B2DPolygon aPoly;
@@ -1270,7 +1270,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
         // now creating the corresponding PolyPolygon
         sal_Int32 i, nNumPoints = aPoly.count();
-        uno::Sequence< awt::Point > aPointSequence( nNumPoints );
+        cpo::uno::Sequence< awt::Point > aPointSequence( nNumPoints );
         awt::Point* pPoints = aPointSequence.getArray();
         for( i = 0; i < nNumPoints; ++i )
         {
@@ -1519,7 +1519,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 nLinePhClrTheme = pLineRef->maPhClr.getSchemeColorIndex();
 
                 // Store style-related properties to InteropGrabBag to be able to export them back
-                uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
+                cpo::uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                 {
                     {"SchemeClr", cpo::uno::Any(pLineRef->maPhClr.getSchemeColorName())},
                     {"Idx", cpo::uno::Any(pLineRef->mnThemedIdx)},
@@ -1543,7 +1543,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 OUString sColorScheme = pFillRef->maPhClr.getSchemeColorName();
                 if( !sColorScheme.isEmpty() )
                 {
-                    uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
+                    cpo::uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                     {
                         {"SchemeClr", cpo::uno::Any(sColorScheme)},
                         {"Idx", cpo::uno::Any(pFillRef->mnThemedIdx)},
@@ -1560,7 +1560,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 // nEffectPhClr = pEffectRef->maPhClr.getColor( rGraphicHelper );
 
                 // Store style-related properties to InteropGrabBag to be able to export them back
-                uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
+                cpo::uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                 {
                     {"SchemeClr", cpo::uno::Any(pEffectRef->maPhClr.getSchemeColorName())},
                     {"Idx", cpo::uno::Any(pEffectRef->mnThemedIdx)},
@@ -1741,7 +1741,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 if (mpCustomShapePropertiesPtr && mpCustomShapePropertiesPtr->getShapeTypeOverride())
                 {
                     uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
-                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                     propertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc( length+1);
@@ -1755,7 +1755,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 if (isLinkedTxbx())
                 {
                     uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
-                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                     propertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc( length + 3 );
@@ -1818,7 +1818,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
                     static constexpr OUString aGrabBagPropName = u"FrameInteropGrabBag"_ustr;
-                    uno::Sequence<beans::PropertyValue> aGrabBag;
+                    cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                     xPropertySet->getPropertyValue(aGrabBagPropName) >>= aGrabBag;
                     beans::PropertyValue aPair(comphelper::makePropertyValue(u"mso-rotation-angle"_ustr,
                                                                              mnRotation));
@@ -1895,7 +1895,7 @@ Reference< XShape > const & Shape::createAndInsert(
             if (aServiceName != "com.sun.star.text.TextFrame" && isLinkedTxbx())
             {
                 uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
-                uno::Sequence<beans::PropertyValue> aGrabBag;
+                cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                 propertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
                 sal_Int32 length = aGrabBag.getLength();
                 aGrabBag.realloc( length + 3 );
@@ -2058,7 +2058,7 @@ Reference< XShape > const & Shape::createAndInsert(
             // add 3D effects if any to GrabBag. They are still used in export.
             if (bHas3DProps)
             {
-                uno::Sequence<beans::PropertyValue> a3DEffectsGrabBag = comphelper::InitPropertySequence(
+                cpo::uno::Sequence<beans::PropertyValue> a3DEffectsGrabBag = comphelper::InitPropertySequence(
                 {
                     {"Camera", cpo::uno::Any(aCamera3DEffects)},
                     {"LightRig", cpo::uno::Any(aLightRig3DEffects)},
@@ -2075,7 +2075,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 Sequence< PropertyValue > aTextShape3DEffects = getTextBody()->get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );
                 if( aTextCamera3DEffects.hasElements() || aTextLightRig3DEffects.hasElements() || aTextShape3DEffects.hasElements() )
                 {
-                    uno::Sequence<beans::PropertyValue> aText3DEffectsGrabBag = comphelper::InitPropertySequence(
+                    cpo::uno::Sequence<beans::PropertyValue> aText3DEffectsGrabBag = comphelper::InitPropertySequence(
                     {
                         {"Camera", cpo::uno::Any(aTextCamera3DEffects)},
                         {"LightRig", cpo::uno::Any(aTextLightRig3DEffects)},
@@ -2890,9 +2890,9 @@ EffectProperties Shape::getActualEffectProperties(const Theme* pTheme) const
     return aEffectProperties;
 }
 
-uno::Sequence< uno::Sequence< cpo::uno::Any > >  Shape::resolveRelationshipsOfTypeFromOfficeDoc(core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType )
+cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >  Shape::resolveRelationshipsOfTypeFromOfficeDoc(core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType )
 {
-    uno::Sequence< uno::Sequence< cpo::uno::Any > > xRelListTemp;
+    cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > xRelListTemp;
     sal_Int32 counter = 0;
 
     core::RelationsRef xRels = rFilter.importRelations( sFragment );
@@ -2907,7 +2907,7 @@ uno::Sequence< uno::Sequence< cpo::uno::Any > >  Shape::resolveRelationshipsOfTy
                 auto pxRelListTemp = xRelListTemp.getArray();
                 for (auto const& imageRel : *xImageRels)
                 {
-                    uno::Sequence<cpo::uno::Any> diagramRelTuple(2);
+                    cpo::uno::Sequence<cpo::uno::Any> diagramRelTuple(2);
                     auto pdiagramRelTuple = diagramRelTuple.getArray();
                     // diagramDataRelTuple[0] => RID,
                     // diagramDataRelTuple[1] => XGraphic
@@ -2940,7 +2940,7 @@ uno::Sequence< uno::Sequence< cpo::uno::Any > >  Shape::resolveRelationshipsOfTy
             // Helper to create relation tuple
             auto addRelation = [&](const auto& rel, const OUString& relType)
             {
-                uno::Sequence<cpo::uno::Any> tuple(3);
+                cpo::uno::Sequence<cpo::uno::Any> tuple(3);
                 auto pTuple = tuple.getArray();
                 pTuple[0] <<= rel.second.maId;
                 pTuple[1] <<= rel.second.maTarget;

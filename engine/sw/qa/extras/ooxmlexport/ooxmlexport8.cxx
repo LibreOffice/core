@@ -323,7 +323,7 @@ note that the indexes may get off as the implementation evolves, C++ code search
         }
     }
     CPPUNIT_ASSERT( numberingRule.is());
-    uno::Sequence< beans::PropertyValue > numbering;
+    cpo::uno::Sequence< beans::PropertyValue > numbering;
     numberingRule->getByIndex( 0 ) >>= numbering;
     sal_Int16 numberingType = style::NumberingType::NUMBER_NONE;
     for( int i = 0;
@@ -623,8 +623,8 @@ DECLARE_OOXMLEXPORT_TEST(testN785767, "n785767.docx")
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // Check the A1 and B1 cells, the width of both of them was the default value (10000 / 9, as there were 9 cells in the row).
-    CPPUNIT_ASSERT_MESSAGE("A1 must not have default width", sal_Int16(UNO_TABLE_COLUMN_SUM / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0].Position);
-    CPPUNIT_ASSERT_MESSAGE("B1 must not have default width", sal_Int16(UNO_TABLE_COLUMN_SUM / 9) != getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0].Position);
+    CPPUNIT_ASSERT_MESSAGE("A1 must not have default width", sal_Int16(UNO_TABLE_COLUMN_SUM / 9) != getProperty< cpo::uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[0].Position);
+    CPPUNIT_ASSERT_MESSAGE("B1 must not have default width", sal_Int16(UNO_TABLE_COLUMN_SUM / 9) != getProperty< cpo::uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0].Position);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFineTableDash, "tableborder-finedash.docx")
@@ -783,7 +783,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59638, "fdo59638.docx")
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     for (beans::PropertyValue const& rProp : aProps)
@@ -868,7 +868,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59273, "fdo59273.docx")
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // Was 9997, so the 4th column had ~zero width
     CPPUNIT_ASSERT_LESSEQUAL(2, (sal_Int16(7500)
-                                 - getProperty<uno::Sequence<text::TableColumnSeparator>>(
+                                 - getProperty<cpo::uno::Sequence<text::TableColumnSeparator>>(
                                        xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr)[2]
                                        .Position));
 }
@@ -914,7 +914,7 @@ DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")
         uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(true, xServiceInfo->supportsService(u"com.sun.star.form.component.ComboBox"_ustr));
         CPPUNIT_ASSERT_EQUAL(u"dropdown default text"_ustr, getProperty<OUString>(xPropertySet, u"DefaultText"_ustr));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty< uno::Sequence<OUString> >(xPropertySet, u"StringItemList"_ustr).getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty< cpo::uno::Sequence<OUString> >(xPropertySet, u"StringItemList"_ustr).getLength());
         CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPropertySet, u"Dropdown"_ustr));
     }
     else
@@ -941,7 +941,7 @@ DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")
         uno::Reference<text::XTextContent> xContentControl;
         xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
         uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValues> aListItems;
+        cpo::uno::Sequence<beans::PropertyValues> aListItems;
         xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aListItems.getLength());
         uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xContentControl, uno::UNO_QUERY);

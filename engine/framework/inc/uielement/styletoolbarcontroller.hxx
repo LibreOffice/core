@@ -38,7 +38,7 @@ public:
                      const css::util::URL& rURL );
 
     // XDispatch
-    void SAL_CALL dispatch( const css::util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& rArguments ) override;
+    void SAL_CALL dispatch( const css::util::URL& rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments ) override;
     void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
     void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
 

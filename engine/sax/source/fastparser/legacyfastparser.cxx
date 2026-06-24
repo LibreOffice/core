@@ -100,7 +100,7 @@ public:
     SaxLegacyFastParser();
 
 // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(css::uno::Sequence<cpo::uno::Any> const& rArguments) override;
+    virtual void SAL_CALL initialize(cpo::uno::Sequence<cpo::uno::Any> const& rArguments) override;
 
 // The SAX-Parser-Interface
     virtual void SAL_CALL parseStream(  const InputSource& structSource) override;
@@ -368,7 +368,7 @@ Sequence< OUString > SaxLegacyFastParser::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_extensions_xml_sax_LegacyFastParser_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SaxLegacyFastParser);
 }

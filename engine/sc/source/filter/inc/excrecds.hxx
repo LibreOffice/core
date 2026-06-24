@@ -183,7 +183,7 @@ class XclExpSheetProtection final : public XclExpProtection
 class XclExpPassHash final : public XclExpRecord
 {
 public:
-    XclExpPassHash(const css::uno::Sequence<sal_Int8>& aHash);
+    XclExpPassHash(const cpo::uno::Sequence<sal_Int8>& aHash);
     virtual ~XclExpPassHash() override;
 
 private:

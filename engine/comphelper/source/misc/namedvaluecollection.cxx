@@ -34,7 +34,7 @@ namespace comphelper
 
 
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::uno::Type;
@@ -202,7 +202,7 @@ namespace comphelper
     }
 
     // static
-    bool NamedValueCollection::get_ensureType( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq,
+    bool NamedValueCollection::get_ensureType( const cpo::uno::Sequence<css::beans::PropertyValue>& rPropSeq,
             std::u16string_view _rValueName, void* _pValueLocation, const Type& _rExpectedValueType )
     {
         for (const css::beans::PropertyValue& rPropVal : rPropSeq)
@@ -232,7 +232,7 @@ namespace comphelper
     }
 
     // static
-    const cpo::uno::Any& NamedValueCollection::get( const css::uno::Sequence<css::beans::PropertyValue>& rPropSeq,
+    const cpo::uno::Any& NamedValueCollection::get( const cpo::uno::Sequence<css::beans::PropertyValue>& rPropSeq,
             std::u16string_view _rValueName )
     {
         static const Any theEmptyDefault;

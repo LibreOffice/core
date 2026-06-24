@@ -201,10 +201,10 @@ SwVbaCells::getServiceImplName()
     return u"SwVbaCells"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaCells::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Cells"_ustr
     };

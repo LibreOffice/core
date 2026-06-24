@@ -53,17 +53,17 @@ public:
 
     virtual ~OZipFileAccess() override;
 
-    static css::uno::Sequence< OUString > GetPatternsFromString_Impl( const OUString& aString );
+    static cpo::uno::Sequence< OUString > GetPatternsFromString_Impl( const OUString& aString );
 
     static bool StringGoodForPattern_Impl( std::u16string_view,
-                                        const css::uno::Sequence< OUString >& aPattern );
+                                        const cpo::uno::Sequence< OUString >& aPattern );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
     virtual bool SAL_CALL hasElements(  ) override;
@@ -79,7 +79,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 };
 

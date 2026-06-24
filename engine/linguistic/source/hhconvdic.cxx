@@ -109,7 +109,7 @@ bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
 {
     return { SN_CONV_DICTIONARY, SN_HH_CONV_DICTIONARY };
 }

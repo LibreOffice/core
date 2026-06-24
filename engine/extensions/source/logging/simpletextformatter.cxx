@@ -91,7 +91,7 @@ Sequence<OUString> SAL_CALL SimpleTextFormatter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_extensions_SimpleTextFormatter(css::uno::XComponentContext*,
-                                                 css::uno::Sequence<cpo::uno::Any> const&)
+                                                 cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new logging::SimpleTextFormatter());
 }

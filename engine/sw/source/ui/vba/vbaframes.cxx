@@ -100,10 +100,10 @@ SwVbaFrames::getServiceImplName()
     return u"SwVbaFrames"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaFrames::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Frames"_ustr
     };

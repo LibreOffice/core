@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
 namespace chart
@@ -155,7 +155,7 @@ bool SAL_CALL NetChartType::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_NET,
@@ -167,7 +167,7 @@ css::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_NetChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::NetChartType);
 }

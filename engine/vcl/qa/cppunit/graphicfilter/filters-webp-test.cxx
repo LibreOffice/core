@@ -106,7 +106,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
     SvMemoryStream aStream;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(u"webp");
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Lossless"_ustr, !lossy),
         comphelper::makePropertyValue(u"Quality"_ustr, sal_Int32(100))
     };

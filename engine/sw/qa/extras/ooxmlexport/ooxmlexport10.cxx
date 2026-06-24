@@ -242,7 +242,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162916_nastyTOC, "tdf162916_nastyTOC.docx")
     //start with level 1, 0 is the header level
     for (sal_Int32 nLevel = 1; nLevel < xLevelFormats->getCount(); ++nLevel)
     {
-        css::uno::Sequence<css::beans::PropertyValues> aLevel;
+        cpo::uno::Sequence<css::beans::PropertyValues> aLevel;
         xLevelFormats->getByIndex(nLevel) >>= aLevel;
 
         // level 2 does not display the page number with its separating tabstop.
@@ -316,7 +316,7 @@ DECLARE_OOXMLEXPORT_TEST(testMissingPath, "missing-path.docx")
 {
     comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty<beans::PropertyValues>(getShape(1), u"CustomShapeGeometry"_ustr));
     comphelper::SequenceAsHashMap aPath(aCustomShapeGeometry[u"Path"_ustr].get<beans::PropertyValues>());
-    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates = aPath[u"Coordinates"_ustr].get< uno::Sequence<drawing::EnhancedCustomShapeParameterPair> >();
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aCoordinates = aPath[u"Coordinates"_ustr].get< cpo::uno::Sequence<drawing::EnhancedCustomShapeParameterPair> >();
     // This was 0, the coordinate list was empty.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(19), aCoordinates.getLength());
 }
@@ -401,7 +401,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65090, "fdo65090.docx")
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
     // The first row had two cells, instead of a single horizontally merged one.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< cpo::uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), u"TableColumnSeparators"_ustr).getLength());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69649, "fdo69649.docx")

@@ -36,10 +36,10 @@ namespace com { namespace sun { namespace star { namespace uno {
     class Type;
     class Exception;
     template< typename > class Reference;
-    template< typename > class Sequence;
     class XInterface;
 } } } }
 namespace cpo::uno { class Any; }
+namespace cpo::uno { template< typename > class Sequence; }
 namespace rtl { class OUString; }
 
 namespace cppu {
@@ -221,7 +221,7 @@ cppu_detail_getUnoType(
 
 template< typename T > inline css::uno::Type const &
 cppu_detail_getUnoType(
-    SAL_UNUSED_PARAMETER css::uno::Sequence< T > const *)
+    SAL_UNUSED_PARAMETER cpo::uno::Sequence< T > const *)
 {
     return cppu_detail_getUnoType(
         static_cast< ::cppu::UnoSequenceType< T > * >(NULL));
@@ -326,8 +326,8 @@ getTypeFavourUnsigned(SAL_UNUSED_PARAMETER ::sal_uInt16 const *) {
    SHORT but not for the UNO type CHAR.
 */
 template< typename T > inline css::uno::Type const &
-getTypeFavourUnsigned(css::uno::Sequence< T > const *);
-    // defined in com/sun/star/uno/Sequence.hxx
+getTypeFavourUnsigned(cpo::uno::Sequence< T > const *);
+    // defined in cpo/uno/Sequence.hxx
 
 /// @cond INTERNAL
 
@@ -369,8 +369,8 @@ getTypeFavourChar(SAL_UNUSED_PARAMETER ::sal_Unicode const *) {
    returns the intended results for sequence types.
 */
 template< typename T > inline css::uno::Type const &
-getTypeFavourChar(css::uno::Sequence< T > const *);
-    // defined in com/sun/star/uno/Sequence.hxx
+getTypeFavourChar(cpo::uno::Sequence< T > const *);
+    // defined in cpo/uno/Sequence.hxx
 
 /// @endcond
 

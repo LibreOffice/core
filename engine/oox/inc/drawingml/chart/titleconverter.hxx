@@ -44,7 +44,7 @@ public:
     css::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole );
     /** Creates a sequence of formatted string objects. */
-    css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >
+    cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >
                         createStringSequence(
                             const OUString& rDefaultText,
                             const ModelRef< TextBody >& rxTextProp,

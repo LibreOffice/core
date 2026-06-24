@@ -68,7 +68,7 @@ private:
 class ScDefaultsCfg final : public ScDefaultsOptions, public utl::ConfigItem
 {
 private:
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
     virtual void ImplCommit() override;
 
 public:
@@ -76,7 +76,7 @@ public:
 
     void SetOptions( const ScDefaultsOptions& rNew );
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

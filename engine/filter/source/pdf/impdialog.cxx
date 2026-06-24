@@ -52,6 +52,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::cpo::uno;
 
 /** Tabbed PDF dialog implementation
     Please note: the default used here are the same as per specification,
@@ -1810,10 +1811,10 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(weld::Container* pPage, weld::DialogC
     // Populate the TSA ComboBox
     try
     {
-        std::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+        std::optional<cpo::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
         if (aTSAURLs)
         {
-            const css::uno::Sequence<OUString>& rTSAURLs = *aTSAURLs;
+            const cpo::uno::Sequence<OUString>& rTSAURLs = *aTSAURLs;
             for (auto const& elem : rTSAURLs)
             {
                 mxLBSignTSA->append_text(elem);

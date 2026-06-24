@@ -28,7 +28,7 @@ TextCharacterSpacingPopup::TextCharacterSpacingPopup(
 {
 }
 
-void TextCharacterSpacingPopup::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
+void TextCharacterSpacingPopup::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     PopupWindowController::initialize(rArguments);
 
@@ -67,14 +67,14 @@ OUString TextCharacterSpacingPopup::getImplementationName()
     return u"com.sun.star.comp.svx.CharacterSpacingToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> TextCharacterSpacingPopup::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> TextCharacterSpacingPopup::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_CharacterSpacingToolBoxControl_get_implementation(
-    css::uno::XComponentContext* rContext, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* rContext, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new TextCharacterSpacingPopup(rContext));
 }

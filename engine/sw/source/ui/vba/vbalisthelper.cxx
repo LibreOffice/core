@@ -130,7 +130,7 @@ void SwVbaListHelper::CreateBulletListTemplate()
 {
     // there is only 1 level for each bullet list in MSWord
     sal_Int32 nLevel = 0;
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
     setOrAppendPropertyValue( aPropertyValues, UNO_NAME_CHAR_STYLE_NAME, cpo::uno::Any( u"Bullet Symbols"_ustr ) );
     setOrAppendPropertyValue( aPropertyValues, UNO_NAME_NUMBERING_TYPE, cpo::uno::Any( sal_Int16(style::NumberingType::CHAR_SPECIAL) ) );
@@ -188,7 +188,7 @@ void SwVbaListHelper::CreateNumberListTemplate()
 {
     // there is only 1 level for each bullet list in MSWord
     sal_Int32 nLevel = 0;
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
 
     sal_Int16 nNumberingType = 0;
@@ -301,7 +301,7 @@ void SwVbaListHelper::CreateOutlineNumberForType1()
     sal_Int16 nNumberingType = 0;
     OUString sPrefix;
     OUString sSuffix;
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
@@ -377,7 +377,7 @@ void SwVbaListHelper::CreateOutlineNumberForType2()
 {
     sal_Int16 nParentNumbering = 0;
     OUString sSuffix( '.' );
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
@@ -396,7 +396,7 @@ void SwVbaListHelper::CreateOutlineNumberForType2()
 void SwVbaListHelper::CreateOutlineNumberForType3()
 {
     OUString aBulletChar;
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
@@ -445,7 +445,7 @@ void SwVbaListHelper::CreateOutlineNumberForType4()
     sal_Int16 nNumberingType = 0;
     OUString sPrefix;
     OUString sSuffix;
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
@@ -527,7 +527,7 @@ void SwVbaListHelper::CreateOutlineNumberForType4()
 void SwVbaListHelper::CreateOutlineNumberForType5()
 {
     sal_Int16 nParentNumbering = 0;
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
@@ -547,7 +547,7 @@ void SwVbaListHelper::CreateOutlineNumberForType6()
     sal_Int16 nNumberingType = 0;
     OUString sPrefix;
     OUString sSuffix;
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
@@ -627,7 +627,7 @@ void SwVbaListHelper::CreateOutlineNumberForType6()
 
 void SwVbaListHelper::CreateOutlineNumberForType7()
 {
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
 
     for( sal_Int32 nLevel = 0; nLevel < LIST_LEVEL_COUNT; nLevel++ )
     {
@@ -640,14 +640,14 @@ void SwVbaListHelper::CreateOutlineNumberForType7()
 
 cpo::uno::Any SwVbaListHelper::getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName )
 {
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
     return getPropertyValue( aPropertyValues, sName );
 }
 
 void SwVbaListHelper::setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName, const cpo::uno::Any& aValue )
 {
-    uno::Sequence< beans::PropertyValue > aPropertyValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropertyValues;
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
     setOrAppendPropertyValue( aPropertyValues, sName, aValue );
     mxNumberingRules->replaceByIndex( nLevel, cpo::uno::Any( aPropertyValues ) );

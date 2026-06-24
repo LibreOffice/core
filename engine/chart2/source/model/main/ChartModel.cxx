@@ -84,7 +84,7 @@
 #include <docmodel/uno/UnoChartColorStyle.hxx>
 #include <svx/ChartThemeType.hxx>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Any;
 using ::osl::MutexGuard;
@@ -370,7 +370,7 @@ bool SAL_CALL ChartModel::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ChartModel::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ChartModel::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.ChartDocument"_ustr,
@@ -382,7 +382,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartModel::getSupportedServiceNames()
 // frame::XModel (required interface)
 
 bool SAL_CALL ChartModel::attachResource( const OUString& rURL
-        , const uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
+        , const cpo::uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
 {
     /*
     The method attachResource() is used by the frame loader implementations
@@ -411,7 +411,7 @@ OUString SAL_CALL ChartModel::getURL()
     return impl_g_getLocation();
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL ChartModel::getArgs()
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL ChartModel::getArgs()
 {
     /*
     The method getArgs() returns a sequence of property values
@@ -421,7 +421,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ChartModel::getArgs()
 
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
-        return uno::Sequence< beans::PropertyValue >(); //behave passive if already disposed or closed or throw exception @todo?
+        return cpo::uno::Sequence< beans::PropertyValue >(); //behave passive if already disposed or closed or throw exception @todo?
     //mutex is acquired
 
     return m_aMediaDescriptor;
@@ -705,7 +705,7 @@ void SAL_CALL ChartModel::close( bool bDeliverOwnership )
 }
 
 // lang::XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL ChartModel::getTypes()
 {
     uno::Reference< lang::XTypeProvider > xAggTypeProvider;
     if( (m_xOldModelAgg->queryAggregation( cppu::UnoType<decltype(xAggTypeProvider)>::get()) >>= xAggTypeProvider)
@@ -776,11 +776,11 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
         //init internal dataprovider
         {
             beans::NamedValue aParam( u"CreateDefaultData"_ustr ,cpo::uno::Any(true) );
-            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aParam) };
+            cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aParam) };
             m_xInternalDataProvider->initialize(aArgs);
         }
         //create data
-        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
             { "CellRangeRepresentation", cpo::uno::Any( u"all"_ustr ) },
             { "HasCategories", cpo::uno::Any( true ) },
             { "FirstCellAsLabel", cpo::uno::Any( true ) },
@@ -1127,7 +1127,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
         {
             datatransfer::DataFlavor aDataFlavor( lcl_aGDIMetaFileMIMEType,
                     u"GDIMetaFile"_ustr,
-                    cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+                    cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() );
 
             cpo::uno::Any aData( xTransferable->getTransferData( aDataFlavor ) );
             aData >>= aMetafile;
@@ -1183,7 +1183,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 {
     return { datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         u"GDIMetaFile"_ustr,
-        cppu::UnoType<uno::Sequence< sal_Int8 >>::get() ) };
+        cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() ) };
 }
 
 bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
@@ -1282,7 +1282,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstanceWithArguments(
 
 Sequence< OUString > SAL_CALL ChartModel::getAvailableServiceNames()
 {
-    uno::Sequence< OUString > aResult;
+    cpo::uno::Sequence< OUString > aResult;
 
     if( m_xOldModelAgg.is())
     {
@@ -1363,13 +1363,13 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
 }
 
 // ____ XDataSource ____
-uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
+cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
 {
     rtl::Reference< DataSource > xSource = DataSourceHelper::getUsedData( *this );
     if( xSource.is())
         return xSource->getDataSequences();
 
-    return uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >();
+    return cpo::uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >();
 }
 
 //XDumper
@@ -1515,7 +1515,7 @@ bool ChartModel::setIncludeHiddenCells( bool bIncludeHiddenCells )
             if( xUsedData.is() )
             {
                 uno::Reference< beans::XPropertySet > xProp;
-                const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
+                const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
                 for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aData )
                 {
                     xProp.set( uno::Reference< beans::XPropertySet >( labeledData->getValues(), uno::UNO_QUERY ) );
@@ -1766,7 +1766,7 @@ void ChartModel::applyGradientPaletteToDataSeries(const ChartGradientPalette& rG
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartModel_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ChartModel(context));
 }

@@ -37,7 +37,7 @@ class ScVbaGlobals : public ScVbaGlobals_BASE
     css::uno::Reference< ov::excel::XApplication > const & getApplication();
 public:
 
-    ScVbaGlobals( css::uno::Sequence< cpo::uno::Any > const& aArgs,
+    ScVbaGlobals( cpo::uno::Sequence< cpo::uno::Any > const& aArgs,
                  css::uno::Reference< css::uno::XComponentContext >const& rxContext );
     virtual ~ScVbaGlobals() override;
 
@@ -71,10 +71,10 @@ public:
     virtual cpo::uno::Any SAL_CALL MenuBars( const cpo::uno::Any& aIndex ) override;
 
     // XMultiServiceFactory
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

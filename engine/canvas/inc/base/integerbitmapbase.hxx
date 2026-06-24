@@ -40,7 +40,7 @@ namespace canvas
     {
     public:
         // XIntegerBitmap
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
                                                                               const css::geometry::IntegerRectangle2D& rect ) override
         {
             canvastools::verifyArgs(rect,
@@ -54,7 +54,7 @@ namespace canvas
                                                      rect );
         }
 
-        virtual void SAL_CALL setData( const css::uno::Sequence< sal_Int8 >&,
+        virtual void SAL_CALL setData( const cpo::uno::Sequence< sal_Int8 >&,
                                        const css::rendering::IntegerBitmapLayout& bitmapLayout,
                                        const css::geometry::IntegerRectangle2D&   rect ) override
         {
@@ -68,7 +68,7 @@ namespace canvas
             Base::mbSurfaceDirty = true;
         }
 
-        virtual void SAL_CALL setPixel( const css::uno::Sequence< sal_Int8 >&,
+        virtual void SAL_CALL setPixel( const cpo::uno::Sequence< sal_Int8 >&,
                                         const css::rendering::IntegerBitmapLayout& bitmapLayout,
                                         const css::geometry::IntegerPoint2D&       pos ) override
         {
@@ -82,7 +82,7 @@ namespace canvas
             Base::mbSurfaceDirty = true;
         }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
                                                                   const css::geometry::IntegerPoint2D& pos ) override
         {
             canvastools::verifyArgs(pos,

@@ -38,7 +38,7 @@ namespace pcr
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::inspection::XObjectInspectorModel;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::XPropertySet;
@@ -58,7 +58,7 @@ namespace pcr
 
     FormController::FormController( const Reference< XComponentContext >& _rxContext,
             OUString sImplementationName,
-            const css::uno::Sequence<OUString>& aSupportedServiceNames,
+            const cpo::uno::Sequence<OUString>& aSupportedServiceNames,
             bool _bUseFormFormComponentHandlers )
         :OPropertyBrowserController( _rxContext )
         ,FormController_PropertyBase1( m_aBHelper )
@@ -227,7 +227,7 @@ namespace pcr
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_FormController_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::FormController( context,
                 u"org.openoffice.comp.extensions.FormController"_ustr,
@@ -237,7 +237,7 @@ extensions_propctrlr_FormController_get_implementation(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 extensions_propctrlr_DialogController_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new pcr::FormController( context,
             u"org.openoffice.comp.extensions.DialogController"_ustr,

@@ -144,7 +144,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(
         const OUString & ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
     // css::lang::XComponent:
@@ -163,9 +163,9 @@ public:
     virtual void SAL_CALL setSubject(const OUString & the_value) override;
     virtual OUString SAL_CALL getDescription() override;
     virtual void SAL_CALL setDescription(const OUString & the_value) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getKeywords() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getKeywords() override;
     virtual void SAL_CALL setKeywords(
-        const css::uno::Sequence< OUString > & the_value) override;
+        const cpo::uno::Sequence< OUString > & the_value) override;
     virtual css::lang::Locale SAL_CALL getLanguage() override;
     virtual void SAL_CALL setLanguage(const css::lang::Locale & the_value) override;
     virtual OUString SAL_CALL getModifiedBy() override;
@@ -189,10 +189,10 @@ public:
     virtual void SAL_CALL setAutoloadSecs(::sal_Int32 the_value) override;
     virtual OUString SAL_CALL getDefaultTarget() override;
     virtual void SAL_CALL setDefaultTarget(const OUString & the_value) override;
-    virtual css::uno::Sequence< css::beans::NamedValue > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::NamedValue > SAL_CALL
         getDocumentStatistics() override;
     virtual void SAL_CALL setDocumentStatistics(
-        const css::uno::Sequence< css::beans::NamedValue > & the_value) override;
+        const cpo::uno::Sequence< css::beans::NamedValue > & the_value) override;
     virtual ::sal_Int16 SAL_CALL getEditingCycles() override;
     virtual void SAL_CALL setEditingCycles(::sal_Int16 the_value) override;
     virtual ::sal_Int32 SAL_CALL getEditingDuration() override;
@@ -202,24 +202,24 @@ public:
         getUserDefinedProperties() override;
     virtual void SAL_CALL loadFromStorage(
         const css::uno::Reference< css::embed::XStorage > & Storage,
-        const css::uno::Sequence< css::beans::PropertyValue > & Medium) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue > & Medium) override;
     virtual void SAL_CALL loadFromMedium(const OUString & URL,
-        const css::uno::Sequence< css::beans::PropertyValue > & Medium) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue > & Medium) override;
     virtual void SAL_CALL storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & Storage,
-        const css::uno::Sequence< css::beans::PropertyValue > & Medium) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue > & Medium) override;
     virtual void SAL_CALL storeToMedium(const OUString & URL,
-        const css::uno::Sequence< css::beans::PropertyValue > & Medium) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getContributor() override;
-    virtual void SAL_CALL setContributor(const css::uno::Sequence< OUString >& the_value) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue > & Medium) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getContributor() override;
+    virtual void SAL_CALL setContributor(const cpo::uno::Sequence< OUString >& the_value) override;
     virtual OUString SAL_CALL getCoverage() override;
     virtual void SAL_CALL setCoverage(const OUString & the_value) override;
     virtual OUString SAL_CALL getIdentifier() override;
     virtual void SAL_CALL setIdentifier(const OUString & the_value) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getPublisher() override;
-    virtual void SAL_CALL setPublisher(const css::uno::Sequence< OUString > & the_value) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getRelation() override;
-    virtual void SAL_CALL setRelation(const css::uno::Sequence< OUString > & the_value) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getPublisher() override;
+    virtual void SAL_CALL setPublisher(const cpo::uno::Sequence< OUString > & the_value) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getRelation() override;
+    virtual void SAL_CALL setRelation(const cpo::uno::Sequence< OUString > & the_value) override;
     virtual OUString SAL_CALL getRights() override;
     virtual void SAL_CALL setRights(const OUString & the_value) override;
     virtual OUString SAL_CALL getSource() override;
@@ -230,7 +230,7 @@ public:
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< cpo::uno::Any > & aArguments) override;
+        const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::util::XCloneable:
     virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
@@ -248,7 +248,7 @@ public:
     // css::xml::sax::XSAXSerializable
     virtual void SAL_CALL serialize(
         const css::uno::Reference<css::xml::sax::XDocumentHandler>& i_xHandler,
-        const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces) override;
+        const cpo::uno::Sequence< css::beans::StringPair >& i_rNamespaces) override;
 
 protected:
     virtual ~SfxDocumentMetaData() override {}
@@ -297,7 +297,7 @@ protected:
     /// extract base URL (necessary for converting relative links)
     css::uno::Reference<css::beans::XPropertySet> getURLProperties(
         std::unique_lock<std::mutex>& rGuard,
-        const css::uno::Sequence<css::beans::PropertyValue> & i_rMedium) const;
+        const cpo::uno::Sequence<css::beans::PropertyValue> & i_rMedium) const;
     /// get text of standard meta data element
     OUString getMetaText(std::unique_lock<std::mutex>& rGuard, const char* i_name) const;
     /// set text of standard meta data element iff not equal to existing text
@@ -311,12 +311,12 @@ protected:
         const OUString& i_name,
         const OUString& i_attr) const;
     /// get text of a list of standard meta data elements (multiple occ.)
-    css::uno::Sequence< OUString > getMetaList(
+    cpo::uno::Sequence< OUString > getMetaList(
         std::unique_lock<std::mutex>& rGuard,
         const char* i_name) const;
     /// set text of a list of standard meta data elements (multiple occ.)
     bool setMetaList(std::unique_lock<std::mutex>& rGuard, const OUString& i_name,
-        const css::uno::Sequence< OUString > & i_rValue,
+        const cpo::uno::Sequence< OUString > & i_rValue,
         AttrVector const*);
     void createUserDefined(std::unique_lock<std::mutex>& rGuard);
 };
@@ -352,9 +352,9 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
     {
-        css::uno::Sequence<OUString> aServiceNames { u"com.sun.star.writer.DocumentProperties"_ustr };
+        cpo::uno::Sequence<OUString> aServiceNames { u"com.sun.star.writer.DocumentProperties"_ustr };
         return aServiceNames;
     }
 };
@@ -609,7 +609,7 @@ OUString durationToText(sal_Int32 i_value) noexcept
 css::uno::Reference< css::beans::XPropertySet >
 SfxDocumentMetaData::getURLProperties(
     std::unique_lock<std::mutex>& /*rGuard*/,
-    const css::uno::Sequence< css::beans::PropertyValue > & i_rMedium) const
+    const cpo::uno::Sequence< css::beans::PropertyValue > & i_rMedium) const
 {
     css::uno::Reference< css::beans::XPropertyBag> xPropArg = css::beans::PropertyBag::createDefault( m_xContext );
     try {
@@ -759,7 +759,7 @@ SfxDocumentMetaData::getMetaAttr(std::unique_lock<std::mutex>& /*rGuard*/, const
     }
 }
 
-css::uno::Sequence< OUString>
+cpo::uno::Sequence< OUString>
 SfxDocumentMetaData::getMetaList(std::unique_lock<std::mutex>& rGuard, const char* i_name) const
 //        throw (css::uno::RuntimeException)
 {
@@ -768,7 +768,7 @@ SfxDocumentMetaData::getMetaList(std::unique_lock<std::mutex>& rGuard, const cha
     assert(m_metaList.find(name) != m_metaList.end());
     std::vector<css::uno::Reference<css::xml::dom::XNode> > const & vec =
         m_metaList.find(name)->second;
-    css::uno::Sequence< OUString> ret(vec.size());
+    cpo::uno::Sequence< OUString> ret(vec.size());
     std::transform(vec.begin(), vec.end(), ret.getArray(),
                    [](const auto& node) { return getNodeText(node); });
     return ret;
@@ -776,7 +776,7 @@ SfxDocumentMetaData::getMetaList(std::unique_lock<std::mutex>& rGuard, const cha
 
 bool
 SfxDocumentMetaData::setMetaList(std::unique_lock<std::mutex>& rGuard, const OUString& name,
-        const css::uno::Sequence<OUString> & i_rValue,
+        const cpo::uno::Sequence<OUString> & i_rValue,
         AttrVector const* i_pAttrs)
     // throw (css::uno::RuntimeException)
 {
@@ -859,7 +859,7 @@ SfxDocumentMetaData::setMetaList(std::unique_lock<std::mutex>& rGuard, const OUS
 }
 
 // convert property list to string list and attribute list
-std::pair<css::uno::Sequence< OUString>, AttrVector>
+std::pair<cpo::uno::Sequence< OUString>, AttrVector>
 propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
 {
     ::std::vector< OUString > values;
@@ -867,7 +867,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
 
     css::uno::Reference<css::beans::XPropertySetInfo> xSetInfo
         = i_xPropSet->getPropertySetInfo();
-    css::uno::Sequence<css::beans::Property> props = xSetInfo->getProperties();
+    cpo::uno::Sequence<css::beans::Property> props = xSetInfo->getProperties();
 
     for (sal_Int32 i = 0; i < props.getLength(); ++i) {
         if (props[i].Attributes & css::beans::PropertyAttribute::TRANSIENT) {
@@ -1002,7 +1002,7 @@ void SfxDocumentMetaData::updateUserDefinedAndAttributes(std::unique_lock<std::m
     createUserDefined(g);
     const css::uno::Reference<css::beans::XPropertySet> xPSet(m_xUserDefined,
             css::uno::UNO_QUERY_THROW);
-    const std::pair<css::uno::Sequence< OUString>, AttrVector>
+    const std::pair<cpo::uno::Sequence< OUString>, AttrVector>
         udStringsAttrs( propsToStrings(xPSet) );
     (void) setMetaList(g, u"meta:user-defined"_ustr, udStringsAttrs.first,
             &udStringsAttrs.second);
@@ -1354,10 +1354,10 @@ SfxDocumentMetaData::supportsService(OUString const & serviceName)
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 SfxDocumentMetaData::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { u"com.sun.star.document.DocumentProperties"_ustr };
+    cpo::uno::Sequence< OUString > s { u"com.sun.star.document.DocumentProperties"_ustr };
     return s;
 }
 
@@ -1454,7 +1454,7 @@ SfxDocumentMetaData::setDescription(const OUString & the_value)
     setMetaTextAndNotify(u"dc:description"_ustr, the_value);
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SAL_CALL SfxDocumentMetaData::getKeywords()
 {
     std::unique_lock g(m_aMutex);
@@ -1463,7 +1463,7 @@ SAL_CALL SfxDocumentMetaData::getKeywords()
 
 void SAL_CALL
 SfxDocumentMetaData::setKeywords(
-        const css::uno::Sequence< OUString > & the_value)
+        const cpo::uno::Sequence< OUString > & the_value)
 {
     std::unique_lock g(m_aMutex);
     if (setMetaList(g, u"meta:keyword"_ustr, the_value, nullptr)) {
@@ -1473,13 +1473,13 @@ SfxDocumentMetaData::setKeywords(
 }
 
 // css::document::XDocumentProperties2
-css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getContributor()
+cpo::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getContributor()
 {
     std::unique_lock g(m_aMutex);
     return getMetaList(g, "dc:contributor");
 }
 
-void SAL_CALL SfxDocumentMetaData::setContributor(const css::uno::Sequence<OUString>& the_value)
+void SAL_CALL SfxDocumentMetaData::setContributor(const cpo::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
     if (setMetaList(g, u"dc:contributor"_ustr, the_value, nullptr))
@@ -1511,13 +1511,13 @@ void SAL_CALL SfxDocumentMetaData::setIdentifier(const OUString& the_value)
     setMetaTextAndNotify(u"dc:identifier"_ustr, the_value);
 }
 
-css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getPublisher()
+cpo::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getPublisher()
 {
     std::unique_lock g(m_aMutex);
     return getMetaList(g, "dc:publisher");
 }
 
-void SAL_CALL SfxDocumentMetaData::setPublisher(const css::uno::Sequence<OUString>& the_value)
+void SAL_CALL SfxDocumentMetaData::setPublisher(const cpo::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
     if (setMetaList(g, u"dc:publisher"_ustr, the_value, nullptr))
@@ -1527,13 +1527,13 @@ void SAL_CALL SfxDocumentMetaData::setPublisher(const css::uno::Sequence<OUStrin
     }
 }
 
-css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getRelation()
+cpo::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getRelation()
 {
     std::unique_lock g(m_aMutex);
     return getMetaList(g, "dc:relation");
 }
 
-void SAL_CALL SfxDocumentMetaData::setRelation(const css::uno::Sequence<OUString>& the_value)
+void SAL_CALL SfxDocumentMetaData::setRelation(const cpo::uno::Sequence<OUString>& the_value)
 {
     std::unique_lock g(m_aMutex);
     if (setMetaList(g, u"dc:relation"_ustr, the_value, nullptr))
@@ -1767,7 +1767,7 @@ SfxDocumentMetaData::setDefaultTarget(const OUString & the_value)
     }
 }
 
-css::uno::Sequence< css::beans::NamedValue > SAL_CALL
+cpo::uno::Sequence< css::beans::NamedValue > SAL_CALL
 SfxDocumentMetaData::getDocumentStatistics()
 {
     std::unique_lock g(m_aMutex);
@@ -1792,7 +1792,7 @@ SfxDocumentMetaData::getDocumentStatistics()
 
 void SAL_CALL
 SfxDocumentMetaData::setDocumentStatistics(
-        const css::uno::Sequence< css::beans::NamedValue > & the_value)
+        const cpo::uno::Sequence< css::beans::NamedValue > & the_value)
 {
     {
         std::unique_lock g(m_aMutex);
@@ -1901,7 +1901,7 @@ SfxDocumentMetaData::getUserDefinedProperties()
 void SAL_CALL
 SfxDocumentMetaData::loadFromStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
-        const css::uno::Sequence< css::beans::PropertyValue > & Medium)
+        const cpo::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
     if (!xStorage.is())
         throw css::lang::IllegalArgumentException(u"SfxDocumentMetaData::loadFromStorage: argument is null"_ustr, *this, 0);
@@ -1940,7 +1940,7 @@ SfxDocumentMetaData::loadFromStorage(
     } catch (const css::uno::Exception &) {
         input.sSystemId = s_meta;
     }
-    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(xPropArg) };
+    cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(xPropArg) };
 
     // the underlying SvXMLImport implements XFastParser, XImporter, XFastDocumentHandler
     css::uno::Reference<XInterface> xFilter =
@@ -1974,7 +1974,7 @@ SfxDocumentMetaData::loadFromStorage(
 void SAL_CALL
 SfxDocumentMetaData::storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
-        const css::uno::Sequence< css::beans::PropertyValue > & Medium)
+        const cpo::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
     if (!xStorage.is())
         throw css::lang::IllegalArgumentException(
@@ -2021,7 +2021,7 @@ SfxDocumentMetaData::storeToStorage(
     // set base URL
     css::uno::Reference<css::beans::XPropertySet> xPropArg =
         getURLProperties(g, Medium);
-    css::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(xSaxWriter), cpo::uno::Any(xPropArg) };
+    cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(xSaxWriter), cpo::uno::Any(xPropArg) };
 
     css::uno::Reference<css::document::XExporter> xExp(
         xMsf->createInstanceWithArgumentsAndContext(
@@ -2031,7 +2031,7 @@ SfxDocumentMetaData::storeToStorage(
     css::uno::Reference<css::document::XFilter> xFilter(xExp,
         css::uno::UNO_QUERY_THROW);
     g.unlock(); // filter calls back into this
-    if (!xFilter->filter(css::uno::Sequence< css::beans::PropertyValue >())) {
+    if (!xFilter->filter(cpo::uno::Sequence< css::beans::PropertyValue >())) {
         throw css::io::IOException(
                 u"SfxDocumentMetaData::storeToStorage: cannot filter"_ustr, *this);
     }
@@ -2044,7 +2044,7 @@ SfxDocumentMetaData::storeToStorage(
 
 void SAL_CALL
 SfxDocumentMetaData::loadFromMedium(const OUString & URL,
-        const css::uno::Sequence< css::beans::PropertyValue > & Medium)
+        const cpo::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
     css::uno::Reference<css::io::XInputStream> xIn;
     comphelper::SequenceAsHashMap md(Medium);
@@ -2086,7 +2086,7 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
 
 void SAL_CALL
 SfxDocumentMetaData::storeToMedium(const OUString & URL,
-        const css::uno::Sequence< css::beans::PropertyValue > & Medium)
+        const cpo::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
     comphelper::SequenceAsHashMap md(Medium);
     if (!URL.isEmpty()) {
@@ -2130,7 +2130,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
 }
 
 // css::lang::XInitialization:
-void SAL_CALL SfxDocumentMetaData::initialize( const css::uno::Sequence< cpo::uno::Any > & aArguments)
+void SAL_CALL SfxDocumentMetaData::initialize( const cpo::uno::Sequence< cpo::uno::Any > & aArguments)
 {
     // possible arguments:
     // - no argument: default initialization (empty DOM)
@@ -2269,7 +2269,7 @@ void SAL_CALL SfxDocumentMetaData::removeModifyListener(
 // css::xml::sax::XSAXSerializable
 void SAL_CALL SfxDocumentMetaData::serialize(
     const css::uno::Reference<css::xml::sax::XDocumentHandler>& i_xHandler,
-    const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces)
+    const cpo::uno::Sequence< css::beans::StringPair >& i_rNamespaces)
 {
     std::unique_lock g(m_aMutex);
     checkInit(g);
@@ -2286,7 +2286,7 @@ void SfxDocumentMetaData::createUserDefined(std::unique_lock<std::mutex>& g)
     if ( m_xUserDefined.is() )
         return;
 
-    css::uno::Sequence<css::uno::Type> types{
+    cpo::uno::Sequence<css::uno::Type> types{
         ::cppu::UnoType<bool>::get(),
         ::cppu::UnoType< OUString>::get(),
         ::cppu::UnoType<css::util::DateTime>::get(),
@@ -2324,7 +2324,7 @@ void SfxDocumentMetaData::createUserDefined(std::unique_lock<std::mutex>& g)
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 CompatWriterDocPropsImpl_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new CompatWriterDocPropsImpl(context));
 }
@@ -2332,7 +2332,7 @@ CompatWriterDocPropsImpl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 SfxDocumentMetaData_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxDocumentMetaData(context));
 }

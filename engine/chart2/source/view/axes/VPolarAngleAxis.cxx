@@ -67,7 +67,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
     if(pColorAny)
         *pColorAny >>= nColor;
 
-    const uno::Sequence< OUString >* pLabels = m_bUseTextLabels? &m_aTextLabels : nullptr;
+    const cpo::uno::Sequence< OUString >* pLabels = m_bUseTextLabels? &m_aTextLabels : nullptr;
 
     //TickInfo* pLastVisibleNeighbourTickInfo = NULL;
     sal_Int32 nTick = 0;

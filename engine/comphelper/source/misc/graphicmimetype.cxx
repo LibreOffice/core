@@ -42,6 +42,7 @@ using namespace css::beans;
 using namespace css::graphic;
 using namespace css::io;
 using namespace css::uno;
+using namespace cpo::uno;
 
 namespace comphelper
 {

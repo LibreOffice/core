@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
@@ -285,7 +285,7 @@ namespace
             reset();
 
             // create content from current extension configuration
-            uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
+            cpo::uno::Sequence< cpo::uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
             const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             uno::Reference< deployment::XExtensionManager > m_xExtensionManager = deployment::ExtensionManager::get(xContext);
 
@@ -313,7 +313,7 @@ namespace
                                 e.Context, anyEx );
             }
 
-            for (const uno::Sequence< uno::Reference< deployment::XPackage > > & xPackageList : xAllPackages)
+            for (const cpo::uno::Sequence< uno::Reference< deployment::XPackage > > & xPackageList : xAllPackages)
             {
                 for (const uno::Reference< deployment::XPackage > & xPackage : xPackageList)
                 {

@@ -73,7 +73,7 @@ public:
 
     // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const  OUString& aName ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const  OUString& aName ) override;
 
     // XElementAccess
@@ -182,12 +182,12 @@ cpo::uno::Any SAL_CALL SvxUnoXPropertyTable::getByName( const  OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
+cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXPropertyTable::getElementNames()
 {
     SolarMutexGuard aGuard;
 
     const tools::Long nCount = getCount();
-    uno::Sequence< OUString > aNames( nCount );
+    cpo::uno::Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
     tools::Long i;
     for( i = 0; i < nCount; i++ )
@@ -243,7 +243,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 }
@@ -280,7 +280,7 @@ OUString SAL_CALL SvxUnoXColorTable::getImplementationName(  )
     return u"SvxUnoXColorTable"_ustr;
 }
 
-uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXColorTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.ColorTable"_ustr };
 }
@@ -301,7 +301,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 }
@@ -348,7 +348,7 @@ OUString SAL_CALL SvxUnoXLineEndTable::getImplementationName(  )
     return u"SvxUnoXLineEndTable"_ustr;
 }
 
-uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXLineEndTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.LineEndTable"_ustr };
 }
@@ -369,7 +369,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 }
@@ -426,7 +426,7 @@ OUString SAL_CALL SvxUnoXDashTable::getImplementationName(  )
     return u"SvxUnoXDashTable"_ustr;
 }
 
-uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXDashTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.DashTable"_ustr };
 }
@@ -447,7 +447,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 }
@@ -499,7 +499,7 @@ OUString SAL_CALL SvxUnoXHatchTable::getImplementationName(  )
     return u"SvxUnoXHatchTable"_ustr;
 }
 
-uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXHatchTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.HatchTable"_ustr };
 }
@@ -520,7 +520,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 }
@@ -562,7 +562,7 @@ OUString SAL_CALL SvxUnoXGradientTable::getImplementationName(  )
     return u"SvxUnoXGradientTable"_ustr;
 }
 
-uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXGradientTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.GradientTable"_ustr };
 }
@@ -583,7 +583,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 }
@@ -634,7 +634,7 @@ OUString SAL_CALL SvxUnoXBitmapTable::getImplementationName(  )
     return u"SvxUnoXBitmapTable"_ustr;
 }
 
-uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  )
+cpo::uno::Sequence<  OUString > SAL_CALL SvxUnoXBitmapTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.BitmapTable"_ustr };
 }

@@ -149,7 +149,7 @@ private:
 
     /** describes all properties available on our interface.
         Will be generated on demand based on our path list m_lPaths. */
-    css::uno::Sequence< css::beans::Property > m_lPropDesc;
+    cpo::uno::Sequence< css::beans::Property > m_lPropDesc;
 
     /** helper needed to (re-)substitute all internal save path values.
         Created on demand, also from the const read path, so it is mutable. */
@@ -183,7 +183,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.util.PathSettings"_ustr};
     }
@@ -303,7 +303,7 @@ public:
         { setStringProperty(u"UserConfig"_ustr, p1); }
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     /** read all configured paths and create all needed internal structures. */
     void readAll();
@@ -384,7 +384,7 @@ private:
 
     void impl_storePath(std::unique_lock<std::mutex>& g, const PathSettings::PathInfo& aPath);
 
-    css::uno::Sequence< sal_Int32 > impl_mapPathName2IDList(std::u16string_view sPath);
+    cpo::uno::Sequence< sal_Int32 > impl_mapPathName2IDList(std::u16string_view sPath);
 
     void impl_notifyPropListener( std::unique_lock<std::mutex>& g,
                                   std::u16string_view    sPath   ,
@@ -501,7 +501,7 @@ void PathSettings::impl_readAll(std::unique_lock<std::mutex>& g)
     {
         // TODO think about me
         css::uno::Reference< css::container::XNameAccess > xCfg    = fa_getCfgNew(g);
-        css::uno::Sequence< OUString >              lPaths = xCfg->getElementNames();
+        cpo::uno::Sequence< OUString >              lPaths = xCfg->getElementNames();
 
         sal_Int32 c = lPaths.getLength();
         for (sal_Int32 i = 0; i < c; ++i)
@@ -528,7 +528,7 @@ std::vector<OUString> PathSettings::impl_readOldFormat(std::unique_lock<std::mut
         cpo::uno::Any aVal( xCfg->getByName(sPath) );
 
         OUString                       sStringVal;
-        css::uno::Sequence< OUString > lStringListVal;
+        cpo::uno::Sequence< OUString > lStringListVal;
 
         if (aVal >>= sStringVal)
         {
@@ -560,7 +560,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(std::unique_lock<std::mu
     aPathVal.lInternalPaths = comphelper::sequenceToContainer<std::vector<OUString>>(xIPath->getElementNames());
 
     // read user defined path list
-    css::uno::Sequence<OUString> vTmpUserPathsSeq;
+    cpo::uno::Sequence<OUString> vTmpUserPathsSeq;
     xPath->getByName(CFGPROP_USERPATHS) >>= vTmpUserPathsSeq;
     aPathVal.lUserPaths = comphelper::sequenceToContainer<std::vector<OUString>>(vTmpUserPathsSeq);
 
@@ -781,7 +781,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(std::unique_lock<std::mute
     return eOp;
 }
 
-css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(std::u16string_view sPath)
+cpo::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(std::u16string_view sPath)
 {
     OUString sInternalProp = OUString::Concat(sPath)+POSTFIX_INTERNAL_PATHS;
     OUString sUserProp     = OUString::Concat(sPath)+POSTFIX_USER_PATHS;
@@ -795,7 +795,7 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(std::u16st
     // follow these group IDs! But if such ID is not in the range of [0..IDGROUP_COUNT]
     // the outside can't determine the right group ... and can not fire the right events .-)
 
-    css::uno::Sequence<sal_Int32> lIDs{ IDGROUP_OLDSTYLE, IDGROUP_INTERNAL_PATHS,
+    cpo::uno::Sequence<sal_Int32> lIDs{ IDGROUP_OLDSTYLE, IDGROUP_INTERNAL_PATHS,
                                         IDGROUP_USER_PATHS, IDGROUP_WRITE_PATH };
     assert(lIDs.getLength() == IDGROUP_COUNT);
     auto plIDs = lIDs.getArray();
@@ -827,14 +827,14 @@ void PathSettings::impl_notifyPropListener( std::unique_lock<std::mutex>& g,
                                             const PathSettings::PathInfo* pPathOld,
                                             const PathSettings::PathInfo* pPathNew)
 {
-    css::uno::Sequence< sal_Int32 >     lHandles(1);
+    cpo::uno::Sequence< sal_Int32 >     lHandles(1);
     auto plHandles = lHandles.getArray();
-    css::uno::Sequence< cpo::uno::Any > lOldVals(1);
+    cpo::uno::Sequence< cpo::uno::Any > lOldVals(1);
     auto plOldVals = lOldVals.getArray();
-    css::uno::Sequence< cpo::uno::Any > lNewVals(1);
+    cpo::uno::Sequence< cpo::uno::Any > lNewVals(1);
     auto plNewVals = lNewVals.getArray();
 
-    css::uno::Sequence< sal_Int32 > lIDs   = impl_mapPathName2IDList(sPath);
+    cpo::uno::Sequence< sal_Int32 > lIDs   = impl_mapPathName2IDList(sPath);
     sal_Int32                       c      = lIDs.getLength();
     sal_Int32                       i      = 0;
     sal_Int32                       nMaxID = m_lPropDesc.getLength()-1;
@@ -1038,7 +1038,7 @@ void PathSettings::impl_rebuildPropertyDescriptor(std::unique_lock<std::mutex>& 
         pProp             = &(plPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_INTERNAL_PATHS;
         pProp->Handle     = i;
-        pProp->Type       = cppu::UnoType<css::uno::Sequence< OUString >>::get();
+        pProp->Type       = cppu::UnoType<cpo::uno::Sequence< OUString >>::get();
         pProp->Attributes = css::beans::PropertyAttribute::BOUND   |
                             css::beans::PropertyAttribute::READONLY;
         ++i;
@@ -1046,7 +1046,7 @@ void PathSettings::impl_rebuildPropertyDescriptor(std::unique_lock<std::mutex>& 
         pProp             = &(plPropDesc[i]);
         pProp->Name       = rPath.sPathName+POSTFIX_USER_PATHS;
         pProp->Handle     = i;
-        pProp->Type       = cppu::UnoType<css::uno::Sequence< OUString >>::get();
+        pProp->Type       = cppu::UnoType<cpo::uno::Sequence< OUString >>::get();
         pProp->Attributes = css::beans::PropertyAttribute::BOUND;
         if (rPath.bIsReadonly)
             pProp->Attributes |= css::beans::PropertyAttribute::READONLY;
@@ -1175,7 +1175,7 @@ void PathSettings::impl_setPathValue(std::unique_lock<std::mutex>& g,
                         static_cast< ::cppu::OWeakObject* >(this));
                 }
 
-                css::uno::Sequence<OUString> lTmpList;
+                cpo::uno::Sequence<OUString> lTmpList;
                 aVal >>= lTmpList;
                 std::vector<OUString> lList = comphelper::sequenceToContainer<std::vector<OUString>>(lTmpList);
                 if (! impl_isValidPath(lList))
@@ -1194,7 +1194,7 @@ void PathSettings::impl_setPathValue(std::unique_lock<std::mutex>& g,
                         static_cast< ::cppu::OWeakObject* >(this));
                 }
 
-                css::uno::Sequence<OUString> lTmpList;
+                cpo::uno::Sequence<OUString> lTmpList;
                 aVal >>= lTmpList;
                 std::vector<OUString> lList = comphelper::sequenceToContainer<std::vector<OUString>>(lTmpList);
                 if (! impl_isValidPath(lList))
@@ -1401,7 +1401,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew(st
 }
 
 // XInitialization
-void SAL_CALL PathSettings::initialize(const css::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
+void SAL_CALL PathSettings::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArguments*/)
 {
     // so we can reinitialize/reset all path variables to default
     std::unique_lock g(m_aMutex);
@@ -1413,7 +1413,7 @@ void SAL_CALL PathSettings::initialize(const css::uno::Sequence<cpo::uno::Any>& 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_PathSettings_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<PathSettings> xPathSettings = new PathSettings(context);
     // fill cache

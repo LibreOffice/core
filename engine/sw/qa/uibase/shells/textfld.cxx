@@ -38,7 +38,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkFootnote)
     createSwDoc();
 
     // When inserting a refmark inside a footnote:
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"TypeName"_ustr, cpo::uno::Any(u"SetRef"_ustr)),
         comphelper::makePropertyValue(u"Name"_ustr, cpo::uno::Any(u"myref"_ustr)),
         comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"content"_ustr)),
@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertHyperlinkKeepSelection)
     pWrtShell->SelAll();
 
     // When inserting a hyperlink whose Hyperlink.Text differs from the selection:
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Hyperlink.Text"_ustr, cpo::uno::Any(u"mytext"_ustr)),
         comphelper::makePropertyValue(u"Hyperlink.TextIsHint"_ustr, cpo::uno::Any(true)),
         comphelper::makePropertyValue(u"Hyperlink.URL"_ustr,
@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkEndnote)
     createSwDoc();
 
     // When inserting a refmark inside an endnote:
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"TypeName"_ustr, cpo::uno::Any(u"SetRef"_ustr)),
         comphelper::makePropertyValue(u"Name"_ustr, cpo::uno::Any(u"myref"_ustr)),
         comphelper::makePropertyValue(u"Content"_ustr, cpo::uno::Any(u"content"_ustr)),

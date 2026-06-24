@@ -2466,7 +2466,7 @@ void Bitmap::CombineMaskOr(Color rTransColor, sal_uInt8 nTol)
 /**
  * Retrieves the color model data we need for the XImageConsumer stuff.
  */
-void  Bitmap::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
+void  Bitmap::GetColorModel(cpo::uno::Sequence< sal_Int32 >& rRGBPalette,
         sal_uInt32& rnRedMask, sal_uInt32& rnGreenMask, sal_uInt32& rnBlueMask, sal_uInt32& rnAlphaMask, sal_uInt32& rnTransparencyIndex,
         sal_uInt32& rnWidth, sal_uInt32& rnHeight, sal_uInt8& rnBitCount)
 {
@@ -2479,7 +2479,7 @@ void  Bitmap::GetColorModel(css::uno::Sequence< sal_Int32 >& rRGBPalette,
 
         if( nPalCount )
         {
-            rRGBPalette = css::uno::Sequence< sal_Int32 >( nPalCount + 1 );
+            rRGBPalette = cpo::uno::Sequence< sal_Int32 >( nPalCount + 1 );
 
             sal_Int32* pTmp = rRGBPalette.getArray();
 

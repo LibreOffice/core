@@ -47,13 +47,13 @@ OUString SAL_CALL ChartTypeUnoDlg::getImplementationName()
     return u"com.sun.star.comp.chart2.ChartTypeDialog"_ustr;
 }
 
-css::uno::Sequence<OUString> SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ChartTypeUnoDlg::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.ChartTypeDialog"_ustr };
 }
-uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL ChartTypeUnoDlg::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 void ChartTypeUnoDlg::implInitialize(const cpo::uno::Any& _rValue)
 {
@@ -93,7 +93,7 @@ uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySe
 
 ::cppu::IPropertyArrayHelper* ChartTypeUnoDlg::createArrayHelper( ) const
 {
-    uno::Sequence< beans::Property > aProps;
+    cpo::uno::Sequence< beans::Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
@@ -102,7 +102,7 @@ uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySe
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_ChartTypeDialog_get_implementation(css::uno::XComponentContext *context,
-                                                            css::uno::Sequence<cpo::uno::Any> const &)
+                                                            cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new chart::ChartTypeUnoDlg(context));
 }

@@ -29,7 +29,7 @@ namespace linguistic
 class Meaning :
     public cppu::WeakImplHelper< css::linguistic2::XMeaning >
 {
-    css::uno::Sequence< OUString >  aSyn;   // list of synonyms, may be empty.
+    cpo::uno::Sequence< OUString >  aSyn;   // list of synonyms, may be empty.
     OUString         aTerm;
 
     Meaning(const Meaning &) = delete;
@@ -41,10 +41,10 @@ public:
 
     // XMeaning
     virtual OUString SAL_CALL getMeaning() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL querySynonyms() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL querySynonyms() override;
 
     // non-interface specific functions
-    void    SetSynonyms( const css::uno::Sequence< OUString > &rSyn );
+    void    SetSynonyms( const cpo::uno::Sequence< OUString > &rSyn );
     void    SetMeaning( const OUString  &rTerm );
 };
 

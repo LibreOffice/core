@@ -55,7 +55,7 @@ ChartPanelFactory::~ChartPanelFactory()
 
 Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     const OUString& rsResourceURL,
-    const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
+    const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments)
 {
     Reference<css::ui::XUIElement> xElement;
 
@@ -152,7 +152,7 @@ bool ChartPanelFactory::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> ChartPanelFactory::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ChartPanelFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.UIElementFactory"_ustr };
 }
@@ -160,7 +160,7 @@ css::uno::Sequence<OUString> ChartPanelFactory::getSupportedServiceNames()
 } // end of namespace chart::sidebar
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-org_libreoffice_comp_chart2_sidebar_ChartPanelFactory(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
+org_libreoffice_comp_chart2_sidebar_ChartPanelFactory(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::sidebar::ChartPanelFactory());
 }

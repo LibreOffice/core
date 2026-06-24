@@ -56,20 +56,20 @@ static sal_Int32 getTokenPerfectHash(const char* pStr, sal_Int32 nLength)
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-css::uno::Sequence<sal_Int8> const& TokenMap::getUtf8TokenName(sal_Int32 nToken)
+cpo::uno::Sequence<sal_Int8> const& TokenMap::getUtf8TokenName(sal_Int32 nToken)
 {
     static const auto saTokenNames = []()
     {
         static_assert(std::size(wordlist) == XML_TOKEN_COUNT);
 
-        std::vector<css::uno::Sequence<sal_Int8>> aTokenNames(std::size(wordlist));
+        std::vector<cpo::uno::Sequence<sal_Int8>> aTokenNames(std::size(wordlist));
         for (const auto& resword : wordlist)
         {
             const char *s = reinterpret_cast<const char*>(&stringpool_contents) + resword.name;
             std::string_view aUtf8Token(s, strlen(s));
 
             aTokenNames[resword.nToken] =
-               css::uno::Sequence<sal_Int8>(
+               cpo::uno::Sequence<sal_Int8>(
                    reinterpret_cast<const sal_Int8*>(aUtf8Token.data()), aUtf8Token.size());
         }
 
@@ -79,7 +79,7 @@ css::uno::Sequence<sal_Int8> const& TokenMap::getUtf8TokenName(sal_Int32 nToken)
     SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "oox", "Wrong nToken parameter");
     if (0 <= nToken && nToken < XML_TOKEN_COUNT)
         return saTokenNames[nToken];
-    static const css::uno::Sequence<sal_Int8> EMPTY_BYTE_SEQ;
+    static const cpo::uno::Sequence<sal_Int8> EMPTY_BYTE_SEQ;
     return EMPTY_BYTE_SEQ;
 }
 

@@ -190,7 +190,7 @@ public:
 
     // dtrans implementation
     virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-    CreateClipboard(const css::uno::Sequence<cpo::uno::Any>& i_rArguments);
+    CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& i_rArguments);
     virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv);
     virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>

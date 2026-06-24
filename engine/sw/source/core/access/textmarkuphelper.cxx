@@ -188,7 +188,7 @@ css::accessibility::TextSegment
     return aTextMarkupSegment;
 }
 
-css::uno::Sequence< css::accessibility::TextSegment >
+cpo::uno::Sequence< css::accessibility::TextSegment >
         SwTextMarkupHelper::getTextMarkupAtIndex( const sal_Int32 nCharIndex,
                                                   const sal_Int32 nTextMarkupType )
 {
@@ -204,7 +204,7 @@ css::uno::Sequence< css::accessibility::TextSegment >
     // paragraph - e.g. numbering portion.
     if ( mrPortionData.GetAccessiblePosition( nCoreCharIndex ) > nCharIndex )
     {
-        return uno::Sequence< css::accessibility::TextSegment >();
+        return cpo::uno::Sequence< css::accessibility::TextSegment >();
     }
 
     std::unique_ptr<sw::WrongListIteratorCounter> pIter = getIterator(nTextMarkupType);

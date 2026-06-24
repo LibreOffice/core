@@ -248,7 +248,7 @@ struct BinComplexRef2d
 // Token vector, token sequence ===============================================
 
 typedef css::sheet::FormulaToken       ApiToken;
-typedef css::uno::Sequence< ApiToken > ApiTokenSequence;
+typedef cpo::uno::Sequence< ApiToken > ApiTokenSequence;
 
 /** Contains the base address and type of a special token representing an array
     formula or a shared formula (false), or a table operation (true). */
@@ -591,7 +591,7 @@ public:
     const FunctionInfo* getFuncInfoFromApiToken( const ApiToken& rToken ) const;
 
     /** Returns the op-code map that is used by the OOXML formula parser. */
-    css::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
+    cpo::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
                         getOoxParserMap() const;
 
 private:

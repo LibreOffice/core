@@ -127,9 +127,9 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL OButtonModel::createClone(
 
 // XServiceInfo
 
-css::uno::Sequence<OUString>  OButtonModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString>  OButtonModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OClickableImageBaseModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc( aSupported.getLength() + 2 );
 
     OUString* pArray = aSupported.getArray();
@@ -352,9 +352,9 @@ Sequence<Type> OButtonControl::_getTypes()
 }
 
 
-css::uno::Sequence<OUString>  OButtonControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString>  OButtonControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OClickableImageBaseControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString*pArray = aSupported.getArray();
@@ -761,14 +761,14 @@ void SAL_CALL OButtonControl::releaseDispatchProviderInterceptor( const Referenc
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OButtonModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OButtonModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OButtonControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OButtonControl(component));
 }

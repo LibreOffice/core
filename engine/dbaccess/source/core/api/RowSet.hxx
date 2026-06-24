@@ -250,8 +250,8 @@ namespace dbaccess
         explicit ORowSet(const css::uno::Reference<css::uno::XComponentContext>&);
 
         // css::lang::XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::uno::XInterface
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -264,7 +264,7 @@ namespace dbaccess
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -300,7 +300,7 @@ namespace dbaccess
         virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) override;
         virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) override;
         virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
         virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
@@ -322,7 +322,7 @@ namespace dbaccess
         virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) override;
         virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) override;
         virtual void SAL_CALL updateString( sal_Int32 columnIndex, const OUString& x ) override;
-        virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const css::uno::Sequence< sal_Int8 >& x ) override;
+        virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const cpo::uno::Sequence< sal_Int8 >& x ) override;
         virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const css::util::Date& x ) override;
         virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const css::util::Time& x ) override;
         virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
@@ -359,7 +359,7 @@ namespace dbaccess
         virtual void SAL_CALL cancel(  ) override;
 
     // css::sdbcx::XDeleteRows
-        virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< cpo::uno::Any >& rows ) override;
+        virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const cpo::uno::Sequence< cpo::uno::Any >& rows ) override;
 
     // XParameters
         virtual void SAL_CALL setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) override;
@@ -372,7 +372,7 @@ namespace dbaccess
         virtual void SAL_CALL setFloat( sal_Int32 parameterIndex, float x ) override;
         virtual void SAL_CALL setDouble( sal_Int32 parameterIndex, double x ) override;
         virtual void SAL_CALL setString( sal_Int32 parameterIndex, const OUString& x ) override;
-        virtual void SAL_CALL setBytes( sal_Int32 parameterIndex, const css::uno::Sequence< sal_Int8 >& x ) override;
+        virtual void SAL_CALL setBytes( sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x ) override;
         virtual void SAL_CALL setDate( sal_Int32 parameterIndex, const css::util::Date& x ) override;
         virtual void SAL_CALL setTime( sal_Int32 parameterIndex, const css::util::Time& x ) override;
         virtual void SAL_CALL setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) override;
@@ -470,10 +470,10 @@ namespace dbaccess
         virtual ~ORowSetClone() override;
 
     // css::lang::XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override
         {
-            return css::uno::Sequence<sal_Int8>();
+            return cpo::uno::Sequence<sal_Int8>();
         }
 
     // css::uno::XInterface
@@ -484,7 +484,7 @@ namespace dbaccess
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // OComponentHelper
         virtual void SAL_CALL disposing() override;

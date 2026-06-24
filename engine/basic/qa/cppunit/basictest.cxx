@@ -10,7 +10,7 @@
 #include "basictest.hxx"
 #include <cppunit/TestAssert.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbmeth.hxx>
@@ -71,7 +71,7 @@ void MacroSnippet::LoadSourceFromFile(const OUString& sModuleName, const OUStrin
     MakeModule(sModuleName, sSource);
 }
 
-SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< cpo::uno::Any >& rArgs )
+SbxVariableRef MacroSnippet::Run( const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
 {
     SbxVariableRef pReturn;
     if ( !Compile() )
@@ -97,7 +97,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< cpo::uno::Any >& rAr
 
 SbxVariableRef MacroSnippet::Run()
 {
-    css::uno::Sequence< cpo::uno::Any > aArgs;
+    cpo::uno::Sequence< cpo::uno::Any > aArgs;
     return Run( aArgs );
 }
 

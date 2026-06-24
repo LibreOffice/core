@@ -50,7 +50,7 @@ namespace {
     using css::uno::XInterface;
     using css::uno::UNO_QUERY;
     using cpo::uno::Any;
-    using css::uno::Sequence;
+    using cpo::uno::Sequence;
     using css::ui::dialogs::XWizard;
     using css::beans::XPropertySetInfo;
     using css::uno::XComponentContext;
@@ -93,7 +93,7 @@ namespace {
 
         // lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // beans::XPropertySet
         virtual css::uno::Reference< beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() override;
@@ -122,7 +122,7 @@ namespace {
         virtual ::sal_Int16 SAL_CALL execute(  ) override;
 
         // lang::XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
    protected:
         virtual ~Wizard() override;
@@ -131,7 +131,7 @@ namespace {
         virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     private:
-        css::uno::Sequence< css::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
+        cpo::uno::Sequence< cpo::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
         css::uno::Reference< ui::dialogs::XWizardController >    m_xController;
         OUString                                            m_sHelpURL;
     };
@@ -442,7 +442,7 @@ namespace {
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svtools_uno_Wizard_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new Wizard(context));
 }

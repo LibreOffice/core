@@ -67,7 +67,7 @@ namespace calc
         virtual ~OCellValueBinding( ) override;
 
         // XValueBinding
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
         virtual bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
         virtual cpo::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
         virtual void SAL_CALL setValue( const cpo::uno::Any& aValue ) override;
@@ -78,7 +78,7 @@ namespace calc
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // OPropertyImplHelper
         using OCellValueBinding_Base::getFastPropertyValue;
@@ -96,12 +96,12 @@ namespace calc
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     private:
         void    checkValueType( std::unique_lock<std::mutex>& rGuard, const css::uno::Type& _rType ) const;
         void    checkInitialized();
-        css::uno::Sequence< css::uno::Type > getSupportedValueTypes(std::unique_lock<std::mutex>& rGuard) const;
+        cpo::uno::Sequence< css::uno::Type > getSupportedValueTypes(std::unique_lock<std::mutex>& rGuard) const;
         bool    supportsType( std::unique_lock<std::mutex>& rGuard, const css::uno::Type& aType ) const;
 
         /** notifies our modify listeners

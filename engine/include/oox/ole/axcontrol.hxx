@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/propertyset.hxx>
@@ -877,8 +877,8 @@ public:
 
 class HtmlSelectModel final : public AxListBoxModel
 {
-    css::uno::Sequence< OUString > msListData;
-    css::uno::Sequence< sal_Int16 > msIndices;
+    cpo::uno::Sequence< OUString > msListData;
+    cpo::uno::Sequence< sal_Int16 > msIndices;
 public:
     HtmlSelectModel();
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm ) override;

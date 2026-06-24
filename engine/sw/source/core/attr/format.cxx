@@ -741,7 +741,7 @@ void SwFormat::GetGrabBagItem(cpo::uno::Any& rVal) const
     if (m_pGrabBagItem)
         m_pGrabBagItem->QueryValue(rVal);
     else
-        rVal <<= uno::Sequence<beans::PropertyValue>();
+        rVal <<= cpo::uno::Sequence<beans::PropertyValue>();
 }
 
 void SwFormat::SetGrabBagItem(const cpo::uno::Any& rVal)

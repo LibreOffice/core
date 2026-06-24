@@ -25,11 +25,11 @@ namespace {
 class MtfRenderer : public MtfRendererBase
 {
 public:
-    MtfRenderer (css::uno::Sequence<cpo::uno::Any> const& args,
+    MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const& args,
                  css::uno::Reference<css::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
-    void SAL_CALL setMetafile (const css::uno::Sequence< sal_Int8 >& rMtf) override;
+    void SAL_CALL setMetafile (const cpo::uno::Sequence< sal_Int8 >& rMtf) override;
     void SAL_CALL draw (double fScaleX, double fScaleY) override;
 
     // XFastPropertySet
@@ -42,7 +42,7 @@ private:
     css::uno::Reference<css::rendering::XBitmapCanvas> mxCanvas;
 };
 
-void MtfRenderer::setMetafile (const uno::Sequence< sal_Int8 >& /*rMtf*/)
+void MtfRenderer::setMetafile (const cpo::uno::Sequence< sal_Int8 >& /*rMtf*/)
 {
         // printf ("MtfRenderer::setMetafile unimplemented, use fast property set or implement me\n");
 }
@@ -66,7 +66,7 @@ void MtfRenderer::setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& 
     }
 }
 
-MtfRenderer::MtfRenderer (uno::Sequence<cpo::uno::Any> const& aArgs, uno::Reference<uno::XComponentContext> const&) : mpMetafile (nullptr)
+MtfRenderer::MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const& aArgs, uno::Reference<uno::XComponentContext> const&) : mpMetafile (nullptr)
 {
     if( aArgs.getLength() == 1 ) {
         aArgs[0] >>= mxCanvas;
@@ -77,7 +77,7 @@ MtfRenderer::MtfRenderer (uno::Sequence<cpo::uno::Any> const& aArgs, uno::Refere
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_rendering_MtfRenderer_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new MtfRenderer(args, context));
 }

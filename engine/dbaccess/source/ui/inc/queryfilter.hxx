@@ -84,7 +84,7 @@ namespace dbaui
         sal_Int32       GetOSQLPredicateType( std::u16string_view _rSelectedPredicate ) const;
         static sal_Int32  GetSelectionPos(sal_Int32 eType, const weld::ComboBox& rListBox);
         bool            getCondition(const weld::ComboBox& _rField, const weld::ComboBox& _rComp, const weld::Entry& _rValue, css::beans::PropertyValue& _rFilter) const;
-        void            fillLines(int &i, const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& _aValues);
+        void            fillLines(int &i, const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& _aValues);
 
         css::uno::Reference< css::beans::XPropertySet > getMatchingColumn( const weld::Entry& _rValueInput ) const;
         css::uno::Reference< css::beans::XPropertySet > getColumn( const OUString& _rFieldName ) const;

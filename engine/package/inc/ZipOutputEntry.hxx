@@ -70,9 +70,9 @@ protected:
         ZipEntry* pEntry, ZipPackageStream* pStream, bool bEncrypt, bool checkStream);
 
     // Inherited classes call this with deflated data buffer.
-    void processDeflated( const css::uno::Sequence< sal_Int8 >& deflateBuffer, sal_Int32 nLength );
+    void processDeflated( const cpo::uno::Sequence< sal_Int8 >& deflateBuffer, sal_Int32 nLength );
     // Inherited classes call this with the input buffer.
-    void processInput( const css::uno::Sequence< sal_Int8 >& rBuffer );
+    void processInput( const cpo::uno::Sequence< sal_Int8 >& rBuffer );
 
     virtual void finishDeflater() = 0;
     virtual sal_Int64 getDeflaterTotalIn() const = 0;
@@ -84,7 +84,7 @@ protected:
 // Normal non-threaded case.
 class ZipOutputEntry : public ZipOutputEntryBase
 {
-    css::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
+    cpo::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
     ZipUtils::Deflater m_aDeflater;
 
 public:
@@ -93,7 +93,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         ZipEntry* pEntry, ZipPackageStream* pStream, bool bEncrypt);
     void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream) override;
-    void write(const css::uno::Sequence< sal_Int8 >& rBuffer);
+    void write(const cpo::uno::Sequence< sal_Int8 >& rBuffer);
 
 protected:
     ZipOutputEntry(

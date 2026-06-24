@@ -134,7 +134,7 @@ FilterConfigItem::FilterConfigItem( std::u16string_view rSubTree )
     ImpInitTree( rSubTree );
 }
 
-FilterConfigItem::FilterConfigItem( css::uno::Sequence< css::beans::PropertyValue > const * pFilterData )
+FilterConfigItem::FilterConfigItem( cpo::uno::Sequence< css::beans::PropertyValue > const * pFilterData )
     : bModified(false)
 {
     if ( pFilterData )
@@ -142,7 +142,7 @@ FilterConfigItem::FilterConfigItem( css::uno::Sequence< css::beans::PropertyValu
 }
 
 FilterConfigItem::FilterConfigItem( std::u16string_view rSubTree,
-    css::uno::Sequence< css::beans::PropertyValue > const * pFilterData )
+    cpo::uno::Sequence< css::beans::PropertyValue > const * pFilterData )
 {
     ImpInitTree( rSubTree );
 

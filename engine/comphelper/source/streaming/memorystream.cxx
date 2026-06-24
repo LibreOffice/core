@@ -60,7 +60,7 @@ bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL UNOMemoryStream::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL UNOMemoryStream::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.MemoryStream"_ustr };
 }
@@ -213,7 +213,7 @@ void SAL_CALL UNOMemoryStream::truncate()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_MemoryStream(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::comphelper::UNOMemoryStream());
 }

@@ -60,7 +60,7 @@ public:
     }
 };
 
-SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Sequence< beans::PropertyValue> const & rValues)
+SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, cpo::uno::Sequence< beans::PropertyValue> const & rValues)
     : SfxDialogController(pParent, u"modules/swriter/ui/tablepreviewdialog.ui"_ustr, u"TablePreviewDialog"_ustr)
     , m_xDescriptionFI(m_xBuilder->weld_label(u"description"_ustr))
     , m_xBeamerWIN(m_xBuilder->weld_container(u"beamer"_ustr))

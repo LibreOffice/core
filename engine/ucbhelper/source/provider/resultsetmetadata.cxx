@@ -41,6 +41,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
+using namespace cpo::uno;
 
 
 namespace ucbhelper_impl {

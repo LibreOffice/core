@@ -335,7 +335,7 @@ class IndirectType(Type):
         assert pelem
         self.element = make_uno_type(pelem.dereference())
         assert self.element
-        self.typename = TemplateType('com::sun::star::uno::Sequence', self.element.typename)
+        self.typename = TemplateType('cpo::uno::Sequence', self.element.typename)
 
 class EnumType(Type):
 

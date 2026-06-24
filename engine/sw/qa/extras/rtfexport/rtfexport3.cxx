@@ -244,8 +244,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122589_firstSection)
 CPPUNIT_TEST_FIXTURE(Test, testTdf104035)
 {
     auto verify = [this]() {
-        auto aTabStops
-            = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), u"ParaTabStops"_ustr);
+        auto aTabStops = getProperty<cpo::uno::Sequence<style::TabStop>>(getParagraph(1),
+                                                                         u"ParaTabStops"_ustr);
         CPPUNIT_ASSERT(aTabStops.hasElements());
         // This was 3330 twips instead, as tabs were assumed to be relative.
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(450)),
@@ -553,8 +553,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTabs)
 {
     auto verify = [this]() {
         // Test tab alignment in decimal mode.
-        auto aTabStops
-            = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), u"ParaTabStops"_ustr);
+        auto aTabStops = getProperty<cpo::uno::Sequence<style::TabStop>>(getParagraph(1),
+                                                                         u"ParaTabStops"_ustr);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabStops.getLength());
         const style::TabStop& rTabStop = aTabStops[0];
         CPPUNIT_ASSERT_EQUAL(style::TabAlign_DECIMAL, rTabStop.Alignment);
@@ -822,7 +822,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableExport)
     // Given a document with a floating table:
     createSwDoc();
     // Insert a table:
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Rows"_ustr, static_cast<sal_Int32>(1)),
         comphelper::makePropertyValue(u"Columns"_ustr, static_cast<sal_Int32>(1)),
     };

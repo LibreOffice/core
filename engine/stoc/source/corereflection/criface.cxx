@@ -308,7 +308,7 @@ public:
 
 Sequence< sal_Int8 > IdlInterfaceMethodImpl::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XIdlMember

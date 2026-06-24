@@ -1061,7 +1061,7 @@ using namespace cpo::uno;
     }
 
 
-    void ParameterManager::setBytes( sal_Int32 _nIndex, const css::uno::Sequence< sal_Int8 >& x )
+    void ParameterManager::setBytes( sal_Int32 _nIndex, const cpo::uno::Sequence< sal_Int8 >& x )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");

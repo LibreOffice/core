@@ -25,7 +25,7 @@ PageColumnPopup::PageColumnPopup(const css::uno::Reference<css::uno::XComponentC
 {
 }
 
-void PageColumnPopup::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
+void PageColumnPopup::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
@@ -59,7 +59,7 @@ OUString PageColumnPopup::getImplementationName()
     return u"lo.writer.PageColumnToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> PageColumnPopup::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> PageColumnPopup::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -67,7 +67,7 @@ css::uno::Sequence<OUString> PageColumnPopup::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_PageColumnToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<cpo::uno::Any> const & )
+    cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new PageColumnPopup(rContext));
 }

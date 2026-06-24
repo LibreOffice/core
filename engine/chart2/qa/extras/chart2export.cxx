@@ -370,7 +370,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterChartTextXValues)
     CPPUNIT_ASSERT(xCT.is());
 
     // Make sure we have exactly 3 data series.
-    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<cpo::uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"Series 1"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"Series 2"_ustr, aLabels[1][0].get<OUString>());
@@ -466,7 +466,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
    loadFromFile(u"docx/testMultiplechartembeddings.docx" );
    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
-   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   cpo::uno::Sequence<beans::PropertyValue> aGrabBag(0);
    xTextDocumentPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
@@ -478,7 +478,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
        if (prop.Name == "OOXEmbeddings")
        {
            bEmbeddings = true;
-           uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
+           cpo::uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
            uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
            OUString aEmbeddedfileName;
            CPPUNIT_ASSERT(prop.Value >>= aEmbeddingsList); // PropertyValue of proper type
@@ -1057,7 +1057,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterPlotLabels)
     CPPUNIT_ASSERT(xCT.is());
 
     // Make sure the original chart has 'a', 'b', 'c' as its data labels.
-    std::vector<uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
+    std::vector<cpo::uno::Sequence<cpo::uno::Any> > aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(u"a"_ustr, aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(u"b"_ustr, aLabels[1][0].get<OUString>());
@@ -1224,7 +1224,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsOleObjectGrabBag)
    loadFromFile(u"docx/testchartoleobjectembeddings.docx" );
    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
-   uno::Sequence<beans::PropertyValue> aGrabBag(0);
+   cpo::uno::Sequence<beans::PropertyValue> aGrabBag(0);
    xTextDocumentPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
    CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
    bool bEmbeddings = false;
@@ -1234,7 +1234,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsOleObjectGrabBag)
        if (prop.Name == "OOXEmbeddings")
        {
            bEmbeddings = true;
-           uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
+           cpo::uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
            uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
            OUString aEmbeddedfileName;
            CPPUNIT_ASSERT(prop.Value >>= aEmbeddingsList); // PropertyValue of proper type
@@ -1258,7 +1258,7 @@ void checkGapWidth(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nV
 {
     cpo::uno::Any aAny = xPropSet->getPropertyValue(u"GapwidthSequence"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
-    uno::Sequence< sal_Int32 > aSequence;
+    cpo::uno::Sequence< sal_Int32 > aSequence;
     aAny >>= aSequence;
     CPPUNIT_ASSERT(aSequence.hasElements());
     CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
@@ -1268,7 +1268,7 @@ void checkOverlap(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nVa
 {
     cpo::uno::Any aAny = xPropSet->getPropertyValue(u"OverlapSequence"_ustr);
     CPPUNIT_ASSERT(aAny.hasValue());
-    uno::Sequence< sal_Int32 > aSequence;
+    cpo::uno::Sequence< sal_Int32 > aSequence;
     aAny >>= aSequence;
     CPPUNIT_ASSERT(aSequence.hasElements());
     CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);

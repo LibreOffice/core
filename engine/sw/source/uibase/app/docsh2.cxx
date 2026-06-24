@@ -220,7 +220,7 @@ static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVB
     if (rHint.GetId() != SfxHintId::ThisIsAnSfxEventHint)
         return;
 
-    uno::Sequence< cpo::uno::Any > aArgs;
+    cpo::uno::Sequence< cpo::uno::Any > aArgs;
     switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
     {
         case SfxEventHintId::CreateDoc:
@@ -256,7 +256,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             case SfxEventHintId::CreateDoc:
             case SfxEventHintId::OpenDoc:
             {
-                uno::Sequence< cpo::uno::Any > aArgs;
+                cpo::uno::Sequence< cpo::uno::Any > aArgs;
                 SwModule::get()->CallAutomationApplicationEventSinks(u"DocumentChange"_ustr, aArgs);
                 break;
             }
@@ -270,7 +270,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     cpo::uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
-                    uno::Sequence< cpo::uno::Any > aArgs{ aDocument };
+                    cpo::uno::Sequence< cpo::uno::Any > aArgs{ aDocument };
                     SwModule::get()->CallAutomationApplicationEventSinks( u"NewDocument"_ustr, aArgs );
                 }
                 break;
@@ -278,7 +278,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     cpo::uno::Any aDocument;
                     aDocument <<= mxAutomationDocumentObject;
-                    uno::Sequence< cpo::uno::Any > aArgs{ aDocument };
+                    cpo::uno::Sequence< cpo::uno::Any > aArgs{ aDocument };
                     SwModule::get()->CallAutomationApplicationEventSinks( u"DocumentOpen"_ustr, aArgs );
                 }
                 break;
@@ -364,7 +364,7 @@ bool SwDocShell::PrepareClose( bool bUI )
         cpo::uno::Any aDocument;
         aDocument <<= mxAutomationDocumentObject;
 
-        uno::Sequence<cpo::uno::Any> aArgs{ // Arg 0: Document
+        cpo::uno::Sequence<cpo::uno::Any> aArgs{ // Arg 0: Document
                                        aDocument,
                                        // Arg 1: Cancel
                                        cpo::uno::Any(false)
@@ -389,7 +389,7 @@ bool SwDocShell::PrepareClose( bool bUI )
         if( xVbaEvents.is() )
         {
             using namespace com::sun::star::script::vba::VBAEventId;
-            uno::Sequence< cpo::uno::Any > aNoArgs;
+            cpo::uno::Sequence< cpo::uno::Any > aNoArgs;
             xVbaEvents->processVbaEvent(AUTO_CLOSE, aNoArgs);
             xVbaEvents->processVbaEvent(DOCUMENT_CLOSE, aNoArgs);
         }
@@ -789,10 +789,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 pStrm->WriteChar( '\0' );
                                 pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
-                                uno::Sequence< sal_Int8 > aSeq( pStrm->TellEnd() );
+                                cpo::uno::Sequence< sal_Int8 > aSeq( pStrm->TellEnd() );
                                 pStrm->ReadBytes( aSeq.getArray(), aSeq.getLength() );
 
-                                uno::Sequence< beans::PropertyValue > aArgs{
+                                cpo::uno::Sequence< beans::PropertyValue > aArgs{
                                     comphelper::makePropertyValue(u"RtfOutline"_ustr, aSeq)
                                 };
                                 xHelper->executeDispatch( xProv, u"SendOutlineToImpress"_ustr, OUString(), 0, aArgs );
@@ -847,10 +847,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pStrm->WriteChar( '\0' );
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
 
-                        uno::Sequence< sal_Int8 > aSeq( pStrm->TellEnd() );
+                        cpo::uno::Sequence< sal_Int8 > aSeq( pStrm->TellEnd() );
                         pStrm->ReadBytes( aSeq.getArray(), aSeq.getLength() );
 
-                        uno::Sequence< beans::PropertyValue > aArgs{
+                        cpo::uno::Sequence< beans::PropertyValue > aArgs{
                             comphelper::makePropertyValue(u"RtfOutline"_ustr, aSeq)
                         };
                         xHelper->executeDispatch( xProv, u"SendOutlineToImpress"_ustr, OUString(), 0, aArgs );

@@ -200,7 +200,7 @@ void SvXMLImportItemMapper::importXMLUnknownAttributes( SfxItemSet& rSet,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       std::unique_ptr<SvXMLAttrContainerItem>& pUnknownItem)
 {
-    const css::uno::Sequence< css::xml::Attribute > unknownAttributes = xAttrList->getUnknownAttributes();
+    const cpo::uno::Sequence< css::xml::Attribute > unknownAttributes = xAttrList->getUnknownAttributes();
     for (const auto & rAttribute : unknownAttributes)
     {
         if( !pUnknownItem )

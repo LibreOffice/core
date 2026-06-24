@@ -27,7 +27,7 @@
 #include <vcl/transfer.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svx/dataaccessdescriptor.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
 namespace com::sun::star::sdbc { class XConnection; }
@@ -220,7 +220,7 @@ namespace svx
                 ODataAccessDescriptor&  getDescriptor()         { return m_aDescriptor; }
     protected:
         void    addCompatibleSelectionDescription(
-            const css::uno::Sequence< cpo::uno::Any >& _rSelRows
+            const cpo::uno::Sequence< cpo::uno::Any >& _rSelRows
         );
             // normally, a derived class could simply access getDescriptor[DataAccessDescriptorProperty::Selection] and place the sequence therein
             // but unfortunately, we have this damned compatible format, and this can't be accessed in

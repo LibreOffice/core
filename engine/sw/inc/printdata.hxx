@@ -162,7 +162,7 @@ public:
     SwPrintUIOptions( sal_uInt16 nCurrentPage, bool bWeb, bool bSwSrcView, bool bHasSelection, bool bHasPostIts, const SwPrintData &rDefaultPrintData );
     ~SwPrintUIOptions();
 
-    bool processPropertiesAndCheckFormat( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp );
+    bool processPropertiesAndCheckFormat( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rNewProp );
 
     bool IsPrintFormControls() const            { return getBoolValue( "PrintControls",        m_rDefaultPrintData.m_bPrintControl ); }
     bool IsPrintPageBackground() const          { return getBoolValue( "PrintPageBackground",  m_rDefaultPrintData.m_bPrintPageBackground ); }

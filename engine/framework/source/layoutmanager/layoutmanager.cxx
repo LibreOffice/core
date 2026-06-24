@@ -2511,7 +2511,7 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
     sal_Int32 nFormsMenu = -1;
     for (sal_Int32 nIndex = 0; nIndex < xMenuIndex->getCount(); ++nIndex)
     {
-        uno::Sequence< beans::PropertyValue > aProps;
+        cpo::uno::Sequence< beans::PropertyValue > aProps;
         xMenuIndex->getByIndex( nIndex ) >>= aProps;
         OUString aCommand;
         for (beans::PropertyValue const& rProp : aProps)
@@ -2538,7 +2538,7 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
     uno::Reference< container::XIndexAccess > xFormsMenuIndex(xFormsMenuSettings->getSettings(true));
 
     assert(xFormsMenuIndex->getCount() >= 1);
-    uno::Sequence< beans::PropertyValue > aNewFormsMenu;
+    cpo::uno::Sequence< beans::PropertyValue > aNewFormsMenu;
     xFormsMenuIndex->getByIndex( 0 ) >>= aNewFormsMenu;
     xMenuIndex->replaceByIndex(nFormsMenu, cpo::uno::Any(aNewFormsMenu));
 
@@ -2568,7 +2568,7 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose, void*, void)
         u".uno:CloseWin"_ustr,
         u"_self"_ustr,
         0,
-        uno::Sequence< beans::PropertyValue >());
+        cpo::uno::Sequence< beans::PropertyValue >());
 }
 
 //  XLayoutManagerEventBroadcaster
@@ -3064,7 +3064,7 @@ namespace detail
     public:
         explicit InfoHelperBuilder(const LayoutManager &rManager)
         {
-            uno::Sequence< beans::Property > aProperties;
+            cpo::uno::Sequence< beans::Property > aProperties;
             rManager.describeProperties(aProperties);
             m_pInfoHelper.reset( new ::cppu::OPropertyArrayHelper(aProperties, true) );
         }
@@ -3093,7 +3093,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySet
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_LayoutManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::LayoutManager(context));
 }

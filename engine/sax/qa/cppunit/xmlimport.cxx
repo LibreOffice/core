@@ -48,6 +48,7 @@ namespace {
 using namespace css;
 using namespace uno;
 using namespace io;
+using namespace ::cpo::uno;
 using namespace xml::sax;
 using namespace ::osl;
 using namespace sax_fastparser;
@@ -260,7 +261,7 @@ public:
 
     // XFastTokenHandler
     virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
     //FastTokenHandlerBase
     virtual sal_Int32 getTokenDirect(std::string_view sToken) const override;
 };
@@ -302,7 +303,7 @@ Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
     return aSeq;
 }
 
-sal_Int32 DummyTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& rIdentifier )
+sal_Int32 DummyTokenHandler::getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& rIdentifier )
 {
     return getTokenDirect(std::string_view(
         reinterpret_cast<const char*>(rIdentifier.getConstArray()), rIdentifier.getLength()));
@@ -360,7 +361,7 @@ void XMLImportTest::setUp()
     xInit->initialize({ cpo::uno::Any(xTokenHandler) });
 
     sal_Int32 nNamespaceCount = SAL_N_ELEMENTS(DummyTokenHandler::namespaceURIs);
-    uno::Sequence<cpo::uno::Any> namespaceArgs( nNamespaceCount + 1 );
+    cpo::uno::Sequence<cpo::uno::Any> namespaceArgs( nNamespaceCount + 1 );
     auto p_namespaceArgs = namespaceArgs.getArray();
     p_namespaceArgs[0] <<= u"registerNamespaces"_ustr;
     for (sal_Int32 i = 1; i <= nNamespaceCount; i++ )

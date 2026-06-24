@@ -33,7 +33,7 @@ protected:
     // ____ DataInterpreter ____
     virtual InterpretedData interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments,
         const std::vector< rtl::Reference< ::chart::DataSeries > >& aSeriesToReUse ) override;
     virtual InterpretedData reinterpretDataSeries(
         const InterpretedData& aInterpretedData ) override;

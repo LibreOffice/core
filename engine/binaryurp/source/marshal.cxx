@@ -23,7 +23,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/string.hxx>
@@ -176,7 +176,7 @@ void Marshal::writeTid(
         writeValue(
             buffer,
             css::uno::TypeDescription(
-                cppu::UnoType< css::uno::Sequence< sal_Int8 > >::get()), &p);
+                cppu::UnoType< cpo::uno::Sequence< sal_Int8 > >::get()), &p);
     }
     write16(buffer, idx);
 }

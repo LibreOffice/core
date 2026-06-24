@@ -111,7 +111,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneToLibraryBullet)
     typeString(pImpressDocument, u"x");
     CPPUNIT_ASSERT(pView->IsTextEdit());
     // Do the switch, taking the second option from the list:
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"BulletIndex"_ustr, static_cast<sal_uInt16>(2)) };
     dispatchCommand(mxComponent, u".uno:SetBullet"_ustr, aArgs);
     // End text edit:

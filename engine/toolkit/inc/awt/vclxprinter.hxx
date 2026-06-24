@@ -94,10 +94,10 @@ public:
 
     // css::awt::XPrinterPropertySet
     void SAL_CALL setHorizontal( bool bHorizontal ) override;
-    css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override;
     void SAL_CALL selectForm( const OUString& aFormDescription ) override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override;
-    void SAL_CALL setBinarySetup( const css::uno::Sequence< sal_Int8 >& data ) override;
+    cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override;
+    void SAL_CALL setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override;
 };
 
 
@@ -125,10 +125,10 @@ public:
 
     // css::awt::XPrinterPropertySet
     void SAL_CALL setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
-    css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
+    cpo::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
     void SAL_CALL selectForm( const OUString& aFormDescription ) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
-    css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
-    void SAL_CALL setBinarySetup( const css::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
+    cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
+    void SAL_CALL setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
 
     // css::awt::XPrinter
     bool SAL_CALL start( const OUString& nJobName, sal_Int16 nCopies, bool nCollate ) override;
@@ -161,10 +161,10 @@ public:
 
     // css::awt::XPrinterPropertySet
     void SAL_CALL setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
-    css::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
+    cpo::uno::Sequence< OUString > SAL_CALL getFormDescriptions(  ) override { return VCLXPrinterPropertySet::getFormDescriptions(); }
     void SAL_CALL selectForm( const OUString& aFormDescription ) override { VCLXPrinterPropertySet::selectForm( aFormDescription ); }
-    css::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
-    void SAL_CALL setBinarySetup( const css::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
+    cpo::uno::Sequence< sal_Int8 > SAL_CALL getBinarySetup(  ) override { return VCLXPrinterPropertySet::getBinarySetup(); }
+    void SAL_CALL setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
 
     // css::awt::XInfoPrinter
     css::uno::Reference< css::awt::XDevice > SAL_CALL createDevice(  ) override;
@@ -180,7 +180,7 @@ class VCLXPrinterServer final : public VCLXPrinterServer_Base
 {
 public:
     // css::awt::XPrinterServer2
-    css::uno::Sequence< OUString > SAL_CALL getPrinterNames(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getPrinterNames(  ) override;
     OUString SAL_CALL getDefaultPrinterName() override;
     css::uno::Reference< css::awt::XPrinter > SAL_CALL createPrinter( const OUString& printerName ) override;
     css::uno::Reference< css::awt::XInfoPrinter > SAL_CALL createInfoPrinter( const OUString& printerName ) override;
@@ -189,7 +189,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

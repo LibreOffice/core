@@ -94,7 +94,7 @@ bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceNa
 {
     return cppu::supportsService( this, rServiceName );
 }
-uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.xml.crypto.SEInitializer"_ustr };
 }
@@ -106,7 +106,7 @@ class NSSInitializer_NssImpl : public SEInitializer_NssImpl
 public:
     explicit NSSInitializer_NssImpl(const uno::Reference<uno::XComponentContext>& xContext);
     OUString SAL_CALL getImplementationName() override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 }
@@ -121,21 +121,21 @@ OUString NSSInitializer_NssImpl::getImplementationName()
     return u"com.sun.star.xml.crypto.NSSInitializer"_ustr;
 }
 
-uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL NSSInitializer_NssImpl::getSupportedServiceNames()
 {
     return { u"com.sun.star.xml.crypto.NSSInitializer"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_NSSInitializer_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new NSSInitializer_NssImpl(pCtx));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
 com_sun_star_xml_crypto_SEInitializer_get_implementation(
-    uno::XComponentContext* pCtx, uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
+    uno::XComponentContext* pCtx, cpo::uno::Sequence<cpo::uno::Any> const& /*rSeq*/)
 {
     return cppu::acquire(new SEInitializer_NssImpl(pCtx));
 }

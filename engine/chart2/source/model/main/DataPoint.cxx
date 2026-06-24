@@ -24,7 +24,7 @@
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -33,7 +33,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
 namespace
@@ -240,7 +240,7 @@ bool SAL_CALL DataPoint::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DataPoint::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DataPoint::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.drawing.FillProperties"_ustr,

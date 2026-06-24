@@ -152,13 +152,13 @@ class ScAppCfg : private ScAppOptions
     DECL_LINK( MiscNotifyHdl, ScLinkConfigItem&, void );
     DECL_LINK( CompatNotifyHdl, ScLinkConfigItem&, void );
 
-    static css::uno::Sequence<OUString> GetLayoutPropertyNames();
-    static css::uno::Sequence<OUString> GetInputPropertyNames();
-    static css::uno::Sequence<OUString> GetRevisionPropertyNames();
-    static css::uno::Sequence<OUString> GetContentPropertyNames();
-    static css::uno::Sequence<OUString> GetSortListPropertyNames();
-    static css::uno::Sequence<OUString> GetMiscPropertyNames();
-    static css::uno::Sequence<OUString> GetCompatPropertyNames();
+    static cpo::uno::Sequence<OUString> GetLayoutPropertyNames();
+    static cpo::uno::Sequence<OUString> GetInputPropertyNames();
+    static cpo::uno::Sequence<OUString> GetRevisionPropertyNames();
+    static cpo::uno::Sequence<OUString> GetContentPropertyNames();
+    static cpo::uno::Sequence<OUString> GetSortListPropertyNames();
+    static cpo::uno::Sequence<OUString> GetMiscPropertyNames();
+    static cpo::uno::Sequence<OUString> GetCompatPropertyNames();
 
 public:
             ScAppCfg();

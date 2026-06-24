@@ -27,7 +27,7 @@
 #include <libxml/parser.h>
 
 namespace com::sun::star::xml::csax { struct XMLAttribute; }
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 
 /** This class represents a SAX handler which simply forwards to
     the corresponding libxml API and translates parameter if necessary.
@@ -58,7 +58,7 @@ class SAXHelper final
         /// @throws css::uno::RuntimeException
         void startElement(
             std::u16string_view aName ,
-            const css::uno::Sequence<
+            const cpo::uno::Sequence<
                 css::xml::csax::XMLAttribute >& aAttributes ) ;
 
         /// @throws css::xml::sax::SAXException

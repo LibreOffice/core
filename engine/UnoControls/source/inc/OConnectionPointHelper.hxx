@@ -85,7 +85,7 @@ public:
 
     virtual void unadvise( const css::uno::Reference< css::uno::XInterface >& xListener ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > getConnections() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > > getConnections() override;
 
 private:
     bool impl_LockContainer();

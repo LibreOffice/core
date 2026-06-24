@@ -42,6 +42,7 @@ using namespace css::lang;
 using namespace css::uno;
 using namespace css::xml::sax;
 using namespace css::xml;
+using namespace ::cpo::uno;
 
 namespace oox::crypto {
 
@@ -93,7 +94,7 @@ public:
     {
         std::u16string_view rLocalName = stripNamespacePrefix(rName);
 
-        const css::uno::Sequence<Attribute> aUnknownAttributes = aAttributeList->getUnknownAttributes();
+        const cpo::uno::Sequence<Attribute> aUnknownAttributes = aAttributeList->getUnknownAttributes();
         for (const Attribute& rAttribute : aUnknownAttributes)
         {
             std::u16string_view rAttrLocalName = stripNamespacePrefix(rAttribute.Name);
@@ -522,7 +523,7 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
     std::vector<sal_uInt8> aExpectedReservedBytes(sizeof(sal_uInt32));
     ByteOrderConverter::writeLittleEndian(aExpectedReservedBytes.data(), msfilter::AGILE_ENCRYPTION_RESERVED);
 
-    uno::Sequence<sal_Int8> aReadReservedBytes(sizeof(sal_uInt32));
+    cpo::uno::Sequence<sal_Int8> aReadReservedBytes(sizeof(sal_uInt32));
     rxInputStream->readBytes(aReadReservedBytes, aReadReservedBytes.getLength());
 
     if (!std::equal(std::cbegin(aReadReservedBytes), std::cend(aReadReservedBytes), aExpectedReservedBytes.begin()))

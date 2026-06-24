@@ -54,7 +54,7 @@ SlideSectionManager::SlideSectionManager(SdDrawDocument& rDoc)
 }
 
 void SlideSectionManager::SetSectionsFromPropertyValues(
-    const uno::Sequence<beans::PropertyValue>& rSections)
+    const cpo::uno::Sequence<beans::PropertyValue>& rSections)
 {
     maSections.clear();
 
@@ -75,11 +75,11 @@ void SlideSectionManager::SetSectionsFromPropertyValues(
     sal_Int32 nFallbackIdx = 0;
     for (const auto& rSectionProp : rSections)
     {
-        uno::Sequence<beans::PropertyValue> aSectionProps;
+        cpo::uno::Sequence<beans::PropertyValue> aSectionProps;
         rSectionProp.Value >>= aSectionProps;
 
         SlideSection aSection;
-        uno::Sequence<OUString> aSlideNames;
+        cpo::uno::Sequence<OUString> aSlideNames;
 
         for (const auto& rProp : aSectionProps)
         {
@@ -118,7 +118,7 @@ void SlideSectionManager::SetSectionsFromPropertyValues(
               });
 }
 
-uno::Sequence<beans::PropertyValue> SlideSectionManager::GetSectionsAsPropertyValues() const
+cpo::uno::Sequence<beans::PropertyValue> SlideSectionManager::GetSectionsAsPropertyValues() const
 {
     sal_uInt16 nPageCount = mrDoc.GetSdPageCount(PageKind::Standard);
 

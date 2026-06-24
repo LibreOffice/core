@@ -420,17 +420,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
             xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr),
             uno::UNO_QUERY);
 
-        css::uno::Sequence<OUString> aUserData{ u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
+        cpo::uno::Sequence<OUString> aUserData{ u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
                                                 u""_ustr,
                                                 u"com.sun.star.comp.Draw.XMLOasisImporter"_ustr,
                                                 u"com.sun.star.comp.Draw.XMLOasisExporter"_ustr,
                                                 u""_ustr,
                                                 u""_ustr,
                                                 u"true"_ustr };
-        uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence({
             { "UserData", cpo::uno::Any(aUserData) },
         }));
-        css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
+        cpo::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
         uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
         xInit->initialize(aOuterArgs);
@@ -442,7 +442,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
         uno::Reference<io::XOutputStream> xOutputStream(
             new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
 
-        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
             { { "FilterName", cpo::uno::Any(u"OpenDocument Drawing Flat XML"_ustr) },
               { "OutputStream", cpo::uno::Any(xOutputStream) },
               { "FilterOptions",

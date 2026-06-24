@@ -364,7 +364,7 @@ using namespace ::com::sun::star;
 // convert between sequence of string and comma separated string
 
 OUString convertCommaSeparated(
-    uno::Sequence< OUString > const& i_rSeq)
+    cpo::uno::Sequence< OUString > const& i_rSeq)
 {
     OUStringBuffer buf;
     ::comphelper::intersperse(
@@ -391,7 +391,7 @@ std::vector<OUString>
     return vec;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
     convertCommaSeparated( std::u16string_view i_rString )
 {
     std::vector< OUString > vec = split(i_rString, ',');

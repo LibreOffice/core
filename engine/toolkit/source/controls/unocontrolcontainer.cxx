@@ -90,11 +90,11 @@ public:
 
     /** retrieves all controls currently in the list
     */
-    void  getControls( uno::Sequence< uno::Reference< awt::XControl > >& _out_rControls ) const;
+    void  getControls( cpo::uno::Sequence< uno::Reference< awt::XControl > >& _out_rControls ) const;
 
     /** retrieves all identifiers of all controls currently in the list
     */
-    void  getIdentifiers( uno::Sequence< sal_Int32 >& _out_rIdentifiers ) const;
+    void  getIdentifiers( cpo::uno::Sequence< sal_Int32 >& _out_rIdentifiers ) const;
 
     /** returns the first control which is registered under the given name
     */
@@ -170,7 +170,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::addControl( const 
 }
 
 
-void UnoControlHolderList::getControls( uno::Sequence< uno::Reference< awt::XControl > >& _out_rControls ) const
+void UnoControlHolderList::getControls( cpo::uno::Sequence< uno::Reference< awt::XControl > >& _out_rControls ) const
 {
     _out_rControls.realloc( maControls.size() );
     uno::Reference< awt::XControl >* pControls = _out_rControls.getArray();
@@ -182,7 +182,7 @@ void UnoControlHolderList::getControls( uno::Sequence< uno::Reference< awt::XCon
 }
 
 
-void UnoControlHolderList::getIdentifiers( uno::Sequence< sal_Int32 >& _out_rIdentifiers ) const
+void UnoControlHolderList::getIdentifiers( cpo::uno::Sequence< sal_Int32 >& _out_rIdentifiers ) const
 {
     _out_rIdentifiers.realloc( maControls.size() );
     sal_Int32* pIdentifiers = _out_rIdentifiers.getArray();
@@ -293,7 +293,7 @@ static void implUpdateVisibility
     const uno::Reference< awt::XControlContainer >& xControlContainer
 )
 {
-    const uno::Sequence< uno::Reference< awt::XControl > >
+    const cpo::uno::Sequence< uno::Reference< awt::XControl > >
         aCtrls = xControlContainer->getControls();
     bool bCompleteVisible = (nDialogStep == 0);
     for( const uno::Reference< awt::XControl >& xControl : aCtrls )
@@ -404,7 +404,7 @@ void UnoControlContainer::dispose(  )
     maCListeners.disposeAndClear( aDisposeEvent );
 
 
-    const uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
+    const cpo::uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
 
     for( uno::Reference< awt::XControl > const & control : aCtrls )
     {
@@ -525,11 +525,11 @@ cpo::uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdent
     return cpo::uno::Any( xControl );
 }
 
-uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  )
+cpo::uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    uno::Sequence< ::sal_Int32 > aIdentifiers;
+    cpo::uno::Sequence< ::sal_Int32 > aIdentifiers;
     mpControls->getIdentifiers( aIdentifiers );
     return aIdentifiers;
 }
@@ -557,10 +557,10 @@ void UnoControlContainer::setStatusText( const OUString& rStatusText )
         xContainer->setStatusText( rStatusText );
 }
 
-uno::Sequence< uno::Reference< awt::XControl > > UnoControlContainer::getControls(  )
+cpo::uno::Sequence< uno::Reference< awt::XControl > > UnoControlContainer::getControls(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    uno::Sequence< uno::Reference< awt::XControl > > aControls;
+    cpo::uno::Sequence< uno::Reference< awt::XControl > > aControls;
     mpControls->getControls( aControls );
     return aControls;
 }
@@ -674,14 +674,14 @@ void UnoControlContainer::removeControl( const uno::Reference< awt::XControl >& 
 
 
 // awt::XUnoControlContainer
-void UnoControlContainer::setTabControllers( const uno::Sequence< uno::Reference< awt::XTabController > >& TabControllers )
+void UnoControlContainer::setTabControllers( const cpo::uno::Sequence< uno::Reference< awt::XTabController > >& TabControllers )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maTabControllers = TabControllers;
 }
 
-uno::Sequence< uno::Reference< awt::XTabController > > UnoControlContainer::getTabControllers(  )
+cpo::uno::Sequence< uno::Reference< awt::XTabController > > UnoControlContainer::getTabControllers(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -755,7 +755,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
             xPSet->addPropertyChangeListener( aPropName, xListener );
         }
 
-        uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
+        cpo::uno::Sequence< uno::Reference< awt::XControl > > aCtrls = getControls();
         for( auto& rCtrl : asNonConstRange(aCtrls) )
             rCtrl->createPeer( rxToolkit, getPeer() );
 
@@ -786,7 +786,7 @@ OUString UnoControlContainer::getImplementationName()
     return u"stardiv.Toolkit.UnoControlContainer"_ustr;
 }
 
-css::uno::Sequence<OUString> UnoControlContainer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnoControlContainer::getSupportedServiceNames()
 {
     auto s(UnoControlBase::getSupportedServiceNames());
     s.realloc(s.getLength() + 2);
@@ -820,7 +820,7 @@ void UnoControlContainer::PrepareWindowDescriptor( css::awt::WindowDescriptor& r
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlContainer_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlContainer());
 }

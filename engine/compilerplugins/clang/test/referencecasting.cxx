@@ -9,7 +9,7 @@
 
 #include "sal/config.h"
 
-#include "com/sun/star/uno/Sequence.hxx"
+#include "cpo/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/io/XStreamListener.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
@@ -104,7 +104,7 @@ void test(rtl::Reference<FooStream> l)
     css::uno::Reference<css::io::XStreamListener> a2 = l;
     (void)a2;
 }
-css::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> getContinuations()
+cpo::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> getContinuations()
 {
     rtl::Reference<FooStream> noel1;
     // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
@@ -180,7 +180,7 @@ struct Test13
     }
 };
 
-void test14(css::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> seq)
+void test14(cpo::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> seq)
 {
     for (sal_Int32 i = 0; i < seq.getLength(); ++i)
     {

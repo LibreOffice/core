@@ -62,7 +62,7 @@ ScVbaCommandBar::getName()
         uno::Reference< container::XNameAccess > xNameAccess = pCBarHelper->getPersistentWindowState();
         if( xNameAccess->hasByName( m_sResourceUrl ) )
         {
-            uno::Sequence< beans::PropertyValue > aToolBar;
+            cpo::uno::Sequence< beans::PropertyValue > aToolBar;
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
             getPropertyValue( aToolBar, u"UIName"_ustr ) >>= sName;
         }
@@ -90,7 +90,7 @@ ScVbaCommandBar::getVisible()
         uno::Reference< container::XNameAccess > xNameAccess = pCBarHelper->getPersistentWindowState();
         if( xNameAccess->hasByName( m_sResourceUrl ) )
         {
-            uno::Sequence< beans::PropertyValue > aToolBar;
+            cpo::uno::Sequence< beans::PropertyValue > aToolBar;
             xNameAccess->getByName( m_sResourceUrl ) >>= aToolBar;
             getPropertyValue( aToolBar, u"Visible"_ustr ) >>= bVisible;
         }
@@ -180,10 +180,10 @@ ScVbaCommandBar::getServiceImplName()
     return u"ScVbaCommandBar"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaCommandBar::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.CommandBar"_ustr
     };
@@ -262,9 +262,9 @@ OUString VbaDummyCommandBar::getServiceImplName()
     return u"VbaDummyCommandBar"_ustr;
 }
 
-uno::Sequence< OUString > VbaDummyCommandBar::getServiceNames()
+cpo::uno::Sequence< OUString > VbaDummyCommandBar::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.CommandBar"_ustr
     };

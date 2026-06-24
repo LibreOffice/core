@@ -35,7 +35,7 @@ OUString VCLXAccessibleFixedHyperlink::getImplementationName()
     return u"com.sun.star.comp.toolkit.AccessibleFixedHyperlink"_ustr;
 }
 
-uno::Sequence<OUString> VCLXAccessibleFixedHyperlink::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> VCLXAccessibleFixedHyperlink::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.AccessibleFixedHyperlink"_ustr };
 }

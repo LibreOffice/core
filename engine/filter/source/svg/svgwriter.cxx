@@ -60,6 +60,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::cpo::uno;
 
 constexpr OUString aPrefixClipPathId = u"clip_path_"_ustr;
 
@@ -4263,14 +4264,14 @@ OUString SVGWriter::getImplementationName()
 {
     return u"com.sun.star.comp.Draw.SVGWriter"_ustr;
 }
-css::uno::Sequence< OUString > SVGWriter::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SVGWriter::getSupportedServiceNames()
 {
     return { u"com.sun.star.svg.SVGWriter"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_SVGWriter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new SVGWriter(args, context));
 }

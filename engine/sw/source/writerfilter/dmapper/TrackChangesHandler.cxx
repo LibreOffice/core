@@ -55,7 +55,7 @@ void TrackChangesHandler::lcl_attribute(Id rName, const Value & rVal)
     }
 }
 
-uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() const
+cpo::uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() const
 {
     OUString sType;
     switch ( m_pRedlineParams->m_nToken & 0xffff )

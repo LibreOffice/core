@@ -1068,7 +1068,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTextBoxBodyUpright)
     bool isUpright = false;
     if (xShapeProperties->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
     {
-        uno::Sequence<beans::PropertyValue> aGrabBag;
+        cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
         xShapeProperties->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
         for (auto& aProp : aGrabBag)
         {

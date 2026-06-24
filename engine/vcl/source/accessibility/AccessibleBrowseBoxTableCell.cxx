@@ -182,7 +182,7 @@ sal_Unicode SAL_CALL AccessibleBrowseBoxTableCell::getCharacter( sal_Int32 nInde
 
     return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
-css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleBrowseBoxTableCell::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
+cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleBrowseBoxTableCell::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -192,7 +192,7 @@ css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleBrowseBoxTabl
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return css::uno::Sequence< css::beans::PropertyValue >();
+    return cpo::uno::Sequence< css::beans::PropertyValue >();
 }
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getCharacterCount(  )
 {

@@ -12,7 +12,7 @@
 
 #include <com/sun/star/sheet/SolverConstraint.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include "SolverComponent.hxx"
 
@@ -37,8 +37,8 @@ struct CoinMpSolveResult
 // encode integer and binary variables), so the same routine serves both a
 // one-shot linear solve and a linearized step of an outer nonlinear loop.
 CoinMpSolveResult coinmpSolveLinearModel(
-    const css::uno::Sequence<css::table::CellAddress>& rVariables,
-    const css::uno::Sequence<css::sheet::SolverConstraint>& rConstraints,
+    const cpo::uno::Sequence<css::table::CellAddress>& rVariables,
+    const cpo::uno::Sequence<css::sheet::SolverConstraint>& rConstraints,
     const css::table::CellAddress& rObjective, const ScSolverCellHashMap& rCells,
     const std::vector<double>& rLowerBounds, const std::vector<double>& rUpperBounds,
     const std::vector<char>& rColumnType, bool bMaximize, double fTimeoutSeconds);

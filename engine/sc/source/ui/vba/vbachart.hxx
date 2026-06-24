@@ -46,7 +46,7 @@ friend class ScVbaAxis;
     css::uno::Reference< css::chart::XTwoAxisXSupplier > xTwoAxisXSupplier;
     css::uno::Reference< css::chart::XTwoAxisYSupplier > xTwoAxisYSupplier;
 
-    static css::uno::Sequence< OUString > getDefaultSeriesDescriptions( sal_Int32 nCount );
+    static cpo::uno::Sequence< OUString > getDefaultSeriesDescriptions( sal_Int32 nCount );
     /// @throws css::script::BasicErrorException
     void setDefaultChartType() ;
     /// @throws css::script::BasicErrorException
@@ -96,7 +96,7 @@ public:
     virtual cpo::uno::Any SAL_CALL Axes( const cpo::uno::Any& Type, const cpo::uno::Any& AxisGroup ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 };
 

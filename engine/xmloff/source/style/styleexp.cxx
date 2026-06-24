@@ -82,7 +82,7 @@ void XMLStyleExport::exportStyleContent( const Reference< XStyle >& rStyle )
     try
     {
         cpo::uno::Any aProperty = xPropSet->getPropertyValue( u"ParaStyleConditions"_ustr );
-        uno::Sequence< beans::NamedValue > aSeq;
+        cpo::uno::Sequence< beans::NamedValue > aSeq;
 
         aProperty >>= aSeq;
 
@@ -476,7 +476,7 @@ void XMLStyleExport::exportStyleFamily(
     std::optional<std::set<OUString> > xExportedStyles;
     bool bFirstStyle = true;
 
-    const uno::Sequence< OUString> aSeq = xStyleCont->getElementNames();
+    const cpo::uno::Sequence< OUString> aSeq = xStyleCont->getElementNames();
     for(const auto& rName : aSeq)
     {
         Reference< XStyle > xStyle;

@@ -38,7 +38,7 @@ namespace com::sun::star {
     namespace sheet { class XFormulaParser; }
 }
 
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 namespace formula
 {
@@ -148,7 +148,7 @@ namespace formula
         virtual void deleteFormData() = 0;
 
         virtual IFunctionManager*   getFunctionManager() = 0;
-        virtual ::std::unique_ptr<FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) = 0;
+        virtual ::std::unique_ptr<FormulaTokenArray> convertToTokenArray(const cpo::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) = 0;
 
         virtual css::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const = 0;
         virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;

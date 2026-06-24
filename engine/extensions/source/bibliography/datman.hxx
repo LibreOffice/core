@@ -62,7 +62,7 @@ public:
 
     // XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
     // XDispatchProviderInterceptor
     virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) override;
     virtual void SAL_CALL setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) override;
@@ -119,7 +119,7 @@ public:
 
         css::uno::Reference< css::awt::XControlModel >            updateGridModel();
 
-        css::uno::Sequence< OUString>           getDataSources() const;
+        cpo::uno::Sequence< OUString>           getDataSources() const;
 
         const OUString&             getActiveDataSource() const {return aDataSourceURL;}
         void                        setActiveDataSource(const OUString& rURL);
@@ -130,7 +130,7 @@ public:
         void                        setFilter(const OUString& rQuery);
         OUString                    getFilter() const;
 
-        css::uno::Sequence< OUString> getQueryFields() const;
+        cpo::uno::Sequence< OUString> getQueryFields() const;
         OUString                    getQueryField() const;
         void                        startQueryWith(const OUString& rQuery);
 

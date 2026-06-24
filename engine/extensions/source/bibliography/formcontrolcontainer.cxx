@@ -31,6 +31,7 @@ namespace bib
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::awt;
+    using namespace ::cpo::uno;
 
     FormControlContainer::FormControlContainer( )
         :OLoadListener( m_aMutex )

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_INC_SECTION_HXX
 #define INCLUDED_SW_INC_SECTION_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/text/XTextSection.hpp>
 
 #include <tools/ref.hxx>
@@ -66,7 +66,7 @@ private:
     OUString m_sCondition; ///< Hide condition
     OUString m_sLinkFileName;
     OUString m_sLinkFilePassword; // Must be changed to Sequence.
-    css::uno::Sequence <sal_Int8> m_Password;
+    cpo::uno::Sequence <sal_Int8> m_Password;
     sal_uInt16 m_nPage; // loaded meta page count for page anchored flys in master document
 
     /// It seems this flag caches the current final "hidden" state.
@@ -124,9 +124,9 @@ public:
     const OUString& GetLinkFilePassword() const        { return m_sLinkFilePassword; }
     void SetLinkFilePassword(OUString const& rS){ m_sLinkFilePassword = rS; }
 
-    css::uno::Sequence<sal_Int8> const& GetPassword() const
+    cpo::uno::Sequence<sal_Int8> const& GetPassword() const
                                             { return m_Password; }
-    void SetPassword(css::uno::Sequence<sal_Int8> const& rNew)
+    void SetPassword(cpo::uno::Sequence<sal_Int8> const& rNew)
                                             { m_Password = rNew; }
     bool IsLinkType() const
     { return (SectionType::DdeLink == m_eType) || (SectionType::FileLink == m_eType); }
@@ -214,7 +214,7 @@ public:
         { m_Data.SetLinkFilePassword(rS); }
 
     // Get / set password of this section
-    css::uno::Sequence<sal_Int8> const& GetPassword() const
+    cpo::uno::Sequence<sal_Int8> const& GetPassword() const
                                             { return m_Data.GetPassword(); }
 
     sal_uInt16 GetPageNum() const

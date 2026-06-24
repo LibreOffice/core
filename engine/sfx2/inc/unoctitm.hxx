@@ -52,9 +52,9 @@ public:
 
     // XDispatch
     virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL,
-                const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
                 const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) override;
-    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
     virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
@@ -81,10 +81,10 @@ public:
                                 virtual ~SfxOfficeDispatch() override;
 
     virtual void SAL_CALL       dispatchWithNotification( const css::util::URL& aURL,
-                                                          const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+                                                          const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
                                                           const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) override;
     virtual void   SAL_CALL     dispatch( const css::util::URL& aURL,
-                                          const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+                                          const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual void   SAL_CALL     addStatusListener( const css::uno::Reference< css::frame::XStatusListener > & xControl,
                                                    const css::util::URL& aURL) override;
 
@@ -114,7 +114,7 @@ class SfxDispatchController_Impl final
     css::uno::WeakReference< css::frame::XFrame > xFrame;
 
     static void         addParametersToArgs( const css::util::URL& aURL,
-                                             css::uno::Sequence< css::beans::PropertyValue >& rArgs );
+                                             cpo::uno::Sequence< css::beans::PropertyValue >& rArgs );
     static MapUnit      GetCoreMetric( SfxItemPool const & rPool, sal_uInt16 nSlot );
 
     void                sendStatusChanged(const OUString& rURL, const css::frame::FeatureStateEvent& rEvent);
@@ -136,7 +136,7 @@ public:
     void                setMasterSlaveCommand( bool bSet );
     /// @throws css::uno::RuntimeException
     void       dispatch( const css::util::URL& aURL,
-                                  const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+                                  const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
                                   const css::uno::Reference< css::frame::XDispatchResultListener >& rListener );
 
     /// @throws css::uno::RuntimeException

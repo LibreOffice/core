@@ -188,7 +188,7 @@ bool SfxApplication::loadBrandSvg(std::u16string_view sName, Bitmap &rBitmap, in
         const uno::Reference< rendering::XBitmap > xBitmap(
             xPrimitive2DRenderer->rasterize(
                 drawinglayer::primitive2d::Primitive2DContainer{xTransformRef}.toSequence(),
-                uno::Sequence< beans::PropertyValue >(),
+                cpo::uno::Sequence< beans::PropertyValue >(),
                 fFakeDPI,
                 fFakeDPI,
                 aRealRect,

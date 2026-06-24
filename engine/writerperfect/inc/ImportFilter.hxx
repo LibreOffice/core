@@ -57,7 +57,7 @@ public:
 
     // XFilter
     virtual bool SAL_CALL
-    filter(const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override
+    filter(const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override
     {
         comphelper::SequenceAsHashMap aDescriptor(rDescriptor);
         css::uno::Reference<css::io::XInputStream> xInputStream;
@@ -114,7 +114,7 @@ public:
 
     //XExtendedFilterDetection
     virtual OUString SAL_CALL
-    detect(css::uno::Sequence<css::beans::PropertyValue>& Descriptor) override
+    detect(cpo::uno::Sequence<css::beans::PropertyValue>& Descriptor) override
     {
         OUString sTypeName;
         sal_Int32 nLength = Descriptor.getLength();
@@ -152,7 +152,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize(const css::uno::Sequence<cpo::uno::Any>& /*aArguments*/) override
+    initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/) override
     {
     }
 

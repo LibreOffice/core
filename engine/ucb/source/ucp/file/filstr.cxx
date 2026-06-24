@@ -115,7 +115,7 @@ void SAL_CALL XStream_impl::truncate()
 
 sal_Int32 SAL_CALL
 XStream_impl::readBytes(
-    uno::Sequence< sal_Int8 >& aData,
+    cpo::uno::Sequence< sal_Int8 >& aData,
     sal_Int32 nBytesToRead )
 {
     if( ! m_nIsOpen )
@@ -161,7 +161,7 @@ XStream_impl::readSomeBytes(
 
 sal_Int32 SAL_CALL
 XStream_impl::readSomeBytes(
-    uno::Sequence< sal_Int8 >& aData,
+    cpo::uno::Sequence< sal_Int8 >& aData,
     sal_Int32 nMaxBytesToRead )
 {
     return readBytes( aData,nMaxBytesToRead );
@@ -184,7 +184,7 @@ XStream_impl::available()
 
 
 void SAL_CALL
-XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
+XStream_impl::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     sal_uInt32 length = aData.getLength();
     if(length)

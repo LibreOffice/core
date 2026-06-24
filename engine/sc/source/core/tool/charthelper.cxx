@@ -193,7 +193,7 @@ void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument
     if( !xDataSource.is() )
         return;
 
-    const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
+    const cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
     rRanges.reserve(2*aLabeledDataSequences.getLength());
     for(const uno::Reference<chart2::data::XLabeledDataSequence>& xLabeledSequence : aLabeledDataSequences)
     {
@@ -210,7 +210,7 @@ void ScChartHelper::GetChartRanges( const uno::Reference< chart2::XChartDocument
 }
 
 void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
-            const uno::Sequence< OUString >& rRanges )
+            const cpo::uno::Sequence< OUString >& rRanges )
 {
     uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
     if( !xDataSource.is() )
@@ -225,7 +225,7 @@ void ScChartHelper::SetChartRanges( const uno::Reference< chart2::XChartDocument
     {
         OUString aPropertyNameRole( u"Role"_ustr );
 
-        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
+        cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
         sal_Int32 nRange=0;
         for( uno::Reference<chart2::data::XLabeledDataSequence>& xLabeledSequence : asNonConstRange(aLabeledDataSequences) )
         {
@@ -402,7 +402,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                         ScRange aRange( rDoc.GetRange( nTab, aRectangle ) );
                         ScRangeList aChangeRanges( aRange );
 
-                        uno::Sequence< beans::PropertyValue > aProperties{
+                        cpo::uno::Sequence< beans::PropertyValue > aProperties{
                             comphelper::makePropertyValue(u"Name"_ustr, aChartName)
                         };
 

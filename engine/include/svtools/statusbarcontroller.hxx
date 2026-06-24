@@ -61,7 +61,7 @@ class SVT_DLLPUBLIC StatusbarController :
         virtual void SAL_CALL release() noexcept override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUpdatable
         virtual void SAL_CALL update() override;
@@ -110,8 +110,8 @@ class SVT_DLLPUBLIC StatusbarController :
 
         // execute methods
         // execute bound status bar controller command/execute various commands
-        void execute( const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
-        void execute( const OUString& aCommand, const css::uno::Sequence< css::beans::PropertyValue >& aArgs );
+        void execute( const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs );
+        void execute( const OUString& aCommand, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs );
 
         bool                                                      m_bInitialized : 1,
                                                                   m_bDisposed : 1;

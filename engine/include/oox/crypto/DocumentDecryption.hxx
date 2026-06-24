@@ -13,7 +13,7 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star {
@@ -32,7 +32,7 @@ class DocumentDecryption
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     oox::ole::OleStorage&                      mrOleStorage;
-    css::uno::Sequence<css::beans::NamedValue> maStreamsSequence;
+    cpo::uno::Sequence<css::beans::NamedValue> maStreamsSequence;
     css::uno::Reference< css::packages::XPackageEncryption > mxPackageEncryption;
 
 public:
@@ -42,7 +42,7 @@ public:
     bool readEncryptionInfo();
     bool generateEncryptionKey(const OUString& rPassword);
 
-    css::uno::Sequence< css::beans::NamedValue > createEncryptionData(const OUString& rPassword);
+    cpo::uno::Sequence< css::beans::NamedValue > createEncryptionData(const OUString& rPassword);
 
 };
 

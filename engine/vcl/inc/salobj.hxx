@@ -21,7 +21,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/syschild.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include "salwtype.hxx"
 
 struct SystemEnvData;

@@ -36,6 +36,7 @@
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
+using namespace cpo::uno;
 
 
 // Construction/Destruction

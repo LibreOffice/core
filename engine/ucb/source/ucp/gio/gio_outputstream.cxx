@@ -39,7 +39,7 @@ OutputStream::~OutputStream()
     closeOutput();
 }
 
-void SAL_CALL OutputStream::writeBytes( const css::uno::Sequence< sal_Int8 >& rData )
+void SAL_CALL OutputStream::writeBytes( const cpo::uno::Sequence< sal_Int8 >& rData )
 {
     if (!mpStream)
         throw css::io::NotConnectedException();

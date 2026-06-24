@@ -50,7 +50,7 @@ SwNumberingTypeListBox::~SwNumberingTypeListBox() {}
 void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
 {
     m_xWidget->clear();
-    uno::Sequence<sal_Int16> aTypes;
+    cpo::uno::Sequence<sal_Int16> aTypes;
     if (nTypeFlags & SwInsertNumTypes::Extended)
     {
         if (m_xImpl->xInfo.is())

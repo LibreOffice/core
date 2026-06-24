@@ -55,7 +55,7 @@ cpo::uno::Any SAL_CALL SfxUnoPanels::getByName( const OUString& aName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL SfxUnoPanels::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL SfxUnoPanels::getElementNames()
 {
 
     SolarMutexGuard aGuard;
@@ -63,7 +63,7 @@ uno::Sequence< OUString > SAL_CALL SfxUnoPanels::getElementNames()
     SidebarController* pSidebarController = getSidebarController();
 
     ResourceManager::PanelContextDescriptorContainer aPanels;
-    uno::Sequence< OUString > panelList(aPanels.size());
+    cpo::uno::Sequence< OUString > panelList(aPanels.size());
 
     if (pSidebarController)
     {
@@ -116,7 +116,7 @@ sal_Int32 SAL_CALL SfxUnoPanels::getCount()
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< OUString > panels = getElementNames();
+    cpo::uno::Sequence< OUString > panels = getElementNames();
     return panels.getLength();
 }
 
@@ -126,7 +126,7 @@ cpo::uno::Any SAL_CALL SfxUnoPanels::getByIndex( sal_Int32 Index )
 
     cpo::uno::Any aRet;
 
-    uno::Sequence< OUString > panels = getElementNames();
+    cpo::uno::Sequence< OUString > panels = getElementNames();
 
     if (Index > panels.getLength()-1 || Index < 0)
         throw lang::IndexOutOfBoundsException();
@@ -147,7 +147,7 @@ bool SAL_CALL SfxUnoPanels::hasElements()
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< OUString > panels = getElementNames();
+    cpo::uno::Sequence< OUString > panels = getElementNames();
     return panels.hasElements();
 }
 

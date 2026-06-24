@@ -167,9 +167,9 @@ struct DownloadTarget
 
 struct UploadSource
 {
-    uno::Sequence<sal_Int8> const& rInData;
+    cpo::uno::Sequence<sal_Int8> const& rInData;
     size_t nPosition;
-    UploadSource(uno::Sequence<sal_Int8> const& i_rInData)
+    UploadSource(cpo::uno::Sequence<sal_Int8> const& i_rInData)
         : rInData(i_rInData)
         , nPosition(0)
     {
@@ -413,7 +413,7 @@ static size_t write_callback(char* const ptr, size_t const size, size_t const nm
     {
         try
         {
-            uno::Sequence<sal_Int8> const data(reinterpret_cast<sal_Int8*>(ptr), nmemb);
+            cpo::uno::Sequence<sal_Int8> const data(reinterpret_cast<sal_Int8*>(ptr), nmemb);
             pTarget->xOutStream->writeBytes(data);
         }
         catch (...)
@@ -714,7 +714,7 @@ static curl_socket_t opensocket_callback(void* /*clientp*/, curlsocktype purpose
 
 CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
-                         uno::Sequence<beans::NamedValue> const& rFlags,
+                         cpo::uno::Sequence<beans::NamedValue> const& rFlags,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider)
     : DAVSession(rpFactory)
     , m_xContext(std::move(xContext))
@@ -843,7 +843,7 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
 
 CurlSession::~CurlSession() {}
 
-auto CurlSession::CanUse(OUString const& rURI, uno::Sequence<beans::NamedValue> const& rFlags)
+auto CurlSession::CanUse(OUString const& rURI, cpo::uno::Sequence<beans::NamedValue> const& rFlags)
     -> bool
 {
     try
@@ -888,7 +888,7 @@ struct CurlProcessor
     static auto ProcessRequestImpl(
         CurlSession& rSession, CurlUri const& rURI, OUString const& rMethod,
         curl_slist* pRequestHeaderList, uno::Reference<io::XOutputStream> const* pxOutStream,
-        uno::Sequence<sal_Int8> const* pInData,
+        cpo::uno::Sequence<sal_Int8> const* pInData,
         ::std::pair<::std::vector<OUString> const&, DAVResource&> const* pRequestedHeaders,
         ResponseHeaders& rHeaders) -> void;
 
@@ -945,7 +945,7 @@ auto CurlProcessor::ProcessRequestImpl(
     CurlSession& rSession, CurlUri const& rURI, OUString const& rMethod,
     curl_slist* const pRequestHeaderList,
     uno::Reference<io::XOutputStream> const* const pxOutStream,
-    uno::Sequence<sal_Int8> const* const pInData,
+    cpo::uno::Sequence<sal_Int8> const* const pInData,
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders,
     ResponseHeaders& rHeaders) -> void
 {
@@ -1277,7 +1277,7 @@ auto CurlProcessor::ProcessRequest(
         }
     }
 
-    uno::Sequence<sal_Int8> data;
+    cpo::uno::Sequence<sal_Int8> data;
     if (pxInStream)
     {
         uno::Reference<io::XSeekable> const xSeekable(*pxInStream, uno::UNO_QUERY);
@@ -1291,7 +1291,7 @@ auto CurlProcessor::ProcessRequest(
         }
         else
         {
-            ::std::vector<uno::Sequence<sal_Int8>> bufs;
+            ::std::vector<cpo::uno::Sequence<sal_Int8>> bufs;
             bool isDone(false);
             do
             {
@@ -2673,7 +2673,7 @@ public:
     {
         return cppu::supportsService(this, ServiceName);
     }
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.ucb.WebDAVManager"_ustr };
     }
@@ -2688,7 +2688,7 @@ public:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_webdav_manager_get_implementation(css::uno::XComponentContext*,
-                                      css::uno::Sequence<cpo::uno::Any> const&)
+                                      cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new WebDAVManager());
 }

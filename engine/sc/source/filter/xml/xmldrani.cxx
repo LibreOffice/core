@@ -345,7 +345,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
                 break;
             auto& group = aParam.aGroups[nPos];
 
-            const uno::Sequence<sheet::SubTotalColumn>& rColumns = rSubTotalRule.aSubTotalColumns;
+            const cpo::uno::Sequence<sheet::SubTotalColumn>& rColumns = rSubTotalRule.aSubTotalColumns;
             sal_Int16 nGroupColumn = rSubTotalRule.nSubTotalRuleGroupFieldNumber;
             group.bActive = true;
             group.nField = static_cast<SCCOL>(nGroupColumn);

@@ -87,7 +87,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.UIConfigurationManager"_ustr};
     }
@@ -105,7 +105,7 @@ public:
 
     // XUIConfigurationManager
     virtual void SAL_CALL reset() override;
-    virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) override;
     virtual css::uno::Reference< css::container::XIndexContainer > SAL_CALL createSettings(  ) override;
     virtual bool SAL_CALL hasSettings( const OUString& ResourceURL ) override;
     virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, bool bWriteable ) override;
@@ -1396,7 +1396,7 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_UIConfigurationManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UIConfigurationManager(context));
 }

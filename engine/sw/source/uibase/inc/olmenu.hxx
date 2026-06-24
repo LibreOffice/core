@@ -21,7 +21,7 @@
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <rtl/ustring.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -90,7 +90,7 @@ class SW_DLLPUBLIC SwSpellPopup
     sal_uInt16 m_nRedlineNextId;
     sal_uInt16 m_nRedlinePrevId;
     SwWrtShell* m_pSh;
-    css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary >  >     m_aDics;
+    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary >  >     m_aDics;
     css::uno::Reference< css::linguistic2::XSpellAlternatives > m_xSpellAlt;
 
     OUString m_sExplanationLink;
@@ -104,7 +104,7 @@ class SW_DLLPUBLIC SwSpellPopup
     bool      m_bGrammarResults;    // show grammar results? Or show spellcheck results?
 
     static void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
-            const css::uno::Sequence< OUString >& aSeq, SwWrtShell* pWrtSh,
+            const cpo::uno::Sequence< OUString >& aSeq, SwWrtShell* pWrtSh,
             std::map< sal_Int16, OUString > &rLangTable );
 
     /// Checks if any of the redline menu items should be hidden.
@@ -118,12 +118,12 @@ public:
     SwSpellPopup( SwWrtShell *pWrtSh,
             const css::linguistic2::ProofreadingResult &rResult,
             sal_Int32 nErrorInResult,
-            const css::uno::Sequence< OUString > &rSuggestions,
+            const cpo::uno::Sequence< OUString > &rSuggestions,
             const OUString & rParaText );
 
     ~SwSpellPopup();
 
-    void InitItemCommands(const css::uno::Sequence< OUString >& aSuggestions);
+    void InitItemCommands(const cpo::uno::Sequence< OUString >& aSuggestions);
 
     PopupMenu& GetMenu()
     {

@@ -48,7 +48,7 @@ OUString UnoControlContainerModel::getImplementationName()
     return u"stardiv.Toolkit.UnoControlContainerModel"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 UnoControlContainerModel::getSupportedServiceNames()
 {
     auto s(UnoControlModel::getSupportedServiceNames());
@@ -85,7 +85,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > UnoControlContainerModel::ge
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlContainerModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoControlContainerModel(context));
 }

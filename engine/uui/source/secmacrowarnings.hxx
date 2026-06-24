@@ -21,7 +21,7 @@
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <vcl/weld.hxx>
 
 namespace com::sun::star::security { class XCertificate; }
@@ -43,7 +43,7 @@ private:
     css::uno::Reference< css::security::XCertificate >  mxCert;
     css::uno::Reference< css::embed::XStorage >         mxStore;
     OUString                                 maODFVersion;
-    const css::uno::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
+    const cpo::uno::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
 
     const bool          mbShowSignatures;
     sal_Int32           mnActSecLevel;
@@ -64,7 +64,7 @@ public:
 
     void    SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
                         const OUString& aODFVersion,
-                        const css::uno::Sequence< css::security::DocumentSignatureInformation >& _rInfos );
+                        const cpo::uno::Sequence< css::security::DocumentSignatureInformation >& _rInfos );
     void    SetCertificate( const css::uno::Reference< css::security::XCertificate >& _rxCert );
 };
 

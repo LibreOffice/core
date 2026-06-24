@@ -66,7 +66,7 @@ struct ContentProperties
     bool         bIsDocument;           // IsDocument
     bool         bIsFolder;             // IsFolder
     OUString     aMediaType;            // MediaType
-    css::uno::Sequence < sal_Int8 >   aEncryptionKey;        // EncryptionKey
+    cpo::uno::Sequence < sal_Int8 >   aEncryptionKey;        // EncryptionKey
     sal_Int64    nSize;                 // Size
     bool         bCompressed;           // Compressed
     bool         bEncrypted;            // Encrypted
@@ -79,7 +79,7 @@ struct ContentProperties
 
     explicit ContentProperties( const OUString& rContentType );
 
-    css::uno::Sequence< css::ucb::ContentInfo >
+    cpo::uno::Sequence< css::ucb::ContentInfo >
     getCreatableContentsInfo( PackageUri const & rUri ) const;
 };
 
@@ -117,24 +117,24 @@ private:
              PackageUri aUri,
              const css::ucb::ContentInfo& Info );
 
-    virtual css::uno::Sequence< css::beans::Property >
+    virtual cpo::uno::Sequence< css::beans::Property >
     getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
-    virtual css::uno::Sequence< css::ucb::CommandInfo >
+    virtual cpo::uno::Sequence< css::ucb::CommandInfo >
     getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
     virtual OUString getParentURL() override;
 
     static css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                       const css::uno::Sequence< css::beans::Property >& rProperties,
+                       const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >& rProvider,
                        const OUString& rContentId );
 
     css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
+    getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties );
     /// @throws css::uno::Exception
-    css::uno::Sequence< cpo::uno::Any >
-    setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+    cpo::uno::Sequence< cpo::uno::Any >
+    setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
                        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     css::uno::Reference< css::container::XHierarchicalNameAccess >
@@ -221,13 +221,13 @@ public:
         noexcept override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     // XContent
@@ -247,7 +247,7 @@ public:
 
 
     // XContentCreator
-    virtual css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
+    virtual cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
     queryCreatableContentsInfo() override;
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
     createNewContent( const css::ucb::ContentInfo& Info ) override;
@@ -259,7 +259,7 @@ public:
     // Called from resultset data supplier.
     static css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                       const css::uno::Sequence< css::beans::Property >& rProperties,
+                       const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        ContentProvider* pProvider,
                        const OUString& rContentId );
 

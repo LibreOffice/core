@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PACKAGE_INC_BYTECHUCKER_HXX
 #define INCLUDED_PACKAGE_INC_BYTECHUCKER_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star {
@@ -29,7 +29,7 @@ class ByteChucker final
 {
     css::uno::Reference < css::io::XOutputStream > xStream;
     css::uno::Reference < css::io::XSeekable > xSeek;
-    css::uno::Sequence < sal_Int8 > a2Sequence, a4Sequence, a8Sequence;
+    cpo::uno::Sequence < sal_Int8 > a2Sequence, a4Sequence, a8Sequence;
     sal_Int8 * const p2Sequence, * const p4Sequence, * const p8Sequence;
 
 public:
@@ -40,7 +40,7 @@ public:
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void WriteBytes( const css::uno::Sequence< sal_Int8 >& aData );
+    void WriteBytes( const cpo::uno::Sequence< sal_Int8 >& aData );
 
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException

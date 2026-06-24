@@ -12,7 +12,7 @@
 #include <miscuno.hxx>
 #include <unonames.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
@@ -82,7 +82,7 @@ void PivotTableResultTraverser::traverse()
                             {
                                 mrVisitor.startLevel(nLevel, xLevel, xLevelName->getName());
 
-                                const uno::Sequence<sheet::MemberResult> aSequence
+                                const cpo::uno::Sequence<sheet::MemberResult> aSequence
                                     = xLevelResult->getResults();
                                 sal_Int32 nCurrent = 0;
                                 sal_Int32 nSize = aSequence.getLength();

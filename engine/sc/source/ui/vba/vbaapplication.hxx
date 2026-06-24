@@ -68,7 +68,7 @@ public:
 
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection() override;
-    virtual cpo::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const css::uno::Sequence< cpo::uno::Any >& Params, css::uno::Sequence< sal_Int16 >& OutParamIndex, css::uno::Sequence< cpo::uno::Any >& OutParam) override;
+    virtual cpo::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& OutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& OutParam) override;
     virtual void  SAL_CALL setValue(const OUString& PropertyName, const cpo::uno::Any& Value) override;
     virtual cpo::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;
     virtual bool  SAL_CALL hasMethod(const OUString& Name) override;
@@ -153,7 +153,7 @@ public:
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     // XInterfaceWithIID
     virtual OUString SAL_CALL getIID() override;
@@ -164,7 +164,7 @@ public:
     virtual css::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
 
     // XSinkCaller
-    virtual void SAL_CALL CallSinks( const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual void SAL_CALL CallSinks( const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -181,7 +181,7 @@ bool ExtensionManager::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > ExtensionManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ExtensionManager::getSupportedServiceNames()
 {
     // a private one:
     return { u"com.sun.star.comp.deployment.ExtensionManager"_ustr };
@@ -243,7 +243,7 @@ ExtensionManager::getPackageManager(std::u16string_view repository)
  */
 void ExtensionManager::addExtensionsToMap(
     id2extensions & mapExt,
-    uno::Sequence<Reference<css::deployment::XPackage> > const & seqExt,
+    cpo::uno::Sequence<Reference<css::deployment::XPackage> > const & seqExt,
     std::u16string_view repository)
 {
     //Determine the index in the vector where these extensions are to be
@@ -311,7 +311,7 @@ std::vector<Reference<css::deployment::XPackage> >
     return extensionList;
 }
 
-uno::Sequence<Reference<css::deployment::XPackage> >
+cpo::uno::Sequence<Reference<css::deployment::XPackage> >
 ExtensionManager::getExtensionsWithSameIdentifier(
         OUString const & identifier,
         OUString const & fileName,
@@ -369,7 +369,7 @@ bool ExtensionManager::isUserDisabled(
 }
 
 bool ExtensionManager::isUserDisabled(
-    uno::Sequence<Reference<css::deployment::XPackage> > const & seqExtSameId)
+    cpo::uno::Sequence<Reference<css::deployment::XPackage> > const & seqExtSameId)
 {
     OSL_ASSERT(seqExtSameId.getLength() == 3);
     Reference<css::deployment::XPackage> const & userExtension = seqExtSameId[0];
@@ -425,7 +425,7 @@ void ExtensionManager::activateExtension(
 }
 
 void ExtensionManager::activateExtension(
-    uno::Sequence<Reference<css::deployment::XPackage> > const & seqExt,
+    cpo::uno::Sequence<Reference<css::deployment::XPackage> > const & seqExt,
     bool bUserDisabled,
     bool bStartup,
     Reference<task::XAbortChannel> const & xAbortChannel,
@@ -487,7 +487,7 @@ Reference<css::deployment::XPackage> ExtensionManager::backupExtension(
     if (xOldExtension.is())
     {
         xBackup = getTmpRepository()->addPackage(
-            xOldExtension->getURL(), uno::Sequence<beans::NamedValue>(),
+            xOldExtension->getURL(), cpo::uno::Sequence<beans::NamedValue>(),
             OUString(), Reference<task::XAbortChannel>(), tmpCmdEnv);
 
         OSL_ENSURE(xBackup.is(), "Failed to backup extension");
@@ -503,7 +503,7 @@ Reference<css::deployment::XPackage> ExtensionManager::backupExtension(
 //all the subfolders for the respective backends.
 //Because all repositories support the same backends, we can just delegate this
 //call to one of the repositories.
-uno::Sequence< Reference<css::deployment::XPackageTypeInfo> >
+cpo::uno::Sequence< Reference<css::deployment::XPackageTypeInfo> >
 ExtensionManager::getSupportedPackageTypes()
 {
     return getUserRepository()->getSupportedPackageTypes();
@@ -515,7 +515,7 @@ ExtensionManager::getSupportedPackageTypes()
 //Returns true if the extension can be installed.
 bool ExtensionManager::doChecksForAddExtension(
     Reference<css::deployment::XPackageManager> const & xPackageMgr,
-    uno::Sequence<beans::NamedValue> const & properties,
+    cpo::uno::Sequence<beans::NamedValue> const & properties,
     css::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
@@ -606,7 +606,7 @@ bool ExtensionManager::doChecksForAddExtension(
 
 // Only add to shared and user repository
 Reference<css::deployment::XPackage> ExtensionManager::addExtension(
-    OUString const & url, uno::Sequence<beans::NamedValue> const & properties,
+    OUString const & url, cpo::uno::Sequence<beans::NamedValue> const & properties,
     OUString const & repository,
         Reference<task::XAbortChannel> const & xAbortChannel,
         Reference<ucb::XCommandEnvironment> const & xCmdEnv )
@@ -633,7 +633,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
         // xTmpExtension's PackageRegistryBackend behind its back
     Reference<css::deployment::XPackage> xTmpExtension(
         xTmpRepository->addPackage(
-            url, uno::Sequence<beans::NamedValue>(), OUString(), xAbortChannel,
+            url, cpo::uno::Sequence<beans::NamedValue>(), OUString(), xAbortChannel,
             new TmpRepositoryCommandEnv()));
     if (!xTmpExtension.is()) {
         throw css::deployment::DeploymentException(
@@ -1069,7 +1069,7 @@ void ExtensionManager::disableExtension(
     ::cppu::throwException(excOccurred);
 }
 
-uno::Sequence< Reference<css::deployment::XPackage> >
+cpo::uno::Sequence< Reference<css::deployment::XPackage> >
     ExtensionManager::getDeployedExtensions(
     OUString const & repository,
     Reference<task::XAbortChannel> const &xAbort,
@@ -1090,7 +1090,7 @@ Reference<css::deployment::XPackage>
         identifier, filename, xCmdEnv);
 }
 
-uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
+cpo::uno::Sequence< cpo::uno::Sequence<Reference<css::deployment::XPackage> > >
     ExtensionManager::getAllExtensions(
     Reference<task::XAbortChannel> const & xAbort,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
@@ -1099,13 +1099,13 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
     {
         id2extensions mapExt;
 
-        uno::Sequence<Reference<css::deployment::XPackage> > userExt =
+        cpo::uno::Sequence<Reference<css::deployment::XPackage> > userExt =
             getUserRepository()->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, userExt, u"user");
-        uno::Sequence<Reference<css::deployment::XPackage> > sharedExt =
+        cpo::uno::Sequence<Reference<css::deployment::XPackage> > sharedExt =
             getSharedRepository()->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, sharedExt, u"shared");
-        uno::Sequence<Reference<css::deployment::XPackage> > bundledExt =
+        cpo::uno::Sequence<Reference<css::deployment::XPackage> > bundledExt =
             getBundledRepository()->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, bundledExt, u"bundled");
 
@@ -1123,7 +1123,7 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
         std::sort(vecExtensions.begin(), vecExtensions.end(), CompIdentifiers());
 
         sal_Int32 j = 0;
-        uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > > seqSeq(vecExtensions.size());
+        cpo::uno::Sequence< cpo::uno::Sequence<Reference<css::deployment::XPackage> > > seqSeq(vecExtensions.size());
         auto seqSeqRange = asNonConstRange(seqSeq);
         for (auto const& elem : vecExtensions)
         {
@@ -1163,7 +1163,7 @@ void ExtensionManager::reinstallDeployedExtensions(
 
         std::set< OUString > disabledExts;
         {
-            const uno::Sequence< Reference<css::deployment::XPackage> > extensions(
+            const cpo::uno::Sequence< Reference<css::deployment::XPackage> > extensions(
                 xPackageManager->getDeployedPackages(xAbortChannel, xCmdEnv));
             for ( const Reference<css::deployment::XPackage>& package : extensions )
             {
@@ -1192,7 +1192,7 @@ void ExtensionManager::reinstallDeployedExtensions(
         //We must sync here, otherwise we will get exceptions when extensions
         //are removed.
         dp_misc::syncRepositories(force, xCmdEnv);
-        const uno::Sequence< Reference<css::deployment::XPackage> > extensions(
+        const cpo::uno::Sequence< Reference<css::deployment::XPackage> > extensions(
             xPackageManager->getDeployedPackages(xAbortChannel, xCmdEnv));
 
         for ( const Reference<css::deployment::XPackage>& package : extensions )
@@ -1258,9 +1258,9 @@ bool ExtensionManager::synchronize(
         // extensions had to be revoked.)
         try
         {
-            const uno::Sequence<uno::Sequence<Reference<css::deployment::XPackage> > >
+            const cpo::uno::Sequence<cpo::uno::Sequence<Reference<css::deployment::XPackage> > >
                 seqSeqExt = getAllExtensions(xAbortChannel, xCmdEnv);
-            for (uno::Sequence<Reference<css::deployment::XPackage> > const & seqExt : seqSeqExt)
+            for (cpo::uno::Sequence<Reference<css::deployment::XPackage> > const & seqExt : seqSeqExt)
             {
                 activateExtension(seqExt, isUserDisabled(seqExt), true,
                                   xAbortChannel, xCmdEnv);
@@ -1361,7 +1361,7 @@ void ExtensionManager::checkUpdate(
             static_cast<OWeakObject *>(this), request );
 }
 
-uno::Sequence<Reference<css::deployment::XPackage> > SAL_CALL
+cpo::uno::Sequence<Reference<css::deployment::XPackage> > SAL_CALL
 ExtensionManager::getExtensionsWithUnacceptedLicenses(
         OUString const & repository,
         Reference<ucb::XCommandEnvironment> const & xCmdEnv)
@@ -1421,7 +1421,7 @@ void ExtensionManager::fireModified()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_ExtensionManager_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new dp_manager::ExtensionManager(context));
 }

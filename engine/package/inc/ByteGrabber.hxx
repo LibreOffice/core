@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PACKAGE_INC_BYTEGRABBER_HXX
 #define INCLUDED_PACKAGE_INC_BYTEGRABBER_HXX
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/bytereader.hxx>
 #include <array>
@@ -33,7 +33,7 @@ class ByteGrabber final
     css::uno::Reference < css::io::XSeekable > xSeek;
     comphelper::ByteReader* mpByteReader;
     std::array<sal_Int8, 8> maBuffer;
-    css::uno::Sequence < sal_Int8 > aSequence;
+    cpo::uno::Sequence < sal_Int8 > aSequence;
 
 public:
     ByteGrabber (css::uno::Reference < css::io::XInputStream > const & xIstream);

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
 #include <set>
@@ -44,7 +44,7 @@ namespace frm
     class TypeBag
     {
     public:
-        typedef css::uno::Sequence< css::uno::Type >            TypeSequence;
+        typedef cpo::uno::Sequence< css::uno::Type >            TypeSequence;
         typedef ::std::set< css::uno::Type, TypeCompareLess >   TypeSet;
 
     private:

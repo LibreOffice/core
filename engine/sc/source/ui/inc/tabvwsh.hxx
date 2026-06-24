@@ -219,7 +219,7 @@ private:
     SfxShell*       GetMySubShell() const;
 
     void            DoReadUserData( std::u16string_view rData );
-    void            DoReadUserDataSequence( const css::uno::Sequence< css::beans::PropertyValue >& rSettings );
+    void            DoReadUserDataSequence( const cpo::uno::Sequence< css::beans::PropertyValue >& rSettings );
     bool            IsSignatureLineSelected();
     bool            IsSignatureLineSigned();
     bool            IsQRCodeSelected();
@@ -253,8 +253,8 @@ protected:
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) override;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) override;
-    virtual void    WriteUserDataSequence (css::uno::Sequence < css::beans::PropertyValue >& ) override;
-    virtual void    ReadUserDataSequence (const css::uno::Sequence < css::beans::PropertyValue >& ) override;
+    virtual void    WriteUserDataSequence (cpo::uno::Sequence < css::beans::PropertyValue >& ) override;
+    virtual void    ReadUserDataSequence (const cpo::uno::Sequence < css::beans::PropertyValue >& ) override;
 
     virtual void    UIDeactivated( SfxInPlaceClient* pClient ) override;
 

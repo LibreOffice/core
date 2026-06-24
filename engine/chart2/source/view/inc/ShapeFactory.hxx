@@ -203,7 +203,7 @@ public:
 
     static rtl::Reference<SvxShapeText>
         createText(const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-            , const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
+            , const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
             , const tNameSequence& rPropNames
             , const tAnySequence& rPropValues
             , const cpo::uno::Any& rATransformation);
@@ -212,7 +212,7 @@ public:
         createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget2D,
                 const css::awt::Size& rSize,
                 const css::awt::Point& rPosition,
-                css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
+                cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
                 const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth );
 

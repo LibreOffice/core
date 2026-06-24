@@ -16,7 +16,7 @@
 #include <vector>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/comphelperdllapi.h>
@@ -24,10 +24,10 @@
 namespace comphelper
 {
     /// Init list for property sequences.
-    inline css::uno::Sequence< css::beans::PropertyValue > InitPropertySequence(
+    inline cpo::uno::Sequence< css::beans::PropertyValue > InitPropertySequence(
         ::std::initializer_list< ::std::pair< OUString, cpo::uno::Any > > vInit)
     {
-        css::uno::Sequence< css::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
+        cpo::uno::Sequence< css::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
         std::transform(vInit.begin(), vInit.end(), vResult.getArray(),
                        [](const std::pair<OUString, cpo::uno::Any>& rInit) {
                            return css::beans::PropertyValue(rInit.first, -1, rInit.second,
@@ -40,10 +40,10 @@ namespace comphelper
     ///
     /// This is particularly useful for creation of sequences that are later
     /// unwrapped using comphelper::SequenceAsHashMap.
-    inline css::uno::Sequence< cpo::uno::Any > InitAnyPropertySequence(
+    inline cpo::uno::Sequence< cpo::uno::Any > InitAnyPropertySequence(
         ::std::initializer_list< ::std::pair< OUString, cpo::uno::Any > > vInit)
     {
-        css::uno::Sequence<cpo::uno::Any> vResult{static_cast<sal_Int32>(vInit.size())};
+        cpo::uno::Sequence<cpo::uno::Any> vResult{static_cast<sal_Int32>(vInit.size())};
         std::transform(vInit.begin(), vInit.end(), vResult.getArray(),
                        [](const std::pair<OUString, cpo::uno::Any>& rInit) {
                            return cpo::uno::Any(

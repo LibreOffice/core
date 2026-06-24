@@ -70,13 +70,13 @@ public:
 
     // XDataProvider
     virtual bool SAL_CALL createDataSourcePossible(
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
     virtual css::uno::Reference<
         css::chart2::data::XDataSource > SAL_CALL createDataSource(
-            const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
+            const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
-    virtual css::uno::Sequence<
+    virtual cpo::uno::Sequence<
         css::beans::PropertyValue > SAL_CALL detectArguments(
             const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
 
@@ -95,11 +95,11 @@ public:
 
     // XSheetDataProvider
     virtual bool SAL_CALL createDataSequenceByFormulaTokensPossible(
-        const css::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
+        const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
     virtual css::uno::Reference< css::chart2::data::XDataSequence >
         SAL_CALL createDataSequenceByFormulaTokens(
-            const css::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
+            const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
     // XRangeXMLConversion
     virtual OUString SAL_CALL convertRangeToXML( const OUString& sRangeRepresentation ) override;
@@ -139,7 +139,7 @@ public:
     virtual bool SAL_CALL supportsService( const OUString&
             rServiceName) override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
 private:
@@ -163,7 +163,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataSource
-    virtual css::uno::Sequence< css::uno::Reference<
+    virtual cpo::uno::Sequence< css::uno::Reference<
             css::chart2::data::XLabeledDataSequence > > SAL_CALL
         getDataSequences() override;
 
@@ -173,7 +173,7 @@ public:
     virtual bool SAL_CALL supportsService( const OUString&
             rServiceName) override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
     // implementation
@@ -212,10 +212,10 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataSequence
-    virtual css::uno::Sequence< cpo::uno::Any >
+    virtual cpo::uno::Sequence< cpo::uno::Any >
         SAL_CALL getData() override;
     virtual OUString SAL_CALL getSourceRangeRepresentation() override;
-    virtual css::uno::Sequence< OUString >
+    virtual cpo::uno::Sequence< OUString >
         SAL_CALL generateLabel(css::chart2::data::LabelOrigin nOrigin) override;
 
     /** Get the number format key for the n-th data entry
@@ -224,11 +224,11 @@ public:
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex ) override;
 
     // XNumericalDataSequence
-    virtual css::uno::Sequence< double >
+    virtual cpo::uno::Sequence< double >
         SAL_CALL getNumericalData() override;
 
     // XTextualDataSequence
-    virtual css::uno::Sequence< OUString >
+    virtual cpo::uno::Sequence< OUString >
         SAL_CALL getTextualData() override;
 
     // XTimeBased
@@ -280,7 +280,7 @@ public:
     virtual bool SAL_CALL supportsService( const OUString&
             rServiceName) override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
 private:
@@ -359,9 +359,9 @@ private:
      * numerical and textural data series if they turn out to be bottlenecks
      * under certain scenarios.
      */
-    css::uno::Sequence< cpo::uno::Any > m_aMixedDataCache;
+    cpo::uno::Sequence< cpo::uno::Any > m_aMixedDataCache;
 
-    css::uno::Sequence<sal_Int32>  m_aHiddenValues;
+    cpo::uno::Sequence<sal_Int32>  m_aHiddenValues;
 
     // properties
     css::chart2::data::DataSequenceRole  m_aRole;

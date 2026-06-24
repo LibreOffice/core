@@ -29,7 +29,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>

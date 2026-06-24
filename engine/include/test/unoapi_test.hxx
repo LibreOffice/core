@@ -140,13 +140,13 @@ public:
     OUString createFilePath(std::u16string_view aFileBase);
     void loadFromURL(const OUString& rURL, const char* pPassword = nullptr);
     void loadWithParams(const OUString& rURL,
-                        const css::uno::Sequence<css::beans::PropertyValue>& rParams);
+                        const cpo::uno::Sequence<css::beans::PropertyValue>& rParams);
     OUString loadFromFile(std::u16string_view aFileBase, const char* pPassword = nullptr);
 
     cpo::uno::Any executeMacro(const OUString& rScriptURL,
-                               const css::uno::Sequence<cpo::uno::Any>& rParams = {});
+                               const cpo::uno::Sequence<cpo::uno::Any>& rParams = {});
 
-    void save(TestFilter eFilter, const css::uno::Sequence<css::beans::PropertyValue>& rParams = {},
+    void save(TestFilter eFilter, const cpo::uno::Sequence<css::beans::PropertyValue>& rParams = {},
               const char* pPassword = nullptr);
     void saveAndReload(TestFilter eFilter, const char* pPassword = nullptr);
 

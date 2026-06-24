@@ -103,7 +103,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 
         // get list of dictionaries-to-use
         std::vector< SvtLinguConfigDictionaryEntry > aDics;
-        uno::Sequence< OUString > aFormatList;
+        cpo::uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( u"Thesauri"_ustr,
                 u"org.openoffice.lingu.new.Thesaurus"_ustr, aFormatList );
         for (const auto& rFormat : aFormatList)
@@ -211,12 +211,12 @@ bool SAL_CALL Thesaurus::hasLocale(const Locale& rLocale)
 
 Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryMeanings(
     const OUString& qTerm, const Locale& rLocale,
-    const css::uno::Sequence< css::beans::PropertyValue >& rProperties)
+    const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties)
 {
     MutexGuard      aGuard( GetLinguMutex() );
 
-    uno::Sequence< Reference< XMeaning > > aMeanings( 1 );
-    uno::Sequence< Reference< XMeaning > > noMeanings( 0 );
+    cpo::uno::Sequence< Reference< XMeaning > > aMeanings( 1 );
+    cpo::uno::Sequence< Reference< XMeaning > > noMeanings( 0 );
     uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
     uno::Reference< XSpellChecker > xSpell;
 
@@ -560,7 +560,7 @@ Sequence< OUString > SAL_CALL Thesaurus::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_Thesaurus_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Thesaurus());
 }

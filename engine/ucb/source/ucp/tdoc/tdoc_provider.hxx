@@ -69,7 +69,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProvider
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
@@ -114,7 +114,7 @@ public:
 
     bool queryNamesOfChildren(
         const OUString & rUri,
-        css::uno::Sequence< OUString > & rNames ) const;
+        cpo::uno::Sequence< OUString > & rNames ) const;
 
     // storage properties
     OUString queryStorageTitle( const OUString & rUri ) const;

@@ -954,7 +954,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropDownFieldEntryLimit)
         const sw::mark::Fieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
         auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         CPPUNIT_ASSERT(bool(pListEntries != pParameters->end()));
-        css::uno::Sequence<OUString> vListEntries;
+        cpo::uno::Sequence<OUString> vListEntries;
         pListEntries->second >>= vListEntries;
         if (!bIsExport)
             CPPUNIT_ASSERT_EQUAL(sal_Int32(26), vListEntries.getLength());

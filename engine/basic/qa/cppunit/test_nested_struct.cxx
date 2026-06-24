@@ -230,7 +230,7 @@ void Nested_Struct::testUnfixedVarAssignAlt()
     SbxVariableRef pNew = myMacro.Run();
     cpo::uno::Any aRet = sbxToUnoValue( pNew.get() );
 
-    uno::Sequence< cpo::uno::Any > aResult;
+    cpo::uno::Sequence< cpo::uno::Any > aResult;
     bool bRes = aRet >>= aResult;
     CPPUNIT_ASSERT_EQUAL(true, bRes );
 
@@ -266,7 +266,7 @@ void Nested_Struct::testFixedVarAssignAlt()
     SbxVariableRef pNew = myMacro.Run();
     cpo::uno::Any aRet = sbxToUnoValue( pNew.get() );
 
-    uno::Sequence< cpo::uno::Any > aResult;
+    cpo::uno::Sequence< cpo::uno::Any > aResult;
     bool bRes = aRet >>= aResult;
     CPPUNIT_ASSERT_EQUAL(true, bRes );
 

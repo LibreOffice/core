@@ -92,7 +92,7 @@ class MenuBarManager final :
         virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
         // XSystemDependentMenuPeer
-        virtual cpo::uno::Any SAL_CALL getMenuHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
+        virtual cpo::uno::Any SAL_CALL getMenuHandle( const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
         DECL_LINK( Select, Menu *, bool );
 
@@ -155,7 +155,7 @@ class MenuBarManager final :
         void SetAcceleratorKeys(Menu* pMenu);
         static void      FillMenuImages( css::uno::Reference< css::frame::XFrame > const & xFrame, Menu* _pMenu, bool bShowMenuImages );
         static void      impl_RetrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
-                                                                  const css::uno::Sequence< OUString >& rCommands,
+                                                                  const cpo::uno::Sequence< OUString >& rCommands,
                                                                   std::vector< std::unique_ptr<MenuItemHandler> >& aMenuShortCuts );
         static void      MergeAddonMenus( Menu* pMenuBar, const MergeMenuInstructionContainer&, const OUString& aModuleIdentifier );
 

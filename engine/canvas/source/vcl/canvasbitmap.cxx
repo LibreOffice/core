@@ -77,7 +77,7 @@ namespace vclcanvas
         return cppu::supportsService( this, ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  )
+    cpo::uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.rendering.CanvasBitmap"_ustr };
     }

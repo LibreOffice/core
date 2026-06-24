@@ -43,7 +43,7 @@ namespace basctl::docs {
     using ::com::sun::star::frame::XController;
     using ::com::sun::star::frame::XModel2;
     using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::frame::XFrame;
 
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;

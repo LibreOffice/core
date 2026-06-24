@@ -469,7 +469,7 @@ void OConnection::disposing()
     m_aAdoConnection.clear();
 }
 
-sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL OConnection::getSomething( const cpo::uno::Sequence< sal_Int8 >& rId )
 {
     return comphelper::getSomethingImpl(rId, this,
                                         comphelper::FallbackToGetSomethingOf<OConnection_BASE>{});

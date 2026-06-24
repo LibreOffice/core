@@ -49,7 +49,7 @@ WrapStreamForShare::~WrapStreamForShare()
 }
 
 // XInputStream
-sal_Int32 SAL_CALL WrapStreamForShare::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL WrapStreamForShare::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if ( !m_xInStream.is() )
         throw io::IOException();
@@ -62,7 +62,7 @@ sal_Int32 SAL_CALL WrapStreamForShare::readBytes( uno::Sequence< sal_Int8 >& aDa
     return nRead;
 }
 
-sal_Int32 SAL_CALL WrapStreamForShare::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL WrapStreamForShare::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     if ( !m_xInStream.is() )
         throw io::IOException();

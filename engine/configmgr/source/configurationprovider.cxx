@@ -32,7 +32,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XFlushListener.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
@@ -117,12 +117,12 @@ private:
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
     {
         return default_
             ? default_provider::getSupportedServiceNames()
-            : css::uno::Sequence<OUString> { u"com.sun.star.configuration.ConfigurationProvider"_ustr };
+            : cpo::uno::Sequence<OUString> { u"com.sun.star.configuration.ConfigurationProvider"_ustr };
     }
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
@@ -131,9 +131,9 @@ private:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
-        css::uno::Sequence< cpo::uno::Any > const & Arguments) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getAvailableServiceNames() override;
 
     virtual void SAL_CALL refresh() override;
@@ -170,13 +170,13 @@ css::uno::Reference< css::uno::XInterface > Service::createInstance(
     OUString const & aServiceSpecifier)
 {
     return createInstanceWithArguments(
-        aServiceSpecifier, css::uno::Sequence< cpo::uno::Any >());
+        aServiceSpecifier, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 css::uno::Reference< css::uno::XInterface >
 Service::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
-    css::uno::Sequence< cpo::uno::Any > const & Arguments)
+    cpo::uno::Sequence< cpo::uno::Any > const & Arguments)
 {
     OUString nodepath;
     OUString locale;
@@ -263,7 +263,7 @@ Service::createInstanceWithArguments(
     return root->getXWeak();
 }
 
-css::uno::Sequence< OUString > Service::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > Service::getAvailableServiceNames()
 {
     return { accessServiceName, updateAccessServiceName };
 }
@@ -346,7 +346,7 @@ void Service::flushModifications() const {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
-    css::uno::XComponentContext* Context, css::uno::Sequence<cpo::uno::Any> const& Arguments)
+    css::uno::XComponentContext* Context, cpo::uno::Sequence<cpo::uno::Any> const& Arguments)
 {
     if (!Arguments.hasElements()) {
         auto p = css::configuration::theDefaultProvider::get(Context);

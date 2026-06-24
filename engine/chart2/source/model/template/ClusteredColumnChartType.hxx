@@ -20,7 +20,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     virtual rtl::Reference<ChartType> cloneChartType() const override;
 
@@ -29,7 +29,7 @@ private:
 
     // ____ XChartType ____
     virtual OUString SAL_CALL getChartType() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedPropertyRoles() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedPropertyRoles() override;
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue(sal_Int32 nHandle, cpo::uno::Any& rAny) const override;

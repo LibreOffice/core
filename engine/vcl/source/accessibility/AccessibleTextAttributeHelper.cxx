@@ -243,7 +243,7 @@ OUString lcl_ConvertParagraphAdjust(css::style::ParagraphAdjust eParaAdjust)
 }
 
 static OUString ConvertUnoToIAccessible2TextAttributes(
-    const css::uno::Sequence<css::beans::PropertyValue>& rUnoAttributes,
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rUnoAttributes,
     IA2AttributeType eAttributeType)
 {
     OUStringBuffer aRet;
@@ -352,8 +352,8 @@ OUString AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
 {
     assert(xText.is());
 
-    const css::uno::Sequence<css::beans::PropertyValue> attribs
-        = xText->getCharacterAttributes(nOffset, css::uno::Sequence<OUString>());
+    const cpo::uno::Sequence<css::beans::PropertyValue> attribs
+        = xText->getCharacterAttributes(nOffset, cpo::uno::Sequence<OUString>());
     OUString sAttributes = ConvertUnoToIAccessible2TextAttributes(attribs, eAttributeType);
 
     css::accessibility::TextSegment aAttributeRun

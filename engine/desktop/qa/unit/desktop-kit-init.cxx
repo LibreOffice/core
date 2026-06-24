@@ -40,8 +40,8 @@ public:
 
 namespace
 {
-void assertSequencesEqual(const uno::Sequence<beans::PropertyValue>& expected,
-                          const uno::Sequence<beans::PropertyValue>& actual)
+void assertSequencesEqual(const cpo::uno::Sequence<beans::PropertyValue>& expected,
+                          const cpo::uno::Sequence<beans::PropertyValue>& actual)
 {
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The sequences should have the same length", expected.getLength(),
                                  actual.getLength());
@@ -62,7 +62,8 @@ void KitInitTest::testJsonToPropertyValues()
                              "\"value\":\"something.odt\""
                              "}}";
 
-    uno::Sequence aArgs{ comphelper::makePropertyValue(u"FileName"_ustr, u"something.odt"_ustr) };
+    cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"FileName"_ustr,
+                                                            u"something.odt"_ustr) };
 
     assertSequencesEqual(
         aArgs, comphelper::containerToSequence(desktop::jsonToPropertyValuesVector(arguments)));
@@ -129,25 +130,25 @@ void KitInitTest::testJsonToPropertyValuesBorder()
 
     // see SvxBoxItem::QueryValue for details
     table::BorderLine2 aLine(sal_Int32(COL_BLACK), 0, 1, 0, table::BorderLineStyle::SOLID, 1);
-    uno::Sequence<cpo::uno::Any> aOuterSeq{ cpo::uno::Any(aLine), // left
-                                            cpo::uno::Any(aLine), // right
-                                            cpo::uno::Any(aLine), // bottom
-                                            cpo::uno::Any(aLine), // top
-                                            cpo::uno::Any(static_cast<sal_Int32>(0)),
-                                            cpo::uno::Any(static_cast<sal_Int32>(0)),
-                                            cpo::uno::Any(static_cast<sal_Int32>(0)),
-                                            cpo::uno::Any(static_cast<sal_Int32>(0)),
-                                            cpo::uno::Any(static_cast<sal_Int32>(0)) };
+    cpo::uno::Sequence<cpo::uno::Any> aOuterSeq{ cpo::uno::Any(aLine), // left
+                                                 cpo::uno::Any(aLine), // right
+                                                 cpo::uno::Any(aLine), // bottom
+                                                 cpo::uno::Any(aLine), // top
+                                                 cpo::uno::Any(static_cast<sal_Int32>(0)),
+                                                 cpo::uno::Any(static_cast<sal_Int32>(0)),
+                                                 cpo::uno::Any(static_cast<sal_Int32>(0)),
+                                                 cpo::uno::Any(static_cast<sal_Int32>(0)),
+                                                 cpo::uno::Any(static_cast<sal_Int32>(0)) };
 
     // see SvxBoxInfoItem::QueryValue() for details
-    uno::Sequence<cpo::uno::Any> aInnerSeq{ cpo::uno::Any(aLine), // horizontal
-                                            cpo::uno::Any(aLine), // vertical
-                                            cpo::uno::Any(static_cast<sal_Int16>(0)),
-                                            cpo::uno::Any(static_cast<sal_Int16>(0x7F)),
-                                            cpo::uno::Any(static_cast<sal_Int32>(0)) };
+    cpo::uno::Sequence<cpo::uno::Any> aInnerSeq{ cpo::uno::Any(aLine), // horizontal
+                                                 cpo::uno::Any(aLine), // vertical
+                                                 cpo::uno::Any(static_cast<sal_Int16>(0)),
+                                                 cpo::uno::Any(static_cast<sal_Int16>(0x7F)),
+                                                 cpo::uno::Any(static_cast<sal_Int32>(0)) };
 
-    uno::Sequence aArgs{ comphelper::makePropertyValue(u"OuterBorder"_ustr, aOuterSeq),
-                         comphelper::makePropertyValue(u"InnerBorder"_ustr, aInnerSeq) };
+    cpo::uno::Sequence aArgs{ comphelper::makePropertyValue(u"OuterBorder"_ustr, aOuterSeq),
+                              comphelper::makePropertyValue(u"InnerBorder"_ustr, aInnerSeq) };
 
     assertSequencesEqual(
         aArgs, comphelper::containerToSequence(desktop::jsonToPropertyValuesVector(arguments)));

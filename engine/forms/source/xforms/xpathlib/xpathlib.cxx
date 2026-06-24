@@ -33,7 +33,7 @@
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -50,6 +50,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xforms;
 using namespace com::sun::star::lang;
+using namespace ::cpo::uno;
 
 xmlXPathFunction xforms_lookupFunc(void *, const xmlChar *xname, const xmlChar *)
 {

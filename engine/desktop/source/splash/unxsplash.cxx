@@ -83,7 +83,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 
 // XInitialize
 void SAL_CALL
-UnxSplashScreen::initialize( const css::uno::Sequence< cpo::uno::Any>& )
+UnxSplashScreen::initialize( const cpo::uno::Sequence< cpo::uno::Any>& )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
     {
@@ -111,7 +111,7 @@ bool UnxSplashScreen::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
 {
     return { u"com.sun.star.office.PipeSplashScreen"_ustr };
 }
@@ -120,7 +120,7 @@ css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_UnxSplash_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new desktop::UnxSplashScreen());
 }

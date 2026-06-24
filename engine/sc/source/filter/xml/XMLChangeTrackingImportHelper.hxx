@@ -164,7 +164,7 @@ class ScXMLChangeTrackingImportHelper
 {
     std::set<OUString>  aUsers;
     std::vector<std::unique_ptr<ScMyBaseAction>> aActions;
-    css::uno::Sequence<sal_Int8> aProtect;
+    cpo::uno::Sequence<sal_Int8> aProtect;
     ScChangeTrack*      pTrack;
     std::unique_ptr<ScMyBaseAction> pCurrentAction;
     sal_Int16           nMultiSpanned;
@@ -184,7 +184,7 @@ public:
     ScXMLChangeTrackingImportHelper();
     ~ScXMLChangeTrackingImportHelper();
 
-    void SetProtection(const css::uno::Sequence<sal_Int8>& rProtect) { aProtect = rProtect; }
+    void SetProtection(const cpo::uno::Sequence<sal_Int8>& rProtect) { aProtect = rProtect; }
     void StartChangeAction(const ScChangeActionType nActionType);
 
     static sal_uInt32 GetIDFromString(std::string_view sID);

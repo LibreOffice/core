@@ -41,6 +41,7 @@ namespace svx
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
+    using namespace ::cpo::uno;
     using namespace ::svt;
 
     ODocumentLinkDialog::ODocumentLinkDialog(weld::Window* pParent, bool _bCreateNew)

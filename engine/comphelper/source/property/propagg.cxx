@@ -220,14 +220,14 @@ bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
 }
 
 
-css::uno::Sequence< css::beans::Property> OPropertyArrayAggregationHelper::getProperties()
+cpo::uno::Sequence< css::beans::Property> OPropertyArrayAggregationHelper::getProperties()
 {
     return comphelper::containerToSequence(m_aProperties);
 }
 
 
 sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
-        sal_Int32* _pHandles, const css::uno::Sequence< OUString >& _rPropNames )
+        sal_Int32* _pHandles, const cpo::uno::Sequence< OUString >& _rPropNames )
 {
     sal_Int32 nHitCount = 0;
 
@@ -376,7 +376,7 @@ void SAL_CALL OPropertySetAggregationHelper::disposing(const css::lang::EventObj
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent>& _rEvents)
+void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const cpo::uno::Sequence< css::beans::PropertyChangeEvent>& _rEvents)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::propertiesChange : have no aggregate !");
 
@@ -463,7 +463,7 @@ void OPropertySetAggregationHelper::startListening()
     if (!m_bListening && m_xAggregateSet.is())
     {
         // register as a single listener
-        css::uno::Sequence< OUString > aPropertyNames;
+        cpo::uno::Sequence< OUString > aPropertyNames;
         m_xAggregateMultiSet->addPropertiesChangeListener(aPropertyNames, this);
         m_xAggregateSet->addVetoableChangeListener(OUString(), this);
 
@@ -490,7 +490,7 @@ void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const OUS
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const css::uno::Sequence< OUString >& _rPropertyNames,
+void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& _rPropertyNames,
                                                                          const css::uno::Reference< css::beans::XPropertiesChangeListener>& _rxListener)
 {
     OPropertySetHelper::addPropertiesChangeListener(_rPropertyNames, _rxListener);

@@ -69,8 +69,8 @@ protected:
     // setDocument runs.
     ScDocument* mpDocument = nullptr;
     css::table::CellAddress                                 maObjective;
-    css::uno::Sequence< css::table::CellAddress >           maVariables;
-    css::uno::Sequence< css::sheet::SolverConstraint >      maConstraints;
+    cpo::uno::Sequence< css::table::CellAddress >           maVariables;
+    cpo::uno::Sequence< css::sheet::SolverConstraint >      maConstraints;
     bool                                                    mbMaximize;
     // set via XPropertySet
     bool                                                    mbNonNegative;
@@ -82,7 +82,7 @@ protected:
     // results
     bool                                                    mbSuccess;
     double                                                  mfResultValue;
-    css::uno::Sequence< double >                            maSolution;
+    cpo::uno::Sequence< double >                            maSolution;
     OUString                                                maStatus;
 
     // Sensitivity report
@@ -106,18 +106,18 @@ public:
                                     css::sheet::XSpreadsheetDocument >& _document ) override;
     virtual css::table::CellAddress SAL_CALL getObjective() override;
     virtual void SAL_CALL   setObjective( const css::table::CellAddress& _objective ) override;
-    virtual css::uno::Sequence< css::table::CellAddress > SAL_CALL getVariables() override;
-    virtual void SAL_CALL   setVariables( const css::uno::Sequence<
+    virtual cpo::uno::Sequence< css::table::CellAddress > SAL_CALL getVariables() override;
+    virtual void SAL_CALL   setVariables( const cpo::uno::Sequence<
                                     css::table::CellAddress >& _variables ) override;
-    virtual css::uno::Sequence< css::sheet::SolverConstraint > SAL_CALL getConstraints() override;
-    virtual void SAL_CALL   setConstraints( const css::uno::Sequence<
+    virtual cpo::uno::Sequence< css::sheet::SolverConstraint > SAL_CALL getConstraints() override;
+    virtual void SAL_CALL   setConstraints( const cpo::uno::Sequence<
                                     css::sheet::SolverConstraint >& _constraints ) override;
     virtual bool SAL_CALL getMaximize() override;
     virtual void SAL_CALL   setMaximize( bool _maximize ) override;
 
     virtual bool SAL_CALL getSuccess() override;
     virtual double SAL_CALL getResultValue() override;
-    virtual css::uno::Sequence< double > SAL_CALL getSolution() override;
+    virtual cpo::uno::Sequence< double > SAL_CALL getSolution() override;
 
     virtual void SAL_CALL solve() override = 0;
 
@@ -129,7 +129,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override = 0;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

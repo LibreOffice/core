@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150197_predefinedNumbering)
     createSwDoc();
 
     // The exact numbering style doesn't matter - just any non-bullet pre-defined numbering style.
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Numbering 123"_ustr) },
         { "FamilyName", cpo::uno::Any(u"NumberingStyles"_ustr) },
     });
@@ -811,7 +811,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
 
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess(xTEOSupplier->getEmbeddedObjects());
-    uno::Sequence<OUString> aSeq(xAccess->getElementNames());
+    cpo::uno::Sequence<OUString> aSeq(xAccess->getElementNames());
 
     // Check number of embedded objects.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeq.getLength());
@@ -821,7 +821,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126477)
     uno::Reference<lang::XComponent> xObj(xEOSupplier->getEmbeddedObject());
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xTEOSupplier2(xObj, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xAccess2(xTEOSupplier2->getEmbeddedObjects());
-    uno::Sequence<OUString> aSeq2(xAccess2->getElementNames());
+    cpo::uno::Sequence<OUString> aSeq2(xAccess2->getElementNames());
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1

@@ -357,7 +357,7 @@ void SAL_CALL Theme::removeVetoableChangeListener(
     }
 }
 
-css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
+cpo::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
 {
     SolarMutexGuard aGuard;
 
@@ -379,7 +379,7 @@ css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
         aProperties.push_back(aProperty);
     }
 
-    return css::uno::Sequence<css::beans::Property>(
+    return cpo::uno::Sequence<css::beans::Property>(
         aProperties.data(),
         aProperties.size());
 }

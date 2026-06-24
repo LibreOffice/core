@@ -272,7 +272,7 @@ PyObject* PyUNO_char_new ( sal_Unicode val , const Runtime &r )
 }
 
 PyObject *PyUNO_ByteSequence_new(
-    const css::uno::Sequence< sal_Int8 > &byteSequence, const Runtime &r )
+    const cpo::uno::Sequence< sal_Int8 > &byteSequence, const Runtime &r )
 {
     PyRef str(
         PyBytes_FromStringAndSize( reinterpret_cast<char const *>(byteSequence.getConstArray()), byteSequence.getLength()),

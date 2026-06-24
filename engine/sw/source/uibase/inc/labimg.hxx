@@ -107,7 +107,7 @@ private:
     SwLabItem   m_aItem;
     bool    m_bIsLabel;
 
-    css::uno::Sequence<OUString> GetPropertyNames() const;
+    cpo::uno::Sequence<OUString> GetPropertyNames() const;
 
     virtual void ImplCommit() override;
 
@@ -116,7 +116,7 @@ public:
 
     SwLabItem&              GetItem() {return m_aItem;}
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 #endif

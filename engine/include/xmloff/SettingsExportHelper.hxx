@@ -64,10 +64,10 @@ class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
     void exportString(const OUString& sValue, const OUString& rName) const;
     void exportDateTime(const css::util::DateTime& aValue, const OUString& rName) const;
     void exportSequencePropertyValue(
-        const css::uno::Sequence<css::beans::PropertyValue>& aProps,
+        const cpo::uno::Sequence<css::beans::PropertyValue>& aProps,
         const OUString& rName) const;
     void exportbase64Binary(
-        const css::uno::Sequence<sal_Int8>& aProps,
+        const cpo::uno::Sequence<sal_Int8>& aProps,
         const OUString& rName) const;
     void exportMapEntry(const cpo::uno::Any& rAny,
                         const OUString& rName,
@@ -80,7 +80,7 @@ class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
         const OUString& rName) const;
 
     void exportSymbolDescriptors(
-                    const css::uno::Sequence < css::formula::SymbolDescriptor > &rProps,
+                    const cpo::uno::Sequence < css::formula::SymbolDescriptor > &rProps,
                     const OUString& rName) const;
     void exportForbiddenCharacters(
                     const css::uno::Reference<css::i18n::XForbiddenCharacters>& xForbChars,
@@ -91,7 +91,7 @@ public:
     ~XMLSettingsExportHelper();
 
     void exportAllSettings(
-        const css::uno::Sequence<css::beans::PropertyValue>& aProps,
+        const cpo::uno::Sequence<css::beans::PropertyValue>& aProps,
         const OUString& rName) const;
 };
 

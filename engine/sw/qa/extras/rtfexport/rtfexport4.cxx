@@ -162,9 +162,9 @@ CPPUNIT_TEST_FIXTURE(Test, test148518)
         CPPUNIT_ASSERT(pDoc->getIDocumentMarkAccess()->getFieldmarksBegin()
                        != pDoc->getIDocumentMarkAccess()->getFieldmarksEnd());
         ::sw::mark::Fieldmark* pFieldmark = *pDoc->getIDocumentMarkAccess()->getFieldmarksBegin();
-        uno::Sequence<OUString> entries;
+        cpo::uno::Sequence<OUString> entries;
         (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] >>= entries;
-        uno::Sequence<OUString> const expected{ u"x"_ustr, u"v"_ustr, u"d"_ustr };
+        cpo::uno::Sequence<OUString> const expected{ u"x"_ustr, u"v"_ustr, u"d"_ustr };
         CPPUNIT_ASSERT_EQUAL(expected, entries);
         sal_Int32 result(-1);
         (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] >>= result;
@@ -446,22 +446,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTabStopFillChars)
     createSwDoc("tab-stop-fill-chars.rtf");
     // tlmdot
     auto aTabstops
-        = getProperty<uno::Sequence<style::TabStop>>(getParagraph(1), u"ParaTabStops"_ustr);
+        = getProperty<cpo::uno::Sequence<style::TabStop>>(getParagraph(1), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT(aTabstops.hasElements());
     CPPUNIT_ASSERT_EQUAL(u'·', aTabstops[0].FillChar);
 
     // tlhyph
-    aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(2), u"ParaTabStops"_ustr);
+    aTabstops
+        = getProperty<cpo::uno::Sequence<style::TabStop>>(getParagraph(2), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT(aTabstops.hasElements());
     CPPUNIT_ASSERT_EQUAL(u'-', aTabstops[0].FillChar);
 
     // tlth
-    aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(3), u"ParaTabStops"_ustr);
+    aTabstops
+        = getProperty<cpo::uno::Sequence<style::TabStop>>(getParagraph(3), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT(aTabstops.hasElements());
     CPPUNIT_ASSERT_EQUAL(u'_', aTabstops[0].FillChar);
 
     // tleq
-    aTabstops = getProperty<uno::Sequence<style::TabStop>>(getParagraph(4), u"ParaTabStops"_ustr);
+    aTabstops
+        = getProperty<cpo::uno::Sequence<style::TabStop>>(getParagraph(4), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT(aTabstops.hasElements());
     CPPUNIT_ASSERT_EQUAL(u' ', aTabstops[0].FillChar);
 }

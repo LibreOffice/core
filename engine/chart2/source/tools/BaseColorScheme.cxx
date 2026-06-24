@@ -34,7 +34,7 @@ bool SAL_CALL BaseColorScheme::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL BaseColorScheme::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL BaseColorScheme::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.ColorScheme"_ustr };
 }

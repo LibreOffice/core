@@ -59,11 +59,11 @@ const sal_uInt16 OLD_HIDDEN         = 0x0004;
 const sal_uInt16 COMPATIBLE_HIDDEN  = 0x0008;
 
 
-const css::uno::Sequence<OUString>& getColumnTypes()
+const cpo::uno::Sequence<OUString>& getColumnTypes()
 {
-    static css::uno::Sequence<OUString> aColumnTypes = []()
+    static cpo::uno::Sequence<OUString> aColumnTypes = []()
     {
-        css::uno::Sequence<OUString> tmp(10);
+        cpo::uno::Sequence<OUString> tmp(10);
         OUString* pNames = tmp.getArray();
         pNames[TYPE_CHECKBOX]       = u"CheckBox"_ustr;
         pNames[TYPE_COMBOBOX]       = u"ComboBox"_ustr;
@@ -102,7 +102,7 @@ sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
             ? aModelName.copy(aModelPrefix.getLength())
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 
-        const css::uno::Sequence<OUString>& rColumnTypes = getColumnTypes();
+        const cpo::uno::Sequence<OUString>& rColumnTypes = getColumnTypes();
         nTypeId = ::detail::findPos(aColumnType, rColumnTypes);
     }
     return nTypeId;
@@ -134,7 +134,7 @@ sal_Int64 SAL_CALL OGridColumn::getSomething( const Sequence<sal_Int8>& _rIdenti
 
 Sequence<sal_Int8> SAL_CALL OGridColumn::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 
@@ -565,8 +565,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> TextFieldColumn::getPropertyS
     return *getArrayHelper();
 }
 void TextFieldColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -599,8 +599,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> PatternFieldColumn::getProper
     return *getArrayHelper();
 }
 void PatternFieldColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -633,8 +633,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> DateFieldColumn::getPropertyS
     return *getArrayHelper();
 }
 void DateFieldColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -667,8 +667,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> TimeFieldColumn::getPropertyS
     return *getArrayHelper();
 }
 void TimeFieldColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -701,8 +701,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> NumericFieldColumn::getProper
     return *getArrayHelper();
 }
 void NumericFieldColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -735,8 +735,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> CurrencyFieldColumn::getPrope
     return *getArrayHelper();
 }
 void CurrencyFieldColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -769,8 +769,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> CheckBoxColumn::getPropertySe
     return *getArrayHelper();
 }
 void CheckBoxColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -803,8 +803,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> ComboBoxColumn::getPropertySe
     return *getArrayHelper();
 }
 void ComboBoxColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -837,8 +837,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> ListBoxColumn::getPropertySet
     return *getArrayHelper();
 }
 void ListBoxColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())
@@ -871,8 +871,8 @@ css::uno::Reference< css::beans::XPropertySetInfo> FormattedFieldColumn::getProp
     return *getArrayHelper();
 }
 void FormattedFieldColumn::fillProperties(
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
-    css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps,
+    cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const
 {
     if (m_xAggregateSet.is())

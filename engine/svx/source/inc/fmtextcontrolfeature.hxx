@@ -70,7 +70,7 @@ namespace svx
 
         /** dispatches the feature URL to the dispatcher, with passing the given arguments
         */
-        void    dispatch( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs ) const;
+        void    dispatch( const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs ) const;
 
         /// releases any resources associated with this instance
         void    dispose();

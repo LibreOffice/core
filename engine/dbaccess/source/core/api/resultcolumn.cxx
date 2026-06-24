@@ -100,7 +100,7 @@ OResultColumn::~OResultColumn()
 // css::lang::XTypeProvider
 Sequence< sal_Int8 > OResultColumn::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo

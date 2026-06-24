@@ -49,7 +49,7 @@ ignoreDiacritics_CTL::transliterateChar2Char(sal_Unicode nInChar)
 
 OUString
 ignoreDiacritics_CTL::foldingImpl(const OUString& rInStr, sal_Int32 nStartPos,
-    sal_Int32 nCount, css::uno::Sequence<sal_Int32>* pOffset)
+    sal_Int32 nCount, cpo::uno::Sequence<sal_Int32>* pOffset)
 {
     if (!m_transliterator)
         throw css::uno::RuntimeException();

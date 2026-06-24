@@ -620,7 +620,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                 {
                     cpo::uno::Any aAny = mxExportInfo->getPropertyValue(sWrittenNumberFormats);
-                    uno::Sequence<sal_Int32> aWasUsed;
+                    cpo::uno::Sequence<sal_Int32> aWasUsed;
                     if(aAny >>= aWasUsed)
                         mpNumExport->SetWasUsed(aWasUsed);
                 }
@@ -661,7 +661,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
 }
 
 // XInitialize
-void SAL_CALL SvXMLExport::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SvXMLExport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // #93186# we need to queryInterface every single Any with any expected outcome. This variable hold the queryInterface results.
 
@@ -765,7 +765,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< cpo::uno::Any >& aAr
 }
 
 // XFilter
-bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
+bool SAL_CALL SvXMLExport::filter( const cpo::uno::Sequence< beans::PropertyValue >& aDescriptor )
 {
     // check for xHandler first... should have been supplied in initialize
     if( !mxHandler.is() )
@@ -891,7 +891,7 @@ bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.ExportFilter"_ustr, u"com.sun.star.xml.XMLExportFilter"_ustr };
 }
@@ -1063,13 +1063,13 @@ void SvXMLExport::ImplExportSettings()
     sal_Int32 nSettingsCount = 0;
 
     // view settings
-    uno::Sequence< beans::PropertyValue > aViewSettings;
+    cpo::uno::Sequence< beans::PropertyValue > aViewSettings;
     GetViewSettingsAndViews( aViewSettings );
     aSettings.emplace_back( XML_VIEW_SETTINGS, aViewSettings );
     nSettingsCount += aViewSettings.getLength();
 
     // configuration settings
-    uno::Sequence<beans::PropertyValue> aConfigSettings;
+    cpo::uno::Sequence<beans::PropertyValue> aConfigSettings;
     GetConfigurationSettings( aConfigSettings );
     aSettings.emplace_back( XML_CONFIGURATION_SETTINGS, aConfigSettings );
     nSettingsCount += aConfigSettings.getLength();
@@ -1222,7 +1222,7 @@ void SvXMLExport::addChaffWhenEncryptedStorage()
 
     if (xEncr.is() && xEncr->hasEncryptionData() && mxExtHandler.is())
     {
-        uno::Sequence<beans::NamedValue> const algo(xEncr->getEncryptionAlgorithms());
+        cpo::uno::Sequence<beans::NamedValue> const algo(xEncr->getEncryptionAlgorithms());
         for (auto const& it : algo)
         {
             if (it.Name == "ChecksumAlgorithm")
@@ -1553,7 +1553,7 @@ void SvXMLExport::ExportStyles_( bool )
 
             if( xGradient->hasElements() )
             {
-                const uno::Sequence< OUString > aNamesSeq ( xGradient->getElementNames() );
+                const cpo::uno::Sequence< OUString > aNamesSeq ( xGradient->getElementNames() );
                 for( const OUString& rStrName : aNamesSeq )
                 {
                     try
@@ -1583,7 +1583,7 @@ void SvXMLExport::ExportStyles_( bool )
 
             if( xHatch->hasElements() )
             {
-                const uno::Sequence< OUString > aNamesSeq ( xHatch->getElementNames() );
+                const cpo::uno::Sequence< OUString > aNamesSeq ( xHatch->getElementNames() );
                 for( const OUString& rStrName : aNamesSeq )
                 {
                     try
@@ -1610,7 +1610,7 @@ void SvXMLExport::ExportStyles_( bool )
         {
             if( xBitmap->hasElements() )
             {
-                const uno::Sequence< OUString > aNamesSeq ( xBitmap->getElementNames() );
+                const cpo::uno::Sequence< OUString > aNamesSeq ( xBitmap->getElementNames() );
                 for( const OUString& rStrName : aNamesSeq )
                 {
                     try
@@ -1640,7 +1640,7 @@ void SvXMLExport::ExportStyles_( bool )
 
             if( xTransGradient->hasElements() )
             {
-                const uno::Sequence< OUString > aNamesSeq ( xTransGradient->getElementNames() );
+                const cpo::uno::Sequence< OUString > aNamesSeq ( xTransGradient->getElementNames() );
                 for( const OUString& rStrName : aNamesSeq )
                 {
                     try
@@ -1670,7 +1670,7 @@ void SvXMLExport::ExportStyles_( bool )
 
             if( xMarker->hasElements() )
             {
-                const uno::Sequence< OUString > aNamesSeq ( xMarker->getElementNames() );
+                const cpo::uno::Sequence< OUString > aNamesSeq ( xMarker->getElementNames() );
                 for( const OUString& rStrName : aNamesSeq )
                 {
                     try
@@ -1700,7 +1700,7 @@ void SvXMLExport::ExportStyles_( bool )
 
             if( xDashes->hasElements() )
             {
-                const uno::Sequence< OUString > aNamesSeq ( xDashes->getElementNames() );
+                const cpo::uno::Sequence< OUString > aNamesSeq ( xDashes->getElementNames() );
                 for( const OUString& rStrName : aNamesSeq )
                 {
                     try
@@ -1813,7 +1813,7 @@ xmloff::OFormLayerXMLExport* SvXMLExport::CreateFormExport()
     return new xmloff::OFormLayerXMLExport(*this);
 }
 
-void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& rProps)
+void SvXMLExport::GetViewSettingsAndViews(cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     GetViewSettings(rProps);
     uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
@@ -1841,7 +1841,7 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
         for (sal_Int32 i = 0; i < nCount; i++)
         {
             aAny = xIndexAccess->getByIndex(i);
-            uno::Sequence<beans::PropertyValue> aProps;
+            cpo::uno::Sequence<beans::PropertyValue> aProps;
             if( aAny >>= aProps )
             {
                 if( aProps.hasElements() )
@@ -1861,11 +1861,11 @@ void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& r
     }
 }
 
-void SvXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>&)
+void SvXMLExport::GetViewSettings(cpo::uno::Sequence<beans::PropertyValue>&)
 {
 }
 
-void SvXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>&)
+void SvXMLExport::GetConfigurationSettings(cpo::uno::Sequence<beans::PropertyValue>&)
 {
 }
 

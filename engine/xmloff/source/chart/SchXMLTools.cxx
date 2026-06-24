@@ -59,7 +59,7 @@ using namespace com::sun::star;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace
 {
@@ -469,7 +469,7 @@ void CreateCategories(
                     return;
 
                 uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDia, uno::UNO_QUERY_THROW );
-                uno::Sequence< uno::Reference< chart2::XCoordinateSystem > >
+                cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > >
                     aCooSysSeq( xCooSysCnt->getCoordinateSystems());
                 if( nCooSysIndex < aCooSysSeq.getLength())
                 {
@@ -695,7 +695,7 @@ void importFormattedText( SvXMLImport& rImport, const std::vector<std::pair<OUSt
             aStringVec.emplace_back(xNewFmtStr);
         }
 
-        uno::Sequence< Reference< chart2::XFormattedString > > aStringSeq =
+        cpo::uno::Sequence< Reference< chart2::XFormattedString > > aStringSeq =
             comphelper::containerToSequence(aStringVec);
         xTitleProp->setPropertyValue(u"FormattedStrings"_ustr, cpo::uno::Any(aStringSeq));
     }
@@ -946,7 +946,7 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
         if( xFact.is() )
         {
             static constexpr OUString aDataProviderServiceName( u"com.sun.star.chart2.data.DataProvider"_ustr);
-            const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
+            const cpo::uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
             const OUString * pBegin = aServiceNames.getConstArray();
             const OUString * pEnd = pBegin + aServiceNames.getLength();
             if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )

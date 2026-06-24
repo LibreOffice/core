@@ -95,7 +95,7 @@ public:
     void SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName = nullptr);
 
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
-                        const css::uno::Sequence< css::sheet::DataPilotFieldFilter >& rFilters );
+                        const cpo::uno::Sequence< css::sheet::DataPilotFieldFilter >& rFilters );
 
     void            MakeOutline( bool bColumns, bool bRecord = true );
     void            RemoveOutline( bool bColumns, bool bRecord = true );

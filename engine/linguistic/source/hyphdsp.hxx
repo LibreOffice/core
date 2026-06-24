@@ -74,7 +74,7 @@ public:
     virtual ~HyphenatorDispatcher() override;
 
     // XSupportedLocales
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL
         getLocales() override;
     virtual bool SAL_CALL
         hasLocale( const css::lang::Locale& aLocale ) override;
@@ -84,24 +84,24 @@ public:
         hyphenate( const OUString& aWord,
                 const css::lang::Locale& aLocale,
                 sal_Int16 nMaxLeading,
-                const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+                const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
     virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > SAL_CALL
         queryAlternativeSpelling( const OUString& aWord,
                 const css::lang::Locale& aLocale,
                 sal_Int16 nIndex,
-                const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+                const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
     virtual css::uno::Reference<
             css::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
                 const OUString& aWord,
                 const css::lang::Locale& aLocale,
-                const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+                const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
 
     // LinguDispatcher
     virtual void
         SetServiceList( const css::lang::Locale &rLocale,
-                const css::uno::Sequence< OUString > &rSvcImplNames ) override;
-    virtual css::uno::Sequence< OUString >
+                const cpo::uno::Sequence< OUString > &rSvcImplNames ) override;
+    virtual cpo::uno::Sequence< OUString >
         GetServiceList( const css::lang::Locale &rLocale ) const override;
 };
 

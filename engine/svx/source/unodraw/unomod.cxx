@@ -87,7 +87,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 //-
 
@@ -202,7 +202,7 @@ uno::Reference< uno::XInterface > SvxUnoDrawMSFactory::createTextField( std::u16
     return SvxUnoTextCreateTextField( ServiceSpecifier );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< cpo::uno::Any >& Arguments )
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
     OUString arg;
     if ((ServiceSpecifier == "com.sun.star.drawing.GraphicObjectShape"
@@ -217,7 +217,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstanceWi
     throw lang::NoSupportException();
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames()
 {
     return UHashMap::getServiceNames();
 }
@@ -253,12 +253,12 @@ cpo::uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rTy
 }
 
 // XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  )
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  )
 {
     if( !maTypeSequence.hasElements() )
     {
         maTypeSequence = comphelper::concatSequences( SfxBaseModel::getTypes(),
-            uno::Sequence {
+            cpo::uno::Sequence {
                 cppu::UnoType<lang::XServiceInfo>::get(),
                 cppu::UnoType<lang::XMultiServiceFactory>::get(),
                 cppu::UnoType<drawing::XDrawPagesSupplier>::get(),
@@ -267,9 +267,9 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  )
     return maTypeSequence;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawingModel::getImplementationId(  )
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawingModel::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL SvxUnoDrawingModel::lockControllers(  )
@@ -466,9 +466,9 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( c
     return xRet;
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames()
 {
-    const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
+    const cpo::uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
 
     static constexpr OUString aSNS[] {
         u"com.sun.star.drawing.DashTable"_ustr,
@@ -509,7 +509,7 @@ bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.DrawingDocument"_ustr };
 }
@@ -636,7 +636,7 @@ bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& ServiceNam
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.DrawPages"_ustr };
 }

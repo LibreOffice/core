@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <vector>
 #include <map>
@@ -146,7 +146,7 @@ private:
 
     /// export a change-info element (from PropertyValues)
     void ExportChangeInfo(
-        const css::uno::Sequence<css::beans::PropertyValue> & rValues);
+        const cpo::uno::Sequence<css::beans::PropertyValue> & rValues);
 
     /// convert the change type from API to XML names
     OUString const & ConvertTypeName(std::u16string_view sApiName);

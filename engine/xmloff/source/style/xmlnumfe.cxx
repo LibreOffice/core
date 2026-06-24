@@ -116,8 +116,8 @@ public:
     bool    GetFirstUsed(sal_uInt32& nKey);
     bool    GetNextUsed(sal_uInt32& nKey);
 
-    uno::Sequence<sal_Int32> GetWasUsed() const;
-    void SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed);
+    cpo::uno::Sequence<sal_Int32> GetWasUsed() const;
+    void SetWasUsed(const cpo::uno::Sequence<sal_Int32>& rWasUsed);
 };
 
 //! SvXMLNumUsedList_Impl should be optimized!
@@ -192,12 +192,12 @@ bool SvXMLNumUsedList_Impl::GetNextUsed(sal_uInt32& nKey)
     return bRet;
 }
 
-uno::Sequence<sal_Int32> SvXMLNumUsedList_Impl::GetWasUsed() const
+cpo::uno::Sequence<sal_Int32> SvXMLNumUsedList_Impl::GetWasUsed() const
 {
     return comphelper::containerToSequence<sal_Int32>(aWasUsed);
 }
 
-void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
+void SvXMLNumUsedList_Impl::SetWasUsed(const cpo::uno::Sequence<sal_Int32>& rWasUsed)
 {
     DBG_ASSERT(nWasUsedCount == 0, "WasUsed should be empty");
     for (const auto nWasUsed : rWasUsed)
@@ -999,7 +999,7 @@ static OUString lcl_GetDefaultCalendar( SvNumberFormatter const * pFormatter, La
     {
         lang::Locale aLocale( LanguageTag::convertToLocale( nLang ) );
 
-        const uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
+        const cpo::uno::Sequence<OUString> aCals = pCalendar->getAllCalendars( aLocale );
         auto pCal = std::find_if(aCals.begin(), aCals.end(),
             [](const OUString& rCal) { return rCal != "gregorian"; });
         if (pCal != aCals.end())
@@ -2077,14 +2077,14 @@ void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
     }
 }
 
-uno::Sequence<sal_Int32> SvXMLNumFmtExport::GetWasUsed() const
+cpo::uno::Sequence<sal_Int32> SvXMLNumFmtExport::GetWasUsed() const
 {
     if (m_pUsedList)
         return m_pUsedList->GetWasUsed();
-    return uno::Sequence<sal_Int32>();
+    return cpo::uno::Sequence<sal_Int32>();
 }
 
-void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
+void SvXMLNumFmtExport::SetWasUsed(const cpo::uno::Sequence<sal_Int32>& rWasUsed)
 {
     if (m_pUsedList)
         m_pUsedList->SetWasUsed(rWasUsed);

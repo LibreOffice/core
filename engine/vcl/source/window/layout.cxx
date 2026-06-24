@@ -3125,7 +3125,7 @@ void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     SvMemoryStream aOStm(65535, 65535);
     if(GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
     {
-        css::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
+        cpo::uno::Sequence<sal_Int8> aSeq( static_cast<sal_Int8 const *>(aOStm.GetData()), aOStm.Tell());
         OStringBuffer aBuffer("data:image/png;base64,");
         ::comphelper::Base64::encode(aBuffer, aSeq);
         rJsonWriter.put("image", aBuffer);

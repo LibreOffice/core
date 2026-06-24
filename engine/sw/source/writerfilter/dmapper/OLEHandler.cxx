@@ -294,7 +294,7 @@ OUString OLEHandler::copyOLEOStream(rtl::Reference<SwXTextDocument> const& xText
         if( (xEmbeddedResolver->getByName( aURL ) >>= xOLEStream) && xOLEStream.is() )
         {
             const sal_Int32 nReadRequest = 0x1000;
-            uno::Sequence< sal_Int8 > aData;
+            cpo::uno::Sequence< sal_Int8 > aData;
 
             while( true )
             {

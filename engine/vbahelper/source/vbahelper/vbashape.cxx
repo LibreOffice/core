@@ -176,7 +176,7 @@ sal_Int32 ScVbaShape::getAutoShapeType(const css::uno::Reference< drawing::XShap
     {
         uno::Reference< beans::XPropertySet > aXPropSet( xShape, uno::UNO_QUERY );
         cpo::uno::Any aGeoPropSet = aXPropSet->getPropertyValue( u"CustomShapeGeometry"_ustr );
-        uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+        cpo::uno::Sequence< beans::PropertyValue > aGeoPropSeq;
         if ( aGeoPropSet >>= aGeoPropSeq )
         {
             for (const auto& rProp : aGeoPropSeq)
@@ -740,10 +740,10 @@ ScVbaShape::getServiceImplName()
     return u"ScVbaShape"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaShape::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msform.Shape"_ustr
     };

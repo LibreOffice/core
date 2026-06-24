@@ -185,8 +185,8 @@ public:
     virtual ::sal_Int32 SAL_CALL insertTab() override;
     virtual void SAL_CALL removeTab( ::sal_Int32 ID ) override;
 
-    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& Properties ) override;
-    virtual css::uno::Sequence< css::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) override;
+    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const cpo::uno::Sequence< css::beans::NamedValue >& Properties ) override;
+    virtual cpo::uno::Sequence< css::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) override;
 
     virtual void SAL_CALL activateTab( ::sal_Int32 ID ) override;
     virtual ::sal_Int32 SAL_CALL getActiveTabID() override;
@@ -566,7 +566,7 @@ public:
     virtual void SAL_CALL selectAllRows() override;
     virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) override;
     virtual void SAL_CALL deselectAllRows() override;
-    virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() override;
+    virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() override;
     virtual bool SAL_CALL hasSelectedRows() override;
     virtual bool SAL_CALL isRowSelected(::sal_Int32 index) override;
     virtual void SAL_CALL addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;

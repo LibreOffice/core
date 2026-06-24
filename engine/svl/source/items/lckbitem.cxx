@@ -21,7 +21,7 @@
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 
 SfxPoolItem* SfxLockBytesItem::CreateDefault() { return new SfxLockBytesItem; }

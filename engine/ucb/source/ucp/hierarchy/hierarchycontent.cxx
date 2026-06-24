@@ -57,7 +57,7 @@
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -198,7 +198,7 @@ XTYPEPROVIDER_COMMON_IMPL( HierarchyContent );
 
 
 // virtual
-uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
 {
     if ( isFolder() && !isReadOnly() )
     {
@@ -248,10 +248,10 @@ OUString SAL_CALL HierarchyContent::getImplementationName()
 
 
 // virtual
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 HierarchyContent::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSNS( 1 );
+    cpo::uno::Sequence< OUString > aSNS( 1 );
 
     if ( m_eKind == LINK )
         aSNS.getArray()[ 0 ] = u"com.sun.star.ucb.HierarchyLinkContent"_ustr;
@@ -306,7 +306,7 @@ cpo::uno::Any SAL_CALL HierarchyContent::execute(
         // getPropertyValues
 
 
-        uno::Sequence< beans::Property > Properties;
+        cpo::uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -326,7 +326,7 @@ cpo::uno::Any SAL_CALL HierarchyContent::execute(
         // setPropertyValues
 
 
-        uno::Sequence< beans::PropertyValue > aProperties;
+        cpo::uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -427,7 +427,7 @@ cpo::uno::Any SAL_CALL HierarchyContent::execute(
         // Remove own and all children's persistent data.
         if ( !removeData() )
         {
-            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
                 {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
             }));
@@ -516,7 +516,7 @@ void SAL_CALL HierarchyContent::abort( sal_Int32 /*CommandId*/ )
 
 
 // virtual
-uno::Sequence< ucb::ContentInfo > SAL_CALL
+cpo::uno::Sequence< ucb::ContentInfo > SAL_CALL
 HierarchyContent::queryCreatableContentsInfo()
 {
     return m_aProps.getCreatableContentsInfo();
@@ -681,7 +681,7 @@ bool HierarchyContent::isReadOnly()
                 = m_pProvider->getConfigProvider( aUri.getService() );
             if ( xConfigProv.is() )
             {
-                uno::Sequence< OUString > aNames
+                cpo::uno::Sequence< OUString > aNames
                     = xConfigProv->getAvailableServiceNames();
                 m_bIsReadOnly = comphelper::findValue(aNames, "com.sun.star.ucb.HierarchyDataReadWriteAccess") == -1;
             }
@@ -830,7 +830,7 @@ bool HierarchyContent::exchangeIdentity(
 // static
 uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                 const uno::Reference< uno::XComponentContext >& rxContext,
-                const uno::Sequence< beans::Property >& rProperties,
+                const cpo::uno::Sequence< beans::Property >& rProperties,
                 const HierarchyContentProperties& rData,
                 HierarchyContentProvider* pProvider,
                 const OUString& rContentId )
@@ -953,7 +953,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
             beans::Property(
                 u"CreatableContentsInfo"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY ),
             cpo::uno::Any( rData.getCreatableContentsInfo() ) );
@@ -970,7 +970,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 
 
 uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
-                        const uno::Sequence< beans::Property >& rProperties )
+                        const cpo::uno::Sequence< beans::Property >& rProperties )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     return getPropertyValues( m_xContext,
@@ -981,15 +981,15 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 }
 
 
-uno::Sequence< cpo::uno::Any > HierarchyContent::setPropertyValues(
-        const uno::Sequence< beans::PropertyValue >& rValues,
+cpo::uno::Sequence< cpo::uno::Any > HierarchyContent::setPropertyValues(
+        const cpo::uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     osl::ResettableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Sequence< cpo::uno::Any > aRet( rValues.getLength() );
+    cpo::uno::Sequence< cpo::uno::Any > aRet( rValues.getLength() );
     auto aRetRange = asNonConstRange(aRet);
-    uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
+    cpo::uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
     beans::PropertyChangeEvent aEvent;
@@ -1257,7 +1257,7 @@ uno::Sequence< cpo::uno::Any > HierarchyContent::setPropertyValues(
         {
             if ( !storeData() )
             {
-                uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
                 {
                     {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
                 }));
@@ -1301,7 +1301,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     // Check, if all required properties were set.
     if ( m_aProps.getTitle().isEmpty() )
     {
-        uno::Sequence<OUString> aProps { u"Title"_ustr };
+        cpo::uno::Sequence<OUString> aProps { u"Title"_ustr };
         ucbhelper::cancelCommandExecution(
             cpo::uno::Any( ucb::MissingPropertiesException(
                                 OUString(),
@@ -1396,7 +1396,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 
     if ( !storeData() )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
         }));
@@ -1512,7 +1512,7 @@ void HierarchyContent::transfer(
     {
         if ( aId.startsWith( rInfo.SourceURL ) )
         {
-            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
                 {"Uri", cpo::uno::Any(rInfo.SourceURL)}
             }));
@@ -1549,7 +1549,7 @@ void HierarchyContent::transfer(
 
     if ( !xSource.is() )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"Uri", cpo::uno::Any(xId->getContentIdentifier())}
         }));
@@ -1579,7 +1579,7 @@ void HierarchyContent::transfer(
             createNewContent( aContentInfo ).get() );
     if ( !xTarget.is() )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"Folder", cpo::uno::Any(aId)}
         }));
@@ -1596,7 +1596,7 @@ void HierarchyContent::transfer(
     // 2) Copy data from source content to child content.
 
 
-    uno::Sequence< beans::Property > aSourceProps
+    cpo::uno::Sequence< beans::Property > aSourceProps
                     = xSource->getPropertySetInfo( xEnv )->getProperties();
     sal_Int32 nCount = aSourceProps.getLength();
 
@@ -1608,7 +1608,7 @@ void HierarchyContent::transfer(
         uno::Reference< sdbc::XRow > xRow
             = xSource->getPropertyValues( aSourceProps );
 
-        uno::Sequence< beans::PropertyValue > aValues( nCount );
+        cpo::uno::Sequence< beans::PropertyValue > aValues( nCount );
         beans::PropertyValue* pValues = aValues.getArray();
 
         const beans::Property* pProps = aSourceProps.getConstArray();
@@ -1707,7 +1707,7 @@ void HierarchyContent::transfer(
     // Remove all persistent data of source and its children.
     if ( !xSource->removeData() )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"Uri", cpo::uno::Any(xSource->m_xIdentifier->getContentIdentifier())}
         }));
@@ -1728,18 +1728,18 @@ void HierarchyContent::transfer(
 // HierarchyContentProperties Implementation.
 
 
-uno::Sequence< ucb::ContentInfo >
+cpo::uno::Sequence< ucb::ContentInfo >
 HierarchyContentProperties::getCreatableContentsInfo() const
 {
     if ( getIsFolder() )
     {
-        uno::Sequence< ucb::ContentInfo > aSeq( 2 );
+        cpo::uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
         // Folder.
         aSeq.getArray()[ 0 ].Type = HIERARCHY_FOLDER_CONTENT_TYPE;
         aSeq.getArray()[ 0 ].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
 
-        uno::Sequence< beans::Property > aFolderProps( 1 );
+        cpo::uno::Sequence< beans::Property > aFolderProps( 1 );
         aFolderProps.getArray()[ 0 ] = beans::Property(
                     u"Title"_ustr,
                     -1,
@@ -1751,7 +1751,7 @@ HierarchyContentProperties::getCreatableContentsInfo() const
         aSeq.getArray()[ 1 ].Type = HIERARCHY_LINK_CONTENT_TYPE;
         aSeq.getArray()[ 1 ].Attributes = ucb::ContentInfoAttribute::KIND_LINK;
 
-        uno::Sequence< beans::Property > aLinkProps( 2 );
+        cpo::uno::Sequence< beans::Property > aLinkProps( 2 );
         aLinkProps.getArray()[ 0 ] = beans::Property(
                     u"Title"_ustr,
                     -1,
@@ -1768,7 +1768,7 @@ HierarchyContentProperties::getCreatableContentsInfo() const
     }
     else
     {
-        return uno::Sequence< ucb::ContentInfo >( 0 );
+        return cpo::uno::Sequence< ucb::ContentInfo >( 0 );
     }
 }
 

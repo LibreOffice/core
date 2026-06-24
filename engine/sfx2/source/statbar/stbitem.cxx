@@ -484,7 +484,7 @@ void SfxStatusBarControl::Click()
 */
 
 {
-    css::uno::Sequence< css::beans::PropertyValue > aArgs;
+    cpo::uno::Sequence< css::beans::PropertyValue > aArgs;
     execute( aArgs );
 }
 

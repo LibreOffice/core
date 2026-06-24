@@ -89,7 +89,7 @@ namespace framework
             ~ImageManagerImpl();
 
             void dispose();
-            void initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments );
+            void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
             /// @throws css::uno::RuntimeException
             void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener );
             /// @throws css::uno::RuntimeException
@@ -100,26 +100,26 @@ namespace framework
             /// @throws css::lang::IllegalAccessException
             void reset();
             /// @throws css::uno::RuntimeException
-            css::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType );
+            cpo::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::uno::RuntimeException
             bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::uno::RuntimeException
-            css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence );
+            cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::lang::IllegalAccessException
             /// @throws css::uno::RuntimeException
-            void replaceImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence );
+            void replaceImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::lang::IllegalAccessException
             /// @throws css::uno::RuntimeException
-            void removeImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aResourceURLSequence );
+            void removeImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aResourceURLSequence );
             /// @throws css::container::ElementExistException
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::lang::IllegalAccessException
             /// @throws css::uno::RuntimeException
-            void insertImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence );
+            void insertImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence );
 
             // XUIConfiguration
             /// @throws css::uno::RuntimeException

@@ -53,7 +53,7 @@ namespace dlgprov
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::script::XScriptListener > const & getScriptListenerForKey( const OUString& sScriptName );
         css::uno::Reference< css::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const css::uno::Reference< css::awt::XControl>& xControl, OUString const & sCodeName );
-        void nestedAttachEvents( const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects, const cpo::uno::Any& Helper, OUString& sDialogCodeName );
+        void nestedAttachEvents( const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects, const cpo::uno::Any& Helper, OUString& sDialogCodeName );
         void nestedAttachEvents( const css::uno::Reference< css::awt::XControl >& xControl, const cpo::uno::Any& Helper, OUString& sDialogCodeName );
         void attachEventsToControl( const css::uno::Reference< css::awt::XControl>& xControl, const css::uno::Reference< css::script::XScriptEventsSupplier >& events, const cpo::uno::Any& Helper  );
     public:
@@ -67,7 +67,7 @@ namespace dlgprov
         virtual ~DialogEventsAttacherImpl() override;
 
         // XScriptEventsAttacher
-        virtual void SAL_CALL attachEvents( const css::uno::Sequence<
+        virtual void SAL_CALL attachEvents( const cpo::uno::Sequence<
             css::uno::Reference< css::uno::XInterface > >& Objects,
             const css::uno::Reference<css::script::XScriptListener>&,
             const cpo::uno::Any& Helper ) override;

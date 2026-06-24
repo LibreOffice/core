@@ -49,7 +49,7 @@ public:
     virtual cpo::uno::Any SAL_CALL
     getTransferData(const css::datatransfer::DataFlavor& aFlavor) override;
 
-    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
 
     bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
 
@@ -61,7 +61,7 @@ public:
                             const css::datatransfer::DataFlavor& rhs);
 
 private:
-    css::uno::Sequence<css::datatransfer::DataFlavor> mFlavorList;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> mFlavorList;
     css::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
     std::shared_ptr<DataFlavorMapper> mDataFlavorMapper;
 };

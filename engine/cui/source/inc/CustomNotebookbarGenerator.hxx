@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
 class CustomNotebookbarGenerator
@@ -29,11 +29,11 @@ public:
     static OUString getCustomizedUIPath();
     static OUString getOriginalUIPath();
     static OString getSystemPath(OUString const& sURL);
-    static css::uno::Sequence<OUString> getCustomizedUIItem(const OUString& sNotebookbarConfigType);
+    static cpo::uno::Sequence<OUString> getCustomizedUIItem(const OUString& sNotebookbarConfigType);
     static void getFileNameAndAppName(OUString& sAppName, OUString& sNotebookbarUIFileName);
-    static void modifyCustomizedUIFile(const css::uno::Sequence<OUString>& sUIItemProperties);
+    static void modifyCustomizedUIFile(const cpo::uno::Sequence<OUString>& sUIItemProperties);
     static void createCustomizedUIFile();
-    static void setCustomizedUIItem(const css::uno::Sequence<OUString>& rUIItemProperties,
+    static void setCustomizedUIItem(const cpo::uno::Sequence<OUString>& rUIItemProperties,
                                     const OUString& rNotebookbarConfigType);
 };
 

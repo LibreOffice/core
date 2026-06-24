@@ -25,14 +25,14 @@
 
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include "xsecxmlsecdllapi.h"
 
 namespace xmlsecurity
 {
-XSECXMLSEC_DLLPUBLIC OUString bigIntegerToNumericString(const css::uno::Sequence<sal_Int8>& serial);
-XSECXMLSEC_DLLPUBLIC css::uno::Sequence<sal_Int8>
+XSECXMLSEC_DLLPUBLIC OUString bigIntegerToNumericString(const cpo::uno::Sequence<sal_Int8>& serial);
+XSECXMLSEC_DLLPUBLIC cpo::uno::Sequence<sal_Int8>
 numericStringToBigInteger(std::u16string_view serialNumber);
 
 // DNs read as strings from XML files may need to be mangled for compatibility

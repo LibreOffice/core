@@ -135,7 +135,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
     try
     {
         Reference< container::XNameAccess > xNameAccess( xNameContainer, uno::UNO_QUERY_THROW );
-        const uno::Sequence<OUString> aElementNames = xNameAccess->getElementNames();
+        const cpo::uno::Sequence<OUString> aElementNames = xNameAccess->getElementNames();
         auto it = std::find_if( aElementNames.begin(), aElementNames.end(), lcl_EqualsElement( aValue, xNameAccess ));
 
         // element found => return name

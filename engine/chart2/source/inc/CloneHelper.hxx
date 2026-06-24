@@ -65,8 +65,8 @@ template< class T >
 /// clones a UNO-sequence of UNO-References
 template< class Interface >
     void CloneRefSequence(
-        const css::uno::Sequence< css::uno::Reference<Interface> > & rSource,
-        css::uno::Sequence< css::uno::Reference<Interface> > & rDestination )
+        const cpo::uno::Sequence< css::uno::Reference<Interface> > & rSource,
+        cpo::uno::Sequence< css::uno::Reference<Interface> > & rDestination )
 {
     rDestination.realloc( rSource.getLength());
     std::transform( rSource.begin(), rSource.end(),

@@ -789,7 +789,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
         if ( ( mAny >>= aXIndexReplace ) && nNumberingDepth < aXIndexReplace->getCount() )
         {
             mAny = aXIndexReplace->getByIndex( nNumberingDepth );
-            auto aPropertySequence = o3tl::doAccess<css::uno::Sequence<css::beans::PropertyValue>>(mAny);
+            auto aPropertySequence = o3tl::doAccess<cpo::uno::Sequence<css::beans::PropertyValue>>(mAny);
 
             if ( aPropertySequence->hasElements() )
             {
@@ -1092,7 +1092,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     ImplGetNumberingLevel( pBuProv, nDepth, mbIsBullet, bGetPropStateValue );
 
     if ( ImplGetPropertyValue( u"ParaTabStops"_ustr, bGetPropStateValue ) )
-        maTabStop = *o3tl::doAccess<css::uno::Sequence<css::style::TabStop>>(mAny);
+        maTabStop = *o3tl::doAccess<cpo::uno::Sequence<css::style::TabStop>>(mAny);
     sal_Int16 eTextAdjust = sal_Int16(css::style::ParagraphAdjust_LEFT);
     if ( GetPropertyValue( aAny, mXPropSet, u"ParaAdjust"_ustr, bGetPropStateValue ) )
         aAny >>= eTextAdjust;

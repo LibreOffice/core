@@ -22,7 +22,7 @@
 #include <vector>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 const sal_Unicode   TILDE_SIGN = L'~';
 const sal_Unicode   AMPERSAND_SIGN = L'&';

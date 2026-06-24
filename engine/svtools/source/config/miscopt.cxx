@@ -21,7 +21,7 @@
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/link.hxx>
 #include <osl/diagnose.h>
@@ -191,7 +191,7 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
 
 void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
 {
-    const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
+    const cpo::uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
     Sequence< Any > seqValues = GetProperties( rPropertyNames  );
 
     // Safe impossible cases.

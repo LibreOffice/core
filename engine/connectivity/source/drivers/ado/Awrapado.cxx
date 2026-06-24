@@ -1774,7 +1774,7 @@ ADORecordset* WpADOConnection::getProcedureColumns( const cpo::uno::Any& catalog
 ADORecordset* WpADOConnection::getTables( const cpo::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   std::u16string_view tableNamePattern,
-                                                  const css::uno::Sequence< OUString >& types )
+                                                  const cpo::uno::Sequence< OUString >& types )
 {
     // Create elements used in the array
     HRESULT hr = S_OK;

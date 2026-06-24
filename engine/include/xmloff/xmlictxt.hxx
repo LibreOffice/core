@@ -106,8 +106,8 @@ public:
     { if (osl_atomic_decrement(&m_nRefCount) == 0) delete this; }
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) final override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) final override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) final override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) final override;
 };
 
 #define XMLOFF_WARN_UNKNOWN(area, rIter) \

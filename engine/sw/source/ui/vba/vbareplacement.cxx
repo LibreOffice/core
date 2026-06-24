@@ -44,7 +44,7 @@ void SAL_CALL SwVbaReplacement::setText( const OUString& _text )
 
 void SAL_CALL SwVbaReplacement::ClearFormatting( )
 {
-    uno::Sequence< beans::PropertyValue > aPropValues;
+    cpo::uno::Sequence< beans::PropertyValue > aPropValues;
     mxPropertyReplace->setReplaceAttributes( aPropValues );
 }
 
@@ -54,10 +54,10 @@ SwVbaReplacement::getServiceImplName()
     return u"SwVbaReplacement"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaReplacement::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Replacement"_ustr
     };

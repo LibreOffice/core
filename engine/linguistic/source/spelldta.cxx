@@ -37,6 +37,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
+using namespace ::cpo::uno;
 
 
 namespace linguistic
@@ -210,7 +211,7 @@ Sequence< OUString > SAL_CALL SpellAlternatives::getAlternatives()
 }
 
 
-void SAL_CALL SpellAlternatives::setAlternatives( const uno::Sequence< OUString >& rAlternatives )
+void SAL_CALL SpellAlternatives::setAlternatives( const cpo::uno::Sequence< OUString >& rAlternatives )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     aAlt = rAlternatives;
@@ -247,7 +248,7 @@ void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 
 
 css::uno::Reference < css::linguistic2::XSpellAlternatives > SpellAlternatives::CreateSpellAlternatives(
-        const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const css::uno::Sequence< OUString > &rAlt )
+        const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const cpo::uno::Sequence< OUString > &rAlt )
 {
     rtl::Reference<SpellAlternatives> pAlt = new SpellAlternatives;
     pAlt->SetWordLanguage( rWord, nLang );

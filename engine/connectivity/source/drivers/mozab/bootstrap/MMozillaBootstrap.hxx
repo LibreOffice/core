@@ -48,13 +48,13 @@ namespace connectivity::mozab
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XMozillaBootstrap
 
         // XProfileDiscover
         virtual ::sal_Int32 SAL_CALL getProfileCount( css::mozilla::MozillaProductType product) override;
-        virtual ::sal_Int32 SAL_CALL getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list ) override;
+        virtual ::sal_Int32 SAL_CALL getProfileList( css::mozilla::MozillaProductType product, cpo::uno::Sequence< OUString >& list ) override;
         virtual OUString SAL_CALL getDefaultProfile( css::mozilla::MozillaProductType product ) override;
         virtual OUString SAL_CALL getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
         virtual bool SAL_CALL isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) override;

@@ -99,7 +99,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode) };
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -111,7 +111,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode) };
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode) };
 
     uno::Reference< lang::XSingleServiceFactory > xFact;
     cpo::uno::Any anyEx;
@@ -147,7 +147,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(embed::ElementModes::READ) };
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(embed::ElementModes::READ) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -159,7 +159,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(nStorageMode) };
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(nStorageMode) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -189,7 +189,7 @@ void OStorageHelper::CopyInputToOutput(
     }
 
     sal_Int32 nRead;
-    uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+    cpo::uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
     do
     {
         nRead = xInput->readBytes ( aSequence, nConstBufferSize );
@@ -215,7 +215,7 @@ uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
 
 void OStorageHelper::SetCommonStorageEncryptionData(
             const uno::Reference< embed::XStorage >& xStorage,
-            const uno::Sequence< beans::NamedValue >& aEncryptionData )
+            const cpo::uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
     uno::Reference< embed::XEncryptionProtectedStorage > xEncrSet( xStorage, uno::UNO_QUERY );
     if ( !xEncrSet.is() )
@@ -226,9 +226,9 @@ void OStorageHelper::SetCommonStorageEncryptionData(
          aEncryptionData[1].Name == "EncryptionKey" )
     {
         xEncrSet->setGpgProperties(
-            aEncryptionData[0].Value.get< uno::Sequence< uno::Sequence< beans::NamedValue > > >() );
+            aEncryptionData[0].Value.get< cpo::uno::Sequence< cpo::uno::Sequence< beans::NamedValue > > >() );
         xEncrSet->setEncryptionData(
-            aEncryptionData[1].Value.get< uno::Sequence< beans::NamedValue > >() );
+            aEncryptionData[1].Value.get< cpo::uno::Sequence< beans::NamedValue > >() );
     }
     else
         xEncrSet->setEncryptionData( aEncryptionData );
@@ -298,10 +298,10 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Sequence< beans::PropertyValue > aProps{ comphelper::makePropertyValue(u"StorageFormat"_ustr,
+    cpo::uno::Sequence< beans::PropertyValue > aProps{ comphelper::makePropertyValue(u"StorageFormat"_ustr,
                                                                                 aFormat) };
 
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode), cpo::uno::Any(aProps) };
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(aURL), cpo::uno::Any(nStorageMode), cpo::uno::Any(aProps) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -314,7 +314,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
             const uno::Reference< uno::XComponentContext >& rxContext,
             bool bRepairStorage )
 {
-    uno::Sequence< beans::PropertyValue > aProps( bRepairStorage ? 2 : 1 );
+    cpo::uno::Sequence< beans::PropertyValue > aProps( bRepairStorage ? 2 : 1 );
     auto pProps = aProps.getArray();
     pProps[0].Name = u"StorageFormat"_ustr;
     pProps[0].Value <<= aFormat;
@@ -324,7 +324,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
         pProps[1].Value <<= bRepairStorage;
     }
 
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(embed::ElementModes::READ), cpo::uno::Any(aProps) };
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(embed::ElementModes::READ), cpo::uno::Any(aProps) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
@@ -338,7 +338,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const uno::Reference< uno::XComponentContext >& rxContext,
             bool bRepairStorage )
 {
-    uno::Sequence< beans::PropertyValue > aProps( bRepairStorage ? 2 : 1 );
+    cpo::uno::Sequence< beans::PropertyValue > aProps( bRepairStorage ? 2 : 1 );
     auto pProps = aProps.getArray();
     pProps[0].Name = u"StorageFormat"_ustr;
     pProps[0].Value <<= aFormat;
@@ -348,17 +348,17 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
         pProps[1].Value <<= bRepairStorage;
     }
 
-    uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(nStorageMode), cpo::uno::Any(aProps) };
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xStream), cpo::uno::Any(nStorageMode), cpo::uno::Any(aProps) };
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
                                                     uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
 
-uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( std::u16string_view aPassword )
+cpo::uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( std::u16string_view aPassword )
 {
     // TODO/LATER: Should not the method be part of DocPasswordHelper?
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
     if ( !aPassword.empty() )
     {
         sal_Int32 nSha1Ind = 0;
@@ -369,7 +369,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             std::vector<unsigned char> const hash(comphelper::Hash::calculateHash(
                 aUTF8Password.getStr(), aUTF8Password.getLength(),
                 comphelper::HashType::SHA256));
-            uno::Sequence<sal_Int8> aDigest(reinterpret_cast<const sal_Int8*>(hash.data()), hash.size());
+            cpo::uno::Sequence<sal_Int8> aDigest(reinterpret_cast<const sal_Int8*>(hash.data()), hash.size());
 
             ++nSha1Ind;
             aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, cpo::uno::Any(aDigest) } };
@@ -407,7 +407,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
                 return aEncryptionData;
             }
 
-            pEncryptionData[nSha1Ind+nInd].Value <<= uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
+            pEncryptionData[nSha1Ind+nInd].Value <<= cpo::uno::Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pBuffer), RTL_DIGEST_LENGTH_SHA1 );
         }
 
         // actual SHA1
@@ -416,14 +416,14 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
         std::vector<unsigned char> const sha1(::comphelper::Hash::calculateHash(
                 aByteStrPass.getStr(), aByteStrPass.getLength(),
                 ::comphelper::HashType::SHA1));
-        pEncryptionData[nSha1Ind + 2].Value <<= uno::Sequence<sal_Int8>(
+        pEncryptionData[nSha1Ind + 2].Value <<= cpo::uno::Sequence<sal_Int8>(
                 reinterpret_cast<sal_Int8 const*>(sha1.data()), sha1.size());
     }
 
     return aEncryptionData;
 }
 
-uno::Sequence<beans::NamedValue>
+cpo::uno::Sequence<beans::NamedValue>
 OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::awt::XWindow>&
 #if HAVE_FEATURE_GPGME
                                                    xParentWindow
@@ -435,10 +435,10 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
     // --------------------
 
     // get 32 random chars out of it
-    uno::Sequence < sal_Int8 > aVector(32);
+    cpo::uno::Sequence < sal_Int8 > aVector(32);
     rtl_random_getBytes(aVector.getArray(), aVector.getLength());
 
-    std::vector< uno::Sequence< beans::NamedValue > > aGpgEncryptions;
+    std::vector< cpo::uno::Sequence< beans::NamedValue > > aGpgEncryptions;
 
     uno::Reference< security::XDocumentDigitalSignatures > xSigner(
         // here none of the version-dependent methods are called
@@ -448,11 +448,11 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
     xSigner->setParentWindow(xParentWindow);
 
     // fire up certificate chooser dialog - user can multi-select!
-    const uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
+    const cpo::uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
         xSigner->chooseEncryptionCertificate(css::security::CertificateKind_OPENPGP);
 
     if (!xSignCertificates.hasElements())
-        return uno::Sequence< beans::NamedValue >(); // user cancelled
+        return cpo::uno::Sequence< beans::NamedValue >(); // user cancelled
 
     // generate one encrypted key entry for each recipient
     // ---------------------------------------------------
@@ -529,7 +529,7 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
                 u"Not a suitable key, or failed to encrypt."_ustr,
                 css::uno::Reference<css::uno::XInterface>(), -1);
 
-        uno::Sequence < sal_Int8 > aCipherValue(len);
+        cpo::uno::Sequence < sal_Int8 > aCipherValue(len);
         result = cipher.seek(0,SEEK_SET);
         assert(result == 0);
         if( cipher.read(aCipherValue.getArray(), len) != len )
@@ -537,9 +537,9 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
 
         SAL_INFO("comphelper.crypto", "Generated gpg crypto of length: " << len);
 
-        uno::Sequence<sal_Int8> aKeyIdSequence
+        cpo::uno::Sequence<sal_Int8> aKeyIdSequence
             = comphelper::arrayToSequence<sal_Int8>(aKeyID.getStr(), aKeyID.getLength() + 1);
-        uno::Sequence<beans::NamedValue> aGpgEncryptionEntry{
+        cpo::uno::Sequence<beans::NamedValue> aGpgEncryptionEntry{
             { u"KeyId"_ustr, cpo::uno::Any(aKeyIdSequence) },
             { u"KeyPacket"_ustr, cpo::uno::Any(aKeyIdSequence) },
             { u"CipherValue"_ustr, cpo::uno::Any(aCipherValue) }
@@ -548,16 +548,16 @@ OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::aw
         aGpgEncryptions.push_back(aGpgEncryptionEntry);
     }
 
-    uno::Sequence<beans::NamedValue> aEncryptionData
+    cpo::uno::Sequence<beans::NamedValue> aEncryptionData
         = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, cpo::uno::Any(aVector) } };
 
-    uno::Sequence<beans::NamedValue> aContainer
+    cpo::uno::Sequence<beans::NamedValue> aContainer
         = { { u"GpgInfos"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGpgEncryptions)) },
             { u"EncryptionKey"_ustr, cpo::uno::Any(aEncryptionData) } };
 
     return aContainer;
 #else
-    return uno::Sequence< beans::NamedValue >();
+    return cpo::uno::Sequence< beans::NamedValue >();
 #endif
 }
 

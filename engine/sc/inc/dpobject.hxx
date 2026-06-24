@@ -259,14 +259,14 @@ public:
                                          std::vector<OUString>& rNames);
 
     bool                GetHierarchiesNA( sal_Int32 nDim, css::uno::Reference< css::container::XNameAccess >& xHiers );
-    void                GetHierarchies( sal_Int32 nDim, css::uno::Sequence< OUString >& rHiers );
+    void                GetHierarchies( sal_Int32 nDim, cpo::uno::Sequence< OUString >& rHiers );
 
     SC_DLLPUBLIC sal_Int32 GetUsedHierarchy( sal_Int32 nDim );
 
     bool                GetMembersNA( sal_Int32 nDim, css::uno::Reference< css::sheet::XMembersAccess >& xMembers );
     bool                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, css::uno::Reference< css::sheet::XMembersAccess >& xMembers );
 
-    bool                GetMemberNames( sal_Int32 nDim, css::uno::Sequence< OUString >& rNames );
+    bool                GetMemberNames( sal_Int32 nDim, cpo::uno::Sequence< OUString >& rNames );
     SC_DLLPUBLIC bool   GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -277,11 +277,11 @@ public:
     void                GetPositionData(const ScAddress& rPos, css::sheet::DataPilotTablePositionData& rPosData);
 
     bool                GetDataFieldPositionData(const ScAddress& rPos,
-                                                 css::uno::Sequence<
+                                                 cpo::uno::Sequence<
                                                     css::sheet::DataPilotFieldFilter >& rFilters);
 
     void                GetDrillDownData(const ScAddress& rPos,
-                                         css::uno::Sequence< css::uno::Sequence< cpo::uno::Any > >& rTableData);
+                                         cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& rTableData);
 
     // apply drop-down attribute, initialize mnHeaderRows, without accessing the source
     // (button attribute must be present)

@@ -56,7 +56,7 @@ static OUString getCurrentDocumentContext(const css::uno::Reference<css::frame::
     return xModuleManager->identify(xFrame); // e.g. "com.sun.star.text.TextDocument"
 }
 
-static void GetAddonNotebookBarItem(const css::uno::Sequence<css::beans::PropertyValue>& pExtension,
+static void GetAddonNotebookBarItem(const cpo::uno::Sequence<css::beans::PropertyValue>& pExtension,
                                     AddonNotebookBarItem& aAddonNotebookBarItem)
 {
     for (const auto& i : pExtension)
@@ -191,7 +191,7 @@ void MergeNotebookBarMenuAddons(Menu* pPopupMenu, sal_Int16 nItemId, const OUStr
             AddonNotebookBarItem aAddonNotebookBarItem;
             Image sImage;
             MenuItemBits nBits = MenuItemBits::ICON;
-            const css::uno::Sequence<css::beans::PropertyValue>& pExtension = aExtension[nSecIdx];
+            const cpo::uno::Sequence<css::beans::PropertyValue>& pExtension = aExtension[nSecIdx];
 
             GetAddonNotebookBarItem(pExtension, aAddonNotebookBarItem);
 

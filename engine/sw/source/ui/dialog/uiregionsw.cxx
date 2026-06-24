@@ -176,7 +176,7 @@ private:
     bool                    m_bContent  : 1;
     // for multiselection, mark at first, then work with TreeListBox!
     bool                    m_bSelected : 1;
-    uno::Sequence<sal_Int8> m_TempPasswd;
+    cpo::uno::Sequence<sal_Int8> m_TempPasswd;
 
 public:
     SectRepr(size_t nPos, SwSection& rSect);
@@ -203,8 +203,8 @@ public:
     void                SetSelected() { m_bSelected = true; }
     bool                IsSelected() const { return m_bSelected; }
 
-    uno::Sequence<sal_Int8> & GetTempPasswd() { return m_TempPasswd; }
-    void SetTempPasswd(const uno::Sequence<sal_Int8> & rPasswd)
+    cpo::uno::Sequence<sal_Int8> & GetTempPasswd() { return m_TempPasswd; }
+    void SetTempPasswd(const cpo::uno::Sequence<sal_Int8> & rPasswd)
         { m_TempPasswd = rPasswd; }
 };
 
@@ -446,7 +446,7 @@ bool SwEditRegionDlg::CheckPasswd(weld::Toggleable* pBox)
             if (aPasswdDlg.run())
             {
                 const OUString sNewPasswd(aPasswdDlg.GetPassword());
-                css::uno::Sequence <sal_Int8 > aNewPasswd;
+                cpo::uno::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if (SvPasswordHelper::CompareHashPassword(
                         pRepr->GetSectionData().GetPassword(), sNewPasswd))
@@ -602,7 +602,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
 
     m_xProtectCB->set_sensitive(true);
     m_xFileCB->set_sensitive(true);
-    css::uno::Sequence <sal_Int8> aCurPasswd;
+    cpo::uno::Sequence <sal_Int8> aCurPasswd;
     if (1 < rBox.count_selected_rows())
     {
         m_xHideCB->set_state(TRISTATE_INDET);
@@ -777,7 +777,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
             SwSectionFormat* pFormat = aOrigArray[ pRepr->GetArrPos() ];
             if (!pRepr->GetSectionData().IsProtectFlag())
             {
-                pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
+                pRepr->GetSectionData().SetPassword(cpo::uno::Sequence<sal_Int8 >());
             }
             size_t nNewPos = rDocFormats.GetPos(pFormat);
             if ( SIZE_MAX != nNewPos )
@@ -1258,7 +1258,7 @@ void SwEditRegionDlg::ChangePasswd(bool bChange)
         }
         else
         {
-            pRepr->GetSectionData().SetPassword(uno::Sequence<sal_Int8 >());
+            pRepr->GetSectionData().SetPassword(cpo::uno::Sequence<sal_Int8 >());
         }
         return false;
     });

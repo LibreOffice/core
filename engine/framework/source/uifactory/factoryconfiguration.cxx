@@ -195,7 +195,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
     if ( !m_bConfigAccessInitialized )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"nodepath", cpo::uno::Any(m_sRoot)}
         }));

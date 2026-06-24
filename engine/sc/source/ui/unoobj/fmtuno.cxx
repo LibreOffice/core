@@ -250,7 +250,7 @@ ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(sal_uIn
 }
 
 void SAL_CALL ScTableConditionalFormat::addNew(
-                    const uno::Sequence<beans::PropertyValue >& aConditionalEntry )
+                    const cpo::uno::Sequence<beans::PropertyValue >& aConditionalEntry )
 {
     SolarMutexGuard aGuard;
     ScCondFormatEntryItem aEntry;
@@ -266,7 +266,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         else if ( rProp.Name == SC_UNONAME_FORMULA1 )
         {
             OUString aStrVal;
-            uno::Sequence<sheet::FormulaToken> aTokens;
+            cpo::uno::Sequence<sheet::FormulaToken> aTokens;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maExpr1 = aStrVal;
             else if ( rProp.Value >>= aTokens )
@@ -278,7 +278,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         else if ( rProp.Name == SC_UNONAME_FORMULA2 )
         {
             OUString aStrVal;
-            uno::Sequence<sheet::FormulaToken> aTokens;
+            cpo::uno::Sequence<sheet::FormulaToken> aTokens;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maExpr2 = aStrVal;
             else if ( rProp.Value >>= aTokens )
@@ -421,12 +421,12 @@ cpo::uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aNam
     return cpo::uno::Any(xEntry);
 }
 
-uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
 {
     SolarMutexGuard aGuard;
 
     tools::Long nCount = maEntries.size();
-    uno::Sequence<OUString> aNames(nCount);
+    cpo::uno::Sequence<OUString> aNames(nCount);
     OUString* pArray = aNames.getArray();
     for (tools::Long i=0; i<nCount; i++)
         pArray[i] = lcl_GetEntryNameFromIndex(i);
@@ -718,7 +718,7 @@ void SAL_CALL ScTableValidationObj::setSourcePosition( const table::CellAddress&
     aSrcPos.Set( static_cast<SCCOL>(aSourcePosition.Column), static_cast<SCROW>(aSourcePosition.Row), aSourcePosition.Sheet );
 }
 
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens( sal_Int32 nIndex )
+cpo::uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens( sal_Int32 nIndex )
 {
     SolarMutexGuard aGuard;
     if (nIndex >= 2 || nIndex < 0)
@@ -727,7 +727,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens( sal
     return nIndex == 0 ? aTokens1 : aTokens2;
 }
 
-void SAL_CALL ScTableValidationObj::setTokens( sal_Int32 nIndex, const uno::Sequence<sheet::FormulaToken>& aTokens )
+void SAL_CALL ScTableValidationObj::setTokens( sal_Int32 nIndex, const cpo::uno::Sequence<sheet::FormulaToken>& aTokens )
 {
     SolarMutexGuard aGuard;
     if (nIndex >= 2 || nIndex < 0)

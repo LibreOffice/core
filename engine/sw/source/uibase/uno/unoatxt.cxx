@@ -112,14 +112,14 @@ cpo::uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     return cpo::uno::Any( xGroup );
 }
 
-uno::Sequence< OUString > SwXAutoTextContainer::getElementNames()
+cpo::uno::Sequence< OUString > SwXAutoTextContainer::getElementNames()
 {
     SolarMutexGuard aGuard;
     const size_t nCount = m_pGlossaries->GetGroupCnt();
     OSL_ENSURE(nCount < o3tl::make_unsigned(SAL_MAX_INT32),
                "SwXAutoTextContainer::getElementNames: too many groups");
 
-    uno::Sequence< OUString > aGroupNames(static_cast<sal_Int32>(nCount));
+    cpo::uno::Sequence< OUString > aGroupNames(static_cast<sal_Int32>(nCount));
     OUString *pArr = aGroupNames.getArray();
 
     for ( size_t i = 0; i < nCount; ++i )
@@ -196,7 +196,7 @@ bool SwXAutoTextContainer::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.AutoTextContainer"_ustr };
 }
@@ -216,7 +216,7 @@ SwXAutoTextGroup::~SwXAutoTextGroup()
 {
 }
 
-uno::Sequence< OUString > SwXAutoTextGroup::getTitles()
+cpo::uno::Sequence< OUString > SwXAutoTextGroup::getTitles()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<SwTextBlocks> pGlosGroup(m_pGlossaries ? m_pGlossaries->GetGroupDoc(m_sGroupName) : nullptr);
@@ -224,7 +224,7 @@ uno::Sequence< OUString > SwXAutoTextGroup::getTitles()
         throw uno::RuntimeException();
     const sal_uInt16 nCount = pGlosGroup->GetCount();
 
-    uno::Sequence< OUString > aEntryTitles(nCount);
+    cpo::uno::Sequence< OUString > aEntryTitles(nCount);
     OUString *pArr = aEntryTitles.getArray();
 
     for ( sal_uInt16 i = 0; i < nCount; i++ )
@@ -501,7 +501,7 @@ cpo::uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
     return cpo::uno::Any( xEntry );
 }
 
-uno::Sequence< OUString > SwXAutoTextGroup::getElementNames()
+cpo::uno::Sequence< OUString > SwXAutoTextGroup::getElementNames()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<SwTextBlocks> pGlosGroup(m_pGlossaries ? m_pGlossaries->GetGroupDoc(m_sGroupName) : nullptr);
@@ -509,7 +509,7 @@ uno::Sequence< OUString > SwXAutoTextGroup::getElementNames()
         throw uno::RuntimeException();
 
     const sal_uInt16 nCount = pGlosGroup->GetCount();
-    uno::Sequence< OUString > aEntryNames(nCount);
+    cpo::uno::Sequence< OUString > aEntryNames(nCount);
     OUString *pArr = aEntryNames.getArray();
 
     for ( sal_uInt16 i = 0; i < nCount; i++ )
@@ -634,9 +634,9 @@ bool SwXAutoTextGroup::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXAutoTextGroup::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { u"com.sun.star.text.AutoTextGroup"_ustr };
+    cpo::uno::Sequence<OUString> aRet { u"com.sun.star.text.AutoTextGroup"_ustr };
     return aRet;
 }
 
@@ -876,9 +876,9 @@ bool SwXAutoTextEntry::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXAutoTextEntry::getSupportedServiceNames()
 {
-    uno::Sequence<OUString> aRet { u"com.sun.star.text.AutoTextEntry"_ustr };
+    cpo::uno::Sequence<OUString> aRet { u"com.sun.star.text.AutoTextEntry"_ustr };
     return aRet;
 }
 
@@ -981,7 +981,7 @@ void SwAutoTextEventDescriptor::getByName(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 SwXAutoTextContainer_get_implementation(css::uno::XComponentContext*,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     //the module may not be loaded
     SolarMutexGuard aGuard;

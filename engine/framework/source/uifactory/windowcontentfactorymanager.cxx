@@ -61,14 +61,14 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.ui.WindowContentFactoryManager"_ustr};
     }
 
     // XSingleComponentFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const css::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) override;
 
 private:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -101,7 +101,7 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
 }
 
 uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createInstanceWithArgumentsAndContext(
-    const uno::Sequence< cpo::uno::Any >& Arguments, const uno::Reference< uno::XComponentContext >& Context )
+    const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const uno::Reference< uno::XComponentContext >& Context )
 {
     uno::Reference< uno::XInterface > xWindow;
     uno::Reference< frame::XFrame >   xFrame;
@@ -196,7 +196,7 @@ uno::Reference< uno::XInterface > SAL_CALL WindowContentFactoryManager::createIn
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_WindowContentFactoryManager_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new WindowContentFactoryManager(context));
 }

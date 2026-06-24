@@ -122,10 +122,10 @@ void SwarmSolverTest::testUnconstrained()
     table::CellAddress aObjective(0, 1, 1);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints;
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints;
 
     // initialize solver
     xSolver->setDocument(xDocument);
@@ -137,7 +137,7 @@ void SwarmSolverTest::testUnconstrained()
     // test results
     xSolver->solve();
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     // It happens that the unconstrained test does not find a solution in the
@@ -165,10 +165,10 @@ void SwarmSolverTest::testVariableBounded()
     table::CellAddress aObjective(0, 1, 1);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [0] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_LESS_EQUAL,
           /*     Right    */ cpo::uno::Any(100.0) },
@@ -187,7 +187,7 @@ void SwarmSolverTest::testVariableBounded()
     // test results
     xSolver->solve();
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-5);
@@ -210,10 +210,10 @@ void SwarmSolverTest::testVariableConstrained()
     table::CellAddress aObjective(0, 1, 1);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [0] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
           /*     Right    */ cpo::uno::Any(-50000.0) },
@@ -235,7 +235,7 @@ void SwarmSolverTest::testVariableConstrained()
     // test results
     xSolver->solve();
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     // The hybrid default reaches the optimum to within a stochastic tolerance.
@@ -259,10 +259,10 @@ void SwarmSolverTest::testTwoVariables()
     table::CellAddress aObjective(0, 1, 5);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 2 }, { 0, 1, 3 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 2 }, { 0, 1, 3 } };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [0] Left     */ table::CellAddress(0, 1, 2),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
           /*     Right    */ cpo::uno::Any(-100.0) },
@@ -287,7 +287,7 @@ void SwarmSolverTest::testTwoVariables()
     // test results
     xSolver->solve();
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     // FIXME increased the delta to cope with failures seen on jenkins
@@ -315,12 +315,12 @@ void SwarmSolverTest::testMultipleVariables()
     table::CellAddress aObjective(0, 5, 7);
 
     // "changing cells" - unknown variables
-    uno::Sequence<table::CellAddress> aVariables{
+    cpo::uno::Sequence<table::CellAddress> aVariables{
         { 0, 6, 1 }, { 0, 6, 2 }, { 0, 6, 3 }, { 0, 6, 4 }
     };
 
     // constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [ 0] Left     */ table::CellAddress(0, 1, 5),
           /*      Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
           /*      Right    */ cpo::uno::Any(table::CellAddress(0, 1, 6)) },
@@ -369,7 +369,7 @@ void SwarmSolverTest::testMultipleVariables()
     // test results
     xSolver->solve();
     CPPUNIT_ASSERT(xSolver->getSuccess());
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
 
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
 #if 0
@@ -404,9 +404,9 @@ void SwarmSolverTest::testInfeasibleConstraints()
         xPropSet->setPropertyValue(u"Algorithm"_ustr, cpo::uno::Any(nAlgorithm));
 
         table::CellAddress aObjective(0, 1, 1);
-        uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+        cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
-        uno::Sequence<sheet::SolverConstraint> aConstraints{
+        cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
             { /* [0] Left     */ table::CellAddress(0, 1, 0),
               /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
               /*     Right    */ cpo::uno::Any(-100.0) },
@@ -454,14 +454,14 @@ void SwarmSolverTest::testLargeObjectiveStillSolvable()
         xPropSet->setPropertyValue(u"Algorithm"_ustr, cpo::uno::Any(nAlgorithm));
 
         table::CellAddress aObjective(0, 1, 1);
-        uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+        cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
         // The variable is pushed far enough out that the objective
         // 10*B1^2 - 60*B1 - 40 reaches the 1e39 range, beyond what a float can
         // hold. Minimizing turns that into a fitness near -1e39. The objective
         // cap is a non-bounded constraint, so the upper part of the box is
         // infeasible while the lower end stays feasible.
-        uno::Sequence<sheet::SolverConstraint> aConstraints{
+        cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
             { /* [0] Left     */ table::CellAddress(0, 1, 0),
               /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
               /*     Right    */ cpo::uno::Any(1.0e19) },
@@ -483,7 +483,7 @@ void SwarmSolverTest::testLargeObjectiveStillSolvable()
 
         CPPUNIT_ASSERT_MESSAGE("Solvable model must report success", xSolver->getSuccess());
 
-        uno::Sequence<double> aSolution = xSolver->getSolution();
+        cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
         CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
         // the returned point must lie in the feasible part of the box
         CPPUNIT_ASSERT(aSolution[0] >= 1.0e19);
@@ -538,11 +538,11 @@ void SwarmSolverTest::testUnreadableConstraintStillChecksOthers()
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // Both constraints act on the objective cell, not the variable, so they end
     // up as non-bounded constraints in the order given here.
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         // right hand side is a string, so it reads as neither a cell nor a
         // number
         { /* [0] Left     */ table::CellAddress(0, 1, 1),
@@ -583,10 +583,10 @@ void SwarmSolverTest::testContradictoryBoundsTerminate()
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // Both act on the variable, so they fold into its bounds: lower 10, upper 5
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         { /* [0] Left     */ table::CellAddress(0, 1, 0),
           /*     Operator */ sheet::SolverConstraintOperator_GREATER_EQUAL,
           /*     Right    */ cpo::uno::Any(10.0) },
@@ -629,10 +629,10 @@ void SwarmSolverTest::testUnboundedIntegerVariable()
     xPropSet->setPropertyValue(u"Integer"_ustr, cpo::uno::Any(true));
 
     table::CellAddress aObjective(0, 1, 1);
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     // No constraints, so the variable keeps the default unbounded range.
-    uno::Sequence<sheet::SolverConstraint> aConstraints;
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints;
 
     xSolver->setDocument(xDocument);
     xSolver->setObjective(aObjective);
@@ -645,7 +645,7 @@ void SwarmSolverTest::testUnboundedIntegerVariable()
     CPPUNIT_ASSERT_MESSAGE("An unbounded integer variable must still be solvable",
                            xSolver->getSuccess());
 
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT(std::isfinite(aSolution[0]));
     CPPUNIT_ASSERT_EQUAL(aSolution[0], std::trunc(aSolution[0]));
@@ -668,7 +668,7 @@ void SwarmSolverTest::testRepeatedSolveResetsState()
                 uno::UNO_QUERY_THROW);
 
     table::CellAddress aObjective(0, 1, 1);
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 1, 0 } };
 
     xSolver->setDocument(xDocument);
     xSolver->setObjective(aObjective);
@@ -698,7 +698,7 @@ void SwarmSolverTest::testRepeatedSolveResetsState()
     CPPUNIT_ASSERT_MESSAGE("The second solve must not inherit the first run's state",
                            xSolver->getSuccess());
 
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-5);
 }
@@ -722,7 +722,7 @@ void SwarmSolverTest::testControllersUnlockedAfterError()
 
     table::CellAddress aObjective(0, 1, 1);
     // sheet index 99 does not exist, so reading or writing this cell throws
-    uno::Sequence<table::CellAddress> aVariables{ { 99, 1, 0 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 99, 1, 0 } };
 
     xSolver->setDocument(xDocument);
     xSolver->setObjective(aObjective);
@@ -764,9 +764,9 @@ void SwarmSolverTest::testConstrainedLinearProgram()
     // objective 2x + 4y is in B3
     table::CellAddress aObjective(0, 1, 2);
     // x is A1, y is A2
-    uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 }, { 0, 0, 1 } };
+    cpo::uno::Sequence<table::CellAddress> aVariables{ { 0, 0, 0 }, { 0, 0, 1 } };
 
-    uno::Sequence<sheet::SolverConstraint> aConstraints{
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints{
         // box bounds on the two variables
         { table::CellAddress(0, 0, 0), sheet::SolverConstraintOperator_GREATER_EQUAL,
           cpo::uno::Any(0.0) },
@@ -794,7 +794,7 @@ void SwarmSolverTest::testConstrainedLinearProgram()
 
     CPPUNIT_ASSERT(xSolver->getSuccess());
 
-    uno::Sequence<double> aSolution = xSolver->getSolution();
+    cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
     CPPUNIT_ASSERT_EQUAL(aVariables.getLength(), aSolution.getLength());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, aSolution[0], 1E-3);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, aSolution[1], 1E-3);

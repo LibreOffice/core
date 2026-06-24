@@ -850,7 +850,7 @@ bool BibGeneralPage::AddXControl(const OUString& rName, weld::ComboBox& rList)
 
             if( xPropSet.is())
             {
-                css::uno::Sequence<OUString> aEntries;
+                cpo::uno::Sequence<OUString> aEntries;
                 xPropSet->getPropertyValue(u"StringItemList"_ustr) >>= aEntries;
                 for (const OUString& rString : aEntries)
                      rList.append_text(rString);

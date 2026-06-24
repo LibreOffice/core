@@ -72,7 +72,7 @@ bool IsMediaTypeXML( const OUString& mediaType )
 
 }
 
-OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::PropertyValue >& aArguments )
+OUString SAL_CALL FilterDetect::detect( cpo::uno::Sequence< css::beans::PropertyValue >& aArguments )
 {
     OUString sUrl;
     css::uno::Reference< css::io::XInputStream > xInStream;
@@ -230,7 +230,7 @@ Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_XMLFilterDetect_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new FilterDetect(context));
 }

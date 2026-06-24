@@ -288,7 +288,7 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< frame::XModel >& xChart
         {
             Reference< chart2::XDiagram > xDiagram( xChart2Document->getFirstDiagram());
             Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-            uno::Sequence< Reference< chart2::XCoordinateSystem > >
+            cpo::uno::Sequence< Reference< chart2::XCoordinateSystem > >
                 aCooSysSeq( xCooSysCnt->getCoordinateSystems());
             sal_Int32 nCooSysIndex = 0;
             if( nCooSysIndex < aCooSysSeq.getLength() )
@@ -495,7 +495,7 @@ void SchXMLAxisContext::CreateAxis()
                             Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChart2Document->getFirstDiagram(), uno::UNO_QUERY );
                             if( xCooSysCnt.is() )
                             {
-                                uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+                                cpo::uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
                                 if( aCooSysSeq.hasElements() )
                                 {
                                     bool bSwapXandYAxis = false;
@@ -672,7 +672,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
     try
     {
         Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xNewDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
-        uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+        cpo::uno::Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
         if( aCooSysSeq.hasElements() )
         {
             const Reference< chart2::XCoordinateSystem >& xCooSys( aCooSysSeq[0] );

@@ -134,7 +134,7 @@ public:
     explicit OGroup(OUString sGroupName);
 
     const OUString& GetGroupName() const { return m_aGroupName; }
-    css::uno::Sequence< css::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;
 
     void InsertComponent( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
     void RemoveComponent( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
@@ -179,9 +179,9 @@ public:
 
 // Other functions
     sal_Int32 getGroupCount() const;
-    void getGroup(sal_Int32 nGroup, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup, OUString& Name);
-    void getGroupByName(const OUString& Name, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup);
-    css::uno::Sequence< css::uno::Reference< css::awt::XControlModel> > getControlModels() const;
+    void getGroup(sal_Int32 nGroup, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup, OUString& Name);
+    void getGroupByName(const OUString& Name, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup);
+    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel> > getControlModels() const;
 
     static OUString GetGroupName( const css::uno::Reference< css::beans::XPropertySet>& xComponent );
 };

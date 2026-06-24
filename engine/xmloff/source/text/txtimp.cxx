@@ -1381,7 +1381,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             }
             if (!bOutlineContentVisible)
             {
-                uno::Sequence<beans::PropertyValue> aGrabBag;
+                cpo::uno::Sequence<beans::PropertyValue> aGrabBag;
                 xPropSet->getPropertyValue(u"ParaInteropGrabBag"_ustr) >>= aGrabBag;
                 sal_Int32 length = aGrabBag.getLength();
                 aGrabBag.realloc(length + 1);

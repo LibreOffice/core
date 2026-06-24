@@ -65,7 +65,7 @@ public:
     virtual void SAL_CALL setDefaultName(const OUString& rName) override;
     virtual void SAL_CALL setDisplayDirectory(const OUString& rDirectory) override;
     virtual OUString SAL_CALL getDisplayDirectory() override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getFiles() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getFiles() override;
 
     // XFilterManager functions
     virtual void SAL_CALL appendFilter(const OUString& rTitle, const OUString& rFilter) override;
@@ -75,7 +75,7 @@ public:
     // XFilterGroupManager functions
     virtual void SAL_CALL
     appendFilterGroup(const OUString& rGroupTitle,
-                      const css::uno::Sequence<css::beans::StringPair>& rFilters) override;
+                      const cpo::uno::Sequence<css::beans::StringPair>& rFilters) override;
 
     // XFilePickerControlAccess functions
     virtual void SAL_CALL setValue(sal_Int16 nControlId, sal_Int16 nControlAction,
@@ -88,7 +88,7 @@ public:
 
     /* TODO XFilePreview
 
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  );
+    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  );
     virtual sal_Int32 SAL_CALL  getTargetColorDepth(  );
     virtual sal_Int32 SAL_CALL  getAvailableWidth(  );
     virtual sal_Int32 SAL_CALL  getAvailableHeight(  );
@@ -98,10 +98,10 @@ public:
     */
 
     // XFilePicker2 functions
-    virtual css::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSelectedFiles() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XCancellable
     virtual void SAL_CALL cancel() override;
@@ -113,7 +113,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     Gtk3KDE5FilePicker(const Gtk3KDE5FilePicker&) = delete;

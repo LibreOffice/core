@@ -99,9 +99,9 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
         ::com::sun::star::document::DocumentProperties::create(m_xContext));
 
     OUString const url(m_directories.getURLFromSrc(u"/sfx2/qa/complex/sfx2/testdocuments/CUSTOM.odt"));
-    xProps->loadFromMedium(url, uno::Sequence<beans::PropertyValue>());
+    xProps->loadFromMedium(url, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, xProps->getAuthor());
-    uno::Sequence<beans::PropertyValue> mimeArgs({
+    cpo::uno::Sequence<beans::PropertyValue> mimeArgs({
         beans::PropertyValue(u"MediaType"_ustr, -1, cpo::uno::Any(u"application/vnd.oasis.opendocument.text"_ustr), beans::PropertyState_DIRECT_VALUE)
         });
     xProps->storeToMedium(maTempFile.GetURL(), mimeArgs);
@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
 
     OUString const url(
         m_directories.getURLFromSrc(u"/sfx2/qa/complex/sfx2/testdocuments/TEST.odt"));
-    xProps->loadFromMedium(url, uno::Sequence<beans::PropertyValue>());
+    xProps->loadFromMedium(url, cpo::uno::Sequence<beans::PropertyValue>());
     CPPUNIT_ASSERT_EQUAL(u"Karl-Heinz Mustermann"_ustr, xProps->getAuthor());
     CPPUNIT_ASSERT_EQUAL(u"StarOffice/8$Solaris_x86 OpenOffice.org_project/680m232$Build-9227"_ustr,
                          xProps->getGenerator());
@@ -150,13 +150,13 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), xProps->getEditingCycles());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(320), xProps->getEditingDuration());
 
-    uno::Sequence<OUString> aKeywords(xProps->getKeywords());
+    cpo::uno::Sequence<OUString> aKeywords(xProps->getKeywords());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aKeywords.getLength());
     CPPUNIT_ASSERT_EQUAL(u"Memo"_ustr, aKeywords[0]);
     CPPUNIT_ASSERT_EQUAL(u"Asien"_ustr, aKeywords[1]);
     CPPUNIT_ASSERT_EQUAL(u"Reis"_ustr, aKeywords[2]);
 
-    uno::Sequence<beans::NamedValue> aDocStats = xProps->getDocumentStatistics();
+    cpo::uno::Sequence<beans::NamedValue> aDocStats = xProps->getDocumentStatistics();
     auto it = std::find_if(std::cbegin(aDocStats), std::cend(aDocStats),
                            [](const css::beans::NamedValue& val) {
                                return val.Name == "WordCount" && val.Value.get<sal_uInt32>() == 23;
@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     xProps->setEditingDuration(84);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(84), xProps->getEditingDuration());
 
-    uno::Sequence<OUString> aKeywords2{ u"keywordly"_ustr, u"keywordlike"_ustr,
+    cpo::uno::Sequence<OUString> aKeywords2{ u"keywordly"_ustr, u"keywordlike"_ustr,
                                         u"keywordalicious"_ustr };
     xProps->setKeywords(aKeywords2);
     aKeywords = xProps->getKeywords();
@@ -255,7 +255,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     CPPUNIT_ASSERT_EQUAL(u"keywordlike"_ustr, aKeywords[1]);
     CPPUNIT_ASSERT_EQUAL(u"keywordalicious"_ustr, aKeywords[2]);
 
-    uno::Sequence<beans::NamedValue> aDocStats2{ { u"SyllableCount"_ustr, cpo::uno::Any(sal_Int16(9)) },
+    cpo::uno::Sequence<beans::NamedValue> aDocStats2{ { u"SyllableCount"_ustr, cpo::uno::Any(sal_Int16(9)) },
                                                  { u"FrameCount"_ustr, cpo::uno::Any(sal_Int16(2)) },
                                                  { u"SentenceCount"_ustr,
                                                    cpo::uno::Any(sal_Int16(7)) } };
@@ -331,7 +331,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     try
     {
         xUDP->addProperty(u"Forbidden"_ustr, beans::PropertyAttribute::REMOVABLE,
-                          cpo::uno::Any(uno::Sequence<OUString>{ u"foo"_ustr, u"bar"_ustr }));
+                          cpo::uno::Any(cpo::uno::Sequence<OUString>{ u"foo"_ustr, u"bar"_ustr }));
         CPPUNIT_FAIL("inserting value of non-supported type did not fail");
     }
     catch (beans::IllegalTypeException&)
@@ -396,12 +396,12 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     {
     }
 
-    uno::Sequence<beans::PropertyValue> mimeArgs({ beans::PropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> mimeArgs({ beans::PropertyValue(
         u"MediaType"_ustr, -1, cpo::uno::Any(u"application/vnd.oasis.opendocument.text"_ustr),
         beans::PropertyState_DIRECT_VALUE) });
     xProps->storeToMedium(maTempFile.GetURL(), mimeArgs);
 
-    xProps->loadFromMedium(maTempFile.GetURL(), uno::Sequence<beans::PropertyValue>());
+    xProps->loadFromMedium(maTempFile.GetURL(), cpo::uno::Sequence<beans::PropertyValue>());
 
     xUDP = xProps->getUserDefinedProperties();
     xPropertySet.set(xUDP, uno::UNO_QUERY);
@@ -500,7 +500,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
 #endif
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
-    uno::Sequence<beans::PropertyValue> aProperties(
+    cpo::uno::Sequence<beans::PropertyValue> aProperties(
         comphelper::InitPropertySequence({ { "NoThumbnail", cpo::uno::Any(true) } }));
     osl::File::remove(maTempFile.GetURL());
     xStorable->storeToURL(maTempFile.GetURL(), aProperties);

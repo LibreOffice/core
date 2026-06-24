@@ -36,7 +36,7 @@ OUString SAL_CALL OKeyColumn::getImplementationName(  )
     return u"com.sun.star.sdbcx.VKeyColumn"_ustr;
 }
 
-css::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  )
 {
     return { isNew()?u"com.sun.star.sdbcx.KeyColumnDescriptor"_ustr:u"com.sun.star.sdbcx.KeyColumn"_ustr };
 }

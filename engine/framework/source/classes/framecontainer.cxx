@@ -185,7 +185,7 @@ css::uno::Reference<css::frame::XFrame> FrameContainer::operator[](sal_uInt32 nI
 
     @threadsafe yes
  *****************************************************************************************************************/
-css::uno::Sequence<css::uno::Reference<css::frame::XFrame>> FrameContainer::getAllElements() const
+cpo::uno::Sequence<css::uno::Reference<css::frame::XFrame>> FrameContainer::getAllElements() const
 {
     SolarMutexGuard g;
     return comphelper::containerToSequence(m_aContainer);

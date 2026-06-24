@@ -48,7 +48,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
-
+using namespace ::cpo::uno;
 
 // Ctor() and Dtor()
 
@@ -440,7 +440,7 @@ sal_Unicode SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacter( sal_Int32 nInd
     EnsureIsAlive();
     return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
-css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
+cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -451,7 +451,7 @@ css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleIconChoiceCtr
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return css::uno::Sequence< css::beans::PropertyValue >();
+    return cpo::uno::Sequence< css::beans::PropertyValue >();
 }
 sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacterCount(  )
 {

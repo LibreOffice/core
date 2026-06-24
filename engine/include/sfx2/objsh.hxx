@@ -25,7 +25,7 @@
 #include <sal/types.h>
 #include <comphelper/errcode.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/frame/XModel3.hpp>
 #include <vcl/bitmap.hxx>
@@ -210,7 +210,7 @@ private:
     SAL_DLLPRIVATE void UpdateTime_Impl(const css::uno::Reference<
         css::document::XDocumentProperties> & i_xDocProps);
 
-    css::uno::Sequence< css::security::DocumentSignatureInformation > rSignatureInfosRemembered;
+    cpo::uno::Sequence< css::security::DocumentSignatureInformation > rSignatureInfosRemembered;
 
     SAL_DLLPRIVATE bool SaveTo_Impl(SfxMedium &rMedium, const SfxItemSet* pSet );
 
@@ -246,7 +246,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static const cpo::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     /* Stampit disable/enable cancel button for print jobs
        default = true = enable! */
@@ -383,13 +383,13 @@ public:
     SignatureState              GetDocumentSignatureState();
     void SignDocumentContent(weld::Window* pDialogParent, const std::function<void(bool)>& rCallback);
     void AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogParent);
-    css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformation(
+    cpo::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformation(
         bool bScriptingContent,
         const css::uno::Reference<css::security::XDocumentDigitalSignatures>& xSigner
         = css::uno::Reference<css::security::XDocumentDigitalSignatures>());
 
     bool SignDocumentContentUsingCertificate(svl::crypto::SigningContext& rSigningContext);
-    bool ResignDocument(css::uno::Sequence< css::security::DocumentSignatureInformation >& rSignaturesInfo);
+    bool ResignDocument(cpo::uno::Sequence< css::security::DocumentSignatureInformation >& rSignaturesInfo);
 
     void SignSignatureLine(weld::Window* pDialogParent, const OUString& aSignatureLineId,
                            const css::uno::Reference<css::security::XCertificate>& xCert,
@@ -408,20 +408,20 @@ public:
 
     ErrCode     CallXScript(
         const OUString& rScriptURL,
-        const css::uno::Sequence< cpo::uno::Any >& aParams,
+        const cpo::uno::Sequence< cpo::uno::Any >& aParams,
         cpo::uno::Any& aRet,
-        css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< cpo::uno::Any >& aOutParam,
+        cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        cpo::uno::Sequence< cpo::uno::Any >& aOutParam,
         bool bRaiseError = true,
         const cpo::uno::Any* aCaller = nullptr );
 
     static ErrCode  CallXScript(
         const css::uno::Reference< css::uno::XInterface >& _rxScriptContext,
         const OUString& rScriptURL,
-        const css::uno::Sequence< cpo::uno::Any >& aParams,
+        const cpo::uno::Sequence< cpo::uno::Any >& aParams,
         cpo::uno::Any& aRet,
-        css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< cpo::uno::Any >& aOutParam,
+        cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        cpo::uno::Sequence< cpo::uno::Any >& aOutParam,
         bool bRaiseError = true,
         const cpo::uno::Any* aCaller = nullptr
     );
@@ -466,8 +466,8 @@ public:
     // true if this type of link, from a document, is allowed by the user to be passed to uno:OpenDoc
     static bool                 AllowedLinkProtocolFromDocument(const OUString& rUrl, SfxObjectShell* pObjShell, weld::Window* pDialogParent);
 
-    const css::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
-    bool                        SetModifyPasswordInfo( const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
+    const cpo::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
+    bool                        SetModifyPasswordInfo( const cpo::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
     static void                 DetectCsvSeparators(SvStream& stream, rtl_TextEncoding eCharSet, OUString& separators, sal_Unicode cStringDelimiter);
     static void                 DetectCsvFilterOptions(SvStream& stream, OUString& aFilterOptions);
@@ -623,7 +623,7 @@ public:
     css::uno::Reference< css::frame::XModel3 > GetBaseModel() const;
     // Only temporarily for the applications!
 
-    virtual css::uno::Sequence< OUString > GetEventNames();
+    virtual cpo::uno::Sequence< OUString > GetEventNames();
 
     css::uno::Reference<css::awt::XWindow> GetDialogParent(SfxMedium const* pMedium = nullptr);
     static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SfxObjectCreateMode::STANDARD );
@@ -639,7 +639,7 @@ public:
     static bool                 CopyStoragesOfUnknownMediaType(
                                     const css::uno::Reference< css::embed::XStorage >& xSource,
                                     const css::uno::Reference<css::embed::XStorage>& xTarget,
-                                    const css::uno::Sequence<OUString>& rExceptions = css::uno::Sequence<OUString>());
+                                    const cpo::uno::Sequence<OUString>& rExceptions = cpo::uno::Sequence<OUString>());
 
     bool isEditDocLocked() const;
     bool isContentExtractionLocked() const;
@@ -718,7 +718,7 @@ public:
     virtual bool    HasChangeRecordProtection() const;
     virtual void    SetChangeRecording( bool bActivate, bool bLockAllViews = false, SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::ViewAgnostic );
     virtual void    SetProtectionPassword( const OUString &rPassword );
-    virtual bool    GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > &rPasswordHash );
+    virtual bool    GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPasswordHash );
 
     static bool IsOwnStorageFormat(const SfxMedium &);
 
@@ -786,7 +786,7 @@ public:
     // Load/Save public internals
     SAL_DLLPRIVATE bool ImportFromGeneratedStream_Impl(
                     const css::uno::Reference< css::io::XStream >& xStream,
-                    const css::uno::Sequence< css::beans::PropertyValue >& aMediaDescr );
+                    const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescr );
     SAL_DLLPRIVATE void UpdateFromTemplate_Impl();
     SAL_DLLPRIVATE bool CanReload_Impl();
     SAL_DLLPRIVATE void SetNamedVisibility_Impl();
@@ -795,12 +795,12 @@ public:
     SAL_DLLPRIVATE bool
     PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName,
                      SfxItemSet const& rItemSet,
-                     const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+                     const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     SAL_DLLPRIVATE bool APISaveAs_Impl(std::u16string_view aFileName, SfxItemSet& rItemSet,
-                                       const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+                                       const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     SAL_DLLPRIVATE bool
     CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet,
-                      const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
+                      const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     SAL_DLLPRIVATE bool GeneralInit_Impl(
                                     const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     bool bTypeMustBeSetAlready );
@@ -824,7 +824,7 @@ public:
     SAL_DLLPRIVATE void CheckOut( );
     SAL_DLLPRIVATE void CancelCheckOut( );
     SAL_DLLPRIVATE void CheckIn( );
-    SAL_DLLPRIVATE css::uno::Sequence< css::document::CmisVersion > GetCmisVersions() const;
+    SAL_DLLPRIVATE cpo::uno::Sequence< css::document::CmisVersion > GetCmisVersions() const;
 
     /** override this if you have a XmlIdRegistry. */
     virtual const sfx2::IXmlIdRegistry* GetXmlIdRegistry() const { return nullptr; }
@@ -833,7 +833,7 @@ public:
     bool IsSignPDF() const;
 
     /// Gets grab-bagged password info to unprotect change tracking with verification
-    css::uno::Sequence< css::beans::PropertyValue > GetDocumentProtectionFromGrabBag() const;
+    cpo::uno::Sequence< css::beans::PropertyValue > GetDocumentProtectionFromGrabBag() const;
 
     // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
     virtual std::unique_ptr<LockAllViewsGuard> LockAllViews()

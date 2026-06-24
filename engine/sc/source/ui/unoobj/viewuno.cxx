@@ -163,9 +163,9 @@ cpo::uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
     return cpo::uno::Any();          // OWeakObject is in derived objects
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes()
+cpo::uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes()
 {
-    static const uno::Sequence<uno::Type> aTypes
+    static const cpo::uno::Sequence<uno::Type> aTypes
     {
         cppu::UnoType<sheet::XViewPane>::get(),
         cppu::UnoType<sheet::XCellRangeReferrer>::get(),
@@ -176,9 +176,9 @@ uno::Sequence<uno::Type> SAL_CALL ScViewPaneBase::getTypes()
     return aTypes;
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScViewPaneBase::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL ScViewPaneBase::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XViewPane
@@ -525,9 +525,9 @@ static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, ScSheetEventId nEv
         if (pScript)
         {
             cpo::uno::Any aRet;
-            uno::Sequence<cpo::uno::Any> aParams;
-            uno::Sequence<sal_Int16> aOutArgsIndex;
-            uno::Sequence<cpo::uno::Any> aOutArgs;
+            cpo::uno::Sequence<cpo::uno::Any> aParams;
+            cpo::uno::Sequence<sal_Int16> aOutArgsIndex;
+            cpo::uno::Sequence<cpo::uno::Any> aOutArgs;
             /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
         }
     }
@@ -537,7 +537,7 @@ static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, ScSheetEventId nEv
     {
         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
         // the parameter is the clicked object, as in the mousePressed call above
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(nTab) };
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(nTab) };
         xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs );
     }
     catch( uno::Exception& )
@@ -583,12 +583,12 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
     nPreviousTab = nNewTab;
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
+cpo::uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
 {
     return comphelper::concatSequences(
         ScViewPaneBase::getTypes(),
         SfxBaseController::getTypes(),
-        uno::Sequence<uno::Type>
+        cpo::uno::Sequence<uno::Type>
         {
             cppu::UnoType<sheet::XSpreadsheetView>::get(),
             cppu::UnoType<container::XEnumerationAccess>::get(),
@@ -606,9 +606,9 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
         } );
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
+cpo::uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // XDocumentView
@@ -1240,11 +1240,11 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
             if (pScript)
             {
                 // the macro parameter is the clicked object, as in the mousePressed call above
-                uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(xTarget) };
+                cpo::uno::Sequence<cpo::uno::Any> aParams{ cpo::uno::Any(xTarget) };
 
                 cpo::uno::Any aRet;
-                uno::Sequence<sal_Int16> aOutArgsIndex;
-                uno::Sequence<cpo::uno::Any> aOutArgs;
+                cpo::uno::Sequence<sal_Int16> aOutArgsIndex;
+                cpo::uno::Sequence<cpo::uno::Any> aOutArgs;
 
                 /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
 
@@ -1260,7 +1260,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
             // the parameter is the clicked object, as in the mousePressed call above
-            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTarget) };
+            cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xTarget) };
             xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs );
         }
         catch( util::VetoException& )
@@ -1286,7 +1286,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             ScDocShell* pDocSh = rViewData.GetDocShell();
             ScDocument& rDoc = pDocSh->GetDocument();
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< cpo::uno::Any > aArgs{ getSelection() };
+            cpo::uno::Sequence< cpo::uno::Any > aArgs{ getSelection() };
             xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
         }
         catch( uno::Exception& )
@@ -1715,10 +1715,10 @@ void ScTabViewObj::SelectionChanged()
         if (pScript)
         {
             // the macro parameter is the selection as returned by getSelection
-            uno::Sequence<cpo::uno::Any> aParams{ getSelection() };
+            cpo::uno::Sequence<cpo::uno::Any> aParams{ getSelection() };
             cpo::uno::Any aRet;
-            uno::Sequence<sal_Int16> aOutArgsIndex;
-            uno::Sequence<cpo::uno::Any> aOutArgs;
+            cpo::uno::Sequence<sal_Int16> aOutArgsIndex;
+            cpo::uno::Sequence<cpo::uno::Any> aOutArgs;
             /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
         }
     }
@@ -1731,7 +1731,7 @@ void ScTabViewObj::SelectionChanged()
     try
     {
         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
-        uno::Sequence< cpo::uno::Any > aArgs{ getSelection() };
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ getSelection() };
         xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
     }
     catch( uno::Exception& )
@@ -1988,7 +1988,7 @@ void ScTabViewObj::VisAreaChanged()
 // XRangeSelection
 
 void SAL_CALL ScTabViewObj::startRangeSelection(
-                                const uno::Sequence<beans::PropertyValue>& aArguments )
+                                const cpo::uno::Sequence<beans::PropertyValue>& aArguments )
 {
     SolarMutexGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -2115,7 +2115,7 @@ bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
 {
     return {SCTABVIEWOBJ_SERVICE, SCVIEWSETTINGS_SERVICE};
 }
@@ -2173,9 +2173,9 @@ void SAL_CALL ScTabViewObj::insertTransferable( const css::uno::Reference< css::
 
 namespace {
 
-uno::Sequence<sal_Int32> toSequence(const ScMarkData::MarkedTabsType& rSelected)
+cpo::uno::Sequence<sal_Int32> toSequence(const ScMarkData::MarkedTabsType& rSelected)
 {
-    uno::Sequence<sal_Int32> aRet(rSelected.size());
+    cpo::uno::Sequence<sal_Int32> aRet(rSelected.size());
     auto aRetRange = asNonConstRange(aRet);
     size_t i = 0;
     for (const auto& rTab : rSelected)
@@ -2189,11 +2189,11 @@ uno::Sequence<sal_Int32> toSequence(const ScMarkData::MarkedTabsType& rSelected)
 
 }
 
-uno::Sequence<sal_Int32> ScTabViewObj::getSelectedSheets()
+cpo::uno::Sequence<sal_Int32> ScTabViewObj::getSelectedSheets()
 {
     ScTabViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
-        return uno::Sequence<sal_Int32>();
+        return cpo::uno::Sequence<sal_Int32>();
 
     ScViewData& rViewData = pViewSh->GetViewData();
 
@@ -2249,11 +2249,11 @@ void ScPreviewObj::Notify(SfxBroadcaster&, const SfxHint& rHint)
         mpViewShell = nullptr;
 }
 
-uno::Sequence<sal_Int32> ScPreviewObj::getSelectedSheets()
+cpo::uno::Sequence<sal_Int32> ScPreviewObj::getSelectedSheets()
 {
     ScPreview* p = mpViewShell ? mpViewShell->GetPreview() : nullptr;
     if (!p)
-        return uno::Sequence<sal_Int32>();
+        return cpo::uno::Sequence<sal_Int32>();
 
     return toSequence(p->GetSelectedTabs());
 }

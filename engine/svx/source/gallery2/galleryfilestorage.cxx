@@ -654,7 +654,7 @@ void GalleryFileStorage::insertFileOrDirURL(const INetURLObject& rFileOrDirURL,
 
         if (bFolder)
         {
-            uno::Sequence<OUString> aProps{ u"Url"_ustr };
+            cpo::uno::Sequence<OUString> aProps{ u"Url"_ustr };
             uno::Reference<sdbc::XResultSet> xResultSet(
                 aCnt.createCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY));
             uno::Reference<ucb::XContentAccess> xContentAccess(xResultSet, uno::UNO_QUERY);

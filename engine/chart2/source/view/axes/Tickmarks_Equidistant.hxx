@@ -29,7 +29,7 @@ namespace chart
 class EquidistantTickIter : public TickIter
 {
 public:
-    EquidistantTickIter( const css::uno::Sequence< css::uno::Sequence< double > >& rTicks
+    EquidistantTickIter( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rTicks
                 , const ExplicitIncrementData& rIncrement
                 , sal_Int32 nMaxDepth );
     EquidistantTickIter( TickInfoArraysType& rTickInfos
@@ -80,7 +80,7 @@ private: //methods
                 }
 
 private: //member
-    const css::uno::Sequence< css::uno::Sequence< double > >*  m_pSimpleTicks;
+    const cpo::uno::Sequence< cpo::uno::Sequence< double > >*  m_pSimpleTicks;
     TickInfoArraysType*       m_pInfoTicks;
     const ExplicitIncrementData& m_rIncrement;
     sal_Int32   m_nMaxDepth;
@@ -113,7 +113,7 @@ public:
 
 private: //methods
     void        addSubTicks( sal_Int32 nDepth,
-                        css::uno::Sequence< css::uno::Sequence< double > >& rParentTicks ) const;
+                        cpo::uno::Sequence< cpo::uno::Sequence< double > >& rParentTicks ) const;
     double*     getMajorTick( sal_Int32 nTick ) const;
     double*     getMinorTick( sal_Int32 nTick, sal_Int32 nDepth
                     , double fStartParentTick, double fNextParentTick ) const;

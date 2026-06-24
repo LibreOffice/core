@@ -17,7 +17,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -58,12 +58,12 @@ private:
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override
     { return { u"com.sun.star.configuration.ReadWriteAccess"_ustr }; }
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence< cpo::uno::Any > const & aArguments) override;
+        cpo::uno::Sequence< cpo::uno::Any > const & aArguments) override;
 
     virtual cpo::uno::Any SAL_CALL getByHierarchicalName(
         OUString const & aName) override
@@ -82,7 +82,7 @@ private:
     virtual bool SAL_CALL hasPendingChanges() override
     { return getRoot()->hasPendingChanges(); }
 
-    virtual css::uno::Sequence< ::css::util::ElementChange > SAL_CALL getPendingChanges() override
+    virtual cpo::uno::Sequence< ::css::util::ElementChange > SAL_CALL getPendingChanges() override
     { return getRoot()->getPendingChanges(); }
 
     css::beans::Property SAL_CALL getPropertyByHierarchicalName(
@@ -102,7 +102,7 @@ private:
     rtl::Reference< RootAccess > root_;
 };
 
-void Service::initialize(css::uno::Sequence< cpo::uno::Any > const & aArguments)
+void Service::initialize(cpo::uno::Sequence< cpo::uno::Any > const & aArguments)
 {
     OUString locale;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= locale)) {
@@ -135,7 +135,7 @@ rtl::Reference< RootAccess > Service::getRoot() {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_configuration_ReadWriteAccess_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new configmgr::read_write_access::Service(context));
 }

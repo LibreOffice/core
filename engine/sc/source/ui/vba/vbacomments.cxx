@@ -100,10 +100,10 @@ ScVbaComments::getServiceImplName()
     return u"ScVbaComments"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 ScVbaComments::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.excel.Comments"_ustr
     };

@@ -702,7 +702,7 @@ void Test::testMSCharBackgroundEditing()
             // Remove highlighting
             xRun->setPropertyValue(u"CharHighlight"_ustr, cpo::uno::Any(COL_TRANSPARENT));
             // Remove shading marker
-            uno::Sequence<beans::PropertyValue> aGrabBag = getProperty<uno::Sequence<beans::PropertyValue> >(xRun,u"CharInteropGrabBag"_ustr);
+            cpo::uno::Sequence<beans::PropertyValue> aGrabBag = getProperty<cpo::uno::Sequence<beans::PropertyValue> >(xRun,u"CharInteropGrabBag"_ustr);
             for (beans::PropertyValue& rProp : asNonConstRange(aGrabBag))
             {
                 if (rProp.Name == "CharShadingMarker")
@@ -962,7 +962,7 @@ auto Test::verifyText13(char const*const pTestName) -> void
     uno::Reference<container::XIndexAccess> xIndexes(xDIS->getDocumentIndexes());
     uno::Reference<text::XDocumentIndex> xIndex(xIndexes->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<container::XIndexReplace> xLevels(getProperty<uno::Reference<container::XIndexReplace>>(xIndex, u"LevelFormat"_ustr));
-    uno::Sequence<beans::PropertyValues> format;
+    cpo::uno::Sequence<beans::PropertyValues> format;
     xLevels->getByIndex(1) >>= format; // 1-based?
     CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, u"TokenType"_ustr, format[0][0].Name);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(pTestName, u"TokenHyperlinkStart"_ustr, format[0][0].Value.get<OUString>());
@@ -1126,7 +1126,7 @@ void Test::testBulletAsImage()
             uno::Reference<beans::XPropertySet> xPropertySet(xPara, uno::UNO_QUERY);
             uno::Reference<container::XIndexAccess> xLevels;
             xLevels.set(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-            uno::Sequence<beans::PropertyValue> aProperties;
+            cpo::uno::Sequence<beans::PropertyValue> aProperties;
             xLevels->getByIndex(0) >>= aProperties;
             uno::Reference<awt::XBitmap> xBitmap;
             awt::Size aSize;
@@ -1174,7 +1174,7 @@ void Test::testBulletAsImage()
             uno::Reference<beans::XPropertySet> xPropertySet(xPara, uno::UNO_QUERY);
             uno::Reference<container::XIndexAccess> xLevels;
             xLevels.set(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-            uno::Sequence<beans::PropertyValue> aProperties;
+            cpo::uno::Sequence<beans::PropertyValue> aProperties;
             xLevels->getByIndex(0) >>= aProperties;
             uno::Reference<awt::XBitmap> xBitmap;
             awt::Size aSize;
@@ -1243,7 +1243,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     OUStringBuffer listFormat;
     for (sal_Int32 i = 0; i < xNumRule->getCount(); ++i)
     {
-        uno::Sequence<beans::PropertyValue> format;
+        cpo::uno::Sequence<beans::PropertyValue> format;
         format.getArray();
         xNumRule->getByIndex(i) >>= format;
         {
@@ -1276,7 +1276,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
@@ -1683,7 +1683,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
@@ -1747,7 +1747,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     comphelper::SequenceAsHashMap aMediaDescriptor;
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
     // Enable PDF/UA
-    uno::Sequence<beans::PropertyValue> aFilterData(
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { "PDFUACompliance", cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
     css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
@@ -1968,7 +1968,7 @@ void Test::testDropDownFormField()
 
             // Check drop down field's parameters.
             const sw::mark::Fieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
-            css::uno::Sequence<OUString> vListEntries;
+            cpo::uno::Sequence<OUString> vListEntries;
             sal_Int32 nSelection = -1;
             auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
             if (pListEntries != pParameters->end())

@@ -59,7 +59,7 @@ Sequence< Type > ODataColumn::getTypes()
 
 Sequence< sal_Int8 > ODataColumn::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 Any SAL_CALL ODataColumn::queryInterface( const Type & _rType )

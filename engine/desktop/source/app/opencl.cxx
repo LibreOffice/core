@@ -126,7 +126,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
     try {
         css::uno::Reference< css::frame::XComponentLoader > xLoader(xDesktop, css::uno::UNO_QUERY_THROW);
 
-        css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
+        cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
                                                                                              true) };
 
         xComponent.set(xLoader->loadComponentFromURL(rURL, u"_blank"_ustr, 0, aArgs));

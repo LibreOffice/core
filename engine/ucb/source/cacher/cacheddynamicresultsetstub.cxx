@@ -127,7 +127,7 @@ bool SAL_CALL CachedDynamicResultSetStub::supportsService( const OUString& Servi
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStub::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStub::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedDynamicResultSetStub"_ustr };
 }
@@ -156,7 +156,7 @@ bool SAL_CALL CachedDynamicResultSetStubFactory::supportsService( const OUString
 {
     return cppu::supportsService( this, ServiceName );
 }
-css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStubFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStubFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CachedDynamicResultSetStubFactory"_ustr };
 }
@@ -167,7 +167,7 @@ css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSetStubFactory::getSu
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_CachedDynamicResultSetStubFactory_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CachedDynamicResultSetStubFactory(context));
 }

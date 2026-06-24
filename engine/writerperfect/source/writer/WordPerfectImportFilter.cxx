@@ -78,7 +78,7 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData& input,
 }
 
 bool WordPerfectImportFilter::importImpl(
-    const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor)
 {
     Reference<XInputStream> xInputStream;
     Reference<XWindow> xDialogParent;
@@ -150,7 +150,7 @@ bool WordPerfectImportFilter::importImpl(
 }
 
 bool SAL_CALL
-WordPerfectImportFilter::filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor)
+WordPerfectImportFilter::filter(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor)
 {
     return importImpl(aDescriptor);
 }
@@ -165,7 +165,7 @@ WordPerfectImportFilter::setTargetDocument(const Reference<css::lang::XComponent
 
 // XExtendedFilterDetection
 OUString SAL_CALL
-WordPerfectImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descriptor)
+WordPerfectImportFilter::detect(cpo::uno::Sequence<css::beans::PropertyValue>& Descriptor)
 {
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 location = nLength;
@@ -203,7 +203,7 @@ WordPerfectImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& D
 
 // XInitialization
 void SAL_CALL
-WordPerfectImportFilter::initialize(const css::uno::Sequence<cpo::uno::Any>& /*aArguments*/)
+WordPerfectImportFilter::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/)
 {
 }
 
@@ -218,7 +218,7 @@ bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString& rServiceN
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ImportFilter"_ustr,
              u"com.sun.star.document.ExtendedTypeDetection"_ustr };
@@ -226,7 +226,7 @@ css::uno::Sequence<OUString> SAL_CALL WordPerfectImportFilter::getSupportedServi
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_Writer_WordPerfectImportFilter_get_implementation(
-    css::uno::XComponentContext* const context, const css::uno::Sequence<cpo::uno::Any>&)
+    css::uno::XComponentContext* const context, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new WordPerfectImportFilter(context));
 }

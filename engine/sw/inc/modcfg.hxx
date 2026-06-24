@@ -69,7 +69,7 @@ class SAL_DLLPUBLIC_RTTI SwRevisionConfig final : public utl::ConfigItem
     sal_uInt16      m_nMarkAlign;         //Revision/LinesChanged/Mark
     Color           m_aMarkColor;         //Revision/LinesChanged/Color
 
-    static const css::uno::Sequence<OUString>& GetPropertyNames();
+    static const cpo::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void            ImplCommit() override;
 
@@ -77,7 +77,7 @@ public:
     SwRevisionConfig();
     virtual ~SwRevisionConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     using ConfigItem::SetModified;
 };
@@ -100,7 +100,7 @@ class SAL_DLLPUBLIC_RTTI SwCompareConfig final : public utl::ConfigItem
     bool            m_bIgnorePieces;  //Compare/Settings/Ignore pieces of length
     sal_uInt16      m_nPieceLen;      //Compare/Settings/Ignore pieces of length
 
-    static const css::uno::Sequence<OUString>& GetPropertyNames();
+    static const cpo::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() override;
 
@@ -108,7 +108,7 @@ public:
     SwCompareConfig();
     virtual ~SwCompareConfig() override;
 
-    virtual void    Notify( const css::uno::Sequence< OUString >& ) override;
+    virtual void    Notify( const cpo::uno::Sequence< OUString >& ) override;
     void            Load();
     using ConfigItem::SetModified;
 };
@@ -128,7 +128,7 @@ class SAL_DLLPUBLIC_RTTI SwInsertConfig final : public utl::ConfigItem
     SwInsertTableOptions    m_aInsTableOpts;
     bool            m_bIsWeb;
 
-    const css::uno::Sequence<OUString>& GetPropertyNames() const;
+    const cpo::uno::Sequence<OUString>& GetPropertyNames() const;
 
     virtual void    ImplCommit() override;
 
@@ -136,7 +136,7 @@ public:
     SwInsertConfig(bool bWeb);
     virtual ~SwInsertConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     using ConfigItem::SetModified;
 };
@@ -156,7 +156,7 @@ class SAL_DLLPUBLIC_RTTI SwTableConfig final : public utl::ConfigItem
     bool    m_bInsTableAlignNum;        // Table/Input/Alignment                // Align numbers.
     bool    m_bSplitVerticalByDefault;  // Table/Input/SplitVerticalByDefault   // Split vertical by default.
 
-    static const css::uno::Sequence<OUString>& GetPropertyNames();
+    static const cpo::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() override;
 
@@ -164,7 +164,7 @@ public:
     SwTableConfig(bool bWeb);
     virtual ~SwTableConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     using ConfigItem::SetModified;
 };
@@ -187,7 +187,7 @@ class SAL_DLLPUBLIC_RTTI SwMiscConfig final : public utl::ConfigItem
     OUString    m_sMailingPath;               // FormLetter/FileOutput/Path
     OUString    m_sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
 
-    static const css::uno::Sequence<OUString>& GetPropertyNames();
+    static const cpo::uno::Sequence<OUString>& GetPropertyNames();
 
     virtual void    ImplCommit() override;
 
@@ -195,7 +195,7 @@ public:
     SwMiscConfig();
     virtual ~SwMiscConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     using ConfigItem::SetModified;
 };

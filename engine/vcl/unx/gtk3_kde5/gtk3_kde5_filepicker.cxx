@@ -107,18 +107,18 @@ OUString SAL_CALL Gtk3KDE5FilePicker::getDisplayDirectory()
     return dir;
 }
 
-uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getFiles()
+cpo::uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getFiles()
 {
-    uno::Sequence<OUString> seq = getSelectedFiles();
+    cpo::uno::Sequence<OUString> seq = getSelectedFiles();
     if (seq.getLength() > 1)
         seq.realloc(1);
     return seq;
 }
 
-uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSelectedFiles()
+cpo::uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSelectedFiles()
 {
     auto id = m_ipc.sendCommand(Commands::GetSelectedFiles);
-    uno::Sequence<OUString> seq;
+    cpo::uno::Sequence<OUString> seq;
     m_ipc.readResponse(id, seq);
     return seq;
 }
@@ -141,8 +141,8 @@ OUString SAL_CALL Gtk3KDE5FilePicker::getCurrentFilter()
     return filter;
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::appendFilterGroup(const OUString& /*rGroupTitle*/,
-                                                    const uno::Sequence<beans::StringPair>& filters)
+void SAL_CALL Gtk3KDE5FilePicker::appendFilterGroup(
+    const OUString& /*rGroupTitle*/, const cpo::uno::Sequence<beans::StringPair>& filters)
 {
     const sal_uInt16 length = filters.getLength();
     for (sal_uInt16 i = 0; i < length; ++i)
@@ -287,7 +287,7 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
     }
 }
 
-void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<cpo::uno::Any>& args)
+void SAL_CALL Gtk3KDE5FilePicker::initialize(const cpo::uno::Sequence<cpo::uno::Any>& args)
 {
     // parameter checking
     cpo::uno::Any arg;
@@ -428,7 +428,7 @@ bool SAL_CALL Gtk3KDE5FilePicker::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL Gtk3KDE5FilePicker::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.dialogs.FilePicker"_ustr,
              u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr,

@@ -983,7 +983,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testBulletCharAndFont)
 
     uno::Reference<container::XIndexAccess> xLevels(
         xPropSet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
     OUString sBulletChar(u'\xf06c');
     for (beans::PropertyValue const& rProp : aProps)

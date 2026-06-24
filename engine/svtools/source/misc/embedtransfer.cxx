@@ -109,8 +109,8 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             OUString aName( u"Dummy"_ustr );
                             SvStream* pStream = nullptr;
                             bool bDeleteStream = false;
-                            uno::Sequence < beans::PropertyValue > aEmpty;
-                            uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
+                            cpo::uno::Sequence < beans::PropertyValue > aEmpty;
+                            cpo::uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
                                     { "SourceShellID", cpo::uno::Any(maParentShellID) },
                                     { "DestinationShellID", cpo::uno::Any(rDestDoc) }
                                 }));
@@ -129,7 +129,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             }
 
                             const sal_uInt32               nLen = pStream->TellEnd();
-                            css::uno::Sequence< sal_Int8 > aSeq( nLen );
+                            cpo::uno::Sequence< sal_Int8 > aSeq( nLen );
 
                             pStream->Seek( STREAM_SEEK_TO_BEGIN );
                             pStream->ReadBytes(aSeq.getArray(), nLen);
@@ -160,7 +160,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     SvmWriter aWriter( aMemStm );
                     aWriter.Write( aMetaFile );
                     cpo::uno::Any aAny;
-                    aAny <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
+                    aAny <<= cpo::uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.TellEnd() );
                     SetAny( aAny );
                     bRet = true;

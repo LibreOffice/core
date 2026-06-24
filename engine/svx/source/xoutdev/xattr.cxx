@@ -28,7 +28,7 @@
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/awt/Gradient2.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/propertyvalue.hxx>
@@ -737,7 +737,7 @@ bool XLineDashItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
             aLineDash.DashLen = rXD.GetDashLen();
             aLineDash.Distance = rXD.GetDistance();
 
-            uno::Sequence< beans::PropertyValue > aPropSeq{
+            cpo::uno::Sequence< beans::PropertyValue > aPropSeq{
                 comphelper::makePropertyValue(u"Name"_ustr, SvxUnogetApiNameForItem(Which(), GetName())),
                 comphelper::makePropertyValue(u"LineDash"_ustr, aLineDash)
             };
@@ -824,7 +824,7 @@ bool XLineDashItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            uno::Sequence< beans::PropertyValue >   aPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue >   aPropSeq;
 
             if ( rVal >>= aPropSeq )
             {
@@ -2092,7 +2092,7 @@ bool XFillGradientItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) c
             const css::awt::Gradient2 aGradient2 = model::gradient::createUnoGradient2(GetGradientValue());
 
             // create sequence
-            uno::Sequence< beans::PropertyValue > aPropSeq{
+            cpo::uno::Sequence< beans::PropertyValue > aPropSeq{
                 comphelper::makePropertyValue(u"Name"_ustr, SvxUnogetApiNameForItem(Which(), GetName())),
                 comphelper::makePropertyValue(u"FillGradient"_ustr, aGradient2)
             };
@@ -2151,7 +2151,7 @@ bool XFillGradientItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId
     {
         case 0:
         {
-            uno::Sequence< beans::PropertyValue >   aPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue >   aPropSeq;
             cpo::uno::Any aGradientAny;
 
             if ( rVal >>= aPropSeq )
@@ -2538,7 +2538,7 @@ bool XFillHatchItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             aUnoHatch.Distance = m_aHatch.GetDistance();
             aUnoHatch.Angle = m_aHatch.GetAngle().get();
 
-            uno::Sequence< beans::PropertyValue > aPropSeq{
+            cpo::uno::Sequence< beans::PropertyValue > aPropSeq{
                 comphelper::makePropertyValue(u"Name"_ustr, SvxUnogetApiNameForItem(Which(), GetName())),
                 comphelper::makePropertyValue(u"FillHatch"_ustr, aUnoHatch)
             };
@@ -2587,7 +2587,7 @@ bool XFillHatchItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            uno::Sequence< beans::PropertyValue >   aPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue >   aPropSeq;
             if ( rVal >>= aPropSeq )
             {
                 css::drawing::Hatch aUnoHatch;

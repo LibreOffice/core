@@ -70,10 +70,10 @@ ScVbaWSFunction::getIntrospection()
 }
 
 cpo::uno::Any SAL_CALL
-ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< cpo::uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< cpo::uno::Any >& /*OutParam*/)
+ScVbaWSFunction::invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& /*OutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*OutParam*/)
 {
     // create copy of parameters, replace Excel range objects with UNO range objects
-    uno::Sequence< cpo::uno::Any > aParamTemp( Params );
+    cpo::uno::Sequence< cpo::uno::Any > aParamTemp( Params );
     if( aParamTemp.hasElements() )
     {
         for( cpo::uno::Any & rArray : asNonConstRange(aParamTemp) )
@@ -94,33 +94,33 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< cpo::
                 {
                     // the sheet.FunctionAccess service doesn't deal with Sequences, only Sequences of Sequence
                     uno::Type aType = rArray.getValueType();
-                    if ( aType.equals( cppu::UnoType<uno::Sequence<sal_Int16>>::get() ) )
+                    if ( aType.equals( cppu::UnoType<cpo::uno::Sequence<sal_Int16>>::get() ) )
                     {
-                        uno::Sequence< uno::Sequence< sal_Int16 > >  aTmp(1);
+                        cpo::uno::Sequence< cpo::uno::Sequence< sal_Int16 > >  aTmp(1);
                         rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
-                    else if ( aType.equals( cppu::UnoType<uno::Sequence<sal_Int32>>::get() ) )
+                    else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get() ) )
                     {
-                        uno::Sequence< uno::Sequence< sal_Int32 > > aTmp(1);
+                        cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > > aTmp(1);
                         rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
-                    else if ( aType.equals( cppu::UnoType<uno::Sequence<double>>::get() ) )
+                    else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence<double>>::get() ) )
                     {
-                        uno::Sequence< uno::Sequence< double > > aTmp(1);
+                        cpo::uno::Sequence< cpo::uno::Sequence< double > > aTmp(1);
                         rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
-                    else if ( aType.equals( cppu::UnoType<uno::Sequence<OUString>>::get() ) )
+                    else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence<OUString>>::get() ) )
                     {
-                        uno::Sequence< uno::Sequence< OUString > > aTmp(1);
+                        cpo::uno::Sequence< cpo::uno::Sequence< OUString > > aTmp(1);
                         rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
-                    else if ( aType.equals( cppu::UnoType<uno::Sequence<cpo::uno::Any>>::get() ) )
+                    else if ( aType.equals( cppu::UnoType<cpo::uno::Sequence<cpo::uno::Any>>::get() ) )
                     {
-                        uno::Sequence< uno::Sequence<cpo::uno::Any > > aTmp(1);
+                        cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Any > > aTmp(1);
                         rArray >>= aTmp.getArray()[ 0 ];
                         rArray <<= aTmp;
                     }
@@ -177,7 +177,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< cpo::
 
     /*  Convert return value from double to Boolean for some functions that
         return Booleans. */
-    typedef uno::Sequence< uno::Sequence< cpo::uno::Any > > AnySeqSeq;
+    typedef cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > AnySeqSeq;
     if( (eOpCode == ocIsEmpty) || (eOpCode == ocIsString) || (eOpCode == ocIsNonString) || (eOpCode == ocIsLogical) ||
         (eOpCode == ocIsRef) || (eOpCode == ocIsValue) || (eOpCode == ocIsFormula) || (eOpCode == ocIsNA) ||
         (eOpCode == ocIsErr) || (eOpCode == ocIsError) || (eOpCode == ocIsEven) || (eOpCode == ocIsOdd) ||
@@ -222,7 +222,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< cpo::
         double fVal = 0.0;
         if( aRet >>= fVal )
             return aRet;
-        uno::Sequence< uno::Sequence< cpo::uno::Any > > aSequence;
+        cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > aSequence;
         if( !( ( aRet >>= aSequence ) && ( aSequence.getLength() > 0 ) &&
             ( aSequence[0].getLength() > 0 ) && ( aSequence[0][0] >>= fVal ) ) )
                 throw uno::RuntimeException();
@@ -285,10 +285,10 @@ ScVbaWSFunction::getServiceImplName()
     return u"ScVbaWSFunction"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaWSFunction::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.WorksheetFunction"_ustr
     };

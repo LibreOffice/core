@@ -27,7 +27,7 @@
 #include <functional>
 
 namespace com::sun::star::uno { class XInterface; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 enum class SfxModelFlags
 {
@@ -51,7 +51,7 @@ namespace sfx2
      */
     css::uno::Reference<css::uno::XInterface>
         SFX2_DLLPUBLIC createSfxModelInstance(
-            const css::uno::Sequence<cpo::uno::Any> & rxArgs,
+            const cpo::uno::Sequence<cpo::uno::Any> & rxArgs,
             std::function<css::uno::Reference<css::uno::XInterface>( SfxModelFlags )> creationFunc
         );
 

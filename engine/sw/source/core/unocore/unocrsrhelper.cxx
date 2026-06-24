@@ -1024,7 +1024,7 @@ void resetCursorPropertyValue(const SfxItemPropertyMapEntry& rEntry, SwPaM& rPam
 }
 
 void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
-    const uno::Sequence< beans::PropertyValue >& rOptions)
+    const cpo::uno::Sequence< beans::PropertyValue >& rOptions)
 {
     if (SwTextNode const*const pTextNode = pUnoCursor->GetPoint()->GetNode().GetTextNode())
     {
@@ -1072,7 +1072,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     uno::Reference < embed::XStorage > xReadStorage;
     if( xInputStream.is() )
     {
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xInputStream),
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xInputStream),
                                          cpo::uno::Any(embed::ElementModes::READ) };
         try
         {
@@ -1240,7 +1240,7 @@ bool DocInsertStringSplitCR(
 
 void makeRedline( SwPaM const & rPaM,
     std::u16string_view rRedlineType,
-    const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
+    const cpo::uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
     IDocumentRedlineAccess& rRedlineAccess = rPaM.GetDoc().getIDocumentRedlineAccess();
 
@@ -1263,7 +1263,7 @@ void makeRedline( SwPaM const & rPaM,
     OUString sAuthor;
     OUString sComment;
     ::util::DateTime aStamp;
-    uno::Sequence< beans::PropertyValue > aRevertProperties;
+    cpo::uno::Sequence< beans::PropertyValue > aRevertProperties;
     sal_uInt32 nMovedID = 0;
     bool bFoundComment = false;
     bool bFoundStamp = false;
@@ -1434,7 +1434,7 @@ void makeRedline( SwPaM const & rPaM,
 
 void makeTableRowRedline( SwTableLine& rTableLine,
     std::u16string_view rRedlineType,
-    const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
+    const cpo::uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
     SwDoc& rDoc = rTableLine.GetFrameFormat()->GetDoc();
     IDocumentRedlineAccess* pRedlineAccess = &rDoc.getIDocumentRedlineAccess();
@@ -1509,7 +1509,7 @@ void makeTableRowRedline( SwTableLine& rTableLine,
 
 void makeTableCellRedline( SwTableBox& rTableBox,
     std::u16string_view rRedlineType,
-    const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
+    const cpo::uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 {
     SwDoc& rDoc = rTableBox.GetFrameFormat()->GetDoc();
     IDocumentRedlineAccess* pRedlineAccess = &rDoc.getIDocumentRedlineAccess();

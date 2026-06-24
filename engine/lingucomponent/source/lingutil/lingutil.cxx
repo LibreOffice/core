@@ -258,7 +258,7 @@ void MergeNewStyleDicsAndOldStyleDics(
     std::set< OUString > aNewStyleLanguages;
     for (auto const& newStyleDic : rNewStyleDics)
     {
-        const uno::Sequence< OUString > aLocaleNames(newStyleDic.aLocaleNames);
+        const cpo::uno::Sequence< OUString > aLocaleNames(newStyleDic.aLocaleNames);
         sal_Int32 nLocaleNames = aLocaleNames.getLength();
         for (sal_Int32 k = 0;  k < nLocaleNames; ++k)
         {

@@ -43,7 +43,7 @@ namespace abp
     private:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
@@ -53,10 +53,10 @@ namespace abp
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XJob
-        virtual cpo::uno::Any SAL_CALL execute( const css::uno::Sequence< css::beans::NamedValue >& lArgs ) override;
+        virtual cpo::uno::Any SAL_CALL execute( const cpo::uno::Sequence< css::beans::NamedValue >& lArgs ) override;
 
         // XInitialisation
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         using svt::OGenericUnoDialog::execute;
         // OGenericUnoDialog overridables

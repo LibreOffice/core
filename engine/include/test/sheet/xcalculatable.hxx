@@ -13,7 +13,7 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -23,7 +23,7 @@ class OOO_DLLPUBLIC_TEST XCalculatable
 {
 public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
-    virtual css::uno::Sequence<css::uno::Reference<css::table::XCell>> getXCells() = 0;
+    virtual cpo::uno::Sequence<css::uno::Reference<css::table::XCell>> getXCells() = 0;
 
     void testCalculate();
     void testCalculateAll();

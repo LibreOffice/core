@@ -52,7 +52,7 @@ bool SAL_CALL HelpOnStartup::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL HelpOnStartup::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL HelpOnStartup::getSupportedServiceNames()
 {
     return { SERVICENAME_JOB };
 }
@@ -89,7 +89,7 @@ HelpOnStartup::~HelpOnStartup()
 }
 
 // css.task.XJob
-cpo::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
+cpo::uno::Any SAL_CALL HelpOnStartup::execute(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     // Analyze the given arguments; try to locate a model there and
     // classify it's used application module.
@@ -143,10 +143,10 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
         m_xConfig.clear();
 }
 
-OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
+OUString HelpOnStartup::its_getModuleIdFromEnv(const cpo::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs        (lArguments);
-    ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault(u"Environment"_ustr, css::uno::Sequence< css::beans::NamedValue >());
+    ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault(u"Environment"_ustr, cpo::uno::Sequence< css::beans::NamedValue >());
 
     // check for right environment.
     // If it's not a DocumentEvent, which triggered this job,
@@ -322,7 +322,7 @@ OUString HelpOnStartup::ist_createHelpURL(std::u16string_view sBaseURL,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_HelpOnStartup_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::HelpOnStartup(context));
 }

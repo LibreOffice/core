@@ -451,7 +451,7 @@ bool WrapOleInRtf(SvStream& rOle2, SvStream& rRtf, SwOLENode& rOLENode,
     SvMemoryStream aGraphicStream;
     if (pGraphic)
     {
-        uno::Sequence<beans::PropertyValue> aFilterData
+        cpo::uno::Sequence<beans::PropertyValue> aFilterData
             = { comphelper::makePropertyValue(u"EmbedEMF"_ustr, false) };
         FilterConfigItem aConfigItem(&aFilterData);
         if (ConvertGraphicToWMF(*pGraphic, aGraphicStream, &aConfigItem))
@@ -573,7 +573,7 @@ bool WrapGraphicInRtf(const Graphic& rGraphic, const SwFrameFormat& rFormat, SvS
     const sal_uInt8* pPresentationData = nullptr;
     sal_uInt64 nPresentationData = 0;
     SvMemoryStream aGraphicStream;
-    uno::Sequence<beans::PropertyValue> aFilterData
+    cpo::uno::Sequence<beans::PropertyValue> aFilterData
         = { comphelper::makePropertyValue(u"EmbedEMF"_ustr, false) };
     FilterConfigItem aConfigItem(&aFilterData);
     if (ConvertGraphicToWMF(rGraphic, aGraphicStream, &aConfigItem))

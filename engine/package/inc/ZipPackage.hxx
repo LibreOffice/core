@@ -68,9 +68,9 @@ class ZipPackage final : public cppu::WeakImplHelper
 {
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
 
-    css::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
-    css::uno::Sequence< sal_Int8 > m_aEncryptionKey;
-    css::uno::Sequence< css::uno::Sequence< css::beans::NamedValue > > m_aGpgProps;
+    cpo::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
+    cpo::uno::Sequence< sal_Int8 > m_aEncryptionKey;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::NamedValue > > m_aGpgProps;
 
     FolderHash        m_aRecent;
     OUString   m_aURL;
@@ -108,8 +108,8 @@ class ZipPackage final : public cppu::WeakImplHelper
     void getZipFileContents();
 
     void WriteMimetypeMagicFile( ZipOutputStream& aZipOut );
-    void WriteManifest( ZipOutputStream& aZipOut, const ::std::vector< css::uno::Sequence< css::beans::PropertyValue > >& aManList );
-    void WriteContentTypes( ZipOutputStream& aZipOut, const ::std::vector< css::uno::Sequence< css::beans::PropertyValue > >& aManList );
+    void WriteManifest( ZipOutputStream& aZipOut, const ::std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >& aManList );
+    void WriteContentTypes( ZipOutputStream& aZipOut, const ::std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >& aManList );
 
     css::uno::Reference< css::io::XInputStream > writeTempFile();
     css::uno::Reference < css::io::XActiveDataStreamer > openOriginalForOutput();
@@ -132,20 +132,20 @@ public:
     rtl::Reference<comphelper::RefCountedMutex>& GetSharedMutexRef() { return m_aMutexHolder; }
 
     void ConnectTo( const css::uno::Reference< css::io::XInputStream >& xInStream );
-    css::uno::Sequence< sal_Int8 > GetEncryptionKey();
+    cpo::uno::Sequence< sal_Int8 > GetEncryptionKey();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
     // XHierarchicalNameAccess
     virtual cpo::uno::Any SAL_CALL getByHierarchicalName( const OUString& aName ) override;
     virtual bool SAL_CALL hasByHierarchicalName( const OUString& aName ) override;
     // XSingleServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(  ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
     // XChangesBatch
     virtual void SAL_CALL commitChanges(  ) override;
     virtual bool SAL_CALL hasPendingChanges(  ) override;
-    virtual css::uno::Sequence< css::util::ElementChange > SAL_CALL getPendingChanges(  ) override;
+    virtual cpo::uno::Sequence< css::util::ElementChange > SAL_CALL getPendingChanges(  ) override;
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
@@ -158,7 +158,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 #endif
 

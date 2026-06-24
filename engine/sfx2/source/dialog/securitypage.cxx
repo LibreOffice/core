@@ -113,7 +113,7 @@ static bool lcl_IsPasswordCorrect(weld::Window *pParent, std::u16string_view rPa
         return false;
 
     bool bRes = false;
-    uno::Sequence< sal_Int8 >   aPasswordHash;
+    cpo::uno::Sequence< sal_Int8 >   aPasswordHash;
     pCurDocShell->GetProtectionHash( aPasswordHash );
 
     // check if supplied password was correct
@@ -121,7 +121,7 @@ static bool lcl_IsPasswordCorrect(weld::Window *pParent, std::u16string_view rPa
     {
         // dummy RedlinePassword from OOXML import: get real password info
         // from the grab-bag to verify the password
-        const css::uno::Sequence< css::beans::PropertyValue > aDocumentProtection =
+        const cpo::uno::Sequence< css::beans::PropertyValue > aDocumentProtection =
                                                 pCurDocShell->GetDocumentProtectionFromGrabBag();
         bRes =
             // password is ok, if there is no DocumentProtection in the GrabBag,
@@ -133,7 +133,7 @@ static bool lcl_IsPasswordCorrect(weld::Window *pParent, std::u16string_view rPa
     }
     else
     {
-        uno::Sequence< sal_Int8 > aNewPasswd( aPasswordHash );
+        cpo::uno::Sequence< sal_Int8 > aNewPasswd( aPasswordHash );
         SvPasswordHelper::GetHashPassword( aNewPasswd, rPassword );
         bRes = SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword );
     }
@@ -311,7 +311,7 @@ void SfxSecurityPage_Impl::Reset_Impl()
             m_xRecordChangesCB->set_sensitive(/*!bProtection && */!bIsReadonly);
 
             m_bOrigPasswordIsConfirmed = true;   // default case if no password is set
-            uno::Sequence< sal_Int8 > aPasswordHash;
+            cpo::uno::Sequence< sal_Int8 > aPasswordHash;
             // check if password is available
             if (pCurDocShell->GetProtectionHash( aPasswordHash ) &&
                 aPasswordHash.hasElements())

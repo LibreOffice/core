@@ -85,7 +85,7 @@ bool SAL_CALL KitInteractionHandler::supportsService(OUString const & rServiceNa
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL KitInteractionHandler::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL KitInteractionHandler::getSupportedServiceNames()
 {
     return { u"com.sun.star.task.InteractionHandler"_ustr,
              // added to indicate support for configuration.backend.MergeRecoveryRequest
@@ -94,7 +94,7 @@ uno::Sequence< OUString > SAL_CALL KitInteractionHandler::getSupportedServiceNam
              u"com.sun.star.uui.InteractionHandler"_ustr };
 }
 
-void SAL_CALL KitInteractionHandler::initialize(uno::Sequence<cpo::uno::Any> const & /*rArguments*/)
+void SAL_CALL KitInteractionHandler::initialize(cpo::uno::Sequence<cpo::uno::Any> const & /*rArguments*/)
 {
 }
 
@@ -135,7 +135,7 @@ void KitInteractionHandler::postError(css::task::InteractionClassification class
 namespace {
 
 /// Just approve the interaction.
-void selectApproved(uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations)
+void selectApproved(cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations)
 {
     for (auto const & c : rContinuations)
     {
@@ -202,7 +202,7 @@ OUString getErrMessage(const uno::Reference<task::XInteractionRequest>& xRequest
 bool KitInteractionHandler::handleIOException(
     const css::uno::Reference<css::task::XInteractionRequest>& rRequest)
 {
-    const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>
+    const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>
         rContinuations = rRequest->getContinuations();
     const cpo::uno::Any aRequest = rRequest->getRequest();
 
@@ -277,7 +277,7 @@ bool KitInteractionHandler::handleIOException(
     return true;
 }
 
-bool KitInteractionHandler::handleNetworkException(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any &rRequest)
+bool KitInteractionHandler::handleNetworkException(const cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any &rRequest)
 {
     ucb::InteractiveNetworkException aNetworkException;
     if (!(rRequest >>= aNetworkException))
@@ -326,7 +326,7 @@ bool KitInteractionHandler::handleNetworkException(const uno::Sequence<uno::Refe
     return true;
 }
 
-bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any &rRequest)
+bool KitInteractionHandler::handlePasswordRequest(const cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any &rRequest)
 {
     bool bPasswordRequestFound = false;
     bool bIsRequestPasswordToModify = false;
@@ -425,7 +425,7 @@ bool KitInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
 }
 
 bool KitInteractionHandler::handleFilterOptionsRequest(
-        const uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
+        const cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>>& rContinuations,
         const cpo::uno::Any& rRequest)
 {
     document::FilterOptionsRequest aFilterOptionsRequest;
@@ -455,7 +455,7 @@ bool KitInteractionHandler::handleFilterOptionsRequest(
 bool SAL_CALL KitInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
-    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();
+    cpo::uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();
     cpo::uno::Any const request(xRequest->getRequest());
 
     if (handleIOException(xRequest))

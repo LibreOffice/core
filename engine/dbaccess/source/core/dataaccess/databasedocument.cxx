@@ -223,7 +223,7 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  )
 
 Sequence< sal_Int8 > SAL_CALL ODatabaseDocument::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // local functions
@@ -782,7 +782,7 @@ Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  )
     return m_pImpl->getMediaDescriptor().getPropertyValues();
 }
 
-Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs2( const ::css::uno::Sequence< ::rtl::OUString >& requestedArgs )
+Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs2( const ::cpo::uno::Sequence< ::rtl::OUString >& requestedArgs )
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     std::vector<PropertyValue> aRet;
@@ -1923,7 +1923,7 @@ void SAL_CALL ODatabaseDocument::loadFromStorage(const Reference<XStorage>& xSto
     xInfoSet->setPropertyValue(u"StreamName"_ustr, cpo::uno::Any(u"content.xml"_ustr));
     xInfoSet->setPropertyValue(u"SourceStorage"_ustr, cpo::uno::Any(xStorage));
 
-    uno::Sequence<cpo::uno::Any> aFilterCreationArgs{ Any(xInfoSet) };
+    cpo::uno::Sequence<cpo::uno::Any> aFilterCreationArgs{ Any(xInfoSet) };
 
     uno::Reference<document::XImporter> xImporter(m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.comp.sdb.DBFilter"_ustr, aFilterCreationArgs, m_pImpl->m_aContext), uno::UNO_QUERY_THROW);
 
@@ -1931,7 +1931,7 @@ void SAL_CALL ODatabaseDocument::loadFromStorage(const Reference<XStorage>& xSto
     xImporter->setTargetDocument(xComponent);
 
     uno::Reference<document::XFilter> xFilter(xImporter, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aFilterArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aFilterArgs;
     xFilter->filter(aFilterArgs);
 
     // In case of embedding, XModel::attachResource is already called.
@@ -2046,7 +2046,7 @@ struct CreateAny
 Reference< XEnumeration > SAL_CALL ODatabaseDocument::getControllers(  )
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
-    uno::Sequence< Any> aController( m_aControllers.size() );
+    cpo::uno::Sequence< Any> aController( m_aControllers.size() );
     std::transform( m_aControllers.begin(), m_aControllers.end(), aController.getArray(), CreateAny() );
     return new ::comphelper::OAnyEnumeration(aController);
 }
@@ -2194,7 +2194,7 @@ OUString SAL_CALL ODatabaseDocument::getUntitledPrefix()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     Reference<XInterface> xDBContextTunnel(DatabaseContext::create(context), UNO_QUERY_THROW);
     rtl::Reference<dbaccess::ODatabaseContext> pContext

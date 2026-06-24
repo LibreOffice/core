@@ -64,11 +64,11 @@ bool getBool(utl::OConfigurationNode const & aNode, const OUString& rNodeName)
     return comphelper::getBOOL(aNode.getNodeValue(rNodeName));
 }
 
-css::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
+cpo::uno::Sequence<OUString> BuildContextList (const ContextList& rContextList)
 {
     const ::std::vector<ContextList::Entry>& entries = rContextList.GetEntries();
 
-    css::uno::Sequence<OUString> result(entries.size());
+    cpo::uno::Sequence<OUString> result(entries.size());
     auto resultRange = asNonConstRange(result);
     tools::Long i = 0;
 
@@ -329,7 +329,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     // save deck settings
 
-    ::uno::Sequence< OUString > sContextList = BuildContextList(pDeckDesc->maContextList);
+    ::cpo::uno::Sequence< OUString > sContextList = BuildContextList(pDeckDesc->maContextList);
 
     utl::OConfigurationNode aDeckNode (aDeckRootNode.openNode(pDeckDesc->msNodeName));
 
@@ -378,7 +378,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
         OUString panelId = panel->GetId();
         std::shared_ptr<PanelDescriptor> xPanelDesc = GetPanelDescriptor(panelId);
 
-        ::uno::Sequence< OUString > sPanelContextList = BuildContextList(xPanelDesc->maContextList);
+        ::cpo::uno::Sequence< OUString > sPanelContextList = BuildContextList(xPanelDesc->maContextList);
 
         utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(xPanelDesc->msNodeName));
 

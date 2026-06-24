@@ -154,16 +154,16 @@ public:
     virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     // ____ XTypeProvider ____
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
         getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() override;
 
     // ____ XPropertyState ____
     virtual css::beans::PropertyState SAL_CALL
         getPropertyState( const OUString& PropertyName ) override final;
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL
-        getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override final;
+    virtual cpo::uno::Sequence< css::beans::PropertyState > SAL_CALL
+        getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName ) override final;
     virtual void SAL_CALL
         setPropertyToDefault( const OUString& PropertyName ) override final;
     virtual cpo::uno::Any SAL_CALL
@@ -175,9 +175,9 @@ public:
     virtual void SAL_CALL
         setAllPropertiesToDefault() override final;
     virtual void SAL_CALL
-        setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames ) override final;
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL
-        getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override final;
+        setPropertiesToDefault( const cpo::uno::Sequence< OUString >& aPropertyNames ) override final;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
+        getPropertyDefaults( const cpo::uno::Sequence< OUString >& aPropertyNames ) override final;
 
     // ____ XStyleSupplier ____
     virtual css::uno::Reference< css::style::XStyle > SAL_CALL getStyle() override final;
@@ -185,8 +185,8 @@ public:
 
     // ____ XMultiPropertySet ____
     virtual void SAL_CALL setPropertyValues(
-        const css::uno::Sequence< OUString >& PropertyNames,
-        const css::uno::Sequence< cpo::uno::Any >& Values ) override final;
+        const cpo::uno::Sequence< OUString >& PropertyNames,
+        const cpo::uno::Sequence< cpo::uno::Any >& Values ) override final;
 
     // ____ XFastPropertySet ____
     virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override final;
@@ -200,7 +200,7 @@ private:
     css::beans::PropertyState
         GetPropertyStateByHandle( sal_Int32 nHandle ) const;
 
-    css::uno::Sequence< css::beans::PropertyState >
+    cpo::uno::Sequence< css::beans::PropertyState >
         GetPropertyStatesByHandle( const std::vector< sal_Int32 > & aHandles ) const;
 
     void SetPropertyToDefault( sal_Int32 nHandle );

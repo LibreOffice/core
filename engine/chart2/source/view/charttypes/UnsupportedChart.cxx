@@ -42,7 +42,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/chart2/XFormattedString.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
 

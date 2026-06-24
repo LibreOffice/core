@@ -62,8 +62,8 @@ namespace cppcanvas::internal
 
             css::rendering::StrokeAttributes                            maStrokeAttributes;
 
-            css::uno::Sequence< double >                                maFillColor;
-            css::uno::Sequence< double >                                maStrokeColor;
+            cpo::uno::Sequence< double >                                maFillColor;
+            cpo::uno::Sequence< double >                                maStrokeColor;
             bool                                                        mbFillColorSet;
             bool                                                        mbStrokeColorSet;
             bool                                                        mbIsFromPreviousSlideshow;

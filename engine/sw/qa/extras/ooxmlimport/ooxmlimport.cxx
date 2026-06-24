@@ -366,7 +366,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN766477)
     uno::Reference<beans::XPropertySet> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<text::XFormField> xFormField(xRun->getPropertyValue(u"Bookmark"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
-    uno::Sequence<OUString> aElementNames(xParameters->getElementNames());
+    cpo::uno::Sequence<OUString> aElementNames(xParameters->getElementNames());
     CPPUNIT_ASSERT_EQUAL(u"Checkbox_Checked"_ustr, aElementNames[0]);
 }
 
@@ -636,7 +636,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN780645)
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xTableRows = xTextTable->getRows();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2135), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0].Position); // was 1999
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2135), getProperty< cpo::uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), u"TableColumnSeparators"_ustr)[0].Position); // was 1999
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testWordArtResizing)
@@ -1586,7 +1586,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf101626)
     // Transform soft-hyphen to hard-hyphen as list bulletChar to avoid missing symbols in export
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     for (beans::PropertyValue const& rProp : aProps)
@@ -1607,7 +1607,7 @@ CPPUNIT_TEST_FIXTURE(Test,  testTdf106606)
     {
         uno::Reference<beans::XPropertySet>     xPropertySet( getStyles( u"NumberingStyles"_ustr )->getByName( rStyleName ), uno::UNO_QUERY );
         uno::Reference<container::XIndexAccess> xLevels( xPropertySet->getPropertyValue( u"NumberingRules"_ustr ), uno::UNO_QUERY );
-        uno::Sequence<beans::PropertyValue>     aProps;
+        cpo::uno::Sequence<beans::PropertyValue>     aProps;
         xLevels->getByIndex( 0 ) >>= aProps; // 1st level
 
         for (beans::PropertyValue const& rProp : aProps)
@@ -1665,7 +1665,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100072)
 
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
             { "OutputStream", cpo::uno::Any(xOutputStream) },
             { "FilterName", cpo::uno::Any(u"SVM"_ustr) }
         }));
@@ -1761,8 +1761,8 @@ CPPUNIT_TEST_FIXTURE(Test, testVmlAdjustments)
     createSwDoc("vml-adjustments.docx");
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue(u"CustomShapeGeometry"_ustr));
-    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues =
-        aGeometry[u"AdjustmentValues"_ustr].get<uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>();
+    cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues =
+        aGeometry[u"AdjustmentValues"_ustr].get<cpo::uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aAdjustmentValues.getLength());
     drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue = *std::cbegin(aAdjustmentValues);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(17639), aAdjustmentValue.Value.get<sal_Int32>());

@@ -59,10 +59,10 @@ SwVbaField::getServiceImplName()
     return u"SwVbaField"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaField::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Field"_ustr
     };
@@ -539,10 +539,10 @@ SwVbaFields::getElementType()
     return  cppu::UnoType<word::XField>::get();
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaFields::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Fields"_ustr
     };

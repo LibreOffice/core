@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/CrossReference.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -57,21 +57,21 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"ContentType"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"Cookie"_ustr, -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
     { u"CrossReferences"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::CrossReference>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::CrossReference>>::get(),
       ATTR_DEFAULT },
     { u"DateCreated"_ustr, -1, cppu::UnoType<css::util::DateTime>::get(),
       ATTR_DEFAULT },
     { u"DateModified"_ustr, -1, cppu::UnoType<css::util::DateTime>::get(),
       ATTR_DEFAULT },
     { u"DeleteOnServer"_ustr, -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
-    { u"DocumentBody"_ustr, -1, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(),
+    { u"DocumentBody"_ustr, -1, cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get(),
       ATTR_DEFAULT },
     { u"DocumentCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(),
       ATTR_DEFAULT | PropertyAttribute::READONLY },
     { u"DocumentCountMarked"_ustr, -1, cppu::UnoType<sal_Int32>::get(),
       ATTR_DEFAULT | PropertyAttribute::READONLY },
     { u"DocumentHeader"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::DocumentHeaderField>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::DocumentHeaderField>>::get(),
       ATTR_DEFAULT },
     { u"DocumentStoreMode"_ustr, -1,
       cppu::UnoType<css::ucb::DocumentStoreMode>::get(), ATTR_DEFAULT },
@@ -116,7 +116,7 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"Origin"_ustr, -1, cppu::UnoType<OUString>::get(),
       ATTR_DEFAULT | PropertyAttribute::READONLY },
     { u"OutgoingMessageRecipients"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::RecipientInfo>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::RecipientInfo>>::get(),
       ATTR_DEFAULT },
     { u"OutgoingMessageState"_ustr, -1,
       cppu::UnoType<css::ucb::OutgoingMessageState>::get(),
@@ -136,28 +136,28 @@ UcbPropertiesManager::UcbPropertiesManager()
     { u"SeenCount"_ustr, -1, cppu::UnoType<sal_Int32>::get(),
       ATTR_DEFAULT | PropertyAttribute::READONLY },
     { u"SendCopyTarget"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
       ATTR_DEFAULT },
     { u"SendFormats"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::SendMediaTypes>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendMediaTypes>>::get(),
       ATTR_DEFAULT },
     { u"SendFroms"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
       ATTR_DEFAULT },
     { u"SendPasswords"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
       ATTR_DEFAULT },
     { u"SendProtocolPrivate"_ustr, -1, cppu::UnoType<sal_Int16>::get(),
       ATTR_DEFAULT },
     { u"SendProtocolPublic"_ustr, -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
     { u"SendReplyTos"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
       ATTR_DEFAULT },
     { u"SendServerNames"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
       ATTR_DEFAULT },
     { u"SendUserNames"_ustr, -1,
-      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      cppu::UnoType<cpo::uno::Sequence<css::ucb::SendInfo>>::get(),
       ATTR_DEFAULT },
     { u"SendVIMPostOfficePath"_ustr, -1, cppu::UnoType<OUString>::get(),
       ATTR_DEFAULT },
@@ -204,7 +204,7 @@ bool SAL_CALL UcbPropertiesManager::supportsService( const OUString& ServiceName
 {
     return cppu::supportsService( this, ServiceName );
 }
-css::uno::Sequence< OUString > SAL_CALL UcbPropertiesManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UcbPropertiesManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.PropertiesManager"_ustr };
 }
@@ -215,7 +215,7 @@ css::uno::Sequence< OUString > SAL_CALL UcbPropertiesManager::getSupportedServic
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_UcbPropertiesManager_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new UcbPropertiesManager());
 }

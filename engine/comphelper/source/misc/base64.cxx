@@ -23,7 +23,7 @@
 
 #include <comphelper/base64.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -110,7 +110,7 @@ static void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart,
 }
 
 template <typename Buffer>
-static void base64encode(Buffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+static void base64encode(Buffer& aStrBuffer, const cpo::uno::Sequence<sal_Int8>& aPass)
 {
     sal_Int32 i(0);
     sal_Int32 nBufferLength(aPass.getLength());
@@ -123,23 +123,23 @@ static void base64encode(Buffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPas
     }
 }
 
-void Base64::encode(OStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+void Base64::encode(OStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int8>& aPass)
 {
     base64encode(aStrBuffer, aPass);
 }
 
-void Base64::encode(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+void Base64::encode(OUStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int8>& aPass)
 {
     base64encode(aStrBuffer, aPass);
 }
 
-void Base64::decode(uno::Sequence<sal_Int8>& aBuffer, std::u16string_view sBuffer)
+void Base64::decode(cpo::uno::Sequence<sal_Int8>& aBuffer, std::u16string_view sBuffer)
 {
     std::size_t nCharsDecoded = decodeSomeChars( aBuffer, sBuffer );
     OSL_ENSURE( nCharsDecoded == sBuffer.size(), "some bytes left in base64 decoding!" );
 }
 
-std::size_t Base64::decodeSomeChars(uno::Sequence<sal_Int8>& rOutBuffer, std::u16string_view rInBuffer)
+std::size_t Base64::decodeSomeChars(cpo::uno::Sequence<sal_Int8>& rOutBuffer, std::u16string_view rInBuffer)
 {
     std::size_t nInBufferLen = rInBuffer.size();
     std::size_t nMinOutBufferLen = (nInBufferLen / 4) * 3;

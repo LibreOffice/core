@@ -29,7 +29,7 @@
 #include "fpicker.hxx"
 
 using css::uno::Reference;
-using css::uno::Sequence;
+using cpo::uno::Sequence;
 
 /*
  * FilePicker implementation.

@@ -104,12 +104,12 @@ OQuery::~OQuery()
 {
 }
 
-css::uno::Sequence<sal_Int8> OQuery::getImplementationId()
+cpo::uno::Sequence<sal_Int8> OQuery::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
-css::uno::Sequence< css::uno::Type > OQuery::getTypes()
+cpo::uno::Sequence< css::uno::Type > OQuery::getTypes()
 {
     return  ::comphelper::concatSequences(
         OQueryDescriptor_Base::getTypes( ),
@@ -222,14 +222,14 @@ OUString SAL_CALL OQuery::getImplementationName()
     }
 bool SAL_CALL OQuery::supportsService(const OUString& _rServiceName)
     {
-        const css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+        const cpo::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
         for (const OUString& s : aSupported)
             if (s == _rServiceName)
                 return true;
 
         return false;
     }
-css::uno::Sequence< OUString > SAL_CALL OQuery::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OQuery::getSupportedServiceNames(  )
 {
     return { SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, u"com.sun.star.sdb.QueryDefinition"_ustr };
 }

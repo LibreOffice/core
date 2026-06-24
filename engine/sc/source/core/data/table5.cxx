@@ -51,7 +51,7 @@
 #include <algorithm>
 #include <limits>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 
 void ScTable::UpdatePageBreaks(const ScRange* pUserArea)

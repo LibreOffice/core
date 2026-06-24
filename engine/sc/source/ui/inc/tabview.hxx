@@ -512,7 +512,7 @@ public:
     void            AddHighlightRange( const ScRange& rRange, const Color& rColor );
     void            ClearHighlightRanges();
 
-    void            DoChartSelection( const css::uno::Sequence< css::chart2::data::HighlightedRange > & rHilightRanges );
+    void            DoChartSelection( const cpo::uno::Sequence< css::chart2::data::HighlightedRange > & rHilightRanges );
     void            DoDPFieldPopup(std::u16string_view rPivotTableName, sal_Int32 nDimensionIndex, Point aPoint, Size aSize);
 
     tools::Long            GetGridWidth( ScHSplitPos eWhich );

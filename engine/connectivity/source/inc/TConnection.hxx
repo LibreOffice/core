@@ -42,7 +42,7 @@ namespace connectivity
     {
     protected:
         ::osl::Mutex                    m_aMutex;
-        css::uno::Sequence< css::beans::PropertyValue >
+        cpo::uno::Sequence< css::beans::PropertyValue >
                                         m_aConnectionInfo;
         connectivity::OWeakRefArray     m_aStatements;  //  vector containing a list
                                                         //  of all the Statement objects
@@ -64,16 +64,16 @@ namespace connectivity
         [[noreturn]] void throwGenericSQLException(TranslateId pErrorResourceId, const css::uno::Reference< css::uno::XInterface>& _xContext);
         const SharedResources& getResources() const { return m_aResources;}
 
-        void setConnectionInfo(const css::uno::Sequence< css::beans::PropertyValue >& _aInfo) { m_aConnectionInfo = _aInfo; }
-        const css::uno::Sequence< css::beans::PropertyValue >&
+        void setConnectionInfo(const cpo::uno::Sequence< css::beans::PropertyValue >& _aInfo) { m_aConnectionInfo = _aInfo; }
+        const cpo::uno::Sequence< css::beans::PropertyValue >&
             getConnectionInfo() const { return m_aConnectionInfo; }
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
 
         //XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+        virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+        static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     };
 }
 

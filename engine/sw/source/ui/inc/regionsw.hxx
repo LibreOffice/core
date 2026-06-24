@@ -121,7 +121,7 @@ class SwInsertSectionTabPage final : public SfxTabPage
     OUString m_sFilterName;
     OUString m_sFilePasswd;
 
-    css::uno::Sequence<sal_Int8> m_aNewPasswd;
+    cpo::uno::Sequence<sal_Int8> m_aNewPasswd;
     SwWrtShell* m_pWrtSh;
     std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
 

@@ -52,6 +52,7 @@ using namespace css::document;
 using namespace css::io;
 using namespace css::lang;
 using namespace css::uno;
+using namespace ::cpo::uno;
 
 // xmloff/xmlkyd.hxx
 constexpr OUString sXML_CDATA = u"CDATA"_ustr;
@@ -4765,7 +4766,7 @@ public:
     bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
+    virtual OUString SAL_CALL detect( cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
 private:
     rtl::Reference< HwpReader > rFilter;
@@ -4811,7 +4812,7 @@ bool HwpImportFilter::supportsService( const OUString& ServiceName )
 }
 
 //XExtendedFilterDetection
-OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
+OUString HwpImportFilter::detect( cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
 {
     OUString sTypeName;
 
@@ -4846,7 +4847,7 @@ Sequence< OUString> HwpImportFilter::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 hwpfilter_HwpImportFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new HwpImportFilter(context));
 }

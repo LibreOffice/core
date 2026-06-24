@@ -121,7 +121,7 @@ namespace
         // transport the raw rtl_TextEncoding value instead of having to translate it into an IANA
         // character set name string (which might not exist for certain eCharSet values, like
         // RTL_TEXTENCODING_MS_950):
-        uno::Sequence<beans::PropertyValue> aProps( comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aProps( comphelper::InitPropertySequence({
                 { SC_DBPROP_EXTENSION, cpo::uno::Any(aExtension) },
                 { SC_DBPROP_CHARSET, cpo::uno::Any(eCharSet) }
             }));
@@ -327,7 +327,7 @@ ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding
         if (!xRow.is()) return SCERR_IMPORT_CONNECT;
 
         // currency flag is not needed for dBase
-        uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
+        cpo::uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
         sal_Int32* pTypeArr = aColTypes.getArray();
         for (sal_Int32 i=0; i<nColCount; i++)
             pTypeArr[i] = xMeta->getColumnType( i+1 );
@@ -767,10 +767,10 @@ ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncod
     }
 
     sal_Int32 nColCount = nLastCol - nFirstCol + 1;
-    uno::Sequence<OUString> aColNames( nColCount );
-    uno::Sequence<sal_Int32> aColTypes( nColCount );
-    uno::Sequence<sal_Int32> aColLengths( nColCount );
-    uno::Sequence<sal_Int32> aColScales( nColCount );
+    cpo::uno::Sequence<OUString> aColNames( nColCount );
+    cpo::uno::Sequence<sal_Int32> aColTypes( nColCount );
+    cpo::uno::Sequence<sal_Int32> aColLengths( nColCount );
+    cpo::uno::Sequence<sal_Int32> aColScales( nColCount );
 
     ScRange aDataRange( nFirstCol, nFirstRow, nTab, nLastCol, nLastRow, nTab );
     lcl_GetColumnTypes( *this, aDataRange, bHasFieldNames,

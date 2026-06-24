@@ -52,6 +52,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
+using namespace ::cpo::uno;
 using namespace linguistic;
 
 
@@ -924,7 +925,7 @@ bool SAL_CALL DictionaryNeo::isFull(  )
     return aEntries.size() >= DIC_MAX_ENTRIES;
 }
 
-uno::Sequence< uno::Reference< XDictionaryEntry > >
+cpo::uno::Sequence< uno::Reference< XDictionaryEntry > >
     SAL_CALL DictionaryNeo::getEntries(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -1012,7 +1013,7 @@ void SAL_CALL DictionaryNeo::store()
 
 void SAL_CALL DictionaryNeo::storeAsURL(
             const OUString& aURL,
-            const uno::Sequence< beans::PropertyValue >& /*rArgs*/ )
+            const cpo::uno::Sequence< beans::PropertyValue >& /*rArgs*/ )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -1026,7 +1027,7 @@ void SAL_CALL DictionaryNeo::storeAsURL(
 
 void SAL_CALL DictionaryNeo::storeToURL(
             const OUString& aURL,
-            const uno::Sequence< beans::PropertyValue >& /*rArgs*/ )
+            const cpo::uno::Sequence< beans::PropertyValue >& /*rArgs*/ )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     saveEntries(aURL);

@@ -52,7 +52,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <i18nlangtag/lang.h>
 #include <o3tl/deleter.hxx>
@@ -1304,7 +1304,7 @@ public:
     void                SetAutoCompleteText(const OUString& rStr, bool bUpdateTipWindow);
 
     EditSelection       TransliterateText( const EditSelection& rSelection, TransliterationFlags nTransliterationMode );
-    short               ReplaceTextOnly( ContentNode* pNode, sal_Int32 nCurrentStart, std::u16string_view rText, const css::uno::Sequence< sal_Int32 >& rOffsets );
+    short               ReplaceTextOnly( ContentNode* pNode, sal_Int32 nCurrentStart, std::u16string_view rText, const cpo::uno::Sequence< sal_Int32 >& rOffsets );
 
     void                SetAsianCompressionMode( CharCompressType n );
     CharCompressType    GetAsianCompressionMode() const { return mnAsianCompressionMode; }

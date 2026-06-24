@@ -47,10 +47,10 @@ SwVbaListGallery::getServiceImplName()
     return u"SwVbaListGallery"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaListGallery::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.ListGallery"_ustr
     };

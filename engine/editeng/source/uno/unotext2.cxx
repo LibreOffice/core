@@ -180,9 +180,9 @@ void SAL_CALL SvxUnoTextContent::release() noexcept
 
 // XTypeProvider
 
-uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
 {
-    static const uno::Sequence< uno::Type > TYPES {
+    static const cpo::uno::Sequence< uno::Type > TYPES {
             cppu::UnoType<text::XTextRange>::get(),
             cppu::UnoType<beans::XPropertySet>::get(),
             cppu::UnoType<beans::XMultiPropertySet>::get(),
@@ -197,9 +197,9 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
     return TYPES;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextContent::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextContent::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // text::XTextRange
@@ -302,28 +302,28 @@ cpo::uno::Any SAL_CALL SvxUnoTextContent::getPropertyValue( const OUString& Prop
 }
 
 // XMultiPropertySet
-void SAL_CALL SvxUnoTextContent::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames, const uno::Sequence< cpo::uno::Any >& aValues )
+void SAL_CALL SvxUnoTextContent::setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues )
 {
     _setPropertyValues( aPropertyNames, aValues, mnParagraph );
 }
 
-uno::Sequence< cpo::uno::Any > SAL_CALL SvxUnoTextContent::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL SvxUnoTextContent::getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames )
 {
     return _getPropertyValues( aPropertyNames, mnParagraph );
 }
 
 /*// XTolerantMultiPropertySet
-uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextContent::setPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames, const uno::Sequence< cpo::uno::Any >& aValues ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+cpo::uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextContent::setPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     return _setPropertyValuesTolerant(aPropertyNames, aValues, mnParagraph);
 }
 
-uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames ) throw (uno::RuntimeException)
+cpo::uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames ) throw (uno::RuntimeException)
 {
     return _getPropertyValuesTolerant(aPropertyNames, mnParagraph);
 }
 
-uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getDirectPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames )
+cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getDirectPropertyValuesTolerant( const cpo::uno::Sequence< OUString >& aPropertyNames )
     throw (uno::RuntimeException)
 {
     return _getDirectPropertyValuesTolerant(aPropertyNames, mnParagraph);
@@ -335,7 +335,7 @@ beans::PropertyState SAL_CALL SvxUnoTextContent::getPropertyState( const OUStrin
     return _getPropertyState( PropertyName, mnParagraph );
 }
 
-uno::Sequence< beans::PropertyState > SAL_CALL SvxUnoTextContent::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
+cpo::uno::Sequence< beans::PropertyState > SAL_CALL SvxUnoTextContent::getPropertyStates( const cpo::uno::Sequence< OUString >& aPropertyName )
 {
     return _getPropertyStates( aPropertyName, mnParagraph );
 }
@@ -352,7 +352,7 @@ OUString SAL_CALL SvxUnoTextContent::getImplementationName()
     return u"SvxUnoTextContent"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),
@@ -492,9 +492,9 @@ void SAL_CALL SvxUnoTextCursor::release() noexcept
 }
 
 // XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
 {
-    static const uno::Sequence< uno::Type > TYPES {
+    static const cpo::uno::Sequence< uno::Type > TYPES {
             cppu::UnoType<text::XTextRange>::get(),
              cppu::UnoType<text::XTextCursor>::get(),
              cppu::UnoType<beans::XPropertySet>::get(),
@@ -508,9 +508,9 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
     return TYPES;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextCursor::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL SvxUnoTextCursor::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 // text::XTextCursor
@@ -613,7 +613,7 @@ bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoTextCursor::getSupportedServiceNames()
 {
     return comphelper::concatSequences(
         SvxUnoTextRangeBase::getSupportedServiceNames(),

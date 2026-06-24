@@ -19,7 +19,7 @@
 #pragma once
 
 #include "ItemConverter.hxx"
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -68,7 +68,7 @@ private:
     bool m_bClockwise;
     rtl::Reference< ::chart::BaseCoordinateSystem > m_xCooSys;
 
-    css::uno::Sequence< sal_Int32 > m_aSupportedMissingValueTreatments;
+    cpo::uno::Sequence< sal_Int32 > m_aSupportedMissingValueTreatments;
     sal_Int32 m_nMissingValueTreatment;
 
     bool m_bSupportingPlottingOfHiddenCells;

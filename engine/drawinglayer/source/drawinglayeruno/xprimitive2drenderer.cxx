@@ -53,8 +53,8 @@ namespace drawinglayer::unorenderer
 
             // XPrimitive2DRenderer
             virtual uno::Reference< rendering::XBitmap > SAL_CALL rasterize(
-                const uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& Primitive2DSequence,
-                const uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
+                const cpo::uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& Primitive2DSequence,
+                const cpo::uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
                 ::sal_uInt32 DPI_X,
                 ::sal_uInt32 DPI_Y,
                 const css::geometry::RealRectangle2D& Range,
@@ -63,7 +63,7 @@ namespace drawinglayer::unorenderer
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName() override;
             virtual bool SAL_CALL supportsService(const OUString&) override;
-            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
         };
 
         }
@@ -73,8 +73,8 @@ namespace drawinglayer::unorenderer
         }
 
         uno::Reference< rendering::XBitmap > XPrimitive2DRenderer::rasterize(
-            const uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& aPrimitive2DSequence,
-            const uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
+            const cpo::uno::Sequence< uno::Reference< graphic::XPrimitive2D > >& aPrimitive2DSequence,
+            const cpo::uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
             ::sal_uInt32 DPI_X,
             ::sal_uInt32 DPI_Y,
             const css::geometry::RealRectangle2D& Range,
@@ -172,7 +172,7 @@ namespace drawinglayer::unorenderer
             return cppu::supportsService(this, rServiceName);
         }
 
-        uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames()
+        cpo::uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames()
         {
             return { u"com.sun.star.graphic.Primitive2DTools"_ustr };
         }
@@ -182,7 +182,7 @@ namespace drawinglayer::unorenderer
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 drawinglayer_XPrimitive2DRenderer(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new drawinglayer::unorenderer::XPrimitive2DRenderer());
 }

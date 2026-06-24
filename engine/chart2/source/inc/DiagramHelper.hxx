@@ -51,10 +51,10 @@ public:
         const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem
         );
 
-    static css::uno::Sequence< OUString >
+    static cpo::uno::Sequence< OUString >
         getExplicitSimpleCategories( ChartModel& rModel );
 
-    static css::uno::Sequence< OUString >
+    static cpo::uno::Sequence< OUString >
         generateAutomaticCategoriesFromCooSys(
             const rtl::Reference< ::chart::BaseCoordinateSystem > & xCooSys );
 

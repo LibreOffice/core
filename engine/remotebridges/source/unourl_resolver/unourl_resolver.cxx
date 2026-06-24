@@ -120,7 +120,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 remotebridges_ResolverImpl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ResolverImpl(context));
 }

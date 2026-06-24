@@ -83,7 +83,7 @@ public:
         OUString SAL_CALL getDefaultPropertyName(  ) override { return u"Value"_ustr; }
     //XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif

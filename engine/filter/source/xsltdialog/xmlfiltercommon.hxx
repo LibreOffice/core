@@ -59,7 +59,7 @@ public:
     filter_info_impl();
     bool operator==( const filter_info_impl& ) const;
 
-    css::uno::Sequence< OUString > getFilterUserData() const;
+    cpo::uno::Sequence< OUString > getFilterUserData() const;
 };
 
 

@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 
 #include <editeng/svxacorr.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 using namespace utl;
 using namespace com::sun::star;

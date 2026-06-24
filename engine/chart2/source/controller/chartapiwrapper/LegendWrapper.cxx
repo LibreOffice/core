@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::beans::Property;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace chart
 {
@@ -398,7 +398,7 @@ bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL LegendWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL LegendWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartLegend"_ustr,

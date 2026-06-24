@@ -35,7 +35,7 @@ uno::Reference< beans::XIntrospectionAccess > SAL_CALL VbaSystemAXControl::getIn
 }
 
 
-cpo::uno::Any SAL_CALL VbaSystemAXControl::invoke( const OUString& aFunctionName, const uno::Sequence< cpo::uno::Any >& aParams, uno::Sequence< ::sal_Int16 >& aOutParamIndex, uno::Sequence< cpo::uno::Any >& aOutParam )
+cpo::uno::Any SAL_CALL VbaSystemAXControl::invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam )
 {
     return m_xControlInvocation->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
 }
@@ -72,10 +72,10 @@ VbaSystemAXControl::getServiceImplName()
 }
 
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 VbaSystemAXControl::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.Frame"_ustr
     };

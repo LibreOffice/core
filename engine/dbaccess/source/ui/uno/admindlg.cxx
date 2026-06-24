@@ -25,7 +25,7 @@ using namespace dbaui;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_openoffice_comp_dbu_ODatasourceAdministrationDialog_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ODataSourcePropertyDialog(context));
 }
@@ -43,7 +43,7 @@ ODataSourcePropertyDialog::ODataSourcePropertyDialog(const Reference<XComponentC
 
 Sequence<sal_Int8> SAL_CALL ODataSourcePropertyDialog::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName()
@@ -51,7 +51,7 @@ OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName()
     return u"org.openoffice.comp.dbu.ODatasourceAdministrationDialog"_ustr;
 }
 
-css::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ODataSourcePropertyDialog::getSupportedServiceNames()
 {
     return { u"com.sun.star.sdb.DatasourceAdministrationDialog"_ustr };
 }

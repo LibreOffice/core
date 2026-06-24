@@ -38,6 +38,7 @@ namespace svxform
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xforms;
+    using namespace ::cpo::uno;
 
 
     //= OAddConditionDialog
@@ -99,7 +100,7 @@ namespace svxform
 
     Sequence<sal_Int8> SAL_CALL OAddConditionDialog::getImplementationId(  )
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
 

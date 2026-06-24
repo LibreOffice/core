@@ -122,10 +122,10 @@ ScVbaCharacters::getServiceImplName()
     return u"ScVbaCharacters"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaCharacters::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.Characters"_ustr
     };

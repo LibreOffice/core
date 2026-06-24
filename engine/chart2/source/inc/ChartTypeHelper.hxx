@@ -35,12 +35,12 @@ public:
     static bool shiftCategoryPosAtXAxisPerDefault(     const rtl::Reference< ::chart::ChartType >& xChartType );
 
     //returns sequence of css::chart::DataLabelPlacement
-    static css::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
+    static cpo::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
         const rtl::Reference< ::chart::ChartType >& xChartType, bool bSwapXAndY
         , const rtl::Reference< ::chart::DataSeries >& xSeries );
 
     //returns sequence of css::chart::MissingValueTreatment
-    static css::uno::Sequence < sal_Int32 > getSupportedMissingValueTreatments(
+    static cpo::uno::Sequence < sal_Int32 > getSupportedMissingValueTreatments(
         const rtl::Reference< ::chart::ChartType >& xChartType );
 
     static css::drawing::Direction3D getDefaultSimpleLightDirection( const rtl::Reference< ::chart::ChartType >& xChartType );

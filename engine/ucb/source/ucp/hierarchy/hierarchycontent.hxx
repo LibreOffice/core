@@ -79,7 +79,7 @@ public:
 
     bool getIsDocument() const { return !getIsFolder(); }
 
-    css::uno::Sequence< css::ucb::ContentInfo >
+    cpo::uno::Sequence< css::ucb::ContentInfo >
     getCreatableContentsInfo() const;
 
     const HierarchyEntryData & getHierarchyEntryData() const { return m_aData; }
@@ -119,9 +119,9 @@ private:
             const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
             const css::ucb::ContentInfo& Info );
 
-    virtual css::uno::Sequence< css::beans::Property >
+    virtual cpo::uno::Sequence< css::beans::Property >
     getProperties( const css::uno::Reference<css::ucb::XCommandEnvironment > & xEnv ) override;
-    virtual css::uno::Sequence< css::ucb::CommandInfo >
+    virtual cpo::uno::Sequence< css::ucb::CommandInfo >
     getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
     virtual OUString getParentURL() override;
 
@@ -159,11 +159,11 @@ private:
                 const css::uno::Reference< css::ucb::XContentIdentifier >& xNewId );
 
     css::uno::Reference< css::sdbc::XRow >
-    getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
+    getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties );
     /// @throws css::uno::Exception
-    css::uno::Sequence< cpo::uno::Any >
+    cpo::uno::Sequence< cpo::uno::Any >
     setPropertyValues(
-            const css::uno::Sequence< css::beans::PropertyValue >& rValues,
+            const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
             const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws css::uno::Exception
@@ -203,13 +203,13 @@ public:
         noexcept override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL
     getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     // XContent
@@ -231,7 +231,7 @@ public:
 
 
     // XContentCreator
-    virtual css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
+    virtual cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
     queryCreatableContentsInfo() override;
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
     createNewContent( const css::ucb::ContentInfo& Info ) override;
@@ -242,7 +242,7 @@ public:
 
     static css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                       const css::uno::Sequence< css::beans::Property >& rProperties,
+                       const cpo::uno::Sequence< css::beans::Property >& rProperties,
                        const HierarchyContentProperties& rData,
                        HierarchyContentProvider* pProvider,
                        const OUString& rContentId );

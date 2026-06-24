@@ -60,13 +60,13 @@ public:
                             // XTableCharts
     virtual void SAL_CALL   addNewByName( const OUString& aName,
                                     const css::awt::Rectangle& aRect,
-                                    const css::uno::Sequence< css::table::CellRangeAddress >& aRanges,
+                                    const cpo::uno::Sequence< css::table::CellRangeAddress >& aRanges,
                                     bool bColumnHeaders, bool bRowHeaders ) override;
     virtual void SAL_CALL   removeByName( const OUString& aName ) override;
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XIndexAccess
@@ -84,7 +84,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 using ScChartObj_Base = comphelper::OPropertyContainerImplHelper<
@@ -123,9 +123,9 @@ public:
     virtual void SAL_CALL   setHasColumnHeaders( bool bHasColumnHeaders ) override;
     virtual bool SAL_CALL getHasRowHeaders() override;
     virtual void SAL_CALL   setHasRowHeaders( bool bHasRowHeaders ) override;
-    virtual css::uno::Sequence< css::table::CellRangeAddress > SAL_CALL
+    virtual cpo::uno::Sequence< css::table::CellRangeAddress > SAL_CALL
                             getRanges(  ) override;
-    virtual void SAL_CALL   setRanges( const css::uno::Sequence< css::table::CellRangeAddress >& aRanges ) override;
+    virtual void SAL_CALL   setRanges( const cpo::uno::Sequence< css::table::CellRangeAddress >& aRanges ) override;
 
                             // XEmbeddedObjectSupplier
     virtual css::uno::Reference< css::lang::XComponent > SAL_CALL
@@ -138,7 +138,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

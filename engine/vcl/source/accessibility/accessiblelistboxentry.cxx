@@ -860,7 +860,7 @@ sal_Unicode SAL_CALL AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex )
     ensureAlive();
     return OCommonAccessibleText::implGetCharacter( implGetText(), nIndex );
 }
-css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& )
+cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -871,7 +871,7 @@ css::uno::Sequence< css::beans::PropertyValue > SAL_CALL AccessibleListBoxEntry:
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return css::uno::Sequence< css::beans::PropertyValue >();
+    return cpo::uno::Sequence< css::beans::PropertyValue >();
 }
 sal_Int32 SAL_CALL AccessibleListBoxEntry::getCharacterCount(  )
 {

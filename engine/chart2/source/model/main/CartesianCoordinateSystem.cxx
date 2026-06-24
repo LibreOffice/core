@@ -24,7 +24,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -80,7 +80,7 @@ bool SAL_CALL CartesianCoordinateSystem::supportsService( const OUString& rServi
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem::getSupportedServiceNames()
 {
     return { CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME };
 }
@@ -105,7 +105,7 @@ bool SAL_CALL CartesianCoordinateSystem2d::supportsService( const OUString& rSer
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem2d::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem2d::getSupportedServiceNames()
 {
     return {
         CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME,
@@ -133,7 +133,7 @@ bool SAL_CALL CartesianCoordinateSystem3d::supportsService( const OUString& rSer
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem3d::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem3d::getSupportedServiceNames()
 {
     return {
         CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME,
@@ -145,14 +145,14 @@ css::uno::Sequence< OUString > SAL_CALL CartesianCoordinateSystem3d::getSupporte
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_CartesianCoordinateSystem2d_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::CartesianCoordinateSystem2d);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_CartesianCoordinateSystem3d_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::CartesianCoordinateSystem3d);
 }

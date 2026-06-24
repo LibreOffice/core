@@ -40,7 +40,7 @@ public:
     // SwVbaVariables_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     // XVariables
     virtual cpo::uno::Any SAL_CALL Add( const OUString& rName, const cpo::uno::Any& rValue ) override;

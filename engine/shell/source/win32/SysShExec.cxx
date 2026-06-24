@@ -408,14 +408,14 @@ bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
 {
     return { "com.sun.star.system.SystemShellExecute" };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_CSysShExec_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CSysShExec(context));
 }

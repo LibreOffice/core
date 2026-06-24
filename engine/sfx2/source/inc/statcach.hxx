@@ -53,7 +53,7 @@ public:
     virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) override;
 
     const css::frame::FeatureStateEvent& GetStatus() const { return aStatus;}
-    sal_Int16               Dispatch( const css::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron );
+    sal_Int16               Dispatch( const cpo::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron );
     void                    Release();
 };
 

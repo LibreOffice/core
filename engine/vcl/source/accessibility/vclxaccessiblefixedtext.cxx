@@ -26,6 +26,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo::uno;
 
 VCLXAccessibleFixedText::VCLXAccessibleFixedText(vcl::Window* pWindow)
     : VCLXAccessibleTextComponent(pWindow)

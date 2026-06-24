@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::task { class XStatusIndicator; }
@@ -41,7 +41,7 @@ class VCL_DLLPUBLIC FilterConfigItem
 {
     css::uno::Reference< css::uno::XInterface > xUpdatableView;
     css::uno::Reference< css::beans::XPropertySet > xPropSet;
-    css::uno::Sequence< css::beans::PropertyValue > aFilterData;
+    cpo::uno::Sequence< css::beans::PropertyValue > aFilterData;
 
     bool    bModified;
 
@@ -53,17 +53,17 @@ class VCL_DLLPUBLIC FilterConfigItem
 
 
     static const css::beans::PropertyValue* GetPropertyValue(
-                const css::uno::Sequence< css::beans::PropertyValue >& rPropSeq,
+                const cpo::uno::Sequence< css::beans::PropertyValue >& rPropSeq,
                     const OUString& rName );
     static  bool WritePropertyValue(
-                css::uno::Sequence< css::beans::PropertyValue >& rPropSeq,
+                cpo::uno::Sequence< css::beans::PropertyValue >& rPropSeq,
                     const css::beans::PropertyValue& rPropValue );
 
 public:
 
     FilterConfigItem( std::u16string_view rSubTree );
-    FilterConfigItem( css::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
-    FilterConfigItem( std::u16string_view rSubTree, css::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
+    FilterConfigItem( cpo::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
+    FilterConfigItem( std::u16string_view rSubTree, cpo::uno::Sequence< css::beans::PropertyValue > const * pFilterData );
     /// Writes config in destructor
     ~FilterConfigItem();
     /// Writes config and sets unmodified state again.
@@ -85,7 +85,7 @@ public:
     void        WriteBool( const OUString& rKey, bool bValue );
     void        WriteInt32( const OUString& rKey, sal_Int32 nValue );
 
-    const css::uno::Sequence< css::beans::PropertyValue >& GetFilterData() const { return aFilterData;}
+    const cpo::uno::Sequence< css::beans::PropertyValue >& GetFilterData() const { return aFilterData;}
 
     // GetStatusIndicator is returning the "StatusIndicator" property of the FilterData sequence
     css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator() const;

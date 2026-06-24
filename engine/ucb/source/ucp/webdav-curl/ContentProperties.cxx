@@ -192,7 +192,7 @@ const PropertyValue * ContentProperties::get(
 
 // static
 void ContentProperties::UCBNamesToDAVNames(
-                            const uno::Sequence< beans::Property > & rProps,
+                            const cpo::uno::Sequence< beans::Property > & rProps,
                             std::vector< OUString > & propertyNames )
 {
 
@@ -284,7 +284,7 @@ void ContentProperties::UCBNamesToDAVNames(
 
 // static
 void ContentProperties::UCBNamesToHTTPNames(
-                            const uno::Sequence< beans::Property > & rProps,
+                            const cpo::uno::Sequence< beans::Property > & rProps,
                             std::vector< OUString > & propertyNames )
 {
 
@@ -323,7 +323,7 @@ void ContentProperties::UCBNamesToHTTPNames(
 
 
 bool ContentProperties::containsAllNames(
-                    const uno::Sequence< beans::Property >& rProps,
+                    const cpo::uno::Sequence< beans::Property >& rProps,
                     std::vector< OUString > & rNamesNotContained ) const
 {
     rNamesNotContained.clear();

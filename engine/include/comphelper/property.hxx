@@ -41,7 +41,7 @@ namespace comphelper
     };
 
 /// remove the property with the given name from the given sequence
-COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<css::beans::Property>& seqProps, const OUString& _rPropName);
+COMPHELPER_DLLPUBLIC void RemoveProperty(cpo::uno::Sequence<css::beans::Property>& seqProps, const OUString& _rPropName);
 
 /** within the given property sequence, modify attributes of a special property
     @param  _rProps         the sequence of properties to search in
@@ -49,7 +49,7 @@ COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<css::beans::Property
     @param  _nAddAttrib     the attributes which should be added
     @param  _nRemoveAttrib  the attributes which should be removed
 */
-COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(css::uno::Sequence<css::beans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
+COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(cpo::uno::Sequence<css::beans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
 
 /** check if the given set has the given property.
 */

@@ -48,7 +48,7 @@ public:
         Note that the properties will need to be adjusted with the table
         properties before actually using them.
       */
-    css::uno::Sequence<css::beans::PropertyValue> getTablePosition() const;
+    cpo::uno::Sequence<css::beans::PropertyValue> getTablePosition() const;
 
     bool operator==(const TablePositionHandler& rHandler) const;
 };

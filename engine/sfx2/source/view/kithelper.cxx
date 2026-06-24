@@ -1012,7 +1012,7 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
         return {};
     }
 
-    uno::Sequence<sal_Int8> aCertificateSequence;
+    cpo::uno::Sequence<sal_Int8> aCertificateSequence;
 
     std::string_view aCertificateBase64String = extractCertificate(rCert);
     if (!aCertificateBase64String.empty())
@@ -1026,7 +1026,7 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
         std::copy(rCert.begin(), rCert.end(), aCertificateSequence.getArray());
     }
 
-    uno::Sequence<sal_Int8> aPrivateKeySequence;
+    cpo::uno::Sequence<sal_Int8> aPrivateKeySequence;
     std::string_view aPrivateKeyBase64String = extractKey(rKey);
     if (!aPrivateKeyBase64String.empty())
     {
@@ -1045,7 +1045,7 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
 
 uno::Reference<security::XCertificate> KitHelper::addCertificate(
     const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator,
-    const css::uno::Sequence<sal_Int8>& rCert)
+    const cpo::uno::Sequence<sal_Int8>& rCert)
 {
     // Trust arg is handled by CERT_DecodeTrustString(), see 'man certutil'.
     return xCertificateCreator->addDERCertificateToTheDatabase(rCert, u"TCu,Cu,Tu"_ustr);
@@ -1075,7 +1075,7 @@ void KitHelper::addCertificates(std::string_view rCerts)
         if (aNext.empty())
             break;
 
-        uno::Sequence<sal_Int8> aCertificateSequence;
+        cpo::uno::Sequence<sal_Int8> aCertificateSequence;
         OUString aBase64OUString = OUString::fromUtf8(aNext);
         comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
         addCertificate(xCertificateCreator, aCertificateSequence);
@@ -1170,7 +1170,7 @@ void KitHelper::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vie
     auto aCommandValues = rJsonWriter.startNode("commandValues");
     rJsonWriter.put("signatureTime", aSigningContext.m_nSignatureTime);
 
-    uno::Sequence<sal_Int8> aDigest(reinterpret_cast<sal_Int8*>(aSigningContext.m_aDigest.data()),
+    cpo::uno::Sequence<sal_Int8> aDigest(reinterpret_cast<sal_Int8*>(aSigningContext.m_aDigest.data()),
                                     aSigningContext.m_aDigest.size());
     OUStringBuffer aBuffer;
     comphelper::Base64::encode(aBuffer, aDigest);

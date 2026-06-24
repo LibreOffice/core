@@ -86,9 +86,9 @@ namespace cppu
 
         virtual cpo::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return ImplHelper_query( rType, cd::get(), this ); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return ImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
 
 #if !defined _MSC_VER // public -> protected changes mangled names there
@@ -118,9 +118,9 @@ namespace cppu
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakObject::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
@@ -152,9 +152,9 @@ namespace cppu
             { OWeakAggObject::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { OWeakAggObject::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakAggImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
@@ -219,9 +219,9 @@ namespace cppu
             { BaseClass::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { BaseClass::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper implementing interfaces css::lang::XTypeProvider and
@@ -289,9 +289,9 @@ namespace cppu
             { BaseClass::acquire(); }
         virtual void SAL_CALL release() SAL_NOEXCEPT SAL_OVERRIDE
             { BaseClass::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return ImplInhHelper_getTypes( cd::get(), BaseClass::getTypes() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 }

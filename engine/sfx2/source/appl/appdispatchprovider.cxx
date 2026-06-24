@@ -55,28 +55,28 @@ public:
     SfxAppDispatchProvider() {}
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence<cpo::uno::Any> const & aArguments) override;
+        cpo::uno::Sequence<cpo::uno::Any> const & aArguments) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
             sal_Int32 eSearchFlags ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL queryDispatches(
-            const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL queryDispatches(
+            const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
 
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
+    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
 
-    virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 ) override;
+    virtual cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 ) override;
 };
 
 void SfxAppDispatchProvider::initialize(
-    css::uno::Sequence<cpo::uno::Any> const & aArguments)
+    cpo::uno::Sequence<cpo::uno::Any> const & aArguments)
 {
     css::uno::Reference<css::frame::XFrame> f;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= f)) {
@@ -97,7 +97,7 @@ bool SAL_CALL SfxAppDispatchProvider::supportsService( const OUString& sServiceN
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SfxAppDispatchProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ProtocolHandler"_ustr, u"com.sun.star.frame.AppDispatchProvider"_ustr };
 }
@@ -144,7 +144,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
 Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
-    uno::Sequence< uno::Reference < frame::XDispatch > > lDispatcher(nCount);
+    cpo::uno::Sequence< uno::Reference < frame::XDispatch > > lDispatcher(nCount);
     std::transform(seqDescriptor.begin(), seqDescriptor.end(), lDispatcher.getArray(),
         [this](const DispatchDescriptor& rDescr) -> uno::Reference<frame::XDispatch> {
             return queryDispatch(rDescr.FeatureURL, rDescr.FrameName, rDescr.SearchFlags); });
@@ -222,7 +222,7 @@ Sequence< frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfi
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxAppDispatchProvider);
 }

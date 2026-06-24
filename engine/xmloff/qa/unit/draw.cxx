@@ -508,10 +508,10 @@ void lcl_assertMetalProperties(std::string_view sInfo,
                                sal_Int16 nExpectedMetalType)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
@@ -703,10 +703,10 @@ void lcl_assertSpecularityProperty(std::string_view sInfo,
                                    const uno::Reference<drawing::XShape>& rxShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
@@ -785,15 +785,15 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 
 namespace
 {
-bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
+bool lcl_getShapeSegments(cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
                           const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
     cpo::uno::Any anotherAny = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr);
-    uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
+    cpo::uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
     if (!(anotherAny >>= aCustomShapeGeometry))
         return false;
-    uno::Sequence<beans::PropertyValue> aPathProps;
+    cpo::uno::Sequence<beans::PropertyValue> aPathProps;
     for (beans::PropertyValue const& rProp : aCustomShapeGeometry)
     {
         if (rProp.Name == "Path")
@@ -827,7 +827,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf148714_CurvedArrowsOld)
     for (sal_Int32 nShapeIndex = 0; nShapeIndex < 4; nShapeIndex++)
     {
         uno::Reference<drawing::XShape> xShape(getShape(nShapeIndex));
-        uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+        cpo::uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
         CPPUNIT_ASSERT(lcl_getShapeSegments(aSegments, xShape));
 
         if (nShapeIndex == 0 || nShapeIndex == 3)
@@ -866,7 +866,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
     // Add a TextRotateAngle attribute.
     uno::Reference<drawing::XShape> xShape(getShape(0));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeomSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeomSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeomSeq;
     auto aGeomVec(comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGeomSeq));
     aGeomVec.push_back(comphelper::makePropertyValue(u"TextRotateAngle"_ustr, sal_Int32(45)));

@@ -159,8 +159,8 @@ class ODatabaseForm :public OFormComponents
     ::osl::Mutex                        m_aResetSafety;
     cpo::uno::Any                       m_aCycle;
     cpo::uno::Any                       m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
-    css::uno::Sequence< OUString >      m_aMasterFields;
-    css::uno::Sequence< OUString >      m_aDetailFields;
+    cpo::uno::Sequence< OUString >      m_aMasterFields;
+    cpo::uno::Sequence< OUString >      m_aDetailFields;
 
     // the object doin' most of the work - an SDB-rowset
     css::uno::Reference< css::uno::XAggregation>      m_xAggregate;
@@ -217,8 +217,8 @@ public:
     virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type> SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type> SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
     // css::lang::XComponent
     virtual void SAL_CALL disposing() override;
@@ -236,8 +236,8 @@ public:
     // IPropertyBagHelperContext
     virtual ::osl::Mutex&   getMutex() override;
     virtual void            describeFixedAndAggregateProperties(
-        css::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
-        css::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
+        cpo::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
+        cpo::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
     ) const override;
     virtual css::uno::Reference< css::beans::XMultiPropertySet >
                             getPropertiesInterface() override;
@@ -275,12 +275,12 @@ public:
     // css::awt::XTabControllerModel
     virtual bool SAL_CALL getGroupControl() override;
     virtual void SAL_CALL setGroupControl(bool /*_bGroupControl*/) override { }
-    virtual void SAL_CALL setControlModels(const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rControls) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels() override;
-    virtual void SAL_CALL setGroup(const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rGroup, const OUString& _rGroupName) override;
+    virtual void SAL_CALL setControlModels(const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rControls) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > SAL_CALL getControlModels() override;
+    virtual void SAL_CALL setGroup(const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rGroup, const OUString& _rGroupName) override;
     virtual sal_Int32 SAL_CALL getGroupCount() override;
-    virtual void SAL_CALL getGroup(sal_Int32 _nGroup, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rxGroup, OUString& _rName) override;
-    virtual void SAL_CALL getGroupByName(const OUString& _rName, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rxGroup) override;
+    virtual void SAL_CALL getGroup(sal_Int32 _nGroup, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rxGroup, OUString& _rName) override;
+    virtual void SAL_CALL getGroupByName(const OUString& _rName, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rxGroup) override;
 
     // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource) override;
@@ -362,12 +362,12 @@ public:
     virtual void SAL_CALL moveToCurrentRow() override;
 
     // css::sdbcx::XDeleteRows
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows(const css::uno::Sequence< cpo::uno::Any>& rows) override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL deleteRows(const cpo::uno::Sequence< cpo::uno::Any>& rows) override;
 
     // css::lang::XServiceInfo
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::io::XPersistObject
     virtual OUString SAL_CALL getServiceName() override;
@@ -388,7 +388,7 @@ public:
     virtual void SAL_CALL setFloat(sal_Int32 parameterIndex, float x) override;
     virtual void SAL_CALL setDouble(sal_Int32 parameterIndex, double x) override;
     virtual void SAL_CALL setString(sal_Int32 parameterIndex, const OUString& x) override;
-    virtual void SAL_CALL setBytes(sal_Int32 parameterIndex, const css::uno::Sequence< sal_Int8 >& x) override;
+    virtual void SAL_CALL setBytes(sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x) override;
     virtual void SAL_CALL setDate(sal_Int32 parameterIndex, const css::util::Date& x) override;
     virtual void SAL_CALL setTime(sal_Int32 parameterIndex, const css::util::Time& x) override;
     virtual void SAL_CALL setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x) override;
@@ -410,8 +410,8 @@ public:
     virtual void SAL_CALL removeProperty( const OUString& Name ) override;
 
     // XPropertyAccess
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
-    virtual void SAL_CALL setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues(  ) override;
+    virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
     using OPropertySetAggregationHelper::setPropertyValues;
 
     // XWarningsSupplier
@@ -500,7 +500,7 @@ private:
 
     // html tools
     OUString         GetDataEncoded(bool _bURLEncoded,const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt);
-    css::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt,
+    cpo::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt,
                                              OUString& rContentType);
 
     void AppendComponent(HtmlSuccessfulObjList& rList, const css::uno::Reference< css::beans::XPropertySet>& xComponentSet, std::u16string_view rNamePrefix,

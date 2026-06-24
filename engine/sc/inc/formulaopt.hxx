@@ -107,9 +107,9 @@ private:
 class ScFormulaCfg final : public ScFormulaOptions, public utl::ConfigItem
 {
     typedef std::map<OUString,sal_uInt16> PropsToIds;
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
     static ScFormulaCfg::PropsToIds GetPropNamesToId();
-    void UpdateFromProperties( const css::uno::Sequence<OUString>& rNames );
+    void UpdateFromProperties( const cpo::uno::Sequence<OUString>& rNames );
 
     virtual void ImplCommit() override;
 
@@ -118,7 +118,7 @@ public:
 
     void SetOptions( const ScFormulaOptions& rNew );
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

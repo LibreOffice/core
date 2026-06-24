@@ -180,7 +180,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
                     or an empty reference otherwise.
          */
         static css::uno::Reference< css::task::XInteractionContinuation > extractContinuation(
-                    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
+                    const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
                     const css::uno::Type&                                                                                             aType         );
 
 

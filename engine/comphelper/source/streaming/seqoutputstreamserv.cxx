@@ -47,15 +47,15 @@ public:
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString & ServiceName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::io::XOutputStream:
-    virtual void SAL_CALL writeBytes( const uno::Sequence< ::sal_Int8 > & aData ) override;
+    virtual void SAL_CALL writeBytes( const cpo::uno::Sequence< ::sal_Int8 > & aData ) override;
     virtual void SAL_CALL flush() override;
     virtual void SAL_CALL closeOutput() override;
 
     // css::io::XSequenceOutputStream:
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) override;
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getWrittenBytes(  ) override;
 
 private:
     virtual ~SequenceOutputStreamService() override {};
@@ -63,7 +63,7 @@ private:
 
     std::mutex m_aMutex;
     // WARNING: dtor of m_xOutputStream writes into m_aSequence so that must live longer!
-    uno::Sequence< ::sal_Int8 > m_aSequence;
+    cpo::uno::Sequence< ::sal_Int8 > m_aSequence;
     uno::Reference< io::XOutputStream > m_xOutputStream;
 };
 SequenceOutputStreamService::SequenceOutputStreamService()
@@ -82,13 +82,13 @@ bool SAL_CALL SequenceOutputStreamService::supportsService( OUString const & ser
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService::getSupportedServiceNames()
 {
     return { u"com.sun.star.io.SequenceOutputStream"_ustr };
 }
 
 // css::io::XOutputStream:
-void SAL_CALL SequenceOutputStreamService::writeBytes( const uno::Sequence< ::sal_Int8 > & aData )
+void SAL_CALL SequenceOutputStreamService::writeBytes( const cpo::uno::Sequence< ::sal_Int8 > & aData )
 {
     std::scoped_lock aGuard( m_aMutex );
     if ( !m_xOutputStream.is() )
@@ -118,7 +118,7 @@ void SAL_CALL SequenceOutputStreamService::closeOutput()
 }
 
 // css::io::XSequenceOutputStream:
-uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenBytes()
+cpo::uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenBytes()
 {
     std::scoped_lock aGuard( m_aMutex );
 
@@ -136,7 +136,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL SequenceOutputStreamService::getWrittenByte
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_SequenceOutputStreamService(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SequenceOutputStreamService());
 }

@@ -370,7 +370,7 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (aResourceName.isEmpty())
         return false;
 
-    css::uno::Sequence< cpo::uno::Any > aArgs{
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{
         cpo::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, aResourceName )),
         cpo::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, m_pContextMenuProvider->getCommandController().getXController()->getFrame() )),
         cpo::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))

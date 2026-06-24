@@ -108,9 +108,9 @@ void SwVbaFormFieldCheckBox::setValue(bool bSet)
 
 OUString SwVbaFormFieldCheckBox::getServiceImplName() { return u"SwVbaFormFieldCheckBox"_ustr; }
 
-uno::Sequence<OUString> SwVbaFormFieldCheckBox::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaFormFieldCheckBox::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.CheckBox"_ustr };
+    static cpo::uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.CheckBox"_ustr };
     return aServiceNames;
 }
 

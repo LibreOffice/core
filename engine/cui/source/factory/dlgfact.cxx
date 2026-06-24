@@ -336,7 +336,7 @@ public:
         return m_pDlg->GetDirection(eDefaultDirection);
     }
     void SetCurrentString(const OUString& rNewString,
-                          const css::uno::Sequence<OUString>& rSuggestions,
+                          const cpo::uno::Sequence<OUString>& rSuggestions,
                           bool bOriginatesFromDocument = true) override
     {
         m_pDlg->SetCurrentString(rNewString, rSuggestions, bOriginatesFromDocument);

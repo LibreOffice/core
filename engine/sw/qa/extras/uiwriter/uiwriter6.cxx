@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116640)
 {
     createSwDoc();
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
@@ -894,7 +894,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108048)
 {
     createSwDoc();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Kind", cpo::uno::Any(sal_Int16(3)) },
         { "TemplateName", cpo::uno::Any(u"Default Page Style"_ustr) },
         { "PageNumber",
@@ -2178,7 +2178,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116403)
     createSwDoc("tdf116403-considerborders.odt");
     // Check that before ToX update, the tab stop position is the old one
     uno::Reference<text::XTextRange> xParagraph = getParagraph(2, u"1\t1"_ustr);
-    auto aTabs = getProperty<uno::Sequence<style::TabStop>>(xParagraph, u"ParaTabStops"_ustr);
+    auto aTabs = getProperty<cpo::uno::Sequence<style::TabStop>>(xParagraph, u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17000), aTabs[0].Position);
 
@@ -2188,7 +2188,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116403)
     pWrtShell->UpdateTableOf(*pTOX);
 
     xParagraph = getParagraph(2, u"1\t1"_ustr);
-    aTabs = getProperty<uno::Sequence<style::TabStop>>(xParagraph, u"ParaTabStops"_ustr);
+    aTabs = getProperty<cpo::uno::Sequence<style::TabStop>>(xParagraph, u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
     // This was still 17000, refreshing ToX didn't take borders spacings and widths into account
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Page borders must be considered for right-aligned tabstop",
@@ -2364,7 +2364,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSpellOnlineParameter)
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     bool bSet = pOpt->IsOnlineSpell();
 
-    uno::Sequence<beans::PropertyValue> params
+    cpo::uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(!bSet) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
@@ -2381,7 +2381,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
-    uno::Sequence<beans::PropertyValue> params
+    cpo::uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
@@ -2429,7 +2429,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
-    uno::Sequence<beans::PropertyValue> params
+    cpo::uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
@@ -2479,7 +2479,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
-    uno::Sequence<beans::PropertyValue> params
+    cpo::uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
@@ -2515,7 +2515,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
     createSwDoc("tdf65535.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
-    uno::Sequence<beans::PropertyValue> params
+    cpo::uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", cpo::uno::Any(true) } });
     dispatchCommand(mxComponent, u".uno:SpellOnline"_ustr, params);
 
@@ -3009,7 +3009,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInsertPdf)
     createSwDoc();
 
     // insert the PDF into the document
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "FileName", cpo::uno::Any(createFileURL(u"hello-world.pdf")) } }));
     dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
 
@@ -3162,7 +3162,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
     createSwDoc();
 
     // Add a basic shape to the document.
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:BasicShapes"_ustr, aArgs);
 

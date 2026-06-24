@@ -92,7 +92,7 @@ XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration()
     SAL_WARN_IF(m_pWriteCache, "fwk.accelerators", "XMLBasedAcceleratorConfiguration::~XMLBasedAcceleratorConfiguration(): Changes not flushed. Ignore it ...");
 }
 
-css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getAllKeyEvents()
+cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getAllKeyEvents()
 {
     SolarMutexGuard g;
     AcceleratorCache&          rCache = impl_getCFG();
@@ -147,7 +147,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
     rCache.removeKey(aKeyEvent);
 }
 
-css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getKeyEventsByCommand(const OUString& sCommand)
+cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfiguration::getKeyEventsByCommand(const OUString& sCommand)
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
@@ -166,13 +166,13 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
     return comphelper::containerToSequence(lKeys);
 }
 
-css::uno::Sequence< cpo::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList)
 {
     SolarMutexGuard g;
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
-    css::uno::Sequence< cpo::uno::Any > lPreferredOnes (c); // don't pack list!
+    cpo::uno::Sequence< cpo::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG();
 
     auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
@@ -482,7 +482,7 @@ XCUBasedAcceleratorConfiguration::~XCUBasedAcceleratorConfiguration()
 {
 }
 
-css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getAllKeyEvents()
+cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getAllKeyEvents()
 {
     SolarMutexGuard g;
 
@@ -629,7 +629,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeKeyEvent(const css::awt::K
     }
 }
 
-css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getKeyEventsByCommand(const OUString& sCommand)
+cpo::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfiguration::getKeyEventsByCommand(const OUString& sCommand)
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
@@ -661,13 +661,13 @@ static AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const Acce
         return !::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey).GetName().isEmpty(); });
 }
 
-css::uno::Sequence< cpo::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
+cpo::uno::Sequence< cpo::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const cpo::uno::Sequence< OUString >& lCommandList)
 {
     SolarMutexGuard g;
 
     sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
-    css::uno::Sequence< cpo::uno::Any > lPreferredOnes (c); // don't pack list!
+    cpo::uno::Sequence< cpo::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG(true);
 
     auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
@@ -955,7 +955,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
     css::uno::Reference< css::container::XNameAccess > xCommand;
     if (xAccess.is())
     {
-        css::uno::Sequence< OUString > lKeys = xAccess->getElementNames();
+        cpo::uno::Sequence< OUString > lKeys = xAccess->getElementNames();
         sal_Int32 nKeys = lKeys.getLength();
         for ( sal_Int32 i=0; i<nKeys; ++i )
         {
@@ -963,7 +963,7 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
             xAccess->getByName(sKey) >>= xKey;
             xKey->getByName(CFG_PROP_COMMAND) >>= xCommand;
 
-            const css::uno::Sequence< OUString > lLocales = xCommand->getElementNames();
+            const cpo::uno::Sequence< OUString > lLocales = xCommand->getElementNames();
             ::std::vector< OUString > aLocales { lLocales.begin(), lLocales.end() };
 
             OUString sLocale;

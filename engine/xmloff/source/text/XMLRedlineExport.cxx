@@ -60,7 +60,7 @@ using ::com::sun::star::text::XTextContent;
 using ::com::sun::star::text::XTextSection;
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 
 XMLRedlineExport::XMLRedlineExport(SvXMLExport& rExp)

@@ -325,13 +325,13 @@ namespace DOM
         // css::xml::sax::XSAXSerializable
         virtual void SAL_CALL serialize(
             const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler,
-            const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces) override;
+            const cpo::uno::Sequence< css::beans::StringPair >& i_rNamespaces) override;
 
         // css::xml::sax::XFastSAXSerializable
         virtual void SAL_CALL fastSerialize( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& handler,
                                              const css::uno::Reference< css::xml::sax::XFastTokenHandler >& tokenHandler,
-                                             const css::uno::Sequence< css::beans::StringPair >& i_rNamespaces,
-                                             const css::uno::Sequence< css::beans::Pair< OUString, sal_Int32 > >& namespaces ) override;
+                                             const cpo::uno::Sequence< css::beans::StringPair >& i_rNamespaces,
+                                             const cpo::uno::Sequence< css::beans::Pair< OUString, sal_Int32 > >& namespaces ) override;
     };
 }
 

@@ -55,7 +55,7 @@ KitStarMathHelper::KitStarMathHelper(const SfxViewShell* pViewShell)
 }
 
 void KitStarMathHelper::Dispatch(
-    const OUString& cmd, const css::uno::Sequence<css::beans::PropertyValue>& rArguments) const
+    const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const
 {
     if (mxFrame)
         comphelper::dispatchCommand(cmd, mxFrame, rArguments);

@@ -21,7 +21,7 @@
 
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <salhelper/simplereferenceobject.hxx>
 
 class SvtFileView;
@@ -71,7 +71,7 @@ namespace svt
             const OUString& _rFilter,
             sal_Int32 _nMinTimeout,
             sal_Int32 _nMaxTimeout,
-            const css::uno::Sequence< OUString >& rDenyList );
+            const cpo::uno::Sequence< OUString >& rDenyList );
 
         /// cancels the running action
         void cancel();

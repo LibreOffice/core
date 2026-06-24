@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -45,14 +45,14 @@ namespace apphelper
 class MediaDescriptorHelper final
 {
 public:
-    MediaDescriptorHelper( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
+    MediaDescriptorHelper( const cpo::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
-    const css::uno::Sequence< css::beans::PropertyValue >& getReducedForModel() const { return m_aModelProperties;}
+    const cpo::uno::Sequence< css::beans::PropertyValue >& getReducedForModel() const { return m_aModelProperties;}
 
     //all properties given in the constructor are stored in the following three sequences
 
     //properties which should be given to a model are additionally stored in this sequence (not documented properties and deprecated properties are not included!)
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
                         m_aModelProperties; //these are properties which are not described in service com.sun.star.document.MediaDescriptor
 
     OUString            FilterName; //internal filter name.

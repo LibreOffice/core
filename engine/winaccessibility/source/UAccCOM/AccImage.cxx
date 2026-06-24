@@ -30,6 +30,7 @@
 
 using namespace css::accessibility;
 using namespace css::uno;
+using namespace cpo::uno;
 
 /**
    * Get description.

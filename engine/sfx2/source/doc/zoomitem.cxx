@@ -18,7 +18,7 @@
  */
 
 #include <sfx2/zoomitem.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/propertyvalue.hxx>
@@ -70,7 +70,7 @@ bool SvxZoomItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case 0:
         {
-            css::uno::Sequence< css::beans::PropertyValue > aSeq{
+            cpo::uno::Sequence< css::beans::PropertyValue > aSeq{
                 comphelper::makePropertyValue(ZOOM_PARAM_VALUE, sal_Int32( GetValue() )),
                 comphelper::makePropertyValue(ZOOM_PARAM_VALUESET, sal_Int16( nValueSet )),
                 comphelper::makePropertyValue(ZOOM_PARAM_TYPE, sal_Int16( eType ))
@@ -98,7 +98,7 @@ bool SvxZoomItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            css::uno::Sequence< css::beans::PropertyValue > aSeq;
+            cpo::uno::Sequence< css::beans::PropertyValue > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == ZOOM_PARAMS ))
             {
                 sal_Int32 nValueTmp( 0 );

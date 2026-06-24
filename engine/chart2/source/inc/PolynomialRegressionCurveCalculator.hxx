@@ -45,8 +45,8 @@ protected:
 private:
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL recalculateRegression(
-        const css::uno::Sequence<double>& aXValues,
-        const css::uno::Sequence<double>& aYValues ) override;
+        const cpo::uno::Sequence<double>& aXValues,
+        const cpo::uno::Sequence<double>& aYValues ) override;
 
     void computeCorrelationCoefficient(
         RegressionCalculationHelper::tDoubleVectorPair& rValues,

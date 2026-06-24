@@ -47,7 +47,7 @@ class ScriptEventContainer final : public ::cppu::WeakImplHelper<
     // if the order changes here (Dialog xml files are digitally signed too).
     // Thus a std::map or std::unordered_map can't be used.
     NameContainerNameMap mHashMap;
-    css::uno::Sequence< OUString > mNames;
+    cpo::uno::Sequence< OUString > mNames;
     std::vector< cpo::uno::Any > mValues;
     css::uno::Type mType;
 
@@ -62,7 +62,7 @@ public:
 
     // Methods XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace

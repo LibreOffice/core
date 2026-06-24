@@ -43,7 +43,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OImageButtonModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 // css::io::XPersistObject
     virtual OUString SAL_CALL getServiceName() override;
@@ -52,7 +52,7 @@ public:
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
 protected:
@@ -65,7 +65,7 @@ class OImageButtonControl : public OClickableImageBaseControl,
 {
 protected:
     // UNO Binding
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     explicit OImageButtonControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -74,7 +74,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OImageButtonControl"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // UNO Binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageButtonControl, OClickableImageBaseControl)

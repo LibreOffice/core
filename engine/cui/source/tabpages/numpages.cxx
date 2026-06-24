@@ -92,6 +92,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
+using namespace ::cpo::uno;
 
 using namespace css;
 using namespace css::uno;
@@ -579,8 +580,8 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, ClickAddChangeHdl_Impl, weld::Button&, voi
         _nMask <<= 1;
     }
 
-    css::uno::Sequence<OUString> aBulletSymbolsList(m_aBulletSymbols.size());
-    css::uno::Sequence<OUString> aBulletSymbolsFontsList(m_aBulletSymbolsFonts.size());
+    cpo::uno::Sequence<OUString> aBulletSymbolsList(m_aBulletSymbols.size());
+    cpo::uno::Sequence<OUString> aBulletSymbolsFontsList(m_aBulletSymbolsFonts.size());
     auto aBulletSymbolsListRange = asNonConstRange(aBulletSymbolsList);
     auto aBulletSymbolsFontsListRange = asNonConstRange(aBulletSymbolsFontsList);
 

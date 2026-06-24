@@ -188,10 +188,10 @@ SwVbaRevisions::getServiceImplName()
     return u"SwVbaRevisions"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaRevisions::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.Revisions"_ustr
     };

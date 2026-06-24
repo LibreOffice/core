@@ -21,13 +21,13 @@
 
 #include <svl/intitem.hxx>
 #include <svx/svxids.hrc>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
 
 class SVX_DLLPUBLIC SvxZoomSliderItem final : public SfxUInt16Item
 {
-    css::uno::Sequence < sal_Int32 > maValues;
+    cpo::uno::Sequence < sal_Int32 > maValues;
     sal_uInt16 mnMinZoom;
     sal_uInt16 mnMaxZoom;
 
@@ -37,7 +37,7 @@ public:
     SvxZoomSliderItem( sal_uInt16 nCurrentZoom = 100, sal_uInt16 nMinZoom = 20, sal_uInt16 nMaxZoom = 600, TypedWhichId<SvxZoomSliderItem> nWhich = SID_ATTR_ZOOMSLIDER );
 
     void AddSnappingPoint( sal_Int32 nNew );
-    const css::uno::Sequence < sal_Int32 >& GetSnappingPoints() const { return maValues;}
+    const cpo::uno::Sequence < sal_Int32 >& GetSnappingPoints() const { return maValues;}
     sal_uInt16 GetMinZoom() const {return mnMinZoom;}
     sal_uInt16 GetMaxZoom() const {return mnMaxZoom;}
 

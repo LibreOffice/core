@@ -81,7 +81,7 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // WeakComponentImplHelperBase
     using ClassificationCategoriesControllerBase::disposing;
@@ -163,7 +163,7 @@ bool ClassificationCategoriesController::supportsService(const OUString& rServic
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> ClassificationCategoriesController::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> ClassificationCategoriesController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -210,7 +210,7 @@ IMPL_LINK(ClassificationCategoriesController, SelectHdl, weld::ComboBox&, rCateg
         OUString aEntry = rCategory.get_active_text();
 
         const OUString& aType = getCategoryType();
-        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
             {"Name", cpo::uno::Any(aEntry)},
             {"Type", cpo::uno::Any(aType)},
         }));
@@ -359,7 +359,7 @@ void ClassificationControl::setCategoryStateFromPolicy(const SfxClassificationHe
 
 } // namespace sfx2
 
-extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(uno::XComponentContext* pContext, const uno::Sequence<cpo::uno::Any>&)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* com_sun_star_sfx2_ClassificationCategoriesController_get_implementation(uno::XComponentContext* pContext, const cpo::uno::Sequence<cpo::uno::Any>&)
 {
     return cppu::acquire(new sfx2::ClassificationCategoriesController(pContext));
 }

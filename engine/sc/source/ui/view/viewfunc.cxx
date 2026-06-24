@@ -1497,7 +1497,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
 
     if (HelperNotifyChanges::getMustPropagateChangesModel(pModelObj))
     {
-        css::uno::Sequence< css::beans::PropertyValue > aProperties;
+        cpo::uno::Sequence< css::beans::PropertyValue > aProperties;
         sal_Int32 nCount = 0;
         const SfxItemPropertyMap& rMap = ScCellObj::GetCellPropertyMap();
         for ( sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )

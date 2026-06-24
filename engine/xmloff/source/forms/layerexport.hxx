@@ -122,20 +122,20 @@ namespace xmloff
         */
         void    exportGridColumn(
             const css::uno::Reference< css::beans::XPropertySet >& _rxColumn,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             );
 
         /** exports one single control
         */
         void    exportControl(
             const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             );
 
         /** exports one single form
         */
         void    exportForm(const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             );
 
         /** seek to the page given.

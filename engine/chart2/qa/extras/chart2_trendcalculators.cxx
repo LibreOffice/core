@@ -14,6 +14,7 @@
 
 using namespace css;
 using namespace css::uno;
+using namespace ::cpo::uno;
 
 // Define the index of sheets in the test document
 constexpr sal_Int32 SHEET_POTENTIAL1 = 0;

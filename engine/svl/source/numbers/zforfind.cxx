@@ -1311,7 +1311,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
             assert(mpFormat->GetLanguage() == aSaveLocale.getLanguageType());   // prerequisite
             // Obtain formatter's locale's (e.g. system) patterns.
             xLocaleData.changeLocale( LanguageTag( mrCurrentLanguageData.GetIniLanguage()));
-            css::uno::Sequence<OUString> aLocalePatterns( xLocaleData->getDateAcceptancePatterns());
+            cpo::uno::Sequence<OUString> aLocalePatterns( xLocaleData->getDateAcceptancePatterns());
             // Reset to format's locale.
             xLocaleData.changeLocale( aSaveLocale);
             // When concatenating don't care about duplicates, combining
@@ -3742,7 +3742,7 @@ void ImpSvNumberInputScan::InitText()
 
     pUpperMonthText.reset();
     pUpperAbbrevMonthText.reset();
-    css::uno::Sequence< css::i18n::CalendarItem2 > xElems = pCal->getMonths();
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > xElems = pCal->getMonths();
     nElems = xElems.getLength();
     pUpperMonthText.reset( new OUString[nElems] );
     pUpperAbbrevMonthText.reset( new OUString[nElems] );
@@ -3829,7 +3829,7 @@ void ImpSvNumberInputScan::InvalidateDateAcceptancePatterns()
 {
     if (sDateAcceptancePatterns.hasElements())
     {
-        sDateAcceptancePatterns = css::uno::Sequence< OUString >();
+        sDateAcceptancePatterns = cpo::uno::Sequence< OUString >();
     }
 }
 

@@ -45,7 +45,7 @@ public:
 
 namespace embeddedobj
 {
-const uno::Sequence< OUString > Interceptor::m_aInterceptedURL{ IU0, IU1, IU2, IU3, IU4, IU5 };
+const cpo::uno::Sequence< OUString > Interceptor::m_aInterceptedURL{ IU0, IU1, IU2, IU3, IU4, IU5 };
 
 void Interceptor::DisconnectDocHolder()
 {
@@ -66,7 +66,7 @@ Interceptor::~Interceptor()
 void SAL_CALL
 Interceptor::dispatch(
     const util::URL& URL,
-    const uno::Sequence<
+    const cpo::uno::Sequence<
     beans::PropertyValue >& Arguments )
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -88,7 +88,7 @@ Interceptor::dispatch(
     }
     else if ( URL.Complete == m_aInterceptedURL[5] )
     {
-        uno::Sequence< beans::PropertyValue > aNewArgs = Arguments;
+        cpo::uno::Sequence< beans::PropertyValue > aNewArgs = Arguments;
         sal_Int32 nInd = 0;
 
         while( nInd < aNewArgs.getLength() )
@@ -209,7 +209,7 @@ Interceptor::removeStatusListener(
 
 
 //XInterceptorInfo
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SAL_CALL
 Interceptor::getInterceptedURLs(  )
 {
@@ -249,12 +249,12 @@ Interceptor::queryDispatch(
     }
 }
 
-uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
+cpo::uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
 Interceptor::queryDispatches(
-    const uno::Sequence<frame::DispatchDescriptor >& Requests )
+    const cpo::uno::Sequence<frame::DispatchDescriptor >& Requests )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    typedef uno::Sequence<uno::Reference<frame::XDispatch>> DispatchSeq;
+    typedef cpo::uno::Sequence<uno::Reference<frame::XDispatch>> DispatchSeq;
     DispatchSeq aRet = m_xSlaveDispatchProvider.is()
         ? m_xSlaveDispatchProvider->queryDispatches(Requests)
         : DispatchSeq(Requests.getLength());

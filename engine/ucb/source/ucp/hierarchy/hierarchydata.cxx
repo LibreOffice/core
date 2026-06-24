@@ -266,7 +266,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                 bRoot = false;
             }
 
-            uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
                 {CFGPROPERTY_NODEPATH, cpo::uno::Any(aParentPath)}
             }));
@@ -512,7 +512,7 @@ bool HierarchyEntry::move(
             bNewRoot = false;
         }
 
-        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
             {CFGPROPERTY_NODEPATH, cpo::uno::Any(aOldParentPath)}
         }));
@@ -535,7 +535,7 @@ bool HierarchyEntry::move(
         }
         else
         {
-            uno::Sequence<cpo::uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
             {
                 {CFGPROPERTY_NODEPATH, cpo::uno::Any(aNewParentPath)}
             }));
@@ -758,7 +758,7 @@ bool HierarchyEntry::remove()
                 bRoot = false;
             }
 
-            uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
                 {CFGPROPERTY_NODEPATH, cpo::uno::Any(aParentPath)}
             }));
@@ -983,7 +983,7 @@ HierarchyEntry::getRootReadAccess()
                 {
                     // Create Root object.
 
-                    uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+                    cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
                     {
                         {CFGPROPERTY_NODEPATH, cpo::uno::Any(OUString())} // root path
                     }));

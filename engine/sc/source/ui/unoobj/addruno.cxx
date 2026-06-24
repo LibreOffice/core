@@ -287,7 +287,7 @@ bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceN
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScAddressConversionObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScAddressConversionObj::getSupportedServiceNames()
 {
     if (bIsRange)
         return {SC_SERVICENAME_RANGEADDRESS};

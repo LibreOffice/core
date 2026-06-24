@@ -21,7 +21,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <ooo/vba/XDocumentBase.hpp>
 #include <rtl/ustring.hxx>
@@ -50,7 +50,7 @@ protected:
     virtual css::frame::XModel* getModel() const = 0;
 public:
     VbaDocumentBase(    const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext );
-    VbaDocumentBase(    css::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
+    VbaDocumentBase(    cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     // Attributes
     virtual OUString SAL_CALL getName() override;
@@ -72,7 +72,7 @@ public:
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
     static OUString getNameFromModel( const css::uno::Reference< css::frame::XModel >& xModel );
 };

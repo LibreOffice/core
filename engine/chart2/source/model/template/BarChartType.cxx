@@ -56,7 +56,7 @@ OUString SAL_CALL BarChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_BAR;
 }
 
-uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
+cpo::uno::Sequence< OUString > BarChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
@@ -71,7 +71,7 @@ bool SAL_CALL BarChartType::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL BarChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL BarChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_BAR,
@@ -82,7 +82,7 @@ css::uno::Sequence< OUString > SAL_CALL BarChartType::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_BarChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::BarChartType);
 }

@@ -517,7 +517,7 @@ static double lcl_sca_XirrResult_Deriv1( const ScaDoubleList& rValues, const Sca
 // XIRR calculation
 
 double SAL_CALL AnalysisAddIn::getXirr(
-    const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates, const cpo::uno::Any& rGuessRate )
+    const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates, const cpo::uno::Any& rGuessRate )
 {
     ScaDoubleList aValues, aDates;
     aValues.Append( rValues );
@@ -577,7 +577,7 @@ double SAL_CALL AnalysisAddIn::getXirr(
 
 
 double SAL_CALL AnalysisAddIn::getXnpv(
-    double fRate, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates )
+    double fRate, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates )
 {
     ScaDoubleList aValList;
     ScaDoubleList aDateList;
@@ -660,7 +660,7 @@ double SAL_CALL AnalysisAddIn::getCoupnum( const css::uno::Reference< css::beans
 }
 
 
-double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const css::uno::Sequence< css::uno::Sequence< double > >& rSchedule )
+double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rSchedule )
 {
     ScaDoubleList aSchedList;
 

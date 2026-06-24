@@ -80,16 +80,16 @@ public:
     virtual ~SpellCheckerDispatcher() override;
 
     // XSupportedLocales (for XSpellChecker)
-    virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() override;
+    virtual cpo::uno::Sequence< css::lang::Locale > SAL_CALL getLocales() override;
     virtual bool SAL_CALL hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XSpellChecker
-    virtual bool SAL_CALL isValid( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, const css::lang::Locale& aLocale, const css::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+    virtual bool SAL_CALL isValid( const OUString& aWord, const css::lang::Locale& aLocale, const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > SAL_CALL spell( const OUString& aWord, const css::lang::Locale& aLocale, const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
 
     // LinguDispatcher
-    virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) override;
-    virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
+    virtual void SetServiceList( const css::lang::Locale &rLocale, const cpo::uno::Sequence< OUString > &rSvcImplNames ) override;
+    virtual cpo::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const override;
 
     void    FlushSpellCache();
 

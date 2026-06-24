@@ -23,7 +23,7 @@
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/graph.hxx>
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
@@ -43,7 +43,7 @@ class JPEGWriter final
 
 public:
     JPEGWriter( SvStream& rStream,
-                const css::uno::Sequence< css::beans::PropertyValue >* pFilterData,
+                const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData,
                 bool* pExportWasGrey );
 
     void*       GetScanline( tools::Long nY );

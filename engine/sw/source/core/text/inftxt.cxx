@@ -1486,7 +1486,7 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
         SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
 
 
-        const uno::Sequence<beans::Property> aProperties
+        const cpo::uno::Sequence<beans::Property> aProperties
                 = xRange->getPropertySetInfo()->getProperties();
 
         for (const beans::Property& rProperty : aProperties)

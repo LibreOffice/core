@@ -151,11 +151,11 @@ public:
 
     typedef std::unordered_map< OUString, size_t > PropertyToIndexMap;
     typedef std::unordered_map< OUString, ControlDependency > ControlDependencyMap;
-    typedef std::unordered_map< OUString, css::uno::Sequence< bool > > ChoiceDisableMap;
+    typedef std::unordered_map< OUString, cpo::uno::Sequence< bool > > ChoiceDisableMap;
 
     VclPtr< Printer >                                           mxPrinter;
     weld::Window*                                               mpWindow;
-    css::uno::Sequence< css::beans::PropertyValue >             maUIOptions;
+    cpo::uno::Sequence< css::beans::PropertyValue >             maUIOptions;
     std::vector< css::beans::PropertyValue >                    maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
     PropertyToIndexMap                                          maPropertyToIndex;
@@ -257,7 +257,7 @@ public:
 
         return size;
     }
-    PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
+    PrinterController::PageSize modifyJobSetup( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rProps );
     void resetPaperToLastConfigured();
 };
 
@@ -327,7 +327,7 @@ static OUString queryFile( Printer const * pPrinter, const OUString & rJobName )
 
     if( xFilePicker->execute() == css::ui::dialogs::ExecutableDialogResults::OK )
     {
-        css::uno::Sequence< OUString > aPathSeq( xFilePicker->getSelectedFiles() );
+        cpo::uno::Sequence< OUString > aPathSeq( xFilePicker->getSelectedFiles() );
         INetURLObject aObj( aPathSeq[0] );
         aResult = aObj.PathToFileName();
     }
@@ -972,7 +972,7 @@ void PrinterController::setupPrinter( weld::Window* i_pParent )
     }
 }
 
-PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps )
+PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rProps )
 {
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mxPrinter->GetPaperSize();
@@ -1068,7 +1068,7 @@ int PrinterController::getPageCountProtected() const
     return getPageCount();
 }
 
-css::uno::Sequence< css::beans::PropertyValue > PrinterController::getPageParametersProtected( int i_nPage ) const
+cpo::uno::Sequence< css::beans::PropertyValue > PrinterController::getPageParametersProtected( int i_nPage ) const
 {
     const MapMode aMapMode( MapUnit::Map100thMM );
 
@@ -1103,7 +1103,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     o_rMtf.Clear();
 
     // get page parameters
-    css::uno::Sequence< css::beans::PropertyValue > aPageParm( getPageParametersProtected( i_nUnfilteredPage ) );
+    cpo::uno::Sequence< css::beans::PropertyValue > aPageParm( getPageParametersProtected( i_nUnfilteredPage ) );
     const MapMode aMapMode( MapUnit::Map100thMM );
 
     mpImplData->mxPrinter->Push();
@@ -1524,14 +1524,14 @@ bool PrinterController::getPrinterModified() const
     return mpImplData->mbPrinterModified;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rMergeList ) const
+cpo::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobProperties( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rMergeList ) const
 {
     std::unordered_set< OUString > aMergeSet;
     size_t nResultLen = size_t(i_rMergeList.getLength()) + mpImplData->maUIProperties.size() + 3;
     for( const auto& rPropVal : i_rMergeList )
         aMergeSet.insert( rPropVal.Name );
 
-    css::uno::Sequence< css::beans::PropertyValue > aResult( nResultLen );
+    cpo::uno::Sequence< css::beans::PropertyValue > aResult( nResultLen );
     auto pResult = aResult.getArray();
     std::copy(i_rMergeList.begin(), i_rMergeList.end(), pResult);
     int nCur = i_rMergeList.getLength();
@@ -1568,7 +1568,7 @@ css::uno::Sequence< css::beans::PropertyValue > PrinterController::getJobPropert
     return aResult;
 }
 
-const css::uno::Sequence< css::beans::PropertyValue >& PrinterController::getUIOptions() const
+const cpo::uno::Sequence< css::beans::PropertyValue >& PrinterController::getUIOptions() const
 {
     return mpImplData->maUIOptions;
 }
@@ -1611,7 +1611,7 @@ void PrinterController::setValue( const css::beans::PropertyValue& i_rPropertyVa
     }
 }
 
-void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::PropertyValue >& i_rOptions )
+void PrinterController::setUIOptions( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rOptions )
 {
     SAL_WARN_IF( mpImplData->maUIOptions.hasElements(), "vcl.gdi", "setUIOptions called twice !" );
 
@@ -1619,13 +1619,13 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
 
     for( const auto& rOpt : i_rOptions )
     {
-        css::uno::Sequence< css::beans::PropertyValue > aOptProp;
+        cpo::uno::Sequence< css::beans::PropertyValue > aOptProp;
         rOpt.Value >>= aOptProp;
         bool bIsEnabled = true;
         bool bHaveProperty = false;
         OUString aPropName;
         vcl::ImplPrinterControllerData::ControlDependency aDep;
-        css::uno::Sequence< bool > aChoicesDisabled;
+        cpo::uno::Sequence< bool > aChoicesDisabled;
         for (const css::beans::PropertyValue& rEntry : aOptProp)
         {
             if ( rEntry.Name == "Property" )
@@ -1728,7 +1728,7 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
     return bEnabled;
 }
 
-void PrinterController::setUIChoicesDisabled(const OUString& rPropName, css::uno::Sequence<bool>& rChoicesDisabled)
+void PrinterController::setUIChoicesDisabled(const OUString& rPropName, cpo::uno::Sequence<bool>& rChoicesDisabled)
 {
     mpImplData->maChoiceDisableMap[rPropName] = std::move(rChoicesDisabled);
 }
@@ -1740,7 +1740,7 @@ bool PrinterController::isUIChoiceEnabled( const OUString& i_rProperty, sal_Int3
         mpImplData->maChoiceDisableMap.find( i_rProperty );
     if(it != mpImplData->maChoiceDisableMap.end() )
     {
-        const css::uno::Sequence< bool >& rDisabled( it->second );
+        const cpo::uno::Sequence< bool >& rDisabled( it->second );
         if( i_nValue >= 0 && i_nValue < rDisabled.getLength() )
             bEnabled = ! rDisabled[i_nValue];
     }
@@ -1937,7 +1937,7 @@ OUString PrinterOptionsHelper::getStringValue( const OUString& i_rPropertyName )
     return (aVal >>= aRet) ? aRet : OUString();
 }
 
-bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::beans::PropertyValue >& i_rNewProp )
+bool PrinterOptionsHelper::processProperties( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rNewProp )
 {
     bool bChanged = false;
 
@@ -1956,7 +1956,7 @@ bool PrinterOptionsHelper::processProperties( const css::uno::Sequence< css::bea
     return bChanged;
 }
 
-void PrinterOptionsHelper::appendPrintUIOptions( css::uno::Sequence< css::beans::PropertyValue >& io_rProps ) const
+void PrinterOptionsHelper::appendPrintUIOptions( cpo::uno::Sequence< css::beans::PropertyValue >& io_rProps ) const
 {
     if( !m_aUIProperties.empty() )
     {
@@ -1967,9 +1967,9 @@ void PrinterOptionsHelper::appendPrintUIOptions( css::uno::Sequence< css::beans:
     }
 }
 
-cpo::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OUString >& i_rIDs,
+cpo::uno::Any PrinterOptionsHelper::setUIControlOpt(const cpo::uno::Sequence< OUString >& i_rIDs,
                                           const OUString& i_rTitle,
-                                          const css::uno::Sequence< OUString >& i_rHelpIds,
+                                          const cpo::uno::Sequence< OUString >& i_rHelpIds,
                                           const OUString& i_rType,
                                           const css::beans::PropertyValue* i_pVal,
                                           const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
@@ -1993,7 +1993,7 @@ cpo::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
             nElements += 1;
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > aCtrl( nElements );
+    cpo::uno::Sequence< css::beans::PropertyValue > aCtrl( nElements );
     auto pCtrl = aCtrl.getArray();
     sal_Int32 nUsed = 0;
     if( !i_rTitle.isEmpty() )
@@ -2059,13 +2059,13 @@ cpo::uno::Any PrinterOptionsHelper::setGroupControlOpt(const OUString& i_rID,
                                              const OUString& i_rTitle,
                                              const OUString& i_rHelpId)
 {
-    css::uno::Sequence< OUString > aHelpId;
+    cpo::uno::Sequence< OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
     }
-    css::uno::Sequence< OUString > aIds { i_rID };
+    cpo::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Group"_ustr);
 }
 
@@ -2074,13 +2074,13 @@ cpo::uno::Any PrinterOptionsHelper::setSubgroupControlOpt(const OUString& i_rID,
                                                 const OUString& i_rHelpId,
                                                 const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
-    css::uno::Sequence< OUString > aHelpId;
+    cpo::uno::Sequence< OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
         *aHelpId.getArray() = i_rHelpId;
     }
-    css::uno::Sequence< OUString > aIds { i_rID };
+    cpo::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Subgroup"_ustr, nullptr, i_rControlOptions);
 }
 
@@ -2091,7 +2091,7 @@ cpo::uno::Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,
                                             bool i_bValue,
                                             const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
-    css::uno::Sequence< OUString > aHelpId;
+    cpo::uno::Sequence< OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
@@ -2100,17 +2100,17 @@ cpo::uno::Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value <<= i_bValue;
-    css::uno::Sequence< OUString > aIds { i_rID };
+    cpo::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Bool"_ustr, &aVal, i_rControlOptions);
 }
 
-cpo::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Sequence< OUString >& i_rIDs,
+cpo::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const cpo::uno::Sequence< OUString >& i_rIDs,
                                               const OUString& i_rTitle,
-                                              const css::uno::Sequence< OUString >& i_rHelpId,
+                                              const cpo::uno::Sequence< OUString >& i_rHelpId,
                                               const OUString& i_rProperty,
-                                              const css::uno::Sequence< OUString >& i_rChoices,
+                                              const cpo::uno::Sequence< OUString >& i_rChoices,
                                               sal_Int32 i_nValue,
-                                              const css::uno::Sequence< bool >& i_rDisabledChoices,
+                                              const cpo::uno::Sequence< bool >& i_rDisabledChoices,
                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );
@@ -2132,11 +2132,11 @@ cpo::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Se
 
 cpo::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rID,
                                               const OUString& i_rTitle,
-                                              const css::uno::Sequence< OUString >& i_rHelpId,
+                                              const cpo::uno::Sequence< OUString >& i_rHelpId,
                                               const OUString& i_rProperty,
-                                              const css::uno::Sequence< OUString >& i_rChoices,
+                                              const cpo::uno::Sequence< OUString >& i_rChoices,
                                               sal_Int32 i_nValue,
-                                              const css::uno::Sequence< bool >& i_rDisabledChoices,
+                                              const cpo::uno::Sequence< bool >& i_rDisabledChoices,
                                               const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     UIControlOptions aOpt( i_rControlOptions );
@@ -2153,7 +2153,7 @@ cpo::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rI
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value <<= i_nValue;
-    css::uno::Sequence< OUString > aIds { i_rID };
+    cpo::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, i_rHelpId, u"List"_ustr, &aVal, aOpt);
 }
 
@@ -2177,7 +2177,7 @@ cpo::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
         aOpt.maAddProps[nUsed++].Value <<= i_nMaxValue;
     }
 
-    css::uno::Sequence< OUString > aHelpId;
+    cpo::uno::Sequence< OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
@@ -2186,7 +2186,7 @@ cpo::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value <<= i_nValue;
-    css::uno::Sequence< OUString > aIds { i_rID };
+    cpo::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Range"_ustr, &aVal, aOpt);
 }
 
@@ -2197,7 +2197,7 @@ cpo::uno::Any PrinterOptionsHelper::setEditControlOpt(const OUString& i_rID,
                                             const OUString& i_rValue,
                                             const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
-    css::uno::Sequence< OUString > aHelpId;
+    cpo::uno::Sequence< OUString > aHelpId;
     if( !i_rHelpId.isEmpty() )
     {
         aHelpId.realloc( 1 );
@@ -2206,7 +2206,7 @@ cpo::uno::Any PrinterOptionsHelper::setEditControlOpt(const OUString& i_rID,
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
     aVal.Value <<= i_rValue;
-    css::uno::Sequence< OUString > aIds { i_rID };
+    cpo::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, u"Edit"_ustr, &aVal, i_rControlOptions);
 }
 

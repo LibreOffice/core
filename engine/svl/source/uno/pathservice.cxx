@@ -51,9 +51,9 @@ public:
             return cppu::supportsService(this, rName);
         }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         {
-            css::uno::Sequence< OUString > aRet { u"com.sun.star.config.SpecialConfigManager"_ustr };
+            cpo::uno::Sequence< OUString > aRet { u"com.sun.star.config.SpecialConfigManager"_ustr };
             return aRet;
         }
 
@@ -79,7 +79,7 @@ public:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svl_PathService_get_implementation(css::uno::XComponentContext*,
-                                                     css::uno::Sequence<cpo::uno::Any> const &)
+                                                     cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new PathService());
 }

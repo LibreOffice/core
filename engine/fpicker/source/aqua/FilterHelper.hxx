@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -35,7 +35,7 @@
 #include <postmac.h>
 
 typedef css::beans::StringPair UnoFilterEntry;
-typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
+typedef cpo::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
 typedef ::std::list<NSString *> NSStringList;
 typedef ::std::list<OUString> OUStringList;
 
@@ -95,7 +95,7 @@ public:
     //XFilterGroupManager delegates
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void appendFilterGroup( const css::uno::Sequence< css::beans::StringPair >& aFilters );
+    void appendFilterGroup( const cpo::uno::Sequence< css::beans::StringPair >& aFilters );
 
 
     //accessor

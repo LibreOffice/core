@@ -62,6 +62,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
+using namespace ::cpo::uno;
 
 // Constants for type offsets per Country/Language (CL)
 #define ZF_STANDARD              0
@@ -1183,7 +1184,7 @@ sal_uInt32 SvNFFormatData::ImpGenerateCL(SvNFLanguageData& rCurrentLanguage, con
             }
             // test XML locale data FormatElement entries
             {
-                uno::Sequence< i18n::FormatElement > xSeq = rCurrentLanguage.xLocaleData->getAllFormats();
+                cpo::uno::Sequence< i18n::FormatElement > xSeq = rCurrentLanguage.xLocaleData->getAllFormats();
                 // A test for completeness of formatindex="0" ...
                 // formatindex="47" is not needed here since it is done in
                 // ImpGenerateFormats().
@@ -2700,7 +2701,7 @@ OUString SvNumberFormatter::GetCalcCellReturn( sal_uInt32 nFormat ) const
 // NfIndexTableOffset. If not found 0 is returned. If the sequence doesn't
 // contain any format code elements a default element is created and inserted.
 sal_Int32 SvNFFormatData::ImpGetFormatCodeIndex(const SvNFLanguageData& rCurrentLanguage,
-                                                css::uno::Sequence<css::i18n::NumberFormatCode>& rSeq,
+                                                cpo::uno::Sequence<css::i18n::NumberFormatCode>& rSeq,
                                                 const NfIndexTableOffset nTabOff)
 {
     auto pSeq = std::find_if(std::cbegin(rSeq), std::cend(rSeq),
@@ -2919,7 +2920,7 @@ void SvNFFormatData::ImpGenerateFormats(SvNFLanguageData& rCurrentLanguage, cons
     sal_Int32 nIdx;
 
     // Number
-    uno::Sequence< i18n::NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER, aLocale );
+    cpo::uno::Sequence< i18n::NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER, aLocale );
     ImpAdjustFormatCodeDefault(rCurrentLanguage, aFormatSeq.getArray(), aFormatSeq.getLength() );
 
     // General
@@ -3395,7 +3396,7 @@ void SvNFFormatData::ImpGenerateAdditionalFormats(SvNFLanguageData& rCurrentLang
 
     // All currencies, this time with [$...] which was stripped in
     // ImpGenerateFormats for old "automatic" currency formats.
-    uno::Sequence< i18n::NumberFormatCode > aFormatSeq = rNumberFormatCode->getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY, aLocale );
+    cpo::uno::Sequence< i18n::NumberFormatCode > aFormatSeq = rNumberFormatCode->getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY, aLocale );
     sal_Int32 nCodes = aFormatSeq.getLength();
     auto aNonConstRange = asNonConstRange(aFormatSeq);
     ImpAdjustFormatCodeDefault(rCurrentLanguage, aNonConstRange.begin(), nCodes);
@@ -4582,7 +4583,7 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( bool & bFoundBank,
 
 void SvNFLanguageData::GetCompatibilityCurrency( OUString& rSymbol, OUString& rAbbrev ) const
 {
-    const css::uno::Sequence< css::i18n::Currency2 >
+    const cpo::uno::Sequence< css::i18n::Currency2 >
         xCurrencies( xLocaleData->getAllCurrencies() );
 
     auto pCurrency = std::find_if(xCurrencies.begin(), xCurrencies.end(),
@@ -4690,7 +4691,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         NfCurrencyEntry(*pLocaleData, LANGUAGE_SYSTEM));
     sal_uInt16 nCurrencyPos = 1;
 
-    const css::uno::Sequence< css::lang::Locale > xLoc = LocaleDataWrapper::getInstalledLocaleNames();
+    const cpo::uno::Sequence< css::lang::Locale > xLoc = LocaleDataWrapper::getInstalledLocaleNames();
     sal_Int32 nLocaleCount = xLoc.getLength();
     SAL_INFO( "svl.numbers", "number of locales: \"" << nLocaleCount << "\"" );
     NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable();

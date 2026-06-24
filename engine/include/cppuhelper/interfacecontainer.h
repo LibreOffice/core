@@ -30,7 +30,7 @@
 #include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/alloc.h"
-#include "com/sun/star/uno/Sequence.hxx"
+#include "cpo/uno/Sequence.hxx"
 #include "com/sun/star/lang/EventObject.hpp"
 
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -150,7 +150,7 @@ public:
     /**
       Return all interfaces added to this container.
      **/
-    css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > SAL_CALL getElements() const;
+    cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > > SAL_CALL getElements() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -318,7 +318,7 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    inline css::uno::Sequence< key > SAL_CALL getContainedTypes() const;
+    inline cpo::uno::Sequence< key > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
@@ -508,7 +508,7 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    css::uno::Sequence< css::uno::Type > SAL_CALL getContainedTypes() const;
+    cpo::uno::Sequence< css::uno::Type > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.

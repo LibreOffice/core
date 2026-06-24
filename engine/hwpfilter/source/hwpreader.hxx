@@ -75,7 +75,7 @@ public:
     /**
      * parseStream does Parser-startup initializations
      */
-    virtual bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
+    virtual bool SAL_CALL filter(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
     virtual void SAL_CALL cancel() override {}
     void setDocumentHandler(css::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler)
     {

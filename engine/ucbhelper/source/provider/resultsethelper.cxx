@@ -73,7 +73,7 @@ bool SAL_CALL ResultSetImplHelper::supportsService( const OUString& ServiceName 
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL ResultSetImplHelper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ResultSetImplHelper::getSupportedServiceNames()
 {
     return { DYNAMICRESULTSET_SERVICE_NAME };
 }
@@ -159,7 +159,7 @@ void SAL_CALL ResultSetImplHelper::setListener(
         m_xResultSet1 /* "old" */,
         m_xResultSet2 /* "new" */ );
 
-    uno::Sequence< css::ucb::ListAction > aActions {
+    cpo::uno::Sequence< css::ucb::ListAction > aActions {
          css::ucb::ListAction(
             0, // Position; not used
             0, // Count; not used

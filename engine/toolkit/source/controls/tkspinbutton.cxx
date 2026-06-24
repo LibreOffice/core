@@ -58,7 +58,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -109,7 +109,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -189,7 +189,7 @@ public:
 
     Sequence< OUString > SAL_CALL UnoSpinButtonModel::getSupportedServiceNames()
     {
-        const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlSpinButtonModel"_ustr };
+        const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlSpinButtonModel"_ustr };
         return comphelper::concatSequences( UnoControlModel::getSupportedServiceNames(), vals );
     }
 
@@ -249,7 +249,7 @@ public:
 
     Sequence< OUString > SAL_CALL UnoSpinButtonControl::getSupportedServiceNames()
     {
-        const css::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlSpinButton"_ustr };
+        const cpo::uno::Sequence<OUString> vals { u"com.sun.star.awt.UnoControlSpinButton"_ustr };
         return comphelper::concatSequences( UnoControlBase::getSupportedServiceNames(), vals );
     }
 
@@ -407,7 +407,7 @@ public:
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoSpinButtonModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoSpinButtonModel(context));
 }
@@ -415,7 +415,7 @@ stardiv_Toolkit_UnoSpinButtonModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoSpinButtonControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new UnoSpinButtonControl());
 }

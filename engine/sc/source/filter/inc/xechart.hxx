@@ -396,7 +396,7 @@ public:
     sal_uInt16          ConvertDataSequence( css::uno::Reference< css::chart2::data::XDataSequence > const & xDataSeq,
                                              bool bSplitToColumns, sal_uInt16 nDefCount = 0 );
     /** Converts the passed sequence of formatted string objects, returns leading font index. */
-    sal_uInt16          ConvertStringSequence( const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& rStringSeq );
+    sal_uInt16          ConvertStringSequence( const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& rStringSeq );
     /** Converts the number format from the passed property set. */
     void                ConvertNumFmt( const ScfPropertySet& rPropSet, bool bPercent );
 

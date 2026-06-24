@@ -205,9 +205,9 @@ using namespace cpo::uno;
 
     // XServiceInfo
 
-    css::uno::Sequence<OUString> SAL_CALL OListBoxModel::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> SAL_CALL OListBoxModel::getSupportedServiceNames()
     {
-        css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
+        cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
         sal_Int32 nOldLen = aSupported.getLength();
         aSupported.realloc( nOldLen + 9 );
@@ -506,8 +506,8 @@ using namespace cpo::uno;
         *pProperties++ = css::beans::Property(PROPERTY_TABINDEX, PROPERTY_ID_TABINDEX, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND);
         *pProperties++ = css::beans::Property(PROPERTY_BOUNDCOLUMN, PROPERTY_ID_BOUNDCOLUMN, cppu::UnoType<sal_Int16>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::MAYBEVOID);
         *pProperties++ = css::beans::Property(PROPERTY_LISTSOURCETYPE, PROPERTY_ID_LISTSOURCETYPE, cppu::UnoType<ListSourceType>::get(), css::beans::PropertyAttribute::BOUND);
-        *pProperties++ = css::beans::Property(PROPERTY_LISTSOURCE, PROPERTY_ID_LISTSOURCE, cppu::UnoType<css::uno::Sequence<OUString>>::get(), css::beans::PropertyAttribute::BOUND);
-        *pProperties++ = css::beans::Property(PROPERTY_VALUE_SEQ, PROPERTY_ID_VALUE_SEQ, cppu::UnoType<css::uno::Sequence<OUString>>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
+        *pProperties++ = css::beans::Property(PROPERTY_LISTSOURCE, PROPERTY_ID_LISTSOURCE, cppu::UnoType<cpo::uno::Sequence<OUString>>::get(), css::beans::PropertyAttribute::BOUND);
+        *pProperties++ = css::beans::Property(PROPERTY_VALUE_SEQ, PROPERTY_ID_VALUE_SEQ, cppu::UnoType<cpo::uno::Sequence<OUString>>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
         *pProperties++ = css::beans::Property(PROPERTY_SELECT_VALUE_SEQ, PROPERTY_ID_SELECT_VALUE_SEQ, cppu::UnoType<Sequence< Any >>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
         *pProperties++ = css::beans::Property(PROPERTY_SELECT_VALUE, PROPERTY_ID_SELECT_VALUE, cppu::UnoType<Any>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::TRANSIENT);
         *pProperties++ = css::beans::Property(PROPERTY_DEFAULT_SELECT_SEQ, PROPERTY_ID_DEFAULT_SELECT_SEQ, cppu::UnoType<Sequence<sal_Int16>>::get(), css::beans::PropertyAttribute::BOUND);
@@ -637,7 +637,7 @@ using namespace cpo::uno;
         _rxInStream >> nAnyMask;
 
         // ListSourceSeq
-        css::uno::Sequence<OUString> aListSourceSeq;
+        cpo::uno::Sequence<OUString> aListSourceSeq;
         if (nVersion == 0x0001)
         {
             // Create ListSourceSeq from String
@@ -696,8 +696,8 @@ using namespace cpo::uno;
             &&  !hasExternalListSource()
             )
         {
-            setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( css::uno::Sequence<OUString>() ) );
-            setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<cpo::uno::Any>() ) );
+            setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( cpo::uno::Sequence<OUString>() ) );
+            setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( cpo::uno::Sequence<cpo::uno::Any>() ) );
         }
 
         if (nVersion > 3)
@@ -967,7 +967,7 @@ using namespace cpo::uno;
                     Reference<XNameAccess> xFieldNames = getTableFields(xConnection, sListSource);
                     if (xFieldNames.is())
                     {
-                        const css::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
+                        const cpo::uno::Sequence<OUString> seqNames = xFieldNames->getElementNames();
                         ::std::copy(
                             seqNames.begin(),
                             seqNames.end(),
@@ -1018,7 +1018,7 @@ using namespace cpo::uno;
         setBoundValues(std::move(aValueList));
 
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( lcl_convertToStringSequence( aDisplayList ) ) );
-        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<cpo::uno::Any>() ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( cpo::uno::Sequence<cpo::uno::Any>() ) );
     }
 
 
@@ -1045,7 +1045,7 @@ using namespace cpo::uno;
         if ( m_eListSourceType != ListSourceType_VALUELIST )
         {
             if ( !hasExternalListSource() )
-                setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( css::uno::Sequence<OUString>() ) );
+                setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( cpo::uno::Sequence<OUString>() ) );
 
             m_aListRowSet.dispose();
         }
@@ -1851,9 +1851,9 @@ using namespace cpo::uno;
     }
 
 
-    css::uno::Sequence<OUString> SAL_CALL OListBoxControl::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> SAL_CALL OListBoxControl::getSupportedServiceNames()
     {
-        css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+        cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
         aSupported.realloc(aSupported.getLength() + 2);
 
         OUString* pArray = aSupported.getArray();
@@ -2176,14 +2176,14 @@ using namespace cpo::uno;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OListBoxModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OListBoxModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OListBoxControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OListBoxControl(component));
 }

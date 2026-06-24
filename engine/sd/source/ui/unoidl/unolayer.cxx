@@ -99,7 +99,7 @@ bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.Layer"_ustr };
 }
@@ -408,7 +408,7 @@ bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
  return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
 {
     return {u"com.sun.star.drawing.LayerManager"_ustr};
 }
@@ -563,7 +563,7 @@ cpo::uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
     return cpo::uno::Any( css::uno::Reference< css::drawing::XLayer>(GetLayer(pLayer)) );
 }
 
-uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -573,7 +573,7 @@ uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
     const sal_uInt16 nLayerCount = rLayerAdmin.GetLayerCount();
 
-    uno::Sequence< OUString > aSeq( nLayerCount );
+    cpo::uno::Sequence< OUString > aSeq( nLayerCount );
 
     OUString* pStrings = aSeq.getArray();
 

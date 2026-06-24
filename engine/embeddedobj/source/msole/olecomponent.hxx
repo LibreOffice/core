@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -56,8 +56,8 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
     OleWrapperClientSite* m_pOleWrapClientSite;
     OleWrapperAdviseSink* m_pImplAdviseSink;
 
-    css::uno::Sequence< css::embed::VerbDescriptor > m_aVerbList;
-    css::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavors;
+    cpo::uno::Sequence< css::embed::VerbDescriptor > m_aVerbList;
+    cpo::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavors;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
@@ -94,7 +94,7 @@ public:
     // ==== Initialization ==================================================
     void LoadEmbeddedObject( const OUString& aTempURL );
     void CreateObjectFromClipboard();
-    void CreateNewEmbeddedObject( const css::uno::Sequence< sal_Int8 >& aSeqCLSID );
+    void CreateNewEmbeddedObject( const cpo::uno::Sequence< sal_Int8 >& aSeqCLSID );
     static void CreateObjectFromData(
                         const css::uno::Reference< css::datatransfer::XTransferable >& xTransfer );
     void CreateObjectFromFile( const OUString& aFileName );
@@ -105,7 +105,7 @@ public:
     void RunObject(); // switch OLE object to running state
     void CloseObject(); // switch OLE object to loaded state
 
-    css::uno::Sequence< css::embed::VerbDescriptor > GetVerbList();
+    cpo::uno::Sequence< css::embed::VerbDescriptor > GetVerbList();
 
     void ExecuteVerb( sal_Int32 nVerbID );
     void SetHostName( const OUString& aEmbDocName );
@@ -117,7 +117,7 @@ public:
 
     sal_Int64 GetMiscStatus( sal_Int64 nAspect );
 
-    css::uno::Sequence< sal_Int8 > GetCLSID();
+    cpo::uno::Sequence< sal_Int8 > GetCLSID();
 
     bool IsWorkaroundActive() const { return m_bWorkaroundActive; }
     bool IsDirty();
@@ -136,7 +136,7 @@ public:
 
     // XTransferable
     virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
+    virtual cpo::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
     virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     // XComponent
@@ -145,7 +145,7 @@ public:
     virtual void SAL_CALL removeEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
+    virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XModifiable
     virtual bool SAL_CALL isModified() override;

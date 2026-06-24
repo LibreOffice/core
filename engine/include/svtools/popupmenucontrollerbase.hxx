@@ -60,14 +60,14 @@ namespace svt
             // XServiceInfo
             virtual OUString SAL_CALL getImplementationName(  ) override = 0;
             virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override = 0;
+            virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override = 0;
 
             // XPopupMenuController
             virtual void SAL_CALL setPopupMenu( const css::uno::Reference< css::awt::XPopupMenu >& PopupMenu ) override;
             virtual void SAL_CALL updatePopupMenu() override;
 
             // XInitialization
-            virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override final;
+            virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override final;
 
             // XStatusListener
             virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override = 0;
@@ -80,22 +80,22 @@ namespace svt
 
             // XDispatchProvider
             virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) override;
-            virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) override;
+            virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) override;
 
             // XDispatch
-            virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& seqProperties ) override;
+            virtual void SAL_CALL dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& seqProperties ) override;
             virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
             virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 
             // XEventListener
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-            void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget = OUString() );
+            void dispatchCommand( const OUString& sCommandURL, const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget = OUString() );
 
     protected:
-            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< cpo::uno::Any >& aArguments );
+            virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< cpo::uno::Any >& aArguments );
 
-            void dispatchCommandImpl( std::unique_lock<std::mutex>& rGuard, const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget );
+            void dispatchCommandImpl( std::unique_lock<std::mutex>& rGuard, const OUString& sCommandURL, const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget );
 
             /** helper method to cause statusChanged is called once for the given command url */
             void updateCommand( const OUString& rCommandURL );

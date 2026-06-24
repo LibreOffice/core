@@ -388,7 +388,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
                 aDescriptor[utl::MediaDescriptor::PROP_FILTERNAME] <<= pOldFilter->GetFilterName();
             }
 
-            uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
+            cpo::uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
             sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, true); // lDescriptor is used as In/Out param ... don't use aDescriptor.getAsConstPropertyValueList() directly!
 
             for (const auto& rProp : lDescriptor)
@@ -418,7 +418,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
                 // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
                 // The DocumentService property is only a preselection, and all preselections are considered as optional!
                 // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
-                uno::Sequence< beans::NamedValue > lQuery { { u"Name"_ustr, cpo::uno::Any(sTypeName) } };
+                cpo::uno::Sequence< beans::NamedValue > lQuery { { u"Name"_ustr, cpo::uno::Any(sTypeName) } };
 
                 xNewFilter = GetFilterForProps(lQuery, nMust, nDont);
                 if (xNewFilter && xNewFilter->GetFilterName().endsWith("_pdf_addstream_import")
@@ -565,7 +565,7 @@ ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<cons
     return nErr;
 }
 
-std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilterForProps( const css::uno::Sequence < beans::NamedValue >& aSeq, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilterForProps( const cpo::uno::Sequence < beans::NamedValue >& aSeq, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
     if( !xServiceManager )
@@ -577,7 +577,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilterForProps( const css:
 
     // make query for all types matching the properties
     uno::Reference < css::container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     while ( xEnum->hasMoreElements() )
     {
         xEnum->nextElement() >>= aProps;
@@ -635,7 +635,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Mime( const OUStrin
         return nullptr;
     }
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq { { u"MediaType"_ustr, cpo::uno::Any(rMediaType) } };
+    cpo::uno::Sequence < css::beans::NamedValue > aSeq { { u"MediaType"_ustr, cpo::uno::Any(rMediaType) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -661,7 +661,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4EA( const OUString&
         return nullptr;
     }
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq { { u"Name"_ustr, cpo::uno::Any(rType) } };
+    cpo::uno::Sequence < css::beans::NamedValue > aSeq { { u"Name"_ustr, cpo::uno::Any(rType) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -696,8 +696,8 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Extension( const OU
     if ( sExt.startsWith(".") )
         sExt = sExt.copy(1);
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq
-        { { u"Extensions"_ustr, cpo::uno::Any(uno::Sequence < OUString > { sExt } ) } };
+    cpo::uno::Sequence < css::beans::NamedValue > aSeq
+        { { u"Extensions"_ustr, cpo::uno::Any(cpo::uno::Sequence < OUString > { sExt } ) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -706,7 +706,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4ClipBoardId( SotCli
     if (nId == SotClipboardFormatId::NONE)
         return nullptr;
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq
+    cpo::uno::Sequence < css::beans::NamedValue > aSeq
         { { u"ClipboardFormat"_ustr, cpo::uno::Any(SotExchange::GetFormatName( nId )) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
@@ -836,7 +836,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcherIter::Next()
     helper to build own formatted string from given stringlist by
     using given separator
   ---------------------------------------------------------------*/
-static OUString implc_convertStringlistToString( const uno::Sequence< OUString >& lList     ,
+static OUString implc_convertStringlistToString( const cpo::uno::Sequence< OUString >& lList     ,
                                                  sal_Unicode                                        cSeparator,
                                                  std::u16string_view                                sPrefix   )
 {
@@ -868,7 +868,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
 {
     OUString sFilterName( rName );
     SfxFilterList_Impl& rList = *pFilterArr;
-    uno::Sequence< beans::PropertyValue > lFilterProperties;
+    cpo::uno::Sequence< beans::PropertyValue > lFilterProperties;
     cpo::uno::Any aResult;
     try
     {
@@ -921,7 +921,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         }
         else if ( rFilterProperty.Name == "UserData" )
         {
-            uno::Sequence< OUString > lUserData;
+            cpo::uno::Sequence< OUString > lUserData;
             rFilterProperty.Value >>= lUserData;
             sUserData = implc_convertStringlistToString( lUserData, ',', u"" );
         }
@@ -950,7 +950,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                 aResult = cpo::uno::Any();
             }
 
-            uno::Sequence< beans::PropertyValue > lTypeProperties;
+            cpo::uno::Sequence< beans::PropertyValue > lTypeProperties;
             if( aResult >>= lTypeProperties )
             {
                 // get indirect available properties then (types)
@@ -968,7 +968,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
                     {
                         if (sExtension.isEmpty())
                         {
-                            uno::Sequence< OUString > lExtensions;
+                            cpo::uno::Sequence< OUString > lExtensions;
                             rTypeProperty.Value >>= lExtensions;
                             sExtension = implc_convertStringlistToString( lExtensions, ';', u"*." );
                         }
@@ -1073,7 +1073,7 @@ void SfxFilterContainer::ReadFilters_Impl( bool bUpdate )
         if( xFilterCFG.is() && xTypeCFG.is() )
         {
             // select right query to get right set of filters for search module
-            const uno::Sequence< OUString > lFilterNames = xFilterCFG->getElementNames();
+            const cpo::uno::Sequence< OUString > lFilterNames = xFilterCFG->getElementNames();
             if ( lFilterNames.hasElements() )
             {
                 // If list of filters already exist ...

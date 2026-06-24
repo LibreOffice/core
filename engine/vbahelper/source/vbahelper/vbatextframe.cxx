@@ -145,10 +145,10 @@ VbaTextFrame::getServiceImplName()
     return u"VbaTextFrame"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 VbaTextFrame::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.TextFrame"_ustr
     };

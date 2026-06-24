@@ -66,7 +66,7 @@ ContentProvider::supportsService(const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
 ContentProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.help.XMLHelp"_ustr, u"com.sun.star.ucb.HelpContentProvider"_ustr };
@@ -190,7 +190,7 @@ void ContentProvider::subst( OUString& instpath )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 CHelpContentProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ContentProvider(context));
 }

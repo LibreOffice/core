@@ -115,7 +115,7 @@ void ZipOutputStream::consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputE
     writeLOC(pCandidate->moveZipEntry(), pCandidate->isEncrypt());
 
     sal_Int32 nRead;
-    uno::Sequence< sal_Int8 > aSequence(n_ConstBufferSize);
+    cpo::uno::Sequence< sal_Int8 > aSequence(n_ConstBufferSize);
     uno::Reference< io::XInputStream > xInput = pCandidate->getData();
     do
     {

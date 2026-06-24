@@ -48,7 +48,7 @@ using namespace ::com::sun::star::animations;
 
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::lang::XMultiServiceFactory;
@@ -355,7 +355,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
             configuration::theDefaultProvider::get( xContext );
 
         // read path to transition effects files from config
-        uno::Sequence< OUString > aFiles;
+        cpo::uno::Sequence< OUString > aFiles;
         aFiles = officecfg::Office::Impress::Misc::TransitionFiles::get();
         for (const auto& rFile : aFiles)
         {

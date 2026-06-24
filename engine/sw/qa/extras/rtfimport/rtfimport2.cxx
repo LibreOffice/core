@@ -90,10 +90,10 @@ CPPUNIT_TEST_FIXTURE(Test, testOleInline)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128611)
 {
     createSwDoc("tdf128611.rtf");
-    auto aPolyPolySequence
-        = getProperty<uno::Sequence<uno::Sequence<awt::Point>>>(getShape(1), u"PolyPolygon"_ustr);
+    auto aPolyPolySequence = getProperty<cpo::uno::Sequence<cpo::uno::Sequence<awt::Point>>>(
+        getShape(1), u"PolyPolygon"_ustr);
     CPPUNIT_ASSERT(aPolyPolySequence.hasElements());
-    const uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+    const cpo::uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
     CPPUNIT_ASSERT_GREATER(static_cast<sal_uInt32>(1), rPolygon.size());
     sal_Int32 nY1 = rPolygon[0].Y;
     sal_Int32 nY2 = rPolygon[1].Y;
@@ -436,7 +436,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf96308Tabpos)
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     xParaEnum->nextElement();
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
-    auto aTabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
+    auto aTabStops = getProperty<cpo::uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
     // This failed: tab stops were not deleted as direct formatting on the paragraph.
     CPPUNIT_ASSERT(!aTabStops.hasElements());
 }
@@ -519,9 +519,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf90097)
     // Get the second child of the group shape.
     uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
-    uno::Sequence<uno::Sequence<awt::Point>> aPolyPolySequence;
+    cpo::uno::Sequence<cpo::uno::Sequence<awt::Point>> aPolyPolySequence;
     xShape->getPropertyValue(u"PolyPolygon"_ustr) >>= aPolyPolySequence;
-    const uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
+    const cpo::uno::Sequence<awt::Point>& rPolygon = aPolyPolySequence[0];
 
     // Vertical flip for the line shape was ignored, so Y coordinates were swapped.
     CPPUNIT_ASSERT(rPolygon[0].Y > rPolygon[1].Y);
@@ -545,24 +545,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167710)
 CPPUNIT_TEST_FIXTURE(Test, testFlip)
 {
     createSwDoc("flip.rtf");
-    comphelper::SequenceAsHashMap aMap = getProperty<uno::Sequence<beans::PropertyValue>>(
+    comphelper::SequenceAsHashMap aMap = getProperty<cpo::uno::Sequence<beans::PropertyValue>>(
         getShapeByName(u"h-and-v"), u"CustomShapeGeometry"_ustr);
     // This resulted in a uno::RuntimeException, as MirroredX wasn't set at all, so could not extract void to boolean.
     CPPUNIT_ASSERT_EQUAL(true, aMap[u"MirroredX"_ustr].get<bool>());
     CPPUNIT_ASSERT_EQUAL(true, aMap[u"MirroredY"_ustr].get<bool>());
 
-    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName(u"h-only"),
-                                                            u"CustomShapeGeometry"_ustr);
+    aMap = getProperty<cpo::uno::Sequence<beans::PropertyValue>>(getShapeByName(u"h-only"),
+                                                                 u"CustomShapeGeometry"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, aMap[u"MirroredX"_ustr].get<bool>());
     CPPUNIT_ASSERT(!aMap[u"MirroredY"_ustr].hasValue());
 
-    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName(u"v-only"),
-                                                            u"CustomShapeGeometry"_ustr);
+    aMap = getProperty<cpo::uno::Sequence<beans::PropertyValue>>(getShapeByName(u"v-only"),
+                                                                 u"CustomShapeGeometry"_ustr);
     CPPUNIT_ASSERT(!aMap[u"MirroredX"_ustr].hasValue());
     CPPUNIT_ASSERT_EQUAL(true, aMap[u"MirroredY"_ustr].get<bool>());
 
-    aMap = getProperty<uno::Sequence<beans::PropertyValue>>(getShapeByName(u"neither-h-nor-v"),
-                                                            u"CustomShapeGeometry"_ustr);
+    aMap = getProperty<cpo::uno::Sequence<beans::PropertyValue>>(getShapeByName(u"neither-h-nor-v"),
+                                                                 u"CustomShapeGeometry"_ustr);
     CPPUNIT_ASSERT(!aMap[u"MirroredX"_ustr].hasValue());
     CPPUNIT_ASSERT(!aMap[u"MirroredY"_ustr].hasValue());
 }
@@ -574,7 +574,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
         getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1sd level
 
     for (int i = 0; i < aProps.getLength(); ++i)
@@ -905,7 +905,8 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
 
     {
         auto xPara(getParagraph(1));
-        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
+        auto tabStops
+            = getProperty<cpo::uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), tabStops.getLength());
     }
@@ -928,7 +929,8 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
 
     {
         auto xPara(getParagraph(4));
-        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
+        auto tabStops
+            = getProperty<cpo::uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), tabStops.getLength());
     }
@@ -937,7 +939,8 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
         auto xPara(getParagraph(5));
         auto fillColor = getProperty<Color>(xPara, u"FillColor"_ustr);
         auto fillStyle = getProperty<drawing::FillStyle>(xPara, u"FillStyle"_ustr);
-        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
+        auto tabStops
+            = getProperty<cpo::uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
 
         CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, fillStyle);
@@ -947,7 +950,8 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
     {
         auto xPara(getParagraph(6));
         auto fillStyle = getProperty<drawing::FillStyle>(xPara, u"FillStyle"_ustr);
-        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
+        auto tabStops
+            = getProperty<cpo::uno::Sequence<style::TabStop>>(xPara, u"ParaTabStops"_ustr);
 
         CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
         CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);

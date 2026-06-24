@@ -21,7 +21,7 @@
 #define INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
 #include <com/sun/star/i18n/LanguageCountryInfo.hpp>
@@ -82,8 +82,8 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     std::shared_ptr< css::i18n::Calendar2 >            xDefaultCalendar;
     std::shared_ptr< css::i18n::Calendar2 >            xSecondaryCalendar;
     css::i18n::LocaleDataItem2                         aLocaleDataItem;
-    css::uno::Sequence< OUString >                     aDateAcceptancePatterns;
-    css::uno::Sequence< sal_Int32 >                    aGrouping;
+    cpo::uno::Sequence< OUString >                     aDateAcceptancePatterns;
+    cpo::uno::Sequence< sal_Int32 >                    aGrouping;
     // cached items
     OUString                aLocaleItem[css::i18n::LocaleItem::COUNT2];
     std::vector<OUString>   aReservedWords;
@@ -161,17 +161,17 @@ public:
     /// NOTE: this wraps XLocaleData5::getLocaleItem2() in fact.
     const css::i18n::LocaleDataItem2& getLocaleItem() const;
     /// NOTE: this wraps XLocaleData3::getAllCalendars2() in fact.
-    css::uno::Sequence< css::i18n::Calendar2 > getAllCalendars() const;
+    cpo::uno::Sequence< css::i18n::Calendar2 > getAllCalendars() const;
     /// NOTE: this wraps XLocaleData2::getAllCurrencies2() in fact.
-    css::uno::Sequence< css::i18n::Currency2 > getAllCurrencies() const;
-    css::uno::Sequence< css::i18n::FormatElement > getAllFormats() const;
+    cpo::uno::Sequence< css::i18n::Currency2 > getAllCurrencies() const;
+    cpo::uno::Sequence< css::i18n::FormatElement > getAllFormats() const;
     css::i18n::ForbiddenCharacters getForbiddenCharacters() const;
-    SAL_DLLPRIVATE const css::uno::Sequence< css::lang::Locale > & getAllInstalledLocaleNames() const;
-    const css::uno::Sequence< OUString > & getDateAcceptancePatterns() const;
+    SAL_DLLPRIVATE const cpo::uno::Sequence< css::lang::Locale > & getAllInstalledLocaleNames() const;
+    const cpo::uno::Sequence< OUString > & getDateAcceptancePatterns() const;
 
 
     /// same as the wrapper implementation but static
-    static const css::uno::Sequence< css::lang::Locale > & getInstalledLocaleNames();
+    static const cpo::uno::Sequence< css::lang::Locale > & getInstalledLocaleNames();
 
     /** Get LanguageTypes for all installed locales which are unambiguous
         convertible back and forth between locale ISO strings and MS-LCID
@@ -189,10 +189,10 @@ public:
     const std::shared_ptr< css::i18n::Calendar2 >& getDefaultCalendar() const;
 
     /// Convenience method to obtain the day names of the default calendar.
-    css::uno::Sequence< css::i18n::CalendarItem2 > const & getDefaultCalendarDays() const;
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > const & getDefaultCalendarDays() const;
 
     /// Convenience method to obtain the month names of the default calendar.
-    css::uno::Sequence< css::i18n::CalendarItem2 > const & getDefaultCalendarMonths() const;
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > const & getDefaultCalendarMonths() const;
 
     /** If the secondary calendar, if any, is of the name passed AND number
         formats using it usually use the E or EE keyword (EC|EEC). */
@@ -208,7 +208,7 @@ public:
         Indian grouping. The sal_Int32* getConstArray() can be passed directly
         to the ::rtl::math::doubleToString() methods as argument for the
         pGroups parameter. */
-    const css::uno::Sequence< sal_Int32 >& getDigitGrouping() const;
+    const cpo::uno::Sequence< sal_Int32 >& getDigitGrouping() const;
 
     // Functionality of class International methods, LocaleItem
 

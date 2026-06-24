@@ -252,7 +252,7 @@ IMPL_STATIC_LINK( ComplexToolbarController, Notify_Impl, void*, p, void )
 void ComplexToolbarController::addNotifyInfo(
     const OUString&                      aEventName,
     const uno::Reference< frame::XDispatch >& xDispatch,
-    const uno::Sequence< beans::NamedValue >& rInfo )
+    const cpo::uno::Sequence< beans::NamedValue >& rInfo )
 {
     uno::Reference< frame::XControlNotificationListener > xControlNotify( xDispatch, uno::UNO_QUERY );
 
@@ -268,7 +268,7 @@ void ComplexToolbarController::addNotifyInfo(
 
     // Add frame as source to the information sequence
     sal_Int32 nCount = rInfo.getLength();
-    uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
+    cpo::uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
     aInfoSeq.realloc( nCount+1 );
     auto pInfoSeq = aInfoSeq.getArray();
     pInfoSeq[nCount].Name  = u"Source"_ustr;
@@ -305,7 +305,7 @@ const css::util::URL& ComplexToolbarController::getInitializedURL()
 void ComplexToolbarController::notifyFocusGet()
 {
     // send focus get notification
-    uno::Sequence< beans::NamedValue > aInfo;
+    cpo::uno::Sequence< beans::NamedValue > aInfo;
     addNotifyInfo( u"FocusSet"_ustr,
                     getDispatchFromCommand( m_aCommandURL ),
                     aInfo );
@@ -314,7 +314,7 @@ void ComplexToolbarController::notifyFocusGet()
 void ComplexToolbarController::notifyFocusLost()
 {
     // send focus lost notification
-    uno::Sequence< beans::NamedValue > aInfo;
+    cpo::uno::Sequence< beans::NamedValue > aInfo;
     addNotifyInfo( u"FocusLost"_ustr,
                     getDispatchFromCommand( m_aCommandURL ),
                     aInfo );
@@ -323,7 +323,7 @@ void ComplexToolbarController::notifyFocusLost()
 void ComplexToolbarController::notifyTextChanged( const OUString& aText )
 {
     // send text changed notification
-    uno::Sequence< beans::NamedValue > aInfo { { u"Text"_ustr, cpo::uno::Any(aText) } };
+    cpo::uno::Sequence< beans::NamedValue > aInfo { { u"Text"_ustr, cpo::uno::Any(aText) } };
     addNotifyInfo( u"TextChanged"_ustr,
                    getDispatchFromCommand( m_aCommandURL ),
                    aInfo );

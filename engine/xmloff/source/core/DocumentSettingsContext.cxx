@@ -66,7 +66,7 @@ public:
     explicit XMLMyList(uno::Reference<uno::XComponentContext> xContext);
 
     void push_back(beans::PropertyValue const & aProp) { aProps.push_back(aProp); nCount++; }
-    uno::Sequence<beans::PropertyValue> GetSequence();
+    cpo::uno::Sequence<beans::PropertyValue> GetSequence();
     uno::Reference<container::XNameContainer> GetNameContainer();
     uno::Reference<container::XIndexContainer> GetIndexContainer();
 };
@@ -80,9 +80,9 @@ XMLMyList::XMLMyList(uno::Reference<uno::XComponentContext> xContext)
     assert(m_xContext.is());
 }
 
-uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
+cpo::uno::Sequence<beans::PropertyValue> XMLMyList::GetSequence()
 {
-    uno::Sequence<beans::PropertyValue> aSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aSeq;
     if(nCount)
     {
         assert(nCount == aProps.size());
@@ -285,7 +285,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >  XMLDocumentSettingsCo
 
 void XMLDocumentSettingsContext::endFastElement(sal_Int32 )
 {
-    uno::Sequence<beans::PropertyValue> aSeqViewProps;
+    cpo::uno::Sequence<beans::PropertyValue> aSeqViewProps;
     if (maViewProps >>= aSeqViewProps)
     {
         GetImport().SetViewSettings(aSeqViewProps);
@@ -309,7 +309,7 @@ void XMLDocumentSettingsContext::endFastElement(sal_Int32 )
         }
     }
 
-    uno::Sequence<beans::PropertyValue> aSeqConfigProps;
+    cpo::uno::Sequence<beans::PropertyValue> aSeqConfigProps;
     if ( maConfigProps >>= aSeqConfigProps )
     {
         if (!comphelper::IsFuzzing() && !officecfg::Office::Common::Save::Document::LoadPrinter::get())
@@ -329,7 +329,7 @@ void XMLDocumentSettingsContext::endFastElement(sal_Int32 )
                 }
                 else if ( sProp == "PrinterSetup" )
                 {
-                    uno::Sequence< sal_Int8 > aEmpty;
+                    cpo::uno::Sequence< sal_Int8 > aEmpty;
                     aSeqConfigPropsRange[i].Value <<= aEmpty;
                     nFound++;
                 }
@@ -343,7 +343,7 @@ void XMLDocumentSettingsContext::endFastElement(sal_Int32 )
 
     for (auto const& settings : maDocSpecificSettings)
     {
-        uno::Sequence< beans::PropertyValue > aDocSettings;
+        cpo::uno::Sequence< beans::PropertyValue > aDocSettings;
         OSL_VERIFY( settings.aSettings >>= aDocSettings );
         GetImport().SetDocumentSpecificSettings( settings.sGroupName, aDocSettings );
     }
@@ -406,7 +406,7 @@ void XMLConfigItemContext::characters( const OUString& rChars )
 void XMLConfigItemContext::endFastElement(sal_Int32 )
 {
     OUString sValue;
-    uno::Sequence<sal_Int8> aDecoded;
+    cpo::uno::Sequence<sal_Int8> aDecoded;
     if (IsXMLToken(msType, XML_BASE64BINARY))
     {
         std::u16string_view sChars = o3tl::trim(maCharBuffer);
@@ -595,7 +595,7 @@ void XMLConfigItemMapIndexedContext::endFastElement(sal_Int32 )
                 uno::Reference< container::XIndexAccess > xIndex = maProps.GetIndexContainer();
 
                 const sal_Int32 nCount = xIndex->getCount();
-                uno::Sequence < beans::PropertyValue > aProps;
+                cpo::uno::Sequence < beans::PropertyValue > aProps;
                 for (sal_Int32 i = 0; i < nCount; i++)
                 {
                     if ((xIndex->getByIndex( i ) >>= aProps) && (aProps.getLength() == XML_FORBIDDEN_CHARACTER_MAX ) )
@@ -667,8 +667,8 @@ void XMLConfigItemMapIndexedContext::endFastElement(sal_Int32 )
             uno::Reference< container::XIndexAccess > xIndex = maProps.GetIndexContainer();
 
             const sal_Int32 nCount = xIndex->getCount();
-            uno::Sequence < beans::PropertyValue > aProps;
-            uno::Sequence < formula::SymbolDescriptor > aSymbolList ( nCount );
+            cpo::uno::Sequence < beans::PropertyValue > aProps;
+            cpo::uno::Sequence < formula::SymbolDescriptor > aSymbolList ( nCount );
 
             formula::SymbolDescriptor *pDescriptor = aSymbolList.getArray();
 

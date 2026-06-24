@@ -481,7 +481,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
     SwDBData aData;
     aData.nCommandType = sdb::CommandType::TABLE;
     uno::Reference<sdbc::XResultSet>  xResSet;
-    uno::Sequence<cpo::uno::Any> aSelection;
+    cpo::uno::Sequence<cpo::uno::Any> aSelection;
     uno::Reference< sdbc::XConnection> xConnection;
 
     aData.sDataSource = rMergeDesc.rDescriptor.getDataSource();
@@ -614,7 +614,7 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
     uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pImpl->pMergeData->xResultSet, uno::UNO_QUERY );
     uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
     OUStringBuffer sStr;
-    uno::Sequence<OUString> aColNames = xCols->getElementNames();
+    cpo::uno::Sequence<OUString> aColNames = xCols->getElementNames();
     const OUString* pColNames = aColNames.getConstArray();
     tools::Long nLength = aColNames.getLength();
     for(tools::Long i = 0; i < nLength; i++)
@@ -651,7 +651,7 @@ bool SwDBManager::GetTableNames(weld::ComboBox& rBox, const OUString& rDBName)
         if(xTSupplier.is())
         {
             uno::Reference<container::XNameAccess> xTables = xTSupplier->getTables();
-            const uno::Sequence<OUString> aTables = xTables->getElementNames();
+            const cpo::uno::Sequence<OUString> aTables = xTables->getElementNames();
             for (const OUString& rTable : aTables)
                 rBox.append(u"0"_ustr, rTable);
         }
@@ -659,7 +659,7 @@ bool SwDBManager::GetTableNames(weld::ComboBox& rBox, const OUString& rDBName)
         if(xQSupplier.is())
         {
             uno::Reference<container::XNameAccess> xQueries = xQSupplier->getQueries();
-            const uno::Sequence<OUString> aQueries = xQueries->getElementNames();
+            const cpo::uno::Sequence<OUString> aQueries = xQueries->getElementNames();
             for (const OUString& rQuery : aQueries)
                 rBox.append(u"1"_ustr, rQuery);
         }
@@ -698,7 +698,7 @@ void SwDBManager::GetColumnNames(weld::ComboBox& rBox,
     if(xColsSupp.is())
     {
         uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
-        const uno::Sequence<OUString> aColNames = xCols->getElementNames();
+        const cpo::uno::Sequence<OUString> aColNames = xCols->getElementNames();
         for (const OUString& rColName : aColNames)
         {
             rBox.append_text(rColName);
@@ -808,7 +808,7 @@ static bool lcl_SaveDoc(
     const INetURLObject* pFileURL,
     const std::shared_ptr<const SfxFilter>& pStoreToFilter,
     const OUString* pStoreToFilterOptions,
-    const uno::Sequence< beans::PropertyValue >* pSaveToFilterData,
+    const cpo::uno::Sequence< beans::PropertyValue >* pSaveToFilterData,
     const bool bIsPDFexport,
     SfxObjectShell* xObjectShell,
     SwWrtShell& rWorkShell,
@@ -847,8 +847,8 @@ static bool lcl_SaveDoc(
 }
 
 static void lcl_PreparePrinterOptions(
-    const uno::Sequence< beans::PropertyValue >& rInPrintOptions,
-    uno::Sequence< beans::PropertyValue >& rOutPrintOptions)
+    const cpo::uno::Sequence< beans::PropertyValue >& rInPrintOptions,
+    cpo::uno::Sequence< beans::PropertyValue >& rOutPrintOptions)
 {
     // printing should be done synchronously otherwise the document
     // might already become invalid during the process
@@ -873,8 +873,8 @@ static void lcl_PreparePrinterOptions(
 }
 
 static void lcl_PrepareSaveFilterDataOptions(
-    const uno::Sequence< beans::PropertyValue >& rInSaveFilterDataptions,
-    uno::Sequence< beans::PropertyValue >& rOutSaveFilterDataOptions,
+    const cpo::uno::Sequence< beans::PropertyValue >& rInSaveFilterDataptions,
+    cpo::uno::Sequence< beans::PropertyValue >& rOutSaveFilterDataOptions,
     const OUString& sPassword)
 {
     rOutSaveFilterDataOptions
@@ -1343,7 +1343,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
             }
 
-            uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions( rMergeDescriptor.aSaveToFilterData );
+            cpo::uno::Sequence< beans::PropertyValue > aSaveToFilterDataOptions( rMergeDescriptor.aSaveToFilterData );
 
             if( bMT_EMAIL || bPasswordColumnName )
             {
@@ -1607,7 +1607,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             else if( IsMergeOk() && bMT_PRINTER )
             {
                 // print the target document
-                uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
+                cpo::uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
                 lcl_PreparePrinterOptions( rMergeDescriptor.aPrintOptions, aOptions );
                 pTargetView->ExecPrint( aOptions, bIsMergeSilent, false/*bPrintAsync*/ );
             }
@@ -2146,7 +2146,7 @@ bool SwDBManager::FillCalcWithMergeData( SvNumberFormatter *pDocFormatter,
 
     {
         uno::Reference<container::XNameAccess> xCols = xColsSupp->getColumns();
-        const uno::Sequence<OUString> aColNames = xCols->getElementNames();
+        const cpo::uno::Sequence<OUString> aColNames = xCols->getElementNames();
         OUString aString;
 
         // add the "record number" variable, as SwCalc::VarLook would.
@@ -2543,7 +2543,7 @@ const SwDBData& SwDBManager::GetAddressDBName()
     return SwModule::get()->GetDBConfig()->GetAddressSource();
 }
 
-uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
+cpo::uno::Sequence<OUString> SwDBManager::GetExistingDatabaseNames()
 {
     const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
@@ -2693,7 +2693,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
     case DBConnURIType::DBASE:
         //set the filter to the file name without extension
         {
-            uno::Sequence<OUString> aFilters { rURL.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset) };
+            cpo::uno::Sequence<OUString> aFilters { rURL.getBase(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset) };
             aTableFilterAny <<= aFilters;
         }
         break;
@@ -2756,7 +2756,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
                 // Cannot embed, as embedded data source would need the URL of the parent document.
                 OUString sHomePath(SvtPathOptions().GetWorkPath());
                 const OUString sTmpName = utl::CreateTempURL(sNewName, true, u".odb", pDestDir ? pDestDir : &sHomePath);
-                xStore->storeAsURL(sTmpName, uno::Sequence<beans::PropertyValue>());
+                xStore->storeAsURL(sTmpName, cpo::uno::Sequence<beans::PropertyValue>());
             }
             else
             {
@@ -2853,7 +2853,7 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
     // Construct vnd.sun.star.pkg:// URL for later loading, and TargetStorage/StreamRelPath for storing.
     OUString const sTmpName = ConstructVndSunStarPkgUrl(rOwnURL, rStreamRelPath);
 
-    uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
     {
         {"TargetStorage", cpo::uno::Any(xStorage)},
         {"StreamRelPath", cpo::uno::Any(rStreamRelPath)},
@@ -2923,13 +2923,13 @@ void SwDBManager::LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const
 }
 
 void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
-                        const uno::Sequence<beans::PropertyValue>& rProperties)
+                        const cpo::uno::Sequence<beans::PropertyValue>& rProperties)
 {
     //prevent second call
     if(m_pImpl->pMergeDialog)
         return ;
     OUString sDataSource, sDataTableOrQuery;
-    uno::Sequence<cpo::uno::Any> aSelection;
+    cpo::uno::Sequence<cpo::uno::Any> aSelection;
 
     sal_Int32 nCmdType = sdb::CommandType::TABLE;
     uno::Reference< sdbc::XConnection> xConnection;
@@ -3026,11 +3026,11 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
 }
 
 void SwDBManager::InsertText(SwWrtShell& rSh,
-                        const uno::Sequence< beans::PropertyValue>& rProperties)
+                        const cpo::uno::Sequence< beans::PropertyValue>& rProperties)
 {
     OUString sDataSource, sDataTableOrQuery;
     uno::Reference<sdbc::XResultSet>  xResSet;
-    uno::Sequence<cpo::uno::Any> aSelection;
+    cpo::uno::Sequence<cpo::uno::Any> aSelection;
     sal_Int16 nCmdType = sdb::CommandType::TABLE;
     uno::Reference< sdbc::XConnection> xConnection;
     for(const beans::PropertyValue& rValue : rProperties)

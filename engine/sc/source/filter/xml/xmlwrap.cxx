@@ -106,7 +106,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     const uno::Reference<frame::XModel>& xModel,
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
-    const uno::Sequence<cpo::uno::Any>& aArgs,
+    const cpo::uno::Sequence<cpo::uno::Any>& aArgs,
     bool bMustBeSuccessful)
 {
     uno::Reference < io::XStream > xDocStream;
@@ -410,7 +410,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
     ErrCodeMsg nMetaRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Metadata)
     {
-        uno::Sequence<cpo::uno::Any> aMetaArgs { Any(xInfoSet) };
+        cpo::uno::Sequence<cpo::uno::Any> aMetaArgs { Any(xInfoSet) };
 
         SAL_INFO( "sc.filter", "meta import start" );
 
@@ -437,7 +437,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         xObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, mrDocShell, SvXMLEmbeddedObjectHelperMode::Read);
         xObjectResolver = xObjectHelper.get();
     }
-    uno::Sequence<cpo::uno::Any> aStylesArgs
+    cpo::uno::Sequence<cpo::uno::Any> aStylesArgs
     {
         Any(xInfoSet),
         Any(xGraphicStorageHandler),
@@ -451,7 +451,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         //  Settings must be loaded first because of the printer setting,
         //  which is needed in the page styles (paper tray).
 
-        uno::Sequence<cpo::uno::Any> aSettingsArgs { Any(xInfoSet) };
+        cpo::uno::Sequence<cpo::uno::Any> aSettingsArgs { Any(xInfoSet) };
 
         SAL_INFO( "sc.filter", "settings import start" );
 
@@ -489,7 +489,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
             // We only need to import content for external link cache document.
             xInfoSet->setPropertyValue(SC_UNO_ODS_IMPORT_STYLES, cpo::uno::Any(false));
 
-        uno::Sequence<cpo::uno::Any> aDocArgs
+        cpo::uno::Sequence<cpo::uno::Any> aDocArgs
         {
             Any(xInfoSet),
             Any(xGraphicStorageHandler),
@@ -597,9 +597,9 @@ static bool lcl_HasValidStream(const ScDocument& rDoc)
 
 bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentContext>& xContext,
     const uno::Reference<frame::XModel>& xModel, const uno::Reference<xml::sax::XWriter>& xWriter,
-    const uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
+    const cpo::uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
     const OUString& sMediaType, const OUString& sComponentName,
-    const uno::Sequence<cpo::uno::Any>& aArgs, std::unique_ptr<ScMySharedData>& pSharedData)
+    const cpo::uno::Sequence<cpo::uno::Any>& aArgs, std::unique_ptr<ScMySharedData>& pSharedData)
 {
     bool bRet(false);
     uno::Reference<io::XOutputStream> xOut;
@@ -737,7 +737,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
     if (pMedium)
         sFileName = pMedium->GetName();
     ScDocShell* pObjSh = rDoc.GetDocumentShell();
-    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
             { "FileName", cpo::uno::Any(sFileName) }
         }));
 
@@ -747,13 +747,13 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         { u"ProgressRange"_ustr, 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"ProgressMax"_ustr, 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"ProgressCurrent"_ustr, 0, ::cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
-        { u"WrittenNumberStyles"_ustr, 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
+        { u"WrittenNumberStyles"_ustr, 0, cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"UsePrettyPrinting"_ustr, 0, ::cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"StreamRelPath"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { u"StyleNames"_ustr, 0, cppu::UnoType<uno::Sequence<OUString>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { u"StyleFamilies"_ustr, 0, cppu::UnoType<uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"StyleNames"_ustr, 0, cppu::UnoType<cpo::uno::Sequence<OUString>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { u"StyleFamilies"_ustr, 0, cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { u"TargetStorage"_ustr, 0, cppu::UnoType<embed::XStorage>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
@@ -862,7 +862,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         // meta export
         if (!bStylesOnly && !bMetaRet)
         {
-            uno::Sequence<cpo::uno::Any> aMetaArgs
+            cpo::uno::Sequence<cpo::uno::Any> aMetaArgs
             {
                 Any(xInfoSet),
                 Any(xWriter),
@@ -896,7 +896,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         // styles export
 
         {
-            uno::Sequence<cpo::uno::Any> aStylesArgs
+            cpo::uno::Sequence<cpo::uno::Any> aStylesArgs
             {
                 Any(xInfoSet),
                 Any(xGraphicStorageHandler),
@@ -921,7 +921,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         if (!bStylesOnly)
         {
-            uno::Sequence<cpo::uno::Any> aDocArgs
+            cpo::uno::Sequence<cpo::uno::Any> aDocArgs
             {
                 Any(xInfoSet),
                 Any(xGraphicStorageHandler),
@@ -954,7 +954,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         if (!bStylesOnly)
         {
-            uno::Sequence<cpo::uno::Any> aSettingsArgs
+            cpo::uno::Sequence<cpo::uno::Any> aSettingsArgs
             {
                 Any(xInfoSet),
                 Any(xWriter),

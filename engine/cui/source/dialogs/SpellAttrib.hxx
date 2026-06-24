@@ -19,7 +19,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <utility>
@@ -34,13 +34,13 @@ struct SpellErrorDescription
     OUString                                     sExplanationURL;
     css::lang::Locale                      aLocale;
     css::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
-    css::uno::Sequence< OUString >  aSuggestions;
+    cpo::uno::Sequence< OUString >  aSuggestions;
     OUString                                     sRuleId;
 
     SpellErrorDescription( bool bGrammar,
                       OUString aText,
                       css::lang::Locale _aLocale,
-                      const css::uno::Sequence< OUString >& rSuggestions,
+                      const cpo::uno::Sequence< OUString >& rSuggestions,
                       css::uno::Reference< css::linguistic2::XProofreader > _xGrammarChecker,
                       const OUString* pDialogTitle = nullptr,
                       const OUString* pExplanation = nullptr,
@@ -85,9 +85,9 @@ struct SpellErrorDescription
                 sRuleId == rDesc.sRuleId;
     }
 
-    css::uno::Sequence<cpo::uno::Any> toSequence() const
+    cpo::uno::Sequence<cpo::uno::Any> toSequence() const
     {
-        css::uno::Sequence<cpo::uno::Any> aEntries{ cpo::uno::Any(bIsGrammarError),
+        cpo::uno::Sequence<cpo::uno::Any> aEntries{ cpo::uno::Any(bIsGrammarError),
                                                     cpo::uno::Any(sErrorText),
                                                     cpo::uno::Any(sDialogTitle),
                                                     cpo::uno::Any(sExplanation),
@@ -99,7 +99,7 @@ struct SpellErrorDescription
         return aEntries;
     }
 
-    void fromSequence(const css::uno::Sequence<cpo::uno::Any>& rEntries)
+    void fromSequence(const cpo::uno::Sequence<cpo::uno::Any>& rEntries)
     {
         rEntries[0] >>= bIsGrammarError;
         rEntries[1] >>= sErrorText;

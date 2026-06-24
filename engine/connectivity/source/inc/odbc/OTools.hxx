@@ -28,7 +28,7 @@
 #include <o3tl/string_view.hxx>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/textenc.h>
 
 enum class ODBC3SQLFunctionId
@@ -213,7 +213,7 @@ namespace connectivity::odbc
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static  css::uno::Sequence<sal_Int8> getBytesValue(const OConnection* _pConnection,
+            static  cpo::uno::Sequence<sal_Int8> getBytesValue(const OConnection* _pConnection,
                                                                             SQLHANDLE _aStatementHandle,
                                                                             sal_Int32 columnIndex,
                                                                             SQLSMALLINT _fSqlType,

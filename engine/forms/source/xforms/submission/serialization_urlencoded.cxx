@@ -36,6 +36,7 @@
 using namespace css::uno;
 using namespace css::io;
 using namespace css::xml::dom;
+using namespace ::cpo::uno;
 
 CSerializationURLEncoded::CSerializationURLEncoded()
     : m_aPipe(Pipe::create(comphelper::getProcessComponentContext()))

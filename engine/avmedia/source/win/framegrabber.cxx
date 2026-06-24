@@ -217,7 +217,7 @@ bool FrameGrabber::supportsService( const OUString& ServiceName )
 }
 
 
-uno::Sequence< OUString > FrameGrabber::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > FrameGrabber::getSupportedServiceNames(  )
 {
     return { AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME };
 }

@@ -81,7 +81,7 @@ void sca::pricing::InitScaFuncDataList(ScaFuncDataList& rList)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 scaddins_ScaPricingAddIn_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ScaPricingAddIn());
 }
@@ -149,7 +149,7 @@ bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName )
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames()
 {
     return { ADDIN_SERVICE, MY_SERVICE };
 }
@@ -277,18 +277,18 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayCategoryName(
 }
 
 // XCompatibilityNames
-uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibilityNames(
+cpo::uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName )
 {
     auto fDataIt = std::find_if( pFuncDataList->begin(), pFuncDataList->end(),
                                  FindScaFuncData( aProgrammaticName ) );
     if( fDataIt == pFuncDataList->end() )
-        return uno::Sequence< sheet::LocalizedName >( 0 );
+        return cpo::uno::Sequence< sheet::LocalizedName >( 0 );
 
     const std::vector<OUString>& rStrList = fDataIt->GetCompNameList();
     sal_uInt32 nCount = rStrList.size();
 
-    uno::Sequence< sheet::LocalizedName > aRet( nCount );
+    cpo::uno::Sequence< sheet::LocalizedName > aRet( nCount );
     sheet::LocalizedName* pArray = aRet.getArray();
 
     for( sal_uInt32 nIndex = 0; nIndex < nCount; nIndex++ )

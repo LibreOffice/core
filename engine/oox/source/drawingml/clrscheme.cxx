@@ -19,7 +19,7 @@
 
 #include <algorithm>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/Color.hpp>
 
 #include <osl/diagnose.h>

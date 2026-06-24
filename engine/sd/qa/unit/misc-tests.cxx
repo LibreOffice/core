@@ -617,7 +617,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
     // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
     // The first three bits depend on initialization and may change. The values in file are Base64 encoded.
     OUString sBase64;
-    uno::Sequence<sal_Int8> aDecodedSeq;
+    cpo::uno::Sequence<sal_Int8> aDecodedSeq;
     sBase64 = getXPathContent(pXmlDoc2,
                               sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
     CPPUNIT_ASSERT_MESSAGE("Item VisibleLayers does not exists.", !sBase64.isEmpty());
@@ -702,7 +702,7 @@ void SdMiscTest::testTdf101242_settings_keep()
     // Value is a bitfield with first Byte in order '* * * measurelines controls backgroundobjects background layout'
     // The first three bits depend on initialization and may change. The values in file are Base64 encoded.
     OUString sBase64;
-    uno::Sequence<sal_Int8> aDecodedSeq;
+    cpo::uno::Sequence<sal_Int8> aDecodedSeq;
     sBase64 = getXPathContent(pXmlDoc2,
                               sPathStart2 + "/config:config-item[@config:name='VisibleLayers']");
     CPPUNIT_ASSERT_MESSAGE("Item VisibleLayers does not exists.", !sBase64.isEmpty());
@@ -787,7 +787,7 @@ void SdMiscTest::testTdf119392()
     // Bits need to be: visible=10111111=0xbf=191 printable=01011111=0x5f=95 locked=10000000=0x80=128
     // The values in file are Base64 encoded.
     OUString sBase64;
-    uno::Sequence<sal_Int8> aDecodedSeq;
+    cpo::uno::Sequence<sal_Int8> aDecodedSeq;
     sBase64 = getXPathContent(pXmlDoc,
                               sPathStart + "/config:config-item[@config:name='VisibleLayers']");
     CPPUNIT_ASSERT_MESSAGE("Item VisibleLayers does not exists.", !sBase64.isEmpty());
@@ -1159,7 +1159,7 @@ void SdMiscTest::testPageBackgroundImages()
     // Add a background graphic to page 1
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(0));
-        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
             { "FileName", cpo::uno::Any(createFileURL(u"TestImage1.png")) },
         }));
 
@@ -1169,7 +1169,7 @@ void SdMiscTest::testPageBackgroundImages()
     // Add a background graphic to page 2
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(1));
-        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
             { "FileName", cpo::uno::Any(createFileURL(u"TestImage2.png")) },
         }));
 
@@ -1179,7 +1179,7 @@ void SdMiscTest::testPageBackgroundImages()
     // Add a background graphic to page 3
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(2));
-        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
             { "FileName", cpo::uno::Any(createFileURL(u"TestImage3.png")) },
         }));
 
@@ -1189,7 +1189,7 @@ void SdMiscTest::testPageBackgroundImages()
     // Add a background graphic to page 4
     {
         CPPUNIT_ASSERT_EQUAL(true, pDrawViewShell->SwitchPage(3));
-        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
             { "FileName", cpo::uno::Any(createFileURL(u"TestImage4.png")) },
         }));
 

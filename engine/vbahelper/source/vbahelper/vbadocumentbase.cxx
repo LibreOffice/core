@@ -49,7 +49,7 @@ VbaDocumentBase::VbaDocumentBase( const uno::Reference< ov::XHelperInterface >& 
 {
 }
 
-VbaDocumentBase::VbaDocumentBase( uno::Sequence< cpo::uno::Any> const & args,
+VbaDocumentBase::VbaDocumentBase( cpo::uno::Sequence< cpo::uno::Any> const & args,
                                   uno::Reference< uno::XComponentContext> const & xContext )
 : VbaDocumentBase_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext )
 {
@@ -136,7 +136,7 @@ VbaDocumentBase::Close( const cpo::uno::Any &rSaveArg, const cpo::uno::Any &rFil
             throw uno::RuntimeException(u"Unable to save to a read only file "_ustr );
         }
         if( bFileName )
-            xStorable->storeAsURL( aFileName, uno::Sequence< beans::PropertyValue >(0) );
+            xStorable->storeAsURL( aFileName, cpo::uno::Sequence< beans::PropertyValue >(0) );
         else
             xStorable->store();
     }
@@ -163,7 +163,7 @@ VbaDocumentBase::Close( const cpo::uno::Any &rSaveArg, const cpo::uno::Any &rFil
                         xDispatchProvider->queryDispatch( aURL, u"_self"_ustr , 0 ) );
                 if (xDispatch)
                 {
-                    xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
+                    xDispatch->dispatch( aURL, cpo::uno::Sequence< beans::PropertyValue >() );
                     return;
                 }
             }
@@ -289,7 +289,7 @@ VbaDocumentBase::getVBProject()
             uno::Reference< XInterface > xVBE( xApp->getVBE(), uno::UNO_QUERY );
             if (xVBE)
             {
-                uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xVBE), // the VBE
+                cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xVBE), // the VBE
                                                  cpo::uno::Any(uno::Reference(getModel())) }; // document model for script container access
                 uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager() );
                 if (xServiceManager)
@@ -310,10 +310,10 @@ VbaDocumentBase::getServiceImplName()
     return u"VbaDocumentBase"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 VbaDocumentBase::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.VbaDocumentBase"_ustr
     };

@@ -53,7 +53,7 @@ class OImageControlModel final
     OUString                                          m_sDocumentURL;
 
     // UNO binding
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
     ImageProducer* GetImageProducer() { return m_xImageProducer.get(); }
 
@@ -80,7 +80,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OImageControlModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XPersistObject
     virtual OUString SAL_CALL getServiceName() override;
@@ -97,10 +97,10 @@ public:
 
     // OControlModel's property handling
     virtual void describeAggregateProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rAggregateProps
     ) const override;
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
     // prevent method hiding
@@ -149,7 +149,7 @@ private:
     ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener> m_aModifyListeners;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     explicit OImageControlControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
@@ -165,7 +165,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OImageControlControl"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XMouseListener
     virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& e) override;

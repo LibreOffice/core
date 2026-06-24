@@ -528,7 +528,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         uno::Reference< container::XContainer> xLibContainer( xScriptCont, uno::UNO_QUERY );
         xLibContainer->addContainerListener( xLibContainerListener );
 
-        const uno::Sequence< OUString > aScriptLibNames = xScriptCont->getElementNames();
+        const cpo::uno::Sequence< OUString > aScriptLibNames = xScriptCont->getElementNames();
 
         if( aScriptLibNames.hasElements() )
         {
@@ -1387,7 +1387,7 @@ bool BasicManager::ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >
         uno::Reference< container::XNameAccess > xScripts( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
         uno::Reference< script::XLibraryContainerPassword > xPassword( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
 
-        const uno::Sequence< OUString > aNames( xScripts->getElementNames() );
+        const cpo::uno::Sequence< OUString > aNames( xScripts->getElementNames() );
         for ( auto const & scriptElementName : aNames )
         {
             if( !xPassword->isLibraryPasswordProtected( scriptElementName ) )
@@ -1398,7 +1398,7 @@ bool BasicManager::ImgVersion12PsswdBinaryLimitExceeded( std::vector< OUString >
                 continue;
 
             uno::Reference< container::XNameAccess > xScriptLibrary( xScripts->getByName( scriptElementName ), uno::UNO_QUERY_THROW );
-            const uno::Sequence< OUString > aElementNames( xScriptLibrary->getElementNames() );
+            const cpo::uno::Sequence< OUString > aElementNames( xScriptLibrary->getElementNames() );
 
             std::vector<OUString> aBigModules;
             for ( auto const & libraryElementName : aElementNames )
@@ -1579,16 +1579,16 @@ public:
 class DialogInfo_Impl : public WeakImplHelper< script::XStarBasicDialogInfo >
 {
     OUString maName;
-    uno::Sequence< sal_Int8 > mData;
+    cpo::uno::Sequence< sal_Int8 > mData;
 
 public:
-    DialogInfo_Impl( OUString aName, const uno::Sequence< sal_Int8 >& Data )
+    DialogInfo_Impl( OUString aName, const cpo::uno::Sequence< sal_Int8 >& Data )
         : maName(std::move( aName )), mData( Data ) {}
 
     // Methods XStarBasicDialogInfo
     virtual OUString SAL_CALL getName() override
         { return maName; }
-    virtual uno::Sequence< sal_Int8 > SAL_CALL getData() override
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getData() override
         { return mData; }
 };
 
@@ -1650,7 +1650,7 @@ public:
 
     // Methods XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
@@ -1687,10 +1687,10 @@ cpo::uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     return aRetAny;
 }
 
-uno::Sequence< OUString > ModuleContainer_Impl::getElementNames()
+cpo::uno::Sequence< OUString > ModuleContainer_Impl::getElementNames()
 {
     sal_uInt16 nMods = mpLib ? mpLib->GetModules().size() : 0;
-    uno::Sequence< OUString > aRetSeq( nMods );
+    cpo::uno::Sequence< OUString > aRetSeq( nMods );
     OUString* pRetSeq = aRetSeq.getArray();
     for( sal_uInt16 i = 0 ; i < nMods ; i++ )
     {
@@ -1740,22 +1740,22 @@ void ModuleContainer_Impl::removeByName( const OUString& Name )
 }
 
 
-static uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
+static cpo::uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
 {
     SvMemoryStream aMemStream;
     pDialog->Store( aMemStream );
     sal_Int32 nLen = aMemStream.Tell();
     if (nLen < 0) { abort(); }
-    uno::Sequence< sal_Int8 > aData( nLen );
+    cpo::uno::Sequence< sal_Int8 > aData( nLen );
     sal_Int8* pDestData = aData.getArray();
     const sal_Int8* pSrcData = static_cast<const sal_Int8*>(aMemStream.GetData());
     std::copy( pSrcData, pSrcData + nLen, pDestData );
     return aData;
 }
 
-static SbxObjectRef implCreateDialog( const uno::Sequence< sal_Int8 >& aData )
+static SbxObjectRef implCreateDialog( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
-    sal_Int8* pData = const_cast< uno::Sequence< sal_Int8 >& >(aData).getArray();
+    sal_Int8* pData = const_cast< cpo::uno::Sequence< sal_Int8 >& >(aData).getArray();
     SvMemoryStream aMemStream( pData, aData.getLength(), StreamMode::READ );
     SbxBaseRef pBase = SbxBase::Load( aMemStream );
     return dynamic_cast<SbxObject*>(pBase.get());
@@ -1781,7 +1781,7 @@ public:
 
     // Methods XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
@@ -1837,10 +1837,10 @@ cpo::uno::Any DialogContainer_Impl::getByName( const OUString& aName )
     return aRetAny;
 }
 
-uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
+cpo::uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
 {
     sal_Int32 nCount = mpLib->GetObjects()->Count();
-    uno::Sequence< OUString > aRetSeq( nCount );
+    cpo::uno::Sequence< OUString > aRetSeq( nCount );
     OUString* pRetSeq = aRetSeq.getArray();
     sal_Int32 nDialogCounter = 0;
 
@@ -1920,7 +1920,7 @@ public:
 
     // Methods XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
@@ -1989,10 +1989,10 @@ cpo::uno::Any LibraryContainer_Impl::getByName( const OUString& aName )
     return aRetAny;
 }
 
-uno::Sequence< OUString > LibraryContainer_Impl::getElementNames()
+cpo::uno::Sequence< OUString > LibraryContainer_Impl::getElementNames()
 {
     sal_uInt16 nLibs = mpMgr->GetLibCount();
-    uno::Sequence< OUString > aRetSeq( nLibs );
+    cpo::uno::Sequence< OUString > aRetSeq( nLibs );
     OUString* pRetSeq = aRetSeq.getArray();
     for( sal_uInt16 i = 0 ; i < nLibs ; i++ )
     {
@@ -2052,7 +2052,7 @@ public:
     virtual void SAL_CALL addModule( const OUString& LibraryName, const OUString& ModuleName,
         const OUString& Language, const OUString& Source ) override;
     virtual void SAL_CALL addDialog( const OUString& LibraryName, const OUString& DialogName,
-        const uno::Sequence< sal_Int8 >& Data ) override;
+        const cpo::uno::Sequence< sal_Int8 >& Data ) override;
 };
 
 uno::Reference< container::XNameContainer > SAL_CALL StarBasicAccess_Impl::getLibraryContainer()
@@ -2094,7 +2094,7 @@ void SAL_CALL StarBasicAccess_Impl::addDialog
 (
     const OUString&,
     const OUString&,
-    const uno::Sequence< sal_Int8 >&
+    const cpo::uno::Sequence< sal_Int8 >&
 )
 {}
 

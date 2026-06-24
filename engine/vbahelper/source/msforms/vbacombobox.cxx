@@ -71,7 +71,7 @@ ScVbaComboBox::setListIndex( const cpo::uno::Any& _value )
 
     sal_Int32 nOldIndex = -1;
     getListIndex() >>= nOldIndex;
-    uno::Sequence< OUString > sItems;
+    cpo::uno::Sequence< OUString > sItems;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sItems;
     if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
     {
@@ -87,7 +87,7 @@ ScVbaComboBox::setListIndex( const cpo::uno::Any& _value )
 cpo::uno::Any SAL_CALL
 ScVbaComboBox::getListIndex()
 {
-    uno::Sequence< OUString > sItems;
+    cpo::uno::Sequence< OUString > sItems;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sItems;
     // should really return the item that has focus regardless of
     // it been selected
@@ -293,10 +293,10 @@ void SAL_CALL ScVbaComboBox::setLinkedCell( const OUString& _linkedcell )
     ScVbaControl::setControlSource( _linkedcell );
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaComboBox::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.ComboBox"_ustr
     };

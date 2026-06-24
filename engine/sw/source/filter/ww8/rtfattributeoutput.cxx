@@ -2797,8 +2797,8 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                                      u"com.sun.star.form.component.ListBox"_ustr))
                         {
                             OUString aStr;
-                            uno::Sequence<sal_Int16> aIntSeq;
-                            uno::Sequence<OUString> aStrSeq;
+                            cpo::uno::Sequence<sal_Int16> aIntSeq;
+                            cpo::uno::Sequence<OUString> aStrSeq;
 
                             m_aRun->append(OUStringToOString(FieldString(ww::eFORMDROPDOWN),
                                                              m_rExport.GetCurrentEncoding()));

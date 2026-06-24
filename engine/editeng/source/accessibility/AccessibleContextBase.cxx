@@ -312,7 +312,7 @@ bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceNa
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL
+cpo::uno::Sequence< OUString > SAL_CALL
        AccessibleContextBase::getSupportedServiceNames()
 {
     return {

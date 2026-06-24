@@ -134,7 +134,7 @@ bool SAL_CALL ToolbarsMenuController::supportsService( const OUString& sServiceN
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ToolbarsMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ToolbarsMenuController::getSupportedServiceNames()
 {
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
@@ -778,7 +778,7 @@ IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, void*, p, void )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ToolbarsMenuController_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ToolbarsMenuController(context));
 }

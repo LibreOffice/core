@@ -34,6 +34,7 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
+    using namespace ::cpo::uno;
 
     OSelectAllDispatcher::OSelectAllDispatcher( EditView& _rView, const URL&  _rURL )
         :ORichTextFeatureDispatcher( _rView, _rURL )

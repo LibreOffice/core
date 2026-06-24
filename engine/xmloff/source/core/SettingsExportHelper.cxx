@@ -123,15 +123,15 @@ void XMLSettingsExportHelper::CallTypeFunction(const cpo::uno::Any& rAny,
         default:
         {
             const uno::Type& aType = aAny.getValueType();
-            if (aType.equals(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get() ) )
+            if (aType.equals(cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get() ) )
             {
-                uno::Sequence< beans::PropertyValue> aProps;
+                cpo::uno::Sequence< beans::PropertyValue> aProps;
                 aAny >>= aProps;
                 exportSequencePropertyValue(aProps, rName);
             }
-            else if( aType.equals(cppu::UnoType<uno::Sequence<sal_Int8>>::get() ) )
+            else if( aType.equals(cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get() ) )
             {
-                uno::Sequence< sal_Int8 > aProps;
+                cpo::uno::Sequence< sal_Int8 > aProps;
                 aAny >>= aProps;
                 exportbase64Binary(aProps, rName);
             }
@@ -153,9 +153,9 @@ void XMLSettingsExportHelper::CallTypeFunction(const cpo::uno::Any& rAny,
             {
                 exportForbiddenCharacters(xForbChars, rName);
             }
-            else if( aType.equals(cppu::UnoType<uno::Sequence<formula::SymbolDescriptor>>::get() ) )
+            else if( aType.equals(cppu::UnoType<cpo::uno::Sequence<formula::SymbolDescriptor>>::get() ) )
             {
-                uno::Sequence< formula::SymbolDescriptor > aProps;
+                cpo::uno::Sequence< formula::SymbolDescriptor > aProps;
                 aAny >>= aProps;
                 exportSymbolDescriptors(aProps, rName);
             }
@@ -255,7 +255,7 @@ void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const
 }
 
 void XMLSettingsExportHelper::exportSequencePropertyValue(
-                    const uno::Sequence<beans::PropertyValue>& aProps,
+                    const cpo::uno::Sequence<beans::PropertyValue>& aProps,
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
@@ -278,7 +278,7 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
     }
 }
 void XMLSettingsExportHelper::exportSymbolDescriptors(
-                    const uno::Sequence < formula::SymbolDescriptor > &rProps,
+                    const cpo::uno::Sequence < formula::SymbolDescriptor > &rProps,
                     const OUString& rName) const
 {
     rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
@@ -288,7 +288,7 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
 
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pDescriptor++ )
     {
-        uno::Sequence < beans::PropertyValue > aSequence ( XML_SYMBOL_DESCRIPTOR_MAX );
+        cpo::uno::Sequence < beans::PropertyValue > aSequence ( XML_SYMBOL_DESCRIPTOR_MAX );
         beans::PropertyValue *pSymbol = aSequence.getArray();
 
         pSymbol[XML_SYMBOL_DESCRIPTOR_NAME].Name         = u"Name"_ustr;
@@ -318,7 +318,7 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
     exportIndexAccess( xBox, rName );
 }
 void XMLSettingsExportHelper::exportbase64Binary(
-                    const uno::Sequence<sal_Int8>& aProps,
+                    const cpo::uno::Sequence<sal_Int8>& aProps,
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
@@ -339,7 +339,7 @@ void XMLSettingsExportHelper::exportMapEntry(const cpo::uno::Any& rAny,
                                         const bool bNameAccess) const
 {
     DBG_ASSERT((bNameAccess && !rName.isEmpty()) || !bNameAccess, "no name");
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     rAny >>= aProps;
     if (aProps.hasElements())
     {
@@ -357,13 +357,13 @@ void XMLSettingsExportHelper::exportNameAccess(
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
-    DBG_ASSERT(aNamed->getElementType().equals(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get() ),
+    DBG_ASSERT(aNamed->getElementType().equals(cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get() ),
                 "wrong NameAccess" );
     if(aNamed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_MAP_NAMED );
-        const uno::Sequence< OUString > aNames(aNamed->getElementNames());
+        const cpo::uno::Sequence< OUString > aNames(aNamed->getElementNames());
         for (const auto& rElementName : aNames)
             exportMapEntry(aNamed->getByName(rElementName), rElementName, true);
         m_rContext.EndElement( true );
@@ -375,7 +375,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
-    DBG_ASSERT(rIndexed->getElementType().equals(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get() ),
+    DBG_ASSERT(rIndexed->getElementType().equals(cppu::UnoType<cpo::uno::Sequence<beans::PropertyValue>>::get() ),
                 "wrong IndexAccess" );
     if (rIndexed->hasElements())
     {
@@ -402,7 +402,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
         return;
 
     rtl::Reference< comphelper::IndexedPropertyValuesContainer > xBox = new comphelper::IndexedPropertyValuesContainer();
-    const uno::Sequence< lang::Locale > aLocales( xLocales->getLocales() );
+    const cpo::uno::Sequence< lang::Locale > aLocales( xLocales->getLocales() );
 
     /* FIXME-BCP47: this stupid and counterpart in
      * xmloff/source/core/DocumentSettingsContext.cxx
@@ -416,7 +416,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
             const i18n::ForbiddenCharacters aChars( xForbChars->getForbiddenCharacters( rLocale ) );
 
 
-            uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
+            cpo::uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
             beans::PropertyValue *pForChar = aSequence.getArray();
 
             pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = u"Language"_ustr;
@@ -437,7 +437,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
 }
 
 void XMLSettingsExportHelper::exportAllSettings(
-                    const uno::Sequence<beans::PropertyValue>& aProps,
+                    const cpo::uno::Sequence<beans::PropertyValue>& aProps,
                     const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");

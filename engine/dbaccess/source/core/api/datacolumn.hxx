@@ -46,8 +46,8 @@ namespace dbaccess
                       const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta);
 
     // css::lang::XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // css::uno::XInterface
         virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -56,7 +56,7 @@ namespace dbaccess
 
     // css::lang::XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -71,7 +71,7 @@ namespace dbaccess
         virtual sal_Int64 SAL_CALL getLong(  ) override;
         virtual float SAL_CALL getFloat(  ) override;
         virtual double SAL_CALL getDouble(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBytes(  ) override;
+        virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getBytes(  ) override;
         virtual css::util::Date SAL_CALL getDate(  ) override;
         virtual css::util::Time SAL_CALL getTime(  ) override;
         virtual css::util::DateTime SAL_CALL getTimestamp(  ) override;
@@ -93,7 +93,7 @@ namespace dbaccess
         virtual void SAL_CALL updateFloat( float x ) override;
         virtual void SAL_CALL updateDouble( double x ) override;
         virtual void SAL_CALL updateString( const OUString& x ) override;
-        virtual void SAL_CALL updateBytes( const css::uno::Sequence< sal_Int8 >& x ) override;
+        virtual void SAL_CALL updateBytes( const cpo::uno::Sequence< sal_Int8 >& x ) override;
         virtual void SAL_CALL updateDate( const css::util::Date& x ) override;
         virtual void SAL_CALL updateTime( const css::util::Time& x ) override;
         virtual void SAL_CALL updateTimestamp( const css::util::DateTime& x ) override;

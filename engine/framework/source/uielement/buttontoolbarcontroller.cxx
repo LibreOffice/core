@@ -89,7 +89,7 @@ void SAL_CALL ButtonToolbarController::release() noexcept
 
 // XInitialization
 void SAL_CALL ButtonToolbarController::initialize(
-    const css::uno::Sequence< cpo::uno::Any >& aArguments )
+    const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     SolarMutexGuard aSolarMutexGuard;
 

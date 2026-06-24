@@ -125,7 +125,7 @@ Sequence< Type > SAL_CALL ActionTriggerSeparatorPropertySet::getTypes()
 
 Sequence< sal_Int8 > SAL_CALL ActionTriggerSeparatorPropertySet::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 bool SAL_CALL ActionTriggerSeparatorPropertySet::convertFastPropertyValue(

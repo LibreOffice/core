@@ -144,10 +144,10 @@ SwVbaHeadersFooters::getServiceImplName()
     return u"SwVbaHeadersFooters"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaHeadersFooters::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.HeadersFooters"_ustr
     };

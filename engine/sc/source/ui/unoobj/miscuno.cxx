@@ -232,7 +232,7 @@ bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
     SAL_CALL ScIndexEnumeration::getSupportedServiceNames()
 {
     return { sServiceName };

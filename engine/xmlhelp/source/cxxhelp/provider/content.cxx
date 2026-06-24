@@ -78,7 +78,7 @@ cpo::uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
 // virtual
-uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 {
     static cppu::OTypeCollection ourTypeCollection(
                    CPPU_TYPE_REF( lang::XTypeProvider ),
@@ -104,7 +104,7 @@ OUString SAL_CALL Content::getImplementationName()
 }
 
 // virtual
-uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.CHelpContent"_ustr };
 }
@@ -133,7 +133,7 @@ private:
 
     uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
-    uno::Sequence< beans::Property >             m_seq;
+    cpo::uno::Sequence< beans::Property >             m_seq;
     URLParameter                                 m_aURLParameter;
     Databases*                                   m_pDatabases;
 
@@ -142,7 +142,7 @@ public:
     ResultSetForRootFactory(
         uno::Reference< uno::XComponentContext > xContext,
         uno::Reference< ucb::XContentProvider > xProvider,
-        const uno::Sequence< beans::Property >& seq,
+        const cpo::uno::Sequence< beans::Property >& seq,
         const URLParameter& rURLParameter,
         Databases* pDatabases )
         : m_xContext(std::move( xContext )),
@@ -170,7 +170,7 @@ private:
 
     uno::Reference< uno::XComponentContext >     m_xContext;
     uno::Reference< ucb::XContentProvider >      m_xProvider;
-    uno::Sequence< beans::Property >             m_seq;
+    cpo::uno::Sequence< beans::Property >             m_seq;
     URLParameter                                 m_aURLParameter;
     Databases*                                   m_pDatabases;
 
@@ -179,7 +179,7 @@ public:
     ResultSetForQueryFactory(
         uno::Reference< uno::XComponentContext > xContext,
         uno::Reference< ucb::XContentProvider > xProvider,
-        const uno::Sequence< beans::Property >& seq,
+        const cpo::uno::Sequence< beans::Property >& seq,
         const URLParameter& rURLParameter,
         Databases* pDatabases )
         : m_xContext(std::move( xContext )),
@@ -212,7 +212,7 @@ cpo::uno::Any SAL_CALL Content::execute(
 
     if ( aCommand.Name == "getPropertyValues" )
     {
-        uno::Sequence< beans::Property > Properties;
+        cpo::uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
             aRet <<= lang::IllegalArgumentException();
@@ -223,15 +223,15 @@ cpo::uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "setPropertyValues" )
     {
-        uno::Sequence<beans::PropertyValue> propertyValues;
+        cpo::uno::Sequence<beans::PropertyValue> propertyValues;
 
         if( ! ( aCommand.Argument >>= propertyValues ) ) {
             aRet <<= lang::IllegalArgumentException();
             ucbhelper::cancelCommandExecution(aRet,Environment);
         }
 
-        uno::Sequence< cpo::uno::Any > ret(propertyValues.getLength());
-        const uno::Sequence< beans::Property > props(getProperties(Environment));
+        cpo::uno::Sequence< cpo::uno::Any > ret(propertyValues.getLength());
+        const cpo::uno::Sequence< beans::Property > props(getProperties(Environment));
         // No properties can be set
         std::transform(std::cbegin(propertyValues), std::cend(propertyValues), ret.getArray(),
             [&props](const beans::PropertyValue& rPropVal) {
@@ -322,7 +322,7 @@ cpo::uno::Any SAL_CALL Content::execute(
 }
 
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-    const uno::Sequence< beans::Property >& rProperties )
+    const cpo::uno::Sequence< beans::Property >& rProperties )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -410,7 +410,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name == "SearchScopes" )
             {
-                uno::Sequence< OUString > seq{ u"Heading"_ustr, u"FullText"_ustr };
+                cpo::uno::Sequence< OUString > seq{ u"Heading"_ustr, u"FullText"_ustr };
                 xRow->appendObject( rProp, cpo::uno::Any(seq) );
             }
             else if ( rProp.Name == "Order" )

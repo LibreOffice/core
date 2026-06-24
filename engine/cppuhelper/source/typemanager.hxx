@@ -60,7 +60,7 @@ private:
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual cpo::uno::Any SAL_CALL getByHierarchicalName(
@@ -84,7 +84,7 @@ private:
     virtual css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
     SAL_CALL createTypeDescriptionEnumeration(
         OUString const & moduleName,
-        css::uno::Sequence< css::uno::TypeClass > const & types,
+        cpo::uno::Sequence< css::uno::TypeClass > const & types,
         css::reflection::TypeDescriptionSearchDepth depth) override;
 
     void readRdbDirectory(std::u16string_view uri, bool optional);

@@ -1119,7 +1119,7 @@ ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::ODerivedDataType( const
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 ::cppu::IPropertyArrayHelper* ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::createArrayHelper( ) const
 {
-    css::uno::Sequence< css::beans::Property > aProps;
+    cpo::uno::Sequence< css::beans::Property > aProps;
     ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
 }

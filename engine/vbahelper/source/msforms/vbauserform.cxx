@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 //     the models in ControlModels can be accessed by name
 // also the XDialog is a XControl ( to access the model above
 
-ScVbaUserForm::ScVbaUserForm( uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
+ScVbaUserForm::ScVbaUserForm( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
     :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), nullptr ),
        mbDispose( true )
 {
@@ -182,7 +182,7 @@ ScVbaUserForm::getServiceImplName()
     return u"ScVbaUserForm"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaUserForm::getServiceNames()
 {
     return { u"ooo.vba.excel.UserForm"_ustr };
@@ -195,7 +195,7 @@ ScVbaUserForm::getIntrospection(  )
 }
 
 cpo::uno::Any SAL_CALL
-ScVbaUserForm::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< cpo::uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
+ScVbaUserForm::invoke( const OUString& /*aFunctionName*/, const cpo::uno::Sequence< cpo::uno::Any >& /*aParams*/, cpo::uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, cpo::uno::Sequence< cpo::uno::Any >& /*aOutParam*/ )
 {
     throw uno::RuntimeException(); // unsupported operation
 }
@@ -226,7 +226,7 @@ ScVbaUserForm::nestedSearch( const OUString& aPropertyName, uno::Reference< awt:
     uno::Reference< awt::XControl > xControl = xContainer->getControl( aPropertyName );
     if ( !xControl.is() )
     {
-        const uno::Sequence< uno::Reference< awt::XControl > > aControls = xContainer->getControls();
+        const cpo::uno::Sequence< uno::Reference< awt::XControl > > aControls = xContainer->getControls();
 
         for ( const auto& rCtrl : aControls )
         {
@@ -306,7 +306,7 @@ ScVbaUserForm::hasProperty( const OUString& aName )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ScVbaUserForm_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaUserForm(args, context));
 }

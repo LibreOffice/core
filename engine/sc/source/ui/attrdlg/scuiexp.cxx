@@ -44,14 +44,14 @@ public:
     {
         return cppu::supportsService(this, serviceName);
     }
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.sheet.CreateDialogFactoryService"_ustr };
     }
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL
-    getSomething(const ::css::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
+    getSomething(const ::cpo::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
     {
         static ScAbstractDialogFactory_Impl aFactory;
         return reinterpret_cast<sal_Int64>(static_cast<ScAbstractDialogFactory*>(&aFactory));
@@ -63,7 +63,7 @@ public:
 extern "C" {
 SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_sheet_CreateDialogFactoryService_get_implementation(
-    css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new CreateDialogFactoryService);
 }

@@ -432,10 +432,10 @@ SwVbaRange::getServiceImplName()
     return u"SwVbaRange"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaRange::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Range"_ustr
     };

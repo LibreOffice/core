@@ -41,14 +41,14 @@ public:
     {
         return cppu::supportsService(this, serviceName);
     }
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.cui.GetCreateDialogFactoryService"_ustr };
     }
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL
-    getSomething(const ::css::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
+    getSomething(const ::cpo::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
     {
         // Noting that we have to return a pointer to **VclAbstractDialogFactory** otherwise
         // the dynamic_casting on the other end will fail on Windows (possibly because of the virtual base involved).
@@ -62,7 +62,7 @@ public:
 extern "C" {
 SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_cui_GetCreateDialogFactoryService(css::uno::XComponentContext*,
-                                               css::uno::Sequence<cpo::uno::Any> const&)
+                                               cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new GetCreateDialogFactoryService);
 }

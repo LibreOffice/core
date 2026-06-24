@@ -106,14 +106,14 @@ public:
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
     void remove( const OUString& aName ) noexcept;
 
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
     virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
     virtual bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
 private:
     PropertyMap maPropertyMap;
     /// Cache the value we return in getProperties because it is expensive to construct
-    css::uno::Sequence< css::beans::Property > maProperties;
+    cpo::uno::Sequence< css::beans::Property > maProperties;
 };
 
 }

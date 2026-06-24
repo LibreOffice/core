@@ -745,7 +745,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyThenTable)
 {
     // Given a document with a 2 page floating table, followed by an other table:
     // Intentionally load the document as hidden to avoid layout during load (see TestTdf150616):
-    uno::Sequence<beans::PropertyValue> aFilterOptions = {
+    cpo::uno::Sequence<beans::PropertyValue> aFilterOptions = {
         comphelper::makePropertyValue(u"Hidden"_ustr, true),
     };
     loadWithParams(createFileURL(u"floattable-then-table.docx"), aFilterOptions);

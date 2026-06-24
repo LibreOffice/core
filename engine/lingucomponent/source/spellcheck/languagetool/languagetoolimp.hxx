@@ -35,8 +35,8 @@ class LanguageToolGrammarChecker
     : public cppu::WeakImplHelper<css::linguistic2::XProofreader, css::lang::XInitialization,
                                   css::lang::XServiceInfo, css::lang::XServiceDisplayName>
 {
-    css::uno::Sequence<css::lang::Locale> m_aSuppLocales;
-    o3tl::lru_map<OString, css::uno::Sequence<css::linguistic2::SingleProofreadingError>>
+    cpo::uno::Sequence<css::lang::Locale> m_aSuppLocales;
+    o3tl::lru_map<OString, cpo::uno::Sequence<css::linguistic2::SingleProofreadingError>>
         mCachedResults;
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     OUString maLastErrorCheckerURL;
@@ -48,7 +48,7 @@ public:
     virtual ~LanguageToolGrammarChecker() override;
 
     // XSupportedLocales
-    virtual css::uno::Sequence<css::lang::Locale> SAL_CALL getLocales() override;
+    virtual cpo::uno::Sequence<css::lang::Locale> SAL_CALL getLocales() override;
     virtual bool SAL_CALL hasLocale(const css::lang::Locale& rLocale) override;
 
     // XProofReader
@@ -57,7 +57,7 @@ public:
     doProofreading(const OUString& aDocumentIdentifier, const OUString& aText,
                    const css::lang::Locale& aLocale, sal_Int32 nStartOfSentencePosition,
                    sal_Int32 nSuggestedBehindEndOfSentencePosition,
-                   const css::uno::Sequence<css::beans::PropertyValue>& aProperties) override;
+                   const cpo::uno::Sequence<css::beans::PropertyValue>& aProperties) override;
 
     virtual void SAL_CALL ignoreRule(const OUString& aRuleIdentifier,
                                      const css::lang::Locale& aLocale) override;
@@ -67,12 +67,12 @@ public:
     virtual OUString SAL_CALL getServiceDisplayName(const css::lang::Locale& rLocale) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& rServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -20,7 +20,7 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace dbaxml
 {
@@ -28,7 +28,7 @@ namespace dbaxml
     class OXMLDataSourceSetting : public SvXMLImportContext
     {
         css::beans::PropertyValue          m_aSetting;
-        css::uno::Sequence< cpo::uno::Any> m_aInfoSequence;
+        cpo::uno::Sequence< cpo::uno::Any> m_aInfoSequence;
         OXMLDataSourceSetting*             m_pContainer;
         css::uno::Type                     m_aPropType;    // the type of the property the instance imports currently
         bool                               m_bIsList;

@@ -72,7 +72,7 @@ namespace connectivity::odbc
         void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, SQLULEN _nColumnSize, sal_Int32 _nScale, const void* _pData, SQLULEN _nDataLen, SQLLEN _nDataAllocLen);
         // Wrappers for special cases
         void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, sal_Int16 _nScale, const OUString &_sData);
-        void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, const css::uno::Sequence< sal_Int8 > &Data);
+        void setParameter(sal_Int32 parameterIndex, sal_Int32 _nType, const cpo::uno::Sequence< sal_Int8 > &Data);
 
         bool isPrepared() const { return m_bPrepared;}
         void prepareStatement();
@@ -98,7 +98,7 @@ namespace connectivity::odbc
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
         //XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
         // XPreparedStatement
         virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(  ) override;
@@ -116,7 +116,7 @@ namespace connectivity::odbc
         virtual void SAL_CALL setFloat( sal_Int32 parameterIndex, float x ) override;
         virtual void SAL_CALL setDouble( sal_Int32 parameterIndex, double x ) override;
         virtual void SAL_CALL setString( sal_Int32 parameterIndex, const OUString& x ) override;
-        virtual void SAL_CALL setBytes( sal_Int32 parameterIndex, const css::uno::Sequence< sal_Int8 >& x ) override;
+        virtual void SAL_CALL setBytes( sal_Int32 parameterIndex, const cpo::uno::Sequence< sal_Int8 >& x ) override;
         virtual void SAL_CALL setDate( sal_Int32 parameterIndex, const css::util::Date& x ) override;
         virtual void SAL_CALL setTime( sal_Int32 parameterIndex, const css::util::Time& x ) override;
         virtual void SAL_CALL setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) override;
@@ -132,7 +132,7 @@ namespace connectivity::odbc
         // XPreparedBatchExecution
         virtual void SAL_CALL addBatch(  ) override;
         virtual void SAL_CALL clearBatch(  ) override;
-        virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
+        virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
         // XCloseable
         virtual void SAL_CALL close(  ) override;
         // XResultSetMetaDataSupplier

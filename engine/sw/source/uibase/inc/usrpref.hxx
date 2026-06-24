@@ -33,7 +33,7 @@ private:
     SwMasterUsrPref&        m_rParent;
     bool                    m_bWeb;
 
-    css::uno::Sequence<OUString> GetPropertyNames() const;
+    cpo::uno::Sequence<OUString> GetPropertyNames() const;
 
     virtual void    ImplCommit() override;
 
@@ -42,7 +42,7 @@ public:
     virtual ~SwContentViewConfig() override;
 
     // utl::ConfigItem
-    virtual void    Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
+    virtual void    Notify( const cpo::uno::Sequence< OUString > &rPropertyNames ) override;
 
     void                    Load();
     using ConfigItem::SetModified;
@@ -54,7 +54,7 @@ private:
     SwMasterUsrPref&    m_rParent;
     bool                m_bWeb;
 
-    css::uno::Sequence<OUString> GetPropertyNames() const;
+    cpo::uno::Sequence<OUString> GetPropertyNames() const;
 
     virtual void        ImplCommit() override;
 
@@ -62,7 +62,7 @@ public:
     SwLayoutViewConfig(bool bWeb, SwMasterUsrPref& rParent);
     virtual ~SwLayoutViewConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     using ConfigItem::SetModified;
 };
@@ -72,7 +72,7 @@ class SwGridConfig final : public utl::ConfigItem
 private:
     SwMasterUsrPref&    m_rParent;
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
@@ -80,7 +80,7 @@ public:
     SwGridConfig(bool bWeb, SwMasterUsrPref& rParent);
     virtual ~SwGridConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     using ConfigItem::SetModified;
 };
@@ -90,7 +90,7 @@ class SwCursorConfig final : public utl::ConfigItem
 private:
     SwMasterUsrPref&    m_rParent;
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
@@ -98,7 +98,7 @@ public:
     SwCursorConfig(SwMasterUsrPref& rParent);
     virtual ~SwCursorConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     using ConfigItem::SetModified;
 };
@@ -108,7 +108,7 @@ class SwFmtAidsAutoComplConfig final : public utl::ConfigItem
 private:
     SwMasterUsrPref& m_rParent;
 
-    static css::uno::Sequence<OUString> GetPropertyNames();
+    static cpo::uno::Sequence<OUString> GetPropertyNames();
 
     virtual void ImplCommit() override;
 
@@ -116,7 +116,7 @@ public:
     SwFmtAidsAutoComplConfig(SwMasterUsrPref& rParent);
     virtual ~SwFmtAidsAutoComplConfig() override;
 
-    virtual void Notify(const css::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void Notify(const cpo::uno::Sequence<OUString>& aPropertyNames) override;
     void Load();
     using ConfigItem::SetModified;
 };
@@ -125,7 +125,7 @@ class SwWebColorConfig final : public utl::ConfigItem
 {
 private:
     SwMasterUsrPref&        m_rParent;
-    css::uno::Sequence<OUString> m_aPropNames;
+    cpo::uno::Sequence<OUString> m_aPropNames;
 
     virtual void ImplCommit() override;
 
@@ -133,7 +133,7 @@ public:
     SwWebColorConfig(SwMasterUsrPref& rParent);
     virtual ~SwWebColorConfig() override;
 
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     void                    Load();
     using ConfigItem::SetModified;
 };

@@ -49,16 +49,16 @@ private:
     virtual ::sal_Int32 SAL_CALL getOpCodeExternal() override;
     virtual ::sal_Int32 SAL_CALL getOpCodeUnknown() override;
                             // Methods
-    virtual css::uno::Sequence< css::sheet::FormulaToken > SAL_CALL getMappings(
-                                    const css::uno::Sequence< OUString >& rNames,
+    virtual cpo::uno::Sequence< css::sheet::FormulaToken > SAL_CALL getMappings(
+                                    const cpo::uno::Sequence< OUString >& rNames,
                                     sal_Int32 nLanguage ) override;
-    virtual css::uno::Sequence< css::sheet::FormulaOpCodeMapEntry > SAL_CALL getAvailableMappings(
+    virtual cpo::uno::Sequence< css::sheet::FormulaOpCodeMapEntry > SAL_CALL getAvailableMappings(
                                     sal_Int32 nLanguage, sal_Int32 nGroups ) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 

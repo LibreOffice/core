@@ -18,7 +18,7 @@
  */
 
 #include <svx/viewlayoutitem.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/propertyvalue.hxx>
@@ -79,7 +79,7 @@ bool SvxViewLayoutItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case 0 :
         {
-            css::uno::Sequence< css::beans::PropertyValue > aSeq{
+            cpo::uno::Sequence< css::beans::PropertyValue > aSeq{
                 comphelper::makePropertyValue(VIEWLAYOUT_PARAM_COLUMNS, sal_Int32( GetValue() )),
                 comphelper::makePropertyValue(VIEWLAYOUT_PARAM_BOOKMODE, mbBookMode)
             };
@@ -105,7 +105,7 @@ bool SvxViewLayoutItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId
     {
         case 0 :
         {
-            css::uno::Sequence< css::beans::PropertyValue > aSeq;
+            cpo::uno::Sequence< css::beans::PropertyValue > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == VIEWLAYOUT_PARAMS ))
             {
                 sal_Int32 nColumns( 0 );

@@ -274,7 +274,7 @@ static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
     return nRet;
 }
 
-void SwRevisionConfig::Notify(const css::uno::Sequence<OUString>&)
+void SwRevisionConfig::Notify(const cpo::uno::Sequence<OUString>&)
 {
     Load();
 }
@@ -602,7 +602,7 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
     }
 }
 
-void SwInsertConfig::Notify(const css::uno::Sequence<OUString>&)
+void SwInsertConfig::Notify(const cpo::uno::Sequence<OUString>&)
 {
     Load();
 }
@@ -1105,7 +1105,7 @@ SwTableConfig::~SwTableConfig()
 {
 }
 
-void SwTableConfig::Notify(const css::uno::Sequence<OUString>&)
+void SwTableConfig::Notify(const cpo::uno::Sequence<OUString>&)
 {
     Load();
 }
@@ -1201,7 +1201,7 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
     return aNames;
 }
 
-void SwMiscConfig::Notify(const css::uno::Sequence<OUString>&)
+void SwMiscConfig::Notify(const cpo::uno::Sequence<OUString>&)
 {
     EnableNotification(GetPropertyNames());
 }
@@ -1340,7 +1340,7 @@ void SwCompareConfig::Load()
     }
 }
 
-void SwCompareConfig::Notify(const css::uno::Sequence<OUString>&)
+void SwCompareConfig::Notify(const cpo::uno::Sequence<OUString>&)
 {
     Load();
 }

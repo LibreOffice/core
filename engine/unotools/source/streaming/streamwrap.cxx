@@ -57,7 +57,7 @@ OInputStreamWrapper::~OInputStreamWrapper()
         delete m_pSvStream;
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
     checkConnected();
 
@@ -72,7 +72,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     sal_uInt32 nRead = m_pSvStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
-    // If read characters < MaxLength, adjust css::uno::Sequence
+    // If read characters < MaxLength, adjust cpo::uno::Sequence
     if (nRead < o3tl::make_unsigned(aData.getLength()))
         aData.realloc( nRead );
 
@@ -94,7 +94,7 @@ sal_Int32 OInputStreamWrapper::readSomeBytes(sal_Int8* pData, sal_Int32 nBytesTo
     return nRead;
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
+sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     checkError();
 
@@ -211,7 +211,7 @@ OOutputStreamWrapper::OOutputStreamWrapper(SvStream& _rStream):
 
 OOutputStreamWrapper::~OOutputStreamWrapper() {}
 
-void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData)
+void SAL_CALL OOutputStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
 {
     sal_uInt32 nWritten = rStream.WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = rStream.GetError();
@@ -306,7 +306,7 @@ css::uno::Reference< css::io::XOutputStream > SAL_CALL OStreamWrapper::getOutput
     return this;
 }
 
-void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData)
+void SAL_CALL OStreamWrapper::writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData)
 {
     sal_uInt32 nWritten = m_pSvStream->WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = m_pSvStream->GetError();

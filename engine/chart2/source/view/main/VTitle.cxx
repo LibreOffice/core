@@ -115,7 +115,7 @@ void VTitle::createShapes(
     if(!m_xTitle.is())
         return;
 
-    uno::Sequence< uno::Reference< XFormattedString > > aStringList = m_xTitle->getText();
+    cpo::uno::Sequence< uno::Reference< XFormattedString > > aStringList = m_xTitle->getText();
     if(!aStringList.hasElements())
         return;
 

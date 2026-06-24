@@ -40,7 +40,7 @@ public:
     // ScVbaComments_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 private:
     css::uno::Reference< css::frame::XModel > mxModel;

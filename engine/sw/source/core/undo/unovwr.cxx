@@ -382,7 +382,7 @@ void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM const & rPam)
 
 void SwUndoTransliterate::AddChanges( SwTextNode& rTNd,
                     sal_Int32 nStart, sal_Int32 nLen,
-                    uno::Sequence <sal_Int32> const & rOffsets )
+                    cpo::uno::Sequence <sal_Int32> const & rOffsets )
 {
     tools::Long nOffsLen = rOffsets.getLength();
     UndoTransliterate_Data* pNew = new UndoTransliterate_Data(

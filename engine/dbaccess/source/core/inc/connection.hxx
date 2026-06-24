@@ -84,8 +84,8 @@ class OConnection final     :public OConnection_Base
     connectivity::OWeakRefArray           m_aComposers;
 
     // the filter as set on the parent data link at construction of the connection
-    css::uno::Sequence< OUString >                                    m_aTableFilter;
-    css::uno::Sequence< OUString >                                    m_aTableTypeFilter;
+    cpo::uno::Sequence< OUString >                                    m_aTableFilter;
+    cpo::uno::Sequence< OUString >                                    m_aTableTypeFilter;
     css::uno::Reference< css::uno::XComponentContext >                m_aContext;
     css::uno::Reference< css::sdbc::XConnection >                     m_xMasterConnection;
     css::uno::Reference< css::sdb::tools::XConnectionTools >          m_xConnectionTools;
@@ -111,7 +111,7 @@ public:
                 ,const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 // css::lang::XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
 // css::uno::XInterface
     virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
@@ -144,7 +144,7 @@ public:
 // css::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // XConnection
     virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
@@ -171,8 +171,8 @@ public:
 
     // XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XUsersSupplier
     virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getUsers(  ) override;

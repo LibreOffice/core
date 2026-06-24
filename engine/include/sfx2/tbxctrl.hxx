@@ -112,10 +112,10 @@ public:
     unsigned short             GetSlotId() const;
 
     void                       Dispatch( const OUString& aCommand,
-                                         css::uno::Sequence< css::beans::PropertyValue > const & aArgs );
+                                         cpo::uno::Sequence< css::beans::PropertyValue > const & aArgs );
     static void                Dispatch( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                                          const OUString& rCommand,
-                                         css::uno::Sequence< css::beans::PropertyValue > const & aArgs );
+                                         cpo::uno::Sequence< css::beans::PropertyValue > const & aArgs );
 
     static SfxItemState        GetItemState( const SfxPoolItem* pState );
     static rtl::Reference<SfxToolBoxControl> CreateControl( sal_uInt16 nSlotId, ToolBoxItemId nTbxId, ToolBox *pBox, SfxModule const *pMod );

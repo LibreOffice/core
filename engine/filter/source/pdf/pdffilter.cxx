@@ -42,6 +42,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
     mxContext( rxContext )
@@ -267,7 +268,7 @@ void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 }
 
 
-void SAL_CALL PDFFilter::initialize( const css::uno::Sequence< cpo::uno::Any >& )
+void SAL_CALL PDFFilter::initialize( const cpo::uno::Sequence< cpo::uno::Any >& )
 {
 }
 
@@ -284,7 +285,7 @@ bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.document.PDFFilter"_ustr };
 }
@@ -292,7 +293,7 @@ css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 filter_PDFFilter_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new PDFFilter(context));
 }

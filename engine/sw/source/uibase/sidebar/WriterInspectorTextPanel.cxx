@@ -510,7 +510,7 @@ static void InsertValues(const css::uno::Reference<css::uno::XInterface>& rSourc
 {
     uno::Reference<beans::XPropertySet> xPropertiesSet(rSource, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertyState> xPropertiesState(rSource, uno::UNO_QUERY_THROW);
-    const uno::Sequence<beans::Property> aProperties
+    const cpo::uno::Sequence<beans::Property> aProperties
         = xPropertiesSet->getPropertySetInfo()->getProperties();
 
     for (const beans::Property& rProperty : aProperties)

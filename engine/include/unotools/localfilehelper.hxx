@@ -20,7 +20,7 @@
 #define INCLUDED_UNOTOOLS_LOCALFILEHELPER_HXX
 
 #include <config_options.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <unotools/unotoolsdllapi.h>
 
 #include <rtl/ustring.hxx>
@@ -30,7 +30,7 @@ namespace utl
     class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) LocalFileHelper
     {
     public:
-        static          css::uno::Sequence< OUString >
+        static          cpo::uno::Sequence< OUString >
                                 GetFolderContents( const OUString& rFolder, bool bFolder );
     };
 

@@ -476,7 +476,7 @@ private:
         // closes the task-local beamer displaying a grid view for a form
 
     // ConfigItem related stuff
-    SAL_DLLPRIVATE virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
+    SAL_DLLPRIVATE virtual void Notify( const cpo::uno::Sequence< OUString >& _rPropertyNames) override;
     SAL_DLLPRIVATE void implAdjustConfigCache_Lock();
 
     SAL_DLLPRIVATE css::uno::Reference< css::awt::XControlContainer >

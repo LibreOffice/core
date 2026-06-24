@@ -57,7 +57,7 @@ TestThread::TestThread(const uno::Reference<frame::XComponentLoader>& xComponent
 void TestThread::execute()
 {
     sal_Int32 nSearchFlags = frame::FrameSearchFlag::AUTO;
-    uno::Sequence<beans::PropertyValue> aArguments = {
+    cpo::uno::Sequence<beans::PropertyValue> aArguments = {
         comphelper::makePropertyValue(u"OnMainThread"_ustr, true),
     };
     // Note how this is invoking loadComponentFromURL() on a frame, not on the desktop, as usual.

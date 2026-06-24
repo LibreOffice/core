@@ -40,6 +40,7 @@ namespace com::sun::star::ucb { class XCommandEnvironment; }
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace ::cpo::uno;
 
 void ScGlobal::InitAddIns()
 {
@@ -125,7 +126,7 @@ OUString ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
         {
             xOrdinalSuffix = i18n::OrdinalSuffix::create( ::comphelper::getProcessComponentContext() );
         }
-        uno::Sequence< OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
+        cpo::uno::Sequence< OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
                 ScGlobal::getLocaleData().getLanguageTag().getLocale());
         if ( aSuffixes.hasElements() )
             return aSuffixes[0];

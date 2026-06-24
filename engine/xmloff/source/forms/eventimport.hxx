@@ -49,7 +49,7 @@ namespace xmloff
     {
         typedef std::map<
             css::uno::Reference< css::beans::XPropertySet >,
-            css::uno::Sequence< css::script::ScriptEventDescriptor >>
+            cpo::uno::Sequence< css::script::ScriptEventDescriptor >>
             MapPropertySet2ScriptSequence;
         // usually an event attacher manager will need to collect all script events registered, 'cause
         // the _real_ XEventAttacherManager handles it's events by index, but out indices are not fixed
@@ -61,7 +61,7 @@ namespace xmloff
         // IEventAttacherManager
         virtual void registerEvents(
             const css::uno::Reference< css::beans::XPropertySet >& _rxElement,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             ) override;
 
     protected:

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_SOURCE_FSSTOR_FSSTORAGE_HXX
 #define INCLUDED_SVL_SOURCE_FSSTOR_FSSTORAGE_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -74,9 +74,9 @@ public:
 
     //  XTypeProvider
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     //  XStorage
 
@@ -124,7 +124,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 

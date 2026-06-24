@@ -15,7 +15,7 @@
 #include <o3tl/hash_combine.hxx>
 #include <dpitemdata.hxx>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <limits>
 #include <utility>
@@ -192,7 +192,7 @@ void ScDPResultTree::clear()
 }
 
 const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
-    const uno::Sequence<sheet::DataPilotFieldFilter>& rFilters) const
+    const cpo::uno::Sequence<sheet::DataPilotFieldFilter>& rFilters) const
 {
     const MemberNode* pMember = mpRoot.get();
     for (const sheet::DataPilotFieldFilter& rFilter : rFilters)

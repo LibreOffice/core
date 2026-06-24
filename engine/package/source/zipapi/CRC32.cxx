@@ -24,6 +24,7 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
+using namespace ::cpo::uno;
 
 /** A class to compute the CRC32 value of a data stream
  */

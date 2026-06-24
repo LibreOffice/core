@@ -45,7 +45,7 @@ ScVbaListBox::setListIndex( const cpo::uno::Any& _value )
 cpo::uno::Any SAL_CALL
 ScVbaListBox::getListIndex()
 {
-    uno::Sequence< sal_Int16 > sSelection;
+    cpo::uno::Sequence< sal_Int16 > sSelection;
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= sSelection;
     if ( !sSelection.hasElements() )
         return cpo::uno::Any( sal_Int32( -1 ) );
@@ -55,8 +55,8 @@ ScVbaListBox::getListIndex()
 cpo::uno::Any SAL_CALL
 ScVbaListBox::getValue()
 {
-    uno::Sequence< sal_Int16 > sSelection;
-    uno::Sequence< OUString > sItems;
+    cpo::uno::Sequence< sal_Int16 > sSelection;
+    cpo::uno::Sequence< OUString > sItems;
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= sSelection;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sItems;
     if( getMultiSelect() )
@@ -75,14 +75,14 @@ ScVbaListBox::setValue( const cpo::uno::Any& _value )
         throw uno::RuntimeException( u"Attribute use invalid."_ustr );
     }
     OUString sValue = getAnyAsString( _value );
-    uno::Sequence< OUString > sList;
+    cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     sal_Int16 nValue = static_cast<sal_Int16>(comphelper::findValue(sList, sValue));
     if( nValue == -1 )
         throw uno::RuntimeException( u"Attribute use invalid."_ustr );
 
-    uno::Sequence< sal_Int16 > nSelectedIndices { nValue };
-    uno::Sequence< sal_Int16 > nOldSelectedIndices;
+    cpo::uno::Sequence< sal_Int16 > nSelectedIndices { nValue };
+    cpo::uno::Sequence< sal_Int16 > nOldSelectedIndices;
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= nOldSelectedIndices;
     m_xProps->setPropertyValue( u"SelectedItems"_ustr, cpo::uno::Any( nSelectedIndices ) );
     if ( nSelectedIndices != nOldSelectedIndices )
@@ -136,7 +136,7 @@ ScVbaListBox::setMultiSelect( sal_Int32 _multiselect )
 cpo::uno::Any SAL_CALL
 ScVbaListBox::Selected( sal_Int32 index )
 {
-    uno::Sequence< OUString > sList;
+    cpo::uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( u"StringItemList"_ustr ) >>= sList;
     sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
     // no choice but to do a horror cast as internally
@@ -177,7 +177,7 @@ ScVbaListBox::setValueEvent( const cpo::uno::Any& value )
     bool bValue = false;
     if( !(value >>= bValue) )
         throw uno::RuntimeException( u"Invalid type. need boolean."_ustr );
-    uno::Sequence< sal_Int16 > nList;
+    cpo::uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= nList;
     sal_Int16 nLength = static_cast<sal_Int16>( nList.getLength() );
     sal_Int16 nIndex = m_nIndex;
@@ -224,7 +224,7 @@ ScVbaListBox::setValueEvent( const cpo::uno::Any& value )
 cpo::uno::Any
 ScVbaListBox::getValueEvent()
 {
-    uno::Sequence< sal_Int16 > nList;
+    cpo::uno::Sequence< sal_Int16 > nList;
     m_xProps->getPropertyValue( u"SelectedItems"_ustr ) >>= nList;
     sal_Int32 nIndex = m_nIndex;
     bool bRet = std::find(std::cbegin(nList), std::cend(nList), nIndex) != std::cend(nList);
@@ -262,10 +262,10 @@ ScVbaListBox::getServiceImplName()
     return u"ScVbaListBox"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaListBox::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.ScVbaListBox"_ustr
     };

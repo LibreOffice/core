@@ -33,7 +33,7 @@ class ScDocShell;
 class ScDPObject;
 class ScDBCollection;
 
-namespace com::sun::star::uno { template <typename > class Sequence; }
+namespace cpo::uno { template <typename > class Sequence; }
 namespace com::sun::star::beans { struct PropertyValue; }
 
 namespace svx {
@@ -61,7 +61,7 @@ public:
                    const svx::ODataAccessDescriptor* pDescriptor);      // used for selection an existing ResultSet
 
     void DoImportUno( const ScAddress& rPos,
-                      const css::uno::Sequence<css::beans::PropertyValue>& aArgs );
+                      const cpo::uno::Sequence<css::beans::PropertyValue>& aArgs );
 
     static void     ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame* pFrame );
 

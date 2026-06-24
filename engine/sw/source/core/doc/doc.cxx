@@ -2326,7 +2326,7 @@ void SwDoc::SetVbaEventProcessor()
         try
         {
             uno::Reference< frame::XModel > xModel( mpDocShell->GetModel(), uno::UNO_SET_THROW );
-            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xModel) };
+            cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(xModel) };
             mxVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "com.sun.star.script.vba.VBATextEventProcessor" , aArgs ), uno::UNO_QUERY_THROW );
         }
         catch( uno::Exception& )
@@ -2380,7 +2380,7 @@ bool SwDoc::HasParagraphDirectFormatting(const SwPosition& rPos)
                                                          uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertyState> xPropertyState(xThisParagraphRange,
                                                              uno::UNO_QUERY_THROW);
-        const uno::Sequence<beans::Property> aProperties
+        const cpo::uno::Sequence<beans::Property> aProperties
                 = xPropertySet->getPropertySetInfo()->getProperties();
         for (const beans::Property& rProperty : aProperties)
         {

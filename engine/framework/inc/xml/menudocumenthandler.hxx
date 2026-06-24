@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
@@ -64,7 +64,7 @@ class ReadMenuDocumentHandlerBase : public ::cppu::WeakImplHelper< css::xml::sax
 
         css::uno::Reference< css::xml::sax::XLocator > m_xLocator;
         css::uno::Reference< css::xml::sax::XDocumentHandler> m_xReader;
-        void initPropertyCommon( css::uno::Sequence< css::beans::PropertyValue > &rProps,
+        void initPropertyCommon( cpo::uno::Sequence< css::beans::PropertyValue > &rProps,
                                  const OUString &rCommandURL, const OUString &rHelpId,
                                  const OUString &rLabel, sal_Int16 nItemStyleBits );
     private:

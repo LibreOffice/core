@@ -49,7 +49,7 @@ public:
         return findItem( rName ) != maItems.end();
     }
 
-    css::uno::Sequence<OUString> getNames() const
+    cpo::uno::Sequence<OUString> getNames() const
     {
         // iterate over members, and collect all those that have names
         std::vector<OUString> aNames;
@@ -96,7 +96,7 @@ public:
         return cpo::uno::Any( getItem( aName ) );
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override
     {
         return getNames();
     }

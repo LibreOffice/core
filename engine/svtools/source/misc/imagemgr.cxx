@@ -237,7 +237,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
 
         OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
         css::uno::Reference < css::container::XNameAccess > xAccess( xTypeDetector, css::uno::UNO_QUERY );
-        css::uno::Sequence < css::beans::PropertyValue > aTypeProps;
+        cpo::uno::Sequence < css::beans::PropertyValue > aTypeProps;
         if ( !aInternalType.isEmpty() && xAccess->hasByName( aInternalType ) )
         {
             xAccess->getByName( aInternalType ) >>= aTypeProps;
@@ -245,7 +245,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
             {
                 if (rProp.Name == "Extensions")
                 {
-                    css::uno::Sequence < OUString > aExtensions;
+                    cpo::uno::Sequence < OUString > aExtensions;
                     if ( ( rProp.Value >>= aExtensions ) && aExtensions.hasElements() )
                     {
                         const OUString* pExtensions = aExtensions.getConstArray();

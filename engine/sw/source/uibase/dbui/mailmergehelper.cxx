@@ -673,7 +673,7 @@ cpo::uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavo
     return aRet;
 }
 
-uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFlavors(  )
+cpo::uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFlavors(  )
 {
     datatransfer::DataFlavor aRet;
     aRet.MimeType = m_aMimeType;
@@ -684,7 +684,7 @@ uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFla
     else
     {
         aRet.HumanPresentableName = m_aName;
-        aRet.DataType = cppu::UnoType<uno::Sequence<sal_Int8>>::get();
+        aRet.DataType = cppu::UnoType<cpo::uno::Sequence<sal_Int8>>::get();
     }
     return { std::move(aRet) };
 }
@@ -803,17 +803,17 @@ void  SwMailMessage::addBccRecipient( const OUString& rRecipientAddress )
     m_aBccRecipients.getArray()[m_aBccRecipients.getLength() - 1] = rRecipientAddress;
 }
 
-uno::Sequence< OUString > SwMailMessage::getRecipients(  )
+cpo::uno::Sequence< OUString > SwMailMessage::getRecipients(  )
 {
     return m_aRecipients;
 }
 
-uno::Sequence< OUString > SwMailMessage::getCcRecipients(  )
+cpo::uno::Sequence< OUString > SwMailMessage::getCcRecipients(  )
 {
     return m_aCcRecipients;
 }
 
-uno::Sequence< OUString > SwMailMessage::getBccRecipients(  )
+cpo::uno::Sequence< OUString > SwMailMessage::getBccRecipients(  )
 {
     return m_aBccRecipients;
 }
@@ -824,7 +824,7 @@ void SwMailMessage::addAttachment( const mail::MailAttachment& rMailAttachment )
     m_aAttachments.getArray()[m_aAttachments.getLength() - 1] = rMailAttachment;
 }
 
-uno::Sequence< mail::MailAttachment > SwMailMessage::getAttachments(  )
+cpo::uno::Sequence< mail::MailAttachment > SwMailMessage::getAttachments(  )
 {
     return m_aAttachments;
 }

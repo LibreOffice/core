@@ -109,7 +109,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent0)
     createSwDoc("tdf126795_TabsRelativeToIndent0.odt");
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
+    cpo::uno::Sequence< style::TabStop > stops = getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
     CPPUNIT_ASSERT_EQUAL( css::style::TabAlign_LEFT, stops[ 0 ].Alignment );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(499), stops[ 0 ].Position );
@@ -120,7 +120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent1)
     createSwDoc("tdf126795_TabsRelativeToIndent1.odt");
     saveAndReload(TestFilter::DOCX);
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
+    cpo::uno::Sequence< style::TabStop > stops = getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph( 2 ), u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
     CPPUNIT_ASSERT_EQUAL( css::style::TabAlign_LEFT, stops[ 0 ].Alignment );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(499), stops[ 0 ].Position );
@@ -129,21 +129,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126795_TabsRelativeToIndent1)
 DECLARE_OOXMLEXPORT_TEST(testTdf46938_clearTabStop, "tdf46938_clearTabStop.docx")
 {
     // Number of tabstops should be zero, overriding the one in the style
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<style::TabStop> >(getParagraph(1), u"ParaTabStops"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph(1), u"ParaTabStops"_ustr).getLength());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf63561_clearTabs, "tdf63561_clearTabs.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), getProperty< uno::Sequence<style::TabStop> >(getParagraph(1), u"ParaTabStops"_ustr).getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), getProperty< uno::Sequence<style::TabStop> >(getParagraph(3), u"ParaTabStops"_ustr).getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty< uno::Sequence<style::TabStop> >(getParagraph(4), u"ParaTabStops"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph(1), u"ParaTabStops"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph(3), u"ParaTabStops"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph(4), u"ParaTabStops"_ustr).getLength());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf63561_clearTabs2, "tdf63561_clearTabs2.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< uno::Sequence<style::TabStop> >(getParagraph(1), u"ParaTabStops"_ustr).getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty< uno::Sequence<style::TabStop> >(getParagraph(3), u"ParaTabStops"_ustr).getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty< uno::Sequence<style::TabStop> >(getParagraph(4), u"ParaTabStops"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph(1), u"ParaTabStops"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph(3), u"ParaTabStops"_ustr).getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph(4), u"ParaTabStops"_ustr).getLength());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf124384, "tdf124384.docx")
@@ -159,7 +159,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121456_tabsOffset)
     saveAndReload(TestFilter::DOCX);
     for (int i=2; i<8; i++)
     {
-        uno::Sequence< style::TabStop > stops = getProperty< uno::Sequence<style::TabStop> >(getParagraph( i ), u"ParaTabStops"_ustr);
+        cpo::uno::Sequence< style::TabStop > stops = getProperty< cpo::uno::Sequence<style::TabStop> >(getParagraph( i ), u"ParaTabStops"_ustr);
         CPPUNIT_ASSERT_EQUAL( sal_Int32(1), stops.getLength());
         CPPUNIT_ASSERT_EQUAL( css::style::TabAlign_RIGHT, stops[ 0 ].Alignment );
         CPPUNIT_ASSERT_EQUAL( sal_Int32(17000), stops[ 0 ].Position );
@@ -243,7 +243,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82065_Ind_start_strict, "tdf82065_Ind_start_stri
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
     bool bFoundIndentAt = false;
     for (beans::PropertyValue const& rProp : aProps)

@@ -98,13 +98,13 @@ namespace vclcanvas
             new CanvasBitmap( aRes, *mpDevice, mpOutDevReference ) );
     }
 
-    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getData( rendering::IntegerBitmapLayout&      rLayout,
+    cpo::uno::Sequence< sal_Int8 > CanvasBitmapHelper::getData( rendering::IntegerBitmapLayout&      rLayout,
                                                            const geometry::IntegerRectangle2D&  rect )
     {
         SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getData()" );
 
         if( !mpBackBuffer )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return cpo::uno::Sequence< sal_Int8 >(); // we're disposed
 
         rLayout = getMemoryLayout();
 
@@ -115,17 +115,17 @@ namespace vclcanvas
         rLayout.ScanLineBytes = aBmpSize.Width()*4;
         rLayout.ScanLineStride = rLayout.ScanLineBytes;
 
-        uno::Sequence< sal_Int8 > aRes = vcl::bitmap::CanvasExtractBitmapData(mpBackBuffer->getBitmapReference(), rect);
+        cpo::uno::Sequence< sal_Int8 > aRes = vcl::bitmap::CanvasExtractBitmapData(mpBackBuffer->getBitmapReference(), rect);
         return aRes;
     }
 
-    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
+    cpo::uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
                                                             const geometry::IntegerPoint2D& pos )
     {
         SAL_INFO( "canvas.vcl", "::vclcanvas::CanvasBitmapHelper::getPixel()" );
 
         if( !mpBackBuffer )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return cpo::uno::Sequence< sal_Int8 >(); // we're disposed
 
         rLayout = getMemoryLayout();
         rLayout.ScanLines = 1;
@@ -141,7 +141,7 @@ namespace vclcanvas
 
         ::Color aColor = mpBackBuffer->getBitmapReference().GetPixelColor(pos.X, pos.Y);
 
-        uno::Sequence< sal_Int8 > aRes( 4 );
+        cpo::uno::Sequence< sal_Int8 > aRes( 4 );
         sal_Int8* pRes = aRes.getArray();
         pRes[ 0 ] = aColor.GetRed();
         pRes[ 1 ] = aColor.GetGreen();

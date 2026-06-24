@@ -30,7 +30,7 @@ class SvxBaseAutoCorrCfg final : public utl::ConfigItem
 {
 private:
     SvxAutoCorrCfg& rParent;
-    static css::uno::Sequence<OUString>    GetPropertyNames();
+    static cpo::uno::Sequence<OUString>    GetPropertyNames();
 
     virtual void            ImplCommit() override;
 
@@ -39,7 +39,7 @@ public:
     virtual ~SvxBaseAutoCorrCfg() override;
 
     void                    Load(bool bInit);
-    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void            Notify( const cpo::uno::Sequence<OUString>& aPropertyNames) override;
     using ConfigItem::SetModified;
 };
 
@@ -47,7 +47,7 @@ class SvxSwAutoCorrCfg final : public utl::ConfigItem
 {
 private:
     SvxAutoCorrCfg& rParent;
-    static css::uno::Sequence<OUString>    GetPropertyNames();
+    static cpo::uno::Sequence<OUString>    GetPropertyNames();
 
     virtual void            ImplCommit() override;
 
@@ -56,7 +56,7 @@ public:
     virtual ~SvxSwAutoCorrCfg() override;
 
     void                    Load(bool bInit);
-    virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
+    virtual void            Notify( const cpo::uno::Sequence<OUString>& aPropertyNames) override;
     using ConfigItem::SetModified;
 };
 /*--------------------------------------------------------------------

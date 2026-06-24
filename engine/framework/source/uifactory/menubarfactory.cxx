@@ -164,7 +164,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_MenuBarFactory_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::MenuBarFactory(context));
 }

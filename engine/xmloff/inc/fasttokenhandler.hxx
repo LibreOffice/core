@@ -18,7 +18,7 @@ namespace xmloff::token {
 namespace TokenMap
 {
 /** Returns the UTF-8 name of the passed token identifier as byte sequence. */
-css::uno::Sequence<sal_Int8> const& getUtf8TokenName(sal_Int32 nToken);
+cpo::uno::Sequence<sal_Int8> const& getUtf8TokenName(sal_Int32 nToken);
 
 /** Returns the token identifier for a UTF-8 string */
 sal_Int32 getTokenFromUtf8(std::string_view token);
@@ -31,8 +31,8 @@ public:
     explicit FastTokenHandler() = default;
 
     // XFastTokenHandler
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< sal_Int8 >& Identifier ) override;
 
     static const OUString& getIdentifier(sal_Int32 nToken);
 

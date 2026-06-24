@@ -56,7 +56,7 @@ public:
 
     // XIdentifierReplace
     virtual cpo::uno::Any SAL_CALL getByIdentifier( sal_Int32 Identifier ) override;
-    virtual uno::Sequence< sal_Int32 > SAL_CALL getIdentifiers(  ) override;
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL getIdentifiers(  ) override;
 
     /* deprecated */
     // XIndexContainer
@@ -338,7 +338,7 @@ cpo::uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identif
     throw container::NoSuchElementException();
 }
 
-uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
+cpo::uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
 {
     auto pObject = mpObject.get();
     if( pObject )
@@ -348,7 +348,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
 
         sal_uInt16 i;
 
-        uno::Sequence< sal_Int32 > aIdSequence( nCount + NON_USER_DEFINED_GLUE_POINTS );
+        cpo::uno::Sequence< sal_Int32 > aIdSequence( nCount + NON_USER_DEFINED_GLUE_POINTS );
         sal_Int32 *pIdentifier = aIdSequence.getArray();
 
         for( i = 0; i < NON_USER_DEFINED_GLUE_POINTS; i++ )
@@ -361,7 +361,7 @@ uno::Sequence< sal_Int32 > SAL_CALL SvxUnoGluePointAccess::getIdentifiers()
     }
     else
     {
-        uno::Sequence< sal_Int32 > aEmpty;
+        cpo::uno::Sequence< sal_Int32 > aEmpty;
         return aEmpty;
     }
 }

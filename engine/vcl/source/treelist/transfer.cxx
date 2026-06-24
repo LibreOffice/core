@@ -300,7 +300,7 @@ bool SAL_CALL TransferableHelper::TerminateListener::supportsService(const OUStr
     return false;
 }
 
-css::uno::Sequence<OUString> TransferableHelper::TerminateListener::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> TransferableHelper::TerminateListener::getSupportedServiceNames()
 {
     return {};
 }
@@ -719,7 +719,7 @@ bool TransferableHelper::SetBitmap(const Bitmap& rBitmap, const DataFlavor& rFla
         if(rFlavor.MimeType.equalsIgnoreAsciiCase("image/png"))
         {
             // write a PNG
-            css::uno::Sequence<css::beans::PropertyValue> aFilterData;
+            cpo::uno::Sequence<css::beans::PropertyValue> aFilterData;
 
 #ifdef IOS
             // Use faster compression on slow devices
@@ -2352,7 +2352,7 @@ static size_t ReadDDELink_impl(std::string_view str, std::string_view& applicati
 bool TransferableDataHelper::ReadDDELink(OUString& application, OUString& topic, OUString& item,
                                          OUString& rest) const
 {
-    css::uno::Sequence<sal_Int8> sequence = GetSequence(SotClipboardFormatId::LINK, {});
+    cpo::uno::Sequence<sal_Int8> sequence = GetSequence(SotClipboardFormatId::LINK, {});
     if (!sequence.hasElements())
     {
         SAL_WARN("svtools", "DDE data not found");

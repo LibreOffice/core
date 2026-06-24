@@ -21,7 +21,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <ooo/vba/XDocumentsBase.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -69,7 +69,7 @@ protected:
     /// @throws css::uno::RuntimeException
     cpo::uno::Any createDocument();
     /// @throws css::uno::RuntimeException
-    cpo::uno::Any openDocument( const OUString& Filename, const cpo::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps );
+    cpo::uno::Any openDocument( const OUString& Filename, const cpo::uno::Any& ReadOnly, const cpo::uno::Sequence< css::beans::PropertyValue >& rProps );
 };
 
 #endif /* SC_ INCLUDED_VBAHELPER_VBADOCUMENTSBASE_HXX */

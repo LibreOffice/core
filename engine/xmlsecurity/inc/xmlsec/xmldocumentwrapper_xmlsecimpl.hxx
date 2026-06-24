@@ -75,7 +75,7 @@ private:
      */
     xmlNodePtr m_pStopAtNode;
     xmlNodePtr m_pCurrentReservedNode;
-    css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > m_aReservedNodes;
+    cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > m_aReservedNodes;
     sal_Int32 m_nReservedNodeIndex;
 
 private:
@@ -135,7 +135,7 @@ public:
 
     virtual void SAL_CALL clearUselessData(
         const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node,
-        const css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >& reservedDescendants,
+        const cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >& reservedDescendants,
         const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& stopAtNode ) override;
 
     virtual void SAL_CALL collapse( const css::uno::Reference<
@@ -179,7 +179,7 @@ public:
 
     virtual void SAL_CALL compressedStartElement(
         const OUString& aName,
-        const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes ) override;
+        const cpo::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes ) override;
 
     virtual void SAL_CALL compressedEndElement( const OUString& aName ) override;
 
@@ -200,7 +200,7 @@ public:
 
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 //        [out] rIndex indicates the found index, or the total number of fieldmarks
 static sw::mark::Fieldmark* lcl_getFieldmark(std::string_view rName, sal_Int32& rIndex,
                                              const rtl::Reference<SwXTextDocument>& xModel,
-                                             uno::Sequence<OUString>* pElementNames = nullptr)
+                                             cpo::uno::Sequence<OUString>* pElementNames = nullptr)
 
 {
     SwDoc* pDoc = xModel->GetDocShell()->GetDoc();
@@ -141,10 +141,10 @@ public:
     }
 
     // XNameAccess
-    uno::Sequence<OUString> SAL_CALL getElementNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override
     {
         sal_Int32 nCount = SAL_MAX_INT32;
-        uno::Sequence<OUString> aSeq;
+        cpo::uno::Sequence<OUString> aSeq;
         lcl_getFieldmark("", nCount, mxTextDocument, &aSeq);
         return aSeq;
     }
@@ -231,9 +231,9 @@ cpo::uno::Any SwVbaFormFields::createCollectionObject(const cpo::uno::Any& aSour
 
 OUString SwVbaFormFields::getServiceImplName() { return u"SwVbaFormFields"_ustr; }
 
-uno::Sequence<OUString> SwVbaFormFields::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaFormFields::getServiceNames()
 {
-    static uno::Sequence<OUString> const sNames{ u"ooo.vba.word.FormFields"_ustr };
+    static cpo::uno::Sequence<OUString> const sNames{ u"ooo.vba.word.FormFields"_ustr };
     return sNames;
 }
 

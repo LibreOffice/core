@@ -89,7 +89,7 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.task.JobExecutor"_ustr};
     }
@@ -224,7 +224,7 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent )
         rtl::Reference<Job> pJob = new Job(m_xContext, css::uno::Reference< css::frame::XFrame >());
         pJob->setJobData(aCfg);
 
-        pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
+        pJob->execute(cpo::uno::Sequence< css::beans::NamedValue >());
     }
 }
 
@@ -301,7 +301,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
         pJob = new Job(m_xContext, xModel);
         pJob->setJobData(aCfg);
 
-        pJob->execute(css::uno::Sequence< css::beans::NamedValue >());
+        pJob->execute(cpo::uno::Sequence< css::beans::NamedValue >());
     }
 }
 
@@ -374,7 +374,7 @@ void SAL_CALL JobExecutor::disposing( const css::lang::EventObject& aEvent )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_JobExecutor_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     rtl::Reference<JobExecutor> xJobExec = new JobExecutor(context);
     // 2nd phase initialization needed

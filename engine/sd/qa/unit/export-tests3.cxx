@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testTextRotation)
 
         CPPUNIT_ASSERT(xPropSet.is());
         auto aGeomPropSeq = xPropSet->getPropertyValue(u"CustomShapeGeometry"_ustr)
-                                .get<uno::Sequence<beans::PropertyValue>>();
+                                .get<cpo::uno::Sequence<beans::PropertyValue>>();
         comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
 
         auto it = aCustomShapeGeometry.find(u"TextRotateAngle"_ustr);
@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testBulletsAsImageImpress8)
 
     uno::Reference<container::XIndexAccess> xLevels(
         xPropSet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aProperties;
+    cpo::uno::Sequence<beans::PropertyValue> aProperties;
     xLevels->getByIndex(0) >>= aProperties; // 1st level
 
     uno::Reference<awt::XBitmap> xBitmap;
@@ -338,7 +338,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testBulletsAsImageImpressOfficeOpenXml)
 
     uno::Reference<container::XIndexAccess> xLevels(
         xPropSet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aProperties;
+    cpo::uno::Sequence<beans::PropertyValue> aProperties;
     xLevels->getByIndex(0) >>= aProperties; // 1st level
 
     uno::Reference<awt::XBitmap> xBitmap;
@@ -390,7 +390,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest3, testBulletsAsImageMsPowerpoint97)
 
     uno::Reference<container::XIndexAccess> xLevels(
         xPropSet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aProperties;
+    cpo::uno::Sequence<beans::PropertyValue> aProperties;
     xLevels->getByIndex(0) >>= aProperties; // 1st level
 
     uno::Reference<awt::XBitmap> xBitmap;

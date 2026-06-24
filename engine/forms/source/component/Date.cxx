@@ -54,9 +54,9 @@ Sequence<Type> ODateControl::_getTypes()
     return OBoundControl::_getTypes();
 }
 
-css::uno::Sequence<OUString> SAL_CALL ODateControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ODateControl::getSupportedServiceNames()
 {
-    const css::uno::Sequence<OUString> vals { FRM_SUN_CONTROL_DATEFIELD, STARDIV_ONE_FORM_CONTROL_DATEFIELD };
+    const cpo::uno::Sequence<OUString> vals { FRM_SUN_CONTROL_DATEFIELD, STARDIV_ONE_FORM_CONTROL_DATEFIELD };
     return comphelper::concatSequences(OBoundControl::getSupportedServiceNames(), vals);
 }
 
@@ -118,7 +118,7 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL ODateModel::createClone()
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames()
 {
     static constexpr OUString vals[] {
        BINDABLE_CONTROL_MODEL,
@@ -308,14 +308,14 @@ Sequence< Type > ODateModel::getSupportedBindingTypes()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_ODateModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ODateModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_ODateControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ODateControl(component));
 }

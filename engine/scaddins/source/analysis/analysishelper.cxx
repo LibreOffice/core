@@ -1465,11 +1465,11 @@ void SortedIndividualInt32List::InsertHolidayList(
     rAnyConv.init( xOptions );
     if( rHolAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
     {
-        uno::Sequence< uno::Sequence< cpo::uno::Any > > aAnySeq;
+        cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > aAnySeq;
         if( !(rHolAny >>= aAnySeq) )
             throw lang::IllegalArgumentException();
 
-        for (const uno::Sequence<cpo::uno::Any>& rSubSeq : aAnySeq)
+        for (const cpo::uno::Sequence<cpo::uno::Any>& rSubSeq : aAnySeq)
         {
             for( const cpo::uno::Any& rAny : rSubSeq )
                 InsertHolidayList( rAnyConv, rAny, nNullDate, false/*bInsertOnWeekend*/ );
@@ -1481,9 +1481,9 @@ void SortedIndividualInt32List::InsertHolidayList(
 
 
 void ScaDoubleList::Append(
-        const uno::Sequence< uno::Sequence< double > >& rValueSeq )
+        const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValueSeq )
 {
-    for( const uno::Sequence< double >& rSubSeq : rValueSeq )
+    for( const cpo::uno::Sequence< double >& rSubSeq : rValueSeq )
     {
         for( const double fValue : rSubSeq )
             Append( fValue );
@@ -1492,9 +1492,9 @@ void ScaDoubleList::Append(
 
 
 void ScaDoubleList::Append(
-        const uno::Sequence< uno::Sequence< sal_Int32 > >& rValueSeq )
+        const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rValueSeq )
 {
-    for( const uno::Sequence< sal_Int32 >& rSubSeq : rValueSeq )
+    for( const cpo::uno::Sequence< sal_Int32 >& rSubSeq : rValueSeq )
     {
         for( const sal_Int32 nValue : rSubSeq )
             Append( nValue );
@@ -1507,7 +1507,7 @@ void ScaDoubleList::Append(
         bool bIgnoreEmpty )
 {
     if( auto s = o3tl::tryAccess<
-            css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>>>(rAny) )
+            cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>>(rAny) )
         Append( rAnyConv, *s, bIgnoreEmpty );
     else
     {
@@ -1522,7 +1522,7 @@ void ScaDoubleList::Append(
 
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
-        const uno::Sequence< cpo::uno::Any >& rAnySeq,
+        const cpo::uno::Sequence< cpo::uno::Any >& rAnySeq,
         bool bIgnoreEmpty )
 {
     for( const cpo::uno::Any& rAny : rAnySeq )
@@ -1532,17 +1532,17 @@ void ScaDoubleList::Append(
 
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
-        const uno::Sequence< uno::Sequence< cpo::uno::Any > >& rAnySeq,
+        const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& rAnySeq,
         bool bIgnoreEmpty )
 {
-    for( const uno::Sequence< cpo::uno::Any >& rArray : rAnySeq )
+    for( const cpo::uno::Sequence< cpo::uno::Any >& rArray : rAnySeq )
         Append( rAnyConv, rArray, bIgnoreEmpty );
 }
 
 void ScaDoubleList::Append(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOpt,
-        const uno::Sequence< cpo::uno::Any >& rAnySeq )
+        const cpo::uno::Sequence< cpo::uno::Any >& rAnySeq )
 {
     rAnyConv.init( xOpt );
     Append( rAnyConv, rAnySeq, true/*bIgnoreEmpty*/ );
@@ -1814,9 +1814,9 @@ ComplexList::~ComplexList()
 }
 
 
-void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r )
+void ComplexList::Append( const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& r )
 {
-    for( const uno::Sequence< OUString >& rList : r )
+    for( const cpo::uno::Sequence< OUString >& rList : r )
     {
         for( const OUString& rStr : rList )
         {
@@ -1827,7 +1827,7 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r )
 }
 
 
-void ComplexList::Append( const uno::Sequence< cpo::uno::Any >& aMultPars )
+void ComplexList::Append( const cpo::uno::Sequence< cpo::uno::Any >& aMultPars )
 {
     for( const cpo::uno::Any& r : aMultPars )
     {
@@ -1847,11 +1847,11 @@ void ComplexList::Append( const uno::Sequence< cpo::uno::Any >& aMultPars )
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
-                uno::Sequence< uno::Sequence< cpo::uno::Any > >           aValArr;
+                cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >           aValArr;
                 if( !(r >>= aValArr) )
                     throw lang::IllegalArgumentException();
 
-                for (const uno::Sequence<cpo::uno::Any>& rArr : aValArr)
+                for (const cpo::uno::Sequence<cpo::uno::Any>& rArr : aValArr)
                     Append( rArr );
                 }
                 break;

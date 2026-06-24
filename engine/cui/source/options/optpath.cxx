@@ -574,7 +574,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
             xFilePicker->appendFilter(OUString(), u"*.xml"_ustr);
             if (xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
             {
-                uno::Sequence<OUString> aPathSeq(xFilePicker->getSelectedFiles());
+                cpo::uno::Sequence<OUString> aPathSeq(xFilePicker->getSelectedFiles());
                 ChangeCurrentEntry(aPathSeq[0]);
             }
         }

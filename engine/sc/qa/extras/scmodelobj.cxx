@@ -41,7 +41,7 @@ public:
     virtual void setUp() override;
 
     virtual uno::Reference<uno::XInterface> init() override;
-    virtual uno::Sequence<uno::Reference<table::XCell>> getXCells() override;
+    virtual cpo::uno::Sequence<uno::Reference<table::XCell>> getXCells() override;
 
     ScModelObj();
 
@@ -71,7 +71,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Sequence<uno::Reference<table::XCell>> m_xCells;
+    cpo::uno::Sequence<uno::Reference<table::XCell>> m_xCells;
 };
 
 ScModelObj::ScModelObj()
@@ -98,7 +98,7 @@ uno::Reference<uno::XInterface> ScModelObj::init()
     return xModel;
 }
 
-uno::Sequence<uno::Reference<table::XCell>> ScModelObj::getXCells() { return m_xCells; }
+cpo::uno::Sequence<uno::Reference<table::XCell>> ScModelObj::getXCells() { return m_xCells; }
 
 void ScModelObj::setUp()
 {

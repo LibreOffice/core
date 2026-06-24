@@ -79,7 +79,7 @@ bool SAL_CALL Desktop::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL Desktop::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL Desktop::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.Desktop"_ustr };
 }
@@ -174,7 +174,7 @@ cpo::uno::Any SAL_CALL Desktop::queryInterface( const css::uno::Type& _rType )
     return aRet;
 }
 
-css::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  )
+cpo::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  )
 {
     return comphelper::concatSequences(
         Desktop_BASE::getTypes(),
@@ -562,7 +562,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame()
 css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFromURL( const OUString&                                 sURL            ,
                                                                                      const OUString&                                 sTargetFrameName,
                                                                                            sal_Int32                                        nSearchFlags    ,
-                                                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments      )
+                                                                                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments      )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -640,7 +640,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
     }
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desktop::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lQueries )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desktop::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lQueries )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -1162,7 +1162,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     cpo::uno::Any aRequest = xRequest->getRequest();
 
     // extract continuations from request
-    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
     css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
     css::uno::Reference< css::task::XInteractionApprove >                            xApprove;
     css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilterSelect;
@@ -1603,7 +1603,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
 bool Desktop::impl_closeFrames(bool bAllowUI)
 {
     SolarMutexClearableGuard aReadLock;
-    css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
     aReadLock.clear();
 
     ::sal_Int32 c                = lFrames.getLength();
@@ -1708,7 +1708,7 @@ const rtl::Reference<framework::Desktop> & framework::getDesktop(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_Desktop_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(framework::getDesktop(context).get());
 }

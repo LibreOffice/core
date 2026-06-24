@@ -415,7 +415,7 @@ namespace {
                 mbImpress ? SvtModuleOptions::EModule::IMPRESS : SvtModuleOptions::EModule::DRAW));
             AddDialogControl(vcl::PrinterOptionsHelper::setGroupControlOpt(u"tabcontrol-page2"_ustr, aAppGroupname, u".HelpID:vcl:PrintDialog:TabPage:AppPage"_ustr));
 
-            uno::Sequence< OUString > aHelpIds, aWidgetIds;
+            cpo::uno::Sequence< OUString > aHelpIds, aWidgetIds;
             if( mbImpress )
             {
                 aHelpIds = { u".HelpID:vcl:PrintDialog:PageContentType:ListBox"_ustr };
@@ -580,7 +580,7 @@ namespace {
 
             if(bRTL)
             {
-                uno::Sequence< OUString > aBRTLChoices{ SdResId(STR_IMPRESS_PRINT_UI_LEFT_SCRIPT),
+                cpo::uno::Sequence< OUString > aBRTLChoices{ SdResId(STR_IMPRESS_PRINT_UI_LEFT_SCRIPT),
                                                         SdResId(STR_IMPRESS_PRINT_UI_RIGHT_SCRIPT) };
                 vcl::PrinterOptionsHelper::UIControlOptions
                     aIncludeOpt( u"PrintProspect"_ustr , -1, true );
@@ -674,8 +674,8 @@ namespace {
                                 aPageRange, aPageRangeOpt));
             vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, -1, true);
             AddDialogControl(vcl::PrinterOptionsHelper::setChoiceListControlOpt(u"evenoddbox"_ustr, u""_ustr,
-                                uno::Sequence<OUString>(), u"EvenOdd"_ustr, uno::Sequence<OUString>(),
-                                0, uno::Sequence<bool>(), aEvenOddOpt));
+                                cpo::uno::Sequence<OUString>(), u"EvenOdd"_ustr, cpo::uno::Sequence<OUString>(),
+                                0, cpo::uno::Sequence<bool>(), aEvenOddOpt));
         }
 
         void AddDialogControl( const Any& i_rCtrl )
@@ -1508,7 +1508,7 @@ public:
     /** Process the sequence of properties given to one of the XRenderable
         methods.
     */
-    void ProcessProperties (const css::uno::Sequence<css::beans::PropertyValue >& rOptions)
+    void ProcessProperties (const cpo::uno::Sequence<css::beans::PropertyValue >& rOptions)
     {
         OSL_ASSERT(!mbIsDisposed);
         if (mbIsDisposed)
@@ -1560,9 +1560,9 @@ public:
     /** Return a sequence of properties that can be returned by the
         XRenderable::getRenderer() method.
     */
-    css::uno::Sequence<css::beans::PropertyValue> GetProperties () const
+    cpo::uno::Sequence<css::beans::PropertyValue> GetProperties () const
     {
-        css::uno::Sequence<css::beans::PropertyValue> aProperties{
+        cpo::uno::Sequence<css::beans::PropertyValue> aProperties{
             comphelper::makePropertyValue(u"ExtraPrintUIOptions"_ustr,
                                           comphelper::containerToSequence(m_aUIProperties)),
             comphelper::makePropertyValue(u"PageSize"_ustr, maPrintSize),
@@ -2683,7 +2683,7 @@ DocumentRenderer::~DocumentRenderer()
 
 sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
     const cpo::uno::Any&,
-    const css::uno::Sequence<css::beans::PropertyValue >& rOptions)
+    const cpo::uno::Sequence<css::beans::PropertyValue >& rOptions)
 {
     mpImpl->ProcessProperties(rOptions);
     return mpImpl->GetPrintPageCount();
@@ -2692,7 +2692,7 @@ sal_Int32 SAL_CALL DocumentRenderer::getRendererCount (
 Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
     sal_Int32,
     const cpo::uno::Any&,
-    const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rOptions)
 {
     mpImpl->ProcessProperties(rOptions);
     return mpImpl->GetProperties();
@@ -2701,7 +2701,7 @@ Sequence<beans::PropertyValue> SAL_CALL DocumentRenderer::getRenderer (
 void SAL_CALL DocumentRenderer::render (
     sal_Int32 nRenderer,
     const cpo::uno::Any&,
-    const css::uno::Sequence<css::beans::PropertyValue>& rOptions)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rOptions)
 {
     mpImpl->ProcessProperties(rOptions);
     mpImpl->PrintPage(nRenderer);

@@ -88,7 +88,7 @@ public:
   virtual void SAL_CALL disposing() override;
 
   // XInitialization
-  virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+  virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
   // XDropTarget
   virtual void SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
@@ -113,7 +113,7 @@ public:
   // XServiceInfo
   virtual OUString SAL_CALL getImplementationName() override;
   virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-  virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+  virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
   // NSDraggingDestination protocol functions
   NSDragOperation draggingEntered(id sender);

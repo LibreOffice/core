@@ -110,7 +110,7 @@ public:
     virtual void SAL_CALL removeTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
 
     // css::beans::XPropertiesChangeListener
-    virtual void SAL_CALL propertiesChange( const ::css::uno::Sequence< ::css::beans::PropertyChangeEvent >& aEvent ) override;
+    virtual void SAL_CALL propertiesChange( const ::cpo::uno::Sequence< ::css::beans::PropertyChangeEvent >& aEvent ) override;
 
     virtual void SAL_CALL addControl( const OUString& Name, const css::uno::Reference< css::awt::XControl >& Control ) override;
     // css::lang::XServiceInfo

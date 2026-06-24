@@ -427,7 +427,7 @@ private:
 };
 
 cpo::uno::Any SAL_CALL SwXMailMerge::execute(
-        const uno::Sequence< beans::NamedValue >& rArguments )
+        const cpo::uno::Sequence< beans::NamedValue >& rArguments )
 {
     SolarMutexGuard aGuard;
     MailMergeExecuteFinalizer aFinalizer(this);
@@ -436,7 +436,7 @@ cpo::uno::Any SAL_CALL SwXMailMerge::execute(
     // (use values from the service as default and override them with
     // the values that are provided as arguments)
 
-    uno::Sequence< cpo::uno::Any >           aCurSelection   = m_aSelection;
+    cpo::uno::Sequence< cpo::uno::Any >           aCurSelection   = m_aSelection;
     uno::Reference< sdbc::XResultSet >  xCurResultSet   = m_xResultSet;
     uno::Reference< sdbc::XConnection > xCurConnection  = m_xConnection;
     uno::Reference< frame::XModel >     xCurModel       = m_xModel;
@@ -1149,7 +1149,7 @@ bool SAL_CALL SwXMailMerge::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL SwXMailMerge::getSupportedServiceNames()
 {
     return { u"com.sun.star.text.MailMerge"_ustr, u"com.sun.star.sdb.DataAccessDescriptor"_ustr };
 }

@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
 namespace
@@ -161,7 +161,7 @@ rtl::Reference< ::chart::BaseCoordinateSystem >
     return xResult;
 }
 
-uno::Sequence< OUString > PieChartType::getSupportedPropertyRoles()
+cpo::uno::Sequence< OUString > PieChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
@@ -199,7 +199,7 @@ bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_PIE,
@@ -211,7 +211,7 @@ css::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_PieChartType_get_implementation(css::uno::XComponentContext * /*context*/,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::PieChartType);
 }

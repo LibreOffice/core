@@ -14,7 +14,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -27,7 +27,7 @@ void XScenarioEnhanced::testGetRanges()
 {
     uno::Reference<sheet::XScenarioEnhanced> xSE(getScenarioSpreadsheet(), UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddr = xSE->getRanges();
+    cpo::uno::Sequence<table::CellRangeAddress> aCellRangeAddr = xSE->getRanges();
     CPPUNIT_ASSERT_MESSAGE("No ranges found", aCellRangeAddr.hasElements());
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong CellRangeAddres", table::CellRangeAddress(1, 0, 0, 10, 10),

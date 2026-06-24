@@ -309,7 +309,7 @@ awt::Size GtkPlayer::getPreferredPlayerWindowSize()
 }
 
 uno::Reference<::media::XPlayerWindow>
-GtkPlayer::createPlayerWindow(const uno::Sequence<cpo::uno::Any>& rArguments)
+GtkPlayer::createPlayerWindow(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -438,7 +438,7 @@ bool GtkPlayer::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> GtkPlayer::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> GtkPlayer::getSupportedServiceNames()
 {
     return { AVMEDIA_GTK_PLAYER_SERVICENAME };
 }

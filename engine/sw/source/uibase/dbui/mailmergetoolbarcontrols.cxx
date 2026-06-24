@@ -123,7 +123,7 @@ public:
         return cppu::supportsService(this, rServiceName);
     }
 
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.frame.ToolbarController"_ustr };
     }
@@ -216,7 +216,7 @@ public:
         return cppu::supportsService(this, rServiceName);
     }
 
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.frame.ToolbarController"_ustr };
     }
@@ -269,7 +269,7 @@ IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, weld::Entry&, rEdit, 
     {
         xConfigItem->MoveResultSet(nEntry);
         // notify about the change
-        dispatchCommand(u".uno:MailMergeCurrentEntry"_ustr, uno::Sequence<beans::PropertyValue>());
+        dispatchCommand(u".uno:MailMergeCurrentEntry"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
     }
     return true;
 };
@@ -357,7 +357,7 @@ void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEv
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *
 lo_writer_MMCurrentEntryController_get_implementation(
     uno::XComponentContext *context,
-    uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MMCurrentEntryController(context));
 }
@@ -365,7 +365,7 @@ lo_writer_MMCurrentEntryController_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface *
 lo_writer_MMExcludeEntryController_get_implementation(
     uno::XComponentContext *context,
-    uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new MMExcludeEntryController(context));
 }

@@ -29,8 +29,8 @@ public:
         weld::IconView* pIconView,
         NumberingPageType ePageType,
         Size previewSize,
-        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& rNumSettings = css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>(),
-        const css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutlineSettings = css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>(),
+        const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>& rNumSettings = cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>(),
+        const cpo::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutlineSettings = cpo::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>(),
         css::uno::Reference<css::text::XNumberingFormatter> const& xFormatter = nullptr,
         const css::lang::Locale& rLocale = css::lang::Locale());
 
@@ -38,8 +38,8 @@ public:
         NumberingPageType ePageType,
         sal_Int32 nIndex,
         Size previewSize,
-        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& rNumSettings = css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>(),
-        const css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutlineSettings = css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>(),
+        const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>& rNumSettings = cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>(),
+        const cpo::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutlineSettings = cpo::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>(),
         css::uno::Reference<css::text::XNumberingFormatter> const& xFormatter = nullptr,
         const css::lang::Locale& rLocale = css::lang::Locale(),
         const std::vector<std::pair<OUString, OUString>>& rCustomBullets = std::vector<std::pair<OUString, OUString>>());
@@ -50,7 +50,7 @@ public:
     static void SetNumberingSettings(
         weld::IconView* mxIconView,
         Size previewSize,
-        const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>& aNum,
+        const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>& aNum,
         css::uno::Reference<css::text::XNumberingFormatter> const& xFormat,
         const css::lang::Locale& rLocale,
         std::vector<std::pair<OUString, OUString>> maCustomBullets = std::vector<std::pair<OUString, OUString>>());
@@ -58,7 +58,7 @@ public:
     static void SetOutlineNumberingSettings(
         weld::IconView* mxIconView,
         Size previewSize,
-        const css::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutline,
+        const cpo::uno::Sequence<css::uno::Reference<css::container::XIndexAccess>>& rOutline,
         css::uno::Reference<css::text::XNumberingFormatter> const& xFormat,
         const css::lang::Locale& rLocale,
         std::vector<std::pair<OUString, OUString>> maCustomBullets = std::vector<std::pair<OUString, OUString>>());

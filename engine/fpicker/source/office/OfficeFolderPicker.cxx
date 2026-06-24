@@ -30,6 +30,7 @@
 using namespace     ::com::sun::star::container;
 using namespace     ::com::sun::star::lang;
 using namespace     ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 SvtFolderPicker::SvtFolderPicker()
 {
@@ -166,7 +167,7 @@ Sequence< OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 fpicker_SvtFolderPicker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SvtFolderPicker());
 }

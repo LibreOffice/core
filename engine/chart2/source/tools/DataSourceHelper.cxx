@@ -41,7 +41,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace
 {
@@ -141,7 +141,7 @@ rtl::Reference< LabeledDataSequence > DataSourceHelper::createLabeledDataSequenc
     return new ::chart::LabeledDataSequence;
 }
 
-uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
+cpo::uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
                                             bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories )
 {
     css::chart::ChartDataRowSource eRowSource = css::chart::ChartDataRowSource_ROWS;
@@ -156,12 +156,12 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
     };
 }
 
-uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
+cpo::uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
                                             const OUString & rRangeRepresentation,
-                                            const uno::Sequence< sal_Int32 >& rSequenceMapping,
+                                            const cpo::uno::Sequence< sal_Int32 >& rSequenceMapping,
                                             bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories )
 {
-    uno::Sequence< beans::PropertyValue > aArguments( createArguments( bUseColumns, bFirstCellAsLabel, bHasCategories ));
+    cpo::uno::Sequence< beans::PropertyValue > aArguments( createArguments( bUseColumns, bFirstCellAsLabel, bHasCategories ));
     aArguments.realloc( aArguments.getLength() + 1 );
     aArguments.getArray()[aArguments.getLength() - 1] =
         beans::PropertyValue( u"CellRangeRepresentation"_ustr
@@ -178,8 +178,8 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
     return aArguments;
 }
 
-void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue >& rArguments
-                                     , OUString & rRangeRepresentation, uno::Sequence< sal_Int32 >& rSequenceMapping
+void DataSourceHelper::readArguments( const cpo::uno::Sequence< beans::PropertyValue >& rArguments
+                                     , OUString & rRangeRepresentation, cpo::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& bUseColumns, bool& bFirstCellAsLabel, bool& bHasCategories )
 {
     for(const beans::PropertyValue& rProperty : rArguments)
@@ -298,7 +298,7 @@ rtl::Reference< DataSource > DataSourceHelper::getUsedData(
 bool DataSourceHelper::detectRangeSegmentation(
     const rtl::Reference<::chart::ChartModel>& xChartModel
     , OUString& rOutRangeString
-    , css::uno::Sequence< sal_Int32 >& rSequenceMapping
+    , cpo::uno::Sequence< sal_Int32 >& rSequenceMapping
     , bool& rOutUseColumns
     , bool& rOutFirstCellAsLabel
     , bool& rOutHasCategories )
@@ -344,7 +344,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
 
     try
     {
-        const uno::Sequence< beans::PropertyValue > aArguments(
+        const cpo::uno::Sequence< beans::PropertyValue > aArguments(
             xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartDocument )));
         for(const beans::PropertyValue& rProperty : aArguments)
         {
@@ -377,7 +377,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
 
 void DataSourceHelper::setRangeSegmentation(
             const rtl::Reference<::chart::ChartModel>& xChartModel
-            , const css::uno::Sequence< sal_Int32 >& rSequenceMapping
+            , const cpo::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool bUseColumns , bool bFirstCellAsLabel, bool bUseCategories )
 {
     uno::Reference< data::XDataProvider > xDataProvider( xChartModel->getDataProvider() );
@@ -392,11 +392,11 @@ void DataSourceHelper::setRangeSegmentation(
 
     OUString aRangeString;
     bool bDummy;
-    uno::Sequence< sal_Int32 > aDummy;
+    cpo::uno::Sequence< sal_Int32 > aDummy;
     readArguments( xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartModel )),
                    aRangeString, aDummy, bDummy, bDummy, bDummy );
 
-    uno::Sequence< beans::PropertyValue > aArguments(
+    cpo::uno::Sequence< beans::PropertyValue > aArguments(
         createArguments( aRangeString, rSequenceMapping, bUseColumns, bFirstCellAsLabel, bUseCategories ) );
 
     uno::Reference< chart2::data::XDataSource > xDataSource( xDataProvider->createDataSource(

@@ -101,16 +101,16 @@ public:
     virtual void SAL_CALL drawLine( ::sal_Int32 X1, ::sal_Int32 Y1, ::sal_Int32 X2, ::sal_Int32 Y2 ) override;
     virtual void SAL_CALL drawRect( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height ) override;
     virtual void SAL_CALL drawRoundedRect( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height, ::sal_Int32 nHorzRound, ::sal_Int32 nVertRound ) override;
-    virtual void SAL_CALL drawPolyLine( const css::uno::Sequence< ::sal_Int32 >& DataX, const css::uno::Sequence< ::sal_Int32 >& DataY ) override;
-    virtual void SAL_CALL drawPolygon( const css::uno::Sequence< ::sal_Int32 >& DataX, const css::uno::Sequence< ::sal_Int32 >& DataY ) override;
-    virtual void SAL_CALL drawPolyPolygon( const css::uno::Sequence< css::uno::Sequence< ::sal_Int32 > >& DataX, const css::uno::Sequence< css::uno::Sequence< ::sal_Int32 > >& DataY ) override;
+    virtual void SAL_CALL drawPolyLine( const cpo::uno::Sequence< ::sal_Int32 >& DataX, const cpo::uno::Sequence< ::sal_Int32 >& DataY ) override;
+    virtual void SAL_CALL drawPolygon( const cpo::uno::Sequence< ::sal_Int32 >& DataX, const cpo::uno::Sequence< ::sal_Int32 >& DataY ) override;
+    virtual void SAL_CALL drawPolyPolygon( const cpo::uno::Sequence< cpo::uno::Sequence< ::sal_Int32 > >& DataX, const cpo::uno::Sequence< cpo::uno::Sequence< ::sal_Int32 > >& DataY ) override;
     virtual void SAL_CALL drawEllipse( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height ) override;
     virtual void SAL_CALL drawArc( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height, ::sal_Int32 X1, ::sal_Int32 Y1, ::sal_Int32 X2, ::sal_Int32 Y2 ) override;
     virtual void SAL_CALL drawPie( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height, ::sal_Int32 X1, ::sal_Int32 Y1, ::sal_Int32 X2, ::sal_Int32 Y2 ) override;
     virtual void SAL_CALL drawChord( ::sal_Int32 nX, ::sal_Int32 nY, ::sal_Int32 nWidth, ::sal_Int32 nHeight, ::sal_Int32 nX1, ::sal_Int32 nY1, ::sal_Int32 nX2, ::sal_Int32 nY2 ) override;
     virtual void SAL_CALL drawGradient( ::sal_Int32 nX, ::sal_Int32 nY, ::sal_Int32 nWidth, ::sal_Int32 Height, const css::awt::Gradient& aGradient ) override;
     virtual void SAL_CALL drawText( ::sal_Int32 X, ::sal_Int32 Y, const OUString& Text ) override;
-    virtual void SAL_CALL drawTextArray( ::sal_Int32 X, ::sal_Int32 Y, const OUString& Text, const css::uno::Sequence< ::sal_Int32 >& Longs ) override;
+    virtual void SAL_CALL drawTextArray( ::sal_Int32 X, ::sal_Int32 Y, const OUString& Text, const cpo::uno::Sequence< ::sal_Int32 >& Longs ) override;
     virtual void SAL_CALL drawImage( ::sal_Int32 nX, ::sal_Int32 nY, ::sal_Int32 nWidth, ::sal_Int32 nHeight, ::sal_Int16 nStyle, const css::uno::Reference< css::graphic::XGraphic >& aGraphic ) override;
 };
 

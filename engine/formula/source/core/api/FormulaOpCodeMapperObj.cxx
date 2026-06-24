@@ -60,9 +60,9 @@ FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj()
 }
 
 
-css::uno::Sequence< css::sheet::FormulaToken >
+cpo::uno::Sequence< css::sheet::FormulaToken >
 SAL_CALL FormulaOpCodeMapperObj::getMappings(
-        const css::uno::Sequence< OUString >& rNames,
+        const cpo::uno::Sequence< OUString >& rNames,
         sal_Int32 nLanguage )
 {
     FormulaCompiler::OpCodeMapPtr xMap = m_pCompiler->GetOpCodeMap( nLanguage);
@@ -72,7 +72,7 @@ SAL_CALL FormulaOpCodeMapperObj::getMappings(
 }
 
 
-css::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
+cpo::uno::Sequence< css::sheet::FormulaOpCodeMapEntry >
 SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
         sal_Int32 nLanguage, sal_Int32 nGroups )
 {
@@ -87,7 +87,7 @@ OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  )
     return u"simple.formula.FormulaOpCodeMapperObj"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.sheet.FormulaOpCodeMapper"_ustr };
 }
@@ -96,7 +96,7 @@ uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNa
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 simple_formula_FormulaOpCodeMapperObj(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(
             new formula::FormulaOpCodeMapperObj(std::make_unique<formula::FormulaCompiler>()));

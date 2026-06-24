@@ -26,6 +26,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::cpo::uno;
 
 namespace i18npool {
 

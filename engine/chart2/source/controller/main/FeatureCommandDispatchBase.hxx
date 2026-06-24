@@ -103,7 +103,7 @@ public:
 protected:
     // XDispatch
     virtual void SAL_CALL dispatch( const css::util::URL& URL,
-        const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+        const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     virtual void fireStatusEvent( const OUString& rURL,
         const css::uno::Reference< css::frame::XStatusListener >& xSingleListener ) override;
@@ -112,7 +112,7 @@ protected:
     virtual FeatureState getState( const OUString& rCommand ) = 0;
 
     // execute a feature
-    virtual void execute( const OUString& rCommand, const css::uno::Sequence< css::beans::PropertyValue>& rArgs ) = 0;
+    virtual void execute( const OUString& rCommand, const cpo::uno::Sequence< css::beans::PropertyValue>& rArgs ) = 0;
 
     // all the features which should be handled by this class
     virtual void describeSupportedFeatures() = 0;

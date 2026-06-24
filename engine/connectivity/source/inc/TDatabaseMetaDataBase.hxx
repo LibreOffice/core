@@ -38,7 +38,7 @@ namespace connectivity
                                                                    css::lang::XEventListener>
     {
     private:
-        css::uno::Sequence< css::beans::PropertyValue >   m_aConnectionInfo;
+        cpo::uno::Sequence< css::beans::PropertyValue >   m_aConnectionInfo;
         ::connectivity::ODatabaseMetaDataResultSet::ORows m_aTypeInfoRows;
 
         // cached database information
@@ -92,10 +92,10 @@ namespace connectivity
 
     public:
 
-        ODatabaseMetaDataBase(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo);
+        ODatabaseMetaDataBase(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo);
 
         // XDatabaseMetaData2
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getConnectionInfo(  ) override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getConnectionInfo(  ) override;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

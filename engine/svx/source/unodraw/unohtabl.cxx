@@ -40,7 +40,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override;
@@ -58,7 +58,7 @@ OUString SAL_CALL SvxUnoHatchTable::getImplementationName()
     return u"SvxUnoHatchTable"_ustr;
 }
 
-uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  )
 {
     return { u"com.sun.star.drawing.HatchTable"_ustr };
 }

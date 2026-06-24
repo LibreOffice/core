@@ -266,8 +266,8 @@ bool Paragraph::setCaretPosition(::sal_Int32 nIndex)
 }
 
 // virtual
-css::uno::Sequence< css::beans::PropertyValue >
-Paragraph::getCharacterAttributes(::sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes)
+cpo::uno::Sequence< css::beans::PropertyValue >
+Paragraph::getCharacterAttributes(::sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes)
 {
     ensureAlive();
     return m_xDocument->retrieveCharacterAttributes( this, nIndex, aRequestedAttributes );
@@ -438,7 +438,7 @@ Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
 // virtual
 bool Paragraph::setAttributes(
     ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
-    css::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
+    cpo::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
 {
     ensureAlive();
     m_xDocument->changeParagraphAttributes(this, nStartIndex, nEndIndex,
@@ -455,16 +455,16 @@ bool Paragraph::setText(OUString const & rText)
 }
 
 // virtual
-css::uno::Sequence< css::beans::PropertyValue >
-Paragraph::getDefaultAttributes(const css::uno::Sequence< OUString >&)
+cpo::uno::Sequence< css::beans::PropertyValue >
+Paragraph::getDefaultAttributes(const cpo::uno::Sequence< OUString >&)
 {
     ensureAlive();
     return {}; // default attributes are not supported by text engine
 }
 
 // virtual
-css::uno::Sequence< css::beans::PropertyValue >
-Paragraph::getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes)
+cpo::uno::Sequence< css::beans::PropertyValue >
+Paragraph::getRunAttributes(::sal_Int32 Index, const cpo::uno::Sequence< OUString >& RequestedAttributes)
 {
     ensureAlive();
     return m_xDocument->retrieveRunAttributes( this, Index, RequestedAttributes );
@@ -790,10 +790,10 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
         // XXX  numeric overflow
 }
 
-css::uno::Sequence< css::beans::PropertyValue >
+cpo::uno::Sequence< css::beans::PropertyValue >
 Document::retrieveCharacterAttributes(
     Paragraph const * pParagraph, ::sal_Int32 nIndex,
-    const css::uno::Sequence< OUString >& aRequestedAttributes)
+    const cpo::uno::Sequence< OUString >& aRequestedAttributes)
 {
     SolarMutexGuard aGuard;
 
@@ -879,7 +879,7 @@ Document::retrieveCharacterAttributes(
         aCharAttrSeq[ rAttrib.Name ] = rAttrib;
     }
 
-    const css::uno::Sequence< css::beans::PropertyValue > aRes = comphelper::mapValuesToSequence( aCharAttrSeq );
+    const cpo::uno::Sequence< css::beans::PropertyValue > aRes = comphelper::mapValuesToSequence( aCharAttrSeq );
 
     // sort the attributes
     auto nLength = static_cast<size_t>(aRes.getLength());
@@ -899,7 +899,7 @@ Document::retrieveCharacterAttributes(
 
 void Document::retrieveRunAttributesImpl(
     Paragraph const * pParagraph, ::sal_Int32 Index,
-    const css::uno::Sequence< OUString >& RequestedAttributes,
+    const cpo::uno::Sequence< OUString >& RequestedAttributes,
     tPropValMap& rRunAttrSeq)
 {
     ::sal_uInt32 nNumber = static_cast< ::sal_uInt32 >( pParagraph->getNumber() );
@@ -945,10 +945,10 @@ void Document::retrieveRunAttributesImpl(
     }
 }
 
-css::uno::Sequence< css::beans::PropertyValue >
+cpo::uno::Sequence< css::beans::PropertyValue >
 Document::retrieveRunAttributes(
     Paragraph const * pParagraph, ::sal_Int32 Index,
-    const css::uno::Sequence< OUString >& RequestedAttributes)
+    const cpo::uno::Sequence< OUString >& RequestedAttributes)
 {
     SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard( GetMutex() );
@@ -1024,7 +1024,7 @@ void Document::copyParagraphText(Paragraph const * pParagraph,
 
 void Document::changeParagraphAttributes(
     Paragraph const * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
-    css::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
+    cpo::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
 {
     SolarMutexGuard aGuard;
     {
@@ -1170,14 +1170,14 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 
     if (nPara > m_nVisibleBegin && nPara < m_nVisibleEnd)
     {
-        css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara - 1)) };
+        cpo::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara - 1)) };
         css::accessibility::AccessibleRelation aRelation(css::accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM, aSequence);
         pRelationSetHelper->AddRelation( aRelation );
     }
 
     if (nPara >= m_nVisibleBegin && m_nVisibleEnd > 1 && nPara < m_nVisibleEnd - 1)
     {
-        css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara + 1)) };
+        cpo::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara + 1)) };
         css::accessibility::AccessibleRelation aRelation( css::accessibility::AccessibleRelationType_CONTENT_FLOWS_TO, aSequence );
         pRelationSetHelper->AddRelation( aRelation );
     }
@@ -1242,7 +1242,7 @@ void    Document::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& r
 {
     if( getAccessibleParent()->getAccessibleContext()->getAccessibleRole() == css::accessibility::AccessibleRole::SCROLL_PANE )
     {
-        css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence {  getAccessibleParent() };
+        cpo::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence {  getAccessibleParent() };
         rRelationSet.AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType_MEMBER_OF, aSequence ) );
     }
     else

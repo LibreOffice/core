@@ -29,7 +29,7 @@ namespace com::sun::star {
     namespace beans { struct PropertyValue; }
 }
 
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 
 class SvXMLExport;
@@ -45,7 +45,7 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
 
     SAL_DLLPRIVATE void exportLevelStyle(
             sal_Int32 nLevel,
-            const css::uno::Sequence< css::beans::PropertyValue>& rProps,
+            const cpo::uno::Sequence< css::beans::PropertyValue>& rProps,
             bool bOutline );
 
     SAL_DLLPRIVATE void exportStyle( const css::uno::Reference< css::style::XStyle >& rStyle );

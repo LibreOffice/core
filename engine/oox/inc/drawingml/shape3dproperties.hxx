@@ -66,12 +66,12 @@ struct Generic3DProperties
     static OUString     getBevelPresetTypeString( sal_Int32 nType );
     static OUString     getPresetMaterialTypeString( sal_Int32 nType );
 
-    css::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
-    css::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();
-    css::uno::Sequence< css::beans::PropertyValue > getShape3DAttributes(
+    cpo::uno::Sequence< css::beans::PropertyValue > getCameraAttributes();
+    cpo::uno::Sequence< css::beans::PropertyValue > getLightRigAttributes();
+    cpo::uno::Sequence< css::beans::PropertyValue > getShape3DAttributes(
             const GraphicHelper& rGraphicHelper, ::Color rPhClr );
-    static css::uno::Sequence< css::beans::PropertyValue > getBevelAttributes( BevelProperties rProps );
-    static css::uno::Sequence< css::beans::PropertyValue > getColorAttributes(
+    static cpo::uno::Sequence< css::beans::PropertyValue > getBevelAttributes( BevelProperties rProps );
+    static cpo::uno::Sequence< css::beans::PropertyValue > getColorAttributes(
             const Color& rColor, const GraphicHelper& rGraphicHelper, ::Color rPhClr );
 };
 

@@ -29,7 +29,7 @@ void DropDownFormFieldButton::InitDropdown()
 
     sw::mark::Fieldmark::parameter_map_t::const_iterator pListEntries
         = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
-    css::uno::Sequence<OUString> vListEntries;
+    cpo::uno::Sequence<OUString> vListEntries;
     if (pListEntries != pParameters->end())
     {
         pListEntries->second >>= vListEntries;

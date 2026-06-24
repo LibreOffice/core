@@ -60,7 +60,7 @@ ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
 
     ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
     CPPUNIT_ASSERT(pModelObj);
-    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pModelObj->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     return pModelObj;
 }
 

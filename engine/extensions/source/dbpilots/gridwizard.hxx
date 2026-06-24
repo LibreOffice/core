@@ -29,7 +29,7 @@ namespace dbp
 {
     struct OGridSettings : public OControlWizardSettings
     {
-        css::uno::Sequence< OUString >      aSelectedFields;
+        cpo::uno::Sequence< OUString >      aSelectedFields;
     };
 
     class OGridWizard final : public OControlWizard

@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
                                     uno::Reference < io::XInputStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    const cpo::uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
 : m_pImpl( &aImpl )
 , m_xMutex( m_pImpl->m_xMutex )
@@ -52,7 +52,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 }
 
 OInputCompStream::OInputCompStream( uno::Reference < io::XInputStream > xStream,
-                                    const uno::Sequence< beans::PropertyValue >& aProps,
+                                    const cpo::uno::Sequence< beans::PropertyValue >& aProps,
                                     sal_Int32 nStorageType )
 : m_pImpl( nullptr )
 , m_xMutex( new comphelper::RefCountedMutex )
@@ -104,7 +104,7 @@ cpo::uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType 
     return OWeakObject::queryInterface( rType );
 }
 
-sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OInputCompStream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
     if ( m_bDisposed )
@@ -116,7 +116,7 @@ sal_Int32 SAL_CALL OInputCompStream::readBytes( uno::Sequence< sal_Int8 >& aData
     return m_xStream->readBytes( aData, nBytesToRead );
 }
 
-sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OInputCompStream::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
     if ( m_bDisposed )
@@ -300,7 +300,7 @@ bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
 namespace
 {
 
-const beans::StringPair* lcl_findPairByName(const uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
+const beans::StringPair* lcl_findPairByName(const cpo::uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
 {
     return std::find_if(rSeq.begin(), rSeq.end(),
         [&rName](const beans::StringPair& rPair) { return rPair.First == rName; });
@@ -321,7 +321,7 @@ OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Target"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
@@ -342,7 +342,7 @@ OUString SAL_CALL OInputCompStream::getTypeByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Type"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
@@ -350,7 +350,7 @@ OUString SAL_CALL OInputCompStream::getTypeByID(  const OUString& sID  )
     return OUString();
 }
 
-uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByID(  const OUString& sID  )
+cpo::uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByID(  const OUString& sID  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
@@ -364,10 +364,10 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
-    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
     auto pRel = std::find_if(aSeq.begin(), aSeq.end(),
-        [&aIDRel](const uno::Sequence<beans::StringPair>& rRel){
+        [&aIDRel](const cpo::uno::Sequence<beans::StringPair>& rRel){
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
     if (pRel != aSeq.end())
         return *pRel;
@@ -375,7 +375,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
     throw container::NoSuchElementException();
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getRelationshipsByType(  const OUString& sType  )
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getRelationshipsByType(  const OUString& sType  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
@@ -389,19 +389,19 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
-    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     const beans::StringPair aTypeRel(u"Type"_ustr, sType);
-    std::vector< uno::Sequence<beans::StringPair> > aResult;
+    std::vector< cpo::uno::Sequence<beans::StringPair> > aResult;
     aResult.reserve(aSeq.getLength());
 
     std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResult),
-        [&aTypeRel](const uno::Sequence<beans::StringPair>& rRel) {
+        [&aTypeRel](const cpo::uno::Sequence<beans::StringPair>& rRel) {
             return std::find(rRel.begin(), rRel.end(), aTypeRel) != rRel.end(); });
 
     return comphelper::containerToSequence(aResult);
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getAllRelationships()
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getAllRelationships()
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
@@ -419,7 +419,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
         [](const beans::PropertyValue& rProp) { return rProp.Name == "RelationsInfo"; });
     if (pProp != std::cend(m_aProperties))
     {
-        uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
+        cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aResult;
         if (pProp->Value >>= aResult)
             return aResult;
     }
@@ -427,7 +427,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     throw io::IOException(u"relations info could not be read"_ustr); // the relations info could not be read
 }
 
-void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, bool /*bReplace*/  )
+void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const cpo::uno::Sequence< beans::StringPair >& /*aEntry*/, bool /*bReplace*/  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 
@@ -459,7 +459,7 @@ void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/
     throw io::IOException(); // TODO: Access denied
 }
 
-void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& /*aEntries*/, bool /*bReplace*/  )
+void SAL_CALL OInputCompStream::insertRelationships(  const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >& /*aEntries*/, bool /*bReplace*/  )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() );
 

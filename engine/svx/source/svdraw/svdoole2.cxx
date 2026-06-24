@@ -158,7 +158,7 @@ private:
     virtual uno::Reference< frame::XDispatchProvider > SAL_CALL getInplaceDispatchProvider() override;
     virtual awt::Rectangle SAL_CALL getPlacement() override;
     virtual awt::Rectangle SAL_CALL getClipRectangle() override;
-    virtual void SAL_CALL translateAccelerators( const uno::Sequence< awt::KeyEvent >& aKeys ) override;
+    virtual void SAL_CALL translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& aKeys ) override;
     virtual void SAL_CALL scrollObject( const awt::Size& aOffset ) override;
     virtual void SAL_CALL changedPlacement( const awt::Rectangle& aPosRect ) override;
 
@@ -459,7 +459,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getClipRectangle()
     return getPlacement();
 }
 
-void SAL_CALL SdrLightEmbeddedClient_Impl::translateAccelerators( const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
+void SAL_CALL SdrLightEmbeddedClient_Impl::translateAccelerators( const cpo::uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
 {
 }
 
@@ -608,7 +608,7 @@ SdrIFrameLink::SdrIFrameLink(SdrOle2Obj* pObject)
         // let the IFrameObject reload the link
         try
         {
-            xPersObj->reload(uno::Sequence<beans::PropertyValue>(), uno::Sequence<beans::PropertyValue>());
+            xPersObj->reload(cpo::uno::Sequence<beans::PropertyValue>(), cpo::uno::Sequence<beans::PropertyValue>());
         }
         catch (const uno::Exception&)
         {
@@ -643,7 +643,7 @@ public:
 
     // Stored when a linked OLE object is deferred during import because
     // link updates are not yet allowed, used to complete creation later.
-    css::uno::Sequence<css::beans::PropertyValue> maDeferredMediaDescriptor;
+    cpo::uno::Sequence<css::beans::PropertyValue> maDeferredMediaDescriptor;
 
     rtl::Reference<SvxUnoShapeModifyListener> mxModifyListener;
 
@@ -931,9 +931,9 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
                             mpImpl->mxObjRef->changeState(embed::EmbedStates::LOADED);
 
                         // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
-                        uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
+                        cpo::uno::Sequence< beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
                             u"URL"_ustr, aNewLinkURL) };
-                        xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
+                        xPersObj->reload( aArgs, cpo::uno::Sequence< beans::PropertyValue >() );
 
                         mpImpl->maLinkURL = aNewLinkURL;
                         bResult = true;
@@ -1055,7 +1055,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
 }
 
 void SdrOle2Obj::SetDeferredLink(const OUString& rLinkURL,
-                                 const uno::Sequence<beans::PropertyValue>& rMediaDescriptor)
+                                 const cpo::uno::Sequence<beans::PropertyValue>& rMediaDescriptor)
 {
     if (mpImpl->mpObjectLink)
         return;
@@ -1078,7 +1078,7 @@ bool SdrOle2Obj::CompleteDeferredLink()
         return false;
 
     // take ownership of the descriptor and clear it so we don't retry
-    uno::Sequence<beans::PropertyValue> aMediaDescriptor;
+    cpo::uno::Sequence<beans::PropertyValue> aMediaDescriptor;
     std::swap(aMediaDescriptor, mpImpl->maDeferredMediaDescriptor);
 
     ::comphelper::IEmbeddedHelper* pPersist = getSdrModelFromSdrObject().GetPersist();

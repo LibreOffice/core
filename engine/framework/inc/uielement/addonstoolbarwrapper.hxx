@@ -38,7 +38,7 @@ class AddonsToolBarWrapper final : public UIElementWrapperBase
         virtual void SAL_CALL dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
@@ -49,7 +49,7 @@ class AddonsToolBarWrapper final : public UIElementWrapperBase
     private:
         css::uno::Reference< css::uno::XComponentContext >                        m_xContext;
         rtl::Reference< ToolBarManager >                                          m_xToolBarManager;
-        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >     m_aConfigData;
+        cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >     m_aConfigData;
         bool                                                                      m_bCreatedImages;
 };
 

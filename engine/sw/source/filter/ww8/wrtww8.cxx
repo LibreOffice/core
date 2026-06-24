@@ -3489,7 +3489,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
 
 bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec )
 {
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
 
     if ( mpMedium )
     {
@@ -3774,7 +3774,7 @@ void WW8Export::PrepareStorage()
     {
         std::shared_ptr<GDIMetaFile> xMetaFile =
             pDocShell->GetPreviewMetaFile();
-        uno::Sequence<sal_Int8> metaFile(
+        cpo::uno::Sequence<sal_Int8> metaFile(
             sfx2::convertMetaFile(xMetaFile.get()));
         sfx2::SaveOlePropertySet(xDocProps, &GetWriter().GetStorage(), &metaFile);
     }
@@ -3787,7 +3787,7 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
     rtl::Reference<SotStorage> xOrigStg;
     uno::Reference< packages::XPackageEncryption > xPackageEncryption;
     std::shared_ptr<SvStream> pSotStorageStream;
-    uno::Sequence< beans::NamedValue > aEncryptionData;
+    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
     if (mpMedium)
     {
         // Check for specific encryption requests
@@ -3800,7 +3800,7 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
             if (sCryptoType.getLength())
             {
                 const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
-                uno::Sequence<cpo::uno::Any> aArguments{
+                cpo::uno::Sequence<cpo::uno::Any> aArguments{
                     cpo::uno::Any(beans::NamedValue(u"Binary"_ustr, cpo::uno::Any(true))) };
                 xPackageEncryption.set(
                     xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -3831,7 +3831,7 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
         xPackageEncryption->setupEncryption(aEncryptionData);
 
         uno::Reference<io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(pSotStorageStream.get(), false));
-        uno::Sequence<beans::NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
+        cpo::uno::Sequence<beans::NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
 
         m_pStg = std::move(xOrigStg);
         for (const beans::NamedValue& aStreamData : aStreams)
@@ -3871,7 +3871,7 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
                 nErrorCode = ERRCODE_IO_GENERAL;
                 break;
             }
-            uno::Sequence<sal_Int8> aStreamContent;
+            cpo::uno::Sequence<sal_Int8> aStreamContent;
             aStreamData.Value >>= aStreamContent;
             size_t nBytesWritten = pStream->WriteBytes(aStreamContent.getArray(), aStreamContent.getLength());
             if (nBytesWritten != static_cast<size_t>(aStreamContent.getLength()))
@@ -4345,7 +4345,7 @@ void WW8Export::WriteFormData( const ::sw::mark::Fieldmark& rFieldmark )
         ::sw::mark::Fieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         if(pListEntries != pParameters->end())
         {
-            uno::Sequence< OUString > vListEntries;
+            cpo::uno::Sequence< OUString > vListEntries;
             pListEntries->second >>= vListEntries;
             aListItems.reserve(vListEntries.getLength());
             copy(std::cbegin(vListEntries), std::cend(vListEntries), back_inserter(aListItems));

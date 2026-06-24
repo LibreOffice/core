@@ -44,7 +44,7 @@ typedef std::vector<TokenValue> TokenValueList;
 /// Receives notification of sax document events to write into an XOutputStream.
 class FastSaxSerializer
 {
-    typedef css::uno::Sequence< ::sal_Int32 > Int32Sequence;
+    typedef cpo::uno::Sequence< ::sal_Int32 > Int32Sequence;
 
 public:
     explicit FastSaxSerializer(const css::uno::Reference< css::io::XOutputStream >& xOutputStream);
@@ -246,7 +246,7 @@ private:
 
         The latter in the case that we are inside a mark().
      */
-    void writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData );
+    void writeBytes( const cpo::uno::Sequence< ::sal_Int8 >& aData );
     void writeBytes( const char* pStr, size_t nLen );
 };
 

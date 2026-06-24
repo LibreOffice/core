@@ -29,7 +29,7 @@
 namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::beans { struct NamedValue; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <class interface_type> class Reference; }
 namespace comphelper { enum class DocPasswordRequestType; }
 
@@ -73,7 +73,7 @@ public:
               occurred while password verification. The password request loop
               will be aborted.
      */
-    virtual DocPasswordVerifierResult verifyPassword( const OUString& rPassword, css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) = 0;
+    virtual DocPasswordVerifierResult verifyPassword( const OUString& rPassword, cpo::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) = 0;
 
     /** Will be called every time an encryption data needs to be verified.
 
@@ -89,7 +89,7 @@ public:
               occurred while data verification. The password request loop
               will be aborted.
      */
-    virtual DocPasswordVerifierResult verifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) = 0;
+    virtual DocPasswordVerifierResult verifyEncryptionData( const cpo::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) = 0;
 
 };
 
@@ -113,7 +113,7 @@ public:
             The sequence containing the hash and the algorithm-related info
       */
 
-    static css::uno::Sequence< css::beans::PropertyValue >
+    static cpo::uno::Sequence< css::beans::PropertyValue >
         GenerateNewModifyPasswordInfo( std::u16string_view aPassword );
 
     /** This helper function converts a grab-bagged password, e.g. the
@@ -130,10 +130,10 @@ public:
             in the inner format.
       */
 
-    static css::uno::Sequence< css::beans::PropertyValue > ConvertPasswordInfo(
-        const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
+    static cpo::uno::Sequence< css::beans::PropertyValue > ConvertPasswordInfo(
+        const cpo::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
-    static css::uno::Sequence<css::beans::PropertyValue>
+    static cpo::uno::Sequence<css::beans::PropertyValue>
     GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassword);
 
     /** This helper function allows to check whether
@@ -152,7 +152,7 @@ public:
 
     static bool IsModifyPasswordCorrect(
                 std::u16string_view aPassword,
-                const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
+                const cpo::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
 
     /** This helper function generates the hash code based on the algorithm
@@ -199,7 +199,7 @@ public:
             The hash represented by sequence of bytes in BigEndian form
       */
 
-    static css::uno::Sequence< sal_Int8 > GetXLHashAsSequence(
+    static cpo::uno::Sequence< sal_Int8 > GetXLHashAsSequence(
                 std::u16string_view aString );
 
 
@@ -240,7 +240,7 @@ public:
 
         @return the raw hash value as sal_Int8 sequence.
      */
-    static css::uno::Sequence<sal_Int8> GetOoxHashAsSequence(
+    static cpo::uno::Sequence<sal_Int8> GetOoxHashAsSequence(
             std::u16string_view rPassword,
             std::u16string_view rSaltValue,
             sal_uInt32 nSpinCount,
@@ -342,7 +342,7 @@ public:
         requested length.
       */
 
-    static css::uno::Sequence< sal_Int8 > GenerateRandomByteSequence(
+    static cpo::uno::Sequence< sal_Int8 > GenerateRandomByteSequence(
                 sal_Int32 nLength );
 
 
@@ -350,24 +350,24 @@ public:
         key digest value used by MSCodec_Std97 codec.
       */
 
-    static css::uno::Sequence< sal_Int8 > GenerateStd97Key(
+    static cpo::uno::Sequence< sal_Int8 > GenerateStd97Key(
                 std::u16string_view aPassword,
-                const css::uno::Sequence< sal_Int8 >& aDocId );
+                const cpo::uno::Sequence< sal_Int8 >& aDocId );
 
 
     /** This helper function generates a byte sequence representing the
         key digest value used by MSCodec_Std97 codec.
       */
 
-    static css::uno::Sequence< sal_Int8 > GenerateStd97Key(
+    static cpo::uno::Sequence< sal_Int8 > GenerateStd97Key(
                 const sal_uInt16 pPassData[16],
-                const css::uno::Sequence< sal_Int8 >& aDocId );
+                const cpo::uno::Sequence< sal_Int8 >& aDocId );
 
     /** This helper function generates a byte sequence representing the
         key digest value used by MSCodec_Std97 codec.
       */
 
-    static css::uno::Sequence< sal_Int8 > GenerateStd97Key(
+    static cpo::uno::Sequence< sal_Int8 > GenerateStd97Key(
                 const sal_uInt16 pPassData[16],
                 const sal_uInt8 pDocId[16] );
 
@@ -425,9 +425,9 @@ public:
             passed password verifier. If empty, no valid password has been
             found, or the user has chosen to cancel password input.
      */
-    static css::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
+    static cpo::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
                             IDocPasswordVerifier& rVerifier,
-                            const css::uno::Sequence< css::beans::NamedValue >& rMediaEncData,
+                            const cpo::uno::Sequence< css::beans::NamedValue >& rMediaEncData,
                             const OUString& rMediaPassword,
                             const css::uno::Reference< css::task::XInteractionHandler >& rxInteractHandler,
                             const OUString& rDocumentUrl,
@@ -435,8 +435,8 @@ public:
                             const ::std::vector< OUString >* pDefaultPasswords = nullptr,
                             bool* pbIsDefaultPassword = nullptr );
 
-    static css::uno::Sequence< css::beans::NamedValue > decryptGpgSession(
-        const css::uno::Sequence< css::uno::Sequence< css::beans::NamedValue > >& rGpgProperties);
+    static cpo::uno::Sequence< css::beans::NamedValue > decryptGpgSession(
+        const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::NamedValue > >& rGpgProperties);
 
 private:
                         ~DocPasswordHelper();

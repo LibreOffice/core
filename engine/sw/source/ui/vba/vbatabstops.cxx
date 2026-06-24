@@ -31,15 +31,15 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 /// @throws uno::RuntimeException
-static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps )
+static cpo::uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps )
 {
-    uno::Sequence< style::TabStop > aSeq;
+    cpo::uno::Sequence< style::TabStop > aSeq;
     xParaProps->getPropertyValue(u"ParaTabStops"_ustr) >>= aSeq;
     return aSeq;
 }
 
 /// @throws uno::RuntimeException
-static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq )
+static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const cpo::uno::Sequence< style::TabStop >& aSeq )
 {
     xParaProps->setPropertyValue(u"ParaTabStops"_ustr, cpo::uno::Any( aSeq ) );
 }
@@ -202,7 +202,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
     aTab.DecimalChar = '.'; // default value
     aTab.FillChar = cLeader;
 
-    uno::Sequence< style::TabStop > aOldTabs = lcl_getTabStops( mxParaProps );
+    cpo::uno::Sequence< style::TabStop > aOldTabs = lcl_getTabStops( mxParaProps );
     auto [begin, end] = asNonConstRange(aOldTabs);
 
     style::TabStop* pOldTab = std::find_if(begin, end,
@@ -216,7 +216,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
     else
     {
         sal_Int32 nTabs = aOldTabs.getLength();
-        uno::Sequence< style::TabStop > aNewTabs( nTabs + 1 );
+        cpo::uno::Sequence< style::TabStop > aNewTabs( nTabs + 1 );
 
         auto it = aNewTabs.getArray();
         *it = aTab;
@@ -229,7 +229,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
 
 void SAL_CALL SwVbaTabStops::ClearAll()
 {
-    uno::Sequence< style::TabStop > aSeq;
+    cpo::uno::Sequence< style::TabStop > aSeq;
     lcl_setTabStops( mxParaProps, aSeq );
 }
 
@@ -257,10 +257,10 @@ SwVbaTabStops::getServiceImplName()
     return u"SwVbaTabStops"_ustr;
 }
 
-css::uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 SwVbaTabStops::getServiceNames()
 {
-    static uno::Sequence< OUString > const sNames
+    static cpo::uno::Sequence< OUString > const sNames
     {
         u"ooo.vba.word.TabStops"_ustr
     };

@@ -703,7 +703,7 @@ Reference<deployment::XPackage> PackageManagerImpl::importExtension(
 */
 Reference<deployment::XPackage> PackageManagerImpl::addPackage(
     OUString const & url,
-    css::uno::Sequence<css::beans::NamedValue> const & properties,
+    cpo::uno::Sequence<css::beans::NamedValue> const & properties,
     OUString const & mediaType_,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv_ )

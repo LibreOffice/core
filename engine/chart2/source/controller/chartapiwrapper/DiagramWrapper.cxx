@@ -77,7 +77,7 @@ using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Reference;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::chart::XAxis;
 
@@ -160,7 +160,7 @@ void lcl_AddPropertiesToVector(
 {
     rOutProperties.emplace_back( "AttributedDataPoints",
                   PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS,
-                  cppu::UnoType<uno::Sequence< uno::Sequence< sal_Int32 > >>::get(),
+                  cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
@@ -1238,7 +1238,7 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( DataSourceHelper::detectRangeSegmentation(
             m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
@@ -1259,7 +1259,7 @@ Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPro
     bool bUseColumns = true;
     bool bFirstCellAsLabel = true;
     bool bHasCategories = true;
-    uno::Sequence< sal_Int32 > aSequenceMapping;
+    cpo::uno::Sequence< sal_Int32 > aSequenceMapping;
 
     if( DataSourceHelper::detectRangeSegmentation(
             m_spChart2ModelContact->getDocumentModel(), aRangeString, aSequenceMapping, bUseColumns
@@ -1702,9 +1702,9 @@ WrappedAttributedDataPointsProperty::WrappedAttributedDataPointsProperty(std::sh
 
 void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    uno::Sequence< uno::Sequence< sal_Int32 > > aNewValue;
+    cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > > aNewValue;
     if( ! (rOuterValue >>= aNewValue) )
-        throw lang::IllegalArgumentException( u"Property AttributedDataPoints requires value of type uno::Sequence< uno::Sequence< sal_Int32 > >"_ustr, nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property AttributedDataPoints requires value of type cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >"_ustr, nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1724,7 +1724,7 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
         else
         {
             //set empty sequence
-            uno::Sequence< sal_Int32 > aSeq;
+            cpo::uno::Sequence< sal_Int32 > aSeq;
             aVal <<= aSeq;
         }
         series->setFastPropertyValue( PROP_DATASERIES_ATTRIBUTED_DATA_POINTS, aVal ); // "AttributedDataPoints"
@@ -1741,14 +1741,14 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
         std::vector< rtl::Reference< DataSeries > > aSeriesVector =
             xDiagram->getDataSeries();
 
-        uno::Sequence< uno::Sequence< sal_Int32 > > aResult( aSeriesVector.size() );
+        cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > > aResult( aSeriesVector.size() );
         auto aResultRange = asNonConstRange(aResult);
         sal_Int32 i = 0;
         for (auto const& series : aSeriesVector)
         {
             cpo::uno::Any aVal(
                 series->getFastPropertyValue(PROP_DATASERIES_ATTRIBUTED_DATA_POINTS)); // "AttributedDataPoints"
-            uno::Sequence< sal_Int32 > aSeq;
+            cpo::uno::Sequence< sal_Int32 > aSeq;
             if( aVal >>= aSeq )
                 aResultRange[ i ] = std::move(aSeq);
             ++i;
@@ -1761,7 +1761,7 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
 Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
     Any aRet;
-    uno::Sequence< uno::Sequence< sal_Int32 > > aSeq;
+    cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > > aSeq;
     aRet <<= aSeq;
     return aRet;
 }
@@ -2076,7 +2076,7 @@ bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DiagramWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DiagramWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.Diagram"_ustr,

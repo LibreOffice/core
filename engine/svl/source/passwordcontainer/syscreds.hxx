@@ -24,7 +24,7 @@
 #include <mutex>
 #include <set>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <unotools/configitem.hxx>
 
 class SysCredentialsConfig;
@@ -35,21 +35,21 @@ class SysCredentialsConfigItem : public utl::ConfigItem
         explicit SysCredentialsConfigItem( SysCredentialsConfig * pOwner );
         //virtual ~SysCredentialsConfigItem();
 
-        virtual void Notify( const css::uno::Sequence< OUString > & seqPropertyNames ) override;
+        virtual void Notify( const cpo::uno::Sequence< OUString > & seqPropertyNames ) override;
 
-        css::uno::Sequence< OUString > getSystemCredentialsURLs();
+        cpo::uno::Sequence< OUString > getSystemCredentialsURLs();
 
-        void setSystemCredentialsURLs( const css::uno::Sequence< OUString > & seqURLList );
+        void setSystemCredentialsURLs( const cpo::uno::Sequence< OUString > & seqURLList );
 
         //bool isSystemCredentialsURL( const OUString & rURL ) const;
 
     private:
-        const css::uno::Sequence< OUString > & getSystemCredentialsURLs(std::unique_lock<std::mutex>& rGuard);
+        const cpo::uno::Sequence< OUString > & getSystemCredentialsURLs(std::unique_lock<std::mutex>& rGuard);
         virtual void ImplCommit() override;
 
         std::mutex m_aMutex;
         bool m_bInited;
-        css::uno::Sequence< OUString > m_seqURLs;
+        cpo::uno::Sequence< OUString > m_seqURLs;
         SysCredentialsConfig * m_pOwner;
 };
 
@@ -61,7 +61,7 @@ class SysCredentialsConfig
         OUString find( OUString const & rURL );
         void add( OUString const & rURL, bool bPersistent );
         void remove( OUString const & rURL );
-        css::uno::Sequence< OUString > list( bool bOnlyPersistent );
+        cpo::uno::Sequence< OUString > list( bool bOnlyPersistent );
 
         void persistentConfigChanged();
 

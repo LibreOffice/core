@@ -41,7 +41,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
 
     virtual css::uno::Type SAL_CALL getElementType(  ) override;
 

@@ -13,7 +13,7 @@
 #include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -32,7 +32,7 @@ void XMultiFormulaTokens::testGetSetTokens()
 {
     uno::Reference<sheet::XMultiFormulaTokens> xMFT(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<sheet::FormulaToken> aTokens{ { /* OpCode */ 2, /* Data */ {} } };
+    cpo::uno::Sequence<sheet::FormulaToken> aTokens{ { /* OpCode */ 2, /* Data */ {} } };
     xMFT->setTokens(0, aTokens);
 
     CPPUNIT_ASSERT_EQUAL(aTokens[0].OpCode, xMFT->getTokens(0)[0].OpCode);

@@ -22,7 +22,7 @@
 
 #include <svl/svldllapi.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <tools/urlobj.hxx>
 #include <o3tl/enumarray.hxx>
@@ -59,9 +59,9 @@ public:
     const OUString& GetURL() const;
     void SetURL(const OUString& aURL);
 
-    static void ParseList( const css::uno::Sequence< sal_Int8 >& aBuffer, std::vector< LockFileEntry > &rOutput );
-    static LockFileEntry ParseEntry( const css::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
-    static OUString ParseName( const css::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
+    static void ParseList( const cpo::uno::Sequence< sal_Int8 >& aBuffer, std::vector< LockFileEntry > &rOutput );
+    static LockFileEntry ParseEntry( const cpo::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
+    static OUString ParseName( const cpo::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
     static OUString EscapeCharacters( const OUString& aSource );
     static OUString GetOOOUserName();
     static OUString GetCurrentLocalTime();

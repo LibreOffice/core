@@ -70,7 +70,7 @@ namespace dbaui
         );
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rArgs ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
         // XInteractionHandler2
         virtual bool SAL_CALL handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
@@ -85,17 +85,17 @@ namespace dbaui
         /// handle SQLExceptions (and derived classes)
         static void implHandle(
                     const ::dbtools::SQLExceptionInfo& _rSqlInfo,
-                    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
+                    const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handle parameter requests
         void    implHandle(
                     const css::sdb::ParametersRequest& _rParamRequest,
-                    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
+                    const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handle document save requests
         void    implHandle(
                     const css::sdb::DocumentSaveRequest& _rParamRequest,
-                    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
+                    const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handles requests which are not SDB-specific
         bool    implHandleUnknown(
@@ -117,7 +117,7 @@ namespace dbaui
         */
         static sal_Int32 getContinuation(
             Continuation _eCont,
-            const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
+            const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
     };
 
     // SQLExceptionInteractionHandler

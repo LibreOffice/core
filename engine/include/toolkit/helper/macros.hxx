@@ -24,9 +24,9 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #define IMPL_IMPLEMENTATION_ID( ClassName ) \
-css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \
+cpo::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \
 { \
-    return css::uno::Sequence<sal_Int8>(); \
+    return cpo::uno::Sequence<sal_Int8>(); \
 }
 
 
@@ -152,9 +152,9 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
     OUString SAL_CALL getImplementationName(  ) override { return u"stardiv.Toolkit." #ImplName ""_ustr; } \
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override   \
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override   \
                             { \
-                                css::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
+                                cpo::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
                                 aNames.getArray()[ aNames.getLength() - 1 ] = ServiceName; \
                                 return aNames; \

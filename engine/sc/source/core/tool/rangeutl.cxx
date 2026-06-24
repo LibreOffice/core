@@ -712,7 +712,7 @@ void ScRangeStringConverter::GetStringFromRange(
 
 void ScRangeStringConverter::GetStringFromRangeList(
         OUString& rString,
-        const uno::Sequence< table::CellRangeAddress >& rRangeSeq,
+        const cpo::uno::Sequence< table::CellRangeAddress >& rRangeSeq,
         const ScDocument* pDocument,
         FormulaGrammar::AddressConvention eConv,
         sal_Unicode cSeparator )

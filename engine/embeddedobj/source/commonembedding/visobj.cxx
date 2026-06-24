@@ -21,7 +21,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 
 
@@ -192,7 +192,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         datatransfer::DataFlavor aDataFlavor(
                 u"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""_ustr,
                 u"GDIMetaFile"_ustr,
-                cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+                cppu::UnoType<cpo::uno::Sequence< sal_Int8 >>::get() );
 
         if( !xTransferable->isDataFlavorSupported( aDataFlavor ))
             throw uno::RuntimeException();

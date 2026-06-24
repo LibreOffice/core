@@ -145,7 +145,7 @@ void loadContentFromURL(const OUString& rURL, std::string& rStrm)
     uno::Reference<io::XInputStream> xStrm = aContent.openStream();
 
     std::ostringstream aStrmBuf;
-    uno::Sequence<sal_Int8> aBytes;
+    cpo::uno::Sequence<sal_Int8> aBytes;
     size_t nBytesRead = 0;
     constexpr size_t BUFFER_SIZE = 4096;
     do

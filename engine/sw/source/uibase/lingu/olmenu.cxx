@@ -93,7 +93,7 @@ static bool lcl_checkScriptType( SvtScriptType nScriptType, LanguageType nLang )
 void SwSpellPopup::fillLangPopupMenu(
     PopupMenu *pPopupMenu,
     sal_uInt16 nLangItemIdStart,
-    const uno::Sequence< OUString >& aSeq,
+    const cpo::uno::Sequence< OUString >& aSeq,
     SwWrtShell* pWrtSh,
     std::map< sal_Int16, OUString > &rLangTable )
 {
@@ -157,7 +157,7 @@ void SwSpellPopup::fillLangPopupMenu(
     const sal_Int16 nMaxCount = 7;
     if (xDocumentLanguages.is())
     {
-        const uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ) );
+        const cpo::uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( static_cast<sal_Int16>(nScriptType), nMaxCount ) );
         for (const lang::Locale& rLocale : rLocales)
         {
             if (aLangItems.size() == size_t(nMaxCount))
@@ -223,7 +223,7 @@ SwSpellPopup::SwSpellPopup(
     bool bUseImagesInMenus = Application::GetSettings().GetStyleSettings().GetUseImagesInMenus();
 
     m_nCheckedLanguage = LANGUAGE_NONE;
-    css::uno::Sequence< OUString > aSuggestions;
+    cpo::uno::Sequence< OUString > aSuggestions;
     if (m_xSpellAlt.is())
     {
         m_nCheckedLanguage = LanguageTag( m_xSpellAlt->getLocale() ).getLanguageType();
@@ -400,7 +400,7 @@ SwSpellPopup::SwSpellPopup(
         aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
     // build sequence for status value
-    uno::Sequence< OUString > aSeq{ aCurrentLang,
+    cpo::uno::Sequence< OUString > aSeq{ aCurrentLang,
                                     aScriptTypesInUse,
                                     aKeyboardLang,
                                     SvtLanguageTable::GetLanguageString(nGuessLangWord) };
@@ -427,7 +427,7 @@ SwSpellPopup::SwSpellPopup(
     SwWrtShell *pWrtSh,
     const linguistic2::ProofreadingResult &rResult,
     sal_Int32 nErrorInResult,
-    const uno::Sequence< OUString > &rSuggestions,
+    const cpo::uno::Sequence< OUString > &rSuggestions,
     const OUString &rParaText )
     : m_aBuilder(nullptr, AllSettings::GetUIRootDir(), u"modules/swriter/ui/spellmenu.ui"_ustr, u""_ustr)
     , m_xPopupMenu(m_aBuilder.get_menu(u"menu"))
@@ -557,7 +557,7 @@ SwSpellPopup::SwSpellPopup(
         aCurrentLang = SvtLanguageTable::GetLanguageString( nLang );
 
     // build sequence for status value
-    uno::Sequence< OUString > aSeq{ aCurrentLang,
+    cpo::uno::Sequence< OUString > aSeq{ aCurrentLang,
                                     aScriptTypesInUse,
                                     aKeyboardLang,
                                     SvtLanguageTable::GetLanguageString(nGuessLangWord) };
@@ -584,7 +584,7 @@ SwSpellPopup::SwSpellPopup(
 
 SwSpellPopup::~SwSpellPopup() {}
 
-void SwSpellPopup::InitItemCommands(const css::uno::Sequence< OUString >& aSuggestions)
+void SwSpellPopup::InitItemCommands(const cpo::uno::Sequence< OUString >& aSuggestions)
 {
     if (!comphelper::COKit::isActive())
         return;

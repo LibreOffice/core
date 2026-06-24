@@ -21,7 +21,7 @@ class XComponentContext;
 using namespace ::com::sun::star;
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
 namespace
@@ -88,7 +88,7 @@ OUString SAL_CALL BoxWhiskerChartType::getChartType()
     return CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER;
 }
 
-uno::Sequence<OUString> BoxWhiskerChartType::getSupportedPropertyRoles()
+cpo::uno::Sequence<OUString> BoxWhiskerChartType::getSupportedPropertyRoles()
 {
     return { u"FillColor"_ustr, u"BorderColor"_ustr };
 }
@@ -136,7 +136,7 @@ bool SAL_CALL BoxWhiskerChartType::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL BoxWhiskerChartType::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL BoxWhiskerChartType::getSupportedServiceNames()
 {
     return { CHART2_SERVICE_NAME_CHARTTYPE_BOXWHISKER, u"com.sun.star.chart2.ChartType"_ustr };
 }
@@ -145,7 +145,7 @@ css::uno::Sequence<OUString> SAL_CALL BoxWhiskerChartType::getSupportedServiceNa
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_chart_BoxWhiskerChartType_get_implementation(
-    css::uno::XComponentContext* /*context*/, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* /*context*/, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ::chart::BoxWhiskerChartType);
 }

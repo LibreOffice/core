@@ -577,17 +577,17 @@ public:
     void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) override;
-    void SAL_CALL addItems( const css::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
+    void SAL_CALL addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
     void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
     sal_Int16 SAL_CALL getItemCount(  ) override;
     OUString SAL_CALL getItem( sal_Int16 nPos ) override;
-    css::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
     sal_Int16 SAL_CALL getSelectedItemPos(  ) override;
-    css::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
+    cpo::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) override;
     OUString SAL_CALL getSelectedItem(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) override;
     void SAL_CALL selectItemPos( sal_Int16 nPos, bool bSelect ) override;
-    void SAL_CALL selectItemsPos( const css::uno::Sequence< sal_Int16 >& aPositions, bool bSelect ) override;
+    void SAL_CALL selectItemsPos( const cpo::uno::Sequence< sal_Int16 >& aPositions, bool bSelect ) override;
     void SAL_CALL selectItem( const OUString& aItem, bool bSelect ) override;
     bool SAL_CALL isMutipleMode(  ) override;
     void SAL_CALL setMultipleMode( bool bMulti ) override;
@@ -650,11 +650,11 @@ public:
     void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
     void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) override;
-    void SAL_CALL addItems( const css::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
+    void SAL_CALL addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
     void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
     sal_Int16 SAL_CALL getItemCount(  ) override;
     OUString SAL_CALL getItem( sal_Int16 nPos ) override;
-    css::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
+    cpo::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
     sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
     void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) override;
 

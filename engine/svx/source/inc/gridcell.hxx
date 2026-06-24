@@ -463,7 +463,7 @@ private:
 class DbListBox final : public DbCellControl
 {
     bool              m_bBound  : 1;
-    css::uno::Sequence< OUString > m_aValueList;
+    cpo::uno::Sequence< OUString > m_aValueList;
 
 public:
     DbListBox(DbGridColumn& _rColumn);
@@ -655,7 +655,7 @@ private:
     void CreateControl(BrowserDataWin* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
     DECL_LINK(OnToggle, weld::CheckButton&, void);
 
-    css::uno::Sequence< OUString >  m_aValueList;
+    cpo::uno::Sequence< OUString >  m_aValueList;
     OUString    m_aText;
     Link<DbFilterField&,void> m_aCommitLink;
     sal_Int16   m_nControlClass;
@@ -701,8 +701,8 @@ public:
     void SetTextLineColor(const Color& _rColor);
 
 // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -828,8 +828,8 @@ public:
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
 // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -890,8 +890,8 @@ public:
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(FmXCheckBoxCell, FmXDataCell)
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -921,8 +921,8 @@ public:
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell)
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -933,17 +933,17 @@ public:
     virtual void SAL_CALL addActionListener(const css::uno::Reference< css::awt::XActionListener >& l) override;
     virtual void SAL_CALL removeActionListener(const css::uno::Reference< css::awt::XActionListener >& l) override;
     virtual void SAL_CALL addItem(const OUString& aItem, sal_Int16 nPos) override;
-    virtual void SAL_CALL addItems(const css::uno::Sequence< OUString >& aItems, sal_Int16 nPos) override;
+    virtual void SAL_CALL addItems(const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos) override;
     virtual void SAL_CALL removeItems(sal_Int16 nPos, sal_Int16 nCount) override;
     virtual sal_Int16 SAL_CALL getItemCount() override;
     virtual OUString SAL_CALL getItem(sal_Int16 nPos) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getItems() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getItems() override;
     virtual sal_Int16 SAL_CALL getSelectedItemPos() override;
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos() override;
+    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos() override;
     virtual OUString SAL_CALL getSelectedItem() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSelectedItems() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSelectedItems() override;
     virtual void SAL_CALL selectItemPos(sal_Int16 nPos, bool bSelect) override;
-    virtual void SAL_CALL selectItemsPos(const css::uno::Sequence< sal_Int16 >& aPositions, bool bSelect) override;
+    virtual void SAL_CALL selectItemsPos(const cpo::uno::Sequence< sal_Int16 >& aPositions, bool bSelect) override;
     virtual void SAL_CALL selectItem(const OUString& aItem, bool bSelect) override;
     virtual bool SAL_CALL isMutipleMode() override;
     virtual void SAL_CALL setMultipleMode(bool bMulti) override;
@@ -986,8 +986,8 @@ public:
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell)
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -998,11 +998,11 @@ public:
     virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& Listener ) override;
     virtual void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& Listener ) override;
     virtual void SAL_CALL addItem( const OUString& Item, ::sal_Int16 Pos ) override;
-    virtual void SAL_CALL addItems( const css::uno::Sequence< OUString >& Items, ::sal_Int16 Pos ) override;
+    virtual void SAL_CALL addItems( const cpo::uno::Sequence< OUString >& Items, ::sal_Int16 Pos ) override;
     virtual void SAL_CALL removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) override;
     virtual ::sal_Int16 SAL_CALL getItemCount(  ) override;
     virtual OUString SAL_CALL getItem( ::sal_Int16 Pos ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getItems(  ) override;
     virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) override;
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 Lines ) override;
 };
@@ -1018,8 +1018,8 @@ public:
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell)
     virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 //  painting the filter text
     void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect);

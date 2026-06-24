@@ -203,7 +203,7 @@ bool StylesPreviewWindow_Base::Command(const CommandEvent& rEvent)
                                            tools::Rectangle(rEvent.GetMousePosPixel(), Size(1, 1)));
     if (rIdent == "update" || rIdent == "edit")
     {
-        css::uno::Sequence<css::beans::PropertyValue> aArgs(0);
+        cpo::uno::Sequence<css::beans::PropertyValue> aArgs(0);
 
         const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                            css::uno::UNO_QUERY);
@@ -450,7 +450,7 @@ IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
 {
     OUString sStyleName = rIconView.get_selected_text();
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{
         comphelper::makePropertyValue(u"Template"_ustr, sStyleName),
         comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
     };
@@ -463,7 +463,7 @@ IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, boo
 {
     OUString sStyleName = rIconView.get_selected_text();
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{
         comphelper::makePropertyValue(u"Param"_ustr, sStyleName),
         comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
     };
@@ -545,14 +545,14 @@ static OString extractPngString(const Bitmap& rBitmap)
 {
     SvMemoryStream aOStm(65535, 65535);
     // Use fastest compression "1"
-    css::uno::Sequence<css::beans::PropertyValue> aFilterData{
+    cpo::uno::Sequence<css::beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue(u"Compression"_ustr, sal_Int32(1)),
     };
     vcl::PngImageWriter aPNGWriter(aOStm);
     aPNGWriter.setParameters(aFilterData);
     if (aPNGWriter.write(rBitmap))
     {
-        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+        cpo::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
                                           aOStm.Tell());
         OStringBuffer aBuffer("data:image/png;base64,");
         ::comphelper::Base64::encode(aBuffer, aSeq);
@@ -654,7 +654,7 @@ StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
         if (it == aGrabBag.end())
             return aFilter;
 
-        css::uno::Sequence<css::beans::PropertyValue> aFilterProps;
+        cpo::uno::Sequence<css::beans::PropertyValue> aFilterProps;
         it->second >>= aFilterProps;
 
         for (const auto& rProp : aFilterProps)

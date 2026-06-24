@@ -23,7 +23,7 @@
 #include "anyrefdg.hxx"
 #include "docsh.hxx"
 #include <SolverSettings.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/SolverConstraint.hpp>
 #include <com/sun/star/sheet/XSolver.hpp>
@@ -76,10 +76,10 @@ private:
     std::vector<sc::ModelConstraint> m_aConditions;
     tools::Long            nScrollPos;
 
-    css::uno::Sequence<OUString> maImplNames;
-    css::uno::Sequence<OUString> maDescriptions;
+    cpo::uno::Sequence<OUString> maImplNames;
+    cpo::uno::Sequence<OUString> maDescriptions;
     OUString        maEngine;
-    css::uno::Sequence<css::beans::PropertyValue> maProperties;
+    cpo::uno::Sequence<css::beans::PropertyValue> maProperties;
 
     static const sal_uInt16 EDIT_ROW_COUNT = 4;
     ScCursorRefEdit* mpLeftEdit[EDIT_ROW_COUNT];
@@ -154,11 +154,11 @@ private:
     // success.
     struct SolveState
     {
-        css::uno::Sequence<css::table::CellAddress> aVariables;
-        css::uno::Sequence<double> aOldValues;
+        cpo::uno::Sequence<css::table::CellAddress> aVariables;
+        cpo::uno::Sequence<double> aOldValues;
         sal_Int32 nVarCount;
         css::table::CellAddress aObjective;
-        css::uno::Sequence<css::sheet::SolverConstraint> aConstraints;
+        cpo::uno::Sequence<css::sheet::SolverConstraint> aConstraints;
         css::uno::Reference<css::sheet::XSolver> xSolver;
         css::uno::Reference<css::beans::XPropertySet> xOptProp;
         bool bSuccess;

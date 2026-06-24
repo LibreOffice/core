@@ -33,7 +33,7 @@
 #include <font/FontMetricData.hxx>
 #include <sft.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <hb-ot.h>
 
@@ -186,7 +186,7 @@ bool FontMetricData::ShouldNotUseUnderlineMetrics() const
     if (comphelper::IsFuzzing())
         return false;
 
-    css::uno::Sequence<OUString> rNoUnderlineMetricsList(
+    cpo::uno::Sequence<OUString> rNoUnderlineMetricsList(
         officecfg::Office::Common::Misc::FontsDontUseUnderlineMetrics::get());
     if (comphelper::findValue(rNoUnderlineMetricsList, GetFamilyName()) != -1)
     {
@@ -410,7 +410,7 @@ bool FontMetricData::ShouldUseWinMetrics(int nAscent, int nDescent, int nTypoAsc
         + OUString::number(nTypoAscent) + "," + OUString::number(nTypoDescent) + ","
         + OUString::number(nWinAscent) + "," + OUString::number(nWinDescent));
 
-    css::uno::Sequence<OUString> rWinMetricFontList(
+    cpo::uno::Sequence<OUString> rWinMetricFontList(
         officecfg::Office::Common::Misc::FontsUseWinMetrics::get());
     if (comphelper::findValue(rWinMetricFontList, aFontIdentifier) != -1)
     {

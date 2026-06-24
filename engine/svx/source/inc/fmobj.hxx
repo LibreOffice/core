@@ -32,8 +32,8 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmFormObj final : public SdrUnoObj
 {
     FmFormObj( const FmFormObj& ) = delete;
 
-    css::uno::Sequence< css::script::ScriptEventDescriptor >  aEvts;  // events of the object
-    css::uno::Sequence< css::script::ScriptEventDescriptor>   m_aEventsHistory;
+    cpo::uno::Sequence< css::script::ScriptEventDescriptor >  aEvts;  // events of the object
+    cpo::uno::Sequence< css::script::ScriptEventDescriptor>   m_aEventsHistory;
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
                 // m_pEnvironmentHistory was created
 
@@ -60,7 +60,7 @@ public:
 
     SAL_DLLPRIVATE const css::uno::Reference< css::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }
-    SAL_DLLPRIVATE const css::uno::Sequence< css::script::ScriptEventDescriptor >&
+    SAL_DLLPRIVATE const cpo::uno::Sequence< css::script::ScriptEventDescriptor >&
         GetOriginalEvents() const { return aEvts; }
     SAL_DLLPRIVATE sal_Int32
         GetOriginalIndex() const { return m_nPos; }
@@ -68,7 +68,7 @@ public:
     SAL_DLLPRIVATE void SetObjEnv(
             const css::uno::Reference< css::container::XIndexContainer>& xForm,
             const sal_Int32 nIdx,
-            const css::uno::Sequence< css::script::ScriptEventDescriptor >& rEvts );
+            const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& rEvts );
     SAL_DLLPRIVATE void ClearObjEnv();
 
 public:

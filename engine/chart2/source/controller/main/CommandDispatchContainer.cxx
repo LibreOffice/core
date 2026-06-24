@@ -36,7 +36,7 @@
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace chart
 {
@@ -142,7 +142,7 @@ Sequence< Reference< frame::XDispatch > > CommandDispatchContainer::getDispatche
     const Sequence< frame::DispatchDescriptor > & aDescriptors )
 {
     sal_Int32 nCount = aDescriptors.getLength();
-    uno::Sequence< uno::Reference< frame::XDispatch > > aRet( nCount );
+    cpo::uno::Sequence< uno::Reference< frame::XDispatch > > aRet( nCount );
     auto aRetRange = asNonConstRange(aRet);
 
     for( sal_Int32 nPos = 0; nPos < nCount; ++nPos )

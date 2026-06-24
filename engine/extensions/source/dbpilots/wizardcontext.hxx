@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -69,7 +69,7 @@ namespace dbp
         typedef std::map<OUString, sal_Int32> TNameTypeMap;
         TNameTypeMap aTypes;
         // the column names of the object the form is bound to (table, query or SQL statement)
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
                     aFieldNames;
 
         bool bEmbedded;

@@ -45,8 +45,8 @@ class ScValidationData;
 
 struct ScCondFormatEntryItem
 {
-    css::uno::Sequence< css::sheet::FormulaToken > maTokens1;
-    css::uno::Sequence< css::sheet::FormulaToken > maTokens2;
+    cpo::uno::Sequence< css::sheet::FormulaToken > maTokens1;
+    cpo::uno::Sequence< css::sheet::FormulaToken > maTokens2;
     OUString            maExpr1;
     OUString            maExpr2;
     OUString            maExprNmsp1;
@@ -83,7 +83,7 @@ public:
                                 formula::FormulaGrammar::Grammar eGrammar) const;
 
                             // XSheetConditionalEntries
-    virtual void SAL_CALL   addNew( const css::uno::Sequence< css::beans::PropertyValue >& aConditionalEntry ) override;
+    virtual void SAL_CALL   addNew( const cpo::uno::Sequence< css::beans::PropertyValue >& aConditionalEntry ) override;
     virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex ) override;
     virtual void SAL_CALL   clear() override;
 
@@ -93,7 +93,7 @@ public:
 
                             // XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XEnumerationAccess
@@ -107,7 +107,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScTableConditionalEntry final : public cppu::WeakImplHelper<
@@ -144,7 +144,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class SC_DLLPUBLIC ScTableValidationObj final : public cppu::WeakImplHelper<
@@ -162,8 +162,8 @@ private:
     OUString            maExprNmsp2;
     formula::FormulaGrammar::Grammar  meGrammar1;      // grammar used with aExpr1 and aExpr2
     formula::FormulaGrammar::Grammar  meGrammar2;      // grammar used with aExpr1 and aExpr2
-    css::uno::Sequence< css::sheet::FormulaToken > aTokens1;
-    css::uno::Sequence< css::sheet::FormulaToken > aTokens2;
+    cpo::uno::Sequence< css::sheet::FormulaToken > aTokens1;
+    cpo::uno::Sequence< css::sheet::FormulaToken > aTokens2;
     ScAddress           aSrcPos;
     OUString            aPosString;     // formula position as text
     sal_uInt16          nValMode;       // enum ScValidationMode
@@ -203,10 +203,10 @@ public:
     virtual void SAL_CALL setSourcePosition( const css::table::CellAddress& aSourcePosition ) override;
 
                             // XMultiFormulaTokens
-    virtual css::uno::Sequence< css::sheet::FormulaToken >
+    virtual cpo::uno::Sequence< css::sheet::FormulaToken >
                             SAL_CALL getTokens( sal_Int32 nIndex ) override;
     virtual void SAL_CALL setTokens( sal_Int32 nIndex,
-                                     const css::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
+                                     const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
     virtual sal_Int32 SAL_CALL getCount() override;
 
                             // XPropertySet
@@ -228,7 +228,7 @@ public:
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

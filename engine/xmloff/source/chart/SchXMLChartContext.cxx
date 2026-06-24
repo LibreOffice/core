@@ -91,7 +91,7 @@ void lcl_MoveDataToCandleStickSeries(
 {
     try
     {
-        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledSeq(
+        cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledSeq(
             xDataSource->getDataSequences());
         if( aLabeledSeq.hasElements())
         {
@@ -100,7 +100,7 @@ void lcl_MoveDataToCandleStickSeries(
             // add to data series
             uno::Reference< chart2::data::XDataSource > xSource( xDestination, uno::UNO_QUERY_THROW );
             // @todo: realloc only once outside this function
-            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xSource->getDataSequences());
+            cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xSource->getDataSequences());
             aData.realloc( aData.getLength() + 1);
             aData.getArray()[ aData.getLength() - 1 ] = aLabeledSeq[0];
             uno::Reference< chart2::data::XDataSink > xSink( xDestination, uno::UNO_QUERY_THROW );
@@ -120,7 +120,7 @@ void lcl_setRoleAtFirstSequence(
     uno::Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
     if( xSource.is())
     {
-        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
+        cpo::uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
         if( aSeq.hasElements())
             lcl_setRoleAtLabeledSequence( aSeq[0], rRole );
     }
@@ -140,7 +140,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
         // count all charttype groups to be able to leave at least one
         sal_Int32 nRemainingGroups = 0;
         uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDia, uno::UNO_QUERY_THROW );
-        const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > >
+        const cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > >
             aCooSysSeq( xCooSysCnt->getCoordinateSystems());
         for( auto const & i : aCooSysSeq )
         {
@@ -152,7 +152,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
         for( sal_Int32 nI = aCooSysSeq.getLength(); nI-- && (nRemainingGroups > 1); )
         {
             uno::Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nI], uno::UNO_QUERY_THROW );
-            uno::Sequence< uno::Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
+            cpo::uno::Sequence< uno::Reference< chart2::XChartType > > aCTSeq( xCTCnt->getChartTypes());
             for( sal_Int32 nJ=aCTSeq.getLength(); nJ-- && (nRemainingGroups > 1); )
             {
                 uno::Reference< chart2::XDataSeriesContainer > xDSCnt( aCTSeq[nJ], uno::UNO_QUERY_THROW );
@@ -202,7 +202,7 @@ void lcl_ApplyHistogramTemplate(const uno::Reference<chart2::XChartDocument>& xD
     }
 }
 
-uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( std::u16string_view rStr, bool bAddOneToEachOldIndex )
+cpo::uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( std::u16string_view rStr, bool bAddOneToEachOldIndex )
 {
     const sal_Unicode aSpace( ' ' );
 
@@ -228,7 +228,7 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( std::u16string_view 
     }
 
     const size_t nVecSize = aVec.size();
-    uno::Sequence< sal_Int32 > aSeq( nVecSize );
+    cpo::uno::Sequence< sal_Int32 > aSeq( nVecSize );
 
     if(!bAddOneToEachOldIndex)
     {
@@ -276,7 +276,7 @@ SchXMLChartContext::~SchXMLChartContext()
 
 static bool lcl_hasServiceName(Reference<lang::XMultiServiceFactory> const & xFactory, OUString const & rServiceName)
 {
-    const uno::Sequence<OUString> aServiceNames(xFactory->getAvailableServiceNames());
+    const cpo::uno::Sequence<OUString> aServiceNames(xFactory->getAvailableServiceNames());
 
     return std::find(aServiceNames.begin(), aServiceNames.end(), rServiceName) != aServiceNames.end();
 }
@@ -719,7 +719,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         bHasCateories = true;
     }
 
-    uno::Sequence< beans::PropertyValue > aArgs{
+    cpo::uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
            u"CellRangeRepresentation"_ustr,
            -1, cpo::uno::Any( rRectangularRange ),
@@ -1030,11 +1030,11 @@ void SchXMLChartContext::MergeSeriesForStockChart()
         bool bHasJapaneseCandlestick = true;
         uno::Reference< chart2::XDataSeriesContainer > xDSContainer;
         uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
-        const uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
+        const cpo::uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
         for( const auto& rCooSys : aCooSysSeq )
         {
             uno::Reference< chart2::XChartTypeContainer > xCTCnt( rCooSys, uno::UNO_QUERY_THROW );
-            const uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+            const cpo::uno::Sequence< uno::Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
             auto pChartType = std::find_if(aChartTypes.begin(), aChartTypes.end(),
                 [](const auto& rChartType) { return rChartType->getChartType() == "com.sun.star.chart2.CandleStickChartType"; });
             if (pChartType != aChartTypes.end())
@@ -1049,12 +1049,12 @@ void SchXMLChartContext::MergeSeriesForStockChart()
         {
             // with japanese candlesticks: open, low, high, close
             // otherwise: low, high, close
-            uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDSContainer->getDataSeries());
+            cpo::uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDSContainer->getDataSeries());
             const sal_Int32 nSeriesCount( aSeriesSeq.getLength());
             const sal_Int32 nSeriesPerCandleStick = bHasJapaneseCandlestick ? 4: 3;
             sal_Int32 nCandleStickCount = nSeriesCount / nSeriesPerCandleStick;
             OSL_ASSERT( nSeriesPerCandleStick * nCandleStickCount == nSeriesCount );
-            uno::Sequence< uno::Reference< chart2::XDataSeries > > aNewSeries( nCandleStickCount );
+            cpo::uno::Sequence< uno::Reference< chart2::XDataSeries > > aNewSeries( nCandleStickCount );
             auto aNewSeriesRange = asNonConstRange(aNewSeries);
             for( sal_Int32 i=0; i<nCandleStickCount; ++i )
             {

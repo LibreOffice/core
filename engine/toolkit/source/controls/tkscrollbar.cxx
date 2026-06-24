@@ -54,7 +54,7 @@ namespace toolkit
         return u"stardiv.Toolkit.UnoControlScrollBarModel"_ustr;
     }
 
-    css::uno::Sequence<OUString>
+    cpo::uno::Sequence<OUString>
     UnoControlScrollBarModel::getSupportedServiceNames()
     {
         auto s(UnoControlModel::getSupportedServiceNames());
@@ -118,7 +118,7 @@ namespace toolkit
     IMPL_IMPLEMENTATION_ID( UnoScrollBarControl )
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type > UnoScrollBarControl::getTypes()
+    cpo::uno::Sequence< css::uno::Type > UnoScrollBarControl::getTypes()
     {
         static const ::cppu::OTypeCollection aTypeList(
             cppu::UnoType<css::lang::XTypeProvider>::get(),
@@ -292,7 +292,7 @@ namespace toolkit
         return u"stardiv.Toolkit.UnoScrollBarControl"_ustr;
     }
 
-    css::uno::Sequence<OUString> UnoScrollBarControl::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> UnoScrollBarControl::getSupportedServiceNames()
     {
         auto s(UnoControlBase::getSupportedServiceNames());
         s.realloc(s.getLength() + 2);
@@ -308,7 +308,7 @@ namespace toolkit
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoControlScrollBarModel(context));
 }
@@ -316,7 +316,7 @@ stardiv_Toolkit_UnoControlScrollBarModel_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_UnoScrollBarControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::UnoScrollBarControl());
 }

@@ -34,7 +34,7 @@ class OFileControlModel
     OUString                         m_sDefaultValue;
 
 protected:
-    virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
+    virtual cpo::uno::Sequence< css::uno::Type> _getTypes() override;
 
 public:
     OFileControlModel(
@@ -53,7 +53,7 @@ public:
     OUString SAL_CALL getImplementationName() override
     { return u"com.sun.star.form.OFileControlModel"_ustr; }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -78,7 +78,7 @@ public:
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
-        css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+        cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
     ) const override;
 
     // prevent method hiding

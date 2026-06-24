@@ -39,7 +39,7 @@ void XFunctionDescriptions::testGetById()
 
     sal_Int32 aId1 = 0;
     OUString aName1;
-    uno::Sequence<beans::PropertyValue> aProps1;
+    cpo::uno::Sequence<beans::PropertyValue> aProps1;
     CPPUNIT_ASSERT(xFD->getByIndex(nNumber) >>= aProps1);
     for (const auto& aProp : aProps1)
     {
@@ -52,7 +52,7 @@ void XFunctionDescriptions::testGetById()
     // fetch the same descriptions by its id
     sal_Int32 aId2 = 0;
     OUString aName2;
-    const uno::Sequence<beans::PropertyValue> aProps2 = xFD->getById(aId1);
+    const cpo::uno::Sequence<beans::PropertyValue> aProps2 = xFD->getById(aId1);
     CPPUNIT_ASSERT_MESSAGE("Received empty FunctionDescriptions from getById()",
                            aProps2.hasElements());
     for (const auto& aProp : aProps2)

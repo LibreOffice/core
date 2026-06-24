@@ -169,7 +169,7 @@ static bool isMediaDescriptor( sal_uInt16 nSlotId )
              nSlotId == SID_SAVEACOPYITEM);
 }
 
-void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
+void TransformParameters( sal_uInt16 nSlotId, const cpo::uno::Sequence<beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
     if ( !pSlot )
         pSlot = SFX_SLOTPOOL().GetSlot( nSlotId );
@@ -616,7 +616,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             }
             else if ( aName == sDenyList )
             {
-                uno::Sequence<OUString> xVal;
+                cpo::uno::Sequence<OUString> xVal;
                 bool bOK = (rProp.Value >>= xVal);
                 DBG_ASSERT( bOK, "invalid type or value for DenyList" );
                 if (bOK)
@@ -1500,7 +1500,7 @@ comphelper::SequenceAsHashMap TransformItems(sal_uInt16 nSlotId, const SfxItemSe
         }
         if ( const SfxStringListItem *pItem = rSet.GetItemIfSet( SID_DENY_LIST, false) )
         {
-            css::uno::Sequence< OUString > aList;
+            cpo::uno::Sequence< OUString > aList;
             pItem->GetStringList( aList );
             aSequ[sDenyList] <<= aList;
         }
@@ -1631,12 +1631,12 @@ comphelper::SequenceAsHashMap TransformItems(sal_uInt16 nSlotId, const SfxItemSe
 }
 
 void SAL_CALL FilterOptionsContinuation::setFilterOptions(
-                const uno::Sequence<beans::PropertyValue>& rProps )
+                const cpo::uno::Sequence<beans::PropertyValue>& rProps )
 {
     rProperties = rProps;
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL
     FilterOptionsContinuation::getFilterOptions()
 {
     return rProperties;
@@ -1644,7 +1644,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL
 
 
 RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > const & rModel,
-                              const uno::Sequence< beans::PropertyValue >& rProperties )
+                              const cpo::uno::Sequence< beans::PropertyValue >& rProperties )
 {
     uno::Reference< uno::XInterface > temp2;
     document::FilterOptionsRequest aOptionsRequest( OUString(),
@@ -1663,7 +1663,7 @@ cpo::uno::Any SAL_CALL RequestFilterOptions::getRequest()
     return m_aRequest;
 }
 
-uno::Sequence< uno::Reference< task::XInteractionContinuation > >
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL RequestFilterOptions::getContinuations()
 {
     return { m_xAbort, m_xOptions };
@@ -1680,7 +1680,7 @@ public:
     explicit RequestPackageReparation_Impl( const OUString& aName );
     bool    isApproved() const;
     virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
 
 RequestPackageReparation_Impl::RequestPackageReparation_Impl( const OUString& aName )
@@ -1702,7 +1702,7 @@ cpo::uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
     return m_aRequest;
 }
 
-uno::Sequence< uno::Reference< task::XInteractionContinuation > >
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL RequestPackageReparation_Impl::getContinuations()
 {
     return { m_xApprove, m_xDisapprove };
@@ -1736,7 +1736,7 @@ class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper< task::XInteracti
 public:
     explicit NotifyBrokenPackage_Impl(const OUString& rName);
     virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
 
 NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )
@@ -1752,7 +1752,7 @@ cpo::uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
     return m_aRequest;
 }
 
-uno::Sequence< uno::Reference< task::XInteractionContinuation > >
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL NotifyBrokenPackage_Impl::getContinuations()
 {
     return { m_xAbort };

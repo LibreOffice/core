@@ -56,8 +56,8 @@ namespace canvas
         struct Values
         {
             Values( ::basegfx::B2DPolygon                               aGradientPoly,
-                    const css::uno::Sequence< css::uno::Sequence< double > >& rColors,
-                    const css::uno::Sequence< double >&                 rStops,
+                    const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rColors,
+                    const cpo::uno::Sequence< double >&                 rStops,
                     double                                              nAspectRatio,
                     GradientType                                        eType ) :
                 maGradientPoly(std::move( aGradientPoly )),
@@ -75,34 +75,34 @@ namespace canvas
             const double                                        mnAspectRatio;
 
             /// Gradient colors
-            const css::uno::Sequence< css::uno::Sequence< double > >   maColors;
+            const cpo::uno::Sequence< cpo::uno::Sequence< double > >   maColors;
 
             /// Gradient color stops
-            const css::uno::Sequence< double >                  maStops;
+            const cpo::uno::Sequence< double >                  maStops;
 
             /// Type of gradient to render (as e.g. linear grads are not represented by maGradientPoly)
             const GradientType                                  meType;
         };
 
-        static css::uno::Sequence< OUString > getAvailableServiceNames();
+        static cpo::uno::Sequence< OUString > getAvailableServiceNames();
         static rtl::Reference<ParametricPolyPolygon> create(
             const css::uno::Reference< css::rendering::XGraphicDevice >& rDevice,
             std::u16string_view rServiceName,
-            const css::uno::Sequence< cpo::uno::Any >& rArgs );
+            const cpo::uno::Sequence< cpo::uno::Any >& rArgs );
 
         /// Dispose all internal references
         virtual void disposing(std::unique_lock<std::mutex>&) override;
 
         // XParametricPolyPolygon2D
         virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL getOutline( double t ) override;
-        virtual css::uno::Sequence< double > SAL_CALL getColor( double t ) override;
-        virtual css::uno::Sequence< double > SAL_CALL getPointColor( const css::geometry::RealPoint2D& point ) override;
+        virtual cpo::uno::Sequence< double > SAL_CALL getColor( double t ) override;
+        virtual cpo::uno::Sequence< double > SAL_CALL getPointColor( const css::geometry::RealPoint2D& point ) override;
         virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace() override;
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         /// Query all defining values of this object atomically
         const Values & getValues() const;
@@ -114,17 +114,17 @@ namespace canvas
 
         static rtl::Reference<ParametricPolyPolygon> createLinearHorizontalGradient( const css::uno::Reference<
                                                                          css::rendering::XGraphicDevice >& rDevice,
-                                                                      const css::uno::Sequence< css::uno::Sequence< double > >& colors,
-                                                                      const css::uno::Sequence< double >& stops );
+                                                                      const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
+                                                                      const cpo::uno::Sequence< double >& stops );
         static rtl::Reference<ParametricPolyPolygon> createEllipticalGradient( const css::uno::Reference<
                                                                    css::rendering::XGraphicDevice >& rDevice,
-                                                                const css::uno::Sequence< css::uno::Sequence< double > >& colors,
-                                                                const css::uno::Sequence< double >& stops,
+                                                                const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
+                                                                const cpo::uno::Sequence< double >& stops,
                                                                 double fAspect );
         static rtl::Reference<ParametricPolyPolygon> createRectangularGradient( const css::uno::Reference<
                                                                     css::rendering::XGraphicDevice >& rDevice,
-                                                                 const css::uno::Sequence< css::uno::Sequence< double > >& colors,
-                                                                 const css::uno::Sequence< double >& stops,
+                                                                 const cpo::uno::Sequence< cpo::uno::Sequence< double > >& colors,
+                                                                 const cpo::uno::Sequence< double >& stops,
                                                                  double fAspect );
 
         /// Private, because objects can only be created from the static factories
@@ -132,14 +132,14 @@ namespace canvas
                                    css::rendering::XGraphicDevice >             xDevice,
                                const ::basegfx::B2DPolygon&                     rGradientPoly,
                                GradientType                                     eType,
-                               const css::uno::Sequence< css::uno::Sequence< double > >&  colors,
-                               const css::uno::Sequence< double >&              stops,
+                               const cpo::uno::Sequence< cpo::uno::Sequence< double > >&  colors,
+                               const cpo::uno::Sequence< double >&              stops,
                                double                                           nAspectRatio );
         ParametricPolyPolygon( css::uno::Reference<
                                    css::rendering::XGraphicDevice >             xDevice,
                                GradientType                                     eType,
-                               const css::uno::Sequence< css::uno::Sequence< double > >&  colors,
-                               const css::uno::Sequence< double >&              stops );
+                               const cpo::uno::Sequence< cpo::uno::Sequence< double > >&  colors,
+                               const cpo::uno::Sequence< double >&              stops );
 
         css::uno::Reference<
             css::rendering::XGraphicDevice >    mxDevice;

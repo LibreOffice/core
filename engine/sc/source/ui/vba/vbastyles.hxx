@@ -35,7 +35,7 @@ public:
     /// @throws css::script::BasicErrorException
     ScVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, ScModelObj* pModel );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > getStyleNames();
+    cpo::uno::Sequence< OUString > getStyleNames();
     /// @throws css::script::BasicErrorException
     void Delete(const OUString& _sStyleName);
     // XStyles
@@ -46,7 +46,7 @@ public:
     virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

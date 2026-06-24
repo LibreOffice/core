@@ -45,9 +45,9 @@ cpo::uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
     {
         if ( m_xInvocation.is() )
         {
-            uno::Sequence< sal_Int16 > aNamedParamIndex;
-            uno::Sequence< cpo::uno::Any > aNamedParam;
-            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(m_nCurInd++) };
+            cpo::uno::Sequence< sal_Int16 > aNamedParamIndex;
+            cpo::uno::Sequence< cpo::uno::Any > aNamedParam;
+            cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(m_nCurInd++) };
 
             return m_xInvocation->invoke( u"item"_ustr,
                                           aArgs,

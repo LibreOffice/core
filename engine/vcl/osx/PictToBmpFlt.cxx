@@ -21,8 +21,8 @@
 
 #include "PictToBmpFlt.hxx"
 
-bool ImageToPNG( css::uno::Sequence<sal_Int8> const & rImgData,
-                 css::uno::Sequence<sal_Int8>& rPngData)
+bool ImageToPNG( cpo::uno::Sequence<sal_Int8> const & rImgData,
+                 cpo::uno::Sequence<sal_Int8>& rPngData)
 {
     NSData* pData = [NSData dataWithBytesNoCopy: const_cast<sal_Int8 *>(rImgData.getConstArray()) length: rImgData.getLength() freeWhenDone: false];
     if( !pData)
@@ -42,8 +42,8 @@ bool ImageToPNG( css::uno::Sequence<sal_Int8> const & rImgData,
     return (nPngSize > 0);
 }
 
-bool PNGToImage( css::uno::Sequence<sal_Int8> const & rPngData,
-                 css::uno::Sequence<sal_Int8>& rImgData,
+bool PNGToImage( cpo::uno::Sequence<sal_Int8> const & rPngData,
+                 cpo::uno::Sequence<sal_Int8>& rImgData,
                  NSBitmapImageFileType eOutFormat
                 )
 {

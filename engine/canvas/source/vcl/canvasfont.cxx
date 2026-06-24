@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
+                            const cpo::uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
                             const geometry::Matrix2D&                       rFontMatrix,
                             rendering::XGraphicDevice&                      rDevice,
                             const OutDevProviderSharedPtr&                  rOutDevProvider ) :
@@ -123,16 +123,16 @@ namespace vclcanvas
             aMetric.GetAscent() / 2.0);
     }
 
-    uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  )
+    cpo::uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  )
     {
         // TODO(F1)
-        return uno::Sequence< double >();
+        return cpo::uno::Sequence< double >();
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  )
+    cpo::uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  )
     {
         // TODO(F1)
-        return uno::Sequence< beans::PropertyValue >();
+        return cpo::uno::Sequence< beans::PropertyValue >();
     }
 
     OUString SAL_CALL CanvasFont::getImplementationName()
@@ -145,7 +145,7 @@ namespace vclcanvas
         return cppu::supportsService( this, ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()
     {
         return { u"com.sun.star.rendering.CanvasFont"_ustr };
     }

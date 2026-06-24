@@ -24,7 +24,7 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/lang.h>
 #include <memory>
@@ -119,8 +119,8 @@ public:
     // get the style name that was generated for a key
     OUString GetStyleName( sal_uInt32 nKey );
 
-    css::uno::Sequence<sal_Int32> GetWasUsed() const;
-    void SetWasUsed(const css::uno::Sequence<sal_Int32>& rWasUsed);
+    cpo::uno::Sequence<sal_Int32> GetWasUsed() const;
+    void SetWasUsed(const cpo::uno::Sequence<sal_Int32>& rWasUsed);
 
 
     // two methods to allow the field import/export to treat system languages

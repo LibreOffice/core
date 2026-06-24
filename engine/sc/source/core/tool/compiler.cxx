@@ -590,7 +590,7 @@ static bool lcl_parseExternalName(
         OUString& rName,
         const sal_Unicode cSep,
         const ScDocument& rDoc,
-        const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+        const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
 {
     /* TODO: future versions will have to support sheet-local names too, thus
      * return a possible sheet name as well. */
@@ -1008,7 +1008,7 @@ struct ConventionOOO_A1 : public Convention_A1
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument& rDoc,
-            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
+            const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
     {
         return lcl_parseExternalName(rSymbol, rFile, rName, '#', rDoc, pExternalLinks);
     }
@@ -1260,7 +1260,7 @@ struct ConventionXL
 
     static bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument& rDoc,
-            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+            const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
     {
         return lcl_parseExternalName( rSymbol, rFile, rName, '!', rDoc, pExternalLinks);
     }
@@ -1494,7 +1494,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument& rDoc,
-            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
+            const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
     {
         return ConventionXL::parseExternalName( rSymbol, rFile, rName, rDoc, pExternalLinks);
     }
@@ -1873,7 +1873,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
     virtual bool parseExternalName( const OUString& rSymbol, OUString& rFile, OUString& rName,
             const ScDocument& rDoc,
-            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
+            const cpo::uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks ) const override
     {
         return ConventionXL::parseExternalName( rSymbol, rFile, rName, rDoc, pExternalLinks);
     }
@@ -5538,7 +5538,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
         uno::Reference< sheet::XFormulaParser > xParser( rParserPool.getFormulaParser( rFormulaNmsp ), uno::UNO_SET_THROW );
         table::CellAddress aReferencePos;
         ScUnoConversion::FillApiAddress( aReferencePos, aPos );
-        uno::Sequence< sheet::FormulaToken > aTokenSeq = xParser->parseFormula( rFormula, aReferencePos );
+        cpo::uno::Sequence< sheet::FormulaToken > aTokenSeq = xParser->parseFormula( rFormula, aReferencePos );
         ScTokenArray aTokenArray(rDoc);
         if( ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, aTokenSeq ) )
         {

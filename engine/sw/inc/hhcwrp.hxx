@@ -63,7 +63,7 @@ class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
                                     const sal_Int32 nUnitEnd );
     void        ChangeText( const OUString &rNewText,
                             std::u16string_view aOrigText,
-                            const css::uno::Sequence< sal_Int32 > *pOffsets,
+                            const cpo::uno::Sequence< sal_Int32 > *pOffsets,
                             SwPaM *pCursor );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
@@ -76,7 +76,7 @@ class SW_DLLPUBLIC SwHHCWrapper final : public editeng::HangulHanjaConversion
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
                         const OUString& rOrigText,
                         const OUString& rReplaceWith,
-                        const css::uno::Sequence< sal_Int32 > &rOffsets,
+                        const cpo::uno::Sequence< sal_Int32 > &rOffsets,
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage ) override;
 

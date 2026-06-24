@@ -561,8 +561,8 @@ sal_Int32 getListPrefixSize(const uno::Reference<css::accessibility::XAccessible
     if (nLength <= 0)
         return 0;
 
-    css::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
-    css::uno::Sequence< OUString > aRequestedAttributes = {UNO_NAME_NUMBERING_LEVEL, UNO_NAME_NUMBERING};
+    cpo::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
+    cpo::uno::Sequence< OUString > aRequestedAttributes = {UNO_NAME_NUMBERING_LEVEL, UNO_NAME_NUMBERING};
     aRunAttributeList = xAccText->getCharacterAttributes(0, aRequestedAttributes);
 
     sal_Int16 nLevel = -1;
@@ -599,7 +599,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
 
     css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
         xAccTextAttr(xAccText, uno::UNO_QUERY);
-    css::uno::Sequence< OUString > aRequestedAttributes;
+    cpo::uno::Sequence< OUString > aRequestedAttributes;
 
     sal_Int32 nPos = 0;
     while (nPos < nLength)
@@ -611,7 +611,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
                 << "', start: " << aTextSegment.SegmentStart
                 << ", end: " << aTextSegment.SegmentEnd);
 
-        css::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
+        cpo::uno::Sequence< css::beans::PropertyValue > aRunAttributeList;
         if (xAccTextAttr.is())
         {
             aRunAttributeList = xAccTextAttr->getRunAttributes(nPos, aRequestedAttributes);
@@ -1935,7 +1935,7 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
     const sal_Int32 nFlags )
 {
     // Retrieve filter from type
-    css::uno::Sequence< css::beans::NamedValue > aQuery {
+    cpo::uno::Sequence< css::beans::NamedValue > aQuery {
         { u"Type"_ustr, cpo::uno::Any( rType ) },
         { u"DocumentService"_ustr, cpo::uno::Any( rModuleIdentifier ) }
     };
@@ -2297,7 +2297,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                css::uno::Sequence< css::beans::PropertyValue > aArgs{
+                cpo::uno::Sequence< css::beans::PropertyValue > aArgs{
                     comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName)
                 };
 
@@ -3106,11 +3106,11 @@ void SfxViewShell::ReadUserData(const OUString&, bool )
 {
 }
 
-void SfxViewShell::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >& )
+void SfxViewShell::ReadUserDataSequence ( const cpo::uno::Sequence < beans::PropertyValue >& )
 {
 }
 
-void SfxViewShell::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& )
+void SfxViewShell::WriteUserDataSequence ( cpo::uno::Sequence < beans::PropertyValue >& )
 {
 }
 
@@ -3453,7 +3453,7 @@ void SfxViewShell::SetKitLanguageTag(const OUString& rBcp47LanguageTag)
 {
     LanguageTag aTag(rBcp47LanguageTag, true);
 
-    css::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
+    cpo::uno::Sequence<OUString> inst(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
     LanguageTag aFallbackTag = LanguageTag(getInstalledLocaleForSystemUILanguage(inst, /* bRequestInstallIfMissing */ false, rBcp47LanguageTag), true).makeFallback();
 
     // If we want de-CH, and the de localisation is available, we don't want to use de-DE as then

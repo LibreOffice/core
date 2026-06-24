@@ -22,7 +22,7 @@
 
 #include <tools/datetime.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <unotools/unotoolsdllapi.h>
 
@@ -68,7 +68,7 @@ public:
     void loadCalendarTZ( const OUString& rUniqueID, const css::lang::Locale& rLocale, const OUString& rTimeZone );
      */
 
-    css::uno::Sequence< OUString > getAllCalendars( const css::lang::Locale& rLocale ) const;
+    cpo::uno::Sequence< OUString > getAllCalendars( const css::lang::Locale& rLocale ) const;
     OUString getUniqueID() const;
     /// set UTC date/time
     void setDateTime( double fTimeInDays );
@@ -95,10 +95,10 @@ public:
     // wrapper implementations of XCalendar3
 
     css::i18n::Calendar2 getLoadedCalendar() const;
-    css::uno::Sequence< css::i18n::CalendarItem2 > getDays() const;
-    css::uno::Sequence< css::i18n::CalendarItem2 > getMonths() const;
-    css::uno::Sequence< css::i18n::CalendarItem2 > getGenitiveMonths() const;
-    css::uno::Sequence< css::i18n::CalendarItem2 > getPartitiveMonths() const;
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > getDays() const;
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > getMonths() const;
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > getGenitiveMonths() const;
+    cpo::uno::Sequence< css::i18n::CalendarItem2 > getPartitiveMonths() const;
 
     // wrapper implementations of XCalendar4
 

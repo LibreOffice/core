@@ -36,7 +36,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
 constexpr OUString WRONG_TYPE_EXCEPTION
-    = u"Type must be css::uno::Sequence< css::beans::PropertyValue >"_ustr;
+    = u"Type must be cpo::uno::Sequence< css::beans::PropertyValue >"_ustr;
 
 const int PROPHANDLE_UINAME     = 1;
 constexpr OUString PROPNAME_UINAME = u"UIName"_ustr;
@@ -278,7 +278,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL RootItemContainer::
     return xInfo;
 }
 
-css::uno::Sequence< css::beans::Property > RootItemContainer::impl_getStaticPropertyDescriptor()
+cpo::uno::Sequence< css::beans::Property > RootItemContainer::impl_getStaticPropertyDescriptor()
 {
     // Create a property array to initialize sequence!
     // Table of all predefined properties of this class. It's used from OPropertySetHelper-class!

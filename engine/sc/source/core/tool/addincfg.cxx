@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <sal/log.hxx>
 
@@ -37,7 +37,7 @@ ScAddInCfg::ScAddInCfg()
 
 void ScAddInCfg::ImplCommit() { SAL_WARN("sc", "ScAddInCfg shouldn't be modified"); }
 
-void ScAddInCfg::Notify(const uno::Sequence<OUString>&)
+void ScAddInCfg::Notify(const cpo::uno::Sequence<OUString>&)
 {
     // forget all add-in information, re-initialize when needed next time
     ScGlobal::GetAddInCollection()->Clear();

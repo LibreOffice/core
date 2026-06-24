@@ -23,12 +23,12 @@
 #include <tokenarray.hxx>
 #include <queryparam.hxx>
 #include <dpitemdata.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <algorithm>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
 ScDPFilteredCache::SingleFilter::SingleFilter(const ScDPItemData& rItem) :

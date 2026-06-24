@@ -52,7 +52,7 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 namespace
 {
@@ -605,13 +605,13 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
 
 uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
-    const uno::Sequence< cpo::uno::Any >& /* Arguments */ )
+    const cpo::uno::Sequence< cpo::uno::Any >& /* Arguments */ )
 {
     OSL_FAIL( "createInstanceWithArguments: No arguments supported" );
     return createInstance( ServiceSpecifier );
 }
 
-uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 {
     std::vector< OUString > aServices;
     const tTemplateMapType & rMap = lcl_DefaultChartTypeMap();
@@ -658,7 +658,7 @@ bool SAL_CALL ChartTypeManager::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.ChartTypeManager"_ustr,
@@ -669,7 +669,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNam
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_ChartTypeManager_get_implementation(css::uno::XComponentContext *context,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::ChartTypeManager(context));
 }

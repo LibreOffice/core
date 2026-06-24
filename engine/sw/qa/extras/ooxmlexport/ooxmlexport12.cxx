@@ -1043,7 +1043,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
         getStyles(u"NumberingStyles"_ustr)->getByName(u"WWNum1"_ustr), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(
         xPropertySet->getPropertyValue(u"NumberingRules"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
+    cpo::uno::Sequence<beans::PropertyValue> aProps;
     xLevels->getByIndex(0) >>= aProps; // 1st level
 
     OUString sBulletChar = std::find_if(std::cbegin(aProps), std::cend(aProps),
@@ -1075,7 +1075,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
     uno::Reference<container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xIndexAccess->getCount());
 
-    uno::Sequence<beans::PropertyValue> aSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aSeq;
     sal_Int32 nCheck = 0;
     if (xIndexAccess->getByIndex(0) >>= aSeq)
     {

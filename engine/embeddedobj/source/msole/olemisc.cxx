@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 
 
 OleEmbeddedObject::OleEmbeddedObject( uno::Reference< uno::XComponentContext > xContext,
-                                      const uno::Sequence< sal_Int8 >& aClassID,
+                                      const cpo::uno::Sequence< sal_Int8 >& aClassID,
                                       OUString aClassName )
 : m_bReadOnly( false )
 , m_bDisposed( false )
@@ -312,7 +312,7 @@ void OleEmbeddedObject::Dispose(osl::ResettableMutexGuard* guard)
 }
 
 
-uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -351,7 +351,7 @@ OUString SAL_CALL OleEmbeddedObject::getClassName()
 
 
 void SAL_CALL OleEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName )
+                const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -634,7 +634,7 @@ void SAL_CALL OleEmbeddedObject::enableModeless( bool bEnable )
 
 
 void SAL_CALL OleEmbeddedObject::translateAccelerators(
-                    const uno::Sequence< awt::KeyEvent >& aKeys )
+                    const cpo::uno::Sequence< awt::KeyEvent >& aKeys )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XInplaceObject > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -690,7 +690,7 @@ css::uno::Reference<css::io::XStream> OleEmbeddedObject::getStream()
     return m_xObjectStream;
 }
 
-void OleEmbeddedObject::initialize(const uno::Sequence<cpo::uno::Any>& rArguments)
+void OleEmbeddedObject::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     if (!rArguments.hasElements())
         return;
@@ -711,7 +711,7 @@ bool SAL_CALL OleEmbeddedObject::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL OleEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OleEmbeddedObject::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.embed.OleEmbeddedObject"_ustr };
 }

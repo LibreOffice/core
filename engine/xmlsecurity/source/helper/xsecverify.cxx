@@ -28,7 +28,7 @@
 #include <gpg/xmlsignature_gpgimpl.hxx>
 #include <gpg/SEInitializer.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
@@ -69,7 +69,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
      */
     rtl::Reference< SignatureVerifierImpl > xReferenceResolvedListener = new SignatureVerifierImpl;
 
-    css::uno::Sequence<cpo::uno::Any> args
+    cpo::uno::Sequence<cpo::uno::Any> args
     {
         Any(OUString::number(nSecurityId)),
         Any(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),
@@ -392,7 +392,7 @@ void XSecController::setDescription(OUString const& rId, OUString const& rDescri
     }
 }
 
-void XSecController::setSignatureBytes(const uno::Sequence<sal_Int8>& rBytes)
+void XSecController::setSignatureBytes(const cpo::uno::Sequence<sal_Int8>& rBytes)
 {
     if (m_vInternalSignatureInformations.empty())
         return;

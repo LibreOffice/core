@@ -32,7 +32,7 @@
 #include <memory>
 
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 class INetURLObject;
 
@@ -254,10 +254,10 @@ public:
 
     ErrCode             ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
                                        sal_uInt16 nFormat,
-                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
+                                       const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
     ErrCode             ExportGraphic( const Graphic& rGraphic, std::u16string_view rPath,
                                        SvStream& rOStm, sal_uInt16 nFormat,
-                                       const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
+                                       const cpo::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
 
     ErrCode             CanImportGraphic( const INetURLObject& rPath,
                                       sal_uInt16 nFormat,

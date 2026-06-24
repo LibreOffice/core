@@ -436,7 +436,7 @@ awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
 {
     awt::FontDescriptor aResult;
     // Note: keep this sorted!
-    uno::Sequence< OUString > aPropNameSeq{
+    cpo::uno::Sequence< OUString > aPropNameSeq{
         u"CharFontCharSet"_ustr,   // CharSet
         u"CharFontFamily"_ustr,    // Family
         u"CharFontName"_ustr,      // Name
@@ -448,7 +448,7 @@ awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
         u"CharUnderline"_ustr,     // Underline
         u"CharWeight"_ustr,        // Weight
         u"CharWordMode"_ustr};     // WordLineMode
-    uno::Sequence< cpo::uno::Any > aValues( xMultiPropSet->getPropertyValues( aPropNameSeq ));
+    cpo::uno::Sequence< cpo::uno::Any > aValues( xMultiPropSet->getPropertyValues( aPropNameSeq ));
 
     sal_Int32 i=0;
     // Note keep this sorted according to the list above (comments are the fieldnames)

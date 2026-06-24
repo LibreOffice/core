@@ -69,7 +69,7 @@ OUString SAL_CALL ScVbaPageSetup::getPrintArea()
 {
     OUString aPrintArea;
     uno::Reference< sheet::XPrintAreas > xPrintAreas( mxSheet, uno::UNO_QUERY_THROW );
-    const uno::Sequence< table::CellRangeAddress > aSeq = xPrintAreas->getPrintAreas();
+    const cpo::uno::Sequence< table::CellRangeAddress > aSeq = xPrintAreas->getPrintAreas();
     if( aSeq.hasElements() )
     {
         ScRangeList aRangeList;
@@ -96,7 +96,7 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const OUString& rAreas )
         rAreas.equalsIgnoreAsciiCase( "FALSE" ) )
     {
         // print the whole sheet
-        uno::Sequence< table::CellRangeAddress > aSeq;
+        cpo::uno::Sequence< table::CellRangeAddress > aSeq;
         xPrintAreas->setPrintAreas( aSeq );
     }
     else
@@ -105,7 +105,7 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const OUString& rAreas )
         ScRange aRange;
         if( getScRangeListForAddress( rAreas, excel::getDocShell( mxModel ) , aRange, aCellRanges ) )
         {
-            uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.size() );
+            cpo::uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.size() );
             auto aSeqRange = asNonConstRange(aSeq);
             for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
             {
@@ -621,10 +621,10 @@ ScVbaPageSetup::getServiceImplName()
     return u"ScVbaPageSetup"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaPageSetup::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.PageSetup"_ustr
     };

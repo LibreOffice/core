@@ -121,7 +121,7 @@ public:
         HierarchyEntryData                                     entry;
         css::uno::Reference< css::container::XHierarchicalNameAccess >   dir;
         css::uno::Reference< css::util::XOfficeInstallationDirectories > officeDirs;
-        css::uno::Sequence< OUString>                          names;
+        cpo::uno::Sequence< OUString>                          names;
         sal_Int32                                              pos;
     };
 

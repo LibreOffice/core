@@ -55,7 +55,7 @@ cpo::uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& r
         sal_Int32 nLen = pStream->TellEnd();
         if (nLen < 0) { abort(); }
 
-        aAny <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >(pStream->GetData()), pStream->TellEnd() );
+        aAny <<= cpo::uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >(pStream->GetData()), pStream->TellEnd() );
     }
     else if ( nT == SotClipboardFormatId::MARKDOWN )
     {
@@ -72,9 +72,9 @@ cpo::uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& r
     return aAny;
 }
 
-uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors(  )
+cpo::uno::Sequence< datatransfer::DataFlavor > EditDataObject::getTransferDataFlavors(  )
 {
-    uno::Sequence< datatransfer::DataFlavor > aDataFlavors(5);
+    cpo::uno::Sequence< datatransfer::DataFlavor > aDataFlavors(5);
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, aDataFlavors.getArray()[0] );
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[1] );
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RTF, aDataFlavors.getArray()[2] );

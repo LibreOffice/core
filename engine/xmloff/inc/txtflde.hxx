@@ -44,8 +44,8 @@ namespace com::sun::star {
     namespace text { class XText; }
     namespace beans { class XPropertySet; }
     namespace beans { class XPropertySetInfo; }
-    namespace uno { template<typename A> class Sequence; }
 }
+namespace cpo::uno { template<typename A> class Sequence; }
 
 
 /// field IDs,
@@ -366,11 +366,11 @@ private:
         sal_Int32 nCommandType);        /// css::sdb::CommandType
 
     void ProcessStringSequence(
-        const css::uno::Sequence<OUString>& rSequence,
+        const cpo::uno::Sequence<OUString>& rSequence,
         const OUString& sSelected );
 
     void ProcessStringSequence(
-        const css::uno::Sequence<OUString>& rSequence,
+        const cpo::uno::Sequence<OUString>& rSequence,
         sal_Int32 nSelected );
 
     /// export attributes that describe a data source

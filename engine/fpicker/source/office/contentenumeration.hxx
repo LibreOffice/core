@@ -172,7 +172,7 @@ namespace svt
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
 
-        css::uno::Sequence< OUString > m_rDenyList;
+        cpo::uno::Sequence< OUString > m_rDenyList;
 
         bool URLOnDenyList ( std::u16string_view sRealURL );
 
@@ -210,7 +210,7 @@ namespace svt
         */
         EnumerationResult   enumerateFolderContentSync(
                     const FolderDescriptor& _rFolder,
-                    const css::uno::Sequence< OUString >& rDenyList
+                    const cpo::uno::Sequence< OUString >& rDenyList
                 );
 
         /** cancels the running operation.

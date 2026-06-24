@@ -646,7 +646,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 
 ::cppu::IPropertyArrayHelper* ToolboxController::createArrayHelper( ) const
 {
-        css::uno::Sequence< Property > aProps;
+        cpo::uno::Sequence< Property > aProps;
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
 }

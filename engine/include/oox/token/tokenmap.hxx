@@ -24,7 +24,7 @@
 
 #include <string_view>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -44,7 +44,7 @@ inline sal_Int32 getTokenFromUnicode(std::u16string_view rUnicodeName)
 }
 
 /** Returns the UTF8 name of the passed token identifier as byte sequence. */
-OOX_DLLPUBLIC css::uno::Sequence<sal_Int8> const& getUtf8TokenName(sal_Int32 nToken);
+OOX_DLLPUBLIC cpo::uno::Sequence<sal_Int8> const& getUtf8TokenName(sal_Int32 nToken);
 
 /** Returns the name of the passed token identifier as OUString. */
 inline OUString getUnicodeTokenName(sal_Int32 nToken)

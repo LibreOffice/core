@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <basegfx/vector/b2dsize.hxx>
@@ -41,10 +41,10 @@ class TextLinesHelper
     ::basegfx::B2DSize maOverallSize;
 
     bool mbIsOverlineColorSet;
-    const css::uno::Sequence<double> maOverlineColor;
+    const cpo::uno::Sequence<double> maOverlineColor;
 
     bool mbIsUnderlineColorSet;
-    const css::uno::Sequence<double> maUnderlineColor;
+    const cpo::uno::Sequence<double> maUnderlineColor;
 
     bool mbOverlineWaveline;
     bool mbUnderlineWaveline;

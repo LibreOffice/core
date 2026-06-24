@@ -60,7 +60,7 @@ public:
     sal_uInt32 fireDragEnterEvent(
         const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& context,
         sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
-        const css::uno::Sequence< css::datatransfer::DataFlavor >& dataFlavor );
+        const cpo::uno::Sequence< css::datatransfer::DataFlavor >& dataFlavor );
 
     sal_uInt32 fireDropActionChangedEvent(
         const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& context,

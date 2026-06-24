@@ -21,7 +21,7 @@
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <tools/color.hxx>
 #include <rtl/ref.hxx>
@@ -75,7 +75,7 @@ private:
     Color                               m_nSpecialFillColor;
     sal_Int32                           m_nNumberFormat;
     sal_Int32                           m_nPercentNumberFormat;
-    css::uno::Sequence<sal_Int32>       m_aAvailableLabelPlacements;
+    cpo::uno::Sequence<sal_Int32>       m_aAvailableLabelPlacements;
     bool                                m_bForbidPercentValue;
     bool                                m_bHideLegendEntry;
     sal_Int32                           m_nPointIndex;

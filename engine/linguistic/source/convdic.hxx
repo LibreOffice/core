@@ -95,8 +95,8 @@ public:
     virtual void SAL_CALL setActive( bool bActivate ) override;
     virtual bool SAL_CALL isActive(  ) override;
     virtual void SAL_CALL clear(  ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getConversionEntries( css::linguistic2::ConversionDirection eDirection ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getConversionEntries( css::linguistic2::ConversionDirection eDirection ) override;
     virtual void SAL_CALL addEntry( const OUString& aLeftText, const OUString& aRightText ) override;
     virtual void SAL_CALL removeEntry( const OUString& aLeftText, const OUString& aRightText ) override;
     virtual sal_Int16 SAL_CALL getMaxCharCount( css::linguistic2::ConversionDirection eDirection ) override;
@@ -113,7 +113,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     bool    HasEntry( const OUString &rLeftText, std::u16string_view rRightText );
     void    AddEntry( const OUString &rLeftText, const OUString &rRightText );

@@ -25,7 +25,7 @@ PageMarginPopup::PageMarginPopup(const css::uno::Reference<css::uno::XComponentC
 {
 }
 
-void PageMarginPopup::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
+void PageMarginPopup::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
@@ -59,7 +59,7 @@ OUString PageMarginPopup::getImplementationName()
     return u"lo.writer.PageMarginToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> PageMarginPopup::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> PageMarginPopup::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -67,7 +67,7 @@ css::uno::Sequence<OUString> PageMarginPopup::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_PageMarginToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<cpo::uno::Any> const & )
+    cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new PageMarginPopup(rContext));
 }

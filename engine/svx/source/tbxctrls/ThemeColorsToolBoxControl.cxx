@@ -68,7 +68,7 @@ bool SAL_CALL ThemeColorsToolBoxControl::supportsService(const OUString& rServic
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL ThemeColorsToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ThemeColorsToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -76,7 +76,7 @@ css::uno::Sequence<OUString> SAL_CALL ThemeColorsToolBoxControl::getSupportedSer
 // Export function for service registration
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_ThemeColorsToolBoxControl_get_implementation(
-    css::uno::XComponentContext* /*rxContext*/, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* /*rxContext*/, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ThemeColorsToolBoxControl());
 }
@@ -116,7 +116,7 @@ void ThemeColorsPaneWrapper::onColorSetActivated()
     if (!mpCurrentColorSet)
         return;
 
-    css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
         u"ThemeName"_ustr, mpCurrentColorSet->getName()) };
 
     comphelper::dispatchCommand(u".uno:ApplyTheme"_ustr, m_xFrame, aArgs);

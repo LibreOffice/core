@@ -84,7 +84,7 @@ namespace canvas
         return cppu::supportsService(this, ServiceName);
     }
 
-    uno::Sequence< OUString > SAL_CALL CachedPrimitiveBase::getSupportedServiceNames(  )
+    cpo::uno::Sequence< OUString > SAL_CALL CachedPrimitiveBase::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.rendering.CachedBitmap"_ustr };
     }

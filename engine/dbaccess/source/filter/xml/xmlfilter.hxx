@@ -36,7 +36,7 @@ namespace dbaxml
 class ODBFilter : public SvXMLImport
 {
 public:
-    typedef std::map< OUString, css::uno::Sequence<css::beans::PropertyValue> > TPropertyNameMap;
+    typedef std::map< OUString, cpo::uno::Sequence<css::beans::PropertyValue> > TPropertyNameMap;
 private:
     TPropertyNameMap                                m_aQuerySettings;
     TPropertyNameMap                                m_aTablesSettings;
@@ -49,7 +49,7 @@ private:
     bool                                            m_bNewFormat;
 
     /// @throws RuntimeException
-    bool                            implImport( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
+    bool                            implImport( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
 
     /** fills the map with the Properties
         @param  _rValue
@@ -73,14 +73,14 @@ public:
     explicit ODBFilter( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
     // XFilter
-    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
+    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
     /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static();
 
     // helper class
-    virtual void SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
-    virtual void SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
+    virtual void SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    virtual void SetConfigurationSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
     const css::uno::Reference<css::beans::XPropertySet>& getDataSource() const { return m_xDataSource; }
 

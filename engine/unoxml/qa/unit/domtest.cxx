@@ -180,16 +180,16 @@ struct DocumentHandler
 
 struct TokenHandler : public sax_fastparser::FastTokenHandlerBase
 {
-    virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence< ::sal_Int8 >& Identifier ) override
+    virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const cpo::uno::Sequence< ::sal_Int8 >& Identifier ) override
     {
         return Identifier.hasElements() ? Identifier[0] : 0;
     }
 
-    virtual uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 ) override
+    virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL getUTF8Identifier( ::sal_Int32 ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "TokenHandler::getUTF8Identifier() unexpected call",
                                 false );
-        return uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
     virtual sal_Int32 getTokenDirect( std::string_view /* token */ ) const override
@@ -218,9 +218,9 @@ public:
         mxErrHandler.set( new ErrorHandler() );
         uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.dom.DocumentBuilder"_ustr), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
-        mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), std::size(validTestFile) - 1)) );
-        mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), std::size(warningTestFile) - 1)) );
-        mxErrorInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(errorTestFile), std::size(errorTestFile) - 1)) );
+        mxValidInStream.set( new SequenceInputStream(cpo::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), std::size(validTestFile) - 1)) );
+        mxWarningInStream.set( new SequenceInputStream(cpo::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), std::size(warningTestFile) - 1)) );
+        mxErrorInStream.set( new SequenceInputStream(cpo::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(errorTestFile), std::size(errorTestFile) - 1)) );
         mxDomBuilder->setErrorHandler(mxErrHandler);
     }
 
@@ -1000,7 +1000,7 @@ public:
     {
         rtl::Reference<DocumentHandler> xHandler = new DocumentHandler;
         rtl::Reference<TokenHandler> xTokHandler = new TokenHandler;
-        uno::Sequence< beans::Pair< OUString, sal_Int32 > > aRegisteredNamespaces = {
+        cpo::uno::Sequence< beans::Pair< OUString, sal_Int32 > > aRegisteredNamespaces = {
             beans::make_Pair(
                 u"urn:oasis:names:tc:opendocument:xmlns:office:1.0"_ustr,
                 xml::sax::FastToken::NAMESPACE),
@@ -1030,7 +1030,7 @@ public:
 
             xFastSaxSerializer->fastSerialize(xHandler,
                 xTokHandler,
-                uno::Sequence< beans::StringPair >(),
+                cpo::uno::Sequence< beans::StringPair >(),
                 aRegisteredNamespaces);
         }
         catch (const css::xml::sax::SAXParseException&)

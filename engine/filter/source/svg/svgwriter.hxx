@@ -376,21 +376,21 @@ class SVGWriter : public cppu::WeakImplHelper< css::svg::XSVGWriter, css::lang::
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
-    css::uno::Sequence< css::beans::PropertyValue >    maFilterData;
+    cpo::uno::Sequence< css::beans::PropertyValue >    maFilterData;
 
 public:
-    explicit SVGWriter( const css::uno::Sequence<cpo::uno::Any>& args,
+    explicit SVGWriter( const cpo::uno::Sequence<cpo::uno::Any>& args,
                         const css::uno::Reference< css::uno::XComponentContext >& rxCtx );
     virtual ~SVGWriter() override;
 
     // XSVGWriter
     virtual void SAL_CALL write( const css::uno::Reference<css::xml::sax::XDocumentHandler>& rxDocHandler,
-                                 const css::uno::Sequence<sal_Int8>& rMtfSeq ) override;
+                                 const cpo::uno::Sequence<sal_Int8>& rMtfSeq ) override;
 
     //  XServiceInfo
     virtual bool SAL_CALL supportsService(const OUString& sServiceName) override;
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

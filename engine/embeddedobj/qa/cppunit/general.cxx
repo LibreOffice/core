@@ -45,8 +45,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfig)
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
     OUString aFileName = createFileURL(u"insert-file-config.doc");
-    uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
-                                                                               aFileName) };
+    cpo::uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
+                                                                                    aFileName) };
     OUString aName(u"Object 1"_ustr);
     uno::Reference<embed::XEmbeddedObject> xObject
         = aContainer.InsertEmbeddedObject(aMedium, aName);
@@ -69,8 +69,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigVsdx)
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
     OUString aFileName = createFileURL(u"insert-file-config.vsdx");
-    uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
-                                                                               aFileName) };
+    cpo::uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
+                                                                                    aFileName) };
     OUString aName(u"Object 1"_ustr);
     uno::Reference<embed::XEmbeddedObject> xObject
         = aContainer.InsertEmbeddedObject(aMedium, aName);
@@ -93,8 +93,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     comphelper::EmbeddedObjectContainer aContainer(xStorage);
     OUString aFileName = createFileURL(u"insert-file-config.pdf");
-    uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
-                                                                               aFileName) };
+    cpo::uno::Sequence<beans::PropertyValue> aMedium{ comphelper::makePropertyValue(u"URL"_ustr,
+                                                                                    aFileName) };
     OUString aName(u"Object 1"_ustr);
     uno::Reference<embed::XEmbeddedObject> xObject
         = aContainer.InsertEmbeddedObject(aMedium, aName);

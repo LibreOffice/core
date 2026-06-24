@@ -105,9 +105,9 @@ cpo::uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames()
 {
-    uno::Sequence<OUString> aRet(SC_LINKTARGETTYPE_COUNT);
+    cpo::uno::Sequence<OUString> aRet(SC_LINKTARGETTYPE_COUNT);
     OUString* pArray = aRet.getArray();
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
         pArray[i] = aNames[i];
@@ -267,7 +267,7 @@ cpo::uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames()
 {
     return xCollection->getElementNames();
 }

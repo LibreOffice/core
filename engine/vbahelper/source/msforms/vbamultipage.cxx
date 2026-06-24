@@ -104,10 +104,10 @@ ScVbaMultiPage::Pages( const cpo::uno::Any& index )
     return xColl->Item( index, cpo::uno::Any() );
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaMultiPage::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.MultiPage"_ustr
     };

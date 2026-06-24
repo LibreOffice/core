@@ -40,7 +40,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override;
@@ -54,7 +54,7 @@ SvxUnoDashTable::SvxUnoDashTable(SdrModel* pModel) noexcept
 
 OUString SAL_CALL SvxUnoDashTable::getImplementationName() { return u"SvxUnoDashTable"_ustr; }
 
-uno::Sequence<OUString> SAL_CALL SvxUnoDashTable::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SvxUnoDashTable::getSupportedServiceNames()
 {
     return { u"com.sun.star.drawing.DashTable"_ustr };
 }

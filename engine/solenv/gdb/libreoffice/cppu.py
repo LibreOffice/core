@@ -144,7 +144,7 @@ def build_pretty_printers():
     printer.add('_uno_Any', UnoAnyPrinter)
     printer.add('cpo::uno::Any', UnoAnyPrinter)
     printer.add('com::sun::star::uno::Reference', UnoReferencePrinter)
-    printer.add('com::sun::star::uno::Sequence', UnoSequencePrinter)
+    printer.add('cpo::uno::Sequence', UnoSequencePrinter)
     printer.add('com::sun::star::uno::Type', UnoTypePrinter)
     printer.add('cppu_threadpool::ThreadPool', CppuThreadpoolThreadPoolPrinter)
 

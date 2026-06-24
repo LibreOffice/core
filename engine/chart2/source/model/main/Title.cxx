@@ -227,15 +227,15 @@ uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
 }
 
 // ____ XTitle ____
-uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
+cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
 {
     MutexGuard aGuard( m_aMutex );
     return m_aStrings;
 }
 
-void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& rNewStrings )
+void SAL_CALL Title::setText( const cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > >& rNewStrings )
 {
-    uno::Sequence< uno::Reference< chart2::XFormattedString > > aOldStrings;
+    cpo::uno::Sequence< uno::Reference< chart2::XFormattedString > > aOldStrings;
     {
         MutexGuard aGuard( m_aMutex );
         std::swap( m_aStrings, aOldStrings );
@@ -319,7 +319,7 @@ bool SAL_CALL Title::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL Title::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Title::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.Title"_ustr,
@@ -338,7 +338,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Title, Title_Base, ::property::OPropertySet )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_Title_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::Title);
 }

@@ -20,7 +20,7 @@
 
 #include <unotools/weakref.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 #include <utility>
 #include <vector>
@@ -49,7 +49,7 @@ public:
     virtual ~SplitCategoriesProvider();
 
     virtual sal_Int32 getLevelCount() const = 0;
-    virtual css::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
+    virtual cpo::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
 };
 
 class ExplicitCategoriesProvider final
@@ -64,7 +64,7 @@ public:
 
     css::uno::Reference< css::chart2::data::XDataSequence > getOriginalCategories();
 
-    css::uno::Sequence< OUString > const & getSimpleCategories();
+    cpo::uno::Sequence< OUString > const & getSimpleCategories();
     const std::vector<ComplexCategory>* getCategoriesByLevel( sal_Int32 nLevel );
 
     static OUString getCategoryByIndex(
@@ -72,11 +72,11 @@ public:
         , ChartModel& rModel
         , sal_Int32 nIndex );
 
-    static css::uno::Sequence< OUString > getExplicitSimpleCategories(
+    static cpo::uno::Sequence< OUString > getExplicitSimpleCategories(
             const SplitCategoriesProvider& rSplitCategoriesProvider );
 
-    static void convertCategoryAnysToText( css::uno::Sequence< OUString >& rOutTexts
-        , const css::uno::Sequence< cpo::uno::Any >& rInAnys
+    static void convertCategoryAnysToText( cpo::uno::Sequence< OUString >& rOutTexts
+        , const cpo::uno::Sequence< cpo::uno::Any >& rInAnys
         , ChartModel& rModel );
 
     bool hasComplexCategories() const;
@@ -100,7 +100,7 @@ private:
     css::uno::Reference< css::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
 
     bool m_bIsExplicitCategoriesInited;
-    css::uno::Sequence< OUString >  m_aExplicitCategories;
+    cpo::uno::Sequence< OUString >  m_aExplicitCategories;
     std::vector< std::vector< ComplexCategory > >   m_aComplexCats;
     std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
 

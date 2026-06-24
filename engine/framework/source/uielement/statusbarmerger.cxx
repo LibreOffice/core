@@ -20,7 +20,7 @@
 #include <o3tl/string_view.hxx>
 
 using com::sun::star::beans::PropertyValue;
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 
 namespace framework
 {

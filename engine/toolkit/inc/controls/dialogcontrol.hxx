@@ -132,7 +132,7 @@ public:
         { UnoDialogControl_Base::ControlContainerBase::removePaintListener(p1); }
     virtual void SAL_CALL setStatusText(const OUString& p1) override
         { UnoDialogControl_Base::ControlContainerBase::setStatusText(p1); }
-    virtual css::uno::Sequence<css::uno::Reference<css::awt::XControl> > SAL_CALL getControls() override
+    virtual cpo::uno::Sequence<css::uno::Reference<css::awt::XControl> > SAL_CALL getControls() override
         { return UnoDialogControl_Base::ControlContainerBase::getControls(); }
     virtual css::uno::Reference<css::awt::XControl> SAL_CALL getControl(const OUString& p1) override
         { return UnoDialogControl_Base::ControlContainerBase::getControl(p1); }
@@ -147,11 +147,11 @@ public:
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;
-    virtual void ImplModelPropertiesChanged( const css::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) override;
+    virtual void ImplModelPropertiesChanged( const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& rEvents ) override;
 };
 
 class UnoMultiPageModel final : public ControlModelContainerBase
@@ -196,15 +196,15 @@ public:
     void                        SAL_CALL acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        SAL_CALL release() noexcept override  { OWeakAggObject::release(); }
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+    cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     // css::awt::XSimpleTabController
     virtual ::sal_Int32 SAL_CALL insertTab() override;
     virtual void SAL_CALL removeTab( ::sal_Int32 ID ) override;
 
-    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& Properties ) override;
-    virtual css::uno::Sequence< css::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) override;
+    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const cpo::uno::Sequence< css::beans::NamedValue >& Properties ) override;
+    virtual cpo::uno::Sequence< css::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) override;
 
     virtual void SAL_CALL activateTab( ::sal_Int32 ID ) override;
     virtual ::sal_Int32 SAL_CALL getActiveTabID() override;
@@ -214,7 +214,7 @@ public:
     // XTabListener
     virtual void SAL_CALL inserted( ::sal_Int32 ID ) override;
     virtual void SAL_CALL removed( ::sal_Int32 ID ) override;
-    virtual void SAL_CALL changed( ::sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& Properties ) override;
+    virtual void SAL_CALL changed( ::sal_Int32 ID, const cpo::uno::Sequence< css::beans::NamedValue >& Properties ) override;
     virtual void SAL_CALL activated( ::sal_Int32 ID ) override;
     virtual void SAL_CALL deactivated( ::sal_Int32 ID ) override;
     virtual void SAL_CALL disposing( const css::lang::EventObject& evt ) override;

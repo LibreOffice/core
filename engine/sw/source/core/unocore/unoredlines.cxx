@@ -93,10 +93,10 @@ bool SwXRedlines::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames()
 {
     OSL_FAIL("not implemented");
-    return uno::Sequence< OUString >();
+    return cpo::uno::Sequence< OUString >();
 }
 
 css::uno::Reference<css::beans::XPropertySet> SwXRedlines::GetObject(SwRangeRedline& rRedline)
@@ -147,9 +147,9 @@ bool SwXRedlineEnumeration::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames()
 {
-    return uno::Sequence< OUString >();
+    return cpo::uno::Sequence< OUString >();
 }
 
 void SwXRedlineEnumeration::Notify( const SfxHint& rHint )

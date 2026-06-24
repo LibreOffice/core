@@ -36,7 +36,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence<cpo::uno::Any> & rArguments ) override;
+        const cpo::uno::Sequence<cpo::uno::Any> & rArguments ) override;
 
 protected:
 

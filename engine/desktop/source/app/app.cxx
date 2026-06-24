@@ -1682,7 +1682,7 @@ void Desktop::OpenClients()
             aCmd.Complete = u"vnd.sun.star.autorecovery:/disableRecovery"_ustr;
             xParser->parseStrict(aCmd);
 
-            xRecovery->dispatch(aCmd, css::uno::Sequence< css::beans::PropertyValue >());
+            xRecovery->dispatch(aCmd, cpo::uno::Sequence< css::beans::PropertyValue >());
         }
         catch(const css::uno::Exception&)
         {
@@ -2060,7 +2060,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
                 css::uno::Reference< css::frame::XDispatch > xDispatch = xDesktop->queryDispatch(aCommand, OUString(), 0);
                 if (xDispatch.is())
-                    xDispatch->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
+                    xDispatch->dispatch(aCommand, cpo::uno::Sequence< css::beans::PropertyValue >());
             }
         }
         catch(const css::uno::Exception&)

@@ -1547,10 +1547,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFollowFrame)
         // disable Field Names warning dialog
         ScopedConfigValue<officecfg::Office::Common::Misc::QueryShowFieldName> aCfg(false);
 
-        uno::Sequence<beans::PropertyValue> argsSH(
+        cpo::uno::Sequence<beans::PropertyValue> argsSH(
             comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(true) } }));
         dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
-        uno::Sequence<beans::PropertyValue> args(
+        cpo::uno::Sequence<beans::PropertyValue> args(
             comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();
@@ -1594,10 +1594,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testHiddenParagraphFlys)
         // disable Field Names warning dialog
         ScopedConfigValue<officecfg::Office::Common::Misc::QueryShowFieldName> aCfg(false);
 
-        uno::Sequence<beans::PropertyValue> argsSH(
+        cpo::uno::Sequence<beans::PropertyValue> argsSH(
             comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", cpo::uno::Any(true) } }));
         dispatchCommand(mxComponent, u".uno:ShowHiddenParagraphs"_ustr, argsSH);
-        uno::Sequence<beans::PropertyValue> args(
+        cpo::uno::Sequence<beans::PropertyValue> args(
             comphelper::InitPropertySequence({ { "Fieldnames", cpo::uno::Any(false) } }));
         dispatchCommand(mxComponent, u".uno:Fieldnames"_ustr, args);
         Scheduler::ProcessEventsToIdle();

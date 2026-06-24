@@ -395,8 +395,8 @@ OUString SAL_CALL ScSolverSettings::getEngine()
 void SAL_CALL ScSolverSettings::setEngine(const OUString& sEngine)
 {
     // Only change the engine if the new engine exists; otherwise leave it unchanged
-    uno::Sequence<OUString> arrEngineNames;
-    uno::Sequence<OUString> arrDescriptions;
+    cpo::uno::Sequence<OUString> arrEngineNames;
+    cpo::uno::Sequence<OUString> arrDescriptions;
     ScSolverUtil::GetImplementations(arrEngineNames, arrDescriptions);
     if (comphelper::findValue(arrEngineNames, sEngine) == -1)
         return;
@@ -404,15 +404,15 @@ void SAL_CALL ScSolverSettings::setEngine(const OUString& sEngine)
     m_pSettings->SetParameter(sc::SP_LO_ENGINE, sEngine);
 }
 
-uno::Sequence<OUString> SAL_CALL ScSolverSettings::getAvailableEngines()
+cpo::uno::Sequence<OUString> SAL_CALL ScSolverSettings::getAvailableEngines()
 {
-    uno::Sequence<OUString> arrEngineNames;
-    uno::Sequence<OUString> arrDescriptions;
+    cpo::uno::Sequence<OUString> arrEngineNames;
+    cpo::uno::Sequence<OUString> arrDescriptions;
     ScSolverUtil::GetImplementations(arrEngineNames, arrDescriptions);
     return arrEngineNames;
 }
 
-uno::Sequence<cpo::uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
+cpo::uno::Sequence<cpo::uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
 {
     // Variable cells parameter is stored as a single string composed of valid ranges
     // separated using the formula separator character
@@ -420,7 +420,7 @@ uno::Sequence<cpo::uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
     // Delimiter character to separate ranges
     sal_Unicode cDelimiter = ScCompiler::GetNativeSymbolChar(OpCode::ocSep);
     const formula::FormulaGrammar::AddressConvention eConv = m_rDoc.GetAddressConvention();
-    uno::Sequence<cpo::uno::Any> aRangeSeq;
+    cpo::uno::Sequence<cpo::uno::Any> aRangeSeq;
     sal_Int32 nIdx(0);
     sal_Int32 nArrPos(0);
 
@@ -444,7 +444,7 @@ uno::Sequence<cpo::uno::Any> SAL_CALL ScSolverSettings::getVariableCells()
     return aRangeSeq;
 }
 
-void SAL_CALL ScSolverSettings::setVariableCells(const uno::Sequence<cpo::uno::Any>& aRanges)
+void SAL_CALL ScSolverSettings::setVariableCells(const cpo::uno::Sequence<cpo::uno::Any>& aRanges)
 {
     OUString sVarCells;
     bool bFirst(true);
@@ -489,9 +489,9 @@ void SAL_CALL ScSolverSettings::setVariableCells(const uno::Sequence<cpo::uno::A
     m_pSettings->SetParameter(sc::SP_VAR_CELLS, sVarCells);
 }
 
-uno::Sequence<sheet::ModelConstraint> SAL_CALL ScSolverSettings::getConstraints()
+cpo::uno::Sequence<sheet::ModelConstraint> SAL_CALL ScSolverSettings::getConstraints()
 {
-    uno::Sequence<sheet::ModelConstraint> aRet;
+    cpo::uno::Sequence<sheet::ModelConstraint> aRet;
     std::vector<sc::ModelConstraint> vConstraints = m_pSettings->GetConstraints();
     const formula::FormulaGrammar::AddressConvention eConv = m_rDoc.GetAddressConvention();
     sal_Int32 nCount(0);
@@ -543,7 +543,7 @@ uno::Sequence<sheet::ModelConstraint> SAL_CALL ScSolverSettings::getConstraints(
 }
 
 void SAL_CALL
-ScSolverSettings::setConstraints(const uno::Sequence<sheet::ModelConstraint>& aConstraints)
+ScSolverSettings::setConstraints(const cpo::uno::Sequence<sheet::ModelConstraint>& aConstraints)
 {
     const formula::FormulaGrammar::AddressConvention eConv = m_rDoc.GetAddressConvention();
     std::vector<sc::ModelConstraint> vRetConstraints;
@@ -631,14 +631,15 @@ sal_Int32 SAL_CALL ScSolverSettings::getConstraintCount()
     return static_cast<sal_Int32>(m_pSettings->GetConstraints().size());
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScSolverSettings::getEngineOptions()
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScSolverSettings::getEngineOptions()
 {
-    uno::Sequence<beans::PropertyValue> aRet = ScSolverUtil::GetDefaults(getEngine());
+    cpo::uno::Sequence<beans::PropertyValue> aRet = ScSolverUtil::GetDefaults(getEngine());
     m_pSettings->GetEngineOptions(aRet);
     return aRet;
 }
 
-void SAL_CALL ScSolverSettings::setEngineOptions(const uno::Sequence<beans::PropertyValue>& rProps)
+void SAL_CALL
+ScSolverSettings::setEngineOptions(const cpo::uno::Sequence<beans::PropertyValue>& rProps)
 {
     m_pSettings->SetEngineOptions(rProps);
 }
@@ -660,7 +661,7 @@ void SAL_CALL ScSolverSettings::solve()
     if (!m_bSuppressDialog)
     {
         // Get the value of the timeout property of the solver engine
-        uno::Sequence<beans::PropertyValue> aProps(getEngineOptions());
+        cpo::uno::Sequence<beans::PropertyValue> aProps(getEngineOptions());
         sal_Int32 nTimeout(0);
         sal_Int32 nPropCount(aProps.getLength());
         bool bHasTimeout(false);
@@ -706,7 +707,7 @@ void SAL_CALL ScSolverSettings::solve()
     }
 
     // Resolve ranges into single cells
-    uno::Sequence<table::CellAddress> aVariableCells;
+    cpo::uno::Sequence<table::CellAddress> aVariableCells;
     sal_Int32 nVarPos(0);
     for (size_t nRangePos = 0, nRange = aVarRanges.size(); nRangePos < nRange; ++nRangePos)
     {
@@ -725,7 +726,7 @@ void SAL_CALL ScSolverSettings::solve()
     }
 
     // Prepare model constraints
-    uno::Sequence<sheet::SolverConstraint> aConstraints;
+    cpo::uno::Sequence<sheet::SolverConstraint> aConstraints;
     sal_Int32 nConstrPos = 0;
     for (const auto& rConstr : m_pSettings->GetConstraints())
     {
@@ -852,7 +853,7 @@ void SAL_CALL ScSolverSettings::solve()
 
     // Create a copy of document values in case the user chooses to restore them
     sal_Int32 nVarCount = aVariableCells.getLength();
-    uno::Sequence<double> aOldValues(nVarCount);
+    cpo::uno::Sequence<double> aOldValues(nVarCount);
     std::transform(std::cbegin(aVariableCells), std::cend(aVariableCells), aOldValues.getArray(),
                    [this](const table::CellAddress& rVariable) -> double {
                        ScAddress aCellPos;
@@ -907,7 +908,7 @@ void SAL_CALL ScSolverSettings::solve()
     {
         m_nStatus = sheet::SolverStatus::SOLUTION_FOUND;
         // Write solution to the document
-        uno::Sequence<double> aSolution = xSolver->getSolution();
+        cpo::uno::Sequence<double> aSolution = xSolver->getSolution();
         if (aSolution.getLength() == nVarCount)
         {
             m_pDocShell->LockPaint();
@@ -980,7 +981,7 @@ bool SAL_CALL ScSolverSettings::supportsService(const OUString& rServiceName)
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScSolverSettings::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScSolverSettings::getSupportedServiceNames()
 {
     return { SC_SOLVERSETTINGS_SERVICE };
 }

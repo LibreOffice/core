@@ -36,7 +36,7 @@ namespace vcl::CommandInfoProvider {
         @return
             The command properties.
     */
-    VCL_DLLPUBLIC css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties(const OUString& rsCommandName, const OUString& rsModuleName);
+    VCL_DLLPUBLIC cpo::uno::Sequence<css::beans::PropertyValue> GetCommandProperties(const OUString& rsCommandName, const OUString& rsModuleName);
 
     /** Return a label for the given command.
         @param rProperties
@@ -44,13 +44,13 @@ namespace vcl::CommandInfoProvider {
         @return
             The command label.
     */
-    VCL_DLLPUBLIC OUString GetLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties);
+    VCL_DLLPUBLIC OUString GetLabelForCommand(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties);
 
-    VCL_DLLPUBLIC OUString GetMenuLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties);
+    VCL_DLLPUBLIC OUString GetMenuLabelForCommand(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties);
 
-    VCL_DLLPUBLIC OUString GetPopupLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties);
+    VCL_DLLPUBLIC OUString GetPopupLabelForCommand(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties);
 
-    VCL_DLLPUBLIC OUString GetTooltipLabelForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties);
+    VCL_DLLPUBLIC OUString GetTooltipLabelForCommand(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties);
 
     /** Return a tooltip for the given command. Falls back to label if command has no tooltip.
         @param rsCommandName
@@ -65,7 +65,7 @@ namespace vcl::CommandInfoProvider {
     */
     VCL_DLLPUBLIC OUString GetTooltipForCommand (
         const OUString& rsCommandName,
-        const css::uno::Sequence<css::beans::PropertyValue>& rProperties,
+        const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties,
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Returns the shortcut for a command in human-readable form */
@@ -75,7 +75,7 @@ namespace vcl::CommandInfoProvider {
     VCL_DLLPUBLIC KeyCode GetCommandKeyCodeShortcut (const OUString& rCommandName,
                                                      const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    VCL_DLLPUBLIC OUString GetRealCommandForCommand(const css::uno::Sequence<css::beans::PropertyValue>& rProperties);
+    VCL_DLLPUBLIC OUString GetRealCommandForCommand(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties);
 
     VCL_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> GetXGraphicForCommand(
         const OUString& rsCommandName,

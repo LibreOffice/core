@@ -48,7 +48,7 @@ void XMLBase64ImportContext::characters(const OUString& rChars)
     else
         aChars = aTrimmedChars;
 
-    uno::Sequence<sal_Int8> aBuffer((aChars.getLength() / 4) * 3);
+    cpo::uno::Sequence<sal_Int8> aBuffer((aChars.getLength() / 4) * 3);
     const sal_Int32 nCharsDecoded = comphelper::Base64::decodeSomeChars(aBuffer, aChars);
     m_aStream.WriteBytes(aBuffer.getArray(), aBuffer.getLength());
     if (nCharsDecoded != aChars.getLength())

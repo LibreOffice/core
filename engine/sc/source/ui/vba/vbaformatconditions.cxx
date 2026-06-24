@@ -238,7 +238,7 @@ ScVbaFormatConditions::getStyleName()
     ScVbaStyles* pStyles = mxStyles.get();
     if ( !pStyles )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
-    uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
+    cpo::uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
     return ContainerUtilities::getUniqueName(sCellStyleNames, u"Excel_CondFormat"_ustr, u"_");
 }
 
@@ -277,10 +277,10 @@ ScVbaFormatConditions::getServiceImplName()
     return u"ScVbaFormatConditions"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaFormatConditions::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.excel.FormatConditions"_ustr
     };

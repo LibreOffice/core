@@ -136,7 +136,7 @@ namespace connectivity::parse
 
         virtual void construct() override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
     private:
         using OOrderColumn_BASE::createArrayHelper;
     };

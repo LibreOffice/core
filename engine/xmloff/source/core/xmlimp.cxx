@@ -369,7 +369,7 @@ public:
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
     OUString implementationName;
-    css::uno::Sequence< OUString > maSupportedServiceNames;
+    cpo::uno::Sequence< OUString > maSupportedServiceNames;
 
     uno::Reference< embed::XStorage > mxSourceStorage;
 
@@ -379,7 +379,7 @@ public:
 
     SvXMLImport_Impl( uno::Reference< uno::XComponentContext > xContext,
                       OUString theImplementationName,
-                      const css::uno::Sequence< OUString > & sSupportedServiceNames = {})
+                      const cpo::uno::Sequence< OUString > & sSupportedServiceNames = {})
         : hBatsFontConv( nullptr )
         , hMathFontConv( nullptr )
         , mbOwnGraphicResolver( false )
@@ -637,7 +637,7 @@ SvXMLImport::SvXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     SvXMLImportFlags nImportFlags,
-    const css::uno::Sequence< OUString > & sSupportedServiceNames )
+    const cpo::uno::Sequence< OUString > & sSupportedServiceNames )
 :   mpImpl( new SvXMLImport_Impl(xContext, implementationName, sSupportedServiceNames) ),
     mxNamespaceMap( SvXMLNamespaceMap() ),
 
@@ -766,7 +766,7 @@ void SAL_CALL SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::
     mxParser->setNamespaceHandler( Handler );
 }
 
-void SAL_CALL SvXMLImport::setCustomEntityNames( const ::css::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )
+void SAL_CALL SvXMLImport::setCustomEntityNames( const ::cpo::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )
 {
     mxParser->setCustomEntityNames( replacements );
 }
@@ -1112,7 +1112,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     return this;
 }
 
-void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
+void SvXMLImport::SetStatistics(const cpo::uno::Sequence< beans::NamedValue> &)
 {
     GetProgressBarHelper()->SetRepeat(false);
     GetProgressBarHelper()->SetReference(0);
@@ -1152,7 +1152,7 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 }
 
 // XFilter
-bool SAL_CALL SvXMLImport::filter( const uno::Sequence< beans::PropertyValue >& )
+bool SAL_CALL SvXMLImport::filter( const cpo::uno::Sequence< beans::PropertyValue >& )
 {
     return false;
 }
@@ -1162,7 +1162,7 @@ void SAL_CALL SvXMLImport::cancel(  )
 }
 
 // XInitialize
-void SAL_CALL SvXMLImport::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL SvXMLImport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     for( const auto& rAny : aArguments )
     {
@@ -1264,7 +1264,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< cpo::uno::Any >& aAr
     uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
 
     css::uno::Reference< XMap > xMap = L10nMapper::load(GetSourceStorage());
-    css::uno::Sequence< cpo::uno::Any > args{
+    cpo::uno::Sequence< cpo::uno::Any > args{
         cpo::uno::Any(u"IgnoreMissingNSDecl"_ustr),
         cpo::uno::Any(xMap) };
     xInit->initialize(args);
@@ -1281,7 +1281,7 @@ bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
 {
     return mpImpl->maSupportedServiceNames;
 }
@@ -1676,15 +1676,15 @@ OUString SvXMLImport::GetStyleDisplayName( XmlStyleFamily nFamily,
     return sName;
 }
 
-void SvXMLImport::SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>&)
+void SvXMLImport::SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>&)
 {
 }
 
-void SvXMLImport::SetConfigurationSettings(const css::uno::Sequence<css::beans::PropertyValue>&)
+void SvXMLImport::SetConfigurationSettings(const cpo::uno::Sequence<css::beans::PropertyValue>&)
 {
 }
 
-void SvXMLImport::SetDocumentSpecificSettings(const OUString&, const uno::Sequence<beans::PropertyValue>&)
+void SvXMLImport::SetDocumentSpecificSettings(const OUString&, const cpo::uno::Sequence<beans::PropertyValue>&)
 {
 }
 
@@ -1798,7 +1798,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     if (pAutoStyles && mxNumberStyles.is())
     {
         uno::Reference<xml::sax::XFastAttributeList> xAttrList = new sax_fastparser::FastAttributeList(nullptr);
-        const uno::Sequence<OUString> aStyleNames = mxNumberStyles->getElementNames();
+        const cpo::uno::Sequence<OUString> aStyleNames = mxNumberStyles->getElementNames();
         for (const auto& name : aStyleNames)
         {
             cpo::uno::Any aAny(mxNumberStyles->getByName(name));

@@ -49,7 +49,7 @@ public:
 
     virtual void SAL_CALL removeByID( const sal_Int32 nID ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::sheet::XConditionalFormat > > SAL_CALL getConditionalFormats() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::sheet::XConditionalFormat > > SAL_CALL getConditionalFormats() override;
 
     virtual sal_Int32 SAL_CALL getLength() override;
 

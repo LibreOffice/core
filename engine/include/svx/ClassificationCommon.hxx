@@ -38,7 +38,7 @@ SVX_DLLPUBLIC OUString
 getProperty(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
             OUString const& rName);
 
-SVX_DLLPUBLIC bool containsProperty(css::uno::Sequence<css::beans::Property> const& rProperties,
+SVX_DLLPUBLIC bool containsProperty(cpo::uno::Sequence<css::beans::Property> const& rProperties,
                                     std::u16string_view rName);
 
 SVX_DLLPUBLIC void

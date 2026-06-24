@@ -115,8 +115,8 @@ public:
                                 No checks are made if the handle range determined by _nFirstAggregateId conflicts with other
                                 handles within _rProperties.
     */
-    OPropertyArrayAggregationHelper(const css::uno::Sequence< css::beans::Property>& _rProperties,
-                                    const css::uno::Sequence< css::beans::Property>& _rAggProperties,
+    OPropertyArrayAggregationHelper(const cpo::uno::Sequence< css::beans::Property>& _rProperties,
+                                    const cpo::uno::Sequence< css::beans::Property>& _rAggProperties,
                                     IPropertyInfoService* _pInfoService = nullptr,
                                     sal_Int32 _nFirstAggregateId = DEFAULT_AGGREGATE_PROPERTY_ID);
 
@@ -126,7 +126,7 @@ public:
                                             sal_Int32 _nHandle) override ;
 
     /// inherited from IPropertyArrayHelper
-    virtual css::uno::Sequence< css::beans::Property> SAL_CALL getProperties() override;
+    virtual cpo::uno::Sequence< css::beans::Property> SAL_CALL getProperties() override;
     /// inherited from IPropertyArrayHelper
     virtual css::beans::Property SAL_CALL getPropertyByName(const OUString& _rPropertyName) override;
 
@@ -135,7 +135,7 @@ public:
     /// inherited from IPropertyArrayHelper
     virtual sal_Int32 SAL_CALL getHandleByName(const OUString & _rPropertyName) override;
     /// inherited from IPropertyArrayHelper
-    virtual sal_Int32 SAL_CALL fillHandles( /*out*/sal_Int32* _pHandles, const css::uno::Sequence< OUString >& _rPropNames ) override;
+    virtual sal_Int32 SAL_CALL fillHandles( /*out*/sal_Int32* _pHandles, const cpo::uno::Sequence< OUString >& _rPropNames ) override;
 
     /** returns information about a property of the aggregate.
         @param  _pPropName          points to a string to receive the property name. No name is returned if this is NULL.
@@ -221,14 +221,14 @@ public:
     virtual void SAL_CALL           addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener) override;
 
 // XPropertiesChangeListener
-    virtual void SAL_CALL propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt) override;
+    virtual void SAL_CALL propertiesChange(const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& evt) override;
 
 // XVetoableChangeListener
     virtual void SAL_CALL vetoableChange(const css::beans::PropertyChangeEvent& aEvent) override;
 
 // XMultiPropertySet
-    virtual void SAL_CALL   setPropertyValues(const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< cpo::uno::Any >& Values) override;
-    virtual void SAL_CALL   addPropertiesChangeListener(const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) override;
+    virtual void SAL_CALL   setPropertyValues(const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values) override;
+    virtual void SAL_CALL   addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) override;
 
 // XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState(const OUString& PropertyName) override;

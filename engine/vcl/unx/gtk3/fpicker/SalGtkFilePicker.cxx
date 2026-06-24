@@ -68,7 +68,7 @@ protected:
     OUString     m_sTitle;
     OUString     m_sFilter;
 
-    css::uno::Sequence< css::beans::StringPair >       m_aSubFilters;
+    cpo::uno::Sequence< css::beans::StringPair >       m_aSubFilters;
 
 public:
     FilterEntry( OUString _aTitle, OUString _aFilter )
@@ -85,7 +85,7 @@ public:
 
     /** retrieves the filters belonging to the entry
     */
-    void       getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList );
+    void       getSubFilters( cpo::uno::Sequence< css::beans::StringPair >& _rSubFilterList );
 
     // helpers for iterating the sub filters
     const css::beans::StringPair*   beginSubFilters() const { return m_aSubFilters.begin(); }
@@ -97,7 +97,7 @@ bool FilterEntry::hasSubFilters() const
     return m_aSubFilters.hasElements();
 }
 
-void FilterEntry::getSubFilters( css::uno::Sequence< css::beans::StringPair >& _rSubFilterList )
+void FilterEntry::getSubFilters( cpo::uno::Sequence< css::beans::StringPair >& _rSubFilterList )
 {
     _rSubFilterList = m_aSubFilters;
 }
@@ -507,7 +507,7 @@ bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
     return bRet;
 }
 
-bool SalGtkFilePicker::FilterNameExists( const css::uno::Sequence< css::beans::StringPair >& _rGroupedFilters )
+bool SalGtkFilePicker::FilterNameExists( const cpo::uno::Sequence< css::beans::StringPair >& _rGroupedFilters )
 {
     bool bRet = false;
 
@@ -620,7 +620,7 @@ OUString SAL_CALL SalGtkFilePicker::getCurrentFilter()
 
 // XFilterGroupManager functions
 
-void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle*/, const uno::Sequence<beans::StringPair>& aFilters )
+void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle*/, const cpo::uno::Sequence<beans::StringPair>& aFilters )
 {
     SolarMutexGuard g;
 
@@ -684,11 +684,11 @@ OUString SAL_CALL SalGtkFilePicker::getDisplayDirectory()
     return implgetDisplayDirectory();
 }
 
-uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles()
+cpo::uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles()
 {
     // no member access => no mutex needed
 
-    uno::Sequence< OUString > aFiles = getSelectedFiles();
+    cpo::uno::Sequence< OUString > aFiles = getSelectedFiles();
     /*
       The previous multiselection API design was completely broken
       and unimplementable for some heterogeneous pseudo-URIs eg. search:
@@ -734,7 +734,7 @@ bool lcl_matchFilter( std::u16string_view rFilter, std::u16string_view rExt )
 
 }
 
-uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
+cpo::uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
 {
     SolarMutexGuard g;
 
@@ -754,7 +754,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
     GtkFileChooserAction eAction = gtk_file_chooser_get_action(
         GTK_FILE_CHOOSER( m_pDialog ));
 
-    uno::Sequence< OUString > aSelectedFiles(nCount);
+    cpo::uno::Sequence< OUString > aSelectedFiles(nCount);
     auto aSelectedFilesRange = asNonConstRange(aSelectedFiles);
 
     // Convert to OOo
@@ -1473,14 +1473,14 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
 
 // XFilePreview functions
 
-uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats()
+cpo::uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats()
 {
     SolarMutexGuard g;
 
     OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO return m_pImpl->getSupportedImageFormats();
-    return uno::Sequence<sal_Int16>();
+    return cpo::uno::Sequence<sal_Int16>();
 }
 
 sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth()
@@ -1661,7 +1661,7 @@ bool SAL_CALL SalGtkFilePicker::getShowState()
     return mbPreviewState;
 }
 
-GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<cpo::uno::Any>& rArguments)
+GtkWidget* SalGtkPicker::GetParentWidget(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     GtkWidget* pParentWidget = nullptr;
 
@@ -1680,7 +1680,7 @@ GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<cpo::uno::Any>& rAr
             css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
             if (xSysDepWin.is())
             {
-                css::uno::Sequence<sal_Int8> aProcessIdent(16);
+                cpo::uno::Sequence<sal_Int8> aProcessIdent(16);
                 rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));
                 cpo::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent, css::lang::SystemDependent::SYSTEM_XWINDOW);
                 css::awt::SystemDependentXWindow tmp;
@@ -1695,7 +1695,7 @@ GtkWidget* SalGtkPicker::GetParentWidget(const uno::Sequence<cpo::uno::Any>& rAr
 
 // XInitialization
 
-void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<cpo::uno::Any>& aArguments )
+void SAL_CALL SalGtkFilePicker::initialize( const cpo::uno::Sequence<cpo::uno::Any>& aArguments )
 {
     // parameter checking
     cpo::uno::Any aAny;
@@ -2062,7 +2062,7 @@ void SalGtkFilePicker::SetFilters()
             {
                 if( filter.hasSubFilters() )
                 {   // it's a filter group
-                    css::uno::Sequence< css::beans::StringPair > aSubFilters;
+                    cpo::uno::Sequence< css::beans::StringPair > aSubFilters;
                     filter.getSubFilters( aSubFilters );
                     for (const auto& rSubFilter : aSubFilters)
                         aAllFormats.insert(rSubFilter.Second);
@@ -2092,7 +2092,7 @@ void SalGtkFilePicker::SetFilters()
             if( filter.hasSubFilters() )
             {   // it's a filter group
 
-                css::uno::Sequence< css::beans::StringPair > aSubFilters;
+                cpo::uno::Sequence< css::beans::StringPair > aSubFilters;
                 filter.getSubFilters( aSubFilters );
 
                 implAddFilterGroup( aSubFilters );

@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <map>
 #include <memory>
@@ -404,7 +404,7 @@ public:
     virtual void SetShowChanges( bool bShowChanges );
     virtual void SetRecordChanges( bool bRecordChanges );
     virtual void SetChangesProtectionKey(
-        const css::uno::Sequence<sal_Int8> & rProtectionKey );
+        const cpo::uno::Sequence<sal_Int8> & rProtectionKey );
 
     /// get the last open redline ID
     OUString const & GetOpenRedlineId() const;

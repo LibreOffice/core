@@ -252,7 +252,7 @@ public:
             GetLanguageGuesser();
 
     SW_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
-    void CallAutomationApplicationEventSinks(const OUString& Method, css::uno::Sequence< cpo::uno::Any >& Arguments);
+    void CallAutomationApplicationEventSinks(const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments);
 
     SW_DLLPUBLIC const SwTableAutoFormatTable& GetAutoFormatTable();
     void InvalidateAutoFormatTable();;

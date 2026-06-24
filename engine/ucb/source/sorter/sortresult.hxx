@@ -123,7 +123,7 @@ private:
     sal_Int32          Compare( SortListData const *pOne,
                                  SortListData const *pTwo );
     void                BuildSortInfo( const css::uno::Reference< css::sdbc::XResultSet >& aResult,
-                                       const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
+                                       const cpo::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                        const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
@@ -145,7 +145,7 @@ public:
     sal_Int32          GetCount() const { return mnCount; }
 
     void                CopyData( SortedResultSet* pSource );
-    void                Initialize( const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
+    void                Initialize( const cpo::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
                                     const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
     void                CheckProperties( sal_Int32 nOldCount, bool bWasFinal );
 
@@ -160,7 +160,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
     virtual void SAL_CALL
@@ -249,7 +249,7 @@ public:
     virtual double SAL_CALL
     getDouble( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getBytes( sal_Int32 columnIndex ) override;
 
     virtual css::util::Date SAL_CALL

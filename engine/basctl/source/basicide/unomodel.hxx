@@ -35,15 +35,15 @@ public:
     //XServiceInfo
     virtual OUString getImplementationName() override;
     virtual bool supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
     // XStorable2
-    virtual void storeSelf( const  css::uno::Sequence< css::beans::PropertyValue >& ) override { notImplemented(); }
+    virtual void storeSelf( const  cpo::uno::Sequence< css::beans::PropertyValue >& ) override { notImplemented(); }
     //  XStorable
     virtual void store() override;
     virtual void storeAsURL( const   OUString& sURL,
-                                      const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
+                                      const   cpo::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
     virtual void storeToURL( const   OUString& sURL,
-                                      const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
+                                      const   cpo::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
 
     // XModel
     virtual css::uno::Reference< css::uno::XInterface > getCurrentSelection() override;

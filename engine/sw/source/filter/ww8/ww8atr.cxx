@@ -2885,7 +2885,7 @@ void WW8AttributeOutput::PostitField( const SwField* pField )
 bool WW8AttributeOutput::DropdownField( const SwField* pField )
 {
     const SwDropDownField& rField2 = *static_cast<const SwDropDownField*>(pField);
-    uno::Sequence<OUString> aItems =
+    cpo::uno::Sequence<OUString> aItems =
         rField2.GetItemSequence();
     GetExport().DoComboBox(rField2.GetName(),
                        rField2.GetHelp(),

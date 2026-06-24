@@ -75,7 +75,7 @@ bool SAL_CALL ContentProvider::supportsService( const OUString& ServiceName )
     return cppu::supportsService( this, ServiceName );
 }
 
-css::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.TransientDocumentsContentProvider"_ustr };
 }
@@ -86,7 +86,7 @@ css::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_tdoc_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ContentProvider(context));
 }
@@ -468,7 +468,7 @@ ContentProvider::queryStream( const OUString & rUri,
 
 
 bool ContentProvider::queryNamesOfChildren(
-    const OUString & rUri, uno::Sequence< OUString > & rNames ) const
+    const OUString & rUri, cpo::uno::Sequence< OUString > & rNames ) const
 {
     Uri aUri( rUri );
     if ( aUri.isRoot() )

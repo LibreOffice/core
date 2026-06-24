@@ -77,11 +77,11 @@ FilterCache::FilterCache()
 
     // E_READ_NOTHING -> creative nothingness.
     m_aStandardProps[E_READ_STANDARD] =
-        css::uno::Sequence< OUString >(sStandardProps + 3, 7);
+        cpo::uno::Sequence< OUString >(sStandardProps + 3, 7);
     m_aStandardProps[E_READ_UPDATE] =
-        css::uno::Sequence< OUString >(sStandardProps, 3);
+        cpo::uno::Sequence< OUString >(sStandardProps, 3);
     m_aStandardProps[E_READ_ALL] =
-        css::uno::Sequence< OUString >(sStandardProps,
+        cpo::uno::Sequence< OUString >(sStandardProps,
                                        SAL_N_ELEMENTS(sStandardProps));
 
     i = 0;
@@ -98,11 +98,11 @@ FilterCache::FilterCache()
 
     // E_READ_NOTHING -> more creative nothingness.
     m_aTypeProps[E_READ_STANDARD] =
-        css::uno::Sequence< OUString >(sTypeProps + 1, 6);
+        cpo::uno::Sequence< OUString >(sTypeProps + 1, 6);
     m_aTypeProps[E_READ_UPDATE] =
-        css::uno::Sequence< OUString >(sTypeProps, 1);
+        cpo::uno::Sequence< OUString >(sTypeProps, 1);
     m_aTypeProps[E_READ_ALL] =
-        css::uno::Sequence< OUString >(sTypeProps,
+        cpo::uno::Sequence< OUString >(sTypeProps,
                                        SAL_N_ELEMENTS(sTypeProps));
 }
 
@@ -504,7 +504,7 @@ cpo::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
                     (sItem == sDefaultFrameLoader   )
                    )
                 {
-                    css::uno::Sequence aProps = rItem.getAsPackedPropertyValueList(true, true);
+                    cpo::uno::Sequence aProps = rItem.getAsPackedPropertyValueList(true, true);
                     return cpo::uno::Any(aProps);
                 }
                 /* <-- HACK */
@@ -549,7 +549,7 @@ cpo::uno::Any FilterCache::getItemWithStateProps(      EItemType        eType,
         bMandatory = true;
     }
 
-    css::uno::Sequence<css::beans::PropertyValue> aProps = rItem.getAsPackedPropertyValueList(bFinalized, bMandatory);
+    cpo::uno::Sequence<css::beans::PropertyValue> aProps = rItem.getAsPackedPropertyValueList(bFinalized, bMandatory);
 
     return cpo::uno::Any(aProps);
     // <- SAFE
@@ -993,8 +993,8 @@ void FilterCache::impl_validateAndOptimize()
         // only in case there is no filled set of Extensions AND
         // no filled set of URLPattern -> we must try to remove this invalid item
         // from this cache!
-        css::uno::Sequence< OUString > lExtensions;
-        css::uno::Sequence< OUString > lURLPattern;
+        cpo::uno::Sequence< OUString > lExtensions;
+        cpo::uno::Sequence< OUString > lURLPattern;
         auto it = aType.find(PROPNAME_EXTENSIONS);
         if (it != aType.end())
             it->second >>= lExtensions;
@@ -1184,7 +1184,7 @@ void FilterCache::impl_validateAndOptimize()
 
         CacheItem&     rLoader   = frameLoader.second;
         cpo::uno::Any& rTypesReg = rLoader[PROPNAME_TYPES];
-        const css::uno::Sequence<OUString> lTypesReg = rTypesReg.get<css::uno::Sequence<OUString> >();
+        const cpo::uno::Sequence<OUString> lTypesReg = rTypesReg.get<cpo::uno::Sequence<OUString> >();
 
         for (auto const& typeReg : lTypesReg)
         {
@@ -1395,7 +1395,7 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     }
 
     css::uno::Reference< css::container::XNameAccess > xSet;
-    css::uno::Sequence< OUString >              lItems;
+    cpo::uno::Sequence< OUString >              lItems;
 
     try
     {
@@ -1530,7 +1530,7 @@ void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::containe
 {
     css::uno::Reference< css::container::XNameContainer > xAdd  (xNode, css::uno::UNO_QUERY);
 
-    css::uno::Sequence< css::beans::PropertyValue > lUINames = rItem.getUnpackedValueOrDefault(PROPNAME_UINAMES, css::uno::Sequence< css::beans::PropertyValue >());
+    cpo::uno::Sequence< css::beans::PropertyValue > lUINames = rItem.getUnpackedValueOrDefault(PROPNAME_UINAMES, cpo::uno::Sequence< css::beans::PropertyValue >());
 
     for (const auto& rPropertyValue : lUINames)
     {
@@ -1576,14 +1576,14 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
         case E_TYPE :
         {
             assert(eOption >= 0 && eOption <= E_READ_ALL);
-            css::uno::Sequence< OUString > &rNames = m_aTypeProps[eOption];
+            cpo::uno::Sequence< OUString > &rNames = m_aTypeProps[eOption];
 
             // read standard properties of a filter
             if (rNames.hasElements())
             {
                 css::uno::Reference< css::beans::XMultiPropertySet >
                     xPropSet( xItem, css::uno::UNO_QUERY_THROW);
-                css::uno::Sequence< cpo::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
+                cpo::uno::Sequence< cpo::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
 
                 for (sal_Int32 i = 0; i < aValues.getLength(); i++)
                     aItem[rNames[i]] = aValues[i];
@@ -1600,14 +1600,14 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
         case E_FILTER :
         {
             assert(eOption >= 0 && eOption <= E_READ_ALL);
-            css::uno::Sequence< OUString > &rNames = m_aStandardProps[eOption];
+            cpo::uno::Sequence< OUString > &rNames = m_aStandardProps[eOption];
 
             // read standard properties of a filter
             if (rNames.hasElements())
             {
                 css::uno::Reference< css::beans::XMultiPropertySet >
                     xPropSet( xItem, css::uno::UNO_QUERY_THROW);
-                css::uno::Sequence< cpo::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
+                cpo::uno::Sequence< cpo::uno::Any > aValues = xPropSet->getPropertyValues(rNames);
 
                 for (sal_Int32 i = 0; i < rNames.getLength(); i++)
                 {
@@ -1619,7 +1619,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
                         assert(rPropName == PROPNAME_FLAGS);
                         // special handling for flags! Convert it from a list of names to its
                         // int representation ...
-                        css::uno::Sequence< OUString > lFlagNames;
+                        cpo::uno::Sequence< OUString > lFlagNames;
                         if (aValues[i] >>= lFlagNames)
                             aItem[rPropName] <<= static_cast<sal_Int32>(FilterCache::impl_convertFlagNames2FlagField(lFlagNames));
                     }
@@ -1852,7 +1852,7 @@ namespace {
 /*-----------------------------------------------
     static! => no locks necessary
 -----------------------------------------------*/
-css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxFilterFlags nFlags)
+cpo::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxFilterFlags nFlags)
 {
     std::vector<OUString> lFlagNames;
 
@@ -1868,7 +1868,7 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxF
 /*-----------------------------------------------
     static! => no locks necessary
 -----------------------------------------------*/
-SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence< OUString >& lNames)
+SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const cpo::uno::Sequence< OUString >& lNames)
 {
     SfxFilterFlags nField = SfxFilterFlags::NONE;
 
@@ -1975,7 +1975,7 @@ void FilterCache::impl_readOldFormat()
         {
             css::uno::Reference< css::container::XNameAccess > xSet;
             xCfg->getByName(TYPES_SET) >>= xSet;
-            const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
+            const cpo::uno::Sequence< OUString > lItems = xSet->getElementNames();
             for (const OUString& rName : lItems)
                 m_lTypes[rName] = impl_readOldItem(xSet, E_TYPE, rName);
         }
@@ -1986,7 +1986,7 @@ void FilterCache::impl_readOldFormat()
         {
             css::uno::Reference< css::container::XNameAccess > xSet;
             xCfg->getByName(FILTER_SET) >>= xSet;
-            const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
+            const cpo::uno::Sequence< OUString > lItems = xSet->getElementNames();
             for (const OUString& rName : lItems)
                 m_lFilters[rName] = impl_readOldItem(xSet, E_FILTER, rName);
         }
@@ -2075,8 +2075,8 @@ OUString FilterCache::impl_searchFrameLoaderForType(const OUString& sType) const
     {
         const OUString& sItem = frameLoader.first;
         ::comphelper::SequenceAsHashMap lProps(frameLoader.second);
-        const css::uno::Sequence<OUString> lTypes =
-                lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >();
+        const cpo::uno::Sequence<OUString> lTypes =
+                lProps[PROPNAME_TYPES].get<cpo::uno::Sequence<OUString> >();
 
         if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
@@ -2092,8 +2092,8 @@ OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) co
     {
         const OUString& sItem = contentHandler.first;
         ::comphelper::SequenceAsHashMap lProps(contentHandler.second);
-        const css::uno::Sequence<OUString> lTypes =
-                lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >();
+        const cpo::uno::Sequence<OUString> lTypes =
+                lProps[PROPNAME_TYPES].get<cpo::uno::Sequence<OUString> >();
         if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
     }

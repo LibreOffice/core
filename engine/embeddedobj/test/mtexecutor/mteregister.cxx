@@ -73,7 +73,7 @@ bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryKey )
             uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
 
             uno::Reference< registry::XRegistryKey >  xNewKey;
-            uno::Sequence< OUString > rServices;
+            cpo::uno::Sequence< OUString > rServices;
             sal_Int32 ind = 0;
 
             xNewKey = xKey->createKey( OUString("/") +

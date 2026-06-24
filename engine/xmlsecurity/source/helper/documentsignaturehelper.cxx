@@ -49,6 +49,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace css::xml::sax;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -293,14 +294,14 @@ void DocumentSignatureHelper::AppendContentTypes(const uno::Reference<embed::XSt
         return;
 
     uno::Reference<io::XInputStream> xRelStream(xStorage->openStreamElement(u"[Content_Types].xml"_ustr, embed::ElementModes::READ), uno::UNO_QUERY);
-    uno::Sequence< uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xRelStream, comphelper::getProcessComponentContext());
+    cpo::uno::Sequence< cpo::uno::Sequence<beans::StringPair> > aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xRelStream, comphelper::getProcessComponentContext());
     if (aContentTypeInfo.getLength() < 2)
     {
         SAL_WARN("xmlsecurity.helper", "no defaults or overrides in aContentTypeInfo");
         return;
     }
-    const uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
-    const uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
+    const cpo::uno::Sequence<beans::StringPair>& rDefaults = aContentTypeInfo[0];
+    const cpo::uno::Sequence<beans::StringPair>& rOverrides = aContentTypeInfo[1];
 
     for (OUString& rElement : rElements)
     {
@@ -373,7 +374,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
                     xPropertySet->getPropertyValue(u"Size"_ustr) >>= nSize;
                     if (nSize >= 0 && nSize < SAL_MAX_INT32)
                     {
-                        uno::Sequence<sal_Int8> aData;
+                        cpo::uno::Sequence<sal_Int8> aData;
                         xInputStream->readBytes(aData, nSize);
                         SAL_INFO("xmlsecurity.helper",
                                  "DocumentSignatureHelper::OpenSignatureStream: stream content is '"

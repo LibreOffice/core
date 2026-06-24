@@ -422,7 +422,7 @@ namespace vclcanvas
                                                                                            const uno::Reference< rendering::XPolyPolygon2D >&   ,
                                                                                            const rendering::ViewState&                          ,
                                                                                            const rendering::RenderState&                        ,
-                                                                                           const uno::Sequence< rendering::Texture >&           ,
+                                                                                           const cpo::uno::Sequence< rendering::Texture >&           ,
                                                                                            const rendering::StrokeAttributes&                    )
     {
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
@@ -432,7 +432,7 @@ namespace vclcanvas
                                                                                                 const uno::Reference< rendering::XPolyPolygon2D >&  ,
                                                                                                 const rendering::ViewState&                         ,
                                                                                                 const rendering::RenderState&                       ,
-                                                                                                const uno::Sequence< rendering::Texture >&          ,
+                                                                                                const cpo::uno::Sequence< rendering::Texture >&          ,
                                                                                                 const uno::Reference< geometry::XMapping2D >&       ,
                                                                                                 const rendering::StrokeAttributes&                   )
     {
@@ -500,7 +500,7 @@ namespace vclcanvas
                                                                                               const uno::Reference< rendering::XPolyPolygon2D >&    ,
                                                                                               const rendering::ViewState&                           ,
                                                                                               const rendering::RenderState&                         ,
-                                                                                              const uno::Sequence< rendering::Texture >&            ,
+                                                                                              const cpo::uno::Sequence< rendering::Texture >&            ,
                                                                                               const uno::Reference< geometry::XMapping2D >&              )
     {
         return uno::Reference< rendering::XCachedPrimitive >(nullptr);
@@ -508,7 +508,7 @@ namespace vclcanvas
 
     uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                        ,
                                                                        const rendering::FontRequest&                    fontRequest,
-                                                                       const uno::Sequence< beans::PropertyValue >&     extraFontProperties,
+                                                                       const cpo::uno::Sequence< beans::PropertyValue >&     extraFontProperties,
                                                                        const geometry::Matrix2D&                        fontMatrix )
     {
         if( mpOutDevProvider && mpDevice )
@@ -522,12 +522,12 @@ namespace vclcanvas
         return uno::Reference< rendering::XCanvasFont >();
     }
 
-    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       ,
+    cpo::uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       ,
                                                                             const rendering::FontInfo&                      ,
-                                                                            const uno::Sequence< beans::PropertyValue >&     )
+                                                                            const cpo::uno::Sequence< beans::PropertyValue >&     )
     {
         // TODO(F2)
-        return uno::Sequence< rendering::FontInfo >();
+        return cpo::uno::Sequence< rendering::FontInfo >();
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         ,
@@ -932,11 +932,11 @@ namespace vclcanvas
             new CanvasBitmap( aBitmap, *mpDevice, mpOutDevProvider ) );
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     rLayout,
+    cpo::uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     rLayout,
                                                      const geometry::IntegerRectangle2D& rect )
     {
         if( !mpOutDevProvider )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return cpo::uno::Sequence< sal_Int8 >(); // we're disposed
 
         rLayout = getMemoryLayout();
 
@@ -964,7 +964,7 @@ namespace vclcanvas
         rLayout.ScanLineBytes = nWidth*4;
         rLayout.ScanLineStride = rLayout.ScanLineBytes;
 
-        uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
+        cpo::uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
         sal_Int8* pRes = aRes.getArray();
 
         int nCurrPos(0);
@@ -982,11 +982,11 @@ namespace vclcanvas
         return aRes;
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
+    cpo::uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout& rLayout,
                                                       const geometry::IntegerPoint2D& pos )
     {
         if( !mpOutDevProvider )
-            return uno::Sequence< sal_Int8 >(); // we're disposed
+            return cpo::uno::Sequence< sal_Int8 >(); // we're disposed
 
         rLayout = getMemoryLayout();
         rLayout.ScanLines = 1;

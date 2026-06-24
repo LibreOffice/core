@@ -199,7 +199,7 @@ static cpo::uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& rP
 static rtl::Reference< ScVbaRange > lcl_makeXRangeFromSheetCellRanges( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRanges >& xLocSheetCellRanges, ScDocShell* pDoc )
 {
     rtl::Reference< ScVbaRange > xRange;
-    const uno::Sequence< table::CellRangeAddress  > sAddresses = xLocSheetCellRanges->getRangeAddresses();
+    const cpo::uno::Sequence< table::CellRangeAddress  > sAddresses = xLocSheetCellRanges->getRangeAddresses();
     ScRangeList aCellRanges;
     if ( sAddresses.hasElements() )
     {
@@ -255,7 +255,7 @@ void ScVbaRange::fireChangeEvent()
     const uno::Reference< script::vba::XVBAEventProcessor >& xVBAEvents = rDoc.GetVbaEventProcessor();
     if( xVBAEvents.is() ) try
     {
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference< excel::XRange >( this )) };
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference< excel::XRange >( this )) };
         xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
     }
     catch( uno::Exception& )
@@ -341,7 +341,7 @@ public:
 
     virtual OUString getServiceImplName() override { return OUString(); }
 
-    virtual uno::Sequence< OUString > getServiceNames() override { return uno::Sequence< OUString >(); }
+    virtual cpo::uno::Sequence< OUString > getServiceNames() override { return cpo::uno::Sequence< OUString >(); }
 
 };
 
@@ -942,14 +942,14 @@ protected:
     ValueGetter& mValueGetter;
     void processValue( sal_Int32 x, sal_Int32 y, const cpo::uno::Any& aValue )
     {
-        uno::Sequence< uno::Sequence< cpo::uno::Any > >& aMatrix = const_cast<css::uno::Sequence<css::uno::Sequence<cpo::uno::Any>> &>(*o3tl::doAccess<uno::Sequence<uno::Sequence<cpo::uno::Any>>>(maValue));
+        cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >& aMatrix = const_cast<cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>> &>(*o3tl::doAccess<cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>>(maValue));
         aMatrix.getArray()[x].getArray()[y] = aValue;
     }
 
 public:
     Dim2ArrayValueGetter(sal_Int32 nRowCount, sal_Int32 nColCount, ValueGetter& rValueGetter ): mValueGetter(rValueGetter)
     {
-        uno::Sequence< uno::Sequence< cpo::uno::Any > > aMatrix;
+        cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > aMatrix;
         aMatrix.realloc( nRowCount );
         auto pMatrix = aMatrix.getArray();
         for ( sal_Int32 index = 0; index < nRowCount; ++index )
@@ -974,7 +974,7 @@ namespace {
 
 class Dim1ArrayValueSetter : public ArrayVisitor
 {
-    uno::Sequence< cpo::uno::Any > aMatrix;
+    cpo::uno::Sequence< cpo::uno::Any > aMatrix;
     sal_Int32 nColCount;
     ValueSetter& mCellValueSetter;
 public:
@@ -994,7 +994,7 @@ public:
 
 class Dim2ArrayValueSetter : public ArrayVisitor
 {
-    uno::Sequence< uno::Sequence< cpo::uno::Any > > aMatrix;
+    cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > > aMatrix;
     ValueSetter& mCellValueSetter;
     sal_Int32 nRowCount;
     sal_Int32 nColCount;
@@ -1417,7 +1417,7 @@ lcl_setupBorders( const uno::Reference< excel::XRange >& xParentRange, const uno
     return borders;
 }
 
-ScVbaRange::ScVbaRange( uno::Sequence< cpo::uno::Any> const & args,
+ScVbaRange::ScVbaRange( cpo::uno::Sequence< cpo::uno::Any> const & args,
     uno::Reference< uno::XComponentContext> const & xContext )
     : ScVbaRange_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ),
                        xContext,
@@ -1564,13 +1564,13 @@ ScVbaRange::setValue( const cpo::uno::Any& aValue, ValueSetter& valueSetter )
             // with a better test than this
             if ( aValue.getValueTypeName().indexOf('[') ==  aValue.getValueTypeName().lastIndexOf('[') )
             {
-                aConverted = xConverter->convertTo( aValue, cppu::UnoType<uno::Sequence< cpo::uno::Any >>::get() );
+                aConverted = xConverter->convertTo( aValue, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Any >>::get() );
                 Dim1ArrayValueSetter setter( aConverted, valueSetter );
                 visitArray( setter );
             }
             else
             {
-                aConverted = xConverter->convertTo( aValue, cppu::UnoType<uno::Sequence< uno::Sequence< cpo::uno::Any > >>::get() );
+                aConverted = xConverter->convertTo( aValue, cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >>::get() );
                 Dim2ArrayValueSetter setter( aConverted, valueSetter );
                 visitArray( setter );
             }
@@ -2018,14 +2018,14 @@ ScVbaRange::getFormulaArray()
     cpo::uno::Any aSingleValueOrMatrix;
     // When dealing with a single element ( embedded in the sequence of sequence ) unwrap and return
     // that value
-    uno::Sequence< uno::Sequence<OUString> > aTmpSeq = xCellRangeFormula->getFormulaArray();
+    cpo::uno::Sequence< cpo::uno::Sequence<OUString> > aTmpSeq = xCellRangeFormula->getFormulaArray();
     if ( aTmpSeq.getLength() == 1 )
     {
         if ( aTmpSeq[ 0 ].getLength() == 1  )
             aSingleValueOrMatrix <<= aTmpSeq[ 0 ][ 0 ];
     }
     else
-        aSingleValueOrMatrix = xConverter->convertTo( cpo::uno::Any( aTmpSeq ) , cppu::UnoType<uno::Sequence< uno::Sequence< cpo::uno::Any > >>::get()  ) ;
+        aSingleValueOrMatrix = xConverter->convertTo( cpo::uno::Any( aTmpSeq ) , cppu::UnoType<cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >>::get()  ) ;
     return aSingleValueOrMatrix;
 }
 
@@ -2058,7 +2058,7 @@ ScVbaRange::setFormulaArray(const cpo::uno::Any& rFormula)
     aAddress.Row = aRangeAddress.StartRow;
     OUString sFormula;
     rFormula >>= sFormula;
-    uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( sFormula, aAddress );
+    cpo::uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( sFormula, aAddress );
     ScTokenArray aTokenArray(getScDocument());
     (void)ScTokenConversion::ConvertToTokenArray( getScDocument(), aTokenArray, aTokens );
 
@@ -2369,7 +2369,7 @@ ScVbaRange::Activate()
 
     if ( xRanges.is() )
     {
-        const uno::Sequence< table::CellRangeAddress > nAddrs = xRanges->getRangeAddresses();
+        const cpo::uno::Sequence< table::CellRangeAddress > nAddrs = xRanges->getRangeAddresses();
         for ( const auto& rAddr : nAddrs )
         {
             if ( cellInRange( rAddr, thisRangeAddress.StartColumn, thisRangeAddress.StartRow ) )
@@ -3369,7 +3369,7 @@ static uno::Reference< table::XCellRange > processKey( const cpo::uno::Any& Key,
 
 // helper method for Sort
 /// @throws uno::RuntimeException
-static sal_Int32 findSortPropertyIndex( const uno::Sequence< beans::PropertyValue >& props,
+static sal_Int32 findSortPropertyIndex( const cpo::uno::Sequence< beans::PropertyValue >& props,
 const OUString& sPropName )
 {
     const beans::PropertyValue* pProp = std::find_if(props.begin(), props.end(),
@@ -3576,11 +3576,11 @@ ScVbaRange::Sort( const cpo::uno::Any& Key1, const cpo::uno::Any& Order1, const 
         xKey3 = processKey( Key3, mxContext, pDocShell );
 
     uno::Reference< util::XSortable > xSort( xRangeCurrent, uno::UNO_QUERY_THROW );
-    uno::Sequence< beans::PropertyValue > sortDescriptor = xSort->createSortDescriptor();
+    cpo::uno::Sequence< beans::PropertyValue > sortDescriptor = xSort->createSortDescriptor();
     auto psortDescriptor = sortDescriptor.getArray();
     sal_Int32 nTableSortFieldIndex = findSortPropertyIndex( sortDescriptor, u"SortFields"_ustr );
 
-    uno::Sequence< table::TableSortField > sTableFields(1);
+    cpo::uno::Sequence< table::TableSortField > sTableFields(1);
     sal_Int32 nTableIndex = 0;
     updateTableSortField(  xRangeCurrent, xKey1, nOrder1, sTableFields.getArray()[ nTableIndex++ ], bIsSortColumns, bMatchCase );
 
@@ -4183,7 +4183,7 @@ static uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Ref
     uno::Reference< beans::XPropertySet > xProps( xIf, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xNameAccess( xProps->getPropertyValue( u"NamedRanges"_ustr ), uno::UNO_QUERY_THROW );
 
-    const uno::Sequence< OUString > sNames = xNameAccess->getElementNames();
+    const cpo::uno::Sequence< OUString > sNames = xNameAccess->getElementNames();
 //    uno::Reference< table::XCellRange > thisRange( getCellRange(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XCellRangeReferrer > xNamedRange;
     for ( const auto& rName : sNames )
@@ -4573,7 +4573,7 @@ ScVbaRange::AutoFilter( const cpo::uno::Any& aField, const cpo::uno::Any& Criter
             OUString sCriteria1;
             bool bAcceptCriteria2 = true;
             bool bAll = false;
-            uno::Sequence< sheet::TableFilterField2 > sTabFilts;
+            cpo::uno::Sequence< sheet::TableFilterField2 > sTabFilts;
             sheet::TableFilterField2* pTabFilts = nullptr;
             uno::Reference< beans::XPropertySet > xDescProps( xDesc, uno::UNO_QUERY_THROW );
             if ( Criteria1.hasValue() )
@@ -4586,7 +4586,7 @@ ScVbaRange::AutoFilter( const cpo::uno::Any& aField, const cpo::uno::Any& Criter
                     Criteria1 >>= sCriteria1;
                     if ( sCriteria1.isEmpty() )
                     {
-                        uno::Sequence< OUString > aCriteria1;
+                        cpo::uno::Sequence< OUString > aCriteria1;
                         Criteria1 >>= aCriteria1;
                         sal_uInt16 nLength = aCriteria1.getLength();
                         if ( nLength )
@@ -4669,7 +4669,7 @@ ScVbaRange::AutoFilter( const cpo::uno::Any& aField, const cpo::uno::Any& Criter
                 pTabFilts[0].Connection = sheet::FilterConnection_AND;
                 pTabFilts[0].Field = (nField - 1);
 
-                uno::Sequence< OUString > aCriteria2;
+                cpo::uno::Sequence< OUString > aCriteria2;
                 if ( Criteria2.hasValue() ) // there is a Criteria2
                 {
                     sTabFilts.realloc(2);
@@ -4735,7 +4735,7 @@ ScVbaRange::AutoFilter( const cpo::uno::Any& aField, const cpo::uno::Any& Criter
             uno::Reference< sheet::XSheetFilterDescriptor2 > xSheetFilterDescriptor(
                     xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY );
             if( xSheetFilterDescriptor.is() )
-                xSheetFilterDescriptor->setFilterFields2( uno::Sequence< sheet::TableFilterField2 >() );
+                xSheetFilterDescriptor->setFilterFields2( cpo::uno::Sequence< sheet::TableFilterField2 >() );
         }
         xDBRangeProps->setPropertyValue( u"AutoFilter"_ustr, cpo::uno::Any(!bHasAuto) );
 
@@ -5057,7 +5057,7 @@ ScVbaRange::PrintOut( const cpo::uno::Any& From, const cpo::uno::Any& To, const 
     ScDocShell* pShell = nullptr;
 
     sal_Int32 nItems = m_Areas->getCount();
-    uno::Sequence<  table::CellRangeAddress > printAreas( nItems );
+    cpo::uno::Sequence<  table::CellRangeAddress > printAreas( nItems );
     auto printAreasRange = asNonConstRange(printAreas);
     uno::Reference< sheet::XPrintAreas > xPrintAreas;
     for ( sal_Int32 index=1; index <= nItems; ++index )
@@ -5643,7 +5643,7 @@ ScVbaRange::RemoveSubtotal(  )
 }
 
 void SAL_CALL
-ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::Sequence< ::sal_Int32 >& _nTotalList, const cpo::uno::Any& aReplace, const cpo::uno::Any& PageBreaks, const cpo::uno::Any& /*SummaryBelowData*/ )
+ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const cpo::uno::Sequence< ::sal_Int32 >& _nTotalList, const cpo::uno::Any& aReplace, const cpo::uno::Any& PageBreaks, const cpo::uno::Any& /*SummaryBelowData*/ )
 {
     try
     {
@@ -5657,7 +5657,7 @@ ScVbaRange::Subtotal( ::sal_Int32 _nGroupBy, ::sal_Int32 _nFunction, const uno::
         uno::Reference< beans::XPropertySet > xSubDescPropertySet( xSubDesc, uno::UNO_QUERY_THROW );
         xSubDescPropertySet->setPropertyValue(u"InsertPageBreaks"_ustr, cpo::uno::Any( bAddPageBreaks));
         sal_Int32 nLen = _nTotalList.getLength();
-        uno::Sequence< sheet::SubTotalColumn > aColumns( nLen );
+        cpo::uno::Sequence< sheet::SubTotalColumn > aColumns( nLen );
         auto aColumnsRange = asNonConstRange(aColumns);
         for (int i = 0; i < nLen; i++)
         {
@@ -5739,7 +5739,7 @@ ScVbaRange::getServiceImplName()
     return u"ScVbaRange"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaRange::getServiceNames()
 {
     return { u"ooo.vba.excel.Range"_ustr };
@@ -5753,9 +5753,9 @@ ScVbaRange::hasError()
     uno::Reference< script::XInvocation > xInvoc( xApplication->WorksheetFunction(), uno::UNO_QUERY_THROW );
 
     uno::Reference< excel::XRange > aRange( this );
-    uno::Sequence< cpo::uno::Any > Params{ cpo::uno::Any(aRange) };
-    uno::Sequence< sal_Int16 > OutParamIndex;
-    uno::Sequence< cpo::uno::Any > OutParam;
+    cpo::uno::Sequence< cpo::uno::Any > Params{ cpo::uno::Any(aRange) };
+    cpo::uno::Sequence< sal_Int16 > OutParamIndex;
+    cpo::uno::Sequence< cpo::uno::Any > OutParam;
     xInvoc->invoke( u"IsError"_ustr, Params, OutParamIndex, OutParam ) >>= dResult;
     return dResult > 0.0;
 }
@@ -5763,7 +5763,7 @@ ScVbaRange::hasError()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaRange_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& args)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& args)
 {
     return cppu::acquire(new ScVbaRange(args, context));
 }

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_PACKAGE_INC_ENCRYPTIONDATA_HXX
 #define INCLUDED_PACKAGE_INC_ENCRYPTIONDATA_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/weak.hxx>
 
 #include <optional>
@@ -28,9 +28,9 @@
 class BaseEncryptionData : public cppu::OWeakObject
 {
 public:
-    css::uno::Sequence< sal_Int8 > m_aSalt;
-    css::uno::Sequence< sal_Int8 > m_aInitVector;
-    css::uno::Sequence< sal_Int8 > m_aDigest;
+    cpo::uno::Sequence< sal_Int8 > m_aSalt;
+    cpo::uno::Sequence< sal_Int8 > m_aInitVector;
+    cpo::uno::Sequence< sal_Int8 > m_aDigest;
     ::std::optional<sal_Int32> m_oPBKDFIterationCount;
     ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> m_oArgon2Args;
 
@@ -51,7 +51,7 @@ public:
 class EncryptionData final : public BaseEncryptionData
 {
 public:
-    css::uno::Sequence < sal_Int8 > m_aKey;
+    cpo::uno::Sequence < sal_Int8 > m_aKey;
     sal_Int32 m_nEncAlg;
     ::std::optional<sal_Int32> m_oCheckAlg;
     sal_Int32 m_nDerivedKeySize;
@@ -59,7 +59,7 @@ public:
     bool m_bTryWrongSHA1;
 
     EncryptionData(const BaseEncryptionData& aData,
-        const css::uno::Sequence<sal_Int8>& aKey, sal_Int32 const nEncAlg,
+        const cpo::uno::Sequence<sal_Int8>& aKey, sal_Int32 const nEncAlg,
         ::std::optional<sal_Int32> const oCheckAlg,
         sal_Int32 const nDerivedKeySize, sal_Int32 const nStartKeyGenID,
         bool const bTryWrongSHA1)

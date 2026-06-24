@@ -295,7 +295,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                         comphelper::getProcessComponentContext() );
                     uno::Reference< container::XIndexContainer > xMenuContainer( xSCF->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
                     // create the popup menu
-                    uno::Sequence< beans::PropertyValue > aPopupMenu{
+                    cpo::uno::Sequence< beans::PropertyValue > aPopupMenu{
                         comphelper::makePropertyValue(u"CommandURL"_ustr, "vnd.openoffice.org:" + sMenuName),
                         comphelper::makePropertyValue(u"Label"_ustr, sMenuName),
                         comphelper::makePropertyValue(u"Type"_ustr, sal_Int32( 0 )),
@@ -594,7 +594,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         if ( bBeginGroup )
         {
             // insert spacer
-            uno::Sequence< beans::PropertyValue > sProps{ comphelper::makePropertyValue(
+            cpo::uno::Sequence< beans::PropertyValue > sProps{ comphelper::makePropertyValue(
                 u"Type"_ustr, ui::ItemType::SEPARATOR_LINE) };
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), cpo::uno::Any( sProps ) );
         }

@@ -103,7 +103,7 @@ public:
     virtual sal_Int32 SAL_CALL getSize( const OUString& FileURL ) override;
     virtual OUString SAL_CALL getContentType( const OUString& FileURL ) override;
     virtual css::util::DateTime SAL_CALL getDateTimeModified( const OUString& FileURL ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getFolderContents( const OUString& FolderURL, bool bIncludeFolders ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getFolderContents( const OUString& FolderURL, bool bIncludeFolders ) override;
     virtual bool SAL_CALL exists( const OUString& FileURL ) override;
     virtual css::uno::Reference< css::io::XInputStream > SAL_CALL openFileRead( const OUString& FileURL ) override;
     virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL openFileWrite( const OUString& FileURL ) override;
@@ -119,7 +119,7 @@ public:
     bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     { return { SERVICE_NAME }; }
 };
 
@@ -682,7 +682,7 @@ void OFileAccess::setHidden( const OUString& FileURL, bool bHidden )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_OFileAccess_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OFileAccess(context));
 }

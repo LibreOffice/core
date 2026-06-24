@@ -22,7 +22,7 @@
 #include <condition_variable>
 #include <exception>
 
-typedef css::uno::Sequence< sal_Int8 > Buffer;
+typedef cpo::uno::Sequence< sal_Int8 > Buffer;
 
 class XBufferedThreadedStream : public cppu::WeakImplHelper< css::io::XInputStream >,
         public comphelper::ByteReader
@@ -75,8 +75,8 @@ public:
     void saveException(const std::exception_ptr& exception) { maSavedException = exception; }
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
     virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
     virtual sal_Int32 SAL_CALL available(  ) override;
     virtual void SAL_CALL closeInput(  ) override;

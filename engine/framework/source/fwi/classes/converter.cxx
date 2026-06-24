@@ -25,10 +25,10 @@ namespace framework{
 /**
  * converts a sequence of PropertyValue to a sequence of NamedValue.
  */
-css::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNamedVal( const css::uno::Sequence< css::beans::PropertyValue >& lSource )
+cpo::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNamedVal( const cpo::uno::Sequence< css::beans::PropertyValue >& lSource )
 {
     sal_Int32 nCount = lSource.getLength();
-    css::uno::Sequence< css::beans::NamedValue > lDestination(nCount);
+    cpo::uno::Sequence< css::beans::NamedValue > lDestination(nCount);
     auto lDestinationRange = asNonConstRange(lDestination);
     for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
     {
@@ -41,7 +41,7 @@ css::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNa
 /**
  * converts a sequence of unicode strings into a vector of such items
  */
-std::vector<OUString> Converter::convert_seqOUString2OUStringList( const css::uno::Sequence< OUString >& lSource )
+std::vector<OUString> Converter::convert_seqOUString2OUStringList( const cpo::uno::Sequence< OUString >& lSource )
 {
     std::vector<OUString> lDestination;
     sal_Int32 nCount = lSource.getLength();

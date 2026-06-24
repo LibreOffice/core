@@ -32,10 +32,10 @@ ScVbaAxisTitle::getServiceImplName()
     return u"ScVbaAxisTitle"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaAxisTitle::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames = comphelper::concatSequences(
+    static cpo::uno::Sequence< OUString > const aServiceNames = comphelper::concatSequences(
         AxisTitleBase::getServiceNames(),
         std::initializer_list<OUString>{ u"ooo.vba.excel.AxisTitle"_ustr } );
     return aServiceNames;

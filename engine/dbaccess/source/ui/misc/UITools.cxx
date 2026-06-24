@@ -1181,7 +1181,7 @@ bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentCo
     try
     {
         Reference<XMultiServiceFactory> xORB( xNameAccess, UNO_QUERY_THROW );
-        uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
             {"Name", cpo::uno::Any(sNewName)}, // set as folder
             {"Parent", cpo::uno::Any(xNameAccess)},

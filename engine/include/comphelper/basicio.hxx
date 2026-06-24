@@ -59,7 +59,7 @@ COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& op
 
 // sequences
 template <class ELEMENT>
-const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, css::uno::Sequence<ELEMENT>& _rSeq)
+const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, cpo::uno::Sequence<ELEMENT>& _rSeq)
 {
     _rSeq.realloc(_rxInStream->readLong());
     for (ELEMENT& rElement : asNonConstRange(_rSeq))
@@ -68,7 +68,7 @@ const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::
 }
 
 template <class ELEMENT>
-const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, const css::uno::Sequence<ELEMENT>& _rSeq)
+const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, const cpo::uno::Sequence<ELEMENT>& _rSeq)
 {
     _rxOutStream->writeLong(_rSeq.getLength());
     for (const ELEMENT& rElement : _rSeq)

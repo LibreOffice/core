@@ -75,7 +75,7 @@ bool BridgeFactory::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > BridgeFactory::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > BridgeFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.bridge.BridgeFactory"_ustr };
 }
@@ -124,7 +124,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
         ? css::uno::Reference< css::bridge::XBridge >() : i->second;
 }
 
-css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
+cpo::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
 BridgeFactory::getExistingBridges() {
     osl::MutexGuard g(m_aMutex);
     if (unnamed_.size() > SAL_MAX_INT32) {
@@ -139,7 +139,7 @@ BridgeFactory::getExistingBridges() {
             getXWeak());
     }
     n = static_cast< sal_Int32 >(n + named_.size());
-    css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > > s(n);
+    cpo::uno::Sequence< css::uno::Reference< css::bridge::XBridge > > s(n);
     auto r = asNonConstRange(s);
     sal_Int32 i = 0;
     for (auto const& item : unnamed_)
@@ -183,7 +183,7 @@ void BridgeFactory::disposing() {
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_bridge_BridgeFactory_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new binaryurp::BridgeFactory);
 }

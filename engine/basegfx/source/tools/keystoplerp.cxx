@@ -18,7 +18,7 @@
  */
 
 #include <basegfx/utils/keystoplerp.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -49,7 +49,7 @@ namespace basegfx::utils
             validateInput(maKeyStops);
         }
 
-        KeyStopLerp::KeyStopLerp( const ::css::uno::Sequence<double>& rKeyStops ) :
+        KeyStopLerp::KeyStopLerp( const ::cpo::uno::Sequence<double>& rKeyStops ) :
             maKeyStops(rKeyStops.begin(), rKeyStops.end()),
             mnLastIndex(0)
         {

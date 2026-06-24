@@ -476,7 +476,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableStyleContext::
     return xContext;
 }
 
-void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRangeAddress>& xCellRanges )
+void XMLTableStyleContext::ApplyCondFormat( const cpo::uno::Sequence<table::CellRangeAddress>& xCellRanges )
 {
     if(!mpCondFormat || GetScImport().HasNewCondFormatData())
         return;

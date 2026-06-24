@@ -28,15 +28,15 @@ namespace dbtools
 
     class OParameterContinuation final : public comphelper::OInteraction< css::sdb::XInteractionSupplyParameters >
     {
-        css::uno::Sequence< css::beans::PropertyValue >       m_aValues;
+        cpo::uno::Sequence< css::beans::PropertyValue >       m_aValues;
 
     public:
         OParameterContinuation() { }
 
-        const css::uno::Sequence< css::beans::PropertyValue >&   getValues() const { return m_aValues; }
+        const cpo::uno::Sequence< css::beans::PropertyValue >&   getValues() const { return m_aValues; }
 
         // XInteractionSupplyParameters
-        virtual void SAL_CALL setParameters( const css::uno::Sequence< css::beans::PropertyValue >& _rValues ) override;
+        virtual void SAL_CALL setParameters( const cpo::uno::Sequence< css::beans::PropertyValue >& _rValues ) override;
 
     private:
         virtual ~OParameterContinuation() override { }

@@ -21,7 +21,7 @@
 
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <tools/urlobj.hxx>
@@ -123,7 +123,7 @@ cpo::uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames()
 {
     return maEventNames;
 }
@@ -143,7 +143,7 @@ bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName )
 
 uno::Type SAL_CALL SfxEvents_Impl::getElementType()
 {
-    uno::Type aElementType = cppu::UnoType<uno::Sequence < beans::PropertyValue >>::get();
+    uno::Type aElementType = cppu::UnoType<cpo::uno::Sequence < beans::PropertyValue >>::get();
     return aElementType;
 }
 
@@ -157,7 +157,7 @@ bool SAL_CALL SfxEvents_Impl::hasElements()
 
 bool SfxEvents_Impl::isScriptURLAllowed(const OUString& aScriptURL)
 {
-    std::optional<css::uno::Sequence<OUString>> allowedEvents(
+    std::optional<cpo::uno::Sequence<OUString>> allowedEvents(
         officecfg::Office::Common::Security::Scripting::AllowedDocumentEventURLs::get());
     // When AllowedDocumentEventURLs is empty, all event URLs are allowed
     if (!allowedEvents)
@@ -166,7 +166,7 @@ bool SfxEvents_Impl::isScriptURLAllowed(const OUString& aScriptURL)
     icu::ErrorCode status;
     const uint32_t rMatcherFlags = UREGEX_CASE_INSENSITIVE;
     icu::UnicodeString usInput(aScriptURL.getStr());
-    const css::uno::Sequence<OUString>& rAllowedEvents = *allowedEvents;
+    const cpo::uno::Sequence<OUString>& rAllowedEvents = *allowedEvents;
     for (auto const& allowedEvent : rAllowedEvents)
     {
         icu::UnicodeString usRegex(allowedEvent.getStr());
@@ -180,7 +180,7 @@ bool SfxEvents_Impl::isScriptURLAllowed(const OUString& aScriptURL)
     return false;
 }
 
-void SfxEvents_Impl::Execute( css::uno::Sequence < css::beans::PropertyValue > const & aProperties, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
+void SfxEvents_Impl::Execute( cpo::uno::Sequence < css::beans::PropertyValue > const & aProperties, const document::DocumentEvent& aTrigger, SfxObjectShell* pDoc )
 {
     OUString aType;
     OUString aScript;
@@ -264,7 +264,7 @@ void SfxEvents_Impl::Execute( css::uno::Sequence < css::beans::PropertyValue > c
             {
                 beans::PropertyValue aEventParam;
                 aEventParam.Value <<= aTrigger;
-                uno::Sequence< beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
+                cpo::uno::Sequence< beans::PropertyValue > aDispatchArgs( &aEventParam, 1 );
                 xDisp->dispatch( aURL, aDispatchArgs );
             }
         }
@@ -288,7 +288,7 @@ void SAL_CALL SfxEvents_Impl::documentEventOccured( const document::DocumentEven
     if ( nIndex == -1 )
         return;
 
-    css::uno::Sequence < css::beans::PropertyValue > aEventData = maEventData[ nIndex ];
+    cpo::uno::Sequence < css::beans::PropertyValue > aEventData = maEventData[ nIndex ];
     aGuard.unlock();
     Execute( aEventData, aEvent, mpObjShell );
 }
@@ -335,7 +335,7 @@ SfxEvents_Impl::~SfxEvents_Impl()
 std::unique_ptr<SvxMacro> SfxEvents_Impl::ConvertToMacro( const cpo::uno::Any& rElement, SfxObjectShell* pObjShell )
 {
     std::unique_ptr<SvxMacro> pMacro;
-    uno::Sequence < beans::PropertyValue > aProperties;
+    cpo::uno::Sequence < beans::PropertyValue > aProperties;
     cpo::uno::Any aAny;
     NormalizeMacro( rElement, aAny, pObjShell );
 

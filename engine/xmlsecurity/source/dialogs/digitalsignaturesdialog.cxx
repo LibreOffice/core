@@ -70,6 +70,7 @@ using namespace comphelper;
 using namespace css::security;
 using namespace css::uno;
 using namespace css;
+using namespace ::cpo::uno;
 
 namespace
 {

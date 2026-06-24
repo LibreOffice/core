@@ -65,7 +65,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName(  ) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XControl
     bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& i_rModel ) override;
@@ -205,7 +205,7 @@ namespace toolkit {
 
     namespace
     {
-        void lcl_checkIndex( const std::vector< css::uno::Sequence< OUString > > & rImageSets, const sal_Int32 i_index, const Reference< XInterface >& i_context,
+        void lcl_checkIndex( const std::vector< cpo::uno::Sequence< OUString > > & rImageSets, const sal_Int32 i_index, const Reference< XInterface >& i_context,
             const bool i_forInsert = false )
         {
             if ( ( i_index < 0 ) || ( o3tl::make_unsigned( i_index ) > rImageSets.size() + ( i_forInsert ? 1 : 0 ) ) )
@@ -477,7 +477,7 @@ namespace toolkit {
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new AnimatedImagesControl());
 }
@@ -485,7 +485,7 @@ org_openoffice_comp_toolkit_AnimatedImagesControl_get_implementation(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_toolkit_AnimatedImagesControlModel_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new toolkit::AnimatedImagesControlModel(context));
 }

@@ -172,7 +172,7 @@ public:
     virtual OUString SAL_CALL
         getImplementationName() override;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
     //=====  lang::XEventListener  ============================================

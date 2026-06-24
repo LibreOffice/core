@@ -130,7 +130,7 @@ namespace comphelper
                 takes, upon return, the descriptions of all properties in the bag
         */
         void describeProperties(
-                    css::uno::Sequence< css::beans::Property >& _out_rProps
+                    cpo::uno::Sequence< css::beans::Property >& _out_rProps
                 ) const
         {
             OPropertyContainerHelper::describeProperties( _out_rProps );

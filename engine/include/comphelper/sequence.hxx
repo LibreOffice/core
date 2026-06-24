@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_SEQUENCE_HXX
 #define INCLUDED_COMPHELPER_SEQUENCE_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 
 #include <vector>
@@ -31,7 +31,7 @@ namespace comphelper
         Returns -1 if nothing found.
     */
     template <class T1, class T2>
-    inline sal_Int32 findValue(const css::uno::Sequence<T1>& _rList, const T2& _rValue)
+    inline sal_Int32 findValue(const cpo::uno::Sequence<T1>& _rList, const T2& _rValue)
     {
         // at which position do I find the value?
         for (sal_Int32 i = 0; i < _rList.getLength(); ++i)
@@ -45,10 +45,10 @@ namespace comphelper
 
     /// concat several sequences
     template <class T, class... Ss>
-    inline css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& rS1, const Ss&... rSn)
+    inline cpo::uno::Sequence<T> concatSequences(const cpo::uno::Sequence<T>& rS1, const Ss&... rSn)
     {
         // unary fold to disallow empty parameter pack: at least have one sequence in rSn
-        css::uno::Sequence<T> aReturn(std::size(rS1) + (... + std::size(rSn)));
+        cpo::uno::Sequence<T> aReturn(std::size(rS1) + (... + std::size(rSn)));
         T* pReturn = std::copy(std::begin(rS1), std::end(rS1), aReturn.getArray());
         (..., (pReturn = std::copy(std::begin(rSn), std::end(rSn), pReturn)));
         return aReturn;
@@ -57,11 +57,11 @@ namespace comphelper
     /// concat additional elements from right sequence to left sequence
     ///
     /// be aware that this takes time O(|left| * |right|)
-    template<typename T> inline css::uno::Sequence<T> combineSequences(
-        css::uno::Sequence<T> const & left, css::uno::Sequence<T> const & right)
+    template<typename T> inline cpo::uno::Sequence<T> combineSequences(
+        cpo::uno::Sequence<T> const & left, cpo::uno::Sequence<T> const & right)
     {
         sal_Int32 n1 = left.getLength();
-        css::uno::Sequence<T> ret(n1 + right.getLength());
+        cpo::uno::Sequence<T> ret(n1 + right.getLength());
             //TODO: check for overflow
         auto pRet = ret.getArray();
         std::copy_n(left.getConstArray(), n1, pRet);
@@ -84,7 +84,7 @@ namespace comphelper
 
     /// remove a specified element from a sequences
     template<class T>
-    inline void removeElementAt(css::uno::Sequence<T>& _rSeq, sal_Int32 _nPos)
+    inline void removeElementAt(cpo::uno::Sequence<T>& _rSeq, sal_Int32 _nPos)
     {
         sal_Int32 nLength = _rSeq.getLength();
 
@@ -118,15 +118,15 @@ namespace comphelper
         prevent or detect precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline css::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
+    inline cpo::uno::Sequence< DstType > arrayToSequence( const SrcType* i_pArray, sal_Int32 nNum )
     {
         if constexpr (std::is_same_v< DstType, SrcType >)
         {
-            return css::uno::Sequence< DstType >( i_pArray, nNum );
+            return cpo::uno::Sequence< DstType >( i_pArray, nNum );
         }
         else
         {
-            css::uno::Sequence< DstType > result( nNum );
+            cpo::uno::Sequence< DstType > result( nNum );
             ::std::copy( i_pArray, i_pArray+nNum, result.getArray() );
             return result;
         }
@@ -156,7 +156,7 @@ namespace comphelper
         detect precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline DstType* sequenceToArray( DstType* io_pArray, const css::uno::Sequence< SrcType >& i_Sequence )
+    inline DstType* sequenceToArray( DstType* io_pArray, const cpo::uno::Sequence< SrcType >& i_Sequence )
     {
         ::std::copy( i_Sequence.begin(), i_Sequence.end(), io_pArray );
         return io_pArray;
@@ -186,33 +186,33 @@ namespace comphelper
         precision loss, overflow or truncation.
      */
     template < typename DstElementType, typename SrcType >
-    inline css::uno::Sequence< DstElementType > containerToSequence( const SrcType& i_Container )
+    inline cpo::uno::Sequence< DstElementType > containerToSequence( const SrcType& i_Container )
     {
         using ::std::size, ::std::begin, ::std::end;
-        css::uno::Sequence< DstElementType > result( size(i_Container) );
+        cpo::uno::Sequence< DstElementType > result( size(i_Container) );
         ::std::copy( begin(i_Container), end(i_Container), result.getArray() );
         return result;
     }
 
     // this one does better type deduction, but does not allow us to copy into a different element type
     template < typename SrcType >
-    inline css::uno::Sequence< typename SrcType::value_type > containerToSequence( const SrcType& i_Container )
+    inline cpo::uno::Sequence< typename SrcType::value_type > containerToSequence( const SrcType& i_Container )
     {
         return containerToSequence<typename SrcType::value_type, SrcType>(i_Container);
     }
 
     // handle arrays
     template<typename ElementType, std::size_t SrcSize>
-    inline css::uno::Sequence< ElementType > containerToSequence( ElementType const (&i_Array)[ SrcSize ] )
+    inline cpo::uno::Sequence< ElementType > containerToSequence( ElementType const (&i_Array)[ SrcSize ] )
     {
-        return css::uno::Sequence< ElementType >( i_Array, SrcSize );
+        return cpo::uno::Sequence< ElementType >( i_Array, SrcSize );
     }
 
     template <typename T>
-    inline css::uno::Sequence<T> containerToSequence(
+    inline cpo::uno::Sequence<T> containerToSequence(
         ::std::vector<T> const& v )
     {
-        return css::uno::Sequence<T>(
+        return cpo::uno::Sequence<T>(
             v.data(), static_cast<sal_Int32>(v.size()) );
     }
 
@@ -239,14 +239,14 @@ namespace comphelper
         precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline DstType sequenceToContainer( const css::uno::Sequence< SrcType >& i_Sequence )
+    inline DstType sequenceToContainer( const cpo::uno::Sequence< SrcType >& i_Sequence )
     {
         return DstType(i_Sequence.begin(), i_Sequence.end());
     }
 
     // this one does better type deduction, but does not allow us to copy into a different element type
     template < typename DstType >
-    inline DstType sequenceToContainer( const css::uno::Sequence< typename DstType::value_type >& i_Sequence )
+    inline DstType sequenceToContainer( const cpo::uno::Sequence< typename DstType::value_type >& i_Sequence )
     {
         return DstType(i_Sequence.begin(), i_Sequence.end());
     }
@@ -282,7 +282,7 @@ namespace comphelper
         precision loss, overflow or truncation.
      */
     template < typename DstType, typename SrcType >
-    inline DstType& sequenceToContainer( DstType& o_Output, const css::uno::Sequence< SrcType >& i_Sequence )
+    inline DstType& sequenceToContainer( DstType& o_Output, const cpo::uno::Sequence< SrcType >& i_Sequence )
     {
         o_Output.resize( i_Sequence.getLength() );
         ::std::copy( i_Sequence.begin(), i_Sequence.end(), o_Output.begin() );
@@ -296,18 +296,18 @@ namespace comphelper
         @return the generated Sequence
      */
     template < typename M >
-    inline css::uno::Sequence< typename M::key_type > mapKeysToSequence( M const& map )
+    inline cpo::uno::Sequence< typename M::key_type > mapKeysToSequence( M const& map )
     {
-        css::uno::Sequence< typename M::key_type > ret( static_cast<sal_Int32>(map.size()) );
+        cpo::uno::Sequence< typename M::key_type > ret( static_cast<sal_Int32>(map.size()) );
         std::transform(map.begin(), map.end(), ret.getArray(),
                        [](const auto& i) -> const typename M::key_type& { return i.first; });
         return ret;
     }
 
     template < typename M >
-    inline css::uno::Sequence< typename M::mapped_type > mapValuesToSequence( M const& map )
+    inline cpo::uno::Sequence< typename M::mapped_type > mapValuesToSequence( M const& map )
     {
-        css::uno::Sequence< typename M::mapped_type > ret( static_cast<sal_Int32>(map.size()) );
+        cpo::uno::Sequence< typename M::mapped_type > ret( static_cast<sal_Int32>(map.size()) );
         std::transform(map.begin(), map.end(), ret.getArray(),
                        [](const auto& i) -> const typename M::mapped_type& { return i.second; });
         return ret;

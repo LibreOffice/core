@@ -21,7 +21,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
@@ -99,9 +99,9 @@ public:
 
     void testAppendSequence()
     {
-        css::uno::Sequence<sal_Int32> s{ 1, 2, 3 };
+        cpo::uno::Sequence<sal_Int32> s{ 1, 2, 3 };
         CPPUNIT_ASSERT_EQUAL("[1,2,3]"_ostr, render(cpo::uno::Any(s)));
-        css::uno::Sequence<sal_Int32> empty;
+        cpo::uno::Sequence<sal_Int32> empty;
         CPPUNIT_ASSERT_EQUAL("[]"_ostr, render(cpo::uno::Any(empty)));
     }
 
@@ -243,21 +243,21 @@ public:
 
     void testParseSequence()
     {
-        css::uno::Sequence<sal_Int32> s;
-        parseJsonToAny(u"[1, 2, 3]"_ustr, cppu::UnoType<css::uno::Sequence<sal_Int32>>::get())
+        cpo::uno::Sequence<sal_Int32> s;
+        parseJsonToAny(u"[1, 2, 3]"_ustr, cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get())
             >>= s;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), s.getLength());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), s[0]);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), s[1]);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), s[2]);
         // Empty:
-        css::uno::Sequence<sal_Int32> e;
-        parseJsonToAny(u"[]"_ustr, cppu::UnoType<css::uno::Sequence<sal_Int32>>::get()) >>= e;
+        cpo::uno::Sequence<sal_Int32> e;
+        parseJsonToAny(u"[]"_ustr, cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get()) >>= e;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), e.getLength());
         // Nested sequences:
-        css::uno::Sequence<css::uno::Sequence<sal_Int32>> n;
+        cpo::uno::Sequence<cpo::uno::Sequence<sal_Int32>> n;
         parseJsonToAny(u"[[1,2],[3]]"_ustr,
-                       cppu::UnoType<css::uno::Sequence<css::uno::Sequence<sal_Int32>>>::get())
+                       cppu::UnoType<cpo::uno::Sequence<cpo::uno::Sequence<sal_Int32>>>::get())
             >>= n;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), n.getLength());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), n[0].getLength());
@@ -266,9 +266,9 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), n[1].getLength());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), n[1][0]);
         // Strings inside arrays may contain commas/brackets; the tokenizer must respect them:
-        css::uno::Sequence<OUString> strs;
+        cpo::uno::Sequence<OUString> strs;
         parseJsonToAny(u"[\"a,b\", \"c]d\"]"_ustr,
-                       cppu::UnoType<css::uno::Sequence<OUString>>::get())
+                       cppu::UnoType<cpo::uno::Sequence<OUString>>::get())
             >>= strs;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), strs.getLength());
         CPPUNIT_ASSERT_EQUAL(u"a,b"_ustr, strs[0]);

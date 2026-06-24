@@ -12,7 +12,7 @@
 #ifndef INCLUDED_XMLOFF_SETTINGSSTORE_HXX
 #define INCLUDED_XMLOFF_SETTINGSSTORE_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XStorage; }
@@ -23,16 +23,16 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 class SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") DocumentSettingsSerializer {
 public:
   // Import objects and update properties (eliding URLs)
-  virtual css::uno::Sequence<css::beans::PropertyValue>
+  virtual cpo::uno::Sequence<css::beans::PropertyValue>
     filterStreamsFromStorage(
         OUString const & referer,
         const css::uno::Reference< css::embed::XStorage > &xStorage,
-        const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
+        const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
   // Export objects and update properties with relative URLs into this storage
-  virtual css::uno::Sequence<css::beans::PropertyValue>
+  virtual cpo::uno::Sequence<css::beans::PropertyValue>
     filterStreamsToStorage(
         const css::uno::Reference< css::embed::XStorage > &xStorage,
-        const css::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
+        const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
 
 protected:
     ~DocumentSettingsSerializer() {}

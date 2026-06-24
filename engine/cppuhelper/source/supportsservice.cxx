@@ -13,14 +13,14 @@
 #include <cassert>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustring.hxx>
 
 bool cppu::supportsService(css::lang::XServiceInfo* implementation, OUString const& name)
 {
     assert(implementation != nullptr);
-    const css::uno::Sequence<OUString> s(implementation->getSupportedServiceNames());
+    const cpo::uno::Sequence<OUString> s(implementation->getSupportedServiceNames());
     return std::find(s.begin(), s.end(), name) != s.end();
 }
 

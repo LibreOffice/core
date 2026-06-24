@@ -113,10 +113,10 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_isometricRightUp)
 
     // Prepare property maps
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
@@ -172,10 +172,10 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_legacyObliqueBottomRight)
 
     // Prepare property maps
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
@@ -227,10 +227,10 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_obliqueTopRight)
 
     // Prepare property maps
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
@@ -272,10 +272,10 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_orthographicFront)
 
     // Make sure that in case extrusion properties exist, the extrusion is disabled.
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     if (aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq)
     {
         comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
@@ -299,10 +299,10 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_perspectiveContrastingLeft)
 
     // Prepare property maps
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
@@ -348,10 +348,10 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_legacyPerspectiveTopRight)
 
     // Prepare property maps
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 
@@ -567,10 +567,10 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_cropped_image)
 
     // Prepare property maps
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aGeoPropSeq;
     xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
-    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    cpo::uno::Sequence<beans::PropertyValue> aExtrusionSeq;
     aGeoPropMap.getValue(u"Extrusion"_ustr) >>= aExtrusionSeq;
     comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
 

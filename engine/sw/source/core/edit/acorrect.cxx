@@ -553,7 +553,7 @@ bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         xHyph = ::GetHyphenator();
         OUStringBuffer sDisambiguatedWord;
 
-        const ::css::uno::Sequence< ::css::beans::PropertyValue > aProperties;
+        const ::cpo::uno::Sequence< ::css::beans::PropertyValue > aProperties;
         css::uno::Reference< css::linguistic2::XHyphenatedWord >  xHyphWord;
         for (int i = 0; i+1 < sWord.getLength(); i++ )
         {

@@ -47,7 +47,7 @@ namespace com::sun::star::rendering
     struct FontRequest;
 }
 
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 namespace canvastools
 {
@@ -353,7 +353,7 @@ namespace canvastools
             @throws a lang::IllegalArgumentException, if anything is wrong
          */
         template< typename SequenceContent > void verifyInput(
-            const css::uno::Sequence< SequenceContent >&                rSequence,
+            const cpo::uno::Sequence< SequenceContent >&                rSequence,
             const char*                                                 pStr,
             const css::uno::Reference< css::uno::XInterface >&          xIf,
             ::sal_Int16                                                 nArgPos )

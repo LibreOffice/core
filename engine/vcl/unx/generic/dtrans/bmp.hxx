@@ -22,7 +22,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <sal/types.h>
 
 namespace x11 {
@@ -67,8 +67,8 @@ public:
     int getDepth() const { return m_aInfo.depth; }
 };
 
-css::uno::Sequence<sal_Int8> convertBitmapDepth(
-    css::uno::Sequence<sal_Int8> const & data, int depth);
+cpo::uno::Sequence<sal_Int8> convertBitmapDepth(
+    cpo::uno::Sequence<sal_Int8> const & data, int depth);
 
 }
 

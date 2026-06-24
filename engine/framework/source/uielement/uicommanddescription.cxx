@@ -81,7 +81,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         // XNameAccess
         virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
         virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
@@ -713,7 +713,7 @@ bool SAL_CALL UICommandDescription::hasElements()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_UICommandDescription_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new framework::UICommandDescription(context));
 }

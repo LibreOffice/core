@@ -365,8 +365,8 @@ void SvxColorTabPage::AddColorFromNameDialog(const OUString& aName)
     m_xSelectPalette->set_active(0);
     SelectPaletteLBHdl(*m_xSelectPalette);
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
-    css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+    cpo::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
+    cpo::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
     sal_Int32 nSize = aCustomColorList.getLength();
     aCustomColorList.realloc( nSize + 1 );
     aCustomColorNameList.realloc( nSize + 1 );
@@ -421,9 +421,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl, weld::Button&, void)
         return;
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
+    cpo::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
     auto aCustomColorListRange = asNonConstRange(aCustomColorList);
-    css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+    cpo::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
     auto aCustomColorNameListRange = asNonConstRange(aCustomColorNameList);
     sal_Int32 nSize = aCustomColorList.getLength() - 1;
     for(sal_Int32 nIndex = o3tl::make_unsigned(nId);nIndex < nSize;nIndex++)
@@ -742,7 +742,7 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
 
 sal_Int32 SvxColorTabPage::FindInCustomColors(std::u16string_view aColorName)
 {
-    css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+    cpo::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
     tools::Long nCount = aCustomColorNameList.getLength();
     bool bValidColorName = true;
     sal_Int32 nPos = -1;

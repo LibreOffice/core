@@ -31,7 +31,7 @@ using namespace com::sun::star::ucb;
 
 ResultSetForRoot::ResultSetForRoot( const uno::Reference< uno::XComponentContext >&  rxContext,
                                     const uno::Reference< XContentProvider >&  xProvider,
-                                    const uno::Sequence< beans::Property >& seq,
+                                    const cpo::uno::Sequence< beans::Property >& seq,
                                     URLParameter const & aURLParameter,
                                     Databases* pDatabases )
     : ResultSetBase( rxContext, xProvider,seq )

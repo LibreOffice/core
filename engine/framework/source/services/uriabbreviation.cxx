@@ -40,7 +40,7 @@ bool SAL_CALL UriAbbreviation::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL UriAbbreviation::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL UriAbbreviation::getSupportedServiceNames()
 {
     return { u"com.sun.star.util.UriAbbreviation"_ustr };
 }
@@ -67,7 +67,7 @@ OUString SAL_CALL UriAbbreviation::abbreviateString(const css::uno::Reference< c
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_UriAbbreviation_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::UriAbbreviation(context));
 }

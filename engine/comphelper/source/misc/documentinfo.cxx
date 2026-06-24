@@ -163,7 +163,7 @@ namespace comphelper {
 
         // like BreakMacroSignature of XMLScriptContext use XModel::attachResource
         // to propagate this notification
-        css::uno::Sequence<css::beans::PropertyValue> aMedDescr = rModel->getArgs();
+        cpo::uno::Sequence<css::beans::PropertyValue> aMedDescr = rModel->getArgs();
         sal_Int32 nNewLen = aMedDescr.getLength() + 1;
         aMedDescr.realloc(nNewLen);
         auto pMedDescr = aMedDescr.getArray();
@@ -182,9 +182,9 @@ namespace comphelper {
 
         // Build a sequence of (control, URL) pairs. If RemoteContentFound
         // already exists, append to the existing sequence.
-        css::uno::Sequence<css::beans::PropertyValue> aMedDescr = rModel->getArgs();
+        cpo::uno::Sequence<css::beans::PropertyValue> aMedDescr = rModel->getArgs();
 
-        css::uno::Sequence<css::beans::PropertyValue> aExisting;
+        cpo::uno::Sequence<css::beans::PropertyValue> aExisting;
         for (const auto& rProp : aMedDescr)
         {
             if (rProp.Name == "RemoteContentFound")

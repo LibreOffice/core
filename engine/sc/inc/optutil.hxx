@@ -45,15 +45,15 @@ public:
     void    SetCommitLink( const Link<ScLinkConfigItem&,void>& rLink );
     void    SetNotifyLink( const Link<ScLinkConfigItem&,void>& rLink );
 
-    virtual void    Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
+    virtual void    Notify( const cpo::uno::Sequence<OUString>& aPropertyNames ) override;
     virtual void    ImplCommit() override;
 
     using ConfigItem::SetModified;
-    css::uno::Sequence< cpo::uno::Any>
-            GetProperties(const css::uno::Sequence< OUString >& rNames)
+    cpo::uno::Sequence< cpo::uno::Any>
+            GetProperties(const cpo::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
-    void    PutProperties( const css::uno::Sequence< OUString >& rNames,
-                            const css::uno::Sequence< cpo::uno::Any>& rValues)
+    void    PutProperties( const cpo::uno::Sequence< OUString >& rNames,
+                            const cpo::uno::Sequence< cpo::uno::Any>& rValues)
                             { ConfigItem::PutProperties( rNames, rValues ); }
 
     using ConfigItem::EnableNotification;

@@ -355,7 +355,7 @@ cpo::uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const
     const cpo::uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
 
     int nArg = SAL_N_ELEMENTS( aArgsPtrArray );
-    uno::Sequence< cpo::uno::Any > aArgs( nArg );
+    cpo::uno::Sequence< cpo::uno::Any > aArgs( nArg );
     auto pArgs = aArgs.getArray();
 
     const cpo::uno::Any** pArg = aArgsPtrArray;
@@ -417,7 +417,7 @@ cpo::uno::Any SAL_CALL VbaApplicationBase::getVBE()
     try // return empty object on error
     {
         // "VBE" object does not have a parent, but pass document model to be able to determine application type
-        uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference(getCurrentDocument())) };
+        cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(uno::Reference(getCurrentDocument())) };
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
             u"ooo.vba.vbide.VBE"_ustr , aArgs, mxContext );
@@ -435,10 +435,10 @@ VbaApplicationBase::getServiceImplName()
     return u"VbaApplicationBase"_ustr;
 }
 
-uno::Sequence<OUString>
+cpo::uno::Sequence<OUString>
 VbaApplicationBase::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.VbaApplicationBase"_ustr
     };

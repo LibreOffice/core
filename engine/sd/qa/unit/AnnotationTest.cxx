@@ -197,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDelete)
 
     auto xAnnotation = pPage->getAnnotations().at(1);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
         { "Id", cpo::uno::Any(OUString::number(xAnnotation->GetId())) },
     }));
     dispatchCommand(mxComponent, u".uno:DeleteAnnotation"_ustr, aPropertyValues);
@@ -268,7 +268,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationPositionUpdate)
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage->GetObjCount());
 
     // Insert new annotation
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
     aArgs = comphelper::InitPropertySequence({
         { "Text", cpo::uno::Any(u"Comment"_ustr) },
     });
@@ -342,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDuplicatePage)
     CPPUNIT_ASSERT_EQUAL(size_t(0), pPage1->GetObjCount());
 
     // Inserted new annotation
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     aArgs = comphelper::InitPropertySequence({
         { "Text", cpo::uno::Any(u"Comment"_ustr) },
@@ -434,7 +434,7 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDuplicatePageAndUndo)
     CPPUNIT_ASSERT(pDocument);
 
     // Inserted new annotation
-    uno::Sequence<beans::PropertyValue> aArgs;
+    cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     aArgs = comphelper::InitPropertySequence({
         { "Text", cpo::uno::Any(u"Comment"_ustr) },

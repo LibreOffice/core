@@ -203,7 +203,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
 
-    virtual css::uno::Sequence<css::uno::Reference< css::accessibility::XAccessible>> SAL_CALL
+    virtual cpo::uno::Sequence<css::uno::Reference< css::accessibility::XAccessible>> SAL_CALL
         getAccessibleChildren() override;
 
     // Return a reference to the parent.

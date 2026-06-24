@@ -32,7 +32,7 @@ public:
     sal_Int16 SAL_CALL getType() override;
 
     OUString transliterateImpl(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        css::uno::Sequence< sal_Int32 >* pOffset) override;
+        cpo::uno::Sequence< sal_Int32 >* pOffset) override;
 
         OUString SAL_CALL
         transliterateChar2String( sal_Unicode inChar) override;
@@ -41,13 +41,13 @@ public:
         transliterateChar2Char( sal_Unicode inChar) override;
 
     OUString foldingImpl(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-        css::uno::Sequence< sal_Int32 >* pOffset) override;
+        cpo::uno::Sequence< sal_Int32 >* pOffset) override;
 
     bool SAL_CALL equals(
         const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) override;
 
-    css::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
+    cpo::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
         const OUString& str2 ) override;
 
 protected:
@@ -94,7 +94,7 @@ public:
     Transliteration_titlecase();
 
     virtual OUString transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-                                        css::uno::Sequence< sal_Int32 >* pOffset ) override;
+                                        cpo::uno::Sequence< sal_Int32 >* pOffset ) override;
 };
 
 class Transliteration_sentencecase final : public Transliteration_body
@@ -103,7 +103,7 @@ public:
     Transliteration_sentencecase();
 
     virtual OUString transliterateImpl( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
-                                        css::uno::Sequence< sal_Int32 >* pOffset ) override;
+                                        cpo::uno::Sequence< sal_Int32 >* pOffset ) override;
 };
 
 }

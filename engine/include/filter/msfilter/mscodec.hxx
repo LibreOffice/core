@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
@@ -56,7 +56,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    bool                InitCodec( const css::uno::Sequence< css::beans::NamedValue >& aData );
+    bool                InitCodec( const cpo::uno::Sequence< css::beans::NamedValue >& aData );
 
     /** Retrieves the encryption data
 
@@ -64,7 +64,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    css::uno::Sequence< css::beans::NamedValue > GetEncryptionData();
+    cpo::uno::Sequence< css::beans::NamedValue > GetEncryptionData();
 
 
     /** Verifies the validity of the password using the passed key and hash.
@@ -187,7 +187,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    bool InitCodec(const css::uno::Sequence< css::beans::NamedValue >& aData);
+    bool InitCodec(const cpo::uno::Sequence< css::beans::NamedValue >& aData);
 
     /** Retrieves the encryption data
 
@@ -195,7 +195,7 @@ public:
             The sequence contains the necessary data to initialize
             the codec.
      */
-    virtual css::uno::Sequence<css::beans::NamedValue> GetEncryptionData();
+    virtual cpo::uno::Sequence<css::beans::NamedValue> GetEncryptionData();
 
     /** Initializes the algorithm with the specified password and document ID.
 
@@ -396,7 +396,7 @@ private:
 class MSFILTER_DLLPUBLIC MSCodec_CryptoAPI final : public MSCodec97
 {
 private:
-    css::uno::Sequence<sal_Int8> m_aStd97Key;
+    cpo::uno::Sequence<sal_Int8> m_aStd97Key;
 public:
     MSCodec_CryptoAPI();
 
@@ -404,7 +404,7 @@ public:
                          const sal_uInt8 pDocId[16]) override;
     virtual bool InitCipher(sal_uInt32 nCounter) override;
     virtual void GetDigestFromSalt(const sal_uInt8* pSaltData, sal_uInt8* pDigest) override;
-    virtual css::uno::Sequence<css::beans::NamedValue> GetEncryptionData() override;
+    virtual cpo::uno::Sequence<css::beans::NamedValue> GetEncryptionData() override;
 };
 
 const sal_uInt32 ENCRYPTINFO_CRYPTOAPI      = 0x00000004;

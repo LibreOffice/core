@@ -20,7 +20,7 @@
 #include <MediaDescriptorHelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -29,12 +29,12 @@ using namespace ::com::sun::star;
 namespace apphelper
 {
 
-MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
+MediaDescriptorHelper::MediaDescriptorHelper( const cpo::uno::Sequence<
                         beans::PropertyValue > & rMediaDescriptor )
     : m_aModelProperties(rMediaDescriptor.getLength())
 {
     auto aModelPropertiesRange = asNonConstRange(m_aModelProperties);
-    css::uno::Sequence< css::beans::PropertyValue >
+    cpo::uno::Sequence< css::beans::PropertyValue >
                         aRegularProperties(rMediaDescriptor.getLength()); //these are the properties which are described in service com.sun.star.document.MediaDescriptor and not marked as deprecated
     auto aRegularPropertiesRange = asNonConstRange(aRegularProperties);
     impl_init();

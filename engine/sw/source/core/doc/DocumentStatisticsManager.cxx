@@ -145,7 +145,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(tools::Long nChars, 
     mpDocStat->nPage     = m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout() ? m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum() : 0;
     SetDocStatModified( false );
 
-    css::uno::Sequence < css::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
+    cpo::uno::Sequence < css::beans::NamedValue > aStat( mpDocStat->nPage ? 8 : 7);
     auto pStat = aStat.getArray();
     sal_Int32 n=0;
     pStat[n].Name = u"TableCount"_ustr;

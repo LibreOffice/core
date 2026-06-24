@@ -30,7 +30,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binarystreambase.hxx>

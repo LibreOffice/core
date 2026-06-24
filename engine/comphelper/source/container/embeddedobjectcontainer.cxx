@@ -227,7 +227,7 @@ OUString EmbeddedObjectContainer::CreateUniqueObjectName()
     return aStr;
 }
 
-uno::Sequence < OUString > EmbeddedObjectContainer::GetObjectNames() const
+cpo::uno::Sequence < OUString > EmbeddedObjectContainer::GetObjectNames() const
 {
     return comphelper::mapKeysToSequence(pImpl->maNameToObjectMap);
 }
@@ -281,7 +281,7 @@ EmbeddedObjectContainer::GetEmbeddedObject(
 
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference < container::XNameAccess > xAccess( pImpl->mxStorage, uno::UNO_QUERY );
-    uno::Sequence< OUString> aSeq = xAccess->getElementNames();
+    cpo::uno::Sequence< OUString> aSeq = xAccess->getElementNames();
     const OUString* pIter = aSeq.getConstArray();
     const OUString* pEnd   = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
@@ -323,7 +323,7 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
         // object was not added until now - should happen only by calling this method from "inside"
         //TODO/LATER: it would be good to detect an error when an object should be created already, but isn't (not an "inside" call)
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
-        uno::Sequence< beans::PropertyValue > aObjDescr(1 + (xCopy.is() ? 1 : 0) + (pBaseURL ? 1 : 0));
+        cpo::uno::Sequence< beans::PropertyValue > aObjDescr(1 + (xCopy.is() ? 1 : 0) + (pBaseURL ? 1 : 0));
         auto itObjDescr = aObjDescr.getArray();
         itObjDescr->Name = u"Parent"_ustr;
         itObjDescr->Value <<= pImpl->m_xModel.get();
@@ -340,7 +340,7 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
             itObjDescr->Value <<= xCopy;
         }
 
-        uno::Sequence< beans::PropertyValue > aMediaDescr{ comphelper::makePropertyValue(
+        cpo::uno::Sequence< beans::PropertyValue > aMediaDescr{ comphelper::makePropertyValue(
             u"ReadOnly"_ustr, bReadOnlyMode) };
         xObj.set( xFactory->createInstanceInitFromEntry(
                 pImpl->mxStorage, rName,
@@ -358,7 +358,7 @@ uno::Reference<embed::XEmbeddedObject> EmbeddedObjectContainer::Get_Impl(
 }
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbeddedObject(
-            const uno::Sequence < sal_Int8 >& rClassId,
+            const cpo::uno::Sequence < sal_Int8 >& rClassId,
             OUString& rNewName,
             std::optional<OUString> oDefaultParentBaseURL )
 {
@@ -374,7 +374,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
         const size_t nArgs = oDefaultParentBaseURL.has_value() ? 2 : 1;
-        uno::Sequence< beans::PropertyValue > aObjDescr( nArgs );
+        cpo::uno::Sequence< beans::PropertyValue > aObjDescr( nArgs );
         auto pObjDescr = aObjDescr.getArray();
         pObjDescr[0].Name = u"Parent"_ustr;
         pObjDescr[0].Value <<= pImpl->m_xModel.get();
@@ -480,7 +480,7 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
     {
         if ( xPersist.is() )
         {
-            uno::Sequence < beans::PropertyValue > aSeq;
+            cpo::uno::Sequence < beans::PropertyValue > aSeq;
             auto aObjArgs(::comphelper::InitPropertySequence({
                 { "SourceShellID", cpo::uno::Any(rSrcShellID) },
                 { "DestinationShellID", cpo::uno::Any(rDestShellID) }
@@ -588,7 +588,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 }
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedObject(
-        const css::uno::Sequence < css::beans::PropertyValue >& aMedium,
+        const cpo::uno::Sequence < css::beans::PropertyValue >& aMedium,
         OUString& rNewName, OUString const* pBaseURL )
 {
     if ( rNewName.isEmpty() )
@@ -598,7 +598,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     try
     {
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
-        uno::Sequence< beans::PropertyValue > aObjDescr(pBaseURL ? 2 : 1);
+        cpo::uno::Sequence< beans::PropertyValue > aObjDescr(pBaseURL ? 2 : 1);
         auto pObjDescr = aObjDescr.getArray();
         pObjDescr[0].Name = u"Parent"_ustr;
         pObjDescr[0].Value <<= pImpl->m_xModel.get();
@@ -628,7 +628,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
 }
 
 uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbeddedLink(
-        const css::uno::Sequence < css::beans::PropertyValue >& aMedium,
+        const cpo::uno::Sequence < css::beans::PropertyValue >& aMedium,
         OUString& rNewName )
 {
     if ( rNewName.isEmpty() )
@@ -638,7 +638,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     try
     {
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create(::comphelper::getProcessComponentContext());
-        uno::Sequence< beans::PropertyValue > aObjDescr{ comphelper::makePropertyValue(
+        cpo::uno::Sequence< beans::PropertyValue > aObjDescr{ comphelper::makePropertyValue(
             u"Parent"_ustr, pImpl->m_xModel.get()) };
         xObj.set( xFactory->createInstanceLink( pImpl->mxStorage, rNewName, aMedium, aObjDescr ), uno::UNO_QUERY );
 
@@ -725,9 +725,9 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
                         embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
-                    uno::Sequence< beans::PropertyValue > aMediaDescr{ comphelper::makePropertyValue(
+                    cpo::uno::Sequence< beans::PropertyValue > aMediaDescr{ comphelper::makePropertyValue(
                         u"URL"_ustr, aURL) };
-                    uno::Sequence< beans::PropertyValue > aObjDescr{ comphelper::makePropertyValue(
+                    cpo::uno::Sequence< beans::PropertyValue > aObjDescr{ comphelper::makePropertyValue(
                         u"Parent"_ustr, pImpl->m_xModel.get()) };
                     xResult.set(xCreator->createInstanceLink(
                                     pImpl->mxStorage,
@@ -749,7 +749,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     uno::Reference < embed::XEmbeddedObjectCreator > xCreator =
                         embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
 
-                    uno::Sequence< beans::PropertyValue > aObjDescr{ comphelper::makePropertyValue(
+                    cpo::uno::Sequence< beans::PropertyValue > aObjDescr{ comphelper::makePropertyValue(
                         u"Parent"_ustr, pImpl->m_xModel.get()) };
                     xResult.set(xCreator->createInstanceInitNew(
                                     xObj->getClassID(),
@@ -769,7 +769,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                     if ( !xOrigInfo.is() )
                         throw uno::RuntimeException(u"Object has no properties"_ustr);
 
-                    const uno::Sequence< beans::Property > aPropertiesList = xOrigInfo->getProperties();
+                    const cpo::uno::Sequence< beans::Property > aPropertiesList = xOrigInfo->getProperties();
                     for ( const auto & p : aPropertiesList )
                     {
                         try
@@ -1106,7 +1106,7 @@ bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const css::uno::Refer
         uno::Reference < embed::XOptimizedStorage > xOptRepl( xReplacement, uno::UNO_QUERY_THROW );
 
         // store it into the subfolder
-        uno::Sequence< beans::PropertyValue > aProps{
+        cpo::uno::Sequence< beans::PropertyValue > aProps{
             comphelper::makePropertyValue(u"MediaType"_ustr, rMediaType),
             comphelper::makePropertyValue(u"UseCommonStoragePasswordEncryption"_ustr, true),
             comphelper::makePropertyValue(u"Compressed"_ustr, true)
@@ -1243,7 +1243,7 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
                 uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                 if ( xPersist.is() )
                 {
-                    uno::Sequence< beans::PropertyValue > aArgs( _bOasisFormat ? 3 : 4 );
+                    cpo::uno::Sequence< beans::PropertyValue > aArgs( _bOasisFormat ? 3 : 4 );
                     auto pArgs = aArgs.getArray();
                     pArgs[0].Name = u"StoreVisualReplacement"_ustr;
                     pArgs[0].Value <<= !_bOasisFormat;
@@ -1264,7 +1264,7 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
 
                     try
                     {
-                        xPersist->storeAsEntry( _xStorage, xPersist->getEntryName(), uno::Sequence< beans::PropertyValue >(), aArgs );
+                        xPersist->storeAsEntry( _xStorage, xPersist->getEntryName(), cpo::uno::Sequence< beans::PropertyValue >(), aArgs );
                     }
                     catch (const embed::WrongStateException&)
                     {
@@ -1447,7 +1447,7 @@ uno::Reference< io::XInputStream > EmbeddedObjectContainer::GetGraphicReplacemen
         if ( pMediaType )
             *pMediaType = aRep.Flavor.MimeType;
 
-        uno::Sequence < sal_Int8 > aSeq;
+        cpo::uno::Sequence < sal_Int8 > aSeq;
         aRep.Data >>= aSeq;
         xInStream = new ::comphelper::SequenceInputStream( aSeq );
     }
@@ -1475,8 +1475,8 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
                     xPersist->setPersistentEntry( _xStorage,
                                                 name,
                                                 embed::EntryInitModes::NO_INIT,
-                                                uno::Sequence< beans::PropertyValue >(),
-                                                uno::Sequence< beans::PropertyValue >() );
+                                                cpo::uno::Sequence< beans::PropertyValue >(),
+                                                cpo::uno::Sequence< beans::PropertyValue >() );
 
                 }
                 catch (const uno::Exception&)

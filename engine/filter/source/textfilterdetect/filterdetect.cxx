@@ -131,7 +131,7 @@ PlainTextFilterDetect::PlainTextFilterDetect() {}
 
 PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
-OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor)
+OUString SAL_CALL PlainTextFilterDetect::detect(cpo::uno::Sequence<beans::PropertyValue>& lDescriptor)
 {
     comphelper::SequenceAsHashMap aMediaDesc(lDescriptor);
 
@@ -221,7 +221,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
 
 // XInitialization
 
-void SAL_CALL PlainTextFilterDetect::initialize(const uno::Sequence<cpo::uno::Any>& /*aArguments*/)
+void SAL_CALL PlainTextFilterDetect::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*aArguments*/)
 {
 }
 
@@ -230,7 +230,7 @@ OUString PlainTextFilterDetect_getImplementationName()
     return u"com.sun.star.comp.filters.PlainTextFilterDetect"_ustr;
 }
 
-uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()
+cpo::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()
 {
     return { u"com.sun.star.document.ExtendedTypeDetection"_ustr, u"com.sun.star.comp.filters.PlainTextFilterDetect"_ustr };
 }
@@ -246,14 +246,14 @@ bool SAL_CALL PlainTextFilterDetect::supportsService(const OUString& rServiceNam
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames()
 {
     return PlainTextFilterDetect_getSupportedServiceNames();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation(css::uno::XComponentContext* ,
-                                                                   css::uno::Sequence<cpo::uno::Any> const &)
+                                                                   cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new PlainTextFilterDetect);
 }

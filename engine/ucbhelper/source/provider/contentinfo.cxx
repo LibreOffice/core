@@ -53,13 +53,13 @@ PropertySetInfo::~PropertySetInfo()
 
 
 // virtual
-uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
+cpo::uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 {
     std::unique_lock aGuard( m_aMutex );
     return getPropertiesImpl();
 }
 
-const uno::Sequence< beans::Property > & PropertySetInfo::getPropertiesImpl()
+const cpo::uno::Sequence< beans::Property > & PropertySetInfo::getPropertiesImpl()
 {
     if ( m_xProps )
         return *m_xProps;
@@ -91,7 +91,7 @@ const uno::Sequence< beans::Property > & PropertySetInfo::getPropertiesImpl()
             xSet->getPropertySetInfo() );
         if ( xInfo.is() )
         {
-            const uno::Sequence< beans::Property > aAddProps
+            const cpo::uno::Sequence< beans::Property > aAddProps
                 = xInfo->getProperties();
             sal_Int32 nAddProps = aAddProps.getLength();
             if ( nAddProps > 0 )
@@ -184,13 +184,13 @@ CommandProcessorInfo::~CommandProcessorInfo()
 
 
 // virtual
-uno::Sequence< css::ucb::CommandInfo > SAL_CALL CommandProcessorInfo::getCommands()
+cpo::uno::Sequence< css::ucb::CommandInfo > SAL_CALL CommandProcessorInfo::getCommands()
 {
     std::unique_lock aGuard( m_aMutex );
     return getCommandsImpl();
 }
 
-const uno::Sequence< css::ucb::CommandInfo > & CommandProcessorInfo::getCommandsImpl()
+const cpo::uno::Sequence< css::ucb::CommandInfo > & CommandProcessorInfo::getCommandsImpl()
 {
     if ( m_xCommands )
         return *m_xCommands;

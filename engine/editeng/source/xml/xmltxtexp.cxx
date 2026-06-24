@@ -25,7 +25,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <svl/itemprop.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/streamwrap.hxx>
@@ -140,7 +140,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
 
 }
 
-uno::Reference< css::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& )
+uno::Reference< css::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& )
 {
     return createInstance( ServiceSpecifier );
 }
@@ -165,7 +165,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SvxSimpleUnoModel::getStyleFam
 }
 
 // XModel
-bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString&, const css::uno::Sequence< css::beans::PropertyValue >& )
+bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString&, const cpo::uno::Sequence< css::beans::PropertyValue >& )
 {
     return false;
 }
@@ -175,7 +175,7 @@ OUString SAL_CALL SvxSimpleUnoModel::getURL(  )
     return OUString();
 }
 
-css::uno::Sequence< css::beans::PropertyValue > SAL_CALL SvxSimpleUnoModel::getArgs(  )
+cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL SvxSimpleUnoModel::getArgs(  )
 {
     Sequence< beans::PropertyValue > aSeq;
     return aSeq;

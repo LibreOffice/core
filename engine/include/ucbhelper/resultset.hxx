@@ -82,7 +82,7 @@ public:
       */
     UCBHELPER_DLLPUBLIC ResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const css::uno::Sequence< css::beans::Property >& rProperties,
+            const cpo::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier );
     /**
       * Construction.
@@ -96,7 +96,7 @@ public:
       */
     UCBHELPER_DLLPUBLIC ResultSet(
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const css::uno::Sequence< css::beans::Property >& rProperties,
+            const cpo::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
     virtual ~ResultSet() override;
@@ -104,7 +104,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
     virtual void SAL_CALL
@@ -183,7 +183,7 @@ public:
     getFloat( sal_Int32 columnIndex ) override;
     virtual double SAL_CALL
     getDouble( sal_Int32 columnIndex ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getBytes( sal_Int32 columnIndex ) override;
     virtual css::util::Date SAL_CALL
     getDate( sal_Int32 columnIndex ) override;
@@ -269,7 +269,7 @@ public:
       *
       * @return a sequence of properties.
       */
-    UCBHELPER_DLLPUBLIC const css::uno::Sequence< css::beans::Property >&
+    UCBHELPER_DLLPUBLIC const cpo::uno::Sequence< css::beans::Property >&
     getProperties() const;
 
     /**

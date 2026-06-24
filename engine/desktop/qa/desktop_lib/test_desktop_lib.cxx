@@ -627,7 +627,7 @@ void DesktopKitTest::testSearchCalc()
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", cpo::uno::Any(u"foo"_ustr)},
         {"SearchItem.Backward", cpo::uno::Any(false)},
@@ -657,7 +657,7 @@ void DesktopKitTest::testSearchAllNotificationsCalc()
     pDocument->pClass->initializeForRendering(pDocument, nullptr);
     pDocument->pClass->registerCallback(pDocument, &DesktopKitTest::callback, this);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"SearchItem.SearchString", cpo::uno::Any(u"foo"_ustr)},
         {"SearchItem.Backward", cpo::uno::Any(false)},
@@ -854,7 +854,7 @@ void DesktopKitTest::testPasteWriterJPEG()
 
     // Delete the pasted picture, and paste again with a custom anchor type.
     uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY_THROW)->dispose();
-    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"AnchorType", cpo::uno::Any(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
     }));
@@ -2314,7 +2314,7 @@ public:
         break;
         case KIT_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
         {
-            uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aPayload));
+            cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::fromUtf8(aPayload));
             if (std::string_view("EMPTY") == pPayload)
                 return;
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), aSeq.getLength());
@@ -2576,7 +2576,7 @@ void DesktopKitTest::testPaintPartTileDifferentSchemes()
 
     // Set to dark scheme
     {
-        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+        cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
                 { "NewTheme", cpo::uno::Any(u"Dark"_ustr) },
             }

@@ -33,7 +33,7 @@ namespace com::sun::star::task
 {
 class XInteractionRequest;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class E> class Sequence;
 }
@@ -93,7 +93,7 @@ class FWK_DLLPUBLIC InteractionRequest
 public:
     static css::uno::Reference<css::task::XInteractionRequest> CreateRequest(
         const cpo::uno::Any& aRequest,
-        const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>&
+        const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>&
             lContinuations);
 };
 

@@ -483,7 +483,7 @@ bool ScDrawTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uIn
                 {
                     try
                     {
-                        uno::Sequence < beans::PropertyValue > aSeq;
+                        cpo::uno::Sequence < beans::PropertyValue > aSeq;
                         OUString aDummyName(u"Dummy"_ustr);
                         xPers->storeToEntry( xWorkStore, aDummyName, aSeq, aSeq );
                         if ( xWorkStore->isStreamElement( aDummyName ) )

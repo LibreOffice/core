@@ -154,7 +154,7 @@ public:
      * XInitialization
      */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 };
 
 

@@ -115,7 +115,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         css::awt::Point getToolbarPos( std::u16string_view rResourceURL );
         css::awt::Size getToolbarSize( std::u16string_view rResourceURL );
         css::uno::Reference< css::ui::XUIElement > getToolbar( std::u16string_view aName );
-        css::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > getToolbars();
+        cpo::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > getToolbars();
 
         void updateToolbarsTips();
 
@@ -242,7 +242,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         void             implts_createAddonsToolBars();
         void             implts_createCustomToolBars();
         void             implts_createNonContextSensitiveToolBars();
-        void             implts_createCustomToolBars( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& aCustomTbxSeq );
+        void             implts_createCustomToolBars( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& aCustomTbxSeq );
         void             implts_createCustomToolBar( const OUString& aTbxResName, const OUString& aTitle );
         void             implts_setToolbarCreation( bool bStart = true );
         bool             implts_isToolbarCreationActive();

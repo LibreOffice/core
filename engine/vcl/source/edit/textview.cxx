@@ -91,7 +91,7 @@ cpo::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFl
         sal_uInt64 nLen = GetHTMLStream().TellEnd();
         GetHTMLStream().Seek(0);
 
-        css::uno::Sequence< sal_Int8 > aSeq( nLen );
+        cpo::uno::Sequence< sal_Int8 > aSeq( nLen );
         memcpy( aSeq.getArray(), GetHTMLStream().GetData(), nLen );
         aAny <<= aSeq;
     }
@@ -102,11 +102,11 @@ cpo::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFl
     return aAny;
 }
 
-css::uno::Sequence< css::datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  )
+cpo::uno::Sequence< css::datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  )
 {
     GetHTMLStream().Seek( STREAM_SEEK_TO_END );
     bool bHTML = GetHTMLStream().Tell() > 0;
-    css::uno::Sequence< css::datatransfer::DataFlavor > aDataFlavors( bHTML ? 2 : 1 );
+    cpo::uno::Sequence< css::datatransfer::DataFlavor > aDataFlavors( bHTML ? 2 : 1 );
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aDataFlavors.getArray()[0] );
     if ( bHTML )
         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::HTML, aDataFlavors.getArray()[1] );

@@ -28,7 +28,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <cpo/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <rtl/ustring.hxx>
@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aFields = {
+    cpo::uno::Sequence<beans::PropertyValue> aFields = {
         comphelper::makePropertyValue(u"Identifier"_ustr, u"ARJ00"_ustr),
         comphelper::makePropertyValue(u"Author"_ustr, u"Ar, J"_ustr),
         comphelper::makePropertyValue(u"Title"_ustr, u"mytitle"_ustr),

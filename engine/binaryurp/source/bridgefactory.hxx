@@ -64,7 +64,7 @@ private:
 
     virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
     virtual css::uno::Reference< css::bridge::XBridge >
@@ -79,7 +79,7 @@ private:
         OUString const & sName) override;
 
     virtual
-    css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
+    cpo::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
     SAL_CALL getExistingBridges() override;
 
     void SAL_CALL disposing() override;

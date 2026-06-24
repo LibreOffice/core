@@ -50,7 +50,7 @@ public:
     void Init(const css::uno::Reference<css::uno::XComponentContext>& xContext,
               const css::uno::Reference<css::frame::XFrame>& xFrame,
               const OUString& sModuleLongName);
-    void FillFunctionsList(const css::uno::Sequence<css::frame::DispatchInformation>& xCommands,
+    void FillFunctionsList(const cpo::uno::Sequence<css::frame::DispatchInformation>& xCommands,
                            CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm,
                            SaveInData* pCurrentSaveInData);
     OUString getCommandName(const OUString& sCommand);

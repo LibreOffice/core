@@ -36,7 +36,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppunit/TestAssert.h>
@@ -95,7 +95,7 @@ public:
     Callback(
         css::uno::Reference< css::frame::XNotifyingDispatch > const & dispatch,
         css::util::URL url,
-        css::uno::Sequence< css::beans::PropertyValue > const & arguments,
+        cpo::uno::Sequence< css::beans::PropertyValue > const & arguments,
         css::uno::Reference< css::frame::XDispatchResultListener > listener):
         dispatch_(dispatch), url_(std::move(url)), arguments_(arguments),
         listener_(std::move(listener))
@@ -107,7 +107,7 @@ private:
 
     css::uno::Reference< css::frame::XNotifyingDispatch > dispatch_;
     css::util::URL url_;
-    css::uno::Sequence< css::beans::PropertyValue > arguments_;
+    cpo::uno::Sequence< css::beans::PropertyValue > arguments_;
     css::uno::Reference< css::frame::XDispatchResultListener > listener_;
 };
 
@@ -140,7 +140,7 @@ void Test::test() {
     CPPUNIT_ASSERT(
         test::getTestArgument(
             u"smoketest.doc", &doc));
-    css::uno::Sequence< css::beans::PropertyValue > args{
+    cpo::uno::Sequence< css::beans::PropertyValue > args{
         { /* Name   */ u"MacroExecutionMode"_ustr,
           /* Handle */ -1,
           /* Value  */ cpo::uno::Any(css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN),
@@ -174,7 +174,7 @@ void Test::test() {
     css::awt::AsyncCallback::create(
         connection_.getComponentContext())->addCallback(
             new Callback(
-                disp, std::move(url), css::uno::Sequence< css::beans::PropertyValue >(),
+                disp, std::move(url), cpo::uno::Sequence< css::beans::PropertyValue >(),
                 new Listener(&result)),
             cpo::uno::Any());
     // Wait for result.condition or connection_ going stale:

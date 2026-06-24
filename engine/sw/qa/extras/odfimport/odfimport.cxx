@@ -80,8 +80,8 @@ using namespace css::uno;
 
 namespace
 {
-typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
-typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
+typedef std::map<OUString, cpo::uno::Sequence< css::table::BorderLine> > AllBordersMap;
+typedef std::pair<OUString, cpo::uno::Sequence< css::table::BorderLine> > StringSequencePair;
 
 class Test : public SwModelTestBase
 {
@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawObjectLinkDeferred)
     // link, we want to verify the state immediately after import.  The test
     // uses 192.0.2.1 (non-routeable) so without the fix type detection fetch
     // would hang/timeout.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(document::UpdateDocMode::NO_UPDATE)),
     };
@@ -180,7 +180,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImageRemoteNotFetched)
     // During import this is false, so the fetch is blocked. The test uses a
     // non-routable address (192.0.2.1) so that an actual fetch would
     // hang/timeout causing this test to fail by timeout.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(document::UpdateDocMode::NO_UPDATE)),
     };
@@ -196,7 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImageEmbeddedNotBlocked)
     // Embedded (inline base64) images must not be blocked by the linked
     // graphic security checks. This verifies that the getUserAllowsLinkUpdate
     // guard in SwGrfNode does not interfere with package/embedded images.
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(document::UpdateDocMode::NO_UPDATE)),
     };
@@ -339,7 +339,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOdtBorders)
             if (xServiceInfo->supportsService(u"com.sun.star.text.TextTable"_ustr))
             {
                 uno::Reference<text::XTextTable> const xTextTable(xServiceInfo, uno::UNO_QUERY_THROW);
-                uno::Sequence<OUString> const cells = xTextTable->getCellNames();
+                cpo::uno::Sequence<OUString> const cells = xTextTable->getCellNames();
                 sal_Int32 nLength = cells.getLength();
 
                 AllBordersMap::iterator it = map.begin();
@@ -1351,7 +1351,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134971)
     createSwDoc("tdf134971a.odt");
     // now insert 2nd file somewhere - insertDocumentFromURL should
     // _not_ touch pool defaults
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
     {
         {"Name", cpo::uno::Any(createFileURL(u"tdf134971b.odt"))},
         {"Filter", cpo::uno::Any(u"writer8"_ustr)},
@@ -1388,7 +1388,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138879)
 {
     createSwDoc();
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
     {
         {"Name", cpo::uno::Any(createFileURL(u"tdf138879.odt"))},
         {"Filter", cpo::uno::Any(u"writer8"_ustr)},
@@ -1567,7 +1567,7 @@ void runWindowsFileZoneTests(css::uno::Reference<css::frame::XDesktop2> const & 
     }
 
     // Load doc with default for UI settings: do not suppress macro
-    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
+    cpo::uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue(
         "MacroExecutionMode", css::document::MacroExecMode::USE_CONFIG) };
     auto aComponent = aDesktop->loadComponentFromURL(sFileName, "_default", 0, aLoadArgs);
 

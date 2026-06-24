@@ -71,7 +71,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     CPPUNIT_ASSERT(pPage2);
     KitHelper::createView();
     int nView2 = KitHelper::getCurrentView();
-    pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pXTextDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
     KitHelper::setView(nView1);
     SwTestViewCallback aView1;
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSignatureState)
     SwXTextDocument* pXTextDocument = createDoc("signed-doc.odt");
 
     // When initializing tiled rendering with an author name:
-    uno::Sequence<beans::PropertyValue> aPropertyValues
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues
         = { comphelper::makePropertyValue(u".uno:Author"_ustr, cpo::uno::Any(u"A"_ustr)) };
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SignatureState eState = getSwDocShell()->GetDocumentSignatureState();
@@ -339,7 +339,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPDFExportViewSwitch)
 
     // When exporting to PDF on the second view and a job on the main loop that switches to the
     // first view:
-    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
         comphelper::makePropertyValue(u"SynchronMode"_ustr, false),
         comphelper::makePropertyValue(u"URL"_ustr, maTempFile.GetURL()),
     };
@@ -418,7 +418,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableOne)
     CPPUNIT_ASSERT(aRecord2.empty());
 
     // And given a reset state (both view1 and view2 recording is disabled):
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"TrackChanges"_ustr, false),
     };
     dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, aArgs);
@@ -922,7 +922,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testImageBulletRemoteNotFetched)
     // the URL during paint when link updates are not allowed.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -953,7 +953,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageRemoteNotFetched)
     // the URL during paint when link updates are not allowed.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -986,7 +986,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphStyleBackgroundImageRemo
     // must not fetch the URL during paint when link updates are not allowed.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -1015,7 +1015,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphStyleDeleteReleasesBackg
     // longer offers a link whose target style is gone.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -1043,7 +1043,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testParagraphDeleteReleasesBackground
     // longer keeps the deleted paragraph alive.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -1075,7 +1075,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBackgroundImageLinkSurvivesUpdate
     // drawing-layer links, so Edit > Links can still update or break it.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -1110,7 +1110,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPageBackgroundImageRemoteNotFetch
     // not fetch the URL during paint when link updates are not allowed.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -1137,7 +1137,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeFillRemoteNotFetched)
     // a remote fetch is attempted.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };
@@ -1162,7 +1162,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormImageRemoteNotFetched)
     // until the user allows link updates.
     comphelper::COKit::setActive(false);
 
-    uno::Sequence<beans::PropertyValue> aParams = {
+    cpo::uno::Sequence<beans::PropertyValue> aParams = {
         comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
                                       sal_Int16(css::document::UpdateDocMode::NO_UPDATE)),
     };

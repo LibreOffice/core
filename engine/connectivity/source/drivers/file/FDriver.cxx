@@ -35,6 +35,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
+using namespace ::cpo::uno;
 
 OFileDriver::OFileDriver(css::uno::Reference< css::uno::XComponentContext > _xContext)
     : ODriver_BASE(m_aMutex)

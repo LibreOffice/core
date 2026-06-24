@@ -48,7 +48,7 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 
 std::unique_ptr<VCoordinateSystem> VCoordinateSystem::createCoordinateSystem(
             const rtl::Reference< BaseCoordinateSystem >& xCooSysModel )
@@ -137,10 +137,10 @@ void VCoordinateSystem::setTransformationSceneToScreen(
 }
 
 //better performance for big data
-uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
+cpo::uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
             const awt::Size& rPageSize, const awt::Size& rPageResolution )
 {
-    uno::Sequence<sal_Int32> aResolution(
+    cpo::uno::Sequence<sal_Int32> aResolution(
         std::max<sal_Int32>(m_xCooSysModel->getDimension(), 2));
     auto aResolutionRange = asNonConstRange(aResolution);
     for( auto& i : aResolutionRange )

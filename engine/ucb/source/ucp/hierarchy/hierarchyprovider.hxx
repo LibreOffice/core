@@ -75,7 +75,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProvider
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
@@ -83,7 +83,7 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // Non-Interface methods
     css::uno::Reference< css::lang::XMultiServiceFactory >

@@ -11,7 +11,7 @@
 #define INCLUDED_TEST_SHEET_FUNCTIONDESCRIPTION_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -20,7 +20,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST FunctionDescription
 {
 public:
-    virtual css::uno::Sequence<css::beans::PropertyValue> init() = 0;
+    virtual cpo::uno::Sequence<css::beans::PropertyValue> init() = 0;
 
     void testFunctionDescriptionProperties();
 

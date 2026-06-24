@@ -49,16 +49,16 @@ public:
     // XUIElementFactory
     css::uno::Reference<css::ui::XUIElement> SAL_CALL
     createUIElement(const OUString& ResourceURL,
-                    const css::uno::Sequence<css::beans::PropertyValue>& Arguments) override;
+                    const cpo::uno::Sequence<css::beans::PropertyValue>& Arguments) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(OUString const& ServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElement(
-    const OUString& ResourceURL, const css::uno::Sequence<css::beans::PropertyValue>& Arguments)
+    const OUString& ResourceURL, const cpo::uno::Sequence<css::beans::PropertyValue>& Arguments)
 {
     try
     {
@@ -126,7 +126,7 @@ bool SmPanelFactory::supportsService(OUString const& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SmPanelFactory::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SmPanelFactory::getSupportedServiceNames()
 {
     return { u"com.sun.star.ui.UIElementFactory"_ustr };
 }
@@ -135,7 +135,7 @@ css::uno::Sequence<OUString> SmPanelFactory::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 org_libreoffice_comp_Math_sidebar_SmPanelFactory(css::uno::XComponentContext*,
-                                                 css::uno::Sequence<cpo::uno::Any> const&)
+                                                 cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmPanelFactory);
 }

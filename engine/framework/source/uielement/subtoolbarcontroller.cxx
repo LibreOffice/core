@@ -52,13 +52,13 @@ class SubToolBarController : public ToolBarBase
     void disposeUIElement();
 public:
     explicit SubToolBarController( const rtl::Reference< css::uno::XComponentContext >& rxContext,
-                                   const css::uno::Sequence< cpo::uno::Any >& rxArgs );
+                                   const cpo::uno::Sequence< cpo::uno::Any >& rxArgs );
     virtual ~SubToolBarController() override;
 
     void PopoverDestroyed();
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& rxArgs ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& rxArgs ) override;
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
@@ -94,14 +94,14 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& rServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 }
 
 SubToolBarController::SubToolBarController(
     const rtl::Reference< css::uno::XComponentContext >& rxContext,
-    const css::uno::Sequence< cpo::uno::Any >& rxArgs
+    const cpo::uno::Sequence< cpo::uno::Any >& rxArgs
 )   : ToolBarBase(
         rxContext,
         rtl::Reference< css::frame::XFrame >(),
@@ -482,7 +482,7 @@ void SubToolBarController::disposing( const css::lang::EventObject& e )
     svt::ToolboxController::disposing( e );
 }
 
-void SubToolBarController::initialize( const css::uno::Sequence< cpo::uno::Any >& rxArgs )
+void SubToolBarController::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rxArgs )
 {
     svt::PopupWindowController::initialize( rxArgs );
 
@@ -528,7 +528,7 @@ bool SubToolBarController::supportsService( const OUString& rServiceName )
     return cppu::supportsService( this, rServiceName );
 }
 
-css::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
 {
     return {u"com.sun.star.frame.ToolbarController"_ustr};
 }
@@ -536,7 +536,7 @@ css::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_SubToolBarController_get_implementation(
     css::uno::XComponentContext* rxContext,
-    css::uno::Sequence<cpo::uno::Any> const & rxArgs )
+    cpo::uno::Sequence<cpo::uno::Any> const & rxArgs )
 {
     return cppu::acquire( new SubToolBarController( rxContext, rxArgs ) );
 }

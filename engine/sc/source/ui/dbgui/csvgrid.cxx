@@ -23,7 +23,7 @@
 #include <tools/json_writer.hxx>
 #include <optutil.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 

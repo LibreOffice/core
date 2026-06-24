@@ -59,8 +59,8 @@ public:
     virtual ~OInputStreamWrapper() override;
 
 // css::io::XInputStream
-    virtual sal_Int32   SAL_CALL    readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override final;
-    virtual sal_Int32   SAL_CALL    readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override final;
+    virtual sal_Int32   SAL_CALL    readBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override final;
+    virtual sal_Int32   SAL_CALL    readSomeBytes(cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override final;
     virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) override final;
     virtual sal_Int32   SAL_CALL    available() override final;
     virtual void        SAL_CALL    closeInput() override final;
@@ -110,7 +110,7 @@ public:
     OOutputStreamWrapper(SvStream& _rStream);
 
 // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) override final;
+    virtual void SAL_CALL writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData) override final;
     virtual void SAL_CALL flush() override final;
     virtual void SAL_CALL closeOutput() override final;
 
@@ -172,7 +172,7 @@ public:
     virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) override;
 
 // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) override;
+    virtual void SAL_CALL writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData) override;
     virtual void SAL_CALL flush() override;
     virtual void SAL_CALL closeOutput() override;
     virtual void SAL_CALL truncate() override;

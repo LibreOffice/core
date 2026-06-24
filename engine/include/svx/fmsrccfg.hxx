@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_FMSRCCFG_HXX
 
 #include <unotools/configvaluecontainer.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
 enum class TransliterationFlags;
@@ -53,7 +53,7 @@ namespace svxform
 
     public:
         // no bit fields at all (want to pass the addresses to the OConfigurationValueContainer)
-        css::uno::Sequence< OUString >
+        cpo::uno::Sequence< OUString >
                     aHistory;
         OUString    sSingleSearchField;
 

@@ -187,7 +187,7 @@ DECLARE_SHELL_MAILMERGE_TEST(exportDirectToPDF_shell, "linked-with-condition.odt
     CPPUNIT_ASSERT(xDispatch.is());
 
     const OUString sExportTo(msMailMergeOutputURL + "/ExportDirectToPDF.pdf");
-    uno::Sequence <css::beans::PropertyValue> aArgs {
+    cpo::uno::Sequence <css::beans::PropertyValue> aArgs {
         comphelper::makePropertyValue(u"SynchronMode"_ustr, true),
         comphelper::makePropertyValue(u"URL"_ustr, sExportTo)
     };
@@ -257,7 +257,7 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf81782_file, "tdf78611.odt", "10-testing-addre
         uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
 
         // check if properties were set
-        uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
+        cpo::uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aKeywords.getLength());
         CPPUNIT_ASSERT_EQUAL(u"one two"_ustr, aKeywords[0]);
 
@@ -391,7 +391,7 @@ DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1"
     // check grabbag
     uno::Reference<beans::XPropertySet> const xModel(
         mxComponent, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aInteropGrabBag;
+    cpo::uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
     xTextDocumentPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;

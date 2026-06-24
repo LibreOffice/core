@@ -145,11 +145,11 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
 
           { /* Name    */ u"getPropertyValues"_ustr,
             /* Handle  */ -1,
-            /* ArgType */ cppu::UnoType<uno::Sequence< beans::Property >>::get() },
+            /* ArgType */ cppu::UnoType<cpo::uno::Sequence< beans::Property >>::get() },
 
           { /* Name    */ u"setPropertyValues"_ustr,
             /* Handle  */ -1,
-            /* ArgType */ cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() },
+            /* ArgType */ cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get() },
 
           { /* Name    */ u"open"_ustr,
             /* Handle  */ -1,
@@ -338,7 +338,7 @@ TaskManager::TaskManager( const uno::Reference< uno::XComponentContext >& rxCont
     m_aDefaultProperties.insert( MyProperty( true,
                                              CreatableContentsInfo,
                                              -1 ,
-                                             cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                                             cppu::UnoType<cpo::uno::Sequence< ucb::ContentInfo >>::get(),
                                              cpo::uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -640,7 +640,7 @@ void TaskManager::page( sal_Int32 CommandId,
         err = aFile.read( static_cast<void*>(BFF),bfz,nrc );
         if(  err == osl::FileBase::E_None )
         {
-            uno::Sequence< sal_Int8 > seq( BFF, static_cast<sal_uInt32>(nrc) );
+            cpo::uno::Sequence< sal_Int8 > seq( BFF, static_cast<sal_uInt32>(nrc) );
             try
             {
                 xOutputStream->writeBytes( seq );
@@ -769,8 +769,8 @@ uno::Reference< XDynamicResultSet >
 TaskManager::ls( sal_Int32 CommandId,
            const OUString& aUnqPath,
            const sal_Int32 OpenMode,
-           const uno::Sequence< beans::Property >& seq,
-           const uno::Sequence< NumberedSortingInfo >& seqSort )
+           const cpo::uno::Sequence< beans::Property >& seq,
+           const cpo::uno::Sequence< NumberedSortingInfo >& seqSort )
 {
     rtl::Reference<XResultSet_impl> p(new XResultSet_impl( this,aUnqPath,OpenMode,seq,seqSort ));
 
@@ -827,16 +827,16 @@ TaskManager::info_p( const OUString& aUnqPath )
 //  Sets the values of the properties belonging to fileURL aUnqPath
 
 
-uno::Sequence< cpo::uno::Any >
+cpo::uno::Sequence< cpo::uno::Any >
 TaskManager::setv( const OUString& aUnqPath,
-             const uno::Sequence< beans::PropertyValue >& values )
+             const cpo::uno::Sequence< beans::PropertyValue >& values )
 {
     std::unique_lock aGuard( m_aMutex );
 
     sal_Int32 propChanged = 0;
-    uno::Sequence< cpo::uno::Any > ret( values.getLength() );
+    cpo::uno::Sequence< cpo::uno::Any > ret( values.getLength() );
     auto retRange = asNonConstRange(ret);
-    uno::Sequence< beans::PropertyChangeEvent > seqChanged( values.getLength() );
+    cpo::uno::Sequence< beans::PropertyChangeEvent > seqChanged( values.getLength() );
     auto seqChangedRange = asNonConstRange(seqChanged);
 
     TaskManager::ContentMap::iterator it = m_aContent.find( aUnqPath );
@@ -916,7 +916,7 @@ TaskManager::setv( const OUString& aUnqPath,
                     if( err )
                     {
                         --propChanged; // unsuccessful setting
-                        uno::Sequence<cpo::uno::Any> names(comphelper::InitAnyPropertySequence(
+                        cpo::uno::Sequence<cpo::uno::Any> names(comphelper::InitAnyPropertySequence(
                         {
                             {"Uri", cpo::uno::Any(aUnqPath)}
                         }));
@@ -978,7 +978,7 @@ TaskManager::setv( const OUString& aUnqPath,
                     if( err != osl::FileBase::E_None )
                     {
                         --propChanged; // unsuccessful setting
-                        uno::Sequence<cpo::uno::Any> names(comphelper::InitAnyPropertySequence(
+                        cpo::uno::Sequence<cpo::uno::Any> names(comphelper::InitAnyPropertySequence(
                         {
                             {"Uri", cpo::uno::Any(aUnqPath)}
                         }));
@@ -1064,9 +1064,9 @@ TaskManager::setv( const OUString& aUnqPath,
 uno::Reference< sdbc::XRow >
 TaskManager::getv( sal_Int32 CommandId,
              const OUString& aUnqPath,
-             const uno::Sequence< beans::Property >& properties )
+             const cpo::uno::Sequence< beans::Property >& properties )
 {
-    uno::Sequence< cpo::uno::Any > seq( properties.getLength() );
+    cpo::uno::Sequence< cpo::uno::Any > seq( properties.getLength() );
 
     sal_Int32 n_Mask;
     getMaskFromProperties( n_Mask,properties );
@@ -1840,7 +1840,7 @@ TaskManager::write( sal_Int32 CommandId,
 
     sal_uInt64 nWrittenBytes;
     sal_Int32 nReadBytes = 0, nRequestedBytes = 32768 /*32k*/;
-    uno::Sequence< sal_Int8 > seq( nRequestedBytes );
+    cpo::uno::Sequence< sal_Int8 > seq( nRequestedBytes );
 
     do
     {
@@ -2149,7 +2149,7 @@ bool TaskManager::ensuredir( sal_Int32 CommandId,
 void
 TaskManager::getMaskFromProperties(
     sal_Int32& n_Mask,
-    const uno::Sequence< beans::Property >& seq )
+    const cpo::uno::Sequence< beans::Property >& seq )
 {
     n_Mask = 0;
     for(const auto& rProp : seq) {
@@ -2207,7 +2207,7 @@ TaskManager::load( const ContentMap::iterator& it, bool create )
         // Now put in all values in the storage in the local hash;
 
         PropertySet& properties = it->second.properties;
-        const uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
+        const cpo::uno::Sequence< beans::Property > seq = xS->getPropertySetInfo()->getProperties();
 
         for( const auto& rProp : seq )
         {
@@ -2452,7 +2452,7 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
         it1->setValue( cpo::uno::Any(
             isDirectory || !aFileStatus.isValid( osl_FileStatus_Mask_Type )
                 ? queryCreatableContentsInfo()
-                : uno::Sequence< ucb::ContentInfo >() ) );
+                : cpo::uno::Sequence< ucb::ContentInfo >() ) );
 }
 
 
@@ -2462,13 +2462,13 @@ TaskManager::commit( std::unique_lock<std::mutex>& rGuard,
 
 bool
 TaskManager::getv(
-    const uno::Sequence< beans::Property >& properties,
+    const cpo::uno::Sequence< beans::Property >& properties,
     osl::DirectoryItem& aDirItem,
     OUString& aUnqPath,
     bool& aIsRegular,
     uno::Reference< sdbc::XRow > & row )
 {
-    uno::Sequence< cpo::uno::Any > seq( properties.getLength() );
+    cpo::uno::Sequence< cpo::uno::Any > seq( properties.getLength() );
 
     sal_Int32 n_Mask;
     getMaskFromProperties( n_Mask,properties );
@@ -2767,7 +2767,7 @@ TaskManager::getPropertyChangeNotifier( const OUString& aName )
 
 void TaskManager::notifyPropertyChanges(
     const std::vector<PropertyChangeNotifier>& listeners,
-    const uno::Sequence<beans::PropertyChangeEvent>& seqChanged)
+    const cpo::uno::Sequence<beans::PropertyChangeEvent>& seqChanged)
 {
     for( auto const & l : listeners )
     {
@@ -2817,7 +2817,7 @@ TaskManager::erasePersistentSet( const OUString& aUnqPath,
     }
 
     uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
-    const uno::Sequence< OUString > seqNames = xName->getElementNames();
+    const cpo::uno::Sequence< OUString > seqNames = xName->getElementNames();
 
     OUString old_Name = aUnqPath;
 
@@ -2849,7 +2849,7 @@ TaskManager::copyPersistentSetWithoutChildren( const OUString& srcUnqPath,
     if( ! x_src.is() )
         return;
 
-    const uno::Sequence< beans::Property > seqProperty =
+    const cpo::uno::Sequence< beans::Property > seqProperty =
         x_src->getPropertySetInfo()->getProperties();
 
     if( ! seqProperty.hasElements() )
@@ -2886,7 +2886,7 @@ TaskManager::copyPersistentSet( const OUString& srcUnqPath,
     }
 
     uno::Reference< container::XNameAccess > xName( m_xFileRegistry,uno::UNO_QUERY );
-    const uno::Sequence< OUString > seqNames = xName->getElementNames();
+    const cpo::uno::Sequence< OUString > seqNames = xName->getElementNames();
 
     OUString new_Name;
 
@@ -2901,11 +2901,11 @@ TaskManager::copyPersistentSet( const OUString& srcUnqPath,
     }
 }
 
-uno::Sequence< ucb::ContentInfo > TaskManager::queryCreatableContentsInfo()
+cpo::uno::Sequence< ucb::ContentInfo > TaskManager::queryCreatableContentsInfo()
 {
 
 
-    uno::Sequence< beans::Property > props
+    cpo::uno::Sequence< beans::Property > props
     {
         { u"Title"_ustr, -1, cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND }
     };

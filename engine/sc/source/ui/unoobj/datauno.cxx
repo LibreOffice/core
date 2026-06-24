@@ -168,7 +168,7 @@ sheet::GeneralFunction  ScDataUnoConversion::SubTotalToGeneral( ScSubTotalFunc e
     return eGeneral;
 }
 
-void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScImportParam& rParam )
+void ScImportDescriptor::FillProperties( cpo::uno::Sequence<beans::PropertyValue>& rSeq, const ScImportParam& rParam )
 {
     OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "wrong Count" );
 
@@ -208,7 +208,7 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
     pArray[3].Value <<= rParam.bNative;
 }
 
-void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
+void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const cpo::uno::Sequence<beans::PropertyValue>& rSeq )
 {
     OUString aStrVal;
     for (const beans::PropertyValue& rProp : rSeq)
@@ -263,7 +263,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
     }
 }
 
-void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScSortParam& rParam )
+void ScSortDescriptor::FillProperties( cpo::uno::Sequence<beans::PropertyValue>& rSeq, const ScSortParam& rParam )
 {
     OSL_ENSURE( rSeq.getLength() == GetPropertyCount(), "wrong count" );
 
@@ -280,7 +280,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     while ( nSortCount < rParam.GetSortKeyCount() && rParam.maKeyState[nSortCount].bDoSort )
         ++nSortCount;
 
-    uno::Sequence<table::TableSortField> aFields(nSortCount);
+    cpo::uno::Sequence<table::TableSortField> aFields(nSortCount);
     if (nSortCount)
     {
         table::TableSortField* pFieldArray = aFields.getArray();
@@ -328,7 +328,7 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
     pArray[9].Value <<= static_cast<sal_Int32>(rParam.eSortNumberBehavior);
 }
 
-void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
+void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const cpo::uno::Sequence<beans::PropertyValue>& rSeq )
 {
     sal_Int32 nSortSize = static_cast<sal_Int32>(rParam.GetSortKeyCount());
     // default if optional SC_UNONAME_NUMBERBEHAVIOR does not exist
@@ -361,8 +361,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         }
         else if (aPropName == SC_UNONAME_SORTFLD)
         {
-            uno::Sequence<util::SortField> aSeq;
-            uno::Sequence<table::TableSortField> aNewSeq;
+            cpo::uno::Sequence<util::SortField> aSeq;
+            cpo::uno::Sequence<table::TableSortField> aNewSeq;
             if ( rProp.Value >>= aSeq )
             {
                 sal_Int32 nCount = aSeq.getLength();
@@ -492,14 +492,14 @@ void SAL_CALL ScSubTotalFieldObj::setGroupColumn( sal_Int32 nGroupColumn )
     xParent->PutData(aParam);
 }
 
-uno::Sequence<sheet::SubTotalColumn> SAL_CALL ScSubTotalFieldObj::getSubTotalColumns()
+cpo::uno::Sequence<sheet::SubTotalColumn> SAL_CALL ScSubTotalFieldObj::getSubTotalColumns()
 {
     SolarMutexGuard aGuard;
     ScSubTotalParam aParam;
     xParent->GetData(aParam);
 
     SCCOL nCount = aParam.aGroups[nPos].nSubTotals;
-    uno::Sequence<sheet::SubTotalColumn> aSeq(nCount);
+    cpo::uno::Sequence<sheet::SubTotalColumn> aSeq(nCount);
     sheet::SubTotalColumn* pAry = aSeq.getArray();
     for (SCCOL i=0; i<nCount; i++)
     {
@@ -510,7 +510,7 @@ uno::Sequence<sheet::SubTotalColumn> SAL_CALL ScSubTotalFieldObj::getSubTotalCol
 }
 
 void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
-                            const uno::Sequence<sheet::SubTotalColumn>& aSubTotalColumns )
+                            const cpo::uno::Sequence<sheet::SubTotalColumn>& aSubTotalColumns )
 {
     SolarMutexGuard aGuard;
     ScSubTotalParam aParam;
@@ -556,7 +556,7 @@ void SAL_CALL ScSubTotalDescriptorBase::clear()
 }
 
 void SAL_CALL ScSubTotalDescriptorBase::addNew(
-                        const uno::Sequence<sheet::SubTotalColumn>& aSubTotalColumns,
+                        const cpo::uno::Sequence<sheet::SubTotalColumn>& aSubTotalColumns,
                         sal_Int32 nGroupColumn )
 {
     SolarMutexGuard aGuard;
@@ -776,14 +776,14 @@ void SAL_CALL ScConsolidationDescriptor::setFunction( sheet::GeneralFunction nFu
     aParam.eFunction = ScDPUtil::toSubTotalFunc(static_cast<ScGeneralFunction>(nFunction));
 }
 
-uno::Sequence<table::CellRangeAddress> SAL_CALL ScConsolidationDescriptor::getSources()
+cpo::uno::Sequence<table::CellRangeAddress> SAL_CALL ScConsolidationDescriptor::getSources()
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = aParam.nDataAreaCount;
     if (!aParam.pDataAreas)
         nCount = 0;
     table::CellRangeAddress aRange;
-    uno::Sequence<table::CellRangeAddress> aSeq(nCount);
+    cpo::uno::Sequence<table::CellRangeAddress> aSeq(nCount);
     table::CellRangeAddress* pAry = aSeq.getArray();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
@@ -799,7 +799,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScConsolidationDescriptor::getSo
 }
 
 void SAL_CALL ScConsolidationDescriptor::setSources(
-                    const uno::Sequence<table::CellRangeAddress>& aSources )
+                    const cpo::uno::Sequence<table::CellRangeAddress>& aSources )
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nCount = static_cast<sal_uInt16>(aSources.getLength());
@@ -900,7 +900,7 @@ void ScFilterDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XSheetFilterDescriptor and XSheetFilterDescriptor2
 
-uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilterFields()
+cpo::uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilterFields()
 {
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
@@ -913,7 +913,7 @@ uno::Sequence<sheet::TableFilterField> SAL_CALL ScFilterDescriptorBase::getFilte
         ++nCount;
 
     sheet::TableFilterField aField;
-    uno::Sequence<sheet::TableFilterField> aSeq(static_cast<sal_Int32>(nCount));
+    cpo::uno::Sequence<sheet::TableFilterField> aSeq(static_cast<sal_Int32>(nCount));
     sheet::TableFilterField* pAry = aSeq.getArray();
     for (SCSIZE i=0; i<nCount; i++)
     {
@@ -1036,7 +1036,7 @@ void convertUnoToQueryEntry(const T& rField, ScQueryEntry& rEntry)
 
 void fillQueryParam(
     ScQueryParam& rParam, ScDocument* pDoc,
-    const uno::Sequence<sheet::TableFilterField2>& aFilterFields)
+    const cpo::uno::Sequence<sheet::TableFilterField2>& aFilterFields)
 {
     size_t nCount = static_cast<size_t>(aFilterFields.getLength());
     rParam.Resize(nCount);
@@ -1072,7 +1072,7 @@ void fillQueryParam(
 
 void fillQueryParam(
     ScQueryParam& rParam, ScDocument* pDoc,
-    const uno::Sequence<sheet::TableFilterField3>& aFilterFields)
+    const cpo::uno::Sequence<sheet::TableFilterField3>& aFilterFields)
 {
     size_t nCount = static_cast<size_t>(aFilterFields.getLength());
     rParam.Resize(nCount);
@@ -1088,7 +1088,7 @@ void fillQueryParam(
         {
             ScQueryEntry::QueryItemsType& rItems = rEntry.GetQueryItems();
             rItems.clear();
-            const uno::Sequence<sheet::FilterFieldValue>& rVals = pAry[i].Values;
+            const cpo::uno::Sequence<sheet::FilterFieldValue>& rVals = pAry[i].Values;
             for (const auto& rVal : rVals)
             {
                 ScQueryEntry::Item aItem;
@@ -1154,7 +1154,7 @@ void fillQueryParam(
 
 }
 
-uno::Sequence<sheet::TableFilterField2> SAL_CALL ScFilterDescriptorBase::getFilterFields2()
+cpo::uno::Sequence<sheet::TableFilterField2> SAL_CALL ScFilterDescriptorBase::getFilterFields2()
 {
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
@@ -1167,7 +1167,7 @@ uno::Sequence<sheet::TableFilterField2> SAL_CALL ScFilterDescriptorBase::getFilt
         ++nCount;
 
     sheet::TableFilterField2 aField;
-    uno::Sequence<sheet::TableFilterField2> aSeq(static_cast<sal_Int32>(nCount));
+    cpo::uno::Sequence<sheet::TableFilterField2> aSeq(static_cast<sal_Int32>(nCount));
     sheet::TableFilterField2* pAry = aSeq.getArray();
     for (SCSIZE i=0; i<nCount; i++)
     {
@@ -1204,7 +1204,7 @@ uno::Sequence<sheet::TableFilterField2> SAL_CALL ScFilterDescriptorBase::getFilt
     return aSeq;
 }
 
-uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilterFields3()
+cpo::uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilterFields3()
 {
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
@@ -1217,7 +1217,7 @@ uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilt
         ++nCount;
 
     sheet::TableFilterField3 aField;
-    uno::Sequence<sheet::TableFilterField3> aSeq(static_cast<sal_Int32>(nCount));
+    cpo::uno::Sequence<sheet::TableFilterField3> aSeq(static_cast<sal_Int32>(nCount));
     sheet::TableFilterField3* pAry = aSeq.getArray();
     for (SCSIZE i = 0; i < nCount; ++i)
     {
@@ -1265,7 +1265,7 @@ uno::Sequence<sheet::TableFilterField3> SAL_CALL ScFilterDescriptorBase::getFilt
 }
 
 void SAL_CALL ScFilterDescriptorBase::setFilterFields(
-                const uno::Sequence<sheet::TableFilterField>& aFilterFields )
+                const cpo::uno::Sequence<sheet::TableFilterField>& aFilterFields )
 {
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
@@ -1329,7 +1329,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
 }
 
 void SAL_CALL ScFilterDescriptorBase::setFilterFields2(
-    const uno::Sequence<sheet::TableFilterField2>& aFilterFields )
+    const cpo::uno::Sequence<sheet::TableFilterField2>& aFilterFields )
 {
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
@@ -1339,7 +1339,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields2(
 }
 
 void SAL_CALL ScFilterDescriptorBase::setFilterFields3(
-    const uno::Sequence<sheet::TableFilterField3>& aFilterFields )
+    const cpo::uno::Sequence<sheet::TableFilterField3>& aFilterFields )
 {
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
@@ -1654,7 +1654,7 @@ void SAL_CALL ScDatabaseRangeObj::setDataArea( const table::CellRangeAddress& aD
     }
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getSortDescriptor()
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getSortDescriptor()
 {
     SolarMutexGuard aGuard;
     ScSortParam aParam;
@@ -1672,7 +1672,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getSortDescript
                 aParam.maKeyState[i].nField -= nFieldStart;
     }
 
-    uno::Sequence<beans::PropertyValue> aSeq( ScSortDescriptor::GetPropertyCount() );
+    cpo::uno::Sequence<beans::PropertyValue> aSeq( ScSortDescriptor::GetPropertyCount() );
     ScSortDescriptor::FillProperties( aSeq, aParam );
     return aSeq;
 }
@@ -1790,7 +1790,7 @@ uno::Reference<sheet::XSubTotalDescriptor> SAL_CALL ScDatabaseRangeObj::getSubTo
     return new ScRangeSubTotalDescriptor(this);
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getImportDescriptor()
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getImportDescriptor()
 {
     SolarMutexGuard aGuard;
     ScImportParam aParam;
@@ -1798,7 +1798,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getImportDescri
     if (pData)
         pData->GetImportParam(aParam);
 
-    uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
+    cpo::uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
     ScImportDescriptor::FillProperties( aSeq, aParam );
     return aSeq;
 }
@@ -2156,7 +2156,7 @@ bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceName 
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
 {
     return {u"com.sun.star.sheet.DatabaseRange"_ustr,
             SCLINKTARGET_SERVICE};
@@ -2306,7 +2306,7 @@ cpo::uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const OUString& aName )
     return cpo::uno::Any(uno::Reference<sheet::XDatabaseRange>(xRange));
 }
 
-uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -2318,7 +2318,7 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
         if (pNames)
         {
             const ScDBCollection::NamedDBs& rDBs = pNames->getNamedDBs();
-            uno::Sequence<OUString> aSeq(rDBs.size());
+            cpo::uno::Sequence<OUString> aSeq(rDBs.size());
             auto aSeqRange = asNonConstRange(aSeq);
             size_t i = 0;
             for (const auto& rDB : rDBs)

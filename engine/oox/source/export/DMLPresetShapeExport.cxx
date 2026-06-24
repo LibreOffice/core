@@ -39,9 +39,9 @@ DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
     m_xShape = std::move(xShape);
     m_bHasHandleValues = false;
     uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
-    css::uno::Sequence<css::beans::PropertyValue> aCustomShapeGeometry
+    cpo::uno::Sequence<css::beans::PropertyValue> aCustomShapeGeometry
         = xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr)
-              .get<uno::Sequence<beans::PropertyValue>>();
+              .get<cpo::uno::Sequence<beans::PropertyValue>>();
 
     for (auto const& rCustomShapeGeometryItem : aCustomShapeGeometry)
     {
@@ -54,13 +54,13 @@ DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
             m_bHasHandleValues = true;
             m_HandleValues
                 = rCustomShapeGeometryItem.Value
-                      .get<css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>>();
+                      .get<cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>>();
         }
         if (rCustomShapeGeometryItem.Name == "AdjustmentValues")
         {
             m_AdjustmentValues
                 = rCustomShapeGeometryItem.Value
-                      .get<css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>>();
+                      .get<cpo::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>>();
         }
         if (rCustomShapeGeometryItem.Name == "MirroredX")
         {
@@ -72,12 +72,12 @@ DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
         }
         //if (rCustomShapeGeometryItem.Name == "Equations")
         //{
-        //    m_Equations = rCustomShapeGeometryItem.Value.get<css::uno::Sequence<OUString>>();
+        //    m_Equations = rCustomShapeGeometryItem.Value.get<cpo::uno::Sequence<OUString>>();
         //}
         //if (rCustomShapeGeometryItem.Name == "Path")
         //{
         //    m_Path = rCustomShapeGeometryItem
-        //                 .Value.get<css::uno::Sequence<css::beans::PropertyValue>>();
+        //                 .Value.get<cpo::uno::Sequence<css::beans::PropertyValue>>();
         //}
         //if (rCustomShapeGeometryItem.Name == "ViewBox")
         //{
@@ -95,13 +95,13 @@ bool DMLPresetShapeExporter::HasHandleValue() const { return m_bHasHandleValues;
 
 const OUString& DMLPresetShapeExporter::GetShapeType() const { return m_sPresetShapeType; }
 
-const css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>>&
+const cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>>&
 DMLPresetShapeExporter::GetHandleValues() const
 {
     return m_HandleValues;
 };
 
-const css::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>&
+const cpo::uno::Sequence<css::drawing::EnhancedCustomShapeAdjustmentValue>&
 DMLPresetShapeExporter::GetAdjustmentValues() const
 {
     return m_AdjustmentValues;

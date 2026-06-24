@@ -29,6 +29,7 @@
 
 using namespace css::uno;
 using namespace ::com::sun::star;
+using namespace ::cpo::uno;
 
 namespace stoc_impreg
 {

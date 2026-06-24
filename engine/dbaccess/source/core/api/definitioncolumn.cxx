@@ -445,7 +445,7 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
     // Which optional properties are contained?
     const sal_Int32 nHaveOptionally (std::bitset<7>(nId).count());
 
-    css::uno::Sequence< css::beans::Property> aDescriptor(nHaveAlways + nHaveOptionally);
+    cpo::uno::Sequence< css::beans::Property> aDescriptor(nHaveAlways + nHaveOptionally);
     css::beans::Property* pDesc = aDescriptor.getArray();
     sal_Int32 nPos = 0;
 

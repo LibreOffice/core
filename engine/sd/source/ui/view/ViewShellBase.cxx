@@ -694,7 +694,7 @@ void ViewShellBase::GetState (SfxItemSet& rSet)
 }
 
 void ViewShellBase::WriteUserDataSequence (
-    css::uno::Sequence< css::beans::PropertyValue >& rSequence)
+    cpo::uno::Sequence< css::beans::PropertyValue >& rSequence)
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();
@@ -703,7 +703,7 @@ void ViewShellBase::WriteUserDataSequence (
 }
 
 void ViewShellBase::ReadUserDataSequence (
-    const css::uno::Sequence< css::beans::PropertyValue >& rSequence)
+    const cpo::uno::Sequence< css::beans::PropertyValue >& rSequence)
 {
     // Forward call to main sub shell.
     ViewShell* pShell = GetMainViewShell().get();

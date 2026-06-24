@@ -200,9 +200,9 @@ OUString Generic3DProperties::getPresetMaterialTypeString( sal_Int32 nType )
     return OUString();
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getCameraAttributes()
+cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getCameraAttributes()
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(6);
+    cpo::uno::Sequence<css::beans::PropertyValue> aSeq(6);
     auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
     if( mfFieldOfVision.has_value() )
@@ -245,9 +245,9 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getCameraAt
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getLightRigAttributes()
+cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getLightRigAttributes()
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(5);
+    cpo::uno::Sequence<css::beans::PropertyValue> aSeq(5);
     auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
     if( mnLightRigDirection.has_value() )
@@ -284,9 +284,9 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getLightRig
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getBevelAttributes( BevelProperties rProps )
+cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getBevelAttributes( BevelProperties rProps )
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(3);
+    cpo::uno::Sequence<css::beans::PropertyValue> aSeq(3);
     auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
     if( rProps.mnPreset.has_value() )
@@ -311,7 +311,7 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getBevelAtt
     return aSeq;
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getColorAttributes(
+cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getColorAttributes(
         const Color& rColor, const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
     const OUString& sColorScheme = rColor.getSchemeColorName();
@@ -327,10 +327,10 @@ css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getColorAtt
                                            rColor.getTransformations()) };
 }
 
-css::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getShape3DAttributes(
+cpo::uno::Sequence< css::beans::PropertyValue > Generic3DProperties::getShape3DAttributes(
         const GraphicHelper& rGraphicHelper, ::Color rPhClr )
 {
-    css::uno::Sequence<css::beans::PropertyValue> aSeq(8);
+    cpo::uno::Sequence<css::beans::PropertyValue> aSeq(8);
     auto pSeq = aSeq.getArray();
     sal_Int32 nSize = 0;
     if( mnExtrusionH.has_value() )

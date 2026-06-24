@@ -190,7 +190,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( std::u16string_view a
             aOslDTime.Day, aOslDTime.Month, aOslDTime.Year, false);
 }
 
-uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( std::u16string_view aChars )
+cpo::uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( std::u16string_view aChars )
 {
     if ( !aChars.empty() )
     {
@@ -200,7 +200,7 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( std::u16string_vi
 
         if (!aUtf8Result.empty())
         {
-            uno::Sequence< OUString > aResult( aUtf8Result.size() );
+            cpo::uno::Sequence< OUString > aResult( aUtf8Result.size() );
             OUString* pResultValues = aResult.getArray();
             for (auto const& elem : aUtf8Result)
             {
@@ -211,12 +211,12 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( std::u16string_vi
             return aResult;
         }
     }
-    return uno::Sequence< OUString >();
+    return cpo::uno::Sequence< OUString >();
 }
 
 void OOXMLDocPropHandler::UpdateDocStatistic( std::u16string_view aChars )
 {
-    uno::Sequence< beans::NamedValue > aSet = m_xDocProp->getDocumentStatistics();
+    cpo::uno::Sequence< beans::NamedValue > aSet = m_xDocProp->getDocumentStatistics();
     OUString aName;
 
     switch( m_nBlock )

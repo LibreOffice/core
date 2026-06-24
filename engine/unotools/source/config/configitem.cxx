@@ -165,7 +165,7 @@ ConfigItem::~ConfigItem()
     ConfigManager::getConfigManager().removeConfigItem(*this);
 }
 
-void ConfigItem::CallNotify( const css::uno::Sequence<OUString>& rPropertyNames )
+void ConfigItem::CallNotify( const cpo::uno::Sequence<OUString>& rPropertyNames )
 {
     // the call is forwarded to the virtual Notify() method
     // it is pure virtual, so all classes deriving from ConfigItem have to decide how they
@@ -308,7 +308,7 @@ static void impl_unpackLocalizedProperties(    const   Sequence< OUString >&   l
     }
 }
 
-Sequence< bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUString >& rNames)
+Sequence< bool > ConfigItem::GetReadOnlyStates(const cpo::uno::Sequence< OUString >& rNames)
 {
     sal_Int32 i;
 

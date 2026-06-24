@@ -307,7 +307,7 @@ public:
     virtual double SAL_CALL
     getDouble( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getBytes( sal_Int32 columnIndex ) override;
 
     virtual css::util::Date SAL_CALL

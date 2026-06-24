@@ -249,10 +249,10 @@ SwVbaPageSetup::getServiceImplName()
     return u"SwVbaPageSetup"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaPageSetup::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.PageSetup"_ustr
     };

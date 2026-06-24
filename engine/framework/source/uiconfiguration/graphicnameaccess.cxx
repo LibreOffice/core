@@ -48,7 +48,7 @@ cpo::uno::Any SAL_CALL GraphicNameAccess::getByName( const OUString& aName )
     return cpo::uno::Any( pIter->second );
 }
 
-uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()
 {
     if ( !m_aSeq.hasElements() )
     {

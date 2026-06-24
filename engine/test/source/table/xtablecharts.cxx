@@ -14,7 +14,7 @@
 #include <com/sun/star/table/XTableCharts.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -26,7 +26,7 @@ void XTableCharts::testAddNewRemoveByName()
 {
     uno::Reference<table::XTableCharts> xTC(init(), uno::UNO_QUERY_THROW);
 
-    uno::Sequence<table::CellRangeAddress> aRanges{ table::CellRangeAddress(0, 1, 1, 14, 4) };
+    cpo::uno::Sequence<table::CellRangeAddress> aRanges{ table::CellRangeAddress(0, 1, 1, 14, 4) };
     xTC->addNewByName(u"XTableCharts"_ustr, awt::Rectangle(500, 3000, 25000, 11000), aRanges, true,
                       true);
     CPPUNIT_ASSERT(xTC->hasByName(u"XTableCharts"_ustr));

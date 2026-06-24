@@ -22,7 +22,7 @@
 #include <vector>
 #include <rangelst.hxx>
 #include "workbookhelper.hxx"
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 
 namespace com::sun::star::table { struct CellRangeAddress; }
 namespace oox { class SequenceInputStream; }
@@ -420,7 +420,7 @@ public:
         @return  A uno sequence of cell range addresses as used in API calls.
             Does not check ranges for supported sheet limits.
      */
-    static css::uno::Sequence<css::table::CellRangeAddress>
+    static cpo::uno::Sequence<css::table::CellRangeAddress>
                         toApiSequence(const ScRangeList& orRanges);
 
     bool                isColOverflow() const { return mbColOverflow; }

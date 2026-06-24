@@ -51,6 +51,7 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace ::cpo::uno;
 
 namespace {
 
@@ -73,7 +74,7 @@ struct HitItem
 
 ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentContext >& rxContext,
                                       const uno::Reference< XContentProvider >&  xProvider,
-                                      const uno::Sequence< beans::Property >& seq,
+                                      const cpo::uno::Sequence< beans::Property >& seq,
                                       const URLParameter& aURLParameter,
                                       Databases* pDatabases )
     : ResultSetBase( rxContext,xProvider,seq )

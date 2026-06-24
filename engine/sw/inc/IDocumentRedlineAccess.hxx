@@ -25,7 +25,7 @@
 
 #include <sal/types.h>
 
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <svx/ctredlin.hxx>
 #include <sfx2/redlinerecordingmode.hxx>
@@ -241,10 +241,10 @@ public:
         /*[in]*/const SwPaM& rPam,
         /*[in]*/const OUString& rComment) = 0;
 
-    virtual const css::uno::Sequence <sal_Int8>& GetRedlinePassword() const = 0;
+    virtual const cpo::uno::Sequence <sal_Int8>& GetRedlinePassword() const = 0;
 
     virtual void SetRedlinePassword(
-        /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) = 0;
+        /*[in]*/const cpo::uno::Sequence <sal_Int8>& rNewPassword) = 0;
 
     virtual void UpdateRedlineContentNode(/*[in]*/ SwRedlineTable::size_type nStartPos,
                                           /*[in]*/ SwRedlineTable::size_type nEndPos) const = 0;

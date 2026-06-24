@@ -1386,7 +1386,7 @@ void SwNumRule::GetGrabBagItem(cpo::uno::Any& rVal) const
     if (mpGrabBagItem)
         mpGrabBagItem->QueryValue(rVal);
     else
-        rVal <<= uno::Sequence<beans::PropertyValue>();
+        rVal <<= cpo::uno::Sequence<beans::PropertyValue>();
 }
 
 void SwNumRule::SetGrabBagItem(const cpo::uno::Any& rVal)
@@ -1439,7 +1439,7 @@ namespace numfunc
             void SetToDefault();
 
             /** returns sequence of default bullet configuration property names */
-            static uno::Sequence<OUString> GetPropNames();
+            static cpo::uno::Sequence<OUString> GetPropNames();
 
             /** loads default bullet configuration properties and applies
                 values to internal data */
@@ -1449,7 +1449,7 @@ namespace numfunc
             void InitFont();
 
             /** catches notification about changed default bullet configuration data */
-            virtual void Notify( const uno::Sequence<OUString>& aPropertyNames ) override;
+            virtual void Notify( const cpo::uno::Sequence<OUString>& aPropertyNames ) override;
             virtual void ImplCommit() override;
 
             // default bullet list configuration data
@@ -1506,9 +1506,9 @@ namespace numfunc
         mnLevelChars[9] = 0x2022;
     }
 
-    uno::Sequence<OUString> SwDefBulletConfig::GetPropNames()
+    cpo::uno::Sequence<OUString> SwDefBulletConfig::GetPropNames()
     {
-        uno::Sequence<OUString> aPropNames(13);
+        cpo::uno::Sequence<OUString> aPropNames(13);
         OUString* pNames = aPropNames.getArray();
         pNames[0] = u"BulletFont/FontFamilyname"_ustr;
         pNames[1] = u"BulletFont/FontWeight"_ustr;
@@ -1529,8 +1529,8 @@ namespace numfunc
 
     void SwDefBulletConfig::LoadConfig()
     {
-        uno::Sequence<OUString> aPropNames = GetPropNames();
-        uno::Sequence<cpo::uno::Any> aValues = GetProperties( aPropNames );
+        cpo::uno::Sequence<OUString> aPropNames = GetPropNames();
+        cpo::uno::Sequence<cpo::uno::Any> aValues = GetProperties( aPropNames );
         const cpo::uno::Any* pValues = aValues.getConstArray();
         OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
                 "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed");
@@ -1592,7 +1592,7 @@ namespace numfunc
         mpFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
     }
 
-    void SwDefBulletConfig::Notify( const uno::Sequence<OUString>& )
+    void SwDefBulletConfig::Notify( const cpo::uno::Sequence<OUString>& )
     {
         SetToDefault();
         LoadConfig();
@@ -1648,13 +1648,13 @@ namespace numfunc
             void SetToDefault();
 
             /** returns sequence of configuration property names */
-            static css::uno::Sequence<OUString> GetPropNames();
+            static cpo::uno::Sequence<OUString> GetPropNames();
 
             /** loads configuration properties and applies values to internal data */
             void LoadConfig();
 
             /** catches notification about changed configuration data */
-            virtual void Notify( const css::uno::Sequence<OUString>& aPropertyNames ) override;
+            virtual void Notify( const cpo::uno::Sequence<OUString>& aPropertyNames ) override;
             virtual void ImplCommit() override;
 
             // configuration data
@@ -1685,9 +1685,9 @@ namespace numfunc
         mbChangeIndentOnTabAtFirstPosOfFirstListItem = true;
     }
 
-    css::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames()
+    cpo::uno::Sequence<OUString> SwNumberingUIBehaviorConfig::GetPropNames()
     {
-        css::uno::Sequence<OUString> aPropNames { u"ChangeIndentOnTabAtFirstPosOfFirstListItem"_ustr };
+        cpo::uno::Sequence<OUString> aPropNames { u"ChangeIndentOnTabAtFirstPosOfFirstListItem"_ustr };
 
         return aPropNames;
     }
@@ -1696,8 +1696,8 @@ namespace numfunc
 
     void SwNumberingUIBehaviorConfig::LoadConfig()
     {
-        css::uno::Sequence<OUString> aPropNames = GetPropNames();
-        css::uno::Sequence<cpo::uno::Any> aValues = GetProperties( aPropNames );
+        cpo::uno::Sequence<OUString> aPropNames = GetPropNames();
+        cpo::uno::Sequence<cpo::uno::Any> aValues = GetProperties( aPropNames );
         const cpo::uno::Any* pValues = aValues.getConstArray();
         OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
                 "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed");
@@ -1724,7 +1724,7 @@ namespace numfunc
         }
     }
 
-    void SwNumberingUIBehaviorConfig::Notify( const css::uno::Sequence<OUString>& )
+    void SwNumberingUIBehaviorConfig::Notify( const cpo::uno::Sequence<OUString>& )
     {
         SetToDefault();
         LoadConfig();

@@ -26,7 +26,7 @@
 #include <cppcanvas/canvas.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -82,7 +82,7 @@ namespace
 {
     template < class MetaActionType > void setStateColor( MetaActionType*                   pAct,
                                                           bool&                             rIsColorSet,
-                                                          uno::Sequence< double >&          rColorSequence,
+                                                          cpo::uno::Sequence< double >&          rColorSequence,
                                                           const cppcanvas::CanvasSharedPtr& rCanvas )
     {
         rIsColorSet = pAct->IsSetting();
@@ -527,15 +527,15 @@ namespace cppcanvas::internal
 
                     uno::Reference<rendering::XColorSpace> xColorSpace(
                         rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
-                    const uno::Sequence< double > aStartColor(
+                    const cpo::uno::Sequence< double > aStartColor(
                         vcl::unotools::colorToDoubleSequence( aVCLStartColor,
                                                                 xColorSpace ));
-                    const uno::Sequence< double > aEndColor(
+                    const cpo::uno::Sequence< double > aEndColor(
                         vcl::unotools::colorToDoubleSequence( aVCLEndColor,
                                                                 xColorSpace ));
 
-                    uno::Sequence< uno::Sequence < double > > aColors;
-                    uno::Sequence< double > aStops;
+                    cpo::uno::Sequence< cpo::uno::Sequence < double > > aColors;
+                    cpo::uno::Sequence< double > aStops;
 
                     if( rGradient.GetStyle() == css::awt::GradientStyle_AXIAL )
                     {
@@ -657,7 +657,7 @@ namespace cppcanvas::internal
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
                                                                     aGradInfo.getTextureTransform() );
 
-                    uno::Sequence<cpo::uno::Any> args(comphelper::InitAnyPropertySequence(
+                    cpo::uno::Sequence<cpo::uno::Any> args(comphelper::InitAnyPropertySequence(
                     {
                         {"Colors", cpo::uno::Any(aColors)},
                         {"Stops", cpo::uno::Any(aStops)},
@@ -817,7 +817,7 @@ namespace cppcanvas::internal
 
             if (rFont.GetEmphasisMark() != FontEmphasisMark::NONE)
             {
-                uno::Sequence< beans::PropertyValue > aProperties{ comphelper::makePropertyValue(
+                cpo::uno::Sequence< beans::PropertyValue > aProperties{ comphelper::makePropertyValue(
                     u"EmphasisMark"_ustr, sal_uInt32(rFont.GetEmphasisMark())) };
                 return rParms.mrCanvas->getUNOCanvas()->createFont(aFontRequest,
                                                                 aProperties,
@@ -825,7 +825,7 @@ namespace cppcanvas::internal
             }
 
             return rParms.mrCanvas->getUNOCanvas()->createFont( aFontRequest,
-                                                                uno::Sequence< beans::PropertyValue >(),
+                                                                cpo::uno::Sequence< beans::PropertyValue >(),
                                                                 aFontMatrix );
         }
 

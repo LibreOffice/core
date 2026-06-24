@@ -84,9 +84,9 @@ public:
     virtual bool SAL_CALL isChecked(::sal_Int32 nType) override;
     virtual css::lang::Locale SAL_CALL getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen) override;
     virtual css::lang::Locale SAL_CALL getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen) override;
-    virtual void SAL_CALL changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) override;
-    virtual void SAL_CALL changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) override;
-    virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getLanguagePortions() override;
+    virtual void SAL_CALL changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const cpo::uno::Sequence< css::beans::PropertyValue > & aAttributes) override;
+    virtual void SAL_CALL changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const cpo::uno::Sequence< css::beans::PropertyValue > & aAttributes) override;
+    virtual cpo::uno::Sequence< ::sal_Int32 > SAL_CALL getLanguagePortions() override;
 
     using SwXTextMarkup::GetTextNode;
 

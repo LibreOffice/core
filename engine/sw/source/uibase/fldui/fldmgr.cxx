@@ -90,6 +90,7 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::style;
 using namespace com::sun::star::sdbc;
 using namespace ::com::sun::star;
+using namespace ::cpo::uno;
 
 // groups of fields
 enum

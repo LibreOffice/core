@@ -138,9 +138,9 @@ protected:
         return u"SwVbaBorder"_ustr;
     }
 
-    virtual css::uno::Sequence<OUString> getServiceNames() override
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override
     {
-        static uno::Sequence< OUString > const aServiceNames
+        static cpo::uno::Sequence< OUString > const aServiceNames
         {
             u"ooo.vba.word.Border"_ustr
         };
@@ -353,10 +353,10 @@ SwVbaBorders::getServiceImplName()
     return u"SwVbaBorders"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaBorders::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Borders"_ustr
     };

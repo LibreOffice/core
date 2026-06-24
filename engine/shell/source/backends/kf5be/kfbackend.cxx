@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -72,7 +72,7 @@ private:
         return ServiceName == getSupportedServiceNames()[0];
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.configuration.backend.KF5Backend"_ustr };
     }
@@ -242,7 +242,7 @@ cpo::uno::Any Service::getPropertyValue(OUString const& PropertyName)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_kf5desktop_get_implementation(css::uno::XComponentContext*,
-                                    css::uno::Sequence<cpo::uno::Any> const&)
+                                    cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new Service());
 }

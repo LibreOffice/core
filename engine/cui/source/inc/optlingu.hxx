@@ -21,7 +21,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <svx/langbox.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 
 namespace com::sun::star{
@@ -98,7 +98,7 @@ private:
 
     css::uno::Reference<
         css::linguistic2::XDictionaryList >      xDicList;
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference<
             css::linguistic2::XDictionary > >    aDics;
 

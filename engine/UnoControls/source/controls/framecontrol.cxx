@@ -114,7 +114,7 @@ OUString FrameControl::getImplementationName()
     return u"stardiv.UnoControls.FrameControl"_ustr;
 }
 
-css::uno::Sequence<OUString> FrameControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> FrameControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.FrameControl"_ustr };
 }
@@ -403,7 +403,7 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 stardiv_UnoControls_FrameControl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new unocontrols::FrameControl(context));
 }

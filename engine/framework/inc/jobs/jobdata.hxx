@@ -176,7 +176,7 @@ class JobData final
         OUString                              getEnvironmentDescriptor() const;
         const OUString &                              getService              () const;
         const OUString &                              getEvent                () const;
-        css::uno::Sequence< css::beans::NamedValue > getConfig               () const;
+        cpo::uno::Sequence< css::beans::NamedValue > getConfig               () const;
         const std::vector< css::beans::NamedValue > & getJobConfig            () const;
 
         bool                                     hasConfig               () const;

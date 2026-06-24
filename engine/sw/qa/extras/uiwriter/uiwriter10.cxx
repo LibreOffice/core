@@ -1813,7 +1813,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf123218)
     CPPUNIT_ASSERT(xChartDoc2);
     uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(
         xChartDoc2->getFirstDiagram(), uno::UNO_QUERY_THROW);
-    uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSequence
+    cpo::uno::Sequence<uno::Reference<chart2::XCoordinateSystem>> xCooSysSequence
         = xCooSysContainer->getCoordinateSystems();
     uno::Reference<chart2::XCoordinateSystem> xCoord = xCooSysSequence[0];
     CPPUNIT_ASSERT(xCoord.is());
@@ -1834,7 +1834,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     createSwDoc();
     SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
@@ -1866,7 +1866,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     // Just select the whole B1
     pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Style", cpo::uno::Any(u"Heading 1"_ustr) },
         { "FamilyName", cpo::uno::Any(u"ParagraphStyles"_ustr) },
     });
@@ -1922,7 +1922,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145151)
     createSwDoc();
     SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", cpo::uno::Any(sal_Int32(2)) }, { "Columns", cpo::uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);

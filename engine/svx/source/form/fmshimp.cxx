@@ -3474,7 +3474,7 @@ void FmXFormShell::implAdjustConfigCache_Lock()
 }
 
 
-void FmXFormShell::Notify( const css::uno::Sequence< OUString >& _rPropertyNames)
+void FmXFormShell::Notify( const cpo::uno::Sequence< OUString >& _rPropertyNames)
 {
     DBG_TESTSOLARMUTEX();
     if (impl_checkDisposed_Lock())

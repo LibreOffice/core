@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 #include <com/sun/star/mozilla/MozillaProductType.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
 #include <map>
@@ -61,7 +61,7 @@ namespace connectivity::mozab
         /// @throws css::uno::RuntimeException
         ::sal_Int32 getProfileCount( css::mozilla::MozillaProductType product );
         /// @throws css::uno::RuntimeException
-        ::sal_Int32 getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list );
+        ::sal_Int32 getProfileList( css::mozilla::MozillaProductType product, cpo::uno::Sequence< OUString >& list );
         /// @throws css::uno::RuntimeException
         OUString getDefaultProfile( css::mozilla::MozillaProductType product );
         /// @throws css::uno::RuntimeException

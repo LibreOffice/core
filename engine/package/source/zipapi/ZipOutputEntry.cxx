@@ -37,6 +37,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to deflate Zip entries
@@ -108,7 +109,7 @@ void ZipOutputEntryBase::closeEntry()
 
     m_xCipherContext.clear();
 
-    uno::Sequence< sal_Int8 > aDigestSeq;
+    cpo::uno::Sequence< sal_Int8 > aDigestSeq;
     if ( m_xDigestContext.is() )
     {
         aDigestSeq = m_xDigestContext->finalizeDigestAndDispose();
@@ -119,11 +120,11 @@ void ZipOutputEntryBase::closeEntry()
         m_pCurrentStream->setDigest( aDigestSeq );
 }
 
-void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& deflateBuffer, sal_Int32 nLength )
+void ZipOutputEntryBase::processDeflated( const cpo::uno::Sequence< sal_Int8 >& deflateBuffer, sal_Int32 nLength )
 {
     if ( nLength > 0 )
     {
-        uno::Sequence< sal_Int8 > aTmpBuffer( deflateBuffer.getConstArray(), nLength );
+        cpo::uno::Sequence< sal_Int8 > aTmpBuffer( deflateBuffer.getConstArray(), nLength );
         if (m_bEncryptCurrentEntry && m_xCipherContext.is())
         {
             // Need to update our digest before encryption...
@@ -131,13 +132,13 @@ void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& defla
             if (m_xDigestContext.is() && nDiff)
             {
                 sal_Int32 nEat = ::std::min( nLength, nDiff );
-                uno::Sequence< sal_Int8 > aTmpSeq( aTmpBuffer.getConstArray(), nEat );
+                cpo::uno::Sequence< sal_Int8 > aTmpSeq( aTmpBuffer.getConstArray(), nEat );
                 m_xDigestContext->updateDigest( aTmpSeq );
                 m_nDigested = m_nDigested + static_cast< sal_Int16 >( nEat );
             }
 
-            // FIXME64: uno::Sequence not 64bit safe.
-            uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
+            // FIXME64: cpo::uno::Sequence not 64bit safe.
+            cpo::uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->convertWithCipherContext( aTmpBuffer );
 
             m_xOutStream->writeBytes( aEncryptionBuffer );
 
@@ -156,7 +157,7 @@ void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& defla
         return;
 
     // FIXME64: sequence not 64bit safe.
-    uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
+    cpo::uno::Sequence< sal_Int8 > aEncryptionBuffer = m_xCipherContext->finalizeCipherContextAndDispose();
     if ( aEncryptionBuffer.hasElements() )
     {
         m_xOutStream->writeBytes( aEncryptionBuffer );
@@ -168,7 +169,7 @@ void ZipOutputEntryBase::processDeflated( const uno::Sequence< sal_Int8 >& defla
     }
 }
 
-void ZipOutputEntryBase::processInput( const uno::Sequence< sal_Int8 >& rBuffer )
+void ZipOutputEntryBase::processInput( const cpo::uno::Sequence< sal_Int8 >& rBuffer )
 {
     if (!m_bEncryptCurrentEntry)
         m_aCRC.updateSegment(rBuffer, rBuffer.getLength());
@@ -330,7 +331,7 @@ std::unique_ptr<comphelper::ThreadTask> ZipOutputEntryInThread::createTask(
 void ZipOutputEntry::writeStream(const uno::Reference< io::XInputStream >& xInStream)
 {
     sal_Int32 nLength = 0;
-    uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
+    cpo::uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
     do
     {
         nLength = xInStream->readBytes(aSeq, n_ConstBufferSize);
@@ -361,16 +362,16 @@ void ZipOutputEntryParallel::writeStream(const uno::Reference< io::XInputStream 
 {
     ZipUtils::ThreadedDeflater deflater( DEFAULT_COMPRESSION );
     deflater.deflateWrite(xInStream,
-            [this](const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nLen) {
+            [this](const cpo::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nLen) {
                 if (!m_bEncryptCurrentEntry)
                     m_aCRC.updateSegment(rBuffer, nLen);
             },
-            [this](const uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nLen) {
+            [this](const cpo::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nLen) {
                 processDeflated(rBuffer, nLen);
             }
     );
     finished = true;
-    processDeflated( uno::Sequence< sal_Int8 >(), 0 ); // finish encrypting, etc.
+    processDeflated( cpo::uno::Sequence< sal_Int8 >(), 0 ); // finish encrypting, etc.
     totalIn = deflater.getTotalIn();
     totalOut = deflater.getTotalOut();
     closeEntry();

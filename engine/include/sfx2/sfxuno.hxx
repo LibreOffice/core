@@ -26,21 +26,21 @@
 
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::beans { struct PropertyValue; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 
 class SfxAllItemSet ;
 class SfxItemSet    ;
 class SfxSlot       ;
 
 SFX2_DLLPUBLIC void TransformParameters(            sal_uInt16                          nSlotId     ,
-                            const   css::uno::Sequence< css::beans::PropertyValue >&    seqArgs     ,
+                            const   cpo::uno::Sequence< css::beans::PropertyValue >&    seqArgs     ,
                                     SfxAllItemSet&                                      aSet        ,
                             const   SfxSlot*                                            pSlot = nullptr   );
 
 SFX2_DLLPUBLIC comphelper::SequenceAsHashMap
 TransformItems(sal_uInt16 nSlotId, const SfxItemSet& aSet, const SfxSlot* pSlot = nullptr);
 
-bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
+bool GetEncryptionData_Impl( const SfxItemSet* pSet, cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 
 typedef sal_Int32 FrameSearchFlags;
 

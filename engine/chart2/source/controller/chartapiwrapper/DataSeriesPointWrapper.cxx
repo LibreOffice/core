@@ -61,7 +61,7 @@ using namespace ::chart::wrapper;
 using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::cpo::uno::Any;
 
@@ -223,7 +223,7 @@ void lcl_AddPropertiesToVector_SeriesOnly(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 }
 
-uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
+cpo::uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
 {
     std::vector< css::beans::Property > aProperties;
 
@@ -454,7 +454,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper( std::shared_ptr<Chart2ModelConta
     //need initialize call afterwards
 }
 
-void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL DataSeriesPointWrapper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_PRECOND(aArguments.hasElements(),"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
 
@@ -879,7 +879,7 @@ bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServiceN
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DataSeriesPointWrapper::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DataSeriesPointWrapper::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart.ChartDataRowProperties"_ustr,

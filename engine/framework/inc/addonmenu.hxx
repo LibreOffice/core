@@ -23,7 +23,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::uno { template <class E> class Sequence; }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 
 class MenuBar;
@@ -62,17 +62,17 @@ class AddonMenuManager
         static void       BuildMenu( PopupMenu*  pCurrentMenu,
                                      sal_uInt16      nInsPos,
                                      sal_uInt16&     nUniqueMenuId,
-                                     const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& aAddonMenuDefinition,
+                                     const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& aAddonMenuDefinition,
                                      const css::uno::Reference< css::frame::XFrame >& rFrame,
                                      const OUString& rModuleIdentifier );
 
         // Retrieve the menu entry property values from a sequence
-        static void       GetMenuEntry( const css::uno::Sequence< css::beans::PropertyValue >& rAddonMenuEntry,
+        static void       GetMenuEntry( const cpo::uno::Sequence< css::beans::PropertyValue >& rAddonMenuEntry,
                                         OUString& rTitle,
                                         OUString& rURL,
                                         OUString& rTarget,
                                         OUString& rContext,
-                                        css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rAddonSubMenu );
+                                        cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& rAddonSubMenu );
 };
 
 } // namespace framework

@@ -19,7 +19,7 @@
 #include <emscripten/bind.h>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppu/unotype.hxx>
 #include <sal/types.h>
@@ -71,7 +71,7 @@ inline void checkSequenceSize(sal_Int32 size)
 }
 
 template <typename T>
-void checkSequenceAccess(css::uno::Sequence<T> const& sequence, sal_Int32 index)
+void checkSequenceAccess(cpo::uno::Sequence<T> const& sequence, sal_Int32 index)
 {
     if (index < 0 || index >= sequence.getLength())
     {
@@ -86,14 +86,14 @@ template <typename T> void registerUnoType()
 
 template <typename T> void registerSequence(char const* name)
 {
-    emscripten::class_<css::uno::Sequence<T>>(name)
+    emscripten::class_<cpo::uno::Sequence<T>>(name)
         .constructor(+[](emscripten::val const& members) {
             auto const len = members["length"].as<std::uint32_t>();
             if (len > std::numeric_limits<sal_Int32>::max())
             {
                 throw std::length_error("JavaScript array length too large for C++ UNO sequence");
             }
-            css::uno::Sequence<T> seq(len);
+            cpo::uno::Sequence<T> seq(len);
             auto const p = seq.getArray();
             for (std::uint32_t i = 0; i != len; ++i)
             {
@@ -103,24 +103,24 @@ template <typename T> void registerSequence(char const* name)
         })
         .constructor(+[](sal_Int32 size, [[maybe_unused]] uno_Sequence) {
             checkSequenceSize(size);
-            return css::uno::Sequence<T>(size);
+            return cpo::uno::Sequence<T>(size);
         })
         .function("resize",
-                  +[](css::uno::Sequence<T>& self, sal_Int32 size) {
+                  +[](cpo::uno::Sequence<T>& self, sal_Int32 size) {
                       checkSequenceSize(size);
                       self.realloc(size);
                   })
-        .function("size", &css::uno::Sequence<T>::getLength)
+        .function("size", &cpo::uno::Sequence<T>::getLength)
         .function("get",
-                  +[](css::uno::Sequence<T> const& self, sal_Int32 index) -> T const& {
+                  +[](cpo::uno::Sequence<T> const& self, sal_Int32 index) -> T const& {
                       checkSequenceAccess(self, index);
                       return self[index];
                   })
-        .function("set", +[](css::uno::Sequence<T>& self, sal_Int32 index, T const& value) {
+        .function("set", +[](cpo::uno::Sequence<T>& self, sal_Int32 index, T const& value) {
             checkSequenceAccess(self, index);
             self.getArray()[index] = value;
         });
-    registerUnoType<css::uno::Sequence<T>>();
+    registerUnoType<cpo::uno::Sequence<T>>();
 }
 
 template <typename T> void registerInOutParameter(char const* name)

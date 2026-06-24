@@ -254,9 +254,9 @@ public:
 
     void SetSourceStream( const css::uno::Reference<css::io::XInputStream>& xNewStream );
 
-    static void GetChangeTrackViewSettings(const ScDocument& rDoc, css::uno::Sequence<css::beans::PropertyValue>& rProps);
-    virtual void GetViewSettings(css::uno::Sequence<css::beans::PropertyValue>& rProps) override;
-    virtual void GetConfigurationSettings(css::uno::Sequence<css::beans::PropertyValue>& rProps) override;
+    static void GetChangeTrackViewSettings(const ScDocument& rDoc, cpo::uno::Sequence<css::beans::PropertyValue>& rProps);
+    virtual void GetViewSettings(cpo::uno::Sequence<css::beans::PropertyValue>& rProps) override;
+    virtual void GetConfigurationSettings(cpo::uno::Sequence<css::beans::PropertyValue>& rProps) override;
 
     virtual void exportAnnotationMeta( const css::uno::Reference < css::drawing::XShape >& xShape) override;
 
@@ -272,11 +272,11 @@ public:
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
     virtual void SAL_CALL cancel() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     virtual void DisposingModel() override;
 };

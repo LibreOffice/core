@@ -31,11 +31,11 @@ typedef std::shared_ptr< SvStream > SvStreamPtr;
 
 struct LangSvcEntries
 {
-    css::uno::Sequence< OUString >   aSvcImplNames;
+    cpo::uno::Sequence< OUString >   aSvcImplNames;
 
     sal_Int16   nLastTriedSvcIndex;
 
-    explicit LangSvcEntries( const css::uno::Sequence< OUString > &rSvcImplNames ) :
+    explicit LangSvcEntries( const cpo::uno::Sequence< OUString > &rSvcImplNames ) :
         aSvcImplNames(rSvcImplNames),
         nLastTriedSvcIndex(-1)
     {
@@ -56,23 +56,23 @@ struct LangSvcEntries
 
 struct LangSvcEntries_Spell : public LangSvcEntries
 {
-    css::uno::Sequence< css::uno::Reference< css::linguistic2::XSpellChecker > >  aSvcRefs;
+    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XSpellChecker > >  aSvcRefs;
 
-    explicit LangSvcEntries_Spell( const css::uno::Sequence< OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
+    explicit LangSvcEntries_Spell( const cpo::uno::Sequence< OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
 };
 
 struct LangSvcEntries_Hyph : public LangSvcEntries
 {
-    css::uno::Sequence< css::uno::Reference< css::linguistic2::XHyphenator > >  aSvcRefs;
+    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XHyphenator > >  aSvcRefs;
 
     explicit LangSvcEntries_Hyph( const OUString &rSvcImplName ) : LangSvcEntries( rSvcImplName ) {}
 };
 
 struct LangSvcEntries_Thes : public LangSvcEntries
 {
-    css::uno::Sequence< css::uno::Reference< css::linguistic2::XThesaurus > >  aSvcRefs;
+    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XThesaurus > >  aSvcRefs;
 
-    explicit LangSvcEntries_Thes( const css::uno::Sequence< OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
+    explicit LangSvcEntries_Thes( const cpo::uno::Sequence< OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
 };
 
 
@@ -80,8 +80,8 @@ struct LangSvcEntries_Thes : public LangSvcEntries
 class LinguDispatcher
 {
 public:
-    virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) = 0;
-    virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const = 0;
+    virtual void SetServiceList( const css::lang::Locale &rLocale, const cpo::uno::Sequence< OUString > &rSvcImplNames ) = 0;
+    virtual cpo::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const = 0;
 
 protected:
     ~LinguDispatcher() {}

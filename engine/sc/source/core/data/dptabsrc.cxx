@@ -57,7 +57,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 
@@ -351,7 +351,7 @@ sal_Int32 ScDPSource::GetSourceDim(sal_Int32 nDim)
     return nDim;
 }
 
-uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResults()
+cpo::uno::Sequence< cpo::uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResults()
 {
     CreateRes_Impl(); // create mpColumnResultRoot and mpRowResultRoot
 
@@ -367,12 +367,12 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
     //  allocate full sequence
     //TODO: leave out empty rows???
 
-    uno::Sequence< uno::Sequence<sheet::DataResult> > aSeq( nRowCount );
-    uno::Sequence<sheet::DataResult>* pRowAry = aSeq.getArray();
+    cpo::uno::Sequence< cpo::uno::Sequence<sheet::DataResult> > aSeq( nRowCount );
+    cpo::uno::Sequence<sheet::DataResult>* pRowAry = aSeq.getArray();
     for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
     {
         //  use default values of DataResult
-        pRowAry[nRow] = uno::Sequence<sheet::DataResult>(nColCount);
+        pRowAry[nRow] = cpo::uno::Sequence<sheet::DataResult>(nColCount);
     }
 
     ScDPResultFilterContext aFilterCxt;
@@ -384,8 +384,8 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
     return aSeq;
 }
 
-uno::Sequence<double> ScDPSource::getFilteredResults(
-            const uno::Sequence<sheet::DataPilotFieldFilter>& aFilters )
+cpo::uno::Sequence<double> ScDPSource::getFilteredResults(
+            const cpo::uno::Sequence<sheet::DataPilotFieldFilter>& aFilters )
 {
     if (maResFilterSet.empty())
         getResults(); // Build result tree first.
@@ -407,7 +407,7 @@ uno::Sequence<double> ScDPSource::getFilteredResults(
         }
     }
 
-    return uno::Sequence<double>();
+    return cpo::uno::Sequence<double>();
 }
 
 void SAL_CALL ScDPSource::refresh()
@@ -1135,7 +1135,7 @@ void ScDPSource::FillMemberResults()
     if (nColLevelCount)
     {
         tools::Long nColDimSize = mpColumnResultRoot->GetSize(mpResultData->GetColStartMeasure());
-        mpColumnResults.reset(new uno::Sequence<sheet::MemberResult>[nColLevelCount]);
+        mpColumnResults.reset(new cpo::uno::Sequence<sheet::MemberResult>[nColLevelCount]);
         for (tools::Long i=0; i<nColLevelCount; i++)
             mpColumnResults[i].realloc(nColDimSize);
 
@@ -1149,7 +1149,7 @@ void ScDPSource::FillMemberResults()
     if (nRowLevelCount)
     {
         tools::Long nRowDimSize = mpRowResultRoot->GetSize(mpResultData->GetRowStartMeasure());
-        mpRowResults.reset( new uno::Sequence<sheet::MemberResult>[nRowLevelCount] );
+        mpRowResults.reset( new cpo::uno::Sequence<sheet::MemberResult>[nRowLevelCount] );
         for (tools::Long i=0; i<nRowLevelCount; i++)
             mpRowResults[i].realloc(nRowDimSize);
 
@@ -1159,7 +1159,7 @@ void ScDPSource::FillMemberResults()
     }
 }
 
-const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( const ScDPLevel* pLevel )
+const cpo::uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( const ScDPLevel* pLevel )
 {
     FillMemberResults();
 
@@ -1323,10 +1323,10 @@ cpo::uno::Any SAL_CALL ScDPDimensions::getByName( const OUString& aName )
 //    return cpo::uno::Any();
 }
 
-uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames()
 {
     tools::Long nCount = getCount();
-    uno::Sequence<OUString> aSeq(nCount);
+    cpo::uno::Sequence<OUString> aSeq(nCount);
     OUString* pArr = aSeq.getArray();
     for (tools::Long i=0; i<nCount; i++)
         pArr[i] = getByIndex(i)->getName();
@@ -1518,7 +1518,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 {
     static const SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
-        { SC_UNO_DP_FILTER,   0,  cppu::UnoType<uno::Sequence<sheet::TableFilterField>>::get(), 0, 0 },
+        { SC_UNO_DP_FILTER,   0,  cppu::UnoType<cpo::uno::Sequence<sheet::TableFilterField>>::get(), 0, 0 },
         { SC_UNO_DP_FLAGS,    0,  cppu::UnoType<sal_Int32>::get(),                beans::PropertyAttribute::READONLY, 0 },
         { SC_UNO_DP_FUNCTION, 0,  cppu::UnoType<sheet::GeneralFunction>::get(),   0, 0 },
         { SC_UNO_DP_FUNCTION2, 0,  cppu::UnoType<sal_Int16>::get(),   0, 0 },
@@ -1570,7 +1570,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     else if ( aPropertyName == SC_UNO_DP_FILTER )
     {
         bool bDone = false;
-        uno::Sequence<sheet::TableFilterField> aSeq;
+        cpo::uno::Sequence<sheet::TableFilterField> aSeq;
         if (aValue >>= aSeq)
         {
             sal_Int32 nLength = aSeq.getLength();
@@ -1698,10 +1698,10 @@ cpo::uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropert
             // single filter field: first field equal to selected string
             sheet::TableFilterField aField( sheet::FilterConnection_AND, 0,
                     sheet::FilterOperator_EQUAL, false, 0.0, aSelectedPage );
-            aRet <<= uno::Sequence<sheet::TableFilterField>( &aField, 1 );
+            aRet <<= cpo::uno::Sequence<sheet::TableFilterField>( &aField, 1 );
         }
         else
-            aRet <<= uno::Sequence<sheet::TableFilterField>(0);
+            aRet <<= cpo::uno::Sequence<sheet::TableFilterField>(0);
     }
     else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
         aRet <<= mpLayoutName ? *mpLayoutName : OUString();
@@ -1760,10 +1760,10 @@ cpo::uno::Any SAL_CALL ScDPHierarchies::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames()
 {
     tools::Long nCount = getCount();
-    uno::Sequence<OUString> aSeq(nCount);
+    cpo::uno::Sequence<OUString> aSeq(nCount);
     OUString* pArr = aSeq.getArray();
     for (tools::Long i=0; i<nCount; i++)
         pArr[i] = getByIndex(i)->getName();
@@ -1921,10 +1921,10 @@ cpo::uno::Any SAL_CALL ScDPLevels::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames()
 {
     tools::Long nCount = getCount();
-    uno::Sequence<OUString> aSeq(nCount);
+    cpo::uno::Sequence<OUString> aSeq(nCount);
     OUString* pArr = aSeq.getArray();
     for (tools::Long i=0; i<nCount; i++)
         pArr[i] = getByIndex(i)->getName();
@@ -2107,9 +2107,9 @@ uno::Reference<sheet::XMembersAccess> SAL_CALL ScDPLevel::getMembers()
     return GetMembersObject();
 }
 
-uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults()
+cpo::uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults()
 {
-    const uno::Sequence<sheet::MemberResult>* pRes = pSource->GetMemberResults( this );
+    const cpo::uno::Sequence<sheet::MemberResult>* pRes = pSource->GetMemberResults( this );
     if (pRes)
         return *pRes;
 
@@ -2178,7 +2178,7 @@ void SAL_CALL ScDPLevel::setName( const OUString& /* rNewName */ )
     OSL_FAIL("not implemented");        //TODO: exception?
 }
 
-uno::Sequence<sal_Int16> ScDPLevel::getSubTotals() const
+cpo::uno::Sequence<sal_Int16> ScDPLevel::getSubTotals() const
 {
     //TODO: separate functions for settings and evaluation?
 
@@ -2201,8 +2201,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
         { SC_UNO_DP_SHOWEMPTY, 0, cppu::UnoType<bool>::get(),                                   0, 0 },
         { SC_UNO_DP_REPEATITEMLABELS, 0, cppu::UnoType<bool>::get(),                                   0, 0 },
         { SC_UNO_DP_SORTING,  0,  cppu::UnoType<sheet::DataPilotFieldSortInfo>::get(),         0, 0 },
-        { SC_UNO_DP_SUBTOTAL, 0,  cppu::UnoType<uno::Sequence<sheet::GeneralFunction>>::get(), 0, 0 },
-        { SC_UNO_DP_SUBTOTAL2, 0, cppu::UnoType<uno::Sequence<sal_Int16>>::get(), 0, 0 },
+        { SC_UNO_DP_SUBTOTAL, 0,  cppu::UnoType<cpo::uno::Sequence<sheet::GeneralFunction>>::get(), 0, 0 },
+        { SC_UNO_DP_SUBTOTAL2, 0, cppu::UnoType<cpo::uno::Sequence<sal_Int16>>::get(), 0, 0 },
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPLevelMap_Impl );
@@ -2217,7 +2217,7 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
         bRepeatItemLabels = lcl_GetBoolFromAny(aValue);
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
-        uno::Sequence<sheet::GeneralFunction> aSeq;
+        cpo::uno::Sequence<sheet::GeneralFunction> aSeq;
         aValue >>= aSeq;
         aSubTotals.realloc(aSeq.getLength());
         std::transform(std::cbegin(aSeq), std::cend(aSeq), aSubTotals.getArray(),
@@ -2247,8 +2247,8 @@ cpo::uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyNam
         aRet <<= bRepeatItemLabels;
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
-        const uno::Sequence<sal_Int16> aSeq = getSubTotals();
-        uno::Sequence<sheet::GeneralFunction> aNewSeq(aSeq.getLength());
+        const cpo::uno::Sequence<sal_Int16> aSeq = getSubTotals();
+        cpo::uno::Sequence<sheet::GeneralFunction> aNewSeq(aSeq.getLength());
         std::transform(aSeq.begin(), aSeq.end(), aNewSeq.getArray(),
             [](const sal_Int16 nFunc) -> sheet::GeneralFunction {
                 if (nFunc == sheet::GeneralFunction2::MEDIAN)
@@ -2260,7 +2260,7 @@ cpo::uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyNam
     }
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL2 )
     {
-        uno::Sequence<sal_Int16> aSeq = getSubTotals();        //TODO: avoid extra copy?
+        cpo::uno::Sequence<sal_Int16> aSeq = getSubTotals();        //TODO: avoid extra copy?
         aRet <<= aSeq;
     }
     else if ( aPropertyName == SC_UNO_DP_SORTING )
@@ -2404,7 +2404,7 @@ cpo::uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScDPMembers::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDPMembers::getElementNames()
 {
     return getElementNames( false );
 }
@@ -2428,14 +2428,14 @@ bool SAL_CALL ScDPMembers::hasElements()
 
 // XMembersAccess implementation
 
-uno::Sequence<OUString> SAL_CALL ScDPMembers::getLocaleIndependentElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScDPMembers::getLocaleIndependentElementNames()
 {
     return getElementNames( true );
 }
 
 // end of XMembersAccess implementation
 
-uno::Sequence<OUString> ScDPMembers::getElementNames( bool bLocaleIndependent ) const
+cpo::uno::Sequence<OUString> ScDPMembers::getElementNames( bool bLocaleIndependent ) const
 {
     // Return list of names in sorted order,
     // so it's displayed in that order in the field options dialog.
@@ -2448,7 +2448,7 @@ uno::Sequence<OUString> ScDPMembers::getElementNames( bool bLocaleIndependent ) 
     bool bSort = !rGlobalOrder.empty();
 
     tools::Long nCount = getCount();
-    uno::Sequence<OUString> aSeq(nCount);
+    cpo::uno::Sequence<OUString> aSeq(nCount);
     OUString* pArr = aSeq.getArray();
     for (tools::Long i=0; i<nCount; i++)
         pArr[i] = getByIndex(bSort ? rGlobalOrder[i] : i)->GetNameStr( bLocaleIndependent);

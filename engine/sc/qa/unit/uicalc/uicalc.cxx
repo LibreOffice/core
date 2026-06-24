@@ -352,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
 
     goToCell(u"A1:A20"_ustr);
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "FillDir", cpo::uno::Any(u"B"_ustr) },
                                            { "FillCmd", cpo::uno::Any(u"L"_ustr) },
                                            { "FillStep", cpo::uno::Any(u"1"_ustr) },
@@ -386,7 +386,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
     insertStringToCell(u"A2"_ustr, u"B");
 
     // Add a new comment to A1 and A2
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Comment"_ustr) } });
 
     goToCell(u"A1"_ustr);
@@ -455,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf63805)
 
     goToCell(u"A1:A20"_ustr);
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "FillDir", cpo::uno::Any(u"B"_ustr) },
                                            { "FillCmd", cpo::uno::Any(u"D"_ustr) },
                                            { "FillStep", cpo::uno::Any(u"1"_ustr) },
@@ -502,7 +502,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147894)
     //Select the first row
     goToCell(u"1:1"_ustr);
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "FillDir", cpo::uno::Any(u"R"_ustr) },
                                            { "FillCmd", cpo::uno::Any(u"L"_ustr) },
                                            { "FillStep", cpo::uno::Any(u"1"_ustr) },
@@ -569,7 +569,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf37623)
 
     goToCell(u"A2:A6"_ustr);
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "FillDir", cpo::uno::Any(u"B"_ustr) },
                                            { "FillCmd", cpo::uno::Any(u"A"_ustr) },
                                            { "FillStep", cpo::uno::Any(u"1"_ustr) },
@@ -1698,7 +1698,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf159373)
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
 
     // Without the fix in place, this test would have crashed here
@@ -1718,7 +1718,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf86166)
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
 
     // Without the fix in place, this test would have crashed here
@@ -1734,7 +1734,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158802)
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
 
     dispatchCommand(mxComponent, u".uno:Remove"_ustr, aArgs);
@@ -1754,7 +1754,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf149502_HangOnDeletingSheet1)
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), pDoc->GetTableCount());
 
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "Index", cpo::uno::Any(sal_uInt16(0)) } }));
 
     // Before the fix in place, this test frozen here
@@ -1845,7 +1845,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
 
     // Add a note to A1
     goToCell(u"A1"_ustr);
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Note in A1"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -1902,7 +1902,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
 
     // Add a note to A1
     goToCell(u"A1"_ustr);
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Note in A1"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -2205,7 +2205,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf141440)
 
     // Insert a note to cell A1
     goToCell(u"A1"_ustr);
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = comphelper::InitPropertySequence({ { "Text", cpo::uno::Any(u"Note in A1"_ustr) } });
     dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
 
@@ -2256,7 +2256,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf163019)
     goToCell(u"B2"_ustr);
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     goToCell(u"B2"_ustr);
-    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
         { { "Flags", cpo::uno::Any(u"V"_ustr) },
           { "FormulaCommand", cpo::uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
           { "SkipEmptyCells", cpo::uno::Any(false) },
@@ -2282,7 +2282,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167386_copy_paste_textbox)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xPage->getCount());
 
     // Insert a textbox
-    uno::Sequence<beans::PropertyValue> aArgs(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", cpo::uno::Any(KEY_MOD1) } }));
     dispatchCommand(mxComponent, u".uno:DrawText"_ustr, aArgs);
 
@@ -2341,7 +2341,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158551)
     goToCell(u"A1"_ustr);
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     goToCell(u"B1"_ustr);
-    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
         { { "Flags", cpo::uno::Any(u"SVD"_ustr) },
           { "FormulaCommand", cpo::uno::Any(sal_uInt16(ScPasteFunc::ADD)) },
           { "SkipEmptyCells", cpo::uno::Any(false) },
@@ -2365,7 +2365,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf166767)
 
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::BITMAP)) } });
 
@@ -2392,7 +2392,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf167901)
 
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::BITMAP)) } });
 
@@ -2412,7 +2412,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf159174)
     dispatchCommand(mxComponent, u".uno:SelectUnprotectedCells"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
-    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         { { "SelectedFormat",
             cpo::uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::BITMAP)) } });
 

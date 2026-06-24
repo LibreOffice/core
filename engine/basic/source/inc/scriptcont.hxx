@@ -93,7 +93,7 @@ public:
     virtual bool SAL_CALL HasExecutableCode(const OUString&) override;
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
 
     // Library password handling for 5.0 documents
     void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword );

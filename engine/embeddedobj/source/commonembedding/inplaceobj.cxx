@@ -65,7 +65,7 @@ void SAL_CALL OCommonEmbeddedObject::enableModeless( bool /*bEnable*/ )
 }
 
 void SAL_CALL OCommonEmbeddedObject::translateAccelerators(
-                    const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
+                    const cpo::uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
 {
     // TODO: UI activation related
 }

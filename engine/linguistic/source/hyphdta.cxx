@@ -31,6 +31,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
+using namespace ::cpo::uno;
 
 
 namespace linguistic
@@ -152,7 +153,7 @@ css::uno::Reference <css::linguistic2::XHyphenatedWord> HyphenatedWord::CreateHy
 css::uno::Reference < css::linguistic2::XPossibleHyphens > PossibleHyphens::CreatePossibleHyphens
         (const OUString &rWord, LanguageType nLang,
          const OUString &rHyphWord,
-         const css::uno::Sequence< sal_Int16 > &rPositions)
+         const cpo::uno::Sequence< sal_Int16 > &rPositions)
 {
     return new PossibleHyphens( rWord, nLang, rHyphWord, rPositions );
 }

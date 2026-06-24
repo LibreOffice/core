@@ -382,7 +382,7 @@ sal_Unicode SAL_CALL AccessibleStaticTextBase::getCharacter( sal_Int32 nIndex )
     return GetParagraph(aPos.nPara).getCharacter(aPos.nIndex);
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 
@@ -755,7 +755,7 @@ bool SAL_CALL AccessibleStaticTextBase::scrollSubstringTo( sal_Int32, sal_Int32,
 }
 
 // XAccessibleTextAttributes
-uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttributes( const uno::Sequence< OUString >& RequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttributes( const cpo::uno::Sequence< OUString >& RequestedAttributes )
 {
     // get the intersection of the default attributes of all paragraphs
 
@@ -767,7 +767,7 @@ uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttrib
     const sal_Int32 nParaCount = GetParagraphCount();
     for ( sal_Int32 nPara = 1; nPara < nParaCount; ++nPara )
     {
-        uno::Sequence< beans::PropertyValue > aSeq = GetParagraph( nPara ).getDefaultAttributes( RequestedAttributes );
+        cpo::uno::Sequence< beans::PropertyValue > aSeq = GetParagraph( nPara ).getDefaultAttributes( RequestedAttributes );
         PropertyValueVector aIntersectionVec;
 
         for ( const auto& rDefAttr : aDefAttrVec )
@@ -788,7 +788,7 @@ uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttrib
     return comphelper::containerToSequence(aDefAttrVec);
 }
 
-uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const uno::Sequence< OUString >& RequestedAttributes )
+cpo::uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& RequestedAttributes )
 {
     // get those default attributes of the paragraph, which are not part
     // of the intersection of all paragraphs and add them to the run attributes
@@ -797,9 +797,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunA
 
     EPaM aPos(Index2Internal(nIndex));
     AccessibleEditableTextPara& rPara = GetParagraph( aPos.nPara );
-    uno::Sequence< beans::PropertyValue > aDefAttrSeq = rPara.getDefaultAttributes( RequestedAttributes );
-    uno::Sequence< beans::PropertyValue > aRunAttrSeq = rPara.getRunAttributes( aPos.nIndex, RequestedAttributes );
-    uno::Sequence< beans::PropertyValue > aIntersectionSeq = getDefaultAttributes( RequestedAttributes );
+    cpo::uno::Sequence< beans::PropertyValue > aDefAttrSeq = rPara.getDefaultAttributes( RequestedAttributes );
+    cpo::uno::Sequence< beans::PropertyValue > aRunAttrSeq = rPara.getRunAttributes( aPos.nIndex, RequestedAttributes );
+    cpo::uno::Sequence< beans::PropertyValue > aIntersectionSeq = getDefaultAttributes( RequestedAttributes );
     PropertyValueVector aDiffVec;
 
     for (auto& defAttr : aDefAttrSeq)

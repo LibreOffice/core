@@ -54,7 +54,7 @@ namespace basctl
 
     // libraries
 
-    css::uno::Sequence< OUString > GetMergedLibraryNames(
+    cpo::uno::Sequence< OUString > GetMergedLibraryNames(
         const css::uno::Reference< css::script::XLibraryContainer >& xModLibContainer,
         const css::uno::Reference< css::script::XLibraryContainer >& xDlgLibContainer );
 
@@ -76,7 +76,7 @@ namespace basctl
 
     /// @throws css::container::NoSuchElementException
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > GetMethodNames(
+    cpo::uno::Sequence< OUString > GetMethodNames(
         const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
 
     bool            HasMethod(

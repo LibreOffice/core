@@ -120,7 +120,7 @@ private:
       * @return a sequence containing the property meta data.
       */
     UCBHELPER_DLLPRIVATE
-    virtual css::uno::Sequence< css::beans::Property >
+    virtual cpo::uno::Sequence< css::beans::Property >
     getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) = 0;
 
     /**
@@ -131,7 +131,7 @@ private:
       * @return a sequence containing the command meta data.
       */
     UCBHELPER_DLLPRIVATE
-    virtual css::uno::Sequence< css::ucb::CommandInfo >
+    virtual cpo::uno::Sequence< css::ucb::CommandInfo >
     getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) = 0;
 
     /**
@@ -184,7 +184,7 @@ protected:
       * @param evt is a sequence of property change events.
       */
     void notifyPropertiesChange(
-        const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) const;
+        const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) const;
 
     /**
       * This method can be used to propagate changes of the propertyset
@@ -313,9 +313,9 @@ public:
     virtual void SAL_CALL release() noexcept override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL
     getImplementationId() override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL
     getTypes() override;
 
     // XServiceInfo
@@ -323,7 +323,7 @@ public:
     getImplementationName() override = 0;
     virtual bool SAL_CALL
     supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override = 0;
 
     // XComponent
@@ -359,11 +359,11 @@ public:
     // XPropertiesChangeNotifier
     virtual void SAL_CALL
     addPropertiesChangeListener(
-        const css::uno::Sequence< OUString >& PropertyNames,
+        const cpo::uno::Sequence< OUString >& PropertyNames,
          const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
     virtual void SAL_CALL
     removePropertiesChangeListener(
-        const css::uno::Sequence< OUString >& PropertyNames,
+        const cpo::uno::Sequence< OUString >& PropertyNames,
         const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
     // XCommandInfoChangeNotifier

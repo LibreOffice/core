@@ -78,13 +78,13 @@ public:
     virtual ~JobDispatch() override;
 
     void impl_dispatchEvent  ( const OUString&                                            sEvent    ,
-                               const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
+                               const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
     void impl_dispatchService( const OUString&                                            sService  ,
-                               const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
+                               const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
     void impl_dispatchAlias  ( const OUString&                                            sAlias    ,
-                               const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
+                               const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
 
 public:
@@ -98,28 +98,28 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {u"com.sun.star.frame.ProtocolHandler"_ustr};
     }
 
     // Xinitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& lArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments ) override;
 
     // XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
                                                                                                          const OUString&                                      sTargetFrameName ,
                                                                                                                sal_Int32                                             nSearchFlags     ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor      ) override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor      ) override;
 
     // XNotifyingDispatch
     virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,
-                                                    const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
+                                                    const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
     // XDispatch
     virtual void SAL_CALL dispatch            ( const css::util::URL&                                     aURL      ,
-                                                const css::uno::Sequence< css::beans::PropertyValue >&    lArgs     ) override;
+                                                const cpo::uno::Sequence< css::beans::PropertyValue >&    lArgs     ) override;
     virtual void SAL_CALL addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                 const css::util::URL&                                     aURL      ) override;
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
@@ -158,7 +158,7 @@ JobDispatch::~JobDispatch()
                 the list of initialization arguments
                 First parameter should be the frame reference we need.
 */
-void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< cpo::uno::Any >& lArguments )
+void SAL_CALL JobDispatch::initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments )
 {
     SolarMutexGuard g;
 
@@ -222,11 +222,11 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL JobDispatch::queryDispatch
             NULL references are not skipped. Every result
             match to one given descriptor item.
 */
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobDispatch::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobDispatch::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     // don't pack resulting list!
     sal_Int32 nCount = lDescriptor.getLength();
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatches(nCount);
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatches(nCount);
     auto lDispatchesRange = asNonConstRange(lDispatches);
     for (sal_Int32 i=0; i<nCount; ++i)
         lDispatchesRange[i] = queryDispatch( lDescriptor[i].FeatureURL  ,
@@ -260,7 +260,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL JobD
                 an interested listener for possible results of this operation
 */
 void SAL_CALL JobDispatch::dispatchWithNotification( /*IN*/ const css::util::URL&                                             aURL      ,
-                                                     /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
+                                                     /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                                      /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     JobURL aAnalyzedURL(aURL.Complete);
@@ -295,7 +295,7 @@ void SAL_CALL JobDispatch::dispatchWithNotification( /*IN*/ const css::util::URL
                 an interested listener for possible results of this operation
 */
 void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                                            sEvent    ,
-                                      /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
+                                      /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                       /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // get list of all enabled jobs
@@ -361,7 +361,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
                 an interested listener for possible results of this operation
 */
 void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                                            sService  ,
-                                        /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
+                                        /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                         /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     JobData aCfg(m_xContext);
@@ -404,7 +404,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
                 an interested listener for possible results of this operation
 */
 void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                                            sAlias    ,
-                                      /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
+                                      /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                       /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     JobData aCfg(m_xContext);
@@ -440,7 +440,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
     @see    dispatchWithNotification()
 */
 void SAL_CALL JobDispatch::dispatch( /*IN*/ const css::util::URL&                                  aURL  ,
-                                     /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
+                                     /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
     dispatchWithNotification(aURL, lArgs, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
@@ -466,7 +466,7 @@ void SAL_CALL JobDispatch::removeStatusListener( /*IN*/ const css::uno::Referenc
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_framework_jobs_JobDispatch_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new JobDispatch(context));
 }

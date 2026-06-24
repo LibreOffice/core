@@ -214,7 +214,7 @@ public:
     void EncryptBytes( SvStream& rStrm, ::std::vector<sal_uInt8>& aBytes );
 
 private:
-    void Init( const css::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
+    void Init( const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 
     static sal_uInt32 GetBlockPos( std::size_t nStrmPos );
     static sal_uInt16 GetOffsetInBlock( std::size_t nStrmPos );

@@ -516,7 +516,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OUString&, rIdent, void)
 
             if (newgraphic.is())
             {
-                css::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
+                cpo::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
 
                 if (!pEntry->GetBackupGraphic().is())
                 {
@@ -530,7 +530,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OUString&, rIdent, void)
                     }
                 }
 
-                css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq{
+                cpo::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq{
                     newgraphic
                 };
                 try
@@ -564,11 +564,11 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OUString&, rIdent, void)
         SvxConfigEntry* pEntry
             = weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry));
 
-        css::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq{
+        cpo::uno::Sequence<css::uno::Reference<css::graphic::XGraphic>> aGraphicSeq{
             pEntry->GetBackupGraphic()
         };
 
-        css::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
+        cpo::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
 
         try
         {
@@ -614,7 +614,7 @@ IMPL_LINK(SvxToolbarConfigPage, ModifyItemHdl, const OUString&, rIdent, void)
             bNeedsApply = true;
         }
 
-        css::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
+        cpo::uno::Sequence<OUString> aURLSeq{ pEntry->GetCommand() };
 
         try
         {

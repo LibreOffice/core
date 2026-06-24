@@ -180,7 +180,7 @@ GraphicHelper* ExcelFilter::implCreateGraphicHelper() const
     return new ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
-bool SAL_CALL ExcelFilter::filter( const css::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
+bool SAL_CALL ExcelFilter::filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
 {
     if ( XmlFilterBase::filter( rDescriptor ) )
         return true;
@@ -215,7 +215,7 @@ OUString ExcelFilter::getImplementationName()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_oox_xls_ExcelFilter_get_implementation(css::uno::XComponentContext* context,
-                                                         css::uno::Sequence<cpo::uno::Any> const &)
+                                                         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new oox::xls::ExcelFilter(context));
 }

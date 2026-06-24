@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(AutoRedactionTest, testImageRedaction)
 
     CPPUNIT_ASSERT_EQUAL(nTotalCount, nImageCount);
 
-    uno::Sequence<beans::PropertyValue> aArgs
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"RedactImages"_ustr, true) };
     dispatchCommand(mxComponent, u".uno:AutoRedactDoc"_ustr, aArgs);
 

@@ -49,10 +49,10 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<cpo::uno::Any>&) override;
+    virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>&) override;
 
     // XMaterialHolder
     virtual cpo::uno::Any SAL_CALL getMaterial() override;
@@ -61,12 +61,12 @@ public:
 
 }
 
-void SAL_CALL FontIdentificator::initialize(const css::uno::Sequence<cpo::uno::Any>& i_rArgs)
+void SAL_CALL FontIdentificator::initialize(const cpo::uno::Sequence<cpo::uno::Any>& i_rArgs)
 {
     if( !ImplGetSVData() )
         return; // VCL not initialized
 
-    css::uno::Sequence<sal_Int8> aFontBuf;
+    cpo::uno::Sequence<sal_Int8> aFontBuf;
     for( const auto& rArg : i_rArgs )
     {
         if( rArg >>= aFontBuf )
@@ -153,7 +153,7 @@ bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName
     return cppu::supportsService(this, i_rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL FontIdentificator::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL FontIdentificator::getSupportedServiceNames()
 {
     return { u"com.sun.star.awt.FontIdentificator"_ustr };
 }
@@ -162,7 +162,7 @@ css::uno::Sequence<OUString> SAL_CALL FontIdentificator::getSupportedServiceName
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 vcl_FontIdentificator_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new vcl::FontIdentificator());
 }

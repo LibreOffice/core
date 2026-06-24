@@ -32,7 +32,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <sal/log.hxx>
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
 using namespace ::com::sun::star;

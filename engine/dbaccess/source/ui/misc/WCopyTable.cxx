@@ -388,9 +388,9 @@ public:
     virtual bool                isView() const override;
     virtual void                copyUISettingsTo( const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
     virtual void                copyFilterAndSortingTo(const css::uno::Reference< css::sdbc::XConnection >& _xConnection, const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
-    virtual css::uno::Sequence< OUString >
+    virtual cpo::uno::Sequence< OUString >
                                 getColumnNames() const override;
-    virtual css::uno::Sequence< OUString >
+    virtual cpo::uno::Sequence< OUString >
                                 getPrimaryKeyColumnNames() const override;
     virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const override;
     virtual OUString            getSelectStatement() const override;

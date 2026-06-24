@@ -32,7 +32,7 @@ namespace {
 
 template<class T>
 bool
-getRequestArgument(uno::Sequence< cpo::uno::Any > const & rArguments,
+getRequestArgument(cpo::uno::Sequence< cpo::uno::Any > const & rArguments,
                    std::u16string_view rKey,
                    T * pValue)
 {
@@ -54,7 +54,7 @@ getRequestArgument(uno::Sequence< cpo::uno::Any > const & rArguments,
 }
 
 bool
-getResourceNameRequestArgument(uno::Sequence< cpo::uno::Any > const & rArguments,
+getResourceNameRequestArgument(cpo::uno::Sequence< cpo::uno::Any > const & rArguments,
                                OUString * pValue)
 {
     if (!getRequestArgument(rArguments, u"Uri",  pValue))
@@ -80,7 +80,7 @@ UUIInteractionHelper::handleInteractiveIOException(
     ucb::InteractiveIOException aIoException;
     if (aAnyRequest >>= aIoException)
     {
-        uno::Sequence< cpo::uno::Any > aRequestArguments;
+        cpo::uno::Sequence< cpo::uno::Any > aRequestArguments;
         ucb::InteractiveAugmentedIOException aAugmentedIoException;
         if (aAnyRequest >>= aAugmentedIoException)
             aRequestArguments = aAugmentedIoException.Arguments;

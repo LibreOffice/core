@@ -36,11 +36,11 @@ using namespace ::chart::DataSeriesProperties;
 namespace chart
 {
 
-uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const rtl::Reference< ChartType >& xChartType
+cpo::uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const rtl::Reference< ChartType >& xChartType
                                                                          , bool bSwapXAndY
                                                                          , const rtl::Reference< DataSeries >& xSeries )
 {
-    uno::Sequence < sal_Int32 > aRet;
+    cpo::uno::Sequence < sal_Int32 > aRet;
     if( !xChartType.is() )
         return aRet;
 
@@ -302,9 +302,9 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
     return nNumberOfSeries;
 }
 
-uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments( const rtl::Reference< ChartType >& xChartType )
+cpo::uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments( const rtl::Reference< ChartType >& xChartType )
 {
-    uno::Sequence < sal_Int32 > aRet;
+    cpo::uno::Sequence < sal_Int32 > aRet;
     if( !xChartType.is() )
         return aRet;
 

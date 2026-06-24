@@ -23,7 +23,7 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
 
-using com::sun::star::uno::Sequence;
+using cpo::uno::Sequence;
 using com::sun::star::uno::Reference;
 using cpo::uno::Any;
 using com::sun::star::uno::RuntimeException;

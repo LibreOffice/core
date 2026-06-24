@@ -26,7 +26,7 @@ void XDataPilotFieldGrouping::testCreateNameGroup()
     uno::Reference< container::XNameAccess > xNameAccess( xDataPilotField->getItems(), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xNameAccess->hasElements());
 
-    uno::Sequence< OUString > aElements = xNameAccess->getElementNames();
+    cpo::uno::Sequence< OUString > aElements = xNameAccess->getElementNames();
     xDataPilotFieldGrouping->createNameGroup( aElements );
 }
 

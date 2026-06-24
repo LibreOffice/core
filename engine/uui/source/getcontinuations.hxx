@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star {
     namespace task {
@@ -44,7 +44,7 @@ bool setContinuation(
 
 template< class t1, class t2 >
 void getContinuations(
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
     css::uno::Reference< t1 > * pContinuation1,
     css::uno::Reference< t2 > * pContinuation2)
@@ -60,7 +60,7 @@ void getContinuations(
 
 template< class t1, class t2, class t3 >
 void getContinuations(
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
     css::uno::Reference< t1 > * pContinuation1,
     css::uno::Reference< t2 > * pContinuation2,
@@ -79,7 +79,7 @@ void getContinuations(
 
 template< class t1, class t2, class t3, class t4 >
 void getContinuations(
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
     css::uno::Reference< t1 > * pContinuation1,
     css::uno::Reference< t2 > * pContinuation2,

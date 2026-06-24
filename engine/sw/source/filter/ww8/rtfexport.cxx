@@ -360,7 +360,7 @@ void RtfExport::WriteFormData(const ::sw::mark::Fieldmark& rFieldmark)
     if (rFieldmark.GetFieldname() == ODF_FORMDROPDOWN)
     {
         m_pAttrOutput->RunText().append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX "1");
-        uno::Sequence<OUString> entries;
+        cpo::uno::Sequence<OUString> entries;
         if (auto const it = rFieldmark.GetParameters()->find(ODF_FORMDROPDOWN_LISTENTRY);
             it != rFieldmark.GetParameters()->end())
         {
@@ -396,7 +396,7 @@ void RtfExport::WriteHyperlinkData(const ::sw::mark::Fieldmark& /*rFieldmark*/)
 
 void RtfExport::DoComboBox(const OUString& /*rName*/, const OUString& /*rHelp*/,
                            const OUString& /*rToolTip*/, const OUString& /*rSelected*/,
-                           const uno::Sequence<OUString>& /*rListItems*/)
+                           const cpo::uno::Sequence<OUString>& /*rListItems*/)
 {
     // this is handled in RtfAttributeOutput::OutputFlyFrame_Impl
 }
@@ -624,7 +624,7 @@ void RtfExport::WriteUserProps()
         {
             uno::Reference<beans::XPropertySet> xPropertySet(xUserDefinedProperties,
                                                              uno::UNO_QUERY);
-            const uno::Sequence<beans::Property> aProperties
+            const cpo::uno::Sequence<beans::Property> aProperties
                 = xPropertySet->getPropertySetInfo()->getProperties();
 
             for (const beans::Property& rProperty : aProperties)
@@ -699,7 +699,7 @@ void RtfExport::WriteDocVars()
 
     uno::Reference<text::XTextFieldsSupplier> xModel(pDocShell->GetModel(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xTextFieldMasters = xModel->getTextFieldMasters();
-    uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
+    cpo::uno::Sequence<rtl::OUString> aMasterNames = xTextFieldMasters->getElementNames();
     if (!aMasterNames.hasElements())
     {
         return;

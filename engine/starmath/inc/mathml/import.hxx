@@ -129,12 +129,12 @@ public:
     /** Imports view settings formula
     */
     virtual void
-    SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+    SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
 
     /** Imports configurations settings formula
     */
     virtual void SetConfigurationSettings(
-        const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
+        const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
 
     /** Set syntax version
     */

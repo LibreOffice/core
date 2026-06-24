@@ -67,7 +67,7 @@ public:
     /**
        Return the sequence of properties. The sequence is sorted by name.
      */
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() = 0;
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() = 0;
     /**
        Return the property with the name rPropertyName.
        @param rPropertyName the name of the property.
@@ -92,7 +92,7 @@ public:
        indicates an unknown property name.
      */
     virtual sal_Int32 SAL_CALL fillHandles(
-        /*out*/ sal_Int32 * pHandles, const css::uno::Sequence< ::rtl::OUString > & rPropNames ) = 0;
+        /*out*/ sal_Int32 * pHandles, const cpo::uno::Sequence< ::rtl::OUString > & rPropNames ) = 0;
 };
 
 /**
@@ -122,7 +122,7 @@ public:
        @param bSorted    indicates that the elements are sorted.
      */
     OPropertyArrayHelper(
-        const css::uno::Sequence< css::beans::Property > & aProps,
+        const cpo::uno::Sequence< css::beans::Property > & aProps,
         bool bSorted = true );
 
     /**
@@ -146,7 +146,7 @@ public:
     /**
        Return the sequence of properties. The sequence is sorted by name.
      */
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() SAL_OVERRIDE;
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL getProperties() SAL_OVERRIDE;
     /**
        Return the property with the name rPropertyName.
        @param rPropertyName the name of the property.
@@ -171,7 +171,7 @@ public:
        indicates an unknown property name.
      */
     virtual sal_Int32 SAL_CALL fillHandles(
-        /*out*/sal_Int32 * pHandles, const css::uno::Sequence< ::rtl::OUString > & rPropNames ) SAL_OVERRIDE;
+        /*out*/sal_Int32 * pHandles, const cpo::uno::Sequence< ::rtl::OUString > & rPropNames ) SAL_OVERRIDE;
 
 protected:
     /** reserved for future use. do not use.
@@ -182,7 +182,7 @@ private:
     void init( bool bSorted );
 
     /** The sequence generated from the pProperties array. */
-    css::uno::Sequence< css::beans::Property > aInfos;
+    cpo::uno::Sequence< css::beans::Property > aInfos;
 
     /**
        True, If the values of the handles are sorted in the same way as the names
@@ -228,7 +228,7 @@ public:
     /**
       Return all id's under which at least one interface is added.
      */
-    css::uno::Sequence< sal_Int32 > SAL_CALL getContainedTypes() const;
+    cpo::uno::Sequence< sal_Int32 > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
@@ -400,7 +400,7 @@ public:
 
         @throws css::uno::RuntimeException
      */
-    css::uno::Sequence< css::uno::Type > getTypes();
+    cpo::uno::Sequence< css::uno::Type > getTypes();
 
     /**
        Send a disposing notification to the listeners in the containers aBoundLC
@@ -458,21 +458,21 @@ public:
 
     // XMultiPropertySet
     virtual void SAL_CALL setPropertyValues(
-        const css::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const css::uno::Sequence< cpo::uno::Any >& Values ) SAL_OVERRIDE;
+        const cpo::uno::Sequence< ::rtl::OUString >& PropertyNames,
+        const cpo::uno::Sequence< cpo::uno::Any >& Values ) SAL_OVERRIDE;
 
-    virtual css::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues(
-        const css::uno::Sequence< ::rtl::OUString >& PropertyNames ) SAL_OVERRIDE;
+    virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues(
+        const cpo::uno::Sequence< ::rtl::OUString >& PropertyNames ) SAL_OVERRIDE;
 
     virtual void SAL_CALL addPropertiesChangeListener(
-        const css::uno::Sequence< ::rtl::OUString >& PropertyNames,
+        const cpo::uno::Sequence< ::rtl::OUString >& PropertyNames,
         const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removePropertiesChangeListener(
         const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) SAL_OVERRIDE;
 
     virtual void SAL_CALL firePropertiesChangeEvent(
-        const css::uno::Sequence< ::rtl::OUString >& PropertyNames,
+        const cpo::uno::Sequence< ::rtl::OUString >& PropertyNames,
         const css::uno::Reference< css::beans::XPropertiesChangeListener > & Listener ) SAL_OVERRIDE;
 
     /**

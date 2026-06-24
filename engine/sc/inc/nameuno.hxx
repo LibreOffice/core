@@ -81,8 +81,8 @@ public:
     virtual void SAL_CALL   setType( sal_Int32 nType ) override;
 
                             /// XFormulaTokens
-    virtual css::uno::Sequence< css::sheet::FormulaToken > SAL_CALL getTokens() override;
-    virtual void SAL_CALL   setTokens( const css::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
+    virtual cpo::uno::Sequence< css::sheet::FormulaToken > SAL_CALL getTokens() override;
+    virtual void SAL_CALL   setTokens( const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
                             /// XNamed
     virtual OUString SAL_CALL getName() override;
@@ -110,7 +110,7 @@ public:
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScNamedRangesObj : public ::cppu::WeakImplHelper<
@@ -162,7 +162,7 @@ public:
 
                             /// XNameAccess
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             /// XIndexAccess
@@ -204,7 +204,7 @@ public:
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScGlobalNamedRangesObj final : public ScNamedRangesObj
@@ -267,7 +267,7 @@ public:
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScLabelRangesObj final : public ::cppu::WeakImplHelper<
@@ -308,7 +308,7 @@ public:
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -54,7 +54,7 @@ namespace {
 
 class PropertyEventSequence
 {
-    uno::Sequence< beans::PropertyChangeEvent > m_aSeq;
+    cpo::uno::Sequence< beans::PropertyChangeEvent > m_aSeq;
     sal_uInt32                                  m_nPos;
 
 public:
@@ -64,7 +64,7 @@ public:
     void append( const beans::PropertyChangeEvent& rEvt )
     { m_aSeq.getArray()[ m_nPos ] = rEvt; ++m_nPos; }
 
-    const uno::Sequence< beans::PropertyChangeEvent >& getEvents()
+    const cpo::uno::Sequence< beans::PropertyChangeEvent >& getEvents()
     { m_aSeq.realloc( m_nPos ); return m_aSeq; }
 };
 
@@ -300,7 +300,7 @@ sal_Int32 SAL_CALL ContentImplHelper::createCommandIdentifier()
 
 // virtual
 void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
-        const uno::Sequence< OUString >& PropertyNames,
+        const cpo::uno::Sequence< OUString >& PropertyNames,
         const uno::Reference< beans::XPropertiesChangeListener >& Listener )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -328,7 +328,7 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
 
 // virtual
 void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
-        const uno::Sequence< OUString >& PropertyNames,
+        const cpo::uno::Sequence< OUString >& PropertyNames,
         const uno::Reference< beans::XPropertiesChangeListener >& Listener )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -642,7 +642,7 @@ bool ContentImplHelper::removeAdditionalPropertySet()
 }
 
 void ContentImplHelper::notifyPropertiesChange(
-    const uno::Sequence< beans::PropertyChangeEvent >& evt ) const
+    const cpo::uno::Sequence< beans::PropertyChangeEvent >& evt ) const
 {
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;

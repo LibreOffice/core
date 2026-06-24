@@ -48,7 +48,7 @@ public:
 
     // XHelperInterface
     OUString getServiceImplName() override;
-    css::uno::Sequence<OUString> getServiceNames() override;
+    cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

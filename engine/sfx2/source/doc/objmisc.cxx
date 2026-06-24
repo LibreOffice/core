@@ -285,7 +285,7 @@ bool SfxObjectShell::IsModified() const
 
     if (pImpl->mxObjectContainer)
     {
-        const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        const cpo::uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
         for ( const auto& rName : aNames )
         {
             uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( rName );
@@ -1580,10 +1580,10 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
 // perhaps rename to CallScript once we get rid of the existing CallScript
 // and Call, CallBasic, CallStarBasic methods
 ErrCode SfxObjectShell::CallXScript( const OUString& rScriptURL,
-        const css::uno::Sequence< cpo::uno::Any >& aParams,
+        const cpo::uno::Sequence< cpo::uno::Any >& aParams,
         cpo::uno::Any& aRet,
-        css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< cpo::uno::Any >& aOutParam,
+        cpo::uno::Sequence< sal_Int16 >& aOutParamIndex,
+        cpo::uno::Sequence< cpo::uno::Any >& aOutParam,
         bool bRaiseError,
         const cpo::uno::Any* pCaller )
 {
@@ -1826,7 +1826,7 @@ bool SfxObjectShell::UseInteractionToHandleError(
             cpo::uno::Any aInteraction;
             rtl::Reference<::comphelper::OInteractionAbort> pAbort = new ::comphelper::OInteractionAbort();
             rtl::Reference<::comphelper::OInteractionApprove> pApprove = new ::comphelper::OInteractionApprove();
-            uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations{
+            cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations{
                 pAbort, pApprove
             };
 
@@ -1943,7 +1943,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
 
             uno::Reference< security::XDocumentDigitalSignatures > xSigner( security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion) );
 
-            uno::Sequence<security::DocumentSignatureInformation> aInfo = rDocShell.GetDocumentSignatureInformation( true, xSigner );
+            cpo::uno::Sequence<security::DocumentSignatureInformation> aInfo = rDocShell.GetDocumentSignatureInformation( true, xSigner );
 
             if ( aInfo.hasElements() )
             {

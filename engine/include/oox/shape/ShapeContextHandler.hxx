@@ -112,7 +112,7 @@ public:
     bool isWordprocessingCanvas() const { return mxWordprocessingCanvasContext ? true : false; }
 
     void setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
-    void setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
+    void setMediaDescriptor(const cpo::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
 
     void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper);
 
@@ -146,7 +146,7 @@ private:
     rtl::Reference<WpgContext> mxWpgContext;
     rtl::Reference<drawingml::ChartGraphicDataContext> mxChartShapeContext;
     css::uno::Reference<css::document::XDocumentProperties> mxDocumentProperties;
-    css::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
+    cpo::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
 
     ::rtl::Reference< ShapeFilterBase > mxShapeFilterBase;
     drawingml::ThemePtr mpThemePtr;

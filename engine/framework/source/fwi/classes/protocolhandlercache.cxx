@@ -173,7 +173,7 @@ HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
     : ConfigItem(sPackage)
     , m_pCache(nullptr)
 {
-    css::uno::Sequence< OUString > lListenPaths { SETNAME_HANDLER };
+    cpo::uno::Sequence< OUString > lListenPaths { SETNAME_HANDLER };
     EnableNotification(lListenPaths);
 }
 
@@ -191,11 +191,11 @@ HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
 void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHash )
 {
     // list of all uno implementation names without encoding
-    css::uno::Sequence< OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::ConfigNameFormat::LocalPath );
+    cpo::uno::Sequence< OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::ConfigNameFormat::LocalPath );
     sal_Int32 nSourceCount = lNames.getLength();
     sal_Int32 nTargetCount = nSourceCount;
     // list of all full qualified path names of configuration entries
-    css::uno::Sequence< OUString > lFullNames ( nTargetCount );
+    cpo::uno::Sequence< OUString > lFullNames ( nTargetCount );
     auto lFullNamesRange = asNonConstRange(lFullNames);
     // expand names to full path names
     sal_Int32 nSource=0;
@@ -213,7 +213,7 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
     }
 
     // get values at all
-    css::uno::Sequence< cpo::uno::Any > lValues = GetProperties( lFullNames );
+    cpo::uno::Sequence< cpo::uno::Any > lValues = GetProperties( lFullNames );
     SAL_WARN_IF( lFullNames.getLength()!=lValues.getLength(), "fwk", "HandlerCFGAccess::read(): Miss some configuration values of handler set!" );
 
     // fill structures
@@ -225,7 +225,7 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
         aHandler.m_sUNOName = ::utl::extractFirstFromConfigurationPath(lNames[nSource]);
 
         // unpack all values of this handler
-        css::uno::Sequence< OUString > lTemp;
+        cpo::uno::Sequence< OUString > lTemp;
         lValues[nTarget] >>= lTemp;
         aHandler.m_lProtocols = Converter::convert_seqOUString2OUStringList(lTemp);
 
@@ -241,7 +241,7 @@ void HandlerCFGAccess::read( HandlerHash& rHandlerHash, PatternHash& rPatternHas
     }
 }
 
-void HandlerCFGAccess::Notify(const css::uno::Sequence< OUString >& /*lPropertyNames*/)
+void HandlerCFGAccess::Notify(const cpo::uno::Sequence< OUString >& /*lPropertyNames*/)
 {
     HandlerHash aHandler;
     PatternHash aPattern;

@@ -40,10 +40,10 @@ namespace connectivity::calc
 
         // XDriver
         virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL
-                connect( const OUString& url, const css::uno::Sequence<
+                connect( const OUString& url, const cpo::uno::Sequence<
                             css::beans::PropertyValue >& info ) override;
         virtual bool SAL_CALL acceptsURL( const OUString& url ) override;
-        virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
     };
 
 }

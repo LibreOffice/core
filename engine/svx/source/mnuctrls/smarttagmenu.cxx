@@ -41,7 +41,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void FillMenu();
@@ -70,13 +70,13 @@ void SmartTagMenuController::statusChanged( const css::frame::FeatureStateEvent&
 {
     resetPopupMenu( m_xPopupMenu );
 
-    css::uno::Sequence< css::beans::PropertyValue > aProperties;
+    cpo::uno::Sequence< css::beans::PropertyValue > aProperties;
     if ( !rEvent.IsEnabled || !( rEvent.State >>= aProperties ) )
         return;
 
-    css::uno::Sequence< css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > aActionComponents;
-    css::uno::Sequence< css::uno::Sequence< sal_Int32 > > aActionIndices;
-    css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > > aStringKeyMaps;
+    cpo::uno::Sequence< cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > aActionComponents;
+    cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > > aActionIndices;
+    cpo::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > > aStringKeyMaps;
     css::uno::Reference< css::text::XTextRange > xTextRange;
     css::uno::Reference< css::frame::XController > xController;
     css::lang::Locale aLocale;
@@ -114,9 +114,9 @@ void SmartTagMenuController::FillMenu()
     sal_uInt16 nMenuId = 1;
     sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
 
-    const css::uno::Sequence< css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence = m_pSmartTagItem->GetActionComponentsSequence();
-    const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rActionIndicesSequence = m_pSmartTagItem->GetActionIndicesSequence();
-    const css::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps = m_pSmartTagItem->GetStringKeyMaps();
+    const cpo::uno::Sequence< cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence = m_pSmartTagItem->GetActionComponentsSequence();
+    const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rActionIndicesSequence = m_pSmartTagItem->GetActionIndicesSequence();
+    const cpo::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps = m_pSmartTagItem->GetStringKeyMaps();
     const css::lang::Locale& rLocale = m_pSmartTagItem->GetLocale();
     const OUString aApplicationName = m_pSmartTagItem->GetApplicationName();
     const OUString aRangeText = m_pSmartTagItem->GetRangeText();
@@ -128,8 +128,8 @@ void SmartTagMenuController::FillMenu()
         css::uno::Reference< css::container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[i];
 
         // Get all actions references associated with the current smart tag type
-        const css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > >& rActionComponents = rActionComponentsSequence[i];
-        const css::uno::Sequence< sal_Int32 >& rActionIndices = rActionIndicesSequence[i];
+        const cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > >& rActionComponents = rActionComponentsSequence[i];
+        const cpo::uno::Sequence< sal_Int32 >& rActionIndices = rActionIndicesSequence[i];
 
         if ( !rActionComponents.hasElements() || !rActionIndices.hasElements() )
             continue;
@@ -233,7 +233,7 @@ OUString SmartTagMenuController::getImplementationName()
     return u"com.sun.star.comp.svx.SmartTagMenuController"_ustr;
 }
 
-css::uno::Sequence< OUString > SmartTagMenuController::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SmartTagMenuController::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.PopupMenuController"_ustr };
 }
@@ -241,7 +241,7 @@ css::uno::Sequence< OUString > SmartTagMenuController::getSupportedServiceNames(
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_svx_SmartTagMenuController_get_implementation(
     css::uno::XComponentContext* xContext,
-    css::uno::Sequence< cpo::uno::Any > const & )
+    cpo::uno::Sequence< cpo::uno::Any > const & )
 {
     return cppu::acquire( new SmartTagMenuController( xContext ) );
 }

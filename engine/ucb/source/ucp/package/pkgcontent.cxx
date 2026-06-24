@@ -61,7 +61,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contentidentifier.hxx>
@@ -103,19 +103,19 @@ ContentProperties::ContentProperties( const OUString& rContentType )
 }
 
 
-uno::Sequence< ucb::ContentInfo >
+cpo::uno::Sequence< ucb::ContentInfo >
 ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
 {
     if ( bIsFolder )
     {
-        uno::Sequence< beans::Property > aProps( 1 );
+        cpo::uno::Sequence< beans::Property > aProps( 1 );
         aProps.getArray()[ 0 ] = beans::Property(
                     u"Title"_ustr,
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
 
-        uno::Sequence< ucb::ContentInfo > aSeq( 2 );
+        cpo::uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
         // Folder.
         aSeq.getArray()[ 0 ].Type
@@ -136,7 +136,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
     }
     else
     {
-        return uno::Sequence< ucb::ContentInfo >( 0 );
+        return cpo::uno::Sequence< ucb::ContentInfo >( 0 );
     }
 }
 
@@ -315,7 +315,7 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 
 // virtual
-uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 {
     if ( isFolder() )
     {
@@ -365,7 +365,7 @@ OUString SAL_CALL Content::getImplementationName()
 
 
 // virtual
-uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 {
     return { isFolder()? u"com.sun.star.ucb.PackageFolderContent"_ustr:u"com.sun.star.ucb.PackageStreamContent"_ustr } ;
 }
@@ -398,7 +398,7 @@ cpo::uno::Any SAL_CALL Content::execute(
         // getPropertyValues
 
 
-        uno::Sequence< beans::Property > Properties;
+        cpo::uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -418,7 +418,7 @@ cpo::uno::Any SAL_CALL Content::execute(
         // setPropertyValues
 
 
-        uno::Sequence< beans::PropertyValue > aProperties;
+        cpo::uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             ucbhelper::cancelCommandExecution(
@@ -517,7 +517,7 @@ cpo::uno::Any SAL_CALL Content::execute(
         // Remove own and all children's persistent data.
         if ( !removeData() )
         {
-            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
                 {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
             }));
@@ -585,7 +585,7 @@ cpo::uno::Any SAL_CALL Content::execute(
 
         if( !flushData() )
         {
-            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
                 {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
             }));
@@ -628,7 +628,7 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 
 
 // virtual
-uno::Sequence< ucb::ContentInfo > SAL_CALL
+cpo::uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
 {
     return m_aProps.getCreatableContentsInfo( m_aUri );
@@ -686,7 +686,7 @@ OUString Content::getParentURL()
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Reference< uno::XComponentContext >& rxContext,
-                const uno::Sequence< beans::Property >& rProperties,
+                const cpo::uno::Sequence< beans::Property >& rProperties,
                 ContentProvider* pProvider,
                 const OUString& rContentId )
 {
@@ -718,7 +718,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 // static
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
         const uno::Reference< uno::XComponentContext >& rxContext,
-        const uno::Sequence< beans::Property >& rProperties,
+        const cpo::uno::Sequence< beans::Property >& rProperties,
         const ContentProperties& rData,
         const rtl::Reference< ::ucbhelper::ContentProviderImplHelper >&
             rProvider,
@@ -866,7 +866,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             beans::Property(
                 u"CreatableContentsInfo"_ustr,
                 -1,
-                cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
+                cppu::UnoType<cpo::uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
                 | beans::PropertyAttribute::READONLY ),
             cpo::uno::Any(
@@ -934,7 +934,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
 
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
-                        const uno::Sequence< beans::Property >& rProperties )
+                        const cpo::uno::Sequence< beans::Property >& rProperties )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     return getPropertyValues( m_xContext,
@@ -945,15 +945,15 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 }
 
 
-uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
-        const uno::Sequence< beans::PropertyValue >& rValues,
+cpo::uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
+        const cpo::uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Sequence< cpo::uno::Any > aRet( rValues.getLength() );
+    cpo::uno::Sequence< cpo::uno::Any > aRet( rValues.getLength() );
     auto aRetRange = asNonConstRange(aRet);
-    uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
+    cpo::uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
     beans::PropertyChangeEvent aEvent;
@@ -1170,7 +1170,7 @@ uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
             // (all non-root folders of a package have the same encryption key).
             if ( m_aUri.isRootFolder() || m_aProps.bIsDocument )
             {
-                uno::Sequence < sal_Int8 > aNewValue;
+                cpo::uno::Sequence < sal_Int8 > aNewValue;
                 if ( rValue.Value >>= aNewValue )
                 {
                     if ( aNewValue != m_aProps.aEncryptionKey )
@@ -1306,7 +1306,7 @@ uno::Sequence< cpo::uno::Any > Content::setPropertyValues(
         {
             if ( !storeData( uno::Reference< io::XInputStream >() ) )
             {
-                uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
                 {
                     {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
                 }));
@@ -1373,7 +1373,7 @@ cpo::uno::Any Content::open(
             if ( !xIn.is() )
             {
                 // No interaction if we are not persistent!
-                uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
                 {
                     {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
                 }));
@@ -1390,7 +1390,7 @@ cpo::uno::Any Content::open(
 
             try
             {
-                uno::Sequence< sal_Int8 > aBuffer;
+                cpo::uno::Sequence< sal_Int8 > aBuffer;
                 while (true)
                 {
                     sal_Int32 nRead = xIn->readSomeBytes( aBuffer, 65536 );
@@ -1427,7 +1427,7 @@ cpo::uno::Any Content::open(
                 if ( !xIn.is() )
                 {
                     // No interaction if we are not persistent!
-                    uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+                    cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
                     {
                         {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
                     }));
@@ -1590,7 +1590,7 @@ void Content::insert(
 
     if ( !storeData( xStream ) )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"Uri", cpo::uno::Any(m_xIdentifier->getContentIdentifier())}
         }));
@@ -1698,7 +1698,7 @@ void Content::transfer(
     {
         if ( aId.startsWith( rInfo.SourceURL ) )
         {
-            uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+            cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
             {
                 {"Uri", cpo::uno::Any(rInfo.SourceURL)}
             }));
@@ -1735,7 +1735,7 @@ void Content::transfer(
 
     if ( !xSource.is() )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"Uri", cpo::uno::Any(xId->getContentIdentifier())}
         }));
@@ -1764,7 +1764,7 @@ void Content::transfer(
         = static_cast< Content * >( createNewContent( aContentInfo ).get() );
     if ( !xTarget.is() )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"Folder", cpo::uno::Any(aId)}
         }));
@@ -1781,7 +1781,7 @@ void Content::transfer(
     // 2) Copy data from source content to child content.
 
 
-    uno::Sequence< beans::Property > aSourceProps
+    cpo::uno::Sequence< beans::Property > aSourceProps
                     = xSource->getPropertySetInfo( xEnv )->getProperties();
     sal_Int32 nCount = aSourceProps.getLength();
 
@@ -1793,7 +1793,7 @@ void Content::transfer(
         uno::Reference< sdbc::XRow > xRow
             = xSource->getPropertyValues( aSourceProps );
 
-        uno::Sequence< beans::PropertyValue > aValues( nCount );
+        cpo::uno::Sequence< beans::PropertyValue > aValues( nCount );
         beans::PropertyValue* pValues = aValues.getArray();
 
         const beans::Property* pProps = aSourceProps.getConstArray();
@@ -1919,7 +1919,7 @@ void Content::transfer(
     // Remove all persistent data of source and its children.
     if ( !xSource->removeData() )
     {
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"Uri", cpo::uno::Any(xSource->m_xIdentifier->getContentIdentifier())}
         }));
@@ -2376,7 +2376,7 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
                 return false;
             }
 
-            uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(isFolder()) };
+            cpo::uno::Sequence< cpo::uno::Any > aArgs{ cpo::uno::Any(isFolder()) };
 
             uno::Reference< uno::XInterface > xNew
                 = xFac->createInstanceWithArguments( aArgs );

@@ -44,7 +44,7 @@ private:
 
 private:
     BarPositionHelper m_aMainPosHelper;
-    css::uno::Sequence<sal_Int32> m_aGapwidthSequence;
+    cpo::uno::Sequence<sal_Int32> m_aGapwidthSequence;
 };
 
 } // namespace chart

@@ -20,7 +20,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <oaidl.h>
 
@@ -57,7 +57,7 @@ namespace connectivity::ado
         OLEVariant(float x);
         OLEVariant(const double &x);
         OLEVariant(IDispatch* pDispInterface);
-        OLEVariant(const css::uno::Sequence< sal_Int8 >& x);
+        OLEVariant(const cpo::uno::Sequence< sal_Int8 >& x);
         OLEVariant& operator=(const OLEVariant& varSrc);
         // Assign a const VARIANT& (::VariantCopy handles everything)
 
@@ -105,7 +105,7 @@ namespace connectivity::ado
         css::util::Date getDate()       const;
         css::util::Time getTime()       const;
         css::util::DateTime getDateTime() const;
-        css::uno::Sequence<sal_Int8> getByteSequence() const;
+        cpo::uno::Sequence<sal_Int8> getByteSequence() const;
         SAFEARRAY*      getUI1SAFEARRAYPtr() const;
         cpo::uno::Any makeAny() const;
 

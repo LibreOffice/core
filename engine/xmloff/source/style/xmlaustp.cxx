@@ -308,15 +308,15 @@ void SvXMLAutoStylePoolP::RegisterDefinedName( XmlStyleFamily nFamily,
 }
 
 void SvXMLAutoStylePoolP::GetRegisteredNames(
-    uno::Sequence<sal_Int32>& rFamilies,
-    uno::Sequence<OUString>& rNames )
+    cpo::uno::Sequence<sal_Int32>& rFamilies,
+    cpo::uno::Sequence<OUString>& rNames )
 {
     m_pImpl->GetRegisteredNames( rFamilies, rNames );
 }
 
 void SvXMLAutoStylePoolP::RegisterNames(
-    uno::Sequence<sal_Int32> const & aFamilies,
-    uno::Sequence<OUString> const & aNames )
+    cpo::uno::Sequence<sal_Int32> const & aFamilies,
+    cpo::uno::Sequence<OUString> const & aNames )
 {
     assert(aFamilies.getLength() == aNames.getLength());
 

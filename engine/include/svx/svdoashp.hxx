@@ -45,7 +45,7 @@ public:
     bool        bMirroredY;
     double      fObjectRotation;
 
-    css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+    cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
 };
 
 enum class CustomShapeHandleModes

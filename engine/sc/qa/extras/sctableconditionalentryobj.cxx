@@ -24,7 +24,7 @@
 #include <unonames.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 
 #include <comphelper/propertyvalue.hxx>
@@ -80,7 +80,7 @@ uno::Reference<uno::XInterface> ScTableConditionalEntryObj::init()
     xSheetConditionalEntries.set(xPropSet->getPropertyValue(SC_UNONAME_CONDFMT),
                                  uno::UNO_QUERY_THROW);
 
-    uno::Sequence<beans::PropertyValue> aPropValue{
+    cpo::uno::Sequence<beans::PropertyValue> aPropValue{
         comphelper::makePropertyValue(SC_UNONAME_STYLENAME, u"Result2"_ustr),
         comphelper::makePropertyValue(SC_UNONAME_FORMULA1, u"$Sheet1.$B$5"_ustr),
         comphelper::makePropertyValue(SC_UNONAME_FORMULA2, u""_ustr),

@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 
 
-uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::impl_staticGetSupportedServiceNames()
 {
     return
     {
@@ -62,14 +62,14 @@ uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstance()
 
 
 uno::Reference< uno::XInterface > SAL_CALL VCLBitmapCreator::createInstanceWithArguments(
-                                                const uno::Sequence< cpo::uno::Any >& aArguments )
+                                                const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
         throw ( uno::Exception,
                 uno::RuntimeException)
 {
     if ( aArguments.getLength() != 1 )
         throw uno::Exception(); // TODO
 
-    uno::Sequence< sal_Int8 > aOrigBitmap;
+    cpo::uno::Sequence< sal_Int8 > aOrigBitmap;
     if ( !( aArguments[0] >>= aOrigBitmap ) )
         throw uno::Exception(); // TODO
 
@@ -98,7 +98,7 @@ bool SAL_CALL VCLBitmapCreator::supportsService( const OUString& ServiceName )
 }
 
 
-uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL VCLBitmapCreator::getSupportedServiceNames()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

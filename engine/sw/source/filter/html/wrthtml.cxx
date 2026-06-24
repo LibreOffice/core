@@ -183,7 +183,7 @@ std::unique_ptr<SwHTMLNumRuleInfo> SwHTMLWriter::ReleaseNextNumInfo()
 
 void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
 {
-    uno::Sequence<beans::PropertyValue> aArgs = rMedium.GetArgs().getAsConstPropertyValueList();
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = rMedium.GetArgs().getAsConstPropertyValueList();
     if (const SfxStringItem* pItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ))
     {
         const OUString sFilterOptions = pItem->GetValue();
@@ -229,7 +229,7 @@ void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
         aStoreMap[u"NoPrettyPrint"_ustr] <<= true;
     }
 
-    const uno::Sequence<OUString> aOptionSeq
+    const cpo::uno::Sequence<OUString> aOptionSeq
         = comphelper::string::convertCommaSeparated(rFilterOptions);
     for (const auto& rOption : aOptionSeq)
     {
@@ -247,7 +247,7 @@ void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
 }
 
 void SwHTMLWriter::SetupFilterFromPropertyValues(
-    const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues)
+    const cpo::uno::Sequence<css::beans::PropertyValue>& rPropertyValues)
 {
     comphelper::SequenceAsHashMap aStoreMap(rPropertyValues);
     auto it = aStoreMap.find(u"RTFOLEMimeType"_ustr);

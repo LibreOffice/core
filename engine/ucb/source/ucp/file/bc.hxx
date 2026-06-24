@@ -103,7 +103,7 @@ namespace fileaccess {
         virtual bool SAL_CALL
         supportsService( const OUString& ServiceName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL
+        virtual cpo::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() override;
 
 
@@ -140,11 +140,11 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         addPropertiesChangeListener(
-            const css::uno::Sequence< OUString >& PropertyNames,
+            const cpo::uno::Sequence< OUString >& PropertyNames,
             const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
         virtual void SAL_CALL
-        removePropertiesChangeListener( const css::uno::Sequence< OUString >& PropertyNames,
+        removePropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames,
                                         const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
         // XPropertyContainer
@@ -171,7 +171,7 @@ namespace fileaccess {
 
         // XContentCreator
 
-        virtual css::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
+        virtual cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
         queryCreatableContentsInfo() override;
 
         virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
@@ -223,12 +223,12 @@ namespace fileaccess {
         css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
             sal_Int32 nMyCommandIdentifier,
-            const css::uno::Sequence< css::beans::Property >& PropertySet );
+            const cpo::uno::Sequence< css::beans::Property >& PropertySet );
 
-        css::uno::Sequence< cpo::uno::Any >
+        cpo::uno::Sequence< cpo::uno::Any >
         setPropertyValues(
             sal_Int32 nMyCommandIdentifier,
-            const css::uno::Sequence< css::beans::PropertyValue >& Values );
+            const cpo::uno::Sequence< css::beans::PropertyValue >& Values );
 
         css::uno::Reference< css::ucb::XDynamicResultSet >
         open(

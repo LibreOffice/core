@@ -72,9 +72,9 @@ Sequence<Type> OComboBoxModel::_getTypes()
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OComboBoxModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OComboBoxModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
@@ -346,7 +346,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<css::io::XObjectOutputStream
         nAnyMask |= BOUNDCOLUMN;
     _rxOutStream << nAnyMask;
 
-    css::uno::Sequence<OUString> aListSourceSeq(&m_aListSource, 1);
+    cpo::uno::Sequence<OUString> aListSourceSeq(&m_aListSource, 1);
     _rxOutStream << aListSourceSeq;
     _rxOutStream << static_cast<sal_Int16>(m_eListSourceType);
 
@@ -412,7 +412,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
     else // nVersion == 4
     {
         m_aListSource.clear();
-        css::uno::Sequence<OUString> aListSource;
+        cpo::uno::Sequence<OUString> aListSource;
         _rxInStream >> aListSource;
         for (const OUString& rToken : aListSource)
             m_aListSource += rToken;
@@ -445,8 +445,8 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
         &&  !hasExternalListSource()
         )
     {
-        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( css::uno::Sequence<OUString>() ) );
-        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<cpo::uno::Any>() ) );
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( cpo::uno::Sequence<OUString>() ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( cpo::uno::Sequence<cpo::uno::Any>() ) );
     }
 
     if (nVersion > 0x0004)
@@ -665,7 +665,7 @@ void OComboBoxModel::loadData( bool _bForce )
     // Set String-Sequence at ListBox
     setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( comphelper::containerToSequence(aStringList) ) );
     // Reset TypedItemList, no matching data.
-    setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<cpo::uno::Any>() ) );
+    setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( cpo::uno::Sequence<cpo::uno::Any>() ) );
 }
 
 
@@ -759,7 +759,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
     if ( !bAddToList )
         return true;
 
-    css::uno::Sequence<OUString> aStringItemList;
+    cpo::uno::Sequence<OUString> aStringItemList;
     if ( !(getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList) )
         return true;
 
@@ -778,7 +778,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         aStringItemList.getArray()[ nOldLen ] = sNewValue;
 
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( aStringItemList ) );
-        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<cpo::uno::Any>() ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( cpo::uno::Sequence<cpo::uno::Any>() ) );
     }
 
     return true;
@@ -859,9 +859,9 @@ OComboBoxControl::OComboBoxControl(const Reference<XComponentContext>& _rxContex
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL OComboBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OComboBoxControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -874,14 +874,14 @@ css::uno::Sequence<OUString> SAL_CALL OComboBoxControl::getSupportedServiceNames
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OComboBoxModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OComboBoxModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OComboBoxControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OComboBoxControl(component));
 }

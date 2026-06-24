@@ -128,15 +128,15 @@ class OOXMLDocument final : public writerfilter::Reference<Stream>
     css::uno::Reference<css::frame::XModel> mxModel;
     rtl::Reference<SwFmDrawPage> mxDrawPage;
     css::uno::Reference<css::xml::dom::XDocument> mxGlossaryDocDom;
-    css::uno::Sequence < css::uno::Sequence< css::beans::NamedValue > > mxGlossaryDomList;
+    cpo::uno::Sequence < cpo::uno::Sequence< css::beans::NamedValue > > mxGlossaryDomList;
     /// Stack of shape contexts, 1 element for VML, 1 element / nesting level for drawingML.
     std::stack< rtl::Reference<oox::shape::ShapeContextHandler> > maShapeContexts;
     css::uno::Reference<css::xml::dom::XDocument> mxThemeDom;
-    css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
-    css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
+    cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
+    cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
     css::uno::Reference<css::xml::dom::XDocument> mxCustomXmlProsDom;
     css::uno::Reference<css::io::XInputStream> mxEmbeddings;
-    css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
+    cpo::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
     std::vector<css::beans::PropertyValue> m_aEmbeddings;
     std::set<OUString> maSeenStreams;
     bool mbIsSubstream;
@@ -151,7 +151,7 @@ class OOXMLDocument final : public writerfilter::Reference<Stream>
     sal_Int32 mnProgressEndPos;
     /// DocumentBaseURL
     OUString m_rBaseURL;
-    css::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
+    cpo::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
     /// Graphic mapper
     css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
     // For a document there is a single theme in document.xml.rels
@@ -189,7 +189,7 @@ public:
     OOXMLDocument(OOXMLStream::Pointer_t pStream,
             css::uno::Reference<css::task::XStatusIndicator> xStatusIndicator,
             bool bSkipImages,
-            const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
+            const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
             const rtl::Reference<oox::shape::ShapeFilterBase>& rxShapeFilterBase);
     virtual ~OOXMLDocument() override;
 
@@ -291,16 +291,16 @@ public:
     /// Pop context of a previously pushed drawingML shape.
     void popShapeContext();
     const css::uno::Reference<css::xml::dom::XDocument>& getThemeDom() const;
-    const css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomList() const;
-    const css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomPropsList() const;
+    const cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomList() const;
+    const cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomPropsList() const;
     const css::uno::Reference<css::xml::dom::XDocument>& getGlossaryDocDom() const;
-    const css::uno::Sequence<css::uno::Sequence< css::beans::NamedValue> >&  getGlossaryDomList() const;
-    const css::uno::Sequence<css::beans::PropertyValue >&  getEmbeddingsList() const;
+    const cpo::uno::Sequence<cpo::uno::Sequence< css::beans::NamedValue> >&  getGlossaryDomList() const;
+    const cpo::uno::Sequence<css::beans::PropertyValue >&  getEmbeddingsList() const;
 
     void incrementProgress();
     bool IsSkipImages() const { return mbSkipImages; };
     OUString const& GetDocumentBaseURL() const { return m_rBaseURL; };
-    const css::uno::Sequence<css::beans::PropertyValue>& getMediaDescriptor() const;
+    const cpo::uno::Sequence<css::beans::PropertyValue>& getMediaDescriptor() const;
 
     const css::uno::Reference<css::graphic::XGraphicMapper>& getGraphicMapper() const
     {
@@ -339,7 +339,7 @@ public:
     static OOXMLDocument *
     createDocument(const OOXMLStream::Pointer_t& pStream,
                  const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator,
-                 bool bSkipImage, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
+                 bool bSkipImage, const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
 
 };
 

@@ -74,7 +74,7 @@ namespace cmis
     }
 
     uno::Reference< sdbc::XRow > RepoContent::getPropertyValues(
-            const uno::Sequence< beans::Property >& rProperties,
+            const cpo::uno::Sequence< beans::Property >& rProperties,
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xContext );
@@ -151,7 +151,7 @@ namespace cmis
         return repo;
     }
 
-    uno::Sequence< beans::Property > RepoContent::getProperties(
+    cpo::uno::Sequence< beans::Property > RepoContent::getProperties(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
     {
         static const beans::Property aGenericProperties[] =
@@ -171,10 +171,10 @@ namespace cmis
         };
 
         const int nProps = SAL_N_ELEMENTS(aGenericProperties);
-        return uno::Sequence< beans::Property > ( aGenericProperties, nProps );
+        return cpo::uno::Sequence< beans::Property > ( aGenericProperties, nProps );
     }
 
-    uno::Sequence< ucb::CommandInfo > RepoContent::getCommands(
+    cpo::uno::Sequence< ucb::CommandInfo > RepoContent::getCommands(
             const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
     {
         static const ucb::CommandInfo aCommandInfoTable[] =
@@ -188,10 +188,10 @@ namespace cmis
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
             ( u"getPropertyValues"_ustr,
-              -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
+              -1, cppu::UnoType<cpo::uno::Sequence< beans::Property >>::get() ),
             ucb::CommandInfo
             ( u"setPropertyValues"_ustr,
-              -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
+              -1, cppu::UnoType<cpo::uno::Sequence< beans::PropertyValue >>::get() ),
 
             // Optional standard commands
             ucb::CommandInfo
@@ -200,7 +200,7 @@ namespace cmis
         };
 
         const int nProps = SAL_N_ELEMENTS(aCommandInfoTable);
-        return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, nProps );
+        return cpo::uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, nProps );
     }
 
     OUString RepoContent::getParentURL( )
@@ -219,7 +219,7 @@ namespace cmis
        return u"com.sun.star.comp.CmisRepoContent"_ustr;
     }
 
-    uno::Sequence< OUString > SAL_CALL RepoContent::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > SAL_CALL RepoContent::getSupportedServiceNames()
     {
        return { u"com.sun.star.ucb.Content"_ustr };
     }
@@ -240,7 +240,7 @@ namespace cmis
 
         if ( aCommand.Name == "getPropertyValues" )
         {
-            uno::Sequence< beans::Property > Properties;
+            cpo::uno::Sequence< beans::Property > Properties;
             if ( !( aCommand.Argument >>= Properties ) )
                 ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
             aRet <<= getPropertyValues( Properties, xEnv );
@@ -275,7 +275,7 @@ namespace cmis
         // TODO Implement me
     }
 
-    uno::Sequence< uno::Type > SAL_CALL RepoContent::getTypes()
+    cpo::uno::Sequence< uno::Type > SAL_CALL RepoContent::getTypes()
     {
         static cppu::OTypeCollection s_aFolderCollection
             (CPPU_TYPE_REF( lang::XTypeProvider ),

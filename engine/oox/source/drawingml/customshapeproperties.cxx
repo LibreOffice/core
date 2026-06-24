@@ -173,14 +173,14 @@ void CustomShapeProperties::pushToPropSet(
         {
             static constexpr OUString sCustomShapeGeometry(u"CustomShapeGeometry"_ustr);
             cpo::uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
-            uno::Sequence< beans::PropertyValue > aGeoPropSeq;
+            cpo::uno::Sequence< beans::PropertyValue > aGeoPropSeq;
             if ( aGeoPropSet >>= aGeoPropSeq )
             {
                 for ( auto& rGeoProp : asNonConstRange(aGeoPropSeq) )
                 {
                     if ( rGeoProp.Name == u"AdjustmentValues"_ustr )
                     {
-                        uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+                        cpo::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
                         if ( rGeoProp.Value >>= aAdjustmentSeq )
                         {
                             auto aAdjustmentSeqRange = asNonConstRange(aAdjustmentSeq);
@@ -268,7 +268,7 @@ void CustomShapeProperties::pushToPropSet(
 
         if (!maConnectionSiteList.empty())
         {
-            css::uno::Sequence<EnhancedCustomShapeParameterPair> seqGluePoints;
+            cpo::uno::Sequence<EnhancedCustomShapeParameterPair> seqGluePoints;
             seqGluePoints.realloc(maConnectionSiteList.size());
             sal_Int32 nId = 0;
             for (auto& rGluePoint : asNonConstRange(seqGluePoints))

@@ -617,11 +617,11 @@ public:
         OUString          Subject;        // subject
         OUString          Keywords;       // keywords
         css::util::DateTime ModificationDate;
-        css::uno::Sequence<OUString> Contributor; // http://purl.org/dc/elements/1.1/contributor
+        cpo::uno::Sequence<OUString> Contributor; // http://purl.org/dc/elements/1.1/contributor
         OUString          Coverage;       // http://purl.org/dc/elements/1.1/coverage
         OUString          Identifier;     // http://purl.org/dc/elements/1.1/identifier
-        css::uno::Sequence<OUString> Publisher; // http://purl.org/dc/elements/1.1/publisher
-        css::uno::Sequence<OUString> Relation; // http://purl.org/dc/elements/1.1/relation
+        cpo::uno::Sequence<OUString> Publisher; // http://purl.org/dc/elements/1.1/publisher
+        cpo::uno::Sequence<OUString> Relation; // http://purl.org/dc/elements/1.1/relation
         OUString          Rights;         // http://purl.org/dc/elements/1.1/rights
         OUString          Source;         // http://purl.org/dc/elements/1.1/source
         OUString          Type;           // http://purl.org/dc/elements/1.1/type

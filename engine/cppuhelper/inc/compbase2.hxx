@@ -102,17 +102,17 @@ public:
     }
 
     // css::lang::XTypeProvider
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
+    virtual cpo::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     {
-        static const css::uno::Sequence<css::uno::Type> aTypeList{
+        static const cpo::uno::Sequence<css::uno::Type> aTypeList{
             cppu::UnoType<css::uno::XWeak>::get(), cppu::UnoType<css::lang::XComponent>::get(),
             cppu::UnoType<css::lang::XTypeProvider>::get(), cppu::UnoType<Ifc>::get()...
         };
         return aTypeList;
     }
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
+    virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
     {
-        return css::uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 
 private:

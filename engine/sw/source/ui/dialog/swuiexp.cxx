@@ -47,14 +47,14 @@ public:
     {
         return cppu::supportsService(this, serviceName);
     }
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return { u"com.sun.star.text.DialogFactoryService"_ustr };
     }
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL
-    getSomething(const ::css::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
+    getSomething(const ::cpo::uno::Sequence<::sal_Int8>& /*aIdentifier*/) override
     {
         SwAbstractDialogFactory* pFactory = &::swui::GetFactory();
         return reinterpret_cast<sal_Int64>(pFactory);
@@ -66,7 +66,7 @@ public:
 extern "C" {
 SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_text_DialogFactoryService_get_implementation(css::uno::XComponentContext*,
-                                                          css::uno::Sequence<cpo::uno::Any> const&)
+                                                          cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new DialogFactoryService);
 }

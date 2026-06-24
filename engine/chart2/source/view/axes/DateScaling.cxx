@@ -112,7 +112,7 @@ bool SAL_CALL DateScaling::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DateScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DateScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_DateScaling };
 }
@@ -195,7 +195,7 @@ bool SAL_CALL InverseDateScaling::supportsService( const OUString& rServiceName 
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL InverseDateScaling::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL InverseDateScaling::getSupportedServiceNames()
 {
     return { lcl_aServiceName_InverseDateScaling };
 }

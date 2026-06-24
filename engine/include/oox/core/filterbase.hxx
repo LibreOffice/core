@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
@@ -197,7 +197,7 @@ public:
     virtual bool SAL_CALL
                         supportsService( const OUString& rServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString > SAL_CALL
                         getSupportedServiceNames() override;
 
     // com.sun.star.lang.XInitialization interface ----------------------------
@@ -213,7 +213,7 @@ public:
             filter implementations may support different arguments.
      */
     virtual void SAL_CALL initialize(
-                            const css::uno::Sequence< cpo::uno::Any >& rArgs ) override;
+                            const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
     // com.sun.star.document.XImporter interface ------------------------------
 
@@ -228,7 +228,7 @@ public:
     // com.sun.star.document.XFilter interface --------------------------------
 
     virtual bool SAL_CALL filter(
-                            const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
+                            const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
 
     virtual void SAL_CALL cancel() override;
 
@@ -251,7 +251,7 @@ protected:
 
 private:
     void                setMediaDescriptor(
-                            const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq );
+                            const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq );
 
     /** Derived classes may create a specialized graphic helper, e.g. for
         resolving palette colors. */

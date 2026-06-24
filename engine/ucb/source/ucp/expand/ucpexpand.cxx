@@ -60,7 +60,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( OUString const & serviceName ) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProvider
     virtual uno::Reference< ucb::XContent > SAL_CALL queryContent(
@@ -93,7 +93,7 @@ OUString ExpandContentProviderImpl::getImplementationName()
 }
 
 
-uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
 {
     check();
     return {
@@ -168,7 +168,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_expand_ExpandContentProviderImpl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new ExpandContentProviderImpl(context));
 }

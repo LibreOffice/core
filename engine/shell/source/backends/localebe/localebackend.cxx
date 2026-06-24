@@ -317,14 +317,14 @@ bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames()
 {
     return { u"com.sun.star.configuration.backend.LocaleBackend"_ustr };
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 shell_LocaleBackend_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new LocaleBackend());
 }

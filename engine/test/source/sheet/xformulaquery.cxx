@@ -16,7 +16,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
@@ -38,7 +38,7 @@ void XFormulaQuery::testQueryDependents()
 
     uno::Reference<sheet::XFormulaQuery> xFormulaQuery(init(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xSCR = xFormulaQuery->queryDependents(false);
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddress = xSCR->getRangeAddresses();
+    cpo::uno::Sequence<table::CellRangeAddress> aCellRangeAddress = xSCR->getRangeAddresses();
 
     CPPUNIT_ASSERT_EQUAL(aCellRangeAddress[m_nIdxDependents], m_aCellRangeAddressDependents);
 }
@@ -57,7 +57,7 @@ void XFormulaQuery::testQueryPrecedents()
 
     uno::Reference<sheet::XFormulaQuery> xFormulaQuery(init(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xSCR = xFormulaQuery->queryPrecedents(false);
-    uno::Sequence<table::CellRangeAddress> aCellRangeAddress = xSCR->getRangeAddresses();
+    cpo::uno::Sequence<table::CellRangeAddress> aCellRangeAddress = xSCR->getRangeAddresses();
 
     CPPUNIT_ASSERT_EQUAL(aCellRangeAddress[m_nIdxPrecedents], m_aCellRangeAddressPrecedents);
 }

@@ -154,7 +154,7 @@ ScAutoFormatsObj::~ScAutoFormatsObj()
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ScAutoFormatsObj_get_implementation(css::uno::XComponentContext*, css::uno::Sequence<cpo::uno::Any> const &)
+ScAutoFormatsObj_get_implementation(css::uno::XComponentContext*, cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
@@ -303,11 +303,11 @@ cpo::uno::Any SAL_CALL ScAutoFormatsObj::getByName( const OUString& aName )
     return cpo::uno::Any(uno::Reference< container::XNamed >(xFormat));
 }
 
-uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
+cpo::uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
 {
     SolarMutexGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetOrCreateAutoFormat();
-    uno::Sequence<OUString> aSeq(pFormats->size());
+    cpo::uno::Sequence<OUString> aSeq(pFormats->size());
     OUString* pAry = aSeq.getArray();
     size_t i = 0;
     for (const auto& rEntry : *pFormats)

@@ -70,7 +70,7 @@ static bool convert( TaskManager const * pShell,
 }
 
 
-XRow_impl::XRow_impl( TaskManager* pMyShell,const uno::Sequence< cpo::uno::Any >& seq )
+XRow_impl::XRow_impl( TaskManager* pMyShell,const cpo::uno::Sequence< cpo::uno::Any >& seq )
     : m_aValueMap( seq ),
       m_nWasNull(false),
       m_pMyShell( pMyShell )
@@ -164,13 +164,13 @@ XRow_impl::getDouble(
     return getValue<double>(columnIndex);
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL
+cpo::uno::Sequence< sal_Int8 > SAL_CALL
 XRow_impl::getBytes(
     sal_Int32 columnIndex )
 {
     if( isIndexOutOfBounds( columnIndex ) )
         throw sdbc::SQLException( u""_ustr, uno::Reference< uno::XInterface >(), OUString(), 0, cpo::uno::Any() );
-    return getValue<uno::Sequence< sal_Int8 >>(columnIndex);
+    return getValue<cpo::uno::Sequence< sal_Int8 >>(columnIndex);
 }
 
 util::Date SAL_CALL

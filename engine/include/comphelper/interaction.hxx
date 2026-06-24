@@ -107,7 +107,7 @@ namespace comphelper
 
     // XInteractionRequest
         virtual cpo::uno::Any SAL_CALL getRequest(  ) override;
-        virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) override;
     };
 
 }   // namespace comphelper

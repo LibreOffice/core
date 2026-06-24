@@ -76,8 +76,8 @@ ThreadedDeflater::~ThreadedDeflater() { clear(); }
 
 void ThreadedDeflater::deflateWrite(
     const css::uno::Reference<css::io::XInputStream>& xInStream,
-    const std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)>& rProcessInputFunc,
-    const std::function<void(const css::uno::Sequence<sal_Int8>&, sal_Int32)>& rProcessOutputFunc)
+    const std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)>& rProcessInputFunc,
+    const std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)>& rProcessOutputFunc)
 {
     sal_Int64 nThreadCount = comphelper::ThreadPool::getSharedOptimalPool().getWorkerCount();
     sal_Int64 batchSize = MaxBlockSize * nThreadCount;
@@ -128,7 +128,7 @@ void ThreadedDeflater::processDeflatedBuffers()
     for (const auto& buffer : outBuffers)
         batchOutputSize += buffer.size();
 
-    css::uno::Sequence<sal_Int8> outBuffer(batchOutputSize);
+    cpo::uno::Sequence<sal_Int8> outBuffer(batchOutputSize);
 
     auto pos = outBuffer.getArray();
     for (auto& buffer : outBuffers)
@@ -143,7 +143,7 @@ void ThreadedDeflater::processDeflatedBuffers()
 
 void ThreadedDeflater::clear()
 {
-    inBuffer = uno::Sequence<sal_Int8>();
+    inBuffer = cpo::uno::Sequence<sal_Int8>();
     outBuffers.clear();
 }
 

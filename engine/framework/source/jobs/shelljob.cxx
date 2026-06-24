@@ -50,7 +50,7 @@ bool SAL_CALL ShellJob::supportsService( const OUString& sServiceName )
     return cppu::supportsService(this, sServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ShellJob::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ShellJob::getSupportedServiceNames()
 {
     return { SERVICENAME_JOB };
 }
@@ -65,14 +65,14 @@ ShellJob::~ShellJob()
 {
 }
 
-cpo::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
+cpo::uno::Any SAL_CALL ShellJob::execute(const cpo::uno::Sequence< css::beans::NamedValue >& lJobArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs  (lJobArguments);
     /** address job configuration inside argument set provided on method execute(). */
-    ::comphelper::SequenceAsHashMap lOwnCfg(lArgs.getUnpackedValueOrDefault(u"JobConfig"_ustr, css::uno::Sequence< css::beans::NamedValue >()));
+    ::comphelper::SequenceAsHashMap lOwnCfg(lArgs.getUnpackedValueOrDefault(u"JobConfig"_ustr, cpo::uno::Sequence< css::beans::NamedValue >()));
 
     const OUString                       sCommand               = lOwnCfg.getUnpackedValueOrDefault(u"Command"_ustr             , OUString());
-    const css::uno::Sequence< OUString > lCommandArguments      = lOwnCfg.getUnpackedValueOrDefault(u"Arguments"_ustr           , css::uno::Sequence< OUString >());
+    const cpo::uno::Sequence< OUString > lCommandArguments      = lOwnCfg.getUnpackedValueOrDefault(u"Arguments"_ustr           , cpo::uno::Sequence< OUString >());
     const bool                           bDeactivateJobIfDone   = lOwnCfg.getUnpackedValueOrDefault(u"DeactivateJobIfDone"_ustr , true );
     const bool                           bCheckExitCode         = lOwnCfg.getUnpackedValueOrDefault(u"CheckExitCode"_ustr       , true );
 
@@ -102,7 +102,7 @@ cpo::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
 
 cpo::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 {
-    css::uno::Sequence< css::beans::NamedValue > aAnswer { { JobConst::ANSWER_DEACTIVATE_JOB, cpo::uno::Any(true) } };
+    cpo::uno::Sequence< css::beans::NamedValue > aAnswer { { JobConst::ANSWER_DEACTIVATE_JOB, cpo::uno::Any(true) } };
     return cpo::uno::Any(aAnswer);
 }
 
@@ -123,7 +123,7 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 }
 
 bool ShellJob::impl_execute(const OUString&                       sCommand      ,
-                            const css::uno::Sequence< OUString >& lArguments    ,
+                            const cpo::uno::Sequence< OUString >& lArguments    ,
                                   bool                            bCheckExitCode)
 {
     ::rtl_uString**   pArgs    = nullptr;
@@ -160,7 +160,7 @@ bool ShellJob::impl_execute(const OUString&                       sCommand      
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 framework_ShellJob_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new framework::ShellJob(context));
 }

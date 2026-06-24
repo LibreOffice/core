@@ -21,7 +21,7 @@ SlideTransitionsToolBoxControl::SlideTransitionsToolBoxControl() {}
 SlideTransitionsToolBoxControl::~SlideTransitionsToolBoxControl() {}
 
 void SAL_CALL
-SlideTransitionsToolBoxControl::initialize(const css::uno::Sequence<cpo::uno::Any>& rArguments)
+SlideTransitionsToolBoxControl::initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments)
 {
     SAL_INFO("sd", "initialize called for TransitionToolBoxControl");
 
@@ -87,7 +87,7 @@ bool SAL_CALL SlideTransitionsToolBoxControl::supportsService(const OUString& rS
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL SlideTransitionsToolBoxControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SlideTransitionsToolBoxControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -95,7 +95,7 @@ css::uno::Sequence<OUString> SAL_CALL SlideTransitionsToolBoxControl::getSupport
 // Export function for service registration
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_sd_SlideTransitionsToolBoxControl_get_implementation(
-    css::uno::XComponentContext* /*rxContext*/, css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* /*rxContext*/, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SlideTransitionsToolBoxControl());
 }

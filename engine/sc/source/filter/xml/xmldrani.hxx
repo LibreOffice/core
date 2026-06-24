@@ -47,7 +47,7 @@ public:
 struct ScSubTotalRule
 {
     sal_Int16 nSubTotalRuleGroupFieldNumber;
-    css::uno::Sequence <css::sheet::SubTotalColumn> aSubTotalColumns;
+    cpo::uno::Sequence <css::sheet::SubTotalColumn> aSubTotalColumns;
 };
 
 class ScXMLDatabaseRangeContext : public ScXMLImportContext
@@ -58,7 +58,7 @@ class ScXMLDatabaseRangeContext : public ScXMLImportContext
     OUString        sConnectionResource;
     OUString        sDatabaseName;
     OUString        sSourceObject;
-    css::uno::Sequence <css::beans::PropertyValue> aSortSequence;
+    cpo::uno::Sequence <css::beans::PropertyValue> aSortSequence;
     std::vector < ScSubTotalRule > aSubTotalRules;
     ScRange         aFilterConditionSourceRangeAddress;
     css::sheet::DataImportMode nSourceType;
@@ -114,7 +114,7 @@ public:
     void SetSubTotalsAscending(const bool bTemp) { bSubTotalsAscending = bTemp; }
     void SetSubTotalsSortGroups(const bool bTemp) { bSubTotalsSortGroups = bTemp; }
     void AddSubTotalRule(const ScSubTotalRule& rRule) { aSubTotalRules.push_back(rRule); }
-    void SetSortSequence(const css::uno::Sequence <css::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
+    void SetSortSequence(const cpo::uno::Sequence <css::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
     void SetFilterConditionSourceRangeAddress(const ScRange& aRange) { aFilterConditionSourceRangeAddress = aRange;
                                                                        bFilterConditionSourceRange = true; }
 };

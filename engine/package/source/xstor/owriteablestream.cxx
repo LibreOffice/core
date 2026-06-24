@@ -88,7 +88,7 @@ static void CopyInputToOutput(
     else
     {
         sal_Int32 nRead;
-        uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
+        cpo::uno::Sequence < sal_Int8 > aSequence ( nConstBufferSize );
 
         do
         {
@@ -108,11 +108,11 @@ bool PackageEncryptionDataLessOrEqual( const ::comphelper::SequenceAsHashMap& aH
           bResult && aIter != aHash1.end();
           ++aIter )
     {
-        uno::Sequence< sal_Int8 > aKey1;
+        cpo::uno::Sequence< sal_Int8 > aKey1;
         bResult = ( ( aIter->second >>= aKey1 ) && aKey1.hasElements() );
         if ( bResult )
         {
-            const uno::Sequence< sal_Int8 > aKey2 = aHash2.getUnpackedValueOrDefault( aIter->first.maString, uno::Sequence< sal_Int8 >() );
+            const cpo::uno::Sequence< sal_Int8 > aKey2 = aHash2.getUnpackedValueOrDefault( aIter->first.maString, cpo::uno::Sequence< sal_Int8 >() );
             bResult = aKey1.getLength() == aKey2.getLength()
                 && std::equal(std::cbegin(aKey1), std::cend(aKey1), aKey2.begin(), aKey2.end());
         }
@@ -127,7 +127,7 @@ namespace
 {
 
 void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >& xPropertySet,
-                                    const uno::Sequence< beans::NamedValue >& aKey )
+                                    const cpo::uno::Sequence< beans::NamedValue >& aKey )
 {
     SAL_WARN_IF( !xPropertySet.is(), "package.xstor", "No property set is provided!" );
     if ( !xPropertySet.is() )
@@ -159,13 +159,13 @@ cpo::uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPrope
     }
 }
 
-bool SequencesEqual( const uno::Sequence< sal_Int8 >& aSequence1, const uno::Sequence< sal_Int8 >& aSequence2 )
+bool SequencesEqual( const cpo::uno::Sequence< sal_Int8 >& aSequence1, const cpo::uno::Sequence< sal_Int8 >& aSequence2 )
 {
     return aSequence1.getLength() == aSequence2.getLength()
         && std::equal(aSequence1.begin(), aSequence1.end(), aSequence2.begin(), aSequence2.end());
 }
 
-bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const uno::Sequence< beans::NamedValue >& aSequence2 )
+bool SequencesEqual( const cpo::uno::Sequence< beans::NamedValue >& aSequence1, const cpo::uno::Sequence< beans::NamedValue >& aSequence2 )
 {
     if ( aSequence1.getLength() != aSequence2.getLength() )
         return false;
@@ -173,7 +173,7 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
     for ( const auto& rProp1 : aSequence1 )
     {
         bool bHasMember = false;
-        uno::Sequence< sal_Int8 > aMember1;
+        cpo::uno::Sequence< sal_Int8 > aMember1;
         sal_Int32 nMember1 = 0;
         if ( rProp1.Value >>= aMember1 )
         {
@@ -183,7 +183,7 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
                 {
                     bHasMember = true;
 
-                    uno::Sequence< sal_Int8 > aMember2;
+                    cpo::uno::Sequence< sal_Int8 > aMember2;
                     if ( !( rProp2.Value >>= aMember2 ) || !SequencesEqual( aMember1, aMember2 ) )
                         return false;
                 }
@@ -213,7 +213,7 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
     return true;
 }
 
-const beans::StringPair* lcl_findPairByName(const uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
+const beans::StringPair* lcl_findPairByName(const cpo::uno::Sequence<beans::StringPair>& rSeq, const OUString& rName)
 {
     return std::find_if(rSeq.begin(), rSeq.end(),
         [&rName](const beans::StringPair& rPair) { return rPair.First == rName; });
@@ -346,7 +346,7 @@ bool OWriteStream_Impl::IsEncrypted()
 
     // since a new key set to the package stream it should not be removed except the case when
     // the stream becomes nonencrypted
-    uno::Sequence< beans::NamedValue > aKey;
+    cpo::uno::Sequence< beans::NamedValue > aKey;
     if ( bToBeEncr )
         GetEncryptionKeyProperty_Impl( xPropSet ) >>= aKey;
 
@@ -497,7 +497,7 @@ void OWriteStream_Impl::FillTempGetFileName()
         else
         {
             sal_Int32 nRead = 0;
-            uno::Sequence< sal_Int8 > aData( MAX_STORCACHE_SIZE + 1 );
+            cpo::uno::Sequence< sal_Int8 > aData( MAX_STORCACHE_SIZE + 1 );
             nRead = xOrigStream->readBytes( aData, MAX_STORCACHE_SIZE + 1 );
             if ( aData.getLength() > nRead )
                 aData.realloc( nRead );
@@ -616,7 +616,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
 }
 
 void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputStream >& xInStream,
-                                              const uno::Sequence< beans::PropertyValue >& aProps )
+                                              const cpo::uno::Sequence< beans::PropertyValue >& aProps )
 {
     ::osl::MutexGuard aGuard( m_xMutex->GetMutex() ) ;
 
@@ -687,7 +687,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        cpo::uno::Any( uno::Sequence< beans::NamedValue >() ) );
+                                        cpo::uno::Any( cpo::uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( u"Encrypted"_ustr, cpo::uno::Any( true ) );
     }
 
@@ -707,7 +707,7 @@ void OWriteStream_Impl::Commit()
         return;
 
     uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream;
-    uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(false) };
+    cpo::uno::Sequence< cpo::uno::Any > aSeq{ cpo::uno::Any(false) };
 
     if ( m_xCacheStream.is() )
     {
@@ -778,7 +778,7 @@ void OWriteStream_Impl::Commit()
 
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        cpo::uno::Any( uno::Sequence< beans::NamedValue >() ) );
+                                        cpo::uno::Any( cpo::uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( u"Encrypted"_ustr,
                                         cpo::uno::Any( true ) );
     }
@@ -830,11 +830,11 @@ void OWriteStream_Impl::Revert()
 
     // currently the relations storage is changed only on commit
     m_xNewRelInfoStream.clear();
-    m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+    m_aNewRelInfo = cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
     if ( m_xOrigRelInfoStream.is() )
     {
         // the original stream is still here, that means that it was not parsed
-        m_aOrigRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+        m_aOrigRelInfo = cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
         m_nRelInfoStatus = RELINFO_NO_INIT;
     }
     else
@@ -847,7 +847,7 @@ void OWriteStream_Impl::Revert()
     }
 }
 
-uno::Sequence< beans::PropertyValue > const & OWriteStream_Impl::GetStreamProperties()
+cpo::uno::Sequence< beans::PropertyValue > const & OWriteStream_Impl::GetStreamProperties()
 {
     if ( !m_aProps.hasElements() )
         m_aProps = ReadPackageStreamProperties();
@@ -855,11 +855,11 @@ uno::Sequence< beans::PropertyValue > const & OWriteStream_Impl::GetStreamProper
     return m_aProps;
 }
 
-uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
-                                                                    const uno::Sequence< beans::PropertyValue >& aProps,
+cpo::uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
+                                                                    const cpo::uno::Sequence< beans::PropertyValue >& aProps,
                                                                     bool bUseCommonEncryption )
 {
-    uno::Sequence< beans::PropertyValue > aResult( aProps );
+    cpo::uno::Sequence< beans::PropertyValue > aResult( aProps );
     beans::PropertyValue aPropVal;
 
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
@@ -949,7 +949,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
     }
 }
 
-uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProperties()
+cpo::uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProperties()
 {
     sal_Int32 nPropNum = 0;
     if ( m_nStorageType == embed::StorageFormats::ZIP )
@@ -959,7 +959,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
     else if ( m_nStorageType == embed::StorageFormats::PACKAGE )
         nPropNum = 4;
     assert(nPropNum >= 2);
-    uno::Sequence< beans::PropertyValue > aResult( nPropNum );
+    cpo::uno::Sequence< beans::PropertyValue > aResult( nPropNum );
     auto aResultRange = asNonConstRange(aResult);
 
     // The "Compressed" property must be set after "MediaType" property,
@@ -1026,10 +1026,10 @@ void OWriteStream_Impl::CopyInternallyTo_Impl( const uno::Reference< io::XStream
         xEncr->setEncryptionData( aEncryptionData.getAsConstNamedValueList() );
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > OWriteStream_Impl::GetAllRelationshipsIfAny()
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > OWriteStream_Impl::GetAllRelationshipsIfAny()
 {
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
-        return uno::Sequence< uno::Sequence< beans::StringPair > >();
+        return cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
 
     ReadRelInfoIfNecessary();
 
@@ -1097,13 +1097,13 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         catch( const packages::WrongPasswordException& )
         {
             TOOLS_INFO_EXCEPTION("package.xstor", "Rethrow");
-            SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
+            SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
             throw;
         }
         catch ( const uno::Exception& ex )
         {
             TOOLS_WARN_EXCEPTION("package.xstor", "GetStream: decrypting stream failed");
-            SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
+            SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
             throw io::IOException(ex.Message); // TODO:
         }
     }
@@ -1285,7 +1285,7 @@ void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
     std::erase(m_aInputStreamsVector, pStream);
 }
 
-void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, uno::Reference< io::XStream >& xTargetStream )
+void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const cpo::uno::Sequence< beans::PropertyValue >& aProps, uno::Reference< io::XStream >& xTargetStream )
 {
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
@@ -1366,7 +1366,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     {
         // TODO: introduce last committed cashed password information and use it here
         // that means "use common pass" also should be remembered on flash
-        uno::Sequence< beans::NamedValue > aKey = aEncryptionData.getAsConstNamedValueList();
+        cpo::uno::Sequence< beans::NamedValue > aKey = aEncryptionData.getAsConstNamedValueList();
 
         uno::Reference< beans::XPropertySet > xProps( m_xPackageStream, uno::UNO_QUERY_THROW );
 
@@ -1375,7 +1375,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         if ( !bEncr )
             throw packages::NoEncryptionException();
 
-        uno::Sequence< beans::NamedValue > aPackKey;
+        cpo::uno::Sequence< beans::NamedValue > aPackKey;
         xProps->getPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY ) >>= aPackKey;
         if ( !SequencesEqual( aKey, aPackKey ) )
             throw packages::WrongPasswordException();
@@ -1394,17 +1394,17 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
             if ( !xDataToCopy.is() )
             {
                 SAL_WARN( "package.xstor", "Encrypted ZipStream must already have input stream inside!" );
-                SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
+                SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
             }
         }
         catch( const uno::Exception& )
         {
             TOOLS_WARN_EXCEPTION( "package.xstor", "Can't open encrypted stream");
-            SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
+            SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
             throw;
         }
 
-        SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
+        SetEncryptionKeyProperty_Impl( xPropertySet, cpo::uno::Sequence< beans::NamedValue >() );
     }
 
     // in case of new inserted package stream it is possible that input stream still was not set
@@ -1499,7 +1499,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
         m_xOrigRelInfoStream = m_xNewRelInfoStream;
         m_aOrigRelInfo = m_aNewRelInfo;
         m_bOrigRelInfoBroken = false;
-        m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+        m_aNewRelInfo = cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
         m_xNewRelInfoStream.clear();
     }
     else
@@ -1736,7 +1736,7 @@ void SAL_CALL OWriteStream::release() noexcept
     OWeakObject::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
 {
     if (! m_oTypeCollection)
     {
@@ -1846,13 +1846,13 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
     return m_oTypeCollection->getTypes() ;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL OWriteStream::getImplementationId()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL OWriteStream::getImplementationId()
 {
     static const comphelper::UnoIdInit lcl_ImplId;
     return lcl_ImplId.getSeq();
 }
 
-sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+sal_Int32 SAL_CALL OWriteStream::readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -1864,7 +1864,7 @@ sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sa
     return m_xInStream->readBytes( aData, nBytesToRead );
 }
 
-sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+sal_Int32 SAL_CALL OWriteStream::readSomeBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -1888,7 +1888,7 @@ sal_Int32 OWriteStream::readSomeBytes(sal_Int8* pData, sal_Int32 nBytesToRead)
     if (auto pByteReader = dynamic_cast<comphelper::ByteReader*>(m_xInStream.get()))
         return pByteReader->readSomeBytes(pData, nBytesToRead);
 
-    uno::Sequence<sal_Int8> aData;
+    cpo::uno::Sequence<sal_Int8> aData;
     sal_Int32 nRead = m_xInStream->readSomeBytes(aData, nBytesToRead);
     std::copy_n(aData.getConstArray(), nRead, pData);
 
@@ -2020,7 +2020,7 @@ void OWriteStream::CheckInitOnWriteDemand(sal_Int32 dataSize)
     }
 }
 
-void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
+void SAL_CALL OWriteStream::writeBytes( const cpo::uno::Sequence< sal_Int8 >& aData )
 {
     osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
 
@@ -2050,7 +2050,7 @@ void OWriteStream::writeBytes( const sal_Int8* pData, sal_Int32 nBytesToWrite )
         pByteWriter->writeBytes(pData, nBytesToWrite);
     else
     {
-        uno::Sequence<sal_Int8> aData(pData, nBytesToWrite);
+        cpo::uno::Sequence<sal_Int8> aData(pData, nBytesToWrite);
         m_xOutStream->writeBytes( aData );
     }
     m_pImpl->m_bHasDataToFlush = true;
@@ -2289,7 +2289,7 @@ void SAL_CALL OWriteStream::removeEncryption()
     ModifyParentUnlockMutex_Impl( aGuard );
 }
 
-void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::NamedValue >& aEncryptionData )
+void SAL_CALL OWriteStream::setEncryptionData( const cpo::uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
     osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
 
@@ -2374,7 +2374,7 @@ OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Target"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
@@ -2395,7 +2395,7 @@ OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
+    const cpo::uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
     auto pRel = lcl_findPairByName(aSeq, u"Type"_ustr);
     if (pRel != aSeq.end())
         return pRel->Second;
@@ -2403,7 +2403,7 @@ OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
     return OUString();
 }
 
-uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  const OUString& sID  )
+cpo::uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  const OUString& sID  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2417,10 +2417,10 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
-    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
     auto pRel = std::find_if(aSeq.begin(), aSeq.end(),
-        [&aIDRel](const uno::Sequence<beans::StringPair>& rRel) {
+        [&aIDRel](const cpo::uno::Sequence<beans::StringPair>& rRel) {
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
     if (pRel != aSeq.end())
         return *pRel;
@@ -2428,7 +2428,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
     throw container::NoSuchElementException();
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRelationshipsByType(  const OUString& sType  )
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRelationshipsByType(  const OUString& sType  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2442,19 +2442,19 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
         throw uno::RuntimeException();
 
     // TODO/LATER: in future the unification of the ID could be checked
-    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     const beans::StringPair aTypeRel(u"Type"_ustr, sType);
-    std::vector< uno::Sequence<beans::StringPair> > aResult;
+    std::vector< cpo::uno::Sequence<beans::StringPair> > aResult;
     aResult.reserve(aSeq.getLength());
 
     std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResult),
-        [&aTypeRel](const uno::Sequence<beans::StringPair>& rRel) {
+        [&aTypeRel](const cpo::uno::Sequence<beans::StringPair>& rRel) {
             return std::find(rRel.begin(), rRel.end(), aTypeRel) != rRel.end(); });
 
     return comphelper::containerToSequence(aResult);
 }
 
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAllRelationships()
+cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAllRelationships()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2470,7 +2470,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAl
     return m_pImpl->GetAllRelationshipsIfAny();
 }
 
-void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, bool bReplace  )
+void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const cpo::uno::Sequence< beans::StringPair >& aEntry, bool bReplace  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2485,10 +2485,10 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
 
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
 
-    uno::Sequence<beans::StringPair>* pPair = nullptr;
+    cpo::uno::Sequence<beans::StringPair>* pPair = nullptr;
 
     // TODO/LATER: in future the unification of the ID could be checked
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
     {
         const auto& rRel = aSeq[nInd];
@@ -2533,10 +2533,10 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     const beans::StringPair aIDRel(u"Id"_ustr, sID);
     auto pRel = std::find_if(std::cbegin(aSeq), std::cend(aSeq),
-        [&aIDRel](const uno::Sequence< beans::StringPair >& rRel) {
+        [&aIDRel](const cpo::uno::Sequence< beans::StringPair >& rRel) {
             return std::find(rRel.begin(), rRel.end(), aIDRel) != rRel.end(); });
     if (pRel != std::cend(aSeq))
     {
@@ -2554,7 +2554,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
     throw container::NoSuchElementException();
 }
 
-void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, bool bReplace  )
+void SAL_CALL OWriteStream::insertRelationships(  const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >& aEntries, bool bReplace  )
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
@@ -2568,18 +2568,18 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
         throw uno::RuntimeException();
 
     OUString aIDTag( u"Id"_ustr );
-    const uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
-    std::vector< uno::Sequence<beans::StringPair> > aResultVec;
+    const cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
+    std::vector< cpo::uno::Sequence<beans::StringPair> > aResultVec;
     aResultVec.reserve(aSeq.getLength() + aEntries.getLength());
 
     std::copy_if(aSeq.begin(), aSeq.end(), std::back_inserter(aResultVec),
-        [&aIDTag, &aEntries, bReplace](const uno::Sequence<beans::StringPair>& rTargetRel) {
+        [&aIDTag, &aEntries, bReplace](const cpo::uno::Sequence<beans::StringPair>& rTargetRel) {
             auto pTargetPair = lcl_findPairByName(rTargetRel, aIDTag);
             if (pTargetPair == rTargetRel.end())
                 return false;
 
             bool bIsSourceSame = std::any_of(aEntries.begin(), aEntries.end(),
-                [&pTargetPair](const uno::Sequence<beans::StringPair>& rSourceEntry) {
+                [&pTargetPair](const cpo::uno::Sequence<beans::StringPair>& rSourceEntry) {
                     return std::find(rSourceEntry.begin(), rSourceEntry.end(), *pTargetPair) != rSourceEntry.end(); });
 
             if ( bIsSourceSame && !bReplace )
@@ -2590,7 +2590,7 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
         });
 
     std::transform(aEntries.begin(), aEntries.end(), std::back_inserter(aResultVec),
-        [&aIDTag](const uno::Sequence<beans::StringPair>& rEntry) -> uno::Sequence<beans::StringPair> {
+        [&aIDTag](const cpo::uno::Sequence<beans::StringPair>& rEntry) -> cpo::uno::Sequence<beans::StringPair> {
             auto pPair = lcl_findPairByName(rEntry, aIDTag);
             if (pPair == rEntry.end())
                 throw io::IOException(); // TODO: illegal relation ( no ID )
@@ -2724,7 +2724,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
         }
 
         m_pImpl->m_xNewRelInfoStream = std::move(xInRelStream);
-        m_pImpl->m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
+        m_pImpl->m_aNewRelInfo = cpo::uno::Sequence< cpo::uno::Sequence< beans::StringPair > >();
         m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
     }
     else if ( m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == "RelationsInfo" )

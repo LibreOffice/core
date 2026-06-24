@@ -20,7 +20,7 @@
 
 #include <vcl/weld.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <svx/langbox.hxx>
 
 namespace com::sun::star{
@@ -61,7 +61,7 @@ private:
     OUString                sNew;
     OUString                sReplaceFT_Text;
 
-    css::uno::Sequence<
+    cpo::uno::Sequence<
         css::uno::Reference<
             css::linguistic2::XDictionary >  > aDics;  //! snapshot copy to work on
 

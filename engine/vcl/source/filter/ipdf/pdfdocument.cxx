@@ -14,7 +14,7 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 
 #include <comphelper/scopeguard.hxx>
@@ -925,7 +925,7 @@ bool PDFDocument::Sign(svl::crypto::SigningContext& rSigningContext, const OUStr
     // Create the PKCS#7 object.
     if (rSigningContext.m_xCertificate)
     {
-        css::uno::Sequence<sal_Int8> aDerEncoded = rSigningContext.m_xCertificate->getEncoded();
+        cpo::uno::Sequence<sal_Int8> aDerEncoded = rSigningContext.m_xCertificate->getEncoded();
         if (!aDerEncoded.hasElements())
         {
             SAL_WARN("vcl.filter", "PDFDocument::Sign: empty certificate");

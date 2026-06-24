@@ -36,7 +36,7 @@
 #include <svx/helperhittest3d.hxx>
 #include <sdr/contact/viewcontactofe3d.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <comphelper/configuration.hxx>
@@ -296,7 +296,7 @@ basegfx::B3DRange E3dObject::RecalcBoundVolume() const
 
         if(!xLocalSequence.empty())
         {
-            const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+            const cpo::uno::Sequence< beans::PropertyValue > aEmptyParameters;
             const drawinglayer::geometry::ViewInformation3D aLocalViewInformation3D(aEmptyParameters);
 
             aRetval = xLocalSequence.getB3DRange(aLocalViewInformation3D);
@@ -468,7 +468,7 @@ E3dCompoundObject::~E3dCompoundObject ()
 basegfx::B2DPolyPolygon E3dCompoundObject::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval;
-    const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+    const cpo::uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, *this);
 
@@ -492,7 +492,7 @@ sal_uInt32 E3dCompoundObject::GetHdlCount() const
 
 void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+    const cpo::uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, *this);
 
@@ -552,7 +552,7 @@ void E3dCompoundObject::RecalcSnapRect()
     if (comphelper::IsFuzzing()) // skip slow path for fuzzing
         return;
 
-    const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+    const cpo::uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, *this);
     maSnapRect = tools::Rectangle();
@@ -601,7 +601,7 @@ rtl::Reference<SdrObject> E3dCompoundObject::CloneSdrObject(SdrModel& rTargetMod
 // convert given basegfx::B3DPolyPolygon to screen coor
 basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate) const
 {
-    const uno::Sequence< beans::PropertyValue > aEmptyParameters;
+    const cpo::uno::Sequence< beans::PropertyValue > aEmptyParameters;
     drawinglayer::geometry::ViewInformation3D aViewInfo3D(aEmptyParameters);
     E3dScene* pRootScene = fillViewInformation3DForCompoundObject(aViewInfo3D, *this);
     basegfx::B2DPolyPolygon aRetval;

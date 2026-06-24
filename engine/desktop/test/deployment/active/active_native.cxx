@@ -40,7 +40,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -71,7 +71,7 @@ public:
 
     static rtl::OUString SAL_CALL static_getImplementationName();
 
-    static css::uno::Sequence< rtl::OUString > SAL_CALL
+    static cpo::uno::Sequence< rtl::OUString > SAL_CALL
     static_getSupportedServiceNames();
 
 private:
@@ -87,16 +87,16 @@ private:
     virtual bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual cpo::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() override
     { return static_getSupportedServiceNames(); }
 
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
         css::util::URL const &, rtl::OUString const &, sal_Int32) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
+    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
     SAL_CALL queryDispatches(
-        css::uno::Sequence< css::frame::DispatchDescriptor > const & Requests) override;
+        cpo::uno::Sequence< css::frame::DispatchDescriptor > const & Requests) override;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
@@ -105,10 +105,10 @@ rtl::OUString Provider::static_getImplementationName() {
     return u"com.sun.star.comp.test.deployment.active_native"_ustr;
 }
 
-css::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
+cpo::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
 {
     rtl::OUString name(u"com.sun.star.test.deployment.active_native"_ustr);
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+    return cpo::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
 css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
@@ -130,11 +130,11 @@ css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
     return dispatch;
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
 Provider::queryDispatches(
-    css::uno::Sequence< css::frame::DispatchDescriptor > const & Requests)
+    cpo::uno::Sequence< css::frame::DispatchDescriptor > const & Requests)
 {
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > s(
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > s(
         Requests.getLength());
     auto const elems = s.getArray();
     for (sal_Int32 i = 0; i < s.getLength(); ++i) {
@@ -159,9 +159,9 @@ public:
 
     static rtl::OUString SAL_CALL static_getImplementationName();
 
-    static css::uno::Sequence< rtl::OUString > SAL_CALL
+    static cpo::uno::Sequence< rtl::OUString > SAL_CALL
     static_getSupportedServiceNames()
-    { return css::uno::Sequence< rtl::OUString >(); }
+    { return cpo::uno::Sequence< rtl::OUString >(); }
 
 private:
     explicit Dispatch(
@@ -176,13 +176,13 @@ private:
     virtual bool SAL_CALL supportsService(rtl::OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual cpo::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() override
     { return static_getSupportedServiceNames(); }
 
     virtual void SAL_CALL dispatch(
         css::util::URL const &,
-        css::uno::Sequence< css::beans::PropertyValue > const &) override;
+        cpo::uno::Sequence< css::beans::PropertyValue > const &) override;
 
     virtual void SAL_CALL addStatusListener(
         css::uno::Reference< css::frame::XStatusListener > const &,
@@ -203,7 +203,7 @@ rtl::OUString Dispatch::static_getImplementationName() {
 
 void Dispatch::dispatch(
     css::util::URL const &,
-    css::uno::Sequence< css::beans::PropertyValue > const &)
+    cpo::uno::Sequence< css::beans::PropertyValue > const &)
 {
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(context_);
     css::uno::Reference< css::frame::XFrame >    xFrame = xDesktop->getCurrentFrame();

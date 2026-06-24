@@ -254,7 +254,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
                FN_PARAM_DATABASE_PROPERTIES, false)))
         {
             //mailmerge has been called from the database beamer
-            uno::Sequence< beans::PropertyValue> aDBValues;
+            cpo::uno::Sequence< beans::PropertyValue> aDBValues;
             if (pItem->GetValue() >>= aDBValues)
             {
                 SwDBData aDBData;
@@ -422,7 +422,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                 using namespace org::freedesktop::PackageKit;
                 using namespace svtools;
                 auto xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-                const css::uno::Sequence< OUString > vPackages{ u"libreoffice-base"_ustr };
+                const cpo::uno::Sequence< OUString > vPackages{ u"libreoffice-base"_ustr };
                 xSyncDbusSessionHelper->InstallPackageNames(vPackages, OUString());
                 SolarMutexGuard aGuard;
                 (void)executeRestartDialog(comphelper::getProcessComponentContext(),
@@ -774,7 +774,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             // now the record has to be merged into the source document
             // TODO can we re-use PerformMailMerge() here somehow?
             const SwDBData& rDBData = xConfigItem->GetCurrentDBData();
-            uno::Sequence<cpo::uno::Any> vSelection({ cpo::uno::Any(xConfigItem->GetResultSetPosition()) });
+            cpo::uno::Sequence<cpo::uno::Any> vSelection({ cpo::uno::Any(xConfigItem->GetResultSetPosition()) });
             svx::ODataAccessDescriptor aDescriptor(::comphelper::InitPropertySequence({
                         {"Selection",        cpo::uno::Any(vSelection)},
                         {"DataSourceName",   cpo::uno::Any(rDBData.sDataSource)},

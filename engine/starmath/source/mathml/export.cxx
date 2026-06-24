@@ -315,7 +315,7 @@ bool SmMLExportWrapper::WriteThroughComponentOS(const Reference<io::XOutputStrea
     // connect model and filter
     xExporter->setSourceDocument(xComponent);
     Reference<XFilter> xFilter(xExporter, UNO_QUERY);
-    uno::Sequence<PropertyValue> aProps(0);
+    cpo::uno::Sequence<PropertyValue> aProps(0);
 
     // filter
     if (nSyntaxVersion == 5)
@@ -430,7 +430,7 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLExporter_get_implementation(css::uno::XComponentContext* context,
-                                   css::uno::Sequence<cpo::uno::Any> const&)
+                                   cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context, u"com.sun.star.comp.Math.XMLExporter"_ustr,
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::ALL));
@@ -438,7 +438,7 @@ Math_MLExporter_get_implementation(css::uno::XComponentContext* context,
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context,
-                                            css::uno::Sequence<cpo::uno::Any> const&)
+                                            cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context,
                                         u"com.sun.star.comp.Math.XMLOasisMetaExporter"_ustr,
@@ -447,7 +447,7 @@ Math_MLOasisMetaExporter_get_implementation(css::uno::XComponentContext* context
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* context,
-                                                css::uno::Sequence<cpo::uno::Any> const&)
+                                                cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context,
                                         u"com.sun.star.comp.Math.XMLOasisSettingsExporter"_ustr,
@@ -456,7 +456,7 @@ Math_MLOasisSettingsExporter_get_implementation(css::uno::XComponentContext* con
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Math_MLContentExporter_get_implementation(css::uno::XComponentContext* context,
-                                          css::uno::Sequence<cpo::uno::Any> const&)
+                                          cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SmMLExport(context, u"com.sun.star.comp.Math.XMLContentExporter"_ustr,
                                         SvXMLExportFlags::OASIS | SvXMLExportFlags::CONTENT));

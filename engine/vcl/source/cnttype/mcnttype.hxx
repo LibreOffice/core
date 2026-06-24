@@ -39,7 +39,7 @@ public:
     virtual OUString SAL_CALL getMediaSubtype(  ) override;
     virtual OUString SAL_CALL getFullMediaType(  ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getParameters(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getParameters(  ) override;
 
     virtual bool SAL_CALL hasParameter( const OUString& aName ) override;
 

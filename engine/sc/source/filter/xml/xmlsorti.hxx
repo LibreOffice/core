@@ -33,7 +33,7 @@ class ScXMLSortContext : public ScXMLImportContext
 {
     ScXMLDatabaseRangeContext* pDatabaseRangeContext;
 
-    css::uno::Sequence <css::util::SortField> aSortFields;
+    cpo::uno::Sequence <css::util::SortField> aSortFields;
     css::table::CellAddress aOutputPosition;
     LanguageTagODF maLanguageTagODF;
     OUString    sAlgorithm;

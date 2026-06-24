@@ -271,7 +271,7 @@ OUString cppName(OUString const& name)
     OUStringBuffer buf;
     for (sal_Int32 i = 0; i != k; ++i)
     {
-        buf.append("::com::sun::star::uno::Sequence<");
+        buf.append("::cpo::uno::Sequence<");
     }
     if (n == "boolean")
     {
@@ -436,7 +436,7 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
         b2u(codemaker::UnoType::decompose(u2b(resolveAllTypedefs(manager, name)), &k, &args)));
     for (sal_Int32 i = 0; i != k; ++i)
     {
-        out << "::com::sun::star::uno::Sequence<";
+        out << "::cpo::uno::Sequence<";
     }
     switch (manager->getSort(n))
     {

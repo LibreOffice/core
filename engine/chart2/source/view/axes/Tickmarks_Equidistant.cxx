@@ -135,7 +135,7 @@ sal_Int32 EquidistantTickFactory::getTickDepth() const
     return static_cast<sal_Int32>(m_rIncrement.SubIncrements.size()) + 1;
 }
 
-void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::Sequence< double > >& rParentTicks ) const
+void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, cpo::uno::Sequence< cpo::uno::Sequence< double > >& rParentTicks ) const
 {
     EquidistantTickIter aIter( rParentTicks, m_rIncrement, nDepth-1 );
     double* pfNextParentTick = aIter.firstValue();
@@ -150,7 +150,7 @@ void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::
     if(!nMaxSubTickCount)
         return;
 
-    uno::Sequence< double > aSubTicks(nMaxSubTickCount);
+    cpo::uno::Sequence< double > aSubTicks(nMaxSubTickCount);
     auto pSubTicks = aSubTicks.getArray();
     sal_Int32 nRealSubTickCount = 0;
     sal_Int32 nIntervalCount = m_rIncrement.SubIncrements[nDepth-1].IntervalCount;
@@ -318,7 +318,7 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
     if (nDepthCount <= 0 || nMaxMajorTickCount <= 0)
         return;
 
-    uno::Sequence< uno::Sequence< double > > aAllTicks(nDepthCount);
+    cpo::uno::Sequence< cpo::uno::Sequence< double > > aAllTicks(nDepthCount);
     auto pAllTicks = aAllTicks.getArray();
     pAllTicks[0].realloc(nMaxMajorTickCount);
     auto pAllTicks0 = pAllTicks[0].getArray();
@@ -354,7 +354,7 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
             if( m_rIncrement.SubIncrements[nN].IntervalCount>1 )
                 nCheckCount *= m_rIncrement.SubIncrements[nN].IntervalCount;
         }
-        uno::Sequence< double >& rTicks = pAllTicks[nDepth];
+        cpo::uno::Sequence< double >& rTicks = pAllTicks[nDepth];
         sal_Int32 nCount = rTicks.getLength();
         //check lower border
         for( nTick=0; nTick<nCheckCount && nTick<nCount; nTick++)
@@ -379,7 +379,7 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
             if(nNewCount<0)
                 nNewCount=0;
 
-            uno::Sequence< double > aOldTicks(rTicks);
+            cpo::uno::Sequence< double > aOldTicks(rTicks);
             rTicks.realloc(nNewCount);
             auto pTicks = rTicks.getArray();
             for(nTick = 0; nTick<nNewCount; nTick++)
@@ -412,7 +412,7 @@ void EquidistantTickFactory::getAllTicksShifted( TickInfoArraysType& rAllTickInf
     EquidistantTickFactory( m_rScale, std::move(aShiftedIncrement) ).getAllTicks(rAllTickInfos);
 }
 
-EquidistantTickIter::EquidistantTickIter( const uno::Sequence< uno::Sequence< double > >& rTicks
+EquidistantTickIter::EquidistantTickIter( const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rTicks
                    , const ExplicitIncrementData& rIncrement
                    , sal_Int32 nMaxDepth )
                 : m_pSimpleTicks(&rTicks)

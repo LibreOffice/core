@@ -354,13 +354,13 @@ bool SAL_CALL CWinClipboard::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL CWinClipboard::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL CWinClipboard::getSupportedServiceNames()
 {
     return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
 }
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard>
-WinSalInstance::CreateClipboard(const css::uno::Sequence<cpo::uno::Any>& arguments)
+WinSalInstance::CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& arguments)
 {
     // Tests run in parallel; sharing the real Windows clipboard between them would race. Headless
     // runs have no system clipboard. In both cases, return the dummy GenericClipboard from the base

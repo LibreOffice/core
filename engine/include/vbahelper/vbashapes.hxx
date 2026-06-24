@@ -56,7 +56,7 @@ private:
     void initBaseCollection();
     css::uno::Reference< css::frame::XModel > m_xModel;
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const cpo::uno::Any& Index );
     /// @throws css::uno::RuntimeException

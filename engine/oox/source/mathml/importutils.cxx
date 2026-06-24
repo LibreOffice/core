@@ -43,7 +43,7 @@ AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFas
 {
     if( !a )
         return;
-    const uno::Sequence< xml::FastAttribute > aFastAttrSeq = a->getFastAttributes();
+    const cpo::uno::Sequence< xml::FastAttribute > aFastAttrSeq = a->getFastAttributes();
     for( const xml::FastAttribute& rFastAttr : aFastAttrSeq )
     {
         attrs[ rFastAttr.Token ] = rFastAttr.Value;
@@ -52,7 +52,7 @@ AttributeListBuilder::AttributeListBuilder( const uno::Reference< xml::sax::XFas
 
 OString tokenToString( int token )
 {
-    uno::Sequence<sal_Int8> const& aTokenNameSeq = TokenMap::getUtf8TokenName(token & TOKEN_MASK);
+    cpo::uno::Sequence<sal_Int8> const& aTokenNameSeq = TokenMap::getUtf8TokenName(token & TOKEN_MASK);
     OString tokenname( reinterpret_cast< const char* >( aTokenNameSeq.getConstArray() ), aTokenNameSeq.getLength() );
     if( tokenname.isEmpty())
         tokenname = "???"_ostr;

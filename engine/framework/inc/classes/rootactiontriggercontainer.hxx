@@ -43,8 +43,8 @@ class RootActionTriggerContainer final : public cppu::ImplInheritanceHelper<Prop
 
         // XMultiServiceFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< cpo::uno::Any >& Arguments ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const cpo::uno::Any& Element ) override;
@@ -67,7 +67,7 @@ class RootActionTriggerContainer final : public cppu::ImplInheritanceHelper<Prop
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XNamed
         virtual OUString SAL_CALL getName(  ) override;

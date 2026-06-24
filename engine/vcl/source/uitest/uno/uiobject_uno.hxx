@@ -33,11 +33,11 @@ public:
 
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getChild(const OUString& rID) override;
 
-    void SAL_CALL executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& xPropValues) override;
+    void SAL_CALL executeAction(const OUString& rAction, const cpo::uno::Sequence<css::beans::PropertyValue>& xPropValues) override;
 
-    css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getState() override;
+    cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getState() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getChildren() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getChildren() override;
 
     OUString SAL_CALL getType() override;
 
@@ -45,7 +45,7 @@ public:
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OUString SAL_CALL getHierarchy() override;
 

@@ -23,7 +23,7 @@
 
 #include <boost/unordered_map.hpp>
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 
 namespace configmgr {
@@ -33,8 +33,8 @@ public:
     enum Containment { CONTAINS_NOT, CONTAINS_SUBNODES, CONTAINS_NODE };
 
     Partial(
-        css::uno::Sequence< OUString > const & includedPaths,
-        css::uno::Sequence< OUString > const & excludedPaths);
+        cpo::uno::Sequence< OUString > const & includedPaths,
+        cpo::uno::Sequence< OUString > const & excludedPaths);
 
     ~Partial();
 

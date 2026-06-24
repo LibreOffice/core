@@ -187,8 +187,8 @@ private:
 
     virtual ::sal_Unicode getCharacter(::sal_Int32 nIndex) override;
 
-    virtual css::uno::Sequence< css::beans::PropertyValue >
-    getCharacterAttributes(::sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue >
+    getCharacterAttributes(::sal_Int32 nIndex, const cpo::uno::Sequence< OUString >& aRequestedAttributes ) override;
 
     virtual css::awt::Rectangle
     getCharacterBounds(::sal_Int32 nIndex) override;
@@ -238,16 +238,16 @@ private:
 
     virtual bool setAttributes(
         ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
-        css::uno::Sequence< css::beans::PropertyValue > const &
+        cpo::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet) override;
 
     virtual bool setText(OUString const & rText) override;
 
-    virtual css::uno::Sequence< css::beans::PropertyValue >
-    getDefaultAttributes(const css::uno::Sequence< OUString >& RequestedAttributes) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue >
+    getDefaultAttributes(const cpo::uno::Sequence< OUString >& RequestedAttributes) override;
 
-    virtual css::uno::Sequence< css::beans::PropertyValue >
-    getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue >
+    getRunAttributes(::sal_Int32 Index, const cpo::uno::Sequence< OUString >& RequestedAttributes) override;
 
     virtual ::sal_Int32 getLineNumberAtIndex( ::sal_Int32 nIndex ) override;
 
@@ -340,18 +340,18 @@ public:
     // still zero), pass a "Paragraph const &" instead of a
     // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
-    css::uno::Sequence< css::beans::PropertyValue > retrieveCharacterAttributes(
+    cpo::uno::Sequence< css::beans::PropertyValue > retrieveCharacterAttributes(
         Paragraph const * pParagraph, ::sal_Int32 nIndex,
-        const css::uno::Sequence< OUString >& aRequestedAttributes);
+        const cpo::uno::Sequence< OUString >& aRequestedAttributes);
 
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
     // "::rtl::Reference< Paragraph > const &".
     // Throws css::lang::IndexOutOfBoundsException.
-    css::uno::Sequence< css::beans::PropertyValue > retrieveRunAttributes(
+    cpo::uno::Sequence< css::beans::PropertyValue > retrieveRunAttributes(
         Paragraph const * pParagraph, ::sal_Int32 Index,
-        const css::uno::Sequence< OUString >& RequestedAttributes);
+        const cpo::uno::Sequence< OUString >& RequestedAttributes);
 
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
@@ -384,7 +384,7 @@ public:
     // Throws css::lang::IndexOutOfBoundsException.
     void changeParagraphAttributes(
         Paragraph const * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
-        css::uno::Sequence< css::beans::PropertyValue > const &
+        cpo::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet);
 
     // To make it possible for this method to be (indirectly) called from
@@ -480,7 +480,7 @@ private:
 
     void retrieveRunAttributesImpl(
         Paragraph const * pParagraph, ::sal_Int32 Index,
-        const css::uno::Sequence< OUString >& RequestedAttributes,
+        const cpo::uno::Sequence< OUString >& RequestedAttributes,
         tPropValMap& rRunAttrSeq);
 
     Paragraphs::iterator getIter(Paragraphs::size_type n) { return m_aParagraphs.begin() + std::min(n, m_aParagraphs.size()); }

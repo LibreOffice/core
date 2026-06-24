@@ -43,9 +43,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::util;
 
 
-css::uno::Sequence<OUString> SAL_CALL ORadioButtonControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ORadioButtonControl::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
     OUString* pArray = aSupported.getArray();
@@ -94,9 +94,9 @@ css::uno::Reference< css::util::XCloneable > SAL_CALL ORadioButtonModel::createC
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL ORadioButtonModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ORadioButtonModel::getSupportedServiceNames()
 {
-    css::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
+    cpo::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 9 );
@@ -386,14 +386,14 @@ bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_ORadioButtonModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ORadioButtonModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_ORadioButtonControl_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::ORadioButtonControl(component));
 }

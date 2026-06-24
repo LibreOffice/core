@@ -157,13 +157,13 @@ public:
         will construct a ViewInformation2D from the ViewParameters for that purpose
      */
     Primitive2DContainer
-    getDecomposition(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
+    getDecomposition(const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
 
     /** The getRange implementation for UNO API will use getRange from this implementation. It
         will construct a ViewInformation2D from the ViewParameters for that purpose
      */
     css::geometry::RealRectangle2D
-    getRange(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
+    getRange(const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters);
 
     // XAccounting
     virtual sal_Int64 estimateUsage();
@@ -197,14 +197,14 @@ public:
     /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
         will construct a ViewInformation2D from the ViewParameters for that purpose
      */
-    virtual css::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>> SAL_CALL
-    getDecomposition(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters) override;
+    virtual cpo::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>> SAL_CALL
+    getDecomposition(const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters) override;
 
     /** The getRange implementation for UNO API will use getRange from this implementation. It
         will construct a ViewInformation2D from the ViewParameters for that purpose
      */
     virtual css::geometry::RealRectangle2D SAL_CALL
-    getRange(const css::uno::Sequence<css::beans::PropertyValue>& rViewParameters) override;
+    getRange(const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters) override;
 
     // XAccounting
     virtual sal_Int64 SAL_CALL estimateUsage() override;

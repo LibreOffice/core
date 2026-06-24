@@ -72,12 +72,12 @@ using namespace ::svt;
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_dbu_SbaXGridControl_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new SbaXGridControl(context));
 }
 
-css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames()
 {
     return { u"com.sun.star.form.control.InteractionGridControl"_ustr, u"com.sun.star.form.control.GridControl"_ustr,
          u"com.sun.star.awt.UnoControl"_ustr };
@@ -139,7 +139,7 @@ Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  )
 
 Sequence< sal_Int8 > SAL_CALL SbaXGridControl::getImplementationId(  )
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > & rToolkit, const Reference< css::awt::XWindowPeer > & rParentPeer)
@@ -776,7 +776,7 @@ void SbaGridControl::SetBrowserAttrs()
     try
     {
         Reference< XComponentContext > xContext = getContext();
-        css::uno::Sequence<cpo::uno::Any> aArguments{
+        cpo::uno::Sequence<cpo::uno::Any> aArguments{
             Any(comphelper::makePropertyValue(u"IntrospectedObject"_ustr, xGridModel)),
             Any(comphelper::makePropertyValue(u"ParentWindow"_ustr, VCLUnoHelper::GetInterface(this)))
         };

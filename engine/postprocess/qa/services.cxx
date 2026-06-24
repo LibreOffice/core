@@ -51,7 +51,7 @@ OString msg(std::u16string_view string) {
     return OUStringToOString(string, osl_getThreadTextEncoding());
 }
 
-OString msg(css::uno::Sequence<OUString> const & strings) {
+OString msg(cpo::uno::Sequence<OUString> const & strings) {
     OStringBuffer buf("{");
     for (sal_Int32 i = 0; i != strings.getLength(); ++i) {
         if (i != 0) {
@@ -65,7 +65,7 @@ OString msg(css::uno::Sequence<OUString> const & strings) {
     return buf.makeStringAndClear();
 }
 
-bool unique(css::uno::Sequence<OUString> const & strings) {
+bool unique(cpo::uno::Sequence<OUString> const & strings) {
     // Assumes small sequences for which quadratic algorithm is acceptable:
     for (sal_Int32 i = 0; i < strings.getLength() - 1; ++i) {
         for (sal_Int32 j = i + 1; j != strings.getLength(); ++j) {
@@ -78,14 +78,14 @@ bool unique(css::uno::Sequence<OUString> const & strings) {
 }
 
 bool contains(
-    css::uno::Sequence<OUString> const & strings, OUString const & string)
+    cpo::uno::Sequence<OUString> const & strings, OUString const & string)
 {
     return comphelper::findValue(strings, string) != -1;
 }
 
 bool contains(
-    css::uno::Sequence<OUString> const & strings1,
-    css::uno::Sequence<OUString> const & strings2)
+    cpo::uno::Sequence<OUString> const & strings1,
+    cpo::uno::Sequence<OUString> const & strings2)
 {
     // Assumes small sequences for which quadratic algorithm is acceptable:
     return std::all_of(strings2.begin(), strings2.end(),
@@ -119,7 +119,7 @@ private:
         css::uno::Reference<css::container::XHierarchicalNameAccess> const & typeManager,
         OUString const & name, bool withArguments,
         OUString const & implementationName,
-        css::uno::Sequence<OUString> const & serviceNames,
+        cpo::uno::Sequence<OUString> const & serviceNames,
         std::vector<css::uno::Reference<css::lang::XComponent>> * components);
 };
 
@@ -136,7 +136,7 @@ void Test::test() {
         m_xContext->getValueByName(
             u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
         css::uno::UNO_QUERY_THROW);
-    const css::uno::Sequence<OUString> serviceNames(
+    const cpo::uno::Sequence<OUString> serviceNames(
         m_xContext->getServiceManager()->getAvailableServiceNames());
     struct Constructor {
         Constructor(
@@ -150,12 +150,12 @@ void Test::test() {
     struct Implementation {
         Implementation(
             css::uno::Reference<css::lang::XServiceInfo> const & theFactory,
-            css::uno::Sequence<OUString> const & theServiceNames):
+            cpo::uno::Sequence<OUString> const & theServiceNames):
             factory(theFactory), serviceNames(theServiceNames),
             accumulationBased(false)
         {}
         css::uno::Reference<css::lang::XServiceInfo> const factory;
-        css::uno::Sequence<OUString> const serviceNames;
+        cpo::uno::Sequence<OUString> const serviceNames;
         std::vector<Constructor> constructors;
         bool accumulationBased;
     };
@@ -196,7 +196,7 @@ void Test::test() {
                 OUString name(j->getImplementationName());
                 auto k = impls.find(name);
                 if (k == impls.end()) {
-                    css::uno::Sequence<OUString> servs(
+                    cpo::uno::Sequence<OUString> servs(
                         j->getSupportedServiceNames());
                     CPPUNIT_ASSERT_MESSAGE(
                         (OString(
@@ -225,7 +225,7 @@ void Test::test() {
                 if (desc.is()) {
                     if (desc->isSingleInterfaceBased()) {
                         if (serviceImpls2.size() == 1) {
-                            const css::uno::Sequence<
+                            const cpo::uno::Sequence<
                                 css::uno::Reference<
                                     css::reflection::XServiceConstructorDescription>>
                                         ctors(desc->getConstructors());
@@ -283,7 +283,7 @@ void Test::createInstance(
     css::uno::Reference<css::container::XHierarchicalNameAccess> const & typeManager,
     OUString const & name, bool withArguments,
     OUString const & implementationName,
-    css::uno::Sequence<OUString> const & serviceNames,
+    cpo::uno::Sequence<OUString> const & serviceNames,
     std::vector<css::uno::Reference<css::lang::XComponent>> * components)
 {
     assert(components != nullptr);
@@ -292,7 +292,7 @@ void Test::createInstance(
         if (withArguments) {
             inst = m_xContext->getServiceManager()
                 ->createInstanceWithArgumentsAndContext(
-                    name, css::uno::Sequence<cpo::uno::Any>(), m_xContext);
+                    name, cpo::uno::Sequence<cpo::uno::Any>(), m_xContext);
         } else {
             inst = m_xContext->getServiceManager()->createInstanceWithContext(
                 name, m_xContext);
@@ -325,7 +325,7 @@ void Test::createInstance(
          .getStr()),
         info.is());
     OUString expImpl(implementationName);
-    css::uno::Sequence<OUString> expServs(serviceNames);
+    cpo::uno::Sequence<OUString> expServs(serviceNames);
     // Special cases:
     if (name == "com.sun.star.comp.configuration.ConfigurationProvider") {
         // Instantiating a ConfigurationProvider with no or empty args must
@@ -360,7 +360,7 @@ void Test::createInstance(
             + msg(name) + "\" reports wrong implementation name")
          .getStr()),
         expImpl, info->getImplementationName());
-    const css::uno::Sequence<OUString> servs(info->getSupportedServiceNames());
+    const cpo::uno::Sequence<OUString> servs(info->getSupportedServiceNames());
     CPPUNIT_ASSERT_MESSAGE(
         (OString(
             "instantiating \"" + msg(implementationName) + "\" via \""

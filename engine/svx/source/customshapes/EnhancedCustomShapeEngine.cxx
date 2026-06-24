@@ -54,7 +54,7 @@ using namespace cpo::uno;
 class SdrObject;
 class SdrObjCustomShape;
 
-EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(const css::uno::Sequence< cpo::uno::Any >& aArguments)
+EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(const cpo::uno::Sequence< cpo::uno::Any >& aArguments)
     : mpCustomShape(nullptr)
     , mbForceGroupWithText(false)
 {
@@ -419,7 +419,7 @@ std::vector< Reference< drawing::XCustomShapeHandle > > EnhancedCustomShapeEngin
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_drawing_EnhancedCustomShapeEngine_get_implementation(
     css::uno::XComponentContext *,
-    css::uno::Sequence<cpo::uno::Any> const & args)
+    cpo::uno::Sequence<cpo::uno::Any> const & args)
 {
     return cppu::acquire(new EnhancedCustomShapeEngine(args));
 }

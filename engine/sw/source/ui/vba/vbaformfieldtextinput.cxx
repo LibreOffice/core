@@ -121,9 +121,9 @@ void SwVbaFormFieldTextInput::EditType(sal_Int32 nType, const cpo::uno::Any& rDe
 
 OUString SwVbaFormFieldTextInput::getServiceImplName() { return u"SwVbaFormFieldTextInput"_ustr; }
 
-uno::Sequence<OUString> SwVbaFormFieldTextInput::getServiceNames()
+cpo::uno::Sequence<OUString> SwVbaFormFieldTextInput::getServiceNames()
 {
-    static uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.TextInput"_ustr };
+    static cpo::uno::Sequence<OUString> const aServiceNames{ u"ooo.vba.word.TextInput"_ustr };
     return aServiceNames;
 }
 

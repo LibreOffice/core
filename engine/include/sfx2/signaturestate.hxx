@@ -48,7 +48,7 @@ namespace DocumentSignatures
 /** Get document signature state */
 UNLESS_MERGELIBS(SFX2_DLLPUBLIC)
 SignatureState
-getSignatureState(const css::uno::Sequence<css::security::DocumentSignatureInformation>& aInfos);
+getSignatureState(const cpo::uno::Sequence<css::security::DocumentSignatureInformation>& aInfos);
 }
 
 #endif // INCLUDED_SFX2_SIGNATURESTATE_HXX

@@ -26,7 +26,7 @@
 
 #include <sot/exchange.hxx>
 #include <vcl/transfer.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/form/XForms.hpp>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
@@ -117,9 +117,9 @@ namespace svxform
 
     protected:
         ListBoxEntrySet     m_aSelectedEntries;
-        css::uno::Sequence< css::uno::Sequence< sal_uInt32 > >
+        cpo::uno::Sequence< cpo::uno::Sequence< sal_uInt32 > >
                             m_aControlPaths;
-        css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
+        cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
                             m_aHiddenControlModels;
 
         css::uno::Reference< css::form::XForms >
@@ -167,13 +167,13 @@ namespace svxform
         void buildListFromPath(const weld::TreeView* pTreeBox, const weld::TreeIter* pRoot);
             // The reverse way: throws everything out of m_aSelectedEntries and rebuilds it using m_aControlPaths
 
-        void addHiddenControlsFormat(const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces);
+        void addHiddenControlsFormat(const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& seqInterfaces);
             // adds an SVX_FML_HIDDEN_CONTROLS format and remembers the passed interfaces for it
             // (it is NOT checked whether actually only hidden controls are denominated
             // by this - the caller must ensure that)
 
         const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
-        const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >&
+        const cpo::uno::Sequence< css::uno::Reference< css::uno::XInterface > >&
                                     hiddenControls() const { return m_aHiddenControlModels; }
 
         const css::uno::Reference< css::form::XForms >&

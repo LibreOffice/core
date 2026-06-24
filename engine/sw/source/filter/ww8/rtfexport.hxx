@@ -108,7 +108,7 @@ public:
 
     void DoComboBox(const OUString& rName, const OUString& rHelp, const OUString& ToolTip,
                     const OUString& rSelected,
-                    const css::uno::Sequence<OUString>& rListItems) override;
+                    const cpo::uno::Sequence<OUString>& rListItems) override;
 
     void DoFormText(const SwInputField* pField) override;
 

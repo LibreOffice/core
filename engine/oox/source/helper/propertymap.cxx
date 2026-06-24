@@ -51,7 +51,7 @@ using ::com::sun::star::text::WritingMode;
 #include <oox/token/propertynames.hxx>
 using ::cpo::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::UnknownPropertyException;

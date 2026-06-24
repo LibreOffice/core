@@ -45,14 +45,14 @@ public:
                                 css::uno::XComponentContext > xContext );
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( css::uno::Sequence<
+    virtual OUString SAL_CALL detect( cpo::uno::Sequence<
                                                css::beans::PropertyValue >& io_rDescriptor ) override;
 
     OUString SAL_CALL getImplementationName() override;
 
     bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -88,7 +88,7 @@ css::uno::Reference< css::io::XStream >
                         OUString&                                                                  o_rOutMimetype,
                         OUString&                                                                  io_rOutPwd,
                         const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                        const css::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
+                        const cpo::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
                         bool                                                                            bMayUseUI );
 
 /** Retrieve embedded substream from PDF file using the standard EmbeddedFile
@@ -123,7 +123,7 @@ css::uno::Reference< css::io::XStream >
                     OUString&                                                                  o_rOutMimetype,
                     OUString&                                                                  io_rOutPwd,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
-                    const css::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
+                    const cpo::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
                     bool                                                                            bMayUseUI );
 
 

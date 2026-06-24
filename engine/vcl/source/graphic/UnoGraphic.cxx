@@ -85,10 +85,10 @@ bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
     return cppu::supportsService( this, rServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
 {
-    uno::Sequence< OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
-    const uno::Sequence< OUString >    aNew { u"com.sun.star.graphic.Graphic"_ustr };
+    cpo::uno::Sequence< OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
+    const cpo::uno::Sequence< OUString >    aNew { u"com.sun.star.graphic.Graphic"_ustr };
     sal_Int32                           nOldCount = aRet.getLength();
 
     aRet.realloc( nOldCount + aNew.getLength() );
@@ -98,7 +98,7 @@ uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
     return aRet;
 }
 
-uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
+cpo::uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
 {
     return cppu::OTypeCollection(
             cppu::UnoType<graphic::XGraphic>::get(),
@@ -134,7 +134,7 @@ awt::Size SAL_CALL Graphic::getSize()
     return awt::Size(aVclSize.Width(), aVclSize.Height());
 }
 
-uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
+cpo::uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
 {
     SolarMutexGuard aGuard;
 
@@ -143,15 +143,15 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getDIB()
         SvMemoryStream aMemoryStream;
 
         WriteDIB(maGraphic.GetBitmap().CreateColorBitmap(), aMemoryStream, false, true);
-        return css::uno::Sequence<sal_Int8>(static_cast<sal_Int8 const *>(aMemoryStream.GetData()), aMemoryStream.Tell());
+        return cpo::uno::Sequence<sal_Int8>(static_cast<sal_Int8 const *>(aMemoryStream.GetData()), aMemoryStream.Tell());
     }
     else
     {
-        return uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 }
 
-uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
+cpo::uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
 {
     SolarMutexGuard aGuard;
 
@@ -161,7 +161,7 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
     }
     else
     {
-        return uno::Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
     }
 }
 

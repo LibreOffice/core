@@ -190,9 +190,9 @@ sal_Unicode SAL_CALL AccessibleGridControlTableCell::getCharacter(sal_Int32 nInd
 
     return OCommonAccessibleText::implGetCharacter(implGetText(), nIndex);
 }
-css::uno::Sequence<css::beans::PropertyValue> SAL_CALL
+cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL
 AccessibleGridControlTableCell::getCharacterAttributes(sal_Int32 nIndex,
-                                                       const css::uno::Sequence<OUString>&)
+                                                       const cpo::uno::Sequence<OUString>&)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -201,7 +201,7 @@ AccessibleGridControlTableCell::getCharacterAttributes(sal_Int32 nIndex,
     if (!implIsValidIndex(nIndex, sText.getLength()))
         throw IndexOutOfBoundsException();
 
-    return css::uno::Sequence<css::beans::PropertyValue>();
+    return cpo::uno::Sequence<css::beans::PropertyValue>();
 }
 sal_Int32 SAL_CALL AccessibleGridControlTableCell::getCharacterCount()
 {

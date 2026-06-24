@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::lang::XServiceName;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Exception;
@@ -243,7 +243,7 @@ bool RegressionCurveHelper::hasMeanValueLine(
 
     try
     {
-        const uno::Sequence< uno::Reference< XRegressionCurve > > aCurves(
+        const cpo::uno::Sequence< uno::Reference< XRegressionCurve > > aCurves(
             xRegCnt->getRegressionCurves());
         for( uno::Reference< XRegressionCurve > const & curve : aCurves )
         {
@@ -306,7 +306,7 @@ rtl::Reference< RegressionCurveModel >
     {
         try
         {
-            const uno::Sequence< uno::Reference< XRegressionCurve > > aCurves(
+            const cpo::uno::Sequence< uno::Reference< XRegressionCurve > > aCurves(
                 xRegCnt->getRegressionCurves());
             for( uno::Reference< XRegressionCurve > const & curve : aCurves )
             {
@@ -609,7 +609,7 @@ rtl::Reference< RegressionCurveModel > RegressionCurveHelper::getFirstCurveNotMe
 
     try
     {
-        const uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
+        const cpo::uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
             xRegCnt->getRegressionCurves());
         for( uno::Reference< chart2::XRegressionCurve > const & curve : aCurves )
         {

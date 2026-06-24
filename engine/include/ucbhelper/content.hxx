@@ -21,7 +21,7 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <ucbhelper/ucbhelperdllapi.h>
 
 namespace com::sun::star::beans
@@ -102,7 +102,7 @@ class UCBHELPER_DLLPUBLIC Content final
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::uno::RuntimeException,
     /// @throws css::uno::Exception
-    cpo::uno::Any createCursorAny(const css::uno::Sequence<OUString>& rPropertyNames,
+    cpo::uno::Any createCursorAny(const cpo::uno::Sequence<OUString>& rPropertyNames,
                                   ResultSetInclude eMode);
 
 public:
@@ -299,8 +299,8 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Sequence<cpo::uno::Any>
-    getPropertyValues(const css::uno::Sequence<OUString>& rPropertyNames);
+    cpo::uno::Sequence<cpo::uno::Any>
+    getPropertyValues(const cpo::uno::Sequence<OUString>& rPropertyNames);
     /**
       * This method can be used to read multiple property values.
       *
@@ -312,7 +312,7 @@ public:
       * @throws css::uno::Exception
       */
     css::uno::Reference<css::sdbc::XRow>
-    getPropertyValuesInterface(const css::uno::Sequence<OUString>& rPropertyNames);
+    getPropertyValuesInterface(const cpo::uno::Sequence<OUString>& rPropertyNames);
 
     /**
       * This method can be used to set multiple property values.
@@ -347,9 +347,9 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Sequence<cpo::uno::Any>
-    setPropertyValues(const css::uno::Sequence<OUString>& rPropertyNames,
-                      const css::uno::Sequence<cpo::uno::Any>& rValues);
+    cpo::uno::Sequence<cpo::uno::Any>
+    setPropertyValues(const cpo::uno::Sequence<OUString>& rPropertyNames,
+                      const cpo::uno::Sequence<cpo::uno::Any>& rValues);
 
     // General command execution.
 
@@ -390,7 +390,7 @@ public:
       * @throws css::uno::Exception
       */
     css::uno::Reference<css::sdbc::XResultSet>
-    createCursor(const css::uno::Sequence<OUString>& rPropertyNames,
+    createCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
                  ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
     /**
       * This methods gives access to the children of a folder content.
@@ -411,15 +411,15 @@ public:
       * @throws css::uno::Exception
       */
     css::uno::Reference<css::ucb::XDynamicResultSet>
-    createDynamicCursor(const css::uno::Sequence<OUString>& rPropertyNames,
+    createDynamicCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
                         ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
 
     /// @throws css::ucb::CommandAbortedException
     /// @throws css::uno::RuntimeException
     /// @throws css::uno::Exception
     css::uno::Reference<css::sdbc::XResultSet>
-    createSortedCursor(const css::uno::Sequence<OUString>& rPropertyNames,
-                       const css::uno::Sequence<css::ucb::NumberedSortingInfo>& rSortInfo,
+    createSortedCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
+                       const cpo::uno::Sequence<css::ucb::NumberedSortingInfo>& rSortInfo,
                        const css::uno::Reference<css::ucb::XAnyCompareFactory>& rAnyCompareFactory,
                        ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
 
@@ -525,7 +525,7 @@ public:
       * @throws css::uno::RuntimeException
       * @throws css::uno::Exception
       */
-    css::uno::Sequence<css::ucb::ContentInfo> queryCreatableContentsInfo();
+    cpo::uno::Sequence<css::ucb::ContentInfo> queryCreatableContentsInfo();
 
     /**
       * This method creates, initializes and inserts ( commits ) a new content
@@ -554,8 +554,8 @@ public:
       * @throws css::uno::Exception
       */
     bool insertNewContent(const OUString& rContentType,
-                          const css::uno::Sequence<OUString>& rPropertyNames,
-                          const css::uno::Sequence<cpo::uno::Any>& rPropertyValues,
+                          const cpo::uno::Sequence<OUString>& rPropertyNames,
+                          const cpo::uno::Sequence<cpo::uno::Any>& rPropertyValues,
                           Content& rNewContent);
     /**
       * This method creates, initializes and inserts (commits) a new content
@@ -587,8 +587,8 @@ public:
       * @throws css::uno::Exception
       */
     bool insertNewContent(const OUString& rContentType,
-                          const css::uno::Sequence<OUString>& rPropertyNames,
-                          const css::uno::Sequence<cpo::uno::Any>& rPropertyValues,
+                          const cpo::uno::Sequence<OUString>& rPropertyNames,
+                          const cpo::uno::Sequence<cpo::uno::Any>& rPropertyValues,
                           const css::uno::Reference<css::io::XInputStream>& rStream,
                           Content& rNewContent);
 

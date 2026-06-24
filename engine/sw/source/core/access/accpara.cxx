@@ -666,7 +666,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
     const SwContentFrame* pPrevContentFrame( pTextFrame->FindPrevCnt() );
     if ( pPrevContentFrame )
     {
-        uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pPrevContentFrame) };
+        cpo::uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pPrevContentFrame) };
         AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_FROM, aSequence);
         pHelper->AddRelation( aAccRel );
     }
@@ -674,7 +674,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
     const SwContentFrame* pNextContentFrame( pTextFrame->FindNextCnt( true ) );
     if ( pNextContentFrame )
     {
-        uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pNextContentFrame) };
+        cpo::uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pNextContentFrame) };
         AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_TO, aSequence);
         pHelper->AddRelation( aAccRel );
     }
@@ -783,9 +783,9 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
     return SwAccessibleContext::getBackground();
 }
 
-static uno::Sequence< OUString > const & getAttributeNames()
+static cpo::uno::Sequence< OUString > const & getAttributeNames()
 {
-    static uno::Sequence< OUString > const aNames
+    static cpo::uno::Sequence< OUString > const aNames
     {
         // Add the font name to attribute list
         // sorted list of strings
@@ -806,9 +806,9 @@ static uno::Sequence< OUString > const & getAttributeNames()
     return aNames;
 }
 
-static uno::Sequence< OUString > const & getSupplementalAttributeNames()
+static cpo::uno::Sequence< OUString > const & getSupplementalAttributeNames()
 {
-    static uno::Sequence< OUString > const aNames
+    static cpo::uno::Sequence< OUString > const aNames
     {
         // sorted list of strings
         UNO_NAME_NUMBERING_LEVEL,
@@ -894,7 +894,7 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
     return sText[nIndex];
 }
 
-css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabStop( sal_Int32 nIndex  )
+cpo::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabStop( sal_Int32 nIndex  )
 {
     SolarMutexGuard aGuard;
 
@@ -933,7 +933,7 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
     GetFrame()->GetCharRect( aCoreRect, aPosition, &aMoveState );
 
     // already get the caret position
-    css::uno::Sequence< css::style::TabStop > tabs;
+    cpo::uno::Sequence< css::style::TabStop > tabs;
     const sal_Int32 nStrLen = pFrame->GetText().getLength();
     if( nStrLen > 0 )
     {
@@ -1158,9 +1158,9 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
 
 // #i63870# - re-implement method on behalf of methods
 // <_getDefaultAttributesImpl(..)> and <_getRunAttributesImpl(..)>
-uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
+cpo::uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     sal_Int32 nIndex,
-    const uno::Sequence< OUString >& aRequestedAttributes )
+    const cpo::uno::Sequence< OUString >& aRequestedAttributes )
 {
 
     SolarMutexGuard aGuard;
@@ -1173,7 +1173,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         throw lang::IndexOutOfBoundsException();
 
     bool bSupplementalMode = false;
-    uno::Sequence< OUString > aNames = aRequestedAttributes;
+    cpo::uno::Sequence< OUString > aNames = aRequestedAttributes;
     if (!aNames.hasElements())
     {
         bSupplementalMode = true;
@@ -1209,7 +1209,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     }
     if( bSupplementalMode )
     {
-        uno::Sequence< OUString > aSupplementalNames = aRequestedAttributes;
+        cpo::uno::Sequence< OUString > aSupplementalNames = aRequestedAttributes;
         if (!aSupplementalNames.hasElements())
             aSupplementalNames = getSupplementalAttributeNames();
 
@@ -1248,7 +1248,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
             aIndices.push_back(i);
         std::sort(aIndices.begin(), aIndices.end(), IndexCompare(aValues.data()));
         // create sorted sequences according to index array
-        uno::Sequence<PropertyValue> aNewValues( nLength );
+        cpo::uno::Sequence<PropertyValue> aNewValues( nLength );
         PropertyValue* pNewValues = aNewValues.getArray();
         for (i = 0; i < nLength; ++i)
         {
@@ -1270,7 +1270,7 @@ static void SetPutRecursive(SfxItemSet &targetSet, const SfxItemSet &sourceSet)
 
 // #i63870#
 void SwAccessibleParagraph::_getDefaultAttributesImpl(
-        const uno::Sequence< OUString >& aRequestedAttributes,
+        const cpo::uno::Sequence< OUString >& aRequestedAttributes,
         tAccParaPropValMap& rDefAttrSeq,
         const bool bOnlyCharAttrs )
 {
@@ -1419,8 +1419,8 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
     }
 }
 
-uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
-        const uno::Sequence< OUString >& aRequestedAttributes )
+cpo::uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
+        const cpo::uno::Sequence< OUString >& aRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 
@@ -1434,7 +1434,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
     bool bProvideMMToPixelRatio( !aRequestedAttributes.hasElements() ||
                                  (comphelper::findValue(aRequestedAttributes, sMMToPixelRatio) != -1) );
 
-    uno::Sequence< PropertyValue > aValues( aDefAttrSeq.size() +
+    cpo::uno::Sequence< PropertyValue > aValues( aDefAttrSeq.size() +
                                             ( bProvideMMToPixelRatio ? 1 : 0 ) );
     auto pValues = aValues.getArray();
     std::transform(aDefAttrSeq.begin(), aDefAttrSeq.end(), pValues,
@@ -1459,7 +1459,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
 
 void SwAccessibleParagraph::_getRunAttributesImpl(
         const sal_Int32 nIndex,
-        const uno::Sequence< OUString >& aRequestedAttributes,
+        const cpo::uno::Sequence< OUString >& aRequestedAttributes,
         tAccParaPropValMap& rRunAttrSeq )
 {
     // create PaM for character at position <nIndex>
@@ -1502,7 +1502,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         tAccParaPropValMap aRunAttrSeq;
         {
             tAccParaPropValMap aDefAttrSeq;
-            uno::Sequence< OUString > aDummy;
+            cpo::uno::Sequence< OUString > aDummy;
             _getDefaultAttributesImpl( aDummy, aDefAttrSeq, true ); // #i82637#
 
             const SfxItemPropertyMap& rPropMap =
@@ -1552,9 +1552,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     }
 }
 
-uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
+cpo::uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
         sal_Int32 nIndex,
-        const uno::Sequence< OUString >& aRequestedAttributes )
+        const cpo::uno::Sequence< OUString >& aRequestedAttributes )
 {
     SolarMutexGuard aGuard;
 
@@ -1575,7 +1575,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
 }
 
 void SwAccessibleParagraph::_getSupplementalAttributesImpl(
-        const uno::Sequence< OUString >& aRequestedAttributes,
+        const cpo::uno::Sequence< OUString >& aRequestedAttributes,
         tAccParaPropValMap& rSupplementalAttrSeq )
 {
     const SwTextFrame* const pFrame = GetTextFrame();
@@ -1803,7 +1803,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         //tab stop
         if (rValue.Name == UNO_NAME_TABSTOPS)
         {
-            css::uno::Sequence< css::style::TabStop > tabs = GetCurrentTabStop( nIndex );
+            cpo::uno::Sequence< css::style::TabStop > tabs = GetCurrentTabStop( nIndex );
             if( !tabs.hasElements() )
             {
                 css::style::TabStop ts;
@@ -2432,7 +2432,7 @@ bool SwAccessibleParagraph::replaceText(
 bool SwAccessibleParagraph::setAttributes(
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex,
-    const uno::Sequence<PropertyValue>& rAttributeSet )
+    const cpo::uno::Sequence<PropertyValue>& rAttributeSet )
 {
     SolarMutexGuard aGuard;
 
@@ -2457,9 +2457,9 @@ bool SwAccessibleParagraph::setAttributes(
     std::sort(aIndices.begin(), aIndices.end(), IndexCompare(pPairs));
 
     // create sorted sequences according to index array
-    uno::Sequence< OUString > aNames( nLength );
+    cpo::uno::Sequence< OUString > aNames( nLength );
     OUString* pNames = aNames.getArray();
-    uno::Sequence< cpo::uno::Any > aValues( nLength );
+    cpo::uno::Sequence< cpo::uno::Any > aValues( nLength );
     cpo::uno::Any* pValues = aValues.getArray();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
@@ -2960,7 +2960,7 @@ TextSegment SAL_CALL SwAccessibleParagraph::getTextMarkup(sal_Int32 nTextMarkupI
     return pTextMarkupHelper->getTextMarkup( nTextMarkupIndex, nTextMarkupType );
 }
 
-uno::Sequence<TextSegment> SAL_CALL
+cpo::uno::Sequence<TextSegment> SAL_CALL
 SwAccessibleParagraph::getTextMarkupAtIndex(sal_Int32 nCharIndex, sal_Int32 nTextMarkupType)
 {
     SolarMutexGuard g;

@@ -4468,13 +4468,13 @@ void DocumentRedlineManager::UpdateRedlineAttr()
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
-const uno::Sequence <sal_Int8>& DocumentRedlineManager::GetRedlinePassword() const
+const cpo::uno::Sequence <sal_Int8>& DocumentRedlineManager::GetRedlinePassword() const
 {
     return maRedlinePasswd;
 }
 
 void DocumentRedlineManager::SetRedlinePassword(
-            /*[in]*/const uno::Sequence <sal_Int8>& rNewPassword)
+            /*[in]*/const cpo::uno::Sequence <sal_Int8>& rNewPassword)
 {
     maRedlinePasswd = rNewPassword;
     m_rDoc.getIDocumentState().SetModified();

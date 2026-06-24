@@ -151,7 +151,7 @@ public:
     css::uno::Reference
         < css::container::XNameAccess > m_xCommandToLabelMap;
 
-    css::uno::Sequence
+    cpo::uno::Sequence
         < css::beans::PropertyValue > m_aSeparatorSeq;
 
     css::uno::Reference<css::graphic::XGraphic> GetImage(const OUString& rCommandURL);
@@ -652,7 +652,7 @@ private:
 
     bool ImportGraphic( const OUString& aURL );
 
-    void ImportGraphics( const css::uno::Sequence< OUString >& aURLs );
+    void ImportGraphics( const cpo::uno::Sequence< OUString >& aURLs );
 
 public:
 

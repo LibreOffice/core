@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf131575)
     CPPUNIT_ASSERT_ASSERTION_FAIL(createScDoc("xlsx/tdf131575.xlsx"));
 
     // importing it must succeed with RepairPackage set to true.
-    uno::Sequence<beans::PropertyValue> aParams
+    cpo::uno::Sequence<beans::PropertyValue> aParams
         = { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) };
     loadWithParams(createFileURL(u"xlsx/tdf131575.xlsx"), aParams);
     ScDocument* pDoc = getScDoc();
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf76115)
     CPPUNIT_ASSERT_ASSERTION_FAIL(createScDoc("xlsx/tdf76115.xlsx"));
 
     // importing it must succeed with RepairPackage set to true.
-    uno::Sequence<beans::PropertyValue> aParams
+    cpo::uno::Sequence<beans::PropertyValue> aParams
         = { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) };
     loadWithParams(createFileURL(u"xlsx/tdf76115.xlsx"), aParams);
     ScDocument* pDoc = getScDoc();
@@ -1639,7 +1639,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testForcepoint107)
     CPPUNIT_ASSERT_ASSERTION_FAIL(createScDoc("xlsx/forcepoint107.xlsx"));
 
     // importing it must succeed with RepairPackage set to true.
-    uno::Sequence<beans::PropertyValue> aParams
+    cpo::uno::Sequence<beans::PropertyValue> aParams
         = { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) };
     loadWithParams(createFileURL(u"xlsx/forcepoint107.xlsx"), aParams);
 

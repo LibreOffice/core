@@ -154,7 +154,7 @@ using ::com::sun::star::frame::XController;
 using ::com::sun::star::frame::XController2;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::io::IOException;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::document::XDocumentRecovery;
 using ::com::sun::star::document::XUndoManager;
 using ::com::sun::star::document::XUndoAction;
@@ -599,7 +599,7 @@ Sequence< uno::Type > SAL_CALL SfxBaseModel::getTypes()
 
 Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId()
 {
-    return css::uno::Sequence<sal_Int8>();
+    return cpo::uno::Sequence<sal_Int8>();
 }
 
 
@@ -919,7 +919,7 @@ bool SAL_CALL SfxBaseModel::attachResource( const   OUString&                   
             {
                 pObjectShell->SetMacroCallsSeenWhileLoading();
             }
-            css::uno::Sequence<css::beans::PropertyValue> aRemoteContent;
+            cpo::uno::Sequence<css::beans::PropertyValue> aRemoteContent;
             if ( rProp.Name == "RemoteContentFound" && (rProp.Value >>= aRemoteContent) && aRemoteContent.hasElements())
             {
                 pObjectShell->SetPendingLinkUpdateInfobar();
@@ -1199,7 +1199,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         }
         else if (rArg.Name == "EmbeddedFonts")
         {
-            if (uno::Sequence<beans::StringPair> fonts; rArg.Value >>= fonts)
+            if (cpo::uno::Sequence<beans::StringPair> fonts; rArg.Value >>= fonts)
             {
                 pMedium->AddEmbeddedFonts(fonts);
                 ok = true;
@@ -2748,9 +2748,9 @@ void SAL_CALL SfxBaseModel::checkIn( bool bIsMajor, const OUString& rMessage )
     }
 }
 
-uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersions( )
+cpo::uno::Sequence< document::CmisVersion > SAL_CALL SfxBaseModel::getAllVersions( )
 {
-    uno::Sequence<document::CmisVersion> aVersions;
+    cpo::uno::Sequence<document::CmisVersion> aVersions;
     if (impl_isDisposed())
         return aVersions;
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
@@ -3127,7 +3127,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                     // #i119366# - If the former file saving with password, do not trying in StoreSelf anyway...
                     bool bFormerPassword = false;
                     {
-                        uno::Sequence< beans::NamedValue > aOldEncryptionData;
+                        cpo::uno::Sequence< beans::NamedValue > aOldEncryptionData;
                         if (GetEncryptionData_Impl( &pMedium->GetItemSet(), aOldEncryptionData ))
                         {
                             bFormerPassword = true;
@@ -3152,13 +3152,13 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                             // TODO/LATER: need a new interaction for this case
                             if ( m_pData->m_pObjectShell->IsDocShared() )
                             {
-                                uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault(u"EncryptionData"_ustr, uno::Sequence< beans::NamedValue >() );
+                                cpo::uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault(u"EncryptionData"_ustr, cpo::uno::Sequence< beans::NamedValue >() );
                                 if ( !aNewEncryptionData.hasElements() )
                                 {
                                     aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aArgHash.getUnpackedValueOrDefault(u"Password"_ustr, OUString()) );
                                 }
 
-                                uno::Sequence< beans::NamedValue > aOldEncryptionData;
+                                cpo::uno::Sequence< beans::NamedValue > aOldEncryptionData;
                                 (void)GetEncryptionData_Impl( &pMedium->GetItemSet(), aOldEncryptionData );
 
                                 if ( !aOldEncryptionData.hasElements() && !aNewEncryptionData.hasElements() )
@@ -3638,7 +3638,7 @@ void SfxBaseModel::getGrabBagItem(cpo::uno::Any& rVal) const
     if (m_pData->m_xGrabBagItem)
         m_pData->m_xGrabBagItem->QueryValue(rVal);
     else
-        rVal <<= uno::Sequence<beans::PropertyValue>();
+        rVal <<= cpo::uno::Sequence<beans::PropertyValue>();
 }
 
 void SfxBaseModel::setGrabBagItem(const cpo::uno::Any& rVal)

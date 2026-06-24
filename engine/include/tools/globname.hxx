@@ -20,7 +20,7 @@
 #define INCLUDED_TOOLS_GLOBNAME_HXX
 
 #include <tools/toolsdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 struct SAL_WARN_UNUSED SvGUID
 {
@@ -45,7 +45,7 @@ public:
                   sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
 
     // create SvGlobalName from a platform independent representation
-    SvGlobalName( const css::uno::Sequence< sal_Int8 >& aSeq );
+    SvGlobalName( const cpo::uno::Sequence< sal_Int8 >& aSeq );
 
     inline constexpr SvGlobalName( const SvGUID & rId );
 
@@ -65,7 +65,7 @@ public:
 
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
-    css::uno::Sequence < sal_Int8 > GetByteSequence() const;
+    cpo::uno::Sequence < sal_Int8 > GetByteSequence() const;
 
 private:
     SvGUID m_aData = {};

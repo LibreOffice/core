@@ -79,10 +79,10 @@ SwVbaAddin::getServiceImplName()
     return u"SwVbaAddin"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 SwVbaAddin::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.word.Addin"_ustr
     };

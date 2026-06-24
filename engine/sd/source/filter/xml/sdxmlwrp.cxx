@@ -740,7 +740,7 @@ bool IsSlideSorterPaste(const ::sd::DrawDocShell& rDocSh)
     if (!xSourcePropertySet)
         return false;
 
-    const uno::Sequence<beans::Property> lProps = xSourcePropertySet->getPropertySetInfo()->getProperties();
+    const cpo::uno::Sequence<beans::Property> lProps = xSourcePropertySet->getPropertySetInfo()->getProperties();
     for (const beans::Property& rProp : lProps)
     {
         if (rProp.Name != "slidesorter")
@@ -831,7 +831,7 @@ bool SdXMLFilter::Export()
         }
 
         // initialize descriptor
-        uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
+        cpo::uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
         beans::PropertyValue* pProps = aDescriptor.getArray();
 
         pProps[0].Name = u"FileName"_ustr;
@@ -933,7 +933,7 @@ bool SdXMLFilter::Export()
 
                 xWriter->setOutputStream( xDocOut );
 
-                uno::Sequence< cpo::uno::Any > aArgs( 2 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGraphicStorageHandler.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
+                cpo::uno::Sequence< cpo::uno::Any > aArgs( 2 + ( mxStatusIndicator.is() ? 1 : 0 ) + ( xGraphicStorageHandler.is() ? 1 : 0 ) + ( xObjectResolver.is() ? 1 : 0 ) );
                 cpo::uno::Any* pArgs = aArgs.getArray();
                 *pArgs++ <<= xInfoSet;
                 if (xGraphicStorageHandler.is())
@@ -1007,7 +1007,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
     uno::Reference<io::XInputStream> xStream(new ::utl::OSeekableInputStreamWrapper(rStream));
     uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.XmlFilterAdaptor"_ustr), uno::UNO_SET_THROW);
 
-    css::uno::Sequence<OUString> aUserData
+    cpo::uno::Sequence<OUString> aUserData
     {
         u"com.sun.star.comp.filter.OdfFlatXml"_ustr,
         u""_ustr,
@@ -1017,17 +1017,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportFODP(SvStream &rStream)
         u""_ustr,
         u"true"_ustr
     };
-    uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aAdaptorArgs(comphelper::InitPropertySequence(
     {
         { "UserData", cpo::uno::Any(aUserData) },
     }));
-    css::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
+    cpo::uno::Sequence<cpo::uno::Any> aOuterArgs{ cpo::uno::Any(aAdaptorArgs) };
 
     uno::Reference<lang::XInitialization> xInit(xInterface, uno::UNO_QUERY_THROW);
     xInit->initialize(aOuterArgs);
 
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "InputStream", cpo::uno::Any(xStream) },
         { "URL", cpo::uno::Any(u"private:stream"_ustr) },
@@ -1062,7 +1062,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPTX(SvStream &rStream)
     uno::Reference<document::XFilter> xFilter(xMultiServiceFactory->createInstance(u"com.sun.star.comp.oox.ppt.PowerPointImport"_ustr), uno::UNO_QUERY_THROW);
 
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
         { "InputStream", cpo::uno::Any(xStream) },
         { "InputMode", cpo::uno::Any(true) },

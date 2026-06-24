@@ -44,7 +44,7 @@ namespace frm
     protected:
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual ::cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XPersistObject
         virtual OUString SAL_CALL getServiceName() override;
@@ -59,7 +59,7 @@ namespace frm
 
         // OControlModel's property handling
         virtual void describeFixedProperties(
-            css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
+            cpo::uno::Sequence< css::beans::Property >& /* [out] */ _rProps
         ) const override;
 
         // OPropertySetHelper
@@ -72,7 +72,7 @@ namespace frm
         virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
         virtual cpo::uno::Any   getDefaultForReset() const override;
 
-        virtual css::uno::Sequence< css::uno::Type >
+        virtual cpo::uno::Sequence< css::uno::Type >
                                 getSupportedBindingTypes() override;
         virtual cpo::uno::Any   translateExternalValueToControlValue( const cpo::uno::Any& _rExternalValue ) const override;
         virtual cpo::uno::Any   translateControlValueToExternalValue( ) const override;

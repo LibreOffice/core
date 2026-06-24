@@ -69,16 +69,16 @@ void ToolbarTabPage::Reset(const SfxItemSet* /* rSet*/)
     css::uno::Reference<css::beans::XPropertySet> xPropSet(xFrame, css::uno::UNO_QUERY);
     xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= m_xLayoutManager;
 
-    css::uno::Sequence<css::uno::Sequence<css::beans::PropertyValue>> aSeqDocToolBars;
+    cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>> aSeqDocToolBars;
     aSeqDocToolBars = xUIConfigMgr->getUIElementsInfo(css::ui::UIElementType::TOOLBAR);
 
-    for (css::uno::Sequence<css::beans::PropertyValue> const& props : aSeqDocToolBars)
+    for (cpo::uno::Sequence<css::beans::PropertyValue> const& props : aSeqDocToolBars)
     {
         for (css::beans::PropertyValue const& prop : props)
         {
             if (prop.Name == u"ResourceURL"_ustr)
             {
-                css::uno::Sequence<css::beans::PropertyValue> aCmdProps;
+                cpo::uno::Sequence<css::beans::PropertyValue> aCmdProps;
                 OUString sResourceURL;
                 OUString sUIName;
                 bool bHide = true;

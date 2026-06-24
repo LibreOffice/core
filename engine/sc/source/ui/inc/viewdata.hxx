@@ -250,11 +250,11 @@ private:
     ScViewDataTable(const ScDocument& rDoc);
 
     void            WriteUserDataSequence(
-                        css::uno::Sequence <css::beans::PropertyValue>& rSettings,
+                        cpo::uno::Sequence <css::beans::PropertyValue>& rSettings,
                         const ScViewData& rViewData, SCTAB nTab ) const;
 
     void            ReadUserDataSequence(
-                        const css::uno::Sequence <css::beans::PropertyValue>& rSettings,
+                        const cpo::uno::Sequence <css::beans::PropertyValue>& rSettings,
                         ScViewData& rViewData, SCTAB nTab, bool& rHasZoom);
 
     /** Sanitize the active split range value to not point into a grid window
@@ -384,8 +384,8 @@ public:
     void            ReadUserData(std::u16string_view rData);
     SC_DLLPUBLIC void WriteExtOptions( ScExtDocOptions& rOpt ) const;
     void            ReadExtOptions( const ScExtDocOptions& rOpt );
-    void            WriteUserDataSequence(css::uno::Sequence <css::beans::PropertyValue>& rSettings) const;
-    void            ReadUserDataSequence(const css::uno::Sequence <css::beans::PropertyValue>& rSettings);
+    void            WriteUserDataSequence(cpo::uno::Sequence <css::beans::PropertyValue>& rSettings) const;
+    void            ReadUserDataSequence(const cpo::uno::Sequence <css::beans::PropertyValue>& rSettings);
 
     ScDocument&     GetDocument() const { return mrDoc; }
 

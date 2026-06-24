@@ -1926,7 +1926,7 @@ boost::property_tree::ptree SfxDispatcher::fillPopupMenu(const rtl::Reference<VC
 
 void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos )
 {
-    css::uno::Sequence< cpo::uno::Any > aArgs{
+    cpo::uno::Sequence< cpo::uno::Any > aArgs{
         cpo::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, rResName )),
         cpo::uno::Any(comphelper::makePropertyValue( u"Frame"_ustr, GetFrame()->GetFrame().GetFrameInterface() )),
         cpo::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))

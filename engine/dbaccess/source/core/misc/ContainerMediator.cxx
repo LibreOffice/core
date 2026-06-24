@@ -33,6 +33,7 @@ namespace dbaccess
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
+    using namespace ::cpo::uno;
 
 OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContainer, const Reference< XNameAccess >& _xSettings )
     : m_xSettings( _xSettings )

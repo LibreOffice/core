@@ -86,8 +86,8 @@ namespace dbaccess
     class OContentHelper :   public ::cppu::BaseMutex
                             ,public OContentHelper_COMPBASE
     {
-        css::uno::Sequence< cpo::uno::Any >
-            setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues );
+        cpo::uno::Sequence< cpo::uno::Any >
+            setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rValues );
 
         void impl_rename_throw(const OUString& _sNewName,bool _bNotify = true);
 
@@ -112,7 +112,7 @@ namespace dbaccess
         *
         * @param evt is a sequence of property change events.
         */
-        void notifyPropertiesChange( const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) const;
+        void notifyPropertiesChange( const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& evt ) const;
 
         OUString impl_getHierarchicalName( bool _includingRootContainer ) const;
 
@@ -124,11 +124,11 @@ namespace dbaccess
                     );
 
         // css::lang::XTypeProvider
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
+        virtual cpo::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
         // css::lang::XServiceInfo
         virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         virtual OUString SAL_CALL getImplementationName(  ) override;
 
         // XContent
@@ -143,15 +143,15 @@ namespace dbaccess
         virtual void SAL_CALL abort( sal_Int32 CommandId ) override ;
 
         // XPropertiesChangeNotifier
-        virtual void SAL_CALL addPropertiesChangeListener( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
-        virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
+        virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
+        virtual void SAL_CALL removePropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
 
         // XPropertyContainer
         virtual void SAL_CALL addProperty( const OUString& Name, sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override ;
         virtual void SAL_CALL removeProperty( const OUString& Name ) override ;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+        virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // css::container::XChild
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
@@ -162,7 +162,7 @@ namespace dbaccess
 
         const ContentProperties& getContentProperties() const { return m_pImpl->m_aProps; }
         css::uno::Reference< css::sdbc::XRow >
-            getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
+            getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties );
 
         const css::uno::Reference< css::uno::XComponentContext >& getContext() const { return m_aContext; }
 

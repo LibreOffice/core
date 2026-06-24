@@ -54,7 +54,7 @@ public:
      void                                   SAL_CALL intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
      void                                   SAL_CALL excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
      void                                   SAL_CALL xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
-     css::uno::Sequence< css::awt::Rectangle > SAL_CALL getRectangles() override;
+     cpo::uno::Sequence< css::awt::Rectangle > SAL_CALL getRectangles() override;
 
 };
 

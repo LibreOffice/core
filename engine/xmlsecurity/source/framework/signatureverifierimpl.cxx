@@ -85,7 +85,7 @@ void SAL_CALL SignatureVerifierImpl::removeSignatureVerifyResultListener(
 
 /* XInitialization */
 void SAL_CALL SignatureVerifierImpl::initialize(
-    const css::uno::Sequence< cpo::uno::Any >& aArguments )
+    const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -106,7 +106,7 @@ OUString SignatureVerifierImpl_getImplementationName ()
     return u"com.sun.star.xml.security.framework.SignatureVerifierImpl"_ustr;
 }
 
-css::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SignatureVerifierImpl_getSupportedServiceNames(  )
 {
     return { u"com.sun.star.xml.crypto.sax.SignatureVerifier"_ustr };
 }
@@ -122,7 +122,7 @@ bool SAL_CALL SignatureVerifierImpl::supportsService( const OUString& rServiceNa
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL SignatureVerifierImpl::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL SignatureVerifierImpl::getSupportedServiceNames(  )
 {
     return SignatureVerifierImpl_getSupportedServiceNames();
 }

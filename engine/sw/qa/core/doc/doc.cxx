@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLinkedStyleDelete)
 
     // Then make sure we don't crash on save:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"FilterName"_ustr, u"writer8"_ustr),
     };
     xStorable->storeAsURL(maTempFile.GetURL(), aArgs);
@@ -420,7 +420,7 @@ SelectionChangeListener::SelectionChangeListener(
 
 void SelectionChangeListener::selectionChanged(const lang::EventObject& /*rEvent*/)
 {
-    uno::Sequence<OUString> aElementNames = m_xBookmarks->getElementNames();
+    cpo::uno::Sequence<OUString> aElementNames = m_xBookmarks->getElementNames();
     for (const auto& rName : aElementNames)
     {
         uno::Reference<text::XTextContent> xTextContent(m_xBookmarks->getByName(rName),
@@ -781,7 +781,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEditListAutofmt)
     pWrtShell->EndPara();
 
     // When changing that red to be black:
-    uno::Sequence<beans::PropertyValue> aArgs = {
+    cpo::uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Color.Color"_ustr, static_cast<sal_Int32>(COL_BLACK)),
     };
     dispatchCommand(mxComponent, u".uno:Color"_ustr, aArgs);

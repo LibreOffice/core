@@ -77,7 +77,7 @@ excludelist:
     - com/sun/star/util/XModifyListener.hpp
     chart2/source/inc/InternalData.hxx:
     # complete type is needed in the inline dtor
-    - com/sun/star/uno/Sequence.hxx
+    - cpo/uno/Sequence.hxx
     chart2/source/inc/InternalDataProvider.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/data/XRangeXMLConversion.hpp

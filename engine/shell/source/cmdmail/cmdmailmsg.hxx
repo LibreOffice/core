@@ -38,9 +38,9 @@ class CmdMailMsg :
     OUString                        m_aRecipient;
     OUString                        m_aOriginator;
     OUString                        m_aSubject;
-    css::uno::Sequence< OUString >  m_CcRecipients;
-    css::uno::Sequence< OUString >  m_BccRecipients;
-    css::uno::Sequence< OUString >  m_Attachments;
+    cpo::uno::Sequence< OUString >  m_CcRecipients;
+    cpo::uno::Sequence< OUString >  m_BccRecipients;
+    cpo::uno::Sequence< OUString >  m_Attachments;
 
     std::mutex                      m_aMutex;
 
@@ -60,13 +60,13 @@ public:
 
     virtual OUString SAL_CALL getRecipient(  ) override;
 
-    virtual void SAL_CALL setCcRecipient( const css::uno::Sequence< OUString >& aCcRecipient ) override;
+    virtual void SAL_CALL setCcRecipient( const cpo::uno::Sequence< OUString >& aCcRecipient ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getCcRecipient(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getCcRecipient(  ) override;
 
-    virtual void SAL_CALL setBccRecipient( const css::uno::Sequence< OUString >& aBccRecipient ) override;
+    virtual void SAL_CALL setBccRecipient( const cpo::uno::Sequence< OUString >& aBccRecipient ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getBccRecipient(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getBccRecipient(  ) override;
 
     virtual void SAL_CALL setOriginator( const OUString& aOriginator ) override;
 
@@ -76,9 +76,9 @@ public:
 
     virtual OUString SAL_CALL getSubject(  ) override;
 
-    virtual void SAL_CALL setAttachement( const css::uno::Sequence< OUString >& aAttachement ) override;
+    virtual void SAL_CALL setAttachement( const cpo::uno::Sequence< OUString >& aAttachement ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getAttachement(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getAttachement(  ) override;
 
 
     // XNameAccess
@@ -86,7 +86,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override ;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override ;
 
     virtual bool SAL_CALL hasByName( const OUString& aName ) override;
 

@@ -104,7 +104,7 @@ std::vector<OUString> lcl_getVisiblePageMembers(const uno::Reference<uno::XInter
     if (!xMembersAccess.is())
         return aResult;
 
-    const css::uno::Sequence<OUString> aMembersNames = xMembersAccess->getElementNames();
+    const cpo::uno::Sequence<OUString> aMembersNames = xMembersAccess->getElementNames();
     for (OUString const & rMemberNames : aMembersNames)
     {
         uno::Reference<beans::XPropertySet> xProperties(xMembersAccess->getByName(rMemberNames), uno::UNO_QUERY);
@@ -174,7 +174,7 @@ void PivotTableDataProvider::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxH
     }
 }
 
-bool SAL_CALL PivotTableDataProvider::createDataSourcePossible(const uno::Sequence<beans::PropertyValue>& /*aArguments*/)
+bool SAL_CALL PivotTableDataProvider::createDataSourcePossible(const cpo::uno::Sequence<beans::PropertyValue>& /*aArguments*/)
 {
     SolarMutexGuard aGuard;
     if (!m_pDocument)
@@ -188,7 +188,7 @@ bool SAL_CALL PivotTableDataProvider::createDataSourcePossible(const uno::Sequen
 }
 
 uno::Reference<chart2::data::XDataSource> SAL_CALL
-    PivotTableDataProvider::createDataSource(const uno::Sequence<beans::PropertyValue>& aArguments)
+    PivotTableDataProvider::createDataSource(const cpo::uno::Sequence<beans::PropertyValue>& aArguments)
 {
     SolarMutexGuard aGuard;
 
@@ -282,12 +282,12 @@ void PivotTableDataProvider::collectPivotTableData()
     uno::Reference<sheet::XDataPilotResults> xDPResults(pDPObject->GetSource(), uno::UNO_QUERY);
     if (!xDPResults.is())
         return;
-    const uno::Sequence<uno::Sequence<sheet::DataResult>> xDataResultsSequence = xDPResults->getResults();
+    const cpo::uno::Sequence<cpo::uno::Sequence<sheet::DataResult>> xDataResultsSequence = xDPResults->getResults();
 
     std::unordered_set<size_t> aValidRowIndex;
 
     size_t nRowIndex = 0;
-    for (uno::Sequence<sheet::DataResult> const & xDataResults : xDataResultsSequence)
+    for (cpo::uno::Sequence<sheet::DataResult> const & xDataResults : xDataResultsSequence)
     {
         std::vector<ValueAndFormat> aRow;
         bool bRowEmpty = true;
@@ -386,7 +386,7 @@ void PivotTableDataProvider::collectPivotTableData()
                     {
                         m_aColumnFields.emplace_back(xLevelName->getName(), nDim, nDimPos, bHasHiddenMember);
 
-                        const uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
+                        const cpo::uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
                         size_t i = 0;
                         OUString sCaption;
                         OUString sName;
@@ -430,7 +430,7 @@ void PivotTableDataProvider::collectPivotTableData()
                     {
                         m_aRowFields.emplace_back(xLevelName->getName(), nDim, nDimPos, bHasHiddenMember);
 
-                        const uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
+                        const cpo::uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
 
                         size_t i = 0;
                         size_t nEachIndex = 0;
@@ -672,11 +672,11 @@ uno::Reference<chart2::data::XDataSource>
 }
 
 
-uno::Sequence<beans::PropertyValue> SAL_CALL PivotTableDataProvider::detectArguments(
+cpo::uno::Sequence<beans::PropertyValue> SAL_CALL PivotTableDataProvider::detectArguments(
             const uno::Reference<chart2::data::XDataSource> & xDataSource)
 {
     if (!m_pDocument ||!xDataSource.is())
-        return uno::Sequence<beans::PropertyValue>();
+        return cpo::uno::Sequence<beans::PropertyValue>();
 
     return comphelper::InitPropertySequence({
         { "CellRangeRepresentation", cpo::uno::Any(u"PivotChart"_ustr) },

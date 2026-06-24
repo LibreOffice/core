@@ -47,7 +47,7 @@ using namespace cpo::uno;
         return u"org.openoffice.comp.abp.OAddressBookSourcePilot"_ustr;
     }
 
-    css::uno::Sequence<OUString> SAL_CALL OABSPilotUno::getSupportedServiceNames()
+    cpo::uno::Sequence<OUString> SAL_CALL OABSPilotUno::getSupportedServiceNames()
     {
         return { u"com.sun.star.ui.dialogs.AddressBookSourcePilot"_ustr };
     }
@@ -100,7 +100,7 @@ using namespace cpo::uno;
         // User has one chance to accept it or not.
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
-        css::uno::Sequence< css::beans::NamedValue > lProtocol { { u"Deactivate"_ustr, cpo::uno::Any( true ) } };
+        cpo::uno::Sequence< css::beans::NamedValue > lProtocol { { u"Deactivate"_ustr, cpo::uno::Any( true ) } };
         return Any( lProtocol );
     }
 
@@ -119,7 +119,7 @@ using namespace cpo::uno;
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 org_openoffice_comp_abp_OAddressBookSourcePilot(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new abp::OABSPilotUno(context));
 }

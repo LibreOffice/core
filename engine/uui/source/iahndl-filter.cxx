@@ -68,7 +68,7 @@ handleNoSuchFilterRequest_(
     weld::Window* pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     document::NoSuchFilterRequest const & rRequest,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
             rContinuations )
 {
     uno::Reference< task::XInteractionAbort > xAbort;
@@ -181,7 +181,7 @@ handleFilterOptionsRequest_(
     uno::Reference<awt::XWindow> const & rWindow,
     uno::Reference< uno::XComponentContext > const & xContext,
     document::FilterOptionsRequest const & rRequest,
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
 {
     uno::Reference< task::XInteractionAbort > xAbort;
@@ -211,7 +211,7 @@ handleFilterOptionsRequest_(
                 pProperty->Value >>= aFilterName;
             }
 
-            uno::Sequence < beans::PropertyValue > aProps;
+            cpo::uno::Sequence < beans::PropertyValue > aProps;
             if ( xFilterCFG->getByName( aFilterName ) >>= aProps )
             {
                 auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
@@ -222,7 +222,7 @@ handleFilterOptionsRequest_(
                     pProp->Value >>= aServiceName;
                     if( !aServiceName.isEmpty() )
                     {
-                        uno::Sequence<cpo::uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
+                        cpo::uno::Sequence<cpo::uno::Any> aDialogArgs(comphelper::InitAnyPropertySequence(
                         {
                             {"ParentWindow", cpo::uno::Any(rWindow)},
                         }));

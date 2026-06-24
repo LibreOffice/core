@@ -35,7 +35,7 @@ public:
     virtual css::uno::Reference< ov::excel::XMenuItem > SAL_CALL Add( const OUString& Caption, const cpo::uno::Any& OnAction, const cpo::uno::Any& ShortcutKey, const cpo::uno::Any& Before, const cpo::uno::Any& Restore, const cpo::uno::Any& StatusBar, const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContextID ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

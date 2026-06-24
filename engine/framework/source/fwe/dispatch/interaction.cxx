@@ -97,7 +97,7 @@ public:
 
 public:
     virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 
 private:
     cpo::uno::Any                                                                       m_aRequest;
@@ -149,7 +149,7 @@ cpo::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest()
 // After interaction we support read access on these continuations on our c++ interface to
 // return user decision.
 
-css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL RequestFilterSelect_Impl::getContinuations()
+cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL RequestFilterSelect_Impl::getContinuations()
 {
     return { m_xAbort, m_xFilter };
 }
@@ -189,17 +189,17 @@ namespace {
 class InteractionRequest_Impl : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
     cpo::uno::Any m_aRequest;
-    uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
+    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
 
 public:
     InteractionRequest_Impl( cpo::uno::Any  aRequest,
-        const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations )
+        const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations )
         : m_aRequest(std::move(aRequest)), m_lContinuations(lContinuations)
     {
     }
 
     virtual cpo::uno::Any SAL_CALL getRequest() override;
-    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
+    virtual cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() override;
 };
 
 }
@@ -209,13 +209,13 @@ cpo::uno::Any SAL_CALL InteractionRequest_Impl::getRequest()
     return m_aRequest;
 }
 
-uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL InteractionRequest_Impl::getContinuations()
+cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL InteractionRequest_Impl::getContinuations()
 {
     return m_lContinuations;
 }
 
 uno::Reference < task::XInteractionRequest > InteractionRequest::CreateRequest(
-    const cpo::uno::Any& aRequest, const uno::Sequence< uno::Reference< task::XInteractionContinuation > >& lContinuations )
+    const cpo::uno::Any& aRequest, const cpo::uno::Sequence< uno::Reference< task::XInteractionContinuation > >& lContinuations )
 {
     return new InteractionRequest_Impl( aRequest, lContinuations );
 }

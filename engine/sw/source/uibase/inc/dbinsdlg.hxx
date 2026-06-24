@@ -27,7 +27,7 @@
 #include "numfmtlb.hxx"
 #include <swdbdata.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.h>
+#include <cpo/uno/Sequence.h>
 #include <o3tl/sorted_vector.hxx>
 
 #include <memory>
@@ -135,7 +135,7 @@ class SwInsertDBColAutoPilot final : public SfxDialogController, public utl::Con
     DECL_LINK( HeaderHdl, weld::Toggleable&, void );
 
     bool SplitTextToColArr( const OUString& rText, DB_Columns& rColArr, bool bInsField );
-    virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
+    virtual void Notify( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void            ImplCommit() override;
     void                    Load();
 
@@ -150,7 +150,7 @@ public:
 
     virtual ~SwInsertDBColAutoPilot() override;
 
-    void DataToDoc( const css::uno::Sequence< cpo::uno::Any >& rSelection,
+    void DataToDoc( const cpo::uno::Sequence< cpo::uno::Any >& rSelection,
         css::uno::Reference< css::sdbc::XDataSource> const & rxSource,
         css::uno::Reference< css::sdbc::XConnection> const & xConnection,
         css::uno::Reference< css::sdbc::XResultSet > const & xResultSet);

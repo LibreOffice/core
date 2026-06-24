@@ -102,7 +102,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getForeColor();
     //XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     //General helper methods for properties (may or may not be relevant for all
     //controls)
     /// @throws css::uno::RuntimeException

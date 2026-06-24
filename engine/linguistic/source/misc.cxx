@@ -33,7 +33,7 @@
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
@@ -262,7 +262,7 @@ uno::Reference< XDictionaryEntry > SearchDicList(
 
     if (rDictionaryMap.empty())
     {
-        const uno::Sequence< uno::Reference< XDictionary > >
+        const cpo::uno::Sequence< uno::Reference< XDictionary > >
                 aDics( xDicList->getDictionaries() );
         for (const uno::Reference<XDictionary>& rxDic : aDics)
         {
@@ -376,7 +376,7 @@ DictionaryError AddEntryToDic(
 }
 
 std::vector< LanguageType >
-    LocaleSeqToLangVec( uno::Sequence< Locale > const &rLocaleSeq )
+    LocaleSeqToLangVec( cpo::uno::Sequence< Locale > const &rLocaleSeq )
 {
     std::vector< LanguageType >   aLangs;
     aLangs.reserve(rLocaleSeq.getLength());

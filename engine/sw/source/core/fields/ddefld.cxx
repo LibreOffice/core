@@ -73,7 +73,7 @@ public:
             OUString sStr;
             if (!(rValue >>= sStr))
             {
-                uno::Sequence< sal_Int8 > aSeq;
+                cpo::uno::Sequence< sal_Int8 > aSeq;
                 rValue >>= aSeq;
                 sStr = OUString(reinterpret_cast<char const*>(aSeq.getConstArray()), aSeq.getLength(), osl_getThreadTextEncoding());
             }

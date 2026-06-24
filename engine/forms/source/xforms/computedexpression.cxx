@@ -21,7 +21,7 @@
 #include "computedexpression.hxx"
 #include "evaluationcontext.hxx"
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XPathExtension.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>

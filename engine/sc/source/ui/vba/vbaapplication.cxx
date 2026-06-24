@@ -193,7 +193,7 @@ ScVbaApplication::getIntrospection()
 }
 
 cpo::uno::Any SAL_CALL
-ScVbaApplication::invoke( const OUString& FunctionName, const uno::Sequence< cpo::uno::Any >& Params, uno::Sequence< sal_Int16 >& OutParamIndex, uno::Sequence< cpo::uno::Any >& OutParam)
+ScVbaApplication::invoke( const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& OutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& OutParam)
 {
     /*  When calling the functions directly at the Application object, no runtime
         errors are thrown, but the error is inserted into the return value. */
@@ -1528,7 +1528,7 @@ ScVbaApplication::FindConnectionPoint()
 // XSinkCaller
 
 void SAL_CALL
-ScVbaApplication::CallSinks( const OUString& Method, uno::Sequence< cpo::uno::Any >& Arguments )
+ScVbaApplication::CallSinks( const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments )
 {
     for (auto& i : mvSinks)
     {
@@ -1543,10 +1543,10 @@ ScVbaApplication::getServiceImplName()
     return u"ScVbaApplication"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaApplication::getServiceNames()
 {
-    static uno::Sequence< OUString > aServiceNames
+    static cpo::uno::Sequence< OUString > aServiceNames
     {
         u"ooo.vba.excel.Application"_ustr
     };
@@ -1556,7 +1556,7 @@ ScVbaApplication::getServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 Calc_ScVbaApplication_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new ScVbaApplication(context));
 }

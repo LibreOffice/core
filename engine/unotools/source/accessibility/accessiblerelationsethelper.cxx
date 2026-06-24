@@ -157,9 +157,9 @@ void AccessibleRelationSetHelper::AddRelation(const AccessibleRelation& rRelatio
 
 //=====  XTypeProvider  =======================================================
 
-uno::Sequence< css::uno::Type> AccessibleRelationSetHelper::getTypes()
+cpo::uno::Sequence< css::uno::Type> AccessibleRelationSetHelper::getTypes()
 {
-    static const uno::Sequence< css::uno::Type> aTypes {
+    static const cpo::uno::Sequence< css::uno::Type> aTypes {
         cppu::UnoType<XAccessibleRelationSet>::get(),
         cppu::UnoType<lang::XTypeProvider>::get()
     };

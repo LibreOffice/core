@@ -46,7 +46,7 @@ namespace pcr
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::graphic::GraphicProvider;
     using ::com::sun::star::graphic::XGraphicProvider;
-    using ::com::sun::star::uno::Sequence;
+    using ::cpo::uno::Sequence;
     using ::com::sun::star::graphic::XGraphic;
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;

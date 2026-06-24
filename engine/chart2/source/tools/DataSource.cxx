@@ -23,7 +23,7 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 
 using namespace ::com::sun::star;
@@ -71,7 +71,7 @@ bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL DataSource::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL DataSource::getSupportedServiceNames()
 {
     return { u"com.sun.star.chart2.data.DataSource"_ustr };
 }
@@ -80,7 +80,7 @@ css::uno::Sequence< OUString > SAL_CALL DataSource::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart_DataSource_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::DataSource);
 }

@@ -270,14 +270,14 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a choice for the content to create
     static constexpr OUString aPrintRangeName( u"PrintContent"_ustr );
-    uno::Sequence< OUString > aChoices{ SwResId( STR_PRINTOPTUI_PRINTALLPAGES ),
+    cpo::uno::Sequence< OUString > aChoices{ SwResId( STR_PRINTOPTUI_PRINTALLPAGES ),
                                         SwResId( STR_PRINTOPTUI_PRINTPAGES ),
                                         SwResId( STR_PRINTOPTUI_PRINTSELECTION ) };
-    uno::Sequence< bool > aChoicesDisabled{ false, false, !bHasSelection };
-    uno::Sequence< OUString > aHelpIds{ u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0"_ustr,
+    cpo::uno::Sequence< bool > aChoicesDisabled{ false, false, !bHasSelection };
+    cpo::uno::Sequence< OUString > aHelpIds{ u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0"_ustr,
                                         u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"_ustr,
                                         u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"_ustr };
-    uno::Sequence< OUString > aWidgetIds{ u"rbAllPages"_ustr, u"rbRangePages"_ustr, u"rbRangeSelection"_ustr };
+    cpo::uno::Sequence< OUString > aWidgetIds{ u"rbAllPages"_ustr, u"rbRangePages"_ustr, u"rbRangeSelection"_ustr };
     m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                         aHelpIds, aPrintRangeName,
                                                         aChoices, 0 /* always default to 'All pages' */,
@@ -294,11 +294,11 @@ SwPrintUIOptions::SwPrintUIOptions(
     vcl::PrinterOptionsHelper::UIControlOptions aEvenOddOpt(aPrintRangeName, -1, true);
     m_aUIProperties[ nIdx++ ].Value = setChoiceListControlOpt(u"evenoddbox"_ustr,
                                                            OUString(),
-                                                           uno::Sequence<OUString>(),
+                                                           cpo::uno::Sequence<OUString>(),
                                                            u"EvenOdd"_ustr,
-                                                           uno::Sequence<OUString>(),
+                                                           cpo::uno::Sequence<OUString>(),
                                                            0,
-                                                           uno::Sequence< bool >(),
+                                                           cpo::uno::Sequence< bool >(),
                                                            aEvenOddOpt);
 
     // create a list box for notes content
@@ -318,7 +318,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                            u"PrintAnnotationMode"_ustr,
                                                            aChoices,
                                                            bHasPostIts ? static_cast<sal_uInt16>(nPrintPostIts) : 0,
-                                                           uno::Sequence< bool >(),
+                                                           cpo::uno::Sequence< bool >(),
                                                            aAnnotOpt);
 
     // create subsection for Page settings
@@ -337,10 +337,10 @@ SwPrintUIOptions::SwPrintUIOptions(
     if (bRTL)
     {
         // create a bool option for brochure RTL dependent on brochure
-        uno::Sequence< OUString > aBRTLChoices{ SwResId( STR_PRINTOPTUI_LEFT_SCRIPT),
+        cpo::uno::Sequence< OUString > aBRTLChoices{ SwResId( STR_PRINTOPTUI_LEFT_SCRIPT),
                                                 SwResId( STR_PRINTOPTUI_RIGHT_SCRIPT) };
         vcl::PrinterOptionsHelper::UIControlOptions aBrochureRTLOpt( aBrochurePropertyName, -1, true );
-        uno::Sequence<OUString> aBRTLHelpIds { u".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox"_ustr };
+        cpo::uno::Sequence<OUString> aBRTLHelpIds { u".HelpID:vcl:PrintDialog:PrintProspectRTL:ListBox"_ustr };
         aBrochureRTLOpt.maGroupHint = u"LayoutPage"_ustr;
         // RTL brochure choices
         //      0 : left-to-right
@@ -352,7 +352,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                                u"PrintProspectRTL"_ustr,
                                                                aBRTLChoices,
                                                                nBRTLChoice,
-                                                               uno::Sequence< bool >(),
+                                                               cpo::uno::Sequence< bool >(),
                                                                aBrochureRTLOpt);
     }
 
@@ -408,7 +408,7 @@ bool SwPrintUIOptions::IsPrintGraphics() const
     return bRes;
 }
 
-bool SwPrintUIOptions::processPropertiesAndCheckFormat( const uno::Sequence< beans::PropertyValue >& i_rNewProp )
+bool SwPrintUIOptions::processPropertiesAndCheckFormat( const cpo::uno::Sequence< beans::PropertyValue >& i_rNewProp )
 {
     bool bChanged = processProperties( i_rNewProp );
 

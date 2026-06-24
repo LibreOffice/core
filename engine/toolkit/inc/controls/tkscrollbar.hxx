@@ -50,7 +50,7 @@ namespace toolkit
         // XServiceInfo
         OUString SAL_CALL getImplementationName() override;
 
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 
 
@@ -76,8 +76,8 @@ namespace toolkit
         void SAL_CALL dispose(  ) override;
 
         // css::lang::XTypeProvider
-        css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
-        css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
+        cpo::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+        cpo::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
         // css::awt::XAdjustmentListener
         void SAL_CALL adjustmentValueChanged( const css::awt::AdjustmentEvent& rEvent ) override;
@@ -102,7 +102,7 @@ namespace toolkit
         // css::lang::XServiceInfo
         OUString SAL_CALL getImplementationName() override;
 
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 
 

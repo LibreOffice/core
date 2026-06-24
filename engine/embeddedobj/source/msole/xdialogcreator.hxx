@@ -44,15 +44,15 @@ public:
     }
 
     // XInsertObjectDialog
-    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceByDialog( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceByDialog( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     // XEmbedObjectClipboardCreator
-    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceInitFromClipboard( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntryName, const css::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) override;
+    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceInitFromClipboard( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntryName, const cpo::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 

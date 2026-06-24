@@ -28,7 +28,7 @@ class MyInterceptor
     std::mutex maMutex;
     uno::Reference<frame::XDispatchProvider> m_xMaster;
     uno::Reference<frame::XDispatchProvider> m_xSlave;
-    uno::Sequence<OUString> m_aDisabledCommands;
+    cpo::uno::Sequence<OUString> m_aDisabledCommands;
     int m_nExpected;
     int m_nUnexpected;
 
@@ -41,7 +41,7 @@ public:
     int getUnexpected();
 
     // frame::XInterceptorInfo
-    virtual uno::Sequence<OUString> SAL_CALL getInterceptedURLs() override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getInterceptedURLs() override;
 
     // frame::XDispatchProviderInterceptor
     virtual void SAL_CALL setMasterDispatchProvider(
@@ -52,8 +52,8 @@ public:
     virtual uno::Reference<frame::XDispatchProvider> SAL_CALL getSlaveDispatchProvider() override;
 
     // frame::XDispatchProvider
-    virtual uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL
-    queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
+    virtual cpo::uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL
+    queryDispatches(const cpo::uno::Sequence<frame::DispatchDescriptor>& rRequests) override;
     virtual uno::Reference<frame::XDispatch>
         SAL_CALL queryDispatch(const util::URL& rURL, const OUString& rTargetFrameName,
                                sal_Int32 SearchFlags) override;
@@ -82,7 +82,7 @@ int MyInterceptor::getUnexpected()
     return nRet;
 }
 
-uno::Sequence<OUString> MyInterceptor::getInterceptedURLs() { return m_aDisabledCommands; }
+cpo::uno::Sequence<OUString> MyInterceptor::getInterceptedURLs() { return m_aDisabledCommands; }
 
 void MyInterceptor::setMasterDispatchProvider(
     const uno::Reference<frame::XDispatchProvider>& xNewSupplier)
@@ -110,10 +110,10 @@ uno::Reference<frame::XDispatchProvider> MyInterceptor::getSlaveDispatchProvider
     return m_xSlave;
 }
 
-uno::Sequence<uno::Reference<frame::XDispatch>>
-MyInterceptor::queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests)
+cpo::uno::Sequence<uno::Reference<frame::XDispatch>>
+MyInterceptor::queryDispatches(const cpo::uno::Sequence<frame::DispatchDescriptor>& rRequests)
 {
-    uno::Sequence<uno::Reference<frame::XDispatch>> aResult(rRequests.getLength());
+    cpo::uno::Sequence<uno::Reference<frame::XDispatch>> aResult(rRequests.getLength());
     auto aResultRange = asNonConstRange(aResult);
 
     for (sal_Int32 i = 0; i < rRequests.getLength(); ++i)

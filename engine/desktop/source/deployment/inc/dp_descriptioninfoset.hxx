@@ -25,7 +25,7 @@
 #include <string_view>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <sal/types.h>
 #include "dp_misc_api.hxx"
 
@@ -109,7 +109,7 @@ public:
         The value attribute can contain various platform tokens. They must be separated by
         commas.Each token will be stripped from leading and trailing white space (trim()).
     */
-    css::uno::Sequence< OUString > getSupportedPlatforms() const;
+    cpo::uno::Sequence< OUString > getSupportedPlatforms() const;
 
     /**
         Returns the localized publisher name and the corresponding URL.
@@ -157,7 +157,7 @@ public:
        @return
        update information URLs
     */
-    css::uno::Sequence< OUString > getUpdateInformationUrls() const;
+    cpo::uno::Sequence< OUString > getUpdateInformationUrls() const;
 
     /**
         Returns the URL for the icon image.
@@ -170,7 +170,7 @@ private:
     SAL_DLLPRIVATE ::std::optional< OUString > getOptionalValue(
         OUString const & expression) const;
 
-    SAL_DLLPRIVATE css::uno::Sequence< OUString > getUrls(
+    SAL_DLLPRIVATE cpo::uno::Sequence< OUString > getUrls(
         OUString const & expression) const;
 
     /** Retrieves a child element which as lang attribute which matches the office locale.
@@ -223,7 +223,7 @@ private:
      */
     SAL_DLLPRIVATE static bool
         checkDenylistVersion(std::u16string_view currentversion,
-                              css::uno::Sequence< OUString > const & versions);
+                              cpo::uno::Sequence< OUString > const & versions);
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
     css::uno::Reference< css::xml::dom::XNode >        m_element;

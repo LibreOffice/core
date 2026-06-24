@@ -48,12 +48,12 @@ namespace pcr
         css::uno::Reference< css::beans::XPropertySet >
                                     m_xCurrentInspectee;
         OUString                    m_sImplementationName;
-        css::uno::Sequence<OUString> m_aSupportedServiceNames;
+        cpo::uno::Sequence<OUString> m_aSupportedServiceNames;
     public:
         FormController(
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             OUString sImplementName,
-            const css::uno::Sequence<OUString>& aSupportedServiceNames,
+            const cpo::uno::Sequence<OUString>& aSupportedServiceNames,
             bool _bUseFormFormComponentHandlers
         );
 
@@ -65,7 +65,7 @@ namespace pcr
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XPropertySet and friends
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

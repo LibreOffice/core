@@ -601,7 +601,7 @@ namespace vclcanvas
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const rendering::ViewState&                        viewState,
                                                                                          const rendering::RenderState&                      renderState,
-                                                                                         const uno::Sequence< rendering::Texture >&         textures )
+                                                                                         const cpo::uno::Sequence< rendering::Texture >&         textures )
     {
         ENSURE_ARG_OR_THROW( xPolyPolygon.is(),
                          "CanvasHelper::fillPolyPolygon(): polygon is NULL");
@@ -644,7 +644,7 @@ namespace vclcanvas
                         std::transform(&aValues.maColors[0],
                                        &aValues.maColors[0]+aValues.maColors.getLength(),
                                        aColors.begin(),
-                                       [](const uno::Sequence< double >& aColor) {
+                                       [](const cpo::uno::Sequence< double >& aColor) {
                                            return vcl::unotools::stdColorSpaceSequenceToColor( aColor );
                                        } );
 

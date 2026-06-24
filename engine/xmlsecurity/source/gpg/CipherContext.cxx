@@ -18,7 +18,7 @@ Sequence<sal_Int8>
     return Sequence<sal_Int8>();
 }
 
-uno::Sequence<sal_Int8> SAL_CALL CipherContext::finalizeCipherContextAndDispose()
+cpo::uno::Sequence<sal_Int8> SAL_CALL CipherContext::finalizeCipherContextAndDispose()
 {
     return Sequence<sal_Int8>();
 }

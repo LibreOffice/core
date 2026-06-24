@@ -57,8 +57,8 @@ public:
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    static css::uno::Sequence<OUString> getSupportedServiceNames_static();
+    cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    static cpo::uno::Sequence<OUString> getSupportedServiceNames_static();
 
     // XClipboard
     css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getContents() override;
@@ -83,7 +83,7 @@ public:
 /// Represents the contents of KitClipboard.
 class KitTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
-    css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
     std::vector<cpo::uno::Any> m_aContent;
 
 public:
@@ -96,11 +96,11 @@ public:
     KitTransferable();
     KitTransferable(size_t nInCount, const char** pInMimeTypes, const size_t* pInSizes,
                     const char** pInStreams);
-    KitTransferable(const OUString& sMimeType, const css::uno::Sequence<sal_Int8>& aSequence);
+    KitTransferable(const OUString& sMimeType, const cpo::uno::Sequence<sal_Int8>& aSequence);
 
     cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
 
-    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
 
     bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
@@ -115,14 +115,14 @@ public:
 class KitProviderTransferable : public cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
     COKitClipboardProvider m_aProvider;
-    css::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> m_aFlavors;
     mutable std::map<OUString, cpo::uno::Any> m_aCache;
 
 public:
     explicit KitProviderTransferable(const COKitClipboardProvider& rProvider);
 
     cpo::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override;
-    css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    cpo::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
     bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
@@ -139,10 +139,10 @@ public:
 
     css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance() override
     {
-        return createInstanceWithArguments(css::uno::Sequence<cpo::uno::Any>());
+        return createInstanceWithArguments(cpo::uno::Sequence<cpo::uno::Any>());
     }
     css::uno::Reference<css::uno::XInterface> SAL_CALL
-    createInstanceWithArguments(const css::uno::Sequence<cpo::uno::Any>& /* rArgs */) override;
+    createInstanceWithArguments(const cpo::uno::Sequence<cpo::uno::Any>& /* rArgs */) override;
 
     /// Fetch clipboard from the global pool.
     static rtl::Reference<KitClipboard> getClipboardForCurView();

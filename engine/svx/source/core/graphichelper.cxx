@@ -139,8 +139,8 @@ OUString GraphicHelper::GetImageType(const Graphic& rGraphic)
 namespace {
 
 
-bool lcl_ExecuteFilterDialog(const uno::Sequence<beans::PropertyValue>& rPropsForDialog,
-                             uno::Sequence<beans::PropertyValue>& rFilterData)
+bool lcl_ExecuteFilterDialog(const cpo::uno::Sequence<beans::PropertyValue>& rPropsForDialog,
+                             cpo::uno::Sequence<beans::PropertyValue>& rFilterData)
 {
     bool bStatus = false;
     try
@@ -155,7 +155,7 @@ bool lcl_ExecuteFilterDialog(const uno::Sequence<beans::PropertyValue>& rPropsFo
             if( xFilterDialog->execute() )
             {
                 bStatus = true;
-                const uno::Sequence<beans::PropertyValue> aPropsFromDialog = xFilterProperties->getPropertyValues();
+                const cpo::uno::Sequence<beans::PropertyValue> aPropsFromDialog = xFilterProperties->getPropertyValues();
                 for ( const auto& rProp : aPropsFromDialog )
                 {
                     if (rProp.Name == "FilterData")
@@ -326,13 +326,13 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
 
                 OUString aExportFilter = rGraphicFilter.GetExportInternalFilterName(nFilter);
 
-                uno::Sequence<beans::PropertyValue> aPropsForDialog
+                cpo::uno::Sequence<beans::PropertyValue> aPropsForDialog
                 {
                     comphelper::makePropertyValue(u"Graphic"_ustr, xGraphic),
                     comphelper::makePropertyValue(u"FilterName"_ustr, aExportFilter)
                 };
 
-                uno::Sequence<beans::PropertyValue> aFilterData;
+                cpo::uno::Sequence<beans::PropertyValue> aFilterData;
                 bool bStatus = lcl_ExecuteFilterDialog(aPropsForDialog, aFilterData);
                 if (bStatus)
                 {
@@ -407,12 +407,12 @@ void GraphicHelper::SaveShapeAsGraphicToPath(
         uno::Reference<drawing::XShapes> xShapes
             = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
         xShapes->add(xShape);
-        uno::Sequence<beans::PropertyValue> aFilterData{
+        cpo::uno::Sequence<beans::PropertyValue> aFilterData{
             comphelper::makePropertyValue(u"Selection"_ustr, xShapes),
         };
         SvFileStream aStream(sPath, StreamMode::READWRITE | StreamMode::TRUNC);
         uno::Reference<io::XOutputStream> xStream(new utl::OStreamWrapper(aStream));
-        uno::Sequence<beans::PropertyValue> aDescriptor
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor
         {
             comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData),
             comphelper::makePropertyValue(u"OutputStream"_ustr, xStream)
@@ -424,7 +424,7 @@ void GraphicHelper::SaveShapeAsGraphicToPath(
     {
         uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
 
-        uno::Sequence<beans::PropertyValue> aDescriptor{ comphelper::makePropertyValue(u"MediaType"_ustr,
+        cpo::uno::Sequence<beans::PropertyValue> aDescriptor{ comphelper::makePropertyValue(u"MediaType"_ustr,
                                                                            aExportMimeType),
                                              comphelper::makePropertyValue(u"URL"_ustr, sPath) };
 

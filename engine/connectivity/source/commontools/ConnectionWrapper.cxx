@@ -87,7 +87,7 @@ OUString SAL_CALL OConnectionWrapper::getImplementationName(  )
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  )
+cpo::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  )
 {
     osl::MutexGuard aGuard(m_aMutex);
     // first collect the services which are supported by our aggregate

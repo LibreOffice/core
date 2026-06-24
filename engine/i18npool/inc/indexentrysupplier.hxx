@@ -42,9 +42,9 @@ public:
     IndexEntrySupplier( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
 
     // Methods
-    virtual css::uno::Sequence < css::lang::Locale > SAL_CALL getLocaleList() override;
+    virtual cpo::uno::Sequence < css::lang::Locale > SAL_CALL getLocaleList() override;
 
-    virtual css::uno::Sequence < OUString > SAL_CALL getAlgorithmList(
+    virtual cpo::uno::Sequence < OUString > SAL_CALL getAlgorithmList(
         const css::lang::Locale& rLocale ) override;
 
     virtual bool SAL_CALL loadAlgorithm(
@@ -74,7 +74,7 @@ public:
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;

@@ -88,11 +88,11 @@ public:
     getAccessibleColumnHeaders() override;
 
     /** @return  An index list of completely selected rows. */
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
     getSelectedAccessibleRows() override;
 
     /** @return  An index list of completely selected columns. */
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL
     getSelectedAccessibleColumns() override;
 
     /** @return  TRUE, if the specified row is completely selected. */

@@ -63,12 +63,12 @@ OZipFileAccess::~OZipFileAccess()
     }
 }
 
-uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUString& aString )
+cpo::uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUString& aString )
 {
     if ( aString.isEmpty() )
-        return uno::Sequence< OUString >();
+        return cpo::uno::Sequence< OUString >();
 
-    uno::Sequence< OUString > aPattern( 1 );
+    cpo::uno::Sequence< OUString > aPattern( 1 );
     auto pPattern = aPattern.getArray();
     sal_Int32 nInd = 0;
 
@@ -112,7 +112,7 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
 }
 
 bool OZipFileAccess::StringGoodForPattern_Impl( std::u16string_view aString,
-                                                    const uno::Sequence< OUString >& aPattern )
+                                                    const cpo::uno::Sequence< OUString >& aPattern )
 {
     sal_Int32 nInd = aPattern.getLength() - 1;
     if ( nInd < 0 )
@@ -157,7 +157,7 @@ bool OZipFileAccess::StringGoodForPattern_Impl( std::u16string_view aString,
 }
 
 // XInitialization
-void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL OZipFileAccess::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -175,7 +175,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< cpo::uno::Any >& 
     OUString aParamURL;
     uno::Reference< io::XStream > xStream;
     uno::Reference< io::XSeekable > xSeekable;
-    uno::Sequence<beans::NamedValue> aArgs;
+    cpo::uno::Sequence<beans::NamedValue> aArgs;
 
     auto openInputStream = [&]()
     {
@@ -289,7 +289,7 @@ cpo::uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     return cpo::uno::Any ( xEntryStream );
 }
 
-uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
+cpo::uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -299,7 +299,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
     if ( !m_pZipFile )
         throw uno::RuntimeException();
 
-    uno::Sequence< OUString > aNames( m_pZipFile->GetEntryHash().size() );
+    cpo::uno::Sequence< OUString > aNames( m_pZipFile->GetEntryHash().size() );
     auto pNames = aNames.getArray();
     sal_Int32 nLen = 0;
 
@@ -377,7 +377,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
         throw io::NotConnectedException();
 
     // Code to compare strings by patterns
-    uno::Sequence< OUString > aPattern = GetPatternsFromString_Impl( aPatternString );
+    cpo::uno::Sequence< OUString > aPattern = GetPatternsFromString_Impl( aPatternString );
 
     auto aIter = std::find_if(m_pZipFile->GetEntryHash().begin(), m_pZipFile->GetEntryHash().end(),
         [&aPattern](const EntryHash::value_type& rEntry) { return StringGoodForPattern_Impl(rEntry.second.sPath, aPattern); });
@@ -455,7 +455,7 @@ bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames()
 {
     return { u"com.sun.star.packages.zip.ZipFileAccess"_ustr,
     u"com.sun.star.comp.packages.zip.ZipFileAccess"_ustr };
@@ -464,7 +464,7 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 package_OZipFileAccess_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new OZipFileAccess(context));
 }

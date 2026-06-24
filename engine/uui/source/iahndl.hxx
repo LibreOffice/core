@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/beans/Optional.hpp>
@@ -117,7 +117,7 @@ private:
 
     static bool
     isInformationalErrorMessageRequest(
-        css::uno::Sequence<
+        cpo::uno::Sequence<
             css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations);
 
     bool
@@ -138,7 +138,7 @@ private:
     void
     handleNameClashResolveRequest(
         css::ucb::NameClashResolveRequest const & rRequest,
-        css::uno::Sequence<
+        cpo::uno::Sequence<
             css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);
 
     bool
@@ -163,7 +163,7 @@ private:
         css::task::InteractionClassification eClassification,
         ErrCode nErrorCode,
         std::vector< OUString > const & rArguments,
-        css::uno::Sequence<
+        cpo::uno::Sequence<
             css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
@@ -172,7 +172,7 @@ private:
     void
     handleGenericErrorRequest(
         ErrCodeMsg nErrorCode,
-        css::uno::Sequence<
+        cpo::uno::Sequence<
             css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
@@ -183,14 +183,14 @@ private:
         const OUString& aDocumentURL,
         const css::uno::Reference< css::embed::XStorage >& xZipStorage,
         const OUString& aDocumentVersion,
-        const css::uno::Sequence< css::security::DocumentSignatureInformation >& aSignInfo,
-        css::uno::Sequence<
+        const cpo::uno::Sequence< css::security::DocumentSignatureInformation >& aSignInfo,
+        cpo::uno::Sequence<
             css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations);
 
     void
     handleBrokenPackageRequest(
         std::vector< OUString > const & rArguments,
-        css::uno::Sequence<
+        cpo::uno::Sequence<
             css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
@@ -221,12 +221,12 @@ private:
     handleAuthFallbackRequest(
             const OUString & instructions,
             const OUString & url,
-            css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
+            cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
 
     void
     handleLoadReadOnlyRequest(
         const OUString& sDocumentURL,
-        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);
+        cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);
 };
 
 class ErrorResource

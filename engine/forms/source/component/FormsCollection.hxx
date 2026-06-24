@@ -55,8 +55,8 @@ public:
     virtual cpo::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+    virtual cpo::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XPersistObject
     virtual OUString SAL_CALL getServiceName() override;
@@ -64,7 +64,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(  ) override;
 
     // XCloneable
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
@@ -86,7 +86,7 @@ public:
         { return OInterfaceContainer::hasElements(); }
     virtual cpo::uno::Any SAL_CALL getByName(const OUString& p1) override
         { return OInterfaceContainer::getByName(p1); }
-    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getElementNames() override
         { return OInterfaceContainer::getElementNames(); }
     virtual bool SAL_CALL hasByName(const OUString& p1) override
         { return OInterfaceContainer::hasByName(p1); }
@@ -110,7 +110,7 @@ public:
         { return OInterfaceContainer::createEnumeration(); }
     virtual void SAL_CALL registerScriptEvent(sal_Int32 p1, const css::script::ScriptEventDescriptor& p2) override
         { OInterfaceContainer::registerScriptEvent(p1, p2); }
-    virtual void SAL_CALL registerScriptEvents(sal_Int32 p1, const css::uno::Sequence<css::script::ScriptEventDescriptor>& p2) override
+    virtual void SAL_CALL registerScriptEvents(sal_Int32 p1, const cpo::uno::Sequence<css::script::ScriptEventDescriptor>& p2) override
         { OInterfaceContainer::registerScriptEvents(p1, p2); }
     virtual void SAL_CALL revokeScriptEvent(sal_Int32 p1, const OUString& p2, const OUString& p3, const OUString& p4) override
         { OInterfaceContainer::revokeScriptEvent(p1, p2, p3, p4); }
@@ -120,7 +120,7 @@ public:
         { OInterfaceContainer::insertEntry(p1); }
     virtual void SAL_CALL removeEntry(sal_Int32 p1) override
         { OInterfaceContainer::removeEntry(p1); }
-    virtual css::uno::Sequence<css::script::ScriptEventDescriptor> SAL_CALL getScriptEvents(sal_Int32 p1) override
+    virtual cpo::uno::Sequence<css::script::ScriptEventDescriptor> SAL_CALL getScriptEvents(sal_Int32 p1) override
         { return OInterfaceContainer::getScriptEvents(p1); }
     virtual void SAL_CALL attach(sal_Int32 p1, const css::uno::Reference<css::uno::XInterface>& p2, const cpo::uno::Any& p3) override
         { OInterfaceContainer::attach(p1, p2, p3); }

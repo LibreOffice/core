@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppcanvas/color.hxx>
 
 namespace cppcanvastools
     {
-        css::uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA );
+        cpo::uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA );
 
-        cppcanvas::IntSRGBA doubleSequenceToIntSRGBA( const css::uno::Sequence< double >& rColor  );
+        cppcanvas::IntSRGBA doubleSequenceToIntSRGBA( const cpo::uno::Sequence< double >& rColor  );
     }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

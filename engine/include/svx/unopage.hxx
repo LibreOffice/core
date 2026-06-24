@@ -106,7 +106,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     virtual void SAL_CALL addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XShapes3
-    virtual void SAL_CALL sort( const css::uno::Sequence< sal_Int32 >& sortOrder ) override;
+    virtual void SAL_CALL sort( const cpo::uno::Sequence< sal_Int32 >& sortOrder ) override;
 
     // XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
@@ -123,7 +123,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
     virtual void SAL_CALL dispose() override;

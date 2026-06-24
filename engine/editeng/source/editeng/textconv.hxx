@@ -20,7 +20,7 @@
 
 #include <editeng/svxenum.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <editeng/ESelection.hxx>
 
@@ -62,7 +62,7 @@ class TextConvWrapper final : public editeng::HangulHanjaConversion
 
     void        ChangeText( const OUString &rNewText,
                             std::u16string_view rOrigText,
-                            const css::uno::Sequence< sal_Int32 > *pOffsets,
+                            const cpo::uno::Sequence< sal_Int32 > *pOffsets,
                             ESelection *pESelection );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
@@ -78,7 +78,7 @@ class TextConvWrapper final : public editeng::HangulHanjaConversion
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
                         const OUString& rOrigText,
                         const OUString& rReplaceWith,
-                        const css::uno::Sequence< sal_Int32 > &rOffsets,
+                        const cpo::uno::Sequence< sal_Int32 > &rOffsets,
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage ) override;
 

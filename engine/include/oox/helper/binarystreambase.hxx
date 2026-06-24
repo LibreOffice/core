@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_HELPER_BINARYSTREAMBASE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <sal/types.h>
 
@@ -31,7 +31,7 @@ namespace com::sun::star {
 
 namespace oox {
 
-typedef css::uno::Sequence< sal_Int8 > StreamDataSequence;
+typedef cpo::uno::Sequence< sal_Int8 > StreamDataSequence;
 
 
 /** Base class for binary stream classes.

@@ -875,7 +875,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testHyperlinkTargetFrameODS)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testOpenDocumentAsReadOnly)
 {
-    uno::Sequence<beans::PropertyValue> aParams
+    cpo::uno::Sequence<beans::PropertyValue> aParams
         = { comphelper::makePropertyValue(u"Silent"_ustr, true) };
 
     loadWithParams(createFileURL(u"xlsx/open-as-read-only.xlsx"), aParams);

@@ -56,6 +56,7 @@
 #include <unotxvw.hxx>
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
 

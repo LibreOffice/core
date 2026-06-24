@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <map>
 
 namespace cpo::uno { class Any; }
@@ -55,7 +55,7 @@ public:
     bool hasType( const css::uno::Type& );
 
     /// get list of convertible types
-    css::uno::Sequence<css::uno::Type> getTypes() const;
+    cpo::uno::Sequence<css::uno::Type> getTypes() const;
 
     /// convert any to XML representation
     OUString toXSD( const cpo::uno::Any& rAny );

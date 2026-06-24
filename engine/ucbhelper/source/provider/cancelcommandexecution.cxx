@@ -69,7 +69,7 @@ void cancelCommandExecution( const cpo::uno::Any & rException,
 
 
 void cancelCommandExecution( const ucb::IOErrorCode eError,
-                             const uno::Sequence< cpo::uno::Any > & rArgs,
+                             const cpo::uno::Sequence< cpo::uno::Any > & rArgs,
                              const uno::Reference<
                                 ucb::XCommandEnvironment > & xEnv,
                              const OUString & rMessage,

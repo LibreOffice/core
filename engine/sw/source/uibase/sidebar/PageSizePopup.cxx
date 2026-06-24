@@ -25,7 +25,7 @@ PageSizePopup::PageSizePopup(const css::uno::Reference<css::uno::XComponentConte
 {
 }
 
-void PageSizePopup::initialize( const css::uno::Sequence< cpo::uno::Any >& rArguments )
+void PageSizePopup::initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArguments )
 {
     PopupWindowController::initialize(rArguments);
 
@@ -59,7 +59,7 @@ OUString PageSizePopup::getImplementationName()
     return u"lo.writer.PageSizeToolBoxControl"_ustr;
 }
 
-css::uno::Sequence<OUString> PageSizePopup::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> PageSizePopup::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ToolbarController"_ustr };
 }
@@ -67,7 +67,7 @@ css::uno::Sequence<OUString> PageSizePopup::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 lo_writer_PageSizeToolBoxControl_get_implementation(
     css::uno::XComponentContext* rContext,
-    css::uno::Sequence<cpo::uno::Any> const & )
+    cpo::uno::Sequence<cpo::uno::Any> const & )
 {
     return cppu::acquire(new PageSizePopup(rContext));
 }

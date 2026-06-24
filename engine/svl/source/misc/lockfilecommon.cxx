@@ -102,7 +102,7 @@ INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
 }
 
 
-void LockFileCommon::ParseList( const uno::Sequence< sal_Int8 >& aBuffer, std::vector< LockFileEntry > & aResult )
+void LockFileCommon::ParseList( const cpo::uno::Sequence< sal_Int8 >& aBuffer, std::vector< LockFileEntry > & aResult )
 {
     sal_Int32 nCurPos = 0;
     while ( nCurPos < aBuffer.getLength() )
@@ -112,7 +112,7 @@ void LockFileCommon::ParseList( const uno::Sequence< sal_Int8 >& aBuffer, std::v
 }
 
 
-LockFileEntry LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
+LockFileEntry LockFileCommon::ParseEntry( const cpo::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
     LockFileEntry aResult;
 
@@ -129,7 +129,7 @@ LockFileEntry LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuff
 }
 
 
-OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
+OUString LockFileCommon::ParseName( const cpo::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
     OStringBuffer aResult(128);
     bool bHaveName = false;

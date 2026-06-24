@@ -429,7 +429,7 @@ sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale 
 
 bool SAL_CALL
     MacSpellChecker::isValid( const OUString& rWord, const Locale& rLocale,
-            const css::uno::Sequence<PropertyValue>& rProperties )
+            const cpo::uno::Sequence<PropertyValue>& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -534,7 +534,7 @@ Reference< XSpellAlternatives >
 
 Reference< XSpellAlternatives > SAL_CALL
     MacSpellChecker::spell( const OUString& rWord, const Locale& rLocale,
-            const css::uno::Sequence<PropertyValue>& rProperties )
+            const cpo::uno::Sequence<PropertyValue>& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -670,7 +670,7 @@ Sequence< OUString > SAL_CALL MacSpellChecker::getSupportedServiceNames()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 lingucomponent_MacSpellChecker_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new MacSpellChecker());
 }

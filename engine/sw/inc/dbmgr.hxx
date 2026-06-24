@@ -26,7 +26,7 @@
 #include "swdllapi.h"
 #include "swdbdata.hxx"
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -105,7 +105,7 @@ struct SwDSParam : public SwDBData
     css::uno::Reference< css::sdbc::XConnection>       xConnection;
     css::uno::Reference< css::sdbc::XStatement>        xStatement;
     css::uno::Reference< css::sdbc::XResultSet>        xResultSet;
-    css::uno::Sequence<  cpo::uno::Any >               aSelection;
+    cpo::uno::Sequence<  cpo::uno::Any >               aSelection;
     bool bScrollable;
     bool bEndOfDB;
     tools::Long nSelectionIndex;
@@ -119,7 +119,7 @@ struct SwDSParam : public SwDBData
 
     SwDSParam(const SwDBData& rData,
         css::uno::Reference< css::sdbc::XResultSet> xResSet,
-        const css::uno::Sequence<  cpo::uno::Any >&   rSelection) :
+        const cpo::uno::Sequence<  cpo::uno::Any >&   rSelection) :
         SwDBData(rData),
         xResultSet(std::move(xResSet)),
         aSelection(rSelection),
@@ -154,7 +154,7 @@ struct SwMergeDescriptor
      * @{ */
     OUString                                            sSaveToFilter;
     OUString                                            sSaveToFilterOptions;
-    css::uno::Sequence< css::beans::PropertyValue >     aSaveToFilterData;
+    cpo::uno::Sequence< css::beans::PropertyValue >     aSaveToFilterData;
     /** @} */
 
     /**
@@ -187,8 +187,8 @@ struct SwMergeDescriptor
     OUString                                            sSubject;
     OUString                                            sMailBody;
     OUString                                            sAttachmentName;
-    css::uno::Sequence< OUString >                      aCopiesTo;
-    css::uno::Sequence< OUString >                      aBlindCopiesTo;
+    cpo::uno::Sequence< OUString >                      aCopiesTo;
+    cpo::uno::Sequence< OUString >                      aBlindCopiesTo;
     css::uno::Reference< css::mail::XSmtpService >      xSmtpServer;
     bool                                                bSendAsHTML;
     bool                                                bSendAsAttachment;
@@ -212,7 +212,7 @@ struct SwMergeDescriptor
      * @defgroup print Mail merge to Printer
      * @addtogroup print
      * @{ */
-    css::uno::Sequence<  css::beans::PropertyValue >    aPrintOptions;
+    cpo::uno::Sequence<  css::beans::PropertyValue >    aPrintOptions;
     /** @} */
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
@@ -341,10 +341,10 @@ public:
     bool     IsInMerge() const   { return m_bInMerge; }
 
     void            ExecuteFormLetter(SwWrtShell& rSh,
-                        const css::uno::Sequence< css::beans::PropertyValue>& rProperties);
+                        const cpo::uno::Sequence< css::beans::PropertyValue>& rProperties);
 
     static void     InsertText(SwWrtShell& rSh,
-                        const css::uno::Sequence< css::beans::PropertyValue>& rProperties);
+                        const cpo::uno::Sequence< css::beans::PropertyValue>& rProperties);
 
     /// check if a data source is open
     bool            IsDataSourceOpen(const OUString& rDataSource,
@@ -394,7 +394,7 @@ public:
                                     const OUString& rTableOrQuery,
                                     SwDBSelect eTableOrQuery = SwDBSelect::UNKNOWN);
 
-    SW_DLLPUBLIC static css::uno::Sequence<OUString> GetExistingDatabaseNames();
+    SW_DLLPUBLIC static cpo::uno::Sequence<OUString> GetExistingDatabaseNames();
 
     /**
      Loads a data source from file and registers it.

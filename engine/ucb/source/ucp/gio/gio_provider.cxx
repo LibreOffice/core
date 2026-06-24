@@ -94,7 +94,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       css::lang::XServiceInfo,
                       css::ucb::XContentProvider );
 
-css::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames()
 {
     return { u"com.sun.star.ucb.GIOContentProvider"_ustr };
 }
@@ -126,7 +126,7 @@ static bool isDisabled()
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_gio_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context , css::uno::Sequence<cpo::uno::Any> const&)
+    css::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     if (isDisabled())
         return nullptr;

@@ -156,10 +156,10 @@ ScVbaColorFormat::getServiceImplName()
     return u"ScVbaColorFormat"_ustr;
 }
 
-uno::Sequence< OUString >
+cpo::uno::Sequence< OUString >
 ScVbaColorFormat::getServiceNames()
 {
-    static uno::Sequence< OUString > const aServiceNames
+    static cpo::uno::Sequence< OUString > const aServiceNames
     {
         u"ooo.vba.msforms.ColorFormat"_ustr
     };

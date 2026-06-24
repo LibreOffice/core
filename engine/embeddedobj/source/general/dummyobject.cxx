@@ -109,7 +109,7 @@ void SAL_CALL ODummyEmbeddedObject::changeState( sal_Int32 nNewState )
 }
 
 
-uno::Sequence< sal_Int32 > SAL_CALL ODummyEmbeddedObject::getReachableStates()
+cpo::uno::Sequence< sal_Int32 > SAL_CALL ODummyEmbeddedObject::getReachableStates()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -136,12 +136,12 @@ void SAL_CALL ODummyEmbeddedObject::doVerb( sal_Int32 )
 }
 
 
-uno::Sequence< embed::VerbDescriptor > SAL_CALL ODummyEmbeddedObject::getSupportedVerbs()
+cpo::uno::Sequence< embed::VerbDescriptor > SAL_CALL ODummyEmbeddedObject::getSupportedVerbs()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
 
-    return uno::Sequence< embed::VerbDescriptor >();
+    return cpo::uno::Sequence< embed::VerbDescriptor >();
 }
 
 
@@ -261,8 +261,8 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
-                    const uno::Sequence< beans::PropertyValue >& /* lArguments */,
-                    const uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
+                    const cpo::uno::Sequence< beans::PropertyValue >& /* lArguments */,
+                    const cpo::uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -316,8 +316,8 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
 
 void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& /* lArguments */,
-                            const uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
+                            const cpo::uno::Sequence< beans::PropertyValue >& /* lArguments */,
+                            const cpo::uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -333,8 +333,8 @@ void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::X
 
 void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
                             const OUString& sEntName,
-                            const uno::Sequence< beans::PropertyValue >& /* lArguments */,
-                            const uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
+                            const cpo::uno::Sequence< beans::PropertyValue >& /* lArguments */,
+                            const cpo::uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -446,8 +446,8 @@ bool SAL_CALL ODummyEmbeddedObject::isReadonly()
 
 
 void SAL_CALL ODummyEmbeddedObject::reload(
-                const uno::Sequence< beans::PropertyValue >& /* lArguments */,
-                const uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
+                const cpo::uno::Sequence< beans::PropertyValue >& /* lArguments */,
+                const cpo::uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_WrongState();
@@ -461,14 +461,14 @@ void SAL_CALL ODummyEmbeddedObject::reload(
 }
 
 
-uno::Sequence< sal_Int8 > SAL_CALL ODummyEmbeddedObject::getClassID()
+cpo::uno::Sequence< sal_Int8 > SAL_CALL ODummyEmbeddedObject::getClassID()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     CheckInit_Runtime();
 
     // currently the class ID is empty
     // TODO/LATER: should a special class ID be used in this case?
-    return uno::Sequence< sal_Int8 >();
+    return cpo::uno::Sequence< sal_Int8 >();
 }
 
 
@@ -483,7 +483,7 @@ OUString SAL_CALL ODummyEmbeddedObject::getClassName()
 
 
 void SAL_CALL ODummyEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
+                const cpo::uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
 {
     throw lang::NoSupportException();
 }
@@ -629,7 +629,7 @@ bool SAL_CALL ODummyEmbeddedObject::supportsService(const OUString& ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL ODummyEmbeddedObject::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL ODummyEmbeddedObject::getSupportedServiceNames()
 {
     return { u"com.sun.star.comp.embed.ODummyEmbeddedObject"_ustr };
 }

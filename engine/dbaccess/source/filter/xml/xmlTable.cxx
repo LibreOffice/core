@@ -81,7 +81,7 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
                 XMLOFF_WARN_UNKNOWN("dbaccess", aIter);
         }
     }
-    uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
+    cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
     {
         {"Name", cpo::uno::Any(m_sName)}, // set as folder
         {"Parent", cpo::uno::Any(m_xParentContainer)}

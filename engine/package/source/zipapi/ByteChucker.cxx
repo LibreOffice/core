@@ -23,6 +23,7 @@
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 ByteChucker::ByteChucker(Reference<XOutputStream> const & xOstream)
 : xStream(xOstream)

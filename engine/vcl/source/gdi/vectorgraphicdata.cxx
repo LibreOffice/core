@@ -64,7 +64,7 @@ Bitmap convertPrimitive2DSequenceToBitmap(
             const uno::Reference< uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
             const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer = graphic::Primitive2DTools::create(xContext);
 
-            uno::Sequence< beans::PropertyValue > aViewParameters = {
+            cpo::uno::Sequence< beans::PropertyValue > aViewParameters = {
                 comphelper::makePropertyValue(u"RangeUnit"_ustr, static_cast<sal_Int32>(eTargetUnit)),
             };
             geometry::RealRectangle2D aRealRect;
@@ -201,7 +201,7 @@ void VectorGraphicData::ensureSequenceAndRange()
 
             if (xInputStream.is())
             {
-                uno::Sequence< ::beans::PropertyValue > aPropertySequence;
+                cpo::uno::Sequence< ::beans::PropertyValue > aPropertySequence;
 
                 // Pass the size hint of the graphic to the EMF parser.
                 geometry::RealPoint2D aSizeHint;
@@ -222,7 +222,7 @@ void VectorGraphicData::ensureSequenceAndRange()
         case VectorGraphicDataType::Pdf:
         {
             const uno::Reference<graphic::XPdfDecomposer> xPdfDecomposer = graphic::PdfTools::create(xContext);
-            uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
+            cpo::uno::Sequence<beans::PropertyValue> aDecompositionParameters = comphelper::InitPropertySequence({
                 {"PageIndex", cpo::uno::Any(sal_Int32(mnPageIndex))},
             });
 
@@ -239,7 +239,7 @@ void VectorGraphicData::ensureSequenceAndRange()
     {
         const sal_Int32 nCount(maSequence.size());
         geometry::RealRectangle2D aRealRect;
-        uno::Sequence< beans::PropertyValue > aViewParameters;
+        cpo::uno::Sequence< beans::PropertyValue > aViewParameters;
 
         for(sal_Int32 a(0); a < nCount; a++)
         {

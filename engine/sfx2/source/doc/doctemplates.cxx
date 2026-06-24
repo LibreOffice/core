@@ -185,9 +185,9 @@ public:
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
+    virtual cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
-        css::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.DocumentTemplates"_ustr };
+        cpo::uno::Sequence< OUString > aSeq { u"com.sun.star.frame.DocumentTemplates"_ustr };
         return aSeq;
     }
 
@@ -625,7 +625,7 @@ bool SfxDocTplService::setTitleForURL( const OUString& rURL, const OUString& aTi
             uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                     rURL, embed::ElementModes::READWRITE);
 
-            uno::Sequence<beans::PropertyValue> medium( comphelper::InitPropertySequence({
+            cpo::uno::Sequence<beans::PropertyValue> medium( comphelper::InitPropertySequence({
                     { "DocumentBaseURL", Any(rURL) },
                     { "URL", Any(rURL) }
                 }));
@@ -1718,7 +1718,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
                 configuration::theDefaultProvider::get( xContext );
 
-        uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
+        cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
         {
             {"nodepath", cpo::uno::Any(u"/org.openoffice.Setup/Office/Factories/"_ustr)}
         }));
@@ -1743,7 +1743,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
             mxContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, mxContext),
             uno::UNO_QUERY_THROW );
 
-        uno::Sequence< beans::PropertyValue > aFilterData;
+        cpo::uno::Sequence< beans::PropertyValue > aFilterData;
         xFilterFactory->getByName( aFilterName ) >>= aFilterData;
         OUString aTypeName;
         for (const auto& rProp : aFilterData)
@@ -1762,7 +1762,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
                     uno::UNO_QUERY_THROW );
 
         SequenceAsHashMap aTypeProps( xTypeDetection->getByName( aTypeName ) );
-        uno::Sequence< OUString > aAllExt =
+        cpo::uno::Sequence< OUString > aAllExt =
             aTypeProps.getUnpackedValueOrDefault(u"Extensions"_ustr, Sequence< OUString >() );
         if ( !aAllExt.hasElements() )
             throw uno::RuntimeException();
@@ -1792,7 +1792,7 @@ bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
         }
 
         // store template
-        uno::Sequence< PropertyValue > aStoreArgs{
+        cpo::uno::Sequence< PropertyValue > aStoreArgs{
             comphelper::makePropertyValue(u"FilterName"_ustr, aFilterName),
             comphelper::makePropertyValue(u"DocumentTitle"_ustr, rTemplateName)
         };
@@ -2611,7 +2611,7 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( OUString & rURL )
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_sfx2_DocumentTemplates_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new SfxDocTplService(context));
 }

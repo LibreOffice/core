@@ -25,7 +25,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <comphelper/getexpandeduri.hxx>

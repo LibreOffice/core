@@ -76,7 +76,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -97,7 +97,7 @@ public:
     // XNumberFormats
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
                             getByKey( sal_Int32 nKey ) override;
-    virtual css::uno::Sequence< sal_Int32 > SAL_CALL queryKeys( sal_Int16 nType,
+    virtual cpo::uno::Sequence< sal_Int32 > SAL_CALL queryKeys( sal_Int16 nType,
                             const css::lang::Locale& nLocale, bool bCreate ) override;
     virtual sal_Int32 SAL_CALL queryKey( const OUString& aFormat,
                             const css::lang::Locale& nLocale, bool bScan ) override;
@@ -124,7 +124,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -164,15 +164,15 @@ public:
                                         css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XPropertyAccess
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL
                             getPropertyValues() override;
-    virtual void SAL_CALL   setPropertyValues( const css::uno::Sequence<
+    virtual void SAL_CALL   setPropertyValues( const cpo::uno::Sequence<
                                 css::beans::PropertyValue >& aProps ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -213,7 +213,7 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 

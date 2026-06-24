@@ -65,9 +65,9 @@ embeddedobj/source/msole/olecomponent.hxx:58
 embeddedobj/source/msole/olecomponent.hxx:59
     OleComponent m_pImplAdviseSink OleWrapperAdviseSink *
 embeddedobj/source/msole/olecomponent.hxx:61
-    OleComponent m_aVerbList css::uno::Sequence<css::embed::VerbDescriptor>
+    OleComponent m_aVerbList cpo::uno::Sequence<css::embed::VerbDescriptor>
 embeddedobj/source/msole/olecomponent.hxx:62
-    OleComponent m_aDataFlavors css::uno::Sequence<css::datatransfer::DataFlavor>
+    OleComponent m_aDataFlavors cpo::uno::Sequence<css::datatransfer::DataFlavor>
 embeddedobj/source/msole/olecomponent.hxx:64
     OleComponent m_xContext css::uno::Reference<css::uno::XComponentContext>
 embeddedobj/source/msole/olecomponent.hxx:66
@@ -87,7 +87,7 @@ helpcompiler/inc/HelpCompiler.hxx:200
 include/basegfx/DrawCommands.hxx:143
     gfx::DrawPath mpFillGradient std::shared_ptr<GradientInfo>
 include/comphelper/seqstream.hxx:75
-    comphelper::SequenceInputStream m_aData const css::uno::Sequence<sal_Int8>
+    comphelper::SequenceInputStream m_aData const cpo::uno::Sequence<sal_Int8>
 include/docmodel/theme/FormatScheme.hxx:373
     model::DashStop mnDashLength sal_Int32
 include/docmodel/theme/FormatScheme.hxx:374

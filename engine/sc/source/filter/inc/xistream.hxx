@@ -56,8 +56,8 @@ public:
     XclImpDecrypterRef  Clone() const;
 
     /** Implementation of the ::comphelper::IDocPasswordVerifier interface */
-    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, css::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) override;
-    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
+    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, cpo::uno::Sequence< css::beans::NamedValue >& o_rEncryptionData ) override;
+    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const cpo::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
 
     /** Updates the decrypter on start of a new record or after seeking stream. */
     void                Update( const SvStream& rStrm, sal_uInt16 nRecSize );
@@ -74,9 +74,9 @@ private:
     virtual XclImpDecrypter* OnClone() const = 0;
     /** Derived classes implement password verification and initialization of
         the decoder. */
-    virtual css::uno::Sequence< css::beans::NamedValue >
+    virtual cpo::uno::Sequence< css::beans::NamedValue >
         OnVerifyPassword( const OUString& rPassword ) = 0;
-    virtual bool OnVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) = 0;
+    virtual bool OnVerifyEncryptionData( const cpo::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) = 0;
 
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( std::size_t nOldStrmPos, std::size_t nNewStrmPos, sal_uInt16 nRecSize ) = 0;
@@ -102,9 +102,9 @@ private:
     /** Implementation of cloning this object. */
     virtual XclImpBiff5Decrypter* OnClone() const override;
     /** Implements password verification and initialization of the decoder. */
-    virtual css::uno::Sequence< css::beans::NamedValue >
+    virtual cpo::uno::Sequence< css::beans::NamedValue >
         OnVerifyPassword( const OUString& rPassword ) override;
-    virtual bool OnVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
+    virtual bool OnVerifyEncryptionData( const cpo::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( std::size_t nOldStrmPos, std::size_t nNewStrmPos, sal_uInt16 nRecSize ) override;
     /** Implementation of the decryption. */
@@ -112,7 +112,7 @@ private:
 
 private:
     ::msfilter::MSCodec_XorXLS95 maCodec;       /// Crypto algorithm implementation.
-    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
+    cpo::uno::Sequence< css::beans::NamedValue > maEncryptionData;
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
 };
@@ -122,9 +122,9 @@ class XclImpBiff8Decrypter : public XclImpDecrypter
 {
 private:
     /** Implements password verification and initialization of the decoder. */
-    virtual css::uno::Sequence< css::beans::NamedValue >
+    virtual cpo::uno::Sequence< css::beans::NamedValue >
         OnVerifyPassword( const OUString& rPassword ) override;
-    virtual bool OnVerifyEncryptionData( const css::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
+    virtual bool OnVerifyEncryptionData( const cpo::uno::Sequence< css::beans::NamedValue >& rEncryptionData ) override;
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( std::size_t nOldStrmPos, std::size_t nNewStrmPos, sal_uInt16 nRecSize ) override;
     /** Implementation of the decryption. */
@@ -142,7 +142,7 @@ protected:
 
     explicit  XclImpBiff8Decrypter(const XclImpBiff8Decrypter& rSrc);
 
-    css::uno::Sequence< css::beans::NamedValue > maEncryptionData;
+    cpo::uno::Sequence< css::beans::NamedValue > maEncryptionData;
     std::vector< sal_uInt8 > maSalt;
     std::vector< sal_uInt8 > maVerifier;
     std::vector< sal_uInt8 > maVerifierHash;

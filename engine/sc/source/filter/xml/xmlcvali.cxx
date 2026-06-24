@@ -365,7 +365,7 @@ void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElemen
     // #i36650# event-listeners element moved up one level
     if (xEventContext.is())
     {
-        uno::Sequence<beans::PropertyValue> aValues;
+        cpo::uno::Sequence<beans::PropertyValue> aValues;
         xEventContext->GetEventSequence( u"OnError"_ustr, aValues );
 
         auto pValue = std::find_if(std::cbegin(aValues), std::cend(aValues),

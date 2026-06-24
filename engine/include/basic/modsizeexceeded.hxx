@@ -46,7 +46,7 @@ public:
 
 // UNO interface
 public:
-    virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override { return m_lContinuations; }
+    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override { return m_lContinuations; }
     cpo::uno::Any SAL_CALL getRequest() override
     {
         return m_aRequest;
@@ -55,7 +55,7 @@ public:
 // member
 private:
     cpo::uno::Any m_aRequest;
-    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
+    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
     rtl::Reference< comphelper::OInteractionAbort > m_xAbort;
     rtl::Reference< comphelper::OInteractionApprove> m_xApprove;
 };

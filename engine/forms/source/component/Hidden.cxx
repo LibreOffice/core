@@ -122,9 +122,9 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OHiddenModel::getSupportedServiceNames()
+cpo::uno::Sequence<OUString> SAL_CALL OHiddenModel::getSupportedServiceNames()
 {
-    return css::uno::Sequence<OUString>{
+    return cpo::uno::Sequence<OUString>{
         FRM_SUN_COMPONENT_HIDDENCONTROL, FRM_SUN_FORMCOMPONENT,
         FRM_COMPONENT_HIDDEN, FRM_COMPONENT_HIDDENCONTROL };
 }
@@ -168,7 +168,7 @@ void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStrea
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_form_OHiddenModel_get_implementation(css::uno::XComponentContext* component,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new frm::OHiddenModel(component));
 }

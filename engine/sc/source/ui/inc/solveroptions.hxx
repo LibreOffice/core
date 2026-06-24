@@ -21,7 +21,7 @@
 
 #include <utility>
 #include <vcl/weld.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star {
     namespace beans { struct PropertyValue; }
@@ -57,9 +57,9 @@ class ScSolverValueDialog;
 
 class ScSolverOptionsDialog : public weld::GenericDialogController
 {
-    css::uno::Sequence<OUString> maImplNames;
+    cpo::uno::Sequence<OUString> maImplNames;
     OUString maEngine;
-    css::uno::Sequence<css::beans::PropertyValue> maProperties;
+    cpo::uno::Sequence<css::beans::PropertyValue> maProperties;
 
     std::vector<std::unique_ptr<ScSolverOptionsString>> m_aOptions;
 
@@ -81,15 +81,15 @@ class ScSolverOptionsDialog : public weld::GenericDialogController
 
 public:
     ScSolverOptionsDialog( weld::Window* pParent,
-                           const css::uno::Sequence<OUString>& rImplNames,
-                           const css::uno::Sequence<OUString>& rDescriptions,
+                           const cpo::uno::Sequence<OUString>& rImplNames,
+                           const cpo::uno::Sequence<OUString>& rDescriptions,
                            OUString aEngine,
-                           const css::uno::Sequence<css::beans::PropertyValue>& rProperties );
+                           const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties );
     virtual ~ScSolverOptionsDialog() override;
 
     // already updated in selection handler
     const OUString& GetEngine() const { return maEngine; }
-    const css::uno::Sequence<css::beans::PropertyValue>& GetProperties();
+    const cpo::uno::Sequence<css::beans::PropertyValue>& GetProperties();
 };
 
 class ScSolverIntegerDialog : public weld::GenericDialogController

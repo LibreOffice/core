@@ -85,7 +85,7 @@
 #include <filesystem>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::cpo::uno::Any;
@@ -261,7 +261,7 @@ static sheet::DataPilotFieldOrientation lcl_GetDataGetOrientation( const uno::Re
     if ( xSource.is() )
     {
         uno::Reference<container::XNameAccess> xDimNameAccess = xSource->getDimensions();
-        const uno::Sequence<OUString> aDimNames = xDimNameAccess->getElementNames();
+        const cpo::uno::Sequence<OUString> aDimNames = xDimNameAccess->getElementNames();
         for (const OUString& rDimName : aDimNames)
         {
             uno::Reference<beans::XPropertySet> xDimProp(xDimNameAccess->getByName(rDimName),
@@ -1555,12 +1555,12 @@ double ScDPObject::GetPivotData(const OUString& rDataFieldName, std::vector<shee
     std::sort(rFilters.begin(), rFilters.end(), LessByDimOrder(mpSaveData->GetDimensionSortOrder()));
 
     size_t n = rFilters.size();
-    uno::Sequence<sheet::DataPilotFieldFilter> aFilters(n);
+    cpo::uno::Sequence<sheet::DataPilotFieldFilter> aFilters(n);
     auto aFiltersRange = asNonConstRange(aFilters);
     for (size_t i = 0; i < n; ++i)
         aFiltersRange[i] = rFilters[i];
 
-    uno::Sequence<double> aRes = xDPResults->getFilteredResults(aFilters);
+    cpo::uno::Sequence<double> aRes = xDPResults->getFilteredResults(aFilters);
     if (nDataIndex >= o3tl::make_unsigned(aRes.getLength()))
         return std::numeric_limits<double>::quiet_NaN();
 
@@ -1899,8 +1899,8 @@ bool ScDPObject::ParseFilters(
     std::vector<OUString> aDataNames;     // data fields (source name)
     std::vector<OUString> aGivenNames;    // data fields (compound name)
     std::vector<OUString> aFieldNames;    // column/row/data fields
-    std::vector< uno::Sequence<OUString> > aFieldValueNames;
-    std::vector< uno::Sequence<OUString> > aFieldValues;
+    std::vector< cpo::uno::Sequence<OUString> > aFieldValueNames;
+    std::vector< cpo::uno::Sequence<OUString> > aFieldValues;
 
     // get all the field and item names
 
@@ -1957,8 +1957,8 @@ bool ScDPObject::ParseFilters(
                             OUString aFieldName( xLevNam->getName() );
                             // getElementNames() and getLocaleIndependentElementNames()
                             // must be consecutive calls to obtain strings in matching order.
-                            uno::Sequence<OUString> aMemberValueNames( xMembers->getElementNames() );
-                            uno::Sequence<OUString> aMemberValues( xMembers->getLocaleIndependentElementNames() );
+                            cpo::uno::Sequence<OUString> aMemberValueNames( xMembers->getElementNames() );
+                            cpo::uno::Sequence<OUString> aMemberValues( xMembers->getLocaleIndependentElementNames() );
 
                             aFieldNames.push_back( aFieldName );
                             aFieldValueNames.push_back( aMemberValueNames );
@@ -2067,8 +2067,8 @@ bool ScDPObject::ParseFilters(
                 // aSpecField is initialized from aFieldNames array, so exact comparison can be used.
                 if ( !bHasFieldName || aFieldNames[nField] == aSpecField )
                 {
-                    const uno::Sequence<OUString>& rItemNames = aFieldValueNames[nField];
-                    const uno::Sequence<OUString>& rItemValues = aFieldValues[nField];
+                    const cpo::uno::Sequence<OUString>& rItemNames = aFieldValueNames[nField];
+                    const cpo::uno::Sequence<OUString>& rItemValues = aFieldValues[nField];
                     sal_Int32 nItemCount = rItemNames.getLength();
                     assert(nItemCount == rItemValues.getLength());
                     const OUString* pItemNamesArr = rItemNames.getConstArray();
@@ -2289,7 +2289,7 @@ static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& x
                 catch(uno::Exception&)
                 {
                 }
-                uno::Sequence<sal_Int16> aSeq;
+                cpo::uno::Sequence<sal_Int16> aSeq;
                 if ( aSubAny >>= aSeq )
                 {
                     PivotFunc nMask = PivotFunc::NONE;
@@ -2697,7 +2697,7 @@ bool ScDPObject::GetHierarchiesNA( sal_Int32 nDim, uno::Reference< container::XN
     return bRet;
 }
 
-void ScDPObject::GetHierarchies( sal_Int32 nDim, uno::Sequence< OUString >& rHiers )
+void ScDPObject::GetHierarchies( sal_Int32 nDim, cpo::uno::Sequence< OUString >& rHiers )
 {
     uno::Reference< container::XNameAccess > xHiersNA;
     if( GetHierarchiesNA( nDim, xHiersNA ) )
@@ -3042,7 +3042,7 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
             if (xInit.is())
             {
                 //  initialize
-                uno::Sequence<cpo::uno::Any> aSeq(4);
+                cpo::uno::Sequence<cpo::uno::Any> aSeq(4);
                 cpo::uno::Any* pArray = aSeq.getArray();
                 pArray[0] <<= rDesc.aParSource;
                 pArray[1] <<= rDesc.aParName;

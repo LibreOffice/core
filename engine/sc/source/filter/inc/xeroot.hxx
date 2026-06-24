@@ -181,9 +181,9 @@ public:
 
     bool                IsDocumentEncrypted() const;
 
-    static css::uno::Sequence< css::beans::NamedValue > GenerateEncryptionData( std::u16string_view aPass );
-    css::uno::Sequence< css::beans::NamedValue > GetEncryptionData() const;
-    static css::uno::Sequence< css::beans::NamedValue > GenerateDefaultEncryptionData();
+    static cpo::uno::Sequence< css::beans::NamedValue > GenerateEncryptionData( std::u16string_view aPass );
+    cpo::uno::Sequence< css::beans::NamedValue > GetEncryptionData() const;
+    static cpo::uno::Sequence< css::beans::NamedValue > GenerateDefaultEncryptionData();
 
 private:
 

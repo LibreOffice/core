@@ -210,7 +210,7 @@ public:
     virtual bool SAL_CALL
         supportsService (const OUString& sServiceName) override final;
 
-    virtual css::uno::Sequence< OUString> SAL_CALL
+    virtual cpo::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames() override;
 
     /** Check whether or not the object has been disposed (or is in the

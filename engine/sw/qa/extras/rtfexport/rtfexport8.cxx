@@ -992,13 +992,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167569)
 
     {
         comphelper::SequenceAsHashMap markerProperties;
-        markerProperties << getProperty<uno::Sequence<beans::NamedValue>>(getParagraph(1),
-                                                                          u"ListAutoFormat"_ustr);
+        markerProperties << getProperty<cpo::uno::Sequence<beans::NamedValue>>(
+            getParagraph(1), u"ListAutoFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(6.0f, markerProperties[u"CharHeight"_ustr].get<float>());
 
         markerProperties.clear();
-        markerProperties << getProperty<uno::Sequence<beans::NamedValue>>(getParagraph(2),
-                                                                          u"ListAutoFormat"_ustr);
+        markerProperties << getProperty<cpo::uno::Sequence<beans::NamedValue>>(
+            getParagraph(2), u"ListAutoFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(6.0f, markerProperties[u"CharHeight"_ustr].get<float>());
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
@@ -1017,13 +1017,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167569)
         // Before the export was implemented, this failed with
         // - the property is of unexpected type or void: ListAutoFormat
         // meaning that the paragraph marker property was lost
-        markerProperties << getProperty<uno::Sequence<beans::NamedValue>>(getParagraph(1),
-                                                                          u"ListAutoFormat"_ustr);
+        markerProperties << getProperty<cpo::uno::Sequence<beans::NamedValue>>(
+            getParagraph(1), u"ListAutoFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(6.0f, markerProperties[u"CharHeight"_ustr].get<float>());
 
         markerProperties.clear();
-        markerProperties << getProperty<uno::Sequence<beans::NamedValue>>(getParagraph(2),
-                                                                          u"ListAutoFormat"_ustr);
+        markerProperties << getProperty<cpo::uno::Sequence<beans::NamedValue>>(
+            getParagraph(2), u"ListAutoFormat"_ustr);
         CPPUNIT_ASSERT_EQUAL(6.0f, markerProperties[u"CharHeight"_ustr].get<float>());
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
@@ -1062,7 +1062,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167661)
             getParagraph(1), u"NumberingRules"_ustr);
 
         comphelper::SequenceAsHashMap level1(
-            xNumberingRules->getByIndex(0).get<uno::Sequence<beans::PropertyValue>>());
+            xNumberingRules->getByIndex(0).get<cpo::uno::Sequence<beans::PropertyValue>>());
 
         CPPUNIT_ASSERT_EQUAL(u"Wingdings"_ustr, level1[u"BulletFontName"_ustr].get<OUString>());
     }
@@ -1075,7 +1075,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf167661)
             getParagraph(1), u"NumberingRules"_ustr);
 
         comphelper::SequenceAsHashMap level1(
-            xNumberingRules->getByIndex(0).get<uno::Sequence<beans::PropertyValue>>());
+            xNumberingRules->getByIndex(0).get<cpo::uno::Sequence<beans::PropertyValue>>());
 
         // Without a fix, this failed with
         // - Expected: Wingdings

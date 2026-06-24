@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -50,7 +50,7 @@ private:
 
 void Test::testTypeOfBooleanSequence() {
     binaryurp::ReaderState state;
-    css::uno::Sequence<sal_Int8> buf{
+    cpo::uno::Sequence<sal_Int8> buf{
         static_cast<sal_Int8>(static_cast<sal_uInt8>(20 | 0x80)),
             // sequence type | cache flag
         static_cast<sal_Int8>(
@@ -64,13 +64,13 @@ void Test::testTypeOfBooleanSequence() {
     CPPUNIT_ASSERT(
         t.equals(
             css::uno::TypeDescription(
-                cppu::UnoType< css::uno::Sequence< bool > >::get())));
+                cppu::UnoType< cpo::uno::Sequence< bool > >::get())));
     m.done();
 }
 
 void Test::testTypeOfVoidSequence() {
     binaryurp::ReaderState state;
-    css::uno::Sequence<sal_Int8> buf{
+    cpo::uno::Sequence<sal_Int8> buf{
         static_cast<sal_Int8>(static_cast<sal_uInt8>(20 | 0x80)),
             // sequence type | cache flag
         static_cast<sal_Int8>(

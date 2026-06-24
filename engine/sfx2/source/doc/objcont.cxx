@@ -66,6 +66,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 
 static
@@ -729,12 +730,12 @@ bool SfxObjectShell::SetModifyPasswordHash( sal_uInt32 nHash )
     return false;
 }
 
-const uno::Sequence< beans::PropertyValue >& SfxObjectShell::GetModifyPasswordInfo() const
+const cpo::uno::Sequence< beans::PropertyValue >& SfxObjectShell::GetModifyPasswordInfo() const
 {
     return pImpl->m_aModifyPasswordInfo;
 }
 
-bool SfxObjectShell::SetModifyPasswordInfo( const uno::Sequence< beans::PropertyValue >& aInfo )
+bool SfxObjectShell::SetModifyPasswordInfo( const cpo::uno::Sequence< beans::PropertyValue >& aInfo )
 {
     if ( ( !IsReadOnly() && !IsReadOnlyUI() )
       || !(pImpl->nFlagsInProgress & SfxLoadedFlags::MAINDOCUMENT ) )

@@ -192,7 +192,7 @@ public:
 
     // Use custom entity names
     void setCustomEntityNames(
-        const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
+        const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
             replacements);
 
     // Calculate length for convertToXML
@@ -259,7 +259,7 @@ void SaxWriterHelper::AddBytes(sal_Int8* pTarget, sal_uInt64& rPos, const sal_In
 }
 
 void SaxWriterHelper::setCustomEntityNames(
-    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+    const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
 {
     m_Replacements.resize(replacements.size());
     for (size_t i = 0; i < replacements.size(); ++i)
@@ -1057,7 +1057,7 @@ public: // XDocumentHandler
                                                 const OUString& aData) override;
     virtual void SAL_CALL setDocumentLocator(const Reference<XLocator>& xLocator) override;
     virtual void SAL_CALL setCustomEntityNames(
-        const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
+        const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>&
             replacements) override;
 
 public: // XExtendedDocumentHandler
@@ -1353,7 +1353,7 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
 void SAXWriter::setDocumentLocator(const Reference<XLocator>&) {}
 
 void SAXWriter::setCustomEntityNames(
-    const ::css::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
+    const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements)
 {
     m_pSaxWriterHelper->setCustomEntityNames(replacements);
 }
@@ -1458,7 +1458,7 @@ void SAXWriter::unknown(const OUString& sString)
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_extensions_xml_sax_Writer_get_implementation(css::uno::XComponentContext*,
-                                                          css::uno::Sequence<cpo::uno::Any> const&)
+                                                          cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     return cppu::acquire(new SAXWriter);
 }

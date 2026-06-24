@@ -28,7 +28,7 @@
 
 // SvGlobalName ----------------------------------------------------------------
 
-SvGlobalName::SvGlobalName( const css::uno::Sequence < sal_Int8 >& aSeq )
+SvGlobalName::SvGlobalName( const cpo::uno::Sequence < sal_Int8 >& aSeq )
 {
     // create SvGlobalName from a platform independent representation
     if ( aSeq.getLength() == 16 )
@@ -130,7 +130,7 @@ OUString SvGlobalName::GetHexName() const
     return OUString::createFromAscii(std::string_view(buf, n));
 }
 
-css::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
+cpo::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
 {
     // platform independent representation of a "GlobalName"
     // maybe transported remotely

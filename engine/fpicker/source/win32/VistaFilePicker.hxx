@@ -99,10 +99,10 @@ public:
 
     virtual OUString SAL_CALL getDisplayDirectory(  ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getFiles(  ) override;
 
     // XFilePicker2 functions
-    virtual css::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  ) override;
 
 
     // XFilterManager functions
@@ -120,7 +120,7 @@ public:
 
 
     virtual void SAL_CALL appendFilterGroup( const OUString&                              sGroupTitle,
-                                             const css::uno::Sequence< css::beans::StringPair >& lFilters   ) override;
+                                             const cpo::uno::Sequence< css::beans::StringPair >& lFilters   ) override;
 
 
     // XFilePickerControlAccess functions
@@ -145,7 +145,7 @@ public:
     // XFilePreview
 
 
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  ) override;
+    virtual cpo::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  ) override;
 
     virtual sal_Int32 SAL_CALL getTargetColorDepth(  ) override;
 
@@ -164,7 +164,7 @@ public:
     // XInitialization
 
 
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& lArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments ) override;
 
 
     // XCancellable
@@ -186,7 +186,7 @@ public:
 
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 
     // XFolderPicker functions
@@ -209,7 +209,7 @@ public:
 
     private:
 
-        css::uno::Sequence< OUString > m_lLastFiles;
+        cpo::uno::Sequence< OUString > m_lLastFiles;
 
         VistaFilePickerImpl m_rDialog;
 

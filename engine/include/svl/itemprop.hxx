@@ -80,14 +80,14 @@ struct SfxItemPropertyMapCompare
 class SVL_DLLPUBLIC SfxItemPropertyMap
 {
     o3tl::sorted_vector< const SfxItemPropertyMapEntry*, SfxItemPropertyMapCompare > m_aMap;
-    mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
+    mutable cpo::uno::Sequence< css::beans::Property > m_aPropSeq;
 public:
     SfxItemPropertyMap( std::span<const SfxItemPropertyMapEntry> pEntries );
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
     ~SfxItemPropertyMap();
 
     const SfxItemPropertyMapEntry* getByName( std::u16string_view rName ) const;
-    css::uno::Sequence< css::beans::Property > const & getProperties() const;
+    cpo::uno::Sequence< css::beans::Property > const & getProperties() const;
     /// @throws css::beans::UnknownPropertyException
     css::beans::Property getPropertyByName( const OUString & rName ) const;
     bool hasPropertyByName( std::u16string_view rName ) const;
@@ -159,7 +159,7 @@ public:
     SfxItemPropertySetInfo(std::span<const SfxItemPropertyMapEntry> pEntries );
     virtual ~SfxItemPropertySetInfo() override;
 
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL
         getProperties(  ) override;
 
     virtual css::beans::Property SAL_CALL
@@ -186,10 +186,10 @@ class SVL_DLLPUBLIC SfxExtItemPropertySetInfo final : public SfxExtItemPropertyS
 public:
                             SfxExtItemPropertySetInfo(
                                 std::span<const SfxItemPropertyMapEntry> pMap,
-                                const css::uno::Sequence<css::beans::Property>& rPropSeq );
+                                const cpo::uno::Sequence<css::beans::Property>& rPropSeq );
                             virtual ~SfxExtItemPropertySetInfo() override;
 
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL
+    virtual cpo::uno::Sequence< css::beans::Property > SAL_CALL
         getProperties(  ) override;
 
     virtual css::beans::Property SAL_CALL
@@ -201,7 +201,7 @@ public:
 private:
     const SfxItemPropertyMapEntry* getByName( std::u16string_view rName ) const;
     o3tl::sorted_vector< SfxItemPropertyMapEntry, SfxItemPropertyMapCompare2 > maMap;
-    mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
+    mutable cpo::uno::Sequence< css::beans::Property > m_aPropSeq;
 };
 
 #endif

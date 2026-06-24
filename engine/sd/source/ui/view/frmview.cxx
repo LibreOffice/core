@@ -402,7 +402,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
     return aLines.makeStringAndClear();
 }
 
-void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& rValues )
+void FrameView::WriteUserDataSequence ( cpo::uno::Sequence < css::beans::PropertyValue >& rValues )
 {
     std::vector< std::pair< OUString, Any > > aUserData;
     aUserData.reserve(41); // worst case
@@ -563,7 +563,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
     }
 }
 
-void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& rSequence )
+void FrameView::ReadUserDataSequence ( const cpo::uno::Sequence < css::beans::PropertyValue >& rSequence )
 {
     const sal_Int32 nLength = rSequence.getLength();
     if (!nLength)

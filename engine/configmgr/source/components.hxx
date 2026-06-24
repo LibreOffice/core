@@ -97,8 +97,8 @@ public:
 
     void insertModificationXcuFile(
         OUString const & fileUri,
-        css::uno::Sequence< OUString > const & includedPaths,
-        css::uno::Sequence< OUString > const & excludedPaths,
+        cpo::uno::Sequence< OUString > const & includedPaths,
+        cpo::uno::Sequence< OUString > const & excludedPaths,
         Modifications * modifications);
 
     css::beans::Optional< cpo::uno::Any >

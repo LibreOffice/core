@@ -43,7 +43,7 @@ class SortedDynamicResultSet: public cppu::WeakImplHelper <
     css::uno::Reference < css::ucb::XDynamicResultSetListener > mxListener;
 
     css::uno::Reference < css::ucb::XDynamicResultSet >      mxOriginal;
-    css::uno::Sequence  < css::ucb::NumberedSortingInfo >    maOptions;
+    cpo::uno::Sequence  < css::ucb::NumberedSortingInfo >    maOptions;
     css::uno::Reference < css::ucb::XAnyCompareFactory >     mxCompFac;
     css::uno::Reference < css::uno::XComponentContext >      m_xContext;
 
@@ -62,7 +62,7 @@ private:
 
 public:
     SortedDynamicResultSet( const css::uno::Reference < css::ucb::XDynamicResultSet >    &xOriginal,
-                            const css::uno::Sequence  < css::ucb::NumberedSortingInfo >  &aOptions,
+                            const cpo::uno::Sequence  < css::ucb::NumberedSortingInfo >  &aOptions,
                             const css::uno::Reference < css::ucb::XAnyCompareFactory >   &xCompFac,
                             const css::uno::Reference < css::uno::XComponentContext >    &rxContext );
 
@@ -73,7 +73,7 @@ public:
 
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
 
@@ -151,13 +151,13 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XSortedDynamicResultSetFactory
     virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
     createSortedDynamicResultSet(
                 const css::uno::Reference< css::ucb::XDynamicResultSet > & Source,
-                const css::uno::Sequence< css::ucb::NumberedSortingInfo > & Info,
+                const cpo::uno::Sequence< css::ucb::NumberedSortingInfo > & Info,
                 const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory ) override;
 };
 

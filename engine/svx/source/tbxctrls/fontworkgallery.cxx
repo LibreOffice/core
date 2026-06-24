@@ -413,11 +413,11 @@ public:
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 }
@@ -443,7 +443,7 @@ VclPtr<vcl::Window> FontworkAlignmentControl::createVclPopupWindow( vcl::Window*
 }
 
 // XInitialization
-void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL FontworkAlignmentControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -477,7 +477,7 @@ Sequence< OUString > FontworkAlignmentControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_FontworkAlignmentControl_get_implementation(
     css::uno::XComponentContext* xContext,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FontworkAlignmentControl(xContext));
 }
@@ -733,11 +733,11 @@ public:
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 }
@@ -763,7 +763,7 @@ VclPtr<vcl::Window> FontworkCharacterSpacingControl::createVclPopupWindow( vcl::
 }
 
 // XInitialization
-void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Sequence< cpo::uno::Any >& aArguments )
+void SAL_CALL FontworkCharacterSpacingControl::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -798,7 +798,7 @@ Sequence< OUString > FontworkCharacterSpacingControl::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_svx_FontworkCharacterSpacingControl_get_implementation(
     css::uno::XComponentContext* xContext,
-    css::uno::Sequence<cpo::uno::Any> const &)
+    cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new FontworkCharacterSpacingControl(xContext));
 }

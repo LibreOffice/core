@@ -40,9 +40,9 @@ DispatchInformationProvider::~DispatchInformationProvider()
 {
 }
 
-css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupportedCommandGroups()
+cpo::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupportedCommandGroups()
 {
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
     sal_Int32                                                                             c1        = lProvider.getLength();
     sal_Int32                                                                             i1        = 0;
 
@@ -55,7 +55,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
         if (!xProvider.is())
             continue;
 
-        const css::uno::Sequence< sal_Int16 > lProviderGroups = xProvider->getSupportedCommandGroups();
+        const cpo::uno::Sequence< sal_Int16 > lProviderGroups = xProvider->getSupportedCommandGroups();
         sal_Int32                             c2              = lProviderGroups.getLength();
         sal_Int32                             i2              = 0;
         for (i2=0; i2<c2; ++i2)
@@ -71,9 +71,9 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     return ::comphelper::containerToSequence(lGroups);
 }
 
-css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
+cpo::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
 {
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider = implts_getAllSubProvider();
     sal_Int32                                                                             c1        = lProvider.getLength();
     sal_Int32                                                                             i1        = 0;
 
@@ -88,7 +88,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
             if (!xProvider.is())
                 continue;
 
-            const css::uno::Sequence< css::frame::DispatchInformation > lProviderInfos = xProvider->getConfigurableDispatchInformation(nCommandGroup);
+            const cpo::uno::Sequence< css::frame::DispatchInformation > lProviderInfos = xProvider->getConfigurableDispatchInformation(nCommandGroup);
             sal_Int32                                                   c2             = lProviderInfos.getLength();
             sal_Int32                                                   i2             = 0;
             for (i2=0; i2<c2; ++i2)
@@ -108,17 +108,17 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     return comphelper::mapValuesToSequence(lInfos);
 }
 
-css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()
+cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()
 {
     css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame);
     if (!xFrame.is())
-        return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
+        return cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
 
     rtl::Reference<CloseDispatcher> xCloser = new CloseDispatcher(m_xContext, xFrame, u"_self"); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xController   (xFrame->getController()                                      , css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XDispatchInformationProvider > xAppDispatcher = css::frame::AppDispatchProvider::create(m_xContext);
-    css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider{
+    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > lProvider{
         xController, xCloser, xAppDispatcher
     };
 

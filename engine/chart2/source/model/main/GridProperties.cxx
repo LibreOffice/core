@@ -23,7 +23,7 @@
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -31,7 +31,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
+using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
 namespace
@@ -175,7 +175,7 @@ bool SAL_CALL GridProperties::supportsService( const OUString& rServiceName )
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL GridProperties::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > SAL_CALL GridProperties::getSupportedServiceNames()
 {
     return {
         u"com.sun.star.chart2.GridProperties"_ustr,
@@ -192,7 +192,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( GridProperties, GridProperties_Base, ::propert
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 com_sun_star_comp_chart2_GridProperties_get_implementation(css::uno::XComponentContext *,
-        css::uno::Sequence<cpo::uno::Any> const &)
+        cpo::uno::Sequence<cpo::uno::Any> const &)
 {
     return cppu::acquire(new ::chart::GridProperties);
 }

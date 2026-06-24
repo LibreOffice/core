@@ -93,7 +93,7 @@ void CppIncludeManager::writeUnoIncludes(CppFile& file)
 
     if (m_typeInfo.needsSequence)
     {
-        file.beginLine().append("#include <com/sun/star/uno/Sequence.hxx>").endLine();
+        file.beginLine().append("#include <cpo/uno/Sequence.hxx>").endLine();
         file.beginLine().append("#include <uno/sequence2.h>").endLine();
         file.beginLine().append("#include <typelib/typedescription.h>").endLine();
     }

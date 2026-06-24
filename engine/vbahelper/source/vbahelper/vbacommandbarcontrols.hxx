@@ -33,14 +33,14 @@ private:
     OUString                                            m_sResourceUrl;
     bool                                                m_bIsMenu;
 
-    static css::uno::Sequence< css::beans::PropertyValue > CreateMenuItemData( const OUString& sCommandURL,
+    static cpo::uno::Sequence< css::beans::PropertyValue > CreateMenuItemData( const OUString& sCommandURL,
                                                                         const OUString& sHelpURL,
                                                                         const OUString& sLabel,
                                                                         sal_uInt16 nType,
                                                                         const cpo::uno::Any& aSubMenu,
                                                                         bool isVisible,
                                                                         bool isEnabled );
-    static css::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const cpo::uno::Any& aSubMenu, bool isVisible, sal_Int32 nStyle );
+    static cpo::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const cpo::uno::Any& aSubMenu, bool isVisible, sal_Int32 nStyle );
 
 public:
     /// @throws css::uno::RuntimeException
@@ -56,7 +56,7 @@ public:
     virtual css::uno::Reference< ov::XCommandBarControl > SAL_CALL Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, const cpo::uno::Any& Temporary ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 class VbaDummyCommandBarControls : public CommandBarControls_BASE
@@ -77,7 +77,7 @@ public:
     virtual css::uno::Reference< ov::XCommandBarControl > SAL_CALL Add( const cpo::uno::Any& Type, const cpo::uno::Any& Id, const cpo::uno::Any& Parameter, const cpo::uno::Any& Before, const cpo::uno::Any& Temporary ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
-    virtual css::uno::Sequence<OUString> getServiceNames() override;
+    virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBACOMMANDBARCONTROLS_HXX

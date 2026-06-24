@@ -59,11 +59,11 @@ class PackageInformationProvider :
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPackageInformationProvider
     virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId ) override;
-    virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL getExtensionList() override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL getExtensionList() override;
 
 private:
 
@@ -91,7 +91,7 @@ bool PackageInformationProvider::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > PackageInformationProvider::getSupportedServiceNames()
+cpo::uno::Sequence< OUString > PackageInformationProvider::getSupportedServiceNames()
 {
     // a private one:
     return { u"com.sun.star.comp.deployment.PackageInformationProvider"_ustr };
@@ -107,7 +107,7 @@ OUString PackageInformationProvider::getPackageLocation(
 
     if ( xManager.is() )
     {
-        const uno::Sequence< uno::Reference< deployment::XPackage > > packages(
+        const cpo::uno::Sequence< uno::Reference< deployment::XPackage > > packages(
                 xManager->getDeployedExtensions(
                     repository,
                     uno::Reference< task::XAbortChannel >(),
@@ -160,20 +160,20 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     return aLocationURL;
 }
 
-uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
+cpo::uno::Sequence< cpo::uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
 {
     const uno::Reference<deployment::XExtensionManager> mgr =
         deployment::ExtensionManager::get(mxContext);
 
     if (!mgr.is())
-        return uno::Sequence< uno::Sequence< OUString > >();
+        return cpo::uno::Sequence< cpo::uno::Sequence< OUString > >();
 
-    const uno::Sequence< uno::Sequence< uno::Reference<deployment::XPackage > > >
+    const cpo::uno::Sequence< cpo::uno::Sequence< uno::Reference<deployment::XPackage > > >
         allExt =  mgr->getAllExtensions(
             uno::Reference< task::XAbortChannel >(),
             uno::Reference< css_ucb::XCommandEnvironment > () );
 
-    uno::Sequence< uno::Sequence< OUString > > retList;
+    cpo::uno::Sequence< cpo::uno::Sequence< OUString > > retList;
 
     sal_Int32 cAllIds = allExt.getLength();
     retList.realloc(cAllIds);
@@ -183,7 +183,7 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
     {
         //The inner sequence contains extensions with the same identifier from
         //all the different repositories, that is user, share, bundled.
-        const uno::Sequence< uno::Reference< deployment::XPackage > > &
+        const cpo::uno::Sequence< uno::Reference< deployment::XPackage > > &
             seqExtension = allExt[i];
         sal_Int32 cExt = seqExtension.getLength();
         OSL_ASSERT(cExt == 3);
@@ -207,7 +207,7 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 com_sun_star_comp_deployment_PackageInformationProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<cpo::uno::Any> const& )
+    css::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
     return cppu::acquire(new dp_info::PackageInformationProvider(context));
 }

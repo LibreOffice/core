@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
@@ -157,7 +157,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
             //TODO/LATER: a "StoreTo" method at embedded object would be nice
             SvStream* pStream = new SvMemoryStream;
             ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
-            uno::Sequence < beans::PropertyValue > aSeq{
+            cpo::uno::Sequence < beans::PropertyValue > aSeq{
                 comphelper::makePropertyValue(u"OutputStream"_ustr, xOut),
                 comphelper::makePropertyValue(u"FilterName"_ustr, pExpFilter->GetName())
             };
@@ -255,7 +255,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
                         //TODO/LATER: is stream instead of outputstream a better choice?!
                         //TODO/LATER: a "StoreTo" method at embedded object would be nice
                         ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
-                        uno::Sequence < beans::PropertyValue > aSeq{ comphelper::makePropertyValue(
+                        cpo::uno::Sequence < beans::PropertyValue > aSeq{ comphelper::makePropertyValue(
                             u"OutputStream"_ustr, xOut) };
                         uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
                         xStor->storeToURL( u"private:stream"_ustr, aSeq );
@@ -282,7 +282,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
         uno::Reference < embed::XEmbedPersist > xPers( rObj.GetObject(), uno::UNO_QUERY );
         if ( xPers.is() )
         {
-            uno::Sequence < beans::PropertyValue > aEmptySeq;
+            cpo::uno::Sequence < beans::PropertyValue > aEmptySeq;
             OUString aTempName( u"bla"_ustr );
             try
             {

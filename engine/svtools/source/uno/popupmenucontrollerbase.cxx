@@ -117,7 +117,7 @@ void SAL_CALL PopupMenuControllerBase::itemSelected( const awt::MenuEvent& rEven
 }
 
 void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL,
-                                               const css::uno::Sequence< css::beans::PropertyValue >& rArgs,
+                                               const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs,
                                                const OUString& sTarget )
 {
     std::unique_lock aLock( m_aMutex );
@@ -127,7 +127,7 @@ void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL,
 
 void PopupMenuControllerBase::dispatchCommandImpl( std::unique_lock<std::mutex>& /*rGuard*/,
                                                const OUString& sCommandURL,
-                                               const css::uno::Sequence< css::beans::PropertyValue >& rArgs,
+                                               const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs,
                                                const OUString& sTarget )
 {
 
@@ -217,7 +217,7 @@ Sequence< Reference< XDispatch > > SAL_CALL PopupMenuControllerBase::queryDispat
     }
 
     sal_Int32                                                          nCount = lDescriptor.getLength();
-    uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
 
     // Step over all descriptors and try to get any dispatcher for it.
     std::transform(lDescriptor.begin(), lDescriptor.end(), lDispatcher.getArray(),

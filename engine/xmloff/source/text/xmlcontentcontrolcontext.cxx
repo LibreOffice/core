@@ -360,7 +360,7 @@ void XMLListItemContext::startFastElement(
         }
     }
 
-    uno::Sequence<beans::PropertyValue> aListItem = {
+    cpo::uno::Sequence<beans::PropertyValue> aListItem = {
         comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(aDisplayText)),
         comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(aValue)),
     };
