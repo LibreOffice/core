@@ -87,7 +87,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     m_xJavaList->set_size_request(m_xJavaList->get_approximate_digit_width() * 30,
                                   m_xJavaList->get_height_rows(8));
 
-    m_xJavaList->enable_toggle_buttons();
     m_xJavaList->set_toggle_button_type(weld::ColumnToggleType::Radio);
     m_xJavaList->connect_toggled( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
     m_xJavaList->connect_selection_changed(LINK(this, SvxJavaOptionsPage, SelectHdl_Impl));
@@ -358,7 +357,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo const * _pInfo )
 #if HAVE_FEATURE_JAVA
     int nPos = m_xJavaList->n_children();
     m_xJavaList->append();
-    m_xJavaList->set_toggle(nPos, TRISTATE_FALSE);
+    m_xJavaList->set_toggle(nPos, TRISTATE_FALSE, 0);
     m_xJavaList->set_text(nPos, _pInfo->sVendor, 1);
     // tdf#80662 Add LRM and PDF Unicode characters around version info
     // to display it correctly, even when UI is RTL (SAL_RTL_ENABLED=1)
@@ -381,7 +380,7 @@ void SvxJavaOptionsPage::HandleCheckEntry(int nCheckedRow)
     for (int i = 0, nCount = m_xJavaList->n_children(); i < nCount; ++i)
     {
         // we have radio button behavior -> so uncheck the other entries
-        m_xJavaList->set_toggle(i, i == nCheckedRow ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xJavaList->set_toggle(i, i == nCheckedRow ? TRISTATE_TRUE : TRISTATE_FALSE, 0);
     }
 }
 
@@ -554,7 +553,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     sal_uInt32 nCount = m_xJavaList->n_children();
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
-        if (m_xJavaList->get_toggle(i) == TRISTATE_TRUE)
+        if (m_xJavaList->get_toggle(i, 0) == TRISTATE_TRUE)
         {
             JavaInfo const * pInfo;
             if ( i < m_parJavaInfo.size() )
