@@ -1349,6 +1349,10 @@ SwXDocumentIndex::attach(const uno::Reference< text::XTextRange > & xTextRange)
         pDoc->InsertTableOf( aPam, rTOXBase, nullptr, false,
                 m_pImpl->m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
 
+    // the section could not be inserted at this range
+    if (!pTOX)
+        throw lang::IllegalArgumentException();
+
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_oProps->GetTOXBase().GetTOXName());
 
     // update page numbers
