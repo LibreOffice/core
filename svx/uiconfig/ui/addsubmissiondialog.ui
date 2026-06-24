@@ -81,21 +81,6 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <child>
-              <object class="GtkEntry" id="name">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="valign">center</property>
-                <property name="activates-default">True</property>
-                <property name="width-chars">46</property>
-                <property name="truncate-multiline">True</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-                <property name="width">2</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -110,31 +95,18 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="urlft">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="addsubmissiondialog|urlft">Binding e_xpression:</property>
-                <property name="use-underline">True</property>
-                <property name="mnemonic-widget">expression</property>
-                <property name="xalign">1</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="browse">
-                <property name="label" translatable="yes" context="addsubmissiondialog|browse">_Add...</property>
+              <object class="GtkEntry" id="name">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
                 <property name="valign">center</property>
-                <property name="use-underline">True</property>
+                <property name="activates-default">True</property>
+                <property name="width-chars">46</property>
+                <property name="truncate-multiline">True</property>
               </object>
               <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">3</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+                <property name="width">2</property>
               </packing>
             </child>
             <child>
@@ -193,6 +165,20 @@
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="urlft">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="addsubmissiondialog|urlft">Binding e_xpression:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">expression</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkEntry" id="expression">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -203,6 +189,20 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="browse">
+                <property name="label" translatable="yes" context="addsubmissiondialog|browse">_Add...</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="valign">center</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>
@@ -221,6 +221,18 @@
               </packing>
             </child>
             <child>
+              <object class="GtkComboBoxText" id="binding">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">center</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
+                <property name="width">2</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -232,18 +244,6 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="binding">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="valign">center</property>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">4</property>
-                <property name="width">2</property>
               </packing>
             </child>
             <child>
