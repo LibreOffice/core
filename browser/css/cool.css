@@ -19,8 +19,8 @@
 	--btn-img-size-s: calc(var(--btn-size-s) - var(--btn-padding) * 2);
 
 	--border-radius-s: 2px;
-	--border-radius: 4px; /* buttons, widgets */
-	--border-radius-large: 10px; /* dialog */
+	--border-radius: 4px; /* buttons, widgets, dialog windows */
+	--border-radius-large: 10px; /* large surfaces: backstage, welcome screen, sidebar, popups, tab groups */
 
 	/* Spacing scale for gap/padding/margin */
 	--spacing-xs: 2px;
