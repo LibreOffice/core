@@ -26,6 +26,14 @@ abstract class SlideRenderer {
 		this._canvas = canvas;
 	}
 
+	// Schedule on the window that owns the canvas. The slideshow can run in its
+	// own window while the document window is hidden behind it, and a hidden
+	// window's animation frames are paused, which would stop the slide drawing.
+	protected requestFrame(callback: FrameRequestCallback): number {
+		const canvasWindow = this._canvas?.ownerDocument?.defaultView;
+		return (canvasWindow || window).requestAnimationFrame(callback);
+	}
+
 	public isDisposed() {
 		return this._context && this._context.isDisposed();
 	}
@@ -55,7 +63,7 @@ abstract class SlideRenderer {
 		this._activeLayers.clear();
 		this._renderedSlideIndex = slideInfo.indexInSlideShow;
 		this._slideTexture = currentSlideTexture;
-		requestAnimationFrame(this.render.bind(this));
+		this.requestFrame(this.render.bind(this));
 	}
 
 	public abstract createTexture(
@@ -75,9 +83,7 @@ abstract class SlideRenderer {
 		const isAnyLayerActive = this.isAnyLayerActive();
 		this._activeLayers.add(sId);
 		if (!isAnyLayerActive) {
-			this._requestAnimationFrameId = requestAnimationFrame(
-				this.render.bind(this),
-			);
+			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
 		}
 	}
 
@@ -93,9 +99,7 @@ abstract class SlideRenderer {
 		const isAnyVideoAlreadyPlaying = this.isAnyVideoPlaying;
 		this._playingVideos.add(sId);
 		if (!isAnyVideoAlreadyPlaying) {
-			this._requestAnimationFrameId = requestAnimationFrame(
-				this.render.bind(this),
-			);
+			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
 		}
 	}
 
@@ -152,9 +156,7 @@ class SlideRenderer2d extends SlideRenderer {
 		canvas2dCtx.setTransform(1, 0, 0, 1, 0, 0);
 
 		if (this.isAnyLayerActive() || this.isAnyVideoPlaying) {
-			this._requestAnimationFrameId = requestAnimationFrame(
-				this.render.bind(this),
-			);
+			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
 		}
 	}
 }
@@ -306,8 +308,6 @@ class SlideRendererGl extends SlideRenderer {
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
 		if (this.isAnyLayerActive() || this.isAnyVideoPlaying)
-			this._requestAnimationFrameId = requestAnimationFrame(
-				this.render.bind(this),
-			);
+			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
 	}
 }
