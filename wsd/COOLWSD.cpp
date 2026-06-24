@@ -2632,6 +2632,7 @@ void COOLWSD::initializeEnvOptions()
     if ((optionValue = std::getenv("server_name")) != nullptr) _overrideSettings["server_name"] = optionValue;
     if ((optionValue = std::getenv("dictionaries")) != nullptr) _overrideSettings["allowed_languages"] = optionValue;
     if ((optionValue = std::getenv("remoteconfigurl")) != nullptr) _overrideSettings["remote_config.remote_url"] = optionValue;
+    if ((optionValue = std::getenv("content_security_policy")) != nullptr) _overrideSettings["net.content_security_policy"] = optionValue;
 }
 
 void COOLWSD::displayHelp()
