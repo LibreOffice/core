@@ -42,6 +42,7 @@ class UnitEarlyDocDeath : public WopiTestServer
 
     std::mutex _dns_mutex;
     std::condition_variable _dns_cv;
+    bool _dnsResumed = false;
 
 public:
     UnitEarlyDocDeath()
@@ -77,15 +78,21 @@ public:
         if (query == "presetasset")
         {
             query = "localhost";
-            // Not waiting for Done would lead to a hang on slow machines.
-            if (_phase != Phase::Finish && _phase != Phase::Done)
+            std::unique_lock<std::mutex> lock(_dns_mutex);
+            // Block only the first preset-asset lookup, until the doc broker is
+            // destroyed. There are several preset assets, so more lookups arrive
+            // later; once resumed we must never block again, or a straggler would
+            // re-stall the shared asyncdns thread and hang the next unit test.
+            if (!_dnsResumed)
             {
                 TST_LOG(
                     "delaying dns resolution of preset host until document broker is destroyed");
-                std::unique_lock<std::mutex> lock(_dns_mutex);
-                _dns_cv.wait(lock, [this]() { return _phase == Phase::ResumeDNS; });
+                _dns_cv.wait(lock, [this]() { return _dnsResumed; });
                 TST_LOG("dns resumed after doc broker destruction");
-                TRANSITION_STATE(_phase, Phase::Finish);
+                if (_phase == Phase::ResumeDNS)
+                {
+                    TRANSITION_STATE(_phase, Phase::Finish);
+                }
             }
         }
     }
@@ -111,7 +118,11 @@ public:
         LOK_ASSERT_STATE(_phase, Phase::WaitDocClose);
         TRANSITION_STATE(_phase, Phase::ResumeDNS);
         TST_LOG("resume dns resolution after doc broker was destroyed");
-        _dns_cv.notify_one();
+        {
+            std::unique_lock<std::mutex> lock(_dns_mutex);
+            _dnsResumed = true;
+        }
+        _dns_cv.notify_all();
         SocketPoll::wakeupWorld();
     }
 
@@ -192,9 +203,107 @@ public:
     }
 };
 
+/// Advertises a single SPIF security-label policy in the UserSettings "spif"
+/// group, serves it, and asserts the install machinery fetched it (so the host's
+/// spif group is delivered into the jail's user config dir like the other groups).
+class UnitSpifPreset : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitInstall, Done) _phase;
+
+    bool _spifAssetRequested = false;
+
+public:
+    UnitSpifPreset()
+        : Base("UnitSpifPreset")
+        , _phase(Phase::Load)
+    {
+    }
+
+    // Point the document's UserSettings at our settings JSON.
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        std::string uri =
+            helpers::getTestServerURI() + "/wopi/settings/userconfig.json?testname=UnitSpifPreset";
+        userSettings->set("uri", Util::trim(uri));
+        userSettings->set("stamp", "spifstamp");
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    // Serve the settings JSON (advertising the spif group) and the policy asset.
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const Poco::URI uriReq(request.getURI());
+        const std::string path = uriReq.getPath();
+
+        if (path == "/wopi/settings/userconfig.json")
+        {
+            const std::string assetUri =
+                helpers::getTestServerURI()
+                + "/wopi/settings/systemconfig/spif/spif-test.xml?testname=UnitSpifPreset";
+            const std::string json =
+                "{\"kind\":\"user\",\"spif\":[{\"uri\":\"" + assetUri + "\",\"stamp\":\"s1\"}]}";
+            TST_LOG("Serving userconfig.json: " << json);
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody(json, "application/json; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        if (path.find("/spif/") != std::string::npos)
+        {
+            _spifAssetRequested = true;
+            TST_LOG("Serving SPIF policy asset: " << path);
+            static constexpr auto spif =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+                "<spif:SPIF xmlns:spif=\"http://www.xmlspif.org/spif\" schemaVersion=\"1.0\" "
+                "version=\"1\"><spif:securityPolicyId name=\"Test\" id=\"1.2.3\" />"
+                "</spif:SPIF>"sv;
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody(std::string(spif), "application/xml; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        return Base::handleHttpGetRequest(request, socket);
+    }
+
+    void onDocBrokerPresetsInstallEnd(bool success) override
+    {
+        TST_LOG("onDocBrokerPresetsInstallEnd: success=" << success);
+        LOK_ASSERT_STATE(_phase, Phase::WaitInstall);
+        LOK_ASSERT_MESSAGE("preset install should succeed", success);
+        LOK_ASSERT_MESSAGE("the spif policy asset should have been fetched", _spifAssetRequested);
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("spif preset group installed");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitInstall);
+                TST_LOG("Creating connection and loading view");
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitInstall:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[2]{ new UnitEarlyDocDeath(), nullptr };
+    return new UnitBase*[3]{ new UnitEarlyDocDeath(), new UnitSpifPreset(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

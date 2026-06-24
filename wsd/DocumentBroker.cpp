@@ -2109,6 +2109,10 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
             addGroup(settings, "template", presets);
             addGroup(settings, "themes", presets);
             addGroup(settings, "extensions", presets);
+            // SPIF security-label policies. Read-only to the engine (which scans
+            // the jail's spif/ config dir at label-dialog build time), so this is
+            // not a round-trip group; persistence is the Settings-UI upload.
+            addGroup(settings, "spif", presets);
 
             // Ensure round-trip group directories exist in the jail even
             // when the host advertised no entries for them. Without this

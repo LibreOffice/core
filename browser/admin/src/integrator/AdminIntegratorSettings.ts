@@ -50,6 +50,7 @@ interface ConfigData {
 	xcu: ConfigItem[] | null;
 	themes: ConfigItem[] | null;
 	extensions: ConfigItem[] | null;
+	spif: ConfigItem[] | null;
 }
 
 interface ViewSettings {
@@ -750,6 +751,7 @@ class SettingIframe {
 		XcuUpload: () => this.settingConfigBasePath() + '/xcu/',
 		themesUpload: () => this.settingConfigBasePath() + '/themes/',
 		extensionsUpload: () => this.settingConfigBasePath() + '/extensions/',
+		spifUpload: () => this.settingConfigBasePath() + '/spif/',
 	};
 	private browserSettingOptions: Record<string, any> = {};
 	// The Interface Settings as browsersetting.json holds them, before the
@@ -1016,6 +1018,20 @@ class SettingIframe {
 				buttonText: _('Upload Extension'),
 				uploadPath: this.PATH.extensionsUpload(),
 				enabledFor: 'systemconfig',
+				element: null,
+			},
+			{
+				id: 'spif',
+				sectionTitle: _('Security policies'),
+				sectionDesc: _(
+					'Upload SPIF security policies (.xml). These define the classifications and categories available when applying a security label to a document.',
+				),
+				listId: 'spifList',
+				inputId: 'spifFile',
+				buttonId: 'uploadSpifButton',
+				fileAccept: '.xml',
+				buttonText: _('Upload Security Policy'),
+				uploadPath: this.PATH.spifUpload(),
 				element: null,
 			},
 		];
@@ -3667,6 +3683,7 @@ class SettingIframe {
 			if (data.themes) this.populateList('themesList', data.themes, '/themes');
 			if (data.extensions)
 				this.populateList('extensionsList', data.extensions, '/extensions');
+			if (data.spif) this.populateList('spifList', data.spif, '/spif');
 		}
 
 		var navItem = document.querySelector<HTMLElement>(

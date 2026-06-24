@@ -28,6 +28,7 @@
 #include <rtl/bootstrap.hxx>
 #include <config_folders.h>
 #include <unotools/datetime.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include <set>
 
@@ -35,6 +36,10 @@ using namespace css;
 
 namespace
 {
+// The provisioned SPIF policies sync into the jail's user config dir under spif/
+// (WOPI presets delivery); $(userurl) resolves to that config root.
+constexpr OUString gsPolicyDir = u"$(userurl)/spif"_ustr;
+
 // TODO dev stopgap: fixed policy path. Replaced by WOPI provisioning (Phase F).
 // The file sits beside the sample TSCP policies in the installation.
 OUString getDevPolicyUrl()
@@ -118,7 +123,11 @@ SwSecurityLabelDlg::SwSecurityLabelDlg(weld::Window* pParent, SwWrtShell& rSh)
                                     m_xCategories->get_height_rows(6));
     m_xCategories->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
-    m_aPolicySet.loadFile(getDevPolicyUrl());
+    // The provisioned policies: every *.xml the WOPI host synced into the jail's
+    // spif/ config dir. Falls back to the dev stopgap when none are present.
+    m_aPolicySet.loadFromDir(SvtPathOptions().SubstituteVariable(gsPolicyDir));
+    if (m_aPolicySet.empty())
+        m_aPolicySet.loadFile(getDevPolicyUrl());
 
     PopulatePolicies();
     initFromExistingLabel();
