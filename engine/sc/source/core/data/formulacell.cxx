@@ -839,7 +839,8 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
     mbSeenInPath(false),
     mbFreeFlying(false),
     mbDynamicArrayMaster(rCell.mbDynamicArrayMaster),
-    mbAutoDynamicArrayEligible(rCell.mbAutoDynamicArrayEligible),
+    // A clone is not freshly typed, so the flag drops on copy.
+    mbAutoDynamicArrayEligible(false),
     cMatrixFlag ( rCell.cMatrixFlag ),
     nSeenInIteration(0),
     nFormatType( rCell.nFormatType ),

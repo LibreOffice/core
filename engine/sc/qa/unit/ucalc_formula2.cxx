@@ -6121,6 +6121,41 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testEnterMatrixUndoRedoKeepsDynamicFlag)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testCopyCellDropsAutoDynamicEligibility)
+{
+    // A clone (paste, fill, transpose) drops the auto-promotion
+    // eligibility, even at a destination position that would
+    // otherwise promote.
+
+    m_pDoc->SetAutoCalc(false);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(0, 3, 0), 40.0);
+
+    ScAddress aSourcePos(2, 0, 0);
+    ScCompiler aComp(*m_pDoc, aSourcePos, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(u"=UNIQUE(A1:A4)"_ustr);
+    auto pSource = new ScFormulaCell(*m_pDoc, aSourcePos, std::move(pCode));
+    pSource->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aSourcePos, pSource);
+
+    ScAddress aCopyPos(3, 0, 0);
+    auto pCopy = new ScFormulaCell(*pSource, *m_pDoc, aCopyPos);
+    m_pDoc->SetFormulaCell(aCopyPos, pCopy);
+
+    m_pDoc->SetAutoCalc(true);
+    m_pDoc->CalcAll();
+
+    CPPUNIT_ASSERT(pSource->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT(!pCopy->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(ScMatrixMode::NONE, pCopy->GetMatrixFlag());
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

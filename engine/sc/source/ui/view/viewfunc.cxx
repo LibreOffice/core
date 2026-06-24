@@ -523,16 +523,7 @@ void finalizeFormulaProcessing(const std::shared_ptr<FormulaProcessingContext>& 
 
     }
 
-    // The cell starts as a plain single-cell formula. If the first
-    // interpret produces a multi-cell matrix and the formula does not
-    // start with the @ implicit-intersection operator, the cell
-    // promotes itself to a dynamic-array master and the auto-resize
-    // machinery materialises the spilled reference cells. The
-    // eligibility flag is set only on freshly typed formulas, so
-    // loaded documents keep their old non-spilling behaviour.
     ScFormulaCell aCell(context->GetDoc(), *context->aPos, std::move(*context->pArr), formula::FormulaGrammar::GRAM_DEFAULT, ScMatrixMode::NONE);
-    if (context->bAutoDynamicArray)
-        aCell.SetAutoDynamicArrayEligible(true);
 
     SCTAB i;
     SvNumberFormatter* pFormatter = context->GetDoc().GetFormatTable();
@@ -557,6 +548,12 @@ void finalizeFormulaProcessing(const std::shared_ptr<FormulaProcessingContext>& 
         else
         {
             ScFormulaCell* pCell = new ScFormulaCell( aCell, context->GetDoc(), *(context->aPos) );
+            // Mark a freshly typed formula as eligible for auto-promotion
+            // to a dynamic-array master. The setter runs on the document-
+            // owned cell after the clone, since the copy constructor
+            // clears the bit.
+            if (context->bAutoDynamicArray)
+                pCell->SetAutoDynamicArrayEligible(true);
             if ( nError != FormulaError::NONE )
             {
                 pCell->GetCode()->DelRPN();
