@@ -119,7 +119,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
     m_xAttrLB->set_size_request(m_xAttrLB->get_approximate_digit_width() * 50,
                                 m_xAttrLB->get_height_rows(12));
 
-    m_xAttrLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xAttrLB->enable_toggle_buttons();
 
     m_xOKBtn->connect_clicked(LINK( this, SvxSearchAttributeDialog, OKHdl));
 

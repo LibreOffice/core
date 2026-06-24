@@ -220,7 +220,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg(weld::Window* pParent,
     maStartHelper.SetValue( rInfo.mbAutoStart, rInfo.mfStart );
     maEndHelper.SetValue( rInfo.mbAutoEnd, rInfo.mfEnd );
 
-    mxLbUnits->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    mxLbUnits->enable_toggle_buttons();
 
     if( nDatePart == 0 )
         nDatePart = css::sheet::DataPilotFieldGroupBy::MONTHS;

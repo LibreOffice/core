@@ -679,7 +679,7 @@ ScDPSubtotalOptDlg::ScDPSubtotalOptDlg(weld::Window* pParent, ScDPObject& rDPObj
     , mrDPObj(rDPObj)
     , maLabelData(rLabelData)
 {
-    m_xLbHide->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xLbHide->enable_toggle_buttons();
 
     m_xLbSortBy->set_size_request(m_xLbSortBy->get_approximate_digit_width() * 18, -1);
     m_xLbHide->set_size_request(-1, m_xLbHide->get_height_rows(5));

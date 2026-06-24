@@ -75,7 +75,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog(weld::Window* pParent,
     m_xLbSettings->set_size_request(m_xLbSettings->get_approximate_digit_width() * 32,
                                     m_xLbSettings->get_height_rows(12));
 
-    m_xLbSettings->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xLbSettings->enable_toggle_buttons();
 
     m_xLbEngine->connect_changed( LINK( this, ScSolverOptionsDialog, EngineSelectHdl ) );
 

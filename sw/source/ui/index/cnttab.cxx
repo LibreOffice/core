@@ -828,7 +828,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(weld::Container* pPage, weld::DialogContr
 
     m_sAddStyleContent = m_xAddStylesCB->get_label();
 
-    m_xFromObjCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xFromObjCLB->enable_toggle_buttons();
 
     for (size_t i = 0; i < std::size(RES_SRCTYPES); ++i)
     {

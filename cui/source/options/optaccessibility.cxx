@@ -90,8 +90,7 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* 
     , m_xOptionsLB(m_xBuilder->weld_tree_view(u"options"_ustr))
     , m_xDefaultPB(m_xBuilder->weld_button(u"default"_ustr))
 {
-
-    m_xOptionsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xOptionsLB->enable_toggle_buttons();
 
     auto pos = m_xOptionsLB->make_iterator();
     for (const auto& [compatId, a11yId] : options_list)

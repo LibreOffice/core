@@ -217,7 +217,7 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(weld::Container* pPage, weld::Dia
     , m_sAccidentalCaps(CuiResId(RID_CUISTR_CORRECT_ACCIDENTAL_CAPS_LOCK))
     , m_xCheckLB(m_xBuilder->weld_tree_view(u"checklist"_ustr))
 {
-    m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xCheckLB->enable_toggle_buttons();
     m_xCheckLB->set_size_request(-1, m_xCheckLB->get_height_rows(10));
 }
 
@@ -1634,7 +1634,7 @@ OfaQuoteTabPage::OfaQuoteTabPage(weld::Container* pPage, weld::DialogController*
     }
     else
     {
-        m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+        m_xCheckLB->enable_toggle_buttons();
         m_xSwCheckLB->hide();
     }
 
@@ -2203,7 +2203,7 @@ OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage(weld::Container* pPage, wel
     m_xSmartTagTypesLB->set_size_request(m_xSmartTagTypesLB->get_approximate_digit_width() * 50,
                                          m_xSmartTagTypesLB->get_height_rows(6));
 
-    m_xSmartTagTypesLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xSmartTagTypesLB->enable_toggle_buttons();
 
     // set the handlers:
     m_xMainCB->connect_toggled(LINK(this, OfaSmartTagOptionsTabPage, CheckHdl));

@@ -15270,7 +15270,8 @@ public:
         set_toggle(rGtkIter.iter, eState, col);
     }
 
-    virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override
+    virtual void enable_toggle_buttons(weld::ColumnToggleType eType
+                                       = weld::ColumnToggleType::Check) override
     {
         for (GList* pEntry = g_list_first(m_pColumns); pEntry; pEntry = g_list_next(pEntry))
         {

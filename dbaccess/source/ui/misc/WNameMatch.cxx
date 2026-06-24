@@ -61,7 +61,7 @@ OWizNameMatching::OWizNameMatching(weld::Container* pPage, OCopyTableWizard* pWi
     m_xAll->connect_clicked(LINK(this,OWizNameMatching,AllNoneClickHdl));
     m_xNone->connect_clicked(LINK(this,OWizNameMatching,AllNoneClickHdl));
 
-    m_xCTRL_LEFT->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xCTRL_LEFT->enable_toggle_buttons();
 
     m_xCTRL_LEFT->connect_selection_changed(LINK(this, OWizNameMatching, TableListClickHdl));
     m_xCTRL_RIGHT->connect_selection_changed(LINK(this, OWizNameMatching, TableListRightSelectHdl));

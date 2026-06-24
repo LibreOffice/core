@@ -634,8 +634,8 @@ ScCheckListMenuControl::ScCheckListMenuControl(weld::Widget* pParent, ScViewData
     // popup isn't a true dialog
     mxButtonBox->sort_native_button_order();
 
-    mxTreeChecks->enable_toggle_buttons(weld::ColumnToggleType::Check);
-    mxListChecks->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    mxTreeChecks->enable_toggle_buttons();
+    mxListChecks->enable_toggle_buttons();
 
     mxBox->show();
     if (mbIsMultiField)

@@ -60,7 +60,7 @@ OTableTreeListBox::OTableTreeListBox(std::unique_ptr<weld::TreeView> xTreeView, 
     , m_bShowToggles(bShowToggles)
 {
     if (m_bShowToggles)
-        m_xTreeView->enable_toggle_buttons(weld::ColumnToggleType::Check);
+        m_xTreeView->enable_toggle_buttons();
 }
 
 bool OTableTreeListBox::isFolderEntry(const weld::TreeIter& rEntry) const

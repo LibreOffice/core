@@ -48,7 +48,8 @@ public:
 
     virtual void do_insert_separator(int pos, const OUString& rId) override;
 
-    virtual void enable_toggle_buttons(weld::ColumnToggleType eType) override;
+    virtual void enable_toggle_buttons(weld::ColumnToggleType eType
+                                       = weld::ColumnToggleType::Check) override;
 
     virtual void set_clicks_to_toggle(int nToggleBehavior) override;
 

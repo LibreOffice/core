@@ -956,7 +956,7 @@ SwCaptionOptPage::SwCaptionOptPage(weld::Container* pPage, weld::DialogControlle
 {
     m_xCategoryBox->connect_entry_insert_text(LINK(this, SwCaptionOptPage, TextFilterHdl));
 
-    m_xCheckLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xCheckLB->enable_toggle_buttons();
 
     SwStyleNameMapper::FillUIName(SwPoolFormatId::COLL_LABEL_ABB, m_sIllustration);
     SwStyleNameMapper::FillUIName(SwPoolFormatId::COLL_LABEL_TABLE, m_sTable);

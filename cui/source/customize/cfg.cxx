@@ -945,7 +945,7 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(std::unique_ptr<weld::TreeView> xCo
     , m_xDropDown(m_xControl->create_virtual_device())
     , m_pPage(pPg)
 {
-    m_xControl->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xControl->enable_toggle_buttons();
     CreateDropDown();
     m_xControl->connect_key_press(LINK(this, SvxMenuEntriesListBox, KeyInputHdl));
     m_xControl->connect_query_tooltip(LINK(this, SvxMenuEntriesListBox, QueryTooltip));

@@ -246,7 +246,7 @@ SfxCommonTemplateDialog_Impl::StyleFiltersToolbarPopup::StyleFiltersToolbarPopup
     , m_xOKButton(m_xBuilder->weld_button(u"ok"_ustr))
     , m_bIsParaFamily(rStyleList.GetFamilyItem()->GetFamily() == SfxStyleFamily::Para)
 {
-    m_xFiltersTreeView->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xFiltersTreeView->enable_toggle_buttons();
     m_xFiltersTreeView->connect_toggled(
         LINK(this, SfxCommonTemplateDialog_Impl::StyleFiltersToolbarPopup, StyleFilterCheckHdl));
 

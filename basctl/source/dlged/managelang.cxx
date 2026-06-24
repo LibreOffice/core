@@ -226,7 +226,7 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(weld::Window* pParent, std::s
 {
     m_xLanguageLB->set_size_request(-1, m_xLanguageLB->get_height_rows(10));
     m_xCheckLangLB->set_size_request(-1, m_xCheckLangLB->get_height_rows(10));
-    m_xCheckLangLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xCheckLangLB->enable_toggle_buttons();
 
     if (m_xLocalizationMgr->isLibraryLocalized())
     {

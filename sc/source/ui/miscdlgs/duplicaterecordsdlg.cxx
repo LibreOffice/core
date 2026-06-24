@@ -46,7 +46,7 @@ ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
     , mrRange(rRange)
     , mrViewData(rViewData)
 {
-    m_xCheckList->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xCheckList->enable_toggle_buttons();
     m_xCheckList->connect_toggled(LINK(this, ScDuplicateRecordsDlg, RecordsChkHdl));
     Init();
 }

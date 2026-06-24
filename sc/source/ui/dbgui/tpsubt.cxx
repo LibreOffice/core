@@ -59,7 +59,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     mxLbColumns->set_size_request(-1, nHeight);
     mxLbFunctions->set_size_request(-1, nHeight);
 
-    mxLbColumns->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    mxLbColumns->enable_toggle_buttons();
 
     Init();
 

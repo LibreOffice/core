@@ -704,7 +704,7 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     aWidths.push_back(60 * nWidth / 100);
     aWidths.push_back(5 * nWidth / 100);
     m_xFileListLB->set_column_fixed_widths(aWidths);
-    m_xFileListLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xFileListLB->enable_toggle_buttons();
 
     m_xNextBtn->set_sensitive(true);
     m_xNextBtn->connect_clicked( LINK( this, RecoveryDialog, NextButtonHdl ) );

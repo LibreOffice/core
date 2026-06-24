@@ -457,7 +457,7 @@ UpdateDialog::UpdateDialog(uno::Reference<uno::XComponentContext> const& context
     m_xDescriptions->set_size_request(nWidth, nHeight);
     m_xUpdates->set_size_request(nWidth, nHeight);
 
-    m_xUpdates->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xUpdates->enable_toggle_buttons();
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
 

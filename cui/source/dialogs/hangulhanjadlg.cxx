@@ -914,7 +914,7 @@ HangulHanjaOptionsDialog::HangulHanjaOptionsDialog(weld::Window* pParent)
     m_xDictsLB->set_size_request(m_xDictsLB->get_approximate_digit_width() * 32,
                                  m_xDictsLB->get_height_rows(5));
 
-    m_xDictsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xDictsLB->enable_toggle_buttons();
 
     m_xDictsLB->connect_selection_changed(LINK(this, HangulHanjaOptionsDialog, DictsLB_SelectHdl));
 

@@ -807,9 +807,9 @@ SvxLinguTabPage::SvxLinguTabPage(weld::Container* pPage, weld::DialogController*
     , m_xMoreDictsBox(m_xBuilder->weld_box(u"moredictsbox"_ustr))
     , m_xMoreDictsLink(m_xBuilder->weld_link_button(u"moredictslink"_ustr))
 {
-    m_xLinguModulesCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
-    m_xLinguDicsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
-    m_xLinguOptionsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xLinguModulesCLB->enable_toggle_buttons();
+    m_xLinguDicsCLB->enable_toggle_buttons();
+    m_xLinguOptionsCLB->enable_toggle_buttons();
 
     m_xLinguModulesCLB->connect_selection_changed(LINK(this, SvxLinguTabPage, SelectHdl_Impl));
     m_xLinguModulesCLB->connect_item_activated(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
@@ -1566,7 +1566,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     m_xModulesCLB->set_size_request(m_xModulesCLB->get_approximate_digit_width() * 40,
                                     m_xModulesCLB->get_height_rows(12));
 
-    m_xModulesCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xModulesCLB->enable_toggle_buttons();
 
     pDefaultLinguData.reset( new SvxLinguData_Impl( rLinguData ) );
 

@@ -70,7 +70,7 @@ ScTableProtectionDlg::ScTableProtectionDlg(weld::Window* pParent)
     m_aAutoFilter = m_xAutoFilter->get_label();
     m_aPivot = m_xPivot->get_label();
 
-    m_xOptionsListBox->enable_toggle_buttons(weld::ColumnToggleType::Check);
+    m_xOptionsListBox->enable_toggle_buttons();
 
     Init();
 }
