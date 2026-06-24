@@ -152,7 +152,11 @@ class URLPopUpSection extends HTMLObjectSection {
 		}
 
 		document.getElementById(this.copyButtonId).onclick = () => {
-			if (this.sectionProperties.linkIsClientSide) {
+			// Hand the known link target straight to the native clipboard, as a UNO command is dropped here in view mode.
+			if (window.mode.isCODesktop()) {
+				(window as any).postMobileMessage('TEXTCLIPBOARD ' + this.sectionProperties.url);
+			}
+			else if (this.sectionProperties.linkIsClientSide) {
 				app.map._clip.setTextSelectionText(this.sectionProperties.url);
 				app.map._clip._execCopyCutPaste('copy');
 			}
