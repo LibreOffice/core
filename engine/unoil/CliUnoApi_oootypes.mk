@@ -26,4 +26,6 @@ $(eval $(call gb_CliUnoApi_use_api,cli_oootypes,udkapi))
 
 $(eval $(call gb_CliUnoApi_use_assembly,cli_oootypes,cli_uretypes))
 
+$(eval $(call gb_CliUnoApi_use_assembly,cli_oootypes,cli_basetypes))
+
 # vim: set noet sw=4 ts=4:

@@ -18,6 +18,7 @@ $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
 		$(call gb_UnoApiTarget_get_target,bridgetest) \
 		$(call gb_UnoApiTarget_get_target,udkapi) \
 		$(call gb_CliUnoApi_get_target,cli_uretypes) \
+		$(call gb_CliLibrary_get_target,cli_basetypes) \
 		$(call gb_Executable_get_runtime_dependencies,climaker) \
 		| $(testtools_CLIDIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLM,1)
@@ -26,6 +27,7 @@ $(testtools_CLIDIR)/cli_types_bridgetest.dll : \
 	$(call gb_Helper_execute,climaker) \
 		$(if $(filter -s,$(MAKEFLAGS)),,--verbose) \
 		--out $@ -r $(call gb_CliUnoApi_get_target,cli_uretypes) \
+		-r $(call gb_CliLibrary_get_target,cli_basetypes) \
 		-X $(call gb_UnoApiTarget_get_target,udkapi) \
 		$(call gb_UnoApiTarget_get_target,bridgetest) > /dev/null)
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),CLM)
