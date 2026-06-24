@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-05 15:53+0200\n"
-"PO-Revision-Date: 2026-06-08 17:01+0000\n"
-"Last-Translator: Артур <atter192837@gmail.com>\n"
+"PO-Revision-Date: 2026-06-25 11:01+0000\n"
+"Last-Translator: hyperflint <yourflint@tutamail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -470,7 +470,6 @@ msgid "Compact layout"
 msgstr "Компактный макет"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:533
-#, fuzzy
 msgid "Show status bar"
 msgstr "Показать строку состояния"
 
@@ -481,7 +480,7 @@ msgstr "Показать линейку"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:535
 msgid "Accessibility Checker"
-msgstr ""
+msgstr "Проверка доступности"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:536
 #: src/control/Control.NavigatorPanel.ts:302
@@ -494,7 +493,7 @@ msgstr "Показать Боковую Панель"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:538
 msgid "Custom Animation"
-msgstr ""
+msgstr "Пользовательская анимация"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:541
 msgid "Style List"
@@ -522,22 +521,19 @@ msgid "Show Grid"
 msgstr "Показать Сетку"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:548
-#, fuzzy
 msgid "Snap to grid"
-msgstr "Привязка к сетке"
+msgstr "Привязать к сетке"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:549
 #: admin/src/integrator/AdminIntegratorSettings.ts:555
-#, fuzzy
 msgid "Size to grid"
 msgstr "Привязка к сетке"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:550
 msgid "Synchronize axes"
-msgstr ""
+msgstr "Синхронизировать оси"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:551
-#, fuzzy
 msgid "Snap grid"
 msgstr "Привязка к сетке"
 
@@ -547,7 +543,7 @@ msgstr "Пустые Страницы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:553
 msgid "Force Breaks"
-msgstr ""
+msgstr "Принудительные разрывы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:554
 #: src/control/Control.Menubar.ts:803 src/control/Control.TopToolbar.js:139
@@ -573,23 +569,24 @@ msgstr "Страница"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:559
 msgid "Fit to page"
-msgstr ""
+msgstr "Уместить на страницу"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:560
+#, fuzzy
 msgid "Tile pages"
-msgstr ""
+msgstr "Страницы с плитками"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:561
 msgid "Booklet"
-msgstr ""
+msgstr "Буклет"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:562
 msgid "Booklet front"
-msgstr ""
+msgstr "Передняя сторона буклета"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:563
 msgid "Booklet back"
-msgstr ""
+msgstr "Задняя сторона буклета"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:564
 msgid "Page name"
@@ -613,7 +610,7 @@ msgstr "Скрытые страницы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 msgid "From printer setup"
-msgstr ""
+msgstr "Из настроек принтера"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:569
 #: src/control/Control.BackstageView.ts:551 templates/templates.js:80
@@ -638,7 +635,7 @@ msgstr "Заметки"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:571
 msgid "Handouts"
-msgstr ""
+msgstr "Флаеры"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:572
 #: src/control/Control.NavigatorPanel.ts:223
@@ -647,7 +644,7 @@ msgstr "Контур"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:573
 msgid "Handout horizontal"
-msgstr ""
+msgstr "Горизонтальный флаер"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:574
 msgid "Images"
@@ -659,7 +656,7 @@ msgstr "Таблицы"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:576
 msgid "Controls"
-msgstr ""
+msgstr "Клавиши управления"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:577
 msgid "Background"
@@ -667,7 +664,7 @@ msgstr "Фон"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:578
 msgid "Print Black"
-msgstr ""
+msgstr "Напечатать черным"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:579
 msgid "Hidden text"
@@ -675,7 +672,7 @@ msgstr "Скрытый текст"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:580
 msgid "Placeholders"
-msgstr ""
+msgstr "Заглушки"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:581
 msgid "Left pages"
@@ -687,11 +684,11 @@ msgstr "Правая страница"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:583
 msgid "Brochure"
-msgstr ""
+msgstr "Брошура"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:584
 msgid "Brochure Right to Left"
-msgstr ""
+msgstr "Брошура слева направо"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:789
 msgid "Invalid JSON file"
@@ -735,17 +732,19 @@ msgstr "Загрузить словарь"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:833
 msgid "Document themes"
-msgstr ""
+msgstr "Темы документа"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:835
 msgid ""
 "Upload custom document themes (.theme). These define color palettes "
 "available under Format > Theme."
 msgstr ""
+"Загрузить пользовательские темы документа (. theme). Они устанавливают "
+"цветовые палитры доступные в Формат > Тема."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:841
 msgid "Upload Theme"
-msgstr ""
+msgstr "Загрузить тему"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:918
 msgid "Something went wrong. Please try to refresh the page."
@@ -833,6 +832,8 @@ msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr ""
+"Для использования Zotero вставьте API-ключ здесь. Вы можете создать свой API-"
+"ключ в "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1949
 msgid "Zotero account API settings"
@@ -870,6 +871,8 @@ msgid ""
 "Configure AI provider credentials and model. Models are fetched "
 "automatically when credentials change."
 msgstr ""
+"Настройка данных и модели поставщика ИИ. Модели будут получены автоматически "
+"при смене данных провайдера ИИ."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2174
 msgid "Text Generation"
@@ -878,7 +881,7 @@ msgstr "Генерация текста"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2224
 #: admin/src/integrator/AdminIntegratorSettings.ts:2342
 msgid "e.g."
-msgstr ""
+msgstr "например"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2246
 msgid ""
@@ -886,13 +889,17 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"Для действий в документе (проверки и редактирования), выберите модель со "
+"встроенной поддержкой вызова функций/инструментов, такую как gpt-4o, "
+"llama3.1, или qwen2.5. Модели без нее (например, базовый llama3, gemma), "
+"могут общаться, но не использовать инструменты работы с документом."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2255
 #: admin/src/integrator/AdminIntegratorSettings.ts:2373
 #: admin/src/integrator/AdminIntegratorSettings.ts:2848
 #: admin/src/integrator/AdminIntegratorSettings.ts:2864
 msgid "Fetch models to select"
-msgstr ""
+msgstr "Получить модели для выбора"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2284
 msgid "Image Generation"
@@ -900,16 +907,16 @@ msgstr "Генерация изображений"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2289
 msgid "Same as Text AI"
-msgstr ""
+msgstr "Тот же, что и текстовый ИИ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2358
 msgid "Leave empty to use Text AI key"
-msgstr ""
+msgstr "Оставить пустым для использования ключа текстового ИИ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2621
 #: admin/src/integrator/AdminIntegratorSettings.ts:2726
 msgid "Fetching models..."
-msgstr ""
+msgstr "Получение моделей…"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2663
 #: admin/src/integrator/AdminIntegratorSettings.ts:2678
@@ -921,24 +928,26 @@ msgstr "Модели не найдены"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2688
 #: admin/src/integrator/AdminIntegratorSettings.ts:2787
 msgid "Models fetched successfully"
-msgstr ""
+msgstr "Модели успешно получены"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2694
 #: admin/src/integrator/AdminIntegratorSettings.ts:2793
 msgid "Failed to fetch models"
-msgstr ""
+msgstr "Ошибка получения моделей"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2704
 msgid "Invalid provider configuration"
-msgstr ""
+msgstr "Неправильная настройка провайдера ИИ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2828
 msgid "None (disable image generation)"
-msgstr ""
+msgstr "Нет (отключить генерирование изображений)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2880
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Невозможно получить модели (HTTP {0}). Проверьте URL провайдера ИИ и ключ "
+"API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2972
 #: admin/src/integrator/Xcu.ts:310
@@ -1060,10 +1069,13 @@ msgid ""
 "The system is currently adjusting resources. Please wait a moment while we "
 "retry your request..."
 msgstr ""
+"В данный момент система корректирует ресурсы. Пожалуйста, немного подождите "
+"пока мы повторяем ваш запрос…"
 
 #: js/global.js:1810
 msgid "The document is being migrated to a new server. Retrying shortly..."
 msgstr ""
+"Документ переносится на новый сервер. Предпринимается повторная попытка…"
 
 #: js/global.js:1812
 msgid "Failed to get RouteToken from controller"
@@ -1083,20 +1095,19 @@ msgstr "Обработка события была отложена на нео�
 
 #: src/app/LOUtil.ts:976
 msgid "{0} website, opens in new tab"
-msgstr ""
+msgstr "Сайт {0}, будет открывается в новой вкладке"
 
 #: src/app/LOUtil.ts:979
 msgid "file type icon"
 msgstr "значок типа файла"
 
 #: src/app/TableStylesService.ts:100
-#, fuzzy
 msgid "Light"
-msgstr "Плотно"
+msgstr "Светлый"
 
 #: src/app/TableStylesService.ts:102
 msgid "Medium"
-msgstr ""
+msgstr "Средний"
 
 #: src/app/TableStylesService.ts:104
 msgid "Dark"
@@ -1110,7 +1121,7 @@ msgstr ""
 #: src/app/TableStylesService.ts:231 src/app/TableStylesService.ts:243
 #: src/app/TableStylesService.ts:245
 msgid "Table Styles"
-msgstr ""
+msgstr "Стили таблицы"
 
 #: src/canvas/sections/CommentListSection.ts:1891
 #: src/canvas/sections/CommentListSection.ts:1904
@@ -1175,9 +1186,8 @@ msgid "Resolved"
 msgstr "Решено"
 
 #: src/canvas/sections/CommentSection.ts:579
-#, fuzzy
 msgid "Removed"
-msgstr "Удалить"
+msgstr "Удалено"
 
 #: src/canvas/sections/CommentSection.ts:1200
 #: src/control/jsdialog/Widget.Comment.ts:177
@@ -1239,23 +1249,23 @@ msgstr "Сохранено"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:118
 msgid "Last edited by %1 on %2"
-msgstr ""
+msgstr "Последний раз отредактировано %1 %2"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:193
 msgid "%1: Initial Version"
-msgstr ""
+msgstr "%1: Изначальная версия"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:197
 msgid "%1: Current Version"
-msgstr ""
+msgstr "%1: Текущая версия"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:204
 msgid "Initial Version"
-msgstr ""
+msgstr "Изначальная версия"
 
 #: src/canvas/sections/CompareChangesLabelSection.ts:208
 msgid "Current Version"
-msgstr ""
+msgstr "Текущая версия"
 
 #: src/canvas/sections/ShapeHandlesSection.ts:489
 msgid "Document contains unsupported media"
@@ -1275,7 +1285,7 @@ msgstr "Удалить ссылку"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
-msgstr ""
+msgstr "Развернуть"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:80
 msgid "Help on this error"
@@ -1283,11 +1293,11 @@ msgstr "Помочь с этой проблемой"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:85
 msgid "Inspect with Function Wizard"
-msgstr ""
+msgstr "Проверить с помощью установщика функций"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr ""
+msgstr "Редактировать в панели формул"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
@@ -1303,15 +1313,16 @@ msgstr "Подвал"
 
 #: src/control/CalcNotifications.ts:41
 msgid "A formula range was not extended to include the inserted cells."
-msgstr ""
+msgstr "Область формулы не была расширена для включения вставленных ячеек."
 
 #: src/control/CalcNotifications.ts:50
 msgid "Deletion created #REF! errors in other formulas. Undo to restore."
 msgstr ""
+"Удаление создало ошибки #REF! в других формулах. Отмените для восстановления."
 
 #: src/control/CalcNotifications.ts:51
 msgid "Find First"
-msgstr ""
+msgstr "Найти первое"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1324,16 +1335,15 @@ msgstr "Автоматический цвет"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:826
 msgid "(opens in new tab)"
-msgstr ""
+msgstr "(будет открыто в новой вкладке)"
 
 #: src/control/Control.AboutDialog.ts:155
-#, fuzzy
 msgid "Served by: "
-msgstr "Работает на:"
+msgstr "Предоставлено: "
 
 #: src/control/Control.AboutDialog.ts:178
 msgid "View widgets"
-msgstr ""
+msgstr "Показать виджеты"
 
 #: src/control/Control.AboutDialog.ts:213
 msgid "\"Slow Proxy\""
@@ -1349,7 +1359,7 @@ msgstr "Скопировать всю информацию о версии на 
 
 #: src/control/Control.AboutDialog.ts:393
 msgid "Version information has been copied"
-msgstr ""
+msgstr "Информация о версии скопирована"
 
 #: src/control/Control.AboutDialog.ts:437
 msgid "Version:"
@@ -1361,191 +1371,195 @@ msgstr "адрес ячейки"
 
 #: src/control/Control.AIChatSidebar.ts:90
 msgid "Make the following text more concise"
-msgstr ""
+msgstr "Сделать выбранный текст более емким"
 
 #: src/control/Control.AIChatSidebar.ts:94
 msgid "Summarize the key points of this text"
-msgstr ""
+msgstr "Обобщи основные моменты данного текста"
 
 #: src/control/Control.AIChatSidebar.ts:98
 msgid "Expand and add more detail to this text"
-msgstr ""
+msgstr "Раскрыть и добавить больше деталей в этот текст"
 
 #: src/control/Control.AIChatSidebar.ts:102
 msgid "Fix grammar, spelling, and punctuation errors"
-msgstr ""
+msgstr "Исправить грамматические, орфографические и пунктуационные ошибки"
 
 #: src/control/Control.AIChatSidebar.ts:118
 msgid "Natural"
-msgstr ""
+msgstr "Естественный"
 
 #: src/control/Control.AIChatSidebar.ts:119
-#, fuzzy
 msgid "Formal"
-msgstr "Формат"
+msgstr "Формальный"
 
 #: src/control/Control.AIChatSidebar.ts:120
 msgid "Short"
-msgstr ""
+msgstr "Краткий"
 
 #: src/control/Control.AIChatSidebar.ts:121
 msgid "Friendly"
-msgstr ""
+msgstr "Дружественный"
 
 #: src/control/Control.AIChatSidebar.ts:122
 msgid "Professional"
-msgstr ""
+msgstr "Профессиональный"
 
 #: src/control/Control.AIChatSidebar.ts:123
 msgid "Casual"
-msgstr ""
+msgstr "Повседневный"
 
 #: src/control/Control.AIChatSidebar.ts:362
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 #: src/control/Control.AIChatSidebar.ts:364
 msgid ""
 "Ethical AI rating: {0} ({1}). Based on open-source licensing, self-hosting, "
 "and training data."
 msgstr ""
+"Этическая оценка ИИ: 0} ({1}). Основано на лицензиях для программного "
+"обеспечения с открытым исходным кодом, данных самостоятельного хостинга и "
+"обучающих данных."
 
 #: src/control/Control.AIChatSidebar.ts:447
 msgid "Your message"
-msgstr ""
+msgstr "Ваше сообщение"
 
 #: src/control/Control.AIChatSidebar.ts:449
 msgid "Action requiring approval"
-msgstr ""
+msgstr "Необходимо одобрение действия"
 
 #: src/control/Control.AIChatSidebar.ts:451
 msgid "Error message"
-msgstr ""
+msgstr "Сообщение об ошибке"
 
 #: src/control/Control.AIChatSidebar.ts:452
 msgid "AI response"
-msgstr ""
+msgstr "Ответ ИИ"
 
 #: src/control/Control.AIChatSidebar.ts:526
 msgid ""
 "Content generated by an external AI service ({0}). Please review before use."
 msgstr ""
+"Материал сгенерирован внешней ИИ моделью ({0}). Проверьте перед "
+"использованием."
 
 #: src/control/Control.AIChatSidebar.ts:529
 msgid "Content generated by an external AI service. Please review before use."
 msgstr ""
+"Материал сгенерирован внешним ИИ сервисом. Пожалуйста, проверьте перед "
+"использованием."
 
 #: src/control/Control.AIChatSidebar.ts:607
 msgid "New conversation"
-msgstr ""
+msgstr "Новый диалог"
 
 #: src/control/Control.AIChatSidebar.ts:638
 msgid "Ask AI anything about your document..."
-msgstr ""
+msgstr "Спросите все о вашем документе у ИИ…"
 
 #: src/control/Control.AIChatSidebar.ts:696
 msgid "Loading"
-msgstr ""
+msgstr "Загрузка"
 
 #: src/control/Control.AIChatSidebar.ts:709
 msgid "Chat messages"
-msgstr ""
+msgstr "Сообщения чата"
 
 #: src/control/Control.AIChatSidebar.ts:735
 msgid "AI generated image"
-msgstr ""
+msgstr "Изображение, сгенерированое ИИ"
 
 #: src/control/Control.AIChatSidebar.ts:770
 msgid "Retry"
-msgstr ""
+msgstr "Повторить"
 
 #: src/control/Control.AIChatSidebar.ts:794
 #: src/control/Control.AIChatSidebar.ts:827
 msgid "Insert at cursor"
-msgstr ""
+msgstr "Поставить на курсор"
 
 #: src/control/Control.AIChatSidebar.ts:803
 #: src/control/Control.AIChatSidebar.ts:834
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Скопировать в буфер обмена"
 
 #: src/control/Control.AIChatSidebar.ts:854
 msgid "Using selected text as context"
-msgstr ""
+msgstr "Использовать выделенный текст для контекста"
 
 #: src/control/Control.AIChatSidebar.ts:861
 msgid "Ask AI..."
-msgstr ""
+msgstr "Спросить ИИ..."
 
 #: src/control/Control.AIChatSidebar.ts:864
 msgid "Message input"
-msgstr ""
+msgstr "Ввод сообщения"
 
 #: src/control/Control.AIChatSidebar.ts:880
 msgid "Stop generating"
-msgstr ""
+msgstr "Остановить генерирование"
 
 #: src/control/Control.AIChatSidebar.ts:881
 msgid "Send message"
-msgstr ""
+msgstr "Отправить сообщение"
 
 #: src/control/Control.AIChatSidebar.ts:895
 #: src/control/Control.AIChatSidebar.ts:908
 msgid "Set tone"
-msgstr ""
+msgstr "Установить тон"
 
 #: src/control/Control.AIChatSidebar.ts:919
 msgid "Set tone of voice"
-msgstr ""
+msgstr "Установить тон голоса"
 
 #: src/control/Control.AIChatSidebar.ts:920
 msgid "Tone of voice: {0}{1}"
-msgstr ""
+msgstr "Тон голоса: {0}{1}"
 
 #: src/control/Control.AIChatSidebar.ts:922
 msgid "with emoji"
-msgstr ""
+msgstr "с эмодзи"
 
 #: src/control/Control.AIChatSidebar.ts:964
 #: src/control/Control.AIChatSidebar.ts:1014
 #: src/control/Control.AIChatSidebar.ts:1386
-#, fuzzy
 msgid "tone"
-msgstr "Нет"
+msgstr "тон"
 
 #: src/control/Control.AIChatSidebar.ts:977
 #: src/control/Control.AIChatSidebar.ts:1248
 msgid "Tone of voice"
-msgstr ""
+msgstr "Тон голоса"
 
 #: src/control/Control.AIChatSidebar.ts:983
 msgid "Reset voice"
-msgstr ""
+msgstr "Сбросить голос"
 
 #: src/control/Control.AIChatSidebar.ts:986
 msgid "Reset tone of voice"
-msgstr ""
+msgstr "Сбросить тон голоса"
 
 #: src/control/Control.AIChatSidebar.ts:1002
 msgid "Your tones"
-msgstr ""
+msgstr "Ваши тоны"
 
 #: src/control/Control.AIChatSidebar.ts:1019
-#, fuzzy
 msgid "Edit tone"
-msgstr "Режим редактирования"
+msgstr "Редактировать тон"
 
 #: src/control/Control.AIChatSidebar.ts:1036
 msgid "+ Add my own voice"
-msgstr ""
+msgstr "+ Добавить мой голос"
 
 #: src/control/Control.AIChatSidebar.ts:1038
 msgid "Add a custom tone of voice"
-msgstr ""
+msgstr "Добавить пользовательский тон голоса"
 
 #: src/control/Control.AIChatSidebar.ts:1049
 msgid "Emojify"
-msgstr ""
+msgstr "Эмодзинировать"
 
 #: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:162
@@ -1560,133 +1574,135 @@ msgstr "Выкл"
 
 #: src/control/Control.AIChatSidebar.ts:1058
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Включить эмодзинирование"
 
 #: src/control/Control.AIChatSidebar.ts:1219
 msgid "Use icon"
-msgstr ""
+msgstr "Использовать иконку"
 
 #: src/control/Control.AIChatSidebar.ts:1229
 msgid "Pick another emoji"
-msgstr ""
+msgstr "Выбрать другой эмодзи"
 
 #: src/control/Control.AIChatSidebar.ts:1243
 msgid "Back to tones"
-msgstr ""
+msgstr "Назад к тонам"
 
 #: src/control/Control.AIChatSidebar.ts:1256
 msgid "Icon"
-msgstr ""
+msgstr "Значок"
 
 #: src/control/Control.AIChatSidebar.ts:1268
 msgid "Name your tone"
-msgstr ""
+msgstr "Дать имя вашему тону"
 
 #: src/control/Control.AIChatSidebar.ts:1275
 msgid "e.g. Quick reply"
-msgstr ""
+msgstr "например «Быстрый ответ»"
 
 #: src/control/Control.AIChatSidebar.ts:1277
 msgid "Tone name"
-msgstr ""
+msgstr "Имя тона"
 
 #: src/control/Control.AIChatSidebar.ts:1282
 msgid "Describe how AI should write"
-msgstr ""
+msgstr "Опишите, каким образом должен писать ИИ"
 
 #: src/control/Control.AIChatSidebar.ts:1290
 msgid ""
 "Write short, direct sentences. Use plain language and skip the small talk."
 msgstr ""
+"Пиши короткие, прямые предложения. Используй «сухой» язык и пропускай «пустые"
+"» разговоры."
 
 #: src/control/Control.AIChatSidebar.ts:1294
 msgid "Tone description"
-msgstr ""
+msgstr "Описание тона"
 
 #: src/control/Control.AIChatSidebar.ts:1303
 #: src/control/Control.AIChatSidebar.ts:1365
 #: src/control/Control.AIChatSidebar.ts:1407
 msgid "Delete tone"
-msgstr ""
+msgstr "Удалить тон"
 
 #: src/control/Control.AIChatSidebar.ts:1305
 msgid "Delete this tone"
-msgstr ""
+msgstr "Удалить этот тон"
 
 #: src/control/Control.AIChatSidebar.ts:1318
 msgid "Save voice"
-msgstr ""
+msgstr "Сохранить голос"
 
 #: src/control/Control.AIChatSidebar.ts:1320
 msgid "Save tone of voice"
-msgstr ""
+msgstr "Сохранить тон голоса"
 
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr ""
+msgstr "Поиск эмодзи"
 
 #: src/control/Control.AIChatSidebar.ts:1336
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr ""
+msgstr "Выбор эмодзи"
 
 #: src/control/Control.AIChatSidebar.ts:1360
 msgid "Delete tone confirmation"
-msgstr ""
+msgstr "Убрать подтверждение тона"
 
 #: src/control/Control.AIChatSidebar.ts:1371
 msgid "This tone of voice will be deleted"
-msgstr ""
+msgstr "Этот тон голоса будет удален"
 
 #: src/control/Control.AIChatSidebar.ts:1400
 msgid "Cancel delete"
-msgstr ""
+msgstr "Отменить удаление"
 
 #: src/control/Control.AIChatSidebar.ts:1427
 #: src/control/Control.AIChatSidebar.ts:1487
 msgid "You have reached the maximum of {0} custom tones."
-msgstr ""
+msgstr "Вы достигли максимального количества в {0} пользовательских тонов."
 
 #: src/control/Control.AIChatSidebar.ts:1661
 msgid "Diagnose formula error"
-msgstr ""
+msgstr "Диагностировать ошибку в формуле"
 
 #: src/control/Control.AIChatSidebar.ts:1667
 msgid "Sanity check data"
-msgstr ""
+msgstr "Проверка достоверности данных"
 
 #: src/control/Control.AIChatSidebar.ts:1673
 msgid "Create a formula"
-msgstr ""
+msgstr "Создать формулу"
 
 #: src/control/Control.AIChatSidebar.ts:1680
 msgid "Create slides"
-msgstr ""
+msgstr "Создать слайды"
 
 #: src/control/Control.AIChatSidebar.ts:1712
 msgid "See less"
-msgstr ""
+msgstr "Свернуть"
 
 #: src/control/Control.AIChatSidebar.ts:1712
 msgid "See more"
-msgstr ""
+msgstr "Развернуть"
 
 #: src/control/Control.AIChatSidebar.ts:1822
 msgid "Image inserted at cursor"
-msgstr ""
+msgstr "Изображение вставлено на курсоре"
 
 #: src/control/Control.AIChatSidebar.ts:1841
 msgid "Text inserted at cursor"
-msgstr ""
+msgstr "Текст вставлен на курсоре"
 
 #: src/control/Control.AIChatSidebar.ts:1920
 msgid "Approaching message length limit"
-msgstr ""
+msgstr "Достигается лимит длинны сообщения"
 
 #: src/control/Control.AIChatSidebar.ts:1974
 msgid "Request timeout"
-msgstr ""
+msgstr "Таймаут запроса"
 
 #: src/control/Control.AIChatSidebar.ts:1989
 #: src/control/Control.AIChatSidebar.ts:2917
@@ -1694,136 +1710,137 @@ msgid ""
 "The selection contains images or other non-text content that cannot be sent "
 "as context."
 msgstr ""
+"Выборка содержит изображения или иной не текстовый материал, который не "
+"может быть отправлен в качестве контекста."
 
 #: src/control/Control.AIChatSidebar.ts:2076
 msgid "Message is too long. Please shorten it and try again."
-msgstr ""
+msgstr "Сообщение слишком длинное. Укоротите его и попробуйте снова."
 
 #: src/control/Control.AIChatSidebar.ts:2131
 msgid "Error: "
-msgstr ""
+msgstr "Ошибка: "
 
 #: src/control/Control.AIChatSidebar.ts:2161
 msgid "Generated image"
-msgstr ""
+msgstr "Сгенерированов изображение"
 
 #: src/control/Control.AIChatSidebar.ts:2173
 msgid "AI request failed"
-msgstr ""
+msgstr "Неудачный запрос к ИИ"
 
 #: src/control/Control.AIChatSidebar.ts:2190
 msgid "The AI assistant"
-msgstr ""
+msgstr "ИИ ассистент"
 
 #: src/control/Control.AIChatSidebar.ts:2203
 msgid "Do you want to proceed?"
-msgstr ""
+msgstr "Вы хотите продолжить?"
 
 #: src/control/Control.AIChatSidebar.ts:2206
 msgid "%1 wants to inspect your document. Do you want to proceed?"
-msgstr ""
+msgstr "%1 хочет просмотреть ваш документ. Хотите продолжить?"
 
 #: src/control/Control.AIChatSidebar.ts:2210
 msgid "Modify document structure"
-msgstr ""
+msgstr "Изменить структуру документа"
 
 #: src/control/Control.AIChatSidebar.ts:2212
 msgid "%1 wants to modify your document:"
-msgstr ""
+msgstr "%1 хочет изменить ваш документ:"
 
 #: src/control/Control.AIChatSidebar.ts:2216
 #: src/control/Control.AIChatSidebar.ts:2227
 msgid "Do you want to apply this change?"
-msgstr ""
+msgstr "Вы хотите применить это изменение?"
 
 #: src/control/Control.AIChatSidebar.ts:2218
 msgid "Set cell formula"
-msgstr ""
+msgstr "Установить формулу ячейки"
 
 #: src/control/Control.AIChatSidebar.ts:2220
 msgid "%1 wants to set a formula in your spreadsheet:"
-msgstr ""
+msgstr "%1 хочет установить формулу в вашей книге:"
 
 #: src/control/Control.AIChatSidebar.ts:2230
 msgid "%1 wants to perform an action. Do you want to proceed?"
-msgstr ""
+msgstr "%1 хочет совершить действие. Вы хотите продолжить?"
 
 #: src/control/Control.AIChatSidebar.ts:2261
 msgid "Approve"
-msgstr ""
+msgstr "Одобрить"
 
 #: src/control/Control.AIChatSidebar.ts:2263
 msgid "Approve action"
-msgstr ""
+msgstr "Одобрить действие"
 
 #: src/control/Control.AIChatSidebar.ts:2270
 msgid "Reject"
-msgstr ""
+msgstr "Отклонить"
 
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Reject action"
-msgstr ""
+msgstr "Отклонить действие"
 
 #: src/control/Control.AIChatSidebar.ts:2291
 msgid "Applying changes..."
-msgstr ""
+msgstr "Применение изменений…"
 
 #: src/control/Control.AIChatSidebar.ts:2294
 msgid "Change rejected"
-msgstr ""
+msgstr "Изменение отклонено"
 
 #: src/control/Control.AIChatSidebar.ts:2384
 msgid "Use section: "
-msgstr ""
+msgstr "Использовать раздел: "
 
 #: src/control/Control.AIChatSidebar.ts:2422
 msgid "Selection fetch timeout"
-msgstr ""
+msgstr "Таймаут при выборке данных"
 
 #: src/control/Control.AIChatSidebar.ts:2441
 msgid "Failed to parse selection content"
-msgstr ""
+msgstr "Ошибка обработки данных"
 
 #: src/control/Control.AIChatSidebar.ts:2689
 msgid "Formula analysis timeout"
-msgstr ""
+msgstr "Таймаут анализа формулы"
 
 #: src/control/Control.AIChatSidebar.ts:2708
 msgid "Analyzing formula dependencies..."
-msgstr ""
+msgstr "Анализ зависимостей формулы…"
 
 #: src/control/Control.AIChatSidebar.ts:2716
 msgid "Failed to analyze formula."
-msgstr ""
+msgstr "Ошибка анализа формулы."
 
 #: src/control/Control.AIChatSidebar.ts:2726
 msgid "The selected cell does not contain a formula."
-msgstr ""
+msgstr "Выбранная ячейка не содержит формулу."
 
 #: src/control/Control.AIChatSidebar.ts:2728
 msgid "The selected cell does not have a formula error."
-msgstr ""
+msgstr "Ошибка отсутствия формулы в ячейке."
 
 #: src/control/Control.AIChatSidebar.ts:2737
 msgid "Diagnose formula error in"
-msgstr ""
+msgstr "Диагностика ошибки формулы в"
 
 #: src/control/Control.AIChatSidebar.ts:2758
 msgid "I have a formula error in my spreadsheet."
-msgstr ""
+msgstr "У меня ошибка формулы в книге."
 
 #: src/control/Control.AIChatSidebar.ts:2760
 msgid "Cell"
-msgstr ""
+msgstr "Ячейка"
 
 #: src/control/Control.AIChatSidebar.ts:2764
-#, fuzzy
 msgid "Sheet"
-msgstr "~Лист"
+msgstr "Лист"
 
 #: src/control/Control.AIChatSidebar.ts:2768
 msgid "contains"
-msgstr ""
+msgstr "содержит"
 
 #: src/control/Control.AIChatSidebar.ts:2770
 #: src/control/Control.FormulaBarJSDialog.js:83
@@ -1834,103 +1851,110 @@ msgstr "Формула"
 
 #: src/control/Control.AIChatSidebar.ts:2774
 msgid "Referenced cells"
-msgstr ""
+msgstr "Упоминаемые ячейки"
 
 #: src/control/Control.AIChatSidebar.ts:2780
 msgid "Please diagnose why this formula produces the"
-msgstr ""
+msgstr "Пожалуйста, проверьте, почему формула производит"
 
 #: src/control/Control.AIChatSidebar.ts:2784
 msgid "error."
-msgstr ""
+msgstr "ошибка."
 
 #: src/control/Control.AIChatSidebar.ts:2786
 msgid "Explain the root cause and suggest how to fix it."
-msgstr ""
+msgstr "Выясни основную причину и предложи пути ее решения."
 
 #: src/control/Control.AIChatSidebar.ts:2790
 msgid ""
 "When referencing specific cells, format each cell address as a clickable "
 "link: [A1](cell://A1)."
 msgstr ""
+"При упоминании определённых ячеек, отформатируй каждую из них в виде "
+"активной ссылки: [A1](cell://A1)."
 
 #: src/control/Control.AIChatSidebar.ts:2805
-#, fuzzy
 msgid "formula"
-msgstr "Формула"
+msgstr "формула"
 
 #: src/control/Control.AIChatSidebar.ts:2807
 msgid "ERROR"
-msgstr ""
+msgstr "ОШИБКА"
 
 #: src/control/Control.AIChatSidebar.ts:2821
 msgid "value"
-msgstr ""
+msgstr "значение"
 
 #: src/control/Control.AIChatSidebar.ts:2831
-#, fuzzy
 msgid "text"
-msgstr "Текст"
+msgstr "текст"
 
 #: src/control/Control.AIChatSidebar.ts:2836
 msgid "empty"
-msgstr ""
+msgstr "пусто"
 
 #: src/control/Control.AIChatSidebar.ts:2838
 msgid "range"
-msgstr ""
+msgstr "диапазон"
 
 #: src/control/Control.AIChatSidebar.ts:2840
 msgid "errors in"
-msgstr ""
+msgstr "ошибки в"
 
 #: src/control/Control.AIChatSidebar.ts:2843
 msgid "only partially scanned"
-msgstr ""
+msgstr "частично просканировано"
 
 #: src/control/Control.AIChatSidebar.ts:2852
 msgid "circular reference"
-msgstr ""
+msgstr "циклическая ссылка"
 
 #: src/control/Control.AIChatSidebar.ts:2902
 msgid "Select the data you want to sanity-check first."
-msgstr ""
+msgstr "Выберите данные, которые хотите первыми проверить на достоверность."
 
 #: src/control/Control.AIChatSidebar.ts:2907
 msgid "Analyzing selected data..."
-msgstr ""
+msgstr "Проверка выбранных данных…"
 
 #: src/control/Control.AIChatSidebar.ts:2920
 msgid "Failed to extract spreadsheet data."
-msgstr ""
+msgstr "Ошибка получения данных из книги."
 
 #: src/control/Control.AIChatSidebar.ts:2929
 msgid "No data found in selection."
-msgstr ""
+msgstr "Данные в выборке не найдены."
 
 #: src/control/Control.AIChatSidebar.ts:2959
 msgid ""
 "Describe the slides you want to create. For example: \"A 5-slide overview "
 "of renewable energy\" or \"An introduction to our team\"."
 msgstr ""
+"Опишите слайды, которые хотите создать. Например: «Обзор на возобновляемую "
+"энергию из пяти слайдов» или «Презентация нашей команды»."
 
 #: src/control/Control.AIChatSidebar.ts:2986
 msgid ""
 "Describe what formula you need. For example: \"Calculate the average of "
 "column B\" or \"Sum all values where column A is greater than 100\"."
 msgstr ""
+"Опишите, какая формула вам нужна. Например: «Рассчитай среднее столбцов A и B"
+"» или «Сумма всех значений столбца A, превышающих 100»."
 
 #: src/control/Control.AIChatSidebar.ts:2996
 msgid ""
 "Read row numbers from the \"Row\" column — do not count or estimate row "
 "positions."
 msgstr ""
+"Считай ряд цифр из столбца «Ряд» — не считай и не оценивай положения ряда."
 
 #: src/control/Control.AIChatSidebar.ts:3000
 msgid ""
 "To identify a cell's column, match the value to the column letter in the "
 "header row — do not guess."
 msgstr ""
+"Для идентификации ряда, где находится ячейка, сопоставь значение ячейки "
+"букве столбца в верхнем ряду — не угадывай."
 
 #: src/control/Control.AIChatSidebar.ts:3004
 msgid ""
