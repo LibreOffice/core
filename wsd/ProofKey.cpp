@@ -111,7 +111,7 @@ void Proof::initialize()
 
 Proof::Proof(Type)
     : _pKey(new Poco::Crypto::RSAKey(
-                 Poco::Crypto::RSAKey::KeyLength::KL_2048,
+                 Poco::Crypto::RSAKey::KeyLength::KL_4096,
                  Poco::Crypto::RSAKey::Exponent::EXP_LARGE))
 {
     initialize();

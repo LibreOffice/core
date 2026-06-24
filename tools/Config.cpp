@@ -515,7 +515,7 @@ int Config::main(const std::vector<std::string>& args)
         if (!proofKeyFile.exists())
         {
             Poco::Crypto::RSAKey proofKey =
-                Poco::Crypto::RSAKey(Poco::Crypto::RSAKey::KeyLength::KL_2048,
+                Poco::Crypto::RSAKey(Poco::Crypto::RSAKey::KeyLength::KL_4096,
                                      Poco::Crypto::RSAKey::Exponent::EXP_LARGE);
             proofKey.save(proofKeyPath + ".pub", proofKeyPath, "" /*no password*/);
 #if !ENABLE_DEBUG
