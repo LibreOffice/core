@@ -38,7 +38,7 @@
 
 std::unique_ptr<Poco::Crypto::RSAKey>& JWTAuth::key() {
     static std::unique_ptr<Poco::Crypto::RSAKey> key(
-        new Poco::Crypto::RSAKey(Poco::Crypto::RSAKey(Poco::Crypto::RSAKey::KL_2048, Poco::Crypto::RSAKey::EXP_LARGE)));
+        new Poco::Crypto::RSAKey(Poco::Crypto::RSAKey(Poco::Crypto::RSAKey::KL_4096, Poco::Crypto::RSAKey::EXP_LARGE)));
     return key;
 }
 
