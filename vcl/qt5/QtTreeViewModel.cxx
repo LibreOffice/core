@@ -41,6 +41,23 @@ bool QtTreeViewModel::hasChildren(const QModelIndex& rIndex) const
     return QSortFilterProxyModel::hasChildren(rIndex);
 }
 
+QVariant QtTreeViewModel::data(const QModelIndex& rIndex, int nRole) const
+{
+    QVariant aData = QSortFilterProxyModel::data(rIndex, nRole);
+
+    if (nRole == Qt::TextAlignmentRole && m_aCenteredColumns.contains(rIndex.column()))
+    {
+        Qt::Alignment eAlignment = aData.value<Qt::Alignment>();
+        eAlignment &= ~Qt::AlignHorizontal_Mask;
+        eAlignment |= Qt::AlignHCenter;
+        return QVariant::fromValue(eAlignment);
+    }
+
+    return aData;
+}
+
+void QtTreeViewModel::setCenteredColumn(int nCol) { m_aCenteredColumns.insert(nCol); }
+
 const std::vector<int>& QtTreeViewModel::editableColumns() const
 {
     assert(std::ranges::is_sorted(m_aEditableColumns));

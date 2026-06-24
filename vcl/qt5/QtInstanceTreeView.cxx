@@ -714,7 +714,7 @@ int QtInstanceTreeView::get_column_width(int nCol) const
     return nWidth;
 }
 
-void QtInstanceTreeView::set_centered_column(int) { assert(false && "Not implemented yet"); }
+void QtInstanceTreeView::set_centered_column(int nCol) { m_pModel->setCenteredColumn(nCol); }
 
 OUString QtInstanceTreeView::get_column_title(int nColumn) const
 {

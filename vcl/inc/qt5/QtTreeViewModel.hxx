@@ -16,6 +16,7 @@
 #include <QtCore/QSortFilterProxyModel>
 #include <QtWidgets/QWidget>
 
+#include <unordered_set>
 #include <vector>
 
 /** Item model for QtInstanceTreeView. */
@@ -23,6 +24,7 @@ class QtTreeViewModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
+    std::unordered_set<int> m_aCenteredColumns;
     std::vector<int> m_aEditableColumns;
 
 public:
@@ -31,6 +33,10 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex& rIndex) const override;
 
     virtual bool hasChildren(const QModelIndex& rIndex = QModelIndex()) const override;
+
+    QVariant data(const QModelIndex& rIndex, int nRole = Qt::DisplayRole) const override;
+
+    void setCenteredColumn(int nCol);
 
     const std::vector<int>& editableColumns() const;
     void setEditableColumns(const std::vector<int>& rEditableColumns);
