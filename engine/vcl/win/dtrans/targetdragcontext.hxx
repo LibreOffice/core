@@ -25,7 +25,8 @@
 
 #include <win/dnd_target.hxx>
 
-class TargetDragContext : public WeakImplHelper<XDropTargetDragContext>
+class TargetDragContext
+    : public cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDragContext>
 {
     // some calls to the functions of XDropTargetDragContext are delegated
     // to non-interface functions of m_pDropTarget

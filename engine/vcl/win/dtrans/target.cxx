@@ -40,6 +40,7 @@ using namespace osl;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
+using namespace com::sun::star::uno;
 
 #define WM_REGISTERDRAGDROP WM_USER + 1
 #define WM_REVOKEDRAGDROP WM_USER + 2

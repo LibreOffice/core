@@ -23,6 +23,8 @@
 
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
+using namespace com::sun::star::uno;
+using namespace cppu;
 
 SourceContext::SourceContext( DragSource* pSource,
                              const Reference<XDragSourceListener>& listener):

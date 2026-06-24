@@ -30,23 +30,28 @@
 // currently.
 // An instance of SourceContext only lives as long as the drag and drop
 // operation lasts.
-class SourceContext : public cppu::BaseMutex, public WeakComponentImplHelper<XDragSourceContext>
+class SourceContext
+    : public cppu::BaseMutex,
+      public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSourceContext>
 {
     DragSource* m_pDragSource;
-    Reference<XDragSource> m_dragSource;
+    css::uno::Reference<css::datatransfer::dnd::XDragSource> m_dragSource;
     // the action ( copy, move etc)
     sal_Int8 m_currentAction;
 
 public:
-    SourceContext(DragSource* pSource, const Reference<XDragSourceListener>& listener);
+    SourceContext(DragSource* pSource,
+                  const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& listener);
     ~SourceContext() override;
     SourceContext(const SourceContext&) = delete;
     SourceContext& operator=(const SourceContext&) = delete;
 
     /// @throws RuntimeException
-    virtual void addDragSourceListener(const Reference<XDragSourceListener>& dsl);
+    virtual void addDragSourceListener(
+        const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& dsl);
     /// @throws RuntimeException
-    virtual void removeDragSourceListener(const Reference<XDragSourceListener>& dsl);
+    virtual void removeDragSourceListener(
+        const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& dsl);
     virtual sal_Int32 SAL_CALL getCurrentCursor() override;
     virtual void SAL_CALL setCursor(sal_Int32 cursorId) override;
     virtual void SAL_CALL setImage(sal_Int32 imageId) override;

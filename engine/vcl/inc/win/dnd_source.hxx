@@ -37,11 +37,13 @@ class SourceContext;
 // ALT modifier is considered to effect a user selection of effects
 class DragSource:
       public cppu::BaseMutex,
-      public WeakComponentImplHelper<XDragSource, XInitialization, XServiceInfo>,
+      public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDragSource,
+                                           css::lang::XInitialization,
+                                           css::lang::XServiceInfo>,
       public IDropSource
 
 {
-    Reference<XComponentContext> m_xContext;
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
     HWND m_hAppWindow;
 
     // The mouse button that set off the drag and drop operation
@@ -50,12 +52,12 @@ class DragSource:
     // First starting a new drag and drop thread if
     // the last one has finished
     void StartDragImpl(
-        const DragGestureEvent& trigger,
+        const css::datatransfer::dnd::DragGestureEvent& trigger,
         sal_Int8 sourceActions,
         sal_Int32 cursor,
         sal_Int32 image,
-        const Reference<XTransferable >& trans,
-        const Reference<XDragSourceListener >& listener);
+        const css::uno::Reference<css::datatransfer::XTransferable >& trans,
+        const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener >& listener);
 
 public:
     LONG m_RunningDndOperationCount;
@@ -65,7 +67,7 @@ public:
     // the thread ID of the thread which created the window
     DWORD m_threadIdWindow;
     // The context notifies the XDragSourceListener s
-    Reference<XDragSourceContext>   m_currentContext;
+    css::uno::Reference<css::datatransfer::dnd::XDragSourceContext> m_currentContext;
 
     // the wrapper for the Transferable ( startDrag)
     sal::systools::COMReference<IDataObject> m_spDataObject;
@@ -73,28 +75,28 @@ public:
     sal_Int8 m_sourceActions;
 
 public:
-    explicit DragSource(const Reference<XComponentContext>& rxContext);
+    explicit DragSource(const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~DragSource() override;
     DragSource(const DragSource&) = delete;
     DragSource &operator= ( const DragSource&) = delete;
 
   // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
     // XDragSource
     virtual bool SAL_CALL isDragImageSupported(  ) override;
     virtual sal_Int32 SAL_CALL getDefaultCursor( sal_Int8 dragAction ) override;
-    virtual void SAL_CALL startDrag( const DragGestureEvent& trigger,
+    virtual void SAL_CALL startDrag( const css::datatransfer::dnd::DragGestureEvent& trigger,
                                      sal_Int8 sourceActions,
                                      sal_Int32 cursor,
                                      sal_Int32 image,
-                                     const Reference<XTransferable >& trans,
-                                     const Reference<XDragSourceListener >& listener ) override;
+                                     const css::uno::Reference<css::datatransfer::XTransferable>& trans,
+                                     const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& listener ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(
             /* [in] */ REFIID riid,
