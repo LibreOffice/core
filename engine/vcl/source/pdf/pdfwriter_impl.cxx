@@ -2091,7 +2091,7 @@ bool PDFWriterImpl::emitFonts()
             FontSubsetInfo aSubsetInfo;
             const auto* pFace = subset.first.m_pFace;
             if (pFace->CreateFontSubset(aBuffer, pGlyphIds, pEncoding, nGlyphs, aSubsetInfo,
-                                        subset.first.m_rVariations))
+                                        subset.first.m_aVariations))
             {
                 // create font stream
                 if (g_bDebugDisableCompression)
