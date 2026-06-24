@@ -3290,7 +3290,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUndoTrackedSplitParagraphNumbering)
     // Undo this tracked change.
     pWrtShell->Undo();
 
-    // make sure that that we are on the same node.
+    // make sure that we are on the same node.
     pCcc = findTextNode(u"ccc");
     CPPUNIT_ASSERT(pCcc);
 
