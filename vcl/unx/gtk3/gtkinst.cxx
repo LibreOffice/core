@@ -14806,21 +14806,15 @@ public:
                 pEditCellData = pData;
                 break;
             }
-            else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer))
+            else if (GTK_IS_CELL_RENDERER_TOGGLE(pCellRenderer) && nCellIndex == m_nExpanderToggleCol)
             {
-                if (nCellIndex == m_nExpanderToggleCol)
-                {
-                    pToggle = pCellRenderer;
-                    g_object_ref(pToggle);
-                }
+                pToggle = pCellRenderer;
+                g_object_ref(pToggle);
             }
-            else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer))
+            else if (GTK_IS_CELL_RENDERER_PIXBUF(pCellRenderer) && nCellIndex == m_nExpanderImageCol)
             {
-                if (nCellIndex == m_nExpanderImageCol)
-                {
-                    pExpander = pCellRenderer;
-                    g_object_ref(pExpander);
-                }
+                pExpander = pCellRenderer;
+                g_object_ref(pExpander);
             }
 
         }
