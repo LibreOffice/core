@@ -22,6 +22,8 @@
 #include <utility>
 
 #include <sfx2/objsh.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/strings.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Dialog.hxx>
@@ -570,7 +572,11 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
 
             if (!xEmbeddedScripts->getAllowMacroExecution())
             {
-                // Please FIXME: Show a message box if AllowMacroExecution is false
+                std::unique_ptr<weld::MessageDialog> xBox(
+                    Application::CreateMessageDialog(m_xDialog.get(), VclMessageType::Warning,
+                                                     VclButtonsType::Ok,
+                                                     SfxResId(STR_CANNOTRUNMACRO)));
+                xBox->run();
                 return;
             }
         }

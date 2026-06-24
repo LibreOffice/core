@@ -10,7 +10,9 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from com.sun.star.beans import PropertyValue
 from com.sun.star.script.provider import ScriptURIHelper
+from com.sun.star.ucb import SimpleFileAccess
 import uno
 
 import tempfile
@@ -188,6 +190,76 @@ class PythonMacroOrganizerTest(UITestCase):
                 self.assertEqual(get_state_as_dict(xTestLibrary)["Children"], "1")
                 xScript = xTestLibrary.getChild(0)
                 self.assertEqual(get_state_as_dict(xScript)["Text"], "My Script")
+
+    def test_macros_disabled(self):
+        # Create a new document with a temporary filename and add a test script to it
+        with tempfile.NamedTemporaryFile(suffix=".odt") as doc_file:
+            with self.ui_test.create_doc_in_start_center("writer") as xComponent:
+                xFileAccess = SimpleFileAccess.create(self.xContext)
+                xFileAccess.createFolder("vnd.sun.star.tdoc:/1/Scripts/python")
+
+                with tempfile.NamedTemporaryFile(suffix=".py", mode="w+",
+                                                 encoding="utf-8") as script_file:
+                    print("def addHello():\n"
+                          "    XSCRIPTCONTEXT.getDocument().getText().setString(\"hello\")",
+                          file=script_file)
+                    script_file.flush()
+
+                    xFileAccess.copy(uno.systemPathToFileUrl(script_file.name),
+                                     "vnd.sun.star.tdoc:/1/Scripts/python/MyScript.py")
+
+                # Save the document to the temporary file
+                save_opts = (
+                    PropertyValue(Name="Overwrite", Value=True),
+                    PropertyValue(Name="FilterName", Value="writer8"),
+                )
+                xComponent.storeAsURL(uno.systemPathToFileUrl(doc_file.name), save_opts)
+
+            # Helper function to select the macro
+            def select_macro(xDialog):
+                xScripts = xDialog.getChild("scripts")
+                # Find the library for the temporary document
+                xDocLibrary = \
+                    next(x for x in map(lambda i: xScripts.getChild(i),
+                                        range(int(get_state_as_dict(xScripts)["Children"])))
+                         if get_state_as_dict(x)["Text"] == os.path.basename(doc_file.name))
+                xDocLibrary.executeAction("EXPAND", tuple())
+                xScript = xDocLibrary.getChild(0)
+                xScript.executeAction("EXPAND", tuple())
+                xMacro = xScript.getChild(0)
+                xMacro.executeAction("SELECT", tuple())
+
+            # Open the document we just created
+            with self.ui_test.load_file(uno.systemPathToFileUrl(doc_file.name)) as xComponent:
+                # We shouldn’t be able to run the embedded script because the security policy
+                # disallows it
+                with self.ui_test.execute_dialog_through_command(
+                        ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=Python",
+                        close_button="close") as xDialog:
+                    select_macro(xDialog)
+
+                    # Clicking run should pop up a nested modal dialog reporting the problem
+                    xRun = xDialog.getChild("ok")
+                    with self.ui_test.execute_blocking_action(xRun.executeAction,
+                                                              args=("CLICK", tuple())):
+                        pass
+
+                # The macro shouldn’t have run so the document text should still be empty
+                self.assertEqual(xComponent.getText().getString(), "")
+
+            # Temporarily disable macro security
+            with self.ui_test.set_config("/org.openoffice.Office.Common/Security/Scripting/"
+                                         "MacroSecurityLevel", 0):
+                with self.ui_test.load_file(uno.systemPathToFileUrl(doc_file.name)) as xComponent:
+                    # Now we should be able to run the embedded script
+                    with self.ui_test.execute_dialog_through_command(
+                            ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=Python",
+                            close_button="ok") as xDialog:
+                        select_macro(xDialog)
+
+                    # The script should have run so the document should contain the text that it
+                    # added
+                    self.assertEqual(xComponent.getText().getString(), "hello")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
