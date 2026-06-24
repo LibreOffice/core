@@ -1059,6 +1059,16 @@ endif
 		test -f $(DIST_FOLDER)/welcome/welcome-slideshow.odp || cp $(srcdir)/welcome/welcome-slideshow.odp $(DIST_FOLDER)/welcome/welcome-slideshow.odp ; \
 		test -f $(DIST_FOLDER)/welcome/welcome.svg || cp $(srcdir)/welcome/welcome.svg $(DIST_FOLDER)/welcome/welcome.svg ; \
 	fi
+	@if test "$(ENABLE_QTAPP)" = true || test "$(ENABLE_MACOSAPP)" = true || test "$(ENABLE_WINDOWSAPP)" = true ; then \
+		echo "Generating localized introductory documents"; \
+		mkdir -p $(DIST_FOLDER)/introdocs/preview ; \
+		cp $(srcdir)/introdocs/introdocs.js $(DIST_FOLDER)/introdocs/introdocs.js ; \
+		for doc in Calc-Intro-Template.ods Impress-Intro-Template.odp ; do \
+			cp $(srcdir)/introdocs/$$doc $(DIST_FOLDER)/introdocs/$$doc && \
+			python3 $(srcdir)/introdocs/create_l10n_intro_docs.py $(srcdir)/introdocs/po $(DIST_FOLDER)/introdocs/$$doc >/dev/null || exit 1 ; \
+			unzip -p $(DIST_FOLDER)/introdocs/$$doc Thumbnails/thumbnail.png > $(DIST_FOLDER)/introdocs/preview/$${doc%.*}.png 2>/dev/null || echo "  (no embedded thumbnail in $$doc)" ; \
+		done ; \
+	fi
 
 if ENABLE_CYPRESS
 	cp -a  "$(srcdir)/../cypress_test/data/multiuser/cypress-multiuser.html" "$(DIST_FOLDER)/cypress-multiuser.html"
@@ -1547,7 +1557,8 @@ pot:
 		src/slideshow/PresenterConsole.js \
 		src/slideshow/SlideShowPresenter.ts \
 		src/control/Control.Extension.ts \
-		templates/templates.js
+		templates/templates.js \
+		introdocs/introdocs.js
 
 	html2po --pot --input=html/cool-help.html --output=po/templates/cool-help.pot --duplicates=merge
 	html2po --pot --input=descriptions/google-play.html --output=po/templates/descriptions.pot --duplicates=merge --keepcomments

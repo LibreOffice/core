@@ -337,7 +337,6 @@
 }
 
 .template-thumbnail {
-	width: 80%;
 	padding: 0;
 	display: flex;
 	justify-content: center;
@@ -432,6 +431,18 @@
 
 .template-featured-row .backstage-template-card {
 	flex: 0 0 auto;
+}
+
+.template-introdocs-row {
+	display: flex;
+}
+
+.template-introdocs-row .backstage-template-card {
+	max-width: none;
+}
+
+.template-introdocs-row .template-thumbnail img {
+	max-width: 100%;
 }
 
 .template-grid-empty {

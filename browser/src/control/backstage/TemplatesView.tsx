@@ -19,10 +19,12 @@
 namespace BackstageTemplates {
   export interface TemplateExplorerProps {
     featuredTemplates: TemplateData[];
+    introDocs: TemplateData[];
     gridTemplates: TemplateData[];
     searchQuery: string;
     showSearch: boolean;
     onTemplateClick: (template: TemplateData) => void;
+    onIntroDocClick: (template: TemplateData) => void;
     onSearchInput: (value: string) => void;
     featuredRowRef: (el: HTMLElement | null) => void;
     searchContainerRef: (el: HTMLElement | null) => void;
@@ -76,6 +78,11 @@ namespace BackstageTemplates {
         : null;
     props.featuredRowRef(featuredRow);
 
+    const introRow =
+      props.introDocs && props.introDocs.length > 0
+        ? introDocsRow(props.introDocs, props.onIntroDocClick)
+        : null;
+
     const searchEl = props.showSearch
       ? searchInput(props.searchQuery, props.onSearchInput)
       : null;
@@ -91,6 +98,7 @@ namespace BackstageTemplates {
     return (
       <div class="backstage-template-explorer">
         {featuredRow}
+        {introRow}
         {searchEl}
         {gridEl}
       </div>
@@ -108,6 +116,19 @@ namespace BackstageTemplates {
             variant: 'featured',
             isBlank: true,
           }),
+        )}
+      </div>
+    );
+  }
+
+  export function introDocsRow(
+    docs: TemplateData[],
+    onClick: (t: TemplateData) => void,
+  ): HTMLElement {
+    return (
+      <div class="template-featured-row template-introdocs-row">
+        {docs.map((d) =>
+          templateCard(d, () => onClick(d), { variant: 'featured' }),
         )}
       </div>
     );

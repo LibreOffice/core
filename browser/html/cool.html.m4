@@ -337,6 +337,9 @@ m4_ifelse(MOBILEAPP, [true],
   [<script type="text/javascript" src="%SERVICE_ROOT%/browser/%VERSION%/templates/templates.js"></script>]
 )
 
+m4_ifelse(MOBILEAPP, [true],
+  [<script type="text/javascript" src="introdocs/introdocs.js"></script>])
+
 m4_ifelse(MOBILEAPP,[true],
   <!-- This is for a mobile app so the script files are in the same folder -->
   m4_ifelse(EMSCRIPTENAPP, [true], [<script src="emscripten-module.js" defer></script>])

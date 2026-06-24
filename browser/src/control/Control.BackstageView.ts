@@ -690,10 +690,12 @@ class BackstageView extends window.L.Class {
 		const filteredTemplates = this.getFilteredTemplates(allTemplates);
 		return BackstageTemplates.templateExplorer({
 			featuredTemplates: this.getFeaturedTemplates(),
+			introDocs: this.getIntroDocsData(),
 			gridTemplates: filteredTemplates,
 			searchQuery: this.templateSearchQuery,
 			showSearch: allTemplates.length > 0,
 			onTemplateClick: (t) => this.triggerNewDocument(t),
+			onIntroDocClick: (t) => this.triggerNewDocument(t),
 			onSearchInput: (value) => {
 				this.templateSearchQuery = value;
 				this.updateTemplateGrid();
@@ -721,6 +723,36 @@ class BackstageView extends window.L.Class {
 		return query
 			? blankTemplates.filter((t) => t.searchText.includes(query))
 			: blankTemplates;
+	}
+
+	private getIntroDocsData(): TemplateData[] {
+		const entries: TemplateManifestEntry[] =
+			(window as any).CODA_INTRODOCS || [];
+		const docs: TemplateData[] = [];
+
+		entries.forEach((entry) => {
+			const path = entry.path;
+			if (!path) return;
+
+			const type = this.normalizeTemplateType(entry.type, path);
+			if (!type) return;
+
+			const name = entry.name;
+			if (!name) return;
+
+			const id = entry.id || this.slugify(name + path);
+			docs.push({
+				id,
+				name,
+				type,
+				path,
+				basename: entry.basename || undefined,
+				preview: entry.preview || undefined,
+				searchText: [name, type, path].join(' ').toLowerCase(),
+			});
+		});
+
+		return docs;
 	}
 
 	private renderInfoView(): void {

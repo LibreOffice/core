@@ -38,6 +38,7 @@
       "welcome",
       "util",
       "templates",
+      "introdocs",
       "extensions"
     ]
   }
