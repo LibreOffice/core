@@ -724,6 +724,24 @@ FontMetric FontList::Get(const OUString& rName, const OUString& rStyleName) cons
     return aInfo;
 }
 
+OUString FontList::GetFaceStyleName(std::u16string_view rName, const OUString& rStyleName) const
+{
+    // The box shows localized names (see GetStyleName), so match against those
+    // but return the face's own name.
+    ImplFontListNameInfo* pData = ImplFindByName( rName );
+    if ( pData )
+    {
+        for (ImplFontListFontMetric* pSearchInfo = pData->mpFirst; pSearchInfo;
+             pSearchInfo = pSearchInfo->mpNext)
+        {
+            if (rStyleName.equalsIgnoreAsciiCase(GetStyleName(*pSearchInfo)))
+                return pSearchInfo->GetStyleName();
+        }
+    }
+
+    return rStyleName;
+}
+
 FontMetric FontList::Get(const OUString& rName,
                         FontWeight eWeight, FontItalic eItalic) const
 {

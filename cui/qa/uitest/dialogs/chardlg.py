@@ -161,5 +161,36 @@ class Test(UITestCase):
                 # i.e. the auto color lost its alpha component and appeared as white.
                 self.assertEqual(get_state_as_dict(xFontColorLB)["Text"], "Automatic")
 
+    def testTdf152396CharStyleNameSubFamily(self):
+        # tdf#152396: an extended style (say a width such as "Condensed")
+        # chosen in the Character dialog must be stored as the typographic
+        # subfamily (CharFontStyleName), not silently dropped because only the
+        # family name is unchanged.
+        with self.ui_test.create_doc_in_start_center("writer") as component:
+            doc = self.xUITest.getTopFocusWindow()
+            editWin = doc.getChild("writer_edit")
+            editWin.executeAction("TYPE", mkPropertyValues({"TEXT": "t"}))
+            self.xUITest.executeCommand(".uno:SelectAll")
+
+            # Choose an extended style name on the Fonts tab.
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog") as xDialog:
+                select_pos(xDialog.getChild("tabcontrol"), "0")
+                xStyle = xDialog.getChild("cbWestStyle")
+                xStyle.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+                xStyle.executeAction("TYPE", mkPropertyValues({"TEXT": "Condensed"}))
+
+            # The chosen subfamily reaches the model. Without the fix the
+            # style-name-only change was dropped and this was an empty string.
+            paragraph = component.Text.createEnumeration().nextElement()
+            portion = paragraph.createEnumeration().nextElement()
+            self.assertEqual(portion.CharFontStyleName, "Condensed")
+
+            # Reopening the dialog shows the stored subfamily, not a
+            # weight/posture-derived name.
+            with self.ui_test.execute_dialog_through_command(".uno:FontDialog", close_button="cancel") as xDialog:
+                select_pos(xDialog.getChild("tabcontrol"), "0")
+                xStyle = xDialog.getChild("cbWestStyle")
+                self.assertEqual(get_state_as_dict(xStyle)["Text"], "Condensed")
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

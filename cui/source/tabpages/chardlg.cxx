@@ -707,8 +707,24 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     // currently chosen font
     if ( bStyle && pFontItem )
     {
-        FontMetric aFontMetric = rFontList.Get(pFontItem->GetFamilyName(), eWeight, eItalic);
-        pStyleBox->set_active_text(rFontList.GetStyleName(aFontMetric));
+        // Show the stored subfamily, not the one re-constructed from
+        // weight/italic, so an extended style stays selected when the dialog
+        // is reopened.
+        if (!pFontItem->GetStyleName().isEmpty())
+        {
+            FontMetric aFontMetric;
+            aFontMetric.SetStyleName(pFontItem->GetStyleName());
+            aFontMetric.SetWeight(eWeight);
+            aFontMetric.SetItalic(eItalic);
+            // The face may not be enumerated (e.g. the font is not installed);
+            // set_active_or_entry_text still shows it in the editable entry.
+            pStyleBox->set_active_or_entry_text(rFontList.GetStyleName(aFontMetric));
+        }
+        else
+        {
+            FontMetric aFontMetric = rFontList.Get(pFontItem->GetFamilyName(), eWeight, eItalic);
+            pStyleBox->set_active_text(rFontList.GetStyleName(aFontMetric));
+        }
     }
     else if ( !m_pImpl->m_bInSearchMode || !bStyle )
     {
@@ -880,7 +896,17 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if (nEntryPos >= m_pImpl->m_nExtraEntryPos)
         aStyleBoxText.clear();
     FontMetric aInfo(rFontList.Get( aFontName, aStyleBoxText));
-    SvxFontItem aFontItem( aInfo.GetFamilyTypeMaybeAskConfig(), aInfo.GetFamilyName(), aInfo.GetStyleName(),
+    // R/I/B/BI styles are covered by the weight/italic items; store only
+    // an extended style as the subfamily, using the font’s own (not our
+    // localized) style name.
+    OUString aStyleName;
+    if ( !aStyleBoxText.isEmpty()
+         && aStyleBoxText != rFontList.GetNormalStr()
+         && aStyleBoxText != rFontList.GetItalicStr()
+         && aStyleBoxText != rFontList.GetBoldStr()
+         && aStyleBoxText != rFontList.GetBoldItalicStr() )
+        aStyleName = rFontList.GetFaceStyleName( aFontName, aStyleBoxText );
+    SvxFontItem aFontItem( aInfo.GetFamilyTypeMaybeAskConfig(), aInfo.GetFamilyName(), aStyleName,
                            aInfo.GetPitchMaybeAskConfig(), aInfo.GetCharSet(), nWhich );
     pOld = GetOldItem( rSet, nSlot );
 
@@ -888,7 +914,8 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     {
         const SvxFontItem& rItem = *static_cast<const SvxFontItem*>(pOld);
 
-        if ( rItem.GetFamilyName() == aFontItem.GetFamilyName() )
+        if ( rItem.GetFamilyName() == aFontItem.GetFamilyName()
+             && rItem.GetStyleName() == aFontItem.GetStyleName() )
             bChanged = false;
     }
 

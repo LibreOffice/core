@@ -170,6 +170,8 @@ public:
     const OUString&         GetBoldItalicStr() const { return maBoldItalic; }
     const OUString&         GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
     OUString                GetStyleName( const FontMetric& rFontMetric ) const;
+    OUString                GetFaceStyleName( std::u16string_view rName,
+                                              const OUString& rStyleName ) const;
 
     FontMetric           Get( const OUString& rName,
                                  const OUString& rStyleName ) const;

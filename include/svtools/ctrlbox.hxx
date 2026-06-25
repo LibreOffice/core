@@ -418,6 +418,7 @@ public:
         m_aLastStyle = rText;
         m_xComboBox->set_active_text(rText);
     }
+    void set_active_or_entry_text(const OUString& rText);
     void set_size_request(int nWidth, int nHeight) {  m_xComboBox->set_size_request(nWidth, nHeight); }
 
     void append_text(const OUString& rStr) { m_xComboBox->append_text(rStr); }

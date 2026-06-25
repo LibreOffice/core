@@ -947,6 +947,17 @@ IMPL_LINK(FontStyleBox, ChangeHdl, weld::ComboBox&, rComboBox, void)
     m_aChangedLink.Call(rComboBox);
 }
 
+void FontStyleBox::set_active_or_entry_text(const OUString& rText)
+{
+    const int nFound = m_xComboBox->find_text(rText);
+    if (nFound != -1)
+    {
+        m_aLastStyle = rText;
+        m_xComboBox->set_active(nFound);
+    }
+    m_xComboBox->set_entry_text(rText);
+}
+
 void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
 {
     OUString aOldText = m_xComboBox->get_active_text();
