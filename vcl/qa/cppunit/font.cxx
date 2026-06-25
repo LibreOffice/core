@@ -13,6 +13,7 @@
 #include <vcl/font.hxx>
 
 #include <font/EmphasisMark.hxx>
+#include <font/FontSelectPattern.hxx>
 
 class VclFontTest : public test::BootstrapFixture
 {
@@ -22,6 +23,7 @@ public:
     void testName();
     void testWeight();
     void testWidthType();
+    void testWidthTypeEquality();
     void testPitch();
     void testItalic();
     void testAlignment();
@@ -38,6 +40,7 @@ public:
     CPPUNIT_TEST(testName);
     CPPUNIT_TEST(testWeight);
     CPPUNIT_TEST(testWidthType);
+    CPPUNIT_TEST(testWidthTypeEquality);
     CPPUNIT_TEST(testPitch);
     CPPUNIT_TEST(testItalic);
     CPPUNIT_TEST(testAlignment);
@@ -82,6 +85,24 @@ void VclFontTest::testWidthType()
 
     aFont.SetWidthType(FontWidth::WIDTH_EXPANDED);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font width should be EXPANDED", FontWidth::WIDTH_EXPANDED, aFont.GetWidthTypeMaybeAskConfig());
+}
+
+void VclFontTest::testWidthTypeEquality()
+{
+    vcl::Font aNormal(u"Test"_ustr, Size(0, 12));
+    vcl::Font aCondensed(aNormal);
+    aCondensed.SetWidthType(FontWidth::WIDTH_CONDENSED);
+    CPPUNIT_ASSERT_MESSAGE("Fonts differing only in width must not be equal",
+                           aNormal != aCondensed);
+
+    vcl::font::FontSelectPattern aNormalFSP(aNormal, aNormal.GetFamilyName(), Size(0, 12), 12.0f);
+    vcl::font::FontSelectPattern aCondensedFSP(aCondensed, aCondensed.GetFamilyName(), Size(0, 12), 12.0f);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("FontSelectPattern must carry the requested width",
+                                 FontWidth::WIDTH_CONDENSED, aCondensedFSP.GetWidthType());
+    CPPUNIT_ASSERT_MESSAGE("FontSelectPatterns differing only in width must not be equal",
+                           aNormalFSP != aCondensedFSP);
+    CPPUNIT_ASSERT_MESSAGE("FontSelectPatterns differing only in width must hash differently",
+                           aNormalFSP.hashCode() != aCondensedFSP.hashCode());
 }
 
 void VclFontTest::testItalic()

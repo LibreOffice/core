@@ -440,7 +440,7 @@ void Font::GetFontAttributes( FontAttributes& rAttrs ) const
     rAttrs.SetPitch( GetPitch() );
     rAttrs.SetItalic( GetItalic() );
     rAttrs.SetWeight( GetWeight() );
-    rAttrs.SetWidthType( WIDTH_DONTKNOW );
+    rAttrs.SetWidthType( GetWidthType() );
     rAttrs.SetMicrosoftSymbolEncoded( GetCharSet() == RTL_TEXTENCODING_SYMBOL );
 }
 
@@ -1012,6 +1012,7 @@ bool ImplFont::EqualIgnoreColor( const ImplFont& rOther ) const
     // equality tests split up for easier debugging
     if( (meWeight   != rOther.meWeight)
     ||  (meItalic   != rOther.meItalic)
+    ||  (meWidthType != rOther.meWidthType)
     ||  (meFamily   != rOther.meFamily)
     ||  (mePitch    != rOther.mePitch) )
         return false;
