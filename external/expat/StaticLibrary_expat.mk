@@ -46,9 +46,13 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
 	UnpackedTarball/expat/lib/random_rand_s \
 ))
+else ifneq ($(filter EMSCRIPTEN MACOSX,$(OS)),)
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
+	UnpackedTarball/expat/lib/random_getentropy \
+))
 else
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
-	UnpackedTarball/expat/lib/random_dev_urandom \
+	UnpackedTarball/expat/lib/random_getrandom \
 ))
 endif
 
