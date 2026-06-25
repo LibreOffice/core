@@ -742,11 +742,11 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         }
 
         if (presWindow != nil) {
-            placeWindow(presWindow!, onScreen: screens[newPresentationScreen], fillScreen: true)
+            placeWindow(presWindow!, onScreen: screens[newPresentationScreen])
             presWindow!.makeFirstResponder(self.presentationController.webView)
         }
         if (consoleWindow != nil) {
-            placeWindow(consoleWindow!, onScreen: screens[newConsoleScreen], fillScreen: true)
+            placeWindow(consoleWindow!, onScreen: screens[newConsoleScreen])
         }
     }
 
@@ -821,10 +821,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         return (documentScreen, externalScreen)
     }
 
-    func placeWindow(_ window: NSWindow, onScreen screen: NSScreen, fillScreen: Bool) {
-        if (fillScreen) {
-            window.setFrame(screen.frame, display: true, animate: false)
-        }
+    func placeWindow(_ window: NSWindow, onScreen screen: NSScreen) {
+        window.setFrame(screen.frame, display: true, animate: false)
         window.setIsVisible(true)
         window.makeKeyAndOrderFront(nil)
     }
@@ -833,7 +831,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         guard let presWindow = presentationController?.window else { return }
         let (laptopScreen, externalScreen) = pickScreens()
         let presenterScreen = externalScreen ?? laptopScreen
-        placeWindow(presWindow, onScreen: presenterScreen, fillScreen: true)
+        placeWindow(presWindow, onScreen: presenterScreen)
         presWindow.makeFirstResponder(presentationController.webView)
     }
 
@@ -851,7 +849,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             consoleWindow.standardWindowButton(.closeButton)?.isHidden = true
             consoleWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
             consoleWindow.standardWindowButton(.zoomButton)?.isHidden = true
-            placeWindow(consoleWindow, onScreen: laptopScreen, fillScreen: true)
+            placeWindow(consoleWindow, onScreen: laptopScreen)
         } else {
             // One screen: the console floats on top of the full screen
             // presentation. Give it most of the work area, but leave a margin
