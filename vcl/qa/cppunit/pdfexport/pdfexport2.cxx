@@ -901,6 +901,60 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf160196)
     save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTaggedNestedTableInRepeatedHeaderRow)
+{
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    comphelper::SequenceAsHashMap aMediaDescriptor;
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
+    // The outer table spans more than one page, so its header row, and the
+    // nested table it carries, are laid out once per page.
+    vcl::filter::PDFDocument aDocument;
+    loadFromFile(u"tagged-nested-table-in-repeated-header.fodt");
+    skipValidation();
+
+    // Tagging the nested table a second time aborted on the assert that each
+    // frame is tagged only once.
+    save(TestFilter::PDF_WRITER, aMediaDescriptor.getAsConstPropertyValueList());
+
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The counts do not depend on the page count: each body row and the nested
+    // table are tagged once, the repeated headers are artifacts.
+    int nTables(0);
+    int nRows(0);
+    int nParagraphs(0);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (!pType || pType->GetValue() != "StructElem")
+            continue;
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pS)
+            continue;
+        if (pS->GetValue() == "Table")
+            ++nTables;
+        else if (pS->GetValue() == "TR")
+            ++nRows;
+        else if (pS->GetValue() == "Standard")
+            ++nParagraphs;
+    }
+
+    // The outer table and the one nested table.
+    CPPUNIT_ASSERT_EQUAL(2, nTables);
+    // One header row, four body rows, and the nested table's single row. A row
+    // per page for the nested table would mean it was tagged on each repeat.
+    CPPUNIT_ASSERT_EQUAL(6, nRows);
+    // One paragraph in the nested table and one in each of the four body rows.
+    CPPUNIT_ASSERT_EQUAL(5, nParagraphs);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion20)
 {
     // Create an empty document.
