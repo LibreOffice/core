@@ -785,14 +785,18 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 		if (!this.content)
 			return;
 
-		// Panels share the same name for main containers, do not execute actions for them
-		// if panel has to be shown or hidden, full update will appear
-		if (data.data && data.jsontype === 'sidebar' &&
-			(data.data.control_id === 'contents' ||
-			data.data.control_id === 'Panel' ||
-			data.data.control_id === 'titlebar')) {
-			window.app.console.log('Ignored action: ' + data.data.action_type + ' for control: ' + data.data.control_id);
-			return;
+		// A panel body's visibility in the mobile wizard is driven by
+		// goLevelDown and goLevelUp navigation. Ignore server actions aimed
+		// at a panel body or its title so a late sidebar refresh cannot
+		// collapse a panel the user has just opened. A full update rebuilds
+		// the panel when its visibility really has to change.
+		if (data.data && data.jsontype === 'sidebar') {
+			const targetId = data.data.control_id;
+			if (targetId &&
+				(targetId.indexOf('contents') === 0 || targetId.indexOf('titlebar') === 0)) {
+				window.app.console.log('Ignored action: ' + data.data.action_type + ' for control: ' + targetId);
+				return;
+			}
 		}
 
 		this._builder.executeAction(this.content, data.data);
