@@ -4506,6 +4506,8 @@ include/connectivity/sqlscan.hxx
 include/connectivity/standardsqlstate.hxx
 include/connectivity/statementcomposer.hxx
 include/connectivity/warningscontainer.hxx
+include/cpo/uno/Any.h
+include/cpo/uno/Any.hxx
 include/cppcanvas/basegfxfactory.hxx
 include/cppcanvas/bitmap.hxx
 include/cppcanvas/bitmapcanvas.hxx
@@ -4518,8 +4520,6 @@ include/cppcanvas/renderer.hxx
 include/cppcanvas/sprite.hxx
 include/cppcanvas/spritecanvas.hxx
 include/cppcanvas/vclfactory.hxx
-include/cpo/uno/Any.h
-include/cpo/uno/Any.hxx
 include/cppu/Enterable.hxx
 include/cppu/EnvGuards.hxx
 include/cppu/Map.hxx
