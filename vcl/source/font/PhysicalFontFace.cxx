@@ -99,11 +99,10 @@ static int FamilyNameMatchValue(FontSelectPattern const& rFSP, std::u16string_vi
     return 0;
 }
 
-static int StyleNameMatchValue(FontSelectPattern const& rFSP, FontMatchStatus const& rStatus,
-                               const PhysicalFontFace& rFontFace)
+static int StyleNameMatchValue(FontSelectPattern const& rFSP, const PhysicalFontFace& rFontFace)
 {
-    if (!rStatus.mpTargetStyleName
-        || !o3tl::equalsIgnoreAsciiCase(rFontFace.GetStyleName(), *rStatus.mpTargetStyleName))
+    if (rFSP.GetStyleName().isEmpty()
+        || !o3tl::equalsIgnoreAsciiCase(rFontFace.GetStyleName(), rFSP.GetStyleName()))
         return 0;
 
     // The style name selects an extended subfamily (a width, an optical size,
@@ -219,10 +218,10 @@ static int ItalicMatchValue(FontSelectPattern const& rFSP, FontItalic eItalic)
     return 0;
 }
 
-bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, FontMatchStatus& rStatus) const
+bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, int& rnBestMatch) const
 {
     int nMatch = FamilyNameMatchValue(rFSP, GetFamilyName());
-    nMatch += StyleNameMatchValue(rFSP, rStatus, *this);
+    nMatch += StyleNameMatchValue(rFSP, *this);
     nMatch += PitchMatchValue(rFSP, GetPitch());
     nMatch += WidthMatchValue(rFSP, GetWidthType());
     nMatch += WeightMatchValue(rFSP, GetWeight());
@@ -235,13 +234,13 @@ bool PhysicalFontFace::IsBetterMatch(const FontSelectPattern& rFSP, FontMatchSta
     else
         nMatch += 5;
 
-    if (rStatus.mnFaceMatch > nMatch)
+    if (rnBestMatch > nMatch)
     {
         return false;
     }
-    else if (rStatus.mnFaceMatch < nMatch)
+    else if (rnBestMatch < nMatch)
     {
-        rStatus.mnFaceMatch = nMatch;
+        rnBestMatch = nMatch;
         return true;
     }
 

@@ -270,8 +270,7 @@ void VclPhysicalFontFaceTest::testMatchStatusValue()
     aFontAttrs.SetWeight(WEIGHT_BOLD);
     rtl::Reference<TestFontFace> aTestedFontFace(new TestFontFace(aFontAttrs, FONTID));
 
-    std::unique_ptr<OUString> pTargetStyleName(new OUString(u"Book"_ustr));
-    vcl::font::FontMatchStatus aFontMatchStatus = { 0, pTargetStyleName.get() };
+    int nFaceMatch = 0;
 
     vcl::Font aTestFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 36));
 
@@ -294,8 +293,8 @@ void VclPhysicalFontFaceTest::testMatchStatusValue()
                                + EXPECTED_WIDTHTYPE + EXPECTED_WEIGHT + EXPECTED_ITALIC
                                + EXPECTED_ORIENTATION;
 
-    CPPUNIT_ASSERT(aTestedFontFace->IsBetterMatch(aFSP, aFontMatchStatus));
-    CPPUNIT_ASSERT_EQUAL(EXPECTED_MATCH, aFontMatchStatus.mnFaceMatch);
+    CPPUNIT_ASSERT(aTestedFontFace->IsBetterMatch(aFSP, nFaceMatch));
+    CPPUNIT_ASSERT_EQUAL(EXPECTED_MATCH, nFaceMatch);
 }
 
 void VclPhysicalFontFaceTest::testWidthAwareMatch()
@@ -319,13 +318,13 @@ void VclPhysicalFontFaceTest::testWidthAwareMatch()
     aFSP.SetWeight(WEIGHT_NORMAL);
     aFSP.SetWidthType(WIDTH_CONDENSED);
 
-    vcl::font::FontMatchStatus aNormalStatus = { 0, nullptr };
-    aNormalFace->IsBetterMatch(aFSP, aNormalStatus);
-    vcl::font::FontMatchStatus aCondensedStatus = { 0, nullptr };
-    aCondensedFace->IsBetterMatch(aFSP, aCondensedStatus);
+    int nNormalMatch = 0;
+    aNormalFace->IsBetterMatch(aFSP, nNormalMatch);
+    int nCondensedMatch = 0;
+    aCondensedFace->IsBetterMatch(aFSP, nCondensedMatch);
 
     CPPUNIT_ASSERT_MESSAGE("condensed face should outscore normal for a condensed request",
-                           aCondensedStatus.mnFaceMatch > aNormalStatus.mnFaceMatch);
+                           nCondensedMatch > nNormalMatch);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VclPhysicalFontFaceTest);

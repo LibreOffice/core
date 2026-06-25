@@ -208,17 +208,13 @@ PhysicalFontFace* PhysicalFontFamily::FindBestFontFace( const vcl::font::FontSel
     if( maFontFaces.size() == 1)
         return maFontFaces[0].get();
 
-    // Pick the face whose style name matches the subfamily the request carries.
-    OUString aTargetStyleName = rFSD.GetStyleName();
-    const OUString* pTargetStyleName = aTargetStyleName.isEmpty() ? nullptr : &aTargetStyleName;
-
     // TODO: linear search improve!
     PhysicalFontFace* pBestFontFace = maFontFaces[0].get();
-    FontMatchStatus aFontMatchStatus = {0, pTargetStyleName};
+    int nBestMatch = 0;
     for (auto const& font : maFontFaces)
     {
         PhysicalFontFace* pFoundFontFace = font.get();
-        if( pFoundFontFace->IsBetterMatch( rFSD, aFontMatchStatus ) )
+        if( pFoundFontFace->IsBetterMatch( rFSD, nBestMatch ) )
             pBestFontFace = pFoundFontFace;
     }
 

@@ -45,13 +45,6 @@ class FontSelectPattern;
 
 namespace vcl::font
 {
-struct FontMatchStatus
-{
-public:
-    int mnFaceMatch;
-    const OUString* mpTargetStyleName;
-};
-
 struct RawFontData
 {
 public:
@@ -148,7 +141,7 @@ public:
 
     SAL_DLLPRIVATE RawFontData GetRawFontData(uint32_t) const;
 
-    bool IsBetterMatch(const vcl::font::FontSelectPattern&, FontMatchStatus&) const;
+    bool IsBetterMatch(const vcl::font::FontSelectPattern&, int& rnBestMatch) const;
     sal_Int32 CompareIgnoreSize(const PhysicalFontFace&) const;
 
     // CreateFontSubset: a method to get a subset of glyphs of a font inside a
