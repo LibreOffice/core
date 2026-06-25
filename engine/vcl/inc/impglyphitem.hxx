@@ -38,7 +38,7 @@ enum class GlyphItemFlags : sal_uInt8
     IS_SPACING = 0x08,
     IS_DROPPED = 0x10,
     IS_CLUSTER_START = 0x20,
-    IS_UNSAFE_TO_BREAK = 0x40, // HB_GLYPH_FLAG_UNSAFE_TO_BREAK from harfbuzz
+    IS_UNSAFE_TO_CONCAT = 0x40, // HB_GLYPH_FLAG_UNSAFE_TO_CONCAT from harfbuzz
     IS_SAFE_TO_INSERT_KASHIDA = 0x80 // HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL from harfbuzz
 };
 namespace o3tl
@@ -84,7 +84,7 @@ public:
     bool IsSpacing() const { return bool(m_nFlags & GlyphItemFlags::IS_SPACING); }
     bool IsDropped() const { return bool(m_nFlags & GlyphItemFlags::IS_DROPPED); }
     bool IsClusterStart() const { return bool(m_nFlags & GlyphItemFlags::IS_CLUSTER_START); }
-    bool IsUnsafeToBreak() const { return bool(m_nFlags & GlyphItemFlags::IS_UNSAFE_TO_BREAK); }
+    bool IsUnsafeToConcat() const { return bool(m_nFlags & GlyphItemFlags::IS_UNSAFE_TO_CONCAT); }
     bool IsSafeToInsertKashida() const
     {
         return bool(m_nFlags & GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA);
@@ -117,8 +117,8 @@ public:
                && m_nXOffset == other.m_nXOffset && m_nYOffset == other.m_nYOffset
                && m_nNewWidth == other.m_nNewWidth && m_aGlyphId == other.m_aGlyphId
                && m_nCharCount == other.m_nCharCount
-               && (m_nFlags & ~GlyphItemFlags::IS_UNSAFE_TO_BREAK)
-                      == (other.m_nFlags & ~GlyphItemFlags::IS_UNSAFE_TO_BREAK);
+               && (m_nFlags & ~GlyphItemFlags::IS_UNSAFE_TO_CONCAT)
+                      == (other.m_nFlags & ~GlyphItemFlags::IS_UNSAFE_TO_CONCAT);
     }
 };
 

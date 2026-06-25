@@ -573,6 +573,11 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
             // Produce HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL that we use below.
             nHbFlags |= HB_BUFFER_FLAG_PRODUCE_SAFE_TO_INSERT_TATWEEL;
+#if HB_VERSION_ATLEAST(4, 0, 0)
+            // Produce the unsafe-to-concat flag, which marks the cluster boundaries at which a
+            // glyph subset cannot be cut out and reused without reshaping (see isSafeToBreak).
+            nHbFlags |= HB_BUFFER_FLAG_PRODUCE_UNSAFE_TO_CONCAT;
+#endif
 
             if (nMinRunPos == 0)
                 nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
@@ -781,8 +786,17 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (u_isUWhiteSpace(aChar))
                     nGlyphFlags |= GlyphItemFlags::IS_SPACING;
 
-                if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
-                    nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
+                // Unsafe-to-break always implies unsafe-to-concat, so on older HarfBuzz that does
+                // not report the concat flag, the break flag is the closest approximation.
+                hb_glyph_flags_t const eHbGlyphFlags
+                    = hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]);
+#if HB_VERSION_ATLEAST(4, 0, 0)
+                if (eHbGlyphFlags & HB_GLYPH_FLAG_UNSAFE_TO_CONCAT)
+                    nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_CONCAT;
+#else
+                if (eHbGlyphFlags & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
+                    nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_CONCAT;
+#endif
 
                 if (!m_bHasFontKashidaPositions
                     || (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i])
