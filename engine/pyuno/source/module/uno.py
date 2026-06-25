@@ -517,6 +517,11 @@ def _uno_struct__setattr__(self, name, value):
     Referenced from the pyuno shared library.
     """
 
+    # Names like __traceback__, __cause__, and __context__ are set on the object by Python itself
+    # while it handles an exception, so keep them on the wrapper instead of forwarding them into the
+    # wrapped UNO value:
+    if name.startswith("__") and name.endswith("__"):
+        return object.__setattr__(self, name, value)
     return setattr(self.__dict__["value"], name, value)
 
 
