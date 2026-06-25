@@ -2731,6 +2731,13 @@ void ScFormulaCell::SetCompile( bool bVal )
 
 void ScFormulaCell::SetDynamicArrayMaster(bool bDynamic)
 {
+    // A formula with @ on top of its RPN opts out of dynamic-array
+    // spilling: the operator collapses any array operand to a single
+    // value, so there is nothing to spill. XLSX still emits the cm="1"
+    // marker on such cells, so reject the request rather than letting
+    // the spill check fire against a 1x1 declared matrix.
+    if (bDynamic && pCode && rpnTopIsImplicitIntersection(*pCode))
+        return;
     mbDynamicArrayMaster = bDynamic;
     // A plain single-cell formula that opts into the dynamic-array flag
     // becomes a 1x1 matrix master so the first interpret can expand it

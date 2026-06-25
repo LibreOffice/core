@@ -6466,6 +6466,32 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testCallableWhereNumberExpected)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAtFormulaIgnoresDynamicArrayMasterFlag)
+{
+    // An @-prefixed formula opts out of dynamic-array spilling.
+    // SetDynamicArrayMaster ignores a request to enable the flag on
+    // such a cell, so an OOXML cm="1" arriving on an @-cell does not
+    // turn into a #SPILL! at interpret time.
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 3.0);
+
+    m_pDoc->SetFormula(ScAddress(1, 0, 0), u"=@(A1:A3+0)"_ustr,
+                       formula::FormulaGrammar::GRAM_NATIVE);
+    ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+
+    pCell->SetDynamicArrayMaster(true);
+    CPPUNIT_ASSERT(!pCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixConcatRendersBooleansAsTrueFalse)
 {
     // A boolean value pulled into a string context renders as the
