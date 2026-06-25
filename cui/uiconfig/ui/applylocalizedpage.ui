@@ -295,26 +295,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="defaultsingle">
-                        <property name="label" translatable="yes" context="applylocalizedpage|defaultsingle">_Default</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="defaultsingle-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|defaultsingle-atkobject">Single quotes default</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|defaultsingle">Resets the quotation marks to the default symbols.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="endquoteft">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -369,6 +349,26 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="defaultsingle">
+                        <property name="label" translatable="yes" context="applylocalizedpage|defaultsingle">_Default</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="defaultsingle-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|defaultsingle-atkobject">Single quotes default</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|defaultsingle">Resets the quotation marks to the default symbols.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -484,26 +484,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="defaultdouble">
-                        <property name="label" translatable="yes" context="applylocalizedpage|defaultdouble">_Default</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">start</property>
-                        <property name="use-underline">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="defaultdouble-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|defaultdouble-atkobject">Double quotes default</property>
-                            <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|defaultdouble">Resets the quotation marks to the default symbols.</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkLabel" id="label8">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -558,6 +538,26 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="defaultdouble">
+                        <property name="label" translatable="yes" context="applylocalizedpage|defaultdouble">_Default</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="halign">start</property>
+                        <property name="use-underline">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="defaultdouble-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="applylocalizedpage|defaultdouble-atkobject">Double quotes default</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="applylocalizedpage|extended_tip|defaultdouble">Resets the quotation marks to the default symbols.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
