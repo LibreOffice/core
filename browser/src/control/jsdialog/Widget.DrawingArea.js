@@ -118,6 +118,7 @@ function _drawingAreaControl (parentContainer, data, builder) {
 		} else {
 			image.alt = '';
 			image.classList.add('ui-decorative-image');
+			image.setAttribute('aria-hidden', 'true');
 		}
 
 		if (data.text) {
