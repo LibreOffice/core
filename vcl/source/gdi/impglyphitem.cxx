@@ -186,7 +186,7 @@ bool SalLayoutGlyphsImpl::isSafeToBreak(const_iterator pos, bool rtl) const
 {
     if (rtl)
     {
-        // RTL is more complicated, because HB_GLYPH_FLAG_UNSAFE_TO_BREAK talks about beginning
+        // RTL is more complicated, because the unsafe-to-concat flag talks about beginning
         // of a cluster, which refers to the text, not glyphs. This function is called
         // for the first glyph of the subset and the first glyph after the subset, but since
         // the glyphs are backwards, and we need the beginning of cluster at the start of the text
@@ -195,9 +195,10 @@ bool SalLayoutGlyphsImpl::isSafeToBreak(const_iterator pos, bool rtl) const
             return true;
         --pos;
     }
-    // Don't create a subset if it's not safe to break at the beginning or end of the sequence
+    // A subset can only be cut out and reused without reshaping at a cluster boundary that is
+    // safe to concatenate; otherwise the glyphs there depend on the surrounding text
     // (https://harfbuzz.github.io/harfbuzz-hb-buffer.html#hb-glyph-flags-t).
-    if (pos->IsUnsafeToBreak() || (pos->IsInCluster() && !pos->IsClusterStart()))
+    if (pos->IsUnsafeToConcat() || (pos->IsInCluster() && !pos->IsClusterStart()))
         return false;
     return true;
 }
