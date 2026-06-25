@@ -310,12 +310,22 @@ bool lcl_IsInNonStructEnv( const SwFrame& rFrame )
     {
         bRet = true;
     }
-    else if ( rFrame.IsInTab() && !rFrame.IsTabFrame() )
+    else if ( rFrame.IsInTab() )
     {
-        const SwTabFrame* pTabFrame = rFrame.FindTabFrame();
-        if ( rFrame.GetUpper() != pTabFrame &&
-             pTabFrame->IsFollow() && pTabFrame->IsInHeadline( rFrame ) )
-             bRet = true;
+        // A repeated header row, and a nested table inside it, is laid out
+        // once per page of a follow table but must be tagged only once, in the
+        // master. Check every enclosing table, not just the innermost. For an
+        // rFrame that is itself a table, start from its parent: IsInHeadline()
+        // wants an ancestor table.
+        const SwFrame* pStart = rFrame.IsTabFrame() ? rFrame.GetUpper() : &rFrame;
+        for ( const SwTabFrame* pTabFrame = pStart->FindTabFrame();
+              pTabFrame && !bRet;
+              pTabFrame = pTabFrame->GetUpper()->FindTabFrame() )
+        {
+            if ( rFrame.GetUpper() != pTabFrame &&
+                 pTabFrame->IsFollow() && pTabFrame->IsInHeadline( rFrame ) )
+                bRet = true;
+        }
     }
 
     return bRet;
