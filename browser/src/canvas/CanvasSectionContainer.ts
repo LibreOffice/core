@@ -710,6 +710,7 @@ class CanvasSectionContainer {
 			return;
 		}
 
+		app.console.debug('CSC: set inRedrawCallback = true');
 		this.inRedrawCallback = true;
 
 		this.flushLayoutingTasks();
@@ -719,6 +720,8 @@ class CanvasSectionContainer {
 		// animate() legitimately requests the next frame, so clear the flag
 		// before it runs or its requestReDraw would be dropped.
 		this.inRedrawCallback = false;
+		app.console.debug('CSC: set inRedrawCallback = false');
+
 
 		this.canvas.style.visibility = 'unset';
 
@@ -738,7 +741,10 @@ class CanvasSectionContainer {
 		// Sections must reach their final state before their onDraw runs;
 		// asking for another frame from within a draw indicates the
 		// section has state to settle that should happen before paint.
-		if (this.inRedrawCallback) return;
+		if (this.inRedrawCallback) {
+			app.console.debug('CSC: inRedrawCallback active - skip');
+			return;
+		}
 		if (this.drawRequest === null)
 			this.drawRequest = requestAnimationFrame(this.redrawCallback.bind(this));
 	}
