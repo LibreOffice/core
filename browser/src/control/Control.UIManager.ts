@@ -148,6 +148,8 @@ class UIManager extends window.L.Control {
 			if (e.key !== 'darkTheme') return;
 			delete (window.prefs as any)._localStorageCache['darkTheme'];
 			this.initDarkModeFromSettings();
+			if (!window.starterScreen)
+				this.refreshUIAfterThemeChange();
 		});
 	}
 
@@ -382,6 +384,17 @@ class UIManager extends window.L.Control {
 
 		this.applyInvert();
 		this.setCanvasColorAfterModeChange();
+		this.refreshUIAfterThemeChange();
+	}
+
+	/**
+	 * Reloads the icons and theme-dependent components after a mode change.
+	 *
+	 * The menubar and toolbar icons are images chosen per theme, so they have
+	 * to be reloaded to match the new mode; CSS variables alone do not change
+	 * them. A spreadsheet also needs its grid lines redrawn in the new colour.
+	 */
+	refreshUIAfterThemeChange(): void {
 		if (!window.mode.isSmallScreenDevice())
 			this.refreshAfterThemeChange();
 
