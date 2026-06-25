@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/color/bcolortools \
     basegfx/source/curve/b2dbeziertools \
     basegfx/source/curve/b2dcubicbezier \
+    basegfx/source/curve/BSpline \
     basegfx/source/matrix/b2dhommatrix \
     basegfx/source/matrix/b2dhommatrixtools \
     basegfx/source/matrix/b3dhommatrix \
