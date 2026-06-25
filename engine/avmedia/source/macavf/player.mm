@@ -311,7 +311,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 
-uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
+uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // get the preferred window size
     const awt::Size aSize( getPreferredPlayerWindowSize() );

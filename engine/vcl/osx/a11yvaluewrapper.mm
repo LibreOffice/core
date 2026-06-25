@@ -22,6 +22,7 @@
 #include "a11ywrapperstatictext.h"
 
 using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 // Wrapper for XAccessibleValue
 // Remember: A UNO-Value is a single numeric value. Regarding the Mac A11y-API, a value can be anything!
