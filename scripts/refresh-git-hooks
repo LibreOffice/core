@@ -19,7 +19,7 @@ shopt -s nullglob
 for hook_name in "${srcdir}"/.git-hooks/*
 do
     hook="${gitdir}/hooks/${hook_name##*/}"
-    if [ ! -e "${hook}" ]; then
+    if [ ! -e "${hook}" -o "$1" = "--force" ]; then
         rm -f "${hook}"
         ln -sf "${hook_name}" "${hook}"
     fi
