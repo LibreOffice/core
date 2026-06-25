@@ -786,7 +786,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_tplwizdesktop \
 	$(if $(WITH_TEMPLATES),\
 		extras_templates \
-		extras_tplwizbitmap \
 		extras_tplwizard \
 	) \
 	framework_dtd \
