@@ -246,6 +246,12 @@ class RenderManager {
 		);
 	}
 
+	static handleVectorPrimitivesDelta(
+		values: cool.VectorPrimitivesResponse,
+	): void {
+		RenderManager.ensureInstance().handleVectorPrimitivesDelta(values);
+	}
+
 	static clearCachedPart(part: number): void {
 		RenderManager.ensureInstance().clearCachedPart(part);
 	}

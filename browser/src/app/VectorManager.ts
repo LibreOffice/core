@@ -175,6 +175,67 @@ class VectorManager extends RenderManagerBase {
 		this._fireChanged();
 	}
 
+	/// Apply a delta to a cached part: rebuild its object list from the
+	/// delta's order, taking new content for changed objects and reusing
+	/// the cache for the rest. A delta not newer than the cache is
+	/// ignored. A part that is not cached, or an order that names
+	/// content the client never had, falls back to a full re-fetch.
+	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
+		const part =
+			values.part !== undefined ? values.part : this._docLayer._selectedPart;
+
+		const cached = this._cache.get(part);
+		if (!cached) return;
+
+		// A delta computed against an older version can arrive after a
+		// newer full response. Its order describes that older state, so
+		// applying it would roll the cache backwards.
+		if (
+			cached.version !== undefined &&
+			values.version !== undefined &&
+			values.version <= cached.version
+		)
+			return;
+
+		const changedObjects = new Map<number, cool.SlideObject>();
+		for (const object of values.objects || []) {
+			if (object.id !== undefined) changedObjects.set(object.id, object);
+		}
+
+		const cachedObjects = new Map<number, cool.SlideObject>();
+		for (const object of cached.objects) {
+			if (object.id !== undefined) cachedObjects.set(object.id, object);
+		}
+
+		const order = values.order || [];
+		const newObjects: cool.SlideObject[] = [];
+		for (const id of order) {
+			const object = changedObjects.get(id) || cachedObjects.get(id);
+			if (!object) {
+				this.clearCachedPart(part);
+				return;
+			}
+			newObjects.push(object);
+		}
+
+		cached.objects = newObjects;
+		cached.version = values.version;
+
+		// A delta carries the master page only when it changed.
+		if (values.masterPage)
+			cached.masterPage = values.masterPage.primitives || [];
+
+		const required = new Set<number>();
+		const walker = new cool.VectorBitmapWalker(required);
+		walker.walkObjects(values.objects || []);
+		if (values.masterPage) walker.walkPrimitives(cached.masterPage);
+		this._indexChecksumsForPart(part, required);
+		this._requestMissingBitmaps(required);
+
+		this._redrawRenderedPreviews(part);
+		this._fireChanged();
+	}
+
 	/// Handle a fetched bitmap: cache it and re-render the
 	/// previews that use it.
 	handleVectorRenderingGraphicsResponse(
@@ -214,12 +275,18 @@ class VectorManager extends RenderManagerBase {
 		const parts = this._checksumToParts.get(checksum);
 		if (!parts) return;
 		for (const part of parts) {
-			const data = this._cache.get(part);
-			if (!data) continue;
-			for (const [id, info] of this._renderedPreviews) {
-				if (info.part !== part) continue;
-				this._renderAndFire(id, part, info.maxWidth, info.maxHeight, data);
-			}
+			this._redrawRenderedPreviews(part);
+		}
+	}
+
+	/// Re-render every preview already shown for a part against its
+	/// current cached data.
+	private _redrawRenderedPreviews(part: number): void {
+		const data = this._cache.get(part);
+		if (!data) return;
+		for (const [id, info] of this._renderedPreviews) {
+			if (info.part !== part) continue;
+			this._renderAndFire(id, part, info.maxWidth, info.maxHeight, data);
 		}
 	}
 

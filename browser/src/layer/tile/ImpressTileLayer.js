@@ -393,6 +393,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
+		if (values.type === 'vectorprimitivesdelta') {
+			RenderManager.handleVectorPrimitivesDelta(values);
+			return;
+		}
+
 		if (values.type === 'vectorrenderinggraphics') {
 			RenderManager.handleVectorRenderingGraphicsResponse(values);
 			return;

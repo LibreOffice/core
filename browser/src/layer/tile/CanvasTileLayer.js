@@ -1353,12 +1353,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			const preview = this._map._docPreviews ? this._map._docPreviews[command.part] : null;
 			if (preview) { preview.invalid = true; }
 
-			// A vector-rendered view has no tiles. A whole-document EMPTY
-			// invalidation carries no part, so refresh every part;
-			// otherwise drop just the one that changed.
+			// A vector-rendered view has no tiles. A change inside a
+			// rectangle is delivered to this view as a pushed delta, so
+			// there is nothing to fetch for it. An invalidation without a
+			// rectangle (width covers everything) has no pushed delta and
+			// may be a structural change, so drop the cached part and
+			// re-fetch it in full. Without a part, drop every part.
 			if (isNaN(command.part))
 				RenderManager.clearAllParts();
-			else
+			else if (command.width === Number.MAX_SAFE_INTEGER)
 				RenderManager.clearCachedPart(command.part);
 
 			const topLeftTwips = new cool.Point(command.x, command.y);

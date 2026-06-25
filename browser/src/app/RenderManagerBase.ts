@@ -133,6 +133,7 @@ class RenderManagerBase {
 	isVectorRendering(): boolean {
 		return false;
 	}
+
 	requestThumbnail(
 		_id: cool.PreviewId,
 		_part: number,
@@ -140,26 +141,36 @@ class RenderManagerBase {
 		_maxHeight: number,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
+
 	requestPart(_part: number): cool.VectorPrimitivesData | undefined {
 		return undefined;
 	}
+
 	renderInto(
 		_context: CanvasRenderingContext2D,
 		_data: cool.VectorPrimitivesData,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
+
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	onVectorChanged(_callback: () => void): void {}
+
 	handleVectorPrimitivesResponse(
 		_values: cool.VectorPrimitivesResponse,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
+
 	handleVectorRenderingGraphicsResponse(
 		_values: cool.VectorRenderingGraphicsResponse,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	handleVectorPrimitivesDelta(_values: cool.VectorPrimitivesResponse): void {}
+
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	clearCachedPart(_part: number): void {}
+
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	clearAllParts(): void {}
 

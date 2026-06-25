@@ -1379,8 +1379,16 @@ class Socket {
 		} else if (textMsg.startsWith('zstdslidelayer:')) {
 			this._onZstdSlideLayerMsg(textMsg, e);
 			return;
-		} else if (textMsg.startsWith('zstdvectorprimitives:')) {
-			this._onZstdVectorPrimitivesMsg(e);
+		} else if (
+			textMsg.startsWith('zstdvectorprimitives:') ||
+			textMsg.startsWith('zstdvectorprimitivesdelta:')
+		) {
+			// A pushed delta carries the same JSON as a pulled one, so it
+			// goes through the same handler, which routes by its type.
+			this._onZstdVectorPrimitivesMsg(
+				e,
+				textMsg.startsWith('zstdvectorprimitivesdelta:'),
+			);
 			return;
 		} else if (textMsg.startsWith('sliderenderingcomplete:')) {
 			this._onSlideRenderingCompleteMsg(textMsg, e);
@@ -1500,6 +1508,7 @@ class Socket {
 				e.data.startsWith('slidelayer:') ||
 				e.data.startsWith('zstdslidelayer:') ||
 				e.data.startsWith('zstdvectorprimitives:') ||
+				e.data.startsWith('zstdvectorprimitivesdelta:') ||
 				e.data.startsWith('windowpaint:')
 			) {
 				let index: number;
@@ -2578,6 +2587,7 @@ class Socket {
 	// command-values handler.
 	private _onZstdVectorPrimitivesMsg(
 		e: SlurpMessageEvent | MinimalMessageEvent,
+		pushed: boolean,
 	): void {
 		const event = e as SlurpMessageEvent;
 		if (!event.imgBytes || event.imgIndex === undefined) {
@@ -2601,7 +2611,12 @@ class Socket {
 		} catch (error) {
 			// Leave the summary as the sizes only.
 		}
-		window.app.console.log('zstdvectorprimitives payload: ' + summary);
+		window.app.console.log(
+			'zstdvectorprimitives ' +
+				(pushed ? 'PUSHED' : 'pulled') +
+				' payload: ' +
+				summary,
+		);
 		const docLayer = (this._map as any)?._docLayer;
 		if (docLayer && docLayer._onCommandValuesMsg)
 			docLayer._onCommandValuesMsg('commandvalues: ' + json);
