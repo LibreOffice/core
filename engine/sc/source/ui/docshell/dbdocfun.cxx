@@ -172,14 +172,13 @@ bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool 
         if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
             nViewShellId = pViewSh->GetViewShellId();
         rDocShell.GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
-
-        rDocShell.GetUndoManager()->AddUndoAction(
-            std::make_unique<ScUndoDBTable>(rDocShell, rName, true/*bInsert*/, std::move(pUndoColl),
-                                           std::make_unique<ScDBCollection>(*pDocColl)));
     }
 
     // A styled table's header row must not be empty nor contain duplicate
     // names; fill blanks and disambiguate duplicates in place (Excel-style).
+    // Must run before the redo snapshot below so the generated names recorded
+    // here ride along in the ScUndoDBTable redo collection; otherwise Redo
+    // restores an empty generated-name set and a later Remove can't strip them.
     if (bHeader)
     {
         if (ScDBData* pInserted = pDocColl->getNamedDBs().findByName(rName))
@@ -187,7 +186,12 @@ bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool 
     }
 
     if (bRecord)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction(
+            std::make_unique<ScUndoDBTable>(rDocShell, rName, true/*bInsert*/, std::move(pUndoColl),
+                                           std::make_unique<ScDBCollection>(*pDocColl)));
         rDocShell.GetUndoManager()->LeaveListAction();
+    }
 
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
@@ -393,6 +397,21 @@ void ScDBDocFunc::RestoreHeaderColumnNames(ScDBData& rData, const std::vector<OU
         }
     }
 
+    // Release a generated name whose origin column no longer holds it: once the
+    // user moved or overwrote it, a later user-typed copy of that string must
+    // not be cleared as a placeholder on table removal / header-off.
+    for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+    {
+        const size_t nOffset = static_cast<size_t>(nCol - nStartCol);
+        if (nOffset >= rPrevNames.size())
+            break;
+        const OUString& aPrev = rPrevNames[nOffset];
+        if (aPrev.isEmpty() || !rData.IsGeneratedHeaderName(aPrev))
+            continue;
+        if (!rTransliteration.isEqual(aPrev, rDoc.GetString(nCol, nRow, nTab)))
+            rData.RemoveGeneratedHeaderName(aPrev);
+    }
+
     if (bListOpen)
     {
         if (bHavePrevAction)
@@ -445,15 +464,17 @@ bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
             rDocShell.GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
         }
 
-        if (!aClearCols.empty())
+        // Clear each generated header cell with its own simple-range mark: a
+        // multi-mark DeleteContents records an undo that degrades across a
+        // redo->undo cycle ("bMarked, but no mark"), failing to restore them.
+        const SCROW nHdrRow = aHeaderArea.aStart.Row();
+        const SCTAB nHdrTab = aHeaderArea.aStart.Tab();
+        for (SCCOL nCol : aClearCols)
         {
             ScMarkData aMark(rDoc.GetSheetLimits());
-            aMark.SelectTable(aHeaderArea.aStart.Tab(), true);
-            for (SCCOL nCol : aClearCols)
-                aMark.SetMultiMarkArea(
-                    ScRange(nCol, aHeaderArea.aStart.Row(), aHeaderArea.aStart.Tab()));
-            rDocShell.GetDocFunc().DeleteContents(aMark, InsertDeleteFlags::CONTENTS, bRecord,
-                                                  bApi);
+            aMark.SelectTable(nHdrTab, true);
+            aMark.SetMarkArea(ScRange(nCol, nHdrRow, nHdrTab));
+            rDocShell.GetDocFunc().DeleteContents(aMark, InsertDeleteFlags::CONTENTS, bRecord, bApi);
         }
 
         std::unique_ptr<ScDBCollection> pUndoColl;
@@ -733,28 +754,31 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     // Group the cell writes with the range/setting-change undo so one Undo reverts both.
     const bool bGroup = bUndo && (bHeaderEnabled || bColumnsChanged || !aClearCols.empty());
 
-    if (bUndo)
+    if (bUndo && bGroup)
     {
-        if (bGroup)
-        {
-            ViewShellId nViewShellId(-1);
-            if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
-                nViewShellId = pViewSh->GetViewShellId();
-            rDocShell.GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
-        }
-
-        rDocShell.GetUndoManager()->AddUndoAction(
-                        std::make_unique<ScUndoDBData>( rDocShell, sOldName, std::move(pUndoColl),
-                            rNewData.GetName(), std::make_unique<ScDBCollection>( *pDocColl ) ) );
+        ViewShellId nViewShellId(-1);
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            nViewShellId = pViewSh->GetViewShellId();
+        rDocShell.GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
     }
 
+    // Fill/clear the generated names before snapshotting *pDocColl for the redo
+    // collection below, so the tracking set rides along on Redo (same ordering
+    // constraint as AddDBTable). Otherwise a redone expand loses the set and a
+    // later shrink can't strip the orphaned "Column#" placeholders.
     if (!aClearCols.empty())
     {
-        ScMarkData aMark(rDoc.GetSheetLimits());
-        aMark.SelectTable(aOldRange.aStart.Tab(), true);
+        // Per-cell simple-range deletes: a multi-mark DeleteContents records an
+        // undo that degrades across redo->undo ("bMarked, but no mark").
+        const SCROW nHdrRow = aOldRange.aStart.Row();
+        const SCTAB nHdrTab = aOldRange.aStart.Tab();
         for (SCCOL nCol : aClearCols)
-            aMark.SetMultiMarkArea(ScRange(nCol, aOldRange.aStart.Row(), aOldRange.aStart.Tab()));
-        rDocShell.GetDocFunc().DeleteContents(aMark, InsertDeleteFlags::CONTENTS, bUndo, false);
+        {
+            ScMarkData aMark(rDoc.GetSheetLimits());
+            aMark.SelectTable(nHdrTab, true);
+            aMark.SetMarkArea(ScRange(nCol, nHdrRow, nHdrTab));
+            rDocShell.GetDocFunc().DeleteContents(aMark, InsertDeleteFlags::CONTENTS, bUndo, false);
+        }
     }
     else if (bHeaderEnabled)
     {
@@ -769,6 +793,11 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
             FillEmptyHeaderColumnNames(*pData, static_cast<SCCOL>(aOldRange.aEnd.Col() + 1),
                                        aNewRange.aEnd.Col());
     }
+
+    if (bUndo)
+        rDocShell.GetUndoManager()->AddUndoAction(
+                        std::make_unique<ScUndoDBData>( rDocShell, sOldName, std::move(pUndoColl),
+                            rNewData.GetName(), std::make_unique<ScDBCollection>( *pDocColl ) ) );
 
     if (bGroup)
         rDocShell.GetUndoManager()->LeaveListAction();

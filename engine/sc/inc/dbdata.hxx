@@ -313,6 +313,8 @@ public:
 
     /** Record a default header name ("Column#") that was written in empty headers */
     void AddGeneratedHeaderName(const OUString& rName) { maGeneratedHeaderNames.insert(rName); }
+    /** Stop tracking rName as a generated name (the user moved/overwrote it). */
+    void RemoveGeneratedHeaderName(const OUString& rName) { maGeneratedHeaderNames.erase(rName); }
     /** Was rName auto-generated as a default header name by this table? */
     bool IsGeneratedHeaderName(const OUString& rName) const
     {

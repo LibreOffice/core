@@ -1208,6 +1208,54 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoHeadersOnTableShrink)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testExpandUndoRedoThenShrink)
+{
+    m_pDoc->InsertTab(0, u"ExpandRedoShrink"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 2, 4,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"A"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"B"_ustr);
+    m_pDoc->SetString(ScAddress(2, 0, 0), u"C"_ustr);
+
+    ScDBDocFunc aFunc(*m_xDocShell);
+
+    // Widen A1:C5 to A1:E5; columns D,E get generated "Column4"/"Column5".
+    ScDBData aWide(*pData);
+    aWide.SetArea(0, 0, 0, 4, 4);
+    aFunc.ModifyDBData(aWide);
+    CPPUNIT_ASSERT_EQUAL(u"Column4"_ustr, m_pDoc->GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Column5"_ustr, m_pDoc->GetString(4, 0, 0));
+
+    // Undo the expand, then Redo it. After Redo the generated-name tracking must
+    // be intact again (this is the state the old code lost).
+    m_xDocShell->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo drops column D", OUString(), m_pDoc->GetString(3, 0, 0));
+    m_xDocShell->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo re-adds Column4", u"Column4"_ustr,
+                                 m_pDoc->GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo re-adds Column5", u"Column5"_ustr,
+                                 m_pDoc->GetString(4, 0, 0));
+
+    // Re-fetch: Undo/Redo replaced the ScDBData in the collection.
+    ScDBData* pNow = m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TESTTABLE"_ustr);
+    CPPUNIT_ASSERT(pNow);
+
+    // Shrink A1:E5 back to A1:C5; the orphaned generated headers must clear.
+    ScDBData aNarrow(*pNow);
+    aNarrow.SetArea(0, 0, 0, 2, 4);
+    aFunc.ModifyDBData(aNarrow);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("kept column A header", u"A"_ustr, m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("dropped column D generated header cleared", OUString(),
+                                 m_pDoc->GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("dropped column E generated header cleared", OUString(),
+                                 m_pDoc->GetString(4, 0, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Removing a table clears the default header names it generated, but leaves
 // user-entered headers (and any header it did not generate) in place.
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoHeadersRemoveTable)
@@ -1414,6 +1462,117 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testCreateTableDuplicateHeaders)
     // Data below is untouched (not shifted down).
     CPPUNIT_ASSERT_EQUAL(u"d1"_ustr, m_pDoc->GetString(0, 1, 0));
     CPPUNIT_ASSERT_EQUAL(OUString(), m_pDoc->GetString(0, 2, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testGeneratedNameReusedByUser)
+{
+    m_pDoc->InsertTab(0, u"DupReuse"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBDocFunc aFunc(*m_xDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 2, 4, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Column1"_ustr, m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Column2"_ustr, m_pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Column3"_ustr, m_pDoc->GetString(2, 0, 0));
+
+    // Rename B -> Sales (frees the generated "Column2"), then type "Column2"
+    // into C by hand (now a real user header, no live duplicate).
+    m_xDocShell->GetDocFunc().SetStringCell(ScAddress(1, 0, 0), u"Sales"_ustr, false);
+    m_xDocShell->GetDocFunc().SetStringCell(ScAddress(2, 0, 0), u"Column2"_ustr, false);
+    CPPUNIT_ASSERT_EQUAL(u"Sales"_ustr, m_pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Column2"_ustr, m_pDoc->GetString(2, 0, 0));
+
+    ScDBData* pData = m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pData);
+    aFunc.DeleteDBTable(pData, /*bRecord*/ true, /*bApi*/ false);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("still-generated A1 cleared", OUString(),
+                                 m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("user header B kept", u"Sales"_ustr, m_pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("user-typed C must survive remove", u"Column2"_ustr,
+                                 m_pDoc->GetString(2, 0, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testRemoveTableUndoRedoUndo)
+{
+    m_pDoc->InsertTab(0, u"RemoveUndoRedo"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBDocFunc aFunc(*m_xDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 2, 4, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Column1"_ustr, m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Column3"_ustr, m_pDoc->GetString(2, 0, 0));
+
+    ScDBData* pData = m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pData);
+    aFunc.DeleteDBTable(pData, /*bRecord*/ true, /*bApi*/ false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("removed: A1 cleared", OUString(), m_pDoc->GetString(0, 0, 0));
+
+    // 1st Undo: table + generated names come back.
+    m_xDocShell->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_MESSAGE(
+        "undo restores table",
+        m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo restores A1", u"Column1"_ustr, m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo restores C1", u"Column3"_ustr, m_pDoc->GetString(2, 0, 0));
+
+    // Redo: removed again.
+    m_xDocShell->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo clears A1 again", OUString(), m_pDoc->GetString(0, 0, 0));
+
+    // 2nd Undo: must behave exactly like the 1st Undo.
+    m_xDocShell->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_MESSAGE(
+        "2nd undo restores table",
+        m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd undo must restore A1", u"Column1"_ustr,
+                                 m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd undo must restore C1", u"Column3"_ustr,
+                                 m_pDoc->GetString(2, 0, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testCreateUndoRedoThenRemove)
+{
+    m_pDoc->InsertTab(0, u"CreateUndoRedo"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBDocFunc aFunc(*m_xDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 2, 4, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Column1"_ustr, m_pDoc->GetString(0, 0, 0));
+
+    // Undo: table gone, headers cleared.
+    m_xDocShell->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_MESSAGE(
+        "undo removes table",
+        !m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo clears A1", OUString(), m_pDoc->GetString(0, 0, 0));
+
+    // Redo: table back, headers back.
+    m_xDocShell->GetUndoManager()->Redo();
+    ScDBData* pData = m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("redo restores table", pData);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo restores A1", u"Column1"_ustr, m_pDoc->GetString(0, 0, 0));
+
+    // Remove: the generated headers must be cleared, not left behind.
+    aFunc.DeleteDBTable(pData, /*bRecord*/ true, /*bApi*/ false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("generated A1 cleared after remove", OUString(),
+                                 m_pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("generated B1 cleared after remove", OUString(),
+                                 m_pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("generated C1 cleared after remove", OUString(),
+                                 m_pDoc->GetString(2, 0, 0));
 
     m_pDoc->DeleteTab(0);
 }
