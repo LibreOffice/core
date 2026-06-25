@@ -1559,6 +1559,16 @@ clean-local:
 	@rm -f $(abs_srcdir)/admin/jsconfig.json
 	@rm -f mocha.log duplication.log
 	@rm -f $(MOCHA_JS_DIR)/main.js
+# unocommands.js, the l10n/uno/*.json and the *-localizations.json maps are
+# generated from the engine. Remove them only when the engine is present (so
+# the next build regenerates them); in a from-tarball build the engine is
+# absent and these shipped copies must survive clean.
+	@test ! -d "$(ENGINE_UI_XCU_DIR)" || rm -f \
+		$(srcdir)/src/unocommands.js \
+		$(srcdir)/l10n/localizations.json \
+		$(srcdir)/l10n/help-localizations.json \
+		$(srcdir)/l10n/uno-localizations.json
+	@test ! -d "$(ENGINE_UI_XCU_DIR)" || rm -rf $(srcdir)/l10n/uno
 
 CLEANFILES = tscompile.done tsc-emit.done tsc-strict.done $(DIST_FOLDER)/strict.tsbuildinfo eslint.done prettier.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
 
