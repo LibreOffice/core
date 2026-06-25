@@ -2357,7 +2357,10 @@ static std::vector<int> clipboard_formats_for_MIME_type(const char* mimeType)
     else if (std::strcmp(mimeType, "text/rtf") == 0)
         result.push_back(RegisterClipboardFormatW(L"Rich Text Format"));
     else if (std::strcmp(mimeType, "text/html") == 0)
+    {
+        result.push_back(RegisterClipboardFormatW(L"HTML Format"));
         result.push_back(RegisterClipboardFormatW(L"HTML (HyperText Markup Language)"));
+    }
     else if (std::strcmp(mimeType, "text/markdown") == 0)
     {
         result.push_back(RegisterClipboardFormatW(L"text/markdown"));
@@ -2510,7 +2513,7 @@ static int clipboardProviderGetData(void* pUserData, const char* pMimeType, char
         if (!source)
             continue;
         std::string fragment;
-        if (std::strcmp(pMimeType, "text/html") == 0)
+        if (format == RegisterClipboardFormatW(L"HTML Format"))
         {
             fragment = get_html_clipboard_fragment(source).c_str();
             source = fragment.c_str();
