@@ -37,8 +37,8 @@
  
    if test -z "$OPT_ZLIB"; then
  
-@@ -24232,6 +24248,7 @@
-     LIBCURL_PC_REQUIRES_PRIVATE="$LIBCURL_PC_REQUIRES_PRIVATE zlib"
+@@ -24777,6 +24777,7 @@
+     fi
      curl_zlib_msg="enabled"
    fi
 + fi
@@ -79,8 +79,8 @@
    if test -z "$OPT_ZLIB"; then
      CURL_CHECK_PKGCONFIG(zlib)
  
-@@ -1395,6 +1395,7 @@
-     LIBCURL_PC_REQUIRES_PRIVATE="$LIBCURL_PC_REQUIRES_PRIVATE zlib"
+@@ -1571,6 +1571,7 @@
+     fi
      curl_zlib_msg="enabled"
    fi
 + fi
