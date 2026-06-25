@@ -82,6 +82,25 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress hyperlink popup te
 		cy.cGet('#hyperlink-pop-up').should('have.text', 'http://www.example.com/');
 	});
 
+	it('In readonly mode, edit and remove buttons are hidden and copy button is visible.', function() {
+		cy.getFrameWindow().its('app').then(function(app) {
+			app.map.setPermission('readonly');
+		});
+
+		helper.typeIntoDocument('{home}');
+		cy.then(() => helper.processToIdle(this.win));
+
+		for (var i = 0; i < 7; i++) {
+			helper.typeIntoDocument('{rightArrow}');
+		}
+		cy.then(() => helper.processToIdle(this.win));
+
+		cy.cGet('.hyperlink-pop-up-container').should('be.visible');
+		cy.cGet('#hyperlink-pop-up-copy').should('be.visible');
+		cy.cGet('#hyperlink-pop-up-edit').should('not.be.visible');
+		cy.cGet('#hyperlink-pop-up-remove').should('not.be.visible');
+	});
+
 	it('Popup disappears after navigating away from hyperlink.', function() {
 		helper.typeIntoDocument('{home}');
 		helper.processToIdle(this.win);

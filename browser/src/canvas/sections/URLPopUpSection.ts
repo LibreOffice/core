@@ -127,6 +127,10 @@ class URLPopUpSection extends HTMLObjectSection {
 		imgRemoveBtn.setAttribute('alt', removeLinkText);
 		imgRemoveBtn.style.padding = '4px';
 
+		if (app.map._permission === 'readonly') {
+			editBtn.style.display = 'none';
+			removeBtn.style.display = 'none';
+		}
 	}
 
 	setUpCallbacks(linkPosition?: cool.SimplePoint) {
