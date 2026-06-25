@@ -102,11 +102,21 @@ public:
     {
     }
 
-    QStringList formats() const override { return _mimeTypes; }
+    QStringList formats() const override
+    {
+        // A paste target asks whether plain text is present under the bare name
+        // "text/plain", but the engine offers it as "text/plain;charset=utf-8".
+        // Advertise the bare name too so the plain-text paste is offered.
+        QStringList result = _mimeTypes;
+        if (_mimeTypes.contains(QLatin1String("text/plain;charset=utf-8"))
+            && !result.contains(QLatin1String("text/plain")))
+            result.append(QStringLiteral("text/plain"));
+        return result;
+    }
 
     bool hasFormat(const QString& mimeType) const override
     {
-        return _mimeTypes.contains(mimeType);
+        return formats().contains(mimeType);
     }
 
     unsigned sourceDocId() const { return _appDocId; }
@@ -132,16 +142,22 @@ public:
 protected:
     QVariant retrieveData(const QString& mimeType, QMetaType /*type*/) const override
     {
-        auto it = _cache.constFind(mimeType);
+        // A request for the bare "text/plain" name maps to the UTF-8 plain text
+        // the engine holds as "text/plain;charset=utf-8".
+        const QString fetchType = (mimeType == QLatin1String("text/plain"))
+                                      ? QStringLiteral("text/plain;charset=utf-8")
+                                      : mimeType;
+
+        auto it = _cache.constFind(fetchType);
         if (it != _cache.constEnd())
             return *it;
 
-        const std::string mimeStr = mimeType.toStdString();
+        const std::string mimeStr = fetchType.toStdString();
         const char* pMimeTypes[] = { mimeStr.c_str(), nullptr };
         std::unique_ptr<QMimeData> data = fetchClipboardData(_appDocId, pMimeTypes);
         // Cache empty results too, to suppress repeated probes for unavailable formats.
-        QByteArray bytes = data ? data->data(mimeType) : QByteArray{};
-        _cache.insert(mimeType, bytes);
+        QByteArray bytes = data ? data->data(fetchType) : QByteArray{};
+        _cache.insert(fetchType, bytes);
         return bytes;
     }
 };
