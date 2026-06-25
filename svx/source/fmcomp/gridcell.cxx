@@ -2622,7 +2622,8 @@ void DbListBox::SetList(const Any& rItems)
 
 void DbListBox::Init(BrowserDataWin& rParent, const Reference< XRowSet >& xCursor)
 {
-    m_rColumn.SetAlignment(css::awt::TextAlign::LEFT);
+    // tdf#98382 - read alignment from model instead of hardcoding LEFT
+    m_rColumn.SetAlignmentFromModel(css::awt::TextAlign::LEFT);
 
     m_pWindow = VclPtr<ListBoxControl>::Create( &rParent );
 
