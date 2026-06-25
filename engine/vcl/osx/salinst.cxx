@@ -825,7 +825,7 @@ SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* p
         return nullptr;
 
     OSX_INST_RUNINMAIN_POINTER( CreateObject( pParent, pWindowData, false ), SalObject* )
-    return new AquaSalObject( static_cast<AquaSalFrame*>(pParent), pWindowData );
+    return new AquaSalObject( static_cast<AquaSalFrame*>(pParent) );
 }
 
 void AquaSalInstance::DestroyObject( SalObject* pObject )

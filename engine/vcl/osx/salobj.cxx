@@ -26,7 +26,7 @@
 #include <osx/salobj.h>
 #include <osx/runinmain.hxx>
 
-AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData const * pWindowData ) :
+AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
     mpFrame( pFrame ),
     mnClipX( -1 ),
     mnClipY( -1 ),
