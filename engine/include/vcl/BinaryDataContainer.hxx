@@ -15,6 +15,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <tools/stream.hxx>
+#include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 
 #include <memory>
@@ -64,6 +65,9 @@ public:
 
     SAL_DLLPRIVATE size_t calculateHash() const;
     std::vector<unsigned char> calculateSHA1() const;
+
+    /// CRC32 over the raw bytes, lazily computed and cached on first call.
+    BitmapChecksum getChecksum() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

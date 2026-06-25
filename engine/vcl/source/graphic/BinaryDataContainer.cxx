@@ -10,6 +10,7 @@
 
 #include <vcl/BinaryDataContainer.hxx>
 #include <o3tl/hash_combine.hxx>
+#include <rtl/crc.h>
 #include <unotools/tempfile.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/seqstream.hxx>
@@ -24,6 +25,8 @@ struct BinaryDataContainer::Impl
     std::unique_ptr<utl::TempFileFast> mpFile;
     // the binary data
     std::shared_ptr<std::vector<sal_uInt8>> mpData;
+    /// 0 means "not computed yet".
+    mutable BitmapChecksum mnChecksum = 0;
 
     Impl(SvStream& stream, size_t size) { readData(stream, size); }
 
@@ -86,6 +89,23 @@ size_t BinaryDataContainer::calculateHash() const
             o3tl::hash_combine(nSeed, rByte);
     }
     return nSeed;
+}
+
+BitmapChecksum BinaryDataContainer::getChecksum() const
+{
+    if (!mpImpl)
+        return 0;
+
+    if (mpImpl->mnChecksum != 0)
+        return mpImpl->mnChecksum;
+
+    const sal_uInt8* pData = getData();
+    const size_t nSize = getSize();
+    if (!pData || !nSize)
+        return 0;
+
+    mpImpl->mnChecksum = rtl_crc32(0, pData, nSize);
+    return mpImpl->mnChecksum;
 }
 
 std::vector<unsigned char> BinaryDataContainer::calculateSHA1() const
