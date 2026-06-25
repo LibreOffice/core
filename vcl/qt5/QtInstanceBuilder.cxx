@@ -65,6 +65,7 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
     u"cui/ui/aboutdialog.ui",
     u"cui/ui/additionsdialog.ui",
     u"cui/ui/areadialog.ui",
+    u"cui/ui/autocorrectdialog.ui",
     u"cui/ui/borderareatransparencydialog.ui",
     u"cui/ui/borderbackgrounddialog.ui",
     u"cui/ui/breaknumberoption.ui",
@@ -377,8 +378,12 @@ constexpr auto SUPPORTED_UI_FILES = frozen::make_unordered_set<std::u16string_vi
 
 // These UI files are only supported inside native Qt dialogs/widgets
 constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16string_view>({
+    u"cui/ui/acorexceptpage.ui",
+    u"cui/ui/acorreplacepage.ui",
     u"cui/ui/additionsfragment.ui",
     u"cui/ui/appearance.ui",
+    u"cui/ui/applyautofmtpage.ui",
+    u"cui/ui/applylocalizedpage.ui",
     u"cui/ui/areatabpage.ui",
     u"cui/ui/asiantypography.ui",
     u"cui/ui/borderpage.ui",
@@ -447,6 +452,7 @@ constexpr auto SUPPORTED_WITH_QT_PARENT = frozen::make_unordered_set<std::u16str
     u"cui/ui/textflowpage.ui",
     u"cui/ui/transparencytabpage.ui",
     u"cui/ui/twolinespage.ui",
+    u"cui/ui/wordcompletionpage.ui",
     u"dbaccess/ui/generatedvaluespage.ui",
     u"dbaccess/ui/specialsettingspage.ui",
     u"filter/ui/pdfgeneralpage.ui",
