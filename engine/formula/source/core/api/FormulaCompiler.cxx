@@ -2420,7 +2420,14 @@ void FormulaCompiler::UnaryLine()
     {
         FormulaTokenRef p = mpToken;
         NextToken();
-        UnaryLine();
+        // Hold the unary operator as the current factor so its
+        // parameter classification reaches the nested operators.
+        {
+            CurrentFactor pInnerFac(this);
+            pInnerFac = p;
+            CheckSetForceArrayParameter(mpToken, 0);
+            UnaryLine();
+        }
         if (mbComputeII)
         {
             FormulaToken** pArg = mpCode - 1;

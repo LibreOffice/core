@@ -5953,6 +5953,25 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testSingleValueOperator)
     // No spill into the row below.
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 1, 0)));
 
+    // The @ also collapses an array produced by range arithmetic. B2:B3+0
+    // is a two-cell array whose upper-left is B2. The formula sits in a
+    // row that does not overlap B2:B3, so implicit intersection on the
+    // range would otherwise fail and the @ has to drive the collapse.
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 7.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 9.0);
+    m_pDoc->SetFormula(ScAddress(0, 5, 0), u"=@(B2:B3+0)"_ustr,
+                       formula::FormulaGrammar::GRAM_NATIVE);
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 6, 0)));
+
+    // Two @-collapsed sub-expressions joined by a binary operator stay
+    // scalar. Without the collapse on each side the addition would see
+    // two arrays and produce one too, leaving the row below populated.
+    m_pDoc->SetFormula(ScAddress(0, 8, 0), u"=@((B2:B3+0)) + @((B2:B3+0))"_ustr,
+                       formula::FormulaGrammar::GRAM_NATIVE);
+    CPPUNIT_ASSERT_EQUAL(14.0, m_pDoc->GetValue(ScAddress(0, 8, 0)));
+    CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 9, 0)));
+
     m_pDoc->DeleteTab(0);
 }
 
