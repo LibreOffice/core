@@ -1516,6 +1516,8 @@ bool ClientRequestDispatcher::handleWopiDiscoveryRequest(
         srvUrl = requestDetails.getProxyPrefix();
     Poco::replaceInPlace(xml, std::string("%SRV_URI%"), srvUrl);
     Poco::replaceInPlace(xml, std::string("%SRV_PROTO%"), std::string(isSsl ? "https" : "http"));
+    bool isInternal = ConfigUtil::getConfigValue<bool>("storage.wopi.internal_zone", false);
+    Poco::replaceInPlace(xml, std::string("%WOPI_NET_ZONE%"), std::string(isInternal ? "internal" : "external"));
 
     http::Response httpResponse(http::StatusCode::OK);
     FileServerRequestHandler::hstsHeaders(httpResponse);

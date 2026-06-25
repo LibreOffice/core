@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <wopi-discovery>
-    <net-zone name="external-%SRV_PROTO%">
+    <net-zone name="%WOPI_NET_ZONE%-%SRV_PROTO%">
 
         <!-- Writer documents -->
         <app name="writer" favIconUrl="images/x-office-document.svg">
