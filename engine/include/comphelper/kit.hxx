@@ -89,6 +89,10 @@ COMPHELPER_DLLPUBLIC OUString getUserConfigDir();
 COMPHELPER_DLLPUBLIC void setSlideshowRendering(bool bSlideshowRendering);
 COMPHELPER_DLLPUBLIC bool isSlideshowRendering();
 
+/// True while the engine is serializing a slide to vector primitives.
+COMPHELPER_DLLPUBLIC void setVectorRendering(bool bVectorRendering);
+COMPHELPER_DLLPUBLIC bool isVectorRendering();
+
 /// Check whether clients want a part number in an invalidation payload.
 COMPHELPER_DLLPUBLIC bool isPartInInvalidation();
 /// Set whether clients want a part number in an invalidation payload.

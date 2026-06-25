@@ -71,6 +71,7 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -2470,12 +2471,21 @@ private:
 
             // A delta carries full content only for objects that changed
             // after the client's version. The rest stay in the order list.
-            if (isDelta()
-                && !mpModel->isVectorObjectChangedSince(mnResolvedPage, pObject->GetUniqueID(),
-                                                        sal_uInt64(mnSinceVersion)))
+            // The object being text-edited is always carried: its live text
+            // is not version-tracked until the edit is committed.
+            if (isDelta())
             {
-                continue;
+                SdrTextObj* pTextObj = DynCastSdrTextObj(pObject);
+                const bool bBeingEdited = pTextObj && pTextObj->IsInEditMode();
+                if (!bBeingEdited
+                    && !mpModel->isVectorObjectChangedSince(
+                           mnResolvedPage, pObject->GetUniqueID(),
+                           sal_uInt64(mnSinceVersion)))
+                {
+                    continue;
+                }
             }
+
             // Get view-independent primitives
             drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
             pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aPrimitives);
@@ -2575,6 +2585,12 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
 
         if (mpDoc)
         {
+            // Keep the text being edited in the decomposition: vector
+            // rendering has no edit-view overlay to draw it otherwise.
+            comphelper::COKit::setVectorRendering(true);
+            comphelper::ScopeGuard aVectorRenderingGuard(
+                [] { comphelper::COKit::setVectorRendering(false); });
+
             VectorContentWriter aContentWriter(mpDoc, this, nPart, nSinceVersion);
             aContentWriter.write(rJsonWriter);
 

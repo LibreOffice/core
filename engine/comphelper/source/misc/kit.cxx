@@ -61,6 +61,8 @@ static bool g_bViewIdForVisCursorInvalidation(false);
 
 static bool g_bSlideshowRendering(false);
 
+static bool g_bVectorRendering(false);
+
 static Compat g_eCompatFlags(Compat::none);
 
 /// Used to set the DocId at ViewShell construction time.
@@ -268,6 +270,16 @@ void setSlideshowRendering(bool bSlideshowRendering)
 bool isSlideshowRendering()
 {
     return g_bSlideshowRendering;
+}
+
+void setVectorRendering(bool bVectorRendering)
+{
+    g_bVectorRendering = bVectorRendering;
+}
+
+bool isVectorRendering()
+{
+    return g_bVectorRendering;
 }
 
 void setCompatFlag(Compat flag) { g_eCompatFlags = static_cast<Compat>(g_eCompatFlags | flag); }

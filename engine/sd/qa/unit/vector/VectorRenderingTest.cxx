@@ -22,15 +22,19 @@
 #include <svx/svdopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
+#include <svx/svdview.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
 #include <sfx2/viewsh.hxx>
 
 #include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
 
@@ -424,6 +428,62 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullSetsPushBaseline)
     // pull, so the push carries no object content.
     CPPUNIT_ASSERT_EQUAL(size_t(2), oDelta->getSize("/order").value_or(0));
     CPPUNIT_ASSERT_EQUAL(size_t(0), oDelta->getSize("/objects").value_or(SIZE_MAX));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditedTextAppearsInPrimitives)
+{
+    // While a text object is being edited, its in-progress text must appear in
+    // the vector primitives. Vector rendering has no edit-view overlay to draw
+    // it, unlike tile rendering.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
+
+    // Enter text edit on the object and type a word.
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(page(1)->GetObj(0));
+    EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+    rEditView.InsertText(u"Hello"_ustr);
+
+    // Serialize while the edit is still active.
+    SdXImpressDocument* pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDoc);
+    tools::JsonWriter aJsonWriter;
+    pDoc->getCommandValues(aJsonWriter, ".uno:VectorPrimitives?part=0");
+    const OString aResult = aJsonWriter.finishAndGetAsOString();
+
+    pView->SdrEndTextEdit();
+
+    CPPUNIT_ASSERT_MESSAGE(aResult.getStr(), aResult.indexOf("Hello") >= 0);
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesEditedObject)
+{
+    // Typing does not advance the part version, so a delta requested while a
+    // text object is being edited must still carry that object. Otherwise the
+    // view would not change until the edit is committed.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
+    SdrObject* pObject = page(1)->GetObj(0);
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(pObject);
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
+
+    // Read the current version, then ask for a delta since exactly that.
+    // No object has changed past it, so only the object being edited can
+    // make the delta non-empty.
+    const sal_Int64 nVersion
+        = getVectorPrimitives(u"testEditDeltaBase").getInt("/version").value_or(-1);
+    auto aDelta = getVectorPrimitives(u"testEditDelta", nVersion);
+
+    pView->SdrEndTextEdit();
+
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pObject->GetUniqueID()),
+                         aDelta.getInt("/objects/0/id").value_or(-1));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)

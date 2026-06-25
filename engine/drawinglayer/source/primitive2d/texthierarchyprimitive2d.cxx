@@ -155,6 +155,10 @@ namespace drawinglayer::primitive2d
             // COKit case: always decompose it when we're rendering a slide show
             if (comphelper::COKit::isSlideshowRendering())
                 bSuppress = false;
+            // Vector rendering draws only from the decomposed primitives and
+            // has no edit-view overlay, so it must keep the edited text.
+            if (comphelper::COKit::isVectorRendering())
+                bSuppress = false;
             if (!bSuppress)
                 GroupPrimitive2D::get2DDecomposition(rVisitor, rViewInformation);
         }
