@@ -43,8 +43,6 @@ public:
     const OUString& GetCustomType() const { return m_aCustomType; }
 
     void SetDumpCallback(const DumpCallback& rCallback) { m_aDumpCallback = rCallback; }
-
-    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,6 +31,4 @@ void VclCustomWidget::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     m_aDumpCallback(rJsonWriter);
 }
 
-FactoryFunction VclCustomWidget::GetUITestFactory() const { return nullptr; }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
