@@ -674,9 +674,9 @@ SfxBoolItem RedlineRenderMode FN_VIEW_REDLINE_RENDER_MODE
     RecordPerSet;
 
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::View;
 ]
 
