@@ -1,0 +1,18 @@
+--- afdko/c/shared/sha1.c	2026-06-26 00:09:12.530617735 +0200
++++ afdko/c/shared/sha1.c	2026-06-26 00:09:22.842585047 +0200
+@@ -5,14 +5,7 @@
+ 
+ #include <stdio.h>
+ #include <limits.h> /* to get info about range unsigned int */
+-
+-#if ULONG_MAX == 4294967295U
+-typedef unsigned long int uint32_t;
+-#elif UINT_MAX == 4294967295U
+-typedef unsigned int uint32_t;
+-#else
+-#error "There must be a way to get an unsigned 32 bit integer"
+-#endif
++#include <stdint.h>
+ 
+ typedef struct sha1_ctx {
+     uint32_t H[5];
