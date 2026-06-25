@@ -1016,25 +1016,9 @@ check-for-system-nss:
 		fi \
 	fi
 
-# engine/distro-configs/Langs.conf and the flatpak manifest's --with-lang=
-# line both feed --with-lang to the same configure run; keep them in lockstep.
-check-flatpak-langs:
-	@distro_lang=`grep -h '^--with-lang=' $(top_srcdir)/engine/distro-configs/Langs.conf | sed 's/^--with-lang=//'`; \
-	flatpak_lang=`grep -h '"--with-lang=' $(top_srcdir)/qt/flatpak/com.collaboraoffice.Office.json | sed 's/.*"--with-lang=//; s/",$$//'`; \
-	if test -z "$$distro_lang" || test -z "$$flatpak_lang"; then \
-		echo "ERROR: failed to extract --with-lang= from Langs.conf or the flatpak manifest" >&2; \
-		exit 1; \
-	fi; \
-	if test "$$distro_lang" != "$$flatpak_lang"; then \
-		echo "ERROR: --with-lang= lists in Langs.conf and the flatpak manifest differ:" >&2; \
-		echo "  engine/distro-configs/Langs.conf:           $$distro_lang" >&2; \
-		echo "  qt/flatpak/com.collaboraoffice.Office.json: $$flatpak_lang" >&2; \
-		echo "Update one to match the other." >&2; \
-		exit 1; \
-	fi
-
-# Same idea for the snap manifest: the --with-lang= line in
-# snap/snapcraft.yaml must match Langs.conf.
+# The snap manifest still spells out its --with-lang= line, so the
+# snap/snapcraft.yaml list must match Langs.conf. (The flatpak manifest reads
+# Langs.conf directly at build time, so it needs no such check.)
 check-snap-langs:
 	@distro_lang=`grep -h '^--with-lang=' $(top_srcdir)/engine/distro-configs/Langs.conf | sed 's/^--with-lang=//'`; \
 	snap_lang=`grep -h '"--with-lang=' $(top_srcdir)/snap/snapcraft.yaml | sed 's/.*"--with-lang=//; s/".*//'`; \
@@ -1052,7 +1036,7 @@ check-snap-langs:
 
 check-recursive: eslint
 
-check: all-local check-for-system-nss check-flatpak-langs check-snap-langs prettier eslint presets-dir check-apparmour-namespaces check-recursive
+check: all-local check-for-system-nss check-snap-langs prettier eslint presets-dir check-apparmour-namespaces check-recursive
 	$(GEN_COVERAGE_COMMAND)
 
 coverage-report:

@@ -166,15 +166,14 @@ migrated to the engine workdir:
   prebuilt `ENGINE_ASSETS` tarball instead of building the engine, that tarball
   must now also contain `workdir/UnpackedTarball/poco/include` and
   `workdir/LinkTarget/StaticLibrary/libPoco*.a`.
-+ **flatpak** (`qt/flatpak/com.collaboraoffice.Office.json`): the `libreoffice`
-  (engine) module's build dir is not visible to the later `collabora-office`
-  module, so it now stages POCO into `/app/core/workdir/...` (matching the
-  engine workdir layout, alongside the existing COKit copy), the standalone
-  `poco` module was removed, and COOL configures with
-  `--with-lo-builddir=/app/core`. The flatpak build sandbox has **no network**,
-  so (like every other engine tarball) `poco-1.15.3-all.tar.bz2` is declared as
-  a pre-fetched `file` source on the `libreoffice` module (`dest:
-  external/tarballs`); flatpak-builder downloads it before the offline build.
++ **flatpak** (`qt/flatpak/com.collaboraoffice.Office.json`): the engine and
+  COOL are built in a single `collabora-office` module (engine in-tree first,
+  then COOL), so the engine build dir is visible and POCO is found via
+  `--with-lo-builddir=$(pwd)/engine` -- no `/app/core` staging. The flatpak
+  build sandbox has **no network**, so (like every other engine tarball)
+  `poco-1.15.3-all.tar.bz2` is declared as a pre-fetched `file` source
+  (`dest: engine/external/tarballs`); flatpak-builder downloads it before the
+  offline build.
 + **wasm** (`wasm/README*`): the example commands already pass
   `--with-lo-builddir`, so the redundant `--with-poco-*` (and the POCO bind
   mount) were dropped.
