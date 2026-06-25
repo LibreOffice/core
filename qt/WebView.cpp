@@ -311,12 +311,15 @@ void CODAWebEngineView::arrangePresentationWindows()
             // so the presentation stays visible around the edges and the user
             // can see it is running underneath. An arbitrary small default
             // size left it too small to use.
+            // showNormal() first to leave any earlier full screen state (set
+            // when an external monitor was present), so the resize and move
+            // below act on the normal-state geometry rather than being
+            // discarded when the window is restored out of full screen.
+            consoleWindow->showNormal();
             const QRect area = laptopScreen->availableGeometry();
             const QSize size(area.width() * 17 / 20, area.height() * 17 / 20);
             consoleWindow->resize(size);
             consoleWindow->move(area.center() - QPoint(size.width() / 2, size.height() / 2));
-            consoleWindow->showNormal();
-            consoleWindow->show();
         }
     }
 }
