@@ -80,6 +80,7 @@ private:
     void InitThemes();
     void InitCustomization();
     void InitIcons();
+    void InitDialogs();
 
     void LoadSchemeList();
 
