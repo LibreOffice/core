@@ -664,6 +664,11 @@ def enforce_treeview_column_rules(current):
   if len(columns[0]) >= 2 and columns[0][0] == "GtkCellRendererPixbuf" and columns[0][1] == "GtkCellRendererToggle":
     raise Exception(sys.argv[1] + ": treeview has special toggle and pixbuf columns/renderers in wrong order: ", current.attrib.get("id"))
 
+  # ensure that column don't contain multiple cell renderers of the same type
+  for col in columns:
+    if len(col) != len(set(col)):
+      raise Exception(sys.argv[1] + ": Multiple cell renderers of the same type not supported in one column: ", current.attrib.get("id"))
+
 with open(sys.argv[1], encoding="utf-8") as f:
   header = f.readline()
   f.seek(0)
