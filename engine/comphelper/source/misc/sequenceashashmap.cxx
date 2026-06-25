@@ -383,7 +383,13 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::propert
             aValue.Value <<= comphelper::containerToSequence(aSeqs);
         }
         else
-            SAL_WARN("comphelper", "JsonToPropertyValues: unhandled type '" << aType << "'");
+        {
+            // Build any other registered UNO type, such as a struct passed
+            // as a single property value, field by field through reflection.
+            aValue.Value = jsonToUnoAny(rPair.second);
+            if (!aValue.Value.hasValue())
+                SAL_WARN("comphelper", "JsonToPropertyValues: unhandled type '" << aType << "'");
+        }
         aArguments.push_back(aValue);
     }
     return aArguments;

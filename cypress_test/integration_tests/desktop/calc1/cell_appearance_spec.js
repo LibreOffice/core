@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach expect require */
 
 var helper = require('../../common/helper');
 var calcHelper = require('../../common/calc_helper');
@@ -199,6 +199,44 @@ describe(['tagdesktop'], 'Change cell appearance.', function() {
 		//			expect(cells[i]).to.have.attr('style', 'border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000');
 		//		}
 		//	});
+	});
+
+	it('Apply a thicker line style from the border dropdown', function() {
+		helper.setDummyClipboardForCopy();
+		desktopHelper.switchUIToNotebookbar();
+		calcHelper.clickOnFirstCell();
+
+		// Give the cell a border on every side so a line style change has
+		// something to thicken.
+		cy.cGet('.notebookbar .unoSetBorderStyle .arrowbackground').click();
+		cy.cGet('.ui-dialog-content').should('be.visible');
+		helper.getMenuEntry(7).click();
+		cy.cGet('.ui-dialog-content').should('not.exist');
+
+		// The default border is one pixel wide on each side.
+		helper.copy();
+		calcHelper.selectEntireSheet();
+		cy.cGet('#copy-paste-container table td')
+			.should('have.attr', 'style', 'border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000');
+
+		// Pick the extra thick width from the Line style submenu of the same dropdown.
+		// Hovering the entry opens its submenu.
+		calcHelper.clickOnFirstCell();
+		cy.cGet('.notebookbar .unoSetBorderStyle .arrowbackground').click();
+		cy.cGet('.ui-dialog-content').should('be.visible');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Line style').trigger('mouseover');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Extra thick (4.50 pt)').should('be.visible').click();
+
+		// The border grows past the one pixel default once the line style is applied.
+		helper.copy();
+		calcHelper.selectEntireSheet();
+		cy.cGet('#copy-paste-container table td')
+			.should('have.attr', 'style')
+			.and((style) => {
+				const match = style.match(/border-top: (\d+)px/);
+				expect(match, 'top border width is present').to.not.be.null;
+				expect(parseInt(match[1], 10)).to.be.greaterThan(1);
+			});
 	});
 
 	it('Apply border color', function() {
