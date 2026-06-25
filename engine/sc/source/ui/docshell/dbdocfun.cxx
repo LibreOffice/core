@@ -31,6 +31,8 @@
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
 #include <undodat.hxx>
+#include <undocell.hxx>
+#include <viewdata.hxx>
 #include <docsh.hxx>
 #include <docfunc.hxx>
 #include <global.hxx>
@@ -70,6 +72,18 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+
+namespace
+{
+bool lcl_GetCursorPos(const ScDocShell& rDocShell, ScAddress& rPos)
+{
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    if (!pViewSh || pViewSh->GetViewData().GetDocShell() != &rDocShell)
+        return false;
+    rPos = pViewSh->GetViewData().GetCurPos();
+    return true;
+}
+}
 
 bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader,
                              bool bRecord, bool bApi, const OUString& rStyleName)
@@ -166,12 +180,20 @@ bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool 
 
     rDocShell.PostPaint(rRange, PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top | PaintPartFlags::Size);
 
+    ScAddress aCursorPos;
+    const bool bHaveCursor = bRecord && lcl_GetCursorPos(rDocShell, aCursorPos);
+
     if (bRecord)
     {
         ViewShellId nViewShellId(-1);
         if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
             nViewShellId = pViewSh->GetViewShellId();
         rDocShell.GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
+        // First child: restores the cursor on Undo (run last when the list is
+        // undone in reverse), so the header fills below can't drag it away.
+        if (bHaveCursor)
+            rDocShell.GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoCursorMove>(rDocShell, aCursorPos));
     }
 
     // A styled table's header row must not be empty nor contain duplicate
@@ -190,6 +212,11 @@ bool ScDBDocFunc::AddDBTable(const OUString& rName, const ScRange& rRange, bool 
         rDocShell.GetUndoManager()->AddUndoAction(
             std::make_unique<ScUndoDBTable>(rDocShell, rName, true/*bInsert*/, std::move(pUndoColl),
                                            std::make_unique<ScDBCollection>(*pDocColl)));
+        // Last child: restores the cursor on Redo (run last when the list is
+        // redone in order).
+        if (bHaveCursor)
+            rDocShell.GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoCursorMove>(rDocShell, aCursorPos));
         rDocShell.GetUndoManager()->LeaveListAction();
     }
 
@@ -456,12 +483,19 @@ bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
         }
 
         const bool bGroup = bRecord && !aClearCols.empty();
+        ScAddress aCursorPos;
+        const bool bHaveCursor = bGroup && lcl_GetCursorPos(rDocShell, aCursorPos);
         if (bGroup)
         {
             ViewShellId nViewShellId(-1);
             if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
                 nViewShellId = pViewSh->GetViewShellId();
             rDocShell.GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
+            // First child: restores the cursor on Undo (see AddDBTable), so the
+            // header-cell clears below can't drag it to a cleared cell.
+            if (bHaveCursor)
+                rDocShell.GetUndoManager()->AddUndoAction(
+                    std::make_unique<ScUndoCursorMove>(rDocShell, aCursorPos));
         }
 
         // Clear each generated header cell with its own simple-range mark: a
@@ -501,7 +535,13 @@ bool ScDBDocFunc::DeleteDBTable(const ScDBData* pDBObj, bool bRecord, bool bApi)
         }
 
         if (bGroup)
+        {
+            // Last child: restores the cursor on Redo.
+            if (bHaveCursor)
+                rDocShell.GetUndoManager()->AddUndoAction(
+                    std::make_unique<ScUndoCursorMove>(rDocShell, aCursorPos));
             rDocShell.GetUndoManager()->LeaveListAction();
+        }
 
         aModificator.SetDocumentModified();
         SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
@@ -753,6 +793,8 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
 
     // Group the cell writes with the range/setting-change undo so one Undo reverts both.
     const bool bGroup = bUndo && (bHeaderEnabled || bColumnsChanged || !aClearCols.empty());
+    ScAddress aCursorPos;
+    const bool bHaveCursor = bGroup && lcl_GetCursorPos(rDocShell, aCursorPos);
 
     if (bUndo && bGroup)
     {
@@ -760,6 +802,11 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
             nViewShellId = pViewSh->GetViewShellId();
         rDocShell.GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
+        // First child: restores the cursor on Undo (see AddDBTable), so the
+        // header fill/clear below can't drag it to a touched cell.
+        if (bHaveCursor)
+            rDocShell.GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoCursorMove>(rDocShell, aCursorPos));
     }
 
     // Fill/clear the generated names before snapshotting *pDocColl for the redo
@@ -800,7 +847,13 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
                             rNewData.GetName(), std::make_unique<ScDBCollection>( *pDocColl ) ) );
 
     if (bGroup)
+    {
+        // Last child: restores the cursor on Redo.
+        if (bHaveCursor)
+            rDocShell.GetUndoManager()->AddUndoAction(
+                std::make_unique<ScUndoCursorMove>(rDocShell, aCursorPos));
         rDocShell.GetUndoManager()->LeaveListAction();
+    }
 
     aModificator.SetDocumentModified();
 }

@@ -158,6 +158,36 @@ bool ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
+ScUndoCursorMove::ScUndoCursorMove( ScDocShell& rNewDocShell, const ScAddress& rPos )
+    : ScSimpleUndo( rNewDocShell )
+    , maPos( rPos )
+{
+}
+
+OUString ScUndoCursorMove::GetComment() const
+{
+    // Never surfaced on its own; only ever a child of a table-edit list action.
+    return OUString();
+}
+
+void ScUndoCursorMove::MoveCursor() const
+{
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (!pViewShell || pViewShell->GetViewData().GetDocShell() != &rDocShell)
+        return;
+
+    pViewShell->SetTabNo( maPos.Tab() );
+    pViewShell->MoveCursorAbs( maPos.Col(), maPos.Row(), SC_FOLLOW_JUMP, false, false );
+}
+
+void ScUndoCursorMove::Undo() { MoveCursor(); }
+
+void ScUndoCursorMove::Redo() { MoveCursor(); }
+
+void ScUndoCursorMove::Repeat(SfxRepeatTarget& /* rTarget */) {}
+
+bool ScUndoCursorMove::CanRepeat(SfxRepeatTarget& /* rTarget */) const { return false; }
+
 ScUndoEnterData::Value::Value() : mnTab(-1), mbHasFormat(false), mnFormat(0) {}
 
 ScUndoEnterData::ScUndoEnterData(

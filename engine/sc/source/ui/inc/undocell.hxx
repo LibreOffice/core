@@ -67,6 +67,27 @@ private:
     void            DoChange( const CellAttributeHolder& rWhichPattern, const std::unique_ptr<EditTextObject>& pEditData ) const;
 };
 
+/** Restores the view cursor to a fixed position on both Undo and Redo.
+    Bracketing a list action with one of these as its first and last child keeps
+    the cursor in place, instead of letting the grouped cell edits inside drag it
+    to whichever cell they happened to touch last. */
+class ScUndoCursorMove: public ScSimpleUndo
+{
+public:
+                    ScUndoCursorMove( ScDocShell& rNewDocShell, const ScAddress& rPos );
+
+    virtual void    Undo() override;
+    virtual void    Redo() override;
+    virtual void    Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const override;
+    virtual OUString GetComment() const override;
+
+private:
+    ScAddress       maPos;
+
+    void            MoveCursor() const;
+};
+
 class ScUndoEnterData: public ScSimpleUndo, public sc::UndoSheetViewSortData
 {
 public:

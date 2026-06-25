@@ -50,6 +50,8 @@
 #include <undomanager.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
+#include <dbdocfun.hxx>
+#include <dbdata.hxx>
 #include <gridwin.hxx>
 #include <sctestviewcallback.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -784,6 +786,112 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHideColRow)
     nNewCurY = pViewData->GetCurY();
     CPPUNIT_ASSERT(nNewCurY > nOldCurY);
     CPPUNIT_ASSERT_EQUAL(nOldCurX, nNewCurX);
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTableResizeUndoKeepsCursor)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // A styled table A1:C14 with auto-generated headers Column1|Column2|Column3.
+    ScDBDocFunc aFunc(*pDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 2, 13, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+
+    // Put the cursor on B8, inside the table body.
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->SetCursor(1, 7);
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pViewData->GetCurY());
+
+    // Widen A1:C14 -> A1:L14 (drag-resize), generating Column4..Column12.
+    ScDBData* pData = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pData);
+    ScDBData aWide(*pData);
+    aWide.SetArea(0, 0, 0, 11, 13);
+    aFunc.ModifyDBData(aWide);
+    CPPUNIT_ASSERT_EQUAL(u"Column12"_ustr, rDoc.GetString(11, 0, 0));
+    // The resize itself must not move the cursor.
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), pViewData->GetCurY());
+
+    // Undo: without the cursor guard the cursor jumped to D1 (first generated cell).
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo must keep the cursor on B8", sal_Int16(1),
+                                 pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo must keep the cursor on B8", sal_Int32(7),
+                                 pViewData->GetCurY());
+
+    // Redo: without the guard the cursor jumped to L1 (last generated cell).
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo must keep the cursor on B8", sal_Int16(1),
+                                 pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo must keep the cursor on B8", sal_Int32(7),
+                                 pViewData->GetCurY());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoExpandUndoKeepsCursor)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // Styled table A1:C5 with auto-generated headers Column1|Column2|Column3.
+    ScDBDocFunc aFunc(*pDocShell);
+    CPPUNIT_ASSERT(aFunc.AddDBTable(u"Table1"_ustr, ScRange(0, 0, 0, 2, 4, 0),
+                                    /*bHeader*/ true, /*bRecord*/ true, /*bApi*/ true,
+                                    u"TableStyleMedium2"_ustr));
+
+    // Type into D3 (the column band right of the table) — this is what the user
+    // does, and it both flags the auto-expansion and leaves the cursor on D3.
+    rDoc.SetString(ScAddress(3, 2, 0), u"x"_ustr);
+    ScDBData* pData = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pData);
+    CPPUNIT_ASSERT(pData->HasPendingExpansion());
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->SetCursor(3, 2);
+
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // Drain the pending expansion: the table grows to column D and a "Column4"
+    // header is generated for it.
+    pDocShell->ProcessPendingTableExpansions();
+    CPPUNIT_ASSERT_EQUAL(u"Column4"_ustr, rDoc.GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pViewData->GetCurY());
+
+    // Undo: without the cursor guard this jumped to D1 (the generated header).
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo must keep the cursor on D3", sal_Int16(3),
+                                 pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("undo must keep the cursor on D3", sal_Int32(2),
+                                 pViewData->GetCurY());
+
+    // Redo: without the guard this jumped to D1 again.
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo must keep the cursor on D3", sal_Int16(3),
+                                 pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo must keep the cursor on D3", sal_Int32(2),
+                                 pViewData->GetCurY());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnCopyPasteCells)

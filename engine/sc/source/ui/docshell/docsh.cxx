@@ -123,6 +123,7 @@
 #include <dbdata.hxx>
 #include <dbdocfun.hxx>
 #include <undodat.hxx>
+#include <undocell.hxx>
 #include <scextopt.hxx>
 #include <compiler.hxx>
 #include <warnpassword.hxx>
@@ -3370,12 +3371,30 @@ void ScDocShell::ProcessPendingTableExpansions()
         return;
 
     const bool bUndo = m_pDocument->IsUndoEnabled();
+
+    // Preserve the cursor across undo/redo: the header fills below run through
+    // the normal cell-edit undo path, which would otherwise move it to the last
+    // generated header cell. (Same bracket as ScDBDocFunc.)
+    ScAddress aCursorPos;
+    bool bHaveCursor = false;
+    if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+    {
+        if (pViewSh->GetViewData().GetDocShell() == this)
+        {
+            aCursorPos = pViewSh->GetViewData().GetCurPos();
+            bHaveCursor = true;
+        }
+    }
+
     if (bUndo)
     {
         ViewShellId nViewShellId(-1);
         if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
             nViewShellId = pViewSh->GetViewShellId();
         GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
+        // First child: restores the cursor on Undo (run last in reverse).
+        if (bHaveCursor)
+            GetUndoManager()->AddUndoAction(std::make_unique<ScUndoCursorMove>(*this, aCursorPos));
     }
 
     ScDBDocFunc aFunc(*this);
@@ -3411,7 +3430,12 @@ void ScDocShell::ProcessPendingTableExpansions()
     }
 
     if (bUndo)
+    {
+        // Last child: restores the cursor on Redo (run last in order).
+        if (bHaveCursor)
+            GetUndoManager()->AddUndoAction(std::make_unique<ScUndoCursorMove>(*this, aCursorPos));
         GetUndoManager()->LeaveListAction();
+    }
 
     SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScDbAreasChanged));
 }
