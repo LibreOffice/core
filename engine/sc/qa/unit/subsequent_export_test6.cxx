@@ -888,6 +888,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testErrorExternalsInDataValidation)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRef)
 {
+    // A list validation pointing at a name whose body is a table reference used to
+    // come up empty; the dropdown must list the referenced table column instead.
+
     createScDoc();
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT(pDoc);
@@ -907,23 +910,129 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRef)
     ScRangeData* pNameRaw = pName.get();
     CPPUNIT_ASSERT(pDoc->GetRangeName().insert(pName.release()));
 
-    ScTokenArray aValTokens(*pDoc);
-    aValTokens.AddRangeName(pNameRaw->GetIndex(), -1);
+    ScTokenArray aValidationTokens(*pDoc);
+    aValidationTokens.AddRangeName(pNameRaw->GetIndex(), -1);
 
-    ScValidationData aValData(SC_VALID_LIST, ScConditionMode::Equal, &aValTokens, nullptr, *pDoc,
-                              ScAddress(0, 0, 0));
-    const sal_uInt32 nValKey = pDoc->AddValidationEntry(aValData);
-    CPPUNIT_ASSERT(nValKey != 0);
+    ScValidationData aValidationData(SC_VALID_LIST, ScConditionMode::Equal, &aValidationTokens,
+                                     nullptr, *pDoc, ScAddress(0, 0, 0));
+    const sal_uInt32 nValidationKey = pDoc->AddValidationEntry(aValidationData);
+    CPPUNIT_ASSERT(nValidationKey != 0);
 
     ScPatternAttr aPattern(pDoc->getCellAttributeHelper());
-    aPattern.GetItemSetWritable().Put(SfxUInt32Item(ATTR_VALIDDATA, nValKey));
+    aPattern.GetItemSetWritable().Put(SfxUInt32Item(ATTR_VALIDDATA, nValidationKey));
     pDoc->ApplyPattern(3, 3, 0, aPattern);
 
-    const ScValidationData* pData = pDoc->GetValidationEntry(nValKey);
+    const ScValidationData* pData = pDoc->GetValidationEntry(nValidationKey);
     CPPUNIT_ASSERT(pData);
     std::vector<ScTypedStrData> aStrings;
     CPPUNIT_ASSERT(pData->FillSelectionList(aStrings, ScAddress(3, 3, 0)));
     CPPUNIT_ASSERT_EQUAL(size_t(3), aStrings.size());
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRefWithHeader)
+{
+    // A list validation pointing at a name that wraps a table reference must show
+    // the table's data rows, even when the table has a header row and holds
+    // numbers: the dropdown lists the data values in order, starting at the first.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    pDoc->SetString(ScAddress(1, 0, 0), u"Score"_ustr);
+    pDoc->SetValue(ScAddress(1, 1, 0), 10.0);
+    pDoc->SetValue(ScAddress(1, 2, 0), 20.0);
+    pDoc->SetValue(ScAddress(1, 3, 0), 30.0);
+
+    // Header row plus three data rows; the data part the reference resolves to
+    // starts one row below the header.
+    std::unique_ptr<ScDBData> pDB(new ScDBData(u"MyTable"_ustr, 0, 1, 0, 1, 3, true, true));
+    ScDBData* pDBRaw = pDB.get();
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pDB)));
+
+    ScTokenArray aNameTokens(*pDoc);
+    aNameTokens.AddTableRef(pDBRaw->GetIndex());
+    auto pName
+        = std::make_unique<ScRangeData>(*pDoc, u"MyName"_ustr, aNameTokens, ScAddress(0, 0, 0));
+    ScRangeData* pNameRaw = pName.get();
+    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(pName.release()));
+
+    ScTokenArray aValidationTokens(*pDoc);
+    aValidationTokens.AddRangeName(pNameRaw->GetIndex(), -1);
+
+    ScValidationData aValidationData(SC_VALID_LIST, ScConditionMode::Equal, &aValidationTokens,
+                                     nullptr, *pDoc, ScAddress(0, 0, 0));
+    const sal_uInt32 nValidationKey = pDoc->AddValidationEntry(aValidationData);
+    CPPUNIT_ASSERT(nValidationKey != 0);
+
+    ScPatternAttr aPattern(pDoc->getCellAttributeHelper());
+    aPattern.GetItemSetWritable().Put(SfxUInt32Item(ATTR_VALIDDATA, nValidationKey));
+    pDoc->ApplyPattern(3, 3, 0, aPattern);
+
+    const ScValidationData* pData = pDoc->GetValidationEntry(nValidationKey);
+    CPPUNIT_ASSERT(pData);
+    std::vector<ScTypedStrData> aStrings;
+    CPPUNIT_ASSERT(pData->FillSelectionList(aStrings, ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aStrings.size());
+    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, aStrings[0].GetString());
+    CPPUNIT_ASSERT_EQUAL(u"20"_ustr, aStrings[1].GetString());
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, aStrings[2].GetString());
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testValidationListNameThroughTableRefColumn)
+{
+    // A name whose body is a column-qualified table reference like MyTable[Score]
+    // must list only that column's data rows, not the first column and not the
+    // header. Such a reference compiles to several tokens, which used to leave the
+    // dropdown empty.
+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    pDoc->SetString(ScAddress(0, 0, 0), u"Name"_ustr);
+    pDoc->SetString(ScAddress(1, 0, 0), u"Score"_ustr);
+    pDoc->SetString(ScAddress(0, 1, 0), u"x"_ustr);
+    pDoc->SetValue(ScAddress(1, 1, 0), 10.0);
+    pDoc->SetString(ScAddress(0, 2, 0), u"y"_ustr);
+    pDoc->SetValue(ScAddress(1, 2, 0), 20.0);
+    pDoc->SetString(ScAddress(0, 3, 0), u"z"_ustr);
+    pDoc->SetValue(ScAddress(1, 3, 0), 30.0);
+
+    // Two-column table A1:B4 with a header row.
+    std::unique_ptr<ScDBData> pDB(new ScDBData(u"MyTable"_ustr, 0, 0, 0, 1, 3, true, true));
+    CPPUNIT_ASSERT(pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pDB)));
+
+    // Base the name outside the table so the column resolves to the data rows,
+    // not an intersecting single cell.
+    auto pName = std::make_unique<ScRangeData>(*pDoc, u"MyName"_ustr, u"MyTable[[Score]]"_ustr,
+                                               ScAddress(0, 5, 0), ScRangeData::Type::Name,
+                                               formula::FormulaGrammar::GRAM_NATIVE);
+    // A column-qualified reference is more than one token.
+    CPPUNIT_ASSERT(pName->GetCode()->GetLen() > 1);
+    ScRangeData* pNameRaw = pName.get();
+    CPPUNIT_ASSERT(pDoc->GetRangeName().insert(pName.release()));
+
+    ScTokenArray aValidationTokens(*pDoc);
+    aValidationTokens.AddRangeName(pNameRaw->GetIndex(), -1);
+
+    ScValidationData aValidationData(SC_VALID_LIST, ScConditionMode::Equal, &aValidationTokens,
+                                     nullptr, *pDoc, ScAddress(0, 0, 0));
+    const sal_uInt32 nValidationKey = pDoc->AddValidationEntry(aValidationData);
+    CPPUNIT_ASSERT(nValidationKey != 0);
+
+    ScPatternAttr aPattern(pDoc->getCellAttributeHelper());
+    aPattern.GetItemSetWritable().Put(SfxUInt32Item(ATTR_VALIDDATA, nValidationKey));
+    pDoc->ApplyPattern(3, 3, 0, aPattern);
+
+    const ScValidationData* pData = pDoc->GetValidationEntry(nValidationKey);
+    CPPUNIT_ASSERT(pData);
+    std::vector<ScTypedStrData> aStrings;
+    CPPUNIT_ASSERT(pData->FillSelectionList(aStrings, ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aStrings.size());
+    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, aStrings[0].GetString());
+    CPPUNIT_ASSERT_EQUAL(u"20"_ustr, aStrings[1].GetString());
+    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, aStrings[2].GetString());
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testPivotTablesWriteRowColumnItems)

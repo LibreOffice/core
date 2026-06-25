@@ -803,6 +803,50 @@ sal_uInt32 lclGetCellFormat( const ScDocument& rDoc, const ScAddress& rPos )
     return pPattern->GetNumberFormat( rDoc.GetFormatTable() );
 }
 
+/** Fills rRange with the cell area a structured table reference stands for.
+    Returns false when no area can be determined. */
+bool lclGetTableRefArea(const FormulaToken* pToken, const ScDocument& rDocument,
+                        const ScAddress& rPos, ScRange& rRange)
+{
+    auto pTableRef = static_cast<const ScTableRefToken*>(pToken);
+
+    // A compiled reference already holds the exact area it resolves to: the
+    // columns and data rows it selects, lined up with the interpreted values.
+    if (const FormulaToken* pArea = pTableRef->GetAreaRefRPN())
+    {
+        switch (pArea->GetType())
+        {
+            case svSingleRef:
+                rRange = ScRange(
+                    static_cast<const ScSingleRefToken*>(pArea)->GetSingleRef().toAbs(rDocument, rPos));
+                return true;
+            case svDoubleRef:
+                rRange = static_cast<const ScDoubleRefToken*>(pArea)->GetDoubleRef().toAbs(rDocument, rPos);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // Not compiled yet, so fall back to the database range.
+    const ScDBData* pDBData
+        = rDocument.GetDBCollection()->getNamedDBs().findByIndex(pTableRef->GetIndex());
+    if (!pDBData)
+        return false;
+
+    pDBData->GetArea(rRange);
+    // Every selector but the whole table refers to the data part, so leave out
+    // the header and totals rows.
+    if (pTableRef->GetItem() != ScTableRefToken::ALL)
+    {
+        if (pDBData->HasHeader())
+            rRange.aStart.IncRow();
+        if (pDBData->HasTotals())
+            rRange.aEnd.IncRow(-1);
+    }
+    return true;
+}
+
 } // namespace
 
 bool ScValidationData::HasSelectionList() const
@@ -890,12 +934,8 @@ bool ScValidationData::GetSelectionFromFormula(
             }
             else if (eOpCode == ocTableRef)
             {
-                auto pTRToken = static_cast<ScTableRefToken*>(t);
-                if (const ScDBData* pDBData = rDocument.GetDBCollection()->getNamedDBs().findByIndex(pTRToken->GetIndex()))
-                {
-                    pDBData->GetArea(aRange);
+                if (lclGetTableRefArea(t, rDocument, rPos, aRange))
                     bRef = true;
-                }
             }
             else if (eOpCode == ocName)
             {
@@ -907,22 +947,15 @@ bool ScValidationData::GetSelectionFromFormula(
                 }
                 else if (pName)
                 {
-                    // Defined name wrapping a single ocTableRef.
+                    // The name wraps a table reference. A column-qualified one
+                    // like MyTable[Column] is several tokens led by the table
+                    // reference, so resolve the area from that leading token.
                     const ScTokenArray* pNameCode = pName->GetCode();
-                    if (pNameCode && pNameCode->GetLen() == 1)
+                    const FormulaToken* pFirst = pNameCode ? pNameCode->FirstToken() : nullptr;
+                    if (pFirst && pFirst->GetOpCode() == ocTableRef
+                            && lclGetTableRefArea(pFirst, rDocument, rPos, aRange))
                     {
-                        formula::FormulaTokenArrayPlainIterator aNameIter(*pNameCode);
-                        const formula::FormulaToken* tInner = aNameIter.GetNextReferenceOrName();
-                        if (tInner && tInner->GetOpCode() == ocTableRef)
-                        {
-                            auto pTRToken = static_cast<const ScTableRefToken*>(tInner);
-                            if (const ScDBData* pDBData = rDocument.GetDBCollection()
-                                    ->getNamedDBs().findByIndex(pTRToken->GetIndex()))
-                            {
-                                pDBData->GetArea(aRange);
-                                bRef = true;
-                            }
-                        }
+                        bRef = true;
                     }
                 }
             }
