@@ -346,26 +346,7 @@ window.L.Clipboard = window.L.Class.extend({
 				return;
 			}
 
-			var formData = new FormData();
-			let commandName = null;
-			if (this._checkAndDisablePasteSpecial()) {
-				commandName = '.uno:PasteSpecial';
-			} else {
-				commandName = '.uno:Paste';
-			}
-			const data = JSON.stringify({
-				url: src,
-				commandName: commandName,
-			});
-			formData.append('data', new Blob([data]), 'clipboard');
-			try {
-				await this._doAsyncDownload(
-					'POST', this.getMetaURL(), formData, false,
-					function(progress) { return 50 + progress/2; },
-				);
-			} catch (_error) {
-				await this.dataTransferToDocumentFallback(null, fallbackHtml);
-			}
+			await this.dataTransferToDocumentFallback(null, fallbackHtml);
 			return;
 		}
 

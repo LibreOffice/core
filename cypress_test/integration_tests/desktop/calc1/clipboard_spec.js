@@ -224,6 +224,63 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', fu
 		cy.cGet('#copy-paste-container').should('contain.text', url); // TODO: There is an extra \n here.
 	});
 
+	it('HTML paste falls back to HTML content when server-side clipboard fetch fails', function() {
+		// Copy A1 first so the server registers a valid clipboard tag. The tag is
+		// needed later when the fallback uploads the HTML to the server's own
+		// clipboard endpoint.
+		calcHelper.clickOnFirstCell();
+		cy.window().then(win => {
+			win['0'].app.socket.sendMessage('uno .uno:Copy');
+		});
+		helper.processToIdle(this.win);
+
+		// Navigate to B1 as the paste destination.
+		helper.typeIntoInputField(helper.addressInputSelector, 'B1');
+		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'B1');
+
+		// Build a dummy clipboard that simulates content copied from a different
+		// coolwsd instance. The data-coolorigin URL is the same server but with a
+		// wrong ServerId, so the server returns 400 on the clipboard GET. The HTML
+		// body holds real content (not a stub), which the fallback will paste.
+		cy.window().then(win => {
+			var clipboard = win['0'].app.map._clip;
+			var fakeUrl = clipboard.getMetaURL().replace(/ServerId=[^&]+/, 'ServerId=wrongserver');
+			var html = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">\n' +
+				'<html>\n<head>\n' +
+				'<meta http-equiv="content-type" content="text/html; charset=utf-8"/>\n' +
+				'</head>\n<body lang="en_US" dir="ltr">' +
+				'<div id="meta-origin" data-coolorigin="' + encodeURIComponent(fakeUrl) + '">' +
+				'<table><tr><td>crossservertext</td></tr></table>' +
+				'</div></body>\n</html>';
+			var blob = new Blob([html]);
+			clipboard._dummyClipboard = {
+				read: function() {
+					return {
+						then: function(resolve) {
+							resolve([{
+								getType: function() {
+									return { then: function(r) { r(blob); } };
+								},
+								types: ['text/html'],
+							}]);
+						},
+					};
+				},
+			};
+		});
+
+		// Paste using the ribbon button.
+		cy.cGet('#Home .ui-overflow-group-content > .unoPaste .arrowbackground').click();
+		helper.getMenuEntry(0).click();
+
+		helper.processToIdle(this.win);
+
+		// The fallback should have pasted the HTML content into B1.
+		cy.cGet('#sc_input_window.formulabar .ui-custom-textarea-text-layer').should('have.text', 'crossservertext');
+		// No error dialog should have appeared.
+		cy.cGet('#copy_paste_warning-box').should('not.exist');
+	});
+
 	it('Paste-Special', function () {
 		helper.setDummyClipboardForCopy();
 
