@@ -902,7 +902,7 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bModified = true; // !!!!
 
-    // if not HideGroups was called with GROUP_MODULES...
+    // if not HideModulesGroup was called...
     if (m_xLinguModulesCLB->get_visible())
     {
         DBG_ASSERT( pLinguData, "pLinguData not yet initialized" );
@@ -1125,7 +1125,7 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
 
 void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 {
-    // if not HideGroups was called with GROUP_MODULES...
+    // if not HideModulesGroup was called...
     if (m_xLinguModulesCLB->get_visible())
     {
         if (!pLinguData)
