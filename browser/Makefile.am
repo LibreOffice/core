@@ -1130,9 +1130,19 @@ $(UNO_L10N_STAMP): $(UNO_GENERATED_STAMP)
 	@cp $(srcdir)/l10n/uno/*.json $(dir $@)
 	@touch $@
 
-$(INTERMEDIATE_DIR)/cool-src.js: tscompile.done $(call prereq_cool) $(COOL_JS_DST) $(srcdir)/src/unocommands.js $(abs_top_srcdir)/scripts/unocommands.py $(abs_top_srcdir)/scripts/unoshortcuts.py $(srcdir)/cool-src.js.m4
+# Generate unoshortcuts.ts from the engine's Accelerators.xcu (the en-US
+# shortcuts and the localized modifier names). Like unocommands.js above:
+# regenerated in a git checkout, shipped in the tarball by the top-level
+# dist-hook, and a no-op when the engine is absent. It is a .ts source, so tsc
+# (which depends on it via COOL_TS_SRC) picks up the regenerated file before
+# compiling.
+$(srcdir)/src/unoshortcuts.ts: $(abs_top_srcdir)/scripts/unoshortcuts.py \
+		$(wildcard $(ENGINE_SRCDIR)/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu) \
+		$(wildcard $(ENGINE_SRCDIR)/vcl/unx/generic/app/keysymnames.cxx)
+	$(QUIET_UNOSHORTCUTS) test ! -d "$(ENGINE_UI_XCU_DIR)" || $(abs_top_srcdir)/scripts/unoshortcuts.py --update $(abs_top_srcdir) $(ENGINE_SRCDIR)
+
+$(INTERMEDIATE_DIR)/cool-src.js: tscompile.done $(call prereq_cool) $(COOL_JS_DST) $(srcdir)/src/unocommands.js $(abs_top_srcdir)/scripts/unocommands.py $(srcdir)/cool-src.js.m4
 	@mkdir -p $(dir $@)
-	$(QUIET_UNOSHORTCUTS) $(abs_top_srcdir)/scripts/unoshortcuts.py --check $(abs_top_srcdir)
 	@printf "Checking for obsolete JS build intermediates in this makefile... "
 	@if ! test "z$(COOL_ASSERT_INTERSECT)" = "z"; then echo; echo "Error: please remove obsolete files:"; echo "$(COOL_ASSERT_INTERSECT)"; exit 1; else echo "clean"; fi
 	@echo "Bundling cool..."
@@ -1565,6 +1575,7 @@ clean-local:
 # absent and these shipped copies must survive clean.
 	@test ! -d "$(ENGINE_UI_XCU_DIR)" || rm -f \
 		$(srcdir)/src/unocommands.js \
+		$(srcdir)/src/unoshortcuts.ts \
 		$(srcdir)/l10n/localizations.json \
 		$(srcdir)/l10n/help-localizations.json \
 		$(srcdir)/l10n/uno-localizations.json

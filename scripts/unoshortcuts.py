@@ -843,12 +843,6 @@ if __name__ == "__main__":
             onlineDir, coreDir)
 
         writeUnoshortcutsJS(onlineDir, shortcuts, l10nSC, l10nKB, modL10N)
-        sys.stderr.write(
-            "Updated browser/src/unoshortcuts.js "
-            "(%d shortcuts, %d l10n tooltip languages, "
-            "%d l10n keybinding languages, "
-            "%d modifier l10n languages)\n"
-            % (len(shortcuts), len(l10nSC), len(l10nKB), len(modL10N)))
 
     else:
         usageAndExit()
