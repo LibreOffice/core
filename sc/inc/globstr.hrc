@@ -610,7 +610,7 @@
 
 #define STR_WARN_ONLYACTIVESHEET_TITLE          NC_("STR_WARN_ONLYACTIVESHEET_TITLE", "Warning")
 #define STR_WARN_ONLYACTIVESHEET_TEXT           NC_("STR_WARN_ONLYACTIVESHEET_TEXT", "Only the active sheet was saved.")
-#define STR_WARN_ONLYACTIVESHEET_QUEST          NC_("STR_WARN_ONLYACTIVESHEET_QUEST", "Your are saving in the CSV text format, which means multiple sheets cannot be handled.")
+#define STR_WARN_ONLYACTIVESHEET_QUEST          NC_("STR_WARN_ONLYACTIVESHEET_QUEST", "You are saving in the CSV text format, which means multiple sheets cannot be handled.")
 #define STR_WARN_ONLYACTIVESHEET_BUTTON         NC_("STR_WARN_ONLYACTIVESHEET_BUTTON", "Okay")
 
 #endif
