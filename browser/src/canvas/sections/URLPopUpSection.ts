@@ -156,19 +156,23 @@ class URLPopUpSection extends HTMLObjectSection {
 		}
 
 		document.getElementById(this.copyButtonId).onclick = () => {
-			// Hand the known link target straight to the native clipboard, as a UNO command is dropped here in view mode.
-			if (window.mode.isCODesktop()) {
-				(window as any).postMobileMessage('TEXTCLIPBOARD ' + this.sectionProperties.url);
-			}
-			else if (this.sectionProperties.linkIsClientSide) {
-				app.map._clip.setTextSelectionText(this.sectionProperties.url);
-				app.map._clip._execCopyCutPaste('copy');
-			}
-			// If _navigatorClipboardWrite is available, use it.
-			else if (window.L.Browser.clipboardApiAvailable || window.ThisIsTheiOSApp)
+			if (window.ThisIsTheiOSApp || window.ThisIsTheMacOSApp
+					|| window.ThisIsTheWindowsApp || window.ThisIsTheQtApp) {
 				app.map._clip.filterExecCopyPaste('.uno:CopyHyperlinkLocation', params);
-			else // Or use previous method.
-				app.map.sendUnoCommand('.uno:CopyHyperlinkLocation', params);
+			} else {
+				const url = this.sectionProperties.url;
+				if (navigator.clipboard && navigator.clipboard.writeText) {
+					navigator.clipboard.writeText(url);
+				} else {
+					const ta = document.createElement('textarea');
+					ta.value = url;
+					ta.style.cssText = 'position:fixed;opacity:0';
+					document.body.appendChild(ta);
+					ta.select();
+					document.execCommand('copy');
+					document.body.removeChild(ta);
+				}
+			}
 		};
 
 		document.getElementById(this.editButtonId).onclick = () => {
