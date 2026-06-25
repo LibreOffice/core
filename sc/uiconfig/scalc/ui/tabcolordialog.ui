@@ -69,6 +69,7 @@
               <object class="GtkMenuButton" id="colorlistbox">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
