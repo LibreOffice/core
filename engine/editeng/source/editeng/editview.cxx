@@ -429,7 +429,19 @@ void EditView::setEditEngine(EditEngine& rEditEngine)
 
 void EditView::SetWindow(vcl::Window* pWindow)
 {
-    getImpl().mpOutputWindow = pWindow;
+    ImpEditView& rImpl = getImpl();
+    // The cursor is registered on the current output window via
+    // vcl::Window::SetCursor(). When the output window changes we must detach
+    // it first, otherwise the old window keeps a pointer to a cursor that is
+    // owned by (and destroyed together with) this view. ~ImpEditView only
+    // clears the cursor from the then-current mpOutputWindow, so switching
+    // windows before destruction would leave a dangling vcl::Window::mpCursor.
+    if (rImpl.mpOutputWindow.get() != pWindow && rImpl.mpOutputWindow && rImpl.mpCursor
+        && rImpl.mpOutputWindow->GetCursor() == rImpl.mpCursor.get())
+    {
+        rImpl.mpOutputWindow->SetCursor(nullptr);
+    }
+    rImpl.mpOutputWindow = pWindow;
     getImpEditEngine().GetSelEngine().Reset();
 }
 
