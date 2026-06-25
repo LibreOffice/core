@@ -1758,6 +1758,22 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testExpandedArrayCollapsesOnNewBlockerXLSX)
     CPPUNIT_ASSERT_EQUAL(SCROW(1), nRows);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testLambdaAndRelatedFunctions)
+{
+    // The document checks every LAMBDA and callable-function formula against
+    // its expected result. Cell B3 of the first sheet holds the combined
+    // outcome over all the per-function checks, and is true only when every
+    // check passed. Recalculate with the engine and confirm B3 is true.
+    createScDoc("xlsx/LambdaAndRelatedFunctions.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->CalcAll();
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+        "B3 reports that a formula in the document did not match its expected result", 1.0,
+        pDoc->GetValue(ScAddress(1, 2, 0)), 0.0);
+}
+
 ScFiltersTest::ScFiltersTest()
     : ScModelTestBase(u"sc/qa/unit/data"_ustr)
 {
