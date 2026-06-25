@@ -25,6 +25,7 @@ class Bridge;
 class WebView;
 class QDragEnterEvent;
 class QDragMoveEvent;
+class QDragLeaveEvent;
 class QDropEvent;
 class QUrl;
 
@@ -48,10 +49,15 @@ protected:
     // Intercept files dropped onto the window from the OS
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
+    void dragLeaveEvent(QDragLeaveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
 
 private:
     void connectScreenChanges();
+
+    // Show or hide the web-side hint shown while a file is dragged over the window.
+    void setDropFeedbackVisible(bool bVisible);
+
     void claimChildWindow(WebView* child, const QUrl& url);
 
     QMainWindow* _mainWindow;

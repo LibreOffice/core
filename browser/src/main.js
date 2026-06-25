@@ -12,7 +12,7 @@
 
 /* global globalThis UIManager */
 /* global errorMessages accessToken accessTokenTTL noAuthHeader accessHeader createOnlineModule */
-/* global app $ host idleTimeoutSecs outOfFocusTimeoutSecs _ LocaleService LayoutingService */
+/* global app $ host idleTimeoutSecs outOfFocusTimeoutSecs _ LocaleService LayoutingService DropFileOverlay */
 /* global ServerConnectionService createEmscriptenModule */
 /*eslint indent: [error, "tab", { "outerIIFEBody": 0 }]*/
 
@@ -88,6 +88,11 @@ if (!window.L.Browser.cypressTest)
 	map.tooltip = window.L.control.tooltip();
 
 app.idleHandler.map = map;
+
+// The native shell toggles these while a file is dragged over the window, so
+// they must exist in both the starter screen and an open document.
+app.showDropOverlay = function () { DropFileOverlay.show(); };
+app.hideDropOverlay = function () { DropFileOverlay.hide(); };
 
 if (window.coolParams.get('starterMode')) {
 	if (window.ThisIsTheQtApp && !window.qtBridgeReady) {

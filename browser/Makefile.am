@@ -689,6 +689,7 @@ COOL_JS_LST =\
 	src/control/backstage/InfoView.tsx \
 	src/control/backstage/ExportView.tsx \
 	src/control/Control.BackstageView.ts \
+	src/control/DropFileOverlay.tsx \
 	src/control/Control.ContextToolbar.ts \
 	src/control/Control.SidebarBase.ts \
 	src/control/Control.Sidebar.ts \
@@ -1447,6 +1448,7 @@ pot:
 		src/control/backstage/HomeView.tsx \
 		src/control/backstage/TemplatesView.tsx \
 		src/control/backstage/InfoView.tsx \
+		src/control/DropFileOverlay.tsx \
 		src/control/Control.Command.js \
 		src/control/Control.DocumentNameInput.js \
 		src/control/Control.DocumentRepair.js \

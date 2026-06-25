@@ -35,6 +35,7 @@
 #include <QDBusVariant>
 #include <QDir>
 #include <QDragEnterEvent>
+#include <QDragLeaveEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QFile>
@@ -357,6 +358,17 @@ bool hasLocalFiles(const QMimeData* mimeData)
 
 } // namespace
 
+void CODAWebEngineView::setDropFeedbackVisible(bool bVisible)
+{
+    // The toggles are registered by the page once its scripts have loaded, so
+    // guard against an early drag before they exist.
+    const char* method = bVisible ? "showDropOverlay" : "hideDropOverlay";
+    const QString script = QStringLiteral(
+                               "window.app && window.app.%1 && window.app.%1();")
+                               .arg(QLatin1String(method));
+    page()->runJavaScript(script);
+}
+
 void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
 {
     // Drags started inside the web content have a non-null source.
@@ -368,7 +380,10 @@ void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
     }
 
     if (hasLocalFiles(event->mimeData()))
+    {
         event->acceptProposedAction();
+        setDropFeedbackVisible(true);
+    }
 }
 
 void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
@@ -383,6 +398,12 @@ void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
         event->acceptProposedAction();
 }
 
+void CODAWebEngineView::dragLeaveEvent(QDragLeaveEvent* event)
+{
+    setDropFeedbackVisible(false);
+    event->accept();
+}
+
 void CODAWebEngineView::dropEvent(QDropEvent* event)
 {
     if (event->source())
@@ -390,6 +411,8 @@ void CODAWebEngineView::dropEvent(QDropEvent* event)
         QWebEngineView::dropEvent(event);
         return;
     }
+
+    setDropFeedbackVisible(false);
 
     const QStringList files = droppedLocalFiles(event->mimeData());
     if (!files.isEmpty())

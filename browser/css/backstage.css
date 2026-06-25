@@ -672,3 +672,46 @@
 	background-image: url('images/application-pdf.svg');
 }
 
+/* Hint shown while a file is dragged from the operating system over the
+ * window. It covers the whole window and only appears while a drag is in
+ * progress. Pointer events stay off so it never blocks the content beneath. */
+.coda-drop-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 1200;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(0, 0, 0, 0.45);
+	pointer-events: none;
+}
+
+.coda-drop-overlay.is-visible {
+	display: flex;
+}
+
+.coda-drop-overlay-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+	padding: 40px 56px;
+	border-radius: var(--border-radius);
+	background-color: var(--color-background-lighter);
+	color: var(--color-main-text);
+	border: 2px dashed var(--color-border);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.coda-drop-overlay-icon {
+	width: 64px;
+	height: 64px;
+	background: url('images/lc_file.svg') no-repeat center / contain;
+}
+
+.coda-drop-overlay-text {
+	font-family: var(--cool-font);
+	font-size: var(--header-font-size);
+	font-weight: 600;
+}
+
