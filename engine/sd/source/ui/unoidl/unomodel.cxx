@@ -2129,6 +2129,29 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL SdXImpressDocument::getImplementationId(
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
+sal_uInt64 SdXImpressDocument::getVectorPartVersion(sal_Int32 nPart) const
+{
+    auto aIterator = maVectorParts.find(nPart);
+    return aIterator != maVectorParts.end() ? aIterator->second.mnVersion : 0;
+}
+
+bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_uInt64 nObjectId,
+                                                    sal_uInt64 nSince) const
+{
+    auto aPartIterator = maVectorParts.find(nPart);
+    if (aPartIterator == maVectorParts.end())
+        return false;
+    const auto& rObjectVersions = aPartIterator->second.maObjectChangeVersions;
+    auto aObjectIterator = rObjectVersions.find(nObjectId);
+    return aObjectIterator != rObjectVersions.end() && aObjectIterator->second > nSince;
+}
+
+bool SdXImpressDocument::isVectorMasterChangedSince(sal_Int32 nPart, sal_uInt64 nSince) const
+{
+    auto aIterator = maVectorParts.find(nPart);
+    return aIterator != maVectorParts.end() && aIterator->second.mnMasterChangeVersion > nSince;
+}
+
 void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if( mpDoc )
@@ -2160,10 +2183,10 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         {
                             // An object on a slide master is drawn on every
                             // slide that uses that master, so count up the
-                            // version of each of those slides. The page
-                            // number of a master is its position in the
-                            // separate master-page list, so it does not
-                            // name a slide.
+                            // version of each of those slides and remember
+                            // it as a master change. The page number of a
+                            // master is its position in the separate
+                            // master-page list, so it does not name a slide.
                             const sal_uInt16 nPageCount
                                 = mpDoc->GetSdPageCount(PageKind::Standard);
                             for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
@@ -2173,14 +2196,35 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                                 if (pStandardPage && pStandardPage->TRG_HasMasterPage()
                                     && &pStandardPage->TRG_GetMasterPage() == pPage)
                                 {
-                                    ++maVectorPartVersions[nPage];
+                                    VectorPartState& rState = maVectorParts[nPage];
+                                    ++rState.mnVersion;
+                                    rState.mnMasterChangeVersion = rState.mnVersion;
                                 }
                             }
                         }
                         else if (pPage->GetPageNum() > 0)
                         {
                             const sal_Int32 nPart = (pPage->GetPageNum() - 1) / 2;
-                            ++maVectorPartVersions[nPart];
+                            VectorPartState& rState = maVectorParts[nPart];
+                            ++rState.mnVersion;
+
+                            // A change inside a group redraws the whole
+                            // top-level object, so record it under the
+                            // top-level ancestor's id, the id the primitive
+                            // tree carries.
+                            const SdrObject* pTopLevel = pObject;
+                            while (const SdrObject* pParent
+                                   = pTopLevel->getParentSdrObjectFromSdrObject())
+                                pTopLevel = pParent;
+                            const sal_uInt64 nObjectId = pTopLevel->GetUniqueID();
+
+                            // Removing an object inside a group changes the
+                            // group, which stays alive, so only a removed
+                            // top-level object drops its change record.
+                            if (eKind == SdrHintKind::ObjectRemoved && pTopLevel == pObject)
+                                rState.maObjectChangeVersions.erase(nObjectId);
+                            else
+                                rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
                         }
                     }
                 }
@@ -2228,12 +2272,18 @@ class VectorContentWriter
         = o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip);
 
 public:
-    VectorContentWriter(SdDrawDocument* pDocument, SdXImpressDocument* pModel, sal_Int32 nPart = -1)
+    VectorContentWriter(SdDrawDocument* pDocument, SdXImpressDocument* pModel, sal_Int32 nPart = -1,
+                        sal_Int64 nSinceVersion = -1)
         : mpDocument(pDocument)
         , mpModel(pModel)
         , mnPart(nPart)
+        , mnSinceVersion(nSinceVersion)
     {
     }
+
+    /// A non-negative since-version asks for a delta against that version
+    /// rather than the full slide.
+    bool isDelta() const { return mnSinceVersion >= 0; }
 
     void write(tools::JsonWriter& rWriter)
     {
@@ -2243,7 +2293,17 @@ public:
 
         writeHeader(rWriter, pPage);
         setupProcessor(rWriter, pPage);
-        writeMasterPage(rWriter, pPage);
+        if (isDelta())
+        {
+            writeObjectOrder(rWriter, pPage);
+            // The master page is not an object on the slide, so a delta
+            // carries its content whenever it changed after the client's
+            // version.
+            if (mpModel->isVectorMasterChangedSince(mnResolvedPage, sal_uInt64(mnSinceVersion)))
+                writeMasterPage(rWriter, pPage);
+        }
+        else
+            writeMasterPage(rWriter, pPage);
         writePageObjects(rWriter, pPage);
     }
 
@@ -2278,14 +2338,17 @@ private:
 
     void writeHeader(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        rWriter.put("type", "vectorprimitives");
+        rWriter.put("type", isDelta() ? "vectorprimitivesdelta" : "vectorprimitives");
         rWriter.put("part", sal_Int32(mnResolvedPage));
         rWriter.put("version", sal_Int64(mpModel->getVectorPartVersion(mnResolvedPage)));
 
-        rWriter.put("slideWidth",
-                    static_cast<sal_Int64>(pPage->GetWidth() * constTwipConversionFactor));
-        rWriter.put("slideHeight",
-                    static_cast<sal_Int64>(pPage->GetHeight() * constTwipConversionFactor));
+        // A delta reuses the slide size the client already has, so only a
+        // full response carries it.
+        if (!isDelta())
+        {
+            rWriter.put("slideWidth", sal_Int64(pPage->GetWidth() * constTwipConversionFactor));
+            rWriter.put("slideHeight", sal_Int64(pPage->GetHeight() * constTwipConversionFactor));
+        }
     }
 
     void setupProcessor(tools::JsonWriter& rWriter, SdPage* pPage)
@@ -2380,6 +2443,19 @@ private:
         }
     }
 
+    /// The order array lists every live object id on the page in z-order.
+    /// It is the authoritative object set and ordering for the part.
+    static void writeObjectOrder(tools::JsonWriter& rWriter, SdPage* pPage)
+    {
+        auto aOrderArray = rWriter.startArray("order");
+        for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+        {
+            SdrObject* pObject = pPage->GetObj(i);
+            if (pObject)
+                rWriter.putSimpleValue(sal_Int64(pObject->GetUniqueID()));
+        }
+    }
+
     void writePageObjects(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         auto aObjectsArray = rWriter.startArray("objects");
@@ -2390,13 +2466,22 @@ private:
             if (!pObject)
                 continue;
 
+            // A delta carries full content only for objects that changed
+            // after the client's version. The rest stay in the order list.
+            if (isDelta()
+                && !mpModel->isVectorObjectChangedSince(mnResolvedPage, pObject->GetUniqueID(),
+                                                        sal_uInt64(mnSinceVersion)))
+            {
+                continue;
+            }
             // Get view-independent primitives
             drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
             pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aPrimitives);
 
-            if (aPrimitives.empty())
-                continue;
-
+            // An object with an empty decomposition still gets an entry,
+            // with an empty primitive list. The object set then always
+            // matches the ids the order array carries, and content that
+            // became empty replaces what a client has cached.
             auto pObjectNode = rWriter.startStruct();
             rWriter.put("id", static_cast<sal_Int64>(pObject->GetUniqueID()));
             rWriter.put("name", pObject->GetName());
@@ -2410,6 +2495,7 @@ private:
     SdDrawDocument* mpDocument;
     SdXImpressDocument* mpModel;
     sal_Int32 mnPart;
+    sal_Int64 mnSinceVersion;
     sal_uInt16 mnResolvedPage = 0;
     std::optional<drawinglayer::Primitive2dJsonProcessor> maProcessor;
 };
@@ -2465,9 +2551,16 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         if (it != aMap.end())
             nPart = it->second.toInt32();
 
+        // A "since" version asks for a delta: only the objects that
+        // changed after that version, plus the current object order.
+        sal_Int64 nSinceVersion = -1;
+        auto aSinceIterator = aMap.find(u"since"_ustr);
+        if (aSinceIterator != aMap.end())
+            nSinceVersion = aSinceIterator->second.toInt64();
+
         if (mpDoc)
         {
-            VectorContentWriter aContentWriter(mpDoc, this, nPart);
+            VectorContentWriter aContentWriter(mpDoc, this, nPart, nSinceVersion);
             aContentWriter.write(rJsonWriter);
         }
     }

@@ -18,6 +18,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <svx/svdogrp.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdorect.hxx>
@@ -87,6 +88,23 @@ protected:
         pRect->SetMergedItem(XLineColorItem(OUString(), aStrokeColor));
 
         pPage->NbcInsertObject(pRect.get());
+    }
+
+    /// Add a group holding one filled rectangle to the first slide.
+    /// Returns the rectangle inside the group.
+    SdrObject* addGroupedRectangle(const tools::Rectangle& rRect, Color aFillColor)
+    {
+        SdrPage* pPage = page(1);
+        rtl::Reference<SdrRectObj> pRect = new SdrRectObj(pPage->getSdrModelFromSdrPage(), rRect);
+
+        pRect->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+        pRect->SetMergedItem(XFillColorItem(OUString(), aFillColor));
+        pRect->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
+
+        rtl::Reference<SdrObjGroup> pGroup = new SdrObjGroup(pPage->getSdrModelFromSdrPage());
+        pGroup->GetSubList()->NbcInsertObject(pRect.get());
+        pPage->NbcInsertObject(pGroup.get());
+        return pRect.get();
     }
 
     /// Add a page-object placeholder (slide embedded in slide) to the
@@ -168,15 +186,21 @@ protected:
         pPage->NbcInsertObject(pRect.get());
     }
 
-    /// Request for the first slide. The raw JSON is written as a reference.
-    tools::JsonPath getVectorPrimitives(std::u16string_view sName)
+    /// Request for the first slide. The raw JSON is written as a
+    /// reference. A non-negative nSince asks for a delta against that
+    /// version instead of the full slide.
+    tools::JsonPath getVectorPrimitives(std::u16string_view sName, sal_Int64 nSince = -1)
     {
         SdXImpressDocument* pDoc = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         CPPUNIT_ASSERT(pDoc);
 
         tools::JsonWriter aJsonWriter;
-        // Explicitly get only part 0 -> first slide
-        pDoc->getCommandValues(aJsonWriter, ".uno:VectorPrimitives?part=0");
+        // Explicitly get only part 0 -> first slide.
+        OString aCommand = ".uno:VectorPrimitives?part=0"_ostr;
+        if (nSince >= 0)
+            aCommand = aCommand + "&since=" + OString::number(nSince);
+        pDoc->getCommandValues(aJsonWriter,
+                               std::string_view(aCommand.getStr(), aCommand.getLength()));
         OString aResult = aJsonWriter.finishAndGetAsOString();
         CPPUNIT_ASSERT(!aResult.isEmpty());
 
@@ -279,6 +303,87 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnMasterChange)
         = getVectorPrimitives(u"testMasterVersion").getInt("/version").value_or(-1);
 
     CPPUNIT_ASSERT_EQUAL(nBefore + 1, nAfter);
+}
+
+// A delta since a version carries full content only for objects that
+// changed after it, while the order array still lists every object.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
+{
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
+
+    SdrObject* pFirst = page(1)->GetObj(0);
+    // Register both objects as changed so the part has a known version.
+    pFirst->BroadcastObjectChange();
+    page(1)->GetObj(1)->BroadcastObjectChange();
+
+    auto aFull = getVectorPrimitives(u"testDeltaFull");
+    assertJsonPath(aFull, "/type", "vectorprimitives");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
+
+    // Change only the first object after that version.
+    pFirst->BroadcastObjectChange();
+
+    auto aDelta = getVectorPrimitives(u"testDeltaSince", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    // The order still lists both objects, but only the changed one
+    // carries content.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pFirst->GetUniqueID()),
+                         aDelta.getInt("/objects/0/id").value_or(-1));
+}
+
+// A change to a shape inside a group must mark the top-level group as
+// changed, so a delta carries the group's new content.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberChange)
+{
+    createBlankDoc();
+    SdrObject* pMember = addGroupedRectangle(
+        tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4));
+    SdrObject* pGroup = page(1)->GetObj(0);
+    pGroup->BroadcastObjectChange();
+
+    const sal_Int64 nVersion
+        = getVectorPrimitives(u"testGroupFull").getInt("/version").value_or(-1);
+
+    // Change only the member inside the group after that version.
+    pMember->BroadcastObjectChange();
+
+    auto aDelta = getVectorPrimitives(u"testGroupDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pGroup->GetUniqueID()),
+                         aDelta.getInt("/objects/0/id").value_or(-1));
+}
+
+// A master-page change is not an object on the slide, so a delta whose
+// baseline predates it must carry the master page content.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedMasterPage)
+{
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    page(1)->GetObj(0)->BroadcastObjectChange();
+
+    auto aFull = getVectorPrimitives(u"testMasterDeltaFull");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+
+    // Put a rectangle on the master after that version and fire the
+    // object change the model would send on a real edit.
+    SdrPage& rMasterPage = page(1)->TRG_GetMasterPage();
+    rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
+        rMasterPage.getSdrModelFromSdrPage(), tools::Rectangle(Point(0, 0), Size(4000, 2000)));
+    rMasterPage.NbcInsertObject(pRect.get());
+    pRect->BroadcastObjectChange();
+
+    auto aDelta = getVectorPrimitives(u"testMasterDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    // The slide object itself is unchanged, so no object content, but
+    // the changed master page comes along.
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(SIZE_MAX));
+    assertJsonPathExists(aDelta, "/masterPage");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)

@@ -103,11 +103,16 @@ public:
     /// Content version of a vector-rendering part (0-based slide index),
     /// counted up each time an object on that part changes. A part that
     /// has not changed since the document was opened reports 0.
-    sal_uInt64 getVectorPartVersion(sal_Int32 nPart) const
-    {
-        auto aIterator = maVectorPartVersions.find(nPart);
-        return aIterator != maVectorPartVersions.end() ? aIterator->second : 0;
-    }
+    sal_uInt64 getVectorPartVersion(sal_Int32 nPart) const;
+
+    /// True when the object with the given unique id last changed on the
+    /// part at a version later than nSince.
+    bool isVectorObjectChangedSince(sal_Int32 nPart, sal_uInt64 nObjectId,
+                                    sal_uInt64 nSince) const;
+
+    /// True when the part's master page last changed at a version later
+    /// than nSince.
+    bool isVectorMasterChangedSince(sal_Int32 nPart, sal_uInt64 nSince) const;
 
 private:
     ::sd::DrawDocShell* mpDocShell;
@@ -116,8 +121,18 @@ private:
 
     std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
     std::unordered_map<sal_Int64, Graphic> maBitmapCache;
-    /// Per-part content version, keyed by 0-based slide index.
-    std::unordered_map<sal_Int32, sal_uInt64> maVectorPartVersions;
+
+    /// Content state of one vector-rendering part: its current version,
+    /// the version at which its master page last changed, and, per object
+    /// unique id, the version at which that object last changed.
+    struct VectorPartState
+    {
+        sal_uInt64 mnVersion = 0;
+        sal_uInt64 mnMasterChangeVersion = 0;
+        std::unordered_map<sal_uInt64, sal_uInt64> maObjectChangeVersions;
+    };
+    /// Vector content state, keyed by 0-based slide index.
+    std::unordered_map<sal_Int32, VectorPartState> maVectorParts;
 
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
