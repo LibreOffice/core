@@ -356,18 +356,38 @@ bool hasLocalFiles(const QMimeData* mimeData)
 
 void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
 {
+    // Drags started inside the web content have a non-null source.
+    // Let the base class handle those, only intercept genuine OS file drops.
+    if (event->source())
+    {
+        QWebEngineView::dragEnterEvent(event);
+        return;
+    }
+
     if (hasLocalFiles(event->mimeData()))
         event->acceptProposedAction();
 }
 
 void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
 {
+    if (event->source())
+    {
+        QWebEngineView::dragMoveEvent(event);
+        return;
+    }
+
     if (hasLocalFiles(event->mimeData()))
         event->acceptProposedAction();
 }
 
 void CODAWebEngineView::dropEvent(QDropEvent* event)
 {
+    if (event->source())
+    {
+        QWebEngineView::dropEvent(event);
+        return;
+    }
+
     const QStringList files = droppedLocalFiles(event->mimeData());
     if (!files.isEmpty())
     {
