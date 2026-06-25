@@ -413,6 +413,20 @@ class BackstageView extends window.L.Class {
 			console.warn('openRecentDocument: URI is missing');
 			return;
 		}
+
+		// If the clicked entry is the document already open in this session,
+		// close the backstage and return to it instead of reopening it. The
+		// whole path is compared, not just the file name, so two files that
+		// share a name in different folders stay distinct.
+		const currentDoc = this.map?.options?.doc;
+		if (
+			currentDoc &&
+			decodeURIComponent(uri) === decodeURIComponent(currentDoc)
+		) {
+			this.hide();
+			return;
+		}
+
 		window.postMobileMessage(`opendoc file=${encodeURIComponent(uri)}`);
 	}
 
