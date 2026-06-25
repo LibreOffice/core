@@ -8065,6 +8065,7 @@ sc/source/ui/miscdlgs/datafdlg.cxx
 sc/source/ui/miscdlgs/dataproviderdlg.cxx
 sc/source/ui/miscdlgs/datatableview.cxx
 sc/source/ui/miscdlgs/delcodlg.cxx
+sc/source/ui/miscdlgs/duplicaterecordsdlg.cxx
 sc/source/ui/miscdlgs/filldlg.cxx
 sc/source/ui/miscdlgs/groupdlg.cxx
 sc/source/ui/miscdlgs/highred.cxx
@@ -12914,6 +12915,7 @@ unotest/source/cpp/officeconnection.cxx
 unotest/source/cpp/toabsolutefileurl.cxx
 unotest/source/cpp/unobootstrapprotector/unobootstrapprotector.cxx
 unotest/source/cpp/unoexceptionprotector/unoexceptionprotector.cxx
+unotest/source/testuno/testuno.cxx
 unotools/qa/unit/testGetEnglishSearchName.cxx
 unotools/source/accessibility/accessiblerelationsethelper.cxx
 unotools/source/config/bootstrap.cxx
