@@ -344,8 +344,13 @@ QStringList droppedLocalFiles(const QMimeData* mimeData)
     return files;
 }
 
-bool hasLocalFiles(const QMimeData* mimeData)
+constexpr const char* PORTAL_FILETRANSFER_MIME = "application/vnd.portal.filetransfer";
+
+bool hasDroppableFiles(const QMimeData* mimeData)
 {
+    if (mimeData && mimeData->hasFormat(PORTAL_FILETRANSFER_MIME))
+        return true;
+
     if (!mimeData || !mimeData->hasUrls())
         return false;
 
@@ -355,6 +360,33 @@ bool hasLocalFiles(const QMimeData* mimeData)
             return true;
     }
     return false;
+}
+
+// Resolve a FileTransfer drag payload into sandbox-accessible paths.
+QStringList filesFromPortalTransfer(const QMimeData* mimeData)
+{
+    if (mimeData && mimeData->hasFormat(PORTAL_FILETRANSFER_MIME))
+    {
+        // The payload is the transfer key, it can contain a trailing NUL.
+        const QString key =
+            QString::fromUtf8(mimeData->data(PORTAL_FILETRANSFER_MIME)).remove(QChar('\0'));
+        if (!key.isEmpty())
+        {
+            QDBusMessage message = QDBusMessage::createMethodCall(
+                "org.freedesktop.portal.Documents", "/org/freedesktop/portal/documents",
+                "org.freedesktop.portal.FileTransfer", "RetrieveFiles");
+            message.setArguments(QVariantList{ key, QVariantMap{} });
+
+            QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(message);
+            if (reply.isValid())
+                return reply.value();
+            else
+                LOG_WRN("FileTransfer portal RetrieveFiles failed: "
+                        << reply.error().message().toStdString());
+        }
+    }
+
+    return {};
 }
 
 } // namespace
@@ -380,7 +412,7 @@ void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
         return;
     }
 
-    if (hasLocalFiles(event->mimeData()))
+    if (hasDroppableFiles(event->mimeData()))
     {
         event->acceptProposedAction();
         setDropFeedbackVisible(true);
@@ -395,7 +427,7 @@ void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
-    if (hasLocalFiles(event->mimeData()))
+    if (hasDroppableFiles(event->mimeData()))
         event->acceptProposedAction();
 }
 
@@ -415,7 +447,17 @@ void CODAWebEngineView::dropEvent(QDropEvent* event)
 
     setDropFeedbackVisible(false);
 
-    const QStringList files = droppedLocalFiles(event->mimeData());
+    const QMimeData* mimeData = event->mimeData();
+
+    const QStringList portalFiles = filesFromPortalTransfer(mimeData);
+    if (!portalFiles.isEmpty())
+    {
+        event->acceptProposedAction();
+        coda::openFiles(portalFiles);
+        return;
+    }
+
+    const QStringList files = droppedLocalFiles(mimeData);
     if (!files.isEmpty())
     {
         event->acceptProposedAction();
