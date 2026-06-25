@@ -737,13 +737,11 @@ class CanvasSectionContainer {
 			this.deferredDrawCallback();
 			return;
 		}
-		// A redraw requested from inside the current paint is dropped.
-		// Sections must reach their final state before their onDraw runs;
-		// asking for another frame from within a draw indicates the
-		// section has state to settle that should happen before paint.
 		if (this.inRedrawCallback) {
-			app.console.debug('CSC: inRedrawCallback active - skip');
-			return;
+			// Unusual - please verify the case
+			// We should already recalculate and process all data BEFORE we draw
+			// If inside drawing code we made change -> possibly it's good to review
+			app.console.debug('CSC: inRedrawCallback active already');
 		}
 		if (this.drawRequest === null)
 			this.drawRequest = requestAnimationFrame(this.redrawCallback.bind(this));
