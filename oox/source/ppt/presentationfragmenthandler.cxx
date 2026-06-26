@@ -869,7 +869,7 @@ void PresentationFragmentHandler::finalizeImport()
         SectionData aSection;
         aSection.maName = rAttribs.getStringDefaulted( XML_name );
         aSection.maId = rAttribs.getStringDefaulted( XML_id );
-        maSectionList.push_back( aSection );
+        maSectionList.push_back( std::move(aSection) );
         return this;
     }
     case P14_TOKEN( sldIdLst ):
