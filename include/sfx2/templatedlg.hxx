@@ -100,7 +100,6 @@ protected:
 
     SAL_DLLPRIVATE void OnTemplateImportCategory(std::u16string_view sCategory);
     //    static void OnTemplateLink ();
-    SAL_DLLPRIVATE void OnTemplateOpen();
     SAL_DLLPRIVATE void OnTemplateExport();
 
     SAL_DLLPRIVATE void OnTemplateState(const TemplateViewItem* pItem);

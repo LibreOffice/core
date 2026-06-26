@@ -554,7 +554,9 @@ void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(std::u16string_view rId
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, OkClickHdl, weld::Button&, void)
 {
-    OnTemplateOpen();
+    const TemplateViewItem* pItem = *maSelTemplates.begin();
+    OpenTemplateHdl(pItem->getPath());
+
     m_xDialog->response(RET_OK);
 }
 
@@ -1032,12 +1034,6 @@ void SfxTemplateManagerDlg::OnTemplateExport()
                                                   sText.replaceFirst("$1", OUString::number(nCount))));
         xBox->run();
     }
-}
-
-void SfxTemplateManagerDlg::OnTemplateOpen ()
-{
-    const TemplateViewItem* pItem = *maSelTemplates.begin();
-    OpenTemplateHdl(pItem->getPath());
 }
 
 void SfxTemplateManagerDlg::OnCategoryNew()
