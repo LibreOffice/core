@@ -29,6 +29,7 @@
 
 #include <QApplication>
 #include <QCloseEvent>
+#include <QEvent>
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QDBusMessage>
@@ -51,6 +52,7 @@
 #include <QScreen>
 #include <QShortcut>
 #include <QStandardPaths>
+#include <QTimer>
 #include <QUrl>
 #include <QVariant>
 #include <common/SettingsStorage.hpp>
@@ -310,6 +312,12 @@ private:
         assert(p != nullptr);
         delete p;
         QMainWindow::closeEvent(ev);
+    }
+
+    void changeEvent(QEvent * ev) override {
+        if (ev->type() == QEvent::ActivationChange && owner_)
+            owner_->onWindowActiveChanged(isActiveWindow());
+        QMainWindow::changeEvent(ev);
     }
 
     WebView * owner_;
@@ -756,6 +764,24 @@ WebView::~WebView() {
         delete _bridge;
         _bridge = nullptr;
     }
+}
+
+void WebView::onWindowActiveChanged(bool active)
+{
+    if (active || isStarterScreen() || !_bridge)
+        return;
+
+    // Backgrounded: after a debounce, drop this document's own off-screen tiles
+    // through its page's blur handler, unless its window is active again by then.
+    constexpr int trimDelayMs = 5000;
+    QTimer::singleShot(trimDelayMs, _webView.get(), [this]() {
+        if (!_bridge || _mainWindow->isActiveWindow())
+            return;
+        LOG_TRC("trimming off-screen tiles of backgrounded document appDocId="
+                << _document._appDocId);
+        _bridge->evalJS("if (window.app && window.app.map && window.app.map._docLayer) "
+                        "window.app.map._docLayer._onDocumentBlur();");
+    });
 }
 
 std::pair<int, int> coda::documentWindowSize(bool isWelcomeOrStarter)

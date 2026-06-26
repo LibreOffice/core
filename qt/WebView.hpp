@@ -153,6 +153,8 @@ public:
     /// Ask the page-JS to run _saveAndClose (saves if dirty, posts
     /// CLOSE_WINDOW on completion).  No-op if no bridge is attached.
     void saveAndClose();
+    // Called when this document's window gains or loses the active state.
+    void onWindowActiveChanged(bool active);
     bool isStarterScreen() const { return _document._fakeClientFd == -1 && _document._appDocId == 0; }
     QMainWindow* getMainWindow() const { return _mainWindow; }
 
