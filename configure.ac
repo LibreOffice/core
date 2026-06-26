@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.63])
 
-AC_INIT([coolwsd], [26.04.2.0], [https://github.com/CollaboraOnline/online/issues], [coolwsd], [https://www.collaboraoffice.org/])
+AC_INIT([coolwsd], [26.04.2.1], [https://github.com/CollaboraOnline/online/issues], [coolwsd], [https://www.collaboraoffice.org/])
 LT_INIT([shared, disable-static, dlopen])
 
 AM_INIT_AUTOMAKE([1.10 foreign subdir-objects tar-pax -Wno-portability])

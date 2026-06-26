@@ -18,7 +18,7 @@ dnl cspell:ignoreRegExp / -isystem /
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([Collabora Office],[26.04.2.0],[],[],[https://www.collaboraoffice.org/])
+AC_INIT([Collabora Office],[26.04.2.1],[],[],[https://www.collaboraoffice.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard

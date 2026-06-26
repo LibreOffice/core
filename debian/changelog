@@ -1,3 +1,9 @@
+coolwsd (26.04.2-1) unstable; urgency=medium
+
+  * https://github.com/CollaboraOnline/online.mirror/releases/tag/cp-26.04.2-1
+
+ -- Adria Figuera <adria.figuerapuig@collabora.com>  Wed, 26 Jun 2026 15:21:00 +0100
+
 coolwsd (26.04.0.1-1) unstable; urgency=medium
 
   * snapshot from main
