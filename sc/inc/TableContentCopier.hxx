@@ -37,7 +37,6 @@ public:
     void performCopy(const ScMarkData* pOnlyMarked, ScCloneFlags nCloneFlags,
                      SCTAB nPreviousSourceTabNo = -1);
     void updateReferencesAfterTabInsertion(RefUpdateInsertTabContext& rContext);
-    void recompileTargetFormulas();
 };
 
 } // namespace sc

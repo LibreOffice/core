@@ -96,12 +96,10 @@ void sc::TableContentCopier::updateReferencesAfterTabInsertion(
     mpSourceTab->UpdateCompile();
 }
 
-void sc::TableContentCopier::recompileTargetFormulas()
+sc::TableContentCopier::~TableContentCopier()
 {
     //  maybe already compiled in Clone, but used names need recompilation
     mpTargetTab->UpdateCompile(true);
 }
-
-sc::TableContentCopier::~TableContentCopier() { recompileTargetFormulas(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
