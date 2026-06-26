@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-06 15:01+0000\n"
-"Last-Translator: Adolfo Jayme Barrientos <fitojb@ubuntu.com>\n"
+"PO-Revision-Date: 2026-06-27 10:05+0000\n"
+"Last-Translator: Libre <6n0n1m0s@proton.me>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/es/>\n"
-"Language: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -63,7 +63,7 @@ msgstr "Estado"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Detalles"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -137,7 +137,7 @@ msgstr "Modificado"
 
 #: admin/admin.strings.js:42
 msgid "Uploaded"
-msgstr "Cargado"
+msgstr "Subido"
 
 #: admin/admin.strings.js:43
 msgid "WOPI host"
@@ -449,6 +449,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Algunos clientes conectados con el formato anterior de URL WebSocket, el "
+"cual está planificado para retirar. Compruebe que su proxy acepta el "
+"traspaso con formulario compacto."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -458,7 +461,7 @@ msgstr "Error"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Aprender más"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -559,7 +562,7 @@ msgstr "Mostrar regla"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Mostrar Marcadores de Formateo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -647,11 +650,11 @@ msgstr "Contenido"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Exhibir"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Mostrar Acotaciones"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -805,13 +808,12 @@ msgid ""
 "Upload reusable text snippets (.bau). To insert the text in your document, "
 "type the shortcut for an AutoText entry and press F3."
 msgstr ""
-"Cargue fragmentos de textos reutilizables (.bau). Para insertar el texto en "
-"su documento, teclee el atajo de una entrada de texto automático y presione "
-"F3."
+"Suba fragmentos de textos reutilizables (.bau). Para insertar el texto en su "
+"documento, teclee el atajo de una entrada de texto automático y presione F3."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:850
 msgid "Upload Autotext"
-msgstr "Cargar texto automático"
+msgstr "Subir texto automático"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:856
 msgid "Custom dictionaries"
@@ -827,7 +829,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:864
 msgid "Upload Wordbook"
-msgstr "Cargar diccionario"
+msgstr "Subir diccionario"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:870
 msgid "Document themes"
@@ -871,14 +873,17 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Cuando esté encendido, el escritor ajusta el documento para el ancho de la "
+"vista del puerto al abrir. Cuando está apagado, el documento se abre en el "
+"nivel de Zum predeterminado establecido debajo."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Ningún ajuste disponible para {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
-msgstr "Seleccione una pestaña para ver configuraciones."
+msgstr "Seleccione una pestaña para ver ajustes."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1376
 #: admin/src/integrator/Xcu.ts:409
@@ -913,7 +918,7 @@ msgstr "Vista compacta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1910
 msgid "Something went wrong while uploading the file. Please try again."
-msgstr "Ocurrió un problema al cargar el archivo. Inténtelo de nuevo."
+msgstr "Ocurrió un problema al subir el archivo. Inténtelo de nuevo."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1986
 #: src/canvas/sections/CommentSection.ts:1545
@@ -947,11 +952,11 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2039
 msgid "Zotero account API settings"
-msgstr "configuración de API de la cuenta de Zotero"
+msgstr "Ajustes de API de la cuenta de Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Ajustes Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -968,7 +973,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Ajuste de firma documental"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1075,12 +1080,12 @@ msgstr "Configuración de los documentos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3218
 msgid "Upload Xcu"
-msgstr "Cargar Xcu"
+msgstr "Subir Xcu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Introduzca {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1088,15 +1093,15 @@ msgstr "Restablecer"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Restablecer a predeterminado {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "¿Seguro que desea restablecer {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Guardar {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -1133,7 +1138,7 @@ msgstr "El formato del diccionario no es válido. Compruebe el archivo."
 
 #: admin/src/integrator/WordBook.ts:486
 msgid "Something went wrong while uploading dictionary file"
-msgstr "Ocurrió un problema al cargar el archivo de diccionario"
+msgstr "Ocurrió un problema al subir el archivo de diccionario"
 
 #: admin/src/integrator/Xcu.ts:167 admin/src/integrator/Xcu.ts:179
 msgid "Something went wrong while loading Document settings."
@@ -1482,7 +1487,7 @@ msgstr "Vista de los widget"
 
 #: src/control/Control.AboutDialog.ts:213
 msgid "\"Slow Proxy\""
-msgstr "«“Proxy” lento»"
+msgstr "«Proxy lento»"
 
 #: src/control/Control.AboutDialog.ts:220
 msgid "Time zone:"
@@ -1530,7 +1535,7 @@ msgstr "Formal"
 
 #: src/control/Control.AIChatSidebar.ts:120
 msgid "Short"
-msgstr "Corta"
+msgstr "Breve"
 
 #: src/control/Control.AIChatSidebar.ts:121
 msgid "Friendly"
@@ -1698,17 +1703,17 @@ msgstr "Emoyificar"
 #: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:153
 msgid "On"
-msgstr "Activado"
+msgstr "Encendido"
 
 #: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:155
 #: src/control/jsdialog/Definitions.Menu.ts:1824
 msgid "Off"
-msgstr "Desactivado"
+msgstr "Apagado"
 
 #: src/control/Control.AIChatSidebar.ts:1058
 msgid "Toggle emojify"
-msgstr "Activar/desactivar emoyificación"
+msgstr "Activar/desactivar emotificación"
 
 #: src/control/Control.AIChatSidebar.ts:1219
 msgid "Use icon"
@@ -1774,12 +1779,12 @@ msgstr "Conservar el tono de voz"
 #: src/control/Control.AIChatSidebar.ts:1335
 #: src/control/jsdialog/Widget.EmojiPicker.ts:410
 msgid "Search emojis"
-msgstr "Buscar emoyis"
+msgstr "Buscar emoticonos"
 
 #: src/control/Control.AIChatSidebar.ts:1336
 #: src/control/jsdialog/Widget.EmojiPicker.ts:401
 msgid "Choose an emoji"
-msgstr "Elija un emoyi"
+msgstr "Elija un emoticono"
 
 #: src/control/Control.AIChatSidebar.ts:1360
 msgid "Delete tone confirmation"
@@ -1997,7 +2002,7 @@ msgstr "error."
 
 #: src/control/Control.AIChatSidebar.ts:2786
 msgid "Explain the root cause and suggest how to fix it."
-msgstr "Explique la causa principal y sugiera cómo solucionarla."
+msgstr "Explique la causa principal y sugiera como solucionarla."
 
 #: src/control/Control.AIChatSidebar.ts:2790
 msgid ""
@@ -2106,7 +2111,7 @@ msgid ""
 "(cell://B2)."
 msgstr ""
 "Cuando haga referencia a celdas concretas, configura cada celda como un "
-"enlace en el que se pueda hacer clic: [B2](cell://B2)."
+"enlace en el que se pueda pulsar: [B2](cell://B2)."
 
 #: src/control/Control.AIChatSidebar.ts:3013
 msgid "Sanity check the following spreadsheet data."
@@ -2191,7 +2196,7 @@ msgstr "No volver a mostrar"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Ocurrió un error {0} mientras procesaba el comando {1}."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -2499,7 +2504,7 @@ msgstr "El contenido se copió en el portapapeles"
 
 #: src/control/Control.DownloadProgress.js:302
 msgid "Download failed"
-msgstr "Falló la descarga"
+msgstr "Descarga incorrecta"
 
 #: src/control/Control.ESignature.ts:127
 msgid "Andorra"
@@ -2885,11 +2890,11 @@ msgstr "Tamaño fijo"
 
 #: src/control/Control.JSDialogBuilder.js:1152
 msgid "From"
-msgstr "De"
+msgstr "Remite"
 
 #: src/control/Control.JSDialogBuilder.js:1155
 msgid "To"
-msgstr "A"
+msgstr "Destino"
 
 #: src/control/Control.JSDialogBuilder.js:1158
 #: src/control/jsdialog/Widget.ColorPicker.ts:226
@@ -3100,7 +3105,7 @@ msgstr "Reparar"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Encontrar"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -3417,21 +3422,21 @@ msgstr "Dibujo ODF (.odg)"
 #: src/control/Control.NotebookbarBuilder.js:421
 #: src/control/Control.NotebookbarBuilder.js:554
 msgid "ODF spreadsheet (.ods)"
-msgstr "Libro ODF (.ods)"
+msgstr "Hoja de cálculo ODF (.ods)"
 
 #: src/control/Control.Menubar.ts:812 src/control/Control.Menubar.ts:824
 #: src/control/Control.Menubar.ts:1322
 #: src/control/Control.NotebookbarBuilder.js:429
 #: src/control/Control.NotebookbarBuilder.js:562
 msgid "Excel 2003 Spreadsheet (.xls)"
-msgstr "Libro de Excel 2003 (.xls)"
+msgstr "Hoja de cálculo Excel 2003 (.xls)"
 
 #: src/control/Control.Menubar.ts:813 src/control/Control.Menubar.ts:825
 #: src/control/Control.Menubar.ts:1323
 #: src/control/Control.NotebookbarBuilder.js:425
 #: src/control/Control.NotebookbarBuilder.js:558
 msgid "Excel Spreadsheet (.xlsx)"
-msgstr "Libro de Excel (.xlsx)"
+msgstr "Hoja de cálculo Excel (.xlsx)"
 
 #: src/control/Control.Menubar.ts:826
 msgid "CSV file (.csv)"
@@ -3863,7 +3868,7 @@ msgstr "Imagen"
 #: src/control/Control.NotebookbarImpress.js:143
 #: src/control/Control.NotebookbarWriter.js:103
 msgid "Chart"
-msgstr "Gráfico"
+msgstr "Diagrama"
 
 #: src/control/Control.NotebookbarCalc.js:99
 #: src/control/Control.NotebookbarDraw.js:122
@@ -4012,11 +4017,11 @@ msgstr "Predeterminado"
 
 #: src/control/Control.NotebookbarCalc.js:1010
 msgid "Heading 1"
-msgstr "Título 1"
+msgstr "Cabecera 1"
 
 #: src/control/Control.NotebookbarCalc.js:1017
 msgid "Heading 2"
-msgstr "Título 2"
+msgstr "Cabecera 2"
 
 #: src/control/Control.NotebookbarCalc.js:1030
 msgid "Good"
@@ -4207,6 +4212,8 @@ msgstr "Insertar una tabla con estilo"
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
 msgstr ""
+"Seleccione un intervalo de celdas editables para insertar una tabla con "
+"estilo"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4317,7 +4324,7 @@ msgstr "Temas"
 #: src/control/Control.NotebookbarWriter.js:3074
 #: src/control/Control.NotebookbarWriter.js:3404
 msgid "Wrap"
-msgstr "Ajustar"
+msgstr "Cobertura"
 
 #: src/control/Control.NotebookbarCalc.js:3211
 #: src/control/Control.NotebookbarImpress.js:2848
@@ -4491,7 +4498,7 @@ msgstr "Seleccionar"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Distribuir"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4529,7 +4536,7 @@ msgstr "Estilos"
 
 #: src/control/Control.NotebookbarWriter.js:1119
 msgid "Lists/Bullets"
-msgstr "Listas/bolos"
+msgstr "Listas/Viñetas"
 
 #: src/control/Control.NotebookbarWriter.js:1406
 msgid "Header & Footer"
@@ -4612,7 +4619,7 @@ msgstr "Quitar sección"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Quitar sección y diapositiva"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4632,7 +4639,7 @@ msgstr "Expandir todas las secciones"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "¿Eliminar sección «%1» y su %2 diapositiva(s)?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4685,10 +4692,13 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Conectado con el formulario anterior de URL WebSocket, el cual está "
+"planificado para retirada. Compruebe que su proxy apruebe el formulario a "
+"través del compacto."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Conectado con el formulario compacto de WebSocket"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4802,6 +4812,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Ajuste de la página para el ancho de ventana. Zum Inteligente en apertura "
+"puede ser conmutado en Opciones debajo de la lengüeta Archivo."
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4923,23 +4935,23 @@ msgstr "Mostrar menú"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Copia detalles de error"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Muestra detalles técnicos"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Detalles técnicos:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Detalles de error copiados al portapapeles"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Incorrecto al copiar detalles de error"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5092,7 +5104,7 @@ msgstr "No se pudieron cargar los estilos"
 
 #: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1614
 msgid "Title"
-msgstr "Título general"
+msgstr "Título"
 
 #: src/control/Control.Zotero.js:1153 src/control/Control.Zotero.js:1614
 msgid "Creator(s)"
@@ -5155,17 +5167,18 @@ msgstr ""
 "bibliografía de este documento."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Primera diapositiva"
+msgstr "Primera línea"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Antes"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Pulsación doble para insertar una lengüeta detener. Pulsación secundaria "
+"para más opciones."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5278,7 +5291,7 @@ msgstr "Solo título"
 
 #: src/control/Styles.js:23 src/control/jsdialog/Definitions.Menu.ts:2226
 msgid "Blank Slide"
-msgstr "Diapositiva vacía"
+msgstr "Diapositiva en blanco"
 
 #: src/control/Styles.js:24 src/control/jsdialog/Definitions.Menu.ts:2231
 msgid "Centered Text"
@@ -5326,19 +5339,19 @@ msgstr "Título, Texto Vertical, Imágenes Prediseñadas"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Selección estandarizada"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Selección extendida"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Añadir selección"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Bloquear selección"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5414,19 +5427,19 @@ msgstr "Estrecho"
 
 #: src/control/jsdialog/Definitions.Menu.ts:176
 msgid "Min"
-msgstr "Mínimo"
+msgstr "Mín"
 
 #: src/control/jsdialog/Definitions.Menu.ts:177
 msgid "Max"
-msgstr "Máximo"
+msgstr "Máx"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1455
 msgid "Edit Single Sparkline"
-msgstr "Editar minigráfico único"
+msgstr "Editar mini‐gráfico único"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1466
 msgid "Delete Single Sparkline"
-msgstr "Eliminar minigráfico único"
+msgstr "Eliminar mini‐gráfico único"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1504
 msgid "Portrait"
@@ -6007,7 +6020,7 @@ msgstr "Se produjo un error de conexión con el documento. Inténtelo de nuevo."
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "La conexión al documento ha sido perdida."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6075,7 +6088,7 @@ msgstr "Servidor equivocado, reconectando..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Versión sin mantenimiento."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6163,7 +6176,7 @@ msgstr "Colores del documento"
 
 #: src/docstatefunctions.js:255
 msgid ", cluster configuration error: mis-matching serverid"
-msgstr "Error de configuración del cluster: error en el id del servidor"
+msgstr ", error de configuración del cluster: el id del servidor no coincide"
 
 #: src/dom/NotebookbarAccessibility.js:257
 msgid "{0} tab selected"
@@ -6171,7 +6184,7 @@ msgstr "{0} pestaña seleccionada"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "No queda espacio en el disco."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6364,7 +6377,7 @@ msgstr "No se puede guardar el documento."
 
 #: src/errormessages.js:49
 msgid "Document cannot be renamed."
-msgstr "No se puede cambiar el nombre del documento."
+msgstr "No se puede renombrar el documento."
 
 #: src/errormessages.js:53
 msgid ""
@@ -6406,7 +6419,7 @@ msgstr "No se puede guardar el documento; compruebe sus permisos."
 
 #: src/errormessages.js:58
 msgid "Document cannot be renamed, please check your permissions."
-msgstr "No se puede cambiar el nombre del documento; compruebe sus permisos."
+msgstr "No se puede renombrar el documento; compruebe sus permisos."
 
 #: src/errormessages.js:59
 msgid "Document cannot be exported. Please try again."
@@ -6414,11 +6427,11 @@ msgstr "No se puede exportar el documento. Inténtelo de nuevo."
 
 #: src/errormessages.js:64
 msgid "Uploading file to server failed, file not found."
-msgstr "No se pudo cargar el archivo al servidor; no se encontró."
+msgstr "No se pudo subir el archivo al servidor; archivo no encontrado."
 
 #: src/errormessages.js:65
 msgid "Uploading file to server failed, the file is too large."
-msgstr "No se pudo cargar el archivo al servidor; es demasiado grande."
+msgstr "No se pudo subir el archivo al servidor; es demasiado grande."
 
 #: src/layer/marker/A11yTextInput.js:235
 msgid "Out of table"
@@ -6537,7 +6550,7 @@ msgstr "No se pudo descargar el portapapeles; vuelva a copiar"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Incorrecto al subir el portapapeles"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6605,11 +6618,9 @@ msgid "Please send us your feedback"
 msgstr "Sírvase enviarnos sus observaciones"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
-"El archivo del tipo {0} no puede cargarse en el servidor ya que no tiene "
-"nombre"
+"El archivo del tipo {0} no puede insertarse ya que el archivo no tiene nombre"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6617,29 +6628,27 @@ msgid ""
 "The file of type: {0} cannot be uploaded to server since the file has no "
 "name"
 msgstr ""
-"El archivo del tipo {0} no puede cargarse en el servidor ya que no tiene "
-"nombre"
+"El archivo del tipo {0} no puede subirse al servidor ya que no tiene nombre"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
 msgstr ""
-"El archivo del tipo {0} no puede cargarse en el servidor ya que está vacío"
+"El archivo del tipo {0} no puede insertarse ya que el archivo está vacío"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
 msgid ""
 "The file of type: {0} cannot be uploaded to server since the file is empty"
 msgstr ""
-"El archivo del tipo {0} no puede cargarse en el servidor ya que está vacío"
+"El archivo del tipo {0} no puede subirse al el servidor ya que está vacío"
 
 #: src/map/handler/Map.FileInserter.js:233
 msgid "Uploading..."
-msgstr "Cargando…"
+msgstr "Subiendo…"
 
 #: src/map/handler/Map.FileInserter.js:258
 msgid "Uploading file to server failed with status: {0}"
-msgstr "Falló la carga del archivo en el servidor con el estado: {0}"
+msgstr "Falló la subida del archivo en el servidor con el estado: {0}"
 
 #: src/map/handler/Map.FileInserter.js:285
 msgid "Failed to read the selected file."
@@ -6832,9 +6841,8 @@ msgid "Present to all"
 msgstr "Presentar para todos"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Editar"
+msgstr "Salir"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
