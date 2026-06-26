@@ -278,7 +278,7 @@ void ScDBFunc::ToggleAutoFilter()
     ScViewData& rViewData = GetViewData();
     ScDocShell* pDocSh = rViewData.GetDocShell();
 
-    ScQueryParam    aParam;
+    auto xParam = std::make_shared<ScQueryParam>();
     ScDocument&     rDoc    = rViewData.GetDocument();
     ScDBData*       pDBData = GetDBData(false, SC_DB_AUTOFILTER, ScGetDBSelection::RowDown);
 
@@ -286,10 +286,10 @@ void ScDBFunc::ToggleAutoFilter()
         return;
 
     pDBData->SetByRow( true );              //! undo, retrieve beforehand ??
-    pDBData->GetQueryParam( aParam );
+    pDBData->GetQueryParam( *xParam );
 
     SCCOL  nCol;
-    SCROW  nRow = aParam.nRow1;
+    SCROW  nRow = xParam->nRow1;
     SCTAB  nTab = rViewData.CurrentTabForData();
     ScMF   nFlag;
     bool   bHasAuto = true;
@@ -297,7 +297,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     //!     instead retrieve from DB-range?
 
-    for (nCol=aParam.nCol1; nCol<=aParam.nCol2 && bHasAuto; nCol++)
+    for (nCol=xParam->nCol1; nCol<=xParam->nCol2 && bHasAuto; nCol++)
     {
         nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ).GetValue();
 
@@ -309,11 +309,11 @@ void ScDBFunc::ToggleAutoFilter()
     {
         //  hide filter buttons
 
-        for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
+        for (nCol=xParam->nCol1; nCol<=xParam->nCol2; nCol++)
         {
             nFlag = rDoc.GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ).GetValue();
             rDoc.ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~ScMF::Auto ) );
-            aParam.RemoveAllEntriesByField(nCol);
+            xParam->RemoveAllEntriesByField(nCol);
         }
 
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
@@ -328,8 +328,8 @@ void ScDBFunc::ToggleAutoFilter()
 
         pDBData->SetAutoFilter(false);
 
-        aParam.bDuplicate = true;
-        Query( aParam, nullptr, true );
+        xParam->bDuplicate = true;
+        Query( *xParam, nullptr, true );
 
         pDocSh->GetUndoManager()->LeaveListAction();
 
@@ -340,8 +340,8 @@ void ScDBFunc::ToggleAutoFilter()
     }
     else                                    // show filter buttons
     {
-        if ( !rDoc.IsBlockEmpty( aParam.nCol1, aParam.nRow1,
-                                 aParam.nCol2, aParam.nRow2, nTab ) )
+        if ( !rDoc.IsBlockEmpty( xParam->nCol1, xParam->nRow1,
+                                 xParam->nCol2, xParam->nRow2, nTab ) )
         {
             if (!bHeader)
             {
@@ -353,17 +353,17 @@ void ScDBFunc::ToggleAutoFilter()
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
                 xBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
-                xBox->runAsync(xBox, [pDocSh, &rViewData, pDBData, nRow, nTab, aParam] (sal_Int32 nResult) {
+                xBox->runAsync(xBox, [pDocSh, &rViewData, pDBData, nRow, nTab, xParam=std::move(xParam)] (sal_Int32 nResult) {
                     if (nResult == RET_YES)
                     {
                         pDBData->SetHeader( true );     //! Undo ??
                     }
 
-                    ApplyAutoFilter(*pDocSh, rViewData, pDBData, nRow, nTab, aParam);
+                    ApplyAutoFilter(*pDocSh, rViewData, pDBData, nRow, nTab, *xParam);
                 });
             }
             else
-                ApplyAutoFilter(*pDocSh, rViewData, pDBData, nRow, nTab, aParam);
+                ApplyAutoFilter(*pDocSh, rViewData, pDBData, nRow, nTab, *xParam);
         }
         else
         {
