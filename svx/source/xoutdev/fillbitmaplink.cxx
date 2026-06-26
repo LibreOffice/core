@@ -54,7 +54,7 @@ public:
 
         OUString aURL;
         sfx2::LinkManager::GetDisplayNames(this, nullptr, &aURL);
-        GraphicObject aGrfObj(aGrf);
+        GraphicObject aGrfObj(std::move(aGrf));
 
         // Replace the item in all attribute sets via pool surrogates
         m_rPool.iterateItemSurrogates(
