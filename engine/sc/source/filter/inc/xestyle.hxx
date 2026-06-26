@@ -348,12 +348,21 @@ struct XclExpCellBorder : public XclCellBorder
     sal_uInt32 mnTopColorId;    /// Color ID for top line.
     sal_uInt32 mnBottomColorId; /// Color ID for bottom line.
     sal_uInt32 mnDiagColorId;   /// Color ID for diagonal line(s).
+    sal_uInt32 mnVertColorId;   /// Color ID for inner vertical line.
+    sal_uInt32 mnHorzColorId;   /// Color ID for inner horizontal line.
 
     model::ComplexColor maComplexColorLeft;
     model::ComplexColor maComplexColorRight;
     model::ComplexColor maComplexColorTop;
     model::ComplexColor maComplexColorBottom;
     model::ComplexColor maComplexColorDiagonal;
+    model::ComplexColor maComplexColorVertical;     /// Complex color for inner vertical line.
+    model::ComplexColor maComplexColorHorizontal;   /// Complex color for inner horizontal line.
+
+    sal_uInt16 mnVertColor;     /// Palette index for inner vertical line.
+    sal_uInt16 mnHorzColor;     /// Palette index for inner horizontal line.
+    sal_uInt8  mnVertLine;      /// Style of inner vertical line.
+    sal_uInt8  mnHorzLine;      /// Style of inner horizontal line.
 
     explicit XclExpCellBorder();
 

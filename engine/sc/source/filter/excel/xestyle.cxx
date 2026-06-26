@@ -1715,7 +1715,13 @@ XclExpCellBorder::XclExpCellBorder() :
     mnRightColorId(  XclExpPalette::GetColorIdFromIndex( mnRightColor ) ),
     mnTopColorId(    XclExpPalette::GetColorIdFromIndex( mnTopColor ) ),
     mnBottomColorId( XclExpPalette::GetColorIdFromIndex( mnBottomColor ) ),
-    mnDiagColorId(   XclExpPalette::GetColorIdFromIndex( mnDiagColor ) )
+    mnDiagColorId(   XclExpPalette::GetColorIdFromIndex( mnDiagColor ) ),
+    mnVertColorId(   XclExpPalette::GetColorIdFromIndex( 0 ) ),
+    mnHorzColorId(   XclExpPalette::GetColorIdFromIndex( 0 ) ),
+    mnVertColor( 0 ),
+    mnHorzColor( 0 ),
+    mnVertLine( EXC_LINE_NONE ),
+    mnHorzLine( EXC_LINE_NONE )
 {
 }
 
@@ -1756,6 +1762,13 @@ bool XclExpCellBorder::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_BORDER_TLBR, bStyle ) ||
                      ScfTools::CheckItem( rItemSet, ATTR_BORDER_BLTR, bStyle );
 
+            // Inner borders (vertical/horizontal)
+            const SvxBoxInfoItem& rBoxInfoItem = rItemSet.Get( ATTR_BORDER_INNER );
+            lclGetBorderLine( mnVertLine, mnVertColorId, maComplexColorVertical, rBoxInfoItem.GetVert(), rPalette, eBiff );
+            lclGetBorderLine( mnHorzLine, mnHorzColorId, maComplexColorHorizontal, rBoxInfoItem.GetHori(), rPalette, eBiff );
+
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_BORDER_INNER, bStyle );
+
             [[fallthrough]];
         }
 
@@ -1788,6 +1801,8 @@ void XclExpCellBorder::SetFinalColors( const XclExpPalette& rPalette )
     mnTopColor    = rPalette.GetColorIndex( mnTopColorId );
     mnBottomColor = rPalette.GetColorIndex( mnBottomColorId );
     mnDiagColor   = rPalette.GetColorIndex( mnDiagColorId );
+    mnVertColor   = rPalette.GetColorIndex( mnVertColorId );
+    mnHorzColor   = rPalette.GetColorIndex( mnHorzColorId );
 }
 
 void XclExpCellBorder::FillToXF5( sal_uInt32& rnBorder, sal_uInt32& rnArea ) const
@@ -1892,7 +1907,13 @@ void XclExpCellBorder::SaveXml(XclExpXmlStream& rStream) const
     lcl_WriteBorder(rStream, XML_bottom, mnBottomLine, rPalette.GetColor(mnBottomColor), maComplexColorBottom);
     lcl_WriteBorder(rStream, XML_diagonal, mnDiagLine, rPalette.GetColor(mnDiagColor), maComplexColorDiagonal);
 
-    // OOXTODO: XML_vertical, XML_horizontal
+    // Inner borders (vertical/horizontal). Only emitted when actually set, so
+    // ordinary cell borders keep their previous output.
+    if (mnVertLine != EXC_LINE_NONE)
+        lcl_WriteBorder(rStream, XML_vertical, mnVertLine, rPalette.GetColor(mnVertColor), maComplexColorVertical);
+    if (mnHorzLine != EXC_LINE_NONE)
+        lcl_WriteBorder(rStream, XML_horizontal, mnHorzLine, rPalette.GetColor(mnHorzColor), maComplexColorHorizontal);
+
     rStyleSheet->endElement( XML_border );
 }
 

@@ -834,6 +834,40 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleCustomExportXLSX)
     assertXPath(pStyles, sFirstRowStripeDxf + "/x:fill/x:patternFill/x:bgColor", "theme", u"9");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleInnerBordersExportXLSX)
+{
+    createScDoc("xlsx/tableStyleInnerBorders.xlsx");
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pStyles);
+
+    assertXPath(pStyles, "/x:styleSheet/x:tableStyles/x:tableStyle", "name", u"Customtablestyle");
+
+    // Locate the wholeTable element's DXF (the DXF order may change on roundtrip).
+    sal_Int32 nWholeTableDxfId
+        = getXPath(
+              pStyles,
+              "/x:styleSheet/x:tableStyles/x:tableStyle/x:tableStyleElement[@type='wholeTable']",
+              "dxfId")
+              .toInt32();
+    CPPUNIT_ASSERT(nWholeTableDxfId >= 0);
+
+    OString sBorder
+        = "/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nWholeTableDxfId + 1) + "]/x:border";
+
+    // The outer borders already exported correctly before the fix.
+    assertXPath(pStyles, sBorder + "/x:left", "style", u"thin");
+    assertXPath(pStyles, sBorder + "/x:top", "style", u"thin");
+
+    // The inner vertical/horizontal borders must now be exported too (with their
+    // theme color), instead of being silently lost.
+    assertXPath(pStyles, sBorder + "/x:vertical", "style", u"thin");
+    assertXPath(pStyles, sBorder + "/x:vertical/x:color", "theme", u"8");
+    assertXPath(pStyles, sBorder + "/x:horizontal", "style", u"thin");
+    assertXPath(pStyles, sBorder + "/x:horizontal/x:color", "theme", u"8");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleCustomRoundtripXLSX)
 {
     // Open xlsx with custom table style, save and reload, verify in-memory state
