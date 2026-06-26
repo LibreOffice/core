@@ -381,6 +381,25 @@ void applyArrayFormulas(
         if (pArray)
         {
             lcl_stripRedundantParentheses(*pArray, {ocSingleValue});
+
+            // A single-cell t="array" that starts with @ imports as
+            // a plain ScFormulaCell, not a CSE array. The @ collapses
+            // the operand to a scalar, so the cell reads back as
+            // =@(expr) instead of {=@(expr)}.
+            const sal_uInt16 nParseLength = pArray->GetLen();
+            const formula::FormulaToken* pFirst = nParseLength ? pArray->GetArray()[0] : nullptr;
+            const bool bSingleCellRange
+                = rAddressItem.maRange.aStart == rAddressItem.maRange.aEnd;
+            if (bSingleCellRange && pFirst
+                && pFirst->GetOpCode() == ocSingleValue)
+            {
+                aComp.CompileTokenArray();
+                ScFormulaCell* pCell = new ScFormulaCell(rDoc.getDoc(), aPos,
+                                                        std::move(pArray));
+                rDoc.setFormulaCell(aPos, pCell);
+                continue;
+            }
+
             rDoc.setMatrixCells(rAddressItem.maRange, *pArray,
                                 formula::FormulaGrammar::GRAM_OOXML,
                                 rAddressItem.mbCachedSpill);
