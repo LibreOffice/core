@@ -618,6 +618,7 @@ EXTRA_DIST = \
              etc/nginx/coolwsd.conf \
              favicon.ico \
              scripts/create-sbom.py \
+             scripts/genlangmaps.py \
              scripts/refresh-git-hooks \
              scripts/unocommands.py \
              scripts/unoshortcuts.py
