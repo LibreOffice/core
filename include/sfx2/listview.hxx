@@ -16,11 +16,6 @@ namespace weld
 class TreeIter;
 }
 
-enum class TemplateViewMode
-{
-    ListView,
-    ThumbnailView
-};
 struct ListViewItem;
 
 class ListView

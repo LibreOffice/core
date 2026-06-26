@@ -11,6 +11,12 @@
 #include <sfx2/templatelocalview.hxx>
 #include <sfx2/listview.hxx>
 
+enum class TemplateViewMode
+{
+    ListView,
+    ThumbnailView
+};
+
 class TemplateDlgLocalView final : public TemplateLocalView, public ListView
 {
     friend class TemplateDlgLocalViewUIObject;
