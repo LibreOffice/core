@@ -252,7 +252,7 @@ SfxCommonTemplateDialog_Impl::StyleFiltersToolbarPopup::StyleFiltersToolbarPopup
 
     const SfxStyleFamilyItem* pStyleFamilyItem = rStyleList.GetFamilyItem();
 
-    auto rFamilySelectedFiltersSet
+    auto& rFamilySelectedFiltersSet
         = rStyleList.m_aFamilySelectedFiltersSet[pStyleFamilyItem->GetFamily()];
 
     const size_t nFamilySelectedFiltersSetSize = rFamilySelectedFiltersSet.size();
