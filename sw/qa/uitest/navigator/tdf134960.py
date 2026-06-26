@@ -91,4 +91,41 @@ class tdf134960_hyperlinks(UITestCase):
             # AssertionError: 'Hyperlink 2' != 'Hyperlink 8'
             self.launch_sidebar(xWriterEdit)
 
+    def test_tdf134960_hyperlinks_in_footnotes_and_endnotes(self):
+
+        with self.ui_test.load_file(get_url_for_data_file("tdf134960_hyperlinks_in_footnotes_and_endnotes.odt")):
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            self.xUITest.executeCommand(".uno:Sidebar")
+
+            xWriterEdit.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "SwNavigatorPanel"}))
+
+            # wait until the navigator panel is available
+            xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
+
+            # See the `m_aUpdateTimer.SetTimeout(200)` (to "avoid flickering of buttons")
+            # in the SwChildWinWrapper ctor in sw/source/uibase/fldui/fldwrap.cxx, where that
+            # m_aUpdateTimer is started by SwChildWinWrapper::ReInitDlg triggered from the
+            # xInsert click above.
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.waitUntilAllIdlesDispatched()
+
+            xContentTree = xNavigatorPanel.getChild("contenttree")
+            xHyperlinks = self.get_item(xContentTree, 'Hyperlinks')
+            self.assertEqual('Hyperlinks', get_state_as_dict(xHyperlinks)['Text'])
+
+            xHyperlinks.executeAction("EXPAND", tuple())
+
+            expectedHyperlinksOrder = [1, 2, 8, 9, 7, 10, 11, 15, 13, 3, 12, 4, 5, 6, 16, 14]
+
+            # Without the fix in place, this test will fail with
+            # AssertionError: 'Hyperlink 1' != 'Hyperlink 15'
+            for i in range(len(expectedHyperlinksOrder)):
+                self.assertEqual('Hyperlink ' + str(expectedHyperlinksOrder[i]), get_state_as_dict(xHyperlinks.getChild(str(i)))['Text'])
+
+            xHyperlinks.executeAction("COLLAPSE", tuple())
+
+            self.xUITest.executeCommand(".uno:Sidebar")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

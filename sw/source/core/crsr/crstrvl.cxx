@@ -78,6 +78,10 @@
 
 #include <fmtanchr.hxx>
 
+#include <notxtfrm.hxx>
+#include <ftnfrm.hxx>
+#include <ndtxt.hxx>
+
 using namespace ::com::sun::star;
 
 void SwCursorShell::MoveCursorToNum()
@@ -3001,13 +3005,94 @@ bool SwCursorShell::GotoNxtPrvHyperlink(bool bNext)
 
     std::stable_sort(
         aArr.begin(), aArr.end(),
-        [nEndOfExtrasIndex](const std::unique_ptr<SwPosition>& a,
-                            const std::unique_ptr<SwPosition>& b)
+        [nEndOfExtrasIndex, this](const std::unique_ptr<SwPosition>& a,
+                                  const std::unique_ptr<SwPosition>& b)
         {
             const SwNode& aTextNode = a->GetNode();
             const SwNode& bTextNode = b->GetNode();
             SwPosition aPos(*aTextNode.GetContentNode(), a->GetContentIndex());
             SwPosition bPos(*bTextNode.GetContentNode(), b->GetContentIndex());
+
+            const SwFrame* paFrame = aTextNode.GetContentNode()->getLayoutFrame(GetLayout());
+            const SwFrame* pbFrame = bTextNode.GetContentNode()->getLayoutFrame(GetLayout());
+
+            // case when both a and b are in footnotes on the same page
+            if (paFrame && pbFrame && paFrame->IsInFootnote() && pbFrame->IsInFootnote()
+                && (paFrame->GetPhyPageNum() == pbFrame->GetPhyPageNum()))
+            {
+                while (paFrame->GetType() != SwFrameType::Footnote)
+                    paFrame = paFrame->GetUpper();
+                while (pbFrame->GetType() != SwFrameType::Footnote)
+                    pbFrame = pbFrame->GetUpper();
+
+                const SwTextFootnote* aTextFootnote
+                    = static_cast<const SwFootnoteFrame*>(paFrame)->GetAttr();
+                const SwTextFootnote* bTextFootnote
+                    = static_cast<const SwFootnoteFrame*>(pbFrame)->GetAttr();
+
+                // footnote anchor positions
+                aPos.Assign(aTextFootnote->GetTextNode(), aTextFootnote->GetStart());
+                bPos.Assign(bTextFootnote->GetTextNode(), bTextFootnote->GetStart());
+
+                // when in the same footnote
+                if (aPos == bPos)
+                    return a->GetContentIndex() < b->GetContentIndex();
+
+                return aPos < bPos;
+            }
+
+            if (paFrame && paFrame->IsInFootnote())
+            {
+                while (paFrame->GetType() != SwFrameType::FootnoteContainer)
+                    paFrame = paFrame->GetUpper();
+                paFrame = paFrame->GetUpper();
+                // paFrame should now point to a SwPageFrame object
+                if (static_cast<const SwPageFrame*>(paFrame)->IsEndNotePage())
+                {
+                    // use the end of content node for comparison position for endnotes
+                    aPos.Assign(GetDoc()->GetNodes().GetEndOfContent());
+                }
+                else if (const SwContentFrame* pContentFrame
+                         = static_cast<const SwPageFrame*>(paFrame)->FindLastBodyContent())
+                {
+                    // use the end position on the footnote page for comparison positions
+                    const SwNode* pNode(
+                        pContentFrame->IsTextFrame()
+                            ? static_cast<SwTextFrame const*>(pContentFrame)->GetTextNodeFirst()
+                            : static_cast<SwNoTextFrame const*>(pContentFrame)->GetNode());
+                    aPos.Assign(*pNode,
+                                pContentFrame->IsTextFrame()
+                                    ? static_cast<const SwTextNode*>(pNode)->GetText().getLength()
+                                    : 0);
+                }
+            }
+
+            if (pbFrame && pbFrame->IsInFootnote())
+            {
+                while (pbFrame->GetType() != SwFrameType::FootnoteContainer)
+                    pbFrame = pbFrame->GetUpper();
+                pbFrame = pbFrame->GetUpper();
+                // pbFrame should now point to a SwPageFrame object
+                if (static_cast<const SwPageFrame*>(pbFrame)->IsEndNotePage())
+                {
+                    // use the end of content node for comparison position for endnotes
+                    bPos.Assign(GetDoc()->GetNodes().GetEndOfContent());
+                }
+                else if (const SwContentFrame* pContentFrame
+                         = static_cast<const SwPageFrame*>(pbFrame)->FindLastBodyContent())
+                {
+                    // use the end position on the footnote page for comparison positions
+                    const SwNode* pNode(
+                        pContentFrame->IsTextFrame()
+                            ? static_cast<SwTextFrame const*>(pContentFrame)->GetTextNodeFirst()
+                            : static_cast<SwNoTextFrame const*>(pContentFrame)->GetNode());
+                    bPos.Assign(*pNode,
+                                pContentFrame->IsTextFrame()
+                                    ? static_cast<const SwTextNode*>(pNode)->GetText().getLength()
+                                    : 0);
+                }
+            }
+
             // use anchor position for entries that are located in flys
             if (nEndOfExtrasIndex >= aTextNode.GetIndex())
                 if (auto pFlyFormat = aTextNode.GetFlyFormat())
@@ -3017,6 +3102,7 @@ bool SwCursorShell::GotoNxtPrvHyperlink(bool bNext)
                 if (auto pFlyFormat = bTextNode.GetFlyFormat())
                     if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
                         bPos = *pPos;
+
             return aPos < bPos;
         });
 

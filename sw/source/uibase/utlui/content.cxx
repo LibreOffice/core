@@ -147,6 +147,9 @@
 #include <txttxmrk.hxx>
 
 #include <IDocumentUndoRedo.hxx>
+#include <pagefrm.hxx>
+#include <notxtfrm.hxx>
+#include <ftnfrm.hxx>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -1080,43 +1083,108 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             }
 
             // use stable sort array to list hyperlinks in document order
-            const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
-            bool bHasEntryInFly = false;
-            std::vector<SwGetINetAttr*> aStableSortINetAttrsArray;
+            const SwNodeOffset nEndOfExtrasIndex
+                = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
+            std::vector<SwGetINetAttr*> aSortedINetAttrsArray;
 
             for (SwGetINetAttr& r : aArr)
-            {
-                aStableSortINetAttrsArray.emplace_back(&r);
-                if (!bHasEntryInFly)
+                aSortedINetAttrsArray.emplace_back(&r);
+
+            std::stable_sort(
+                aSortedINetAttrsArray.begin(), aSortedINetAttrsArray.end(),
+                [this, nEndOfExtrasIndex](const SwGetINetAttr* a, const SwGetINetAttr* b)
                 {
-                    if (nEndOfExtrasIndex >= r.rINetAttr.GetTextNode().GetIndex())
+                    const SwNode& aTextNode = a->rINetAttr.GetTextNode();
+                    const SwNode& bTextNode = b->rINetAttr.GetTextNode();
+                    SwPosition aPos(*aTextNode.GetContentNode(), a->rINetAttr.GetStart());
+                    SwPosition bPos(*bTextNode.GetContentNode(), b->rINetAttr.GetStart());
+
+                    const SwFrame* paFrame
+                        = aTextNode.GetContentNode()->getLayoutFrame(m_pWrtShell->GetLayout());
+                    const SwFrame* pbFrame
+                        = bTextNode.GetContentNode()->getLayoutFrame(m_pWrtShell->GetLayout());
+
+                    // case when both a and b are in footnotes on the same page
+                    if (paFrame && pbFrame && paFrame->IsInFootnote() && pbFrame->IsInFootnote()
+                        && (paFrame->GetPhyPageNum() == pbFrame->GetPhyPageNum()))
                     {
-                        // Not a node of BodyText
-                        // Are we in a fly?
-                        if (r.rINetAttr.GetTextNode().GetFlyFormat())
-                            bHasEntryInFly = true;
+                        while (paFrame->GetType() != SwFrameType::Footnote)
+                            paFrame = paFrame->GetUpper();
+                        while (pbFrame->GetType() != SwFrameType::Footnote)
+                            pbFrame = pbFrame->GetUpper();
+
+                        const SwTextFootnote* aTextFootnote
+                            = static_cast<const SwFootnoteFrame*>(paFrame)->GetAttr();
+                        const SwTextFootnote* bTextFootnote
+                            = static_cast<const SwFootnoteFrame*>(pbFrame)->GetAttr();
+
+                        // footnote anchor positions
+                        aPos.Assign(aTextFootnote->GetTextNode(), aTextFootnote->GetStart());
+                        bPos.Assign(bTextFootnote->GetTextNode(), bTextFootnote->GetStart());
+
+                        // when in the same footnote
+                        if (aPos == bPos)
+                            return a->rINetAttr.GetStart() < b->rINetAttr.GetStart();
+
+                        return aPos < bPos;
                     }
-                }
-            }
 
-            std::stable_sort(aStableSortINetAttrsArray.begin(), aStableSortINetAttrsArray.end(),
-                             [](const SwGetINetAttr* a, const SwGetINetAttr* b){
-                SwPosition aSwPos(a->rINetAttr.GetTextNode(),
-                                  a->rINetAttr.GetStart());
-                SwPosition bSwPos(b->rINetAttr.GetTextNode(),
-                                  b->rINetAttr.GetStart());
-                return aSwPos < bSwPos;});
+                    if (paFrame && paFrame->IsInFootnote())
+                    {
+                        while (paFrame->GetType() != SwFrameType::FootnoteContainer)
+                            paFrame = paFrame->GetUpper();
+                        paFrame = paFrame->GetUpper();
+                        // paFrame should now point to a SwPageFrame object
+                        if (static_cast<const SwPageFrame*>(paFrame)->IsEndNotePage())
+                        {
+                            // use the end of content node for comparison position for endnotes
+                            aPos.Assign(m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent());
+                        }
+                        else if (const SwContentFrame* pContentFrame
+                                 = static_cast<const SwPageFrame*>(paFrame)->FindLastBodyContent())
+                        {
+                            // use the end position on the footnote page for comparison positions
+                            const SwNode* pNode(
+                                pContentFrame->IsTextFrame()
+                                    ? static_cast<SwTextFrame const*>(pContentFrame)
+                                          ->GetTextNodeFirst()
+                                    : static_cast<SwNoTextFrame const*>(pContentFrame)->GetNode());
+                            aPos.Assign(
+                                *pNode,
+                                pContentFrame->IsTextFrame()
+                                    ? static_cast<const SwTextNode*>(pNode)->GetText().getLength()
+                                    : 0);
+                        }
+                    }
 
-            // When there are hyperlinks in text frames do an additional sort using the text frame
-            // anchor position to place entries in the order of document layout appearance.
-            if (bHasEntryInFly)
-            {
-                std::stable_sort(aStableSortINetAttrsArray.begin(), aStableSortINetAttrsArray.end(),
-                                 [nEndOfExtrasIndex](const SwGetINetAttr* a, const SwGetINetAttr* b){
-                    const SwTextNode& aTextNode = a->rINetAttr.GetTextNode();
-                    const SwTextNode& bTextNode = b->rINetAttr.GetTextNode();
-                    SwPosition aPos(aTextNode, a->rINetAttr.GetStart());
-                    SwPosition bPos(bTextNode, b->rINetAttr.GetStart());
+                    if (pbFrame && pbFrame->IsInFootnote())
+                    {
+                        while (pbFrame->GetType() != SwFrameType::FootnoteContainer)
+                            pbFrame = pbFrame->GetUpper();
+                        pbFrame = pbFrame->GetUpper();
+                        // pbFrame should now point to a SwPageFrame object
+                        if (static_cast<const SwPageFrame*>(pbFrame)->IsEndNotePage())
+                        {
+                            // use the end of content node for comparison position for endnotes
+                            bPos.Assign(m_pWrtShell->GetDoc()->GetNodes().GetEndOfContent());
+                        }
+                        else if (const SwContentFrame* pContentFrame
+                                 = static_cast<const SwPageFrame*>(pbFrame)->FindLastBodyContent())
+                        {
+                            // use the end position on the footnote page comparison positions
+                            const SwNode* pNode(
+                                pContentFrame->IsTextFrame()
+                                    ? static_cast<SwTextFrame const*>(pContentFrame)
+                                          ->GetTextNodeFirst()
+                                    : static_cast<SwNoTextFrame const*>(pContentFrame)->GetNode());
+                            bPos.Assign(
+                                *pNode,
+                                pContentFrame->IsTextFrame()
+                                    ? static_cast<const SwTextNode*>(pNode)->GetText().getLength()
+                                    : 0);
+                        }
+                    }
+
                     // use anchor position for entries that are located in flys
                     if (nEndOfExtrasIndex >= aTextNode.GetIndex())
                         if (auto pFlyFormat = aTextNode.GetFlyFormat())
@@ -1126,11 +1194,12 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         if (auto pFlyFormat = bTextNode.GetFlyFormat())
                             if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
                                 bPos = *pPos;
-                    return aPos < bPos;});
-            }
+
+                    return aPos < bPos;
+                });
 
             SwGetINetAttrs::size_type n = 0;
-            for (auto p : aStableSortINetAttrsArray)
+            for (auto p : aSortedINetAttrsArray)
             {
                 auto pCnt = std::make_unique<SwURLFieldContent>(this, p->sText,
                             INetURLObject::decode(p->rINetAttr.GetINetFormat().GetValue(),
