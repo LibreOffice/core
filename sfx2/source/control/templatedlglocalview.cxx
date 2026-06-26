@@ -356,19 +356,14 @@ IMPL_LINK(TemplateDlgLocalView, PopupMenuHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
+    if (ListView::get_selected_rows().empty())
+        return true;
+
     if (rCEvt.IsMouseEvent())
-    {
-        if (ListView::get_selected_rows().empty())
-            return true;
-        Point aPosition(rCEvt.GetMousePosPixel());
-        maPosition = aPosition;
-    }
+        maPosition = rCEvt.GetMousePosPixel();
     else
-    {
-        if (ListView::get_selected_rows().empty())
-            return true;
         maPosition = Point(0, 0);
-    }
+
     updateSelection();
     if (mpSelectedItem)
         maCreateContextMenuHdl.Call(mpSelectedItem);
