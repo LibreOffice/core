@@ -52,6 +52,9 @@ private:
     Degree100                   nAngle0;
     Degree100                   nAngle;
     bool                        bRight;
+    // When true, each marked object rotates around its own centre, set when the
+    // individual rotate handle is dragged.
+    bool                        m_bIndividualCenters;
 
 public:
     explicit SdrDragRotate(SdrDragView& rNewView);
@@ -63,6 +66,8 @@ public:
     virtual PointerStyle GetSdrDragPointer() const override;
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation() const override;
+    virtual basegfx::B2DHomMatrix getCurrentTransformationForOrigin(const Point& rOrigin) const override;
+    virtual std::optional<Point> getIndividualDragOrigin(const SdrObject& rObject) const override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
 };
 

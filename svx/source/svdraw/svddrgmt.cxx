@@ -83,8 +83,10 @@ SdrDragEntry::~SdrDragEntry()
 }
 
 
-SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(basegfx::B2DPolyPolygon aOriginalPolyPolygon)
-:   maOriginalPolyPolygon(std::move(aOriginalPolyPolygon))
+SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(basegfx::B2DPolyPolygon aOriginalPolyPolygon,
+                                                 std::optional<Point> oIndividualOrigin)
+:   maOriginalPolyPolygon(std::move(aOriginalPolyPolygon)),
+    moIndividualOrigin(oIndividualOrigin)
 {
 }
 
@@ -100,7 +102,10 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
     {
         basegfx::B2DPolyPolygon aCopy(maOriginalPolyPolygon);
 
-        rDragMethod.applyCurrentTransformationToPolyPolygon(aCopy);
+        if(moIndividualOrigin)
+            aCopy.transform(rDragMethod.getCurrentTransformationForOrigin(*moIndividualOrigin));
+        else
+            rDragMethod.applyCurrentTransformationToPolyPolygon(aCopy);
         basegfx::BColor aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
         basegfx::BColor aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
         const double fStripeLength(officecfg::Office::Common::Drawinglayer::StripeLength::get());
@@ -433,7 +438,8 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
         if(pM->GetPageView() == getSdrDragView().GetSdrPageView())
         {
-            const basegfx::B2DPolyPolygon aNewPolyPolygon(pM->GetMarkedSdrObj()->TakeXorPoly());
+            SdrObject* pObj = pM->GetMarkedSdrObj();
+            const basegfx::B2DPolyPolygon aNewPolyPolygon(pObj->TakeXorPoly());
 
             for(auto const& rPolygon : aNewPolyPolygon)
             {
@@ -447,7 +453,16 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
             if(!bNoPolygons)
             {
-                aResult.append(aNewPolyPolygon);
+                // Individual: keep each wireframe as its own entry anchored at
+                // its origin. Otherwise merge into one shared-reference polygon.
+                if(std::optional<Point> oOrigin = getIndividualDragOrigin(*pObj))
+                {
+                    addSdrDragEntry(std::make_unique<SdrDragEntryPolyPolygon>(aNewPolyPolygon, oOrigin));
+                }
+                else
+                {
+                    aResult.append(aNewPolyPolygon);
+                }
             }
         }
     }
@@ -463,7 +478,7 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
 
     if(aResult.count())
     {
-        addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPolyPolygon(std::move(aResult))));
+        addSdrDragEntry(std::make_unique<SdrDragEntryPolyPolygon>(std::move(aResult)));
     }
 }
 
@@ -660,6 +675,16 @@ void SdrDragMethod::Hide()
 basegfx::B2DHomMatrix SdrDragMethod::getCurrentTransformation() const
 {
     return basegfx::B2DHomMatrix();
+}
+
+basegfx::B2DHomMatrix SdrDragMethod::getCurrentTransformationForOrigin(const Point& /*rOrigin*/) const
+{
+    return getCurrentTransformation();
+}
+
+std::optional<Point> SdrDragMethod::getIndividualDragOrigin(const SdrObject& /*rObject*/) const
+{
+    return std::nullopt;
 }
 
 void SdrDragMethod::CancelSdrDrag()
@@ -1719,7 +1744,8 @@ PointerStyle SdrDragMove::GetSdrDragPointer() const
 SdrDragResize::SdrDragResize(SdrDragView& rNewView)
 :   SdrDragMethod(rNewView),
     aXFact(1,1),
-    aYFact(1,1)
+    aYFact(1,1),
+    m_bIndividualOrigins(false)
 {
 }
 
@@ -1789,6 +1815,23 @@ bool SdrDragResize::BeginSdrDrag()
         default: break;
     }
 
+    // Individual resize handle: resize each object around its own opposite
+    // corner. The reference is the dragged object's corner, so the scale factor
+    // derives from that object.
+    SdrHdl* pDragHdl = GetDragHdl();
+    m_bIndividualOrigins = getSdrDragView().GetMarkedObjectList().GetMarkCount() > 1
+        && pDragHdl != nullptr && pDragHdl->GetObj() != nullptr
+        && eRefHdl != SdrHdlKind::Move
+        && !getSdrDragView().IsResizeAtCenter()
+        && !IsDraggingPoints() && !IsDraggingGluePoints();
+
+    if (m_bIndividualOrigins)
+    {
+        DragStat().SetRef1(GetResizeRefPoint(pDragHdl->GetObj()->GetSnapRect(), GetDragHdlKind()));
+        Show();
+        return true;
+    }
+
     if (eRefHdl!=SdrHdlKind::Move)
         pRefHdl=GetHdlList().GetHdl(eRefHdl);
 
@@ -1818,12 +1861,24 @@ bool SdrDragResize::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation() const
 {
+    return getCurrentTransformationForOrigin(DragStat().GetRef1());
+}
+
+basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformationForOrigin(const Point& rOrigin) const
+{
     basegfx::B2DHomMatrix aRetval(basegfx::utils::createTranslateB2DHomMatrix(
-        -DragStat().GetRef1().X(), -DragStat().GetRef1().Y()));
+        -rOrigin.X(), -rOrigin.Y()));
     aRetval.scale(double(aXFact), double(aYFact));
-    aRetval.translate(DragStat().GetRef1().X(), DragStat().GetRef1().Y());
+    aRetval.translate(rOrigin.X(), rOrigin.Y());
 
     return aRetval;
+}
+
+std::optional<Point> SdrDragResize::getIndividualDragOrigin(const SdrObject& rObject) const
+{
+    if (!m_bIndividualOrigins)
+        return std::nullopt;
+    return GetResizeRefPoint(rObject.GetSnapRect(), GetDragHdlKind());
 }
 
 void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
@@ -2009,7 +2064,11 @@ void SdrDragResize::MoveSdrDrag(const Point& rNoSnapPnt)
 
 void SdrDragResize::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    rTarget.Resize(DragStat().GetRef1(),aXFact,aYFact);
+    // Individual mode uses each object's own opposite corner, else the shared one.
+    const Point aRef(m_bIndividualOrigins
+        ? GetResizeRefPoint(rTarget.GetSnapRect(), GetDragHdlKind())
+        : DragStat().GetRef1());
+    rTarget.Resize(aRef,aXFact,aYFact);
 }
 
 bool SdrDragResize::EndSdrDrag(bool bCopy)
@@ -2023,6 +2082,10 @@ bool SdrDragResize::EndSdrDrag(bool bCopy)
     else if (IsDraggingGluePoints())
     {
         getSdrDragView().ResizeMarkedGluePoints(DragStat().GetRef1(),aXFact,aYFact,bCopy);
+    }
+    else if (m_bIndividualOrigins)
+    {
+        getSdrDragView().ResizeMarkedObjIndividualOrigins(GetDragHdlKind(),aXFact,aYFact,bCopy);
     }
     else
     {
@@ -2047,7 +2110,10 @@ PointerStyle SdrDragResize::GetSdrDragPointer() const
 
 void SdrDragRotate::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    rTarget.Rotate(DragStat().GetRef1(), nAngle, nSin, nCos);
+    // Individual mode turns each object around its own centre, else the shared one.
+    const Point aRef(m_bIndividualCenters ? rTarget.GetSnapRect().Center()
+                                          : DragStat().GetRef1());
+    rTarget.Rotate(aRef, nAngle, nSin, nCos);
 }
 
 SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
@@ -2056,7 +2122,8 @@ SdrDragRotate::SdrDragRotate(SdrDragView& rNewView)
     nCos(1.0),
     nAngle0(0),
     nAngle(0),
-    bRight(false)
+    bRight(false),
+    m_bIndividualCenters(false)
 {
 }
 
@@ -2080,6 +2147,20 @@ OUString SdrDragRotate::GetSdrDragComment() const
 
 bool SdrDragRotate::BeginSdrDrag()
 {
+    // Individual rotate handle: rotate each object around its own centre, with
+    // the drag angle measured from the dragged object's centre.
+    SdrHdl* pDragHdl = GetDragHdl();
+    if (GetDragHdlKind() == SdrHdlKind::Rotate
+        && getSdrDragView().GetMarkedObjectList().GetMarkCount() > 1
+        && pDragHdl != nullptr && pDragHdl->GetObj() != nullptr)
+    {
+        m_bIndividualCenters = true;
+        Show();
+        DragStat().SetRef1(pDragHdl->GetObj()->GetSnapRect().Center());
+        nAngle0 = GetAngle(DragStat().GetStart() - DragStat().GetRef1());
+        return true;
+    }
+
     SdrHdl* pH=GetHdlList().GetHdl(SdrHdlKind::Ref1);
 
     if (nullptr != pH)
@@ -2108,9 +2189,21 @@ bool SdrDragRotate::BeginSdrDrag()
 
 basegfx::B2DHomMatrix SdrDragRotate::getCurrentTransformation() const
 {
+    return getCurrentTransformationForOrigin(DragStat().GetRef1());
+}
+
+basegfx::B2DHomMatrix SdrDragRotate::getCurrentTransformationForOrigin(const Point& rOrigin) const
+{
     return basegfx::utils::createRotateAroundPoint(
-        DragStat().GetRef1().X(), DragStat().GetRef1().Y(),
+        rOrigin.X(), rOrigin.Y(),
         -atan2(nSin, nCos));
+}
+
+std::optional<Point> SdrDragRotate::getIndividualDragOrigin(const SdrObject& rObject) const
+{
+    if (!m_bIndividualCenters)
+        return std::nullopt;
+    return rObject.GetSnapRect().Center();
 }
 
 void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
@@ -2173,6 +2266,10 @@ bool SdrDragRotate::EndSdrDrag(bool bCopy)
         else if (IsDraggingGluePoints())
         {
             getSdrDragView().RotateMarkedGluePoints(DragStat().GetRef1(),nAngle,bCopy);
+        }
+        else if (m_bIndividualCenters)
+        {
+            getSdrDragView().RotateMarkedObjIndividualCenters(nAngle,bCopy);
         }
         else
         {

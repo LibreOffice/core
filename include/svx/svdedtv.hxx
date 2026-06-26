@@ -235,9 +235,13 @@ public:
     void SetMarkedObjRect(const tools::Rectangle& rRect);
     void MoveMarkedObj(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
+    // Resize each marked object by the same factor around its own reference corner (the one opposite eDragKind).
+    void ResizeMarkedObjIndividualOrigins(SdrHdlKind eDragKind, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
     SAL_DLLPRIVATE void ResizeMultMarkedObj(const Point& rRef, const Fraction& xFact, const Fraction& yFact, const bool bWdh, const bool bHgt);
     SAL_DLLPRIVATE Degree100 GetMarkedObjRotate() const;
     void RotateMarkedObj(const Point& rRef, Degree100 nAngle, bool bCopy=false);
+    // Rotate every marked object by the same angle, each around its own centre.
+    void RotateMarkedObjIndividualCenters(Degree100 nAngle, bool bCopy=false);
     SAL_DLLPRIVATE void MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool bCopy=false);
     void MirrorMarkedObjHorizontal();
     void MirrorMarkedObjVertical();
