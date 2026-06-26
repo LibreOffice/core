@@ -40,23 +40,6 @@ public:
                            css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                            const char16_t* pFilterName, bool bEncrypted,
                            int_fast16_t nSyntaxVersion);
-
-    /** read a component from storage
-     */
-    ErrCode ReadThroughComponentS(const css::uno::Reference<css::embed::XStorage>& xStorage,
-                                  const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                                  const char16_t* pStreamName,
-                                  css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                                  css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
-                                  const char16_t* pFilterName, int_fast16_t nSyntaxVersion);
-
-    /** read a component from text
-     */
-    ErrCode
-    ReadThroughComponentMS(std::u16string_view aText,
-                           const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                           css::uno::Reference<css::uno::XComponentContext> const& rxContext,
-                           css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
 class SmMLImport final : public SvXMLImport
@@ -67,20 +50,14 @@ private:
     size_t m_nSmSyntaxVersion;
 
 public:
-    /** Gets parsed element tree
-    */
-    SmMlElement* getElementTree() { return m_pElementTree; }
-
     /** Checks out if parse was a success
      */
     bool getSuccess() const { return m_bSuccess; }
 
-public:
     /** Handles an error on the mathml structure
      */
     void declareMlError();
 
-public:
     /** Constructor
     */
     SmMLImport(const css::uno::Reference<css::uno::XComponentContext>& rContext,
@@ -90,7 +67,6 @@ public:
     */
     virtual ~SmMLImport() noexcept override { cleanup(); };
 
-public:
     /** End the document
     */
     void SAL_CALL endDocument() override;

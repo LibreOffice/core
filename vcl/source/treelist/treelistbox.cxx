@@ -956,25 +956,6 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     return bSuccess;
 }
 
-void SvTreeListBox::RemoveSelection()
-{
-    std::vector<const SvTreeListEntry*> aList;
-    // cache selection, as the implementation deselects everything on the first
-    // remove
-    SvTreeListEntry* pEntry = FirstSelected();
-    while ( pEntry )
-    {
-        aList.push_back( pEntry );
-        if ( pEntry->HasChildren() )
-            // remove deletes all children automatically
-            SelectChildren(pEntry, false);
-        pEntry = NextSelected( pEntry );
-    }
-
-    for (auto const& elem : aList)
-        RemoveEntry(elem);
-}
-
 void SvTreeListBox::RemoveEntry(SvTreeListEntry const* pEntry) { m_pModel->Remove(pEntry); }
 
 void SvTreeListBox::RecalcViewData()
@@ -1480,7 +1461,21 @@ nAction
         && (   (g_pDDTarget && (g_pDDTarget->GetModel() != GetModel()))
             || !g_pDDTarget))
     {
-        RemoveSelection();
+        std::vector<const SvTreeListEntry*> aList;
+        // cache selection, as the implementation deselects everything on the first
+        // remove
+        SvTreeListEntry* pEntry = FirstSelected();
+        while ( pEntry )
+        {
+            aList.push_back( pEntry );
+            if ( pEntry->HasChildren() )
+                // remove deletes all children automatically
+                SelectChildren(pEntry, false);
+            pEntry = NextSelected( pEntry );
+        }
+
+        for (auto const& elem : aList)
+            RemoveEntry(elem);
     }
 #endif
 
@@ -1916,18 +1911,6 @@ SvButtonState SvTreeListBox::GetCheckButtonState( SvTreeListEntry* pEntry ) cons
         eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
     return eState;
-}
-
-bool SvTreeListBox::GetCheckButtonEnabled(SvTreeListEntry* pEntry) const
-{
-    if (pEntry && (m_nTreeFlags & SvTreeFlags::CHKBTN))
-    {
-        SvLBoxButton* pItem
-            = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
-        if (pItem)
-            return pItem->isEnable();
-    }
-    return false;
 }
 
 // TODO: Currently all data is cloned so that they conform to the default tree

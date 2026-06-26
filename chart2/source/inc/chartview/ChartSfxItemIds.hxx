@@ -259,7 +259,6 @@ struct AxisFlags{
     static T toNum (const U&& fl){ return static_cast<T>(fl);}
     bool operator==(const T& val){return val == static_cast<T>(m);}
     bool operator==(const U& fl){return fl == m;}
-    bool operator==(const AxisFlags& other){return other==this;}
 private:
     U m;
 };

@@ -95,41 +95,6 @@ static OUString getModuleId(std::u16string_view sModuleName)
         return u"None"_ustr;
 }
 
-SvxNotebookbarConfigPage::SvxNotebookbarConfigPage(weld::Container* pPage,
-                                                   weld::DialogController* pController,
-                                                   const SfxItemSet& rSet)
-    : SvxConfigPage(pPage, pController, rSet)
-{
-    m_xCommandCategoryListBox->set_visible(false);
-    m_xDescriptionFieldLb->set_visible(false);
-    m_xSearchEdit->set_visible(false);
-    m_xDescriptionField->set_visible(false);
-    m_xMoveUpButton->set_visible(false);
-    m_xMoveDownButton->set_visible(false);
-    m_xCommandButtons->set_visible(false);
-    m_xLeftFunctionLabel->set_visible(false);
-    m_xSearchLabel->set_visible(false);
-    m_xCategoryLabel->set_visible(false);
-    m_xCustomizeBox->set_visible(false);
-    m_xCustomizeLabel->set_visible(false);
-
-    weld::TreeView& rCommandCategoryBox = m_xFunctions->get_widget();
-    rCommandCategoryBox.hide();
-
-    m_xContentsListBox.reset(
-        new SvxNotebookbarEntriesListBox(m_xBuilder->weld_tree_view(u"toolcontents"_ustr), this));
-    m_xDropTargetHelper.reset(new SvxConfigPageFunctionDropTarget(
-        *this, m_xContentsListBox->get_widget(), rCommandCategoryBox, Link<int, void>()));
-    weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
-    Size aSize(m_xFunctions->get_size_request());
-    rTreeView.set_size_request(aSize.Width(), aSize.Height());
-
-    rTreeView.set_hexpand(true);
-    rTreeView.set_vexpand(true);
-    rTreeView.set_help_id(HID_SVX_CONFIG_NOTEBOOKBAR_CONTENTS);
-    rTreeView.show();
-}
-
 SvxNotebookbarConfigPage::~SvxNotebookbarConfigPage() {}
 
 void SvxNotebookbarConfigPage::DeleteSelectedTopLevel() {}

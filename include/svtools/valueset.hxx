@@ -275,7 +275,6 @@ public:
     virtual void    Select();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
-    OUString const & GetText() const { return maText; }
     void            SetText(const OUString& rText) { maText = rText; }
     void            SetStyle(WinBits nStyle);
     WinBits         GetStyle() const { return mnStyle; }

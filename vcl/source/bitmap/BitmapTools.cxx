@@ -282,6 +282,7 @@ Bitmap CreateFromData( RawBitmap&& rawBitmap )
     return aBmp;
 }
 
+#if defined(_WIN32) && !USE_HEADLESS_CODE
 void fillWithData(sal_uInt8* pData, Bitmap const& rBitmap)
 {
     BitmapScopedReadAccess aReadAccess(rBitmap);
@@ -303,7 +304,7 @@ void fillWithData(sal_uInt8* pData, Bitmap const& rBitmap)
         }
     }
 }
-
+#endif
 
 #if ENABLE_CAIRO_CANVAS
 Bitmap CreateFromCairoSurface(Size aSize, cairo_surface_t * pSurface)

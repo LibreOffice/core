@@ -105,7 +105,6 @@ public:
     virtual Size GetOptimalSize() const override;
 
     void getColRange(SCCOL& rStartCol, SCCOL& rEndCol) const;
-    void getRowRange(SCROW& rStartRow, SCROW& rEndRow) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

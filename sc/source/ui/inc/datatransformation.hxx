@@ -195,9 +195,6 @@ class FindReplaceTransformation : public DataTransformation
         FindReplaceTransformation(SCCOL nCol, OUString aFindString, OUString aReplaceString);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
-        SCCOL getColumn() const;
-        const OUString & getFindString() const;
-        const OUString & getReplaceString() const;
 };
 
 class DeleteRowTransformation : public DataTransformation
@@ -209,8 +206,6 @@ class DeleteRowTransformation : public DataTransformation
         DeleteRowTransformation(SCCOL nCol, OUString aFindString);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
-        SCCOL getColumn() const;
-        const OUString & getFindString() const;
 };
 
 class SwapRowsTransformation : public DataTransformation
@@ -221,7 +216,6 @@ class SwapRowsTransformation : public DataTransformation
         SwapRowsTransformation(SCROW mRow, SCROW nRow);
         virtual void Transform(ScDocument& rDoc) const override;
         virtual TransformationType getTransformationType() const override;
-        SCROW getFirstRow() const;
 };
 
 }

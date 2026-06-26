@@ -61,11 +61,6 @@ public:
         m_aColorActivatedHdl = rLink;
     }
 
-    void setSelectionChangedHdl(const Link<const ColorIconView&, void>& rLink)
-    {
-        m_aSelectionChangedHdl = rLink;
-    }
-
 private:
     ScopedVclPtr<VirtualDevice> createIcon(const Color& rColor);
 };

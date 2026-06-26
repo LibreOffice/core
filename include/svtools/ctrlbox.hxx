@@ -367,12 +367,9 @@ public:
     void connect_key_press(const Link<const KeyEvent&, bool>& rLink) { m_xComboBox->connect_key_press(rLink); }
     void connect_popup_toggled(const Link<weld::ComboBox&, void>& rLink){ m_xComboBox->connect_popup_toggled(rLink); }
     void connect_live_preview(const Link<const FontMetric&, void>& rLink) { m_aLivePreviewHdl = rLink; }
-    int get_active() const { return m_xComboBox->get_active(); }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
     void set_active_or_entry_text(const OUString& rText);
     void set_active(int nPos) { m_xComboBox->set_active(nPos); }
-    int get_count() const { return m_xComboBox->get_count(); }
-    OUString get_text(int nIndex) const { return m_xComboBox->get_text(nIndex); }
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
     void save_value() { m_xComboBox->save_value(); }
     OUString const& get_saved_value() const { return m_xComboBox->get_saved_value(); }
@@ -498,14 +495,11 @@ public:
     void set_sensitive(bool bSensitive) { m_xComboBox->set_sensitive(bSensitive); }
     void set_size_request(int nWidth, int nHeight) { m_xComboBox->set_size_request(nWidth, nHeight); }
 
-    int get_active() const { return m_xComboBox->get_active(); }
     int get_value() const;
     void set_value(int nValue);
     void save_value() { m_nSavedValue = get_value(); }
     int get_saved_value() const { return m_nSavedValue; }
     bool get_value_changed_from_saved() const { return get_value() != get_saved_value(); }
-    int get_count() const { return m_xComboBox->get_count(); }
-    OUString get_text(int i) const { return m_xComboBox->get_text(i); }
     bool has_focus() const { return m_xComboBox->has_focus(); }
     void connect_entry_activate(const Link<weld::ComboBox&, bool>& rLink) { m_xComboBox->connect_entry_activate(rLink); }
     void disable_entry_completion() { m_xComboBox->set_entry_completion(false, false); }

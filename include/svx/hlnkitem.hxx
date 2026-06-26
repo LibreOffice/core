@@ -107,7 +107,6 @@ public:
 
     const OUString& GetReplacementText() const { return m_sReplacementText; }
 
-    void SetTextIsHint(bool bTextIsHint) { m_bTextIsHint = bTextIsHint; }
     bool GetTextIsHint() const { return m_bTextIsHint; }
 };
 

@@ -408,13 +408,6 @@ public:
     /// @return current angle of rotation of the body
     double getAngle() const;
 
-    /** Set angle of the box2d body
-
-        @param fAngle
-        Angle in degrees
-     */
-    void setAngle(const double fAngle);
-
     /** Set density and restitution of the box2d body
 
         @param fDensity

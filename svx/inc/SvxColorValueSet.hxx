@@ -29,9 +29,6 @@ public:
 
     virtual void Resize() override;
 
-    /* Maximum row/line count for the ColorValueSet control. If more lines would be needed, a scrollbar will
-       be used. */
-    static constexpr sal_uInt32 getMaxRowCount() { return 10; }
     static sal_uInt32 getEntryEdgeLength();
     static sal_uInt32 getColumnCount();
 

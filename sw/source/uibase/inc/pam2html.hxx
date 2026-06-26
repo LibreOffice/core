@@ -26,7 +26,6 @@
 
 namespace SwPam2Html
 {
-SW_DLLPUBLIC OString ExportPaMToHTML(SwPaM* pCursor);
 SW_DLLPUBLIC void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rData);
 }
 

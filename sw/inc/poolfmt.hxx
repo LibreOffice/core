@@ -422,8 +422,6 @@ UNKNOWN = USHRT_MAX
 // add some operators to make that less verbose.
 inline constexpr SwPoolFormatId operator-(SwPoolFormatId lhs, SwPoolFormatId rhs)
 { return SwPoolFormatId(sal_uInt16(lhs) - sal_uInt16(rhs)); }
-inline constexpr SwPoolFormatId operator&(SwPoolFormatId lhs, SwPoolFormatId rhs)
-{ return SwPoolFormatId(sal_uInt16(lhs) & sal_uInt16(rhs)); }
 inline constexpr SwPoolFormatId operator+(SwPoolFormatId lhs, sal_uInt16 rhs)
 { return SwPoolFormatId(sal_uInt16(lhs) + rhs); }
 inline constexpr SwPoolFormatId operator-(SwPoolFormatId lhs, sal_uInt16 rhs)

@@ -56,7 +56,6 @@ public:
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
-    void Terminate();
     bool IsParseError() const { return mbIsParseError; }
     const std::exception_ptr & GetLastException() const { return mpLastException; }
 
@@ -83,8 +82,6 @@ public:
 
     virtual void Import() = 0;
 
-    virtual const OUString& GetURL() const = 0;
-
     static std::unique_ptr<SvStream> FetchStreamFromURL(const OUString&, OStringBuffer& rBuffer);
 
     void setDeterministic();
@@ -104,7 +101,7 @@ public:
 
     virtual void Import() override;
 
-    const OUString& GetURL() const override;
+    const OUString& GetURL() const;
     void ImportFinished();
 };
 

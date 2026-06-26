@@ -146,7 +146,6 @@ public:
     static rtl::Reference< SdXImpressDocument > GetModel( SdDrawDocument const & rDoc );
 
     // internal
-    bool operator==( const SdXImpressDocument& rModel ) const { return mpDoc == rModel.mpDoc; }
     bool operator!=( const SdXImpressDocument& rModel ) const { return mpDoc != rModel.mpDoc; }
 
     ::sd::DrawDocShell* GetDocShell() const { return mpDocShell; }

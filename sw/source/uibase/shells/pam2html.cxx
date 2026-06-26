@@ -28,38 +28,6 @@
 
 namespace SwPam2Html
 {
-OString ExportPaMToHTML(SwPaM* pCursor)
-{
-    SolarMutexGuard gMutex;
-    OString aResult;
-    WriterRef xWrt;
-    GetHTMLWriter(u"NoLineLimit,SkipHeaderFooter,NoPrettyPrint", OUString(), xWrt);
-    if (pCursor != nullptr)
-    {
-        SvMemoryStream aMemoryStream;
-        SwWriter aWriter(aMemoryStream, *pCursor);
-        ErrCodeMsg nError = aWriter.Write(xWrt);
-        if (nError.IsError())
-        {
-            SAL_WARN("sw.ui", "ExportPaMToHTML: failed to export selection to HTML " << nError);
-            return {};
-        }
-        aResult
-            = OString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
-        aResult = aResult.replaceAll("<p"_ostr, "<span"_ostr);
-        aResult = aResult.replaceAll("</p>"_ostr, "</span>"_ostr);
-
-        // HTML has for that <br> and <p> also does new line
-        aResult = aResult.replaceAll("<ul>"_ostr, ""_ostr);
-        aResult = aResult.replaceAll("</ul>"_ostr, ""_ostr);
-        aResult = aResult.replaceAll("<ol>"_ostr, ""_ostr);
-        aResult = aResult.replaceAll("</ol>"_ostr, ""_ostr);
-        aResult = aResult.replaceAll("\n"_ostr, ""_ostr).trim();
-        return aResult;
-    }
-    return {};
-}
-
 void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rData)
 {
     SolarMutexGuard gMutex;

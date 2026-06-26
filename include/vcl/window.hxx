@@ -746,7 +746,6 @@ public:
     WindowExtendedStyle                 GetExtendedStyle() const;
     void                                SetType( WindowType eType );
     WindowType                          GetType() const;
-    std::string_view GetTypeName() const;
     bool IsFormControl() const;
     void SetFormControl(bool bFormControl);
     bool                                IsSystemWindow() const;

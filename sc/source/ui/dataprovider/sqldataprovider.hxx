@@ -29,7 +29,7 @@ public:
 
     virtual void Import() override;
 
-    virtual const OUString& GetURL() const override;
+    virtual const OUString& GetURL() const;
 
     void ImportFinished();
 };

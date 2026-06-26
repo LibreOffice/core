@@ -85,42 +85,6 @@ namespace svgio::svgreader
             }
         }
 
-        FontStretch getWider(FontStretch aSource)
-        {
-            switch(aSource)
-            {
-                case FontStretch::ultra_condensed: aSource = FontStretch::extra_condensed; break;
-                case FontStretch::extra_condensed: aSource = FontStretch::condensed; break;
-                case FontStretch::condensed: aSource = FontStretch::semi_condensed; break;
-                case FontStretch::semi_condensed: aSource = FontStretch::normal; break;
-                case FontStretch::normal: aSource = FontStretch::semi_expanded; break;
-                case FontStretch::semi_expanded: aSource = FontStretch::expanded; break;
-                case FontStretch::expanded: aSource = FontStretch::extra_expanded; break;
-                case FontStretch::extra_expanded: aSource = FontStretch::ultra_expanded; break;
-                default: break;
-            }
-
-            return aSource;
-        }
-
-        FontStretch getNarrower(FontStretch aSource)
-        {
-            switch(aSource)
-            {
-                case FontStretch::extra_condensed: aSource = FontStretch::ultra_condensed; break;
-                case FontStretch::condensed: aSource = FontStretch::extra_condensed; break;
-                case FontStretch::semi_condensed: aSource = FontStretch::condensed; break;
-                case FontStretch::normal: aSource = FontStretch::semi_condensed; break;
-                case FontStretch::semi_expanded: aSource = FontStretch::normal; break;
-                case FontStretch::expanded: aSource = FontStretch::semi_expanded; break;
-                case FontStretch::extra_expanded: aSource = FontStretch::expanded; break;
-                case FontStretch::ultra_expanded: aSource = FontStretch::extra_expanded; break;
-                default: break;
-            }
-
-            return aSource;
-        }
-
         FontWeight getBolder(FontWeight aSource)
         {
             switch(aSource)

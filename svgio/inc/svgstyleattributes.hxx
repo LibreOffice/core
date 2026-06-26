@@ -89,9 +89,6 @@ namespace svgio::svgreader
             ultra_expanded
         };
 
-        FontStretch getWider(FontStretch aSource);
-        FontStretch getNarrower(FontStretch aSource);
-
         enum class FontStyle
         {
             notset,

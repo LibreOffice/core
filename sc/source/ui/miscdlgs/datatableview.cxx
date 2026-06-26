@@ -292,15 +292,6 @@ void ScDataTableView::getColRange(SCCOL& rStartCol, SCCOL& rEndCol) const
     rEndCol = static_cast<SCCOL>(aEnd);
 }
 
-void ScDataTableView::getRowRange(SCROW& rStartCol, SCROW& rEndCol) const
-{
-    SCCOLROW aStart = 0;
-    SCCOLROW aEnd = 0;
-    mpRowView->GetMarkRange(aStart, aEnd);
-    rStartCol = static_cast<SCROW>(aStart);
-    rEndCol = static_cast<SCROW>(aEnd);
-}
-
 IMPL_LINK_NOARG(ScDataTableView, VertScrollHdl, weld::Scrollbar&, void)
 {
     mnFirstVisibleRow = mpVScroll->GetThumbPos();

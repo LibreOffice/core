@@ -90,13 +90,6 @@ OUString SfxUndoAction::GetComment() const
     return OUString();
 }
 
-
-OUString SfxUndoAction::GetObjDescription() const
-{
-    return OUString();
-}
-
-
 void SfxUndoAction::SetComment(const OUString& /*rStr*/)
 {
 }

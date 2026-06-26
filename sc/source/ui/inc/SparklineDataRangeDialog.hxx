@@ -49,7 +49,6 @@ private:
     void setupValues();
 
     void perform();
-    bool checkValidInputOutput();
 
 public:
     SparklineDataRangeDialog(SfxBindings* pBindings, SfxChildWindow* pChildWindow,

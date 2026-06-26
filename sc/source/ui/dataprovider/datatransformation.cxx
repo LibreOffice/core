@@ -1167,21 +1167,6 @@ TransformationType FindReplaceTransformation::getTransformationType() const
     return TransformationType::FINDREPLACE_TRANSFORMATION;
 }
 
-SCCOL FindReplaceTransformation::getColumn() const
-{
-    return mnCol;
-}
-
-const OUString& FindReplaceTransformation::getFindString() const
-{
-    return maFindString;
-}
-
-const OUString& FindReplaceTransformation::getReplaceString() const
-{
-    return maReplaceString;
-}
-
 DeleteRowTransformation::DeleteRowTransformation(SCCOL nCol, OUString aFindString)
     : mnCol(nCol)
     , maFindString(std::move(aFindString))
@@ -1213,16 +1198,6 @@ void DeleteRowTransformation::Transform(ScDocument& rDoc) const
 TransformationType DeleteRowTransformation::getTransformationType() const
 {
     return TransformationType::DELETEROW_TRANSFORMATION;
-}
-
-SCCOL DeleteRowTransformation::getColumn() const
-{
-    return mnCol;
-}
-
-const OUString& DeleteRowTransformation::getFindString() const
-{
-    return maFindString;
 }
 
 SwapRowsTransformation::SwapRowsTransformation(SCROW mRow, SCROW nRow)
@@ -1259,11 +1234,6 @@ void SwapRowsTransformation::Transform(ScDocument& rDoc) const
 TransformationType SwapRowsTransformation::getTransformationType() const
 {
     return TransformationType::SWAPROWS_TRANSFORMATION;
-}
-
-SCROW SwapRowsTransformation::getFirstRow() const
-{
-    return mxRow;
 }
 
 }

@@ -53,8 +53,6 @@ public:
         OUString sUIItemId;
         OUString sClassType;
     };
-    SvxNotebookbarConfigPage(weld::Container* pPage, weld::DialogController* pController,
-                             const SfxItemSet& rItemSet);
     virtual ~SvxNotebookbarConfigPage() override;
     SaveInData* CreateSaveInData(const css::uno::Reference<css::ui::XUIConfigurationManager>&,
                                  const css::uno::Reference<css::ui::XUIConfigurationManager>&,

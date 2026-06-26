@@ -974,16 +974,6 @@ double box2DBody::getAngle() const
     return ::basegfx::rad2deg(-fAngle);
 }
 
-void box2DBody::setAngle(const double fAngle)
-{
-#if BOX2D_CHECK_VERSION(3, 0)
-    b2Body_SetTransform(*mpBox2DBody, b2Body_GetPosition(*mpBox2DBody),
-                        b2MakeRot(::basegfx::deg2rad(-fAngle)));
-#else
-    mpBox2DBody->SetTransform(mpBox2DBody->GetPosition(), ::basegfx::deg2rad(-fAngle));
-#endif
-}
-
 void box2DBody::setDensityAndRestitution(const double fDensity, const double fRestitution)
 {
 #if BOX2D_CHECK_VERSION(3, 0)

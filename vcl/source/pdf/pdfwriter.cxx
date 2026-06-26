@@ -181,11 +181,6 @@ void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const B
     xImplementation->drawBitmap( rDestPt, rDestSize, rBitmap, rGraphic );
 }
 
-void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
-{
-    xImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );
-}
-
 void PDFWriter::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
     xImplementation->drawHatch( rPolyPoly, rHatch );

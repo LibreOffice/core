@@ -445,7 +445,6 @@ public:
 
     bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     bool            MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, SvTreeListEntry* pTarget, bool bAllowCopyFallback );
-    void            RemoveSelection();
     /**
      * Removes the entry along with all of its descendants
      */
@@ -620,7 +619,6 @@ public:
 
     void            SetCheckButtonState( SvTreeListEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvTreeListEntry* ) const;
-    bool GetCheckButtonEnabled(SvTreeListEntry* pEntry) const;
 
     void SetEntryText(SvTreeListEntry& rEntry, const OUString& rStr);
     void SetExpandedEntryBmp(SvTreeListEntry& rEntry, const Image& _rImage);
@@ -717,10 +715,8 @@ public:
 
     // Make single click "activate" a row like a double-click normally does
     void            SetActivateOnSingleClick(bool bEnable) { mbActivateOnSingleClick = bEnable; }
-    bool            GetActivateOnSingleClick() const { return mbActivateOnSingleClick; }
 
     void            SetCustomEntryRenderer(bool bEnable) { mbCustomEntryRenderer = bEnable; }
-    bool            GetCustomEntryRenderer() const { return mbCustomEntryRenderer; }
 
     // Make mouse over a row "select" a row like a single-click normally does
     void            SetHoverSelection(bool bEnable) { mbHoverSelection = bEnable; }
@@ -728,7 +724,6 @@ public:
 
     // to get enable or disable the text-column
     void           SetTextColumnEnabled(bool bEnable) { mbIsTextColumEnabled = bEnable; }
-    bool           IsTextColumnEnabled() const { return mbIsTextColumEnabled; }
 
     // only true during Select if the Select is due to a Hover
     bool            IsSelectDueToHover() const { return mbSelectingByHover; }

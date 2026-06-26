@@ -61,7 +61,9 @@ Bitmap VCL_DLLPUBLIC CreateFromData(sal_uInt8 const *pData,
                                       sal_Int8 nBitsPerPixel,
                                       bool bReversColors = false, bool bReverseAlpha = false);
 
+#if defined(_WIN32) && !USE_HEADLESS_CODE
 void VCL_DLLPUBLIC fillWithData(sal_uInt8* pData, Bitmap const& rBitmap);
+#endif
 
 Bitmap VCL_DLLPUBLIC CreateFromData( RawBitmap && data );
 

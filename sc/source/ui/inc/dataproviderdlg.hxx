@@ -62,7 +62,6 @@ private:
     ScDBData* pDBData;
     ScDBCollection* mpDestDBCollection;
 
-    DECL_LINK(ColumnMenuHdl, const weld::ComboBox&, void);
     DECL_LINK(ScrollToEnd, Timer*, void);
     DECL_LINK(ApplyQuitHdl, weld::Button&, void);
     DECL_LINK(CancelQuitHdl, weld::Button&, void);
