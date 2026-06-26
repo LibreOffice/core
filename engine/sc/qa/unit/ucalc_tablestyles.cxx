@@ -1150,7 +1150,7 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoHeadersOnAutoExpansion)
 
 // Dragging the table wider (ModifyDBData with a larger column range) fills the
 // newly-covered columns' empty header cells; existing headers stay put.
-CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoHeadersOnTableExpasion)
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testAutoHeadersOnTableExpansion)
 {
     m_pDoc->InsertTab(0, u"DragExtend"_ustr);
     m_pDoc->EnableUndo(true);
