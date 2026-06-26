@@ -279,6 +279,26 @@ SwImplShellAction::~SwImplShellAction() COVERITY_NOEXCEPT_FALSE
     }
 }
 
+// A built-in style's name is shared between views and localized to whichever
+// view last used it, so a lookup in the current view's language can miss, and
+// the pool getters create a missing style, which a lookup must not do.
+template <class FormatRange>
+static bool lcl_IsPoolFormatPresent(const FormatRange& rFormats, SwPoolFormatId nId)
+{
+    for (const auto* pFormat : rFormats)
+        if (pFormat && pFormat->GetPoolFormatId() == nId)
+            return true;
+    return false;
+}
+
+static bool lcl_IsPoolPageDescPresent(const SwDoc& rDoc, SwPoolFormatId nId)
+{
+    for (size_t i = 0, nCnt = rDoc.GetPageDescCnt(); i < nCnt; ++i)
+        if (rDoc.GetPageDesc(i).GetPoolFormatId() == nId)
+            return true;
+    return false;
+}
+
 // find/create SwCharFormate
 // possibly fill Style
 static SwCharFormat* lcl_FindCharFormat( SwDoc& rDoc,
@@ -296,10 +316,11 @@ static SwCharFormat* lcl_FindCharFormat( SwDoc& rDoc,
             pFormat = rDoc.GetDfltCharFormat();
         }
 
-        if( !pFormat && bCreate )
-        {   // explore Pool
+        if( !pFormat )
+        {
             const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::ChrFmt);
-            if(nId != SwPoolFormatId::UNKNOWN)
+            if (nId != SwPoolFormatId::UNKNOWN
+                && (bCreate || lcl_IsPoolFormatPresent(*rDoc.GetCharFormats(), nId)))
                 pFormat = rDoc.getIDocumentStylePoolAccess().GetCharFormatFromPool(nId);
         }
     }
@@ -332,10 +353,11 @@ static SwTextFormatColl* lcl_FindParaFormat(  SwDoc& rDoc,
     if (!rName.isEmpty())
     {
         pColl = rDoc.FindTextFormatCollByName( rName );
-        if( !pColl && bCreate )
-        {   // explore Pool
+        if( !pColl )
+        {
             const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::TxtColl);
-            if(nId != SwPoolFormatId::UNKNOWN)
+            if (nId != SwPoolFormatId::UNKNOWN
+                && (bCreate || lcl_IsPoolFormatPresent(*rDoc.GetTextFormatColls(), nId)))
                 pColl = rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(nId);
         }
     }
@@ -369,10 +391,11 @@ static SwFrameFormat* lcl_FindFrameFormat(   SwDoc& rDoc,
     if( !rName.isEmpty() )
     {
         pFormat = rDoc.FindFrameFormatByName( rName );
-        if( !pFormat && bCreate )
-        {   // explore Pool
+        if( !pFormat )
+        {
             const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::FrmFmt);
-            if(nId != SwPoolFormatId::UNKNOWN)
+            if (nId != SwPoolFormatId::UNKNOWN
+                && (bCreate || lcl_IsPoolFormatPresent(*rDoc.GetFrameFormats(), nId)))
                 pFormat = rDoc.getIDocumentStylePoolAccess().GetFrameFormatFromPool(nId);
         }
     }
@@ -404,10 +427,11 @@ static const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
     if (!rName.isEmpty())
     {
         pDesc = rDoc.FindPageDesc(rName);
-        if( !pDesc && bCreate )
+        if( !pDesc )
         {
-            SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::PageDesc);
-            if(nId != SwPoolFormatId::UNKNOWN)
+            const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::PageDesc);
+            if (nId != SwPoolFormatId::UNKNOWN
+                && (bCreate || lcl_IsPoolPageDescPresent(rDoc, nId)))
                 pDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool(nId);
         }
     }
@@ -438,10 +462,11 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
     if (!rName.isEmpty())
     {
         pRule = rDoc.FindNumRulePtr( rName );
-        if( !pRule && bCreate )
+        if( !pRule )
         {
-            SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::NumRule);
-            if(nId != SwPoolFormatId::UNKNOWN)
+            const SwPoolFormatId nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, SwGetPoolIdFromName::NumRule);
+            if (nId != SwPoolFormatId::UNKNOWN
+                && (bCreate || lcl_IsPoolFormatPresent(rDoc.GetNumRuleTable(), nId)))
                 pRule = rDoc.getIDocumentStylePoolAccess().GetNumRuleFromPool(nId);
         }
     }

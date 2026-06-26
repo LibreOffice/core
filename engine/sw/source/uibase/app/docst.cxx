@@ -104,6 +104,21 @@ static OutlinerView* lcl_GetPostItOutlinerView(SwWrtShell& rShell)
     return pWin->GetOutlinerView();
 }
 
+// A built-in style's name is shared between views and holds only one language,
+// so the stored name is wrong for a view in another language.
+static UIName lcl_getStyleDisplayName(const SwFormat& rFormat)
+{
+    const SwPoolFormatId nId = rFormat.GetPoolFormatId();
+    if (!IsPoolUserFormat(nId))
+    {
+        UIName aName;
+        SwStyleNameMapper::FillUIName(nId, aName);
+        if (!aName.isEmpty())
+            return aName;
+    }
+    return rFormat.GetName();
+}
+
 void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 {
     SfxWhichIter aIter(rSet);
@@ -145,7 +160,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 {
                     SwFrameFormat* pFormat = pShell->GetSelectedFrameFormat();
                     if( pFormat )
-                        aName = pFormat->GetName();
+                        aName = lcl_getStyleDisplayName(*pFormat);
                 }
                 else if (pShell->GetSelectionType() == SelectionType::PostIt)
                 {
@@ -157,7 +172,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 {
                     SwTextFormatColl* pColl = pShell->GetCurTextFormatColl();
                     if(pColl)
-                        aName = pColl->GetName();
+                        aName = lcl_getStyleDisplayName(*pColl);
                 }
                 rSet.Put(SfxTemplateItem(nWhich, aName.toString()));
             }

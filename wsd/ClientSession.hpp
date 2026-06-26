@@ -435,6 +435,12 @@ private:
                    const std::shared_ptr<DocumentBroker>& docBroker);
     bool getCommandValues(const char* buffer, int length, const StringVector& tokens,
                           const std::shared_ptr<DocumentBroker>& docBroker);
+    /// Command values can be localized (style names), so views of one document
+    /// in different languages must not share a cached entry.
+    std::string commandValuesCacheKey(const std::string& command) const
+    {
+        return command + " lang=" + getLang();
+    }
     bool sendTile(const char* buffer, int length, const StringVector& tokens,
                   const std::shared_ptr<DocumentBroker>& docBroker);
     bool sendCombinedTiles(const char* buffer, int length, const StringVector& tokens,
