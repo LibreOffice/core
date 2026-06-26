@@ -66,10 +66,6 @@ protected:
 
     int get_index(sal_uInt16 nId) const { return mxTreeView->find_id(OUString::number(nId)); }
 
-    DECL_LINK(ColumnClickedHdl, const int, void);
-
-    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
-
 private:
     void AppendRow(const OUString& rImage, const OUString& rTitle, const OUString& rSubtitle,
                    const OUString& rApplication, const OUString& rModify, const OUString& rSize,
@@ -84,6 +80,10 @@ private:
     bool UpdateRows();
 
     void sortColumn(const int col);
+
+    DECL_LINK(ColumnClickedHdl, const int, void);
+
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 
 protected:
     std::unique_ptr<weld::TreeView> mxTreeView;

@@ -33,7 +33,6 @@ TemplateDlgLocalView::TemplateDlgLocalView(std::unique_ptr<weld::ScrolledWindow>
     , mViewMode(TemplateViewMode::ThumbnailView)
 {
     mxTreeView->connect_item_activated(LINK(this, TemplateDlgLocalView, RowActivatedHdl));
-    mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
     mxTreeView->connect_selection_changed(LINK(this, TemplateDlgLocalView, ListViewChangedHdl));
     mxTreeView->connect_command(LINK(this, TemplateDlgLocalView, PopupMenuHdl));
     mxTreeView->connect_key_press(LINK(this, TemplateDlgLocalView, KeyPressHdl));

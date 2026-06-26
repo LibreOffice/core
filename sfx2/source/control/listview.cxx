@@ -64,6 +64,7 @@ ListView::ListView(std::unique_ptr<weld::TreeView> xTreeView)
     mxTreeView->set_column_fixed_widths(aWidths);
     mxTreeView->set_selection_mode(SelectionMode::Multiple);
     mxTreeView->connect_query_tooltip(LINK(this, ListView, QueryTooltipHdl));
+    mxTreeView->connect_column_clicked(LINK(this, ListView, ColumnClickedHdl));
 }
 ListView::~ListView() {}
 
