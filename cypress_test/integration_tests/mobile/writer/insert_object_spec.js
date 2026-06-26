@@ -80,10 +80,13 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 	});
 
 	it('Insert header.', function() {
-		// Get the blinking cursor pos
 		helper.typeIntoDocument('xx{enter}');
 		helper.typeText('body', 'xxxx', 500);
-		helper.getCursorPos('left', 'cursorOrigLeft');
+		// Document-space cursor left in twips, independent of scroll position.
+		// Retry until core has sent a real cursor position (the rectangle starts zeroed).
+		let cursorOrigLeft;
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.x1').should('be.greaterThan', 0)
+			.then((left) => { cursorOrigLeft = left; });
 		mobileHelper.openInsertionWizard();
 		// Open header/footer submenu
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Header and Footer').click();
@@ -93,19 +96,18 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		// Insert header for All
 		cy.cGet('body').contains('.menu-entry-no-icon', 'All').click();
 		helper.processToIdle(this.win);
-		cy.get('@cursorOrigLeft')
-			.then(function(cursorOrigLeft) {
-				cy.cGet('.blinking-cursor')
-					.should(function(cursor) {
-						expect(cursor.offset().left).to.be.lessThan(cursorOrigLeft);
-					});
-			});
+		// Inserting the header moves the cursor into the header area, leftwards.
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.x1')
+			.should((left) => { expect(left).to.be.lessThan(cursorOrigLeft); });
 	});
 
 	it('Insert footer.', function() {
-		// Get the blinking cursor pos
 		helper.typeIntoDocument('xxxx');
-		helper.getCursorPos('top', 'cursorOrigTop');
+		// Document-space cursor top in twips, independent of scroll position.
+		// Retry until core has sent a real cursor position (the rectangle starts zeroed).
+		let cursorOrigTop;
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1').should('be.greaterThan', 0)
+			.then((top) => { cursorOrigTop = top; });
 		mobileHelper.openInsertionWizard();
 		// Open header/footer submenu
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Header and Footer').click();
@@ -115,86 +117,73 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		// Insert footer for All
 		cy.cGet('body').contains('.ui-content.level-1.mobile-wizard[title~="Footer"] .ui-header.level-2.mobile-wizard.ui-widget .menu-entry-no-icon', 'All').click();
 		helper.processToIdle(this.win);
-		// Check that the cursor was moved
-		cy.get('@cursorOrigTop')
-			.then(function(cursorOrigTop) {
-				cy.cGet('.blinking-cursor')
-					.should(function(cursor) {
-						expect(cursor.offset().top).to.be.greaterThan(cursorOrigTop);
-					});
-			});
+		// The footer moves the cursor down into the footer area.
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1')
+			.should((top) => { expect(top).to.be.greaterThan(cursorOrigTop); });
 	});
 
 	it('Insert footnote.', function() {
-		// Get the blinking cursor pos
 		helper.typeIntoDocument('xxxx');
-		helper.getCursorPos('top', 'cursorOrigTop');
+		// Document-space cursor top in twips, independent of scroll position.
+		// Retry until core has sent a real cursor position (the rectangle starts zeroed).
+		let cursorOrigTop;
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1').should('be.greaterThan', 0)
+			.then((top) => { cursorOrigTop = top; });
 		mobileHelper.openInsertionWizard();
 		// Insert footnote
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Footnote').click();
 		helper.processToIdle(this.win);
-		// Check that the cursor was moved
-		cy.get('@cursorOrigTop')
-			.then(function(cursorOrigTop) {
-				cy.cGet('.blinking-cursor')
-					.should(function(cursor) {
-						expect(cursor.offset().top).to.be.greaterThan(cursorOrigTop);
-					});
-			});
+		// The footnote moves the cursor down into the footnote area.
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1')
+			.should((top) => { expect(top).to.be.greaterThan(cursorOrigTop); });
 	});
 
 	it('Insert endnote.', function() {
-		// Get the blinking cursor pos
 		helper.typeIntoDocument('xxxx');
-		helper.getCursorPos('top', 'cursorOrigTop');
+		// Document-space cursor top in twips, independent of scroll position.
+		// Retry until core has sent a real cursor position (the rectangle starts zeroed).
+		let cursorOrigTop;
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1').should('be.greaterThan', 0)
+			.then((top) => { cursorOrigTop = top; });
 		mobileHelper.openInsertionWizard();
 		// Insert endnote
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Endnote').click();
 		helper.processToIdle(this.win);
-		// Check that the cursor was moved
-		cy.get('@cursorOrigTop')
-			.then(function(cursorOrigTop) {
-				cy.cGet('.blinking-cursor')
-					.should(function(cursor) {
-						expect(cursor.offset().top).to.be.greaterThan(cursorOrigTop);
-					});
-			});
+		// The endnote moves the cursor down into the endnote area.
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1')
+			.should((top) => { expect(top).to.be.greaterThan(cursorOrigTop); });
 	});
 
 	it('Insert page break.', function() {
-		// Get the blinking cursor pos
 		helper.typeIntoDocument('xxxx');
-		helper.getCursorPos('top', 'cursorOrigTop');
+		// Document-space cursor top in twips, independent of scroll position.
+		// Retry until core has sent a real cursor position (the rectangle starts zeroed).
+		let cursorOrigTop;
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1').should('be.greaterThan', 0)
+			.then((top) => { cursorOrigTop = top; });
 		mobileHelper.openInsertionWizard();
 		// Insert page break
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Page Break').click();
 		helper.processToIdle(this.win);
-		// Check that the cursor was moved
-		cy.get('@cursorOrigTop')
-			.then(function(cursorOrigTop) {
-				cy.cGet('.blinking-cursor')
-					.should(function(cursor) {
-						expect(cursor.offset().top).to.be.greaterThan(cursorOrigTop);
-					});
-			});
+		// The page break moves the cursor down onto the next page.
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1')
+			.should((top) => { expect(top).to.be.greaterThan(cursorOrigTop); });
 	});
 
 	it('Insert column break.', function() {
-		// Get the blinking cursor pos
 		helper.typeIntoDocument('xxxx');
-		helper.getCursorPos('top', 'cursorOrigTop');
+		// Document-space cursor top in twips, independent of scroll position.
+		// Retry until core has sent a real cursor position (the rectangle starts zeroed).
+		let cursorOrigTop;
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1').should('be.greaterThan', 0)
+			.then((top) => { cursorOrigTop = top; });
 		mobileHelper.openInsertionWizard();
 		// Do insertion
 		cy.cGet('body').contains('.menu-entry-with-icon', 'Column Break').click();
 		helper.processToIdle(this.win);
-		// Check that the cursor was moved
-		cy.get('@cursorOrigTop')
-			.then(function(cursorOrigTop) {
-				cy.cGet('.blinking-cursor')
-					.should(function(cursor) {
-						expect(cursor.offset().top).to.be.greaterThan(cursorOrigTop);
-					});
-			});
+		// The column break moves the cursor down to the next column start.
+		cy.getFrameWindow().its('app.file.textCursor.rectangle.y1')
+			.should((top) => { expect(top).to.be.greaterThan(cursorOrigTop); });
 	});
 
 	it('Insert hyperlink.', function() {
