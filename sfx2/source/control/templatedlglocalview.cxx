@@ -362,21 +362,17 @@ IMPL_LINK(TemplateDlgLocalView, PopupMenuHdl, const CommandEvent&, rCEvt, bool)
             return true;
         Point aPosition(rCEvt.GetMousePosPixel());
         maPosition = aPosition;
-        updateSelection();
-        if (mpSelectedItem)
-            maCreateContextMenuHdl.Call(mpSelectedItem);
-        return true;
     }
     else
     {
         if (ListView::get_selected_rows().empty())
             return true;
         maPosition = Point(0, 0);
-        updateSelection();
-        if (mpSelectedItem)
-            maCreateContextMenuHdl.Call(mpSelectedItem);
-        return true;
     }
+    updateSelection();
+    if (mpSelectedItem)
+        maCreateContextMenuHdl.Call(mpSelectedItem);
+    return true;
 }
 
 IMPL_LINK_NOARG(TemplateDlgLocalView, ListViewChangedHdl, weld::ItemView&, void)
