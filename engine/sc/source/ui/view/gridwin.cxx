@@ -7115,12 +7115,18 @@ void ScGridWindow::UpdateDatabaseOverlay()
                 true, true));
 
             xOverlayManager->add(*pOverlay);
-            std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList = DrawFillMarker(aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row(), mpDBExpandRect, true);
-            if (pOverlayList)
-            {
-                mpOODatabase.swap(pOverlayList);
-                mpOODatabase->append(std::move(pOverlay));
-            }
+            // Only draw the table-resize handle when the table area is editable; on a
+            // protected sheet the handle (and thus the resize affordance) must not appear.
+            const bool bEditable = ScEditableTester::CreateAndTestBlock(
+                rDocument, aCurrRange.aStart.Tab(), aCurrRange.aStart.Col(), aCurrRange.aStart.Row(),
+                aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row()).IsEditable();
+            std::unique_ptr<sdr::overlay::OverlayObjectList> pOverlayList;
+            if (bEditable)
+                pOverlayList = DrawFillMarker(aCurrRange.aEnd.Col(), aCurrRange.aEnd.Row(), mpDBExpandRect, true);
+            if (!pOverlayList)
+                pOverlayList = std::make_unique<sdr::overlay::OverlayObjectList>();
+            mpOODatabase.swap(pOverlayList);
+            mpOODatabase->append(std::move(pOverlay));
         }
     }
 }
