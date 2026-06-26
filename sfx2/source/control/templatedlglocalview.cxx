@@ -285,11 +285,11 @@ void TemplateDlgLocalView::syncCursor()
         ListView::unselect_all();
         int nIndex = -1;
 
-        for (auto it = mFilteredItemList.cbegin(); it != mFilteredItemList.cend(); ++it)
+        for (const ThumbnailViewItem* pItem : mFilteredItemList)
         {
-            if ((*it)->mbSelected)
+            if (pItem->mbSelected)
             {
-                nIndex = ListView::get_index((*it)->mnId);
+                nIndex = ListView::get_index(pItem->mnId);
                 if (nIndex >= 0)
                 {
                     ListView::set_cursor(nIndex);
