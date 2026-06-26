@@ -2584,9 +2584,24 @@ class Socket {
 			window.app.console.warn('zstdvectorprimitives with no payload');
 			return;
 		}
+		const compressed = event.imgBytes.subarray(event.imgIndex);
 		const json = new TextDecoder().decode(
-			(window as any).fzstd.decompress(event.imgBytes.subarray(event.imgIndex)),
+			(window as any).fzstd.decompress(compressed),
 		);
+		let summary =
+			compressed.length + ' bytes compressed, ' + json.length + ' bytes JSON';
+		try {
+			const parsed = JSON.parse(json);
+			summary +=
+				', type=' +
+				parsed.type +
+				', objects=' +
+				(parsed.objects ? parsed.objects.length : 0);
+			if (parsed.order) summary += ', order=' + parsed.order.length;
+		} catch (error) {
+			// Leave the summary as the sizes only.
+		}
+		window.app.console.log('zstdvectorprimitives payload: ' + summary);
 		const docLayer = (this._map as any)?._docLayer;
 		if (docLayer && docLayer._onCommandValuesMsg)
 			docLayer._onCommandValuesMsg('commandvalues: ' + json);
