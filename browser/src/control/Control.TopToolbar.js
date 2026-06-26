@@ -259,6 +259,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			{type: 'toolitem',  id: 'sidebar', text: _UNO('.uno:Sidebar', '', true), command: '.uno:SidebarDeck.PropertyDeck', visible: false, icon: 'compact_sidebar.svg', accessibility: { focusBack: true, combination: 'ZB' }},
 			{type: 'toolitem',  id: 'modifypage', text: _UNO('.uno:ModifyPage', 'presentation', true), command: '.uno:ModifyPage', visible: false, icon: 'compact_sidebar.svg', accessibility: { focusBack: true, combination: 'ZL' }},
 			{type: 'customtoolitem',  id: 'slidechangewindow', text: _UNO('.uno:SlideChangeWindow', 'presentation', true), command: 'transitiondeck', icon: 'compact_slidechangewindow.svg', visible: false, accessibility: { focusBack: true, combination: 'ZT' }},
+			{type: 'menubutton', id: 'changelayout:ChangeSlideLayoutMenu', noLabel: true, text: _('Change Layout'), command: '.uno:AssignLayout', visible: false, icon: 'lc_changelayout.svg', accessibility: { focusBack: true, combination: 'ZC' }},
 			{type: 'toolitem',  id: 'customanimation', text: _UNO('.uno:CustomAnimation', 'presentation', true), command: '.uno:CustomAnimation', visible: false, icon: 'compact_customanimation.svg', accessibility: { focusBack: true, combination: 'ZA' }},
 			{type: 'toolitem',  id: 'masterslidespanel', text: _UNO('.uno:MasterSlidesPanel', 'presentation', true), command: '.uno:MasterSlidesPanel', visible: false, icon: 'compact_masterslides.svg', accessibility: { focusBack: true, combination: 'ZM' }},
 			{type: 'customtoolitem',  id: 'fold', desktop: false, mobile: false, tablet: true, iosapptablet: false, visible: false},
@@ -411,7 +412,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			if (this.parentContainer) {
 				['resetimpress', 'breaksidebar', 'modifypage',
 					'leftpara', 'centerpara', 'rightpara', 'justifypara', 'breakpara', 'linespacing',
-					'gridvisible', 'griduse',
+					'gridvisible', 'griduse','changelayout',
 					'breakspacing', 'defaultbullet', 'defaultnumbering', 'breakbullet', 'inserttextbox', 'inserttable',  'insertannotation', 'backcolor',
 					'breaksidebar', 'modifypage', 'slidechangewindow', 'customanimation', 'masterslidespanel', 'navigator'
 				].forEach((id) => {
