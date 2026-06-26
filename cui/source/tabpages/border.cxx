@@ -439,40 +439,6 @@ SvxBorderTabPage::SvxBorderTabPage(weld::Container* pPage, weld::DialogControlle
     // set metric
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreAttrs );
 
-    if( mbUseMarginItem )
-    {
-        // copied from SvxAlignmentTabPage
-        switch ( eFUnit )
-        {
-            //  #103396# the default value (1pt) can't be accurately represented in
-            //  inches or pica with two decimals, so point is used instead.
-            case FieldUnit::PICA:
-            case FieldUnit::INCH:
-            case FieldUnit::FOOT:
-            case FieldUnit::MILE:
-                eFUnit = FieldUnit::POINT;
-                break;
-
-            case FieldUnit::CM:
-            case FieldUnit::M:
-            case FieldUnit::KM:
-                eFUnit = FieldUnit::MM;
-                break;
-            default: ;//prevent warning
-        }
-    }
-    else
-    {
-        switch ( eFUnit )
-        {
-            case FieldUnit::M:
-            case FieldUnit::KM:
-                eFUnit = FieldUnit::MM;
-                break;
-            default: ; //prevent warning
-        }
-    }
-
     SetFieldUnit(*m_xEdShadowSize, eFUnit);
 
     sal_uInt16 nWhich = GetWhich( SID_ATTR_BORDER_INNER, false );
