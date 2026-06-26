@@ -32,6 +32,14 @@ else if (wopiSrc !== '' && accessHeader !== '') {
 	wopiParams = { 'access_header': accessHeader };
 }
 
+// Debug-only: an explicit user id, sent as a WOPI param (a sibling of the
+// access token, NOT part of WOPISrc, so the doc key and collaboration are
+// unaffected). The test WOPI host reads it as the UserId. This lets us debug
+// multi-user scenarios that the single hard-coded test user cannot.
+var debugUserId = global.coolParams.get('userid');
+if (wopiSrc !== '' && debugUserId)
+	wopiParams.userid = debugUserId;
+
 var filePath = global.coolParams.get('file_path');
 
 app.localeService = new LocaleService();

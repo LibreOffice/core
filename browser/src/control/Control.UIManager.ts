@@ -51,6 +51,9 @@ class UIManager extends window.L.Control {
 	// Hidden Notebookbar tabs.
 	hiddenTabs: { [key: string]: boolean } = {};
 	permissionViewMode?: PermissionViewMode;
+	// Guards the one-time reconciliation of an integrator-forced theme with
+	// the server-stored user setting (see reconcileIntegratorThemeOverride).
+	private integratorThemeReconciled = false;
 
 	/**
 	 * Called when the UIManager control is added to the map.
@@ -143,14 +146,19 @@ class UIManager extends window.L.Control {
 		});
 		// Cross-window live update: desktop windows share one profile, so a dark
 		// mode change in another window fires a 'storage' event here. Drop the
-		// cached value and re-apply from the (updated) localStorage.
-		window.addEventListener('storage', (e) => {
-			if (e.key !== 'darkTheme') return;
-			delete (window.prefs as any)._localStorageCache['darkTheme'];
-			this.initDarkModeFromSettings();
-			if (!window.starterScreen)
-				this.refreshUIAfterThemeChange();
-		});
+		// cached value and re-apply from the (updated) localStorage. This is only
+		// wanted on the desktop, where every window is the same user. In a browser
+		// two tabs share localStorage but are independent views (often different
+		// collaborating users), so syncing here would flip the other user's theme.
+		if (window.mode.isCODesktop()) {
+			window.addEventListener('storage', (e) => {
+				if (e.key !== 'darkTheme') return;
+				delete (window.prefs as any)._localStorageCache['darkTheme'];
+				this.initDarkModeFromSettings();
+				if (!window.starterScreen)
+					this.refreshUIAfterThemeChange();
+			});
+		}
 	}
 
 	// UI initialization
@@ -398,7 +406,13 @@ class UIManager extends window.L.Control {
 		if (!window.mode.isSmallScreenDevice())
 			this.refreshAfterThemeChange();
 
-		if (app.map._docLayer._docType === 'spreadsheet') {
+		// Both app.sectionContainer and app.map._docLayer are absent when a theme
+		// is applied very early (the integrator-override reconciliation runs while
+		// the document is still loading, before the canvas sections exist). Test
+		// the container first so its presence also shields the _docLayer access;
+		// the grid section is built later with the already-set theme anyway, so
+		// there is nothing to reset here yet.
+		if (app.sectionContainer && app.map._docLayer._docType === 'spreadsheet') {
 			const calcGridSection = app.sectionContainer.getSectionWithName(app.CSections.CalcGrid.name);
 			if (calcGridSection)
 				calcGridSection.resetStrokeStyle();
@@ -408,9 +422,58 @@ class UIManager extends window.L.Control {
 	}
 
 	/**
+	 * Reconciles an integrator-forced UI theme with the server-stored user theme.
+	 *
+	 * An integrator can force a theme through ui_defaults (UITheme) together with
+	 * SavedUIState=false. SavedUIState=false means "ignore the saved user state,
+	 * use the integrator default", so the client honours the integrator theme in
+	 * prefs.get(). But the core engine keeps applying the server-stored user
+	 * theme through overrideDocOption, which is unaware of SavedUIState. The
+	 * document content is then drawn in one theme while the canvas background
+	 * uses the other; in Calc this leaves text on default-background cells
+	 * unreadable, and it does not fix itself.
+	 *
+	 * Rather than teach core about SavedUIState, keep a single source of truth:
+	 * since SavedUIState=false forbids the saved value from winning anyway, make
+	 * the saved value match the integrator default. Persist it exactly as a user
+	 * theme toggle would - applyDarkMode stores it on the server (so core's
+	 * overrideDocOption now agrees) and pushes it to core live. The rest of the
+	 * normal flow then continues unchanged.
+	 *
+	 * Returns true when it reconciled (and therefore already applied the theme).
+	 */
+	reconcileIntegratorThemeOverride(): boolean {
+		if (this.integratorThemeReconciled || (window as any).savedUIState)
+			return false;
+
+		const prefs = window.prefs as any;
+		const integratorTheme = prefs._getUIDefault('darkTheme');
+		if (integratorTheme === undefined)
+			return false;
+
+		// Only act on a genuine divergence. With no stored value the engine
+		// already receives the integrator theme through the document load
+		// command, so there is nothing to reconcile.
+		const storedTheme = prefs._userBrowserSetting['darkTheme'];
+		if (storedTheme === undefined || storedTheme === integratorTheme)
+			return false;
+
+		this.integratorThemeReconciled = true;
+		this.applyDarkMode(integratorTheme === 'true', true);
+		return true;
+	}
+
+	/**
 	 * Initializes dark mode based on user settings.
 	 */
 	initDarkModeFromSettings(): void {
+		// If the integrator forces a theme that the server-stored user setting
+		// contradicts, reconcile them first. When that happens applyDarkMode has
+		// already applied the theme to the UI and the core engine, so there is
+		// nothing left to do here.
+		if (this.reconcileIntegratorThemeOverride())
+			return;
+
 		var inDarkTheme = window.prefs.getBoolean('darkTheme');
 
 		if (inDarkTheme) {

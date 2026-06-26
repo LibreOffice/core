@@ -24,7 +24,12 @@
         // filePathParam: 'file_path' (iframe1) or 'file_path2' (iframe2).
         // When file_path2 is missing, iframe2 falls back to file_path so
         // existing single-file multiuser tests keep working.
-        function constructWopiUrl(filePathParam) {
+        // useridParam: 'userid1' (iframe1) or 'userid2' (iframe2). Most multiuser
+        // tests pass neither, so both iframes act as the default user and behave
+        // as before. Tests that need distinct, persisting users (e.g. theme
+        // isolation) pass explicit ids; the test WOPI server then gives each its
+        // own settings store.
+        function constructWopiUrl(filePathParam, useridParam) {
             var wopiUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?";
             wopiUrl = wopiUrl.replace("cypress-multiuser.html", "cool.html");
             var params = new URLSearchParams(window.location.search);
@@ -34,16 +39,32 @@
             filePath = filePath.substr(1);
             params.delete('file_path');
             params.delete('file_path2');
+            var userid = params.get(useridParam);
+            params.delete('userid');
+            params.delete('userid1');
+            params.delete('userid2');
             var wopiSrc = window.location.protocol + "//" + window.location.host + "/wopi/files/" + encodeURIComponent(filePath);
             wopiUrl = wopiUrl + "WOPISrc=" + wopiSrc + '&' + params.toString();
-            return wopiUrl
+            if (userid)
+                wopiUrl += '&userid=' + userid;
+            return { url: wopiUrl, userid: userid };
         }
+       // The access token is an auth credential, not an identity (the test WOPI
+       // server resolves the user from &userid). Vary it per user so the
+       // proactive vetting key (docKey_token) differs between the two iframes
+       // and a concurrent load cannot pick up the other user's vetting result.
+       function applyForm(form, filePathParam, useridParam) {
+           var built = constructWopiUrl(filePathParam, useridParam);
+           form.action = built.url;
+           if (built.userid)
+               form.querySelector('input[name=access_token]').value = 'test-' + built.userid;
+       }
        var form1 = document.getElementById("form1");
-       form1.action = constructWopiUrl('file_path');
+       applyForm(form1, 'file_path', 'userid1');
        form1.submit();
 
        var form2 = document.getElementById("form2");
-       form2.action = constructWopiUrl('file_path2');
+       applyForm(form2, 'file_path2', 'userid2');
 
         window.addEventListener(
             'message',

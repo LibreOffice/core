@@ -17,6 +17,7 @@
 <body>
     <form id="form" action enctype="multipart/form-data" target="coolframe" method="post">
          <input name="access_token" value="test" type="hidden"/>
+         <input id="ui_defaults" name="ui_defaults" type="hidden"/>
          <input id="wopi_setting_base_url" name="wopi_setting_base_url" type="hidden"/>
     </form>
     <iframe id="coolframe" name= "coolframe" style="width:100%;height:100%;position:absolute;" title="Collabora Online" allow="fullscreen">
@@ -70,6 +71,17 @@
             let remainingParams = params.toString()
             if (remainingParams)
               localUrl = localUrl + '&' + params.toString();
+            // The debug user id identifies the user to the (test) WOPI host.
+            // The access token is an authorization credential, not an identity
+            // (a real host may mint several tokens for one user), so debugging
+            // multi-user scenarios needs a separate, explicit user id. Drive it
+            // purely from the URL: open with &userid=2 in a second tab to act
+            // as a different user; same userid across tabs/reloads = same user.
+            // It is a plain query param, not part of the WOPISrc, so the doc key
+            // and collaboration are unaffected. When present it already rode
+            // along in params above. When omitted the (test) WOPI host falls back
+            // to its default user "test", which stays the document owner
+            // (UserId == OwnerId), so add nothing here.
             return localUrl
           }
         var form = document.getElementById("form");
@@ -78,6 +90,26 @@
           settingsBaseUrl = window.location.protocol + "//" + window.location.host + "/wopi/settings";
         document.getElementById("wopi_setting_base_url").value = settingsBaseUrl;
         form.action = constructWopiUrl();
+        // The access token is an auth credential, not an identity, and the test
+        // WOPI server does not validate it. Vary it per user so the proactive
+        // vetting key (docKey_token) differs between users; otherwise two tabs
+        // opened at the same time share one key and the second tab can pick up
+        // the first user's vetting result. User identity for preset routing
+        // still comes from the separate userid param, not the token. With no
+        // userid the default user keeps the plain "test" token, so cypress and
+        // the committed seed are unaffected.
+        var debugUserId = new URLSearchParams(window.location.search).get('userid');
+        if (debugUserId)
+          document.querySelector('input[name=access_token]').value = 'test-' + debugUserId;
+        // Debug-only test aid: pass ?UITheme=dark|light to mimic an integrator
+        // whose UI theme default differs from the server-stored user setting.
+        // SavedUIState=false is the part that lets the integrator default win
+        // over the saved browsersetting on the client (prefs.get); it lets us
+        // exercise the client/core theme reconciliation easily.
+        var uiTheme = new URLSearchParams(window.location.search).get('UITheme');
+        if (uiTheme === 'dark' || uiTheme === 'light')
+          document.getElementById('ui_defaults').value =
+            'UITheme=' + uiTheme + ';SavedUIState=false';
         form.submit();
 
         // TODO: share code between debug.html and framed.doc.html

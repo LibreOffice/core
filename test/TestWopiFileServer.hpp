@@ -101,6 +101,31 @@ std::string readFileToString(const std::string& path)
     return buffer.str();
 }
 
+// Maps a user id to its on-disk preset directory (relative to FileServerRoot).
+// A real WOPI host keeps each user's settings (browser/view settings,
+// dictionaries, ...) separate, so mirror that here: two debug users with
+// different &userid values get different stores and a theme/view change by one
+// cannot leak into another's. The default debug user (empty or "test") keeps
+// the historical shared location, which the cypress fixtures seed and read
+// directly, so existing tests are unaffected.
+std::string userPresetDir(const std::string& userId)
+{
+    if (userId.empty() || userId == "test")
+        return "test/data/presets/user";
+
+    // Keep the directory name filesystem-safe; debug user ids are simple
+    // tokens, so reduce anything else to '_'.
+    std::string safe;
+    safe.reserve(userId.size());
+    for (const char c : userId)
+    {
+        const bool ok = (c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') ||
+                        (c >= 'A' && c <= 'Z') || c == '-' || c == '_';
+        safe.push_back(ok ? c : '_');
+    }
+    return "test/data/presets/user/u-" + safe;
+}
+
 //handles request starts with /wopi/files
 void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetails& requestDetails,
                        std::istream& message, const std::shared_ptr<StreamSocket>& socket)
@@ -131,8 +156,10 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         const std::shared_ptr<LocalFileInfo>& localFile =
             LocalFileInfo::getOrCreateFile(localPath, path.getFileName());
 
-        std::string userId = std::to_string(lastLocalId++);
-        std::string userNameString = "LocalUser#" + userId;
+        // Identity used for settings/owner comes from the request (see UserId
+        // below); the per-connection counter only keeps friendly names distinct
+        // for multiple views, which some multi-view tests rely on.
+        std::string userNameString = "LocalUser#" + std::to_string(lastLocalId++);
         Poco::JSON::Object::Ptr fileInfo = new Poco::JSON::Object();
 
         Poco::JSON::Object::Ptr wopi = new Poco::JSON::Object();
@@ -154,10 +181,17 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         fileInfo->set("Size", localFile->getSize());
         fileInfo->set("Version", "1.0");
         fileInfo->set("OwnerId", "test");
-        // usually in debug mode with debug.html the user that opening the document is same therefore set a static userId
-        // if this is not the same as the OwnerId then the user is not considered the owner and cannot change the password
-        // via document, properties
-        fileInfo->set("UserId", "test");
+        // The WOPI host identifies the user; mirror that here by taking the user
+        // id from the request (debug.html sends &userid on the WOPISrc; a real
+        // host resolves it from the access token). Same userid across tabs/reloads
+        // is the same user, different userid is a different user. Falling back to
+        // "test" keeps the default debug user matching OwnerId so it stays the
+        // owner (owner-only actions such as the document-properties password
+        // option require UserId == OwnerId).
+        std::string userId = requestDetails.getParam("userid");
+        if (userId.empty())
+            userId = "test";
+        fileInfo->set("UserId", userId);
         fileInfo->set("UserFriendlyName", userNameString);
 
         //allow &configid to override etag to force another subforkit
@@ -181,7 +215,18 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         // Cypress tests both assume that tests start in the default config, e.g.
         // spell checking and sidebar enabled, and some tests assume they can override
         // features by changing localStorage before loading a document.
-        const bool cypressUserConfig = localPath.find("cypress_test") != std::string::npos;
+        //
+        // A test that needs real per-user settings persistence (e.g. the theme
+        // isolation/reload tests) opts in by passing an explicit &userid: that
+        // routes it to the full userconfig with its own per-user store (see
+        // userPresetDir), so its browser settings are saved and served back on
+        // reload. The default user (no userid -> "test") keeps the historical
+        // cypressuserconfig.json, so the many tests that don't ask for
+        // persistence are unaffected.
+        const bool persistingTestUser =
+            !userId.empty() && userId != "test";
+        const bool cypressUserConfig =
+            localPath.find("cypress_test") != std::string::npos && !persistingTestUser;
 #else
         const bool cypressUserConfig(false);
 #endif
@@ -191,7 +236,12 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
             std::string userConfig = !cypressUserConfig ? "/wopi/settings/userconfig.json"
                                                         : "/wopi/settings/cypressuserconfig.json";
             std::string uri = COOLWSD::getServerURL() + userConfig;
-            userSettings->set("uri", Util::trim(uri));
+            Util::trim(uri);
+            // Carry the user id so the settings handler can serve this user's
+            // own preset store (see userPresetDir). It survives the round trip:
+            // DocumentBroker fetches UserSettings.uri via getPathAndQuery().
+            uri += "?userid=" + userId;
+            userSettings->set("uri", uri);
             userSettings->set("stamp", etagString);
             fileInfo->set("UserSettings", userSettings);
         }
@@ -277,7 +327,7 @@ using asset = std::pair<std::string, std::string>;
 void handlePresetRequest(const std::string& kind, const std::string& etagString,
                          const std::string& prefix, const std::shared_ptr<StreamSocket>& socket,
                          const std::vector<asset>& items, bool serveBrowserSetttings,
-                         const std::string& unittest)
+                         const std::string& unittest, const std::string& userId)
 {
     Poco::JSON::Object::Ptr configInfo = new Poco::JSON::Object();
     configInfo->set("kind", kind);
@@ -336,16 +386,21 @@ void handlePresetRequest(const std::string& kind, const std::string& etagString,
     if (serveBrowserSetttings)
     {
         assert(kind == "user");
-        const std::string& browserSettingPath =
-            COOLWSD::FileServerRoot + "test/data/presets/user/browsersetting.json";
-        if (FileUtil::Stat(browserSettingPath).exists())
+        // browsersetting.json and viewsetting.json are mutable: the client
+        // re-uploads them at runtime (e.g. a changed view mode). Their stamp
+        // must therefore change with the file content.
+        const std::string browserSettingPath =
+            COOLWSD::FileServerRoot + userPresetDir(userId) + "/browsersetting.json";
+        const FileUtil::Stat browserSettingStat(browserSettingPath);
+        if (browserSettingStat.exists())
         {
             Poco::JSON::Array::Ptr browsersettingArray = new Poco::JSON::Array();
             Poco::JSON::Object::Ptr configEntry = new Poco::JSON::Object();
             std::string uri = COOLWSD::getServerURL().append(prefix + browserSettingPath);
             Util::trim(uri);
             configEntry->set("uri", uri);
-            configEntry->set("stamp", etagString);
+            configEntry->set("stamp", etagString + '-' +
+                                         std::to_string(browserSettingStat.modifiedTimeUs()));
             browsersettingArray->add(configEntry);
             configInfo->set("browsersetting", browsersettingArray);
         }
@@ -354,16 +409,18 @@ void handlePresetRequest(const std::string& kind, const std::string& etagString,
             LOG_WRN("preset file [" << browserSettingPath << "] doesn't exist");
         }
 
-        const std::string& viewSettingPath =
-            COOLWSD::FileServerRoot + "test/data/presets/user/viewsetting.json";
-        if (FileUtil::Stat(viewSettingPath).exists())
+        const std::string viewSettingPath =
+            COOLWSD::FileServerRoot + userPresetDir(userId) + "/viewsetting.json";
+        const FileUtil::Stat viewSettingStat(viewSettingPath);
+        if (viewSettingStat.exists())
         {
             Poco::JSON::Array::Ptr viewsettingArray = new Poco::JSON::Array();
             Poco::JSON::Object::Ptr configEntry = new Poco::JSON::Object();
             std::string uri = COOLWSD::getServerURL().append(prefix + viewSettingPath);
             Util::trim(uri);
             configEntry->set("uri", uri);
-            configEntry->set("stamp", etagString);
+            configEntry->set("stamp", etagString + '-' +
+                                          std::to_string(viewSettingStat.modifiedTimeUs()));
             viewsettingArray->add(configEntry);
             configInfo->set("viewsetting", viewsettingArray);
         }
@@ -390,7 +447,7 @@ enum class PresetType : std::uint8_t
 };
 
 // search for presets file in test/data/presets directory
-static std::vector<asset> getAssetVec(PresetType type)
+static std::vector<asset> getAssetVec(PresetType type, const std::string& userId = std::string())
 {
     std::string searchDir = "test/data/presets";
     std::vector<asset> assetVec;
@@ -403,7 +460,7 @@ static std::vector<asset> getAssetVec(PresetType type)
     if (type == PresetType::Shared)
         searchDir.append("/shared");
     else if (type == PresetType::User)
-        searchDir.append("/user");
+        searchDir = userPresetDir(userId);
 
     auto searchInDir = [&assetVec](const std::string& directory)
     {
@@ -475,15 +532,29 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
 
         if (configPath == "/userconfig.json" || configPath == "/cypressuserconfig.json")
         {
-            auto items = getAssetVec(PresetType::User);
-            bool serveBrowerSettings = configPath != "/cypressuserconfig.json";
+            const bool serveBrowerSettings = configPath != "/cypressuserconfig.json";
+            // Route to the requesting user's own preset store, except for the
+            // cypress config, which must keep using the shared fixture dir its
+            // tests seed and read directly.
+            std::string presetUser;
+            if (serveBrowerSettings)
+            {
+                const auto useridIt =
+                    std::find_if(params.begin(), params.end(),
+                                 [](const std::pair<std::string, std::string>& pair)
+                                 { return pair.first == "userid"; });
+                if (useridIt != params.end())
+                    presetUser = useridIt->second;
+            }
+            auto items = getAssetVec(PresetType::User, presetUser);
             handlePresetRequest("user", etagString, prefix, socket, items, serveBrowerSettings,
-                                unittest);
+                                unittest, presetUser);
         }
         else if (configPath == "/sharedconfig.json")
         {
             auto items = getAssetVec(PresetType::Shared);
-            handlePresetRequest("shared", etagString, prefix, socket, items, false, unittest);
+            handlePresetRequest("shared", etagString, prefix, socket, items, false, unittest,
+                                std::string());
         }
         else
             throw BadRequestException("Invalid Config Request: " + configPath);
@@ -555,22 +626,51 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
             const std::string& type = splitStr[1];
             const std::string& fileName = splitStr[3];
 
-            std::string dirPath = "test/data/presets/";
+            // The user id (carried on the upload URI via _uriPublic, preserved
+            // by getPresetUploadBaseUrl) selects this user's own store, so the
+            // GET listing reads back what this user uploaded (see userPresetDir).
+            std::string userId;
+            for (const auto& param : params)
+            {
+                if (param.first == "userid")
+                    userId = param.second;
+            }
+
+            // Write under FileServerRoot so the location matches where the
+            // GET/index handlers read presets from (they use
+            // COOLWSD::FileServerRoot + "test/data/presets/..."). A relative
+            // path would resolve against coolwsd's CWD, which differs from
+            // FileServerRoot under cypress (CWD is cypress_test/), so uploaded
+            // settings would be written somewhere they are never read back.
+            std::string dirPath = COOLWSD::FileServerRoot;
             if (type == "userconfig")
-                dirPath.append("user");
+                dirPath += userPresetDir(userId);
             else if (type == "systemconfig")
-                dirPath.append("shared");
+                dirPath += "test/data/presets/shared";
 
-            Poco::File(dirPath).createDirectories();
+            // The default cypress user (no &userid -> "test") must not persist
+            // its browser settings: tests rely on a clean starting config, and a
+            // persisted file (e.g. a recent color picked by one test) would leak
+            // into later tests and runs. Only a test that opted in with an
+            // explicit &userid (any value, including 1) gets its own persisted
+            // store. Skip the write for the default user but still respond OK so
+            // the client's upload does not error. Shared/systemconfig is
+            // unaffected.
+            const bool skipPersist =
+                (type == "userconfig" && (userId.empty() || userId == "test"));
+            if (!skipPersist)
+            {
+                Poco::File(dirPath).createDirectories();
 
-            LOG_DBG("Saving uploaded file [" << fileName << "] to directory [" << dirPath << ']');
-            dirPath.push_back('/');
-            dirPath.append(fileName);
+                LOG_DBG("Saving uploaded file [" << fileName << "] to directory [" << dirPath << ']');
+                dirPath.push_back('/');
+                dirPath.append(fileName);
 
-            std::ofstream outfile(dirPath, std::ofstream::binary);
-            std::copy_n(std::istreambuf_iterator<char>(message), size,
-                        std::ostreambuf_iterator<char>(outfile));
-            outfile.close();
+                std::ofstream outfile(dirPath, std::ofstream::binary);
+                std::copy_n(std::istreambuf_iterator<char>(message), size,
+                            std::ostreambuf_iterator<char>(outfile));
+                outfile.close();
+            }
 
             std::string timestamp =
                 Util::getIso8601FracformatTime(std::chrono::system_clock::now());
@@ -600,7 +700,7 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
 
         // TODO: hardcoded save to shared directory, add support for user directory
         // when adminIntegratorSettings allow it
-        const std::string testSharedDir = "test/data/presets/shared";
+        const std::string testSharedDir = COOLWSD::FileServerRoot + "test/data/presets/shared";
         Poco::File(testSharedDir).createDirectories();
         LOG_DBG("Saving uploaded file[" << fileName << "] to directory[" << testSharedDir << ']');
 
@@ -643,11 +743,21 @@ void handleSettingsRequest(const Poco::Net::HTTPRequest& request, const std::str
         const std::string& type = splitStr[1];
         const std::string& fileName = splitStr[3];
 
-        std::string dirPath = "test/data/presets/";
+        std::string userId;
+        for (const auto& param : params)
+        {
+            if (param.first == "userid")
+                userId = param.second;
+        }
+
+        // Match the read/upload path (COOLWSD::FileServerRoot-based, keyed by
+        // user id); see the upload handler above for why a relative path is
+        // wrong under cypress.
+        std::string dirPath = COOLWSD::FileServerRoot;
         if (type == "userconfig")
-            dirPath.append("user");
+            dirPath += userPresetDir(userId);
         else if (type == "systemconfig")
-            dirPath.append("shared");
+            dirPath += "test/data/presets/shared";
 
         dirPath.push_back('/');
         dirPath.append(fileName);

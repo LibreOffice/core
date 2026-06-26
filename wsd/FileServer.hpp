@@ -100,12 +100,14 @@ public:
 
         ResourceAccessDetails(std::string wopiSrc, std::string accessToken,
                               std::string noAuthHeader,
-                              std::string permission, std::string wopiConfigId)
+                              std::string permission, std::string wopiConfigId,
+                              std::string userId = std::string())
             : _wopiSrc(std::move(wopiSrc))
             , _accessToken(std::move(accessToken))
             , _noAuthHeader(std::move(noAuthHeader))
             , _permission(std::move(permission))
             , _wopiConfigId(std::move(wopiConfigId))
+            , _userId(std::move(userId))
         {
         }
 
@@ -118,6 +120,10 @@ public:
         // only exists in debugging mode, so built-in wopi debugging server
         // can support multiple 'shared' configs depending on configid=something
         const std::string& wopiConfigId() const { return _wopiConfigId; }
+        // only used in debugging mode: the access token identifies the user to a
+        // real host, but the built-in wopi debugging server uses a fixed token,
+        // so an explicit userid is carried through to distinguish users.
+        const std::string& userId() const { return _userId; }
 
     private:
         std::string _wopiSrc;
@@ -125,6 +131,7 @@ public:
         std::string _noAuthHeader;
         std::string _permission;
         std::string _wopiConfigId;
+        std::string _userId;
     };
 
 private:

@@ -189,17 +189,6 @@ std::string PreProcessedFile::substitute(const Util::UnorderedStringMap<std::str
 
 std::string FileServerRequestHandler::uiDefaultsToJSON(const std::string& uiDefaults, std::string& uiMode, std::string& uiTheme, std::string& savedUIState)
 {
-    static std::string previousUIDefaults;
-    static std::string previousJSON("{}");
-    static std::string previousUIMode;
-
-    // early exit if we are serving the same thing
-    if (uiDefaults == previousUIDefaults)
-    {
-        uiMode = previousUIMode;
-        return previousJSON;
-    }
-
     Poco::JSON::Object json;
     Poco::JSON::Object textDefs;
     Poco::JSON::Object spreadsheetDefs;
@@ -207,7 +196,12 @@ std::string FileServerRequestHandler::uiDefaultsToJSON(const std::string& uiDefa
     Poco::JSON::Object drawingDefs;
 
     uiMode.clear();
-    uiTheme = "light";
+    // Leave the theme unset unless ui_defaults names one (UITheme below). A
+    // normal request that does not set ui_defaults then keeps the empty theme it
+    // had before, instead of being forced to "light"; the client decides the
+    // theme from its own settings. (Previously a process-global cache returned
+    // early for the common empty input and masked this default.)
+    uiTheme.clear();
     savedUIState = "true";
     StringVector tokens(StringVector::tokenize(uiDefaults, ';'));
     for (const auto& token : tokens)
@@ -338,11 +332,7 @@ std::string FileServerRequestHandler::uiDefaultsToJSON(const std::string& uiDefa
     std::ostringstream oss;
     Poco::JSON::Stringifier::stringify(json, oss);
 
-    previousUIDefaults = uiDefaults;
-    previousJSON = oss.str();
-    previousUIMode = uiMode;
-
-    return previousJSON;
+    return oss.str();
 }
 
 std::string FileServerRequestHandler::checkFileInfoToJSON(const std::string& checkfileInfo)

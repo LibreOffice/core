@@ -15,6 +15,7 @@ function plugin(on, config) {
 	on('task', {
 		copyFile: tasks.copyFile,
 		getSelectors: tasks.getSelectors,
+		writeUserSetting: tasks.writeUserSetting,
 		lighthouse: lighthouse(),
 	});
 

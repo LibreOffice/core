@@ -705,6 +705,12 @@ void launchAsyncCheckFileInfo(
 #if ENABLE_DEBUG
     if (!accessDetails.wopiConfigId().empty())
         options.push_back("configid=" + accessDetails.wopiConfigId());
+
+    // Carry the debug user id into the proactive CheckFileInfo so the session's
+    // public URI identifies the user (the built-in test wopi server uses a fixed
+    // access token and cannot otherwise tell users apart).
+    if (!accessDetails.userId().empty())
+        options.push_back("userid=" + accessDetails.userId());
 #endif
 
     const RequestDetails fullRequestDetails =

@@ -61,7 +61,7 @@ function setupDocument(filePath, copyCertificates = false) {
  *   document is loaded, such as clearing a warning about macros.
  * isMultiUser: Set to true for multiuser tests.
  */
-function loadDocument(filePath, skipDocumentChecks, isMultiUser, lang) {
+function loadDocument(filePath, skipDocumentChecks, isMultiUser, lang, extraQuery) {
 	cy.log('>> loadDocument - start');
 	cy.log('Param - filePath: ' + filePath);
 	if (skipDocumentChecks) {
@@ -91,7 +91,7 @@ function loadDocument(filePath, skipDocumentChecks, isMultiUser, lang) {
 	if (Cypress.env('INTEGRATION') === 'nextcloud') {
 		loadDocumentNextcloud(filePath);
 	} else {
-		loadDocumentNoIntegration(filePath, isMultiUser, lang);
+		loadDocumentNoIntegration(filePath, isMultiUser, lang, extraQuery);
 	}
 
 	const isDraw = filePath.indexOf('draw') === 0;
@@ -117,14 +117,14 @@ function loadDocument(filePath, skipDocumentChecks, isMultiUser, lang) {
  * call setupDocument and loadDocument directly
  * filePath: test document path, for example: 'calc/hello-world.ods'
  */
-function setupAndLoadDocument(filePath, isMultiUser = false, copyCertificates = false, lang = undefined) {
+function setupAndLoadDocument(filePath, isMultiUser = false, copyCertificates = false, lang = undefined, extraQuery = undefined) {
 	cy.log('>> setupAndLoadDocument - start');
 
 	var newFilePath = setupDocument(filePath, copyCertificates);
 	if (isMultiUser) {
-		loadDocument(newFilePath, undefined, isMultiUser, lang);
+		loadDocument(newFilePath, undefined, isMultiUser, lang, extraQuery);
 	} else {
-		loadDocument(newFilePath, undefined, undefined, lang);
+		loadDocument(newFilePath, undefined, undefined, lang, extraQuery);
 	}
 
 	cy.log('<< setupAndLoadDocument - end');
@@ -174,11 +174,11 @@ function setupAndLoadTwoDocuments(filePath1, filePath2, lang) {
  * Covers most use cases. For more flexibility,
  * call closeDocument and loadDocument directly
  */
-function reloadDocument(filePath) {
+function reloadDocument(filePath, extraQuery) {
 	cy.log('>> reloadDocument - start');
 
 	closeDocument(filePath);
-	loadDocument(filePath, /*skipDocumentChecks*/ true);
+	loadDocument(filePath, /*skipDocumentChecks*/ true, undefined, undefined, extraQuery);
 
 	// loadDocument skips full documentChecks on reload, but we still
 	// need to wait for the document canvas to be visible before
@@ -211,7 +211,7 @@ function logError(event) {
 /*
  * Loads the test document directly in Collabora Online.
  */
-function loadDocumentNoIntegration(filePath, isMultiUser, lang) {
+function loadDocumentNoIntegration(filePath, isMultiUser, lang, extraQuery) {
 	cy.log('>> loadDocumentNoIntegration - start');
 
 	var URI = '';
@@ -228,6 +228,12 @@ function loadDocumentNoIntegration(filePath, isMultiUser, lang) {
 		const serverPort = Cypress.env('SERVER_PORT');
 		if (serverPort)
 			URI += '&wopiPort=' + serverPort;
+	}
+
+	// Extra query parameters the harness should pass on to debug.html /
+	// cypress-multiuser.html (e.g. &userid / &UITheme for the theme tests).
+	if (extraQuery) {
+		URI += '&' + extraQuery;
 	}
 
 	if (isMultiUser) {

@@ -1816,7 +1816,23 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     socket->send(httpResponse);
     LOG_TRC("Sent file: " << relPath << ": " << preprocess);
 
-    return ResourceAccessDetails(std::move(wopiSrc), urv[ACCESS_TOKEN], urv[NO_AUTH_HEADER], urv[PERMISSION], urv[DEBUG_WOPI_CONFIG_ID]);
+    std::string userId;
+#if ENABLE_DEBUG
+    // The built-in test wopi server uses a fixed access token, so it cannot tell
+    // users apart from the token alone. Carry an explicit &userid through to the
+    // proactive CheckFileInfo (and thus the session's public URI) so per-user
+    // settings stay isolated when debugging multi-user scenarios.
+    for (const auto& param : params)
+    {
+        if (param.first == "userid")
+        {
+            userId = param.second;
+            break;
+        }
+    }
+#endif
+
+    return ResourceAccessDetails(std::move(wopiSrc), urv[ACCESS_TOKEN], urv[NO_AUTH_HEADER], urv[PERMISSION], urv[DEBUG_WOPI_CONFIG_ID], std::move(userId));
 }
 
 void FileServerRequestHandler::preprocessWelcomeFile(const HTTPRequest& request,

@@ -859,6 +859,22 @@ function showWelcomeSVG() {
 			}
 		})(),
 
+		// Multi-user debugging runs several users in one browser, which shares a
+		// single localStorage per origin. A fresh user who has no saved settings
+		// yet (no darkTheme in their browsersetting.json) falls through get() to
+		// localStorage and would pick up another user's value. Namespace the
+		// localStorage keys per debug user so they stay isolated. userid 1 (and
+		// cypress, which sends no userid) keeps bare keys, matching the seed and
+		// the access-token convention.
+		_lsKey: function(key) {
+			if (window.enableDebug) {
+				const uid = global.coolParams.get('userid');
+				if (uid)
+					return key + '__u' + uid;
+			}
+			return key;
+		},
+
 		_initializeBrowserSetting: function (msg) {
 			let settingJSON = JSON.parse(msg.substring('browsersetting:'.length + 1));;
 
@@ -912,15 +928,15 @@ function showWelcomeSVG() {
 				return;
 			}
 
-			const oldValue = global.localStorage.getItem(oldName);
-			const newValue = global.localStorage.getItem(newName);
+			const oldValue = global.localStorage.getItem(global.prefs._lsKey(oldName));
+			const newValue = global.localStorage.getItem(global.prefs._lsKey(newName));
 
 			if (oldValue === null || newValue !== null) {
 				return;
 			}
 
 			// we do not remove the old value, both for downgrades and in case we split an old global preference to a per-app one
-			global.localStorage.setItem(newName, oldValue);
+			global.localStorage.setItem(global.prefs._lsKey(newName), oldValue);
 		},
 
 		/// Similar to using window.uiDefaults directly, but this can handle dotted keys like "presentation.ShowSidebar" and does not allow partially referencing a value (like just "presentation")
@@ -973,7 +989,7 @@ function showWelcomeSVG() {
 			}
 
 			if (global.prefs.canPersist) {
-				const localStorageItem = global.localStorage.getItem(key);
+				const localStorageItem = global.localStorage.getItem(global.prefs._lsKey(key));
 
 				if (localStorageItem) {
 					global.prefs._localStorageCache[key] = localStorageItem;
@@ -1000,6 +1016,13 @@ function showWelcomeSVG() {
 			global.prefs._pendingSettingUpdate = undefined;
 		},
 
+		// Debounce before pushing a browsersetting update to the server, so a
+		// burst of changes is sent as one request. Cypress tests cannot afford
+		// the production delay, so shorten it when running under Cypress.
+		_settingUpdateDebounceMs: function() {
+			return L.Browser.cypressTest ? 100 : 5000;
+		},
+
 		// set multiple preference together and when browsersetting is enabled send
 		// update only once
 		setMultiple: function (prefsObject) {
@@ -1012,7 +1035,7 @@ function showWelcomeSVG() {
 						global.prefs._settingUpdateJSON[key] = value;
 				}
 				if (global.prefs.canPersist) {
-					global.localStorage.setItem(key, value);
+					global.localStorage.setItem(global.prefs._lsKey(key), value);
 				}
 				global.prefs._localStorageCache[key] = value;
 			}
@@ -1020,7 +1043,7 @@ function showWelcomeSVG() {
 			const isEmpty = (obj) => Object.keys(obj).length === 0;
 			if (browserSettingEnabled && !isEmpty(global.prefs._settingUpdateJSON) && global.socket && (global.socket instanceof WebSocket || global.socket instanceof global.IndirectSocket) && global.socket.readyState === 1) {
 				clearTimeout(global.prefs._pendingSettingUpdate);
-				global.prefs._pendingSettingUpdate = setTimeout(L.bind(this.sendPendingBrowserSettingsUpdate, this), 5000);
+				global.prefs._pendingSettingUpdate = setTimeout(L.bind(this.sendPendingBrowserSettingsUpdate, this), this._settingUpdateDebounceMs());
 			}
 		},
 
@@ -1032,11 +1055,11 @@ function showWelcomeSVG() {
 				if (global.socket && (global.socket instanceof WebSocket || global.socket instanceof global.IndirectSocket) && global.socket.readyState === 1 && oldValue !== value) {
 					global.prefs._settingUpdateJSON[key] = value;
 					clearTimeout(global.prefs._pendingSettingUpdate);
-					global.prefs._pendingSettingUpdate = setTimeout(L.bind(this.sendPendingBrowserSettingsUpdate, this), 5000);
+					global.prefs._pendingSettingUpdate = setTimeout(L.bind(this.sendPendingBrowserSettingsUpdate, this), this._settingUpdateDebounceMs());
 				}
 			}
 			if (global.prefs.canPersist) {
-				global.localStorage.setItem(key, value);
+				global.localStorage.setItem(global.prefs._lsKey(key), value);
 			}
 			global.prefs._localStorageCache[key] = value;
 		},
@@ -1046,7 +1069,7 @@ function showWelcomeSVG() {
 				delete global.prefs._userBrowserSetting[key];
 			}
 			if (global.prefs.canPersist) {
-				global.localStorage.removeItem(key);
+				global.localStorage.removeItem(global.prefs._lsKey(key));
 			}
 			delete global.prefs._localStorageCache[key];
 		},
