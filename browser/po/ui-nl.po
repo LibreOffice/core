@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-14 09:08+0000\n"
+"PO-Revision-Date: 2026-06-27 10:05+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
-"Language: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -64,7 +64,7 @@ msgstr "Status"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -447,6 +447,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Sommige clients zijn verbonden met het oude WebSocket URL-formulier, dat "
+"gepland is voor verwijdering. Controleer of uw proxy het compacte formulier "
+"doorgeeft."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -456,7 +459,7 @@ msgstr "Fout"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Meer informatie"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -557,7 +560,7 @@ msgstr "Liniaal weergeven"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Opmaakmarkeringen weergeven"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -645,11 +648,11 @@ msgstr "Inhoud"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Weergave"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Begrenzingen weergeven"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -868,10 +871,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Wanneer aan, Writer past het document aan de viewport breedte op open. "
+"Wanneer uit, wordt het document geopend op het standaardzoomniveau dat "
+"hieronder is ingesteld."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Geen instellingen beschikbaar voor {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -954,7 +960,7 @@ msgstr "API-instellingen voor Zotero-account"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Instellingen voor Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -971,7 +977,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Instellingen voor Documentondertekening"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1083,7 +1089,7 @@ msgstr "Upload Xcu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Invoer {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1091,15 +1097,15 @@ msgstr "Opnieuw instellen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Herstellen naar standaard {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Weet u zeker dat u {0} wilt herstellen?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "{0} opslaan"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2198,6 +2204,7 @@ msgstr "Laat dit niet meer zien"
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
 msgstr ""
+"Er is een {0} fout opgetreden tijdens het verwerken van de opdracht {1}."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3105,7 +3112,7 @@ msgstr "Herstellen"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Zoeken"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -3944,7 +3951,7 @@ msgid ""
 "press Esc to exit)"
 msgstr ""
 "Opmaak kopiëren is ingeschakeld (druk op Enter op een cel om toe te passen, "
-"klik opnieuw of druk op Esc om af te sluiten)"
+"klik opnieuw of druk op Esc om te sluiten)"
 
 #: src/control/Control.NotebookbarCalc.js:499
 #: src/control/Control.NotebookbarDraw.js:692
@@ -4136,7 +4143,7 @@ msgstr "Werkbladweergave verwijderen"
 
 #: src/control/Control.NotebookbarCalc.js:1490
 msgid "Exit Sheet View"
-msgstr "Werkbladweergave verlaten"
+msgstr "Werkbladweergave sluiten"
 
 #: src/control/Control.NotebookbarCalc.js:1505
 msgid "Freeze"
@@ -4211,6 +4218,7 @@ msgstr "Een opgemaakte tabel invoegen"
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
 msgstr ""
+"Selecteer een bewerkbaar celbereik om een gestileerde tabel in te voegen"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4350,8 +4358,7 @@ msgstr "Liniaal"
 #: src/control/Control.TopToolbar.js:153
 msgid "Clone Formatting is active (click again or press Esc to exit)"
 msgstr ""
-"Het klonen van opmaak is actief (klik nogmaals of druk op Esc om af te "
-"sluiten)"
+"Het klonen van opmaak is actief (klik nogmaals of druk op Esc om te sluiten)"
 
 #: src/control/Control.NotebookbarDraw.js:920
 #: src/control/Control.NotebookbarImpress.js:1056
@@ -4493,7 +4500,7 @@ msgstr "Selecteren"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Verdelen"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4614,7 +4621,7 @@ msgstr "Sectie verwijderen"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Sectie & dia's verwijderen"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4634,7 +4641,7 @@ msgstr "Alle secties uitvouwen"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Sectie \"%1\" en de %2 dia(s) verwijderen?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4685,10 +4692,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Verbonden met het oude WebSocket URL-formulier, dat gepland is voor "
+"verwijdering. Controleer of uw proxy het compacte formulier doorgeeft."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Verbonden met het compacte WebSocket URL-formulier"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4802,6 +4811,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Pas de pagina aan de vensterbreedte aan. Smart Zoom on open kan worden "
+"geschakeld in Opties onder het tabblad Bestand."
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4922,23 +4933,23 @@ msgstr "Menu weergeven"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Foutdetails kopiëren"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Technische details weergeven"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Technische details:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Foutgegevens gekopieerd naar klembord"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Kopiëren van foutgegevens is mislukt"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5152,17 +5163,18 @@ msgstr ""
 "citaten en bibliografie in dit document bijwerkt."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Eerste dia"
+msgstr "Eerste regel"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Voor"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Dubbelklik om een tabstop in te voegen. Klik met de rechtermuisknop voor "
+"meer opties."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5326,19 +5338,19 @@ msgstr "Titel, verticale tekst, clipart"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Standaard selectie"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Selectie uitbreiden"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Selectie toevoegen"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Blokselectie"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -6010,7 +6022,7 @@ msgstr ""
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "De verbinding met het document is verbroken."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6078,7 +6090,7 @@ msgstr "Verkeerde server, opnieuw verbinden..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Niet-ondersteunde versie."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6175,7 +6187,7 @@ msgstr "{0} tabblad geselecteerd"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Geen schijfruimte meer."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6536,7 +6548,7 @@ msgstr "Downloaden van het klembord is mislukt; kopieer opnieuw"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Het uploaden van het klembord is mislukt"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6603,11 +6615,10 @@ msgid "Please send us your feedback"
 msgstr "Stuur ons uw bevindingen"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
-"Bestand van het type: {0} kan niet geüpload worden naar de server omdat het "
-"bestand geen naam heeft"
+"Het bestand van het type: {0} kan niet worden ingevoegd omdat het bestand "
+"geen naam heeft"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6619,11 +6630,10 @@ msgstr ""
 "bestand geen naam heeft"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
 msgstr ""
-"Bestand van het type: {0} kan niet geüpload worden naar de server omdat het "
-"bestand leeg is"
+"Het bestand van het type: {0} kan niet worden ingevoegd omdat het bestand "
+"leeg is"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -6831,9 +6841,8 @@ msgid "Present to all"
 msgstr "Presenteren aan Iedereen"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Bewerken"
+msgstr "Sluiten"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
@@ -6866,7 +6875,7 @@ msgstr "Herhaal over {0} seconden"
 #: src/slideshow/PresenterConsole.js:1463
 #: src/slideshow/SlideShowPresenter.ts:654
 msgid "Click to exit presentation..."
-msgstr "Klik om presentatie te verlaten..."
+msgstr "Klik om presentatie te sluiten…"
 
 #: src/slideshow/SlideShowPresenter.ts:826
 msgid "You are on the first slide"
