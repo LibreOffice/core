@@ -2449,6 +2449,7 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
         bool bIncludeHiddenCells )
     : m_xDataArray(new std::vector<Item>)
     , m_bIncludeHiddenCells( bIncludeHiddenCells)
+    , m_eDimType(DataSourceType::UNKNOWN)
     , m_nObjectId( 0 )
     , m_pDocument( pDoc)
     , m_aTokens(std::move(rTokens))
