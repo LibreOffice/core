@@ -3403,7 +3403,10 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
     }
     else if( rPropertyName == "ChartExDimType" )
     {
-        if ( !(rValue >>= m_eDimType))
+        sal_Int32 nDimType;
+        if (rValue >>= nDimType)
+            m_eDimType = static_cast<DataSourceType>(nDimType);
+        else
             throw lang::IllegalArgumentException();
     }
     else if( rPropertyName == "ChartExFormula" )
@@ -3452,7 +3455,7 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
         aRet <<= bHasStringLabel;
     }
     else if ( rPropertyName == "ChartExDimType" )
-        aRet <<= m_eDimType;
+        aRet <<= static_cast<sal_Int32>(m_eDimType);
     else if ( rPropertyName == "ChartExFormula" )
         aRet <<= m_sFormula;
     else if ( rPropertyName == "ChartExNFormula" )

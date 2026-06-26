@@ -40,6 +40,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
@@ -47,6 +48,8 @@
 #include <optional>
 #include <unordered_set>
 #include <vector>
+
+using oox::drawingml::chart::DataSourceType;
 
 namespace com::sun::star::chart2::data { class XLabeledDataSequence; }
 
@@ -366,7 +369,7 @@ private:
     // properties
     css::chart2::data::DataSequenceRole  m_aRole;
     bool                        m_bIncludeHiddenCells;
-    sal_Int32                   m_eDimType; // actually oox::drawingml::chart::DataSourceType
+    DataSourceType              m_eDimType;
     OUString                    m_sFormula; // from <cx:f>
     OUString                    m_sNFormula; // from <cx:nf>
 

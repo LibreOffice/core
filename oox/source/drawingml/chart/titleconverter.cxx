@@ -65,7 +65,7 @@ Reference< XDataSequence > TextConverter::createDataSequence( const OUString& rR
     if( mrModel.mxDataSeq.is() )
     {
         DataSequenceConverter aDataSeqConv( *this, *mrModel.mxDataSeq );
-        xDataSeq = aDataSeqConv.createDataSequence( rRole );
+        xDataSeq = aDataSeqConv.createDataSequence( rRole, DataSourceType::UNKNOWN );
     }
     return xDataSeq;
 }

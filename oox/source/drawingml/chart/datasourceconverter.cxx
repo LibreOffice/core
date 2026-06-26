@@ -40,7 +40,7 @@ DataSequenceConverter::~DataSequenceConverter()
 }
 
 Reference< XDataSequence > DataSequenceConverter::createDataSequence(
-    const OUString& rRole, std::optional<DataSourceType> oDimType )
+    const OUString& rRole, DataSourceType eDimType )
 {
     // create data sequence from data source model (virtual call at chart converter)
     Reference< XDataSequence > xDataSeq;
@@ -85,8 +85,8 @@ Reference< XDataSequence > DataSequenceConverter::createDataSequence(
         aSeqProp.setProperty(PROP_NumberFormatKey, nKey);
 
     // store chartex dimension info for round-trip export
-    if (oDimType)
-        aSeqProp.setProperty(PROP_ChartExDimType, static_cast<sal_Int32>(*oDimType));
+    if (eDimType != DataSourceType::UNKNOWN)
+        aSeqProp.setProperty(PROP_ChartExDimType, static_cast<sal_Int32>(eDimType));
     if (!mrModel.maFormula.isEmpty())
         aSeqProp.setProperty(PROP_ChartExFormula, mrModel.maFormula);
     if (!mrModel.maNFormula.isEmpty())
@@ -105,13 +105,13 @@ DataSourceConverter::~DataSourceConverter()
 }
 
 Reference< XDataSequence > DataSourceConverter::createDataSequence(
-    const OUString& rRole, std::optional<DataSourceType> oDimType )
+    const OUString& rRole, DataSourceType eDimType )
 {
     Reference< XDataSequence > xDataSeq;
     if( mrModel.mxDataSeq.is() )
     {
         DataSequenceConverter aDataSeqConv( *this, *mrModel.mxDataSeq );
-        xDataSeq = aDataSeqConv.createDataSequence( rRole, oDimType );
+        xDataSeq = aDataSeqConv.createDataSequence( rRole, eDimType );
     }
     return xDataSeq;
 }

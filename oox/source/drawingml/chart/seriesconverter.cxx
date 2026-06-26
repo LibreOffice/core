@@ -74,14 +74,14 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         const ConverterRoot& rParent,
         DataSourceModel* pValues, const OUString& rRole,
         TextModel* pTitle = nullptr,
-        std::optional<DataSourceType> oDimType = std::nullopt )
+        DataSourceType eDimType = DataSourceType::UNKNOWN )
 {
     // create data sequence for values
     Reference< XDataSequence > xValueSeq;
     if( pValues )
     {
         DataSourceConverter aSourceConv( rParent, *pValues );
-        xValueSeq = aSourceConv.createDataSequence( rRole, oDimType );
+        xValueSeq = aSourceConv.createDataSequence( rRole, eDimType );
     }
 
     // create data sequence for title

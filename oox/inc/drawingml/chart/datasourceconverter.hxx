@@ -21,15 +21,13 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_DATASOURCECONVERTER_HXX
 
 #include <drawingml/chart/converterbase.hxx>
-#include <optional>
+#include <oox/drawingml/chart/datasourcemodel.hxx>
 
 namespace com::sun::star {
     namespace chart2::data { class XDataSequence; }
 }
 
 namespace oox::drawingml::chart {
-
-enum class DataSourceType : sal_Int32;
 
 struct DataSequenceModel;
 
@@ -43,7 +41,7 @@ public:
         @param oDimType  If set, stores this as the ChartExDimType property. */
     css::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole,
-                                            std::optional<DataSourceType> oDimType = std::nullopt );
+                                            DataSourceType eDimType );
 };
 
 
@@ -59,7 +57,7 @@ public:
         @param oDimType  If set, forwarded to DataSequenceConverter. */
     css::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole,
-                                            std::optional<DataSourceType> oDimType = std::nullopt );
+                                            DataSourceType eDimType );
 };
 
 
