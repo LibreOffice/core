@@ -1760,18 +1760,35 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testExpandedArrayCollapsesOnNewBlockerXLSX)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testLambdaAndRelatedFunctions)
 {
-    // The document checks every LAMBDA and callable-function formula against
-    // its expected result. Cell B3 of the first sheet holds the combined
-    // outcome over all the per-function checks, and is true only when every
-    // check passed. Recalculate with the engine and confirm B3 is true.
+    // The document combines a per-formula check of every LAMBDA and
+    // callable-function result into cell B3 of the first sheet, true only when
+    // every check passed. Confirm B3 holds as loaded and after a
+    // recalculation, both before and after a round-trip through the XLSX export.
     createScDoc("xlsx/LambdaAndRelatedFunctions.xlsx");
+
     ScDocument* pDoc = getScDoc();
+    // The result as stored in the file, before the engine recomputes anything.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("as loaded, a formula did not match its expected result",
+                                         1.0, pDoc->GetValue(ScAddress(1, 2, 0)), 0.0);
 
     pDoc->CalcAll();
-
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-        "B3 reports that a formula in the document did not match its expected result", 1.0,
+        "after recalculation, a formula did not match its expected result", 1.0,
         pDoc->GetValue(ScAddress(1, 2, 0)), 0.0);
+
+    // Write the document back out as XLSX and read it in again.
+    saveAndReload(TestFilter::XLSX);
+
+    pDoc = getScDoc();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+        "after save and reload, a formula did not match its expected result", 1.0,
+        pDoc->GetValue(ScAddress(1, 2, 0)), 0.0);
+
+    pDoc->CalcAll();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
+        "after save, reload and recalculation, a formula did not match its "
+        "expected result",
+        1.0, pDoc->GetValue(ScAddress(1, 2, 0)), 0.0);
 }
 
 ScFiltersTest::ScFiltersTest()
