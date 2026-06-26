@@ -58,17 +58,20 @@ void XMLTextListContext::startElement(
     if (!aStyleName.isEmpty())
     {
         auto it = GetImport().GetAutomaticListStyles().find(aStyleName);
-        OString aKey = OUStringToOString(aStyleName, RTL_TEXTENCODING_UTF8);
-        const librevenge::RVNGProperty* propLevel = it->second.child(aKey.getStr());
-        if (propLevel)
+        if (it != GetImport().GetAutomaticListStyles().end())
         {
-            const librevenge::RVNGPropertyListVector* pSubStylesVector
-                = static_cast<const librevenge::RVNGPropertyListVector*>(propLevel);
-            const librevenge::RVNGPropertyList& list = (*pSubStylesVector)[nLevel - 1];
-            const librevenge::RVNGProperty* p = list["style:num-format"];
-            if (p)
+            OString aKey = OUStringToOString(aStyleName, RTL_TEXTENCODING_UTF8);
+            const librevenge::RVNGProperty* propLevel = it->second.child(aKey.getStr());
+            if (propLevel)
             {
-                m_bIsOrderedList = true;
+                const librevenge::RVNGPropertyListVector* pSubStylesVector
+                    = static_cast<const librevenge::RVNGPropertyListVector*>(propLevel);
+                const librevenge::RVNGPropertyList& list = (*pSubStylesVector)[nLevel - 1];
+                const librevenge::RVNGProperty* p = list["style:num-format"];
+                if (p)
+                {
+                    m_bIsOrderedList = true;
+                }
             }
         }
     }
