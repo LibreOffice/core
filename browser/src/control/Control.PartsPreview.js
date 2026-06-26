@@ -1241,7 +1241,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 							break;
 						}
 						if (this._previewTiles[it].hash !== app.impress.partList[it].hash) {
-							this._insertPreview({selectedPart: it, hashCode: app.impress.partList[it].hash});
+							// new slide is at it; _insertPreview adds at selectedPart + 1
+							this._insertPreview({selectedPart: it - 1, hashCode: app.impress.partList[it].hash});
 							break;
 						}
 					}
@@ -1331,11 +1332,16 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			// insert newPreview to newIndex position
 			this._previewTiles.splice(newIndex, 0, newPreview);
 
-			var selectedFrame = this._previewTiles[e.selectedPart].parentNode;
 			var newFrame = newPreview.parentNode;
-
-			// insert after selectedFrame
-			selectedFrame.parentNode.insertBefore(newFrame, selectedFrame.nextSibling);
+			if (e.selectedPart >= 0) {
+				// after selectedPart's frame (null sibling appends at the end)
+				var selectedFrame = this._previewTiles[e.selectedPart].parentNode;
+				selectedFrame.parentNode.insertBefore(newFrame, selectedFrame.nextSibling);
+			} else {
+				// no preceding slide: before the old first tile, now at index 1
+				var followingFrame = this._previewTiles[1] ? this._previewTiles[1].parentNode : null;
+				newFrame.parentNode.insertBefore(newFrame, followingFrame);
+			}
 
 			this._ensureVisiblePreviews(); // Load previews
 		}
