@@ -32,20 +32,6 @@ public:
     void AppendItem(const OUString& rId, const OUString& rTitle, const OUString& rSubtitle,
                     const OUString& rPath, bool bDefault);
 
-    void AppendRow(const OUString& rImage, const OUString& rTitle, const OUString& rSubtitle,
-                   const OUString& rApplication, const OUString& rModify, const OUString& rSize,
-                   const OUString& rId);
-
-    void UpdateRow(int nIndex, const OUString& rImage, const OUString& rTitle,
-                   const OUString& rSubtitle, const OUString& rApplication, const OUString& rModify,
-                   const OUString& rSize, const OUString& rId);
-
-    void ReloadRows();
-
-    bool UpdateRows();
-
-    void sortColumn(const int col);
-
     void sort();
 
     void clearListView();
@@ -88,6 +74,21 @@ protected:
     DECL_LINK(ColumnClickedHdl, const int, void);
 
     DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
+
+private:
+    void AppendRow(const OUString& rImage, const OUString& rTitle, const OUString& rSubtitle,
+                   const OUString& rApplication, const OUString& rModify, const OUString& rSize,
+                   const OUString& rId);
+
+    void UpdateRow(int nIndex, const OUString& rImage, const OUString& rTitle,
+                   const OUString& rSubtitle, const OUString& rApplication, const OUString& rModify,
+                   const OUString& rSize, const OUString& rId);
+
+    void ReloadRows();
+
+    bool UpdateRows();
+
+    void sortColumn(const int col);
 
 protected:
     std::unique_ptr<weld::TreeView> mxTreeView;
