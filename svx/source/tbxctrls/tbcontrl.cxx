@@ -4282,10 +4282,7 @@ ColorListBox::ColorListBox(std::unique_ptr<weld::MenuButton> pControl,
 IMPL_LINK(ColorListBox, ToggleHdl, weld::Toggleable&, rButton, void)
 {
     if (rButton.get_active())
-    {
-        if (!comphelper::LibreOfficeKit::isActive())
-            getColorWindow().GrabFocus();
-    }
+        getColorWindow().GrabFocus();
 }
 
 ColorListBox::~ColorListBox()
