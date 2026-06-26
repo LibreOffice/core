@@ -332,8 +332,8 @@ void JsProvTest::testFolder()
         CPPUNIT_ASSERT_EQUAL(sPart, xBrowseNode->getName());
 
         // Folders should be creatable but not editable
-        CPPUNIT_ASSERT(getBooleanProperty(m_xScriptProvider, "Creatable"));
-        CPPUNIT_ASSERT(!getBooleanProperty(m_xScriptProvider, "Editable"));
+        CPPUNIT_ASSERT(getBooleanProperty(xBrowseNode, "Creatable"));
+        CPPUNIT_ASSERT(!getBooleanProperty(xBrowseNode, "Editable"));
         css::uno::Reference<css::script::XInvocation> xInvocation(xBrowseNode,
                                                                   css::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xInvocation->hasMethod("Creatable"));
