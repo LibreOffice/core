@@ -2714,9 +2714,9 @@ OUString SdPage::GetPresObjText(PresObjKind eObjKind) const
     OUString aString;
 
 #if defined(IOS) || defined(ANDROID)
-    bool isMobileDevice = true;
+    const bool isMobileDevice = true;
 #else
-    bool isMobileDevice = false;
+    const bool isMobileDevice = false;
 #endif
 
     if (eObjKind == PresObjKind::Title)
