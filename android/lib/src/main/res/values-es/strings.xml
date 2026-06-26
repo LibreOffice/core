@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="temp_file_saving_disabled">Este archivo es de solo lectura; el guardado está desactivado.</string>
+    <string name="temp_file_saving_disabled">Compartido como solo-lectura por la app origen. Utilice «Editar una copia» para realizar cambios.</string>
     <string name="storage_permission_required">Se requiere permiso de almacenamiento</string>
     <string name="failed_to_load_file">No se pudo determinar el archivo para cargar</string>
     <string name="failed_to_insert_image">Error al insertar imagen</string>
