@@ -2644,7 +2644,8 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
     // We have to force everything to calculate, or we might end up triggering recalc while
     // we walk the data, and then we get stale ScPatternAttr pointers.
-    rDoc.FetchTable(nScTab)->CalcAll();
+    if (ScTable* pTable = rDoc.FetchTable(nScTab))
+        pTable->CalcAll();
 
     // range for cell iterator
     SCCOL nLastIterScCol = nMaxScCol;
