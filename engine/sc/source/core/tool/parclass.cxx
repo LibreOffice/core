@@ -114,6 +114,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocAverageIfs,      {{ ReferenceOrRefArray, ReferenceOrRefArray, Value      }, 2, Value }},
     { ocByCol,           {{ ForceArray, Value                                    }, 0, ForceArrayReturn }},
     { ocByRow,           {{ ForceArray, Value                                    }, 0, ForceArrayReturn }},
+    { ocCall,            {{ Value, ForceArray                                    }, 1, Value }},
     { ocCell,            {{ Value, Reference                                     }, 0, Value }},
     { ocColumn,          {{ Reference                                            }, 0, Value }},
     { ocColumns,         {{ Reference                                            }, 1, Value }},

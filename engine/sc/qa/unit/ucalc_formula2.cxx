@@ -261,6 +261,45 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLAMBDA)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testLambdaReducingArgumentDoesNotSpill)
+{
+    // A lambda whose body aggregates a range argument reduces to a single value
+    // even when entered as a spill-capable dynamic-array formula, the way an
+    // imported one is.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 3.0);
+
+    // A value just below the formula blocks a three-row spill, so a result that
+    // is wrongly sized to the three-row argument surfaces as a spill error.
+    m_pDoc->SetValue(ScAddress(2, 1, 0), 99.0);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // The trailing flag makes this a spill-capable dynamic-array master, the
+    // same kind an imported dynamic-array formula becomes.
+    m_pDoc->InsertMatrixFormula(2, 0, 2, 0, aMark, u"=LAMBDA(r; SUM(r))(A1:A3)"_ustr, nullptr,
+                                formula::FormulaGrammar::GRAM_DEFAULT, true);
+
+    ScFormulaCell* pRangeCell = m_pDoc->GetFormulaCell(ScAddress(2, 0, 0));
+    CPPUNIT_ASSERT(pRangeCell);
+
+    // The whole range reaches the body, which sums it to one value.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("the reduced lambda must not report a spill error",
+                                 sal_Int32(FormulaError::NONE),
+                                 sal_Int32(pRangeCell->GetErrCode()));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+
+    // The value below the formula is untouched, confirming nothing spilled over it.
+    CPPUNIT_ASSERT_EQUAL(99.0, m_pDoc->GetValue(ScAddress(2, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncCHOOSE)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
