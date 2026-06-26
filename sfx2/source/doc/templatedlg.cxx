@@ -554,8 +554,8 @@ void SfxTemplateManagerDlg::DefaultTemplateMenuSelectHdl(std::u16string_view rId
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, OkClickHdl, weld::Button&, void)
 {
-   OnTemplateOpen();
-   m_xDialog->response(RET_OK);
+    OnTemplateOpen();
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, MoveTemplateHdl, void*, void)
