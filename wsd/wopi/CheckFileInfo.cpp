@@ -224,6 +224,10 @@ CheckFileInfo::wopiFileInfo(const Poco::URI& uriPublic) const
         JsonUtil::findJSONValue(_wopiInfo, "BaseFileName", filename);
         JsonUtil::findJSONValue(_wopiInfo, "LastModifiedTime", modifiedTime);
 
+        if (!modifiedTime.empty() && !Util::isIso8601(modifiedTime))
+            LOG_WRN("CheckFileInfo returned a LastModifiedTime ["
+                    << modifiedTime << "] that is not a parsable ISO8601 timestamp");
+
         assert(filename.find_first_of('/') == std::string::npos &&
                "Invalid BaseFileName, which had passed prior validation");
 

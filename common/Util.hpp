@@ -952,6 +952,10 @@ int main(int argc, char**argv)
     /// Convert time from ISO8061 fraction format
     std::chrono::system_clock::time_point iso8601ToTimestamp(const std::string& iso8601Time, const std::string& logName);
 
+    /// Returns true if the string is an ISO8601 timestamp that
+    /// iso8601ToTimestamp can parse (second-precision or fractional-second).
+    bool isIso8601(const std::string& iso8601Time);
+
     /// A null-converter between two identical clocks.
     template <typename Dst, typename Src, typename std::is_same<Src, Dst>::type>
     Dst convertChronoClock(const Src time)

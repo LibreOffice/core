@@ -969,6 +969,9 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
                 const std::string lastModifiedTime =
                     JsonUtil::getJSONValue<std::string>(object, "LastModifiedTime");
                 LOG_TRC(wopiLog << " returns LastModifiedTime [" << lastModifiedTime << "].");
+                if (!lastModifiedTime.empty() && !Util::isIso8601(lastModifiedTime))
+                    LOG_WRN(wopiLog << " returned a LastModifiedTime [" << lastModifiedTime
+                                    << "] that is not a parsable ISO8601 timestamp");
                 setLastModifiedTime(lastModifiedTime);
 
                 if (details.isSaveAs || details.isRename)

@@ -73,6 +73,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testJoinPair);
     CPPUNIT_TEST(testThreadPool);
     CPPUNIT_TEST(testLogCaptureCaller);
+    CPPUNIT_TEST(testIsIso8601);
     CPPUNIT_TEST_SUITE_END();
 
     void testCOOLProtocolFunctions();
@@ -99,6 +100,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testJoinPair();
     void testThreadPool();
     void testLogCaptureCaller();
+    void testIsIso8601();
 
     size_t waitForThreads(size_t count);
 };
@@ -1035,6 +1037,32 @@ void WhiteBoxTests::testLogCaptureCaller()
     TST_LOG("With caller: [" << withCaller << ']');
     LOK_ASSERT_MESSAGE("Expected to find the parent's source location",
                        withCaller.find("|(from WhiteBoxTests.cpp:") != std::string::npos);
+}
+
+void WhiteBoxTests::testIsIso8601()
+{
+    constexpr auto testname = __func__;
+
+    // Second-precision and fractional-second forms are accepted, including a
+    // trailing zone marker after the fraction (the form coolwsd itself emits).
+    LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07"));
+    LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07.1"));
+    LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07.123456"));
+    LOK_ASSERT(Util::isIso8601("2021-03-04T05:06:07.123456Z"));
+
+    // Empty, non-timestamp text, and a date with no time are rejected.
+    LOK_ASSERT(!Util::isIso8601(""));
+    LOK_ASSERT(!Util::isIso8601("not a timestamp"));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04"));
+
+    // A dot with no following digit is rejected.
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07."));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07.Z"));
+
+    // Forms iso8601ToTimestamp does not parse (bare zone marker or numeric
+    // offset without a fraction) are rejected.
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07Z"));
+    LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07+01:00"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WhiteBoxTests);

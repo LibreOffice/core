@@ -33,6 +33,7 @@
 
 #include <atomic>
 #include <cassert>
+#include <cctype>
 #include <chrono>
 #include <cstdio>
 #include <cstdlib>
@@ -521,6 +522,25 @@ namespace Util
         oss << std::fixed << sec.count() << 'Z';
 
         return oss.str();
+    }
+
+    bool isIso8601(const std::string& iso8601Time)
+    {
+        if (iso8601Time.empty())
+            return false;
+
+        std::tm tm;
+        const char* trailing = strptime(iso8601Time.c_str(), "%Y-%m-%dT%H:%M:%S", &tm);
+        if (!trailing)
+            return false;
+
+        // Accept what iso8601ToTimestamp can read: the bare second-precision
+        // form, and the fractional-second form which requires at least one
+        // digit after the dot.
+        if (trailing[0] == '\0')
+            return true;
+
+        return trailing[0] == '.' && std::isdigit(static_cast<unsigned char>(trailing[1]));
     }
 
     std::chrono::system_clock::time_point iso8601ToTimestamp(const std::string& iso8601Time,
