@@ -1869,12 +1869,16 @@ static const char* ToLineStyle( sal_uInt8 nLineStyle )
 
 namespace
 {
-void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt8 nLineStyle, const Color& rColor, model::ComplexColor const& rComplexColor)
+void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt8 nLineStyle, const Color& rColor, model::ComplexColor const& rComplexColor, bool bWriteEmpty = true)
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     if( nLineStyle == EXC_LINE_NONE )
     {
-        rStyleSheet->singleElement(nElement);
+        // In a differential format (dxf) an empty side element (e.g. <left/>) means
+        // "no border" and overrides the underlying table style, so omit it there and
+        // let the side be inherited. The cell border list still writes it.
+        if (bWriteEmpty)
+            rStyleSheet->singleElement(nElement);
         return;
     }
     else if (rColor == Color(0, 0, 0) && !rComplexColor.isValidThemeType())
@@ -1889,7 +1893,7 @@ void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt8 nLine
 }
 } // end anonymous namespace
 
-void XclExpCellBorder::SaveXml(XclExpXmlStream& rStream) const
+void XclExpCellBorder::SaveXml(XclExpXmlStream& rStream, bool bDxf) const
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStream.GetCurrentStream();
 
@@ -1901,11 +1905,11 @@ void XclExpCellBorder::SaveXml(XclExpXmlStream& rStream) const
             // OOXTODO: XML_outline
     );
 
-    lcl_WriteBorder(rStream, XML_left, mnLeftLine, rPalette.GetColor(mnLeftColor), maComplexColorLeft);
-    lcl_WriteBorder(rStream, XML_right, mnRightLine, rPalette.GetColor(mnRightColor), maComplexColorRight);
-    lcl_WriteBorder(rStream, XML_top, mnTopLine, rPalette.GetColor(mnTopColor), maComplexColorTop);
-    lcl_WriteBorder(rStream, XML_bottom, mnBottomLine, rPalette.GetColor(mnBottomColor), maComplexColorBottom);
-    lcl_WriteBorder(rStream, XML_diagonal, mnDiagLine, rPalette.GetColor(mnDiagColor), maComplexColorDiagonal);
+    lcl_WriteBorder(rStream, XML_left, mnLeftLine, rPalette.GetColor(mnLeftColor), maComplexColorLeft, !bDxf);
+    lcl_WriteBorder(rStream, XML_right, mnRightLine, rPalette.GetColor(mnRightColor), maComplexColorRight, !bDxf);
+    lcl_WriteBorder(rStream, XML_top, mnTopLine, rPalette.GetColor(mnTopColor), maComplexColorTop, !bDxf);
+    lcl_WriteBorder(rStream, XML_bottom, mnBottomLine, rPalette.GetColor(mnBottomColor), maComplexColorBottom, !bDxf);
+    lcl_WriteBorder(rStream, XML_diagonal, mnDiagLine, rPalette.GetColor(mnDiagColor), maComplexColorDiagonal, !bDxf);
 
     // Inner borders (vertical/horizontal). Only emitted when actually set, so
     // ordinary cell borders keep their previous output.
@@ -3353,7 +3357,7 @@ void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
     if (mpAlign)
         mpAlign->SaveXml(rStrm);
     if (mpBorder)
-        mpBorder->SaveXml(rStrm);
+        mpBorder->SaveXml(rStrm, /*bDxf*/true);
     if (mpProt)
         mpProt->SaveXml(rStrm);
     if (mpCellArea)
@@ -3375,7 +3379,7 @@ void XclExpDxf::SaveXmlExt( XclExpXmlStream& rStrm )
     if (mpAlign)
         mpAlign->SaveXml(rStrm);
     if (mpBorder)
-        mpBorder->SaveXml(rStrm);
+        mpBorder->SaveXml(rStrm, /*bDxf*/true);
     if (mpProt)
         mpProt->SaveXml(rStrm);
     rStyleSheet->endElementNS( XML_x14, XML_dxf );

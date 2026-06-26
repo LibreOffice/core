@@ -866,6 +866,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleInnerBordersExportXLSX)
     assertXPath(pStyles, sBorder + "/x:vertical/x:color", "theme", u"8");
     assertXPath(pStyles, sBorder + "/x:horizontal", "style", u"thin");
     assertXPath(pStyles, sBorder + "/x:horizontal/x:color", "theme", u"8");
+
+    sal_Int32 nHeaderRowDxfId
+        = getXPath(
+              pStyles,
+              "/x:styleSheet/x:tableStyles/x:tableStyle/x:tableStyleElement[@type='headerRow']",
+              "dxfId")
+              .toInt32();
+    CPPUNIT_ASSERT(nHeaderRowDxfId >= 0);
+    OString sHdrBorder
+        = "/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nHeaderRowDxfId + 1) + "]/x:border";
+    assertXPath(pStyles, sHdrBorder + "/x:bottom", "style", u"medium");
+    assertXPath(pStyles, sHdrBorder + "/x:left", 0);
+    assertXPath(pStyles, sHdrBorder + "/x:right", 0);
+    assertXPath(pStyles, sHdrBorder + "/x:top", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleCustomRoundtripXLSX)

@@ -382,7 +382,8 @@ struct XclExpCellBorder : public XclCellBorder
     /** Fills the data to the passed fields of a BIFF8 CF (conditional format) record. */
     void                FillToCF8( sal_uInt16& rnLine, sal_uInt32& rnColor ) const;
 
-    void                SaveXml( XclExpXmlStream& rStrm ) const;
+    /// bDxf: omit unset border sides (dxf) instead of writing them as empty elements.
+    void                SaveXml( XclExpXmlStream& rStrm, bool bDxf = false ) const;
 };
 
 /** Extends the XclCellArea struct for export.
