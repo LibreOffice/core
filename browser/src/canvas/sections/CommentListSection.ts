@@ -1389,6 +1389,10 @@ export class CommentSection extends CanvasSectionObject {
 			topTwips + Math.round(commentHeight * app.pixelsToTwips)
 		);
 
+		// A frozen-pane anchor is always visible; scrolling only moves the view away.
+		if (this.isTopInFrozenPane(topTwips))
+			return;
+
 		if (!topVisible || !bottomVisible) {
 			const topPixels = topTwips * app.twipsToPixels;
 			const topBottom = this.getScreenTopBottom();
@@ -1403,13 +1407,30 @@ export class CommentSection extends CanvasSectionObject {
 				if (bottomViewPos < scrollPos)
 					scrollPos = bottomViewPos;
 			}
-			app.activeDocument.activeLayout.scrollTo(0, scrollPos);
+			// Only a vertical target is computed; keep X so a horizontally
+			// scrolled view (or a frozen column) is not snapped back to 0.
+			app.activeDocument.activeLayout.scrollTo(
+				app.activeDocument.activeLayout.viewedRectangle.pX1, scrollPos);
 
 			if (app.map._docLayer._docType === 'spreadsheet' && rootComment) {
 				rootComment.positionCalcComment();
 				rootComment.focus();
 			}
 		}
+	}
+
+	// A frozen-row pane sits at the top of the view (its rectangle has pY1 === 0).
+	private isTopInFrozenPane (topTwips: number): boolean {
+		const splitPanesContext = app.map._docLayer._splitPanesContext;
+		if (!splitPanesContext)
+			return false;
+
+		const rectangles = splitPanesContext.getViewRectangles();
+		for (let i = 0; i < rectangles.length; i++) {
+			if (rectangles[i].pY1 === 0 && rectangles[i].containsY(topTwips))
+				return true;
+		}
+		return false;
 	}
 
 	/// returns canvas top and bottom position in core pixels
