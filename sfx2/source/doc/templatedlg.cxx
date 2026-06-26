@@ -298,17 +298,16 @@ void SfxTemplateManagerDlg::setTemplateViewMode(TemplateViewMode eViewMode)
     {
         mxThumbnailViewButton->set_active(true);
         mxListViewButton->set_active(false);
-        maLocalView.ThumbnailView::GrabFocus();
     }
     else
     {
         assert(eViewMode == TemplateViewMode::ListView);
         mxListViewButton->set_active(true);
         mxThumbnailViewButton->set_active(false);
-        maLocalView.ListView::grab_focus();
     }
 
     maLocalView.setTemplateViewMode(eViewMode);
+    maLocalView.GrabFocus();
     maLocalView.Show();
 }
 

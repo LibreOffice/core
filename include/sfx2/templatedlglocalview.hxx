@@ -48,6 +48,8 @@ public:
 
     bool IsVisible() const;
 
+    void GrabFocus();
+
     void connect_focus_rect(const Link<weld::Widget&, tools::Rectangle>& rLink)
     {
         GetDrawingArea()->connect_focus_rect(rLink);

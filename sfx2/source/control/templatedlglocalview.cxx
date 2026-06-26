@@ -270,6 +270,14 @@ bool TemplateDlgLocalView::IsVisible() const
     return ThumbnailView::IsVisible() || ListView::IsListViewVisible();
 }
 
+void TemplateDlgLocalView::GrabFocus()
+{
+    if (mViewMode == TemplateViewMode::ListView)
+        ListView::grab_focus();
+    else
+        ThumbnailView::GrabFocus();
+}
+
 void TemplateDlgLocalView::syncCursor()
 {
     if (mViewMode == TemplateViewMode::ListView)
