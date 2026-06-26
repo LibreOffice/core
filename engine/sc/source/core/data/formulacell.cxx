@@ -1607,11 +1607,13 @@ bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
                                     || eType == formula::svMatrix);
             continue;
         }
-        // Jump commands like IF, IFERROR, IFNA expose their branches
-        // through a FormulaJumpToken. Pop the condition and run the
-        // walk on each branch slice. The token returns an array if any
-        // of its branches does.
-        if (eOp == ocIf || eOp == ocIfError || eOp == ocIfNA)
+        // Jump commands expose their branches through a
+        // FormulaJumpToken. Branches k=1..nJumpCount-1 hold the
+        // result expressions: IF carries THEN and ELSE, CHOOSE
+        // carries the alternatives, LET carries the bindings and
+        // the body. The token is array-intent if any branch is.
+        if (eOp == ocIf || eOp == ocIfError || eOp == ocIfNA
+            || eOp == ocChoose || eOp == ocLet)
         {
             if (aStackIsArray.empty())
                 return false;
@@ -1619,11 +1621,6 @@ bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
             const auto* pJumpTok = static_cast<const formula::FormulaJumpToken*>(p);
             const short* pJump = pJumpTok->GetJump();
             const short nJumpCount = pJump[0];
-            // jump[nBranch] points at the token that precedes branch
-            // nBranch. The branch body sits in (jump[nBranch],
-            // jump[nBranch+1]). The closing jump[nJumpCount] points at
-            // the end-of-block token, which the outer loop's increment
-            // then steps past.
             bool bAnyBranchArray = false;
             for (short nBranch = 1; nBranch < nJumpCount && !bAnyBranchArray; ++nBranch)
             {
@@ -1638,10 +1635,7 @@ bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
             i = pJump[nJumpCount];
             continue;
         }
-        // CHOOSE, LET and other jump commands fall through to the
-        // bail branch below. CHOOSE's first arg is the selector and
-        // the rest are alternatives, but its jump-offset layout
-        // differs from the IF family. LET binds names along the way.
+        // Any other jump command stays an unknown shape.
         if (formula::FormulaCompiler::IsOpCodeJumpCommand(eOp))
             return false;
         const sal_uInt8 nParameters = p->GetParamCount();

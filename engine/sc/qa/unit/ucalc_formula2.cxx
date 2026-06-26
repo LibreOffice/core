@@ -6545,6 +6545,61 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixConcatRendersBooleansAsTrueFalse)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testAutoSpillFromChooseAndLet)
+{
+    // A UI-typed CHOOSE or LET whose result is a multi-cell array
+    // auto-promotes the cell to a dynamic-array master and spills
+    // the result. CHOOSE inspects each alternative slice and reports
+    // array if any one of them produces an array. LET recurses into
+    // the body slice.
+
+    m_pDoc->SetAutoCalc(false);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 3.0);
+    m_pDoc->SetValue(ScAddress(1, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(1, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 30.0);
+
+    // CHOOSE(2; A1:A3; B1:B3) picks B1:B3, a 3x1 column array. The
+    // cell at D1 spills into D1:D3 with 10, 20 and 30.
+    ScAddress aChoosePos(3, 0, 0);
+    ScCompiler aChooseComp(*m_pDoc, aChoosePos, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pChooseCode
+        = aChooseComp.CompileString(u"=CHOOSE(2; A1:A3; B1:B3)"_ustr);
+    auto pChooseCell = new ScFormulaCell(*m_pDoc, aChoosePos, std::move(pChooseCode));
+    pChooseCell->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aChoosePos, pChooseCell);
+
+    // LET(x; A1:A3; x*2) binds x to A1:A3 and doubles it. The cell
+    // at E1 spills into E1:E3 with 2, 4 and 6.
+    ScAddress aLetPos(4, 0, 0);
+    ScCompiler aLetComp(*m_pDoc, aLetPos, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pLetCode = aLetComp.CompileString(u"=LET(x; A1:A3; x*2)"_ustr);
+    auto pLetCell = new ScFormulaCell(*m_pDoc, aLetPos, std::move(pLetCode));
+    pLetCell->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aLetPos, pLetCell);
+
+    m_pDoc->SetAutoCalc(true);
+    m_pDoc->CalcAll();
+
+    CPPUNIT_ASSERT_MESSAGE("CHOOSE with a range branch should auto-spill",
+                           pChooseCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+
+    CPPUNIT_ASSERT_MESSAGE("LET binding a range should auto-spill",
+                           pLetCell->IsDynamicArrayMaster());
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(4, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
