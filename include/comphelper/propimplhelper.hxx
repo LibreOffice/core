@@ -689,19 +689,37 @@ void OPropertyImplHelper<BaseClass, Ifc...>::impl_fireAll(std::unique_lock<std::
            && m_aPendingHandles.size() == m_aPendingOldValues.size());
 
     auto allHandles = std::exchange(m_aPendingHandles, {});
-    // seems needed for gcc13, TODO: try to remove when baseline > gcc13
-    allHandles.reserve(allHandles.size() + nCount);
+
+#if defined __GNUC__ && (__GNUC__ == 13) && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
     allHandles.insert(allHandles.end(), pHandles, pHandles + nCount);
+#if defined __GNUC__ && (__GNUC__ == 13) && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
     auto allNewValues = std::exchange(m_aPendingNewValues, {});
-    // seems needed for gcc13, TODO: try to remove when baseline > gcc13
-    allNewValues.reserve(allNewValues.size() + nCount);
+
+#if defined __GNUC__ && (__GNUC__ == 13) && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
     allNewValues.insert(allNewValues.end(), pNewValues, pNewValues + nCount);
+#if defined __GNUC__ && (__GNUC__ == 13) && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
     auto allOldValues = std::exchange(m_aPendingOldValues, {});
-    // seems needed for gcc13, TODO: try to remove when baseline > gcc13
-    allOldValues.reserve(allOldValues.size() + nCount);
+
+#if defined __GNUC__ && (__GNUC__ == 13) && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
     allOldValues.insert(allOldValues.end(), pOldValues, pOldValues + nCount);
+#if defined __GNUC__ && (__GNUC__ == 13) && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
     fire(rGuard, allHandles.data(), allNewValues.data(), allOldValues.data(), allHandles.size(),
          false);
