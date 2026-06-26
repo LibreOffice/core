@@ -1007,8 +1007,11 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                     if (pPage->TRG_HasMasterPage())
                         pMasterPage = &pPage->TRG_GetMasterPage();
                 }
-                sd::ThemeColorChanger aChanger(pMasterPage, GetModel()->GetDocShell());
-                aChanger.apply(pTheme->getColorSet());
+                if (pMasterPage)
+                {
+                    sd::ThemeColorChanger aChanger(pMasterPage, GetModel()->GetDocShell());
+                    aChanger.apply(pTheme->getColorSet());
+                }
             }
             break;
 
