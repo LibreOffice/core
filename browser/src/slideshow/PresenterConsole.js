@@ -683,6 +683,9 @@ class PresenterConsole {
 		this._onResize();
 
 		this._proxyPresenter.addEventListener('load', () => {
+			// The size above was measured before the window had laid out at its
+			// real size, so measure again now that it has.
+			this._onResize();
 			const pauseButton = this._proxyPresenter.document.querySelector('#pause');
 			if (pauseButton) {
 				pauseButton.focus();

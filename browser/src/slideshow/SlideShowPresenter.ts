@@ -1185,6 +1185,15 @@ class SlideShowPresenter {
 		);
 
 		window.addEventListener('resize', this.onSlideWindowResize);
+		if (this._slideShowInSeparateWindow) {
+			// The shell takes this window full screen after it opens, which
+			// resizes the window itself rather than the document window, so
+			// re-fit the slide when that resize arrives.
+			(this._slideShowWindowProxy as Window).addEventListener(
+				'resize',
+				this.onSlideWindowResize,
+			);
+		}
 		this._getProxyDocumentNode().addEventListener(
 			'keydown',
 			this._onKeyDownHandler,
@@ -1240,6 +1249,12 @@ class SlideShowPresenter {
 			if (window.mode.isCODesktop() && !this._shellOpensSlideshowWindow()) {
 				app.socket.sendMessage('FULLSCREENPRESENTATION false');
 			}
+		}
+		if (this._slideShowInSeparateWindow && this._slideShowWindowProxy) {
+			(this._slideShowWindowProxy as Window).removeEventListener(
+				'resize',
+				this.onSlideWindowResize,
+			);
 		}
 		this._slideShowWindowProxy = null;
 		this._slideShowInSeparateWindow = false;
