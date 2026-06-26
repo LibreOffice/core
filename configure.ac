@@ -1822,7 +1822,7 @@ AS_IF([test "$ENABLE_WINDOWSAPP" != "true"],
 dnl config for qtapp frontend for cool
 AS_IF([test "$ENABLE_QTAPP" = true],
       [
-       PKG_CHECK_MODULES([QT6], [Qt6Core Qt6Widgets Qt6Gui Qt6WebEngineCore Qt6WebChannel Qt6WebEngineWidgets Qt6DBus Qt6PrintSupport])
+       PKG_CHECK_MODULES([QT6], [Qt6Core >= 6.6 Qt6Widgets Qt6Gui Qt6WebEngineCore Qt6WebChannel Qt6WebEngineWidgets Qt6DBus Qt6PrintSupport])
 
        dnl Locate qtpaths6 for Qt6 tool discovery
        AC_PATH_PROG([QTPATHS6], [qtpaths6], [no],
