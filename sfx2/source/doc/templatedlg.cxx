@@ -437,17 +437,11 @@ void SfxTemplateManagerDlg::readSettings ()
         mxActionBar->set_item_sensitive(MNI_ACTION_DELETE_FOLDER, !bIsBuiltInRegion);
     }
 
-    if (nViewMode == static_cast<sal_Int16>(TemplateViewMode::ListView)
-        || nViewMode == static_cast<sal_Int16>(TemplateViewMode::ThumbnailView))
-    {
-        TemplateViewMode eViewMode = static_cast<TemplateViewMode>(nViewMode);
-        setTemplateViewMode(eViewMode);
-    }
-    else
-    {
-        //Default ViewMode
-        setTemplateViewMode(TemplateViewMode::ThumbnailView);
-    }
+    const TemplateViewMode eViewMode
+        = (nViewMode == static_cast<sal_Int16>(TemplateViewMode::ListView))
+              ? TemplateViewMode::ListView
+              : TemplateViewMode::ThumbnailView;
+    setTemplateViewMode(eViewMode);
 }
 
 void SfxTemplateManagerDlg::writeSettings ()
