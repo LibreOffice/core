@@ -48,7 +48,16 @@ apps:
     desktop: usr/share/applications/com.collaboraoffice.Office.desktop
     common-id: com.collaboraoffice.Office
     environment:
-      LD_LIBRARY_PATH: $SNAP/usr/lib/collaboraoffice/program:$LD_LIBRARY_PATH
+      # The kde-neon-6 desktop-launch wrapper wires up the content-snap
+      # library dirs (kf6, gpu-2404, ...) but no longer adds the snap's own
+      # $SNAP/usr/lib/<triplet> to LD_LIBRARY_PATH. libhyphen and libmythes
+      # are staged there and exist nowhere else (the rest of the dictionary
+      # libs happen to also be carried by the kf6 content snap), so coda-qt's
+      # dlopen of libmergedlo.so fails with "libhyphen.so.0: cannot open
+      # shared object file". Put the arch dir back explicitly. snapd has no
+      # runtime variable for the GNU triplet, so list both supported arches;
+      # the loader ignores a path that does not exist.
+      LD_LIBRARY_PATH: $SNAP/usr/lib/collaboraoffice/program:$SNAP/usr/lib/x86_64-linux-gnu:$SNAP/usr/lib/aarch64-linux-gnu:$LD_LIBRARY_PATH
       # Keep the user profile in the revision-independent common dir so
       # settings persist across upgrades and reverts. The default $HOME
       # inside the snap is the per-revision SNAP_USER_DATA, which snapd
