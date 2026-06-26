@@ -30,6 +30,14 @@ window.L.Map.include({
 			commentSection.navigateAndFocusComment(editingComment);
 			return { blocked: true, commentSection };
 		}
+		// Finish any in-progress cell edit before the comment popup opens
+		if (
+			app.map._docLayer._docType === 'spreadsheet' &&
+			app.map.formulabar &&
+			app.map.formulabar.isInEditMode()
+		) {
+			app.map.sendUnoCommand('.uno:AcceptFormula');
+		}
 		return { blocked: false, commentSection };
 	},
 
