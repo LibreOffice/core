@@ -83,6 +83,8 @@ class ContextToolbar extends JSDialogComponent {
 
 				this.builder?.build(this.container, contextToolbarItems, false);
 
+				this.map.uiManager.initializeNotebookbarInCore();
+
 				this.initialized = true;
 			}
 
