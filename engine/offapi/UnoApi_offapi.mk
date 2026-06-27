@@ -2256,7 +2256,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	XSelectionFunction \
 	XShape \
 	XShapeAligner \
-	XShapeArranger \
 	XShapeBinder \
 	XShapeCombiner \
 	XShapeDescriptor \
