@@ -469,16 +469,16 @@ public:
     virtual void onAdminNotifyMessage(const std::string& message)
     {
         std::unique_lock<std::mutex> lock(_messageReceivedMutex);
-        _messageReceivedCV.notify_all();
         _messageReceived = message;
+        _messageReceivedCV.notify_all();
         LOG_INF("UnitAdmin:: onAdminNotifyMessage: " << message);
     }
 
     virtual void onAdminQueryMessage(const std::string& message)
     {
         std::unique_lock<std::mutex> lock(_messageReceivedMutex);
-        _messageReceivedCV.notify_all();
         _messageReceived = message;
+        _messageReceivedCV.notify_all();
         LOG_INF("UnitAdmin:: onAdminQueryMessage: " << message);
     }
 };

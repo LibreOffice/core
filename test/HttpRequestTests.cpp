@@ -561,7 +561,7 @@ void HttpRequestTests::test500GetStatuses()
         const std::shared_ptr<const http::Response> httpResponse = httpSession->response();
 
         std::unique_lock<std::mutex> lock(mutex);
-        cv.wait_for(lock, DefTimeoutSeconds, [&]() { return httpResponse->done(); });
+        cv.wait_for(lock, DefTimeoutSeconds, [&]() { return !timedout; });
         TST_LOG("Finished async GET of [" << url << "]: " << httpResponse->state());
 
         httpSession->asyncShutdown(); // Request to shutdown.

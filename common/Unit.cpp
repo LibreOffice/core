@@ -512,7 +512,10 @@ void UnitBase::endTest([[maybe_unused]] const std::string& reason)
         socketPoll->joinThread();
 
     // tell the timeout thread that the work has finished
-    KitWorkFinished = true;
+    {
+        std::lock_guard<std::mutex> lock(TimeoutThreadMutex);
+        KitWorkFinished = true;
+    }
     TimeoutConditionVariable.notify_all();
     if (TimeoutThread.joinable())
         TimeoutThread.join();

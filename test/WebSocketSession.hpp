@@ -422,8 +422,10 @@ private:
 
     void onDisconnect() override
     {
-        _disconnected = true;
-
+        {
+            std::unique_lock<std::mutex> lock(_outMutex);
+            _disconnected = true;
+        }
         _disconnectCv.notify_all();
     }
 
