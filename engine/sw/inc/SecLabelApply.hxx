@@ -23,9 +23,17 @@ class XModel;
 
 namespace sw::seclabel
 {
-/// Append a STANAG customXml part (the 4778 binding) and its itemProps to the
+/// Schema URI that marks our STANAG customXml part among the document's customXml
+/// items (the itemProps ds:schemaRef references it). Matches the 4778 binding ns,
+/// and is how we find the existing label to replace or remove (never by index).
+inline constexpr OUString STANAG_BINDING_SCHEMA
+    = u"urn:nato:stanag:4778:bindinginformation:1:0"_ustr;
+
+/// Store a STANAG customXml part (the 4778 binding) and its itemProps in the
 /// document's InteropGrabBag, so the DOCX export writes them as
-/// customXml/item*.xml + customXml/itemProps*.xml on the next save.
+/// customXml/item*.xml + customXml/itemProps*.xml on the next save. Any label
+/// part the document already carries is replaced (found the way readLabel finds
+/// it), so re-applying never leaves a duplicate behind.
 SW_DLLPUBLIC void storeLabelPart(const css::uno::Reference<css::frame::XModel>& xModel,
                                  std::u16string_view rBindingXml,
                                  std::u16string_view rItemPropsXml);

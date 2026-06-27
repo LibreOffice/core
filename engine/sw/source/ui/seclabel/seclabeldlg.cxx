@@ -391,8 +391,8 @@ void SwSecurityLabelDlg::applyLabel(const OUString& rClassification,
     const sw::seclabel::StanagLabel aLabel
         = m_pPolicy->buildLabel(rClassification, rSelected, utl::toISO8601(aNow.GetUNODateTime()),
                                 utl::toISO8601(aReview.GetUNODateTime()));
-    const OUString sItemProps = sw::seclabel::buildItemProps(
-        makeGuid(), u"urn:nato:stanag:4778:bindinginformation:1:0"_ustr);
+    const OUString sItemProps
+        = sw::seclabel::buildItemProps(makeGuid(), sw::seclabel::STANAG_BINDING_SCHEMA);
     sw::seclabel::storeLabelPart(xModel, aLabel.toBindingXml(), sItemProps);
 
     sal_Int32 nColor = 0;

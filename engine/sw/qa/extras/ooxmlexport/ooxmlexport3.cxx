@@ -29,7 +29,9 @@
 #include <SecLabelApply.hxx>
 #include <SpifPolicy.hxx>
 #include <StanagLabel.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <comphelper/sequenceashashmap.hxx>
 #include <tools/stream.hxx>
 
 using namespace css;
@@ -118,6 +120,65 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelApply)
     CPPUNIT_ASSERT_EQUAL(size_t(2), aReadBack.aCategories[0].aValues.size());
     CPPUNIT_ASSERT_EQUAL(u"CANADA"_ustr, aReadBack.aCategories[0].aValues[0]);
     CPPUNIT_ASSERT_EQUAL(u"UNITED KINGDOM"_ustr, aReadBack.aCategories[0].aValues[1]);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelReplace)
+{
+    // Re-applying a label must replace the existing STANAG part, not add a second.
+    createSwDoc();
+
+    static const OString aSpif(
+        R"xml(<?xml version="1.0" encoding="utf-8"?>
+<spif:SPIF xmlns:spif="http://www.xmlspif.org/spif" schemaVersion="1.0" version="1">
+  <spif:securityPolicyId name="SPIF Collabora" id="1.2.826.0.1310.1.2.0" />
+  <spif:securityClassifications>
+    <spif:securityClassification name="SECRET" color="red" lacv="4" hierarchy="4" />
+  </spif:securityClassifications>
+  <spif:securityCategoryTagSets>
+    <spif:securityCategoryTagSet name="Release Categories" id="1.2.826.0.1310.1.2.0.0">
+      <spif:securityCategoryTag name="Releasable To" tagType="enumerated" enumType="permissive">
+        <spif:tagCategory name="CANADA" lacv="4407630" obsolete="false" />
+        <spif:tagCategory name="UNITED KINGDOM" lacv="5591873" obsolete="false" />
+        <spif:markingQualifier markingCode="pageTopBottom">
+          <spif:qualifier markingQualifier="//" qualifierCode="separator" />
+          <spif:qualifier markingQualifier="." qualifierCode="suffix" />
+        </spif:markingQualifier>
+      </spif:securityCategoryTag>
+    </spif:securityCategoryTagSet>
+  </spif:securityCategoryTagSets>
+</spif:SPIF>)xml"_ostr);
+    SvMemoryStream aPolicyStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(),
+                                 StreamMode::READ);
+    sw::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aPolicyStream));
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    auto applyOnce = [&](const std::vector<bool>& rSelected, const OUString& rGuid) {
+        const sw::seclabel::StanagLabel aLabel = aPolicy.buildLabel(
+            u"SECRET"_ustr, rSelected, u"2026-06-21T10:00:00Z"_ustr, u"2027-06-21T10:00:00Z"_ustr);
+        sw::seclabel::storeLabelPart(xModel, aLabel.toBindingXml(),
+                                     sw::seclabel::buildItemProps(
+                                         rGuid, sw::seclabel::STANAG_BINDING_SCHEMA));
+    };
+    applyOnce({ true, false }, u"{B6E4D8A1-1A35-4F0E-9B7A-71F4C0F5E0D3}"_ustr); // CANADA
+    applyOnce({ true, true }, u"{C7F5E9B2-2B46-5A1F-AC8B-82F5D1F6E1E4}"_ustr); // + UK
+
+    // The second apply replaced the first: exactly one STANAG customXml part.
+    uno::Reference<beans::XPropertySet> xProps(xModel, uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aGrabBag(xProps->getPropertyValue(u"InteropGrabBag"_ustr));
+    cpo::uno::Sequence<uno::Reference<css::xml::dom::XDocument>> aParts;
+    aGrabBag[u"OOXCustomXml"_ustr] >>= aParts;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aParts.getLength());
+
+    saveAndReload(TestFilter::DOCX);
+
+    // One part on disk, and it carries the second (latest) selection.
+    CPPUNIT_ASSERT(parseExport(u"customXml/item1.xml"_ustr));
+    uno::Reference<frame::XModel> xReloaded(mxComponent, uno::UNO_QUERY);
+    sw::seclabel::StanagLabel aReadBack;
+    CPPUNIT_ASSERT(sw::seclabel::readLabel(xReloaded, aReadBack));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aReadBack.aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aReadBack.aCategories[0].aValues.size());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testA4AndBorders, "a4andborders.docx")

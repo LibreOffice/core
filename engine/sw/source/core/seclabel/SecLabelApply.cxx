@@ -97,6 +97,68 @@ OUString domToString(const uno::Reference<xml::dom::XDocument>& xDom)
     return OUString(static_cast<const char*>(aStream.GetData()),
                     static_cast<sal_Int32>(aStream.GetSize()), RTL_TEXTENCODING_UTF8);
 }
+
+// Parse a customXml part into rLabel. True when it carries a confidentiality label,
+// whether a 4778 binding wrapper or a standalone 4774 label.
+bool parseLabelDom(const uno::Reference<xml::dom::XDocument>& xDom, StanagLabel& rLabel)
+{
+    if (!xDom.is())
+        return false;
+
+    const OUString sXml = domToString(xDom);
+    if (sXml.isEmpty())
+        return false;
+
+    const OString aUtf8 = OUStringToOString(sXml, RTL_TEXTENCODING_UTF8);
+    SvMemoryStream aStream(const_cast<char*>(aUtf8.getStr()), aUtf8.getLength(),
+                           StreamMode::READ);
+    return rLabel.parse(aStream) && !rLabel.aClassification.isEmpty();
+}
+
+// Index of the label's customXml part, or -1 if absent. OOXCustomXml and
+// OOXCustomXmlProps are parallel: the same index in one is the counterpart of the
+// other. Matched on the part readLabel would read, so that a standalone 4774 label,
+// or one another tool wrote, is replaced or removed instead of being left in the
+// document beside a new one. The itemProps schema URI is the fallback, for a part
+// whose payload we cannot parse.
+sal_Int32 findStanagPart(comphelper::SequenceAsHashMap& rGrabBag)
+{
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> aList;
+    rGrabBag[u"OOXCustomXml"_ustr] >>= aList;
+    for (sal_Int32 i = 0; i < aList.getLength(); ++i)
+    {
+        StanagLabel aLabel;
+        if (parseLabelDom(aList[i], aLabel))
+            return i;
+    }
+
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> aProps;
+    rGrabBag[u"OOXCustomXmlProps"_ustr] >>= aProps;
+    for (sal_Int32 i = 0; i < aProps.getLength(); ++i)
+    {
+        if (aProps[i].is() && domToString(aProps[i]).indexOf(STANAG_BINDING_SCHEMA) >= 0)
+            return i;
+    }
+
+    return -1;
+}
+
+// Drop the DOM at nIndex from the rKey list of rGrabBag.
+void eraseDomAt(comphelper::SequenceAsHashMap& rGrabBag, const OUString& rKey, sal_Int32 nIndex)
+{
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> aList;
+    rGrabBag[rKey] >>= aList;
+    if (nIndex < 0 || nIndex >= aList.getLength())
+        return;
+    cpo::uno::Sequence<uno::Reference<xml::dom::XDocument>> aOut(aList.getLength() - 1);
+    auto* pOut = aOut.getArray();
+    for (sal_Int32 i = 0, j = 0; i < aList.getLength(); ++i)
+    {
+        if (i != nIndex)
+            pOut[j++] = aList[i];
+    }
+    rGrabBag[rKey] <<= aOut;
+}
 }
 
 void storeLabelPart(const uno::Reference<frame::XModel>& xModel, std::u16string_view rBindingXml,
@@ -112,6 +174,16 @@ void storeLabelPart(const uno::Reference<frame::XModel>& xModel, std::u16string_
     const uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
     comphelper::SequenceAsHashMap aGrabBag(xModelProps->getPropertyValue(u"InteropGrabBag"_ustr));
+
+    // Replace any label already present, so re-applying or re-labeling never
+    // leaves a second STANAG customXml part behind.
+    const sal_Int32 nExisting = findStanagPart(aGrabBag);
+    if (nExisting >= 0)
+    {
+        eraseDomAt(aGrabBag, u"OOXCustomXml"_ustr, nExisting);
+        eraseDomAt(aGrabBag, u"OOXCustomXmlProps"_ustr, nExisting);
+    }
+
     appendDom(aGrabBag, u"OOXCustomXml"_ustr, parseToDom(xContext, rBindingXml));
     appendDom(aGrabBag, u"OOXCustomXmlProps"_ustr, parseToDom(xContext, rItemPropsXml));
     xModelProps->setPropertyValue(u"InteropGrabBag"_ustr,
@@ -172,15 +244,7 @@ bool readLabel(const uno::Reference<frame::XModel>& xModel, StanagLabel& rLabel)
     aGrabBag[u"OOXCustomXml"_ustr] >>= aList;
     for (const auto& xDom : aList)
     {
-        if (!xDom.is())
-            continue;
-        const OUString sXml = domToString(xDom);
-        if (sXml.isEmpty())
-            continue;
-        const OString aUtf8 = OUStringToOString(sXml, RTL_TEXTENCODING_UTF8);
-        SvMemoryStream aStream(const_cast<char*>(aUtf8.getStr()), aUtf8.getLength(),
-                               StreamMode::READ);
-        if (rLabel.parse(aStream) && !rLabel.aClassification.isEmpty())
+        if (parseLabelDom(xDom, rLabel))
             return true;
     }
     return false;
