@@ -67,6 +67,14 @@ void LayoutAtomVisitorBase::visit(ForEachAtom& rAtom)
             return;
     }
 
+    // cool#15967. Connectors are not independent but siblings of current node.
+    if (rAtom.iterator().mnPtType == XML_sibTrans)
+    {
+        for (const auto& pAtom : rAtom.getChildren())
+            pAtom->accept(*this);
+        return;            
+    }
+
     sal_Int32 nChildren = 1;
     // Approximate the non-assistant type with the node type.
     if (rAtom.iterator().mnPtType == XML_node || rAtom.iterator().mnPtType == XML_nonAsst)

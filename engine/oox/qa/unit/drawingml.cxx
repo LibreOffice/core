@@ -39,7 +39,9 @@
 #include <docmodel/theme/Theme.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <basegfx/utils/gradienttools.hxx>
+#include <osl/process.h>
 
 using namespace ::com::sun::star;
 
@@ -842,6 +844,39 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPPTXImportOutlinerListStyle)
     // - Actual  : 3600
     // i.e. the master was wrong, re-export to PPTX could not write the correct numbering rules.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2388), nLeftMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testConnectorText)
+{
+    // This test belongs to new SmartArt implementation.
+    // Adapt the test, when using fallback provided by drawing.xml is dropped.
+    static OUString constexpr var{ u"DIAGRAM_IGNORE_EXTDRAWINGS"_ustr };
+    osl_setEnvironment(var.pData, u"1"_ustr.pData);
+    comphelper::ScopeGuard g([] { osl_clearEnvironment(var.pData); });
+
+    loadFromFile(u"cool15967_BasicProcess_ConnectorText.pptx");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    // Get SmartArt object, which is actually a group with 8 shapes.
+    uno::Reference<drawing::XShape> xSmartArt(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GroupShape"_ustr, xSmartArt->getShapeType());
+    uno::Reference<container::XIndexAccess> xGroup(xSmartArt, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8), xGroup->getCount());
+
+    // Access to underlying model is not yet possible. Thus we can only test indirectly with
+    // properties available in UNO. Without fix, the shape names were identical.
+    OUString sName;
+    uno::Reference<beans::XPropertySet> xConnAProps(getChildShape(xSmartArt,2), uno::UNO_QUERY);
+    xConnAProps->getPropertyValue(u"Name"_ustr) >>= sName;
+    CPPUNIT_ASSERT_EQUAL(u"{06F924E1-8519-4DEB-B576-001BD7EEDCA2}"_ustr, sName);
+    uno::Reference<beans::XPropertySet> xConnBProps(getChildShape(xSmartArt,4), uno::UNO_QUERY);
+    xConnBProps->getPropertyValue(u"Name"_ustr) >>= sName;
+    CPPUNIT_ASSERT_EQUAL(u"{6B4132B0-E8B4-435F-9A22-55740C4BDF51}"_ustr, sName);
+    uno::Reference<beans::XPropertySet> xConnCProps(getChildShape(xSmartArt,6), uno::UNO_QUERY);
+    xConnCProps->getPropertyValue(u"Name"_ustr) >>= sName;
+    CPPUNIT_ASSERT_EQUAL(u"{55B8016A-A755-4069-A179-DFC2070CA8C9}"_ustr, sName);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
