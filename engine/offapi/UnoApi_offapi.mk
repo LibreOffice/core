@@ -2262,7 +2262,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	XShapeDescriptor \
 	XShapeGroup \
 	XShapeGrouper \
-	XShapeMirror \
 	XShapes \
 	XShapes2 \
 	XShapes3 \
