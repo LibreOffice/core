@@ -300,6 +300,32 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testLambdaReducingArgumentDoesNotSpill)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMapPerElementErrorIsolation)
+{
+    // MAP gives one result per element, so an element whose lambda errors holds
+    // an error in that cell alone. The error must not carry over into the
+    // elements computed after it.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // The middle element divides by zero. Entered as an array formula across
+    // three cells, the elements before and after it still hold their own value.
+    m_pDoc->InsertMatrixFormula(0, 0, 2, 0, aMark, u"=MAP({1;0;2}; LAMBDA(x; 1 / x))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"#DIV/0!"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.5, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+
+    // IFERROR replaces only the erroring element, so the sum drops just that one.
+    m_pDoc->InsertMatrixFormula(0, 2, 0, 2, aMark,
+                                u"=SUM(IFERROR(MAP({1;0;2}; LAMBDA(x; 1 / x)); 0))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.5, m_pDoc->GetValue(ScAddress(0, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncCHOOSE)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.

@@ -1438,6 +1438,9 @@ void ScInterpreter::ScByCol()
         }
         ScCall(pCallable, aArgs);
         PutMatrixValue(PopToken(), xResMat, nCol, 0);
+        // The result of this column is stored, so clear any error it produced
+        // and let the next column compute from a clean state.
+        nGlobalError = FormulaError::NONE;
     }
 
     PushMatrix(xResMat);
@@ -1497,6 +1500,9 @@ void ScInterpreter::ScByRow()
         }
         ScCall(pCallable, aArgs);
         PutMatrixValue(PopToken(), xResMat, 0, nRow);
+        // The result of this row is stored, so clear any error it produced and
+        // let the next row compute from a clean state.
+        nGlobalError = FormulaError::NONE;
     }
 
     PushMatrix(xResMat);
@@ -1558,6 +1564,9 @@ void ScInterpreter::ScMakeArray()
             aArguments[1] = pColToken;
             ScCall(pCallable, aArguments);
             PutMatrixValue(PopToken(), xResMat, nCol, nRow);
+            // The result of this cell is stored, so clear any error it produced
+            // and let the next cell compute from a clean state.
+            nGlobalError = FormulaError::NONE;
         }
     }
 
@@ -1632,6 +1641,9 @@ void ScInterpreter::ScMap()
             }
             ScCall(pCallable, aArgs);
             PutMatrixValue(PopToken(), xResMat, nCol, nRow);
+            // The result of this cell is stored, so clear any error it produced
+            // and let the next cell compute from a clean state.
+            nGlobalError = FormulaError::NONE;
         }
     }
 
