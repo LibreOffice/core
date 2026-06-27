@@ -182,6 +182,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="LineSpacingAsGapBelow" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Place the line spacing gap below the line: aesthetically balanced, consistent, and interoperable</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="BalanceSpacesAndIdeographicSpaces" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Adjust spaces to half the width of ideographic spaces, using Word-compatible rules</desc>

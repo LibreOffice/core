@@ -471,6 +471,8 @@ public:
 
     SW_DLLPUBLIC void SetIgnoreTabsAndBlanksForLineCalculation(bool bIgnoreTabsAndBlanksForLineCalculation);
 
+    SW_DLLPUBLIC void SetLineSpacingAsGapBelow(bool bValue);
+
     SW_DLLPUBLIC void SetMsWordUlTrailSpace(bool val);
 
     SW_DLLPUBLIC void SetBalanceSpacesAndIdeographicSpaces(bool bValue);

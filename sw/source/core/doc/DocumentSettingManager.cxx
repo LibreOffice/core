@@ -150,6 +150,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbContinuousEndnotes                = aOptions.get(u"ContinuousEndnotes"_ustr);
         mbMsWordCompGridMetrics             = aOptions.get(u"MsWordCompGridMetrics"_ustr);
         mbIgnoreTabsAndBlanksForLineCalculation = aOptions.get(u"IgnoreTabsAndBlanksForLineCalculation"_ustr);
+        mbLineSpacingAsGapBelow = aOptions.get(u"LineSpacingAsGapBelow"_ustr);
         mbBalanceSpacesAndIdeographicSpaces = aOptions.get(u"BalanceSpacesAndIdeographicSpaces"_ustr);
         mbAdjustTableLineHeightsToGridHeight = aOptions.get(u"AdjustTableLineHeightsToGridHeight"_ustr);
         mbListLabelAlignmentIgnoresDirection = aOptions.get(u"ListLabelAlignmentIgnoresDirection"_ustr);

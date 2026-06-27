@@ -1158,6 +1158,20 @@ void SwViewShell::SetIgnoreTabsAndBlanksForLineCalculation(bool val)
     }
 }
 
+void SwViewShell::SetLineSpacingAsGapBelow(bool bValue)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW) != bValue)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW, bValue);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::Size | SwInvalidateFlags::Section
+        | SwInvalidateFlags::PrtArea | SwInvalidateFlags::Table
+        | SwInvalidateFlags::Pos;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
+
 void SwViewShell::SetMsWordUlTrailSpace(bool val)
 {
     IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
