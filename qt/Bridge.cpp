@@ -381,17 +381,28 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
 
 void Bridge::saveDocumentAs()
 {
-    promptSaveLocation([fakeClientFd = _document._fakeClientFd](const std::string& destPath, const std::string& format) {
+    promptSaveLocation(
+        [fakeClientFd = _document._fakeClientFd,
+         currentUri = _document._fileURL](const std::string& destPath, const std::string& format)
+        {
             const QFileInfo destInfo(QString::fromStdString(destPath));
 
             Poco::URI destUri("file", destInfo.absoluteFilePath().toStdString());
 
-            // Send saveas command to COOLWSD with the selected format
-            std::string saveasCmd = "saveas url=" + destUri.toString() +
-                                     " format=" + format +
-                                     " options=";
-            fakeSocketWriteQueue(fakeClientFd, saveasCmd.c_str(), saveasCmd.size());
-    });
+            if (destUri.toString() == currentUri.toString())
+            {
+                // Send save command if the saveas destination is the same as the current document.
+                const std::string saveCmd = "save dontTerminateEdit=0 dontSaveIfUnmodified=0";
+                fakeSocketWriteQueue(fakeClientFd, saveCmd.data(), saveCmd.size());
+            }
+            else
+            {
+                // Send saveas command to COOLWSD with the selected format
+                std::string saveasCmd =
+                    "saveas url=" + destUri.toString() + " format=" + format + " options=";
+                fakeSocketWriteQueue(fakeClientFd, saveasCmd.c_str(), saveasCmd.size());
+            }
+        });
 }
 
 QVariant Bridge::cool(const QString& messageStr)
