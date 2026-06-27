@@ -33,7 +33,6 @@
 #i85263 -o svx.SvxShape
 #i87746 -o svx.SvxShapeCircle
 -o svx.SvxShapeCollection
-#i85263 -o svx.SvxShapeConnector
 #i87746 -o svx.SvxShapeControl
 #i87746 -o svx.SvxShapeDimensioning
 #i87746 -o svx.SvxShapeGroup

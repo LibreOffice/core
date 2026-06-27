@@ -330,7 +330,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/drawing/_TextProperties \
     qadevOOo/tests/java/ifc/drawing/_TextShape \
     qadevOOo/tests/java/ifc/drawing/_TextShapeDescriptor \
-    qadevOOo/tests/java/ifc/drawing/_XConnectorShape \
     qadevOOo/tests/java/ifc/drawing/_XControlShape \
     qadevOOo/tests/java/ifc/drawing/_XDrawPageDuplicator \
     qadevOOo/tests/java/ifc/drawing/_XDrawPages \
@@ -1039,7 +1038,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_svx/SvxShape \
     qadevOOo/tests/java/mod/_svx/SvxShapeCircle \
     qadevOOo/tests/java/mod/_svx/SvxShapeCollection \
-    qadevOOo/tests/java/mod/_svx/SvxShapeConnector \
     qadevOOo/tests/java/mod/_svx/SvxShapeControl \
     qadevOOo/tests/java/mod/_svx/SvxShapeDimensioning \
     qadevOOo/tests/java/mod/_svx/SvxShapeGroup \

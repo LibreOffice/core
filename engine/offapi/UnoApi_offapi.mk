@@ -2230,8 +2230,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	TextureMode \
 	TextureProjectionMode \
 	VerticalDimensioning \
-	XConnectableShape \
-	XConnectorShape \
 	XControlShape \
 	XCustomShapeEngine \
 	XCustomShapeHandle \

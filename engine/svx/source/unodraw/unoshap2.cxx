@@ -366,22 +366,6 @@ SvxShapeConnector::~SvxShapeConnector() noexcept
 }
 
 
-cpo::uno::Any SAL_CALL SvxShapeConnector::queryInterface( const uno::Type & rType )
-{
-    return SvxShapeText::queryInterface( rType );
-}
-
-cpo::uno::Any SAL_CALL SvxShapeConnector::queryAggregation( const uno::Type & rType )
-{
-    cpo::uno::Any aAny;
-
-    QUERYINT( drawing::XConnectorShape );
-    else
-        return SvxShapeText::queryAggregation( rType );
-
-    return aAny;
-}
-
 // XTypeProvider
 
 uno::Sequence< uno::Type > SAL_CALL SvxShapeConnector::getTypes()
@@ -396,86 +380,6 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShapeConnector::getImplementationId()
 
 // css::drawing::XShape
 
-
-OUString SAL_CALL SvxShapeConnector::getShapeType()
-{
-    return SvxShapeText::getShapeType();
-}
-
-awt::Point SAL_CALL SvxShapeConnector::getPosition()
-{
-    return SvxShapeText::getPosition();
-}
-
-
-void SAL_CALL SvxShapeConnector::setPosition( const awt::Point& Position )
-{
-    SvxShapeText::setPosition(Position);
-}
-
-
-awt::Size SAL_CALL SvxShapeConnector::getSize()
-{
-    return SvxShapeText::getSize();
-}
-
-
-void SAL_CALL SvxShapeConnector::setSize( const awt::Size& rSize )
-{
-    SvxShapeText::setSize( rSize );
-}
-
-
-// XConnectorShape
-
-void SAL_CALL SvxShapeConnector::connectStart( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType )
-{
-    ::SolarMutexGuard aGuard;
-
-    Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
-    SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape( xRef );
-
-    if( pSdrObject )
-        GetSdrObject()->ConnectToNode( true, pSdrObject );
-
-    GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
-}
-
-
-void SAL_CALL SvxShapeConnector::connectEnd( const uno::Reference< drawing::XConnectableShape >& xShape, drawing::ConnectionType  )
-{
-    ::SolarMutexGuard aGuard;
-
-    Reference< drawing::XShape > xRef( xShape, UNO_QUERY );
-    SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape( xRef );
-
-    if( HasSdrObject() && pSdrObject )
-        GetSdrObject()->ConnectToNode( false, pSdrObject );
-
-    GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
-}
-
-
-void SAL_CALL SvxShapeConnector::disconnectBegin( const uno::Reference< drawing::XConnectableShape >&  )
-{
-    ::SolarMutexGuard aGuard;
-
-    if(HasSdrObject())
-        GetSdrObject()->DisconnectFromNode( true );
-
-    GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
-}
-
-
-void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::XConnectableShape >& )
-{
-    ::SolarMutexGuard aGuard;
-
-    if(HasSdrObject())
-        GetSdrObject()->DisconnectFromNode( false );
-
-    GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
-}
 
 SvxShapeControl::SvxShapeControl(SdrObject* pObj)
     : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONTROL), getSvxMapProvider().GetPropertySet(SVXMAP_CONTROL, SdrObject::GetGlobalDrawObjectItemPool()) )

@@ -39,7 +39,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <com/sun/star/drawing/XConnectorShape.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <sal/types.h>
@@ -474,37 +473,13 @@ public:
 };
 
 /***********************************************************************
-*                                                                      *
+*  aka. SdrObjKind::Edge                                               *
 ***********************************************************************/
-class SvxShapeConnector final : public css::drawing::XConnectorShape,
-                          public SvxShapeText
+class SvxShapeConnector final : public SvxShapeText
 {
 public:
     SvxShapeConnector(SdrObject* pObj);
     virtual ~SvxShapeConnector() noexcept override;
-
-    // XInterface
-    virtual cpo::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override
-    { SvxShapeText::acquire(); }
-    virtual void SAL_CALL release() noexcept override
-    { SvxShapeText::release(); }
-
-    // XShapeDescriptor
-    virtual OUString SAL_CALL getShapeType() override;
-
-    // XShape
-    virtual css::awt::Point SAL_CALL getPosition() override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
-    virtual css::awt::Size SAL_CALL getSize() override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
-
-    // XConnectorShape
-    virtual void SAL_CALL connectStart( const css::uno::Reference< css::drawing::XConnectableShape >& xShape, css::drawing::ConnectionType nPos ) override;
-    virtual void SAL_CALL connectEnd( const css::uno::Reference< css::drawing::XConnectableShape >& xShape, css::drawing::ConnectionType nPos ) override;
-    virtual void SAL_CALL disconnectBegin( const css::uno::Reference< css::drawing::XConnectableShape >& xShape ) override;
-    virtual void SAL_CALL disconnectEnd( const css::uno::Reference< css::drawing::XConnectableShape >& xShape ) override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;

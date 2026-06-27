@@ -5690,18 +5690,6 @@ module com {
      CENTERED = 2,
      BOTTOM = 3
     };
-    /** @deprecated */ published interface XConnectableShape {
-     interface ::com::sun::star::uno::XInterface;
-     boolean canConnect([in] ::com::sun::star::awt::Point nPos, [in] boolean bCreateGluePoint, [in] long nMaxDist);
-     boolean doConnect([in] ::com::sun::star::awt::Point nPos, [in] boolean bCreateGluePoint, [in] long nMaxDist);
-    };
-    /** @deprecated */ published interface XConnectorShape {
-     interface ::com::sun::star::drawing::XShape;
-     void connectStart([in] ::com::sun::star::drawing::XConnectableShape xShape, [in] ::com::sun::star::drawing::ConnectionType nPos);
-     void connectEnd([in] ::com::sun::star::drawing::XConnectableShape xShape, [in] ::com::sun::star::drawing::ConnectionType nPos);
-     void disconnectBegin([in] ::com::sun::star::drawing::XConnectableShape xShape);
-     void disconnectEnd([in] ::com::sun::star::drawing::XConnectableShape xShape);
-    };
     published interface XDrawPage {
      interface ::com::sun::star::drawing::XShapes;
     };

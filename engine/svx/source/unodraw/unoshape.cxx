@@ -793,7 +793,6 @@ uno::Sequence< uno::Type > const & SvxShape::_getTypes()
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<lang::XUnoTunnel>::get(),
                 cppu::UnoType<container::XNamed>::get(),
-                cppu::UnoType<drawing::XConnectorShape>::get(),
                 // from SvxUnoTextBase::getTypes()
                 cppu::UnoType<text::XTextAppend>::get(),
                 cppu::UnoType<text::XTextCopy>::get(),

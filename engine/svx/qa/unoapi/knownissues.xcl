@@ -18,7 +18,6 @@
 
 ### i85263 ###
 svx.SvxShape::com::sun::star::drawing::TextProperties::TextWritingMode
-svx.SvxShapeConnector::com::sun::star::drawing::TextProperties::TextWritingMode
 # -> disabled in svx.sce
 
 ### i46736 ###
@@ -61,7 +60,6 @@ svx.SvxUnoTextRange::com::sun::star::style::ParagraphProperties
 svx.SvxGraphicObject::com::sun::star::style::ParagraphProperties
 svx.SvxShape::com::sun::star::style::ParagraphProperties
 svx.SvxShapeCircle::com::sun::star::style::ParagraphProperties
-svx.SvxShapeConnector::com::sun::star::style::ParagraphProperties
 svx.SvxShapeDimensioning::com::sun::star::style::ParagraphProperties
 svx.SvxShapePolyPolygon::com::sun::star::style::ParagraphProperties
 svx.SvxShapePolyPolygonBezier::com::sun::star::style::ParagraphProperties
