@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-08 17:01+0000\n"
+"PO-Revision-Date: 2026-06-27 18:12+0000\n"
 "Last-Translator: Tigran Zargaryan <tigranflib@gmail.com>\n"
-"Language-Team: Armenian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/hy/>\n"
-"Language: \n"
+"Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/hy/>\n"
+"Language: hy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -64,7 +64,7 @@ msgstr "Կարգավիճակ"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Մանրամասներ"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -448,6 +448,8 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Որոշ հաճախորդներ կապվել են հին WebSocket URL ձևի հետ, որը նախատեսվում է "
+"հեռացնել: Ստուգեք, որ ձեր պրոքսին անցկացնում է կոմպակտ ձևը:"
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -457,7 +459,7 @@ msgstr "Սխալ"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Իմանալ ավելին"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -559,7 +561,7 @@ msgstr "Ցուցադրել քանոնը"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Ցուցադրել ձևաչափման նշանները"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -647,11 +649,11 @@ msgstr "Բովանդակություն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Ցուցադրել"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Ցուցադրել սահմանները"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -871,10 +873,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Միացված լինելու դեպքում, Writer-ը բացելիս փաստաթուղթը հարմարեցնում է դիտման "
+"պատուհանի լայնությանը։ Անջատված լինելու դեպքում փաստաթուղթը բացվում է ստորև "
+"սահմանված լռելյայն մեծացման մակարդակով։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "{0}-ի համար կարգավորումներ հասանելի չեն"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -953,7 +958,7 @@ msgstr "Zotero հաշվի API կարգավորումներ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero-ի կարգավորումներ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -970,7 +975,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Փաստաթղթի ստորագրման կարգավորումներ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1082,7 +1087,7 @@ msgstr "Վերբեռնեք Xcu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Մուտքագրեք {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1090,15 +1095,15 @@ msgstr "Վերակարգաբերում"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Վերագործարկել {0}-ի լռելյայն վիճակին"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Վստա՞հ եք, որ ուզում եք վերագործարկել {0}-ը։"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Պահպանել {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2189,7 +2194,7 @@ msgstr "Այլևս սա չցուցադրել"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "{1} հրամանը մշակելիս տեղի ունեցավ {0} սխալ։"
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3099,7 +3104,7 @@ msgstr "Վերանորոգում"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Գտնել"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4204,7 +4209,7 @@ msgstr "Տեղադրեք ոճավորված աղյուսակ"
 
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "Ընտրեք խմբագրելի բջիջների միջակայք՝ ոճավորված աղյուսակ տեղադրելու համար"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4487,7 +4492,7 @@ msgstr "Ընտրել"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Բաշխել"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4608,7 +4613,7 @@ msgstr "Հեռացնել բաժինը"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Հեռացնել բաժինը և սահիկները"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4628,7 +4633,7 @@ msgstr "Ընդարձակել բոլոր ենթաբաժինները"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Ջնջե՞լ \"%1\" բաժինը և դրա %2 սահիկ(ներ)ը։"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4679,10 +4684,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Կապված է հին WebSocket URL ձևի հետ, որը նախատեսվում է հեռացնել: Ստուգեք, որ "
+"ձեր պրոքսին անցկացնում է սեղմ ձևը:"
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Կապված է կոմպակտ WebSocket URL ձևի հետ"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4796,6 +4803,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Էջը հարմարեցրեք պատուհանի լայնությանը: Բացելու դեպքում խելացի մեծացումը "
+"կարող է փոխանջատվել Նիշք ներդիրի «Ընտրանքներ» բաժնում:"
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4915,23 +4924,23 @@ msgstr "Ցուցադրել ընտրացանկը"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Պատճենեք սխալի մանրամասները"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Ցուցադրել տեխնիկական մանրամասները"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Տեխնիկական մանրամասներ:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Սխալի մանրամասները պատճենվեցին սեղմատախտակին"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Չհաջողվեց պատճենել սխալի մանրամասները"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5147,17 +5156,18 @@ msgstr ""
 "փաստաթղթի հղումները և մատենագիտությունը։"
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Առաջին սահիկ"
+msgstr "Առաջին տող"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Մինչ"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Կրկնակի սեղմեք՝ ներդիրի կանգ տեղադրելու համար: Ավելի շատ տարբերակների համար "
+"սեղմեք աջ կոճակով:"
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5317,19 +5327,19 @@ msgstr "Վերնագիր, ուղղահայաց տեքստ, կլիպարտ"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Ստանդարտ ընտրություն"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Ընդլայնված ընտրություն"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Ընտրության ավելացում"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Արգելափակել ընտրությունը"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -6001,7 +6011,7 @@ msgstr ""
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Փաստաթղթի հետ կապը կորել է։"
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6069,7 +6079,7 @@ msgstr "Սխալ սերվեր, վերամիացում..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Չաջակցվող տարբերակ։"
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6166,7 +6176,7 @@ msgstr "Ընտրված է {0} ներդիրը"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Սկավառակային տարածք չի մնացել։"
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6527,7 +6537,7 @@ msgstr "Չհաջողվեց ներբեռնել սեղմատախտակը, խնդր
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Չհաջողվեց վերբեռնել սեղմատախտակը"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6595,9 +6605,8 @@ msgid "Please send us your feedback"
 msgstr "Խնդրում ենք մեզ ուղարկել ձեր կարծիքը"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr "Նիշքի տեսակ: {0} չի կարող վերբեռնվել սերվեր, քանի որ նիշքը անուն չունի"
+msgstr "Նիշքի տեսակ: {0} չի կարող ներդրվել, քանի որ նիշքը անուն չունի"
 
 #: src/map/handler/Map.FileInserter.js:193
 msgid ""
@@ -6606,9 +6615,8 @@ msgid ""
 msgstr "Նիշքի տեսակ: {0} չի կարող վերբեռնվել սերվեր, քանի որ նիշքը անուն չունի"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr "{0} տեսակի նիշքը չի կարող վերբեռնվել սերվեր, քանի որ նիշքը դատարկ է"
+msgstr "{0} տեսակի նիշքը չի կարող ներդրվել, քանի որ նիշքը դատարկ է"
 
 #: src/map/handler/Map.FileInserter.js:197
 msgid ""
@@ -6813,9 +6821,8 @@ msgid "Present to all"
 msgstr "Ներկայացնել բոլորին"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Խմբագրել"
+msgstr "Ելք"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
