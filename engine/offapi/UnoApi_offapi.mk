@@ -2498,7 +2498,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XLoadEventListener \
 	XLoadable \
 	XLoaderFactory \
-	XMenuBarAcceptor \
 	XMenuBarMergingAcceptor \
 	XModel \
 	XModel2 \
