@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-15 10:02+0000\n"
+"PO-Revision-Date: 2026-06-27 18:12+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "help/de/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:9-5
 msgid "Keyboard Shortcuts"
@@ -80,16 +80,15 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-48
 msgid "Open"
-msgstr ""
+msgstr "Öffnen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-79
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>O</kbd>"
 msgstr ""
-"<kbd>Strg</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Strg</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-72
 msgid "Print (Download as PDF)"
@@ -97,7 +96,7 @@ msgstr "Drucken (als PDF herunterladen)"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-70
 msgid "Print"
-msgstr ""
+msgstr "Drucken"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:22-72
 msgid "Display the Keyboard shortcuts help"
