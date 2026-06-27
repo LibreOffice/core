@@ -1620,7 +1620,25 @@ bool ScInterpreter::ConvertMatrixParameters()
                                 if ( nJumpRows < o3tl::make_unsigned(nRow2 - nRow1 + 1) )
                                     nJumpRows = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
                             }
-                            formula::FormulaToken* pNew = new ScMatrixToken( std::move(pMat) );
+                            // For an @ operand, pair the matrix with
+                            // the source range so the row-aligned slot
+                            // can be picked. Other operators receive a
+                            // plain ScMatrixToken.
+                            formula::FormulaToken* pNew = nullptr;
+                            if (pCur->GetOpCode() == ocSingleValue)
+                            {
+                                sc::RangeMatrix aRangeMatrix;
+                                aRangeMatrix.mpMat = std::move(pMat);
+                                aRangeMatrix.mnCol1 = nCol1;
+                                aRangeMatrix.mnRow1 = nRow1;
+                                aRangeMatrix.mnTab1 = nTab1;
+                                aRangeMatrix.mnCol2 = nCol2;
+                                aRangeMatrix.mnRow2 = nRow2;
+                                aRangeMatrix.mnTab2 = nTab2;
+                                pNew = new ScMatrixRangeToken( aRangeMatrix );
+                            }
+                            else
+                                pNew = new ScMatrixToken( std::move(pMat) );
                             pNew->IncRef();
                             pStack[ sp - i ] = pNew;
                             p->DecRef();    // p may be dead now!

@@ -1562,11 +1562,50 @@ void ScInterpreter::ScNeg()
 
 void ScInterpreter::ScSingleValue()
 {
-    // The @ operator collapses an array operand to a single value. It is
-    // the implicit-intersection prefix that opts a formula out of the
-    // dynamic-array spill behaviour.
+    // The @ implicit-intersection operator collapses an operand to
+    // a single value. For a bare range, pick the slot row-aligned
+    // (or column-aligned) with the formula cell, and push #VALUE!
+    // when no slot matches. For a computed matrix, pick the
+    // upper-left value.
     nFuncFmtType = nCurFmtType;
-    if (GetStackType() == svMatrix)
+    StackVar eType = GetStackType();
+    if (eType == svDoubleRef
+        || (eType == svMatrix && sp > 0
+            && static_cast<const ScMatrixToken*>(pStack[sp - 1])->IsMatrixRangeToken()))
+    {
+        ScRange aRange;
+        if (eType == svDoubleRef)
+        {
+            PopDoubleRef(aRange);
+        }
+        else
+        {
+            const auto* pRangeToken = static_cast<const ScMatrixRangeToken*>(pStack[sp - 1]);
+            const ScComplexRefData& rRef = pRangeToken->GetDoubleRef();
+            aRange.aStart = rRef.Ref1.toAbs(mrDoc, aPos);
+            aRange.aEnd = rRef.Ref2.toAbs(mrDoc, aPos);
+            Pop();
+        }
+        if (nGlobalError != FormulaError::NONE)
+        {
+            PushError(nGlobalError);
+            return;
+        }
+        ScAddress aAdr;
+        if (!DoubleRefToPosSingleRef(aRange, aAdr))
+        {
+            // DoubleRefToPosSingleRef set FormulaError::NoValue.
+            PushError(nGlobalError);
+            return;
+        }
+        ScRefCellValue aCell(mrDoc, aAdr);
+        if (aCell.hasString())
+            PushString(aCell.getString(mrDoc));
+        else
+            PushDouble(GetCellValue(aAdr, aCell));
+        return;
+    }
+    if (eType == svMatrix)
     {
         ScMatrixRef pMat = GetMatrix();
         if (!pMat)
@@ -1580,7 +1619,7 @@ void ScInterpreter::ScSingleValue()
         else
             PushDouble(aVal.fVal);
     }
-    // Non-matrix operand passes through unchanged.
+    // Non-matrix, non-range operand passes through unchanged.
 }
 
 void ScInterpreter::ScPercentSign()

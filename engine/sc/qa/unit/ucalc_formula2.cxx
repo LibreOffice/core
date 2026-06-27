@@ -5941,24 +5941,34 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayFlagCopy)
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testSingleValueOperator)
 {
-    // The @ prefix collapses an array-returning function to its upper-left
-    // value, opting the formula out of auto-spill.
+    // @ collapses an array operand or a bare range to a single slot.
 
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
     m_pDoc->InsertTab(0, u"Sheet1"_ustr);
 
+    // @SEQUENCE collapses the spilled array. The row below stays empty.
     m_pDoc->SetFormula(ScAddress(0, 0, 0), u"=@SEQUENCE(4)"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE);
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
-    // No spill into the row below.
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, m_pDoc->GetCellType(ScAddress(0, 1, 0)));
 
-    // The @ also collapses an array produced by range arithmetic. B2:B3+0
-    // is a two-cell array whose upper-left is B2. The formula sits in a
-    // row that does not overlap B2:B3, so implicit intersection on the
-    // range would otherwise fail and the @ has to drive the collapse.
+    // Bare-range @ picks the slot whose row matches the formula row,
+    // and pushes #VALUE! when no slot matches.
     m_pDoc->SetValue(ScAddress(1, 1, 0), 7.0);
     m_pDoc->SetValue(ScAddress(1, 2, 0), 9.0);
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 11.0);
+    m_pDoc->SetFormula(ScAddress(3, 1, 0), u"=@B2:B4"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+    m_pDoc->SetFormula(ScAddress(3, 2, 0), u"=@B2:B4"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+    m_pDoc->SetFormula(ScAddress(3, 3, 0), u"=@B2:B4"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+    m_pDoc->SetFormula(ScAddress(3, 4, 0), u"=@B2:B4"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+    CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(3, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NoValue, m_pDoc->GetErrCode(ScAddress(3, 4, 0)));
+
+    // @ on a computed expression returns the upper-left of the
+    // produced array, even when the formula sits in a row that does
+    // not overlap the source.
     m_pDoc->SetFormula(ScAddress(0, 5, 0), u"=@(B2:B3+0)"_ustr,
                        formula::FormulaGrammar::GRAM_NATIVE);
     CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0, 5, 0)));
