@@ -77,10 +77,6 @@ bridges_SELECTED_BRIDGE := gcc3_linux_intel
 bridge_asm_objects := call
 bridge_exception_objects := cpp2uno except uno2cpp
 bridge_noncallexception_objects := callvirtualmethod
-else ifeq ($(COM),MSC)
-bridges_SELECTED_BRIDGE := msvc_win32_intel
-bridge_exception_objects := cpp2uno uno2cpp
-bridge_noopt_objects := except
 else ifeq ($(OS),EMSCRIPTEN)
 bridges_SELECTED_BRIDGE := gcc3_wasm
 bridge_exception_objects := abi cpp2uno uno2cpp
