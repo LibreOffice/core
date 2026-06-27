@@ -5741,10 +5741,6 @@ module com {
      void setInFrontOf([in] ::com::sun::star::drawing::XShapes xShapes, [in] ::com::sun::star::drawing::XShape xShape);
      void reverseOrder([in] ::com::sun::star::drawing::XShapes xShapes);
     };
-    /** @deprecated */ published interface XUniversalShapeDescriptor {
-     interface ::com::sun::star::drawing::XShapeDescriptor;
-     void setShapeType([in] string aShapeTypeName);
-    };
    };
    module embed {
     published constants Actions {

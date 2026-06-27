@@ -2267,7 +2267,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	XShapes3 \
 	XSlidePreviewCacheListener \
 	XSlideSorterSelectionSupplier \
-	XUniversalShapeDescriptor \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing/framework,\
 	AnchorBindingMode \
