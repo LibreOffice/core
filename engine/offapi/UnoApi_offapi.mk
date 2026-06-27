@@ -869,8 +869,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/frame,\
 	Components \
 	ContentHandler \
 	Controller \
-	DesktopTask \
-	DesktopTasks \
 	DispatchProvider \
 	FrameControl \
 	FrameLoader \
@@ -2467,7 +2465,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XControllerBorder \
 	XDesktop \
 	XDesktop2 \
-	XDesktopTask \
 	XDispatch \
 	XDispatchHelper \
 	XDispatchInformationProvider \

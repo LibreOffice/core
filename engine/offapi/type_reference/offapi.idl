@@ -7275,32 +7275,10 @@ module com {
      interface ::com::sun::star::frame::XComponentLoader;
     };
     /** @deprecated */ published service Desktop: ::com::sun::star::frame::XDesktop2;
-    /** @deprecated */ published interface XDesktopTask {
-     interface ::com::sun::star::lang::XComponent;
-     /** @deprecated */ void initialize([in] ::com::sun::star::awt::XWindow TaskWindow);
-     /** @deprecated */ boolean close();
-    };
     /** @deprecated */ published interface XWindowArranger {
      interface ::com::sun::star::uno::XInterface;
      /** @deprecated */ boolean hasArrangeCommand([in] short nCommand);
      /** @deprecated */ void arrange([in] short nCommand);
-    };
-    /** @deprecated */ published service DesktopTask {
-     interface ::com::sun::star::frame::XDesktopTask;
-     interface ::com::sun::star::frame::XFrame;
-     interface ::com::sun::star::beans::XPropertySet;
-     interface ::com::sun::star::frame::XWindowArranger;
-     interface ::com::sun::star::frame::XFramesSupplier;
-     [property, readonly] string Title;
-     [property, readonly] boolean IsDesktop;
-     [property] boolean IsVisible;
-     [property] boolean IsFloating;
-     [property] boolean IsAlwaysVisible;
-     [property] ::com::sun::star::awt::Point Position;
-     [property] ::com::sun::star::awt::Size Size;
-    };
-    /** @deprecated */ published service DesktopTasks {
-     interface ::com::sun::star::container::XEnumerationAccess;
     };
     published interface XDispatchHelper {
      interface ::com::sun::star::uno::XInterface;
