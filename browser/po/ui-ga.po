@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-27 10:05+0000\n"
+"PO-Revision-Date: 2026-06-27 18:12+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ga/>\n"
@@ -65,7 +65,7 @@ msgstr "Stádas"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Sonraí"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -446,6 +446,8 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Cheangail roinnt cliant leis an seanfhoirm URL WebSocket, atá beartaithe a "
+"bhaint. Seiceáil go dtéann do sheachfhreastalaí tríd an bhfoirm dhlúth."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -455,7 +457,7 @@ msgstr "Earráid"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Foghlaim níos mó"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -556,7 +558,7 @@ msgstr "Taispeáin Rialóir"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Taispeáin Marcanna Formáidithe"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -644,11 +646,11 @@ msgstr "Ábhar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Taispeáin"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Taispeáin Teorainneacha"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -868,10 +870,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Nuair a bhíonn sé ar siúl, oireann Writer an doiciméad do leithead an "
+"radhairc nuair a osclaítear é. Nuair a bhíonn sé múchta, osclaítear an "
+"doiciméad ag an leibhéal súmála réamhshocraithe atá socraithe thíos."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Níl aon socruithe ar fáil do {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -952,7 +957,7 @@ msgstr "Socruithe API cuntais Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Socruithe Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -969,7 +974,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Socruithe Sínithe Doiciméad"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1081,7 +1086,7 @@ msgstr "Uaslódáil Xcu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Cuir isteach {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1089,15 +1094,15 @@ msgstr "Athshocraigh"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Athshocraigh go dtí an réamhshocrú {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "An bhfuil tú cinnte gur mian leat {0} a athshocrú?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Sábháil {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2196,7 +2201,7 @@ msgstr "Ná taispeáin é seo arís"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Tharla earráid {0} agus an t-ordú {1} á phróiseáil."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3108,7 +3113,7 @@ msgstr "Deisiú"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Aimsigh"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4212,6 +4217,7 @@ msgstr "Cuir tábla stílithe isteach"
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
 msgstr ""
+"Roghnaigh raon cealla in-eagarthóireachta chun tábla stílithe a chur isteach"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4493,7 +4499,7 @@ msgstr "Roghnaigh"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Dáileadh"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4614,7 +4620,7 @@ msgstr "Bain an Roinn"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Bain an Rannóg & Sleamhnáin"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4634,7 +4640,7 @@ msgstr "Leathnaigh Gach Roinn"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Scrios an chuid \"%1\" agus a %2 sleamhnán(anna)?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4687,10 +4693,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Ceangailte leis an seanfhoirm URL WebSocket, atá beartaithe a bhaint. "
+"Seiceáil go dtugann do sheachfhreastalaí an fhoirm dhlúth tríd."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Ceangailte leis an bhfoirm URL dlúth WebSocket"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4804,6 +4812,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Oiriúnaigh an leathanach do leithead na fuinneoige. Is féidir Zúmáil Chliste "
+"a athrú nuair a osclaítear é i Roghanna faoin táb Comhad."
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4925,23 +4935,23 @@ msgstr "Taispeáin an Roghchlár"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Sonraí earráide cóipeála"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Taispeáin sonraí teicniúla"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Sonraí Teicniúla:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Sonraí earráide cóipeáilte chuig an ghearrthaisce"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Theip ar shonraí na hearráide a chóipeáil"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5157,17 +5167,18 @@ msgstr ""
 "leabharliosta a nuashonrú sa doiciméad seo."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "An Chéad Sleamhnán"
+msgstr "An chéad líne"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Roimh"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Cliceáil faoi dhó chun stad tab a chur isteach. Cliceáil ar dheis le "
+"haghaidh tuilleadh roghanna."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5331,19 +5342,19 @@ msgstr "Teideal, Téacs Ingearach, Clipart"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Rogha caighdeánach"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Ag leathnú an roghnúcháin"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Ag cur rogha leis"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Rogha bloc"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -6018,7 +6029,7 @@ msgstr ""
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Tá an nasc leis an doiciméad caillte."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6088,7 +6099,7 @@ msgstr "Freastalaí mícheart, ag athcheangal..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Leagan gan tacaíocht."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6185,7 +6196,7 @@ msgstr "Cluaisín {0} roghnaithe"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Níl aon spás diosca fágtha."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6549,7 +6560,7 @@ msgstr "Theip ar an ngearrthaisce a íoslódáil, déan cóip arís"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Theip ar an ngearrthaisce a uaslódáil"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6619,11 +6630,10 @@ msgid "Please send us your feedback"
 msgstr "Seol d'aiseolas chugainn le do thoil"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
-"Ní féidir an cineál comhaid: {0} a uaslódáil chuig an bhfreastalaí toisc "
-"nach bhfuil ainm ar an gcomhad"
+"Ní féidir an comhad den chineál: {0} a chur isteach mar níl aon ainm ar an "
+"gcomhad"
 
 #: src/map/handler/Map.FileInserter.js:193
 msgid ""
@@ -6634,11 +6644,10 @@ msgstr ""
 "nach bhfuil ainm ar an gcomhad"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
 msgstr ""
-"Ní féidir an cineál comhaid: {0} a uaslódáil chuig an bhfreastalaí toisc go "
-"bhfuil an comhad folamh"
+"Ní féidir an comhad den chineál: {0} a chur isteach mar go bhfuil an comhad "
+"folamh"
 
 #: src/map/handler/Map.FileInserter.js:197
 msgid ""
@@ -6846,9 +6855,8 @@ msgid "Present to all"
 msgstr "Cuir i láthair do chách"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Cuir in Eagar"
+msgstr "Scoir"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
