@@ -415,7 +415,7 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
 
     // TODO/FIXME: the closing characters must be right-flanking
 
-    if (ShouldCloseIt(current.nCodeChange, result.nCodeChange))
+    if (!current.bCodeBlock && ShouldCloseIt(current.nCodeChange, result.nCodeChange))
     {
         rWrt.Strm().WriteUnicodeOrByteText(u"`");
     }
@@ -557,7 +557,7 @@ void OutFormattingChange(SwMDWriter& rWrt, NodePositions& positions, sal_Int32 p
         }
     }
 
-    if (ShouldOpenIt(current.nCodeChange, result.nCodeChange))
+    if (!current.bCodeBlock && ShouldOpenIt(current.nCodeChange, result.nCodeChange))
     {
         rWrt.Strm().WriteUnicodeOrByteText(u"`");
     }

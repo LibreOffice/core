@@ -1128,6 +1128,49 @@ CPPUNIT_TEST_FIXTURE(Test, testCTLPaste)
     CPPUNIT_ASSERT_EQUAL(u"שלום"_ustr, getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf172833CodeBlock)
+{
+    createSwDoc("tdf172833-code-block.fodt");
+
+    save(TestFilter::MD);
+    std::string aActual = TempFileToString();
+    std::string aExpected(
+        // clang-format off
+        "This is not code." SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "```" SAL_NEWLINE_STRING
+        "This is code." SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "This is more code." SAL_NEWLINE_STRING
+        "```" SAL_NEWLINE_STRING
+        SAL_NEWLINE_STRING
+        "This is not code." SAL_NEWLINE_STRING
+        // clang-format on
+    );
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: This is not code.
+    //
+    // ```
+    // This is code.
+    //
+    // This is more code.
+    // ```
+    //
+    // This is not code.
+    //
+    // - Actual  : This is not code.
+    //
+    // ```
+    // `This is code.`
+    //
+    // `This is more code.`
+    // ```
+    //
+    // This is not code.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
