@@ -80,7 +80,10 @@ public:
     {
         if (_thread)
         {
-            _exit = true;
+            {
+                std::unique_lock<std::mutex> guard(_lock);
+                _exit = true;
+            }
             _condition.notify_all();
             _thread->join();
             _thread.reset();

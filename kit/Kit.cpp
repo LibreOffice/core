@@ -272,7 +272,10 @@ BackgroundSaveWatchdog::~BackgroundSaveWatchdog()
 
 void BackgroundSaveWatchdog::complete()
 {
-    _saveCompleted = true;
+    {
+        std::unique_lock<std::mutex> lock(_watchdogMutex);
+        _saveCompleted = true;
+    }
     _watchdogCV.notify_all();
     if (_watchdogThread.joinable())
         _watchdogThread.join();
