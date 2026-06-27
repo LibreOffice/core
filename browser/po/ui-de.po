@@ -12,11 +12,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-15 10:02+0000\n"
+"PO-Revision-Date: 2026-06-27 18:12+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
-"Language: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -68,7 +68,7 @@ msgstr "Status"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -651,11 +651,11 @@ msgstr "Inhalt"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Anzeige"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Grenzen anzeigen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -1092,7 +1092,7 @@ msgstr "Xcu hochladen"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "{0} eingeben"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1108,7 +1108,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "{0} speichern"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -5175,9 +5175,8 @@ msgstr ""
 "die Zitate und die Bibliographie in diesem Dokument nicht aktualisieren kann."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Erste Folie"
+msgstr "Erste Zeile"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
@@ -6651,11 +6650,9 @@ msgid "Please send us your feedback"
 msgstr "Bitte senden Sie uns Ihr Feedback"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
 msgstr ""
-"Die Datei vom Typ: {0} kann nicht auf den Server hochgeladen werden, da die "
-"Datei keinen Namen hat"
+"Die Datei vom Typ: {0} kann nicht eingefügt werden, da sie keinen Namen hat"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6667,11 +6664,8 @@ msgstr ""
 "Datei keinen Namen hat"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr ""
-"Die Datei vom Typ: {0} kann nicht auf den Server hochgeladen werden, da die "
-"Datei leer ist"
+msgstr "Die Datei vom Typ: {0} kann nicht eingefügt werden, da sie leer ist"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -6881,9 +6875,8 @@ msgid "Present to all"
 msgstr "Allen präsentieren"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Bearbeiten"
+msgstr "Beenden"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
