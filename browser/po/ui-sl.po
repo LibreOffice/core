@@ -5,18 +5,18 @@ msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-07 16:01+0000\n"
+"PO-Revision-Date: 2026-06-27 10:05+0000\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"Language-Team: Slovenian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/sl/>\n"
-"Language: \n"
+"Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/sl/>\n"
+"Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
-"%100==4 ? 2 : 3;\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3;\n"
 "X-Accelerator-Marker: ~\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: admin/admin.strings.js:15
@@ -64,7 +64,7 @@ msgstr "Stanje"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "Podrobnosti"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -447,6 +447,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Nekateri odjemalci so povezani s starim obrazcem WebSocket URL, ki ga "
+"načrtujemo umakniti. Vendar preverite, da vaš posredni strežnik prepušča "
+"strnjeno obliko."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -456,7 +459,7 @@ msgstr "Napaka"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Več o tem"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -557,7 +560,7 @@ msgstr "Pokaži ravnilo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Pokaži oblikovalne oznake"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -645,11 +648,11 @@ msgstr "Vsebina"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "Prikaži"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Pokaži meje"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -867,10 +870,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Ko je vključeno, Writer ob odprtju umeri dokument na širino okna. Ko je "
+"izključeno, se dokument odpre pri privzeti ravni povečave, nastavljeni "
+"spodaj."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Za {0} nastavitve niso na voljo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -947,7 +953,7 @@ msgstr "nastavitvah API svojega računa Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Nastavitve Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -964,7 +970,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Nastavitve podpisovanja dokumenta"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1075,7 +1081,7 @@ msgstr "Naloži xcu na strežnik"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Vnesite: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1083,15 +1089,15 @@ msgstr "Ponastavi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Ponastavi na privzeto: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite ponastaviti {0}?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Shrani {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2179,7 +2185,7 @@ msgstr "Tega ne kaži več"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Napaka {0} se je pojavila ob obdelavi ukaza {1}."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3087,7 +3093,7 @@ msgstr "Popravi"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Najdi"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4191,7 +4197,7 @@ msgstr "Vstavi tabelo s slogom"
 
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "Izberite obseg celic za urejanje, da vstavite tabelo s slogom"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4474,7 +4480,7 @@ msgstr "Izberi"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Porazdeli"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4595,7 +4601,7 @@ msgstr "Odstrani odsek"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Odstrani odseke in prosojnice"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4615,7 +4621,7 @@ msgstr "Razširi vse odseke"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Ali želite izbrisati odsek \"%1\" in njegovih %2 prosojnic?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4666,10 +4672,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Povezani s starim obliko WebSocket URL, za katero načrtujemo odstranitev. "
+"Preverite, da vaš posredni strežnik prepušča strnjeno obliko."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Povezani s strnjenim obrazcem WebSocket URL"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4783,6 +4791,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Umeri stran na širino okna. Pametno povečavo ob odprtju lahko preklopite v "
+"Možnostih na zavihku Datoteka."
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4902,23 +4912,23 @@ msgstr "Pokaži meni"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Kopiraj podrobnosti napake"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Pokaži tehnične podrobnosti"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Tehnične podrobnosti:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Podrobnosti o napaki so kopirane v odložišče"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Kopiranje podrobnosti napake ni uspelo"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5134,17 +5144,18 @@ msgstr ""
 "in bibliografijo v tem dokumentu."
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "Prva prosojnica"
+msgstr "Prva vrstica"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Pred"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Dvokliknite za vstavljanje tabulatorskega mesta. Kliknite z desnim gumbom "
+"miške za več možnosti."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5304,19 +5315,19 @@ msgstr "Naslov, navpično besedilo, izrezek"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Navaden izbor"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Širitveni izbor"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Dodajalni izbor"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Bločni izbor"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5985,7 +5996,7 @@ msgstr "Žal se ni mogoče povezati z vašim dokumentom. Prosimo, poskusite znov
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Povezava z dokumentom je izgubljena."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6053,7 +6064,7 @@ msgstr "Napačen strežnik, poteka ponovno povezovanje ..."
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Nepodprta različica."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6150,7 +6161,7 @@ msgstr "Izbran zavihek {0}"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Na disku ni več prostora."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6505,7 +6516,7 @@ msgstr "Odložišča ni mogoče prenesti s strežnika, prosimo, kopirajte ponovn
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Nalaganje na odložišče je spodletelo"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6572,11 +6583,8 @@ msgid "Please send us your feedback"
 msgstr "Pošljite nam svoje mnenje"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr ""
-"Datoteke vrste {0} ni mogoče prenesti na strežnik, ker datoteka ni "
-"poimenovana"
+msgstr "Datoteke vrste {0} ni možno vstaviti, ker datoteka ni poimenovana"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6588,10 +6596,8 @@ msgstr ""
 "poimenovana"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr ""
-"Datoteke vrste {0} ni mogoče prenesti na strežnik, ker je datoteka prazna"
+msgstr "Datoteke vrste {0} ni možno vstaviti, ker je datoteka prazna"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -6799,9 +6805,8 @@ msgid "Present to all"
 msgstr "Predstavljaj vsem"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "Uredi"
+msgstr "Izhod"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
