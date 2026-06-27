@@ -1098,11 +1098,19 @@ prettier.done: $(COOL_JS_SRC) $(COOL_TS_SRC) $(COOL_TSX_SRC)
 	@touch $@
 
 # Generate the localization map files from Langs.conf (the single source of
-# truth for shipped languages) and copy them to the dist folder. git build only;
-# in a dist tarball they are already shipped, so the recipe just copies.
-$(L10N_MAPS_STAMP): $(abs_top_srcdir)/scripts/genlangmaps.py $(wildcard $(LANGS_CONF)) \
+# truth for shipped languages). git build only; in a dist tarball they are
+# already shipped, so the recipe is a no-op. genlangmaps.py writes all three
+# in one run, so localizations.json carries the recipe and the other two
+# depend on it.
+$(srcdir)/l10n/localizations.json: $(abs_top_srcdir)/scripts/genlangmaps.py $(wildcard $(LANGS_CONF)) \
 		$(wildcard $(srcdir)/po/ui-*.po) $(wildcard $(srcdir)/po/help-*.po)
 	$(QUIET_GENLANGMAPS) test ! -f "$(LANGS_CONF)" || $(abs_top_srcdir)/scripts/genlangmaps.py $(abs_top_srcdir) $(ENGINE_SRCDIR)
+
+# The same run wrote these two, so they are up to date once it has run.
+$(srcdir)/l10n/help-localizations.json $(srcdir)/l10n/uno-localizations.json: $(srcdir)/l10n/localizations.json
+
+# Copy them to the dist folder.
+$(L10N_MAPS_STAMP): $(srcdir)/l10n/localizations.json $(srcdir)/l10n/help-localizations.json $(srcdir)/l10n/uno-localizations.json
 	@mkdir -p $(DIST_FOLDER)/l10n
 	@cp $(srcdir)/l10n/localizations.json $(srcdir)/l10n/help-localizations.json $(srcdir)/l10n/uno-localizations.json $(DIST_FOLDER)/l10n/
 	@touch $@
