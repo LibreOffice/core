@@ -1590,9 +1590,11 @@ void ScInterpreter::ScMap()
         {
             SCSIZE nCols, nRows;
             xMat->GetDimensions(nCols, nRows);
-            if (nC == 0 || nCols < nC)
+            // The result spans the largest argument array. A shorter array
+            // leaves its missing positions not available.
+            if (nCols > nC)
                 nC = nCols;
-            if (nR == 0 || nRows < nR)
+            if (nRows > nR)
                 nR = nRows;
             aMatrices[i] = xMat;
         }
@@ -1622,8 +1624,16 @@ void ScInterpreter::ScMap()
     {
         for (SCSIZE nRow = 0; nRow < nR; ++nRow)
         {
+            bool bElementMissing = false;
             for (sal_uInt8 nMat = 0; nMat < nArgCount; ++nMat)
             {
+                SCSIZE nMatCols, nMatRows;
+                aMatrices[nMat]->GetDimensions(nMatCols, nMatRows);
+                if (nCol >= nMatCols || nRow >= nMatRows)
+                {
+                    bElementMissing = true;
+                    break;
+                }
                 if (aMatrices[nMat]->IsEmpty(nCol, nRow))
                     aArgs[nMat] = new formula::FormulaMissingToken();
                 else if (aMatrices[nMat]->IsValue(nCol, nRow))
@@ -1638,6 +1648,13 @@ void ScInterpreter::ScMap()
                     aArgs[nMat] = new formula::FormulaStringToken(aMatrices[nMat]->GetString(nCol, nRow));
                 else // TODO: callable
                     aArgs[nMat] = new formula::FormulaErrorToken(FormulaError::IllegalParameter);
+            }
+            // One of the arrays is shorter and has no element here, so there is
+            // nothing to map at this position.
+            if (bElementMissing)
+            {
+                xResMat->PutError(FormulaError::NotAvailable, nCol, nRow);
+                continue;
             }
             ScCall(pCallable, aArgs);
             PutMatrixValue(PopToken(), xResMat, nCol, nRow);

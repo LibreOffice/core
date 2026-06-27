@@ -326,6 +326,49 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testMapPerElementErrorIsolation)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMapMismatchedArrayLengths)
+{
+    // MAP over two arrays of different lengths produces a result as long as the
+    // longer one, with the position the shorter array cannot reach left not
+    // available, rather than clipping the result to the shorter array.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+
+    // Read MAP's result matrix directly. Entered over a single cell it is
+    // neither spilled nor padded, so the matrix is exactly what MAP produced.
+    // Linear element access keeps the check independent of the result shape.
+    m_pDoc->InsertMatrixFormula(0, 0, 0, 0, aMark,
+                                u"=MAP({1;2;3}; {1;2}; LAMBDA(a; b; a + b))"_ustr);
+    ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    const ScMatrix* pMat = pCell->GetMatrix();
+    CPPUNIT_ASSERT(pMat);
+
+    // Three elements, the length of the longer array, not two.
+    SCSIZE nCols = 0;
+    SCSIZE nRows = 0;
+    pMat->GetDimensions(nCols, nRows);
+    CPPUNIT_ASSERT_EQUAL(SCSIZE(3), nCols * nRows);
+
+    // The two matched elements add. The third has no second operand.
+    CPPUNIT_ASSERT_EQUAL(2.0, pMat->GetDouble(0));
+    CPPUNIT_ASSERT_EQUAL(4.0, pMat->GetDouble(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(FormulaError::NotAvailable),
+                         sal_Int32(GetDoubleErrorValue(pMat->GetDouble(2))));
+
+    // The same result reduced to a scalar, as a second check: IFERROR turns the
+    // not-available element into a sentinel, so a three-element result sums
+    // higher than one clipped to two elements.
+    m_pDoc->InsertMatrixFormula(
+        2, 0, 2, 0, aMark, u"=SUM(IFERROR(MAP({1;2;3}; {1;2}; LAMBDA(a; b; a + b)); 100))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(106.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncCHOOSE)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
