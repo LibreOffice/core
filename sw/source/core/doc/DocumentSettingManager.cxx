@@ -60,6 +60,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbAddFlyOffsets(false),
     mbAddVerticalFlyOffsets(false),
     mbUseHiResolutionVirtualDevice(true),
+    mbOldLineSpacing(false),
     mbMathBaselineAlignment(false), // default for *old* documents is 'off'
     mbStylesNoDefault(false),
     mEmbedFonts(false),
@@ -131,7 +132,6 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbTabCompat                         = !aOptions.get(u"UseOurTabStopFormat"_ustr);
         mbUseVirtualDevice                  = true;
         mbAddExternalLeading                = !aOptions.get(u"NoExternalLeading"_ustr);
-        mbOldLineSpacing                    = aOptions.get(u"UseLineSpacing"_ustr);
         mbAddParaSpacingToTableCells        = aOptions.get(u"AddTableSpacing"_ustr);
         mbAddParaLineSpacingToTableCells    = aOptions.get(u"AddTableLineSpacing"_ustr);
         mbUseFormerObjectPos                = aOptions.get(u"UseObjectPositioning"_ustr);
@@ -162,7 +162,6 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbTabCompat                         = true;
         mbUseVirtualDevice                  = true;
         mbAddExternalLeading                = true;
-        mbOldLineSpacing                    = false;
         mbAddParaSpacingToTableCells        = false;
         mbAddParaLineSpacingToTableCells    = false;
         mbUseFormerObjectPos                = false;

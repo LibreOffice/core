@@ -436,10 +436,6 @@ public:
     // of table cells.
     SW_DLLPUBLIC void SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells );
 
-    // Former formatting of text lines with
-    // proportional line spacing or not.
-    SW_DLLPUBLIC void SetUseFormerLineSpacing( bool _bUseFormerLineSpacing );
-
     // Former object positioning.
     SW_DLLPUBLIC void SetUseFormerObjectPositioning( bool _bUseFormerObjPos );
 

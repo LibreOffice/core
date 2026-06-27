@@ -62,12 +62,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="UseLineSpacing" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Use OpenOffice.org 1.1 line spacing</desc>
-        </info>
-        <value>false</value>
-      </prop>
       <prop oor:name="AddTableSpacing" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Add paragraph and table spacing at bottom of table cells</desc>

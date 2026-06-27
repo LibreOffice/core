@@ -958,23 +958,6 @@ void SwViewShell::SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCel
 }
 
 /**
- * Sets if former formatting of text lines with proportional line spacing should used.
- * #i11859#
- * @param[in] (bool) setting of the new value
- */
-void SwViewShell::SetUseFormerLineSpacing( bool _bUseFormerLineSpacing )
-{
-    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
-    if ( rIDSA.get(DocumentSettingId::OLD_LINE_SPACING) != _bUseFormerLineSpacing )
-    {
-        SwWait aWait( *GetDoc()->GetDocShell(), true );
-        rIDSA.set(DocumentSettingId::OLD_LINE_SPACING, _bUseFormerLineSpacing );
-        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea;
-        lcl_InvalidateAllContent( *this, nInv );
-    }
-}
-
-/**
  * Sets IDocumentSettingAccess if former object positioning should be used.
  * #i11860#
  * @param[in] (bool) setting the new value
@@ -1165,6 +1148,9 @@ void SwViewShell::SetLineSpacingAsGapBelow(bool bValue)
     {
         SwWait aWait(*GetDoc()->GetDocShell(), true);
         rIDSA.set(DocumentSettingId::LINE_SPACING_AS_GAP_BELOW, bValue);
+        // mutually exclusive with UseFormerLineSpacing
+        if (bValue)
+            rIDSA.set(DocumentSettingId::OLD_LINE_SPACING, false);
         const SwInvalidateFlags nInv = SwInvalidateFlags::Size | SwInvalidateFlags::Section
         | SwInvalidateFlags::PrtArea | SwInvalidateFlags::Table
         | SwInvalidateFlags::Pos;

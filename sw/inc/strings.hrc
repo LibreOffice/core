@@ -1525,7 +1525,6 @@
 #define STR_COMPAT_OPT_ADDSPACINGATPAGES        NC_("STR_COMPAT_OPT_ADDSPACINGATPAGES", "Add paragraph and table spacing at top of first page and page breaks")
 #define STR_COMPAT_OPT_USEOURTABSTOPFORMAT      NC_("STR_COMPAT_OPT_USEOURTABSTOPFORMAT", "Use OpenOffice.org 1.1 tabstop formatting")
 #define STR_COMPAT_OPT_NOEXTERNALLEADING        NC_("STR_COMPAT_OPT_NOEXTERNALLEADING", "Do not add leading (extra space) between lines of text")
-#define STR_COMPAT_OPT_USELINESPACING           NC_("STR_COMPAT_OPT_USELINESPACING", "Use OpenOffice.org 1.1 line spacing")
 #define STR_COMPAT_OPT_ADDTABLESPACING          NC_("STR_COMPAT_OPT_ADDTABLESPACING", "Add paragraph and table spacing at bottom of table cells")
 #define STR_COMPAT_OPT_USEOBJECTPOSITIONING     NC_("STR_COMPAT_OPT_USEOBJECTPOSITIONING", "Use OpenOffice.org 1.1 object positioning")
 #define STR_COMPAT_OPT_USEOURTEXTWRAPPING       NC_("STR_COMPAT_OPT_USEOURTEXTWRAPPING", "Use OpenOffice.org 1.1 text wrapping around objects")

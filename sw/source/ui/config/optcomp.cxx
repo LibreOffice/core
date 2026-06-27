@@ -50,7 +50,6 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"AddSpacingAtPages"_ustr, STR_COMPAT_OPT_ADDSPACINGATPAGES },
     { u"UseOurTabStopFormat"_ustr, STR_COMPAT_OPT_USEOURTABSTOPFORMAT },
     { u"NoExternalLeading"_ustr, STR_COMPAT_OPT_NOEXTERNALLEADING },
-    { u"UseLineSpacing"_ustr, STR_COMPAT_OPT_USELINESPACING },
     { u"AddTableSpacing"_ustr, STR_COMPAT_OPT_ADDTABLESPACING },
     { u"UseObjectPositioning"_ustr, STR_COMPAT_OPT_USEOBJECTPOSITIONING },
     { u"UseOurTextWrapping"_ustr, STR_COMPAT_OPT_USEOURTEXTWRAPPING },
@@ -83,7 +82,6 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
         { u"AddSpacingAtPages"_ustr, { DocumentSettingId::PARA_SPACE_MAX_AT_PAGES, false } },
         { u"UseOurTabStopFormat"_ustr, { DocumentSettingId::TAB_COMPAT, true } },
         { u"NoExternalLeading"_ustr, { DocumentSettingId::ADD_EXT_LEADING, true } },
-        { u"UseLineSpacing"_ustr, { DocumentSettingId::OLD_LINE_SPACING, false } },
         { u"AddTableSpacing"_ustr, { DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS, false } },
         { u"UseObjectPositioning"_ustr, { DocumentSettingId::USE_FORMER_OBJECT_POS, false } },
         { u"UseOurTextWrapping"_ustr, { DocumentSettingId::USE_FORMER_TEXT_WRAPPING, false } },
@@ -279,10 +277,6 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case DocumentSettingId::ADD_EXT_LEADING:
                         m_pWrtShell->SetAddExtLeading( !bChecked );
-                        break;
-
-                    case DocumentSettingId::OLD_LINE_SPACING:
-                        m_pWrtShell->SetUseFormerLineSpacing( bChecked );
                         break;
 
                     case DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS:
