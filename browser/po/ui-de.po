@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-27 18:12+0000\n"
+"PO-Revision-Date: 2026-06-28 21:01+0000\n"
 "Last-Translator: Mr-Update <mr.update@yahoo.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
@@ -453,6 +453,9 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Einige Clients haben sich über das alte WebSocket-URL-Format verbunden, "
+"dessen Abschaffung geplant ist. Stellen Sie sicher, dass Ihr Proxy das "
+"kompakte Format durchlässt."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -462,7 +465,7 @@ msgstr "Fehler"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "Mehr erfahren"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -563,7 +566,7 @@ msgstr "Lineal anzeigen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Formatierungszeichen anzeigen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -878,10 +881,13 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Wenn aktiviert, passt Writer das Dokument beim Öffnen an die Breite des "
+"Ansichtsbereichs an. Wenn deaktiviert, wird das Dokument mit der unten "
+"festgelegten Standardzoomstufe geöffnet."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Für {0} sind keine Einstellungen verfügbar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -963,7 +969,7 @@ msgstr "API-Einstellungen Ihres Zotero-Kontos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero-Einstellungen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -980,7 +986,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Einstellungen für die Dokumentensignatur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1100,11 +1106,11 @@ msgstr "Zurücksetzen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Zurücksetzen auf Standardwerte {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Möchten Sie {0} wirklich zurücksetzen?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
@@ -2209,7 +2215,7 @@ msgstr "Nicht erneut anzeigen"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "Bei der Ausführung des Befehls {1} ist ein {0}-Fehler aufgetreten."
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3122,7 +3128,7 @@ msgstr "Reparieren"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "Finden"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4231,6 +4237,8 @@ msgstr "Gestylte Tabelle einfügen"
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
 msgstr ""
+"Einen bearbeitbaren Zellbereich auswählen, um eine formatierte Tabelle "
+"einzufügen"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4513,7 +4521,7 @@ msgstr "Auswahl"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "Verteilen"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4617,32 +4625,32 @@ msgstr "Einfügen"
 
 #: src/control/Control.PartsPreview.js:480
 msgid "Add Section"
-msgstr "Bereich hinzufügen"
+msgstr "Abschnitt hinzufügen"
 
 #: src/control/Control.PartsPreview.js:665
 msgid "Toggle section %1"
-msgstr "Bereich %1 umschalten"
+msgstr "Abschnitt %1 umschalten"
 
 #: src/control/Control.PartsPreview.js:856
 #: src/control/Control.PartsPreview.js:987
 msgid "Rename Section"
-msgstr "Bereich umbenennen"
+msgstr "Abschnitt umbenennen"
 
 #: src/control/Control.PartsPreview.js:863
 msgid "Remove Section"
-msgstr "Bereich entfernen"
+msgstr "Abschnitt entfernen"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "Abschnitt und Folien entfernen"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
-msgstr "Bereich nach oben verschieben"
+msgstr "Abschnitt nach oben verschieben"
 
 #: src/control/Control.PartsPreview.js:889
 msgid "Move Section Down"
-msgstr "Bereich nach unten verschieben"
+msgstr "Abschnitt nach unten verschieben"
 
 #: src/control/Control.PartsPreview.js:898
 msgid "Collapse All Sections"
@@ -4654,11 +4662,11 @@ msgstr "Alle Abschnitte erweitern"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "Abschnitt „%1“ und dazugehörige %2 Folie(n) löschen?"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
-msgstr "Geben Sie den Namen des neuen Bereichs ein:"
+msgstr "Geben Sie den Namen des neuen Abschnitts ein:"
 
 #: src/control/Control.SaveState.ts:49
 msgid "Saving"
@@ -4705,27 +4713,29 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"Dies betrifft das alte WebSocket-URL-Format, dessen Abschaffung geplant ist. "
+"Stellen Sie sicher, dass Ihr Proxy das kompakte Format durchlässt."
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "Verbunden mit dem kompakten WebSocket-URL-Format"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
-msgstr "Die IsAdminUser Eigenschaft wird nicht durch Integration gesetzt"
+msgstr "Die Eigenschaft IsAdminUser wird nicht durch Integration gesetzt"
 
 #: src/control/Control.ServerAuditDialog.ts:158
 msgid ""
 "Used deprecated is_admin field, integration should use IsAdminUser property "
 "instead"
 msgstr ""
-"Verwendete nicht mehr gültiges is_admin Feld, Integration sollte IsAdminUser "
-"Eigenschaft stattdessen verwenden"
+"Es wurde das veraltete Feld is_admin verwendet; die Integration sollte "
+"stattdessen die Eigenschaft IsAdminUser verwenden"
 
 #: src/control/Control.ServerAuditDialog.ts:164
 msgid "The IsAdminUser user property is set by integration"
 msgstr ""
-"Die IsAdminUser-Benutzereigenschaft ist durch die Integration festgelegt"
+"Die Benutzereigenschaft IsAdminUser wird durch die Integration festgelegt"
 
 #: src/control/Control.ServerAuditDialog.ts:172
 msgid "PostMessage API is initialized"
@@ -4823,6 +4833,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"Die Seite an die Fensterbreite anpassen. Intelligenter Zoom beim Öffnen kann "
+"in den Optionen im Tab „Datei“ aktiviert oder deaktiviert werden."
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4943,23 +4955,23 @@ msgstr "Menü anzeigen"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "Fehlerdetails kopieren"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "Technische Details anzeigen"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "Technische Details:"
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "Fehlerdetails in die Zwischenablage kopiert"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "Das Kopieren der Fehlerdetails ist fehlgeschlagen"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5180,11 +5192,12 @@ msgstr "Erste Zeile"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "Vorher"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
 msgstr ""
+"Doppelklick zum Einfügen eines Tabulators. Rechtsklick für weitere Optionen."
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5346,19 +5359,19 @@ msgstr "Titel, vertikaler Text, Clipart"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "Standardauswahl"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "Auswahl erweitern"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "Auswahl hinzufügen"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "Blockauswahl"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -6033,7 +6046,7 @@ msgstr ""
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "Die Verbindung zum Dokument ist unterbrochen."
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -6102,7 +6115,7 @@ msgstr "Falscher Server, Verbindung wird neu aufgebaut …"
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "Nicht unterstützte Version."
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6202,7 +6215,7 @@ msgstr "{0} Tab ausgewählt"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "Kein Speicherplatz mehr verfügbar."
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6581,7 +6594,7 @@ msgstr "Fehler beim Herunterladen der Zwischenablage, bitte kopieren Sie erneut"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "Hochladen der Zwischenablage fehlgeschlagen"
 
 #: src/map/Clipboard.js:1450
 msgid ""
