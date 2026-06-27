@@ -1218,17 +1218,16 @@ void ScInterpreter::ScMatTrans()
         PushIllegalParameter();
 }
 
-/** Minimum extent of one result matrix dimension.
-    For a row or column vector to be replicated the larger matrix dimension is
-    returned, else the smaller dimension.
- */
-static SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
+// Pair non-broadcast operands to the larger extent so the longer
+// side keeps its data. A single-cell side broadcasts to the other
+// side's length.
+static SCSIZE lcl_GetExtent( SCSIZE n1, SCSIZE n2 )
 {
     if (n1 == 1)
         return n2;
     else if (n2 == 1)
         return n1;
-    else if (n1 < n2)
+    else if (n1 > n2)
         return n1;
     else
         return n2;
@@ -1237,30 +1236,30 @@ static SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
 static ScMatrixRef lcl_MatrixCalculation(
     const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter, const ScMatrix::CalculateOpFunction& Op)
 {
-    SCSIZE nC1, nC2, nMinC;
-    SCSIZE nR1, nR2, nMinR;
+    SCSIZE nC1, nC2, nExtentC;
+    SCSIZE nR1, nR2, nExtentR;
     rMat1.GetDimensions(nC1, nR1);
     rMat2.GetDimensions(nC2, nR2);
-    nMinC = lcl_GetMinExtent( nC1, nC2);
-    nMinR = lcl_GetMinExtent( nR1, nR2);
-    ScMatrixRef xResMat = pInterpreter->GetNewMat(nMinC, nMinR, /*bEmpty*/true);
+    nExtentC = lcl_GetExtent( nC1, nC2);
+    nExtentR = lcl_GetExtent( nR1, nR2);
+    ScMatrixRef xResMat = pInterpreter->GetNewMat(nExtentC, nExtentR, /*bEmpty*/true);
     if (xResMat)
-        xResMat->ExecuteBinaryOp(nMinC, nMinR, rMat1, rMat2, pInterpreter, Op);
+        xResMat->ExecuteBinaryOp(nExtentC, nExtentR, rMat1, rMat2, pInterpreter, Op);
     return xResMat;
 }
 
 ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef& pMat2)
 {
-    SCSIZE nC1, nC2, nMinC;
-    SCSIZE nR1, nR2, nMinR;
+    SCSIZE nC1, nC2, nExtentC;
+    SCSIZE nR1, nR2, nExtentR;
     pMat1->GetDimensions(nC1, nR1);
     pMat2->GetDimensions(nC2, nR2);
-    nMinC = lcl_GetMinExtent( nC1, nC2);
-    nMinR = lcl_GetMinExtent( nR1, nR2);
-    ScMatrixRef xResMat = GetNewMat(nMinC, nMinR, /*bEmpty*/true);
+    nExtentC = lcl_GetExtent( nC1, nC2);
+    nExtentR = lcl_GetExtent( nR1, nR2);
+    ScMatrixRef xResMat = GetNewMat(nExtentC, nExtentR, /*bEmpty*/true);
     if (xResMat)
     {
-        xResMat->MatConcat(nMinC, nMinR, pMat1, pMat2, mrContext, mrDoc.GetSharedStringPool());
+        xResMat->MatConcat(nExtentC, nExtentR, pMat1, pMat2, mrContext, mrDoc.GetSharedStringPool());
     }
     return xResMat;
 }

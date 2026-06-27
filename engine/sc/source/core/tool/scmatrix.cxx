@@ -3163,7 +3163,10 @@ void ScMatrixImpl::ExecuteBinaryOp(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatri
                     }
                 }
                 else
-                    aOutPos = maMat.set(aOutPos, CreateDoubleError(FormulaError::NoValue));
+                    // Out of bounds against the shorter operand.
+                    // Mismatched-extent arithmetic fills these slots
+                    // with #N/A so the longer side still has a result.
+                    aOutPos = maMat.set(aOutPos, CreateDoubleError(FormulaError::NotAvailable));
                 aOutPos = MatrixImplType::next_position(aOutPos);
             }
         }

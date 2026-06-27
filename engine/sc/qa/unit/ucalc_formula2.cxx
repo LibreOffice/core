@@ -2182,6 +2182,31 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRefUnresolved)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixArithmeticMismatchedExtent)
+{
+    // Range arithmetic between operands of unequal non-broadcast
+    // lengths extends the result to the longer length and fills the
+    // slots past the shorter operand with #N/A.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 2.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 4.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 7.0);
+    m_pDoc->SetValue(ScAddress(0, 3, 0), 7.0);
+
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(1, 0, 1, 3, aMark, u"=A1:A4 * {1|2|3}"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(8.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(1, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(FormulaError::NotAvailable, m_pDoc->GetErrCode(ScAddress(1, 3, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testMatrixOp)
 {
     m_pDoc->InsertTab(0, u"Test"_ustr);
