@@ -12,6 +12,8 @@
 #include <rtl/string.hxx>
 #include <tools/json_writer.hxx>
 
+#include <cmath>
+
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
@@ -427,12 +429,14 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
     if (rFontAttr.getMonospaced())
         mrWriter.put("monospaced", true);
 
-    // Handle character advance widths
+    // Character advance widths. Round each to a whole twip: that step is
+    // finer than a screen pixel, and it keeps the advance list compact
+    // instead of carrying full double precision per glyph.
     if (!rPrimitive.getDXArray().empty())
     {
         auto aDxArray = mrWriter.startArray("dxarray");
         for (double fValue : rPrimitive.getDXArray())
-            mrWriter.putSimpleValue(fValue * mfScaleFactor);
+            mrWriter.putSimpleValue(sal_Int64(std::llround(fValue * mfScaleFactor)));
     }
 }
 
