@@ -6425,11 +6425,6 @@ module com {
      interface ::com::sun::star::lang::XEventListener;
      boolean approveParameter([in] ::com::sun::star::form::DatabaseParameterEvent aEvent);
     };
-    /** @deprecated */ published interface XDeleteListener {
-     interface ::com::sun::star::lang::XEventListener;
-     boolean approveDelete([in] ::com::sun::star::lang::EventObject aEvent);
-     void deleted([in] ::com::sun::star::lang::EventObject aEvent);
-    };
     published interface XErrorListener;
     /** @deprecated */ published interface XErrorBroadcaster {
      interface ::com::sun::star::uno::XInterface;

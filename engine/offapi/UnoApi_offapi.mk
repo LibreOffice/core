@@ -2358,7 +2358,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/form,\
 	XDatabaseParameterBroadcaster \
 	XDatabaseParameterBroadcaster2 \
 	XDatabaseParameterListener \
-	XDeleteListener \
 	XErrorBroadcaster \
 	XErrorListener \
 	XForm \
