@@ -78,7 +78,7 @@ else
 $(gb_Extension_workdir)/%/description.xml : $(gb_Extension_XRMEXDEPS) $(gb_Helper_LANGSTARGET)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
 	$(call gb_Trace_StartRange,$*/description.xml,XRM)
-	MERGEINPUT=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(POFILES)) && \
+	MERGEINPUT=$(call gb_var2file,$(call gb_TmpFile,$@),$(POFILES)) && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(gb_Extension_workdir)/$* && \
 		$(gb_Extension_XRMEXCOMMAND) \
@@ -99,7 +99,7 @@ $(call gb_Extension_get_target,%) : \
 		$(gb_Extension_workdir)/%/description.xml
 	$(call gb_Output_announce,$*,$(true),OXT,3)
 	$(call gb_Trace_StartRange,$*,OXT)
-	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(subst $(WHITESPACE),$(NEWLINE),$(sort $(FILES)))) && \
+	RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$@),$(subst $(WHITESPACE),$(NEWLINE),$(sort $(FILES)))) && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_rootdir,$*)/META-INF \
 			$(if $(LICENSE),$(call gb_Extension_get_rootdir,$*)/registration) && \

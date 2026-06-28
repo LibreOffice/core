@@ -175,6 +175,14 @@ define gb_var2file
 $(file >$(1),$(2))$(1)
 endef
 
+# A path for a temporary file under TMPDIR, built without spawning a process.
+# The argument is a name unique to the recipe. It is the target (plus a tag
+# when one recipe needs more than one file). The macro removes the
+# SRCDIR or WORKDIR prefix and replaces the slashes that remain with
+# underscores, so the result is a single valid filename. For example the
+# argument Library/mergedlo.dep becomes $(TMPDIR)/gbuild-Library_mergedlo.dep.tmp.
+gb_TmpFile = $(TMPDIR)/gbuild-$(subst /,_,$(subst $(WORKDIR)/,,$(subst $(SRCDIR)/,,$(1)))).tmp
+
 $(eval $(call gb_Helper_init_registries))
 include $(SRCDIR)/Repository.mk
 include $(SRCDIR)/RepositoryExternal.mk

@@ -17,16 +17,16 @@ $(gb_AutoInstall_targetdir)/% : $(GBUILDDIR)/AutoInstall.mk \
         | $(gb_AutoInstall_targetdir)/.dir
 	$(call gb_Output_announce,$*,$(true),AIN,3)
 	$(call gb_Trace_StartRange,$*,AIN)
-	LIBFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
+	LIBFILE=$(call gb_var2file,$(call gb_TmpFile,$*.lib),\
 		$(foreach lib,$(gb_Library_MODULE_$*),\
 			$(lib) \
 			$(call gb_Library_get_runtime_filename,$(lib)))) \
-	&& EXEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
+	&& EXEFILE=$(call gb_var2file,$(call gb_TmpFile,$*.exe),\
 		$(foreach exe,$(gb_Executable_MODULE_$*),\
 			$(exe) \
 			$(call gb_Executable_get_filename,$(exe)))) \
-	&& JARFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Jar_MODULE_$*)) \
-	&& PKGFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_Package_MODULE_$*)) \
+	&& JARFILE=$(call gb_var2file,$(call gb_TmpFile,$*.jar),$(gb_Jar_MODULE_$*)) \
+	&& PKGFILE=$(call gb_var2file,$(call gb_TmpFile,$*.pkg),$(gb_Package_MODULE_$*)) \
 	&& $(call gb_ExternalExecutable_get_command,python) \
 			$(GBUILDDIR)/gen-autoinstall.py \
 			'$*' '$(SCP2COMPONENTCONDITION)' \

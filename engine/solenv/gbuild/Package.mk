@@ -64,7 +64,7 @@ $(dir $(call gb_Package_get_target,%))%/.dir :
 .PHONY : $(call gb_Package_get_clean_target,%)
 $(call gb_Package_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PKG,2)
-	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(FILES)) \
+	RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$*.pkgclean),$(FILES)) \
 	&& cat $${RESPONSEFILE} | $(if $(filter WNT,$(OS)),env -i PATH="$$PATH") xargs $(if $(filter MACOSX,$(OS_FOR_BUILD)),-n 1000) rm -fr \
 	&& rm -f $${RESPONSEFILE}
 

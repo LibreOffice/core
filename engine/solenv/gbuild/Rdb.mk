@@ -12,7 +12,7 @@ gb_Rdb__get_install_target = $(INSTROOT)/$(LIBO_ETC_FOLDER)/services/$(1).rdb
 define gb_Rdb__command
 $(if $(COMPONENTS),,$(call gb_Output_error,Rdb without components: partial build of module postprocess is not possible currently - only top-level make works))
 $(call gb_Helper_abbreviate_dirs,\
-	RESPONSEFILE=$(call gb_var2file,$(shell $(call gb_MKTEMP)),\
+	RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$@),\
 		<list> \
 		$(foreach component,$(COMPONENTS),\
 			<filename>$(call gb_ComponentTarget_get_target,$(component))</filename>) \

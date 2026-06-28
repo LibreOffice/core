@@ -743,7 +743,7 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 .PHONY : $(WORKDIR)/Clean/LinkTarget/%
 $(WORKDIR)/Clean/LinkTarget/% :
 	$(call gb_Output_announce,$(LINKTARGETMAKEFILENAME),$(false),LNK,4)
-	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
+	RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$*.linkclean),\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dwo_target,$(object))) \
@@ -807,7 +807,7 @@ $(call gb_Output_announce,LNK:$(2).d,$(true),DEP,1)
 	$(call gb_Trace_StartRange,LNK:$(2),DEP)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),\
+	RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$(2).dep),\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_dep_target,$(object)))\

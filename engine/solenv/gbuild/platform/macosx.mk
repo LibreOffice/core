@@ -97,7 +97,7 @@ endef
 
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
-	FILELIST=$(call gb_var2file,$(shell $(gb_MKTEMP)), \
+	FILELIST=$(call gb_var2file,$(call gb_TmpFile,$(2)), \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \

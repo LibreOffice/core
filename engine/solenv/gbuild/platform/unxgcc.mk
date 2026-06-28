@@ -195,7 +195,7 @@ define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(1) && \
 	$(if $(filter EMSCRIPTEN,$(OS)),unset PYTHONWARNINGS && \
-		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)), \
+		RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$(1)), \
 			$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 			$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 			$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
