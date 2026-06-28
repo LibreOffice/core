@@ -6257,9 +6257,6 @@ module com {
      SQL = 2,
      SQLPASSTHROUGH = 3
     };
-    /** @deprecated */ published struct DatabaseDeleteEvent: ::com::sun::star::lang::EventObject {
-     sequence< any > Bookmarks;
-    };
     published struct DatabaseParameterEvent: ::com::sun::star::lang::EventObject {
      ::com::sun::star::container::XIndexAccess Parameters;
     };

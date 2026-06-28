@@ -2341,7 +2341,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/embed,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/form,\
 	DataSelectionType \
-	DatabaseDeleteEvent \
 	DatabaseParameterEvent \
 	ErrorEvent \
 	FormButtonType \
