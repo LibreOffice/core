@@ -659,6 +659,11 @@ QVariant Bridge::cool(const QString& messageStr)
     {
         QString text = QString::fromStdString(tokens.substrFromToken(1));
         QApplication::clipboard()->setText(text);
+        // The system clipboard now holds this plain text, which is not the
+        // document's internal LOKit selection. Forget the source document so
+        // that the next paste syncs the system clipboard into LOKit instead of
+        // replaying the stale internal selection.
+        sClipboardSourceDocId.store(0);
     }
     else if (tokens.equals(0, "COPY") || tokens.equals(0, "COPYSLIDE") || tokens.equals(0, "CUT"))
     {
