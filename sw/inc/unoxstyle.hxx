@@ -197,6 +197,9 @@ public:
     const UIName& GetParentStyleUIName() const { return m_sParentStyleUIName; }
     void SetDoc(SwDoc* pDc, SfxStyleSheetBasePool* pPool)
     {
+        if (m_pBasePool)
+            SfxListener::EndListening(*m_pBasePool);
+
         m_bIsDescriptor = false;
         m_pDoc = pDc;
         m_pBasePool = pPool;
