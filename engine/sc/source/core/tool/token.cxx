@@ -939,7 +939,13 @@ bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
 
 void ScMatrixFormulaCellToken::CloneUpperLeftIfNecessary()
 {
-    if (xUpperLeft && xUpperLeft->GetType() == svDouble)
+    // Clone an svDouble because SetUpperLeftDouble changes it in place. Clone an
+    // uncounted token because storing it here would take no counted reference
+    // and leave the upper left dangling; this happens during threaded group
+    // calculation, when the group's pCode tokens are switched to
+    // RefCntPolicy::None. The clone is a normally reference-counted copy.
+    if (xUpperLeft && (xUpperLeft->GetType() == svDouble
+            || xUpperLeft->GetRefCntPolicy() == formula::RefCntPolicy::None))
         xUpperLeft = xUpperLeft->Clone();
 }
 

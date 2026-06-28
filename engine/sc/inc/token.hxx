@@ -367,7 +367,7 @@ public:
 private:
 
     /** xUpperLeft is modifiable through SetUpperLeftDouble(), so clone it
-        whenever an svDouble token is assigned to. */
+        whenever an svDouble token is assigned to or it is not reference counted. */
     void CloneUpperLeftIfNecessary();
 };
 
