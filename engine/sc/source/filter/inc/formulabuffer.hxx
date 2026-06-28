@@ -10,11 +10,27 @@
 #pragma once
 
 #include "workbookhelper.hxx"
+#include <formula/opcode.hxx>
+#include <sal/types.h>
+#include <initializer_list>
 #include <mutex>
 #include <utility>
 #include <vector>
 
+class ScTokenArray;
+
 namespace oox::xls {
+
+// When one of the trigger opcodes is followed by ((...)) that
+// spans the whole argument, drop the inner parenthesis pair:
+//   OPCODE((expr)) -> OPCODE(expr)
+// An inner pair that does not span the whole argument, or
+// parentheses that belong to a function call inside the
+// argument, stay:
+//   OPCODE((A)+B)     -> OPCODE((A)+B)
+//   OPCODE(FUNC(arg)) -> OPCODE(FUNC(arg))
+SAL_DLLPUBLIC_EXPORT void stripRedundantParentheses(
+    ScTokenArray& rArray, std::initializer_list<OpCode> aTriggerOpCodes);
 
 class FormulaBuffer final : public WorkbookHelper
 {
@@ -150,6 +166,6 @@ public:
     void addDataTable(const ScRange& rRange) { maDataTables.push_back(rRange); }
 };
 
-}
+} // namespace oox::xls
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
