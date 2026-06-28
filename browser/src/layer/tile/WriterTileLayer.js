@@ -148,14 +148,14 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			this._reconnectFileSize = app.activeDocument.fileSize.clone();
 		if (this._reconnectFileSize) {
 			if (this._reconnectFileSizeTimer)
-				clearTimeout(this._reconnectFileSizeTimer);
+				app.timerRegistry.clearTimeout(this._reconnectFileSizeTimer);
 			if (statusJSON.width >= this._reconnectFileSize.x && statusJSON.height >= this._reconnectFileSize.y) {
 				this._reconnectFileSize = null;
 				this._reconnectFileSizeTimer = null;
 			} else {
 				const RECONNECT_FILE_SIZE_RELEASE_MS = 5000;
 				this._reconnectLatestStatus = new cool.SimplePoint(statusJSON.width, statusJSON.height);
-				this._reconnectFileSizeTimer = setTimeout(this._releaseReconnectFileSize.bind(this), RECONNECT_FILE_SIZE_RELEASE_MS);
+				this._reconnectFileSizeTimer = app.timerRegistry.setTimeout('reconnectfilesize', this._releaseReconnectFileSize.bind(this), RECONNECT_FILE_SIZE_RELEASE_MS);
 			}
 		}
 		var sizeChanged = !this._reconnectFileSize &&
