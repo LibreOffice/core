@@ -118,7 +118,6 @@ public:
     // XBound
     bool commit();
 
-    // css::form::XInsertListener
     void inserted();
 
     void markColumn(sal_uInt16 nId);

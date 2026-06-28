@@ -6474,11 +6474,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::awt::XImageProducer getImageProducer();
     };
-    /** @deprecated */ published interface XInsertListener {
-     interface ::com::sun::star::lang::XEventListener;
-     void inserting([in] ::com::sun::star::lang::EventObject aEvent);
-     void inserted([in] ::com::sun::star::lang::EventObject aEvent);
-    };
     published interface XLoadable {
      interface ::com::sun::star::uno::XInterface;
      void load();

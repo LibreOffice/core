@@ -2374,7 +2374,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/form,\
 	XGridFieldDataSupplier \
 	XGridPeer \
 	XImageProducerSupplier \
-	XInsertListener \
 	XLoadListener \
 	XLoadable \
 	XPositioningListener \
