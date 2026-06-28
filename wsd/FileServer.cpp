@@ -3326,6 +3326,8 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
     response.add("X-Content-Type-Options", "nosniff");
     response.add("X-XSS-Protection", "1; mode=block");
     response.add("Referrer-Policy", "no-referrer");
+    response.add("Cross-Origin-Resource-Policy", "cross-origin");
+    response.add("Cross-Origin-Embedder-Policy", "require-corp");
 
     response.setBody(std::move(adminFile));
     socket->send(response);
