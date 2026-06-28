@@ -2680,6 +2680,28 @@ void ScFormulaCell::HandleStuffAfterParallelCalculation(ScInterpreter* pInterpre
 {
     aResult.HandleStuffAfterParallelCalculation();
 
+#if defined DBG_UTIL
+    // Threaded group calculation switches the group's pCode tokens to
+    // RefCntPolicy::None for the duration, on the basis that interpreting only
+    // reads pCode. If a matrix result's upper left ends up pointing back into
+    // pCode, a new reference into pCode was taken during that window; because
+    // the policy was None it went uncounted, and the shared token is freed too
+    // early at teardown. Flag that here.
+    if (pCode)
+    {
+        if (const ScMatrixFormulaCellToken* pMat = aResult.GetMatrixFormulaCellToken())
+        {
+            if (const formula::FormulaToken* pUpperLeft = pMat->GetUpperLeftToken().get())
+            {
+                formula::FormulaToken** pArray = pCode->GetArray();
+                for (sal_uInt16 i = 0, n = pCode->GetLen(); i < n; ++i)
+                    assert(pArray[i] != pUpperLeft
+                        && "matrix result upper left aliases a pCode token after threaded calculation");
+            }
+        }
+    }
+#endif
+
     if( !pCode->GetCodeLen() )
         return;
 
