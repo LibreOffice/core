@@ -98,8 +98,8 @@ $(eval $(call gb_CppunitTest_use_more_fonts,sw_uiwriter$(1)))
 
 $(eval $(call gb_CppunitTest_use_packages,sw_uiwriter$(1),\
 	$(if $(filter DICTIONARIES,$(BUILD_TYPE)),
-		$(call gb_Dictionary_get_packagename,dict-de) \
-		$(call gb_Dictionary_get_packagename,dict-en) \
+		$(if $(and $(MPL_SUBSET), $(filter-out LINUX,$(OS))),,$(call gb_Dictionary_get_packagename,dict-de)) \
+		$(if $(and $(MPL_SUBSET), $(filter-out LINUX,$(OS))),,$(call gb_Dictionary_get_packagename,dict-en)) \
 		$(call gb_Dictionary_get_packagename,dict-hu) \
 	) \
 ))

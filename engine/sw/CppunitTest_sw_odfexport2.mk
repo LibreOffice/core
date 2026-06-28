@@ -74,8 +74,8 @@ $(eval $(call gb_CppunitTest_use_more_fonts,sw_odfexport2))
 
 ifneq ($(filter DICTIONARIES,$(BUILD_TYPE)),)
 $(eval $(call gb_CppunitTest_use_packages,sw_odfexport2,\
-	$(call gb_Dictionary_get_packagename,dict-de) \
-	$(call gb_Dictionary_get_packagename,dict-en) \
+	$(if $(and $(MPL_SUBSET), $(filter-out LINUX,$(OS))),,$(call gb_Dictionary_get_packagename,dict-de)) \
+	$(if $(and $(MPL_SUBSET), $(filter-out LINUX,$(OS))),,$(call gb_Dictionary_get_packagename,dict-en)) \
 	$(call gb_Dictionary_get_packagename,dict-hu) \
 ))
 endif
