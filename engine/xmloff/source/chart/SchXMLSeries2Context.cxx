@@ -359,22 +359,6 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
                         maSeriesChartTypeName = aClassName;
                 }
                 break;
-            case XML_ELEMENT(LO_EXT, XML_CLASS):
-                {
-                    OUString aClassName;
-                    sal_uInt16 nClassPrefix =
-                        GetImport().GetNamespaceMap().GetKeyByAttrValueQName(
-                            aValue, &aClassName );
-                    if (XML_NAMESPACE_LO_EXT == nClassPrefix)
-                    {
-                        maSeriesChartTypeName = SchXMLTools::GetChartTypeByClassName(
-                            aClassName, false /* bUseOldNames */ );
-
-                        if (maSeriesChartTypeName.isEmpty())
-                            maSeriesChartTypeName = aClassName;
-                    }
-                }
-                break;
             case XML_ELEMENT(LO_EXT, XML_HIDE_LEGEND):
                 bHideLegend = aValue.toBoolean();
                 break;
