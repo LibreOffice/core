@@ -761,6 +761,32 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleDefaultExportXLSX)
                 u"average");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testDefaultTableStyleExportXLSX)
+{
+    // The per-document default table style (used for newly inserted tables) is
+    // exported on the workbook tableStyles element as defaultTableStyle.
+    createScDoc("xlsx/TableStyleTest.xlsx");
+    getScDoc()->GetTableStyles()->SetDefaultStyleName(u"TableStyleMedium5"_ustr);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pStyles);
+    assertXPath(pStyles, "/x:styleSheet/x:tableStyles", "defaultTableStyle", u"TableStyleMedium5");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testDefaultTableStyleReloadXLSX)
+{
+    // The default table style survives a save and reload.
+    createScDoc("xlsx/TableStyleTest.xlsx");
+    getScDoc()->GetTableStyles()->SetDefaultStyleName(u"TableStyleMedium5"_ustr);
+
+    saveAndReload(TestFilter::XLSX);
+
+    CPPUNIT_ASSERT_EQUAL(u"TableStyleMedium5"_ustr,
+                         getScDoc()->GetTableStyles()->GetDefaultStyleName());
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleCustomExportXLSX)
 {
     // Open xlsx with custom table style, save as xlsx, verify roundtrip

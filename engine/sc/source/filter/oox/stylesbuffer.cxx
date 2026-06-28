@@ -3071,6 +3071,11 @@ TableStyleRef StylesBuffer::createTableStyle()
     return xTableStyle;
 }
 
+void StylesBuffer::importTableStylesAttribs( const AttributeList& rAttribs )
+{
+    maDefaultTableStyleName = rAttribs.getString( XML_defaultTableStyle, OUString() );
+}
+
 DxfRef StylesBuffer::createExtDxf()
 {
     DxfRef xDxf = std::make_shared<Dxf>( *this );
@@ -3129,6 +3134,11 @@ void StylesBuffer::finalizeImport()
     // differential formatting (for conditional formatting)
     maDxfs.forEachMem( &Dxf::finalizeImport );
     maTableStyles.forEachMem( &TableStyle::finalizeImport, maDxfs );
+    if (!maDefaultTableStyleName.isEmpty())
+    {
+        if (ScTableStyles* pStyles = getScDocument().GetTableStyles())
+            pStyles->SetDefaultStyleName(maDefaultTableStyleName);
+    }
 }
 
 ::Color StylesBuffer::getPaletteColor( sal_Int32 nPaletteIdx ) const

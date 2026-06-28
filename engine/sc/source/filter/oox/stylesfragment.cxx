@@ -222,8 +222,10 @@ ContextHandlerRef StylesFragment::onCreateContext( sal_Int32 nElement, const Att
                 case XLS_TOKEN( cellXfs ):
                 case XLS_TOKEN( cellStyleXfs ):
                 case XLS_TOKEN( dxfs ):
-                case XLS_TOKEN( tableStyles ):
                 case XLS_TOKEN( cellStyles ):   return this;
+                case XLS_TOKEN( tableStyles ):
+                    getStyles().importTableStylesAttribs( rAttribs );
+                    return this;
             }
         break;
 

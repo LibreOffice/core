@@ -3440,10 +3440,27 @@ XclExpXmlTableStyles::XclExpXmlTableStyles( const XclExpRoot& rRoot):
 void XclExpXmlTableStyles::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    if (maTableStyles.empty())
+
+    OUString aDefaultStyle;
+    if (const ScTableStyles* pTableStyles = GetDoc().GetTableStyles())
+        aDefaultStyle = pTableStyles->GetDefaultStyleName();
+
+    // Record the document default so it survives a round-trip and applies to
+    // tables inserted after reload. When no table uses a style and the default
+    // is still the built-in one, write nothing, matching the previous output.
+    const bool bNonBuiltInDefault
+        = !aDefaultStyle.isEmpty() && aDefaultStyle != u"TableStyleMedium2";
+    if (maTableStyles.empty() && !bNonBuiltInDefault)
         return;
 
-    rStyleSheet->startElement( XML_tableStyles, XML_count, OString::number(maTableStyles.size()) );
+    // Only emit the attribute for a changed default, so the built-in case keeps
+    // the previous output byte for byte.
+    std::optional<OString> aDefaultAttr
+        = bNonBuiltInDefault ? std::optional<OString>(aDefaultStyle.toUtf8()) : std::nullopt;
+
+    rStyleSheet->startElement( XML_tableStyles,
+                               XML_count, OString::number(maTableStyles.size()),
+                               XML_defaultTableStyle, aDefaultAttr );
     for (auto& rTableStyleElement : maTableStyles)
     {
         rTableStyleElement->SaveXml(rStrm);
