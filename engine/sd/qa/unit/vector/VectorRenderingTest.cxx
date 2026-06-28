@@ -28,6 +28,8 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 
+#include <sfx2/viewsh.hxx>
+
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
@@ -384,6 +386,44 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedMasterPage)
     // the changed master page comes along.
     CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(SIZE_MAX));
     assertJsonPathExists(aDelta, "/masterPage");
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullSetsPushBaseline)
+{
+    // A full pull records the requesting view's content version as that
+    // view's push baseline. The first push to the view then carries only
+    // later changes, not the whole slide the view already pulled.
+
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
+    page(1)->GetObj(0)->BroadcastObjectChange();
+    page(1)->GetObj(1)->BroadcastObjectChange();
+
+    // The full pull gives the view both objects and sets its baseline.
+    auto aFull = getVectorPrimitives(u"testPullBaseline");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
+
+    const SfxViewShell* pView = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pView);
+    const sal_Int32 nViewId = static_cast<sal_Int32>(pView->GetViewShellId().get());
+
+    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    const OString aCommand
+        = ".uno:VectorPrimitives?part=0&pushdelta=1&viewid=" + OString::number(nViewId);
+    tools::JsonWriter aJsonWriter;
+    pDocument->getCommandValues(aJsonWriter,
+                                std::string_view(aCommand.getStr(), aCommand.getLength()));
+    const OString aResult = aJsonWriter.finishAndGetAsOString();
+    auto oDelta = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
+    CPPUNIT_ASSERT(oDelta.has_value());
+
+    assertJsonPath(*oDelta, "/type", "vectorprimitivesdelta");
+    // The order still lists both objects, but nothing changed since the
+    // pull, so the push carries no object content.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), oDelta->getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), oDelta->getSize("/objects").value_or(SIZE_MAX));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)

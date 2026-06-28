@@ -86,6 +86,7 @@
 #include "unopool.hxx"
 #include <sfx2/kit/helper.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
 #include <Outliner.hxx>
 #include <COKit/COKitEnums.h>
@@ -176,6 +177,7 @@
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <vcl/graph.hxx>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/kit/ControlHandler.hxx>
@@ -2558,10 +2560,53 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         if (aSinceIterator != aMap.end())
             nSinceVersion = aSinceIterator->second.toInt64();
 
+        // A push asks for the delta since the version last pushed to the
+        // given view, then advances that mark, so the caller keeps no
+        // version state of its own.
+        const bool bPushDelta = aMap.find(u"pushdelta"_ustr) != aMap.end();
+        sal_Int32 nViewId = -1;
+        if (bPushDelta)
+        {
+            auto aViewIterator = aMap.find(u"viewid"_ustr);
+            if (aViewIterator != aMap.end())
+                nViewId = aViewIterator->second.toInt32();
+            nSinceVersion = static_cast<sal_Int64>(maVectorPushedVersions[nViewId][nPart]);
+        }
+
         if (mpDoc)
         {
             VectorContentWriter aContentWriter(mpDoc, this, nPart, nSinceVersion);
             aContentWriter.write(rJsonWriter);
+
+            if (bPushDelta)
+            {
+                maVectorPushedVersions[nViewId][nPart] = getVectorPartVersion(nPart);
+
+                // Views come and go over the document's life, so drop the
+                // push marks of views that no longer exist.
+                std::unordered_set<sal_Int32> aLiveViewIds;
+                const SfxViewShell* pShell = SfxViewShell::GetFirst(false);
+                while (pShell)
+                {
+                    aLiveViewIds.insert(sal_Int32(pShell->GetViewShellId().get()));
+                    pShell = SfxViewShell::GetNext(*pShell, false);
+                }
+                std::erase_if(maVectorPushedVersions,
+                              [&aLiveViewIds](const auto& rEntry)
+                              { return aLiveViewIds.find(rEntry.first) == aLiveViewIds.end(); });
+            }
+            else if (nPart >= 0)
+            {
+                // A pull leaves the requesting view holding the slide at this
+                // version. Record it as that view's push baseline so the
+                // first push to the view carries only later changes instead
+                // of the whole slide again.
+                if (const SfxViewShell* pCurrentView = SfxViewShell::Current())
+                {
+                    const sal_Int32 nCurrentViewId = sal_Int32(pCurrentView->GetViewShellId().get());
+                    maVectorPushedVersions[nCurrentViewId][nPart] = getVectorPartVersion(nPart);
+                }
+            }
         }
     }
 }

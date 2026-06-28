@@ -1780,6 +1780,42 @@ void CallbackFlushHandler::viewCallbackWithViewId(int nType, const OString& pPay
     queue(nType, callbackData);
 }
 
+void CallbackFlushHandler::scheduleVectorPrimitivesDelta(int nPart)
+{
+    // Repeated invalidations of the same part between two flushes
+    // collapse into a single delta, computed at flush time.
+    m_vectorDeltaParts.insert(nPart);
+}
+
+void CallbackFlushHandler::flushVectorPrimitivesDeltas()
+{
+    if (m_vectorDeltaParts.empty())
+        return;
+
+    std::set<int> aParts;
+    aParts.swap(m_vectorDeltaParts);
+
+    ITiledRenderable* pDocument = getTiledRenderable(m_pDocument);
+    if (!pDocument)
+        return;
+
+    for (const int nPart : aParts)
+    {
+        // Computing the delta at delivery time reads the document after
+        // the change that triggered the invalidation has fully landed.
+        // The command tracks the version last pushed to this view and
+        // returns the delta since it, so the mark advances only for a
+        // delta that is handed to the client.
+        const OString aCommand = ".uno:VectorPrimitives?part=" + OString::number(nPart)
+                                 + "&pushdelta=1&viewid=" + OString::number(m_viewId);
+        tools::JsonWriter aJsonWriter;
+        pDocument->getCommandValues(aJsonWriter,
+                                    std::string_view(aCommand.getStr(), aCommand.getLength()));
+        const OString aDelta = aJsonWriter.finishAndGetAsOString();
+        m_pCallback(KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA, aDelta.getStr(), m_pData);
+    }
+}
+
 void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* pRect, int nPart, int nMode)
 {
     tools::Rectangle& rPaintedTiles = m_aPaintedTiles[nPart][nMode];
@@ -1789,9 +1825,16 @@ void CallbackFlushHandler::viewInvalidateTilesCallback(const tools::Rectangle* p
     {
         // A vector-rendered view paints no bitmap tiles, so there is no
         // painted-tile bounding box to crop against. Forward the invalidation
-        // as-is, or invalidate everything when the rect is null, so the client
-        // re-fetches the changed vector content.
+        // as-is, or invalidate everything when the rect is null.
         aRect = pRect ? *pRect : RectangleAndPart::emptyAllRectangle;
+
+        // Push the changed slide's delta to this view so it does not have to
+        // request it. An invalidation without a rectangle may be a
+        // structural change a delta does not describe, so leave it to a
+        // full re-fetch by the client, whether it names a part or covers
+        // the whole document.
+        if (pRect && nPart >= 0)
+            scheduleVectorPrimitivesDelta(nPart);
     }
     else if (rPaintedTiles.IsEmpty())
     {
@@ -2664,6 +2707,11 @@ void CallbackFlushHandler::invoke()
 
         m_pCallback(type, payload.getStr(), m_pData);
     }
+
+    // The deltas of the changed vector parts follow the queued
+    // messages, so the client sees each invalidation before the delta
+    // that answers it.
+    flushVectorPrimitivesDeltas();
 
     m_queue1.clear();
     m_queue2.clear();

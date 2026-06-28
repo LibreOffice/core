@@ -215,6 +215,12 @@ namespace desktop {
         void queue(const int type, CallbackData& data);
         void enqueueUpdatedTypes();
         void enqueueUpdatedType( int type, const SfxViewShell* sourceViewShell, int viewId );
+        /// Record that a slide part changed, so the next flush pushes
+        /// that part's vector-primitives delta to the client.
+        void scheduleVectorPrimitivesDelta(int nPart);
+        /// Compute and send the delta of every part recorded since the
+        /// last flush.
+        void flushVectorPrimitivesDeltas();
 
         void stop();
 
@@ -252,6 +258,9 @@ namespace desktop {
         OString m_aViewRenderState;
         int m_viewId = -1; // view id of the associated SfxViewShell
         bool m_bVectorRendering = false;
+        /// Slide parts whose vector-primitives delta is still to be
+        /// pushed, collected between two flushes.
+        std::set<int> m_vectorDeltaParts;
         COKitCallback m_pCallback;
         ImplSVEvent* m_pFlushEvent;
         void *m_pData;

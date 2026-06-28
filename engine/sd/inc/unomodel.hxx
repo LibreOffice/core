@@ -134,6 +134,12 @@ private:
     /// Vector content state, keyed by 0-based slide index.
     std::unordered_map<sal_Int32, VectorPartState> maVectorParts;
 
+    /// Last vector-primitives version pushed to each view, keyed by view
+    /// id then 0-based slide index. A push computes its delta since this
+    /// and then advances it.
+    std::unordered_map<sal_Int32, std::unordered_map<sal_Int32, sal_uInt64>>
+        maVectorPushedVersions;
+
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
 
