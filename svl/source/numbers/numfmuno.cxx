@@ -38,6 +38,7 @@
 #include <svl/zformat.hxx>
 #include <svl/itemprop.hxx>
 #include <utility>
+#include <algorithm>
 
 using namespace com::sun::star;
 
@@ -429,7 +430,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::queryKey( const OUString& aFormat,
         const sal_Int32 nLen = aFormat.getLength();
         OUStringBuffer aBuf(0);
         sal_Unicode* p = aBuf.appendUninitialized( nLen + 1);
-        memcpy( p, aFormat.getStr(), (nLen + 1) * sizeof(sal_Unicode));   // including 0-char
+        std::copy_n( aFormat.getStr(), nLen + 1, p );   // including 0-char
         aBuf.setLength( nLen);
         assert(p == aBuf.getStr());
         sal_Unicode const * const pStop = p + aBuf.getLength();
