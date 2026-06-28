@@ -1482,7 +1482,15 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                     {
                         // otherwise pointer should have been updated to a different node
                         assert(this == pMerged->pLastNode);
-                        assert(pMerged->extents.empty());
+                        // In hidden paragraph mode earlier nodes can still have visible text, so
+                        // the extents can be non-empty. None of them point at this node though.
+                        assert(pMerged->extents.empty()
+                            || (pFrame->getRootFrame()->GetParagraphBreakMode()
+                                    == sw::ParagraphBreakMode::Hidden
+                                && std::none_of(pMerged->extents.begin(),
+                                       pMerged->extents.end(),
+                                       [this](sw::Extent const& rExtent)
+                                       { return rExtent.pNode == this; })));
                         for (SwNodeOffset i = pMerged->pLastNode->GetIndex() - 1;;
                                 --i)
                         {
