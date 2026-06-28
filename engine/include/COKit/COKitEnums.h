@@ -1090,7 +1090,18 @@ typedef enum
      * The points are in twips, in document coordinates. An empty
      * "polygons" array means no preview is available for this handle.
      */
-    KIT_CALLBACK_SHAPE_DRAG_PREVIEW = 75
+    KIT_CALLBACK_SHAPE_DRAG_PREVIEW = 75,
+
+    /**
+     * A vector-primitives delta for a slide that changed.
+     *
+     * Pushed to a vector-rendering view so it does not have to request the
+     * delta after an invalidation. The payload is the same JSON the
+     * .uno:VectorPrimitives command returns for a delta: a vectorprimitivesdelta
+     * with the part, the version, the object order, the changed objects and,
+     * when the master page changed, its content.
+     */
+    KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA = 76
 
 }
 COKitCallbackType;
@@ -1272,6 +1283,8 @@ static inline const char* kitCallbackTypeToString(int nType)
         return "KIT_CALLBACK_CLIPBOARD_MIMETYPES";
     case KIT_CALLBACK_SHAPE_DRAG_PREVIEW:
         return "KIT_CALLBACK_SHAPE_DRAG_PREVIEW";
+    case KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA:
+        return "KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA";
     }
 
     assert(!"Unknown COKitCallbackType type.");

@@ -1292,6 +1292,30 @@ void insertUserNames(const std::map<int, UserInfo>& viewInfo, std::string& json)
 
 }
 
+// zstd's default compression level, a middle-of-the-road trade-off
+// between compression ratio and speed.
+constexpr int zstdCompressionLevel = 3;
+
+bool ChildSession::sendZstdFrame(std::string_view headerName, const char* data, size_t size)
+{
+    const std::string header(headerName);
+    const size_t bound = ZSTD_COMPRESSBOUND(size);
+    std::vector<char> output(header.size() + bound);
+    std::memcpy(output.data(), header.data(), header.size());
+
+    const size_t compressedSize
+        = ZSTD_compress(output.data() + header.size(), bound, data, size, zstdCompressionLevel);
+    if (ZSTD_isError(compressedSize))
+    {
+        LOG_WRN("Failed to zstd-compress " << headerName << ": "
+                                           << ZSTD_getErrorName(compressedSize));
+        return false;
+    }
+
+    output.resize(header.size() + compressedSize);
+    return sendBinaryFrame(output.data(), output.size());
+}
+
 bool ChildSession::getCommandValues(const StringVector& tokens)
 {
     bool success;
@@ -1320,30 +1344,13 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
     }
     else if (command.rfind(".uno:VectorPrimitives", 0) == 0)
     {
+        // The primitive-tree JSON is large, so compress it with zstd. Fall
+        // back to an uncompressed text frame if compression fails.
         LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(command.c_str()));
         const char* json = values.get() ? values.get() : "{}";
-        const size_t jsonSize = std::strlen(json);
-
-        // The primitive-tree JSON is large, so compress it with zstd and send
-        // it as a binary frame: a newline-terminated name header followed by
-        // the compressed payload.
-        const std::string header("zstdvectorprimitives:\n");
-        const size_t bound = ZSTD_COMPRESSBOUND(jsonSize);
-        std::vector<char> output(header.size() + bound);
-        std::memcpy(output.data(), header.data(), header.size());
-
-        const size_t compressedSize =
-            ZSTD_compress(output.data() + header.size(), bound, json, jsonSize, 3);
-        if (ZSTD_isError(compressedSize))
-        {
-            LOG_WRN("Failed to zstd-compress vector primitives: " << ZSTD_getErrorName(compressedSize));
+        success = sendZstdFrame("zstdvectorprimitives:\n", json, std::strlen(json));
+        if (!success)
             success = sendTextFrame("commandvalues: " + std::string(json));
-        }
-        else
-        {
-            output.resize(header.size() + compressedSize);
-            success = sendBinaryFrame(output.data(), output.size());
-        }
     }
     else
     {
@@ -3819,6 +3826,15 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
 
     switch (static_cast<COKitCallbackType>(type))
     {
+    case KIT_CALLBACK_VECTOR_PRIMITIVES_DELTA:
+        // Push the delta to the client as a zstd binary frame, the same
+        // shape the .uno:VectorPrimitives command response uses. When
+        // compression fails, send the JSON as a command values text
+        // frame, which the client routes by its type field, so the
+        // delta still arrives.
+        if (!sendZstdFrame("zstdvectorprimitivesdelta:\n", payload.data(), payload.size()))
+            sendTextFrame("commandvalues: " + payload);
+        break;
     case KIT_CALLBACK_INVALIDATE_TILES:
         {
             StringVector tokens(StringVector::tokenize(payload, ','));

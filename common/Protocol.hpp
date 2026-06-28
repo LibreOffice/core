@@ -41,6 +41,7 @@ namespace COOLProtocol
         "slidelayer:",
         "zstdslidelayer:",
         "zstdvectorprimitives:",
+        "zstdvectorprimitivesdelta:",
         "windowpaint:",
         "urp:"
     };

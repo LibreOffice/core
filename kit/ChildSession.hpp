@@ -214,6 +214,10 @@ private:
     bool moveSelectedClientParts(const StringVector& tokens);
     bool setPage(const StringVector& tokens);
     bool sendWindowCommand(const StringVector& tokens);
+    /// Compress data with zstd and send it as a binary frame: the
+    /// newline-terminated name header followed by the compressed bytes.
+    /// Returns false if the data could not be compressed and sent.
+    bool sendZstdFrame(std::string_view headerName, const char* data, size_t size);
     bool askSignatureStatus(const char* buffer, int length, const StringVector& tokens);
     bool renderShapeSelection(const StringVector& tokens);
     bool removeTextContext(const StringVector& tokens);
