@@ -1505,6 +1505,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"DatabaseSettings", { PayloadType::TableStylePayload, true } },
         { u"TableTotalRow", { PayloadType::BooleanOrDisabledPayload, true } },
         { u"TableStyles", { PayloadType::StringPayload, true } },
+        { u"SetDefaultTableStyle", { PayloadType::StringPayload, true } },
 
         { u"TableStyle", { PayloadType::StringPayload, true } },
         { u"TableStyleSettings", { PayloadType::StringPayload, true } },

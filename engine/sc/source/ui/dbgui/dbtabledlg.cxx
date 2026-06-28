@@ -178,9 +178,12 @@ IMPL_LINK_NOARG(ScDbTableDlg, OkBtnHdl, weld::Button&, void)
         OUString aDefault = u""_ustr;
         if (const ScTableStyles* pTableStyles = rDoc.GetTableStyles())
         {
-            const ScTableStyle* pTableStyle
-                = pTableStyles->GetTableStyle(u"TableStyleMedium2"_ustr);
-            if (pTableStyle)
+            // New tables use the document's chosen default style. If the stored
+            // name is no longer available, fall back to the built-in default.
+            const OUString& rDefaultName = pTableStyles->GetDefaultStyleName();
+            if (pTableStyles->GetTableStyle(rDefaultName))
+                aDefault = rDefaultName;
+            else if (pTableStyles->GetTableStyle(u"TableStyleMedium2"_ustr))
                 aDefault = u"TableStyleMedium2"_ustr;
         }
 

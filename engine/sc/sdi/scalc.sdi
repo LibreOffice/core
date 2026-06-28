@@ -6600,6 +6600,23 @@ SfxVoidItem ResizeCalcTable SID_RESIZE_CALCTABLE
     GroupId = SfxGroupId::Table;
 ]
 
+SfxStringItem SetDefaultTableStyle SID_SET_DEFAULT_TABLE_STYLE
+(SfxStringItem StyleName SID_SET_DEFAULT_TABLE_STYLE)
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
+]
+
 SfxVoidItem RenameCalcTable SID_RENAME_CALCTABLE
 ()
 [

@@ -120,6 +120,9 @@ private:
 
     std::unordered_map<OUString, std::unique_ptr<ScTableStyle>> maTableStyles;
 
+    // Name of the style applied to newly inserted tables in this document.
+    OUString maDefaultStyleName;
+
     void InvalidateBindings();
 
 public:
@@ -128,6 +131,9 @@ public:
     void AddTableStyle(std::unique_ptr<ScTableStyle> pTableStyle);
     const ScTableStyle* GetTableStyle(const OUString& rName) const;
     bool HasTableStyle() const { return !maTableStyles.empty(); }
+
+    const OUString& GetDefaultStyleName() const { return maDefaultStyleName; }
+    void SetDefaultStyleName(const OUString& rName) { maDefaultStyleName = rName; }
 
     /// Remove all styles marked as OOXML defaults (for regeneration after theme change)
     void ClearOOXMLDefaultStyles();

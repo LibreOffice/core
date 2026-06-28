@@ -981,6 +981,7 @@ std::map<ScTableStyleElement, const ScPatternAttr*> ScTableStyle::GetSetPatterns
 
 ScTableStyles::ScTableStyles(ScDocument* pDoc)
     : mpDoc(pDoc)
+    , maDefaultStyleName(u"TableStyleMedium2"_ustr)
 {
 }
 

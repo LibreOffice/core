@@ -15,6 +15,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <sc.hrc>
@@ -28,6 +29,7 @@
 #include <reffact.hxx>
 #include <editable.hxx>
 #include <subtotalparam.hxx>
+#include <tablestyle.hxx>
 
 #define ShellClass_ScTableShell
 #include <scslots.hxx>
@@ -173,11 +175,32 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
                                        false);
             }
             break;
+            case SID_SET_DEFAULT_TABLE_STYLE:
+            {
+                if (!pSet)
+                    break;
+                const SfxPoolItem* pItem = nullptr;
+                if (pSet->GetItemState(SID_SET_DEFAULT_TABLE_STYLE, true, &pItem)
+                    != SfxItemState::SET)
+                    break;
+                const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
+                if (!pStrItem)
+                    break;
+
+                ScDocShell* pDocSh = rViewData.GetDocShell();
+                if (ScTableStyles* pStyles = pDocSh->GetDocument().GetTableStyles())
+                {
+                    pStyles->SetDefaultStyleName(pStrItem->GetValue());
+                    pDocSh->SetDocumentModified();
+                }
+            }
+            break;
         }
     }
 
     rBindings.Invalidate(SID_DATABASE_SETTINGS);
     rBindings.Invalidate(SID_TABLE_TOTALROW);
+    rBindings.Invalidate(SID_SET_DEFAULT_TABLE_STYLE);
 }
 
 void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
@@ -224,6 +247,13 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
                     rSet.DisableItem(nWhich);
                 else
                     rSet.Put(SfxBoolItem(nWhich, pDBData->HasTotals()));
+            }
+            break;
+            case SID_SET_DEFAULT_TABLE_STYLE:
+            {
+                ScDocument& rDoc = m_pViewShell->GetViewData().GetDocument();
+                if (const ScTableStyles* pStyles = rDoc.GetTableStyles())
+                    rSet.Put(SfxStringItem(nWhich, pStyles->GetDefaultStyleName()));
             }
             break;
         }
