@@ -1500,6 +1500,19 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
                 aSize.setWidth( basegfx::fround<::tools::Long>(aSize.Width() * propvalue[1]) );
                 Point aPos( basegfx::fround<::tools::Long>(aTitlePos.X() +(aSize.Width() * propvalue[2])),
                             basegfx::fround<::tools::Long>(aTitlePos.Y() + (aSize.Height() * propvalue[3])) );
+
+                // The height of this object is derived from the master title placeholder's
+                // height times a fixed factor (e.g. 4.6354 for AUTOLAYOUT_ONLY_TEXT).
+                // If the height extends past the bottom of the slide, clamp the height to
+                // the bottom edge of the master's body placeholder.
+                const ::tools::Long nPageBottom = rPage.GetSize().Height() - rPage.GetLowerBorder();
+                if (aPos.Y() + aSize.Height() > nPageBottom)
+                {
+                    const ::tools::Long nClampedHeight = aLayoutRect.Bottom() - aPos.Y();
+                    if (nClampedHeight > 0 && nClampedHeight < aSize.Height())
+                        aSize.setHeight(nClampedHeight);
+                }
+
                 rRectangle[count] = ::tools::Rectangle(aPos, aSize);
                 count = count+1;
             }
