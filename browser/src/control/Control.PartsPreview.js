@@ -240,6 +240,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._addDnDHandlers(frame);
 		window.L.DomUtil.create('span', 'preview-helper', frame);
 
+		// The visible digit comes from a CSS counter keyed off DOM order (see
+		// partsPreviewControl.css), so it always matches the frame's current
+		// position without any renumbering when frames are inserted or removed.
+		const slideNumber = window.L.DomUtil.create('span', 'preview-slide-number', frame);
+		slideNumber.setAttribute('aria-hidden', 'true');
+
 		var imgClassName = 'preview-img ' + this.options.imageClass;
 		var img = window.L.DomUtil.create('img', imgClassName, frame);
 		img.setAttribute('alt', _('preview of page %1').replace('%1', String(i + 1)));

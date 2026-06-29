@@ -6,6 +6,7 @@
 	max-height: 95%;
 	scrollbar-color: var(--scrollbar-color);
 	scrollbar-width: var(--scrollbar-width);
+	counter-reset: slide-number;
 }
 
 #sidebar-panel {
@@ -18,8 +19,26 @@
 
 .preview-frame {
 	white-space: nowrap;
-	text-align: center;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
 	padding: 1em 0;
+}
+
+.preview-slide-number {
+	font-family: var(--cool-font);
+	font-size: 12px;
+	color: var(--color-text-light);
+	min-width: 24px;
+	text-align: right;
+	padding-right: 4px;
+	flex-shrink: 0;
+	user-select: none;
+	counter-increment: slide-number;
+}
+
+.preview-slide-number::before {
+	content: counter(slide-number);
 }
 
 .preview-helper {

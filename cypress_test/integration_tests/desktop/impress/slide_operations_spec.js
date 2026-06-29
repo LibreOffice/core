@@ -5,6 +5,22 @@ var helper = require('../../common/helper');
 var impressHelper = require('../../common/impress_helper');
 var desktopHelper = require('../../common/desktop_helper');
 
+// The visible slide number is rendered by a CSS counter (see
+// partsPreviewControl.css): counter-reset on the container, counter-increment
+// on each .preview-slide-number, content: counter(...) painting the digit.
+// getComputedStyle never resolves counter() to the digit it paints - the
+// resolved value depends on the element's position among its layout
+// siblings, which is a rendering-time concern the computed style spec
+// deliberately excludes - so this checks the counter wiring itself rather
+// than trying to read a rendered number.
+function assertSlideNumberCounterWiring(items) {
+	for (var i = 0; i < items.length; i++) {
+		var view = items[i].ownerDocument.defaultView;
+		expect(view.getComputedStyle(items[i]).counterIncrement).to.contain('slide-number');
+		expect(view.getComputedStyle(items[i], '::before').content).to.equal('counter(slide-number)');
+	}
+}
+
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', function() {
 
 	beforeEach(function() {
@@ -41,6 +57,46 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 
 		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 1);
 
+	});
+
+	it('Slide number counter stays wired one-to-one with slides after insert and delete', function() {
+		// Add two slides.
+		cy.cGet('#presentation-toolbar #insertpage').click();
+		cy.cGet('#presentation-toolbar #insertpage').click();
+
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 3);
+
+		cy.cGet('#slide-sorter').should(function(container) {
+			var view = container[0].ownerDocument.defaultView;
+			expect(view.getComputedStyle(container[0]).counterReset).to.contain('slide-number');
+		});
+
+		// One number span per slide - not more, not fewer - each still
+		// wired to the shared counter.
+		cy.cGet('#slide-sorter .preview-slide-number').should(function(items) {
+			expect(items).to.have.length(3);
+			assertSlideNumberCounterWiring(items);
+		});
+
+		// Delete the first slide: its number span must go with its frame,
+		// not linger and throw off every later slide's count.
+		cy.cGet('#preview-frame-part-0').click();
+
+		cy.cGet('#presentation-toolbar #deletepage').click();
+		cy.cGet('#modal-dialog-deleteslide-modal .button-primary').click();
+
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 2);
+
+		cy.cGet('#slide-sorter .preview-slide-number').should(function(items) {
+			expect(items).to.have.length(2);
+			assertSlideNumberCounterWiring(items);
+		});
+
+		// The slide that used to be second is now first in DOM order, so
+		// the counter will paint it as slide 1.
+		cy.cGet('#slide-sorter .preview-frame:not(#first-drop-site)').should(function(frames) {
+			expect(frames[0].id).to.equal('preview-frame-part-1');
+		});
 	});
 
 	it('Check slide sorter focus', function() {
