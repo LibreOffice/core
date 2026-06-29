@@ -171,6 +171,12 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwViewShell : public sw::Ring<SwViewS
     // boolean, indicating that class in constructor.
     bool mbInConstructor:1;
 
+    /// While set, ApplyViewOptions() does not broadcast a ViewRenderState
+    /// change. SwViewOptionAdjust_Impl sets it around the transient view option
+    /// swap a PDF/print render performs, so that swap does not churn the COKit
+    /// tile canonical id (which would orphan the client's tiles).
+    bool mbInViewOptionAdjust = false;
+
     SdrPaintWindow*         mpTargetPaintWindow;
     VclPtr<OutputDevice>    mpBufferedOut;
 
@@ -550,6 +556,9 @@ public:
     SW_DLLPUBLIC SfxItemPool& GetAttrPool();
 
     bool IsPreview() const { return mbPreview; }
+
+    void SetInViewOptionAdjust(bool bSet) { mbInViewOptionAdjust = bSet; }
+    bool IsInViewOptionAdjust() const { return mbInViewOptionAdjust; }
 
     // Invalidates pages and contents.
     // When bSizeChanged==true, adds/removes

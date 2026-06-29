@@ -5066,7 +5066,9 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 {
     if (m_pShell)
     {
+        m_pShell->SetInViewOptionAdjust(true);
         m_pShell->ApplyViewOptions( m_aOldViewOptions );
+        m_pShell->SetInViewOptionAdjust(false);
     }
 }
 
@@ -5123,7 +5125,9 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions, 
     if (m_aOldViewOptions != aRenderViewOptions)  // check if reformatting is necessary
     {
         aRenderViewOptions.SetPrinting( pPrtOptions != nullptr );
+        m_pShell->SetInViewOptionAdjust(true);
         m_pShell->ApplyViewOptions( aRenderViewOptions );
+        m_pShell->SetInViewOptionAdjust(false);
     }
 }
 

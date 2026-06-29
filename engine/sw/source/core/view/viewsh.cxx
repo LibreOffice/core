@@ -2637,7 +2637,10 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         InvalidateLayout( true );
     }
 
-    if (SfxViewShell* pNotifySh = GetSfxViewShell())
+    // Skip the transient view option swap a PDF/print render performs
+    // (SwViewOptionAdjust_Impl): broadcasting a ViewRenderState change for it
+    // would churn the COKit tile canonical id and orphan the client's tiles.
+    if (SfxViewShell* pNotifySh = IsInViewOptionAdjust() ? nullptr : GetSfxViewShell())
     {
         SwXTextDocument* pModel = comphelper::getFromUnoTunnel<SwXTextDocument>(pNotifySh->GetCurrentDocument());
         KitHelper::notifyViewRenderState(pNotifySh, pModel);
