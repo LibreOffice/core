@@ -185,6 +185,30 @@ std::optional<JsonPath> JsonPath::at(std::string_view sPath) const noexcept
     return JsonPath(mpOwned, *pNode);
 }
 
+namespace
+{
+const boost::property_tree::ptree* findFirstNode(const boost::property_tree::ptree& rTree,
+                                                 std::string_view sKey)
+{
+    for (const auto& rChild : rTree)
+    {
+        if (rChild.first == sKey)
+            return &rChild.second;
+        if (const boost::property_tree::ptree* pFound = findFirstNode(rChild.second, sKey))
+            return pFound;
+    }
+    return nullptr;
+}
+}
+
+std::optional<JsonPath> JsonPath::findFirst(std::string_view sKey) const noexcept
+{
+    const boost::property_tree::ptree* pNode = findFirstNode(*mpTree, sKey);
+    if (!pNode)
+        return std::nullopt;
+    return JsonPath(mpOwned, *pNode);
+}
+
 JsonPath JsonPath::sub(const boost::property_tree::ptree& rSubTree) const noexcept
 {
     return JsonPath(mpOwned, rSubTree);

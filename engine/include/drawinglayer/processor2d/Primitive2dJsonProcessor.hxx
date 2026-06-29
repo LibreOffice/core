@@ -15,8 +15,12 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include <unordered_map>
+#include <vector>
+
+#include <vcl/BinaryDataContainer.hxx>
 
 class Bitmap;
 class Graphic;
@@ -82,6 +86,12 @@ public:
     /// processing are stored here keyed by their checksum.
     void setBitmapCache(std::unordered_map<sal_Int64, Graphic>& rCache);
 
+    /// External caches: the font files text portions use, keyed by a
+    /// content hash of the bytes, and the ids already worked out for a
+    /// font key, so each distinct face is read and hashed only once.
+    void setFontCache(std::unordered_map<sal_uInt64, BinaryDataContainer>& rCache,
+                      std::unordered_map<OUString, sal_uInt64>& rIdByKey);
+
 private:
     void processPrimitive(const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive);
 
@@ -115,6 +125,8 @@ private:
 
     tools::JsonWriter& mrWriter;
     std::unordered_map<sal_Int64, Graphic>* mpBitmapCache = nullptr;
+    std::unordered_map<sal_uInt64, BinaryDataContainer>* mpFontCache = nullptr;
+    std::unordered_map<OUString, sal_uInt64>* mpFontIdByKey = nullptr;
     double mfScaleFactor = 1.0;
     drawinglayer::geometry::ViewInformation2D maViewInformation2D;
 };

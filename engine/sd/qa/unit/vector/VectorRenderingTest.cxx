@@ -18,6 +18,8 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <vcl/virdev.hxx>
+
 #include <svx/svdogrp.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdpage.hxx>
@@ -42,6 +44,7 @@
 
 #include <cmath>
 #include <fstream>
+#include <optional>
 #include <string_view>
 
 using namespace css;
@@ -607,6 +610,58 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGraphicsResponseKeepsTypeOnUnknown
     CPPUNIT_ASSERT(oJson.has_value());
     assertJsonPath(*oJson, "/type", "vectorrenderinggraphics");
     CPPUNIT_ASSERT_EQUAL(sal_Int64(12345), oJson->getInt("/checksum").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextPortionCarriesFont)
+{
+    // A text portion names its face by id and the font command returns
+    // that face's file, so a client loads the exact font instead of
+    // guessing from the family name.
+
+    // The id is read from a realized face, so the test needs at least
+    // one usable font. Pass trivially when the environment has none.
+    ScopedVclPtrInstance<VirtualDevice> pProbeDevice;
+    pProbeDevice->SetFont(vcl::Font(u"Liberation Sans"_ustr, Size(0, 2000)));
+    if (pProbeDevice->GetCurrentFontRawData().isEmpty())
+        return;
+
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(page(1)->GetObj(0));
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
+
+    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    tools::JsonWriter aJsonWriter;
+    pDocument->getCommandValues(aJsonWriter, ".uno:VectorPrimitives?part=0");
+    const OString aResult = aJsonWriter.finishAndGetAsOString();
+
+    pView->SdrEndTextEdit();
+
+    // The text portion must carry a font id.
+    auto oJson = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
+    CPPUNIT_ASSERT(oJson.has_value());
+    const std::optional<tools::JsonPath> oFontId = oJson->findFirst("fontId");
+    CPPUNIT_ASSERT_MESSAGE(aResult.getStr(), oFontId.has_value());
+    const OString aFontId = oFontId->getString().value_or(""_ostr);
+    CPPUNIT_ASSERT(aFontId.toUInt64(16) != 0);
+
+    // The font command returns that face's bytes as base64.
+    const OString aFontCommand = ".uno:VectorRenderingFont?id=" + aFontId;
+    tools::JsonWriter aFontWriter;
+    pDocument->getCommandValues(aFontWriter,
+                           std::string_view(aFontCommand.getStr(), aFontCommand.getLength()));
+    const OString aFontResult = aFontWriter.finishAndGetAsOString();
+    auto oFont
+        = tools::JsonPath::parse(std::string_view(aFontResult.getStr(), aFontResult.getLength()));
+    CPPUNIT_ASSERT(oFont.has_value());
+    assertJsonPath(*oFont, "/type", "vectorrenderingfont");
+    // A real font file base64-encodes to far more than this. The bound only
+    // guards against an empty or missing payload.
+    CPPUNIT_ASSERT(oFont->getString("/data").value_or(OString()).getLength() > 1000);
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)

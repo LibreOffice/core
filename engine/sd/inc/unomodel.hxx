@@ -38,7 +38,9 @@
 #include <unotools/weakref.hxx>
 
 #include <unordered_map>
+#include <vector>
 
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/graph.hxx>
 
 #include <sfx2/sfxbasemodel.hxx>
@@ -100,6 +102,20 @@ public:
     /// Cache of graphics from vector rendering, keyed by checksum.
     std::unordered_map<sal_Int64, Graphic>& getBitmapCache() { return maBitmapCache; }
 
+    /// Cache of font files used by vector-rendering text, keyed by a
+    /// content hash of the font bytes.
+    std::unordered_map<sal_uInt64, BinaryDataContainer>& getVectorFontCache()
+    {
+        return maVectorFontCache;
+    }
+
+    /// Font ids by font key, so each distinct face is read and hashed
+    /// only once per document.
+    std::unordered_map<OUString, sal_uInt64>& getVectorFontIdByKey()
+    {
+        return maVectorFontIdByKey;
+    }
+
     /// Content version of a vector-rendering part (0-based slide index),
     /// counted up each time an object on that part changes. A part that
     /// has not changed since the document was opened reports 0.
@@ -131,6 +147,8 @@ private:
 
     std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
     std::unordered_map<sal_Int64, Graphic> maBitmapCache;
+    std::unordered_map<sal_uInt64, BinaryDataContainer> maVectorFontCache;
+    std::unordered_map<OUString, sal_uInt64> maVectorFontIdByKey;
 
     /// Vector content state, keyed by 0-based slide index.
     std::unordered_map<sal_Int32, VectorPartState> maVectorParts;

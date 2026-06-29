@@ -26,7 +26,10 @@
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/font.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
@@ -85,6 +88,14 @@ namespace drawinglayer
 void Primitive2dJsonProcessor::setBitmapCache(std::unordered_map<sal_Int64, Graphic>& rCache)
 {
     mpBitmapCache = &rCache;
+}
+
+void Primitive2dJsonProcessor::setFontCache(
+    std::unordered_map<sal_uInt64, BinaryDataContainer>& rCache,
+    std::unordered_map<OUString, sal_uInt64>& rIdByKey)
+{
+    mpFontCache = &rCache;
+    mpFontIdByKey = &rIdByKey;
 }
 
 /// Write graphic data as base64 data URL, preferring native browser-supported formats. A graphic
@@ -428,6 +439,40 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         mrWriter.put("rtl", true);
     if (rFontAttr.getMonospaced())
         mrWriter.put("monospaced", true);
+
+    // The exact face the engine resolved for this portion, named by a
+    // content-hash id. The font command serves the bytes on demand.
+    if (mpFontCache && mpFontIdByKey)
+    {
+        const OUString aFontKey = rFontAttr.getFamilyName() + u"|"_ustr + rFontAttr.getStyleName()
+                                  + u"|"_ustr + OUString::number(rFontAttr.getWeight()) + u"|"_ustr
+                                  + OUString::number(rFontAttr.getItalic() ? 1 : 0) + u"|"_ustr
+                                  + rPrimitive.getLocale().Language;
+        auto aFound = mpFontIdByKey->find(aFontKey);
+        sal_uInt64 nFontId = aFound != mpFontIdByKey->end() ? aFound->second : 0;
+        if (aFound == mpFontIdByKey->end())
+        {
+            // The height is arbitrary, the font file bytes do not depend
+            // on it. A fresh device keeps the file the face was loaded
+            // from, which the shared layout device drops.
+            constexpr double fFontExtractHeight = 2000.0;
+            ScopedVclPtrInstance<VirtualDevice> pFontDevice;
+            const vcl::Font aFont = getVclFontFromFontAttribute(
+                rFontAttr, fFontExtractHeight, fFontExtractHeight, 0.0, rPrimitive.getLocale());
+            pFontDevice->SetFont(aFont);
+            const BinaryDataContainer aFontData = pFontDevice->GetCurrentFontRawData();
+            if (!aFontData.isEmpty())
+            {
+                // The id is the content hash of the font bytes, so identical
+                // faces share one cache entry.
+                nFontId = aFontData.calculateHash();
+                mpFontCache->try_emplace(nFontId, aFontData);
+            }
+            mpFontIdByKey->emplace(aFontKey, nFontId);
+        }
+        if (nFontId != 0)
+            mrWriter.put("fontId", OString::number(nFontId, 16));
+    }
 
     // Character advance widths. Round each to a whole twip: that step is
     // finer than a screen pixel, and it keeps the advance list compact

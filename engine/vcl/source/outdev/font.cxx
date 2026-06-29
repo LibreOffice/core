@@ -29,6 +29,8 @@
 #include <i18nlangtag/lang.h>
 #include <comphelper/configuration.hxx>
 
+#include <tools/stream.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <vcl/metaact.hxx>
@@ -45,6 +47,8 @@
 #include <impfontcache.hxx>
 #include <font/DirectFontSubstitution.hxx>
 #include <font/PhysicalFontFaceCollection.hxx>
+#include <font/PhysicalFontFace.hxx>
+#include <font/LogicalFontInstance.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/FeatureCollector.hxx>
 #include <impglyphitem.hxx>
@@ -692,6 +696,28 @@ const LogicalFontInstance* OutputDevice::GetFontInstance() const
     if (!InitFont())
         return nullptr;
     return mpFontInstance.get();
+}
+
+BinaryDataContainer OutputDevice::GetCurrentFontRawData() const
+{
+    const LogicalFontInstance* pFontInstance = GetFontInstance();
+    if (!pFontInstance)
+        return BinaryDataContainer();
+
+    const vcl::font::PhysicalFontFace* pFontFace = pFontInstance->GetFontFace();
+    if (!pFontFace)
+        return BinaryDataContainer();
+
+    // Tag 0 asks for the whole font file rather than a single table.
+    const vcl::font::RawFontData aRawData(pFontFace->GetRawFontData(0));
+    if (aRawData.empty())
+        return BinaryDataContainer();
+
+    // The stream wraps the raw bytes without copying them. The container
+    // makes its own copy, shared between everything it is handed to.
+    SvMemoryStream aStream(const_cast<sal_uInt8*>(aRawData.data()), aRawData.size(),
+                           StreamMode::READ);
+    return BinaryDataContainer(aStream, aRawData.size());
 }
 
 bool OutputDevice::ImplNewFont() const

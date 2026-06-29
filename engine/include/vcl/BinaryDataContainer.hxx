@@ -63,7 +63,7 @@ public:
     /// swap out to disk for now
     SAL_DLLPRIVATE void swapOut() const;
 
-    SAL_DLLPRIVATE size_t calculateHash() const;
+    size_t calculateHash() const;
     std::vector<unsigned char> calculateSHA1() const;
 
     /// CRC32 over the raw bytes, lazily computed and cached on first call.

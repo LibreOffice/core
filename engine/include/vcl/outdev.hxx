@@ -84,6 +84,7 @@ class BitmapReadAccess;
 class Image;
 class TextRectInfo;
 class FontMetric;
+class BinaryDataContainer;
 class GDIMetaFile;
 class GfxLink;
 namespace tools {
@@ -1188,6 +1189,9 @@ public:
     static sal_uInt64 GetFontDataGeneration();
 
     LogicalFontInstance const* GetFontInstance() const;
+    /// The current font's whole file, or an empty container when no
+    /// font is realized.
+    BinaryDataContainer GetCurrentFontRawData() const;
     bool ForceFallbackFont(vcl::Font const& rFallbackFont);
 
 protected:

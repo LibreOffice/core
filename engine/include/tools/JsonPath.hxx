@@ -66,6 +66,11 @@ public:
     /// returned JsonPath shares ownership with this one.
     std::optional<JsonPath> at(std::string_view sPath) const noexcept;
 
+    /// First node with the given key anywhere under this node, walking
+    /// the tree depth-first. The returned JsonPath shares ownership with
+    /// this one. Returns std::nullopt when the key does not occur.
+    std::optional<JsonPath> findFirst(std::string_view sKey) const noexcept;
+
     /// Wrap a node already known to be part of this tree as a new
     /// JsonPath sharing ownership with this. The caller must ensure
     /// rSubTree is part of the tree rooted at this->tree().

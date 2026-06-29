@@ -61,11 +61,13 @@
 
 
 #include <com/sun/star/embed/Aspects.hpp>
+#include <cpo/uno/Sequence.hxx>
 
 #include <animations/animationnodehelper.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
+#include <comphelper/base64.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/indexedpropertyvalues.hxx>
 #include <comphelper/kit.hxx>
@@ -2406,6 +2408,8 @@ private:
         maProcessor.emplace(rWriter);
         maProcessor->setScaleFactor(constTwipConversionFactor);
         maProcessor->setBitmapCache(mpModel->getBitmapCache());
+        maProcessor->setFontCache(mpModel->getVectorFontCache(),
+                                  mpModel->getVectorFontIdByKey());
 
         // Set up ViewInformation2D with visualized page
         drawinglayer::geometry::ViewInformation2D aViewInfo;
@@ -2582,7 +2586,7 @@ private:
 bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
     if (rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics"
-        || rCommand == u"ExtractDocumentStructure")
+        || rCommand == u"VectorRenderingFont" || rCommand == u"ExtractDocumentStructure")
         return true;
     return false;
 }
@@ -2625,6 +2629,28 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             else
             {
                 rJsonWriter.put("error", "notfound");
+            }
+        }
+    }
+    else if (o3tl::starts_with(rCommand, ".uno:VectorRenderingFont"))
+    {
+        auto aIdIterator = aMap.find(u"id"_ustr);
+        if (aIdIterator != aMap.end())
+        {
+            sal_uInt64 nFontId = aIdIterator->second.toUInt64(16);
+            rJsonWriter.put("type", "vectorrenderingfont");
+            rJsonWriter.put("fontId", OString::number(nFontId, 16));
+
+            auto aFontIterator = maVectorFontCache.find(nFontId);
+            if (aFontIterator != maVectorFontCache.end())
+            {
+                const BinaryDataContainer& rBytes = aFontIterator->second;
+                const cpo::uno::Sequence<sal_Int8> aSequence(
+                    reinterpret_cast<const sal_Int8*>(rBytes.getData()),
+                    static_cast<sal_Int32>(rBytes.getSize()));
+                OStringBuffer aBase64;
+                comphelper::Base64::encode(aBase64, aSequence);
+                rJsonWriter.put("data", aBase64.makeStringAndClear());
             }
         }
     }
