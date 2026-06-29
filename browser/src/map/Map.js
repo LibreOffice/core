@@ -1110,6 +1110,21 @@ window.L.Map = window.L.Evented.extend({
 		return this.formulabar && this.formulabar.hasFocus();
 	},
 
+	// Accepts any pending cell edit, whether it is happening in the formula
+	// bar or directly in the cell. app.file.textCursor.visible mirrors the
+	// core's cursorvisible: message, which is set for both; the formula-bar
+	// checks catch a focused-but-not-yet-typed-into formula bar as well.
+	acceptPendingCellEdit: function () {
+		if (
+			this.getDocType() === 'spreadsheet' &&
+			(app.file.textCursor.visible ||
+				(this.formulabar &&
+					(this.formulabar.hasFocus() ||
+						this.formulabar.isInEditMode())))
+		)
+			app.dispatcher.dispatch('acceptformula');
+	},
+
 	// TODO replace with universal implementation after refactoring projections
 
 	getZoomScale: function (toZoom, fromZoom) {

@@ -379,6 +379,8 @@ if (window.ThisIsTheEmscriptenApp) {
 
 window.addEventListener('beforeunload', function () {
 	if (map && app.socket) {
+		if (app.map)
+			app.map.acceptPendingCellEdit();
 		if (app.socket.setUnloading)
 			app.socket.setUnloading();
 		app.socket.close();

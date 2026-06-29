@@ -64,13 +64,7 @@ class Dispatcher {
 			) {
 				window.postMobileMessage('BYE');
 			} else {
-				if (
-					app.map &&
-					app.map.formulabar &&
-					(app.map.formulabar.hasFocus() || app.map.formulabar.isInEditMode())
-				) {
-					this.dispatch('acceptformula'); // save data from the edited cell on exit
-				}
+				if (app.map) app.map.acceptPendingCellEdit();
 
 				window.prefs.sendPendingBrowserSettingsUpdate();
 				app.map.fire('postMessage', {

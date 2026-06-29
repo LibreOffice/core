@@ -135,6 +135,7 @@ interface MapInterface extends Evented {
 
 	focus(acceptInput?: boolean): void;
 	editorHasFocus(): boolean;
+	acceptPendingCellEdit(): void;
 
 	_fireInitComplete(condition: string): void;
 	sendInitUNOCommands(): void;
