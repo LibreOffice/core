@@ -1353,13 +1353,19 @@ bool ChildSession::getCommandValues(const StringVector& tokens)
         insertUserNames(viewInfo, json);
         success = sendTextFrame("commandvalues: " + json);
     }
-    else if (command.rfind(".uno:VectorPrimitives", 0) == 0)
+    else if (command.rfind(".uno:VectorPrimitives", 0) == 0
+             || command.rfind(".uno:VectorRenderingFont", 0) == 0)
     {
-        // The primitive-tree JSON is large, so compress it with zstd. Fall
-        // back to an uncompressed text frame if compression fails.
+        // The primitive-tree JSON and font files are large, so compress
+        // them with zstd. Fall back to an uncompressed text frame if
+        // compression fails.
+        const bool isFont = command.rfind(".uno:VectorRenderingFont", 0) == 0;
         LOKitHelper::ScopedString values(getLOKitDocument()->getCommandValues(command.c_str()));
-        const char* json = values ? values.get() : "{}";
-        success = sendZstdFrame("zstdvectorprimitives:\n", json, std::strlen(json));
+        const char* json = values.get() ? values.get() : "{}";
+        const std::string_view header = isFont
+                                            ? std::string_view("zstdvectorrenderingfont:\n")
+                                            : std::string_view("zstdvectorprimitives:\n");
+        success = sendZstdFrame(header, json, std::strlen(json));
         if (!success)
             success = sendTextFrame("commandvalues: " + std::string(json));
     }

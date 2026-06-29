@@ -1383,10 +1383,12 @@ class Socket {
 			return;
 		} else if (
 			textMsg.startsWith('zstdvectorprimitives:') ||
-			textMsg.startsWith('zstdvectorprimitivesdelta:')
+			textMsg.startsWith('zstdvectorprimitivesdelta:') ||
+			textMsg.startsWith('zstdvectorrenderingfont:')
 		) {
-			// A pushed delta carries the same JSON as a pulled one, so it
-			// goes through the same handler, which routes by its type.
+			// Primitive trees, pushed deltas and font files all carry the
+			// same kind of JSON, so they share one handler that routes by
+			// the JSON type. Only a delta arrives as a push.
 			this._onZstdVectorPrimitivesMsg(
 				e,
 				textMsg.startsWith('zstdvectorprimitivesdelta:'),
@@ -1511,6 +1513,7 @@ class Socket {
 				e.data.startsWith('zstdslidelayer:') ||
 				e.data.startsWith('zstdvectorprimitives:') ||
 				e.data.startsWith('zstdvectorprimitivesdelta:') ||
+				e.data.startsWith('zstdvectorrenderingfont:') ||
 				e.data.startsWith('windowpaint:')
 			) {
 				let index: number;
