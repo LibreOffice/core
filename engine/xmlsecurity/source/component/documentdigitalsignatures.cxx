@@ -51,6 +51,7 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <sfx2/digitalsignatures.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svl/cryptosign.hxx>
 
 #include <map>
@@ -630,6 +631,25 @@ DocumentDigitalSignatures::chooseCertificatesImpl(SfxViewShell* pViewShell,
                                                   const CertificateChooserUserAction eAction,
                                                   const CertificateKind certificateKind)
 {
+    // On Windows and macOS the desktop apps sign from the native certificate
+    // store (the Windows certificate store and Keychain Access), where the
+    // chooser dialog is meaningful: the user picks one of possibly several
+    // certificates. Everywhere else (COOL, CODA-Q) the signing certificate
+    // comes from the session and is put on the view: there is at most one
+    // cert+key pair, so there is nothing to choose - take the view's
+    // certificate directly. This also avoids running the CertificateChooser
+    // as a synchronous modal dialog - there is no async JSDialog for it -
+    // which would block the kit's event loop; that matters in the multi-user
+    // COOL server case.
+#if !defined(_WIN32) && !defined(MACOSX)
+    if ((eAction == CertificateChooserUserAction::Sign
+         || eAction == CertificateChooserUserAction::SelectSign)
+        && pViewShell && pViewShell->GetSigningCertificate().m_xCertificate.is())
+    {
+        return { pViewShell->GetSigningCertificate().m_xCertificate };
+    }
+#endif
+
     std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
     DocumentSignatureManager aSignatureManager(mxCtx, {});
