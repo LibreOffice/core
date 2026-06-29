@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basegfx,\
     basegfx/test/BSplineTest \
     basegfx/test/B2DPointTest \
     basegfx/test/GaussianEliminationTest \
+    basegfx/test/TridiagonalSolverTest \
     basegfx/test/B2DPolygonTest \
     basegfx/test/B2DPolygonToolsTest \
     basegfx/test/B2DPolyPolygonTest \
