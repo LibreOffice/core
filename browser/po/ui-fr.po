@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-05 00:58+0000\n"
-"Last-Translator: Azerliap <azerliap@protonmail.com>\n"
+"PO-Revision-Date: 2026-06-30 00:25+0000\n"
+"Last-Translator: Tim <tim1337@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
-"Language: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -63,8 +63,9 @@ msgid "Status"
 msgstr "État"
 
 #: admin/admin.strings.js:24
+#, fuzzy
 msgid "Details"
-msgstr ""
+msgstr "Détails"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -450,10 +451,14 @@ msgstr ""
 "Cloisonnement du Kit rapide via l'utilisation de bind-mount non configuré."
 
 #: admin/src/AdminSocketServerAudit.js:59
+#, fuzzy
 msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Certains clients se sont connectés via l'ancienne URL WebSocket, dont la "
+"suppression est prévue. Vérifiez que votre proxy laisse passer la forme "
+"compacte."
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -462,8 +467,9 @@ msgid "Error"
 msgstr "Erreur"
 
 #: admin/src/AdminSocketServerAudit.js:107
+#, fuzzy
 msgid "Learn more"
-msgstr ""
+msgstr "En savoir plus"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -564,8 +570,9 @@ msgid "Show Ruler"
 msgstr "Afficher la règle"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
+#, fuzzy
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "Afficher les marques de formatage"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -652,12 +659,14 @@ msgid "Content"
 msgstr "Contenu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
+#, fuzzy
 msgid "Display"
-msgstr ""
+msgstr "Afficher"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
+#, fuzzy
 msgid "Show Boundaries"
-msgstr ""
+msgstr "Afficher les limites"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -878,10 +887,14 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Lorsque cette option est activée, Writer ajuste la largeur du document à "
+"celle de la fenêtre d'affichage lors de son ouverture. Lorsqu'elle est "
+"désactivée, le document s'ouvre avec le niveau de zoom par défaut défini ci-"
+"dessous."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "Aucun paramètre disponible pour {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -962,7 +975,7 @@ msgstr "les paramètres d'API de votre Compte Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Paramètres Zotera"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -979,7 +992,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "Paramètres de signature des documents"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1019,6 +1032,12 @@ msgid ""
 "function/tool calling, such as gpt-4o, llama3.1, or qwen2.5. Models without "
 "it (e.g. base llama3, gemma) can still chat but cannot use document tools."
 msgstr ""
+"Pour les opérations sur les documents (consultation et modification), "
+"choisissez un modèle prenant en charge l'appel natif de fonctions ou "
+"d'outils, tel que gpt-4o, llama3.1 ou qwen2.5. Les modèles qui ne disposent "
+"pas de cette fonctionnalité (par exemple, llama3 de base ou gemma) peuvent "
+"toujours dialoguer, mais ne peuvent pas utiliser les outils liés aux "
+"documents."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2345
 #: admin/src/integrator/AdminIntegratorSettings.ts:2463
@@ -1072,6 +1091,8 @@ msgstr "Aucun (désactivation génération d’images)"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2970
 msgid "Could not fetch models (HTTP {0}). Check the provider URL and API key."
 msgstr ""
+"Impossible de récupérer les modèles (HTTP {0}). Vérifiez l'URL du "
+"fournisseur et la clé API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3087
 #: admin/src/integrator/Xcu.ts:345
@@ -1085,7 +1106,7 @@ msgstr "Envoyer Xcu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "Entrez {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1093,15 +1114,15 @@ msgstr "Réinitialiser"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "Rétablir les paramètres par défaut {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir réinitialiser {0} ?"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "Enregistrer {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -1249,7 +1270,7 @@ msgstr "Serré"
 
 #: src/app/TableStylesService.ts:105
 msgid "Medium"
-msgstr ""
+msgstr "Moyen"
 
 #: src/app/TableStylesService.ts:107
 msgid "Dark"
@@ -1466,8 +1487,9 @@ msgstr ""
 "restaurer."
 
 #: src/control/CalcNotifications.ts:51
+#, fuzzy
 msgid "Find First"
-msgstr ""
+msgstr "Rechercher en premier"
 
 #: src/control/ColorPicker.ts:269
 msgid "No color"
@@ -1717,7 +1739,7 @@ msgstr "Ajouter un ton de voix customisé"
 
 #: src/control/Control.AIChatSidebar.ts:1049
 msgid "Emojify"
-msgstr ""
+msgstr "« Emojifier »"
 
 #: src/control/Control.AIChatSidebar.ts:1055
 #: src/control/Control.StatusBar.js:153
@@ -1732,7 +1754,7 @@ msgstr "Arrêt"
 
 #: src/control/Control.AIChatSidebar.ts:1058
 msgid "Toggle emojify"
-msgstr ""
+msgstr "Activer/désactiver « emojifier »"
 
 #: src/control/Control.AIChatSidebar.ts:1219
 msgid "Use icon"
