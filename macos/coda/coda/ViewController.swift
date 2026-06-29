@@ -451,7 +451,13 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                         return (nil, nil)
                     }
 
-                    let suggestedName = srcURL.lastPathComponent
+                    // Suggest the document's own name with the exported file's
+                    // extension, not the kit's temp-file name (which carries the
+                    // internal jail/sandbox filename). Mirrors the downloadas path.
+                    let suggestedName = self.document?.tempFileURL?
+                        .deletingPathExtension()
+                        .appendingPathExtension(srcURL.pathExtension)
+                        .lastPathComponent ?? srcURL.lastPathComponent
                     let savePanel = NSSavePanel()
                     savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
                     savePanel.nameFieldStringValue = suggestedName
