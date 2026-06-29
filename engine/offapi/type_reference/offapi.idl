@@ -7481,12 +7481,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      /** @deprecated */ string detect([in] string URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Argumentlist);
     };
-    /** @deprecated */ published interface XFrameLoaderQuery {
-     interface ::com::sun::star::uno::XInterface;
-     /** @deprecated */ sequence< string > getAvailableFilterNames();
-     /** @deprecated */ sequence< ::com::sun::star::beans::PropertyValue > getLoaderProperties([in] string sFilterName);
-     /** @deprecated */ string searchFilter([in] string sURL, [in] sequence< ::com::sun::star::beans::PropertyValue > seqArguments);
-    };
     /** @deprecated */ published interface XFrameSetModel {
      interface ::com::sun::star::uno::XInterface;
      string getSource();
