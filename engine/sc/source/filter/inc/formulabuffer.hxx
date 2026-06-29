@@ -32,6 +32,12 @@ namespace oox::xls {
 SAL_DLLPUBLIC_EXPORT void stripRedundantParentheses(
     ScTokenArray& rArray, std::initializer_list<OpCode> aTriggerOpCodes);
 
+// _xlfn.ANCHORARRAY(<ref>) is the OOXML spelling of the native
+// postfix <ref>#. Both give the same RPN, but the parse array
+// keeps the source order and would read back as #(<ref>), so
+// rewrite each such span to <ref>#.
+SAL_DLLPUBLIC_EXPORT void liftAnchorArrayToPostfix(ScTokenArray& rArray);
+
 class FormulaBuffer final : public WorkbookHelper
 {
 public:

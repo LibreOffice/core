@@ -45,6 +45,20 @@ OUString stripAndPrint(ScDocument& rDocument, const OUString& rFormula)
     sc::TokenStringContext aContext(rDocument, formula::FormulaGrammar::GRAM_OOXML);
     return pArray->CreateString(aContext, aPosition);
 }
+
+// Compile with the OOXML grammar, lift every _xlfn.ANCHORARRAY
+// wrapper past its parenthesised operand, then read the parse
+// array back in native grammar.
+OUString liftAnchorArrayAndPrintNative(ScDocument& rDocument, const OUString& rFormula)
+{
+    ScAddress aPosition(0, 0, 0);
+    ScCompiler aComp(rDocument, aPosition, formula::FormulaGrammar::GRAM_OOXML, true, false);
+    std::unique_ptr<ScTokenArray> pArray = aComp.CompileString(rFormula);
+    CPPUNIT_ASSERT(pArray);
+    oox::xls::liftAnchorArrayToPostfix(*pArray);
+    sc::TokenStringContext aContext(rDocument, formula::FormulaGrammar::GRAM_NATIVE);
+    return pArray->CreateString(aContext, aPosition);
+}
 }
 
 CPPUNIT_TEST_FIXTURE(RedundantParenthesesStripperTest, testStripsInnerPairAroundExpression)
@@ -109,6 +123,33 @@ CPPUNIT_TEST_FIXTURE(RedundantParenthesesStripperTest, testLeavesNonTriggerOpcod
 {
     createScDoc();
     CPPUNIT_ASSERT_EQUAL(u"SUM((A1+B1))"_ustr, stripAndPrint(*getScDoc(), u"SUM((A1+B1))"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(RedundantParenthesesStripperTest, testLiftsAnchorArrayAroundBareReference)
+{
+    // _xlfn.ANCHORARRAY(A1) reads back as A1# in native grammar.
+    createScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"A1#"_ustr,
+                         liftAnchorArrayAndPrintNative(*getScDoc(), u"_xlfn.ANCHORARRAY(A1)"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(RedundantParenthesesStripperTest, testLiftsAnchorArrayInsideAddition)
+{
+    // The wrapper composes with arithmetic: _xlfn.ANCHORARRAY(A1)+10
+    // reads back as A1#+10 in native grammar.
+    createScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"A1#+10"_ustr, liftAnchorArrayAndPrintNative(
+                                             *getScDoc(), u"_xlfn.ANCHORARRAY(A1)+10"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(RedundantParenthesesStripperTest, testLiftsAnchorArrayAroundParenthesisedReference)
+{
+    // A parenthesised operand is taken whole: _xlfn.ANCHORARRAY(((A1)))
+    // reads back as ((A1))# in native grammar, with the inner
+    // parentheses left in place.
+    createScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"((A1))#"_ustr, liftAnchorArrayAndPrintNative(
+                                              *getScDoc(), u"_xlfn.ANCHORARRAY(((A1)))"_ustr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

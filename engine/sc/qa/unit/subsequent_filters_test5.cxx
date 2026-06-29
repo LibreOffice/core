@@ -214,6 +214,19 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testPlainScalarStaysWithoutImplicitIntersec
     CPPUNIT_ASSERT_EQUAL(6.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testSpillOperatorXlsxImport)
+{
+    // XLSX stores the # spilled-range operator as the _xlfn.ANCHORARRAY
+    // wrapper. Import rewrites it back to the native # operator, on its
+    // own and composed inside other functions.
+    createScDoc("xlsx/SimpleSpillOperatorFixture.xlsx");
+    ScDocument* pDocument = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(u"=B2#"_ustr, pDocument->GetFormula(2, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=UNIQUE(B2#)"_ustr, pDocument->GetFormula(3, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"=SUM(B2#)"_ustr, pDocument->GetFormula(4, 1, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testDynamicSpillStateExportFODS)
 {
     // A dynamic-array master in spill state collapses to 1x1. FODS

@@ -78,6 +78,51 @@ void stripRedundantParentheses(ScTokenArray& rArray,
     }
 }
 
+// Rewrite each four-token span
+//   ocSpill ocOpen <push> ocClose
+// to
+//   <push> ocSpill
+// so the parse array matches the native postfix form.
+void liftAnchorArrayToPostfix(ScTokenArray& rArray)
+{
+    sal_uInt16 nPosition = 0;
+    while (nPosition + 1 < rArray.GetLen())
+    {
+        if (rArray.TokenAt(nPosition)->GetOpCode() == ocSpill
+            && rArray.TokenAt(nPosition + 1)->GetOpCode() == ocOpen)
+        {
+            // Find the parenthesis that closes the one right after the
+            // spill opcode, tracking nesting so a parenthesised operand
+            // such as ((A1)) is taken whole.
+            sal_uInt16 nClose = nPosition + 2;
+            sal_uInt16 nDepth = 1;
+            while (nClose < rArray.GetLen())
+            {
+                const OpCode eInner = rArray.TokenAt(nClose)->GetOpCode();
+                if (eInner == ocOpen)
+                    ++nDepth;
+                else if (eInner == ocClose && --nDepth == 0)
+                    break;
+                ++nClose;
+            }
+            if (nClose < rArray.GetLen())
+            {
+                // Turn #(operand) into operand#: move the spill opcode
+                // past the operand and drop the wrapper parentheses,
+                // keeping any inner ones. The reference keeps the spill
+                // token alive when it leaves its old slot.
+                formula::FormulaTokenRef pSpill(rArray.TokenAt(nPosition));
+                rArray.ReplaceToken(nClose, pSpill.get(),
+                                    formula::FormulaTokenArray::CODE_ONLY);
+                rArray.RemoveToken(nPosition + 1, 1);
+                rArray.RemoveToken(nPosition, 1);
+                continue;
+            }
+        }
+        ++nPosition;
+    }
+}
+
 namespace {
 
 /**
@@ -166,6 +211,7 @@ void applySharedFormulas(
             if (pArray)
             {
                 stripRedundantParentheses(*pArray, {ocSingleValue});
+                liftAnchorArrayToPostfix(*pArray);
                 aComp.CompileTokenArray(); // Generate RPN tokens.
                 aGroups.set(nId, std::move(pArray), aPos);
             }
@@ -332,6 +378,7 @@ void applyCellFormulas(
             continue;
 
         stripRedundantParentheses(*pCode, {ocSingleValue});
+        liftAnchorArrayToPostfix(*pCode);
         aCompiler.CompileTokenArray(); // Generate RPN tokens.
 
         ScFormulaCell* pCell = new ScFormulaCell(rDoc.getDoc(), aPos, std::move(pCode));
@@ -359,6 +406,7 @@ void applyArrayFormulas(
         if (pArray)
         {
             stripRedundantParentheses(*pArray, {ocSingleValue});
+            liftAnchorArrayToPostfix(*pArray);
 
             // A single-cell t="array" that starts with @ imports as
             // a plain ScFormulaCell, not a CSE array. The @ collapses

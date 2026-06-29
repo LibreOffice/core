@@ -515,6 +515,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "IFERROR" , ocIfError },
     { "_xlfn.IFNA" , ocIfNA },
     { "_xlfn.SINGLE" , ocSingleValue },
+    { "_xlfn.ANCHORARRAY" , ocSpill },
     { "CHOOSE" , ocChoose },
     { "(" , ocOpen },
     { ")" , ocClose },
