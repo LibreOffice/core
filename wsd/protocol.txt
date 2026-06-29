@@ -1369,3 +1369,134 @@ lokitversion <JSON string>
          "ProductVersion": "26.04",
          "ProductExtension": ".0.0.alpha0",
          "BuildId": "<full 40 char git hash>"}
+
+/co/collab WebSocket endpoint
+=============================
+
+The /co/collab WebSocket is separate from the per-document /cool/ws session.  A CODA or COWASM
+client opens it to coordinate with any other clients editing the same document: it surfaces a
+per-doc user list, lets peers signal that local editing has started, and exchanges document bytes
+through one-shot HTTP byte-stream URLs.  One CollabBroker per docKey lives on the server side and
+brokers all messages for that document.
+
+Connection:
+
+    wss://<host>/co/collab/<docKey>?wopiSrc=<wopi-url>&access_token=<token>
+
+    <docKey> is the same key used for the /cool/ws session of the document.  wopiSrc and
+    access_token authenticate the user against the integrator.  Until the server has validated them
+    it sends "progress: validating", and replies with one of
+
+        error: cmd=collab kind=accesstoken
+        error: cmd=internal kind=timeout
+        error: cmd=storage kind=loadfailed
+
+    on failure, or {"type":"authenticated"} on success.  After {"type":"authenticated"} every
+    subsequent message in either direction is a single JSON object with a "type" field.
+
+server -> client messages on /co/collab
+---------------------------------------
+
+{"type":"authenticated"}
+
+    Sent once the wopiSrc + access_token pair has been accepted.
+
+{"type":"user_list","users":[<user>,...],"editingActive":<bool>}
+
+    Initial snapshot of the connected user set, sent right after {"type":"authenticated"}.  Each
+    <user> object carries at least "id" (the integrator user id), "name" (display name) and
+    "canWrite" (true if this view holds write access).  When the user has an avatar registered with
+    the broker, the object also carries "avatar":"<url>" pointing at the /co/collab/avatar endpoint
+    described below.  "editingActive" is true once any peer has sent {"type":"editing_started"}.
+
+{"type":"user_joined","user":<user>}
+{"type":"user_left","user":<user>}
+
+    A peer connected or disconnected.  Sent to every other client.
+
+{"type":"editing_started","user":<user>}
+
+    Some peer transitioned from viewing to editing.  Sent once per document lifetime; the broker
+    tracks an "editing started" flag, so a late-joining client gets the same information through
+    user_list's "editingActive".
+
+{"type":"switch_to_collab"}
+{"type":"saved_and_switching"}
+
+    Sent during a local-to-server transition: a CODA peer that owned the document locally has
+    decided to hand it off to the server.  "saved_and_switching" follows the matching incoming
+    message from the same peer once its save back to the integrator has completed.
+
+{"type":"fetch_url","stream":"<name>","requestId":"<id>","url":"<url>","filename":"<name>"}
+
+    Reply to a client-sent {"type":"fetch"} or {"type":"upload"}: a one-shot URL the client can GET
+    (/co/collab/fetch) or POST (/co/collab/put) to transfer document bytes.  The token in the URL is
+    a rotating token consumed by the first request and may only be used once.  "filename" carries
+    the document filename when known.
+
+{"type":"fetch_error","stream":"<name>","requestId":"<id>","error":"<text>"}
+
+    Reply to a client-sent {"type":"fetch"} or {"type":"upload"} that cannot be served (no current
+    download, session expired, server shutting down).
+
+{"type":"error","error":"<text>"}
+
+    The client sent a malformed frame ("Invalid JSON", "Invalid JSON object", or "Unknown message
+    type").
+
+client -> server messages on /co/collab
+---------------------------------------
+
+{"type":"fetch","stream":"document","requestId":"<id>"}
+
+    Request a one-shot URL for downloading the current document bytes.  Server replies with
+    {"type":"fetch_url"} (success) or {"type":"fetch_error"} (failure), carrying the same
+    "requestId" so the client can correlate replies with requests.
+
+{"type":"upload","stream":"document","requestId":"<id>"}
+
+    Request a one-shot URL for uploading modified document bytes.  Reply shape mirrors "fetch": a
+    {"type":"fetch_url"} carrying a /co/collab/put URL on success, or {"type":"fetch_error"} on
+    failure.
+
+{"type":"editing_started"}
+
+    This view has just transitioned from viewing to editing.  Broadcast as
+    {"type":"editing_started","user":<self>} to every other client and sticks the "editingActive"
+    flag in subsequent user_list snapshots.
+
+{"type":"switch_to_collab"}
+{"type":"saved_and_switching"}
+
+    Drive the local-to-server transition: a CODA peer that owned the document locally asks the
+    server to take over.  "switch_to_collab" is sent first; "saved_and_switching" follows once the
+    page-JS save back to the integrator has completed.  Both are forwarded to all other peers
+    verbatim.
+
+{"type":"bye"}
+
+    Sent right before the client closes the WebSocket as an orderly disconnect marker.  Without it
+    the broker waits out an idle grace period in case the client reconnects; "bye" lets the broker
+    reclaim itself immediately.
+
+HTTP byte-stream endpoints under /co/collab/
+--------------------------------------------
+
+These endpoints are reached over the same origin that serves the WebSocket, with
+WOPI-token-authenticated cross-origin reads permitted so a CODA page on a different origin can drive
+them.
+
+/co/collab/fetch?token=<rotating-token>
+
+    GET.  Returns the document body bytes that the matching {"type":"fetch"} WS request resolved to.
+    The token is one-shot: it is consumed by the first GET and cannot be replayed.
+
+/co/collab/put?token=<rotating-token>
+
+    POST.  Accepts modified document body bytes from a peer that requested an upload URL via
+    {"type":"upload"}.  Same one-shot token semantics.
+
+/co/collab/avatar?WOPISrc=<wopi-url>&userId=<user-id>&token=<wopi-token>
+
+    GET.  Returns the avatar bytes for the user, fetched by the server from the URL the integrator
+    supplied in WOPI's UserExtraInfo.avatar so the client never sees integrator-internal URLs.
