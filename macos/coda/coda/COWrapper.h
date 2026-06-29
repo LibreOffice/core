@@ -58,4 +58,10 @@
 // by the client (main.js) on load via the SYNCSETTINGS message.
 + (void)syncSettingsWith:(Document *_Nonnull)document NS_SWIFT_NAME(syncSettings(with:));
 
+// The release version, the source revision, and the full copyright line, the
+// same values the server reports to the web client.
++ (NSString *_Nonnull)coolwsdVersion;
++ (NSString *_Nonnull)coolwsdVersionHash;
++ (NSString *_Nonnull)copyrightNotice;
+
 @end

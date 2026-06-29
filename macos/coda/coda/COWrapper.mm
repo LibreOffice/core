@@ -717,6 +717,23 @@ static std::atomic<int> appDocIdCounter(1);
     });
 }
 
++ (NSString *)coolwsdVersion {
+    return [NSString stringWithUTF8String:Util::getCoolVersion().c_str()];
+}
+
++ (NSString *)coolwsdVersionHash {
+    return [NSString stringWithUTF8String:Util::getCoolVersionHash().c_str()];
+}
+
++ (NSString *)copyrightNotice {
+    // __DATE__ holds the build date as "Mmm dd yyyy", so its last four
+    // characters are the year. The copyright line combines that build year
+    // with the configured vendor name.
+    const std::string year(&__DATE__[7]);
+    const std::string notice = "Copyright \xC2\xA9 " + year + ", " + CODA_VENDOR + ".";
+    return [NSString stringWithUTF8String:notice.c_str()];
+}
+
 @end
 
 // macOS implementations of the platform-specific Desktop:: path hooks that

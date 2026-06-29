@@ -34,6 +34,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // We have to set the product name in the menu entries explicitly, there seems to be no automatic way to do that
         updateProductName()
 
+        // Run after updateProductName so the localized "About <name>" title is
+        // already in place when we take over the menu item.
+        useCustomAboutPanel()
+
         // Schedule opening of the Open panel if no document is open in 100ms
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
             self?.documentController.presentStartupBackstage(calledFromStartup: true)
@@ -105,6 +109,88 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         replaceProductName(in: mainMenu, withAction: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), appName: name)
         replaceProductName(in: mainMenu, withAction: #selector(NSApplication.hide(_:)), appName: name)
         replaceProductName(in: mainMenu, withAction: #selector(NSApplication.terminate(_:)), appName: name)
+    }
+
+    /**
+     * Point the "About" menu item at our own handler. The storyboard wires it
+     * to the system selector, whose panel only knows the bundle name and
+     * version; we want the same details the web Help -> About dialog shows.
+     */
+    private func useCustomAboutPanel() {
+        guard let mainMenu = NSApp.mainMenu else { return }
+        redirectAction(in: mainMenu,
+                       from: #selector(NSApplication.orderFrontStandardAboutPanel(_:)),
+                       to: #selector(showAboutPanel(_:)),
+                       target: self)
+    }
+
+    /**
+     * Find the first menu item with the given action and make it call a
+     * different action on a different target instead.
+     */
+    private func redirectAction(in menu: NSMenu, from oldAction: Selector, to newAction: Selector, target: AnyObject) {
+        for item in menu.items {
+            if item.action == oldAction {
+                item.action = newAction
+                item.target = target
+                return
+            }
+            if let sub = item.submenu {
+                redirectAction(in: sub, from: oldAction, to: newAction, target: target)
+            }
+        }
+    }
+
+    /**
+     * Show the About panel with the same details as the web Help -> About
+     * dialog: the product name, the version with its source revision, a link
+     * to the source revision and to the license, and the copyright line.
+     */
+    @objc private func showAboutPanel(_ sender: Any?) {
+        let hash = COWrapper.coolwsdVersionHash()
+
+        // The standard panel reads the copyright line from the raw "Copyright"
+        // key, which has no typed constant.
+        let copyrightKey = NSApplication.AboutPanelOptionKey(rawValue: "Copyright")
+        let options: [NSApplication.AboutPanelOptionKey: Any] = [
+            .applicationName: AppDelegate.getAppName(),
+            .applicationVersion: COWrapper.coolwsdVersion(),
+            .version: hash,
+            copyrightKey: COWrapper.copyrightNotice(),
+            .credits: AppDelegate.aboutCredits(hash: hash),
+        ]
+
+        NSApp.orderFrontStandardAboutPanel(options: options)
+    }
+
+    /**
+     * The scrollable text shown under the version in the About panel. It links
+     * the source revision to the online change browser and offers the license,
+     * matching the links the web About dialog shows in the apps.
+     */
+    private static func aboutCredits(hash: String) -> NSAttributedString {
+        let credits = NSMutableAttributedString()
+
+        // Open the source revision in the online change browser.
+        if let revisionURL = URL(string: "https://gerrit.collaboraoffice.com/plugins/gitiles/online/+log/\(hash)") {
+            credits.append(NSAttributedString(
+                string: NSLocalizedString("View source revision", comment: "About panel"),
+                attributes: [.link: revisionURL]))
+        }
+
+        // Offer the bundled license document when the build includes one.
+        if let licenseURL = Bundle.main.url(forResource: "LICENSE", withExtension: "html") {
+            credits.append(NSAttributedString(string: "\n"))
+            credits.append(NSAttributedString(
+                string: NSLocalizedString("License Information", comment: "About panel"),
+                attributes: [.link: licenseURL]))
+        }
+
+        let centered = NSMutableParagraphStyle()
+        centered.alignment = .center
+        credits.addAttribute(.paragraphStyle, value: centered,
+                             range: NSRange(location: 0, length: credits.length))
+        return credits
     }
 
     /**
