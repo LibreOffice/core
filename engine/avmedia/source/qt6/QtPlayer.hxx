@@ -36,29 +36,29 @@ public:
     bool create(const OUString& rURL);
 
     // XPlayer
-    virtual void SAL_CALL start() override;
-    virtual void SAL_CALL stop() override;
-    virtual bool SAL_CALL isPlaying() override;
-    virtual double SAL_CALL getDuration() override;
-    virtual void SAL_CALL setMediaTime(double fTime) override;
-    virtual double SAL_CALL getMediaTime() override;
-    virtual void SAL_CALL setPlaybackLoop(bool bSet) override;
-    virtual bool SAL_CALL isPlaybackLoop() override;
-    virtual void SAL_CALL setVolumeDB(sal_Int16 nVolumeDB) override;
-    virtual sal_Int16 SAL_CALL getVolumeDB() override;
-    virtual void SAL_CALL setMute(bool bSet) override;
-    virtual bool SAL_CALL isMute() override;
-    virtual css::awt::Size SAL_CALL getPreferredPlayerWindowSize() override;
+    virtual void start() override;
+    virtual void stop() override;
+    virtual bool isPlaying() override;
+    virtual double getDuration() override;
+    virtual void setMediaTime(double fTime) override;
+    virtual double getMediaTime() override;
+    virtual void setPlaybackLoop(bool bSet) override;
+    virtual bool isPlaybackLoop() override;
+    virtual void setVolumeDB(sal_Int16 nVolumeDB) override;
+    virtual sal_Int16 getVolumeDB() override;
+    virtual void setMute(bool bSet) override;
+    virtual bool isMute() override;
+    virtual css::awt::Size getPreferredPlayerWindowSize() override;
     virtual css::uno::Reference<css::media::XPlayerWindow>
-        SAL_CALL createPlayerWindow(const css::uno::Sequence<cpo::uno::Any>& rArgs) override;
-    virtual css::uno::Reference<css::media::XFrameGrabber> SAL_CALL createFrameGrabber() override;
+    createPlayerWindow(const css::uno::Sequence<cpo::uno::Any>& rArgs) override;
+    virtual css::uno::Reference<css::media::XFrameGrabber> createFrameGrabber() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    virtual void SAL_CALL disposing() final override;
+    virtual void disposing() final override;
 
 private:
     std::unique_ptr<QMediaPlayer> m_xMediaPlayer;

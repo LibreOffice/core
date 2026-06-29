@@ -64,7 +64,7 @@ FrameGrabber::FrameGrabber( const OUString& rURL, UINT32 nFrameWidth, UINT32 nFr
 
 FrameGrabber::~FrameGrabber() = default;
 
-uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
+uno::Reference< graphic::XGraphic > FrameGrabber::grabFrame( double fMediaTime )
 {
     uno::Reference< graphic::XGraphic > xRet;
 
@@ -205,19 +205,19 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 }
 
 
-OUString SAL_CALL FrameGrabber::getImplementationName(  )
+OUString FrameGrabber::getImplementationName(  )
 {
     return AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME;
 }
 
 
-bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
+bool FrameGrabber::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
+uno::Sequence< OUString > FrameGrabber::getSupportedServiceNames(  )
 {
     return { AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME };
 }

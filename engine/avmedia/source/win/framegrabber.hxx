@@ -38,12 +38,12 @@ public:
     ~FrameGrabber() override;
 
     // XFrameGrabber
-    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) override;
+    virtual css::uno::Reference< css::graphic::XGraphic > grabFrame( double fMediaTime ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) override;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+    virtual OUString getImplementationName(  ) override;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 private:
     OUString                maURL;

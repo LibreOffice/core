@@ -276,12 +276,12 @@ void Window::updatePointer()
     SetCursor( LoadCursor( nullptr, pCursorName ) );
 }
 
-void SAL_CALL Window::update(  )
+void Window::update(  )
 {
     ::RedrawWindow( mnFrameWnd, nullptr, nullptr, RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE  );
 }
 
-bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
+bool Window::setZoomLevel( media::ZoomLevel eZoomLevel )
 {
         bool bRet = false;
 
@@ -300,17 +300,17 @@ bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
         return bRet;
 }
 
-media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
+media::ZoomLevel Window::getZoomLevel(  )
 {
     return meZoomLevel;
 }
 
-void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
+void Window::setPointerType( sal_Int32 nPointerType )
 {
     mnPointerType = nPointerType;
 }
 
-void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 )
+void Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 )
 {
     if( mnFrameWnd )
     {
@@ -319,7 +319,7 @@ void SAL_CALL Window::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal
     }
 }
 
-awt::Rectangle SAL_CALL Window::getPosSize()
+awt::Rectangle Window::getPosSize()
 {
     awt::Rectangle aRet;
 
@@ -339,107 +339,107 @@ awt::Rectangle SAL_CALL Window::getPosSize()
     return aRet;
 }
 
-void SAL_CALL Window::setVisible( bool bVisible )
+void Window::setVisible( bool bVisible )
 {
     if( mnFrameWnd && mrPlayer.GetVideoWidth() && mrPlayer.GetVideoHeight() )
         ::ShowWindow( mnFrameWnd, bVisible ? SW_SHOW : SW_HIDE );
 }
 
-void SAL_CALL Window::setEnable( bool bEnable )
+void Window::setEnable( bool bEnable )
 {
     if( mnFrameWnd )
         ::EnableWindow( mnFrameWnd, bEnable );
 }
 
-void SAL_CALL Window::setFocus(  )
+void Window::setFocus(  )
 {
     if( mnFrameWnd )
         ::SetFocus( mnFrameWnd );
 }
 
-void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
+void Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maWindowListeners.addInterface( g, xListener );
 }
 
-void SAL_CALL Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
+void Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maWindowListeners.removeInterface( g, xListener );
 }
 
-void SAL_CALL Window::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
+void Window::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maFocusListeners.addInterface( g, xListener );
 }
 
-void SAL_CALL Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
+void Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maFocusListeners.removeInterface( g, xListener );
 }
 
-void SAL_CALL Window::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
+void Window::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maKeyListeners.addInterface( g, xListener );
 }
 
-void SAL_CALL Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
+void Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maKeyListeners.removeInterface( g, xListener );
 }
 
-void SAL_CALL Window::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
+void Window::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maMouseListeners.addInterface( g, xListener );
 }
 
-void SAL_CALL Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
+void Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maMouseListeners.removeInterface( g, xListener );
 }
 
-void SAL_CALL Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
+void Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maMouseMotionListeners.addInterface( g, xListener );
 }
 
-void SAL_CALL Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
+void Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maMouseMotionListeners.removeInterface( g, xListener );
 }
 
-void SAL_CALL Window::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
+void Window::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maPaintListeners.addInterface( g, xListener );
 }
 
-void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
+void Window::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maPaintListeners.removeInterface( g, xListener );
 }
 
-void SAL_CALL Window::dispose(  )
+void Window::dispose(  )
 {
 }
 
-void SAL_CALL Window::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void Window::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maEventListeners.addInterface( g, xListener );
 }
 
-void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
+void Window::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
     std::unique_lock g(maMutex);
     maEventListeners.removeInterface( g, xListener );
@@ -469,17 +469,17 @@ void Window::fireSetFocusEvent( const css::awt::FocusEvent& rEvt )
     maFocusListeners.notifyEach(g, &awt::XFocusListener::focusGained, rEvt);
 }
 
-OUString SAL_CALL Window::getImplementationName(  )
+OUString Window::getImplementationName(  )
 {
     return AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME;
 }
 
-bool SAL_CALL Window::supportsService( const OUString& ServiceName )
+bool Window::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
+uno::Sequence< OUString > Window::getSupportedServiceNames(  )
 {
     return { AVMEDIA_WIN_WINDOW_SERVICENAME };
 }

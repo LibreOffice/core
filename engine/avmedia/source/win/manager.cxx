@@ -38,7 +38,7 @@ Manager::~Manager()
 }
 
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
+uno::Reference< media::XPlayer > Manager::createPlayer( const OUString& rURL )
 {
     rtl::Reference<Player>              pPlayer( new Player() );
     const INetURLObject                 aURL( rURL );
@@ -50,19 +50,19 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
 }
 
 
-OUString SAL_CALL Manager::getImplementationName(  )
+OUString Manager::getImplementationName(  )
 {
     return "com.sun.star.comp.avmedia.Manager_DirectX";
 }
 
 
-bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
+bool Manager::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
+uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
 {
     return { "com.sun.star.media.Manager" };
 }

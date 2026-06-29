@@ -60,7 +60,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 
-uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
+uno::Reference< graphic::XGraphic > FrameGrabber::grabFrame( double fMediaTime )
 {
     uno::Reference< graphic::XGraphic > xRet;
     if( !mpImageGen )
@@ -97,17 +97,17 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 }
 
 
-OUString SAL_CALL FrameGrabber::getImplementationName(  )
+OUString FrameGrabber::getImplementationName(  )
 {
     return AVMEDIA_MACAVF_FRAMEGRABBER_IMPLEMENTATIONNAME;
 }
 
-bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
+bool FrameGrabber::supportsService( const OUString& ServiceName )
 {
     return ServiceName == AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME;
 }
 
-uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames(  )
+uno::Sequence< OUString > FrameGrabber::getSupportedServiceNames(  )
 {
     return { AVMEDIA_MACAVF_FRAMEGRABBER_SERVICENAME };
 }

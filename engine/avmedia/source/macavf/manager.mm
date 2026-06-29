@@ -36,7 +36,7 @@ Manager::~Manager()
 {}
 
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
+uno::Reference< media::XPlayer > Manager::createPlayer( const OUString& rURL )
 {
     rtl::Reference<Player>              xPlayer( new Player() );
     INetURLObject                       aURL( rURL );
@@ -48,19 +48,19 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString&
 }
 
 
-OUString SAL_CALL Manager::getImplementationName(  )
+OUString Manager::getImplementationName(  )
 {
     return "com.sun.star.comp.avmedia.Manager_MacAVF";
 }
 
 
-bool SAL_CALL Manager::supportsService( const OUString& ServiceName )
+bool Manager::supportsService( const OUString& ServiceName )
 {
     return ServiceName == "com.sun.star.media.Manager_MacAVF";
 }
 
 
-uno::Sequence< OUString > SAL_CALL Manager::getSupportedServiceNames(  )
+uno::Sequence< OUString > Manager::getSupportedServiceNames(  )
 {
     return { "com.sun.star.media.Manager_MacAVF" };
 }

@@ -33,19 +33,19 @@ namespace avmedia{
 
 
 //  XServiceInfo
-OUString SAL_CALL SoundHandler::getImplementationName()
+OUString SoundHandler::getImplementationName()
 {
     return u"com.sun.star.comp.framework.SoundHandler"_ustr;
 }
 
 // XServiceInfo
-bool SAL_CALL SoundHandler::supportsService( const OUString& sServiceName )
+bool SoundHandler::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 // XServiceInfo
-css::uno::Sequence< OUString > SAL_CALL SoundHandler::getSupportedServiceNames()
+css::uno::Sequence< OUString > SoundHandler::getSupportedServiceNames()
 {
     return { u"com.sun.star.frame.ContentHandler"_ustr };
 }
@@ -102,7 +102,7 @@ SoundHandler::~SoundHandler()
     @onerror    We do nothing.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&                                             aURL      ,
+void SoundHandler::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                      const css::uno::Sequence< css::beans::PropertyValue >&            lDescriptor,
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
@@ -152,7 +152,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
     // } SAFE
 }
 
-void SAL_CALL SoundHandler::dispatch( const css::util::URL&                                  aURL       ,
+void SoundHandler::dispatch( const css::util::URL&                                  aURL       ,
                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
@@ -179,7 +179,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
     @onerror    We return nothing.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
+OUString SoundHandler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
 {
     // Our default is "nothing". So we can return it, if detection failed or file type is really unknown.
     OUString sTypeName;

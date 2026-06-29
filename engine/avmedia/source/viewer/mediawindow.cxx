@@ -488,7 +488,7 @@ void PlayerListener::stopListening(std::unique_lock<std::mutex>&)
     m_xNotifier.clear();
 }
 
-void SAL_CALL PlayerListener::preferredPlayerWindowSizeAvailable(const css::lang::EventObject&)
+void PlayerListener::preferredPlayerWindowSizeAvailable(const css::lang::EventObject&)
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -500,7 +500,7 @@ void SAL_CALL PlayerListener::preferredPlayerWindowSizeAvailable(const css::lang
     stopListening(aGuard);
 }
 
-void SAL_CALL PlayerListener::disposing(const css::lang::EventObject&)
+void PlayerListener::disposing(const css::lang::EventObject&)
 {
 }
 

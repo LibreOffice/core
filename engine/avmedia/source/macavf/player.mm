@@ -153,7 +153,7 @@ bool Player::create( const OUString& rURL )
 }
 
 
-void SAL_CALL Player::start()
+void Player::start()
 {
     if( !mpPlayer )
         return;
@@ -163,7 +163,7 @@ void SAL_CALL Player::start()
 }
 
 
-void SAL_CALL Player::stop()
+void Player::stop()
 {
     if( !mpPlayer )
         return;
@@ -173,7 +173,7 @@ void SAL_CALL Player::stop()
 }
 
 
-bool SAL_CALL Player::isPlaying()
+bool Player::isPlaying()
 {
     if( !mpPlayer )
         return false;
@@ -182,7 +182,7 @@ bool SAL_CALL Player::isPlaying()
 }
 
 
-double SAL_CALL Player::getDuration()
+double Player::getDuration()
 {
     // slideshow checks for non-zero duration, so cheat here
     double duration = 0.01;
@@ -200,14 +200,14 @@ double SAL_CALL Player::getDuration()
 }
 
 
-void SAL_CALL Player::setMediaTime( double fTime )
+void Player::setMediaTime( double fTime )
 {
     if( mpPlayer )
         [mpPlayer seekToTime: CMTimeMakeWithSeconds(fTime,1000) ];
 }
 
 
-double SAL_CALL Player::getMediaTime()
+double Player::getMediaTime()
 {
     if( !mpPlayer )
         return 0.0;
@@ -233,19 +233,19 @@ double Player::getStopTime()
 }
 
 
-void SAL_CALL Player::setPlaybackLoop( bool bSet )
+void Player::setPlaybackLoop( bool bSet )
 {
     mbLooping = bSet;
 }
 
 
-bool SAL_CALL Player::isPlaybackLoop()
+bool Player::isPlaybackLoop()
 {
     return mbLooping;
 }
 
 
-void SAL_CALL Player::setMute( bool bSet )
+void Player::setMute( bool bSet )
 {
     if( !mpPlayer )
         return;
@@ -255,13 +255,13 @@ void SAL_CALL Player::setMute( bool bSet )
 }
 
 
-bool SAL_CALL Player::isMute()
+bool Player::isMute()
 {
     return mbMuted;
 }
 
 
-void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
+void Player::setVolumeDB( sal_Int16 nVolumeDB )
 {
     // -40dB <-> AVPlayer volume 0.0
     //   0dB <-> AVPlayer volume 1.0
@@ -273,7 +273,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 }
 
 
-sal_Int16 SAL_CALL Player::getVolumeDB()
+sal_Int16 Player::getVolumeDB()
 {
     if( !mpPlayer )
         return 0;
@@ -290,7 +290,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
 }
 
 
-awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
+awt::Size Player::getPreferredPlayerWindowSize()
 {
     awt::Size aSize( 0, 0 ); // default size
 
@@ -311,7 +311,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 
-uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< cpo::uno::Any >& aArguments )
+uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     // get the preferred window size
     const awt::Size aSize( getPreferredPlayerWindowSize() );
@@ -330,7 +330,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 }
 
 
-uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
+uno::Reference< media::XFrameGrabber > Player::createFrameGrabber()
 {
     rtl::Reference<FrameGrabber> pGrabber = new FrameGrabber();
     AVAsset* pMovie = [[mpPlayer currentItem] asset];
@@ -341,19 +341,19 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 }
 
 
-OUString SAL_CALL Player::getImplementationName(  )
+OUString Player::getImplementationName(  )
 {
     return AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME;
 }
 
 
-bool SAL_CALL Player::supportsService( const OUString& ServiceName )
+bool Player::supportsService( const OUString& ServiceName )
 {
     return ServiceName == AVMEDIA_MACAVF_PLAYER_SERVICENAME;
 }
 
 
-uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
+uno::Sequence< OUString > Player::getSupportedServiceNames(  )
 {
     return { AVMEDIA_MACAVF_PLAYER_SERVICENAME };
 }

@@ -59,26 +59,26 @@ class SoundHandler : public comphelper::WeakImplHelper<css::lang::XServiceInfo,
         virtual ~SoundHandler(                                                                        ) override;
 
         //  XServiceInfo
-       virtual OUString                                               SAL_CALL getImplementationName              (                                                                               ) override;
-       virtual bool                                               SAL_CALL supportsService                    ( const OUString&                                               sServiceName    ) override;
-       virtual css::uno::Sequence< OUString >                         SAL_CALL getSupportedServiceNames           (                                                                               ) override;
+       virtual OUString                                               getImplementationName              (                                                                               ) override;
+       virtual bool                                               supportsService                    ( const OUString&                                               sServiceName    ) override;
+       virtual css::uno::Sequence< OUString >                         getSupportedServiceNames           (                                                                               ) override;
 
         //  XNotifyingDispatch
-        virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
+        virtual void dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         //  XDispatch
-        virtual void SAL_CALL dispatch              (   const   css::util::URL&                                     aURL        ,
+        virtual void dispatch              (   const   css::util::URL&                                     aURL        ,
                                                         const   css::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) override;
         // not supported !
-        virtual void SAL_CALL addStatusListener     (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
+        virtual void addStatusListener     (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
                                                         const   css::util::URL&                                     /*aURL*/        ) override {};
-        virtual void SAL_CALL removeStatusListener  (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
+        virtual void removeStatusListener  (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
                                                         const   css::util::URL&                                     /*aURL*/        ) override {};
 
         //  XExtendedFilterDetection
-        virtual OUString SAL_CALL detect           (           css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) override;
+        virtual OUString detect           (           css::uno::Sequence< css::beans::PropertyValue >&    lDescriptor ) override;
 
     //  protected methods
     protected:

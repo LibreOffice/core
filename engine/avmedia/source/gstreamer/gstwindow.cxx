@@ -43,11 +43,11 @@ Window::~Window()
 // XPlayerWindow
 
 
-void SAL_CALL Window::update(  )
+void Window::update(  )
 {
 }
 
-bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
+bool Window::setZoomLevel( media::ZoomLevel eZoomLevel )
 {
         bool bRet = false;
 
@@ -65,23 +65,23 @@ bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
         return bRet;
 }
 
-media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
+media::ZoomLevel Window::getZoomLevel(  )
 {
     return meZoomLevel;
 }
 
-void SAL_CALL Window::setPointerType( sal_Int32 /*nPointerType*/ )
+void Window::setPointerType( sal_Int32 /*nPointerType*/ )
 {
 }
 
 // XWindow
 
 
-void SAL_CALL Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
+void Window::setPosSize( sal_Int32 /*X*/, sal_Int32 /*Y*/, sal_Int32 /*Width*/, sal_Int32 /*Height*/, sal_Int16 /*Flags*/ )
 {
 }
 
-awt::Rectangle SAL_CALL Window::getPosSize()
+awt::Rectangle Window::getPosSize()
 {
     awt::Rectangle aRet;
 
@@ -92,95 +92,95 @@ awt::Rectangle SAL_CALL Window::getPosSize()
     return aRet;
 }
 
-void SAL_CALL Window::setVisible( bool /*bVisible*/ )
+void Window::setVisible( bool /*bVisible*/ )
 {
 }
 
-void SAL_CALL Window::setEnable( bool /*bEnable*/ )
+void Window::setEnable( bool /*bEnable*/ )
 {
 }
 
-void SAL_CALL Window::setFocus(  )
+void Window::setFocus(  )
 {
 }
 
-void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& )
+void Window::addWindowListener( const uno::Reference< awt::XWindowListener >& )
 {
 }
 
-void SAL_CALL Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& )
+void Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& )
 {
 }
 
-void SAL_CALL Window::addFocusListener( const uno::Reference< awt::XFocusListener >& )
+void Window::addFocusListener( const uno::Reference< awt::XFocusListener >& )
 {
 }
 
-void SAL_CALL Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& )
+void Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& )
 {
 }
 
-void SAL_CALL Window::addKeyListener( const uno::Reference< awt::XKeyListener >& )
+void Window::addKeyListener( const uno::Reference< awt::XKeyListener >& )
 {
 }
 
-void SAL_CALL Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& )
+void Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& )
 {
 }
 
-void SAL_CALL Window::addMouseListener( const uno::Reference< awt::XMouseListener >& )
+void Window::addMouseListener( const uno::Reference< awt::XMouseListener >& )
 {
 }
 
-void SAL_CALL Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& )
+void Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& )
 {
 }
 
-void SAL_CALL Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
+void Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
 {
 }
 
-void SAL_CALL Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
+void Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
 {
 }
 
-void SAL_CALL Window::addPaintListener( const uno::Reference< awt::XPaintListener >& )
+void Window::addPaintListener( const uno::Reference< awt::XPaintListener >& )
 {
 }
 
-void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintListener >& )
+void Window::removePaintListener( const uno::Reference< awt::XPaintListener >& )
 {
 }
 
 // XComponent
 
 
-void SAL_CALL Window::dispose(  )
+void Window::dispose(  )
 {
 }
 
-void SAL_CALL Window::addEventListener( const uno::Reference< lang::XEventListener >& )
+void Window::addEventListener( const uno::Reference< lang::XEventListener >& )
 {
 }
 
-void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventListener >& )
+void Window::removeEventListener( const uno::Reference< lang::XEventListener >& )
 {
 }
 
 // XServiceInfo
 
 
-OUString SAL_CALL Window::getImplementationName(  )
+OUString Window::getImplementationName(  )
 {
     return AVMEDIA_GST_WINDOW_IMPLEMENTATIONNAME;
 }
 
-bool SAL_CALL Window::supportsService( const OUString& ServiceName )
+bool Window::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL Window::getSupportedServiceNames(  )
+uno::Sequence< OUString > Window::getSupportedServiceNames(  )
 {
     return { AVMEDIA_GST_WINDOW_SERVICENAME };
 }

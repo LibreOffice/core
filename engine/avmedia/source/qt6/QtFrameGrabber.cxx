@@ -77,7 +77,7 @@ void QtFrameGrabber::onVideoFrameChanged(const QVideoFrame& rFrame)
     m_bWaitingForFrame = false;
 }
 
-css::uno::Reference<css::graphic::XGraphic> SAL_CALL QtFrameGrabber::grabFrame(double fMediaTime)
+css::uno::Reference<css::graphic::XGraphic> QtFrameGrabber::grabFrame(double fMediaTime)
 {
     std::lock_guard aLock(m_aMutex);
 

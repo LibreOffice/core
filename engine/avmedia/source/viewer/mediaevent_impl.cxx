@@ -44,12 +44,12 @@ void MediaEventListenersImpl::cleanUp()
 }
 
 
-void SAL_CALL MediaEventListenersImpl::disposing( const css::lang::EventObject& )
+void MediaEventListenersImpl::disposing( const css::lang::EventObject& )
 {
 }
 
 
-void SAL_CALL MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
+void MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
 {
     const std::unique_lock aGuard( maMutex );
 
@@ -66,7 +66,7 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
 }
 
 
-void SAL_CALL MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e )
+void MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e )
 {
     const std::unique_lock aGuard( maMutex );
 
@@ -82,7 +82,7 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e 
 }
 
 
-void SAL_CALL MediaEventListenersImpl::mousePressed( const css::awt::MouseEvent& e )
+void MediaEventListenersImpl::mousePressed( const css::awt::MouseEvent& e )
 {
     const std::unique_lock aGuard( maMutex );
 
@@ -100,7 +100,7 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const css::awt::MouseEvent&
 }
 
 
-void SAL_CALL MediaEventListenersImpl::mouseReleased( const css::awt::MouseEvent& e )
+void MediaEventListenersImpl::mouseReleased( const css::awt::MouseEvent& e )
 {
     const std::unique_lock aGuard( maMutex );
     const SolarMutexGuard aAppGuard;
@@ -119,29 +119,17 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const css::awt::MouseEvent
 }
 
 
-void SAL_CALL MediaEventListenersImpl::mouseEntered( const css::awt::MouseEvent& )
+void MediaEventListenersImpl::mouseEntered( const css::awt::MouseEvent& )
 {
 }
 
 
-void SAL_CALL MediaEventListenersImpl::mouseExited( const css::awt::MouseEvent& )
+void MediaEventListenersImpl::mouseExited( const css::awt::MouseEvent& )
 {
 }
 
 
-void SAL_CALL MediaEventListenersImpl::mouseDragged( const css::awt::MouseEvent& e )
-{
-    const std::unique_lock aGuard( maMutex );
-
-    if( mpNotifyWindow )
-    {
-        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, MouseEventModifiers::NONE, e.Buttons, e.Modifiers );
-        Application::PostMouseEvent( VclEventId::WindowMouseMove, mpNotifyWindow.get(), &aVCLMouseEvt );
-    }
-}
-
-
-void SAL_CALL MediaEventListenersImpl::mouseMoved( const css::awt::MouseEvent& e )
+void MediaEventListenersImpl::mouseDragged( const css::awt::MouseEvent& e )
 {
     const std::unique_lock aGuard( maMutex );
 
@@ -153,12 +141,24 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const css::awt::MouseEvent& e
 }
 
 
-void SAL_CALL MediaEventListenersImpl::focusGained( const css::awt::FocusEvent& )
+void MediaEventListenersImpl::mouseMoved( const css::awt::MouseEvent& e )
+{
+    const std::unique_lock aGuard( maMutex );
+
+    if( mpNotifyWindow )
+    {
+        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, MouseEventModifiers::NONE, e.Buttons, e.Modifiers );
+        Application::PostMouseEvent( VclEventId::WindowMouseMove, mpNotifyWindow.get(), &aVCLMouseEvt );
+    }
+}
+
+
+void MediaEventListenersImpl::focusGained( const css::awt::FocusEvent& )
 {
 }
 
 
-void SAL_CALL MediaEventListenersImpl::focusLost( const css::awt::FocusEvent& )
+void MediaEventListenersImpl::focusLost( const css::awt::FocusEvent& )
 {
 }
 

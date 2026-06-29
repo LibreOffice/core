@@ -25,7 +25,7 @@ Manager::Manager() {}
 
 Manager::~Manager() {}
 
-uno::Reference<media::XPlayer> SAL_CALL Manager::createPlayer(const OUString& rURL)
+uno::Reference<media::XPlayer> Manager::createPlayer(const OUString& rURL)
 {
     const INetURLObject aURL(rURL);
     OUString sMainURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
@@ -36,17 +36,14 @@ uno::Reference<media::XPlayer> SAL_CALL Manager::createPlayer(const OUString& rU
     return xPlayer;
 }
 
-OUString SAL_CALL Manager::getImplementationName()
-{
-    return u"com.sun.star.comp.media.Manager_Gtk"_ustr;
-}
+OUString Manager::getImplementationName() { return u"com.sun.star.comp.media.Manager_Gtk"_ustr; }
 
-bool SAL_CALL Manager::supportsService(const OUString& ServiceName)
+bool Manager::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL Manager::getSupportedServiceNames()
+uno::Sequence<OUString> Manager::getSupportedServiceNames()
 {
     return { u"com.sun.star.media.Manager"_ustr };
 }

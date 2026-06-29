@@ -68,8 +68,8 @@ namespace avmedia
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
         virtual ~PlayerListener() override;
 
-        virtual void SAL_CALL preferredPlayerWindowSizeAvailable(const css::lang::EventObject& rSource) override;
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rSource) override;
+        virtual void preferredPlayerWindowSizeAvailable(const css::lang::EventObject& rSource) override;
+        virtual void disposing(const css::lang::EventObject& rSource) override;
 
         void startListening(const css::uno::Reference<css::media::XPlayerNotifier>& rNotifier);
 

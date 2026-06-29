@@ -21,7 +21,7 @@ QtManager::QtManager() {}
 
 QtManager::~QtManager() {}
 
-css::uno::Reference<css::media::XPlayer> SAL_CALL QtManager::createPlayer(const OUString& rURL)
+css::uno::Reference<css::media::XPlayer> QtManager::createPlayer(const OUString& rURL)
 {
     const INetURLObject aURL(rURL);
     OUString sMainURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
@@ -35,17 +35,14 @@ css::uno::Reference<css::media::XPlayer> SAL_CALL QtManager::createPlayer(const 
     return xPlayer;
 }
 
-OUString SAL_CALL QtManager::getImplementationName()
-{
-    return u"com.sun.star.comp.media.Manager_Qt"_ustr;
-}
+OUString QtManager::getImplementationName() { return u"com.sun.star.comp.media.Manager_Qt"_ustr; }
 
-bool SAL_CALL QtManager::supportsService(const OUString& ServiceName)
+bool QtManager::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL QtManager::getSupportedServiceNames()
+css::uno::Sequence<OUString> QtManager::getSupportedServiceNames()
 {
     return { u"com.sun.star.media.Manager"_ustr };
 }

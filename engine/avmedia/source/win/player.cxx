@@ -158,7 +158,7 @@ void Player::OnMediaPlayerEvent(MFP_EVENT_HEADER* pEventHeader)
     }
 }
 
-void SAL_CALL Player::disposing()
+void Player::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     OnClose(mnFrameWnd);
@@ -422,7 +422,7 @@ HRESULT Player::InitializeWindow(bool bAddSoundWindow)
     return hr;
 }
 
-void SAL_CALL Player::start(  )
+void Player::start(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if( g_pPlayer )
@@ -450,7 +450,7 @@ void SAL_CALL Player::start(  )
     }
 }
 
-void SAL_CALL Player::stop(  )
+void Player::stop(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if (g_pPlayer && (g_bHasVideo || g_bHasAudio))
@@ -471,7 +471,7 @@ void SAL_CALL Player::stop(  )
     }
 }
 
-bool SAL_CALL Player::isPlaying()
+bool Player::isPlaying()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -493,7 +493,7 @@ bool SAL_CALL Player::isPlaying()
     return bRet;
 }
 
-double SAL_CALL Player::getDuration(  )
+double Player::getDuration(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -512,7 +512,7 @@ double SAL_CALL Player::getDuration(  )
     return aRefTime;
 }
 
-void SAL_CALL Player::setMediaTime( double fTime )
+void Player::setMediaTime( double fTime )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -537,7 +537,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
     }
 }
 
-double SAL_CALL Player::getMediaTime(  )
+double Player::getMediaTime(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -557,21 +557,21 @@ double SAL_CALL Player::getMediaTime(  )
     return aRefTime;
 }
 
-void SAL_CALL Player::setPlaybackLoop( bool bSet )
+void Player::setPlaybackLoop( bool bSet )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     mbLooping = bSet;
 }
 
-bool SAL_CALL Player::isPlaybackLoop(  )
+bool Player::isPlaybackLoop(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     return mbLooping;
 }
 
-void SAL_CALL Player::setMute( bool bSet )
+void Player::setMute( bool bSet )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -587,7 +587,7 @@ void SAL_CALL Player::setMute( bool bSet )
     }
 }
 
-bool SAL_CALL Player::isMute(  )
+bool Player::isMute(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -603,7 +603,7 @@ bool SAL_CALL Player::isMute(  )
     return mbMuted;
 }
 
-void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
+void Player::setVolumeDB( sal_Int16 nVolumeDB )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -619,7 +619,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
     }
 }
 
-sal_Int16 SAL_CALL Player::getVolumeDB(  )
+sal_Int16 Player::getVolumeDB(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -635,14 +635,14 @@ sal_Int16 SAL_CALL Player::getVolumeDB(  )
     return static_cast< sal_Int16 >( (mnUnmutedVolume - 1.0) * AVMEDIA_DB_RANGE);
 }
 
-awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
+awt::Size Player::getPreferredPlayerWindowSize(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     return awt::Size(mnFrameWidth, mnFrameHeight);
 }
 
-uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< cpo::uno::Any >& aArguments )
+uno::Reference< ::media::XPlayerWindow > Player::createPlayerWindow( const uno::Sequence< cpo::uno::Any >& aArguments )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -677,7 +677,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     return xRet;
 }
 
-uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
+uno::Reference< media::XFrameGrabber > Player::createFrameGrabber(  )
 {
     uno::Reference< media::XFrameGrabber > xRet;
 
@@ -690,17 +690,17 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
     return xRet;
 }
 
-OUString SAL_CALL Player::getImplementationName(  )
+OUString Player::getImplementationName(  )
 {
     return AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME;
 }
 
-bool SAL_CALL Player::supportsService( const OUString& ServiceName )
+bool Player::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames(  )
+uno::Sequence< OUString > Player::getSupportedServiceNames(  )
 {
     return { AVMEDIA_WIN_PLAYER_SERVICENAME };
 }

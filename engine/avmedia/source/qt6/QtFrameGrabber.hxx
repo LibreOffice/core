@@ -37,8 +37,7 @@ private:
 public:
     QtFrameGrabber(const QUrl& rSourceUrl);
 
-    virtual css::uno::Reference<css::graphic::XGraphic>
-        SAL_CALL grabFrame(double fMediaTime) override;
+    virtual css::uno::Reference<css::graphic::XGraphic> grabFrame(double fMediaTime) override;
 
 private slots:
     void onErrorOccured(QMediaPlayer::Error eError, const QString& rErrorString);

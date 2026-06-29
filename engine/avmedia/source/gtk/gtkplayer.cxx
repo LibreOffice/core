@@ -70,7 +70,7 @@ void GtkPlayer::cleanup()
     }
 }
 
-void SAL_CALL GtkPlayer::disposing()
+void GtkPlayer::disposing()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -166,7 +166,7 @@ void GtkPlayer::notifyListeners()
     }
 }
 
-void SAL_CALL GtkPlayer::start()
+void GtkPlayer::start()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -174,7 +174,7 @@ void SAL_CALL GtkPlayer::start()
         gtk_media_stream_play(m_pStream);
 }
 
-void SAL_CALL GtkPlayer::stop()
+void GtkPlayer::stop()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -182,7 +182,7 @@ void SAL_CALL GtkPlayer::stop()
         gtk_media_stream_pause(m_pStream);
 }
 
-bool SAL_CALL GtkPlayer::isPlaying()
+bool GtkPlayer::isPlaying()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -194,7 +194,7 @@ bool SAL_CALL GtkPlayer::isPlaying()
     return bRet;
 }
 
-double SAL_CALL GtkPlayer::getDuration()
+double GtkPlayer::getDuration()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -206,7 +206,7 @@ double SAL_CALL GtkPlayer::getDuration()
     return duration;
 }
 
-void SAL_CALL GtkPlayer::setMediaTime(double fTime)
+void GtkPlayer::setMediaTime(double fTime)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -224,7 +224,7 @@ void SAL_CALL GtkPlayer::setMediaTime(double fTime)
         gtk_media_stream_update(m_pStream, gst_position);
 }
 
-double SAL_CALL GtkPlayer::getMediaTime()
+double GtkPlayer::getMediaTime()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -236,13 +236,13 @@ double SAL_CALL GtkPlayer::getMediaTime()
     return position;
 }
 
-void SAL_CALL GtkPlayer::setPlaybackLoop(bool bSet)
+void GtkPlayer::setPlaybackLoop(bool bSet)
 {
     osl::MutexGuard aGuard(m_aMutex);
     gtk_media_stream_set_loop(m_pStream, bSet);
 }
 
-bool SAL_CALL GtkPlayer::isPlaybackLoop()
+bool GtkPlayer::isPlaybackLoop()
 {
     osl::MutexGuard aGuard(m_aMutex);
     return gtk_media_stream_get_loop(m_pStream);
@@ -252,7 +252,7 @@ bool SAL_CALL GtkPlayer::isPlaybackLoop()
 // it does not modify the volume. This means that muting and then unmuting the
 // stream will restore the volume settings." but that doesn't seem to be my
 // experience at all
-void SAL_CALL GtkPlayer::setMute(bool bSet)
+void GtkPlayer::setMute(bool bSet)
 {
     osl::MutexGuard aGuard(m_aMutex);
     bool bMuted = gtk_media_stream_get_muted(m_pStream);
@@ -263,13 +263,13 @@ void SAL_CALL GtkPlayer::setMute(bool bSet)
         setVolumeDB(m_nUnmutedVolume);
 }
 
-bool SAL_CALL GtkPlayer::isMute()
+bool GtkPlayer::isMute()
 {
     osl::MutexGuard aGuard(m_aMutex);
     return gtk_media_stream_get_muted(m_pStream);
 }
 
-void SAL_CALL GtkPlayer::setVolumeDB(sal_Int16 nVolumeDB)
+void GtkPlayer::setVolumeDB(sal_Int16 nVolumeDB)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -279,7 +279,7 @@ void SAL_CALL GtkPlayer::setVolumeDB(sal_Int16 nVolumeDB)
     gtk_media_stream_set_volume(m_pStream, fValue);
 }
 
-sal_Int16 SAL_CALL GtkPlayer::getVolumeDB()
+sal_Int16 GtkPlayer::getVolumeDB()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -293,7 +293,7 @@ sal_Int16 SAL_CALL GtkPlayer::getVolumeDB()
     return m_nUnmutedVolume;
 }
 
-awt::Size SAL_CALL GtkPlayer::getPreferredPlayerWindowSize()
+awt::Size GtkPlayer::getPreferredPlayerWindowSize()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -309,7 +309,7 @@ awt::Size SAL_CALL GtkPlayer::getPreferredPlayerWindowSize()
 }
 
 uno::Reference<::media::XPlayerWindow>
-    SAL_CALL GtkPlayer::createPlayerWindow(const uno::Sequence<cpo::uno::Any>& rArguments)
+GtkPlayer::createPlayerWindow(const uno::Sequence<cpo::uno::Any>& rArguments)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -351,8 +351,7 @@ uno::Reference<::media::XPlayerWindow>
     return xRet;
 }
 
-void SAL_CALL
-GtkPlayer::addPlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
+void GtkPlayer::addPlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
 {
     m_lListener.addInterface(cppu::UnoType<css::media::XPlayerListener>::get(), rListener);
     if (gtk_media_stream_is_prepared(m_pStream))
@@ -365,8 +364,8 @@ GtkPlayer::addPlayerListener(const css::uno::Reference<css::media::XPlayerListen
         installNotify();
 }
 
-void SAL_CALL
-GtkPlayer::removePlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
+void GtkPlayer::removePlayerListener(
+    const css::uno::Reference<css::media::XPlayerListener>& rListener)
 {
     m_lListener.removeInterface(cppu::UnoType<css::media::XPlayerListener>::get(), rListener);
 }
@@ -390,8 +389,7 @@ public:
     virtual ~GtkFrameGrabber() override { g_object_unref(m_pStream); }
 
     // XFrameGrabber
-    virtual css::uno::Reference<css::graphic::XGraphic>
-        SAL_CALL grabFrame(double fMediaTime) override
+    virtual css::uno::Reference<css::graphic::XGraphic> grabFrame(double fMediaTime) override
     {
         gint64 gst_position = llround(fMediaTime * 1000000);
         gtk_media_stream_seek(m_pStream, gst_position);
@@ -419,7 +417,7 @@ public:
 };
 }
 
-uno::Reference<media::XFrameGrabber> SAL_CALL GtkPlayer::createFrameGrabber()
+uno::Reference<media::XFrameGrabber> GtkPlayer::createFrameGrabber()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -433,17 +431,14 @@ uno::Reference<media::XFrameGrabber> SAL_CALL GtkPlayer::createFrameGrabber()
     return xFrameGrabber;
 }
 
-OUString SAL_CALL GtkPlayer::getImplementationName()
-{
-    return u"com.sun.star.comp.avmedia.Player_Gtk"_ustr;
-}
+OUString GtkPlayer::getImplementationName() { return u"com.sun.star.comp.avmedia.Player_Gtk"_ustr; }
 
-bool SAL_CALL GtkPlayer::supportsService(const OUString& ServiceName)
+bool GtkPlayer::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence<OUString> SAL_CALL GtkPlayer::getSupportedServiceNames()
+uno::Sequence<OUString> GtkPlayer::getSupportedServiceNames()
 {
     return { AVMEDIA_GTK_PLAYER_SERVICENAME };
 }
