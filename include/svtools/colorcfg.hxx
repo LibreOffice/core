@@ -99,10 +99,6 @@ enum ColorConfigEntry : int
     // colors for Libreoffice Theme (Application)
     WINDOWCOLOR         ,
     WINDOWTEXTCOLOR     ,
-    WRITERNOTEBOOKBARCOLOR   ,
-    CALCNOTEBOOKBARCOLOR     ,
-    IMPRESSNOTEBOOKBARCOLOR  ,
-    DRAWNOTEBOOKBARCOLOR     ,
     BASECOLOR           ,
     BUTTONCOLOR         ,
     BUTTONTEXTCOLOR     ,
@@ -214,10 +210,6 @@ namespace {
 
         { std::u16string_view(u"WindowColor"), false },
         { std::u16string_view(u"WindowTextColor"), false },
-        { std::u16string_view(u"WriterNotebookbarColor"), false },
-        { std::u16string_view(u"CalcNotebookbarColor"), false },
-        { std::u16string_view(u"ImpressNotebookbarColor"), false },
-        { std::u16string_view(u"DrawNotebookbarColor"), false },
         { std::u16string_view(u"BaseColor"), false },
         { std::u16string_view(u"ButtonColor"), false },
         { std::u16string_view(u"ButtonTextColor"), false },

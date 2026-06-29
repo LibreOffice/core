@@ -362,10 +362,6 @@ void ColorConfig_Impl::LoadThemeColorsFromRegistry()
 
     rThemeColors.SetWindowColor(GetColorValue(svtools::WINDOWCOLOR).nColor);
     rThemeColors.SetWindowTextColor(GetColorValue(svtools::WINDOWTEXTCOLOR).nColor);
-    rThemeColors.SetWriterNotebookbarColor(GetColorValue(svtools::WRITERNOTEBOOKBARCOLOR).nColor);
-    rThemeColors.SetCalcNotebookbarColor(GetColorValue(svtools::CALCNOTEBOOKBARCOLOR).nColor);
-    rThemeColors.SetImpressNotebookbarColor(GetColorValue(svtools::IMPRESSNOTEBOOKBARCOLOR).nColor);
-    rThemeColors.SetDrawNotebookbarColor(GetColorValue(svtools::DRAWNOTEBOOKBARCOLOR).nColor);
     rThemeColors.SetBaseColor(GetColorValue(svtools::BASECOLOR).nColor);
     rThemeColors.SetButtonColor(GetColorValue(svtools::BUTTONCOLOR).nColor);
     rThemeColors.SetButtonTextColor(GetColorValue(svtools::BUTTONTEXTCOLOR).nColor);
@@ -465,14 +461,6 @@ static Color lcl_GetDefaultUIColor(ColorConfigEntry eEntry)
             return rStyleSettings.GetWindowColor();
         case WINDOWTEXTCOLOR:
             return rStyleSettings.GetWindowTextColor();
-        case WRITERNOTEBOOKBARCOLOR:
-            return rStyleSettings.GetWriterNotebookbarColor();
-        case CALCNOTEBOOKBARCOLOR:
-            return rStyleSettings.GetCalcNotebookbarColor();
-        case IMPRESSNOTEBOOKBARCOLOR:
-            return rStyleSettings.GetImpressNotebookbarColor();
-        case DRAWNOTEBOOKBARCOLOR:
-            return rStyleSettings.GetDrawNotebookbarColor();
         case BASECOLOR:
             return rStyleSettings.GetFieldColor();
         case BUTTONCOLOR:
@@ -727,11 +715,6 @@ void ColorConfig_Impl::UpdateSettings()
     aStyleSettings.BatchSetBackgrounds(aColor);
     aStyleSettings.SetActiveTabColor(aColor);
     aStyleSettings.SetHelpColor(aColor);
-
-    aStyleSettings.SetWriterNotebookbarColor(GetColorValue(WRITERNOTEBOOKBARCOLOR, true).nColor);
-    aStyleSettings.SetCalcNotebookbarColor(GetColorValue(CALCNOTEBOOKBARCOLOR, true).nColor);
-    aStyleSettings.SetImpressNotebookbarColor(GetColorValue(IMPRESSNOTEBOOKBARCOLOR, true).nColor);
-    aStyleSettings.SetDrawNotebookbarColor(GetColorValue(DRAWNOTEBOOKBARCOLOR, true).nColor);
 
     aColor = GetColorValue(BASECOLOR, true).nColor;
     aStyleSettings.SetInactiveTabColor(aColor);

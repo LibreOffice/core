@@ -781,46 +781,6 @@
           </info>
         </prop>
       </group>
-      <group oor:name="WriterNotebookbarColor">
-        <info>
-          <desc>Allows to overwrite the Notebookbar background in Writer.</desc>
-        </info>
-        <prop oor:name="Color" oor:type="xs:int">
-          <info>
-            <desc>Specifies the color for the Notebookbar background color in Writer.</desc>
-          </info>
-        </prop>
-      </group>
-      <group oor:name="CalcNotebookbarColor">
-        <info>
-          <desc>Allows to overwrite the Notebookbar background in Calc.</desc>
-        </info>
-        <prop oor:name="Color" oor:type="xs:int">
-          <info>
-            <desc>Specifies the color for the Notebookbar background color in Calc.</desc>
-          </info>
-        </prop>
-      </group>
-      <group oor:name="ImpressNotebookbarColor">
-        <info>
-          <desc>Allows to overwrite the Notebookbar background in Impress.</desc>
-        </info>
-        <prop oor:name="Color" oor:type="xs:int">
-          <info>
-            <desc>Specifies the color for the Notebookbar background color in Impress.</desc>
-          </info>
-        </prop>
-      </group>
-      <group oor:name="DrawNotebookbarColor">
-        <info>
-          <desc>Allows to overwrite the Notebookbar background in Draw.</desc>
-        </info>
-        <prop oor:name="Color" oor:type="xs:int">
-          <info>
-            <desc>Specifies the color for the Notebookbar background color in Draw.</desc>
-          </info>
-        </prop>
-      </group>
       <group oor:name="BaseColor">
         <info>
           <desc>Allows to overwrite the system base color.</desc>
