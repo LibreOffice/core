@@ -14,15 +14,21 @@ namespace cool {
 	/// or undefined when the image is not in the cache yet.
 	export type BitmapLookup = (checksum: number) => HTMLImageElement | undefined;
 
+	/// A function that tells whether the font with the given id has been
+	/// loaded and registered, so it can be used for drawing.
+	export type FontLoadedLookup = (fontId: string) => boolean;
+
 	/// Renders JSON primitives with Canvas 2D drawing operations.
 	export class VectorPrimitiveRenderer {
 		private _bitmapLookup: BitmapLookup | undefined;
+		private _fontLoaded: FontLoadedLookup | undefined;
 		// Slide size in twips. The background primitive fills this rectangle.
 		private _slideWidth = 0;
 		private _slideHeight = 0;
 
-		constructor(bitmapLookup?: BitmapLookup) {
+		constructor(bitmapLookup?: BitmapLookup, fontLoaded?: FontLoadedLookup) {
 			this._bitmapLookup = bitmapLookup;
+			this._fontLoaded = fontLoaded;
 		}
 
 		/// Set the slide size in twips before rendering a primitive tree, so the
@@ -312,7 +318,15 @@ namespace cool {
 			const style = primitive.italic ? 'italic' : 'normal';
 			const weight =
 				VectorPrimitiveRenderer._FONT_WEIGHT_CSS[primitive.weight ?? 5] ?? 400;
-			const family = primitive.familyname ?? 'sans-serif';
+			// Prefer the exact face the engine sent, once it has loaded.
+			// Fall back to the family name otherwise.
+			let family = primitive.familyname ?? 'sans-serif';
+			if (
+				primitive.fontId !== undefined &&
+				this._fontLoaded &&
+				this._fontLoaded(primitive.fontId)
+			)
+				family = 'vecfont-' + primitive.fontId;
 
 			context.font = `${style} ${weight} ${fontSize}px "${family}"`;
 			// A matrix that only scales by the font size moves the

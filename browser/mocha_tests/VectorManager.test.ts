@@ -169,6 +169,36 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(data.masterPage.length, 1);
 	});
 
+	// A text portion names its font face by id. The manager asks the
+	// engine for that font so it can be loaded and used for an exact match.
+	it('requests the font a text portion names', function () {
+		const sent: string[] = [];
+		(app as any).socket.sendMessage = (message: string) => sent.push(message);
+
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			slideWidth: 1000,
+			slideHeight: 800,
+			objects: [
+				{
+					id: 1,
+					primitives: [
+						{ type: 'textSimplePortion', text: 'Hi', fontId: '1092a' } as any,
+					],
+				},
+			],
+		});
+
+		(app as any).socket.sendMessage = function () {};
+		nodeassert.ok(
+			sent.some(
+				(message) => message.indexOf('.uno:VectorRenderingFont?id=1092a') >= 0,
+			),
+			'a font request carries the portion font id',
+		);
+	});
+
 	// Discarding the whole cache forgets every part, so the next use
 	// starts a fresh fetch.
 	it('drops all cached parts when the cache is discarded', function () {

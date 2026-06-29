@@ -246,6 +246,12 @@ class RenderManager {
 		);
 	}
 
+	static handleVectorRenderingFontResponse(
+		values: cool.VectorRenderingFontResponse,
+	): void {
+		RenderManager.ensureInstance().handleVectorRenderingFontResponse(values);
+	}
+
 	static handleVectorPrimitivesDelta(
 		values: cool.VectorPrimitivesResponse,
 	): void {

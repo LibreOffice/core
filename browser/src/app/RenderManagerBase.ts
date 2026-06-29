@@ -187,6 +187,11 @@ class RenderManagerBase {
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
 
+	handleVectorRenderingFontResponse(
+		_values: cool.VectorRenderingFontResponse,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+	): void {}
+
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	handleVectorPrimitivesDelta(_values: cool.VectorPrimitivesResponse): void {}
 

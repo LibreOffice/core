@@ -403,6 +403,11 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			return;
 		}
 
+		if (values.type === 'vectorrenderingfont') {
+			RenderManager.handleVectorRenderingFontResponse(values);
+			return;
+		}
+
 		if (values.comments) {
 			var comments = Array.isArray(values.comments)
 				? values.comments

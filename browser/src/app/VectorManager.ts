@@ -22,8 +22,9 @@
 
 class VectorManager extends RenderManagerBase {
 	private _renderer: cool.VectorPrimitiveRenderer =
-		new cool.VectorPrimitiveRenderer((checksum) =>
-			this._bitmapCache.get(checksum),
+		new cool.VectorPrimitiveRenderer(
+			(checksum) => this._bitmaps.get(checksum),
+			(fontId) => this._fonts.has(fontId),
 		);
 
 	// Cached parsed JSON primitive tree keyed by part number.
@@ -36,20 +37,17 @@ class VectorManager extends RenderManagerBase {
 	private _inFlightParts: Set<number> = new Set();
 
 	// Decoded bitmap images keyed by their checksum.
-	private _bitmapCache: Map<number, HTMLImageElement> = new Map();
+	private _bitmaps = new VectorResourceTracker<number, HTMLImageElement>(
+		(checksum) =>
+			'commandvalues command=.uno:VectorRenderingGraphics?checksum=' +
+			String(checksum),
+	);
 
-	// Checksums for which a .uno:VectorRenderingGraphics request is
-	// in flight.
-	private _bitmapsInFlight: Set<number> = new Set();
-
-	// Checksums for which no usable image could be obtained. A repeat
-	// request would return the same answer.
-	private _unavailableBitmaps: Set<number> = new Set();
-
-	// Reverse index from bitmap checksum to the parts that reference
-	// it. Lets a freshly-decoded bitmap re-render only the affected
-	// thumbnails.
-	private _checksumToParts: Map<number, Set<number>> = new Map();
+	// Loaded font faces keyed by font id, registered on document.fonts
+	// under the family name "vecfont-<id>".
+	private _fonts = new VectorResourceTracker<string, FontFace>(
+		(fontId) => 'commandvalues command=.uno:VectorRenderingFont?id=' + fontId,
+	);
 
 	// Size and part of every preview that has been rendered. A redraw
 	// triggered by a decoded bitmap reuses these so the re-fired
@@ -146,10 +144,32 @@ class VectorManager extends RenderManagerBase {
 		);
 	}
 
+	/// Part a response applies to: the one it names, or the selected
+	/// part when it names none.
+	private _partFor(values: cool.VectorPrimitivesResponse): number {
+		return values.part !== undefined
+			? values.part
+			: this._docLayer._selectedPart;
+	}
+
+	/// Collect the bitmap checksums and font ids the walk visits,
+	/// remember the part uses them and request the missing ones.
+	private _collectResources(
+		part: number,
+		walk: (walker: cool.VectorResourceWalker) => void,
+	): void {
+		const checksums = new Set<number>();
+		const fontIds = new Set<string>();
+		walk(new cool.VectorResourceWalker(checksums, fontIds));
+		this._bitmaps.indexForPart(part, checksums);
+		this._bitmaps.requestMissing(checksums);
+		this._fonts.indexForPart(part, fontIds);
+		this._fonts.requestMissing(fontIds);
+	}
+
 	/// Handle a vector primitives response.
 	handleVectorPrimitivesResponse(values: cool.VectorPrimitivesResponse): void {
-		const part =
-			values.part !== undefined ? values.part : this._docLayer._selectedPart;
+		const part = this._partFor(values);
 
 		this._inFlightParts.delete(part);
 
@@ -168,12 +188,10 @@ class VectorManager extends RenderManagerBase {
 		};
 		this._cache.set(part, data);
 
-		const required = new Set<number>();
-		const walker = new cool.VectorBitmapWalker(required);
-		walker.walkPrimitives(masterPage);
-		walker.walkObjects(objects);
-		this._indexChecksumsForPart(part, required);
-		this._requestMissingBitmaps(required);
+		this._collectResources(part, (walker) => {
+			walker.walkPrimitives(masterPage);
+			walker.walkObjects(objects);
+		});
 
 		this._drainPending(part, data);
 		this._fireChanged();
@@ -186,8 +204,7 @@ class VectorManager extends RenderManagerBase {
 	/// ignored. A part that is not cached, or an order that names
 	/// content the client never had, falls back to a full re-fetch.
 	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
-		const part =
-			values.part !== undefined ? values.part : this._docLayer._selectedPart;
+		const part = this._partFor(values);
 
 		const cached = this._cache.get(part);
 		if (!cached) return;
@@ -230,12 +247,10 @@ class VectorManager extends RenderManagerBase {
 		if (values.masterPage)
 			cached.masterPage = values.masterPage.primitives || [];
 
-		const required = new Set<number>();
-		const walker = new cool.VectorBitmapWalker(required);
-		walker.walkObjects(values.objects || []);
-		if (values.masterPage) walker.walkPrimitives(cached.masterPage);
-		this._indexChecksumsForPart(part, required);
-		this._requestMissingBitmaps(required);
+		this._collectResources(part, (walker) => {
+			walker.walkObjects(values.objects || []);
+			if (values.masterPage) walker.walkPrimitives(cached.masterPage);
+		});
 
 		this._redrawRenderedPreviews(part);
 		this._fireChanged();
@@ -247,8 +262,8 @@ class VectorManager extends RenderManagerBase {
 	handleVectorRenderingGraphicsResponse(
 		values: cool.VectorRenderingGraphicsResponse,
 	): void {
-		if (this._bitmapCache.has(values.checksum)) {
-			this._bitmapsInFlight.delete(values.checksum);
+		if (this._bitmaps.has(values.checksum)) {
+			this._bitmaps.clearInFlight(values.checksum);
 			return;
 		}
 		if (!values.data) {
@@ -262,9 +277,8 @@ class VectorManager extends RenderManagerBase {
 		// Add to the cache only on a successful decode. Clear
 		// the in-flight mark on either outcome.
 		image.onload = () => {
-			this._bitmapCache.set(values.checksum, image);
-			this._bitmapsInFlight.delete(values.checksum);
-			this._redrawPreviewsFor(values.checksum);
+			this._bitmaps.setLoaded(values.checksum, image);
+			this._redrawPartsUsing(this._bitmaps.partsFor(values.checksum));
 			this._fireChanged();
 		};
 		image.onerror = () => {
@@ -285,23 +299,10 @@ class VectorManager extends RenderManagerBase {
 				' is unavailable: ' +
 				reason,
 		);
-		this._unavailableBitmaps.add(checksum);
-		this._bitmapsInFlight.delete(checksum);
+		this._bitmaps.setUnavailable(checksum);
 	}
 
-	private _indexChecksumsForPart(part: number, checksums: Set<number>): void {
-		for (const checksum of checksums) {
-			let parts = this._checksumToParts.get(checksum);
-			if (!parts) {
-				parts = new Set<number>();
-				this._checksumToParts.set(checksum, parts);
-			}
-			parts.add(part);
-		}
-	}
-
-	private _redrawPreviewsFor(checksum: number): void {
-		const parts = this._checksumToParts.get(checksum);
+	private _redrawPartsUsing(parts: Set<number> | undefined): void {
 		if (!parts) return;
 		for (const part of parts) {
 			this._redrawRenderedPreviews(part);
@@ -319,17 +320,45 @@ class VectorManager extends RenderManagerBase {
 		}
 	}
 
-	private _requestMissingBitmaps(checksums: Set<number>): void {
-		for (const checksum of checksums) {
-			if (this._bitmapCache.has(checksum)) continue;
-			if (this._bitmapsInFlight.has(checksum)) continue;
-			if (this._unavailableBitmaps.has(checksum)) continue;
-			this._bitmapsInFlight.add(checksum);
-			app.socket.sendMessage(
-				'commandvalues command=.uno:VectorRenderingGraphics?checksum=' +
-					String(checksum),
-			);
+	/// Handle a fetched font: register it as a FontFace under a synthetic
+	/// family name and re-render the parts that use it. The face is added
+	/// to the document only after it loads, so a failed decode leaves the
+	/// renderer on the family-name fallback.
+	handleVectorRenderingFontResponse(
+		values: cool.VectorRenderingFontResponse,
+	): void {
+		const fontId = values.fontId;
+		if (this._fonts.has(fontId)) {
+			this._fonts.clearInFlight(fontId);
+			return;
 		}
+		if (!values.data) {
+			// The engine does not hold the id.
+			this._fonts.setUnavailable(fontId);
+			return;
+		}
+		const face = new FontFace(
+			'vecfont-' + fontId,
+			this._decodeFontData(values.data),
+		);
+		face
+			.load()
+			.then(() => {
+				(document as unknown as { fonts: Set<FontFace> }).fonts.add(face);
+				this._fonts.setLoaded(fontId, face);
+				this._redrawPartsUsing(this._fonts.partsFor(fontId));
+				this._fireChanged();
+			})
+			.catch(() => {
+				this._fonts.setUnavailable(fontId);
+			});
+	}
+
+	private _decodeFontData(base64: string): ArrayBuffer {
+		const binary = window.atob(base64);
+		const bytes = new Uint8Array(binary.length);
+		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+		return bytes.buffer;
 	}
 
 	/// Drop cached data for a part and any in-flight state.
@@ -353,11 +382,11 @@ class VectorManager extends RenderManagerBase {
 		this._cache.clear();
 		this._inFlightParts.clear();
 		this._pendingPreviews.clear();
-		this._bitmapCache.clear();
-		this._bitmapsInFlight.clear();
-		this._unavailableBitmaps.clear();
-		this._checksumToParts.clear();
+		this._bitmaps.clear();
 		this._renderedPreviews.clear();
+		for (const face of this._fonts.values())
+			(document as unknown as { fonts: Set<FontFace> }).fonts.delete(face);
+		this._fonts.clear();
 		this._fireChanged();
 	}
 

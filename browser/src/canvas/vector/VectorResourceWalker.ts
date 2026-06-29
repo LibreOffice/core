@@ -10,13 +10,16 @@
  */
 
 namespace cool {
-	/// Walk a JSON primitive tree and collect the checksums of every
-	/// image-bearing primitive seen. Recurses into the children container.
-	export class VectorBitmapWalker {
+	/// Walk a JSON primitive tree and collect the checksum of every
+	/// image-bearing primitive and the font id of every text portion
+	/// seen. Recurses into the children container.
+	export class VectorResourceWalker {
 		private _checksums: Set<number>;
+		private _fontIds: Set<string>;
 
-		constructor(checksums: Set<number>) {
+		constructor(checksums: Set<number>, fontIds: Set<string>) {
 			this._checksums = checksums;
+			this._fontIds = fontIds;
 		}
 
 		walkObjects(objects: SlideObject[]): void {
@@ -32,6 +35,8 @@ namespace cool {
 		private _walkPrimitive(primitive: Primitive): void {
 			if (GraphicResource.is(primitive))
 				this._checksums.add(primitive.checksum);
+			const fontId = (primitive as TextSimplePortionPrimitive).fontId;
+			if (typeof fontId === 'string') this._fontIds.add(fontId);
 			if (primitive.children) this.walkPrimitives(primitive.children);
 		}
 	}

@@ -366,6 +366,7 @@ COOL_JS_LST =\
 	src/app/Tile.ts \
 	src/app/RenderManagerBase.ts \
 	src/app/BitmapTileManager.ts \
+	src/app/VectorResourceTracker.ts \
 	src/app/VectorManager.ts \
 	src/app/TilesMiddleware.ts \
 	src/app/SearchService.ts \
@@ -454,10 +455,11 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/TextSimplePortionPrimitive.ts \
 	src/canvas/vector/primitive/TransformPrimitive.ts \
 	src/canvas/vector/primitive/UnifiedTransparencePrimitive.ts \
-	src/canvas/vector/VectorBitmapWalker.ts \
+	src/canvas/vector/VectorResourceWalker.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \
 	src/canvas/vector/VectorRenderingGraphicsResponse.ts \
+	src/canvas/vector/VectorRenderingFontResponse.ts \
 	src/canvas/vector/VectorPrimitivesData.ts \
 	src/canvas/vector/VectorPrimitivesResponse.ts \
 	src/canvas/vector/VectorContentSection.ts \

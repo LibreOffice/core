@@ -21,6 +21,11 @@ namespace cool {
 	/// Font shape: familyname, optional stylename, weight as a number
 	/// from 0 to 10 where 0 is unknown and 5 is normal, and italic,
 	/// outline, rtl and monospaced as optional booleans.
+	///
+	/// fontId, when present, identifies the exact font face the engine
+	/// rendered this run with. The face's file can be fetched by that id
+	/// and, once loaded, used in place of the family name for an exact
+	/// match.
 	export interface TextSimplePortionPrimitive extends Primitive {
 		type: typeof TextSimplePortionPrimitive.type;
 		text?: string;
@@ -39,6 +44,7 @@ namespace cool {
 		rtl?: boolean;
 		monospaced?: boolean;
 		dxarray?: number[];
+		fontId?: string;
 	}
 
 	export namespace TextSimplePortionPrimitive {
