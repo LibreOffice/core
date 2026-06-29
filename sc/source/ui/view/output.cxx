@@ -1077,7 +1077,9 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
     // See more about bWorksInPixels in ScOutputData::DrawGrid
     bool bWorksInPixels = (meType == OUTTYPE_WINDOW);
-    const tools::Long nOneX = bWorksInPixels ? 1 : nOneXLogic;
+    // tdf#135891 - avoid visible gaps for metafile and window output as in ScOutputData::DrawGrid
+    const tools::Long nOneX = (bWorksInPixels || mbMetaFile) ? 1 : nOneXLogic;
+    const tools::Long nOneY = (bWorksInPixels || mbMetaFile) ? 1 : nOneYLogic;
     const tools::Long nLayoutSign = mbLayoutRTL ? -1 : 1;
     const tools::Long nSignedOneX = nOneX * nLayoutSign;
 
@@ -1128,8 +1130,8 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if ( mbLayoutRTL )
                     nPosX += mnMirrorW - nOneX;
 
-                // tdf#135891 - adjust the x position to ensure the correct starting point
-                if (!bWorksInPixels)
+                // tdf#135891 - adjust the x position for printer output
+                if (!bWorksInPixels && !mbMetaFile)
                     nPosX -= nLayoutSign + 1;
 
                 aRect = tools::Rectangle(nPosX, nPosY - 1, nPosX, nPosY - 1 + nRowHeight);
@@ -1212,11 +1214,14 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     if (bWorksInPixels)
                         nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                    drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
+                    // tdf#135891 - use adjusted nOneX/nOneY to avoid white gaps between colored cells
+                    drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect,
+                              nPosXLogic, nLayoutSign, nOneX, nOneY, pDataBarInfo, pOldDataBarInfo,
+                              pIconSetInfo, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
                     nPosX = nNewPosX;
-                    // tdf#135891 - adjust the x position to ensure the correct starting point
-                    if (!bWorksInPixels && nX == mnX1)
+                    // tdf#135891 - adjust the x position for printer output
+                    if (!bWorksInPixels && !mbMetaFile && nX == mnX1)
                         nPosX += nSignedOneX + 1;
                 }
 
@@ -1224,7 +1229,10 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if (bWorksInPixels)
                     nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                drawCells(rRenderContext, std::optional<Color>(), nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
+                // tdf#135891 - use adjusted nOneX/nOneY to avoid white gaps between colored cells
+                drawCells(rRenderContext, std::optional<Color>(), nullptr, pOldColor,
+                          pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneX, nOneY, nullptr,
+                          pOldDataBarInfo, nullptr, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
                 nArrY += nSkip;
 
