@@ -44,6 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #include <uno/current_context.hxx>
 #include <utility>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <boost/property_tree/json_parser.hpp>
@@ -51,6 +52,7 @@
 
 #include <sfx2/app.hxx>
 #include <unoctitm.hxx>
+#include <sfx2/module.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/ctrlitem.hxx>
@@ -1101,7 +1103,21 @@ OString SizePayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateEve
 {
     OStringBuffer aBuffer(aEvent.FeatureURL.Complete.toUtf8() + "=");
     if (css::awt::Size aSize; aEvent.IsEnabled && (aEvent.State >>= aSize))
-        aBuffer.append(OString::number(aSize.Width) + " x " + OString::number(aSize.Height));
+    {
+        FieldUnit eUnit = SfxModule::GetCurrentFieldUnit();
+        // Format a dimension in mm100 as a string with 2 decimal places.
+        auto formatDim = [eUnit](sal_Int32 nVal) -> OString {
+            // Multiply by 100 so the result has 2 implicit decimal places.
+            sal_Int64 nConv = vcl::ConvertValue(static_cast<sal_Int64>(nVal) * 100,
+                                               0, 0, FieldUnit::MM_100TH, eUnit);
+            sal_Int64 nInt = nConv / 100;
+            sal_Int64 nFrac = nConv % 100;
+            return OString::number(nInt) + "."
+                   + (nFrac < 10 ? "0"_ostr : OString()) + OString::number(nFrac);
+        };
+        OString aUnit = eUnit == FieldUnit::INCH ? "\"" : " cm";
+        aBuffer.append(formatDim(aSize.Width) + aUnit + " x " + formatDim(aSize.Height) + aUnit);
+    }
     return aBuffer.makeStringAndClear();
 }
 
@@ -1471,7 +1487,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"FreezePanesColumn", { PayloadType::PointPayload, true } },
         { u"FreezePanesRow", { PayloadType::PointPayload, true } },
 
-        { u"Size", { PayloadType::SizePayload, false } },
+        { u"Size", { PayloadType::SizePayload, true } },
 
         { u"LanguageStatus", { PayloadType::StringOrStrSeqPayload, true } },
         { u"StatePageNumber", { PayloadType::StringOrStrSeqPayload, true } },

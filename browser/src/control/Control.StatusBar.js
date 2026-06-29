@@ -47,6 +47,25 @@ class StatusBar extends JSDialog.Toolbar {
 		return localizedText;
 	}
 
+	// Context strings sent by core when a drawn object (shape, image, etc.) is selected.
+	_isDrawContext(context) {
+		const drawContexts = ['Draw', 'DrawLine', '3DObject', 'MultiObject', 'Graphic', 'DrawFontwork', 'OLE'];
+		return drawContexts.indexOf(context) >= 0;
+	}
+
+	_updateSpreadsheetDrawVisibility(inDrawContext) {
+		if (this.map.getDocType() !== 'spreadsheet')
+			return;
+		if (!window.mode.isSmallScreenDevice()) {
+			this.showItem('statusdocpos-container', !inDrawContext);
+			this.showItem('rowcolselcount-container', !inDrawContext);
+			this.showItem('statetablecell-container', !inDrawContext);
+			this.showItem('StateTableCellMenu', !inDrawContext && !this.map.isReadOnlyMode());
+			this.showItem('statetablebreak', !inDrawContext && !this.map.isReadOnlyMode());
+			this.showItem('shapesize-container', inDrawContext);
+		}
+	}
+
 	_updateToolbarsVisibility(context) {
 		var isReadOnly = this.map.isReadOnlyMode();
 		if (isReadOnly) {
@@ -57,6 +76,7 @@ class StatusBar extends JSDialog.Toolbar {
 			this.enableItem('languagestatus', true);
 		}
 		this.updateVisibilityForToolbar(context);
+		this._updateSpreadsheetDrawVisibility(this._isDrawContext(context));
 	}
 
 	onContextChange(event) {
@@ -233,6 +253,7 @@ class StatusBar extends JSDialog.Toolbar {
 		return [
 			this._generateHtmlItem('statusdocpos'), 					// spreadsheet
 			this._generateHtmlItem('rowcolselcount', 1), 					// spreadsheet
+			this._generateHtmlItem('shapesize', 1),						// spreadsheet (shape selected)
 			this._generateHtmlItem('statepagenumber'), 					// text
 			this._generateHtmlItem('statewordcount', 1), 					// text
 			this._generateHtmlItem('insertmode', 5),						// spreadsheet, text
@@ -635,6 +656,9 @@ class StatusBar extends JSDialog.Toolbar {
 		else if (commandName === '.uno:StatusSelectionMode' || commandName === '.uno:SelectionMode') {
 			$('#statusselectionmode-container').attr('default-state', state === '0' || null);
 			this.updateHtmlItem('StatusSelectionMode', state ? window.L.Styles.selectionMode[state] : _('Selection mode: inactive'), !state);
+		}
+		else if (commandName === '.uno:Size') {
+			this.updateHtmlItem('ShapeSize', state ? state : ' ');
 		}
 		else if (commandName == '.uno:StateTableCell') {
 			this.updateHtmlItem('StateTableCell', state ? this.localizeStateTableCell(state) : ' ');

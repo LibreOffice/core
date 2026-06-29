@@ -67,6 +67,11 @@ function getStatusbarItemMetadata(id: string): StatusbarItemMetadata {
 				cooltip: _('Choice of functions'),
 				configLabel: _('Table Cell Functions'),
 			};
+		case 'shapesize':
+			return {
+				cooltip: _('Size of selected shape'),
+				configLabel: _('Shape Size'),
+			};
 		case 'prevpage': {
 			const docType = app.map && app.map.getDocType ? app.map.getDocType() : '';
 			const label =
@@ -256,6 +261,15 @@ function getDocumentStatusElements(text: string, builder: any) {
 	return docstat;
 }
 
+function getShapeSizeElements(text: string, builder: any) {
+	return getStatusbarItemElement(
+		'ShapeSize',
+		getStatusbarItemMetadata('shapesize').cooltip,
+		text,
+		builder,
+	);
+}
+
 function getShowCommentsStatusElements(text: string, builder: any) {
 	return getStatusbarItemElement(
 		'ShowComments',
@@ -322,6 +336,7 @@ var getElementsFromId = function (
 		return getPageStatusElements(data.text, builder);
 	else if (id === 'documentstatus')
 		return getDocumentStatusElements(data.text, builder);
+	else if (id === 'shapesize') return getShapeSizeElements(data.text, builder);
 };
 
 function htmlContent(
