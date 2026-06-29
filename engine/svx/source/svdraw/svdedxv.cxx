@@ -1676,8 +1676,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     SdrUndoManager* pUndoEditUndoManager = nullptr;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
-    if (IsUndoEnabled() && pTEObj && mpTextEditOutliner
-        && !GetModel().GetDisableTextEditUsesCommonUndoManager())
+    if (mpTextEditOutliner && mpLocalTextEditUndoManager)
     {
         // change back the UndoManager to the remembered original one
         SfxUndoManager* pOriginal = mpTextEditOutliner->SetUndoManager(mpOldTextEditUndoManager);
