@@ -266,7 +266,7 @@ describe(['tagdesktop'], 'Change cell appearance.', { testIsolation: false }, fu
 		helper.waitForMapState('.uno:LineStyle', 'enabled');
 		cy.cGet('.notebookbar .unoSetBorderStyle .arrowbackground').click();
 		cy.cGet('.ui-dialog-content').should('be.visible');
-		cy.cGet('body').contains('.ui-combobox-entry', 'Line style').trigger('mouseover');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Line style').trigger('mouseenter');
 		cy.cGet('body').contains('.ui-combobox-entry', 'Extra thick (4.50 pt)').should('be.visible').click();
 
 		// The border grows past the one pixel default once the line style is applied.

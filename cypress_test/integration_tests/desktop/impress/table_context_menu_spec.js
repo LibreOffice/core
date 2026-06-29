@@ -39,15 +39,13 @@ describe(['tagdesktop'], 'Table context menu operations', function() {
 	}
 
 	// Open a context-menu submenu by its label and return the requested entry
-	// from the submenu dropdown that pops up. The submenu opens on hover (see
-	// the mouseover handler in Widget.Combobox.js) as a separate dropdown
-	// overlay whose id is derived from the parent menu id. We match on the
-	// ui-has-menu class so we target the submenu entry rather than a leaf entry
-	// that happens to share the label (e.g. the injected ".uno:Delete").
+	// from the submenu dropdown that pops up. The submenu opens on mouseenter.
+	// We match on the ui-has-menu class so we target the submenu entry rather
+	// than a leaf entry that happens to share the label (e.g. ".uno:Delete").
 	function contextSubMenuItem(submenuText, itemText) {
 		cy.cGet('#jsd-context-menu-dropdown-overlay .ui-combobox-entry.ui-has-menu')
 			.contains('span', submenuText)
-			.trigger('mouseover');
+			.trigger('mouseenter');
 		return cy.cGet('[id^="jsd-context-menu-"][id$="-dropdown-overlay"]')
 			.contains('.ui-combobox-entry.jsdialog.ui-grid-cell span', itemText);
 	}

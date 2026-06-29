@@ -581,7 +581,18 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		app.layoutingService.appendLayoutingTask(() => { this.setupInitialFocus(instance); });
 
 		if (instance.isDropdown && instance.isSubmenu) {
-			instance.container.addEventListener('mouseleave', () => {
+			instance.container.addEventListener('mouseleave', (event) => {
+				// Close the submenu only when the mouse leaves the parent
+				// entry. Ignore the event when relatedTarget is the parent
+				// entry element or one of its children. This covers the case
+				// where the user moves back to the parent entry, and the case
+				// where the browser fires a synthetic mouseleave because the
+				// container was repositioned after being placed in the DOM.
+				const parentEntry = instance.popupParent;
+				if (parentEntry && event.relatedTarget instanceof Node
+						&& (parentEntry === event.relatedTarget
+							|| parentEntry.contains(event.relatedTarget)))
+					return;
 				instance.builder.callback('combobox', 'hidedropdown', {id: instance.id}, null, instance.builder);
 			});
 		}
@@ -1217,6 +1228,11 @@ window.L.Control.JSDialog = window.L.Control.extend({
 					instance.replacedContainer.replaceWith(instance.container);
 				} else {
 					instance.container.classList.add('fadein');
+					// Pre-position before append so the container appears at the
+					// correct location immediately rather than jumping from the CSS
+					// default position.
+					if (instance.isDropdown && instance.isSubmenu)
+						instance.updatePos();
 					dialogDomParent.append(instance.container);
 				}
 

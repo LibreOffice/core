@@ -54,7 +54,7 @@ describe(['tagdesktop'], 'Wordbook upload.', function() {
 		cy.cGet('#jsd-context-menu-dropdown-overlay').should('be.visible');
 		cy.cGet('#jsd-context-menu-dropdown-overlay .ui-combobox-entry.ui-has-menu')
 			.contains('span', 'Add to Dictionary')
-			.trigger('mouseover');
+			.trigger('mouseenter');
 
 		cy.cGet('#jsd-context-menu-dropdown-overlay .ui-combobox-entry')
 			.contains('span', 'standard.dic')

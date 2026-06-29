@@ -112,14 +112,31 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 		}
 	});
 
+	entry.addEventListener('mouseenter', function () {
+		const grid = entry.parentElement;
+		if (!grid)
+			return;
+		const openEntries = grid.querySelectorAll('.has-open-submenu');
+		for (let i = 0; i < openEntries.length; i++) {
+			if (openEntries[i] !== entry && openEntries[i].getAttribute('aria-expanded') !== 'true')
+				openEntries[i].classList.remove('has-open-submenu');
+		}
+	});
+
 	if (data.hasSubMenu) {
 		entry.setAttribute('aria-haspopup', true);
 		entry.setAttribute('aria-expanded', false);
-		entry._onDropDown = function(open) {
+		const onDropDown = function(open) {
 			entry.setAttribute('aria-expanded', open);
+			if (open)
+				entry.classList.add('has-open-submenu');
+			else
+				entry.classList.remove('has-open-submenu');
 		};
+		entry._onDropDown = onDropDown;
+		parentContainer._onDropDown = onDropDown;
 
-		entry.addEventListener('mouseover', function () {
+		entry.addEventListener('mouseenter', function () {
 			builder.callback('combobox', 'showsubmenu', {id: data.comboboxId}, entryData, builder);
 		});
 	}

@@ -237,14 +237,22 @@ JSDialog.OpenDropdown = function (
 
 			if (eventType === 'selected' || eventType === 'showsubmenu') {
 				if (entry && entry.items) {
+					// The submenu for this entry is already open; keep it.
+					if (lastSubMenuOpened === subMenuId) return;
+
 					closeLastSubMenu();
 
 					// open submenu
+					// Use the entry's known ID to find the DOM element that will become
+					// popupParent. Positional lookup via querySelectorAll('.ui-grid-cell')
+					// is unreliable because the grid renderer inserts an empty placeholder
+					// cell at position 0, shifting every real entry by one slot.
 					const dropdown = JSDialog.GetDropdown(object.id);
-					const allEntries = dropdown.querySelectorAll('.ui-grid-cell');
-					const index = pos + 1;
-					const targetEntry =
-						allEntries && allEntries.length > index ? allEntries[index] : null;
+					const entryId = object.id + '-entry-' + pos;
+					const targetEntry = dropdown
+						? dropdown.querySelector('[id="' + entryId + '"]')
+						: null;
+
 					JSDialog.OpenDropdown(
 						subMenuId,
 						targetEntry,

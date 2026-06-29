@@ -1744,8 +1744,14 @@ img.context-menu-icon {
 	pointer-events: none;
 }
 
+.ui-combobox-entry.has-open-submenu {
+	background-color: var(--color-background-hover);
+}
+
 [id^='comment-menu-'][id$='-entries'] .ui-combobox-entry:hover,
-#jsd-context-menu-entries .ui-combobox-entry:hover {
+#jsd-context-menu-entries .ui-combobox-entry:hover,
+[id^='comment-menu-'][id$='-entries'] .ui-combobox-entry.has-open-submenu,
+#jsd-context-menu-entries .ui-combobox-entry.has-open-submenu {
 	background-color: var(--color-background-darker) !important;
 	color: var(--color-text-darker) !important;
 }
