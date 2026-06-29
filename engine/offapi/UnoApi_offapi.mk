@@ -2470,7 +2470,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XFrame2 \
 	XFrameActionListener \
 	XFrameLoader \
-	XFrameSetModel \
 	XFrames \
 	XFramesSupplier \
 	XGlobalEventBroadcaster \

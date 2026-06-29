@@ -7481,11 +7481,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      /** @deprecated */ string detect([in] string URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Argumentlist);
     };
-    /** @deprecated */ published interface XFrameSetModel {
-     interface ::com::sun::star::uno::XInterface;
-     string getSource();
-     void setSource([in] string Source);
-    };
     published interface XInterceptorInfo {
      interface ::com::sun::star::uno::XInterface;
      sequence< string > getInterceptedURLs();
