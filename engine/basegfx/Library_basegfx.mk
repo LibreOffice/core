@@ -41,6 +41,7 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
     basegfx/source/matrix/b2dhommatrixtools \
     basegfx/source/matrix/b3dhommatrix \
     basegfx/source/matrix/b3dhommatrixtools \
+    basegfx/source/numeric/CyclicTridiagonalSolver \
     basegfx/source/numeric/ftools \
     basegfx/source/numeric/GaussianElimination \
     basegfx/source/numeric/TridiagonalSolver \
