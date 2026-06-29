@@ -12,8 +12,7 @@
  * Document parts switching and selecting handler
  */
 
-/* global app _ cool */
-/* global _ JSDialog app OtherViewCellCursorSection RenderManager TextCursorSection OtherViewGraphicSelectionSection */
+/* global _ app cool JSDialog OtherViewCellCursorSection RenderManager TextCursorSection OtherViewGraphicSelectionSection */
 
 window.L.Map.include({
 	/*
