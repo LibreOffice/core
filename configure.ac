@@ -2685,21 +2685,34 @@ if test "$enable_windowsapp" = "yes"; then
     CODA_CCACHE=
     AC_ARG_WITH([coda-ccache],
         AS_HELP_STRING([--with-coda-ccache=PATH],
-            [Path to the ccache program used to wrap the windows app
-             clang-cl compiles. Defaults to the ccache found on PATH; pass
+            [Path to the Windows ccache.exe used to wrap the windows app
+             clang-cl compiles. Defaults to the ccache.exe found on PATH; pass
              --without-coda-ccache to build without it.]))
-    coda_ccache_prog=
+    dnl configure runs on WSL or Cygwin, but MSBuild runs the shim as a native
+    dnl Windows process, so the shim must be a Windows ccache.exe, never the
+    dnl Linux ccache that sits on the WSL PATH. Search for ccache.exe so that
+    dnl Linux ccache is passed over. (Cygwin resolves the bare name to
+    dnl ccache.exe anyway, so spelling out the .exe costs it nothing.)
+    coda_ccache_exe=
     AS_IF([test "$with_coda_ccache" = "no"],
-              [coda_ccache_prog=no],
+              [coda_ccache_exe=no],
           [test -n "$with_coda_ccache" -a "$with_coda_ccache" != "yes"],
-              [coda_ccache_prog="$with_coda_ccache"],
-          [AC_PATH_PROG([coda_ccache_prog], [ccache])])
-    AS_IF([test -n "$coda_ccache_prog" -a "$coda_ccache_prog" != "no"],
+              [coda_ccache_exe="$with_coda_ccache"],
+          [AC_PATH_PROG([coda_ccache_exe], [ccache.exe])])
+    dnl A Windows executable starts with the "MZ" DOS signature. If what we
+    dnl found is something else (e.g. a Linux ELF ccache picked up from the WSL
+    dnl PATH), warn and build without ccache rather than installing a shim that
+    dnl Windows refuses to run as an "Unsupported 16-Bit Application".
+    AS_IF([test -n "$coda_ccache_exe" -a "$coda_ccache_exe" != "no"],
+        [AS_IF([test "`head -c 2 "$coda_ccache_exe" 2>/dev/null`" != "MZ"],
+            [AC_MSG_WARN([$coda_ccache_exe is not a Windows executable; building without ccache. Install a Windows ccache.exe and pass --with-coda-ccache=PATH to cache the clang-cl compiles.])
+             coda_ccache_exe=no])])
+    AS_IF([test -n "$coda_ccache_exe" -a "$coda_ccache_exe" != "no"],
         [coda_ccache_shim="`pwd`/windows/coda/ccache-shim"
          AS_MKDIR_P([$coda_ccache_shim])
          rm -f "$coda_ccache_shim/clang-cl.exe"
-         ln "$coda_ccache_prog" "$coda_ccache_shim/clang-cl.exe" 2>/dev/null \
-             || cp -f "$coda_ccache_prog" "$coda_ccache_shim/clang-cl.exe"
+         ln "$coda_ccache_exe" "$coda_ccache_shim/clang-cl.exe" 2>/dev/null \
+             || cp -f "$coda_ccache_exe" "$coda_ccache_shim/clang-cl.exe"
          AS_IF([command -v wslpath >/dev/null 2>&1],
                    [CODA_CCACHE=`wslpath -w "$coda_ccache_shim"`],
                [command -v cygpath >/dev/null 2>&1],
