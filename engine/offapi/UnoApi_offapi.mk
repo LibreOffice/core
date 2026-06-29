@@ -2515,7 +2515,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XUIControllerFactory \
 	XUIControllerRegistration \
 	XUntitledNumbers \
-	XUrlList \
 	XWindowArranger \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame/status,\

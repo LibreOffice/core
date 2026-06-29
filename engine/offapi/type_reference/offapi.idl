@@ -7512,10 +7512,6 @@ module com {
      void queryTermination([in] ::com::sun::star::lang::EventObject Event) raises (::com::sun::star::frame::TerminationVetoException);
      void notifyTermination([in] ::com::sun::star::lang::EventObject Event);
     };
-    /** @deprecated */ published interface XUrlList {
-     interface ::com::sun::star::uno::XInterface;
-     [attribute] sequence< string > List;
-    };
     published singleton theDesktop: ::com::sun::star::frame::XDesktop2;
    };
    module graphic {
