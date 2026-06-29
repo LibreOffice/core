@@ -1616,7 +1616,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	// navigate the slides right away. Only take focus while it still rests
 	// on the document itself; if the user has already moved it to another
 	// control, leave it where they put it.
-	_focusCurrentSlideOnLoad: function () {
+	_focusCurrentSlideOnLoad: function (e) {
+		if (!e || !e.status)
+			return;
 		if (!this._previewInitialized)
 			return;
 
