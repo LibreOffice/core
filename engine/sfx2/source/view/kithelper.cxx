@@ -860,6 +860,11 @@ OString KitHelper::makeVisCursorInvalidation(int nViewId, const OString& rRectan
     }
 }
 
+OString KitHelper::makeModifiedStatusPayload(bool bModified)
+{
+    return bModified ? ".uno:ModifiedStatus=true"_ostr : ".uno:ModifiedStatus=false"_ostr;
+}
+
 void KitHelper::notifyAllViews(int nType, const OString& rPayload)
 {
     if (DisableCallbacks::disabled())

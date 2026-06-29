@@ -207,6 +207,9 @@ public:
     /// Notifies all views with the given type and payload.
     static void notifyAllViews(int nType, const OString& rPayload);
 
+    /// Builds the ".uno:ModifiedStatus=true" or "...=false" state-change payload.
+    static OString makeModifiedStatusPayload(bool bModified);
+
     /// Dispatches a callback to a single view identified by its view id.
     static void notifyView(int nViewId, int nType, const OString& rPayload);
 

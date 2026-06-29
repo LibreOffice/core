@@ -3412,6 +3412,15 @@ void SfxViewShell::viewAddPendingInvalidateTiles()
 void SfxViewShell::afterCallbackRegistered()
 {
     KIT_INFO("sfx.view", "SfxViewShell::afterCallbackRegistered invoked");
+
+    // SfxObjectShell::ModifyChanged broadcasts ModifiedStatus to all views, but only
+    // when the modified flag actually changes. A view that registers after the document
+    // was already modified missed that broadcast, so tell this view it is modified now.
+    // A view that joins an unmodified document already starts unmodified, so it needs no
+    // notification and we leave that state alone.
+    if (SfxObjectShell* pObjShell = GetObjectShell(); pObjShell && pObjShell->IsModified())
+        viewCallback(KIT_CALLBACK_STATE_CHANGED, KitHelper::makeModifiedStatusPayload(true));
+
     if (GetKitAccessibilityState())
     {
         KitDocumentFocusListener& rDocFocusListener = GetKitDocumentFocusListener();

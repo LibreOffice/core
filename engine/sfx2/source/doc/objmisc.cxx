@@ -350,9 +350,8 @@ void SfxObjectShell::ModifyChanged()
         SfxViewShell* pCurrent = SfxViewShell::Current();
         if ( pCurrent && pCurrent->GetObjectShell() == this )
         {
-            OString aStatus = ".uno:ModifiedStatus="_ostr;
-            aStatus += IsModified() ? "true" : "false";
-            KitHelper::notifyAllViews(KIT_CALLBACK_STATE_CHANGED, aStatus);
+            KitHelper::notifyAllViews(KIT_CALLBACK_STATE_CHANGED,
+                                      KitHelper::makeModifiedStatusPayload(IsModified()));
         }
     }
 }
