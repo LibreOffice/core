@@ -111,7 +111,6 @@ namespace dbaui
         bool                        bEnabled;
 
         std::optional<bool> bChecked;
-        cpo::uno::Any               aValue;
         std::optional<OUString> sTitle;
 
         FeatureState() : bEnabled(false) { }

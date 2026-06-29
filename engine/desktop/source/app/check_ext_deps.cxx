@@ -69,15 +69,12 @@ class SilentCommandEnv
                                       task::XInteractionHandler,
                                       ucb::XProgressHandler >
 {
-    uno::Reference<uno::XComponentContext> mxContext;
     Desktop    *mpDesktop;
     sal_Int32   mnLevel;
     sal_Int32   mnProgress;
 
 public:
-    SilentCommandEnv(
-        uno::Reference<uno::XComponentContext> xContext,
-        Desktop* pDesktop );
+    SilentCommandEnv( Desktop* pDesktop );
     virtual ~SilentCommandEnv() override;
 
     // XCommandEnvironment
@@ -98,9 +95,7 @@ public:
 
 
 SilentCommandEnv::SilentCommandEnv(
-    uno::Reference<uno::XComponentContext> xContext,
     Desktop* pDesktop ):
-    mxContext(std::move( xContext )),
     mpDesktop( pDesktop ),
     mnLevel( 0 ),
     mnProgress( 25 )
@@ -334,7 +329,7 @@ void Desktop::SynchronizeExtensionRepositories(bool bCleanedExtensionCache, Desk
     const uno::Reference< uno::XComponentContext >& context(
         comphelper::getProcessComponentContext());
     uno::Reference< ucb::XCommandEnvironment > silent(
-        new SilentCommandEnv(context, pDesktop));
+        new SilentCommandEnv(pDesktop));
     if (bCleanedExtensionCache) {
         deployment::ExtensionManager::get(context)->reinstallDeployedExtensions(
             true, u"user"_ustr, Reference<task::XAbortChannel>(), silent);

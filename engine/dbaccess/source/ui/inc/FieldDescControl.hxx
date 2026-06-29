@@ -60,7 +60,6 @@ namespace dbaui
         std::unique_ptr<weld::Container> m_xContainer;
 
         weld::Widget* m_pLastFocusWindow;
-        weld::Widget* m_pActFocusWindow;
 
         std::unique_ptr<weld::Label>   m_xDefaultText;
         std::unique_ptr<weld::Label>   m_xRequiredText;
@@ -90,8 +89,6 @@ namespace dbaui
 
         std::unique_ptr<weld::Button>  m_xFormat;
 
-        Link<weld::Widget&, void> m_aControlFocusIn;
-
         TOTypeInfoSP            m_pPreviousType;
         short                   m_nPos;
         OUString                aYes;
@@ -106,7 +103,6 @@ namespace dbaui
 
         // used by ActivatePropertyField
         DECL_LINK( OnControlFocusLost, weld::Widget&, void );
-        DECL_LINK( OnControlFocusGot, weld::Widget&, void );
 
         void                UpdateFormatSample(OFieldDescription const * pFieldDescr);
 

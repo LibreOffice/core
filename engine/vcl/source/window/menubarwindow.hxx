@@ -60,12 +60,6 @@ class MenuBarWindow : public vcl::Window, public MenuWindow
     friend class Menu;
 
 private:
-    struct AddButtonEntry
-    {
-        Link<MenuBarButtonCallbackArg&,bool>  m_aSelectLink;
-        Link<MenuBarButtonCallbackArg&,bool>  m_aHighlightLink;
-    };
-
     VclPtr<MenuBar>        m_pMenu;
     VclPtr<PopupMenu>      m_pActivePopup;
     VclPtr<PopupMenu>      mpParentPopup;
@@ -80,8 +74,6 @@ private:
     VclPtr<DecoToolBox>  m_aCloseBtn;
     VclPtr<PushButton>   m_aFloatBtn;
     VclPtr<PushButton>   m_aHideBtn;
-
-    std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 
     void            HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos);
     void    ChangeHighlightItem(sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true);
@@ -130,7 +122,6 @@ public:
     void    LayoutChanged();
     Size const & MinCloseButtonSize() const;
 
-    bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId);
     void SetMBWHideAccel(bool val) { mbHideAccel = val; }
     bool GetMBWHideAccel() const { return mbHideAccel; }
     void SetMBWMenuKey(bool val) { mbMenuKey = val; }

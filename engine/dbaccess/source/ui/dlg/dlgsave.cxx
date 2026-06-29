@@ -86,7 +86,7 @@ IMPL_LINK_NOARG(OSaveAsDlg, ButtonClickHdl, weld::Button&, void)
 
     if ( m_nType == CommandType::TABLE ) {
         sNameToCheck = ::dbtools::composeTableName(
-                           m_xMetaData,
+                           nullptr,
                            getCatalog(),
                            getSchema(),
                            sNameToCheck,

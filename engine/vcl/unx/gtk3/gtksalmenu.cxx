@@ -740,12 +740,6 @@ namespace
     }
 }
 
-static void MenuButtonClicked(GtkWidget* pWidget, gpointer pMenu)
-{
-    OUString aId(get_buildable_id(GTK_BUILDABLE(pWidget)));
-    static_cast<MenuBar*>(pMenu)->HandleMenuButtonEvent(aId.toUInt32());
-}
-
 bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
 {
     if (!mbMenuBar)
@@ -784,9 +778,6 @@ bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
     set_buildable_id(GTK_BUILDABLE(pButton), OUString::number(rNewItem.mnId));
 
     gtk_widget_set_tooltip_text(pButton, rNewItem.maToolTipText.toUtf8().getStr());
-
-    MenuBar *pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
-    g_signal_connect(pButton, "clicked", G_CALLBACK(MenuButtonClicked), pVclMenuBar);
 
     if (mpCloseButton)
     {

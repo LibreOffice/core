@@ -195,7 +195,6 @@ private:
     tools::Long            mnUserItemWidth;
     tools::Long            mnUserItemHeight;
     sal_uInt16      mnSelItemId;
-    int             mnSavedItemId;
     sal_uInt16      mnHighItemId;
     sal_uInt16      mnCols;
     sal_uInt16      mnCurCol;

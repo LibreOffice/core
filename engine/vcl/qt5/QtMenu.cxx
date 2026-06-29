@@ -739,14 +739,8 @@ void QtMenu::slotCloseDocument()
         Application::PostUserEvent(pVclMenuBar->GetCloseButtonClickHdl());
 }
 
-void QtMenu::slotMenuBarButtonClicked(QAbstractButton* pButton)
+void QtMenu::slotMenuBarButtonClicked(QAbstractButton* /*pButton*/)
 {
-    MenuBar* pVclMenuBar = static_cast<MenuBar*>(mpVCLMenu.get());
-    if (pVclMenuBar)
-    {
-        SolarMutexGuard aGuard;
-        pVclMenuBar->HandleMenuButtonEvent(m_pButtonGroup->id(pButton));
-    }
 }
 
 void QtMenu::slotShortcutF10()

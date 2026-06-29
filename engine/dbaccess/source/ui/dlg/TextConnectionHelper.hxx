@@ -42,7 +42,6 @@ namespace dbaui
         OUString    m_aTextSeparatorList;
         OUString    m_aTextNone;
         OUString    m_aOldExtension;
-        Link<OTextConnectionHelper*, void> m_aGetExtensionHandler; /// to be called if a new type is selected
 
         short       m_nAvailableSections;
 
@@ -69,7 +68,6 @@ namespace dbaui
         std::unique_ptr<CharSetListBox> m_xCharSet;
 
         DECL_LINK(OnSetExtensionHdl, weld::Toggleable&, void);
-        DECL_LINK(OnEditModified, weld::Entry&, void);
 
         OUString    GetSeparator(const weld::ComboBox& rBox, std::u16string_view rList);
         void        SetSeparator(weld::ComboBox& rBox, std::u16string_view rList, const OUString& rVal);

@@ -2414,9 +2414,6 @@ static bool ImplHandleMenuEvent( vcl::Window const * pWindow, SalMenuEvent* pEve
                 case SalEvent::MenuHighlight:
                     bRet = pMenuBar->HandleMenuHighlightEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
                     break;
-                case SalEvent::MenuButtonCommand:
-                    bRet = pMenuBar->HandleMenuButtonEvent( pEvent->mnId );
-                    break;
                 case SalEvent::MenuCommand:
                     bRet = pMenuBar->HandleMenuCommandEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
                     break;

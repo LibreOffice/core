@@ -148,14 +148,8 @@ IMPL_LINK(TreeListBox, KeyInputHdl, const KeyEvent&, rKEvt, bool)
                 m_aCopyHandler.Call(nullptr);
             break;
         case KeyFuncType::PASTE:
-            bHandled = m_aPasteHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
-            if (bHandled)
-                m_aPasteHandler.Call(nullptr);
             break;
         case KeyFuncType::DELETE:
-            bHandled = m_aDeleteHandler.IsSet() && !m_xTreeView->get_selected(nullptr);
-            if (bHandled)
-                m_aDeleteHandler.Call(nullptr);
             break;
         default:
             break;

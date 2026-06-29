@@ -92,7 +92,6 @@ ValueSet::ValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     mnUserItemHeight    = 0;
     mnFirstLine         = 0;
     mnSelItemId         = 0;
-    mnSavedItemId       = -1;
     mnCols              = 0;
     mnCurCol            = 0;
     mnUserCols          = 0;

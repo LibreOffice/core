@@ -181,7 +181,6 @@ using namespace cpo::uno;
                     sSelectedDirectory = aSelectedDirectory.GetMainURL( INetURLObject::DecodeMechanism::WithCharset );
 
                     setURLNoPrefix( sSelectedDirectory );
-                    SetRoadmapStateValue(true);
                     callModifiedHdl();
                 }
                 catch( const Exception& )
@@ -232,7 +231,6 @@ using namespace cpo::uno;
                 if ( getSelectedDataSource(sDataSource,sCurrDatasource) && !sDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sDataSource);
-                    SetRoadmapStateValue(true);
                     callModifiedHdl();
                 }
                 else
@@ -449,7 +447,6 @@ using namespace cpo::uno;
                                 bTryCreate = true;
                             else
                             {
-                                SetRoadmapStateValue(false);
                                 callModifiedHdl();
                                 return RET_RETRY;
                             }
@@ -465,7 +462,6 @@ using namespace cpo::uno;
 
                 default:
                     // cancelled
-                    SetRoadmapStateValue(false);
                     callModifiedHdl();
                     return RET_CANCEL;
             }
@@ -475,7 +471,6 @@ using namespace cpo::uno;
             // TODO: error msg
             return RET_CANCEL;
         } */
-        SetRoadmapStateValue(true);
         callModifiedHdl();
         return RET_OK;
     }
@@ -625,7 +620,6 @@ using namespace cpo::uno;
                         OSQLWarningBox aWarning(GetFrameWeld(), sFile);
                         aWarning.run();
                         setURLNoPrefix(sOldPath);
-                        SetRoadmapStateValue(false);
                         callModifiedHdl();
                         return false;
                     }
@@ -663,7 +657,6 @@ using namespace cpo::uno;
         if (ERRCODE_NONE == _aFileOpen.Execute())
         {
             setURLNoPrefix(_aFileOpen.GetPath());
-            SetRoadmapStateValue(checkTestConnection());
             callModifiedHdl();
         }
     }

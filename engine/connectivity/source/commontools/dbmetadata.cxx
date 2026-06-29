@@ -70,15 +70,9 @@ namespace dbtools
     {
         Reference< XConnection >        xConnection;
         Reference< XDatabaseMetaData >  xConnectionMetaData;
-        ::connectivity::DriversConfig   aDriverConfig;
 
         ::std::optional< OUString >    sCachedIdentifierQuoteString;
         ::std::optional< OUString >    sCachedCatalogSeparator;
-
-        DatabaseMetaData_Impl()
-            : aDriverConfig( ::comphelper::getProcessComponentContext() )
-        {
-        }
     };
 
 

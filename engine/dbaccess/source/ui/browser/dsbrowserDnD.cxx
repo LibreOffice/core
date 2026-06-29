@@ -129,7 +129,6 @@ namespace dbaui
         m_nAsyncDrop = nullptr;
         m_aAsyncDrop.aDroppedData.clear();
         m_aAsyncDrop.nType          = E_TABLE;
-        m_aAsyncDrop.nAction        = _rEvt.mnAction;
         m_aAsyncDrop.bError         = false;
         m_aAsyncDrop.bHtml          = false;
         m_aAsyncDrop.xDroppedAt.reset();

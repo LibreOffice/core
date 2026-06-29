@@ -90,7 +90,6 @@ namespace dbaui
             m_xTextSeparator->append_text( lcl_getListEntry(m_aTextSeparatorList, nIdx) );
         m_xTextSeparator->append_text(m_aTextNone);
 
-        m_xOwnExtension->connect_changed(LINK(this, OTextConnectionHelper, OnEditModified));
         m_xAccessTextFiles->connect_toggled(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
         m_xAccessCSVFiles->connect_toggled(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
         m_xAccessOtherFiles->connect_toggled(LINK(this, OTextConnectionHelper, OnSetExtensionHdl));
@@ -122,17 +121,11 @@ namespace dbaui
         m_xContainer->show();
     }
 
-    IMPL_LINK_NOARG(OTextConnectionHelper, OnEditModified, weld::Entry&, void)
-    {
-        m_aGetExtensionHandler.Call(this);
-    }
-
     IMPL_LINK_NOARG(OTextConnectionHelper, OnSetExtensionHdl, weld::Toggleable&, void)
     {
         bool bDoEnable = m_xAccessOtherFiles->get_active();
         m_xOwnExtension->set_sensitive(bDoEnable);
         m_xExtensionExample->set_sensitive(bDoEnable);
-        m_aGetExtensionHandler.Call(this);
     }
 
     void OTextConnectionHelper::fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList)

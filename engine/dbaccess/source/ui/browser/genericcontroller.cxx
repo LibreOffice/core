@@ -332,8 +332,6 @@ namespace
             _out_rStates.push_back( Any( *_rFeatureState.sTitle ) );
         if ( _rFeatureState.bChecked.has_value() )
             _out_rStates.push_back( Any( *_rFeatureState.bChecked ) );
-        if ( _rFeatureState.aValue.hasValue() )
-            _out_rStates.push_back( _rFeatureState.aValue );
         if ( _out_rStates.empty() )
             _out_rStates.emplace_back( );
     }

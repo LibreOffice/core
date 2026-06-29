@@ -75,8 +75,6 @@ namespace dbaui
 
         Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handler to be called (asynchronously) when the selection changes in any way
         Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
-        Link<LinkParamNone*,void>   m_aPasteHandler;        // called when someone press CTRL+V
-        Link<LinkParamNone*,void>   m_aDeleteHandler;       // called when someone press DELETE Key
 
         DECL_LINK(OnTimeOut, Timer*, void);
 

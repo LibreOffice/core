@@ -243,8 +243,6 @@ public:
     css::uno::Sequence< OUString >                      m_aTableFilter;
     css::uno::Sequence< OUString >                      m_aTableTypeFilter;
     rtl::Reference< OSharedConnectionManager >          m_xSharedConnectionManager;
-    css::uno::Reference<css::awt::XWindow>
-                                                        m_xDialogParent;
     sal_uInt16                                          m_nControllerLockCount;
 
     void reset();

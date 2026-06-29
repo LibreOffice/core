@@ -337,8 +337,6 @@ IMPL_LINK(SvxGeneralTabPage, ChooseKeyButtonHdl, weld::Button&, rButton, void)
         if(!xCertificate.is())
             return;
 
-        OUString aKeyThumbprint
-            = comphelper::xmlsec::GetHexString(xCertificate->getSHA1Thumbprint(), "");
         OUString aIssuer = comphelper::xmlsec::GetContentPart(xCertificate->getIssuerName(),
                                                               xCertificate->getCertificateKind());
         OUString aSubject = comphelper::xmlsec::GetContentPart(xCertificate->getSubjectName(),
@@ -358,12 +356,10 @@ IMPL_LINK(SvxGeneralTabPage, ChooseKeyButtonHdl, weld::Button&, rButton, void)
 
         if (m_xSigningKeyButton.get() == &rButton)
         {
-            msCurrentSigningKey = aKeyThumbprint;
             m_xSigningKeyLB->set_text(aKeyDisplayName);
         }
         else if (m_xEncryptionKeyButton.get() == &rButton)
         {
-            msCurrentEncryptionKey = aKeyThumbprint;
             m_xEncryptionKeyLB->set_text(aKeyDisplayName);
         }
     }
@@ -377,12 +373,10 @@ IMPL_LINK(SvxGeneralTabPage, RemoveKeyButtonHdl, weld::Button&, rButton, void)
 {
         if (m_xRemoveSigningKeyButton.get() == &rButton)
         {
-            msCurrentSigningKey.clear();
             m_xSigningKeyLB->set_text(u""_ustr);
         }
         else if (m_xRemoveEncryptionKeyButton.get() == &rButton)
         {
-            msCurrentEncryptionKey.clear();
             m_xEncryptionKeyLB->set_text(u""_ustr);
         }
 }

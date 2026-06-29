@@ -51,7 +51,6 @@ namespace dbaui
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
         OUString                   m_aName;
         const IObjectNameCheck&    m_rObjectNameCheck;
-        css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
         sal_Int32                  m_nType;
         SADFlags                   m_nFlags;
 

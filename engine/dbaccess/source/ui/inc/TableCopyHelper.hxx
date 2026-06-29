@@ -60,7 +60,6 @@ namespace dbaui
     {
     private:
         OGenericUnoController*  m_pController;
-        OUString         m_sTableNameForAppend;
 
     public:
         // is needed to describe the drop target
@@ -68,20 +67,15 @@ namespace dbaui
         {
             svx::ODataAccessDescriptor    aDroppedData;
 
-            //for transfor the tablename
-            OUString                 sDefaultTableName;
-
             OUString                        aUrl;
             std::unique_ptr<SvStream>       aHtmlRtfStorage;
             ElementType                     nType;
             std::unique_ptr<weld::TreeIter> xDroppedAt;
-            sal_Int8                        nAction;
             bool                        bHtml;
             bool                        bError;
 
             DropDescriptor()
                 : nType(E_TABLE)
-                , nAction(DND_ACTION_NONE)
                 , bHtml(false)
                 , bError(false)
                 { }
@@ -124,8 +118,6 @@ namespace dbaui
         bool copyTagTable(const TransferableDataHelper& _aDroppedData,
                           DropDescriptor& _rAsyncDrop,
                           const SharedConnection& _xConnection);
-
-        const OUString&   GetTableNameForAppend() const { return m_sTableNameForAppend ;}
 
     private:
         /** pastes a table into the data source

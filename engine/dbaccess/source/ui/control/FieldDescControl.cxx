@@ -68,7 +68,6 @@ OFieldDescControl::OFieldDescControl(weld::Container* pPage)
     : m_xBuilder(Application::CreateBuilder(pPage, u"dbaccess/ui/fielddescpage.ui"_ustr))
     , m_xContainer(m_xBuilder->weld_container(u"FieldDescPage"_ustr))
     , m_pLastFocusWindow(nullptr)
-    , m_pActFocusWindow(nullptr)
     , m_nPos(-1)
     , aYes(DBA_RES(STR_VALUE_YES))
     , aNo(DBA_RES(STR_VALUE_NO))
@@ -469,7 +468,6 @@ void OFieldDescControl::InitializeControl(OPropListBoxCtrl* _pControl,const OUSt
 void OFieldDescControl::InitializeControl(weld::Widget* pControl,const OUString& _sHelpId)
 {
     pControl->set_help_id(_sHelpId);
-    pControl->connect_focus_in(LINK(this, OFieldDescControl, OnControlFocusGot));
     pControl->connect_focus_out(LINK(this, OFieldDescControl, OnControlFocusLost));
 
     if (dynamic_cast<weld::Entry*>(pControl))
@@ -863,13 +861,6 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     });
 
     SetReadOnly( bRead );
-}
-
-IMPL_LINK(OFieldDescControl, OnControlFocusGot, weld::Widget&, rControl, void )
-{
-    m_pActFocusWindow = &rControl;
-
-    m_aControlFocusIn.Call(rControl);
 }
 
 IMPL_LINK(OFieldDescControl, OnControlFocusLost, weld::Widget&, rControl, void )

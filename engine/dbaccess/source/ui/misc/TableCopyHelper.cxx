@@ -102,11 +102,9 @@ void OTableCopyHelper::insertTable( std::u16string_view i_rSourceDataSource, con
 
         Reference<XCopyTableWizard> xWizard(CopyTableWizard::createWithInteractionHandler(aContext, xSource, xDest, xInteractionHandler), UNO_SET_THROW);
 
-        OUString sTableNameForAppend( GetTableNameForAppend() );
-        xWizard->setDestinationTableName( GetTableNameForAppend() );
+        xWizard->setDestinationTableName( u""_ustr );
 
-        bool bAppendToExisting = !sTableNameForAppend.isEmpty();
-        xWizard->setOperation( bAppendToExisting ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData );
+        xWizard->setOperation( CopyTableOperation::CopyDefinitionAndData );
 
         (void)xWizard->execute();
     }
@@ -176,7 +174,7 @@ bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor const & _rD
         pImport->enableCheckOnly();
 
     //set the selected tablename
-    pImport->setSTableName(_rDesc.sDefaultTableName);
+    pImport->setSTableName(u""_ustr);
 
     pImport->setStream(pStream);
     return pImport->Read();

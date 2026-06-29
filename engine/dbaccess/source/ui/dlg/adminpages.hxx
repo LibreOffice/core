@@ -88,9 +88,6 @@ namespace dbaui
     class OGenericAdministrationPage    :public SfxTabPage
                                         ,public ::vcl::IWizardPageController
     {
-    private:
-        Link<OGenericAdministrationPage const *, void> m_aModifiedHandler; /// to be called if something on the page has been modified
-        bool        m_abEnableRoadmap;
     protected:
         IDatabaseSettingsDialog*   m_pAdminDialog;
         IItemSetHelper*            m_pItemSetHelper;
@@ -138,8 +135,6 @@ namespace dbaui
         virtual bool commitPage( ::vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool canAdvance() const override;
 
-        void                SetRoadmapStateValue( bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
-
     protected:
         /// default implementation: call FillItemSet, call prepareLeave,
         virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
@@ -152,7 +147,7 @@ namespace dbaui
         virtual void    Activate() override;
 
     protected:
-        virtual void callModifiedHdl(weld::Widget* /*pControl*/ = nullptr) { m_aModifiedHandler.Call(this); }
+        virtual void callModifiedHdl(weld::Widget* /*pControl*/ = nullptr) {}
 
         /// called from within DeactivatePage. The page is allowed to be deactivated if this method returns true
         virtual bool prepareLeave() { return true; }

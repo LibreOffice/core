@@ -2686,12 +2686,6 @@ bool Menu::HandleMenuCommandEvent(Menu* pMenu, sal_uInt16 nCommandEventId)
         return false;
 }
 
-bool MenuBar::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    return pMenuWin && pMenuWin->HandleMenuButtonEvent(i_nButtonId);
-}
-
 int MenuBar::GetMenuBarHeight() const
 {
     const SalMenu *pNativeMenu = ImplGetSalMenu();

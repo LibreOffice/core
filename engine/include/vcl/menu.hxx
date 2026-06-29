@@ -457,7 +457,6 @@ public:
 
     SAL_DLLPRIVATE virtual void SelectItem(sal_uInt16 nId) override;
     SAL_DLLPRIVATE bool HandleMenuHighlightEvent(Menu* pMenu, sal_uInt16 nEventId);
-    bool HandleMenuButtonEvent(sal_uInt16 nEventId);
 
     void SetCloseButtonClickHdl( const Link<void*,void>& rLink ) { maCloseHdl = rLink; }
     const Link<void*,void>& GetCloseButtonClickHdl() const       { return maCloseHdl; }

@@ -176,7 +176,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     if (pMen)
     {
         m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), pMen->HasCloseButton());
-        m_aCloseBtn->Show(pMen->HasCloseButton() || !m_aAddButtons.empty());
+        m_aCloseBtn->Show(pMen->HasCloseButton());
         m_aFloatBtn->Show(pMen->HasFloatButton());
         m_aHideBtn->Show(pMen->HasHideButton());
     }
@@ -201,7 +201,7 @@ void MenuBarWindow::SetHeight(tools::Long nHeight)
 void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
 {
     m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), bClose);
-    m_aCloseBtn->Show(bClose || !m_aAddButtons.empty());
+    m_aCloseBtn->Show(bClose);
     if (m_pMenu->mpSalMenu)
         m_pMenu->mpSalMenu->ShowCloseButton(bClose);
     m_aFloatBtn->Show( bFloat );
@@ -226,17 +226,6 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl, ToolBox *, void)
         // gets destroyed
         Application::PostUserEvent(m_pMenu->GetCloseButtonClickHdl());
     }
-    else
-    {
-        std::map<sal_uInt16,AddButtonEntry>::iterator it = m_aAddButtons.find(sal_uInt16(m_aCloseBtn->GetCurItemId()));
-        if( it != m_aAddButtons.end() )
-        {
-            MenuBarButtonCallbackArg aArg;
-            aArg.nId = it->first;
-            aArg.bHighlight = (sal_uInt16(m_aCloseBtn->GetHighlightItemId()) == it->first);
-            it->second.m_aSelectLink.Call( aArg );
-        }
-    }
 }
 
 IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
@@ -253,11 +242,6 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
     {
         auto nPos = static_cast<ToolBox::ImplToolItems::size_type>(reinterpret_cast<sal_IntPtr>(rEvent.GetData()));
         aArg.nId = sal_uInt16(m_aCloseBtn->GetItemId(nPos));
-    }
-    std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( aArg.nId );
-    if( it != m_aAddButtons.end() )
-    {
-        it->second.m_aHighlightLink.Call( aArg );
     }
 }
 
@@ -1116,19 +1100,6 @@ rtl::Reference<comphelper::OAccessible> MenuBarWindow::CreateAccessible()
         return m_pMenu->GetAccessible();
 
     return {};
-}
-
-bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
-{
-    std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( i_nButtonId );
-    if( it != m_aAddButtons.end() )
-    {
-        MenuBarButtonCallbackArg aArg;
-        aArg.nId = it->first;
-        aArg.bHighlight = true;
-        return it->second.m_aSelectLink.Call( aArg );
-    }
-    return false;
 }
 
 bool MenuBarWindow::CanGetFocus() const

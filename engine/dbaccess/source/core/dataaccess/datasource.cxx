@@ -1222,11 +1222,8 @@ Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocume
     return Reference< XOfficeDatabaseDocument >( static_cast<cppu::OWeakObject*>(xModel.get()), UNO_QUERY_THROW );
 }
 
-void SAL_CALL ODatabaseSource::initialize( css::uno::Sequence< cpo::uno::Any > const & rArguments)
+void SAL_CALL ODatabaseSource::initialize( css::uno::Sequence< cpo::uno::Any > const & )
 {
-    ::comphelper::NamedValueCollection aProperties( rArguments );
-    if (aProperties.has(u"ParentWindow"_ustr))
-        aProperties.get(u"ParentWindow"_ustr) >>= m_pImpl->m_xDialogParent;
 }
 
 Reference< XInterface > ODatabaseSource::getThis() const
