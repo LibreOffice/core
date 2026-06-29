@@ -3385,6 +3385,17 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
             rJsonWriter.put("halign", "end");
     }
 
+    VclAlign nValign = get_valign();
+    if (nValign != VclAlign::Fill)
+    {
+        if (nValign == VclAlign::Start)
+            rJsonWriter.put("valign", "start");
+        else if (nValign == VclAlign::Center)
+            rJsonWriter.put("valign", "center");
+        else if (nValign == VclAlign::End)
+            rJsonWriter.put("valign", "end");
+    }
+
     // Emit hexpand as a self-property (like halign above) so single-widget
     // updates keep the expand hint; otherwise it is only added by the parent
     // when dumping the whole children tree, and a standalone widget update
@@ -3424,6 +3435,17 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
                         rJsonWriter.put("halign", "center");
                     else if (eHalign == VclAlign::End)
                         rJsonWriter.put("halign", "end");
+                }
+
+                VclAlign eValign = pChild->get_valign();
+                if (eValign != VclAlign::Fill)
+                {
+                    if (eValign == VclAlign::Start)
+                        rJsonWriter.put("valign", "start");
+                    else if (eValign == VclAlign::Center)
+                        rJsonWriter.put("valign", "center");
+                    else if (eValign == VclAlign::End)
+                        rJsonWriter.put("valign", "end");
                 }
 
                 if (pChild->get_hexpand())

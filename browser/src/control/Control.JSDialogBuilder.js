@@ -2288,6 +2288,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		if (data.hexpand) {
 			control.style.width = '100%';
 		}
+
+		if (data.valign) {
+			control.style.alignSelf = data.valign;
+		}
 	},
 
 	postProcess: function(parent, data) {

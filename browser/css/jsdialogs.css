@@ -369,6 +369,7 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	width: 100%;
 	display: grid;
 	grid-gap: var(--spacing-s);
+	align-items: center;
 }
 
 /* Special Characters dialog */
