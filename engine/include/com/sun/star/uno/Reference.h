@@ -37,18 +37,6 @@ class RuntimeException;
 class XInterface;
 class Type;
 
-/** Enum defining UNO_REF_NO_ACQUIRE for setting reference without acquiring a given interface.
-    Deprecated, please use SAL_NO_ACQUIRE.
-    @deprecated
-*/
-enum UnoReference_NoAcquire
-{
-    /** This enum value can be used for creating a reference granting a given interface,
-        i.e. transferring ownership to it.
-    */
-    UNO_REF_NO_ACQUIRE
-};
-
 /** This base class serves as a base class for all template reference classes and
     has been introduced due to compiler problems with templated operators ==, =!.
 */
