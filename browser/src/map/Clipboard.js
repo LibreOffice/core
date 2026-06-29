@@ -82,8 +82,8 @@ window.L.Clipboard = window.L.Class.extend({
 		document.oncut = function(ev)   { return that.cut(ev); };
 		document.oncopy = function(ev)  { return that.copy(ev); };
 		document.onpaste = function(ev) {
-			if (window.ThisIsTheWindowsApp) {
-				// Most likely this could be done for the macOS app, too.
+			if (window.ThisIsTheMacOSApp || window.ThisIsTheWindowsApp) {
+				// For each app that uses the COKitClipboardProvider API
 				ev.preventDefault();
 				window.postMobileMessage('uno .uno:Paste');
 				return;
