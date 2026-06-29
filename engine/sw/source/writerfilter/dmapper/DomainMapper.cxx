@@ -3034,7 +3034,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             // Add the property if the style exists, but do not add it elements in TOC:
             // they will receive later another style references from TOC
             if ( bExists && m_pImpl->GetTopContext() && !m_pImpl->IsInTOC())
+            {
                 m_pImpl->GetTopContext()->Insert( PROP_CHAR_STYLE_NAME, cpo::uno::Any( sConvertedName ) );
+
+                if (!m_pImpl->GetSdtStarts().empty())
+                    m_pImpl->m_pSdtHelper->SetPlaceholderCharStyle(sConvertedName);
+            }
         }
     break;
     case NS_ooxml::LN_CT_TblPrBase_tblCellMar: //cell margins

@@ -1032,6 +1032,9 @@ void DomainMapper_Impl::PushSdt()
     // Offset so the cursor is not adjusted as we import the SDT's content.
     bool bStart = !xCursor->goLeft(1, /*bExpand=*/false);
     m_xSdtStarts.push({bStart, OUString(), xCursor->getStart()});
+
+    // It is captured while the SDT's content run is imported and consumed in PopSdt().
+    m_pSdtHelper->SetPlaceholderCharStyle(OUString());
 }
 
 const std::stack<BookmarkInsertPosition>& DomainMapper_Impl::GetSdtStarts() const
@@ -1123,11 +1126,31 @@ void DomainMapper_Impl::PopSdt()
         // the encoded data instead of the image.
         xCursor->setString(*oData);
 
-        // Such value is always a plain text string, remove the char style of the placeholder.
-        uno::Reference<beans::XPropertyState> xPropertyState(xCursor, uno::UNO_QUERY);
-        if (xPropertyState.is())
+        // tdf#147258: When a placeholder was being shown, its char style is just the
+        // placeholder styling and must not persist once the real value is shown.
+
+        // But when the value is formatted via a genuine char style (e.g. bold),
+        // that formatting is meaningful and Word keeps it, so only reset the
+        // char style in the placeholder case.
+        uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+        if (m_pSdtHelper->GetShowingPlcHdr())
         {
-            xPropertyState->setPropertyToDefault(u"CharStyleName"_ustr);
+            uno::Reference<beans::XPropertyState> xPropertyState(xCursor, uno::UNO_QUERY);
+            if (xPropertyState.is())
+            {
+                xPropertyState->setPropertyToDefault(u"CharStyleName"_ustr);
+            }
+        }
+        else if (!m_pSdtHelper->GetPlaceholderCharStyle().isEmpty() && xCursorProps.is())
+        {
+            OUString sCurrentCharStyle;
+            xCursorProps->getPropertyValue(u"CharStyleName"_ustr) >>= sCurrentCharStyle;
+            // Apply the run's char style explicitly so we keeps the intended formatting.
+            if (sCurrentCharStyle.isEmpty())
+            {
+                xCursorProps->setPropertyValue(
+                    u"CharStyleName"_ustr, cpo::uno::Any(m_pSdtHelper->GetPlaceholderCharStyle()));
+            }
         }
     }
 

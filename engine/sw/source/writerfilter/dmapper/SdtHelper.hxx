@@ -146,6 +146,9 @@ class SdtHelper final : public virtual SvRefBase
     /// <w:sdtPr>'s <w:lock w:val="...">.
     OUString m_aLock;
 
+    /// Char style of the SDT's content run, used for data-bound values.
+    OUString m_aPlaceholderCharStyle;
+
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
                        css::uno::Reference<css::uno::XComponentContext> xContext);
@@ -212,6 +215,12 @@ public:
 
     void SetShowingPlcHdr();
     bool GetShowingPlcHdr() const;
+
+    void SetPlaceholderCharStyle(const OUString& rCharStyle)
+    {
+        m_aPlaceholderCharStyle = rCharStyle;
+    }
+    const OUString& GetPlaceholderCharStyle() const { return m_aPlaceholderCharStyle; }
 
     void SetChecked();
     bool GetChecked() const;

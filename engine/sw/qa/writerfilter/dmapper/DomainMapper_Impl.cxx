@@ -11,6 +11,7 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -352,6 +353,26 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlDataBindingColor)
     // - Actual  : rgba[ff0000ff]
     // i.e. the char color was red, not the default / automatic.
     CPPUNIT_ASSERT_EQUAL(COL_AUTO, nColor);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSDTDataBindingCharStyle)
+{
+    loadFromFile(u"sdt-data-binding-char-style.docx");
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoEnd(/*bExpand=*/false);
+    xCursor->goLeft(/*nCount=*/1, /*bExpand=*/false);
+    uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
+    float fWeight{};
+    CPPUNIT_ASSERT(xCursorProps->getPropertyValue(u"CharWeight"_ustr) >>= fWeight);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 150 (BOLD)
+    // - Actual  : 100 (NORMAL)
+    // i.e. the char style of the placeholder run was dropped together with its bold, even though
+    // the placeholder was not being shown.
+    CPPUNIT_ASSERT_EQUAL(css::awt::FontWeight::BOLD, fWeight);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionBreak)
