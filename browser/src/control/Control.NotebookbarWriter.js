@@ -2512,13 +2512,6 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: false, combination: 'SE', de: null },
 				'children' : [
 					{
-						'type': 'bigtoolitem',
-						'id': 'table-entire-cell',
-						'text': _UNO('.uno:EntireCell', 'text', true),
-						'command': '.uno:EntireCell',
-						'accessibility': { focusBack: true,	combination: 'EC', de: null }
-					},
-					{
 						'type': 'container',
 						'children': [
 							{
