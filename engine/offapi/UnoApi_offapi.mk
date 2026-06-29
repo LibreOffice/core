@@ -2576,7 +2576,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	AmPmValue \
 	Boundary \
 	BreakType \
-	CTLScriptType \
 	Calendar \
 	Calendar2 \
 	CalendarDisplayCode \

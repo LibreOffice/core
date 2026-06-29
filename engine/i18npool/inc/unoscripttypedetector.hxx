@@ -36,10 +36,6 @@ public:
     virtual sal_Int32 SAL_CALL beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) override;
     virtual sal_Int32 SAL_CALL endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) override;
     virtual sal_Int16 SAL_CALL getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) override;
-    virtual sal_Int32 SAL_CALL beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) override;
-    virtual sal_Int32 SAL_CALL endOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) override;
-    virtual sal_Int16 SAL_CALL getCTLScriptType( const OUString& Text, sal_Int32 nPos ) override;
-
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

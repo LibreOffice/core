@@ -7622,13 +7622,6 @@ module com {
      const short HYPHENATION = 2;
      const short WORDBOUNDARY = 1;
     };
-    /** @deprecated */ published constants CTLScriptType {
-     const short CTL_ARABIC = 2;
-     const short CTL_HEBREW = 1;
-     const short CTL_INDIC = 4;
-     const short CTL_THAI = 3;
-     const short CTL_UNKNOWN = 0;
-    };
     published struct CalendarItem {
      string ID;
      string AbbrevName;
@@ -8514,9 +8507,6 @@ module com {
      long beginOfScriptDirection([in] string aText, [in] long nPos, [in] short nScriptDirection);
      long endOfScriptDirection([in] string aText, [in] long nPos, [in] short nScriptDirection);
      short getScriptDirection([in] string aText, [in] long nPos, [in] short nDefaultScriptDirection);
-     /** @deprecated */ long beginOfCTLScriptType([in] string aText, [in] long nPos);
-     /** @deprecated */ long endOfCTLScriptType([in] string aText, [in] long nPos);
-     /** @deprecated */ short getCTLScriptType([in] string aText, [in] long nPos);
     };
     published constants reservedWords {
      const short ABOVE_WORD = 6;
