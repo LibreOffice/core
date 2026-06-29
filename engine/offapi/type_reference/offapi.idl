@@ -6492,10 +6492,6 @@ module com {
      boolean approveReset([in] ::com::sun::star::lang::EventObject rEvent);
      void resetted([in] ::com::sun::star::lang::EventObject rEvent);
     };
-    /** @deprecated */ published interface XRestoreListener {
-     interface ::com::sun::star::lang::XEventListener;
-     void restored([in] ::com::sun::star::lang::EventObject aEvent);
-    };
     published interface XSubmitListener;
     published interface XSubmit {
      interface ::com::sun::star::uno::XInterface;

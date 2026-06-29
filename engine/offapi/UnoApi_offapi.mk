@@ -2379,7 +2379,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/form,\
 	XPositioningListener \
 	XReset \
 	XResetListener \
-	XRestoreListener \
 	XSubmit \
 	XSubmitListener \
 	XUpdateBroadcaster \
