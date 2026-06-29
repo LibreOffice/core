@@ -56,7 +56,7 @@ gb_UITest_PRECOMMAND = $(gb_PythonTest_PRECOMMAND)
 .PHONY : $(call gb_UITest_get_target,%)
 $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 ifneq ($(gb_SUPPRESS_TESTS),)
-	@true
+	@:
 else
 	$(call gb_Output_announce,$*,$(true),UIT,2)
 	$(call gb_Trace_StartRange,$*,UIT)
@@ -152,7 +152,7 @@ $(call gb_UITest_get_target,%) :
 ifeq ($(gb_SUPPRESS_TESTS),)
 	$(call gb_Output_announce,$* (skipped - no UITest),$(true),PYT,2)
 endif
-	@true
+	@:
 
 define gb_UITest_UITest
 $(eval $(call gb_Module_register_target,$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))

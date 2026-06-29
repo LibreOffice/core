@@ -127,7 +127,7 @@ $(call gb_CppunitTest_get_clean_target,%) :
 .PHONY : $(call gb_CppunitTest_get_target,%)
 $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 ifneq ($(gb_SUPPRESS_TESTS),)
-	@true
+	@:
 else
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Trace_StartRange,$*,CUT)

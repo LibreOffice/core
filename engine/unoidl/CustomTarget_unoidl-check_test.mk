@@ -32,7 +32,7 @@ $(call gb_CustomTarget_get_target,unoidl/unoidl-check_test): \
         $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usa.rdb \
         $(gb_CustomTarget_workdir)/unoidl/unoidl-check_test/usb.rdb
 ifneq ($(gb_SUPPRESS_TESTS),)
-	@true
+	@:
 else
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \

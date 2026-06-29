@@ -38,7 +38,7 @@ $(call gb_PythonTest_get_target,%) :\
         $(if $(filter-out WNT,$(OS)),$(call gb_Library_get_target,pyuno_wrapper)) \
         | $(gb_PythonTest_DEPS)
 ifneq ($(gb_SUPPRESS_TESTS),)
-	@true
+	@:
 else
 	$(call gb_Output_announce,$*,$(true),PYT,2)
 	$(call gb_Trace_StartRange,$*,PYT)
@@ -116,7 +116,7 @@ $(call gb_PythonTest_get_target,%) :
 ifeq ($(gb_SUPPRESS_TESTS),)
 	$(call gb_Output_announce,$* (skipped - no PythonTest),$(true),PYT,2)
 endif
-	@true
+	@:
 
 define gb_PythonTest_PythonTest
 $(eval $(call gb_Module_register_target,$(call gb_PythonTest_get_target,$(1)),$(call gb_PythonTest_get_clean_target,$(1))))

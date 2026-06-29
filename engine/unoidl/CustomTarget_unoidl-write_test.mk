@@ -27,7 +27,7 @@ $(call gb_CustomTarget_get_target,unoidl/unoidl-write_test) : \
         $(SRCDIR)/idlc/test/parser/typedef.tests \
         | $(gb_CustomTarget_workdir)/unoidl/unoidl-write_test/.dir
 ifneq ($(gb_SUPPRESS_TESTS),)
-	@true
+	@:
 else
 	$(call gb_Helper_abbreviate_dirs,( \
         $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \

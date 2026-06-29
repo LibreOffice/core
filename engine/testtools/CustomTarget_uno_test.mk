@@ -27,7 +27,7 @@ $(call gb_CustomTarget_get_target,testtools/uno_test) : \
 			$(call gb_Package_get_target,jvmfwk_jreproperties) \
 			$(call gb_Package_get_target,jvmfwk_jvmfwk3_ini))
 ifneq ($(gb_SUPPRESS_TESTS),)
-	@true
+	@:
 else
 	$(call gb_Helper_abbreviate_dirs,\
 		$(call gb_Executable_get_command,uno) \

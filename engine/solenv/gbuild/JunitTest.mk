@@ -33,7 +33,7 @@ ifneq (,$(strip $(OOO_JUNIT_JAR)))
 .PHONY : $(call gb_JunitTest_get_target,%)
 $(call gb_JunitTest_get_target,%) :
 ifneq ($(gb_SUPPRESS_TESTS),)
-	@true
+	@:
 else
 	$(call gb_Output_announce,$*,$(true),JUT,2)
 	$(call gb_Trace_StartRange,$*,JUT)
@@ -209,7 +209,7 @@ $(call gb_JunitTest_get_target,%) :
 ifeq ($(gb_SUPPRESS_TESTS),)
 	$(call gb_Output_announce,$* (skipped - no Junit),$(true),JUT,2)
 endif
-	@true
+	@:
 
 define gb_JunitTest_JunitTest
 $(eval $(call gb_Module_register_target,$(call gb_JunitTest_get_target,$(1)),$(call gb_JunitTest_get_clean_target,$(1))))
