@@ -837,6 +837,15 @@ class JSFrame : public JSWidget<SalInstanceFrame, ::VclFrame>
 public:
     JSFrame(JSDialogSender* pSender, ::VclFrame* pFrame, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
+
+    // like JSContainer: a frame disable must refresh its children on the client
+    virtual void set_sensitive(bool sensitive) override
+    {
+        bool bIsSensitive = SalInstanceFrame::get_sensitive();
+        SalInstanceFrame::set_sensitive(sensitive);
+        if (bIsSensitive != sensitive)
+            sendUpdate();
+    }
 };
 
 class JSMenuButton : public JSWidget<SalInstanceMenuButton, ::MenuButton>

@@ -140,7 +140,13 @@ IMPL_LINK_NOARG(ScDbTableDlg, OkBtnHdl, weld::Button&, void)
 
         for (const ScDBData* pDBData : aDBData)
         {
-            if (pDBData->GetTableStyleInfo())
+            ScRange aArea;
+            pDBData->GetArea(aArea);
+            // Overlapping a styled table is never allowed. Overlapping a plain
+            // database range is allowed only when it is the exact same area, in
+            // which case AddDBTable() reuses and promotes it into a table
+            // instead of overlaying a second range on top.
+            if (pDBData->GetTableStyleInfo() || aArea != theCurArea)
             {
                 bInvalid = true;
                 theCurArea = ScRange();

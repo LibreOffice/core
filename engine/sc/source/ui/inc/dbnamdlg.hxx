@@ -89,6 +89,9 @@ private:
     void            UpdateDBData( const OUString& rStrName );
     void            SetInfoStrings( const ScDBData* pDBData );
 
+    bool            OverlapsOtherNamedDB();
+    bool            SelectedDBIsStyledTable();
+
     DECL_LINK( CancelBtnHdl, weld::Button&, void );
     DECL_LINK( OkBtnHdl, weld::Button&, void );
     DECL_LINK( AddBtnHdl, weld::Button&, void );

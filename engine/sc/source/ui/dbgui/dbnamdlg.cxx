@@ -278,7 +278,9 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument& rDocP )
     OUString aRefStr(theCurArea.Format(rDocP, ScRefFlags::RANGE_ABS_3D, aAddrDetails));
     m_xEdAssign->SetRefString( aRefStr );
     m_xOptions->set_sensitive(true);
-    m_xBtnAdd->set_sensitive(true);
+    const bool bOverlap = OverlapsOtherNamedDB();
+    m_xBtnAdd->set_sensitive(!bOverlap);
+    m_xBtnOk->set_sensitive(!bOverlap && !SelectedDBIsStyledTable());
     bSaved = true;
     xSaveObj->Save();
 }
@@ -416,6 +418,29 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, weld::Button&, void)
             ScAddress aEnd   = theCurArea.aEnd;
 
             ScDBData* pOldEntry = aLocalDbCol.getNamedDBs().findByUpperName(ScGlobal::getCharClass().uppercase(aNewName));
+
+            // A styled table cannot be edited from this dialog (its Modify
+            // button is disabled); don't let the OK path silently re-apply or
+            // move it.
+            if (pOldEntry && pOldEntry->GetTableStyleInfo())
+            {
+                bInvalid = true;
+                return;
+            }
+
+            // A named database range is exported to OOXML as a table, and two
+            // tables may not share cells.
+            for (const ScDBData* pDBData : aLocalDbCol.GetAllNamedDBsInArea(theCurArea))
+            {
+                if (pDBData != pOldEntry)
+                {
+                    m_xEdAssign->SelectAll();
+                    m_xEdAssign->GrabFocus();
+                    bInvalid = true;
+                    return;
+                }
+            }
+
             if (pOldEntry)
             {
                 //  modify area
@@ -545,6 +570,38 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, weld::Button&, void)
     NameModifyHdl( *m_xEdName );
 }
 
+bool ScDbNameDlg::OverlapsOtherNamedDB()
+{
+    OUString aName = comphelper::string::strip(m_xEdName->get_active_text(), ' ');
+    if (aName.isEmpty())
+        return false;
+
+    ScRange aTmpRange;
+    if (!(aTmpRange.ParseAny(m_xEdAssign->GetText(), rDoc, aAddrDetails) & ScRefFlags::VALID))
+        return false;
+
+    const ScDBData* pSelf = aLocalDbCol.getNamedDBs().findByUpperName(
+        ScGlobal::getCharClass().uppercase(aName));
+
+    for (const ScDBData* pDBData : aLocalDbCol.GetAllNamedDBsInArea(aTmpRange))
+    {
+        if (pDBData != pSelf)
+            return true;
+    }
+    return false;
+}
+
+bool ScDbNameDlg::SelectedDBIsStyledTable()
+{
+    OUString aName = comphelper::string::strip(m_xEdName->get_active_text(), ' ');
+    if (aName.isEmpty())
+        return false;
+
+    const ScDBData* pData = aLocalDbCol.getNamedDBs().findByUpperName(
+        ScGlobal::getCharClass().uppercase(aName));
+    return pData && pData->GetTableStyleInfo();
+}
+
 IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
 {
     OUString  theName     = m_xEdName->get_active_text();
@@ -588,7 +645,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
 
             if ( !m_xEdAssign->GetText().isEmpty() )
             {
-                m_xBtnAdd->set_sensitive(true);
+                m_xBtnAdd->set_sensitive(!OverlapsOtherNamedDB());
                 m_xOptions->set_sensitive(true);
             }
             else
@@ -610,6 +667,8 @@ IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl, weld::ComboBox&, void)
         //SFX_APPWINDOW->set_sensitive(true);
         bRefInputMode = true;
     }
+
+    m_xBtnOk->set_sensitive(!OverlapsOtherNamedDB() && !SelectedDBIsStyledTable());
 }
 
 IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl, formula::RefEdit&, void)
@@ -621,9 +680,12 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl, formula::RefEdit&, void)
     if ( aTmpRange.ParseAny( aText, rDoc, aAddrDetails ) & ScRefFlags::VALID )
         theCurArea = aTmpRange;
 
+    const bool bOverlap = OverlapsOtherNamedDB();
+    m_xBtnOk->set_sensitive(!bOverlap && !SelectedDBIsStyledTable());
+
     if (!aText.isEmpty() && !m_xEdName->get_active_text().isEmpty())
     {
-        m_xBtnAdd->set_sensitive(true);
+        m_xBtnAdd->set_sensitive(!bOverlap);
         m_xBtnHeader->set_sensitive(true);
         m_xBtnTotals->set_sensitive(true);
         m_xBtnDoSize->set_sensitive(true);
