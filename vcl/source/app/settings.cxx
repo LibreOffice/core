@@ -159,10 +159,6 @@ struct ColorSet
     Color                           maToolTextColor;
     Color                           maWindowColor;
     Color                           maWindowTextColor;
-    Color                           maWriterNotebookbarColor;
-    Color                           maCalcNotebookbarColor;
-    Color                           maImpressNotebookbarColor;
-    Color                           maDrawNotebookbarColor;
     Color                           maWorkspaceColor;
     Color                           maActiveTabColor;
     Color                           maInactiveTabColor;
@@ -531,10 +527,6 @@ void ImplStyleData::SetStandardStyles()
     maColors.maLabelTextColor            = COL_BLACK;
     maColors.maWindowColor               = COL_WHITE;
     maColors.maWindowTextColor           = COL_BLACK;
-    maColors.maWriterNotebookbarColor    = Color(0x1a, 0x85, 0xd1); // #1a85d1
-    maColors.maCalcNotebookbarColor      = Color(0x3c, 0xbc, 0x45); // #3cbc45
-    maColors.maImpressNotebookbarColor   = Color(0xe7, 0x57, 0x29); // #e75729
-    maColors.maDrawNotebookbarColor      = Color(0xe5, 0xb4, 0x43); // #e5b443
     maColors.maDialogColor               = COL_LIGHTGRAY;
     maColors.maDialogTextColor           = COL_BLACK;
     maColors.maWorkspaceColor            = Color( 0xDF, 0xDF, 0xDE );
@@ -953,54 +945,6 @@ const Color&
 StyleSettings::GetWindowTextColor() const
 {
     return mxData->maColors.maWindowTextColor;
-}
-
-void
-StyleSettings::SetWriterNotebookbarColor( const Color& rColor )
-{
-    mxData->maColors.maWriterNotebookbarColor = rColor;
-}
-
-const Color&
-StyleSettings::GetWriterNotebookbarColor() const
-{
-    return mxData->maColors.maWriterNotebookbarColor;
-}
-
-void
-StyleSettings::SetCalcNotebookbarColor( const Color& rColor )
-{
-    mxData->maColors.maCalcNotebookbarColor = rColor;
-}
-
-const Color&
-StyleSettings::GetCalcNotebookbarColor() const
-{
-    return mxData->maColors.maCalcNotebookbarColor;
-}
-
-void
-StyleSettings::SetImpressNotebookbarColor( const Color& rColor )
-{
-    mxData->maColors.maImpressNotebookbarColor = rColor;
-}
-
-const Color&
-StyleSettings::GetImpressNotebookbarColor() const
-{
-    return mxData->maColors.maImpressNotebookbarColor;
-}
-
-void
-StyleSettings::SetDrawNotebookbarColor( const Color& rColor )
-{
-    mxData->maColors.maDrawNotebookbarColor = rColor;
-}
-
-const Color&
-StyleSettings::GetDrawNotebookbarColor() const
-{
-    return mxData->maColors.maDrawNotebookbarColor;
 }
 
 void

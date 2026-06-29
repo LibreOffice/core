@@ -315,25 +315,21 @@ void NotebookBar::StateChanged(const  StateChangedType nStateChange )
 
 void NotebookBar::UpdateBackground()
 {
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    Color aColor = rStyleSettings.GetDialogColor();
+    Color aColor = GetSettings().GetStyleSettings().GetDialogColor();
     // macOS excluded since AquaGraphicsBackendBase::performDrawNativeControl() case ControlType::TabPane
     // draws the whole Notebookbar and does not allow to just color the background
-#ifndef MACOSX
+
     const sal_uInt8 cTrans = officecfg::Office::Common::Misc::NotebookbarColorTransparency::get();
-    if (ThemeColors::VclPluginCanUseThemeColors())
-    {
-        const ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
-        if (m_sModule == "com.sun.star.text.TextDocument")
-            aColor.Merge(rThemeColors.GetWriterNotebookbarColor(), cTrans);
-        else if (m_sModule == "com.sun.star.sheet.SpreadsheetDocument")
-            aColor.Merge(rThemeColors.GetCalcNotebookbarColor(), cTrans);
-        else if (m_sModule == "com.sun.star.presentation.PresentationDocument")
-            aColor.Merge(rThemeColors.GetImpressNotebookbarColor(), cTrans);
-        else if (m_sModule == "com.sun.star.drawing.DrawingDocument")
-            aColor.Merge(rThemeColors.GetDrawNotebookbarColor(), cTrans);
-    }
-#endif
+
+    if (m_sModule == "com.sun.star.text.TextDocument")
+        aColor.Merge(Color(0x1a, 0x85, 0xd1), cTrans); // #1a85d1
+    else if (m_sModule == "com.sun.star.sheet.SpreadsheetDocument")
+        aColor.Merge(Color(0x3c, 0xbc, 0x45), cTrans); // #3cbc45
+    else if (m_sModule == "com.sun.star.presentation.PresentationDocument")
+        aColor.Merge(Color(0xe7, 0x57, 0x29), cTrans); // #e75729
+    else if (m_sModule == "com.sun.star.drawing.DrawingDocument")
+        aColor.Merge(Color(0xe5, 0xb4, 0x43), cTrans); // #e5b443
+
     SetBackground(Wallpaper(aColor));
     UpdateDefaultSettings();
     GetOutDev()->SetSettings( DefaultSettings );

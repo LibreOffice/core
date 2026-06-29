@@ -92,10 +92,6 @@ public:
 
     void SetWindowColor(const Color& rColor) { m_aWindowColor = rColor; }
     void SetWindowTextColor(const Color& rColor) { m_aWindowTextColor = rColor; }
-    void SetWriterNotebookbarColor(const Color& rColor) { m_aWriterNotebookbarColor = rColor; }
-    void SetCalcNotebookbarColor(const Color& rColor) { m_aCalcNotebookbarColor = rColor; }
-    void SetImpressNotebookbarColor(const Color& rColor) { m_aImpressNotebookbarColor = rColor; }
-    void SetDrawNotebookbarColor(const Color& rColor) { m_aDrawNotebookbarColor = rColor; }
     void SetBaseColor(const Color& rColor) { m_aBaseColor = rColor; }
     void SetButtonColor(const Color& rColor) { m_aButtonColor = rColor; }
     void SetButtonTextColor(const Color& rColor) { m_aButtonTextColor = rColor; }
@@ -128,10 +124,6 @@ public:
 
     const Color& GetWindowColor() const { return m_aWindowColor; }
     const Color& GetWindowTextColor() const { return m_aWindowTextColor; }
-    const Color& GetWriterNotebookbarColor() const { return m_aWriterNotebookbarColor; }
-    const Color& GetCalcNotebookbarColor() const { return m_aCalcNotebookbarColor; }
-    const Color& GetImpressNotebookbarColor() const { return m_aImpressNotebookbarColor; }
-    const Color& GetDrawNotebookbarColor() const { return m_aDrawNotebookbarColor; }
     const Color& GetBaseColor() const { return m_aBaseColor; }
     const Color& GetButtonColor() const { return m_aButtonColor; }
     const Color& GetButtonTextColor() const { return m_aButtonTextColor; }
@@ -161,10 +153,6 @@ public:
 private:
     Color m_aWindowColor;
     Color m_aWindowTextColor;
-    Color m_aWriterNotebookbarColor;
-    Color m_aCalcNotebookbarColor;
-    Color m_aImpressNotebookbarColor;
-    Color m_aDrawNotebookbarColor;
     Color m_aBaseColor;
     Color m_aButtonColor;
     Color m_aButtonTextColor;
