@@ -5271,6 +5271,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                     {
                         maBindings.pop_front();
                     }
+                    mIsInBinding = (!maBindings.empty() && maBindings.front().nBracketPos + 1 == nBrackets);
                 }
                 if (bUseFunctionStack && nFunction)
                     --nFunction;
@@ -5322,20 +5323,32 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             break;
             case ocTableRefOpen:
             {
-                // Don't count following item separator as parameter separator.
-                if (bUseFunctionStack)
+                // If we're expecting a lambda parameter name, enclosing it in [] makes it optional.
+                if (!(mIsInBinding
+                      && maBindings.front().eOpCode == ocLambda
+                      && maBindings.front().nParaPos < maBindings.front().nParaCount))
                 {
-                    ++nFunction;
-                    pFunctionStack[ nFunction ].eOp = eOp;
-                    pFunctionStack[ nFunction ].nSep = 0;
-                    nHighWatermark = nFunction;
+                    // Don't count following item separator as parameter separator.
+                    if (bUseFunctionStack)
+                    {
+                        ++nFunction;
+                        pFunctionStack[ nFunction ].eOp = eOp;
+                        pFunctionStack[ nFunction ].nSep = 0;
+                        nHighWatermark = nFunction;
+                    }
                 }
             }
             break;
             case ocTableRefClose:
             {
-                if (bUseFunctionStack && nFunction)
-                    --nFunction;
+                // If we're expecting a lambda parameter name, enclosing it in [] makes it optional.
+                if (!(mIsInBinding
+                      && maBindings.front().eOpCode == ocLambda
+                      && maBindings.front().nParaPos < maBindings.front().nParaCount))
+                {
+                    if (bUseFunctionStack && nFunction)
+                        --nFunction;
+                }
             }
             break;
             case ocColRowName:
@@ -5429,27 +5442,32 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
                         FormulaTokenArray::ReplaceMode::CODE_ONLY);
             }
         }
-        switch (eOp)
+        if (!(mIsInBinding
+            && maBindings.front().eOpCode == ocLambda
+            && maBindings.front().nParaPos < maBindings.front().nParaCount))
         {
-            case ocTableRefOpen:
-                SAL_WARN_IF( maTableRefs.empty(), "sc.core", "ocTableRefOpen without TableRefEntry");
-                if (maTableRefs.empty())
-                    SetError(FormulaError::Pair);
-                else
-                    ++maTableRefs.back().mnLevel;
-                break;
-            case ocTableRefClose:
-                SAL_WARN_IF( maTableRefs.empty(), "sc.core", "ocTableRefClose without TableRefEntry");
-                if (maTableRefs.empty())
-                    SetError(FormulaError::Pair);
-                else
-                {
-                    if (--maTableRefs.back().mnLevel == 0)
-                        maTableRefs.pop_back();
-                }
-                break;
-            default:
-                break;
+            switch (eOp)
+            {
+                case ocTableRefOpen:
+                    SAL_WARN_IF( maTableRefs.empty(), "sc.core", "ocTableRefOpen without TableRefEntry");
+                    if (maTableRefs.empty())
+                        SetError(FormulaError::Pair);
+                    else
+                        ++maTableRefs.back().mnLevel;
+                    break;
+                case ocTableRefClose:
+                    SAL_WARN_IF( maTableRefs.empty(), "sc.core", "ocTableRefClose without TableRefEntry");
+                    if (maTableRefs.empty())
+                        SetError(FormulaError::Pair);
+                    else
+                    {
+                        if (--maTableRefs.back().mnLevel == 0)
+                            maTableRefs.pop_back();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         meLastOp = maRawToken.GetOpCode();
         if ( mbAutoCorrect )

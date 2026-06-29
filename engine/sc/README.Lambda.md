@@ -14,6 +14,7 @@ letters, numbers, and underscores (`_`).
 * You may specify no parameters, if you want the function to operate the same
 way every time it is called (this may be useful if its expression includes
 volatile operators such as `RAND` or `TIME`).
+FIXME: This is not yet true.
 
 * The result of a `LAMBDA` is a function. Don't expect that to show up in the
 spreadsheet in any useful way! You must call the function to use it.
@@ -32,6 +33,16 @@ level of scope.
 refer to it from within the function. For example, if cell `A1` is a `LAMBDA`
 formula, the body of the `LAMBDA` can call itself by referring to `A1`. You can
 name your `LAMBDA` cell to make this easier to read.
+
+* If you want your `LAMBDA` function to permit optional parameters, enclose those
+parameter names (in the parameter list, not in the body) in brackets, like this:
+> =LAMBDA(name1, name2, [name3], [name4], expression)
+
+* `ISOMITTED` can be used within a `LAMBDA` body to detect whether an optional
+parameter was provided or omitted.
+
+* Optional parameters must not appear before any required parameters in the
+parameter list. Your parameters can appear in any order inside the body.
 
 ### Examples
 
@@ -82,10 +93,13 @@ expression, like any other. It also looks for the lambda parameters, and interns
 them as identifiers.
 
 * The second stage of the compiler sets up the jump table with the parameters
-and body.
+and body. It also looks for any parameters between
+`ocTableRefOpen`/`ocTableRefClose` (which correspond to brackets), and sets
+`mIsOptional` for those parameters.
 
 * When interpreted, `ocLambda` causes a `ScFormulaFunction` to be built using
-the contents of the jump table.
+the contents of the jump table. At this point the optional parameters are
+counted, and that information is passed on to the next step.
 
 * `ScFormulaFunction`'s constructor clones the lambda body and saves the
 interpreter's contextual information, then locates each use of each parameter in

@@ -379,12 +379,15 @@ public:
 class FORMULA_DLLPUBLIC FormulaStringNameToken final : public FormulaToken
 {
     svl::SharedString maString;
+    bool mIsOptional;
 public:
-    FormulaStringNameToken(StackVar eTypeP, svl::SharedString r);
+    FormulaStringNameToken(StackVar eTypeP, svl::SharedString r, bool isOptional = false);
     FormulaStringNameToken(const FormulaStringNameToken& r);
 
     virtual FormulaToken* Clone() const override;
     const svl::SharedString& GetString() const { return maString; }
+    bool GetIsOptional() const { return mIsOptional; }
+    void SetIsOptional(bool isOptional) { mIsOptional = isOptional; }
     virtual bool operator==(const FormulaToken& rToken) const override;
 };
 

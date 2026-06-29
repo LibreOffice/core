@@ -2079,12 +2079,38 @@ void FormulaCompiler::Factor()
                     SAL_WARN("formula.core","Jump OpCode: " << +eOp);
                     assert(!"FormulaCompiler::Factor: someone forgot to add a jump count case");
             }
+            OpCode eFacOpCode = pFacToken->GetOpCode();
             eOp = NextToken();
             if (eOp == ocOpen)
             {
                 NextToken();
-                CheckSetForceArrayParameter( mpToken, 0);
-                eOp = Expression();
+                // Optional LAMBDA parameters are surrounded by []
+                if (eFacOpCode == ocLambda && mpToken->GetOpCode() == ocTableRefOpen)
+                {
+                    meLastOp = ocSep; // So that NextToken() doesn't produce an error
+                    eOp = NextToken();
+                    if (eOp == ocPush && mpToken->GetType() == svStringName)
+                    {
+                        CheckSetForceArrayParameter(mpToken, 0);
+                        static_cast<FormulaStringNameToken*>(mpToken.get())->SetIsOptional(true);
+                        PutCode(mpToken);
+                        eOp = NextToken();
+                        if (eOp == ocTableRefClose)
+                        {
+                            meLastOp = ocPush; // So that NextToken() doesn't produce an error
+                            eOp = NextToken();
+                        }
+                        else
+                            SetError(FormulaError::PairExpected);
+                    }
+                    else
+                        SetError(FormulaError::ParameterExpected);
+                }
+                else
+                {
+                    CheckSetForceArrayParameter(mpToken, 0);
+                    eOp = Expression();
+                }
             }
             else
                 SetError( FormulaError::PairExpected);
@@ -2093,8 +2119,8 @@ void FormulaCompiler::Factor()
             // ignored) an unlimited ocIf would crash because
             // ScRawToken::Clone() allocates the JumpBuffer according to
             // nJump[0]*2+2, which is 3*2+2 on ocIf and 2*2+2 ocIfError and ocIfNA.
+            // Also, ocChoose, ocLet, and ocLambda have variable parameter list lengths.
             short nJumpMax;
-            OpCode eFacOpCode = pFacToken->GetOpCode();
             switch (eFacOpCode)
             {
                 case ocIf:
@@ -2128,10 +2154,35 @@ void FormulaCompiler::Factor()
                 if ( ++nJumpCount <= nJumpMax )
                     static_cast<FormulaJumpToken*>(&*pFacToken)->GetJump()[nJumpCount] = mnPC-1;
                 NextToken();
-                CheckSetForceArrayParameter( mpToken, nJumpCount - 1);
-                eOp = Expression();
+                // Optional LAMBDA parameters are surrounded by []
+                if (eFacOpCode == ocLambda && mpToken->GetOpCode() == ocTableRefOpen)
+                {
+                    meLastOp = ocSep; // So that NextToken() doesn't produce an error
+                    eOp = NextToken();
+                    if (eOp == ocPush && mpToken->GetType() == svStringName)
+                    {
+                        CheckSetForceArrayParameter(mpToken, nJumpCount - 1);
+                        static_cast<FormulaStringNameToken*>(mpToken.get())->SetIsOptional(true);
+                        PutCode(mpToken);
+                        eOp = NextToken();
+                        if (eOp == ocTableRefClose)
+                        {
+                            meLastOp = ocPush; // So that NextToken() doesn't produce an error
+                            eOp = NextToken();
+                        }
+                        else
+                            SetError(FormulaError::PairExpected);
+                    }
+                    else
+                        SetError(FormulaError::ParameterExpected);
+                }
+                else
+                {
+                    CheckSetForceArrayParameter(mpToken, nJumpCount - 1);
+                    eOp = Expression();
+                }
                 // ocSep or ocClose terminate the subexpression
-                PutCode( mpToken );
+                PutCode(mpToken);
             }
             if (eOp != ocClose)
                 SetError( FormulaError::PairExpected);

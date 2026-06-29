@@ -72,15 +72,17 @@ private:
     ScFormulaCell* mpCell;
     ScInterpreterContext* mpContext;
 
-    /// the body (code) of the lambda
+    // the body (code) of the lambda
     ScTokenArray maLambdaBody;
-    /// for each parameter, a list of positions where it appears in the body
+    // for each parameter, a list of positions where it appears in the body
     std::vector<std::forward_list<short>> maReplacementPositions;
+    short mnRequiredParams;
 
 public:
     ScFormulaFunction(const ScFormulaFunction&) = default;
     ScFormulaFunction(const ScInterpreter& rInterpreter, const std::vector<OUString>& rLambdaParams,
-                      const ScTokenArray& rLambdaBody, short nBodyStart, short nBodyEnd);
+                      short nRequiredParams, const ScTokenArray& rLambdaBody, short nBodyStart,
+                      short nBodyEnd);
 
     virtual OpCode GetOpCode() const override { return ocLambda; }
 
@@ -94,6 +96,7 @@ public:
     {
         return maReplacementPositions[nParam];
     }
+    short GetNumRequiredParams() const { return mnRequiredParams; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

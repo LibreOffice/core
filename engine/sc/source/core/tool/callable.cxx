@@ -263,7 +263,7 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
 }
 
 ScFormulaFunction::ScFormulaFunction(const ScInterpreter& rInterpreter,
-                                     const std::vector<OUString>& rParams,
+                                     const std::vector<OUString>& rParams, short nRequiredParams,
                                      const ScTokenArray& rTokens, short nBodyStart, short nBodyEnd)
     : formula::FormulaCallable()
     , mpDoc(&rInterpreter.mrDoc)
@@ -272,6 +272,7 @@ ScFormulaFunction::ScFormulaFunction(const ScInterpreter& rInterpreter,
     , mpContext(&rInterpreter.mrContext)
     , maLambdaBody(rInterpreter.mrDoc)
     , maReplacementPositions(rParams.size())
+    , mnRequiredParams(nRequiredParams)
 {
     lcl_CloneSubarray(rTokens, nBodyStart, nBodyEnd, maLambdaBody);
 

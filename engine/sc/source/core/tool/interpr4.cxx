@@ -910,6 +910,26 @@ const svl::SharedString & ScInterpreter::PopString()
     return svl::SharedString::getEmptyString();
 }
 
+const svl::SharedString& ScInterpreter::PopStringName(bool& rIsOptional)
+{
+    if (sp)
+    {
+        --sp;
+        const FormulaToken* p = pStack[sp];
+        if (p->GetType() == svStringName)
+        {
+            auto pToken = static_cast<const FormulaStringNameToken*>(p);
+            rIsOptional = pToken->GetIsOptional();
+            return pToken->GetString();
+        }
+        else
+            SetError(FormulaError::ParameterExpected);
+    }
+    else
+        SetError(FormulaError::UnknownStackVariable);
+    return svl::SharedString::getEmptyString();
+}
+
 void ScInterpreter::ValidateRef( const ScSingleRefData & rRef )
 {
     SCCOL nCol;

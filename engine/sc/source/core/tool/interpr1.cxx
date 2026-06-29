@@ -10038,29 +10038,65 @@ void ScInterpreter::ScLambda()
     }
 
     FormulaToken** pCode = pArr->GetCode();
-    std::vector<OUString> aParams(nJumpCount - 1);
+    short nParams = nJumpCount - 1;
+    std::vector<OUString> aParams(nParams);
+    short nFirstOptionalParam = nParams;
 
-    if (nJumpCount > 1)
-    {
-        // first param name is on the top of the stack
-        aParams[0] = GetString().getString();
-        // param names after the first are found at pJump[1] to pJump[nJumpCount - 2]
-        for (nJump = 1; nJump <= nJumpCount - 2; ++nJump)
-        {
-            auto pToken = static_cast<FormulaStringNameToken*>(pCode[pJump[nJump] + 1]);
-            aParams[nJump] = pToken->GetString().getString();
-        }
-
-        // body is between pJump[nJumpCount - 1] and pJump[nJumpCount]
-        FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, *pArr, pJump[nJumpCount - 1], pJump[nJumpCount]);
-        PushCallable(pFunc);
-    }
-    else
+    if (nParams < 1)
     {
         // FIXME: jump opcodes need to work differently; this shouldn't be forbidden
-        SAL_WARN("sc", "Cannot construct a LAMBDA with no parameters");
         PushError(FormulaError::ParameterExpected);
+        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+        return;
     }
+
+    // First param name is on the top of the stack
+    bool isOptional = false;
+    aParams[0] = PopStringName(isOptional).getString();
+
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+        return;
+    }
+
+    if (isOptional)
+        nFirstOptionalParam = 0;
+
+    // Param names after the first are found at pJump[1] + 1 to pJump[nJumpCount - 2] + 1
+    for (nJump = 1; nJump <= nJumpCount - 2; ++nJump)
+    {
+        if (auto pToken = dynamic_cast<FormulaStringNameToken*>(pCode[pJump[nJump] + 1]))
+        {
+            aParams[nJump] = pToken->GetString().getString();
+            // All optional parameters must appear at the end of the parameter list
+            if (nFirstOptionalParam < nParams)
+            {
+                // We've seen at least one optional param; all params after that point must
+                // be optional, as well.
+                if (!pToken->GetIsOptional())
+                {
+                    PushError(FormulaError::IllegalParameter);
+                    aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+                    return;
+                }
+            }
+            else if (pToken->GetIsOptional())
+                nFirstOptionalParam = nJump;
+        }
+        else
+        {
+            PushError(FormulaError::ParameterExpected);
+            aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
+            return;
+        }
+    }
+
+    // Lambda-body is between pJump[nJumpCount - 1] and pJump[nJumpCount]
+    FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, nFirstOptionalParam, *pArr,
+                                                     pJump[nJumpCount - 1], pJump[nJumpCount]);
+    PushCallable(pFunc);
 
     aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
 }
@@ -10619,8 +10655,9 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
         }
 
         short nParamCount = pLambda->GetNumParams();
+        short nRequiredParamCount = pLambda->GetNumRequiredParams();
         short nArgCount = aArguments.size();
-        if (nParamCount != nArgCount)
+        if (nArgCount > nParamCount || nArgCount < nRequiredParamCount)
         {
             // A call with the wrong number of arguments is a value error,
             // matching the OOXML interpretation.
@@ -10632,15 +10669,26 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
         // clone tokens of lambda-body for replacing string name tokens with arguments
         ScTokenArray aNewTokens = pLambda->GetLambdaBody().CloneValue();
 
-        for (short nParam = 0; nParam < nArgCount; ++nParam)
+        for (short nParam = 0; nParam < nParamCount; ++nParam)
         {
             const std::forward_list<short>& rPositions = pLambda->GetReplacementPositions(nParam);
-            FormulaConstTokenRef pArgument = aArguments[nParam];
-            FormulaTokenRef pNewArg = RefToAbs(pArgument);
-            if (!pNewArg)
+
+            FormulaTokenRef pNewArg = nullptr;
+            if (nParam < nArgCount)
             {
-                PushError(nGlobalError);
-                return;
+                FormulaConstTokenRef pArgument = aArguments[nParam];
+                pNewArg = RefToAbs(pArgument);
+                if (!pNewArg)
+                {
+                    PushError(nGlobalError);
+                    return;
+                }
+            }
+            else
+            {
+                // Ensure parameters that are optional and not provided are set to svMissing,
+                // so that ISOMITTED detects them properly.
+                pNewArg = new FormulaMissingToken();
             }
 
             lcl_ReplaceParam(aNewTokens, rPositions, pNewArg);
@@ -10867,7 +10915,8 @@ void ScInterpreter::ScLet()
 
     // calculate the first subformula with no bindings
     {
-        FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, *pArr, pJump[1], pJump[2]);
+        FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, 0, *pArr,
+                                                         pJump[1], pJump[2]);
         ScCall(pFunc, aArgs);
 
         aArgs.push_back(PopToken());
@@ -10879,7 +10928,8 @@ void ScInterpreter::ScLet()
     for (nJump = 3; nJump < nJumpCount; nJump += 2)
     {
         // calculate each subformula with the bindings created before it
-        FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, *pArr, pJump[nJump], pJump[nJump + 1]);
+        FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, aParams.size(),
+                                                         *pArr, pJump[nJump], pJump[nJump + 1]);
         ScCall(pFunc, aArgs);
 
         aArgs.push_back(PopToken());
@@ -10892,7 +10942,8 @@ void ScInterpreter::ScLet()
     nJump--;
 
     // calculate the last subformula with all of the bindings in place
-    FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, *pArr, pJump[nJump], pJump[nJump + 1]);
+    FormulaCallableRef pFunc = new ScFormulaFunction(*this, aParams, aParams.size(),
+                                                     *pArr, pJump[nJump], pJump[nJump + 1]);
     ScCall(pFunc, aArgs);
 
     aCode.Jump(pJump[nJumpCount], pJump[nJumpCount]);
