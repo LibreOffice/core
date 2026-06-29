@@ -594,53 +594,6 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 }
 
 /*-************************************************************************************************************
-    @interface  XTasksSupplier
-    @short      get access to create enumerations of our task children
-    @descr      Direct children of desktop are tasks every time.
-                Calling this method allows to create enumerations of the children.
-
-                But, don't forget - you will be the owner of the returned object and must release it!
-                We use a helper class to implement the access interface. They hold a weak reference to us.
-                It can be, that the desktop is dead, but not your TasksAccess-object! Then they will do nothing!
-                You can't create enumerations then.
-
-    @attention  Normally we don't need any lock here. We don't work on internal members!
-
-    @seealso    class TasksAccess
-    @return     A reference to an access object, which can create enumerations of our child tasks.
-
-    @onerror    A null reference is returned.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getTasks()
-{
-    SAL_INFO("fwk.desktop", "Desktop::getTasks(): Use of obsolete interface XTaskSupplier");
-    return nullptr;
-}
-
-/*-************************************************************************************************************
-    @interface  XTasksSupplier
-    @short      return current active task of our direct children
-    @descr      Desktop children are tasks only ! If we have an active path from desktop
-                as top to any frame on bottom, we must have an active direct child. Its reference is returned here.
-
-    @attention  a)  Do not confuse it with getCurrentFrame()! The current frame might not be one of our direct children.
-                    It can be every frame in subtree and must have the focus (is the last one of an active path!).
-                b)  We don't need any lock here. Our container itself is threadsafe and lives, if we live!
-
-    @seealso    method getCurrentFrame()
-    @return     A reference to our current active taskchild.
-
-    @onerror    A null reference is returned.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-css::uno::Reference< css::frame::XTask > SAL_CALL Desktop::getActiveTask()
-{
-    SAL_INFO("fwk.desktop", "Desktop::getActiveTask(): Use of obsolete interface XTaskSupplier");
-    return nullptr;
-}
-
-/*-************************************************************************************************************
     @interface  XDispatchProvider
     @short      search a dispatcher for given URL
     @descr      We use a helper implementation (class DispatchProvider) to do so.

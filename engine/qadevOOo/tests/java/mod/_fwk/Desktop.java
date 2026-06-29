@@ -41,7 +41,6 @@ import com.sun.star.uno.XInterface;
 *  <li><code>com::sun::star::frame::XDispatchProvider</code></li>
 *  <li><code>com::sun::star::frame::XFrame</code></li>
 *  <li><code>com::sun::star::frame::XFramesSupplier</code></li>
-*  <li><code>com::sun::star::frame::XTasksSupplier</code></li>
 *  <li><code>com::sun::star::lang::XComponent</code></li>
 *  <li><code>com::sun::star::task::XStatusIndicatorFactory</code></li>
 * </ul><p>
@@ -51,7 +50,6 @@ import com.sun.star.uno.XInterface;
 * @see com.sun.star.frame.XDispatchProvider
 * @see com.sun.star.frame.XFrame
 * @see com.sun.star.frame.XFramesSupplier
-* @see com.sun.star.frame.XTasksSupplier
 * @see com.sun.star.lang.XComponent
 * @see com.sun.star.task.XStatusIndicatorFactory
 * @see ifc.beans._XPropertySet

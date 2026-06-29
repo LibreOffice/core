@@ -7507,11 +7507,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      any dispatchWithReturnValue([in] ::com::sun::star::util::URL URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments);
     };
-    /** @deprecated */ published interface XTasksSupplier {
-     interface ::com::sun::star::uno::XInterface;
-     /** @deprecated */ ::com::sun::star::container::XEnumerationAccess getTasks();
-     /** @deprecated */ ::com::sun::star::frame::XTask getActiveTask();
-    };
     published interface XTerminateListener {
      interface ::com::sun::star::lang::XEventListener;
      void queryTermination([in] ::com::sun::star::lang::EventObject Event) raises (::com::sun::star::frame::TerminationVetoException);

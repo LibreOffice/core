@@ -2503,7 +2503,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XSynchronousDispatch \
 	XSynchronousFrameLoader \
 	XTask \
-	XTasksSupplier \
 	XTerminateListener \
 	XTerminateListener2 \
 	XTitle \

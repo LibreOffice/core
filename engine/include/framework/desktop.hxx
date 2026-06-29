@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/XTasksSupplier.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -71,7 +70,6 @@ enum ELoadState
                 XServiceInfo
                 XDesktop
                 XComponentLoader
-                XTasksSupplier
                 XDispatchProvider
                 XFramesSupplier
                 XFrame
@@ -89,7 +87,6 @@ enum ELoadState
 typedef cppu::WeakComponentImplHelper<
            css::lang::XServiceInfo              ,
            css::frame::XDesktop2                ,
-           css::frame::XTasksSupplier           ,
            css::frame::XDispatchResultListener  ,   // => XEventListener
            css::task::XInteractionHandler       ,
            css::frame::XUntitledNumbers > Desktop_BASE;
@@ -210,10 +207,6 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
                                                                                                                           const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ,
                                                                                                                           const css::uno::Sequence< css::beans::PropertyValue >&         lArguments       ) override;
-
-        //  XTasksSupplier
-        virtual css::uno::Reference< css::container::XEnumerationAccess >           SAL_CALL getTasks                   (                                                                                 ) override;
-        virtual css::uno::Reference< css::frame::XTask >                            SAL_CALL getActiveTask              (                                                                                 ) override;
 
         //  XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch >                        SAL_CALL queryDispatch              ( const css::util::URL&                                          aURL             ,
