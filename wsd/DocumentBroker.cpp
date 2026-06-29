@@ -4527,16 +4527,15 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         {
             LOG_WRN("Failed to upload presets for session [" << id << "]: " << exc.what());
         }
-        if (activeSessionCount <= 1 && !isConvertTo())
+        if (!isConvertTo())
         {
-            // rescue clipboard before shutdown.
-            // N.B. If the user selects then copies, most likely we will
-            // mark the document as possibly-modified. This will issue
-            // a save (below) before removing the session, guaranteeing
-            // that we wait for the save to complete, which is after
-            // rescuing the clipboard via getclipboard. Conversely,
-            // if there is no reason to think the document is possibly-
-            // modified, then it's unlikely there is anything in the clipboard.
+            // Rescue the clipboard before the session goes away so its copied
+            // content lands in the global SavedClipboards cache. The clipboard
+            // tag is tied to this view, so once the session is gone no live one
+            // can serve it; caching here lets a later paste still fetch it,
+            // including from another session of the same document. The session
+            // lingers in WAIT_DISCONNECT until the 'disconnected' handshake,
+            // leaving time for the getclipboard response to arrive and cache.
             LOG_TRC("request/rescue clipboard on disconnect for " << session->getId());
             forwardToChild(session, "getclipboard name=shutdown");
         }
