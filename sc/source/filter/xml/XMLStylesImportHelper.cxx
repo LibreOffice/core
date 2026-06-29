@@ -324,9 +324,9 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
         {
             if (rRange.aStart.Row() == aPrevRange.aStart.Row())
             {
-                if (rRange.aEnd.Row() == aPrevRange.aEnd.Row())
+                if (rRange.aEnd.Row() == aPrevRange.aEnd.Row() &&
+                    aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col())
                 {
-                    OSL_ENSURE(aPrevRange.aEnd.Col() + 1 == rRange.aStart.Col(), "something went wrong");
                     aPrevRange.aEnd.SetCol(rRange.aEnd.Col());
                 }
                 else
@@ -335,9 +335,9 @@ void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
             else
             {
                 if (rRange.aStart.Col() == aPrevRange.aStart.Col() &&
-                    rRange.aEnd.Col() == aPrevRange.aEnd.Col())
+                    rRange.aEnd.Col() == aPrevRange.aEnd.Col() &&
+                    aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row())
                 {
-                    OSL_ENSURE(aPrevRange.aEnd.Row() + 1 == rRange.aStart.Row(), "something went wrong");
                     aPrevRange.aEnd.SetRow(rRange.aEnd.Row());
                 }
                 else
