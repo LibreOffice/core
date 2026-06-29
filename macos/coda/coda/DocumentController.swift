@@ -17,6 +17,17 @@ final class DocumentController: NSDocumentController {
     static let isUITesting = ProcessInfo.processInfo.arguments.contains("--uitesting")
 
     /**
+     * How long, in seconds, to wait for modified documents to finish saving
+     * before opening another document.
+     *
+     * Saving runs through the engine and completes asynchronously. Opening
+     * waits for the saves to land on disk so the work is recoverable if the
+     * load of the next document OOMs, but it gives up after this long so that
+     * a stalled save never blocks opening for good.
+     */
+    private static let flushBeforeOpenTimeoutSeconds: TimeInterval = 8
+
+    /**
      * The current, live NSOpenPanel instance that was open during the app startup.
      *
      * We make sure that there is always just one instance, and focus it in case anybody
@@ -88,6 +99,19 @@ final class DocumentController: NSDocumentController {
                                completionHandler: @escaping (NSDocument?, Bool, Error?) -> Void) {
         closeLiveOpenPanel()
 
+        // Write any unsaved documents to disk before loading this one. Loading a document is a relatively dangerous
+        // checkpoint which can e.g. OOM, so ensure already-open work survives if loading takes down the process.
+        flushModifiedDocuments {
+            self.performOpenDocument(withContentsOf: url, display: displayDocument, completionHandler: completionHandler)
+        }
+    }
+
+    /**
+     * Loads the document.
+     */
+    private func performOpenDocument(withContentsOf url: URL,
+                                     display displayDocument: Bool,
+                                     completionHandler: @escaping (NSDocument?, Bool, Error?) -> Void) {
         // During UI testing the file comes from the test runner's sandbox,
         // which the app cannot write to.  Copy it into the app's own temp
         // directory so NSDocument considers it writable.
@@ -106,6 +130,41 @@ final class DocumentController: NSDocumentController {
         }
 
         super.openDocument(withContentsOf: url, display: displayDocument, completionHandler: completionHandler)
+    }
+
+    /**
+     * Save every open document that has unsaved edits, then run `next`.
+     *
+     * Each save runs through the engine and finishes asynchronously, so this
+     * waits for all of them to report completion before running `next`. If a
+     * save stalls, a timer runs `next` anyway so opening cannot hang for good.
+     * `next` runs exactly once, on the main queue.
+     */
+    private func flushModifiedDocuments(then next: @escaping () -> Void) {
+        let modified = documents.filter { $0.hasUnautosavedChanges }
+        if modified.isEmpty {
+            next()
+            return
+        }
+
+        var alreadyProceeded = false
+        let proceedOnce = {
+            if alreadyProceeded { return }
+            alreadyProceeded = true
+            next()
+        }
+
+        let group = DispatchGroup()
+        for doc in modified {
+            group.enter()
+            doc.autosave(withImplicitCancellability: false) { _ in
+                group.leave()
+            }
+        }
+        group.notify(queue: .main, execute: proceedOnce)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + DocumentController.flushBeforeOpenTimeoutSeconds,
+                                      execute: proceedOnce)
     }
 
     /**
