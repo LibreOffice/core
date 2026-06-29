@@ -4248,6 +4248,11 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
         bool isAbort = payload == "ABORT";
         bool isError = payload == "ERROR";
         bool isPending = payload == "PENDING";
+        // "DONE": the store already delivered the file to its final location
+        // (CODA-W, where the Win32 file-save callback both picked the path and
+        // wrote there), so we only have to dismiss the export UI - there is no
+        // file left to hand to the host.
+        bool isDone = payload == "DONE";
         bool exportWasRequested = !_exportAsWopiUrl.empty();
 
         if (isPending) // dialog ret=ok, local save has been started
@@ -4271,6 +4276,12 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
         {
             _exportAsWopiUrl.clear();
             sendTextFrameAndLogError("error: cmd=exportas kind=saveasfailed");
+            return;
+        }
+
+        if (isDone) // file already delivered by the store; nothing left to do
+        {
+            _exportAsWopiUrl.clear();
             return;
         }
 

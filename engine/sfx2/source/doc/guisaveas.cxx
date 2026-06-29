@@ -1974,8 +1974,20 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
     {
         if ( pViewShell )
         {
+#ifdef _WIN32
+            // On the Windows desktop app the COKit file-save callback is the
+            // native Win32 picker (output_file_dialog_from_core): it already
+            // asked the user for a location and the store wrote the export
+            // there. There is nothing left to deliver, so signal completion
+            // with "DONE" - the host dismisses the "Please wait" UI without
+            // popping a second, redundant save dialog. (.uno:SaveGraphic
+            // exports to a temp file and fires KIT_CALLBACK_EXPORT_FILE with
+            // that URL from its own code path, so it still delivers normally.)
+            pViewShell->viewCallback( KIT_CALLBACK_EXPORT_FILE, "DONE"_ostr );
+#else
             OUString sURL = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             pViewShell->viewCallback( KIT_CALLBACK_EXPORT_FILE, sURL.toUtf8() );
+#endif
         }
     }
 
