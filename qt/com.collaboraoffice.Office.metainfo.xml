@@ -41,6 +41,18 @@
   </kudos>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="26.04.1.4-1" date="2026-07-02">
+      <description>
+        <p>New features and fixes in this release:</p>
+        <ul>
+          <li>Built-in AI assistant across Writer, Calc and Impress – draft and refine text, fix formulas, fact check slides, without leaving your work</li>
+          <li>Smarter editing – document comparison and multi-page view in Writer, calculated pivot fields and per-user views in Calc</li>
+          <li>Ever improving document compatibility – improved handling of Microsoft Word, Excel and PowerPoint formats</li>
+          <li>More accessible – a broad set of accessibility improvements throughout</li>
+          <li>More reliable clipboard – copy and paste in and out of Collabora Office</li>
+        </ul>
+      </description>
+    </release>
     <release version="25.04.9.2-2" date="2026-03-14">
       <description>
         <p>New features and fixes in this release:</p>
