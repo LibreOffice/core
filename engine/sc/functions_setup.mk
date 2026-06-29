@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_use_externals,sc_$(1)_functions_test, \
 	boost_headers \
 	mdds_headers \
         md4c \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_$(1)_functions_test, \
@@ -44,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_$(1)_functions_test, \
     scqahelper \
     sfx \
     sot \
+    subsequenttest \
     svl \
     svt \
     svx \
