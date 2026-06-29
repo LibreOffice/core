@@ -23,6 +23,7 @@
 
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
+#include <certificate.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 
 #include <com/sun/star/security/CertificateCharacters.hpp>
@@ -229,10 +230,13 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP(weld::Container* pParent,
     aDetails = xmlsec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( XsResId( STR_THUMBPRINT_SHA1 ), aLBEntry, aDetails, true );
 
-    aSeq = xCert->getMD5Thumbprint();
+    xmlsecurity::Certificate *const pCert{dynamic_cast<xmlsecurity::Certificate *>(xCert.get())};
+    assert(pCert); // in practice all certs are built-in impl.
+
+    aSeq = pCert->getSHA256Thumbprint();
     aLBEntry = xmlsec::GetHexString( aSeq, pHexSep );
     aDetails = xmlsec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XsResId( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
+    InsertElement( XsResId( STR_THUMBPRINT_SHA256 ), aLBEntry, aDetails, true );
 
     m_xElementsLB->columns_autosize();
     m_xElementsLB->connect_selection_changed(

@@ -33,7 +33,7 @@
 #define STR_SIGNATURE_ALGO                          NC_("STR_SIGNATURE_ALGO", "Signature Algorithm")
 #define STR_USE                                     NC_("STR_USE", "Certificate Use")
 #define STR_THUMBPRINT_SHA1                         NC_("STR_THUMBPRINT_SHA1", "Thumbprint SHA1")
-#define STR_THUMBPRINT_MD5                          NC_("STR_THUMBPRINT_MD5", "Thumbprint MD5")
+#define STR_THUMBPRINT_SHA256                       NC_("STR_THUMBPRINT_SHA256", "Thumbprint SHA256")
 
 #define STR_XMLSECDLG_OPENED_CRTMGR                 NC_("STR_XMLSECDLG_OPENED_CRTMGR", "You have opened the certificate manager at\n")
 #define STR_XMLSECDLG_OLD_ODF_FORMAT                NC_("STR_XMLSECDLG_OLD_ODF_FORMAT", "This document contains signatures in ODF 1.1 (OpenOffice.org 2.x) format. " \
