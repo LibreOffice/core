@@ -55,30 +55,24 @@ void stripRedundantParentheses(ScTokenArray& rArray,
         }
         // Strip only when the inner pair fully spans the wrapper's
         // argument.
-        sal_uInt16 nInnerClose = 0;
         sal_uInt16 nDepth = 2;
         for (sal_uInt16 nScan = nPosition + 3; nScan < rArray.GetLen(); ++nScan)
         {
             OpCode eOp = rArray.TokenAt(nScan)->GetOpCode();
-            if (eOp == ocOpen)
-                ++nDepth;
-            else if (eOp == ocClose && --nDepth == 1)
+            if (nDepth == 1)
             {
-                if (nScan + 1 < rArray.GetLen()
-                    && rArray.TokenAt(nScan + 1)->GetOpCode() == ocClose)
+                if (eOp == ocClose)
                 {
-                    nInnerClose = nScan;
+                    rArray.RemoveToken(nScan - 1, 1);
+                    rArray.RemoveToken(nPosition + 2, 1);
                 }
                 break;
             }
+            if (eOp == ocOpen)
+                ++nDepth;
+            else if (eOp == ocClose)
+                --nDepth;
         }
-        if (!nInnerClose)
-        {
-            ++nPosition;
-            continue;
-        }
-        rArray.RemoveToken(nInnerClose, 1);
-        rArray.RemoveToken(nPosition + 2, 1);
         ++nPosition;
     }
 }
