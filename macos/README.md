@@ -5,19 +5,20 @@ This is the Collabora Office macOS desktop app (`macos/`).
 
 ## Requirements
 
+* Homebrew - install Homebrew from https://brew.sh/ to make getting all the dependencies easier.
 * Node.js — needed for building the JavaScript parts in `browser/`. Install
   Node.js (20.x) by downloading the macOS `.pkg` from the `Prebuilt installer`
   tab at https://nodejs.org/en/download. It provides the `npm` and `node`
   commands.
-* libtool — for `./configure`:
+* Install various build dependencies by running
     ```bash
-    brew install libtool
+    brew install automake autoconf libtool make gperf meson ninja pkg-conf
     ```
-* Python 3.12 plus the `lxml` and `polib` modules, used by the Python build
+* Python 3 plus the `lxml` and `polib` modules, used by the Python build
   helpers:
     ```bash
-    brew install python@3.12
-    /opt/homebrew/bin/pip3.12 install --break-system-packages lxml polib
+    brew install python3
+    /opt/homebrew/bin/pip3 install --break-system-packages lxml polib
     ```
     Modern pip (23+) treats the Homebrew Python environment as externally
     managed (PEP 668), so `--break-system-packages` is required; alternatively,
@@ -54,6 +55,10 @@ git clone https://gerrit.collaboraoffice.com/translations engine/translations
 
 `autogen.input`:
 
+    # See footnote [0]
+    PKG_CONFIG=/opt/homebrew/bin/pkg-config
+    # See footnote [1]
+    GNUMAKE=gmake
     # Distro
     --with-distro=CPMacOS-LOKit
     --disable-mergelibs
@@ -119,4 +124,13 @@ That's it!
 If you just want a pre-built macOS version instead of building locally, please use
 the **TestFlight preview build**:
 👉 https://testflight.apple.com/join/sbkwMzMt
+
+## Footnotes
+
+[0] Without PKG_CONFIG=... in autogen.input, our configure.ac gets a little confused and tries to build internal python, which is
+    both unwanted, and will fail.
+
+[1] by default, autogen.sh finds /usr/bin/make instead of the newer version of make that brew installs (brew calls it gmake),
+    and complains that the version is too old.
+
 <!-- build-doc-end -->
