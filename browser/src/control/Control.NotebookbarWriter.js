@@ -2853,13 +2853,6 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				},
 				'children' : [
 					{
-						'type': 'bigtoolitem',
-						'id': 'table-number-format-dialog',
-						'text': _UNO('.uno:TableNumberFormatDialog', 'text'),
-						'command': '.uno:TableNumberFormatDialog',
-						'accessibility': { focusBack: true,	combination: 'NF', de: null }
-					},
-					{
 						'type': 'container',
 						'children': [
 							{
