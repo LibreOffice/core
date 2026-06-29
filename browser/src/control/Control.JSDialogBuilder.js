@@ -503,6 +503,38 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		return rows + 1;
 	},
 
+	// Turns a container into a CSS grid and applies spacing and homogeneous
+	// sizing along its main axis (columns for a horizontal container, rows
+	// for a vertical one), so both container orientations support both
+	// properties the same way.
+	_applyGridLayout: function(table, childData, isVertical) {
+		$(table).css('display', 'grid');
+
+		if (!isVertical) {
+			var rows = this._getGridRows(childData.children);
+			var cols = this._getGridColumns(childData.children);
+			var trackSize = childData.homogeneous ? '1fr' : 'auto';
+
+			if (rows > 1 && cols > 1) {
+				table.style.gridTemplateRows = 'repeat(' + rows + ', ' + trackSize + ')';
+				table.style.gridTemplateColumns = 'repeat(' + cols + ', ' + trackSize + ')';
+			} else {
+				$(table).css('grid-auto-flow', 'column');
+				if (childData.homogeneous)
+					table.style.gridAutoColumns = '1fr';
+			}
+
+			if (childData.spacing)
+				table.style.columnGap = childData.spacing + 'px';
+		} else {
+			if (childData.homogeneous)
+				table.style.gridAutoRows = '1fr';
+
+			if (childData.spacing)
+				table.style.rowGap = childData.spacing + 'px';
+		}
+	},
+
 	_explorableEntry: function(parentContainer, data, content, builder, valueNode, iconURL, updateCallback) {
 		var mainContainer = window.L.DomUtil.create('div', 'ui-explorable-entry level-' + builder._currentDepth + ' ' + builder.options.cssClass, parentContainer);
 		if (data) {
@@ -2449,21 +2481,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				if (childData.cssClass)
 					$(table).addClass(childData.cssClass);
 
-				if (!isVertical) {
-					var rows = this._getGridRows(childData.children);
-					var cols = this._getGridColumns(childData.children);
-
-					if (rows > 1 && cols > 1) {
-						var gridRowColStyle = 'grid-template-rows: repeat(' + rows  + '); \
-							grid-template-columns: repeat(' + cols  + ');';
-
-						table.style = gridRowColStyle;
-					} else {
-						$(table).css('grid-auto-flow', 'column');
-					}
-
-					$(table).css('display', 'grid');
-				}
+				if (!isVertical || childData.spacing || childData.homogeneous)
+					this._applyGridLayout(table, childData, isVertical);
 
 				$(table).addClass('ui-grid-cell');
 

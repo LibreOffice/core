@@ -397,6 +397,10 @@ void VclBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     VclContainer::DumpAsPropertyTree(rJsonWriter);
     rJsonWriter.put("vertical", m_bVerticalContainer);
+    if (m_nSpacing)
+        rJsonWriter.put("spacing", m_nSpacing);
+    if (m_bHomogeneous)
+        rJsonWriter.put("homogeneous", true);
 }
 
 sal_uInt16 VclBox::getDefaultAccessibleRole() const

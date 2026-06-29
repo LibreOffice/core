@@ -297,6 +297,8 @@ type FunctionNameAlias = {
 interface ContainerWidgetJSON extends WidgetJSON {
 	layoutstyle?: string | 'start' | 'end'; // describes alignment of the elements
 	vertical?: boolean; // is horizontal or vertical container
+	spacing?: number; // gap between children in pixels
+	homogeneous?: boolean; // all children share equal size along the main axis
 }
 
 interface OverflowGroupWidgetJSON extends ContainerWidgetJSON {
