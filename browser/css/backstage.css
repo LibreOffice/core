@@ -251,10 +251,9 @@
 /* Home view specific styles */
 .backstage-home-templates-row {
 	display: flex;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	gap: 1.5rem;
 	margin-bottom: 1.5rem;
-	overflow: hidden;
 	padding: 0 12px 0.5rem;
 	justify-content: flex-start;
 	max-width: 100%;
