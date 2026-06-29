@@ -700,7 +700,13 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
         if ( m_pWrtShell )
         {
             SwDoc* pDoc = m_pWrtShell->GetDoc();
+            // tdf#172325: this part broadcast changes and if there's the WriterInspector enabled
+            // it goes mayhem in SfxItemSet management
+            // so perhaps it's just a workaround but feel free to revert the lock/unlock call
+            // if you find a better way
+            m_pWrtShell->LockView(true);
             pDoc->SetDefaultPageMode( bIsSquaredPageModeFlag );
+            m_pWrtShell->LockView(false);
             m_pWrtShell->SetModified();
         }
         bRet = true;
