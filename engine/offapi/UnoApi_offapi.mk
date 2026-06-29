@@ -2466,7 +2466,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame,\
 	XDispatchResultListener \
 	XDocumentTemplates \
 	XExtendedFilterDetection \
-	XFilterDetect \
 	XFrame \
 	XFrame2 \
 	XFrameActionListener \

@@ -7481,11 +7481,6 @@ module com {
      interface ::com::sun::star::uno::XInterface;
      /** @deprecated */ string detect([in] string URL, [in] sequence< ::com::sun::star::beans::PropertyValue > Argumentlist);
     };
-    /** @deprecated */ published interface XFilterDetect {
-     interface ::com::sun::star::uno::XInterface;
-     string getContentType([in] string URL);
-     boolean useExternBrowser([in] string URL);
-    };
     /** @deprecated */ published interface XFrameLoaderQuery {
      interface ::com::sun::star::uno::XInterface;
      /** @deprecated */ sequence< string > getAvailableFilterNames();
