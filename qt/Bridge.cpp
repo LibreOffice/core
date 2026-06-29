@@ -389,7 +389,7 @@ void Bridge::saveDocumentAs()
 
             Poco::URI destUri("file", destInfo.absoluteFilePath().toStdString());
 
-            if (destUri.toString() == currentUri.toString())
+            if (destUri.getPath() == currentUri.getPath())
             {
                 // Send save command if the saveas destination is the same as the current document.
                 const std::string saveCmd = "save dontTerminateEdit=0 dontSaveIfUnmodified=0";
