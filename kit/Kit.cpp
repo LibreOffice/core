@@ -1394,7 +1394,8 @@ void Document::onUnload(const ChildSession& session)
     // Unload the view.
     _loKitDocument->setView(viewId);
     _loKitDocument->registerCallback(nullptr, nullptr);
-    _loKit->registerCallback(nullptr, nullptr);
+    if (_loKitDocument->getViewsCount() <= 1)
+        _loKit->registerCallback(nullptr, nullptr);
     _loKitDocument->destroyView(viewId);
 
     // Since callback messages are processed on idle-timer,
