@@ -61,7 +61,7 @@ bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, const
 }
 
 // XTransferable
-Any SAL_CALL DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor )
+Any DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor )
 {
     const SolarMutexGuard aGuard;
 
@@ -81,13 +81,13 @@ Any SAL_CALL DlgEdTransferableImpl::getTransferData( const DataFlavor& rFlavor )
 
     return aData;
 }
-Sequence< DataFlavor > SAL_CALL DlgEdTransferableImpl::getTransferDataFlavors(  )
+Sequence< DataFlavor > DlgEdTransferableImpl::getTransferDataFlavors(  )
 {
     const SolarMutexGuard aGuard;
 
     return m_SeqFlavors;
 }
-bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor& rFlavor )
+bool DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor& rFlavor )
 {
     const SolarMutexGuard aGuard;
 
@@ -98,7 +98,7 @@ bool SAL_CALL DlgEdTransferableImpl::isDataFlavorSupported( const DataFlavor& rF
 }
 
 // XClipboardOwner
-void SAL_CALL DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& )
+void DlgEdTransferableImpl::lostOwnership( const Reference< XClipboard >&, const Reference< XTransferable >& )
 {
     const SolarMutexGuard aGuard;
 

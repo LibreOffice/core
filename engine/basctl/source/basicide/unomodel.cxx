@@ -44,12 +44,12 @@ public:
         : m_sText(sSelectedText)
         , m_bHasElements(true) {}
 
-    virtual bool SAL_CALL hasMoreElements() override
+    virtual bool hasMoreElements() override
     {
         return m_bHasElements;
     }
 
-    virtual cpo::uno::Any SAL_CALL nextElement() override
+    virtual cpo::uno::Any nextElement() override
     {
         if (m_bHasElements)
         {
@@ -93,17 +93,17 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames()
 }
 
 //  XStorable
-void SAL_CALL SIDEModel::store()
+void SIDEModel::store()
 {
     notImplemented();
 }
 
-void SAL_CALL SIDEModel::storeAsURL( const OUString&, const uno::Sequence< beans::PropertyValue >& )
+void SIDEModel::storeAsURL( const OUString&, const uno::Sequence< beans::PropertyValue >& )
 {
     notImplemented();
 }
 
-void SAL_CALL SIDEModel::storeToURL( const OUString&,
+void SIDEModel::storeToURL( const OUString&,
         const uno::Sequence< beans::PropertyValue >& )
 {
     notImplemented();
@@ -115,7 +115,7 @@ void  SIDEModel::notImplemented()
 }
 
 // XModel
-css::uno::Reference< css::uno::XInterface > SAL_CALL SIDEModel::getCurrentSelection()
+css::uno::Reference< css::uno::XInterface > SIDEModel::getCurrentSelection()
 {
     SolarMutexGuard aGuard;
     Shell* pShell = GetShell();

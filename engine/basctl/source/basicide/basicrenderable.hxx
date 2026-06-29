@@ -45,16 +45,16 @@ public:
     virtual ~Renderable() override;
 
     // XRenderable
-    virtual sal_Int32 SAL_CALL getRendererCount (
+    virtual sal_Int32 getRendererCount (
         const cpo::uno::Any& aSelection,
         const css::uno::Sequence<css::beans::PropertyValue >& xOptions) override;
 
-    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getRenderer (
+    virtual css::uno::Sequence<css::beans::PropertyValue> getRenderer (
         sal_Int32 nRenderer,
         const cpo::uno::Any& rSelection,
         const css::uno::Sequence<css::beans::PropertyValue>& rxOptions) override;
 
-    virtual void SAL_CALL render (
+    virtual void render (
         sal_Int32 nRenderer,
         const cpo::uno::Any& rSelection,
         const css::uno::Sequence<css::beans::PropertyValue>& rxOptions) override;

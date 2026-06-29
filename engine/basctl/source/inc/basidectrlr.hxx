@@ -44,19 +44,19 @@ public:
     virtual ~Controller() override;
 
     // XInterface
-    virtual cpo::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    virtual cpo::uno::Any queryInterface( const css::uno::Type & rType ) override;
+    virtual void acquire() noexcept override;
+    virtual void release() noexcept override;
 
     // XTypeProvider ( ::SfxBaseController )
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual css::uno::Sequence< css::uno::Type > getTypes() override;
+    virtual css::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
+    virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 protected:
     // OPropertyArrayUsageHelper

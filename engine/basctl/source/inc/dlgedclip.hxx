@@ -40,12 +40,12 @@ public:
     virtual ~DlgEdTransferableImpl() override;
 
     // XTransferable
-    virtual cpo::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() override;
-    virtual bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual cpo::uno::Any getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
+    virtual css::uno::Sequence< css::datatransfer::DataFlavor > getTransferDataFlavors() override;
+    virtual bool isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
 
     // XClipboardOwner
-    virtual void SAL_CALL lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
+    virtual void lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
 };
 
 } // namespace basctl

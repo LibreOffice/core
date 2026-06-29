@@ -207,13 +207,13 @@ public:
 private:
     virtual ~ChangesListener() override {}
 
-    virtual void SAL_CALL disposing(lang::EventObject const &) override
+    virtual void disposing(lang::EventObject const &) override
     {
         std::unique_lock g(editor_.mutex_);
         editor_.notifier_.clear();
     }
 
-    virtual void SAL_CALL propertiesChange(
+    virtual void propertiesChange(
         Sequence< beans::PropertyChangeEvent > const &) override
     {
         SolarMutexGuard g;

@@ -33,20 +33,20 @@ public:
     virtual ~SIDEModel() override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > getSupportedServiceNames() override;
     // XStorable2
-    virtual void SAL_CALL storeSelf( const  css::uno::Sequence< css::beans::PropertyValue >& ) override { notImplemented(); }
+    virtual void storeSelf( const  css::uno::Sequence< css::beans::PropertyValue >& ) override { notImplemented(); }
     //  XStorable
-    virtual void SAL_CALL store() override;
-    virtual void SAL_CALL storeAsURL( const   OUString& sURL,
+    virtual void store() override;
+    virtual void storeAsURL( const   OUString& sURL,
                                       const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
-    virtual void SAL_CALL storeToURL( const   OUString& sURL,
+    virtual void storeToURL( const   OUString& sURL,
                                       const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ) override;
 
     // XModel
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection() override;
+    virtual css::uno::Reference< css::uno::XInterface > getCurrentSelection() override;
 };
 
 } // namespace basctl

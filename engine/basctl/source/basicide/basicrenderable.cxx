@@ -109,7 +109,7 @@ bool Renderable::isPrintEvenPages() const
     return nContent != 3;
 }
 
-sal_Int32 SAL_CALL Renderable::getRendererCount (
+sal_Int32 Renderable::getRendererCount (
         const Any&, const Sequence<beans::PropertyValue >& i_xOptions
         )
 {
@@ -155,7 +155,7 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
     return nCount;
 }
 
-Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
+Sequence<beans::PropertyValue> Renderable::getRenderer (
         sal_Int32, const Any&, const Sequence<beans::PropertyValue>& i_xOptions
         )
 {
@@ -182,7 +182,7 @@ Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
     return aVals;
 }
 
-void SAL_CALL Renderable::render (
+void Renderable::render (
         sal_Int32 nRenderer, const Any&,
         const Sequence<beans::PropertyValue>& i_xOptions
         )

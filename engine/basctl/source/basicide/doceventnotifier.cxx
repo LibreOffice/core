@@ -70,10 +70,10 @@ namespace basctl
         virtual ~Impl () override;
 
         // XDocumentEventListener
-        virtual void SAL_CALL documentEventOccured( const DocumentEvent& Event ) override;
+        virtual void documentEventOccured( const DocumentEvent& Event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Event ) override;
+        virtual void disposing( const css::lang::EventObject& Event ) override;
 
         // WeakComponentImplHelper
         virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -108,7 +108,7 @@ namespace basctl
         disposeOnDestruct();
     }
 
-    void SAL_CALL DocumentEventNotifier::Impl::documentEventOccured( const DocumentEvent& _rEvent )
+    void DocumentEventNotifier::Impl::documentEventOccured( const DocumentEvent& _rEvent )
     {
         std::unique_lock aGuard( m_aMutex );
 
@@ -167,7 +167,7 @@ namespace basctl
         }
     }
 
-    void SAL_CALL DocumentEventNotifier::Impl::disposing( const css::lang::EventObject& /*Event*/ )
+    void DocumentEventNotifier::Impl::disposing( const css::lang::EventObject& /*Event*/ )
     {
         SolarMutexGuard aSolarGuard;
         std::unique_lock aGuard( m_aMutex );
@@ -202,7 +202,7 @@ namespace basctl
                 xBroadcaster = theGlobalEventBroadcaster::get(aContext);
             }
 
-            void ( SAL_CALL XDocumentEventBroadcaster::*listenerAction )( const Reference< XDocumentEventListener >& ) =
+            void ( XDocumentEventBroadcaster::*listenerAction )( const Reference< XDocumentEventListener >& ) =
                 ( _eAction == RegisterListener ) ? &XDocumentEventBroadcaster::addDocumentEventListener : &XDocumentEventBroadcaster::removeDocumentEventListener;
 
             rGuard.unlock();

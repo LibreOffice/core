@@ -121,14 +121,14 @@ void Paragraph::notifyEvent(::sal_Int16 nEventId,
 }
 
 // virtual
-sal_Int64 SAL_CALL Paragraph::getAccessibleChildCount()
+sal_Int64 Paragraph::getAccessibleChildCount()
 {
     ensureAlive();
     return 0;
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 Paragraph::getAccessibleChild(sal_Int64)
 {
     ensureAlive();
@@ -139,7 +139,7 @@ Paragraph::getAccessibleChild(sal_Int64)
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 Paragraph::getAccessibleParent()
 {
     ensureAlive();
@@ -147,28 +147,28 @@ Paragraph::getAccessibleParent()
 }
 
 // virtual
-sal_Int64 SAL_CALL Paragraph::getAccessibleIndexInParent()
+sal_Int64 Paragraph::getAccessibleIndexInParent()
 {
     ensureAlive();
     return m_xDocument->retrieveParagraphIndex(this);
 }
 
 // virtual
-::sal_Int16 SAL_CALL Paragraph::getAccessibleRole()
+::sal_Int16 Paragraph::getAccessibleRole()
 {
     ensureAlive();
     return css::accessibility::AccessibleRole::PARAGRAPH;
 }
 
 // virtual
-OUString SAL_CALL Paragraph::getAccessibleDescription()
+OUString Paragraph::getAccessibleDescription()
 {
     ensureAlive();
     return OUString();
 }
 
 // virtual
-OUString SAL_CALL Paragraph::getAccessibleName()
+OUString Paragraph::getAccessibleName()
 {
     ensureAlive();
     return OUString();
@@ -176,14 +176,14 @@ OUString SAL_CALL Paragraph::getAccessibleName()
 
 // virtual
 css::uno::Reference< css::accessibility::XAccessibleRelationSet >
-SAL_CALL Paragraph::getAccessibleRelationSet()
+Paragraph::getAccessibleRelationSet()
 {
     ensureAlive();
     return m_xDocument->retrieveParagraphRelationSet( this );
 }
 
 // virtual
-sal_Int64 SAL_CALL Paragraph::getAccessibleStateSet()
+sal_Int64 Paragraph::getAccessibleStateSet()
 {
     ensureAlive();
 
@@ -193,14 +193,14 @@ sal_Int64 SAL_CALL Paragraph::getAccessibleStateSet()
 }
 
 // virtual
-css::lang::Locale SAL_CALL Paragraph::getLocale()
+css::lang::Locale Paragraph::getLocale()
 {
     ensureAlive();
     return m_xDocument->retrieveLocale();
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 Paragraph::getAccessibleAtPoint(css::awt::Point const &)
 {
     ensureAlive();
@@ -213,7 +213,7 @@ css::awt::Rectangle Paragraph::implGetBounds()
 }
 
 // virtual
-void SAL_CALL Paragraph::grabFocus()
+void Paragraph::grabFocus()
 {
     ensureAlive();
     VclPtr<vcl::Window> pWindow = m_xDocument->GetWindow();
@@ -232,26 +232,26 @@ void SAL_CALL Paragraph::grabFocus()
 }
 
 // virtual
-sal_Int32 SAL_CALL Paragraph::getForeground()
+sal_Int32 Paragraph::getForeground()
 {
     return 0; // TODO
 }
 
 // virtual
-sal_Int32 SAL_CALL Paragraph::getBackground()
+sal_Int32 Paragraph::getBackground()
 {
     return 0; // TODO
 }
 
 // virtual
-::sal_Int32 SAL_CALL Paragraph::getCaretPosition()
+::sal_Int32 Paragraph::getCaretPosition()
 {
     ensureAlive();
     return m_xDocument->retrieveParagraphCaretPosition(this);
 }
 
 // virtual
-bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
+bool Paragraph::setCaretPosition(::sal_Int32 nIndex)
 {
     ensureAlive();
     m_xDocument->changeParagraphSelection(this, nIndex, nIndex);
@@ -259,14 +259,14 @@ bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
 }
 
 // virtual
-::sal_Unicode SAL_CALL Paragraph::getCharacter(::sal_Int32 nIndex)
+::sal_Unicode Paragraph::getCharacter(::sal_Int32 nIndex)
 {
     ensureAlive();
     return OCommonAccessibleText::implGetCharacter(implGetText(), nIndex);
 }
 
 // virtual
-css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+css::uno::Sequence< css::beans::PropertyValue >
 Paragraph::getCharacterAttributes(::sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes)
 {
     ensureAlive();
@@ -274,7 +274,7 @@ Paragraph::getCharacterAttributes(::sal_Int32 nIndex, const css::uno::Sequence< 
 }
 
 // virtual
-css::awt::Rectangle SAL_CALL
+css::awt::Rectangle
 Paragraph::getCharacterBounds(::sal_Int32 nIndex)
 {
     ensureAlive();
@@ -286,14 +286,14 @@ Paragraph::getCharacterBounds(::sal_Int32 nIndex)
 }
 
 // virtual
-::sal_Int32 SAL_CALL Paragraph::getCharacterCount()
+::sal_Int32 Paragraph::getCharacterCount()
 {
     ensureAlive();
     return implGetText().getLength();
 }
 
 // virtual
-::sal_Int32 SAL_CALL
+::sal_Int32
 Paragraph::getIndexAtPoint(css::awt::Point const & rPoint)
 {
     ensureAlive();
@@ -305,7 +305,7 @@ Paragraph::getIndexAtPoint(css::awt::Point const & rPoint)
 }
 
 // virtual
-OUString SAL_CALL Paragraph::getSelectedText()
+OUString Paragraph::getSelectedText()
 {
     ensureAlive();
 
@@ -313,21 +313,21 @@ OUString SAL_CALL Paragraph::getSelectedText()
 }
 
 // virtual
-::sal_Int32 SAL_CALL Paragraph::getSelectionStart()
+::sal_Int32 Paragraph::getSelectionStart()
 {
     ensureAlive();
     return OCommonAccessibleText::getSelectionStart();
 }
 
 // virtual
-::sal_Int32 SAL_CALL Paragraph::getSelectionEnd()
+::sal_Int32 Paragraph::getSelectionEnd()
 {
     ensureAlive();
     return OCommonAccessibleText::getSelectionEnd();
 }
 
 // virtual
-bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
+bool Paragraph::setSelection(::sal_Int32 nStartIndex,
                                                 ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -336,14 +336,14 @@ bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
 }
 
 // virtual
-OUString SAL_CALL Paragraph::getText()
+OUString Paragraph::getText()
 {
     ensureAlive();
     return implGetText();
 }
 
 // virtual
-OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
+OUString Paragraph::getTextRange(::sal_Int32 nStartIndex,
                                                      ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -351,28 +351,28 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
 }
 
 // virtual
-css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment Paragraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     ensureAlive();
     return OCommonAccessibleText::getTextAtIndex(nIndex, aTextType);
 }
 
 // virtual
-css::accessibility::TextSegment SAL_CALL Paragraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment Paragraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     ensureAlive();
     return OCommonAccessibleText::getTextBeforeIndex(nIndex, aTextType);
 }
 
 // virtual
-css::accessibility::TextSegment SAL_CALL Paragraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
+css::accessibility::TextSegment Paragraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     ensureAlive();
     return OCommonAccessibleText::getTextBehindIndex(nIndex, aTextType);
 }
 
 // virtual
-bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
+bool Paragraph::copyText(::sal_Int32 nStartIndex,
                                             ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -381,13 +381,13 @@ bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
 }
 
 // virtual
-bool SAL_CALL Paragraph::scrollSubstringTo( sal_Int32, sal_Int32, css::accessibility::AccessibleScrollType )
+bool Paragraph::scrollSubstringTo( sal_Int32, sal_Int32, css::accessibility::AccessibleScrollType )
 {
     return false;
 }
 
 // virtual
-bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
+bool Paragraph::cutText(::sal_Int32 nStartIndex,
                                            ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -397,7 +397,7 @@ bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
 }
 
 // virtual
-bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
+bool Paragraph::pasteText(::sal_Int32 nIndex)
 {
     ensureAlive();
     m_xDocument->changeParagraphText(this, nIndex, nIndex, false, true,
@@ -406,7 +406,7 @@ bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
 }
 
 // virtual
-bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
+bool Paragraph::deleteText(::sal_Int32 nStartIndex,
                                           ::sal_Int32 nEndIndex)
 {
     ensureAlive();
@@ -416,7 +416,7 @@ bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
 }
 
 // virtual
-bool SAL_CALL Paragraph::insertText(OUString const & rText,
+bool Paragraph::insertText(OUString const & rText,
                                               ::sal_Int32 nIndex)
 {
     ensureAlive();
@@ -425,7 +425,7 @@ bool SAL_CALL Paragraph::insertText(OUString const & rText,
 }
 
 // virtual
-bool SAL_CALL
+bool
 Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
                            OUString const & rReplacement)
 {
@@ -436,7 +436,7 @@ Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
 }
 
 // virtual
-bool SAL_CALL Paragraph::setAttributes(
+bool Paragraph::setAttributes(
     ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
     css::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
 {
@@ -447,7 +447,7 @@ bool SAL_CALL Paragraph::setAttributes(
 }
 
 // virtual
-bool SAL_CALL Paragraph::setText(OUString const & rText)
+bool Paragraph::setText(OUString const & rText)
 {
     ensureAlive();
     m_xDocument->changeParagraphText(this, rText);
@@ -455,7 +455,7 @@ bool SAL_CALL Paragraph::setText(OUString const & rText)
 }
 
 // virtual
-css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+css::uno::Sequence< css::beans::PropertyValue >
 Paragraph::getDefaultAttributes(const css::uno::Sequence< OUString >&)
 {
     ensureAlive();
@@ -463,7 +463,7 @@ Paragraph::getDefaultAttributes(const css::uno::Sequence< OUString >&)
 }
 
 // virtual
-css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
+css::uno::Sequence< css::beans::PropertyValue >
 Paragraph::getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes)
 {
     ensureAlive();
@@ -471,7 +471,7 @@ Paragraph::getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUStrin
 }
 
 // virtual
-::sal_Int32 SAL_CALL Paragraph::getLineNumberAtIndex( ::sal_Int32 nIndex )
+::sal_Int32 Paragraph::getLineNumberAtIndex( ::sal_Int32 nIndex )
 {
     ensureAlive();
 
@@ -482,7 +482,7 @@ Paragraph::getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUStrin
 }
 
 // virtual
-css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineNumber( ::sal_Int32 nLineNo )
+css::accessibility::TextSegment Paragraph::getTextAtLineNumber( ::sal_Int32 nLineNo )
 {
     ensureAlive();
 
@@ -494,7 +494,7 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineNumber( ::sal_I
 }
 
 // virtual
-css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
+css::accessibility::TextSegment Paragraph::getTextAtLineWithCaret(  )
 {
     ensureAlive();
 
@@ -514,7 +514,7 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
 }
 
 // virtual
-::sal_Int32 SAL_CALL Paragraph::getNumberOfLineWithCaret(  )
+::sal_Int32 Paragraph::getNumberOfLineWithCaret(  )
 {
     ensureAlive();
     return m_xDocument->retrieveParagraphLineWithCursor(this);
@@ -1186,14 +1186,14 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 }
 
 // virtual
-sal_Int64 SAL_CALL Document::getAccessibleChildCount()
+sal_Int64 Document::getAccessibleChildCount()
 {
     ::comphelper::OExternalLockGuard aGuard(this);
     return m_nVisibleEnd - m_nVisibleBegin;
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 Document::getAccessibleChild(sal_Int64 i)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
@@ -1206,13 +1206,13 @@ Document::getAccessibleChild(sal_Int64 i)
 }
 
 // virtual
-::sal_Int16 SAL_CALL Document::getAccessibleRole()
+::sal_Int16 Document::getAccessibleRole()
 {
     return css::accessibility::AccessibleRole::TEXT_FRAME;
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+css::uno::Reference< css::accessibility::XAccessible >
 Document::getAccessibleAtPoint(css::awt::Point const & rPoint)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
@@ -1251,7 +1251,7 @@ void    Document::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& r
     }
 }
 // virtual
-void SAL_CALL Document::disposing()
+void Document::disposing()
 {
     m_aEngineListener.endListening();
     m_aViewListener.endListening();

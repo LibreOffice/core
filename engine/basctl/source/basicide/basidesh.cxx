@@ -126,17 +126,17 @@ public:
     }
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& ) override {}
+    virtual void disposing( const lang::EventObject& ) override {}
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const container::ContainerEvent& Event ) override
+    virtual void elementInserted( const container::ContainerEvent& Event ) override
     {
         OUString sModuleName;
         if( mpShell && ( Event.Accessor >>= sModuleName ) )
             mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, true );
     }
-    virtual void SAL_CALL elementReplaced( const container::ContainerEvent& ) override { }
-    virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) override
+    virtual void elementReplaced( const container::ContainerEvent& ) override { }
+    virtual void elementRemoved( const container::ContainerEvent& Event ) override
     {
         OUString sModuleName;
         if( mpShell && ( Event.Accessor >>= sModuleName ) )

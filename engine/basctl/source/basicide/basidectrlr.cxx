@@ -52,7 +52,7 @@ Controller::~Controller()
 { }
 
 // XInterface
-Any SAL_CALL Controller::queryInterface( const Type & rType )
+Any Controller::queryInterface( const Type & rType )
 {
     Any aReturn = SfxBaseController::queryInterface( rType );
     if ( !aReturn.hasValue() )
@@ -61,18 +61,18 @@ Any SAL_CALL Controller::queryInterface( const Type & rType )
     return aReturn;
 }
 
-void SAL_CALL Controller::acquire() noexcept
+void Controller::acquire() noexcept
 {
     SfxBaseController::acquire();
 }
 
-void SAL_CALL Controller::release() noexcept
+void Controller::release() noexcept
 {
     SfxBaseController::release();
 }
 
 // XTypeProvider ( ::SfxBaseController )
-Sequence< Type > SAL_CALL Controller::getTypes()
+Sequence< Type > Controller::getTypes()
 {
     Sequence< Type > aTypes = ::comphelper::concatSequences(
         SfxBaseController::getTypes(),
@@ -82,13 +82,13 @@ Sequence< Type > SAL_CALL Controller::getTypes()
     return aTypes;
 }
 
-Sequence< sal_Int8 > SAL_CALL Controller::getImplementationId()
+Sequence< sal_Int8 > Controller::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // XPropertySet
-Reference< beans::XPropertySetInfo > SAL_CALL Controller::getPropertySetInfo()
+Reference< beans::XPropertySetInfo > Controller::getPropertySetInfo()
 {
     Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

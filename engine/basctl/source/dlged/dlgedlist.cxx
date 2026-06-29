@@ -34,12 +34,12 @@ DlgEdPropListenerImpl::~DlgEdPropListenerImpl()
 }
 
 // XEventListener
-void SAL_CALL DlgEdPropListenerImpl::disposing( const css::lang::EventObject& )
+void DlgEdPropListenerImpl::disposing( const css::lang::EventObject& )
 {
 }
 
 // XPropertyChangeListener
-void SAL_CALL DlgEdPropListenerImpl::propertyChange( const  css::beans::PropertyChangeEvent& evt )
+void DlgEdPropListenerImpl::propertyChange( const  css::beans::PropertyChangeEvent& evt )
 {
     rDlgEdObj._propertyChange( evt );
 }
@@ -55,22 +55,22 @@ DlgEdEvtContListenerImpl::~DlgEdEvtContListenerImpl()
 }
 
 // XEventListener
-void SAL_CALL DlgEdEvtContListenerImpl::disposing( const  css::lang::EventObject& )
+void DlgEdEvtContListenerImpl::disposing( const  css::lang::EventObject& )
 {
 }
 
 // XContainerListener
-void SAL_CALL DlgEdEvtContListenerImpl::elementInserted(const css::container::ContainerEvent& /*Event*/)
+void DlgEdEvtContListenerImpl::elementInserted(const css::container::ContainerEvent& /*Event*/)
 {
     rDlgEdObj._elementInserted();
 }
 
-void SAL_CALL DlgEdEvtContListenerImpl::elementReplaced(const css::container::ContainerEvent& /*Event*/)
+void DlgEdEvtContListenerImpl::elementReplaced(const css::container::ContainerEvent& /*Event*/)
 {
     rDlgEdObj._elementReplaced();
 }
 
-void SAL_CALL DlgEdEvtContListenerImpl::elementRemoved(const css::container::ContainerEvent& /*Event*/)
+void DlgEdEvtContListenerImpl::elementRemoved(const css::container::ContainerEvent& /*Event*/)
 {
     rDlgEdObj._elementRemoved();
 }

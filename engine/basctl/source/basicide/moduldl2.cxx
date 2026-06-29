@@ -90,7 +90,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) override
+    virtual void handle( const Reference< task::XInteractionRequest >& rRequest ) override
     {
         if ( m_xHandler.is() )
         {
@@ -1031,8 +1031,8 @@ public:
     {}
 
     // Methods
-    virtual Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
-    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler() override;
+    virtual Reference< task::XInteractionHandler > getInteractionHandler() override;
+    virtual Reference< XProgressHandler > getProgressHandler() override;
 };
 
 }
