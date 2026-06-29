@@ -54,11 +54,17 @@ m4_ifelse(MOBILEAPP, [true],
 
 m4_ifelse(MOBILEAPP, [true],
 [
+  <style>
+    .webBasedCOOLOnly { display: none }
+  </style>
   <input type="hidden" id="init-app-type" value="mobile" />
   <input type="hidden" id="init-help-file" value="m4_syscmd([cat html/cool-help.html | sed 's/"/\&quot;/g'])" />
   <input type="hidden" id="init-product-branding-url" value="INFO_URL" />
 ],
 [
+  <style>
+    .mobileAppAndCODAOnly { display: none }
+  </style>
   <input type="hidden" id="init-welcome-url" value="%WELCOME_URL%" />
   <input type="hidden" id="init-feedback-url" value="%FEEDBACK_URL%" />
   <input type="hidden" id="init-buy-product-url" value="%BUYPRODUCT_URL%" />

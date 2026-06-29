@@ -1,3 +1,4 @@
+<!-- -*- indent-tabs-mode: nil -*- -->
 <div class="search-container">
     <input size="20" id="online-help-search-input" type="search" aria-label="search" spellcheck="false" />
     <button id="online-help-search-button" type="button" aria-label="Search">
@@ -328,9 +329,10 @@
     <h2 class="help-dialog-header"><span class="productname">{productname}</span> Help</h2>
     <nav class="help-toc" aria-label="Help table of contents">
         <ul class="toc-list">
-            <li class="toc-h2 m-v-0"><a class="border-0 scroll-button" href="#1327">Collaborative editing</a></li>
+            <li class="toc-h2 m-v-0 webBasedCOOLOnly"><a class="border-0 scroll-button" href="#1327">Collaborative editing</a></li>
             <li class="toc-h2 m-v-0"><a class="border-0 scroll-button" href="#1333"><span class="productname">{productname}</span> user interface</a></li>
-            <li class="toc-h2 m-v-0"><a class="border-0 scroll-button" href="#1335">Opening, closing, saving, printing and downloading documents</a></li>
+            <li class="toc-h2 m-v-0 webBasedCOOLOnly"><a class="border-0 scroll-button" href="#1335A">Opening, closing, saving, printing and downloading documents</a></li>
+            <li class="toc-h2 m-v-0 mobileAppAndCODAOnly"><a class="border-0 scroll-button" href="#1335B">Opening, closing, saving and printing documents</a></li>
             <li class="toc-h2 m-v-0"><a class="border-0 scroll-button" href="#1337">Editing documents</a></li>
             <li class="toc-h2 m-v-0"><a class="border-0 scroll-button" href="#1338">Advanced features</a></li>
 
@@ -359,10 +361,16 @@
     </nav>
 
     <div class="section">
-    <p class="section-header"><span class="productname">{productname}</span> allows you to create and edit office documents text documents, spreadsheets and presentations directly in your browser, in a simple and straight-forward way. You can work alone on a document, or collaboratively as part of a team.</p>
+      <p class="section-header"><span class="productname">{productname}</span> allows
+        you to create and edit typical office documents, that is text documents,
+        spreadsheets and presentations,
+        <span class="webBasedCOOLOnly">directly in your browser,</span>
+        in a simple and straight-forward way.
+        <span class="webBasedCOOLOnly">You can work alone on a document, or collaboratively as part of a team.</span>
+      </p>
     </div>
 
-  <div class="section">
+  <div class="section webBasedCOOLOnly">
     <h3 id="1327" class="section-header">Collaborative editing</h3>
     <div class="sub-section">
     <ul>
@@ -374,7 +382,13 @@
   </div>
 <div class="section">
     <h3 id="1333" class="section-header"><span class="productname">{productname}</span> user interface</h3>
-    <div class="sub-section"><p><span class="productname">{productname}</span> uses modern browser resources to adapt the user interface to the size of the viewing area, including small screens found in mobile devices. The interface is composed of:</p></div>
+    <div class="sub-section">
+      <p>
+        <span class="webBasedCOOLOnly">
+          <span class="productname">{productname}</span> uses modern browser resources to adapt the user interface to the size of the viewing area, including small screens found in mobile devices.</span>
+        The interface is composed of:
+      </p>
+    </div>
   <div class="sub-section">
     <p><span class="def">The document area:</span> The application area shows the document contents, either spreadsheets, presentations or text documents.</p>
   </div>
@@ -409,8 +423,8 @@
     <div class="screenshot" id="help-informationbar"><img alt="Information bar showing page navigation arrows, zoom controls, and zoom level" src="images/help/en/information-bar.png"/></div>
   </div>
 </div>
-    <div class="section">
-    <h3 id="1335" class="section-header">Opening, closing, saving, printing and downloading documents</h3>
+    <div class="section webBasedCOOLOnly">
+    <h3 id="1335A" class="section-header">Opening, closing, saving, printing and downloading documents</h3>
     <p>Your documents are stored and managed in the cloud storage that is integrated with <span class="productname">{productname}</span>.</p>
     <div class="sub-section"><p>To download a document download it from the <span class="productname">{productname}</span> application’s <span class="ui">File</span> menu. The download formats available depends on the application. All applications exports documents in PDF format.</p></div>
     <div class="sub-section"><p>To open document, click on the file to open the <span class="productname">{productname}</span> module associated to the document format.</p></div>
@@ -418,6 +432,41 @@
     <div class="sub-section"><p>Depending on the capabilities of your browser, the print window may appear or a “Download PDF export?” popup appears. You can print this PDF in your favorite PDF reader.</p></div>
     <div class="sub-section"><p>When closing a document, it is automatically saved if it has been changed.</p></div>
     </div>
+
+    <!-- FIXME: We need an official term for the "Backstage". Below I
+         just tediously use "the page shown from the File menu bar
+         button"
+      -->
+    <div class="section mobileAppAndCODAOnly">
+    <h3 id="1335B" class="section-header">Opening, closing, saving and printing documents</h3>
+    <div class="sub-section">
+      <p>To open a document, either open it in <span class="productname">{productname}</span>
+        from your platform's file manager or use the <span class="ui">Open</span> button
+        on the page shown from the <span class="ui">File</span> menu bar button.
+      </p>
+    </div>
+    <div class="sub-section">
+      <p>To save the document in a different format use the <span class="ui">Save as</span>
+        button on the page shown from the <span class="ui">File</span> menu bar button.
+      </p>
+    </div>
+    <div class="sub-section">
+      <p>Documents are automatically saved perdiodically,
+        but if you want a document to be saved right away you can use the
+        <span class="ui">Save</span> button on the page shown from the
+        <span class="ui">File</span> menu bar button.
+      </p>
+    </div>
+    <div class="sub-section">
+      <p>To print the document, use the <span class="ui">Print</span> button
+        on the page shown from the <span class="ui">File</span> menu bar button.
+      </p>
+    </div>
+    <div class="sub-section">
+      <p>When closing a document, it is automatically saved if it has been changed.
+      </p>
+    </div>
+
     <div class="section">
     <h3 id="1337" class="section-header">Editing documents</h3>
     <p>Document editing should be familiar to everyone that has used an office application before, but here are some distinctive features:</p>
