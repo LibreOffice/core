@@ -3985,7 +3985,7 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
     {
         WritingMode eMode;
         if( ( mAny >>= eMode ) && eMode == WritingMode_TB_RL )
-            sWritingMode = "eaVert";
+            sWritingMode = "eaVert"_ostr;
     }
     if (GetProperty(rXPropSet, u"WritingMode"_ustr))
     {
@@ -3993,15 +3993,15 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
         if (mAny >>= nWritingMode)
         {
             if (nWritingMode == text::WritingMode2::TB_RL)
-                sWritingMode = "eaVert";
+                sWritingMode = "eaVert"_ostr;
             else if (nWritingMode == text::WritingMode2::BT_LR)
-                sWritingMode = "vert270";
+                sWritingMode = "vert270"_ostr;
             else if (nWritingMode == text::WritingMode2::TB_RL90)
-                sWritingMode = "vert";
+                sWritingMode = "vert"_ostr;
             else if (nWritingMode == text::WritingMode2::TB_LR)
-                sWritingMode = "mongolianVert";
+                sWritingMode = "mongolianVert"_ostr;
             else if (nWritingMode == text::WritingMode2::STACKED)
-                sWritingMode = "wordArtVert";
+                sWritingMode = "wordArtVert"_ostr;
         }
     }
 
@@ -4064,16 +4064,16 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
                         switch (nWritingMode)
                         {
                         case WritingMode2::TB_RL:
-                            sWritingMode = "eaVert";
+                            sWritingMode = "eaVert"_ostr;
                             break;
                         case WritingMode2::BT_LR:
-                            sWritingMode = "vert270";
+                            sWritingMode = "vert270"_ostr;
                             break;
                         case WritingMode2::TB_RL90:
-                            sWritingMode = "vert";
+                            sWritingMode = "vert"_ostr;
                             break;
                         case WritingMode2::TB_LR:
-                            sWritingMode = "mongolianVert";
+                            sWritingMode = "mongolianVert"_ostr;
                             break;
                         default:
                             break;
@@ -4166,9 +4166,9 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
     if (nTextPreRotateAngle != 0 && !sWritingMode)
     {
         if (nTextPreRotateAngle == -90 || nTextPreRotateAngle == 270)
-            sWritingMode = "vert";
+            sWritingMode = "vert"_ostr;
         else if (nTextPreRotateAngle == -270 || nTextPreRotateAngle == 90)
-            sWritingMode = "vert270";
+            sWritingMode = "vert270"_ostr;
         else if (nTextPreRotateAngle == -180 || nTextPreRotateAngle == 180)
         {
 #if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
@@ -5369,35 +5369,35 @@ bool DrawingML::WriteCustomGeometry(
         // NOFILL or one of the LIGHTEN commands
         std::optional<OString> sFill;
         if (HasCommandInSubPath(NOFILL, nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
-            sFill = "none";
+            sFill = "none"_ostr;
         else if (HasCommandInSubPath(DARKEN, nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
-            sFill = "darken";
+            sFill = "darken"_ostr;
         else if (HasCommandInSubPath(DARKENLESS, nSubpathStartIndex, nNextNcommandIndex - 1,
                                      aSegments))
-            sFill = "darkenLess";
+            sFill = "darkenLess"_ostr;
         else if (HasCommandInSubPath(LIGHTEN, nSubpathStartIndex, nNextNcommandIndex - 1,
                                      aSegments))
-            sFill = "lighten";
+            sFill = "lighten"_ostr;
         else if (HasCommandInSubPath(LIGHTENLESS, nSubpathStartIndex, nNextNcommandIndex - 1,
                                      aSegments))
-            sFill = "lightenLess";
+            sFill = "lightenLess"_ostr;
         else
         {
             // shading info might be in object type, e.g. "Octagon Bevel".
             sal_Int32 nLuminanceChange(aCustomShape2d.GetLuminanceChange(nSubPathIndex));
             if (nLuminanceChange <= -40)
-                sFill = "darken";
+                sFill = "darken"_ostr;
             else if (nLuminanceChange <= -10)
-                sFill = "darkenLess";
+                sFill = "darkenLess"_ostr;
             else if (nLuminanceChange >= 40)
-                sFill = "lighten";
+                sFill = "lighten"_ostr;
             else if (nLuminanceChange >= 10)
-                sFill = "lightenLess";
+                sFill = "lightenLess"_ostr;
         }
         // NOSTROKE
         std::optional<OString> sStroke;
         if (HasCommandInSubPath(NOSTROKE, nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
-            sStroke = "0";
+            sStroke = "0"_ostr;
 
         // Write a:path start element
         mpFS->startElementNS(
@@ -5840,7 +5840,7 @@ void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>
     // Only closed SdrPathObj can be filled
     std::optional<OString> sFill;
     if (!bClosed)
-        sFill = "none"; // for possible values see ST_PathFillMode in OOXML standard
+        sFill = "none"_ostr; // for possible values see ST_PathFillMode in OOXML standard
 
     // Put all polygons of rPolyPolygon in the same path element
     // to subtract the overlapped areas.

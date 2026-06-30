@@ -849,7 +849,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         if (aAny >>= eTiming)
         {
             if (eTiming == Timing_INDEFINITE)
-                sDuration = "indefinite";
+                sDuration = "indefinite"_ostr;
         }
         else
             aAny >>= fDuration;
@@ -864,13 +864,13 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         if (nType == EffectNodeType::TIMING_ROOT)
         {
             if (!sDuration)
-                sDuration = "indefinite";
+                sDuration = "indefinite"_ostr;
             if (!pRestart)
                 pRestart = "never";
         }
         else if (nType == EffectNodeType::MAIN_SEQUENCE)
         {
-            sDuration = "indefinite";
+            sDuration = "indefinite"_ostr;
         }
     }
 
@@ -917,7 +917,7 @@ void PPTXAnimationExport::WriteAnimationNodeCommonPropsStart()
         if (aAny >>= eTiming)
         {
             if (eTiming == Timing_INDEFINITE)
-                sRepeatCount = "indefinite";
+                sRepeatCount = "indefinite"_ostr;
         }
         else
             aAny >>= fRepeatCount;

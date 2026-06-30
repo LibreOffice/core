@@ -267,7 +267,7 @@ void xcl::exp::NamedSheetViews::saveSortRules(const sax_fastparser::FSHelperPtr&
 
         std::optional<OString> sDescending;
         if (!rKey.bAscending)
-            sDescending = "1";
+            sDescending = "1"_ostr;
 
         pStream->singleElement(XML_sortCondition, XML_ref, aSortReference, XML_descending,
                                sDescending);

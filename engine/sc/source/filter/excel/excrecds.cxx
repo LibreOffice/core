@@ -823,7 +823,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 
     std::optional<OString> sHiddenButtonValue;
     if (bIsButtonHidden)
-        sHiddenButtonValue = "1";
+        sHiddenButtonValue = "1"_ostr;
 
     rWorksheet->startElement( XML_filterColumn,
             XML_colId, OString::number(nCol),
