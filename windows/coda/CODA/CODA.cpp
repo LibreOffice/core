@@ -1989,18 +1989,29 @@ static void openCOOLWindow(const FilenameAndUri& filenameAndUri, DocumentMode mo
                                         wil::com_ptr<ICoreWebView2Deferral> deferral;
                                         args->GetDeferral(&deferral);
 
+                                        HMONITOR hMonitor = MonitorFromWindow(data.hWnd, MONITOR_DEFAULTTONEAREST);
+                                        MONITORINFO monitorInfo = { sizeof(monitorInfo) };
+                                        GetMonitorInfo(hMonitor, &monitorInfo);
+                                        const RECT& area = monitorInfo.rcWork;
+                                        int areaWidth = area.right - area.left;
+                                        int areaHeight = area.bottom - area.top;
+                                        int width = areaWidth * 17 / 20;
+                                        int height = areaHeight * 17 / 20;
+                                        int x = area.left + (areaWidth - width) / 2;
+                                        int y = area.top + (areaHeight - height) / 2;
+
                                         data.hConsoleWnd = CreateWindowW(windowClass,
                                                 Util::string_to_wide_string(APP_NAME).c_str(),
                                                 WS_OVERLAPPEDWINDOW,
-                                                CW_USEDEFAULT, CW_USEDEFAULT,
-                                                800, 640, NULL, NULL, appInstance, NULL);
+                                                x, y, width, height,
+                                                NULL, NULL, appInstance, NULL);
 
                                         auto& consoleData = windowData[data.hConsoleWnd];
                                         consoleData.hWnd = data.hConsoleWnd;
                                         consoleData.hParentWnd = data.hWnd;
                                         consoleData.isConsole = true;
-                                        consoleData.previousSize.x = 800;
-                                        consoleData.previousSize.y = 640;
+                                        consoleData.previousSize.x = width;
+                                        consoleData.previousSize.y = height;
 
                                         ShowWindow(data.hConsoleWnd, appShowMode);
 
