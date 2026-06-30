@@ -973,8 +973,11 @@ bool ScDBData::HasTearRiskAtBand(const ScDocument& rDoc, SCROW nShiftRow) const
         if (pDPs->IntersectsTableByColumns(nStartCol, nEndCol, nShiftRow, nTable))
             return true;
     }
-    // Other ScDBData (named or anonymous) whose horizontal extent straddles the band
-    // and whose vertical extent reaches into the rows that would be shifted.
+    // Other ScDBData (named or anonymous) that is genuinely straddled by a column-bounded
+    // row shift at nShiftRow: it must reach into the shifted rows AND cross one of the table's
+    // column edges (part inside [nStartCol..nEndCol], part outside). A range entirely outside
+    // those columns is never torn, and one fully enclosed shifts cleanly and is left to the
+    // overlap guard. Mirrors ScDPCollection's FindIntersectingTableByColumns for pivot tables.
     auto bStraddlesBand = [&](const ScDBData& rOther) {
         if (&rOther == this)
             return false;
@@ -982,9 +985,13 @@ bool ScDBData::HasTearRiskAtBand(const ScDocument& rDoc, SCROW nShiftRow) const
         rOther.GetArea(aOther);
         if (aOther.aStart.Tab() != nTable)
             return false;
-        const bool bHorizStraddle = (aOther.aStart.Col() < nStartCol) || (aOther.aEnd.Col() > nEndCol);
-        const bool bRowOverlap = aOther.aEnd.Row() >= nShiftRow;
-        return bHorizStraddle && bRowOverlap;
+        if (aOther.aEnd.Row() < nShiftRow)
+            return false; // entirely above the shifted band
+        if (nStartCol <= aOther.aStart.Col() && aOther.aEnd.Col() <= nEndCol)
+            return false; // fully enclosed in our columns — shifts cleanly, left to the overlap guard
+        if (aOther.aEnd.Col() < nStartCol || nEndCol < aOther.aStart.Col())
+            return false; // entirely outside our columns — a column-bounded shift cannot tear it
+        return true; // genuinely straddles a column boundary and reaches the band
     };
     if (const ScDBCollection* pDBs = rDoc.GetDBCollection())
     {
