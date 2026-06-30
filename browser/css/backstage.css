@@ -692,7 +692,7 @@
 	display: none;
 	align-items: center;
 	justify-content: center;
-	background-color: rgba(0, 0, 0, 0.45);
+	background-color: var(--color-overlay);
 	pointer-events: none;
 }
 
@@ -704,19 +704,30 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 16px;
-	padding: 40px 56px;
-	border-radius: var(--border-radius);
+	gap: var(--spacing-xl);
+	padding: calc(var(--spacing-xl) * 2.5) calc(var(--spacing-xl) * 3.5);
+	border-radius: var(--border-radius-large);
 	background-color: var(--color-background-lighter);
 	color: var(--color-main-text);
 	border: 2px dashed var(--color-border);
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+	box-shadow: var(--shadow-subtle);
 }
 
 .coda-drop-overlay-icon {
 	width: 64px;
 	height: 64px;
 	background: url('images/lc_file.svg') no-repeat center / contain;
+}
+
+/* In dark mode the dashed outline uses the mid-grey border token and the
+ * icon uses its light-stroke variant, so both stay visible on the dark
+ * card. */
+[data-theme='dark'] .coda-drop-overlay-card {
+	border-color: var(--color-border-dark-63);
+}
+
+[data-theme='dark'] .coda-drop-overlay-icon {
+	background-image: url('images/dark/lc_file.svg');
 }
 
 .coda-drop-overlay-text {
@@ -1126,4 +1137,3 @@
 	justify-content: flex-end;
 	margin-top: 4px;
 }
-
