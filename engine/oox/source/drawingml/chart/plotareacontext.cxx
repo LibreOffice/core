@@ -182,13 +182,6 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                     if (rAttribs.hasAttribute(XML_id)) {
                         sal_Int32 nId = rAttribs.getInteger(XML_id, -1);
                         // TODO: also handle attribute "hidden"
-
-                        // Add the id to the axis id list in the (fictitious)
-                        // type group
-                        std::shared_ptr<TypeGroupModel> aTGM =
-                            mrModel.maTypeGroups.get(mrModel.maTypeGroups.size() - 1);
-                        aTGM->maAxisIds.push_back(nId);
-
                         return new CxAxisContext(*this, mrModel.maAxes.create(nElement, mrModel.meCT), nId);
                     } else {
                         return nullptr;
@@ -240,7 +233,8 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                         mrModel.maTypeGroups.create(nTypeId, false);
                         std::shared_ptr<TypeGroupModel> aTGM =
                             mrModel.maTypeGroups.get(mrModel.maTypeGroups.size() - 1);
-                        return new ChartexSeriesContext(*this, aTGM->maSeries.create(false), mrModel.mnCurSeriesIdx++);
+                        return new ChartexSeriesContext(*this,
+                                aTGM->maSeries.create(false, nTypeId), mrModel.mnCurSeriesIdx++);
                     }
                     return nullptr;
                 case CX_TOKEN(plotSurface) :

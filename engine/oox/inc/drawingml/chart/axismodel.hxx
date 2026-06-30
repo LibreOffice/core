@@ -63,6 +63,7 @@ struct AxisModel
     ShapeRef            mxMajorGridLines;   /// Major grid lines formatting.
     ShapeRef            mxMinorGridLines;   /// Minor grid lines formatting.
     NumberFormat        maNumberFormat;     /// Number format for axis tick labels.
+    std::optional<bool>      mobCatNotVal;       /// True if cat axis, false if val axis (for chartex)
     std::optional< double >  mofCrossesAt;       /// Position on this axis where another axis crosses.
     std::optional< double >  mofMajorUnit;       /// Unit for major tick marks on date/value axis.
     std::optional< double >  mofMinorUnit;       /// Unit for minor tick marks on date/value axis.

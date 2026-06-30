@@ -208,6 +208,14 @@ void DataSeriesProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
+    // Chartex only: the cx:axisId values listed on the cx:series element at
+    // import. Empty for axis-less chartex types (regionMap, sunburst, treemap).
+    rOutProperties.emplace_back( "ChartexAxisIds",
+                  PROP_DATASERIES_CHARTEX_AXIS_IDS,
+                  cppu::UnoType<cpo::uno::Sequence<sal_Int32>>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
     // add properties of service DataPointProperties
     DataPointProperties::AddPropertiesToVector( rOutProperties );
 }

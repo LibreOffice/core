@@ -291,10 +291,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPPTX)
 
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 3, 0,
                 "layoutId", u"funnel");
-    // There should be only one axis, where currently there are multiple.
-    // However, that's a separate problem from the gapWidth output. So just
-    // reference the first for now.
-    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[1]/cx:catScaling", "gapWidth",
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis/cx:catScaling", "gapWidth",
                 u"2.19");
 }
 
@@ -305,7 +302,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexGapWidth)
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[1]/cx:catScaling", "gapWidth",
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis/cx:catScaling", "gapWidth",
                 u"2.47");
 
     // ====
@@ -314,7 +311,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexGapWidth)
     pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[1]/cx:catScaling", "gapWidth",
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis/cx:catScaling", "gapWidth",
                 u"2.55");
 }
 
@@ -359,6 +356,46 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexNoSpPr)
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series");
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:spPr",
                 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxisIdPerSeries)
+{
+    // Waterfall charts have two axes. Each series should reference both via
+    // cx:axisId, and the plot area should contain exactly two cx:axis
+    // elements.
+    loadFromFile(u"xlsx/waterfall2.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series[1]/cx:axisId", 2);
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 2);
+
+    // Funnel charts have one axis. (At least as MSO produces them -- arguably
+    // there are two dimensions, but we'll stick with the MSO convention for
+    // now.) The series should reference it via
+    // cx:axisId, and the plot area should contain exactly one cx:axis
+    // elements.
+    loadFromFile(u"xlsx/funnel1.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:axisId", 1);
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 1);
+
+    // RegionMap charts have no axes. The series should have no cx:axisId and the plot
+    // area should have no cx:axis.
+    loadFromFile(u"xlsx/regionMap.xlsx");
+    save(TestFilter::XLSX);
+    pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc,
+                "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:axisId", 0);
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testAxisTitleRotationXLSX)
