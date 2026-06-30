@@ -1503,7 +1503,7 @@ ErrCode FileDialogHelper_Impl::execute( css::uno::Sequence<OUString>& rpURLList,
     // set the read-only flag. When inserting a file, this flag is always set
     if ( mbInsert )
         rpSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
-    else if ( ( FILEOPEN_READONLY_VERSION == m_nDialogType ) && xCtrlAccess.is() )
+    else if ( ( FILEOPEN_READONLY_VERSION == m_nDialogType || FILEOPEN_READONLY_VERSION_FILTEROPTIONS == m_nDialogType ) && xCtrlAccess.is() )
     {
         try
         {
