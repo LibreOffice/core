@@ -1052,15 +1052,38 @@ void QtBuilder::setLayoutAlignment(QLayout& rLayout, stringmap& rProps)
     }
 }
 
+static Qt::Alignment toLabelAlign(const OUString& rValue, bool bHorizontal)
+{
+    float f = rValue.toFloat();
+
+    // Match what Window::set_property() accepts
+    assert(f == 0.0 || f == 1.0 || f == 0.5);
+    if (f == 0.0)
+        return bHorizontal ? Qt::AlignLeft : Qt::AlignTop;
+    else if (f == 0.5)
+        return bHorizontal ? Qt::AlignHCenter : Qt::AlignVCenter;
+    else
+        return bHorizontal ? Qt::AlignRight : Qt::AlignBottom;
+}
+
 void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
 {
+    Qt::Alignment nAlign;
+
     for (auto const & [ rKey, rValue ] : rProps)
     {
         if (rKey == u"label")
             rLabel.setText(convertAccelerator(rValue));
         else if (rKey == u"wrap")
             rLabel.setWordWrap(toBool(rValue));
+        else if (rKey == u"xalign")
+            nAlign |= toLabelAlign(rValue, true);
+        else if (rKey == u"yalign")
+            nAlign |= toLabelAlign(rValue, false);
     }
+
+    if (nAlign != 0)
+        rLabel.setAlignment(nAlign);
 }
 
 void QtBuilder::setMenuButtonProperties(QToolButton& rButton, stringmap& rProps,
