@@ -4021,6 +4021,13 @@ bool DocumentBroker::manualSave(const std::shared_ptr<ClientSession>& session,
     return false;
 }
 
+bool DocumentBroker::isBackgroundSaveWorking(bool canBackground) const
+{
+    constexpr std::size_t MaxBackgroundSaveFailures = 2; // Give only 1 extra chance.
+    return canBackground && _saveManager.lastSaveSuccessful() &&
+           _saveManager.saveFailureCount() < MaxBackgroundSaveFailures;
+}
+
 bool DocumentBroker::autoSave(const bool force, const bool dontSaveIfUnmodified,
                               const bool finalWrite)
 {
@@ -4102,10 +4109,13 @@ bool DocumentBroker::autoSave(const bool force, const bool dontSaveIfUnmodified,
                            << (_saveManager.isAutoSaveEnabled() ? "" : "not ")
                            << "enabled with interval of " << _saveManager.autoSaveInterval());
 
-        // Either we've been idle long enough, or it's auto-save time.
+        // When background save is working, save on the idle-save interval
+        // without waiting for inactivity, since the save does not block the
+        // user. Only gate on inactivity when background save is off or failing.
         bool save = _saveManager.isIdleSaveEnabled() &&
-                    inactivityTime >= _saveManager.idleSaveInterval() &&
-                    timeSinceLastSave >= _saveManager.idleSaveInterval();
+                    timeSinceLastSave >= _saveManager.idleSaveInterval() &&
+                    (isBackgroundSaveWorking(_backgroundAutoSave) ||
+                     inactivityTime >= _saveManager.idleSaveInterval());
 
         // Save if it's been long enough since the last save and/or upload.
         if (!save && _saveManager.isAutoSaveEnabled() &&
@@ -4299,14 +4309,12 @@ bool DocumentBroker::sendUnoSave(const std::shared_ptr<ClientSession>& session,
     _saveManager.setLastModifiedLocalTime(std::chrono::system_clock::time_point());
 
     static const bool forceBackgroundEnv = !!getenv("COOL_FORCE_BGSAVE");
-    constexpr std::size_t MaxFailureCountForBackgroundSaving = 2; // Give only 1 extra chance.
 
     // Note: It's odd to capture these here, but this function is used from ClientSession too.
     const bool autosave = isAutosave || UNITWSD_CALL_INSTANCE(_unitWsd, isAutosave());
     const bool backgroundConfigured = (autosave && _backgroundAutoSave) || _backgroundManualSave;
     const bool canBackground = forceBackgroundEnv || (!finalWrite && backgroundConfigured);
-    const bool background = canBackground && _saveManager.lastSaveSuccessful() &&
-                            _saveManager.saveFailureCount() < MaxFailureCountForBackgroundSaving;
+    const bool background = isBackgroundSaveWorking(canBackground);
 
     std::ostringstream oss;
     // arguments init
