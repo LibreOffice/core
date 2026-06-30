@@ -82,8 +82,8 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.sectionProperties.hasVideo = false; // Don't hide svg when there is video content.
 		this.sectionProperties.shapeRectangleProperties = null; // Not null when there are scaling handles.
 		this.sectionProperties.lastDragDistance = [0, 0];
-		this.sectionProperties.pickedIndexX = 0; // Which corner of shape is closest to snap point when moving the shape.
-		this.sectionProperties.pickedIndexY = 0; // Which corner of shape is closest to snap point when moving the shape.
+		this.sectionProperties.snapOffsetX = 0; // Distance from the dragged shape's left edge to the point that snapped.
+		this.sectionProperties.snapOffsetY = 0; // Distance from the dragged shape's top edge to the point that snapped.
 		this.sectionProperties.mathObjectBorderColor = 'red'; // Border color for Math objects.
 		this.sectionProperties.lastTapTime = 0;
 		this.sectionProperties.clickTimer = null;
@@ -100,6 +100,20 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		// These are for snapping the objects to the same level with others' boundaries.
 		this.sectionProperties.closestX = null;
 		this.sectionProperties.closestY = null;
+
+		// When the snap is a center-to-center match, these hold the [x, y] center
+		// (in pixels) of the other object so we can mark it with a red dot.
+		this.sectionProperties.centerSnapX = null;
+		this.sectionProperties.centerSnapY = null;
+
+		// True when the active object's own center is what snapped to another
+		// object's center on that axis (true center-to-center alignment).
+		this.sectionProperties.centerToCenterX = false;
+		this.sectionProperties.centerToCenterY = false;
+
+		// [x, y] center (in pixels) of the active (dragged or scaled) object,
+		// set when a center-to-center match happens so we can mark it too.
+		this.sectionProperties.draggedCenter = null;
 
 		this.refreshInfo(info);
 
@@ -803,10 +817,12 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 	adjustSnapTransformCoordinate(x: number, y: number) {
 		// Transform command accepts the difference from top left corner.
-		// If we are snapping to other corners, we need to adjust the coordinate.
+		// closestX / closestY are the snapped position of the matched point
+		// (left edge, center or right edge), so subtract that point's offset
+		// from the top left corner to get the new top left position.
 
-		if (x !== null && [0, 3].includes(this.sectionProperties.pickedIndexX)) x -= this.size[0];
-		if (y !== null && [0, 3].includes(this.sectionProperties.pickedIndexY)) y -= this.size[1];
+		if (x !== null) x -= this.sectionProperties.snapOffsetX;
+		if (y !== null) y -= this.sectionProperties.snapOffsetY;
 
 		return x !== null ? x: y;
 	}
@@ -963,66 +979,108 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		}
 	}
 
+	// xList holds the dragged shape's [left edge, center, right edge].
+	// We look for the closest left/center/right ordinate of any other object.
 	findClosestX(xList: number[]) {
 		let closest = 1000;
 		let pickX = null;
-		this.sectionProperties.pickedIndexX = 0;
+		let snapOffset = 0;
+		let centerSnap = null;
+		let centerToCenter = false;
 		if (GraphicSelection.extraInfo.ObjectRectangles) {
 			const ordNum = GraphicSelection.extraInfo.OrdNum;
 			const rectangles = GraphicSelection.extraInfo.ObjectRectangles;
 
 			for (let i = 0; i < rectangles.length; i++) {
-				if (rectangles[i][4] !== ordNum) { // Don't compare it with itself.
-					const distances = [];
-					for (let j = 0; j < xList.length; j++) {
-						distances.unshift(Math.abs(rectangles[i][0] - xList[j]));
-						distances.push(Math.abs(rectangles[i][0] + rectangles[i][2] - xList[j]));
-					}
+				if (rectangles[i][4] === ordNum) continue; // Don't compare it with itself.
 
-					const min = Math.min(...distances);
-					const index = distances.indexOf(min);
-					if (min < closest) {
-						closest = min;
-						pickX = index < xList.length ? rectangles[i][0]: rectangles[i][0] + rectangles[i][2];
-						this.sectionProperties.pickedIndexX = index;
+				// Candidate snap ordinates of the other object: left edge, center, right edge.
+				const targets = [
+					rectangles[i][0],
+					rectangles[i][0] + rectangles[i][2] / 2,
+					rectangles[i][0] + rectangles[i][2],
+				];
+
+				for (let j = 0; j < xList.length; j++) {
+					for (let k = 0; k < targets.length; k++) {
+						const distance = Math.abs(targets[k] - xList[j]);
+						if (distance < closest) {
+							closest = distance;
+							pickX = targets[k];
+							snapOffset = xList[j] - xList[0]; // 0, half width or full width.
+							// k === 1 means the other object's center was the snap target.
+							centerSnap = k === 1 ? [targets[1], rectangles[i][1] + rectangles[i][3] / 2] : null;
+							// Both centers meet when the matched point is the active object's center too.
+							centerToCenter = k === 1 && xList[j] === xList[1];
+						}
 					}
 				}
 			}
 		}
 
-		if (closest < 10 * app.dpiScale) this.sectionProperties.closestX = pickX;
-		else this.sectionProperties.closestX = null;
+		if (closest < 10 * app.dpiScale) {
+			this.sectionProperties.closestX = pickX;
+			this.sectionProperties.snapOffsetX = snapOffset;
+			this.sectionProperties.centerSnapX = centerSnap;
+			this.sectionProperties.centerToCenterX = centerToCenter;
+		}
+		else {
+			this.sectionProperties.closestX = null;
+			this.sectionProperties.centerSnapX = null;
+			this.sectionProperties.centerToCenterX = false;
+		}
 	}
 
+	// yList holds the dragged shape's [top edge, center, bottom edge].
+	// We look for the closest top/center/bottom ordinate of any other object.
 	findClosestY(yList: number[]) {
 		let closest = 1000;
 		let pickY = null;
+		let snapOffset = 0;
+		let centerSnap = null;
+		let centerToCenter = false;
 		if (GraphicSelection.extraInfo.ObjectRectangles) {
 			const ordNum = GraphicSelection.extraInfo.OrdNum;
 			const rectangles = GraphicSelection.extraInfo.ObjectRectangles;
-			this.sectionProperties.pickedIndexY = 0;
 
 			for (let i = 0; i < rectangles.length; i++) {
-				if (rectangles[i][4] !== ordNum) { // Don't compare it with itself.
-					const distances = [];
-					for (let j = 0; j < yList.length; j++) {
-						distances.unshift(Math.abs(rectangles[i][1] - yList[j]));
-						distances.push(Math.abs(rectangles[i][1] + rectangles[i][3] - yList[j]));
-					}
+				if (rectangles[i][4] === ordNum) continue; // Don't compare it with itself.
 
-					const min = Math.min(...distances);
-					const index = distances.indexOf(min);
-					if (min < closest) {
-						closest = min;
-						pickY = index < yList.length ? rectangles[i][1]: rectangles[i][1] + rectangles[i][3];
-						this.sectionProperties.pickedIndexY = index;
+				// Candidate snap ordinates of the other object: top edge, center, bottom edge.
+				const targets = [
+					rectangles[i][1],
+					rectangles[i][1] + rectangles[i][3] / 2,
+					rectangles[i][1] + rectangles[i][3],
+				];
+
+				for (let j = 0; j < yList.length; j++) {
+					for (let k = 0; k < targets.length; k++) {
+						const distance = Math.abs(targets[k] - yList[j]);
+						if (distance < closest) {
+							closest = distance;
+							pickY = targets[k];
+							snapOffset = yList[j] - yList[0]; // 0, half height or full height.
+							// k === 1 means the other object's center was the snap target.
+							centerSnap = k === 1 ? [rectangles[i][0] + rectangles[i][2] / 2, targets[1]] : null;
+							// Both centers meet when the matched point is the active object's center too.
+							centerToCenter = k === 1 && yList[j] === yList[1];
+						}
 					}
 				}
 			}
 		}
 
-		if (closest < 10 * app.dpiScale) this.sectionProperties.closestY = pickY;
-		else this.sectionProperties.closestY = null;
+		if (closest < 10 * app.dpiScale) {
+			this.sectionProperties.closestY = pickY;
+			this.sectionProperties.snapOffsetY = snapOffset;
+			this.sectionProperties.centerSnapY = centerSnap;
+			this.sectionProperties.centerToCenterY = centerToCenter;
+		}
+		else {
+			this.sectionProperties.closestY = null;
+			this.sectionProperties.centerSnapY = null;
+			this.sectionProperties.centerToCenterY = false;
+		}
 	}
 
 	private cloneSelectedPartInfoForGridSnap() {
@@ -1083,12 +1141,12 @@ class ShapeHandlesSection extends CanvasSectionObject {
 				if (diffX < minX) {
 					minX = diffX;
 					this.sectionProperties.closestX = innerRectangle.x1 + (countX * gapX);
-					this.sectionProperties.pickedIndexX = [1, 3].includes(i) ? 0 : 1; // Do we subtract width or not.
+					this.sectionProperties.snapOffsetX = [1, 3].includes(i) ? size[0] : 0; // Subtract width when a right corner snapped.
 				}
 				if (diffY < minY) {
 					minY = diffY;
 					this.sectionProperties.closestY = innerRectangle.y1 + (countY * gapY);
-					this.sectionProperties.pickedIndexY = [2, 3].includes(i) ? 0 : 1; // Do we subtract height or not.
+					this.sectionProperties.snapOffsetY = [2, 3].includes(i) ? size[1] : 0; // Subtract height when a bottom corner snapped.
 				}
 			}
 		}
@@ -1101,6 +1159,19 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		if (app.map._docLayer._docType === 'presentation') {
 			this.findClosestX(xListToCheck);
 			this.findClosestY(yListToCheck);
+
+			// On a center-to-center match, also mark the active object's own center.
+			// The object is not snapped until mouse up, so on a matched axis use the
+			// snapped ordinate (closestX / closestY) to place the dot on the helper
+			// line instead of the still-offset live position (xList[1] / yList[1]).
+			if (this.sectionProperties.centerToCenterX || this.sectionProperties.centerToCenterY) {
+				this.sectionProperties.draggedCenter = [
+					this.sectionProperties.centerToCenterX ? this.sectionProperties.closestX : xListToCheck[1],
+					this.sectionProperties.centerToCenterY ? this.sectionProperties.closestY : yListToCheck[1],
+				];
+			}
+			else
+				this.sectionProperties.draggedCenter = null;
 		}
 	}
 
@@ -1113,14 +1184,19 @@ class ShapeHandlesSection extends CanvasSectionObject {
 
 		this.sectionProperties.closestX = null;
 		this.sectionProperties.closestY = null;
+		this.sectionProperties.centerSnapX = null;
+		this.sectionProperties.centerSnapY = null;
+		this.sectionProperties.draggedCenter = null;
 
 		if (app.map.stateChangeHandler.getItemValue('.uno:GridUse') === 'true') {
 			this.findClosestGridPoint(size, position, dragDistance)
 		}
 		else {
+			const left = position[0] + dragDistance[0];
+			const top = position[1] + dragDistance[1];
 			this.checkObjectsBoundaries(
-				[position[0] + dragDistance[0], position[0] + dragDistance[0] + size[0]],
-				[position[1] + dragDistance[1], position[1] + dragDistance[1] + size[1]]
+				[left, left + size[0] / 2, left + size[0]],
+				[top, top + size[1] / 2, top + size[1]]
 			);
 		}
 
@@ -1294,6 +1370,19 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		this.context.stroke();
 	}
 
+	// Marks the center of the other object we are aligning to with a small red dot.
+	// centerPoint is the [x, y] center of that object in pixels.
+	drawCenterSnapDot(centerPoint: number[]) {
+		const x = this.containerObject.getDocumentAnchor()[0] + centerPoint[0] - app.activeDocument.activeLayout.viewedRectangle.pX1;
+		const y = this.containerObject.getDocumentAnchor()[1] + centerPoint[1] - app.activeDocument.activeLayout.viewedRectangle.pY1;
+
+		this.context.beginPath();
+		this.context.fillStyle = 'red';
+		this.context.arc(x, y, 3 * app.dpiScale, 0, 2 * Math.PI);
+		this.context.fill();
+		this.context.closePath();
+	}
+
 	drawShapeAlignmentHelperLines() {
 		this.context.save();
 
@@ -1310,6 +1399,17 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			this.drawYAxis(this.containerObject.getDocumentAnchor()[1] + this.sectionProperties.closestY - app.activeDocument.activeLayout.viewedRectangle.pY1);
 
 		this.context.closePath();
+
+		// When snapping to another object's center, mark that center with a red dot.
+		if (this.sectionProperties.centerSnapX !== null)
+			this.drawCenterSnapDot(this.sectionProperties.centerSnapX);
+
+		if (this.sectionProperties.centerSnapY !== null)
+			this.drawCenterSnapDot(this.sectionProperties.centerSnapY);
+
+		// On a center-to-center match, also mark the active object's own center.
+		if (this.sectionProperties.draggedCenter !== null)
+			this.drawCenterSnapDot(this.sectionProperties.draggedCenter);
 
 		this.context.restore();
 	}
