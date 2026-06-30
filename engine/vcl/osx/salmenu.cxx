@@ -841,36 +841,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 
-bool AquaSalMenu::AddMenuBarButton( const SalMenuButtonItem& i_rNewItem )
-{
-    if( ! mbMenuBar  )
-        return false;
-
-    MenuBarButtonEntry* pEntry = findButtonItem( i_rNewItem.mnId );
-    if( pEntry )
-    {
-        releaseButtonEntry( *pEntry );
-        pEntry->maButton = i_rNewItem;
-        pEntry->mpNSImage = CreateNSImage( i_rNewItem.maImage );
-        if( i_rNewItem.maToolTipText.getLength() )
-            pEntry->mpToolTipString = CreateNSString( i_rNewItem.maToolTipText );
-    }
-    else
-    {
-        maButtons.push_back( MenuBarButtonEntry( i_rNewItem ) );
-        maButtons.back().mpNSImage = CreateNSImage( i_rNewItem.maImage );
-        maButtons.back().mpToolTipString = CreateNSString( i_rNewItem.maToolTipText );
-    }
-
-    // lazy create status item
-    SalData::getStatusItem();
-
-    if( pCurrentMenuBar == this )
-        statusLayout();
-
-    return true;
-}
-
 void AquaSalMenu::RemoveMenuBarButton( sal_uInt16 i_nId )
 {
     MenuBarButtonEntry* pEntry = findButtonItem( i_nId );

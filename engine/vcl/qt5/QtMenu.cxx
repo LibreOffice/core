@@ -815,14 +815,6 @@ QPushButton* QtMenu::ImplAddMenuBarButton(const QIcon& rIcon, const QString& rTo
     return pButton;
 }
 
-bool QtMenu::AddMenuBarButton(const SalMenuButtonItem& rItem)
-{
-    if (!validateQMenuBar())
-        return false;
-    return !!ImplAddMenuBarButton(QIcon(QPixmap::fromImage(toQImage(rItem.maImage))),
-                                  toQString(rItem.maToolTipText), rItem.mnId);
-}
-
 void QtMenu::connectHelpShortcut(QMenu* pMenu)
 {
     assert(pMenu);

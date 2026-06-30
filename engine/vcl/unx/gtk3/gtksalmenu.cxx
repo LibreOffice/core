@@ -740,57 +740,6 @@ namespace
     }
 }
 
-bool GtkSalMenu::AddMenuBarButton(const SalMenuButtonItem& rNewItem)
-{
-    if (!mbMenuBar)
-        return false;
-
-    if (!mpMenuBarContainerWidget)
-        return false;
-
-    GtkWidget* pImage = nullptr;
-    if (!!rNewItem.maImage)
-    {
-        SvMemoryStream* pMemStm = new SvMemoryStream;
-        auto aBitmap = rNewItem.maImage.GetBitmap();
-        vcl::PngImageWriter aWriter(*pMemStm);
-        aWriter.write(aBitmap);
-
-        GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
-                                                    pMemStm->TellEnd(),
-                                                    DestroyMemoryStream,
-                                                    pMemStm);
-
-        GIcon *pIcon = g_bytes_icon_new(pBytes);
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        pImage = gtk_image_new_from_gicon(pIcon, GTK_ICON_SIZE_MENU);
-#else
-        pImage = gtk_image_new_from_gicon(pIcon);
-#endif
-        g_object_unref(pIcon);
-        g_bytes_unref(pBytes);
-    }
-
-    GtkWidget* pButton = AddButton(pImage);
-
-    maExtraButtons.emplace_back(rNewItem.mnId, pButton);
-
-    set_buildable_id(GTK_BUILDABLE(pButton), OUString::number(rNewItem.mnId));
-
-    gtk_widget_set_tooltip_text(pButton, rNewItem.maToolTipText.toUtf8().getStr());
-
-    if (mpCloseButton)
-    {
-        gtk_grid_insert_next_to(GTK_GRID(mpMenuBarContainerWidget), mpCloseButton, GTK_POS_LEFT);
-        gtk_grid_attach_next_to(GTK_GRID(mpMenuBarContainerWidget), pButton, mpCloseButton,
-                                GTK_POS_LEFT, 1, 1);
-    }
-    else
-        gtk_grid_attach(GTK_GRID(mpMenuBarContainerWidget), pButton, 1, 0, 1, 1);
-
-    return true;
-}
-
 void GtkSalMenu::RemoveMenuBarButton( sal_uInt16 nId )
 {
     const auto it = std::find_if(maExtraButtons.begin(), maExtraButtons.end(), [&nId](const auto &item) {

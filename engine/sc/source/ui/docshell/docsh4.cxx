@@ -248,18 +248,6 @@ bool ScDocShell::HasUpdatableLinks() const
     return pLinkMgr && !pLinkMgr->GetLinks().empty();
 }
 
-IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, weld::Button&, void )
-{
-    getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
-    PerformLinkUpdate();
-
-    ScTabViewShell* pViewSh = GetBestViewShell();
-    SfxViewFrame* pViewFrame = pViewSh ? pViewSh->GetFrame() : nullptr;
-    if (pViewFrame)
-        pViewFrame->RemoveInfoBar(u"enablecontent");
-    SAL_WARN_IF(!pViewFrame, "sc", "expected there to be a ViewFrame");
-}
-
 namespace
 {
 

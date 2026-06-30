@@ -363,7 +363,6 @@ public:
     void            UnlockDocument();
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
-    DECL_LINK( ReloadAllLinksHdl, weld::Button&, void );
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() override;
 

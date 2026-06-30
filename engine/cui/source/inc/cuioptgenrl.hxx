@@ -57,8 +57,6 @@ private:
     unsigned nShortNameField;
 
     DECL_LINK( ModifyHdl_Impl, weld::Entry&, void );
-    DECL_LINK( ChooseKeyButtonHdl, weld::Button&, void );
-    DECL_LINK( RemoveKeyButtonHdl, weld::Button&, void );
 
     bool                GetData_Impl();
     void                SetData_Impl();

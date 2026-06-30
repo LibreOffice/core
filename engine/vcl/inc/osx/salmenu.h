@@ -37,13 +37,10 @@ class AquaSalMenu : public SalMenu
 public: // for OOStatusView
     struct MenuBarButtonEntry
     {
-        SalMenuButtonItem       maButton;
         NSImage*                mpNSImage;      // cached image
         NSString*               mpToolTipString;
 
         MenuBarButtonEntry() : mpNSImage( nil ), mpToolTipString( nil ) {}
-        MenuBarButtonEntry( const SalMenuButtonItem& i_rItem )
-        : maButton( i_rItem), mpNSImage( nil ), mpToolTipString( nil ) {}
     };
 private:
     std::vector< MenuBarButtonEntry >   maButtons;
@@ -66,7 +63,6 @@ public:
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) override;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) override;
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags) override;
-    virtual bool AddMenuBarButton( const SalMenuButtonItem& ) override;
     virtual void RemoveMenuBarButton( sal_uInt16 nId ) override;
     virtual tools::Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame ) override;
 

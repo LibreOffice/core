@@ -37,17 +37,6 @@ struct SalItemParams
     MenuItemBits    nBits;                  // MenuItem-Bits
 };
 
-struct SalMenuButtonItem
-{
-    sal_uInt16          mnId;
-    Image               maImage;
-    OUString            maToolTipText;
-
-    SalMenuButtonItem() : mnId( 0 ) {}
-    SalMenuButtonItem( sal_uInt16 i_nId, Image aImg, OUString  i_TTText )
-    : mnId( i_nId ), maImage(std::move( aImg )), maToolTipText(std::move( i_TTText )) {}
-};
-
 class VCL_PLUGIN_PUBLIC SalMenuItem
 {
 public:
@@ -76,7 +65,6 @@ public:
     virtual void GetSystemMenuData(SystemMenuData& rData);
     virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const tools::Rectangle& rRect, FloatWinPopupFlags nFlags);
     virtual void ShowCloseButton(bool bShow);
-    virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
     virtual void Update() {}
 
