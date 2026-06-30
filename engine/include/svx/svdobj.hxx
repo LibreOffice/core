@@ -89,7 +89,6 @@ enum class SdrInventor : sal_uInt32 {
     E3d              = sal_uInt32( 'E' | ('3' << 8) | ('D' << 16) | ('1' << 24) ),
     FmForm           = sal_uInt32( 'F' | ('M' << 8) | ('0' << 16) | ('1' << 24) ),
     IMap             = sal_uInt32( 'I' | ('M' << 8) | ('A' << 16) | ('P' << 24) ),
-    ReportDesign     = sal_uInt32( 'R' | ('P' << 8) | ('T' << 16) | ('1' << 24) ),
     ScOrSwDraw       = sal_uInt32( 'S' | ('C' << 8) | ('3' << 16) | ('0' << 24) ), // Used in sc/ and sw/
     SgaImap          = sal_uInt32( 'S' | ('D' << 8) | ('U' << 16) | ('D' << 24) ),
     StarDrawUserData = sal_uInt32( 'S' | ('D' << 8) | ('U' << 16) | ('D' << 24) ),

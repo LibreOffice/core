@@ -34,20 +34,6 @@ namespace dbaui
         E_ELEMENT_TYPE_COUNT = E_NONE
     };
 
-    enum class PreviewMode
-    {
-        NONE   = 0,
-        Document = 1,
-        DocumentInfo  = 2
-    };
-
-    enum class ElementOpenMode
-    {
-        Normal,
-        Design,
-        Mail
-    };
-
 } // namespace dbaui
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

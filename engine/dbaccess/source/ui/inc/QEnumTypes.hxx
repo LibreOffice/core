@@ -20,45 +20,6 @@
 
 namespace dbaui
 {
-    enum EOrderDir
-    {
-        ORDER_NONE=0,
-        ORDER_ASC,
-        ORDER_DESC
-    };
-
-    enum EFunctionType
-    {
-        FKT_NONE        =0x00000000,
-        FKT_OTHER       =0x00000001,
-        FKT_AGGREGATE   =0x00000002,
-        FKT_CONDITION   =0x00000004,
-        FKT_NUMERIC     =0x00000008
-        // if this function type is set, it is either EXISTS or UNIQUE,
-        // the FieldName contains the complete statement
-    };
-
-    enum EConnectionSide
-    {
-        JTCS_FROM=0,
-        JTCS_TO
-    };
-
-    enum ETableFieldType
-    {
-        TAB_NORMAL_FIELD=0,
-        TAB_PRIMARY_FIELD
-    };
-
-    enum EJoinType
-    {
-        FULL_JOIN=0,
-        LEFT_JOIN,
-        RIGHT_JOIN,
-        CROSS_JOIN,
-        INNER_JOIN
-    };
-
     enum EControlType
     {
         tpDefault = 0,
