@@ -2191,7 +2191,6 @@ class UIManager extends window.L.Control {
 		clickToDismiss?: boolean,
 	): any {
 		var dialogId = this.generateModalId(id);
-		focusId = focusId ? focusId : 'response';
 		return {
 			id: dialogId,
 			dialogid: id,
