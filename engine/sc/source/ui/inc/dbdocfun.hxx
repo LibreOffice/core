@@ -72,7 +72,7 @@ public:
 
     SC_DLLPUBLIC void DoSubTotals(SCTAB nTab, const ScSubTotalParam& rParam, bool bRecord, bool bApi);
 
-    void            DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
+    bool            DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
                                       bool bRecord, bool bApi );
 
     SC_DLLPUBLIC bool AddDBTable(const OUString& rName, const ScRange& rRange, bool bHeader, bool bRecord,

@@ -2550,6 +2550,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             // Do subtotal if needed
             ScRange aOldRange;
             pDBData->GetArea(aOldRange);
+            bool bRefused = false;
             if (aNewDBData.HasTotals() && (aOldRange.aEnd.Row() != aNewDBRange.aEnd.Row() || aOldRange.aStart.Row() != aNewDBRange.aStart.Row()))
             {
                 // Subtotals
@@ -2561,20 +2562,23 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 // add/replace total row
                 aSubTotalParam.bRemoveOnly = false;
                 aSubTotalParam.bReplace = true;
-                aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, false);
+                bRefused = !aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, false);
             }
             else if (pDBData->WouldResizeOverlap(rDocument, aNewDBRange))
             {
                 // A table must not be dragged over another structure; same refusal as the
                 // total-row extend path, here also covering a right-drag.
                 mrViewData.GetDocShell()->ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
-                if (comphelper::COKit::isActive())
-                    UpdateAllOverlays();
+                bRefused = true;
             }
             else
             {
                 aFunc.ModifyDBData(aNewDBData);
             }
+
+            // In case of refuse, need overlay update.
+            if (bRefused && comphelper::COKit::isActive())
+                UpdateAllOverlays();
         }
     }
     else if (mrViewData.IsAnyFillMode())

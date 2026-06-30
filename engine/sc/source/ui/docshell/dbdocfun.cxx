@@ -1099,7 +1099,7 @@ void ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     aOperation.run();
 }
 
-void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
+bool ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const ScSubTotalParam& rParam,
                                     bool bRecord, bool bApi )
 {
     bool bDo = !rParam.bRemoveOnly; // false = only delete
@@ -1116,7 +1116,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     if (!pDBData)
     {
         OSL_FAIL("SubTotals: no DBData");
-        return;
+        return false;
     }
 
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(rDoc, nTab, 0, rParam.nRow1 + 1, rDoc.MaxCol(), rDoc.MaxRow());
@@ -1124,7 +1124,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     {
         if (!bApi)
             rDocShell.ErrorMessageAsync(aTester.GetMessageId());
-        return;
+        return false;
     }
 
     if (rDoc.HasAttrib(rParam.nCol1, rParam.nRow1 + 1, nTab, rParam.nCol2, rParam.nRow2, nTab,
@@ -1132,7 +1132,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
     {
         if (!bApi)
             rDocShell.ErrorMessageAsync(STR_MSSG_INSERTCELLS_0); // don't insert into merged
-        return;
+        return false;
     }
 
     // Would a column-bounded row shift at the would-be total row tear a straddling structure
@@ -1148,7 +1148,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
         {
             if (!bApi)
                 rDocShell.ErrorMessageAsync(STR_MSSG_TABLE_STRADDLE);
-            return;
+            return false;
         }
         bInPlace = true;
     }
@@ -1164,7 +1164,7 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
         {
             if (!bApi)
                 rDocShell.ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
-            return;
+            return false;
         }
     }
 
@@ -1242,6 +1242,8 @@ void ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
                         PaintPartFlags::Grid | PaintPartFlags::Left | PaintPartFlags::Top
                             | PaintPartFlags::Size);
     aModificator.SetDocumentModified();
+
+    return true;
 }
 
 bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
