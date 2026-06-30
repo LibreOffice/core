@@ -136,7 +136,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     if (pLst==nullptr) return false;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
-    bool bUnmark = (nOptions & (SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
+    bool bUnmark = (nOptions & SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     tools::Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->getSdrPageFromSdrObjList();
@@ -173,7 +173,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     if (pLst==nullptr) return false;
     SdrLayerID nLayer;
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
-    bool bUnmark=(nOptions&(SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
+    bool bUnmark=(nOptions & SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
     tools::Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->getSdrPageFromSdrObjList();
@@ -254,7 +254,7 @@ bool SdrExchangeView::Paste(
     if (pLst==nullptr)
         return false;
 
-    bool bUnmark=(nOptions&(SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
+    bool bUnmark=(nOptions & SdrInsertFlags::DONTMARK)==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark)
         UnmarkAllObj();
 

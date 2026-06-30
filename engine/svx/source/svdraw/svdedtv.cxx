@@ -1061,7 +1061,7 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
     }
 
     if (!(nOptions & SdrInsertFlags::DONTMARK)) {
-        if (!(nOptions & SdrInsertFlags::ADDMARK)) UnmarkAllObj();
+        UnmarkAllObj();
         MarkObj(pObj,&rPV);
     }
     return true;
