@@ -1,0 +1,123 @@
+#!/bin/sh
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# Assemble a self-contained root filesystem under /rootfs that holds Collabora
+# Online and every runtime dependency the hardened base image does not already
+# provide. Runs in the Debian builder stage, AFTER the packages are installed
+# and configured. The result is COPY'd into the distroless runtime image.
+#
+# There is deliberately no hand-maintained file list: the set of files to ship
+# is derived from dpkg. Installing Collabora Online pulls in its full
+# dependency closure; we copy exactly what that install added to a pristine
+# base image, so the list tracks packaging changes automatically.
+
+set -eu
+
+ROOTFS=/rootfs
+PKGS_BEFORE=/tmp/pkgs.before    # pristine package set, captured before install
+PKGS_ADDED=/tmp/pkgs.added
+FILELIST=/tmp/rootfs.files
+
+# Packages used only to build/configure the image (not needed at runtime), plus
+# packages the base image already provides. Their files are not copied. The
+# engine links its externals (openssl, libpng, libxml2, ...) statically, so the
+# only system libraries we ship are the few that coolwsd genuinely links
+# (pulled in via the dpkg dependency diff); these here are pure tooling:
+#   libcap2-bin     - setcap, used at build time only
+#   ca-certificates - the base image ships its own bundle; the jail gets its
+#                     copy from systemplate (built in the builder)
+#   adduser         - postinst uses it to create the 'cool' user
+#   fontconfig      - postinst uses fc-cache to build the font cache that goes
+#                     into systemplate; the fontconfig tools are not used at runtime
+#   cpio            - postinst uses it to run coolwsd-systemplate-setup
+BUILD_ONLY="libcap2-bin ca-certificates adduser fontconfig cpio"
+
+# Shared libraries the base image is known to provide (glibc and openssl). A
+# needed library matching this is considered covered even if we do not ship it.
+# Everything else (zlib, fontconfig, freetype, ...) must be shipped.
+BASE_LIB_RE='/(ld-linux-x86-64|ld-linux|libc|libm|libdl|libpthread|librt|libresolv|libutil|libnsl|libnss_[a-z]+|libcrypt|libssl|libcrypto)\.so'
+
+echo "=== Working out which packages the Collabora install added ==="
+dpkg-query -W -f '${Package}\n' | sort > /tmp/pkgs.after
+comm -13 "$PKGS_BEFORE" /tmp/pkgs.after > "$PKGS_ADDED"
+for p in $BUILD_ONLY; do
+    sed -i "/^${p}\$/d" "$PKGS_ADDED"
+done
+echo "Shipping the files of these packages:"
+sed 's/^/  /' "$PKGS_ADDED"
+
+echo "=== Building the file list ==="
+# dpkg -L lists files, symlinks and directories; keep only files and symlinks.
+while read -r pkg; do
+    dpkg-query -L "$pkg"
+done < "$PKGS_ADDED" \
+    | while read -r path; do
+        if [ -f "$path" ] || [ -L "$path" ]; then
+            printf '%s\n' "$path"
+        fi
+      done | sort -u > "$FILELIST"
+
+# Add the generated trees that no package owns: systemplate is built by the
+# coolwsd postinst, child-roots and cache are runtime working directories.
+find /opt/cool >> "$FILELIST"
+
+# Drop documentation, manuals and changelogs to keep the image small.
+sed -i -E '\#^/usr/share/(doc|man|info|lintian|bug)/#d' "$FILELIST"
+sort -u "$FILELIST" -o "$FILELIST"
+
+echo "=== Verifying the dependency closure ==="
+# Builder-side ldd resolves against the builder (which has everything), so it
+# cannot tell us a library is missing from the base image. Instead, flag any
+# needed library that is neither shipped nor known to be base-provided; those
+# are the ones to double-check against the base image.
+uncovered=$(
+    while read -r f; do
+        case "$f" in
+            *.so | *.so.* | */bin/* | */sbin/* | */program/*) ;;
+            *) continue ;;
+        esac
+        ldd "$f" 2>/dev/null
+    done < "$FILELIST" \
+        | awk '/=>/ && $3 ~ /^\// { print $3 }' \
+        | sort -u \
+        | while read -r lib; do
+            grep -qxF "$lib" "$FILELIST" && continue
+            printf '%s\n' "$lib" | grep -Eq "$BASE_LIB_RE" && continue
+            printf '%s\n' "$lib"
+          done
+)
+if [ -n "$uncovered" ]; then
+    echo "WARNING: needed libraries that are neither shipped nor known base-provided:"
+    printf '%s\n' "$uncovered" | sed 's/^/  /'
+    echo "Confirm the base image provides them; otherwise ship their package."
+else
+    echo "OK: every needed library is shipped or provided by the base image."
+fi
+
+echo "=== Copying into $ROOTFS ==="
+# Re-assert the file capabilities on the binaries so the copy carries them.
+# (BuildKit's COPY --from preserves security.capability; we set them again here
+# to be certain after the preceding steps.)
+setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/coolforkit-caps
+setcap cap_sys_admin=ep /usr/bin/coolmount
+
+mkdir -p "$ROOTFS"
+# tar preserves permissions, symlinks, hardlinks and extended attributes
+# (security.capability). Strip the leading slash so paths land under $ROOTFS.
+sed 's#^/##' "$FILELIST" > "$FILELIST.rel"
+tar -C / -cf - --xattrs --xattrs-include='*' --no-recursion -T "$FILELIST.rel" \
+    | tar -C "$ROOTFS" -xf - --xattrs --xattrs-include='*'
+
+# /etc/passwd and /etc/group are owned by the base, so dpkg did not list our
+# modified copies; install them explicitly. /etc/passwd stays group-writable so
+# coolwsd can map an arbitrary (e.g. OpenShift) UID to the 'cool' user.
+install -D -m 0664 /etc/passwd "$ROOTFS/etc/passwd"
+install -D -m 0644 /etc/group  "$ROOTFS/etc/group"
+
+# coolwsd writes a generated SSL certificate under /tmp/ssl; make sure a
+# world-writable /tmp exists in the distroless image.
+install -d -m 1777 "$ROOTFS/tmp"
+
+echo "=== rootfs assembled under $ROOTFS ==="
