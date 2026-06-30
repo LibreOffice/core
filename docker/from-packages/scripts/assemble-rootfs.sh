@@ -140,4 +140,36 @@ install -D -m 0644 /etc/group  "$ROOTFS/etc/group"
 # world-writable /tmp exists in the distroless image.
 install -d -m 1777 "$ROOTFS/tmp"
 
+# Source the jail's glibc loader / NSS / resolver objects and the CA trust
+# store from the target (base) image instead of the Debian builder, when the
+# build provides it via HARDENED_ROOT. These are dlopen'd at runtime by the
+# in-jail process, which runs with the base image's libc (we ship no libc of
+# our own), so they must match that libc; sourcing them here also lets the jail
+# use the hardened base's libraries and trust store. Each file is overlaid only
+# if the target image carries it at the same path; otherwise the builder's copy
+# is kept (and logged), never removed.
+if [ -n "${HARDENED_ROOT:-}" ]; then
+    echo "=== Overlaying jail glibc/CA from the target image ($HARDENED_ROOT) ==="
+    syst="$ROOTFS/opt/cool/systemplate"
+    find "$syst" \( -name 'ld-*' -o -name 'libnss_*.so*' -o -name 'libresolv.so*' \) \
+        -type f 2>/dev/null | while read -r f; do
+        rel=${f#"$syst"/}
+        if [ -e "$HARDENED_ROOT/$rel" ]; then
+            cp -a -L "$HARDENED_ROOT/$rel" "$f"
+            echo "  overlaid /$rel"
+        else
+            echo "  KEPT     /$rel (not provided by the target image)"
+        fi
+    done
+    ca="etc/ssl/certs/ca-certificates.crt"
+    if [ -e "$syst/$ca" ]; then
+        if [ -e "$HARDENED_ROOT/$ca" ]; then
+            cp -a -L "$HARDENED_ROOT/$ca" "$syst/$ca"
+            echo "  overlaid /$ca"
+        else
+            echo "  KEPT     /$ca (not provided by the target image)"
+        fi
+    fi
+fi
+
 echo "=== rootfs assembled under $ROOTFS ==="

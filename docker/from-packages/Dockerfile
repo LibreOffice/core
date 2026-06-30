@@ -18,6 +18,10 @@ ARG releasenotes
 ARG version
 ARG onlinetag
 
+# Named alias of the runtime base, so the builder can source the jail's
+# glibc loader / NSS / resolver and the CA trust store from it (see below).
+FROM ${runtime_base} AS hardened
+
 # ---------------------------------------------------------------------------
 # Builder stage: install Collabora Online from packages on Debian exactly as
 # before, then assemble a self-contained root filesystem to hand to the base.
@@ -139,9 +143,13 @@ RUN --mount=type=secret,id=secret_key \
 # (e.g. OpenShift-assigned) UID to the 'cool' user at startup
     chmod g+w /etc/passwd
 
-# Assemble the root filesystem to hand to the hardened base image.
+# Assemble the root filesystem to hand to the hardened base image. The base
+# image's own files are made available under /hardened so the assembler can
+# source the jail's glibc loader / NSS / resolver and the CA trust store from
+# the target rather than from the Debian builder.
+COPY --from=hardened / /hardened/
 COPY /scripts/assemble-rootfs.sh /usr/local/bin/assemble-rootfs.sh
-RUN /usr/local/bin/assemble-rootfs.sh
+RUN HARDENED_ROOT=/hardened /usr/local/bin/assemble-rootfs.sh
 
 # ---------------------------------------------------------------------------
 # Runtime stage: the hardened, distroless base with only Collabora Online and
