@@ -1153,6 +1153,18 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testPivotTablesWriteRowColumnItems)
     assertXPath(pTable, "/x:pivotTableDefinition/x:colItems/x:i[3]", "r", u"2");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest6, testBuiltInDefaultTableStyleNotExportedXLSX)
+{
+    createScDoc("xlsx/TableStyleTest.xlsx");
+    getScDoc()->GetTableStyles()->SetDefaultStyleName(u"TableStyleMedium2"_ustr);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pStyles = parseExport(u"xl/styles.xml"_ustr);
+    CPPUNIT_ASSERT(pStyles);
+    assertXPathNoAttribute(pStyles, "/x:styleSheet/x:tableStyles", "defaultTableStyle");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

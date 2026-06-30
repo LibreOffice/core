@@ -2088,6 +2088,51 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testRenameTableUpdatesStructuredRefs)
     m_pDoc->DeleteTab(0);
 }
 
+// The gallery groups styles Light, then Medium, then Dark, and orders the
+// trailing number numerically so the list reads 1, 2, ... 10 rather than the
+// lexical 1, 10, 2.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testGetSortedTableStyles)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Sorted"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScTableStyles* pStyles = m_pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    std::vector<const ScTableStyle*> aSorted = pStyles->GetSortedTableStyles();
+    CPPUNIT_ASSERT(!aSorted.empty());
+
+    auto indexOf = [&aSorted](std::u16string_view aName) -> sal_Int32 {
+        for (size_t i = 0; i < aSorted.size(); ++i)
+            if (aSorted[i]->GetName() == aName)
+                return static_cast<sal_Int32>(i);
+        return -1;
+    };
+
+    const sal_Int32 nLight1 = indexOf(u"TableStyleLight1");
+    const sal_Int32 nLight2 = indexOf(u"TableStyleLight2");
+    const sal_Int32 nLight10 = indexOf(u"TableStyleLight10");
+    const sal_Int32 nLight21 = indexOf(u"TableStyleLight21");
+    const sal_Int32 nMedium1 = indexOf(u"TableStyleMedium1");
+    const sal_Int32 nDark1 = indexOf(u"TableStyleDark1");
+    CPPUNIT_ASSERT(nLight1 >= 0);
+    CPPUNIT_ASSERT(nLight2 >= 0);
+    CPPUNIT_ASSERT(nLight10 >= 0);
+    CPPUNIT_ASSERT(nLight21 >= 0);
+    CPPUNIT_ASSERT(nMedium1 >= 0);
+    CPPUNIT_ASSERT(nDark1 >= 0);
+
+    CPPUNIT_ASSERT_MESSAGE("Light 1 precedes Light 2", nLight1 < nLight2);
+    CPPUNIT_ASSERT_MESSAGE("Light 2 precedes Light 10 (numeric, not lexical)", nLight2 < nLight10);
+    CPPUNIT_ASSERT_MESSAGE("Light precedes Medium", nLight21 < nMedium1);
+    CPPUNIT_ASSERT_MESSAGE("Medium precedes Dark", nMedium1 < nDark1);
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TableStylesTest, testRenameTableDuplicateRefused)
 {
     m_pDoc->InsertTab(0, u"RenameDup"_ustr);
@@ -2285,6 +2330,27 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testConvertToRangeFlattensStructuredRefs)
     CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(3, 2, 0));
     CPPUNIT_ASSERT_EQUAL(60.0, m_pDoc->GetValue(3, 3, 0));
     CPPUNIT_ASSERT(!bNameHasTableRef());
+
+    m_pDoc->DeleteTab(0);
+}
+
+// The document carries a default table style for newly inserted tables. New
+// documents start at the built-in Medium 2, and the choice is remembered.
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testDefaultTableStyleName)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, u"Default"_ustr);
+
+    auto pColorSet = createTestThemeA();
+    ScTableStyleGenerator::generateDefaultStyles(*m_pDoc, *pColorSet);
+
+    ScTableStyles* pStyles = m_pDoc->GetTableStyles();
+    CPPUNIT_ASSERT(pStyles);
+
+    CPPUNIT_ASSERT_EQUAL(u"TableStyleMedium2"_ustr, pStyles->GetDefaultStyleName());
+
+    pStyles->SetDefaultStyleName(u"TableStyleLight9"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"TableStyleLight9"_ustr, pStyles->GetDefaultStyleName());
 
     m_pDoc->DeleteTab(0);
 }
