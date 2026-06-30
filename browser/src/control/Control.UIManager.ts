@@ -2027,7 +2027,7 @@ class UIManager extends window.L.Control {
 			}
 		}
 
-		document.addEventListener('mousemove', function() {
+		const hideTooltip = function() {
 			elem.tooltip('close');
 			elem.tooltip('disable');
 
@@ -2039,7 +2039,20 @@ class UIManager extends window.L.Control {
 					section.hideAnchorRectangles();
 				}
 			}
-		}, {once: true});
+			document.removeEventListener('mousemove', hideTooltip);
+			document.removeEventListener('wheel', hideTooltip);
+			document.removeEventListener('keydown', hideTooltipOnKey, { capture: true } as any);
+		};
+
+		const hideTooltipOnKey = function(e: KeyboardEvent) {
+			if (e.key === 'PageUp' || e.key === 'PageDown') {
+				hideTooltip();
+			}
+		};
+
+		document.addEventListener('mousemove', hideTooltip);
+		document.addEventListener('wheel', hideTooltip);
+		document.addEventListener('keydown', hideTooltipOnKey, { capture: true });
 	}
 
 	// Snack bar

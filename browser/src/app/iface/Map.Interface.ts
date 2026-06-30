@@ -256,4 +256,5 @@ interface MapInterface extends Evented {
 	_controlCorners: Record<string, Node>;
 	_contextMenu: ContextMenuControl;
 	_saveImageToWopi: boolean;
+	tooltip?: any;
 }

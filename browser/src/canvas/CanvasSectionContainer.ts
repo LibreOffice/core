@@ -1340,6 +1340,9 @@ class CanvasSectionContainer {
 	}
 
 	public onMouseWheel (e: WheelEvent) {
+		if (app.map && app.map.tooltip)
+			app.map.tooltip.hide();
+
 		var point = this.convertPositionToCanvasLocale(e);
 		var delta: Array<number>;
 

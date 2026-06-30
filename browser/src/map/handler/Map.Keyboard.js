@@ -416,6 +416,12 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			return;
 		}
 
+		if (ev.keyCode === this.keyCodes.PAGEUP || ev.keyCode === this.keyCodes.PAGEDOWN) {
+			if (this._map && this._map.tooltip) {
+				this._map.tooltip.hide();
+			}
+		}
+
 		if (window.KeyboardShortcuts.processEvent(app.UI.language.fromURL, ev)) {
 			return;
 		}
