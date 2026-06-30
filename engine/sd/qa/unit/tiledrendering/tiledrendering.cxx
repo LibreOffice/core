@@ -2787,6 +2787,46 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testEndTextEditAfterShapeDeleted)
+{
+    // View 1 text-edits a shape, view 2 deletes it. The model-change
+    // notification makes view 1 end its text edit because the object is no
+    // longer inserted. The undo manager must be swapped back cleanly.
+    SdXImpressDocument* pXImpressDocument = createDoc("TextBoxAndRect.odg");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    const int nView1 = KitHelper::getCurrentView();
+    sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView1 = pViewShell1->GetView();
+    Scheduler::ProcessEventsToIdle();
+
+    KitHelper::createView();
+    sd::ViewShell* pViewShell2 = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView2 = pViewShell2->GetView();
+    Scheduler::ProcessEventsToIdle();
+
+    KitHelper::setView(nView1);
+    SdPage* pPage = pViewShell1->GetActualPage();
+    SdrObject* pTextBoxObject = pPage->GetObj(0);
+    CPPUNIT_ASSERT_EQUAL(u"Text Box"_ustr, pTextBoxObject->GetName());
+
+    // view 1: start text editing the text box
+    pView1->SdrBeginTextEdit(pTextBoxObject);
+    CPPUNIT_ASSERT(pView1->IsTextEdit());
+    CPPUNIT_ASSERT(pView1->getViewLocalUndoManager());
+
+    // view 2: delete the shape; the model-change notification ends text
+    // edit on view 1 because the object is no longer inserted
+    pView2->MarkObj(pTextBoxObject, pView2->GetSdrPageView());
+    pView2->DeleteMarkedObj();
+    Scheduler::ProcessEventsToIdle();
+
+    // view 1: text edit ended and the local undo manager was freed
+    KitHelper::setView(nView1);
+    CPPUNIT_ASSERT(!pView1->IsTextEdit());
+    CPPUNIT_ASSERT(!pView1->getViewLocalUndoManager());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarHide)
 {
     // Given an impress document, with a visible sidebar:
