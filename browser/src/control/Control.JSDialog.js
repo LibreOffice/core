@@ -577,7 +577,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			const restored = instance.container.querySelector('[id=\'' + instance.preservedFocusId + '\']');
 			instance.preservedFocusId = null;
 			if (restored && JSDialog.IsFocusable(restored)) {
-				restored.focus();
+				restored.focus({preventScroll: true});
 				return;
 			}
 		}
@@ -586,7 +586,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		var initialFocusElement = this._getFocusablesForInitialFocus(instance.container);
 
 		if (instance.canHaveFocus && initialFocusElement && initialFocusElement.length)
-			initialFocusElement[0].focus();
+			initialFocusElement[0].focus({preventScroll: true});
 
 		// pass the current instance and get the tabcontrol object if it exist
 		// this will only search in current instance and not in whole document
@@ -622,7 +622,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			// for tab control case we have more then 1 element that can be focusable so select the first tab for the list
 			if (Array.isArray(firstFocusableElement))
 				firstFocusableElement = firstFocusableElement[0];
-			firstFocusableElement.focus();
+			firstFocusableElement.focus({preventScroll: true});
 		}
 		else if (instance.canHaveFocus !== false && instance.init_focus_id)
 			app.console.error('JSDialog: Cannot get focus for dialog: "' + instance.id + '" with initial id: "' + instance.init_focus_id + '"');
