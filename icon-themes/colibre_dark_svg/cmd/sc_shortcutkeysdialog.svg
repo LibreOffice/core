@@ -1,10 +1,1 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-  <rect x="1" y="3" width="14" height="10" rx="1" fill="#1c1c1a" stroke="#c8c8c8" stroke-width=".75"/>
-  <rect x="2.5" y="5" width="2.5" height="2" rx=".4" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".4"/>
-  <rect x="6" y="5" width="2.5" height="2" rx=".4" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".4"/>
-  <rect x="9.5" y="5" width="2.5" height="2" rx=".4" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".4"/>
-  <rect x="2.5" y="8" width="2.5" height="2" rx=".4" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".4"/>
-  <rect x="6" y="8" width="2.5" height="2" rx=".4" fill="#1e8bcd" stroke="#3a3a38" stroke-width=".4"/>
-  <rect x="9.5" y="8" width="2.5" height="2" rx=".4" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".4"/>
-  <rect x="3" y="11" width="10" height="1.5" rx=".4" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".4"/>
-</svg>
+<svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg"><path d="m1 3c-.554 0-1 .446-1 1v7c0 .554.446 1 1 1h14c.554 0 1-.446 1-1v-7c0-.554-.446-1-1-1zm0 1h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1.75v1h-1.75zm-11.5 2h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm1.75 0h1v1h-1zm-13 2h2v1h-2zm3 0h1v1h-1zm2 0h1v1h-1zm2 0h1v1h-1zm2 0h1v1h-1zm2 0h3v1h-3zm-11 2h1v1h-1zm2 0h1v1h-1zm2 0h6v1h-6zm7 0h1v1h-1zm2 0h1v1h-1z" fill="#fafafa" stroke-linejoin="round"/></svg>

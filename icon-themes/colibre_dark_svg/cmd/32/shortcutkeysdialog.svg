@@ -1,16 +1,1 @@
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect x="3" y="9" width="26" height="16" rx="1.5" ry="1.5" fill="#1c1c1a" stroke="#c8c8c8" stroke-width="1"/>
-  <rect x="5" y="11" width="4" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="10" y="11" width="4" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="15" y="11" width="4" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="20" y="11" width="4" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="25" y="11" width="2" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="5" y="15" width="3" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="9" y="15" width="4" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="14" y="15" width="4" height="3" rx=".5" fill="#1e8bcd" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="19" y="15" width="4" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="24" y="15" width="3" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="5" y="19" width="3" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="9" y="19" width="14" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-  <rect x="24" y="19" width="3" height="3" rx=".5" fill="#c8c6c4" stroke="#3a3a38" stroke-width=".5"/>
-</svg>
+<svg height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg"><path d="m1 8c-.554 0-1 .446-1 1v13c0 .554.446 1 1 1h30c.554 0 1-.446 1-1v-13c0-.554-.446-1-1-1zm0 1h4v1h-4zm5 0h2v1h-2zm3 0h2v1h-2zm3 0h2v1h-2zm3 0h2v1h-2zm3 0h2v1h-2zm3 0h2v1h-2zm3 0h2v1h-2zm3 0h4v1h-4zm-26 2h4v2h-4zm5 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h4v2h-4zm-26 3h4v2h-4zm5 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h4v2h-4zm-26 3h7v2h-7zm8 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h2v2h-2zm3 0h7v2h-7zm-23 3h3v2h-3zm4 0h2v2h-2zm3 0h2v2h-2zm3 0h10v2h-10zm11 0h2v2h-2zm3 0h2v2h-2zm3 0h3v2h-3z" fill="#fafafa"/></svg>
