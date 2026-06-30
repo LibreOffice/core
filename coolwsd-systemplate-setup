@@ -55,9 +55,6 @@ if [ "$LIBC" != "musl" ]; then
          lib/libresolv* lib64/libresolv* lib/*/libresolv* \
          var/cache/fontconfig \
          etc/fonts \
-         usr/lib/locale/en_US.utf8 \
-         usr/lib/locale/C.UTF-8 \
-         usr/lib/locale/locale_archive \
          -type f 2>/dev/null
 
     find etc/fonts \
