@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-26 11:34+0200\n"
-"PO-Revision-Date: 2026-06-09 21:01+0000\n"
+"PO-Revision-Date: 2026-06-30 03:40+0000\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/collabora-online/collabora-ui/zh_Hant/>\n"
-"Language: \n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -64,7 +64,7 @@ msgstr "狀態"
 
 #: admin/admin.strings.js:24
 msgid "Details"
-msgstr ""
+msgstr "詳細資訊"
 
 #: admin/admin.strings.js:25 src/control/Control.ServerAuditDialog.ts:343
 msgid "No issues found"
@@ -436,6 +436,8 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"部分客戶端是透過舊版的 WebSocket URL 格式連線的，我們已規劃移除該格式。請確認"
+"您的代理伺服器能順利傳遞此精簡格式。"
 
 #: admin/src/AdminSocketServerAudit.js:91
 #: admin/src/integrator/AdminIntegratorSettings.ts:3536
@@ -445,7 +447,7 @@ msgstr "錯誤"
 
 #: admin/src/AdminSocketServerAudit.js:107
 msgid "Learn more"
-msgstr ""
+msgstr "取得更多資訊"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -544,7 +546,7 @@ msgstr "顯示尺規"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:567
 msgid "Show Formatting Marks"
-msgstr ""
+msgstr "顯示格式設定標記"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:568
 #: src/control/Control.NotebookbarWriter.js:2316
@@ -632,11 +634,11 @@ msgstr "內容"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:591
 msgid "Display"
-msgstr ""
+msgstr "顯示"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:592
 msgid "Show Boundaries"
-msgstr ""
+msgstr "顯示邊框"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:593
 #: src/control/Control.BackstageView.ts:560
@@ -849,10 +851,12 @@ msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"若啟用此設定，Writer 會在開啟文件時將文件調整為與檢視區域寬度相符；若停用此設"
+"定，文件則會以下方設定的「預設縮放比例」開啟。"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1347
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "{0} 目前沒有可用設定"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1359
 msgid "Select a tab to browser settings."
@@ -927,7 +931,7 @@ msgstr "Zotero 帳號 API 設定"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2064
 msgid "Zotero Settings"
-msgstr ""
+msgstr "Zotero 設定"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2096
 #: admin/src/integrator/AdminIntegratorSettings.ts:3178
@@ -942,7 +946,7 @@ msgstr "要使用文件簽署，請在此處指定您的簽署憑證、金鑰與
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2121
 msgid "Document Signing Settings"
-msgstr ""
+msgstr "文件簽署設定"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2159
 #: admin/src/integrator/AdminIntegratorSettings.ts:2176
@@ -1049,7 +1053,7 @@ msgstr "上傳 Xcu"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3375
 #: admin/src/integrator/AdminIntegratorSettings.ts:3385
 msgid "Enter {0}"
-msgstr ""
+msgstr "輸入 {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3417
 msgid "Reset"
@@ -1057,15 +1061,15 @@ msgstr "重設"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3418
 msgid "Reset to default {0}"
-msgstr ""
+msgstr "重設為預設值 {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3422
 msgid "Are you sure you want to reset {0}?"
-msgstr ""
+msgstr "您確定您要重設 {0} 嗎？"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3438
 msgid "Save {0}"
-msgstr ""
+msgstr "儲存 {0}"
 
 #: admin/src/integrator/WordBook.ts:117
 msgid "Standard dictionary"
@@ -2117,7 +2121,7 @@ msgstr "不再顯示"
 
 #: src/control/Control.AlertDialog.js:108
 msgid "A {0} error occurred while processing the {1} command."
-msgstr ""
+msgstr "處理 {1} 命令時發生 {0} 錯誤。"
 
 #: src/control/Control.AlertDialog.js:109
 msgid "The server encountered a {0} error while parsing the {1} command."
@@ -3021,7 +3025,7 @@ msgstr "修復"
 #: src/control/Control.Menubar.ts:146 src/control/Control.Menubar.ts:503
 #: src/control/Control.Menubar.ts:686 src/control/Control.Menubar.ts:850
 msgid "Find"
-msgstr ""
+msgstr "尋找"
 
 #: src/control/Control.Menubar.ts:150
 msgid "Compare Changes"
@@ -4123,7 +4127,7 @@ msgstr "插入包含樣式的表格"
 
 #: src/control/Control.NotebookbarCalc.js:1815
 msgid "Select an editable cell range to insert a styled table"
-msgstr ""
+msgstr "選取可編輯的儲存格範圍，以插入帶有樣式的表格"
 
 #: src/control/Control.NotebookbarCalc.js:1824
 #: src/control/Control.NotebookbarDraw.js:1034
@@ -4404,7 +4408,7 @@ msgstr "選取"
 #: src/control/Control.NotebookbarImpress.js:2235
 #: src/control/Control.NotebookbarWriter.js:2638
 msgid "Distribute"
-msgstr ""
+msgstr "散佈"
 
 #: src/control/Control.NotebookbarImpress.js:2274
 #: src/control/Control.NotebookbarWriter.js:2677
@@ -4525,7 +4529,7 @@ msgstr "移除區塊"
 
 #: src/control/Control.PartsPreview.js:871
 msgid "Remove Section & Slides"
-msgstr ""
+msgstr "移除區塊與投影片"
 
 #: src/control/Control.PartsPreview.js:880
 msgid "Move Section Up"
@@ -4545,7 +4549,7 @@ msgstr "展開所有區塊"
 
 #: src/control/Control.PartsPreview.js:940
 msgid "Delete section \"%1\" and its %2 slide(s)?"
-msgstr ""
+msgstr "刪除區塊「%1」與其 %2 投影片？"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "Enter new section name:"
@@ -4596,10 +4600,12 @@ msgid ""
 "Connected with the old WebSocket URL form, which is planned for removal. "
 "Check that your proxy passes the compact form through."
 msgstr ""
+"此連結與舊版的 WebSocket URL 格式相關，我們規劃移除該格式。請確認您的代理伺服"
+"器能順利傳遞此精簡格式。"
 
 #: src/control/Control.ServerAuditDialog.ts:143
 msgid "Connected with the compact WebSocket URL form"
-msgstr ""
+msgstr "透過精簡 WebSocket URL 格式建立連線"
 
 #: src/control/Control.ServerAuditDialog.ts:152
 msgid "The IsAdminUser property is not set by integration"
@@ -4711,6 +4717,8 @@ msgid ""
 "Fit the page to the window width. Smart Zoom on open can be toggled in "
 "Options under File tab."
 msgstr ""
+"將頁面調整為與視窗寬度相同。開啟時啟用「智慧縮放」的功能，可於「檔案」索引標"
+"籤下的「選項」中進行切換。"
 
 #: src/control/Control.StatusBar.js:271
 msgid "Status Bar Menu"
@@ -4826,23 +4834,23 @@ msgstr "顯示選單"
 
 #: src/control/Control.UIManager.ts:2681
 msgid "Copy error details"
-msgstr ""
+msgstr "複製錯誤詳細資訊"
 
 #: src/control/Control.UIManager.ts:2728
 msgid "Show technical details"
-msgstr ""
+msgstr "顯示技術詳細資訊"
 
 #: src/control/Control.UIManager.ts:2742
 msgid "Technical Details:"
-msgstr ""
+msgstr "技術詳細資訊："
 
 #: src/control/Control.UIManager.ts:2746
 msgid "Error details copied to clipboard"
-msgstr ""
+msgstr "錯誤詳細資訊已複製到剪貼簿"
 
 #: src/control/Control.UIManager.ts:2756
 msgid "Failed to copy error details"
-msgstr ""
+msgstr "複製錯誤詳細資訊失敗"
 
 #: src/control/Control.UserList.ts:56
 msgid "{user} has joined"
@@ -5052,17 +5060,16 @@ msgid ""
 msgstr "取消引用連結將阻止 Collabora Online 更新此文件中的引用與參考文獻。"
 
 #: src/control/HRuler.ts:321
-#, fuzzy
 msgid "First line"
-msgstr "第一張投影片"
+msgstr "第一行"
 
 #: src/control/HRuler.ts:327
 msgid "Before"
-msgstr ""
+msgstr "前"
 
 #: src/control/HRuler.ts:399
 msgid "Double-click to insert a tab stop. Right-click for more options."
-msgstr ""
+msgstr "雙擊以插入定位落點。右鍵點選以取得更多選項。"
 
 #: src/control/HRuler.ts:785 src/control/HRuler.ts:952
 msgid "Left Margin"
@@ -5218,19 +5225,19 @@ msgstr "題名、垂直文字、美術圖形"
 
 #: src/control/Styles.js:43
 msgid "Standard selection"
-msgstr ""
+msgstr "標準區塊"
 
 #: src/control/Styles.js:44
 msgid "Extending selection"
-msgstr ""
+msgstr "延伸區塊"
 
 #: src/control/Styles.js:45
 msgid "Adding selection"
-msgstr ""
+msgstr "新增區塊"
 
 #: src/control/Styles.js:46
 msgid "Block selection"
-msgstr ""
+msgstr "封鎖區塊"
 
 #: src/control/Toolbar.js:170 src/control/Toolbar.js:183
 msgid "Downloading..."
@@ -5897,7 +5904,7 @@ msgstr "哎呀，有點尷尬，我們無法連線至您的文件。請稍後再
 
 #: src/app/Socket.ts:621
 msgid "The connection to the document has been lost."
-msgstr ""
+msgstr "與文件的連線中斷。"
 
 #: src/app/Socket.ts:622
 msgid "The server has been disconnected."
@@ -5963,7 +5970,7 @@ msgstr "錯誤的伺服器，正在重新連線……"
 
 #: src/app/Socket.ts:1905
 msgid "Unsupported version."
-msgstr ""
+msgstr "不支援的版本。"
 
 #: src/app/Socket.ts:1906
 msgid "Unsupported server version."
@@ -6056,7 +6063,7 @@ msgstr "已選取 {0} 個分頁"
 
 #: src/errormessages.js:22
 msgid "No disk space left."
-msgstr ""
+msgstr "磁碟空間不足。"
 
 #: src/errormessages.js:22
 msgid "No disk space left on server."
@@ -6370,7 +6377,7 @@ msgstr "無法下載剪貼簿，請重新複製"
 
 #: src/map/Clipboard.js:372
 msgid "Failed to upload the clipboard"
-msgstr ""
+msgstr "上傳剪貼簿失敗"
 
 #: src/map/Clipboard.js:1450
 msgid ""
@@ -6432,9 +6439,8 @@ msgid "Please send us your feedback"
 msgstr "請給我們您的回饋"
 
 #: src/map/handler/Map.FileInserter.js:192
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file has no name"
-msgstr "檔案類型：{0} 由於沒有檔名而無法上傳至伺服器"
+msgstr "無法插入類型為 {0} 的檔案，因為該檔案沒有名稱"
 
 #: src/map/handler/Map.FileInserter.js:193
 #, javascript-format
@@ -6444,9 +6450,8 @@ msgid ""
 msgstr "檔案類型：{0} 由於沒有檔名而無法上傳至伺服器"
 
 #: src/map/handler/Map.FileInserter.js:196
-#, fuzzy
 msgid "The file of type: {0} cannot be inserted since the file is empty"
-msgstr "檔案類型：{0} 由於檔案空白而無法上傳至伺服器"
+msgstr "無法插入類型為 {0} 的檔案，因為該檔案為空"
 
 #: src/map/handler/Map.FileInserter.js:197
 #, javascript-format
@@ -6649,9 +6654,8 @@ msgid "Present to all"
 msgstr "向全員簡報"
 
 #: src/slideshow/PresenterConsole.js:41
-#, fuzzy
 msgid "Exit"
-msgstr "編輯"
+msgstr "結束"
 
 #: src/slideshow/PresenterConsole.js:42
 msgid "Go Back"
