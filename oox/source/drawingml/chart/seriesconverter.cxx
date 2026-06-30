@@ -1032,6 +1032,16 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
             convertGeography(*rLPR->mxGeography, aSeriesProp);
         }
     }
+
+    // Chartex only: preserve the cx:axisId list from the series so export
+    // can emit the matching cx:axisId children and the right number of
+    // cx:axis elements.
+    if (!mrModel.maAxisIds.empty())
+    {
+        aSeriesProp.setProperty(PROP_ChartexAxisIds,
+            comphelper::containerToSequence(mrModel.maAxisIds));
+    }
+
     return xDataSeries;
 }
 

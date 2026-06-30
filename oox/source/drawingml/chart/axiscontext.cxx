@@ -309,9 +309,11 @@ ContextHandlerRef CxAxisContext::onCreateContext( sal_Int32 nElement, const Attr
     if( isRootElement() ) switch( nElement )
     {
         case CX_TOKEN(catScaling) :
+            mrModel.mobCatNotVal = true;
             mrModel.mofGapWidth = rAttribs.getDouble(XML_gapWidth);
             return nullptr;
         case CX_TOKEN(valScaling) :
+            mrModel.mobCatNotVal = false;
             mrModel.mofMax = rAttribs.getDouble(XML_max);
             mrModel.mofMin = rAttribs.getDouble(XML_min);
             mrModel.mofMajorUnit = rAttribs.getDouble(XML_majorUnit);

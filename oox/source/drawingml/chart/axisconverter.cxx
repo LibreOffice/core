@@ -146,7 +146,8 @@ AxisConverter::~AxisConverter()
 void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoordSystem,
                                      RefVector<TypeGroupConverter>& rTypeGroups,
                                      const AxisModel* pCrossingAxis, sal_Int32 nAxesSetIdx,
-                                     sal_Int32 nAxisIdx, bool bUseFixedInnerSize)
+                                     sal_Int32 nAxisIdx, bool bUseFixedInnerSize,
+                                     ChartType eCT)
 {
     if (rTypeGroups.empty())
         return;
@@ -225,6 +226,15 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
             aAxisProp.setProperty(PROP_HasExplicitSpPr, true);
         if (mrModel.mxTextProp.is())
             aAxisProp.setProperty(PROP_HasExplicitTxPr, true);
+
+        // Chartex only: preserve the cx:axis id so export can re-emit it and
+        // so series-to-axis links can be reconstructed from the chart2 model.
+        if (eCT == ChartType::CX && mrModel.mnAxisId >= 0) {
+            aAxisProp.setProperty(PROP_AxisId, mrModel.mnAxisId);
+            if (mrModel.mobCatNotVal) {
+                aAxisProp.setProperty(PROP_CatNotVal, mrModel.mobCatNotVal.value());
+            }
+        }
 
         // no X axis line in radar charts
         if( (nAxisIdx == API_X_AXIS) && (rTypeInfo.meTypeCategory == TYPECATEGORY_RADAR) )

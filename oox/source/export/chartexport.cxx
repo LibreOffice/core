@@ -2876,7 +2876,7 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
         pFS->singleElement(FSNS(XML_c, XML_barDir), XML_val, "col");
         pFS->singleElement(FSNS(XML_c, XML_grouping), XML_val, "clustered");
         pFS->singleElement(FSNS(XML_c, XML_varyColors), XML_val, "0");
-        createAxes(true, false, false);
+        createAxes_chart(true, false);
         pFS->endElement(FSNS(XML_c, XML_barChart));
     }
 
@@ -3043,7 +3043,11 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
     }
 
     //Axis Data
-    exportAxes(bIsChartex);
+    if (bIsChartex) {
+        exportAxes_chartex();
+    } else {
+        exportAxes_chart();
+    }
 
     if (!bIsChartex) {
         // Data Table
@@ -3451,7 +3455,7 @@ void ChartExport::exportAreaChart( const Reference< chart2::XChartType >& xChart
         if (splitDataSeries.hasElements())
             exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
-        createAxes(bPrimaryAxes, true, false);
+        createAxes_chart(bPrimaryAxes, true);
         //exportAxesId(bPrimaryAxes);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
@@ -3555,7 +3559,7 @@ void ChartExport::exportBarChart(const Reference< chart2::XChartType >& xChartTy
             }
         }
 
-        createAxes(bPrimaryAxes, true, false);
+        createAxes_chart(bPrimaryAxes, true);
 
         pFS->endElement(FSNS(XML_c, nTypeId));
     }
@@ -3580,7 +3584,7 @@ void ChartExport::exportBubbleChart( const Reference< chart2::XChartType >& xCha
         if (splitDataSeries.hasElements())
             exportSeries_chart(xChartType, splitDataSeries, bPrimaryAxes);
 
-        createAxes(bPrimaryAxes, true, false);
+        createAxes_chart(bPrimaryAxes, true);
 
         pFS->endElement(FSNS(XML_c, XML_bubbleChart));
     }
@@ -3597,8 +3601,6 @@ void ChartExport::exportChartex( const Reference< chart2::XChartType >& xChartTy
     {
         if (!splitDataSeries.hasElements())
             continue;
-
-        createAxes(true, false, true);
 
         //exportVaryColors(xChartType);
 
@@ -3737,7 +3739,7 @@ void ChartExport::exportLineChart( const Reference< chart2::XChartType >& xChart
             pFS->singleElement(FSNS(XML_c, XML_marker), XML_val, marker);
         }
 
-        createAxes(bPrimaryAxes, true, false);
+        createAxes_chart(bPrimaryAxes, true);
 
         pFS->endElement( FSNS( XML_c, nTypeId ) );
     }
@@ -3782,7 +3784,7 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
-    createAxes(bPrimaryAxes, true, false);
+    createAxes_chart(bPrimaryAxes, true);
 
     pFS->endElement( FSNS( XML_c, XML_radarChart ) );
 }
@@ -3812,7 +3814,7 @@ void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType 
     bool bPrimaryAxes = true;
     if (pSeries)
         exportSeries_chart(xChartType, *pSeries, bPrimaryAxes);
-    createAxes(bPrimaryAxes, true, false);
+    createAxes_chart(bPrimaryAxes, true);
     //exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
@@ -3860,7 +3862,7 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
             exportUpDownBars(xChartType);
         }
 
-        createAxes(bPrimaryAxes, true, false);
+        createAxes_chart(bPrimaryAxes, true);
 
         pFS->endElement(FSNS(XML_c, XML_stockChart));
     }
@@ -3935,7 +3937,7 @@ void ChartExport::exportSurfaceChart( const Reference< chart2::XChartType >& xCh
     exportVaryColors(xChartType);
     bool bPrimaryAxes = true;
     exportAllSeries(xChartType, bPrimaryAxes);
-    createAxes(bPrimaryAxes, true, false);
+    createAxes_chart(bPrimaryAxes, true);
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
@@ -4448,6 +4450,7 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
             }
 
             // axisId
+            createAxes_chartex(rSeries);
 
             // extLst
 
@@ -4812,7 +4815,7 @@ void ChartExport::InitPlotArea( )
     }
 }
 
-void ChartExport::exportAxes( bool bIsChartex )
+void ChartExport::exportAxes_chart()
 {
     sal_Int32 nSize = maAxes.size();
     // let's export the axis types in the right order
@@ -4821,8 +4824,15 @@ void ChartExport::exportAxes( bool bIsChartex )
         for ( sal_Int32 nIdx = 0; nIdx < nSize; nIdx++ )
         {
             if (nSortIdx == maAxes[nIdx].nAxisType)
-                exportAxis( maAxes[nIdx], bIsChartex );
+                exportAxis( maAxes[nIdx], false);
         }
+    }
+}
+
+void ChartExport::exportAxes_chartex()
+{
+    for (const AxisIdPair& aIdPair : maAxes) {
+        exportAxis(aIdPair, true);
     }
 }
 
@@ -4894,6 +4904,7 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair, bool bIsChartex)
     switch( rAxisIdPair.nAxisType )
     {
         case AXIS_PRIMARY_X:
+        case AXIS_CATEGORY:
         {
             Reference< css::chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
             if( xAxisXSupp.is())
@@ -4905,16 +4916,21 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair, bool bIsChartex)
             if( bHasXAxisMinorGrid )
                 xMinorGrid = xAxisXSupp->getXHelpGrid();
 
-            nAxisType = lcl_getCategoryAxisType(mxNewDiagram, 0, 0);
-            if( nAxisType != -1 )
-                nAxisType = getRealXAxisType(nAxisType);
-            else
-                nAxisType = getXAxisTypeByChartType( getChartType() );
+            if (rAxisIdPair.nAxisType == AXIS_CATEGORY) {
+                nAxisType = XML_catAx;
+            } else {
+                nAxisType = lcl_getCategoryAxisType(mxNewDiagram, 0, 0);
+                if( nAxisType != -1 )
+                    nAxisType = getRealXAxisType(nAxisType);
+                else
+                    nAxisType = getXAxisTypeByChartType( getChartType() );
+            }
             // FIXME: axPos, need to check axis direction
             sAxPos = "b";
             break;
         }
         case AXIS_PRIMARY_Y:
+        case AXIS_VALUE:
         {
             Reference< css::chart::XAxisYSupplier > xAxisYSupp( mxDiagram, uno::UNO_QUERY );
             if( xAxisYSupp.is())
@@ -6214,7 +6230,7 @@ void ChartExport::exportDataPoints(
 }
 
 // Generalized axis output
-void ChartExport::createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes, bool bIsChartex)
+void ChartExport::createAxes_chart(bool bPrimaryAxes, bool bCheckCombinedAxes)
 {
     sal_Int32 nAxisIdx = -1, nAxisIdy = -1;
     bool bCreateAxes = true;
@@ -6222,8 +6238,8 @@ void ChartExport::createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes, bool bI
     // tdf#114181 keep axes of combined charts - search for existing pairs
     if (bCheckCombinedAxes)
     {
-        const AxesType eWantedX = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
-        const AxesType eWantedY = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
+        const AxisType eWantedX = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
+        const AxisType eWantedY = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
 
         sal_Int32 nFoundX = -1, nFoundY = -1;
         for (const auto& rAxis : maAxes)
@@ -6246,27 +6262,119 @@ void ChartExport::createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes, bool bI
     {
         nAxisIdx = lcl_generateRandomValue();
         nAxisIdy = lcl_generateRandomValue();
-        AxesType eXAxis = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
-        AxesType eYAxis = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
+        AxisType eXAxis = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
+        AxisType eYAxis = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
         maAxes.emplace_back( eXAxis, nAxisIdx, nAxisIdy );
         maAxes.emplace_back( eYAxis, nAxisIdy, nAxisIdx );
     }
 
-    if (!bIsChartex) {
-        // Export IDs
-        FSHelperPtr pFS = GetFS();
-        pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdx));
-        pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdy));
-        if (mbHasZAxis)
+    // Export IDs
+    FSHelperPtr pFS = GetFS();
+
+    pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdx));
+    pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdy));
+    if (mbHasZAxis)
+    {
+        sal_Int32 nAxisIdz = 0;
+        if( isDeep3dChart() )
         {
-            sal_Int32 nAxisIdz = 0;
-            if( isDeep3dChart() )
-            {
-                nAxisIdz = lcl_generateRandomValue();
-                maAxes.emplace_back( AXIS_PRIMARY_Z, nAxisIdz, nAxisIdy );
-            }
-            pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdz));
+            nAxisIdz = lcl_generateRandomValue();
+            maAxes.emplace_back( AXIS_PRIMARY_Z, nAxisIdz, nAxisIdy );
         }
+        pFS->singleElement(FSNS(XML_c, XML_axId), XML_val, OString::number(nAxisIdz));
+    }
+}
+
+void ChartExport::createAxes_chartex(
+    const Reference<chart2::XDataSeries>& xSeries)
+{
+    FSHelperPtr pFS = GetFS();
+
+    // Use the cx:axisId list preserved on the data series at import.
+    // For axis-less chartex types (regionMap, sunburst, treemap) the
+    // sequence is empty, so no <cx:axisId> and no <cx:axis> are emitted.
+    uno::Sequence<sal_Int32> aAxisIds;
+    Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
+    if (xSeriesProp.is())
+    {
+        try
+        {
+            xSeriesProp->getPropertyValue(u"ChartexAxisIds"_ustr) >>= aAxisIds;
+        }
+        catch (const uno::Exception&)
+        {
+        }
+    }
+
+    if (!aAxisIds.hasElements())
+        return;
+
+    for (sal_Int32 nAxisId : aAxisIds)
+    {
+        pFS->singleElement(FSNS(XML_cx, XML_axisId), XML_val,
+            OString::number(nAxisId));
+
+        // Each axis appears in maAxes (and therefore in <cx:axis> output)
+        // exactly once across all series.
+        bool bKnown = std::any_of(maAxes.begin(), maAxes.end(),
+            [nAxisId](const AxisIdPair& rPair)
+            { return rPair.nAxisId == nAxisId; });
+        if (bKnown)
+            continue;
+
+        // Find the axis type by walking through and
+        // matching the AxisId property we stored at import.
+        AxisType eAxisType = AXIS_CATEGORY;
+        try
+        {
+            Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(
+                mxNewDiagram, uno::UNO_QUERY);
+            if (xCooSysCnt.is())
+            {
+                bool bFound = false;
+                const auto aCooSysSeq = xCooSysCnt->getCoordinateSystems();
+                for (const auto& xCooSys : aCooSysSeq)
+                {
+                    if (bFound)
+                        break;
+                    const sal_Int32 nDim = xCooSys->getDimension();
+                    for (sal_Int32 i = 0; i < nDim && !bFound; ++i)
+                    {
+                        const sal_Int32 nMaxAxIdx = xCooSys->getMaximumAxisIndexByDimension(i);
+                        for (sal_Int32 j = 0; j <= nMaxAxIdx && !bFound; ++j)
+                        {
+                            Reference<chart2::XAxis> xAxis = xCooSys->getAxisByDimension(i, j);
+                            Reference<beans::XPropertySet> xAxisProp( xAxis, uno::UNO_QUERY);
+                            if (!xAxisProp.is())
+                                continue;
+                            sal_Int32 nStoredId = -1;
+                            try
+                            {
+                                xAxisProp->getPropertyValue(u"AxisId"_ustr) >>= nStoredId;
+                            }
+                            catch (const uno::Exception&)
+                            {
+                                continue;
+                            }
+                            if (nStoredId == nAxisId)
+                            {
+                                bool bCatNotVal = false;
+                                xAxisProp->getPropertyValue(u"CatNotVal"_ustr) >>= bCatNotVal;
+                                eAxisType = bCatNotVal ? AXIS_CATEGORY : AXIS_VALUE;
+                                bFound = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (const uno::Exception&)
+        {
+        }
+
+        // nCrossAx is unused for chartex (<cx:axis> has no crossAx field),
+        // so the value passed for the third parameter is irrelevant
+        maAxes.emplace_back(eAxisType, nAxisId, -1);
     }
 }
 

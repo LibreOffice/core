@@ -77,21 +77,23 @@ namespace oox::drawingml {
 
 struct LabelPlacementParam;
 
-enum AxesType
+enum AxisType
 {
-    AXIS_PRIMARY_X = 1,
-    AXIS_PRIMARY_Y = 2,
-    AXIS_PRIMARY_Z = 3,
-    AXIS_SECONDARY_X = 4,
-    AXIS_SECONDARY_Y = 5
+    AXIS_PRIMARY_X,
+    AXIS_PRIMARY_Y,
+    AXIS_PRIMARY_Z,
+    AXIS_SECONDARY_X,
+    AXIS_SECONDARY_Y,
+    AXIS_CATEGORY, // used for chartex
+    AXIS_VALUE     // used for chartex
 };
 
 struct AxisIdPair{
-    AxesType nAxisType;
+    AxisType nAxisType;
     sal_Int32 nAxisId;
     sal_Int32 nCrossAx;
 
-    AxisIdPair(AxesType nType, sal_Int32 nId, sal_Int32 nAx)
+    AxisIdPair(AxisType nType, sal_Int32 nId, sal_Int32 nAx)
         : nAxisType(nType)
         , nAxisId(nId)
         , nCrossAx(nAx)
@@ -273,7 +275,8 @@ private:
 
     void exportManualLayout(const css::chart2::RelativePosition& rPos, const css::chart2::RelativeSize& rSize, const bool bIsExcludingDiagramPositioning);
 
-    void exportAxes( bool bIsChartex );
+    void exportAxes_chart();
+    void exportAxes_chartex();
     void exportAxis(const AxisIdPair& rAxisIdPair,
             bool bIsChartex);
     void exportOneAxis_chart(
@@ -291,7 +294,9 @@ private:
         const css::uno::Reference< css::beans::XPropertySet >& xMinorGrid,
         sal_Int32 nAxisType,
         const AxisIdPair& rAxisIdPair);
-    void createAxes(bool bPrimaryAxes, bool bCheckCombinedAxes, bool bIsChartex);
+    void createAxes_chart(bool bPrimaryAxes, bool bCheckCombinedAxes);
+    void createAxes_chartex(
+        const css::uno::Reference<css::chart2::XDataSeries>& xSeries);
     void exportView3D();
     bool isDeep3dChart();
 

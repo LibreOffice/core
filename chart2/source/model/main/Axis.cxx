@@ -79,7 +79,9 @@ enum
     PROP_AXIS_TRY_STAGGERING_FIRST,
     PROP_AXIS_MAJOR_ORIGIN,
     PROP_AXIS_HAS_EXPLICIT_SPPR,
-    PROP_AXIS_HAS_EXPLICIT_TXPR
+    PROP_AXIS_HAS_EXPLICIT_TXPR,
+    PROP_AXIS_ID,
+    PROP_AXIS_CAT_NOT_VAL
 };
 
 void lcl_AddPropertiesToVector(
@@ -213,6 +215,20 @@ void lcl_AddPropertiesToVector(
 
     rOutProperties.emplace_back( "HasExplicitTxPr",
                   PROP_AXIS_HAS_EXPLICIT_TXPR,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    // Chartex only: the cx:axis id attribute value from import, preserved
+    // so export can reuse the same id and so series-to-axis links survive
+    // round-trip.
+    rOutProperties.emplace_back( "AxisId",
+                  PROP_AXIS_ID,
+                  cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+    rOutProperties.emplace_back( "CatNotVal",
+                  PROP_AXIS_CAT_NOT_VAL,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );

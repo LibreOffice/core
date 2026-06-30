@@ -18,6 +18,7 @@ AttachedAxisIndex
 AutoFilter
 AutoShowInfo
 Autocomplete
+AxisId
 BackColor
 BackColorTransparency
 BackGraphicLocation
@@ -48,6 +49,7 @@ BulletFontName
 BulletRelSize
 CLSID
 CalcAsShown
+CatNotVal
 CellBackColor
 CellProtection
 CellStyle
@@ -57,6 +59,7 @@ Change
 ChartExDimType
 ChartExFormula
 ChartExNFormula
+ChartexAxisIds
 CharBackColor
 CharBackgroundComplexColor
 CharCaseMap

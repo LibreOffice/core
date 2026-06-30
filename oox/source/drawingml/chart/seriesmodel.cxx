@@ -112,12 +112,13 @@ BinningModel::BinningModel() :
 {
 }
 
-SeriesModel::SeriesModel(bool bMSO2007Doc) :
+SeriesModel::SeriesModel(bool bMSO2007Doc, sal_Int32 nTypeId) :
     mnExplosion( 0 ),
     mnIndex( -1 ),
     mnMarkerSize( 5 ),
     mnMarkerSymbol( XML_auto ),
     mnOrder( -1 ),
+    mnTypeId(nTypeId),
     mnDataId(-1),
     mbBubble3d( !bMSO2007Doc ),
     mbInvertNeg( !bMSO2007Doc ),
