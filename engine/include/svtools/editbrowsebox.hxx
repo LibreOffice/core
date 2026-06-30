@@ -40,27 +40,11 @@ enum class EditBrowseBoxFlags
     invalidation, then you would specify this bit to prevent flicker
 */
     NO_HANDLE_COLUMN_CONTENT   = 0x0001,
-/** set this bit to activate the cell on a MouseButtonDown, not a MouseButtonUp event
- */
-    ACTIVATE_ON_BUTTONDOWN     = 0x0002,
-/** if this bit is set and EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT is _not_ set, the handle
-    column is drawn with the text contained in column 0 instead of an image
-*/
-    HANDLE_COLUMN_TEXT         = 0x0004,
-
-/** If this bit is set, tab traveling is somewhat modified<br/>
-    If the control gets the focus because the user pressed the TAB key, then the
-    first or last cell (depending on whether the traveling was cycling forward or backward)
-    gets activated.
-    @see Window::GetGetFocusFlags
-    @see GETFOCUS_*
-*/
-    SMART_TAB_TRAVEL           = 0x0008,
 
 };
 namespace o3tl
 {
-    template<> struct typed_flags<EditBrowseBoxFlags> : is_typed_flags<EditBrowseBoxFlags, 0x0f> {};
+    template<> struct typed_flags<EditBrowseBoxFlags> : is_typed_flags<EditBrowseBoxFlags, 0x01> {};
 }
 
 namespace svt
@@ -1101,7 +1085,7 @@ namespace svt
                                 sal_uInt16 nColumnId ) const override;
         using Control::ImplInitSettings;
         SVT_DLLPRIVATE void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-        SVT_DLLPRIVATE void DetermineFocus( const GetFocusFlags _nGetFocusFlags = GetFocusFlags::NONE);
+        SVT_DLLPRIVATE void DetermineFocus();
         inline void EnableAndShow() const;
 
         SVT_DLLPRIVATE void implActivateCellOnMouseEvent(const BrowserMouseEvent& _rEvt, bool _bUp);

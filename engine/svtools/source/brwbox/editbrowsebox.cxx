@@ -34,21 +34,6 @@
 namespace svt
 {
 
-namespace
-{
-
-    GetFocusFlags getRealGetFocusFlags( vcl::Window* _pWindow )
-    {
-        GetFocusFlags nFlags = GetFocusFlags::NONE;
-        while ( _pWindow && nFlags == GetFocusFlags::NONE )
-        {
-            nFlags = _pWindow->GetGetFocusFlags( );
-            _pWindow = _pWindow->GetParent();
-        }
-        return nFlags;
-    }
-}
-
 using namespace com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace cpo::uno;
@@ -187,7 +172,7 @@ void EditBrowseBox::GetFocus()
     if (IsEditing() && Controller()->GetWindow().IsVisible())
         Controller()->GetWindow().GrabFocus();
 
-    DetermineFocus(getRealGetFocusFlags(this));
+    DetermineFocus();
 }
 
 bool EditBrowseBox::SeekRow(sal_Int32 nRow)
@@ -275,14 +260,8 @@ void EditBrowseBox::PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& 
     if (nBrowserFlags & EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT)
         return;
 
-    // draw the text of the header column
-    if (nBrowserFlags & EditBrowseBoxFlags::HANDLE_COLUMN_TEXT )
-    {
-        rDev.DrawText( rRect, GetCellText( nPaintRow, 0 ),
-                       DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::Clip );
-    }
     // draw an image
-    else if (eStatus != CLEAN && rDev.GetOutDevType() == OUTDEV_WINDOW)
+    if (eStatus != CLEAN && rDev.GetOutDevType() == OUTDEV_WINDOW)
     {
         Image aImage(GetImage(eStatus));
         // calc the image position
@@ -399,7 +378,7 @@ void EditBrowseBox::KeyInput( const KeyEvent& rEvt )
 
 void EditBrowseBox::ChildFocusIn()
 {
-    DetermineFocus(getRealGetFocusFlags(this));
+    DetermineFocus();
 }
 
 void EditBrowseBox::ChildFocusOut()
@@ -432,14 +411,6 @@ void EditBrowseBox::MouseButtonDown(const BrowserMouseEvent& rEvt)
     aMouseEvent.Set(&rEvt,true);
     BrowseBox::MouseButtonDown(rEvt);
     aMouseEvent.Clear();
-
-    if (m_nBrowserFlags & EditBrowseBoxFlags::ACTIVATE_ON_BUTTONDOWN)
-    {
-        // the base class does not travel upon MouseButtonDown, but implActivateCellOnMouseEvent assumes we traveled ...
-        GoToRowColumnId( rEvt.GetRow(), rEvt.GetColumnId() );
-        if (rEvt.GetRow() >= 0)
-            implActivateCellOnMouseEvent(rEvt, false);
-    }
 }
 
 void EditBrowseBox::MouseButtonUp( const BrowserMouseEvent& rEvt )
@@ -452,9 +423,8 @@ void EditBrowseBox::MouseButtonUp( const BrowserMouseEvent& rEvt )
     BrowseBox::MouseButtonUp(rEvt);
     aMouseEvent.Clear();
 
-    if (!(m_nBrowserFlags & EditBrowseBoxFlags::ACTIVATE_ON_BUTTONDOWN))
-        if (rEvt.GetRow() >= 0)
-            implActivateCellOnMouseEvent(rEvt, true);
+    if (rEvt.GetRow() >= 0)
+        implActivateCellOnMouseEvent(rEvt, true);
 }
 
 bool EditBrowseBox::ControlHasFocus() const
@@ -681,7 +651,7 @@ bool EditBrowseBox::EventNotify(NotifyEvent& rEvt)
     switch (rEvt.GetType())
     {
         case NotifyEventType::GETFOCUS:
-            DetermineFocus(getRealGetFocusFlags(this));
+            DetermineFocus();
             break;
 
         case NotifyEventType::LOSEFOCUS:
@@ -865,7 +835,7 @@ bool EditBrowseBox::IsCursorMoveAllowed(sal_Int32 nNewRow, sal_uInt16 nNewColId)
         {
             tools::Rectangle aRect = GetFieldRectPixel(nEditRow, 0, false );
             // status cell should be painted if and only if text is displayed
-            pTHIS->bPaintStatus = ( GetBrowserFlags() & EditBrowseBoxFlags::HANDLE_COLUMN_TEXT ) == EditBrowseBoxFlags::HANDLE_COLUMN_TEXT;
+            pTHIS->bPaintStatus = false;
             rWindow.Invalidate(aRect);
             pTHIS->bPaintStatus = true;
         }

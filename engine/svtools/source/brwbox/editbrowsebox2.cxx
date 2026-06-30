@@ -98,7 +98,7 @@ void EditBrowseBox::GrabTableFocus()
         aController->GetWindow().GrabFocus();
 }
 
-void EditBrowseBox::DetermineFocus( const GetFocusFlags _nGetFocusFlags )
+void EditBrowseBox::DetermineFocus()
 {
     bool bFocus = ControlHasFocus();
     for (vcl::Window* pWindow = Application::GetFocusWindow();
@@ -110,37 +110,6 @@ void EditBrowseBox::DetermineFocus( const GetFocusFlags _nGetFocusFlags )
         return;
 
     bHasFocus = bFocus;
-
-    if ( !(GetBrowserFlags( ) & EditBrowseBoxFlags::SMART_TAB_TRAVEL) )
-        return;
-
-    if  (   !(bHasFocus                           // we got the focus
-        &&  ( _nGetFocusFlags & GetFocusFlags::Tab ))  // using the TAB key
-        )
-        return;
-
-    sal_Int32 nRows = GetRowCount();
-    sal_uInt16 nCols = ColCount();
-
-    if (( nRows <= 0 ) || ( nCols <= 0 ))
-        return;
-
-    if ( _nGetFocusFlags & GetFocusFlags::Forward )
-    {
-        if ( GetColumnId( 0 ) != HandleColumnId )
-        {
-            GoToRowColumnId( 0, GetColumnId( 0 ) );
-        }
-        else
-        {   // the first column is the handle column -> not focussable
-            if ( nCols > 1 )
-                GoToRowColumnId( 0, GetColumnId( 1 ) );
-        }
-    }
-    else if ( _nGetFocusFlags & GetFocusFlags::Backward )
-    {
-        GoToRowColumnId( nRows - 1, GetColumnId( nCols -1 ) );
-    }
 }
 
 tools::Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 _nIndex)
