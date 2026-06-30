@@ -52,15 +52,12 @@ if [ "$LIBC" != "musl" ]; then
     find etc/ld.so.* \
          lib/ld-* lib64/ld-* \
          lib/libnss_* lib64/libnss_* lib/*/libnss_* \
-         lib/*/nss/*.so \
          lib/libresolv* lib64/libresolv* lib/*/libresolv* \
          var/cache/fontconfig \
          etc/fonts \
          usr/lib/locale/en_US.utf8 \
          usr/lib/locale/C.UTF-8 \
          usr/lib/locale/locale_archive \
-         usr/lib/*/nss/*.so \
-         usr/lib/*/libsqlite* \
          usr/share/liblangtag \
          usr/share/hyphen \
          -type f 2>/dev/null
@@ -69,19 +66,16 @@ if [ "$LIBC" != "musl" ]; then
          lib/ld-* lib64/ld-* \
          lib/libnss_* lib64/libnss_* lib/*/libnss_* \
          lib/libresolv* lib64/libresolv* lib/*/libresolv* \
-         usr/lib/*/libsqlite* \
         -type l 2>/dev/null
 else
     # musl doesn't use libnss, libresolv, or glibc locale files
     find var/cache/fontconfig \
          etc/fonts \
-         usr/lib/*/libsqlite* \
          usr/share/liblangtag \
          usr/share/hyphen \
          -type f 2>/dev/null
 
     find etc/fonts \
-         usr/lib/*/libsqlite* \
         -type l 2>/dev/null
 fi
 
