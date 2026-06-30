@@ -93,14 +93,6 @@ find etc/pki/tls/certs/ca-bundle.crt \
      var/lib/ca-certificates/ca-bundle.pem \
 	-type l,f -print -quit 2>/dev/null
 
-# Go through the LO shared objects and check what system libraries
-# they link to.
-find $INSTDIR -name 'xpdfimport' |
-while read file; do
-    ldd $file 2>/dev/null
-done |
-grep -v dynamic | cut -s -d " " -f 3 | grep -E '^(/lib|/usr)' | sort -u | sed -e 's,^/,,'
-
 ) |
 
 # Can't use -l because then symlinks won't be handled well enough.
