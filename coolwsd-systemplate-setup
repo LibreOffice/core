@@ -58,7 +58,6 @@ if [ "$LIBC" != "musl" ]; then
          usr/lib/locale/en_US.utf8 \
          usr/lib/locale/C.UTF-8 \
          usr/lib/locale/locale_archive \
-         usr/share/liblangtag \
          usr/share/hyphen \
          -type f 2>/dev/null
 
@@ -71,7 +70,6 @@ else
     # musl doesn't use libnss, libresolv, or glibc locale files
     find var/cache/fontconfig \
          etc/fonts \
-         usr/share/liblangtag \
          usr/share/hyphen \
          -type f 2>/dev/null
 
