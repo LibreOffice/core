@@ -751,6 +751,11 @@ std::vector<rtl::Reference<SdrObject>> SdrEditView::DeleteMarkedList(SdrMarkList
                     SdrMark* pM = rMark.GetMark(nm);
                     SdrObject* pObj = pM->GetMarkedSdrObj();
 
+                    // skip objects already detached from their parent list;
+                    // they are not removed below, so no undo action applies
+                    if(nullptr == pObj->getParentSdrObjListFromSdrObject())
+                        continue;
+
                     // extra undo actions for changed connector which now may hold its laid out path (SJ)
                     AddUndoActions(CreateConnectorUndo( *pObj ));
 
@@ -767,6 +772,13 @@ std::vector<rtl::Reference<SdrObject>> SdrEditView::DeleteMarkedList(SdrMarkList
                 SdrMark* pM = rMark.GetMark(nm);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
                 SdrObjList*  pOL = pObj->getParentSdrObjListFromSdrObject();
+
+                // The object may already have been detached from its parent
+                // list (e.g. removed by another action while it stayed in the
+                // selection); there is nothing to remove in that case.
+                if(nullptr == pOL)
+                    continue;
+
                 const size_t nOrdNum(pObj->GetOrdNumDirect());
 
                 bool bIs3D = DynCastE3dObject(pObj);
