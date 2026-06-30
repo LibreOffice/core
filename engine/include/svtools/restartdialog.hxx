@@ -47,9 +47,6 @@ enum RestartReason {
     // "For the modified experimental features to take effect,
     // %PRODUCTNAME must be restarted.":
     RESTART_REASON_EXP_FEATURES,
-    // "For the extension to work properly,
-    // %PRODUCTNAME must be restarted.":
-    RESTART_REASON_EXTENSION_INSTALL,
     // "To apply theme changes,
     // %PRODUCTNAME must be restarted.":
     RESTART_REASON_THEME_CHANGE,
