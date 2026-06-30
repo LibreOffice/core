@@ -244,6 +244,7 @@ constexpr auto SwriterDialogList
         { u"modules/swriter/ui/characterproperties.ui" },
         { u"modules/swriter/ui/columndialog.ui" },
         { u"modules/swriter/ui/columnpage.ui" },
+        { u"modules/swriter/ui/conditionpage.ui" },
         { u"modules/swriter/ui/contentcontroldlg.ui" },
         { u"modules/swriter/ui/contentcontrollistitemdlg.ui" },
         { u"modules/swriter/ui/dropcapspage.ui" },
