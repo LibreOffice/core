@@ -724,6 +724,7 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	font: inherit;
 	font-weight: bold;
 	cursor: pointer;
+	color: var(--color-main-text);
 }
 
 .ui-treeview-icon {
