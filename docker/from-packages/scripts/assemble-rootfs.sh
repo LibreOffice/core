@@ -63,8 +63,28 @@ done < "$PKGS_ADDED" \
 # coolwsd postinst, child-roots and cache are runtime working directories.
 find /opt/cool >> "$FILELIST"
 
-# Drop documentation, manuals and changelogs to keep the image small.
-sed -i -E '\#^/usr/share/(doc|man|info|lintian|bug)/#d' "$FILELIST"
+# Trim files that have no role at runtime in the container, to shrink the image
+# and its attack surface:
+#   - manuals, info, lintian and bug metadata
+#   - everything under /usr/share/doc EXCEPT the copyright files, which are kept
+#     for license compliance
+#   - the systemd unit, AppArmor profile and reverse-proxy snippets: this is a
+#     distroless image started directly via coolwsd, not a service managed by
+#     systemd/apparmor or fronted by a bundled nginx/apache config
+#   - the legacy "lool" aliases (pre-rename compatibility)
+#   - tools the daemon does not use: the build-time systemplate setup script,
+#     and the convert/stress/config helpers
+grep -vE \
+    -e '^/usr/share/(man|info|lintian|bug)/' \
+    -e '^/(lib|usr/lib)/systemd/' \
+    -e '^/etc/apparmor\.d/' \
+    -e '^/etc/(nginx|apache2)/' \
+    -e '^/usr/bin/(loolwsd|loolconfig|loolwsd-systemplate-setup)$' \
+    -e '^/usr/bin/(coolwsd-systemplate-setup|coolconvert|coolstress|coolconfig)$' \
+    "$FILELIST" \
+    | awk '!(/^\/usr\/share\/doc\// && !/\/copyright$/)' \
+    > "$FILELIST.trimmed"
+mv "$FILELIST.trimmed" "$FILELIST"
 sort -u "$FILELIST" -o "$FILELIST"
 
 echo "=== Verifying the dependency closure ==="
