@@ -55,7 +55,6 @@ class AddressInputField {
 		if (addressInput && document.activeElement !== addressInput) {
 			// if the user is not editing the address field
 			addressInput.value = event.address;
-			addressInput.setAttribute('aria-label', event.address);
 		}
 		this.map.formulabarSetDirty();
 	}
@@ -70,6 +69,7 @@ class AddressInputField {
 				changeOnEnterOnly: true,
 				focusMapOnEnter: true,
 				accessibility: { focusBack: true, combination: 'CA' },
+				aria: { label: _('Name Box') },
 				children: [
 					{
 						id: 'expand',
@@ -119,6 +119,10 @@ class AddressInputField {
 		// we want to create a named range only when user presses the 'Enter' key.
 		data.control.changeOnEnterOnly = true;
 		data.control.focusMapOnEnter = true;
+
+		if (data.control.id === 'pos_window')
+			data.control.aria = { label: _('Name Box') };
+
 		this.builder.updateWidget(this.parentContainer, data.control);
 	}
 
