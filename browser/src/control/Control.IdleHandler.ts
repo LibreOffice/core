@@ -214,6 +214,10 @@ class IdleHandler {
 
 	notifyActive() {
 		this._lastActivity = Date.now();
+		this._stopOutOfFocusTimer();
+		if (!this._active) {
+			this._activate();
+		}
 
 		if (window.ThisIsTheAndroidApp) {
 			window.postMobileMessage('LIGHT_SCREEN');
