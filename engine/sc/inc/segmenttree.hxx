@@ -94,13 +94,23 @@ public:
         SCCOL mnCol2;
         bool mbValue;
     };
+    class RangeIterator
+    {
+    public:
+        explicit RangeIterator(ScFlatBoolColSegments const& rSegs);
+        bool getFirst(RangeData& rRange);
+        bool getNext(RangeData& rRange);
+
+    private:
+        ScFlatBoolColSegments const& mrSegs;
+    };
     ScFlatBoolColSegments(SCCOL nMaxCol);
     ScFlatBoolColSegments(const ScFlatBoolColSegments& r);
     ~ScFlatBoolColSegments();
 
     bool setTrue(SCCOL nCol1, SCCOL nCol2);
     bool setFalse(SCCOL nCol1, SCCOL nCol2);
-    bool getRangeData(SCCOL nCol, RangeData& rData);
+    bool getRangeData(SCCOL nCol, RangeData& rData) const;
     void removeSegment(SCCOL nCol1, SCCOL nCol2);
     void insertSegment(SCCOL nCol, SCCOL nSize);
 

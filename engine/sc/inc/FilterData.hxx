@@ -84,6 +84,8 @@ public:
     SCROW countVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
     SCCOL countVisibleCols(SCCOL nStartCol, SCCOL nEndCol) const;
     SCCOLROW lastHiddenColRow(SCCOLROW nPos, bool bCol) const;
+
+    const ScFlatBoolColSegments& getHiddenCols() const { return *mpHiddenCols; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4494,17 +4494,57 @@ SCROW ScTable::GetRowForHeightPixels(SCROW nStartRow, tools::Long& rStartRowHeig
 
 tools::Long ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
 {
-    tools::Long n = 0;
-    if ( mpColWidth )
+    if ( !mpColWidth )
     {
-        auto colWidthIt = mpColWidth->begin();
-        for (SCCOL i = 0; i < nCol; (++i < nCol) ? ++colWidthIt : (void)false)
-            if (!( bHiddenAsZero && ColHidden(i) ))
-                n += *colWidthIt;
+        OSL_FAIL("GetColumnOffset: Data missing");
+        return 0;
+    }
+    tools::Long n = 0;
+    if (bHiddenAsZero)
+    {
+        // Walk the two data structures in parallel, for performance.
+        size_t nColWidthIndex;
+        SCCOL nColWidthRangeEnd;
+        sal_uInt16 nColWidth = mpColWidth->GetValue(0, nColWidthIndex, nColWidthRangeEnd);
+        ScFlatBoolColSegments::RangeData aHiddenColsRange;
+        ScFlatBoolColSegments::RangeIterator aHiddenColsRangeItr(maFilterData.getHiddenCols());
+        bool bHasHiddenColsRange = aHiddenColsRangeItr.getFirst(aHiddenColsRange);
+        for (SCCOL i = 0; i < nCol; ++i)
+        {
+            // Fetch the next width range if necessary.
+            if (i > nColWidthRangeEnd)
+                nColWidth = mpColWidth->GetNextValue(nColWidthIndex, nColWidthRangeEnd);
+            // Fetch the next hidden cols range if necessary.
+            if (bHasHiddenColsRange && i > aHiddenColsRange.mnCol2)
+                bHasHiddenColsRange = aHiddenColsRangeItr.getNext(aHiddenColsRange);
+
+            if (!bHasHiddenColsRange)
+            {
+                // Zero width, because absence of data implies hidden, see FilterData::colHidden.
+            }
+            else if (i >= aHiddenColsRange.mnCol1 && i <= aHiddenColsRange.mnCol2)
+            {
+                // Inside a range for which we have "is-hidden" data
+                if (!aHiddenColsRange.mbValue)
+                    n += nColWidth;
+            }
+            else
+            {
+                n += nColWidth;
+            }
+        }
     }
     else
     {
-        OSL_FAIL("GetColumnOffset: Data missing");
+        size_t nColWidthIndex;
+        SCCOL nColWidthRangeEnd;
+        sal_uInt16 nColWidth = mpColWidth->GetValue(0, nColWidthIndex, nColWidthRangeEnd);
+        for (SCCOL i = 0; i < nCol; ++i)
+        {
+            if (i > nColWidthRangeEnd)
+                nColWidth = mpColWidth->GetNextValue(nColWidthIndex, nColWidthRangeEnd);
+            n += nColWidth;
+        }
     }
     return n;
 }

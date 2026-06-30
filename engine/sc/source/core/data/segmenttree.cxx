@@ -506,6 +506,35 @@ OString ScFlatBoolRowSegments::dumpAsString()
     return aOutput.makeStringAndClear();
 }
 
+ScFlatBoolColSegments::RangeIterator::RangeIterator(ScFlatBoolColSegments const & rSegs) :
+    mrSegs(rSegs)
+{
+}
+
+bool ScFlatBoolColSegments::RangeIterator::getFirst(RangeData& rRange)
+{
+    ScFlatBoolSegmentsImpl::RangeData aData;
+    if (!mrSegs.mpImpl->getFirst(aData))
+        return false;
+
+    rRange.mnCol1  = static_cast<SCCOL>(aData.mnPos1);
+    rRange.mnCol2  = static_cast<SCCOL>(aData.mnPos2);
+    rRange.mbValue = static_cast<bool>(aData.mnValue);
+    return true;
+}
+
+bool ScFlatBoolColSegments::RangeIterator::getNext(RangeData& rRange)
+{
+    ScFlatBoolSegmentsImpl::RangeData aData;
+    if (!mrSegs.mpImpl->getNext(aData))
+        return false;
+
+    rRange.mnCol1  = static_cast<SCCOL>(aData.mnPos1);
+    rRange.mnCol2  = static_cast<SCCOL>(aData.mnPos2);
+    rRange.mbValue = static_cast<bool>(aData.mnValue);
+    return true;
+}
+
 ScFlatBoolColSegments::ScFlatBoolColSegments(SCCOL nMaxCol) :
     mpImpl(new ScFlatBoolSegmentsImpl(nMaxCol))
 {
@@ -530,7 +559,7 @@ bool ScFlatBoolColSegments::setFalse(SCCOL nCol1, SCCOL nCol2)
     return mpImpl->setFalse(static_cast<SCCOLROW>(nCol1), static_cast<SCCOLROW>(nCol2));
 }
 
-bool ScFlatBoolColSegments::getRangeData(SCCOL nCol, RangeData& rData)
+bool ScFlatBoolColSegments::getRangeData(SCCOL nCol, RangeData& rData) const
 {
     ScFlatBoolSegmentsImpl::RangeData aData;
     if (!mpImpl->getRangeData(static_cast<SCCOLROW>(nCol), aData))
