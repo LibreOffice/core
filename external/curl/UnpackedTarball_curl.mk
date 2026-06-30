@@ -34,6 +34,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/0001-url-improve-connection-reuse-on-negotiate.patch \
 	external/curl/0001-setopt-clear-proxy-auth-properties-when-switching.patch \
 	external/curl/0001-http-clear-the-proxy-credentials-as-well-on-port-or-.patch \
+	external/curl/0001-url-detect-proxy-changes-read-from-environment.patch \
+	external/curl/0001-digest-flush-state-on-origin-or-credential-change.patch \
 ))
 
 ifeq ($(SYSTEM_NSS),)
