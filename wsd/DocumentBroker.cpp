@@ -4091,11 +4091,11 @@ bool DocumentBroker::autoSave(const bool force, const bool dontSaveIfUnmodified,
     {
         const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
         const std::chrono::milliseconds inactivityTime
-            = std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastActivityTime);
+            = std::chrono::duration_cast<std::chrono::milliseconds>(now - _lastModifyActivityTime);
         const auto timeSinceLastSave = std::min(_saveManager.timeSinceLastSaveRequest(),
                                                 _storageManager.timeSinceLastUploadResponse());
         LOG_TRC("DocKey [" << _docKey << "] is modified. It has been " << timeSinceLastSave
-                           << " since last save and the most recent activity was " << inactivityTime
+                           << " since last save and the most recent modifying activity was " << inactivityTime
                            << " ago. Idle save is "
                            << (_saveManager.isIdleSaveEnabled() ? "" : "not ")
                            << "enabled, auto save is "
