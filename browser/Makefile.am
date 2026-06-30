@@ -674,7 +674,7 @@ COOL_JS_LST =\
 	src/control/Control.UIManager.ts \
 	src/control/Control.DocumentNameInput.js \
 	src/control/Notebookbar.WriterReferencesTab.ts \
-	src/control/Notebookbar.WriterTableTab.js \
+	src/control/Notebookbar.WriterTableTab.ts \
 	src/control/Control.Notebookbar.js \
 	src/control/Control.NotebookbarWriter.js \
 	src/control/Control.NotebookbarCalc.js \
@@ -1473,7 +1473,7 @@ pot:
 		src/control/Notebookbar.ImpressAnimationTab.ts \
 		src/control/Notebookbar.ImpressTransitionTab.ts \
 		src/control/Notebookbar.WriterReferencesTab.ts \
-		src/control/Notebookbar.WriterTableTab.js \
+		src/control/Notebookbar.WriterTableTab.ts \
 		src/control/Sidebar.FromNotebookbarPanel.ts \
 		src/control/Control.Notebookbar.js \
 		src/control/Control.NotebookbarBase.ts \

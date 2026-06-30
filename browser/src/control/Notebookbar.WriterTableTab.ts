@@ -13,14 +13,12 @@
  * WriterTableTab - contains JSON for the table tab
  */
 
-/* global _ _UNO JSDialog */
-
-class WriterTableTab {
-	getName() {
+class WriterTableTab implements NotebookbarTab {
+	public getName(): string {
 		return 'Table';
 	}
 
-	getEntry() {
+	public getEntry(): NotebookbarTabEntry {
 		return {
 			id: this.getName() + '-tab-label',
 			text: _('Table'),
@@ -33,15 +31,16 @@ class WriterTableTab {
 		};
 	}
 
-	getContent() {
-		var content = [
+	public getContent(): NotebookbarTabContent {
+		var content: NotebookbarTabContent = [
 			{
 				type: 'overflowgroup',
-				id: 'table-select',
+				id: 'table-select-group',
 				name: _('Select'),
 				accessibility: { focusBack: false, combination: 'SE', de: null },
 				children: [
 					{
+						id: 'table-select',
 						type: 'container',
 						children: [
 							{
@@ -57,7 +56,7 @@ class WriterTableTab {
 											combination: 'CE',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-select-table',
@@ -68,9 +67,9 @@ class WriterTableTab {
 											combination: 'ST',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 							{
 								type: 'toolbox',
 								children: [
@@ -84,7 +83,7 @@ class WriterTableTab {
 											combination: 'ER',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-delete-table',
@@ -95,19 +94,19 @@ class WriterTableTab {
 											combination: 'DT',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 						],
-						vertical: 'true',
-					},
+						vertical: true,
+					} as ContainerWidgetJSON,
 				],
-			},
+			} as OverflowGroupWidgetJSON,
 			{
 				type: 'separator',
 				id: 'table-deletetable-break',
 				orientation: 'vertical',
-			},
+			} as SeparatorWidgetJSON,
 			{
 				type: 'overflowgroup',
 				id: 'table-insert',
@@ -115,6 +114,7 @@ class WriterTableTab {
 				accessibility: { focusBack: false, combination: 'TI', de: null },
 				children: [
 					{
+						id: 'table-insert-container',
 						type: 'container',
 						children: [
 							{
@@ -130,7 +130,7 @@ class WriterTableTab {
 											combination: 'CB',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-insert-columns-after',
@@ -141,7 +141,7 @@ class WriterTableTab {
 											combination: 'CA',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-insert-delete-columns',
@@ -152,9 +152,9 @@ class WriterTableTab {
 											combination: 'CD',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 							{
 								type: 'toolbox',
 								children: [
@@ -168,7 +168,7 @@ class WriterTableTab {
 											combination: 'RB',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-insert-rows-after',
@@ -179,7 +179,7 @@ class WriterTableTab {
 											combination: 'RA',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-insert-delete-rows',
@@ -190,19 +190,19 @@ class WriterTableTab {
 											combination: 'RD',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 						],
-						vertical: 'true',
-					},
+						vertical: true,
+					} as ContainerWidgetJSON,
 				],
-			},
+			} as OverflowGroupWidgetJSON,
 			{
 				type: 'separator',
 				id: 'table-deleterows-break',
 				orientation: 'vertical',
-			},
+			} as SeparatorWidgetJSON,
 			{
 				type: 'overflowgroup',
 				id: 'table-split',
@@ -214,8 +214,9 @@ class WriterTableTab {
 						text: _UNO('.uno:MergeCells', 'text'),
 						command: '.uno:MergeCells',
 						accessibility: { focusBack: true, combination: 'MC', de: null },
-					},
+					} as ToolItemWidgetJSON,
 					{
+						id: 'table-split-container',
 						type: 'container',
 						children: [
 							{
@@ -231,9 +232,9 @@ class WriterTableTab {
 											combination: 'SC',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 							{
 								type: 'toolbox',
 								children: [
@@ -247,19 +248,19 @@ class WriterTableTab {
 											combination: 'TS',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 						],
-						vertical: 'true',
-					},
+						vertical: true,
+					} as ContainerWidgetJSON,
 				],
-			},
+			} as OverflowGroupWidgetJSON,
 			{
 				type: 'separator',
 				id: 'table-splittable-break',
 				orientation: 'vertical',
-			},
+			} as SeparatorWidgetJSON,
 			{
 				type: 'overflowgroup',
 				id: 'table-alignment',
@@ -267,6 +268,7 @@ class WriterTableTab {
 				accessibility: { focusBack: true, combination: 'CT', de: null },
 				children: [
 					{
+						id: 'table-alignment-container',
 						type: 'container',
 						children: [
 							{
@@ -282,7 +284,7 @@ class WriterTableTab {
 											combination: 'CT',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-cell-vert-center',
@@ -293,7 +295,7 @@ class WriterTableTab {
 											combination: 'CC',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-cell-vert-bottom',
@@ -304,9 +306,9 @@ class WriterTableTab {
 											combination: 'CM',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 							{
 								type: 'toolbox',
 								children: [
@@ -357,15 +359,15 @@ class WriterTableTab {
 								],
 							},
 						],
-						vertical: 'true',
-					},
+						vertical: true,
+					} as ContainerWidgetJSON,
 				],
-			},
+			} as OverflowGroupWidgetJSON,
 			{
 				type: 'separator',
 				id: 'table-justifypara-break',
 				orientation: 'vertical',
-			},
+			} as SeparatorWidgetJSON,
 			{
 				type: 'overflowgroup',
 				id: 'table-design',
@@ -384,6 +386,7 @@ class WriterTableTab {
 						accessibility: { focusBack: false, combination: 'SD', de: null },
 					},
 					{
+						id: 'table-line-style-container',
 						type: 'container',
 						children: [
 							{
@@ -400,9 +403,9 @@ class WriterTableTab {
 											combination: 'BL',
 											de: null,
 										},
-									},
+									} as MenuButtonWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 							{
 								type: 'toolbox',
 								children: [
@@ -417,19 +420,19 @@ class WriterTableTab {
 											combination: 'BC',
 											de: null,
 										},
-									},
+									} as MenuButtonWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 						],
-						vertical: 'true',
-					},
+						vertical: true,
+					} as ContainerWidgetJSON,
 				],
-			},
+			} as OverflowGroupWidgetJSON,
 			{
 				type: 'separator',
 				id: 'table-bigtoolitem-break',
 				orientation: 'vertical',
-			},
+			} as SeparatorWidgetJSON,
 			{
 				type: 'overflowgroup',
 				id: 'table-number-format',
@@ -441,6 +444,7 @@ class WriterTableTab {
 				},
 				children: [
 					{
+						id: 'table-number-format-container',
 						type: 'container',
 						children: [
 							{
@@ -456,7 +460,7 @@ class WriterTableTab {
 											combination: 'FC',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 									{
 										type: 'toolitem',
 										id: 'table-number-format-percent',
@@ -467,26 +471,26 @@ class WriterTableTab {
 											combination: 'NP',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 							{
 								type: 'toolitem',
 								id: 'table-number-format-date',
 								text: _UNO('.uno:NumberFormatDate', 'text', false),
 								command: '.uno:NumberFormatDate',
 								accessibility: { focusBack: true, combination: 'DA', de: null },
-							},
+							} as ToolItemWidgetJSON,
 						],
-						vertical: 'true',
-					},
+						vertical: true,
+					} as ContainerWidgetJSON,
 				],
-			},
+			} as OverflowGroupWidgetJSON,
 			{
 				type: 'separator',
 				id: 'table-unsetcellsreadonly-break',
 				orientation: 'vertical',
-			},
+			} as SeparatorWidgetJSON,
 			{
 				type: 'overflowgroup',
 				id: 'table-sort-group',
@@ -499,10 +503,14 @@ class WriterTableTab {
 						text: _UNO('.uno:TableSort', 'text'),
 						command: '.uno:TableSort',
 						accessibility: { focusBack: true, combination: 'SO', de: null },
-					},
+					} as ToolItemWidgetJSON,
 				],
-			},
-			{ type: 'separator', id: 'table-sort-break', orientation: 'vertical' },
+			} as OverflowGroupWidgetJSON,
+			{
+				type: 'separator',
+				id: 'table-sort-break',
+				orientation: 'vertical',
+			} as SeparatorWidgetJSON,
 			{
 				type: 'overflowgroup',
 				id: 'table-protect-group',
@@ -510,6 +518,7 @@ class WriterTableTab {
 				accessibility: { focusBack: true, combination: 'PR', de: null },
 				children: [
 					{
+						id: 'table-protection-controls',
 						type: 'container',
 						children: [
 							{
@@ -525,9 +534,9 @@ class WriterTableTab {
 											combination: 'PP',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 							{
 								type: 'toolbox',
 								children: [
@@ -541,26 +550,26 @@ class WriterTableTab {
 											combination: 'UP',
 											de: null,
 										},
-									},
+									} as ToolItemWidgetJSON,
 								],
-							},
+							} as ToolboxWidgetJSON,
 						],
-						vertical: 'true',
-					},
+						vertical: true,
+					} as ContainerWidgetJSON,
 				],
-			},
+			} as OverflowGroupWidgetJSON,
 			{
 				type: 'separator',
 				id: 'table-numberformatpercent-break',
 				orientation: 'vertical',
-			},
+			} as SeparatorWidgetJSON,
 			{
 				type: 'bigtoolitem',
 				id: 'table-insert-caption-dialog',
 				text: _UNO('.uno:InsertCaptionDialog', 'text'),
 				command: '.uno:InsertCaptionDialog',
 				accessibility: { focusBack: true, combination: 'IC', de: null },
-			},
+			} as ToolItemWidgetJSON,
 		];
 		return content;
 	}
