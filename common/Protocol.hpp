@@ -307,7 +307,9 @@ namespace COOLProtocol
                    !tokens.equals(1, ".uno:Copy") && !tokens.equals(1, ".uno:Save") &&
                    !tokens.startsWith(1, ".uno:ToolbarMode") && // ToolbarMode?Mode...
                    !tokens.equals(1, ".uno:InvertBackground") &&
-                   !tokens.equals(1, ".uno:ChangeTheme");
+                   !tokens.equals(1, ".uno:ChangeTheme") &&
+                   !tokens.equals(1, ".uno:ShowRuler") &&
+                   !tokens.equals(1, ".uno:QuickFind");
         }
 
         return false;
