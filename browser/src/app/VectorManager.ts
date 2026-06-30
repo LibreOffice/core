@@ -262,6 +262,12 @@ class VectorManager extends RenderManagerBase {
 	handleVectorRenderingGraphicsResponse(
 		values: cool.VectorRenderingGraphicsResponse,
 	): void {
+		window.app.console.log(
+			'vectorrenderinggraphics pulled payload: ' +
+				(values.data ? values.data.length : 0) +
+				' base64 bytes, checksum=' +
+				values.checksum,
+		);
 		if (this._bitmaps.has(values.checksum)) {
 			this._bitmaps.clearInFlight(values.checksum);
 			return;

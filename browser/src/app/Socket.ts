@@ -2603,24 +2603,37 @@ class Socket {
 		const json = new TextDecoder().decode(
 			(window as any).fzstd.decompress(compressed),
 		);
-		let summary =
-			compressed.length + ' bytes compressed, ' + json.length + ' bytes JSON';
+		let type = 'unknown';
+		let detail = '';
 		try {
 			const parsed = JSON.parse(json);
-			summary +=
-				', type=' +
-				parsed.type +
-				', objects=' +
-				(parsed.objects ? parsed.objects.length : 0);
-			if (parsed.order) summary += ', order=' + parsed.order.length;
+			type = parsed.type || 'unknown';
+			if (parsed.type === 'vectorrenderingfont') {
+				detail =
+					', fontId=' +
+					parsed.fontId +
+					', font=' +
+					(parsed.data ? parsed.data.length : 0) +
+					' base64 bytes';
+			} else {
+				detail = ', objects=' + (parsed.objects ? parsed.objects.length : 0);
+				if (parsed.order) detail += ', order=' + parsed.order.length;
+				if (parsed.version !== undefined)
+					detail += ', version=' + parsed.version;
+			}
 		} catch (error) {
-			// Leave the summary as the sizes only.
+			// Leave the detail empty.
 		}
 		window.app.console.log(
-			'zstdvectorprimitives ' +
-				(pushed ? 'PUSHED' : 'pulled') +
+			'zstd' +
+				type +
+				(pushed ? ' PUSHED' : ' pulled') +
 				' payload: ' +
-				summary,
+				compressed.length +
+				' bytes compressed, ' +
+				json.length +
+				' bytes JSON' +
+				detail,
 		);
 		const docLayer = (this._map as any)?._docLayer;
 		if (docLayer && docLayer._onCommandValuesMsg)
