@@ -257,7 +257,8 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			data = encodeURIComponent(JSON.stringify(data));
 			break;
 		}
-		var windowId = builder && builder.windowId !== null && builder.windowId !== undefined ? builder.windowId :
+		var hasOwnWindow = builder && builder.windowId !== null && builder.windowId !== undefined;
+		var windowId = hasOwnWindow ? builder.windowId :
 			(window.mobileDialogId !== undefined ? window.mobileDialogId :
 				(window.sidebarId !== undefined ? window.sidebarId : -1));
 
@@ -265,6 +266,16 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			window.app.console.error('JSDialog: windowId "' + windowId + '" is not valid. Use a number.');
 			return; // core will fail parsing the command, it is a mistake most probably
 		}
+
+		// Closing the generic popover only makes sense when we know WindowId.
+		// Without: the value falls back to -1. A client-only dropdown
+		// matches no widget and core warns that the id was not found.
+		const isBrowerOnlyWindow = !hasOwnWindow
+			&& window.sidebarId === undefined
+			&& window.mobileDialogId === undefined;
+
+		if (objectType === 'popover' && object.id === '__POPOVER__' && isBrowerOnlyWindow)
+			return;
 
 		var message = 'dialogevent ' + windowId
 				+ ' {\"id\":\"' + object.id
