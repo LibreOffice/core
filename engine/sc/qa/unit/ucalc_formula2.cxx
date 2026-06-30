@@ -261,6 +261,24 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLAMBDA)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testConcatWithOmittedOptionalParameter)
+{
+    // Concatenating an omitted optional lambda parameter yields just the
+    // provided operand. The missing value stands in for an empty string
+    // rather than being read as a double.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=LAMBDA(x; [y]; x & y)(\"a\")"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // A genuine boolean operand is still rendered as TRUE or FALSE.
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=TRUE() & \"x\""_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"TRUEx"_ustr, m_pDoc->GetString(ScAddress(0, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testLambdaReducingArgumentDoesNotSpill)
 {
     // A lambda whose body aggregates a range argument reduces to a single value

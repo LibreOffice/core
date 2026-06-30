@@ -47,12 +47,15 @@ using namespace formula;
 
 namespace {
 
-// True when the stack token carries a boolean value, recognised
-// by the LOGICAL tag on its FormulaTypedDoubleToken.
+// True when the stack token is a double carrying a boolean value, tagged
+// LOGICAL. A missing argument or an empty cell is reported as a double by the
+// stack but is not a double token, so the token's own type is checked before
+// the cast.
 bool isLogicalDoubleToken(const FormulaToken* pToken)
 {
-    return static_cast<const FormulaDoubleToken*>(pToken)->GetDoubleType()
-        == static_cast<sal_Int16>(SvNumFormatType::LOGICAL);
+    return pToken->GetType() == svDouble
+        && static_cast<const FormulaDoubleToken*>(pToken)->GetDoubleType()
+            == static_cast<sal_Int16>(SvNumFormatType::LOGICAL);
 }
 
 // Format a value through the LOGICAL standard format so the string
