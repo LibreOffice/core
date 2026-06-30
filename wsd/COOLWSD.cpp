@@ -62,6 +62,9 @@
 #include <common/Util.hpp>
 #include <net/AsyncDNS.hpp>
 #include <net/ServerSocket.hpp>
+#if ENABLE_SSL
+#include <net/Ssl.hpp>
+#endif
 #include <wsd/COOLWSDServer.hpp>
 #include <wsd/ClientRequestDispatcher.hpp>
 #include <wsd/DocumentBroker.hpp>
@@ -94,6 +97,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -106,6 +110,7 @@
 #include <sys/types.h>
 
 #ifndef _WIN32
+#include <pwd.h>
 #include <sys/resource.h>
 #include <sys/wait.h>
 #include <sysexits.h>
@@ -1421,9 +1426,43 @@ void COOLWSD::setupChildRoot(const bool UseMountNamespaces)
 
 #endif
 
+#if !MOBILEAPP
+namespace
+{
+/// When the container is started with an arbitrary UID (for example OpenShift
+/// assigns a random one) there is no matching entry in /etc/passwd, so
+/// getpwuid() fails and the privileged-user check refuses to start. Add an
+/// entry mapping the current UID to the 'cool' user. The old container start
+/// script did this via libnss_wrapper and LD_PRELOAD; appending to /etc/passwd
+/// directly avoids the preload (which must be set before exec) and drops the
+/// extra runtime dependency. The image makes /etc/passwd writable for the root
+/// group, which is the group an arbitrary OpenShift UID runs as.
+void ensureUserEntry()
+{
+    const uid_t uid = getuid();
+    if (getpwuid(uid) != nullptr)
+        return; // Already resolvable, nothing to do.
+
+    std::ofstream passwd("/etc/passwd", std::ios::app);
+    if (!passwd)
+    {
+        LOG_WRN("No passwd entry for uid " << uid
+                                           << " and /etc/passwd is not writable; the "
+                                              "privileged-user check may fail.");
+        return;
+    }
+
+    passwd << "cool:x:" << uid << ':' << getgid() << "::/opt/cool:/usr/sbin/nologin\n";
+    LOG_INF("Added a passwd entry mapping uid " << uid << " to the 'cool' user.");
+}
+} // namespace
+#endif
+
 void COOLWSD::innerInitialize(Poco::Util::Application& self)
 {
 #if !MOBILEAPP
+    ensureUserEntry();
+
     if (geteuid() == 0 && CheckCoolUser)
     {
         throw std::runtime_error("Do not run as root. Please run as cool user.");
@@ -2251,6 +2290,29 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
 
 #if !MOBILEAPP
     net::AsyncDNS::startAsyncDNS();
+
+#if ENABLE_SSL
+    // Generate a self-signed certificate when SSL is enabled, none is already
+    // configured, and generation hasn't been disabled. This replaces the
+    // openssl command-line invocation in the old container start script. It must
+    // run before StorageConnectionManager::initialize() below, which is the
+    // first consumer of the SSL cert/key/CA paths.
+    if (ConfigUtil::isSslEnabled() && !std::getenv("DONT_GEN_SSL_CERT"))
+    {
+        const std::string certPath = ConfigUtil::getPathFromConfig("ssl.cert_file_path");
+        if (certPath.empty() || !Poco::File(certPath).exists())
+        {
+            const std::string sslDir = "/tmp/ssl";
+            const char* certDomain = std::getenv("cert_domain");
+            if (ssl::generateSelfSignedCert(sslDir, certDomain ? certDomain : "localhost"))
+            {
+                config().setString("ssl.cert_file_path", sslDir + "/cert.pem");
+                config().setString("ssl.key_file_path", sslDir + "/privkey.pem");
+                config().setString("ssl.ca_file_path", sslDir + "/cert.pem");
+            }
+        }
+    }
+#endif
 
     LOG_TRC("Initialize StorageConnectionManager");
     StorageConnectionManager::initialize();

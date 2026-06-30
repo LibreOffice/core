@@ -21,9 +21,6 @@ RUN apt-get update && \
 # copy freshly built engine and Collabora Online
 COPY /instdir /
 
-# copy the shell script which can start Collabora Online (coolwsd)
-COPY /start-collabora-online.sh /
-
 # set up Collabora Online (normally done by postinstall script of package)
 # Fix permissions
 RUN setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/coolforkit-caps && \
@@ -35,11 +32,25 @@ RUN setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/coolforkit-caps && \
     touch /var/log/coolwsd.log && \
     chown cool:cool /var/log/coolwsd.log && \
     chown -R cool:cool /opt/ && \
-    chown -R cool:cool /etc/coolwsd
+    chown -R cool:cool /etc/coolwsd && \
+    # coolwsd appends a mapping for an arbitrary (e.g. OpenShift) UID to
+    # /etc/passwd at startup, so it must be writable by the root group
+    chmod g+w /etc/passwd
 
 EXPOSE 9980
 
 # switch to cool user (use numeric user id to be compatible with Kubernetes Pod Security Policies)
 USER 100
 
-ENTRYPOINT ["/start-collabora-online.sh"]
+# Start coolwsd directly, with no shell in between: self-signed certificate
+# generation (unless DONT_GEN_SSL_CERT is set) and arbitrary-UID handling are
+# done inside coolwsd itself. The configuration is still driven dynamically by
+# environment variables (--use-env-vars).
+ENTRYPOINT ["/usr/bin/coolwsd", \
+            "--use-env-vars", \
+            "--o:sys_template_path=/opt/cool/systemplate", \
+            "--o:child_root_path=/opt/cool/child-roots", \
+            "--o:file_server_root_path=/usr/share/coolwsd", \
+            "--o:cache_files.path=/opt/cool/cache", \
+            "--o:logging.color=false", \
+            "--o:stop_on_config_change=true"]

@@ -128,6 +128,13 @@ private:
     static std::unique_ptr<SslContext> ClientInstance;
 };
 
+/// Generate a self-signed certificate and matching private key under @dir
+/// (created if necessary), using @commonName as the certificate's CN. Writes
+/// privkey.pem and cert.pem; the certificate is its own CA. Returns true on
+/// success. This replaces the openssl command-line invocation that the
+/// container start script used to run before launching the server.
+bool generateSelfSignedCert(const std::string& dir, const std::string& commonName);
+
 } // namespace ssl
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

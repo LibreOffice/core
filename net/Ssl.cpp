@@ -21,7 +21,17 @@
 #include <common/Log.hpp>
 #include <common/Util.hpp>
 
+#include <openssl/evp.h>
+#include <openssl/pem.h>
+#include <openssl/x509.h>
+#include <openssl/x509v3.h>
+
+#include <sys/stat.h>
 #include <unistd.h>
+
+#include <cerrno>
+#include <functional>
+#include <memory>
 
 std::unique_ptr<SslContext> ssl::Manager::ServerInstance(nullptr);
 std::unique_ptr<SslContext> ssl::Manager::ClientInstance(nullptr);
@@ -171,6 +181,95 @@ std::string SslContext::getLastErrorMsg() const
     }
 
     return "Success";
+}
+
+namespace
+{
+/// RAII wrapper for the BIO used while writing PEM files.
+struct BioFileDeleter
+{
+    void operator()(BIO* bio) const { BIO_free_all(bio); }
+};
+using BioFilePtr = std::unique_ptr<BIO, BioFileDeleter>;
+
+bool writePem(const std::string& path, const std::function<int(BIO*)>& writer)
+{
+    BioFilePtr bio(BIO_new_file(path.c_str(), "w"));
+    if (!bio)
+    {
+        LOG_ERR("Could not open [" << path << "] to write the generated certificate");
+        return false;
+    }
+
+    if (writer(bio.get()) != 1)
+    {
+        LOG_ERR("Failed to write PEM data to [" << path << ']');
+        return false;
+    }
+
+    return true;
+}
+} // namespace
+
+bool ssl::generateSelfSignedCert(const std::string& dir, const std::string& commonName)
+{
+    if (::mkdir(dir.c_str(), 0700) != 0 && errno != EEXIST)
+    {
+        LOG_SYS("Could not create directory [" << dir << "] for the generated certificate");
+        return false;
+    }
+
+    std::unique_ptr<EVP_PKEY, decltype(&EVP_PKEY_free)> pkey(EVP_RSA_gen(2048), EVP_PKEY_free);
+    if (!pkey)
+    {
+        LOG_ERR("Failed to generate the RSA key for the self-signed certificate");
+        return false;
+    }
+
+    std::unique_ptr<X509, decltype(&X509_free)> x509(X509_new(), X509_free);
+    if (!x509)
+    {
+        LOG_ERR("Failed to allocate the X509 certificate");
+        return false;
+    }
+
+    X509_set_version(x509.get(), 2 /* X509 v3 */);
+    ASN1_INTEGER_set(X509_get_serialNumber(x509.get()), 1);
+    // Valid from now for 25 years, matching the previous start script.
+    X509_gmtime_adj(X509_getm_notBefore(x509.get()), 0);
+    X509_gmtime_adj(X509_getm_notAfter(x509.get()), 60L * 60 * 24 * 9131);
+    X509_set_pubkey(x509.get(), pkey.get());
+
+    X509_NAME* name = X509_get_subject_name(x509.get());
+    X509_NAME_add_entry_by_txt(name, "C", MBSTRING_ASC,
+                               reinterpret_cast<const unsigned char*>("DE"), -1, -1, 0);
+    X509_NAME_add_entry_by_txt(name, "O", MBSTRING_ASC,
+                               reinterpret_cast<const unsigned char*>("Dummy Authority"), -1, -1, 0);
+    X509_NAME_add_entry_by_txt(name, "CN", MBSTRING_ASC,
+                               reinterpret_cast<const unsigned char*>(commonName.c_str()), -1, -1,
+                               0);
+    // Self-signed: issuer == subject.
+    X509_set_issuer_name(x509.get(), name);
+
+    if (X509_sign(x509.get(), pkey.get(), EVP_sha256()) == 0)
+    {
+        LOG_ERR("Failed to sign the self-signed certificate");
+        return false;
+    }
+
+    const std::string keyPath = dir + "/privkey.pem";
+    const std::string certPath = dir + "/cert.pem";
+
+    if (!writePem(keyPath, [&pkey](BIO* bio) {
+            return PEM_write_bio_PrivateKey(bio, pkey.get(), nullptr, nullptr, 0, nullptr, nullptr);
+        }))
+        return false;
+
+    if (!writePem(certPath, [&x509](BIO* bio) { return PEM_write_bio_X509(bio, x509.get()); }))
+        return false;
+
+    LOG_INF("Generated self-signed certificate [" << certPath << "] and key [" << keyPath << ']');
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

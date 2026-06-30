@@ -54,10 +54,6 @@ RUN apk add --no-cache \
 # copy freshly built engine and Collabora Online
 COPY --from=builder /build/instdir /
 
-# copy the start script from the cloned online repo (supports both musl and glibc)
-COPY --from=builder /build/builddir/online/docker/from-packages/scripts/start-collabora-online.sh /start-collabora-online.sh
-RUN chmod +x /start-collabora-online.sh
-
 # set up Collabora Online (normally done by postinstall script of package)
 # Fix permissions
 RUN setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/coolforkit-caps && \
@@ -78,9 +74,8 @@ RUN setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/coolforkit-caps && \
     chmod 640 /etc/coolwsd/coolwsd.xml && \
     chown cool:cool /etc/coolwsd && \
     rm -rf /etc/coolwsd/proof_key* && \
-    chown cool:cool /start-collabora-online.sh && \
-    # musl has no NSS -- the start script appends to /etc/passwd directly
-    # for OpenShift random UID support, so it must be writable
+    # coolwsd appends a mapping for an arbitrary (e.g. OpenShift) UID to
+    # /etc/passwd at startup, so it must be writable by the root group
     chmod g+w /etc/passwd
 
 EXPOSE 9980
@@ -88,4 +83,15 @@ EXPOSE 9980
 # switch to cool user (use numeric user id to be compatible with Kubernetes Pod Security Policies)
 USER 1001
 
-ENTRYPOINT ["/start-collabora-online.sh"]
+# Start coolwsd directly, with no shell in between: self-signed certificate
+# generation (unless DONT_GEN_SSL_CERT is set) and arbitrary-UID handling are
+# done inside coolwsd itself. The configuration is still driven dynamically by
+# environment variables (--use-env-vars).
+ENTRYPOINT ["/usr/bin/coolwsd", \
+            "--use-env-vars", \
+            "--o:sys_template_path=/opt/cool/systemplate", \
+            "--o:child_root_path=/opt/cool/child-roots", \
+            "--o:file_server_root_path=/usr/share/coolwsd", \
+            "--o:cache_files.path=/opt/cool/cache", \
+            "--o:logging.color=false", \
+            "--o:stop_on_config_change=true"]
