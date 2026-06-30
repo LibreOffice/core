@@ -251,17 +251,8 @@ Image EditBrowseBox::GetImage(RowStatus eStatus) const
         case DELETED:
             aBitmap = Bitmap(BMP_DELETED);
             break;
-        case PRIMARYKEY:
-            aBitmap = Bitmap(BMP_PRIMARYKEY);
-            break;
-        case CURRENT_PRIMARYKEY:
-            aBitmap = Bitmap(BMP_CURRENT_PRIMARYKEY);
-            break;
         case FILTER:
             aBitmap = Bitmap(BMP_FILTER);
-            break;
-        case HEADERFOOTER:
-            aBitmap = Bitmap(BMP_HEADERFOOTER);
             break;
         case CLEAN:
             break;

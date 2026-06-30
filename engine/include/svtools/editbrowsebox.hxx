@@ -907,10 +907,7 @@ namespace svt
             MODIFIED            =   3,
             NEW                 =   4,
             DELETED             =   5,
-            PRIMARYKEY          =   6,
-            CURRENT_PRIMARYKEY  =   7,
             FILTER              =   8,
-            HEADERFOOTER        =   9
         };
 
     private:

@@ -2260,7 +2260,6 @@ startmath/res/im21108.png cmd/lc_outlineformat.png
 svtools/res/back_large.png cmd/lc_prevrecord.png
 svtools/res/back_small.png cmd/sc_prevrecord.png
 svtools/res/bmpfont.png cmd/sc_color.png
-svtools/res/ed06.png dbaccess/res/pkey.png
 svtools/res/folderop.png cmd/sc_open.png
 svtools/res/info_large.png cmd/lc_alignleft.png
 svtools/res/info_small.png cmd/sc_alignleft.png

@@ -118,10 +118,7 @@ inline constexpr OUString BMP_MODIFIED = u"svtools/res/ed02.png"_ustr;
 inline constexpr OUString BMP_NEW = u"svtools/res/ed03.png"_ustr;
 inline constexpr OUString BMP_DELETED = u"svtools/res/ed04.png"_ustr;
 inline constexpr OUString BMP_CURRENTNEW = u"svtools/res/ed05.png"_ustr;
-inline constexpr OUString BMP_PRIMARYKEY = u"svtools/res/ed06.png"_ustr;
-inline constexpr OUString BMP_CURRENT_PRIMARYKEY = u"svtools/res/ed07.png"_ustr;
 inline constexpr OUString BMP_FILTER = u"svtools/res/ed08.png"_ustr;
-inline constexpr OUString BMP_HEADERFOOTER = u"svtools/res/ed09.png"_ustr;
 
 inline constexpr OUString BMP_TAB_LOCK = u"cmd/sc_lock.png"_ustr;
 
