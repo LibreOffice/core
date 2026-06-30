@@ -205,6 +205,74 @@ class WriterTableTab implements NotebookbarTab {
 			} as SeparatorWidgetJSON,
 			{
 				type: 'overflowgroup',
+				id: 'table-edit-panel',
+				name: _('Size'),
+				accessibility: { focusBack: false, combination: 'TD', de: null },
+				children: [
+					{
+						id: 'TableEditPanel',
+						type: 'container',
+						children: [
+							{
+								id: 'rowsizing',
+								type: 'toolbox',
+								children: [
+									{
+										id: 'SetMinimalRowHeight',
+										type: 'toolitem',
+										text: _UNO('.uno:SetMinimalRowHeight', 'text'),
+										command: '.uno:SetMinimalRowHeight',
+									} as ToolItemWidgetJSON,
+									{
+										id: 'SetOptimalRowHeight',
+										type: 'toolitem',
+										text: _UNO('.uno:SetOptimalRowHeight', 'text'),
+										command: '.uno:SetOptimalRowHeight',
+									} as ToolItemWidgetJSON,
+									{
+										id: 'DistributeRows',
+										type: 'toolitem',
+										text: _UNO('.uno:DistributeRows', 'text'),
+										command: '.uno:DistributeRows',
+									} as ToolItemWidgetJSON,
+								],
+							} as ToolboxWidgetJSON,
+							{
+								id: 'columnsizing',
+								type: 'toolbox',
+								children: [
+									{
+										id: 'SetMinimalColumnWidth',
+										type: 'toolitem',
+										text: _UNO('.uno:SetMinimalColumnWidth', 'text'),
+										command: '.uno:SetMinimalColumnWidth',
+									} as ToolItemWidgetJSON,
+									{
+										id: 'SetOptimalColumnWidth',
+										type: 'toolitem',
+										text: _UNO('.uno:SetOptimalColumnWidth', 'text'),
+										command: '.uno:SetOptimalColumnWidth',
+									} as ToolItemWidgetJSON,
+									{
+										id: 'DistributeColumns',
+										type: 'toolitem',
+										text: _UNO('.uno:DistributeColumns', 'text'),
+										command: '.uno:DistributeColumns',
+									} as ToolItemWidgetJSON,
+								],
+							} as ToolboxWidgetJSON,
+						],
+						vertical: true,
+					} as ContainerWidgetJSON,
+				],
+			} as OverflowGroupWidgetJSON,
+			{
+				type: 'separator',
+				id: 'table-size-break',
+				orientation: 'vertical',
+			} as SeparatorWidgetJSON,
+			{
+				type: 'overflowgroup',
 				id: 'table-split',
 				name: _('Merge & Split'),
 				children: [
