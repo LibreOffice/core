@@ -74,6 +74,8 @@ private:
         css::uno::Sequence< OUString > const & includedPaths,
         css::uno::Sequence< OUString > const & excludedPaths) override;
 
+    virtual void SAL_CALL writeModifications(OUString const & fileUri) override;
+
     OUString SAL_CALL getImplementationName() override {
         return u"com.sun.star.comp.configuration.Update"_ustr;
     }
@@ -142,6 +144,14 @@ void Service::insertModificationXcuFile(
             mods, rtl::Reference< RootAccess >(), &bc);
     }
     bc.send();
+}
+
+void Service::writeModifications(OUString const & fileUri)
+{
+    // writeModificationsToFile takes the configmgr lock itself while it reads
+    // the modification tree, so unlike the other methods here this one must not
+    // hold the lock around the call.
+    Components::getSingleton(context_).writeModificationsToFile(fileUri);
 }
 
 }

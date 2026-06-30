@@ -5585,7 +5585,10 @@ static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pVal
     }
     else if (strcmp(pOption, "addconfig") == 0)
     {
-        updateConfig(OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8));
+        const OUString aConfigPath(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8);
+        updateConfig(aConfigPath);
+        // The per-session call (the per-user tree) arrives last and wins.
+        comphelper::COKit::setUserConfigDir(aConfigPath);
     }
     else if (strcmp(pOption, "userpersistence") == 0)
     {

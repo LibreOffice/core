@@ -35,6 +35,12 @@ interface XUpdate {
     void insertModificationXcuFile(
         [in] string fileUri, [in] sequence< string > includedPaths,
         [in] sequence< string > excludedPaths);
+
+    /* Serialise the current in-memory modifications to fileUri in the
+       registrymodifications.xcu format. The write happens synchronously and
+       ignores the configured modification target, so it also persists changes
+       when the user layer is mounted read-only. */
+    void writeModifications([in] string fileUri);
 };
 
 }; }; }; };

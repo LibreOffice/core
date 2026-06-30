@@ -81,6 +81,10 @@ COMPHELPER_DLLPUBLIC bool isForkedChild();
 COMPHELPER_DLLPUBLIC void setUserSettingsPersistenceAvailable(bool bAvailable);
 COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
 
+/// Directory URL (file://...) of the per-user config tree; empty when unknown.
+COMPHELPER_DLLPUBLIC void setUserConfigDir(const OUString& rUrl);
+COMPHELPER_DLLPUBLIC OUString getUserConfigDir();
+
 /// Used by SlideshowLayerRenderer for signaling that a slide rendering is occurring.
 COMPHELPER_DLLPUBLIC void setSlideshowRendering(bool bSlideshowRendering);
 COMPHELPER_DLLPUBLIC bool isSlideshowRendering();

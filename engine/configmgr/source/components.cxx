@@ -320,6 +320,10 @@ void Components::writeModifications() {
     }
 }
 
+void Components::writeModificationsToFile(OUString const & url) {
+    writeModFile(*this, url, data_);
+}
+
 void Components::flushModifications() {
     rtl::Reference< WriteThread > thread;
     {

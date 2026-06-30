@@ -11,6 +11,7 @@
 
 #include <atomic>
 #include <map>
+#include <mutex>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 
@@ -42,6 +43,9 @@ static bool g_bForkedChild(false);
 // TODO(per-view): process-wide; last attach wins in mixed-session kits.
 // Move to per-SfxViewShell when more settings join this signal.
 static std::atomic<bool> g_bUserSettingsPersistenceAvailable(true);
+
+static std::mutex g_aUserConfigDirMutex;
+static OUString g_aUserConfigDir;
 
 static bool g_bPartInInvalidation(false);
 
@@ -167,6 +171,18 @@ void setUserSettingsPersistenceAvailable(bool bAvailable)
 bool isUserSettingsPersistenceAvailable()
 {
     return g_bUserSettingsPersistenceAvailable.load(std::memory_order_relaxed);
+}
+
+void setUserConfigDir(const OUString& rUrl)
+{
+    std::lock_guard<std::mutex> aGuard(g_aUserConfigDirMutex);
+    g_aUserConfigDir = rUrl;
+}
+
+OUString getUserConfigDir()
+{
+    std::lock_guard<std::mutex> aGuard(g_aUserConfigDirMutex);
+    return g_aUserConfigDir;
 }
 
 void setPartInInvalidation(bool bPartInInvalidation)

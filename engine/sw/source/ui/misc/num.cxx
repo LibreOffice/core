@@ -39,11 +39,14 @@
 #include <svl/eitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/intitem.hxx>
+#include <com/sun/star/configuration/Update.hpp>
 #include <comphelper/configuration.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/kit.hxx>
+#include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include <vcl/tabs.hrc>
 
@@ -1053,6 +1056,29 @@ IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, SetDefaultHdl, weld::Button&, void)
                 aFonts, pBatch);
         }
         pBatch->commit();
+
+        // On the desktop configmgr writes the commit to disk itself. The COOL
+        // kit mounts that layer read-only, so ask configmgr to serialise the
+        // in-memory modifications to the per-user xcu directly. The host
+        // round-trip then uploads the file on close and re-applies it on open.
+        if (comphelper::COKit::isActive()
+            && comphelper::COKit::isUserSettingsPersistenceAvailable())
+        {
+            OUString aConfigDir = comphelper::COKit::getUserConfigDir();
+            if (aConfigDir.isEmpty())
+            {
+                SAL_WARN("sw.ui",
+                         "No user config dir; cannot persist bullets/numbering defaults");
+            }
+            else
+            {
+                if (!aConfigDir.endsWith("/"))
+                    aConfigDir += "/";
+                const OUString aFileUrl = aConfigDir + "xcu/registrymodifications.xcu";
+                css::configuration::Update::get(comphelper::getProcessComponentContext())
+                    ->writeModifications(aFileUrl);
+            }
+        }
     }
     catch (const css::uno::Exception&)
     {

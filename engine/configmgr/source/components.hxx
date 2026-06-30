@@ -74,6 +74,13 @@ public:
 
     void writeModifications();
 
+    // Serialise the current in-memory modifications to the given file URL in
+    // the registrymodifications.xcu format, synchronously and regardless of
+    // the configured modification target. Must be called with the configmgr
+    // lock unacquired; it takes the lock itself while reading the modification
+    // tree.
+    void writeModificationsToFile(OUString const & url);
+
     void flushModifications();
         // must be called with configmgr::lock unacquired; must be called before
         // shutdown if writeModifications has ever been called (probably

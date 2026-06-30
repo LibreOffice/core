@@ -1869,20 +1869,15 @@ const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
     static const std::vector<RoundTripPresetGroup> sGroups = {
         { "wordbook", true },
         { "themes", false },
-        // false ("upload all") because configmgr writes new files here
-        // (registrymodifications.xcu) we want to keep; scrubXcu=true so we
-        // only keep the allowed nodes and not the whole local registry.
+        // upload-all keeps the kit-written registrymodifications.xcu; scrubXcu
+        // trims it to the allowed nodes.
         { "xcu", false, /*scrubXcu=*/true },
     };
     return sGroups;
 }
 
-// configmgr's writable layer (see setupKitEnvironment) collects *every*
-// officecfg commit a session makes into xcu/registrymodifications.xcu, not
-// just the settings we expose: recent-document history, window state,
-// tip-of-the-day counters, the linguistic registry, etc. Scrub the file to
-// these allowed roots before upload so that churn isn't persisted into the
-// user's settings storage; everything else is dropped.
+// Scrub the kit-written registrymodifications.xcu to these roots before upload;
+// anything outside the list is dropped.
 //
 // !!! KEEP IN SYNC with aAllowedSubset in engine/desktop/source/lib/init.cxx
 // (the apply side; this is the upload side). No shared symbol exists across
