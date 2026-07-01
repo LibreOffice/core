@@ -158,34 +158,63 @@ install -D -m 0644 /etc/group  "$ROOTFS/etc/group"
 # world-writable /tmp exists in the distroless image.
 install -d -m 1777 "$ROOTFS/tmp"
 
-# Source the jail's glibc loader / NSS / resolver objects and the CA trust
-# store from the target (base) image instead of the Debian builder, when the
-# build provides it via HARDENED_ROOT. These are dlopen'd at runtime by the
-# in-jail process, which runs with the base image's libc (we ship no libc of
-# our own), so they must match that libc; sourcing them here also lets the jail
-# use the hardened base's libraries and trust store. Each file is overlaid only
-# if the target image carries it at the same path; otherwise the builder's copy
-# is kept (and logged), never removed.
+# Replace the jail's glibc loader / NSS / resolver objects and the CA trust
+# store with the target (base) image's own copies, when the build provides the
+# base under HARDENED_ROOT. These are dlopen'd at runtime by the in-jail
+# process, which runs with the base image's libc (we ship no libc of our own),
+# so they must match that libc; it also gives the jail the hardened base's
+# trust store.
+#
+# The ZenDiS base is a Nix-built image: its FHS paths are absolute symlinks
+# into /nix/store, and it keeps the libraries under /usr/lib (its /lib is
+# empty) while the template uses /lib. So match by basename and resolve the
+# base's object by following the symlink chain within HARDENED_ROOT, treating
+# absolute link targets as rooted at HARDENED_ROOT.
 if [ -n "${HARDENED_ROOT:-}" ]; then
     echo "=== Overlaying jail glibc/CA from the target image ($HARDENED_ROOT) ==="
     syst="$ROOTFS/opt/cool/systemplate"
+
+    # Print the real file HARDENED_ROOT holds for base-relative path $1, or
+    # nothing if it does not resolve to a regular file.
+    resolve_in_target() {
+        p="$1"; i=0
+        while [ -L "$HARDENED_ROOT$p" ] && [ "$i" -lt 40 ]; do
+            t=$(readlink "$HARDENED_ROOT$p")
+            case "$t" in
+                /*) p="$t" ;;
+                *)  p="$(dirname "$p")/$t" ;;
+            esac
+            i=$((i + 1))
+        done
+        [ -f "$HARDENED_ROOT$p" ] && printf '%s\n' "$HARDENED_ROOT$p"
+    }
+
+    overlay_from_target() {  # $1 = file in the template to replace
+        _b=$(basename "$1")
+        _src=$(resolve_in_target "/usr/lib/x86_64-linux-gnu/$_b")
+        [ -z "$_src" ] && _src=$(resolve_in_target "/lib/x86_64-linux-gnu/$_b")
+        [ -z "$_src" ] && _src=$(resolve_in_target "/lib64/$_b")
+        if [ -n "$_src" ]; then
+            cp -f --preserve=mode,timestamps "$_src" "$1"
+            echo "  overlaid ${1#"$ROOTFS"} <- ${_src#"$HARDENED_ROOT"}"
+        else
+            echo "  KEPT     ${1#"$ROOTFS"} (not found in target)"
+        fi
+    }
+
     find "$syst" \( -name 'ld-*' -o -name 'libnss_*.so*' -o -name 'libresolv.so*' \) \
         -type f 2>/dev/null | while read -r f; do
-        rel=${f#"$syst"/}
-        if [ -e "$HARDENED_ROOT/$rel" ]; then
-            cp -a -L "$HARDENED_ROOT/$rel" "$f"
-            echo "  overlaid /$rel"
-        else
-            echo "  KEPT     /$rel (not provided by the target image)"
-        fi
+        overlay_from_target "$f"
     done
-    ca="etc/ssl/certs/ca-certificates.crt"
-    if [ -e "$syst/$ca" ]; then
-        if [ -e "$HARDENED_ROOT/$ca" ]; then
-            cp -a -L "$HARDENED_ROOT/$ca" "$syst/$ca"
-            echo "  overlaid /$ca"
+
+    ca="$syst/etc/ssl/certs/ca-certificates.crt"
+    if [ -e "$ca" ]; then
+        src=$(resolve_in_target "/etc/ssl/certs/ca-certificates.crt")
+        if [ -n "$src" ]; then
+            cp -f --preserve=mode,timestamps "$src" "$ca"
+            echo "  overlaid /etc/ssl/certs/ca-certificates.crt <- ${src#"$HARDENED_ROOT"}"
         else
-            echo "  KEPT     /$ca (not provided by the target image)"
+            echo "  KEPT     /etc/ssl/certs/ca-certificates.crt (not found in target)"
         fi
     fi
 fi
