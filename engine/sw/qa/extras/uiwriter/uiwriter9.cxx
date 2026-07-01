@@ -1918,6 +1918,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testStyleApplyForwardsOriginalName)
                          getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testAutocorrectSingleQuoteUndo)
+{
+    // Typing an apostrophe autocorrects it to a typographic one. Undoing the
+    // autocorrect must remove the whole quote in a single step, not leave a
+    // straight quote behind.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+
+    auto getText = [&]() -> OUString {
+        return pWrtShell->getShellCursor(false)->GetPoint()->GetNode().GetTextNode()->GetText();
+    };
+
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'c', 0);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'e', 0);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '\'', 0);
+    Scheduler::ProcessEventsToIdle();
+
+    // The straight apostrophe became a typographic one (U+2019).
+    CPPUNIT_ASSERT_EQUAL(u"ce\u2019"_ustr, getText());
+
+    pWrtShell->Undo();
+    Scheduler::ProcessEventsToIdle();
+
+    // One undo removes the quote entirely. Without the fix the quote turned
+    // back into a straight one (U+0027) and only a second undo removed it.
+    CPPUNIT_ASSERT_EQUAL(u"ce"_ustr, getText());
+
+    // The same holds when more is typed after the quote and it is undone: the
+    // undo that reaches the quote removes it rather than exposing a straight
+    // quote in between.
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, '\'', 0);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'u', 0);
+    pTextDoc->postKeyEvent(KIT_KEYEVENT_KEYINPUT, 'n', 0);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"ce\u2019un"_ustr, getText());
+
+    pWrtShell->Undo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"ce\u2019"_ustr, getText());
+
+    pWrtShell->Undo();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"ce"_ustr, getText());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

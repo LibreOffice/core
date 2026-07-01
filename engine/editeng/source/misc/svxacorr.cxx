@@ -1294,29 +1294,22 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, sal_Int32 nInsPos,
     else
         cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
-    OUString sChg( cInsChar );
+    // Put the final typographic quote in place with a single edit instead of
+    // inserting the typed character and then replacing it with the typographic
+    // one. With the two-edit form, undoing the autocorrect first turned the
+    // quote back into a straight quote and only a second undo removed it, so a
+    // stray straight quote was left behind. A single edit means one undo
+    // removes the whole quote.
+    OUString sChg( cRet );
     if( bIns )
         rDoc.Insert( nInsPos, sChg );
     else
         rDoc.Replace( nInsPos, sChg );
 
-    sChg = OUString(cRet);
-
     if( eType == ACQuotes::NonBreakingSpace )
-    {
-        if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, OUStringChar(cNonBreakingSpace) ))
-        {
-            if( !bSttQuote )
-                ++nInsPos;
-        }
-    }
+        rDoc.Insert(bSttQuote ? nInsPos + 1 : nInsPos, OUStringChar(cNonBreakingSpace));
     else if( eType == ACQuotes::DoubleAngleQuote && cInsChar != '\"' )
-    {
-        rDoc.Delete( nInsPos-1, nInsPos);
-        --nInsPos;
-    }
-
-    rDoc.Replace( nInsPos, sChg );
+        rDoc.Delete(nInsPos - 1, nInsPos);
 
     // i' -> I' in English (last step for the Undo)
     if( eType == ACQuotes::CapitalizeIAm )
