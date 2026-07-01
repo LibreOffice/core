@@ -187,7 +187,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 		helper.moveCursor('right', 'shift');
 	}
 
-	it('Set minimal row height.', function() {
+	function minimalRowHeightTest() {
 		prepareForTableSizeTests();
 		cy.cGet('#rowsizing .unoSetOptimalRowHeight').click();
 		cy.cGet('#rowsizing .unoSetMinimalRowHeight').click();
@@ -196,9 +196,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 
 		// Check new row height
 		cy.cGet('#copy-paste-container td').should('not.have.attr', 'height');
-	});
+	}
 
-	it('Set optimal row height.', function() {
+	function optimalRowHeightTest() {
 		prepareForTableSizeTests();
 		cy.cGet('#rowsizing .unoSetOptimalRowHeight').should('not.have.attr','disabled');
 		cy.cGet('#rowsizing .unoSetOptimalRowHeight').click();
@@ -215,9 +215,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 						expect(items[i]).not.have.attr('height');
 				}
 			});
-	});
+	}
 
-	it('Distribute rows.', function() {
+	function distributeRowsTest() {
 		prepareForTableSizeTests();
 		cy.cGet('#rowsizing .unoDistributeRows').should('not.have.attr','disabled');
 		cy.cGet('#rowsizing .unoDistributeRows').click();
@@ -235,18 +235,18 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 						expect(items[i]).not.have.attr('height');
 				}
 			});
-	});
+	}
 
-	it('Set minimal column width.', function() {
+	function minimalColumnWidthTest() {
 		prepareForTableSizeTests();
 		cy.cGet('#columnsizing .unoSetMinimalColumnWidth').click();
 
 		selectFullTable();
 
 		cy.cGet('#copy-paste-container td').should('have.attr', 'width', '25');
-	});
+	}
 
-	it('Set optimal column width.', function() {
+	function optimalColumnWidthTest() {
 		prepareForTableSizeTests();
 		cy.cGet('#columnsizing .unoSetOptimalColumnWidth').click();
 
@@ -254,15 +254,39 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 
 		cy.cGet('#copy-paste-container td:nth-of-type(1n)').should('have.attr', 'width', '90%');
 		cy.cGet('#copy-paste-container td:nth-of-type(2n)').should('have.attr', 'width', '10%');
-	});
+	}
 
-	it('Distribute columns.', function() {
+	function distributeColumnsTest() {
 		prepareForTableSizeTests();
 		cy.cGet('#columnsizing .unoDistributeColumns').click();
 
 		selectFullTable();
 
 		cy.cGet('#copy-paste-container td').should('have.attr', 'width', '50%');
+	}
+
+	it('Set minimal row height.', function() {
+		minimalRowHeightTest();
+	});
+
+	it('Set optimal row height.', function() {
+		optimalRowHeightTest();
+	});
+
+	it('Distribute rows.', function() {
+		distributeRowsTest();
+	});
+
+	it('Set minimal column width.', function() {
+		minimalColumnWidthTest();
+	});
+
+	it('Set optimal column width.', function() {
+		optimalColumnWidthTest();
+	});
+
+	it('Distribute columns.', function() {
+		distributeColumnsTest();
 	});
 
 	it('Split Cells', function() {
