@@ -118,8 +118,6 @@ fi
 
 echo "=== Copying into $ROOTFS ==="
 # Re-assert the file capabilities on the binaries so the copy carries them.
-# (BuildKit's COPY --from preserves security.capability; we set them again here
-# to be certain after the preceding steps.)
 setcap cap_fowner,cap_chown,cap_sys_chroot=ep /usr/bin/coolforkit-caps
 setcap cap_sys_admin=ep /usr/bin/coolmount
 
@@ -129,6 +127,17 @@ mkdir -p "$ROOTFS"
 sed 's#^/##' "$FILELIST" > "$FILELIST.rel"
 tar -C / -cf - --xattrs --xattrs-include='*' --no-recursion -T "$FILELIST.rel" \
     | tar -C "$ROOTFS" -xf - --xattrs --xattrs-include='*'
+
+# Fail now if the capabilities did not make it into the staged tree, e.g. the
+# builder's filesystem does not support the security.capability xattr. (The
+# survival of these across COPY --from into the final image is checked
+# separately by the verify-caps stage.)
+for cap_bin in usr/bin/coolforkit-caps usr/bin/coolmount; do
+    if [ -z "$(getcap "$ROOTFS/$cap_bin")" ]; then
+        echo "FATAL: no file capabilities on $ROOTFS/$cap_bin after staging" >&2
+        exit 1
+    fi
+done
 
 # /etc/passwd and /etc/group are owned by the base, so dpkg did not list our
 # modified copies; install them explicitly. /etc/passwd stays group-writable so

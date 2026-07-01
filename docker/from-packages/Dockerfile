@@ -152,6 +152,25 @@ COPY /scripts/assemble-rootfs.sh /usr/local/bin/assemble-rootfs.sh
 RUN HARDENED_ROOT=/hardened /usr/local/bin/assemble-rootfs.sh
 
 # ---------------------------------------------------------------------------
+# Capability check: the runtime stage relies on COPY --from carrying the jail's
+# file capabilities (the security.capability xattr on coolforkit-caps and
+# coolmount). That holds for modern BuildKit but not for the legacy builder and
+# not necessarily for every rootless/older setup, so prove it here and fail the
+# build rather than ship a jail that cannot start. Copying the two binaries out
+# of the builder exercises the exact same COPY --from mechanism the runtime
+# stage uses; getcap is already present here (libcap2-bin in the builder).
+# ---------------------------------------------------------------------------
+FROM builder AS verify-caps
+COPY --from=builder /rootfs/usr/bin/coolforkit-caps /rootfs/usr/bin/coolmount /probe/
+RUN set -eu; \
+    fc="$(/sbin/getcap /probe/coolforkit-caps)"; \
+    mc="$(/sbin/getcap /probe/coolmount)"; \
+    echo "post-COPY caps -- coolforkit-caps: ${fc:-<none>} | coolmount: ${mc:-<none>}"; \
+    case "$fc" in *cap_sys_chroot*) ;; *) echo "FATAL: cap_sys_chroot lost on COPY --from; BuildKit is not preserving the security.capability xattr" >&2; exit 1;; esac; \
+    case "$mc" in *cap_sys_admin*) ;; *) echo "FATAL: cap_sys_admin lost on COPY --from; BuildKit is not preserving the security.capability xattr" >&2; exit 1;; esac; \
+    touch /caps-verified
+
+# ---------------------------------------------------------------------------
 # Runtime stage: the hardened, distroless base with only Collabora Online and
 # its runtime dependencies copied in. No shell, no package manager.
 # ---------------------------------------------------------------------------
@@ -172,9 +191,14 @@ LABEL commit.history.core="https://gerrit.collaboraoffice.com/plugins/gitiles/on
 ENV LC_CTYPE C.UTF-8
 
 # Bring in Collabora Online and all its runtime dependencies, assembled in the
-# builder. BuildKit preserves the file capabilities on coolforkit-caps and
-# coolmount (security.capability xattr) across this copy.
+# builder. This relies on COPY --from carrying the file capabilities on
+# coolforkit-caps and coolmount (security.capability xattr); the verify-caps
+# stage proves that holds in this build environment.
 COPY --from=builder /rootfs /
+
+# Force the capability check to run as part of every build: this pulls in the
+# verify-caps stage, which fails the build if the capabilities did not survive.
+COPY --from=verify-caps /caps-verified /opt/cool/.caps-verified
 
 # coolwsd listens on port 9980
 EXPOSE 9980
