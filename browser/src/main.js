@@ -36,9 +36,11 @@ else if (wopiSrc !== '' && accessHeader !== '') {
 // access token, NOT part of WOPISrc, so the doc key and collaboration are
 // unaffected). The test WOPI host reads it as the UserId. This lets us debug
 // multi-user scenarios that the single hard-coded test user cannot.
-var debugUserId = global.coolParams.get('userid');
-if (wopiSrc !== '' && debugUserId)
-	wopiParams.userid = debugUserId;
+if (window.enableDebug) {
+	var debugUserId = global.coolParams.get('userid');
+	if (wopiSrc !== '' && debugUserId)
+		wopiParams.userid = debugUserId;
+}
 
 var filePath = global.coolParams.get('file_path');
 
