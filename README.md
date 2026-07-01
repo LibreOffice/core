@@ -109,6 +109,21 @@ This project has several components:
 * **cypress_test/**
   * JavaScript based integration tests
 
+## Building for development
+
+The engine (core) is built first, then online on top of it.
+
+    cd engine
+    ./autogen.sh --with-distro=CPLinux-LOKit-Dev
+    make
+    cd ..
+    ./autogen.sh --enable-developer
+    make
+
+Then "make run" to start coolwsd. Both developer options are convenience
+bundles; pass individual configure options to override a piece. To bootstrap
+from scratch, see scripts/clone-online.sh.
+
 ## Further recommended reading with build details
 
 * **[Build Collabora Online](https://www.collaboraoffice.org/post/build-code/)**
