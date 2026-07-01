@@ -2509,19 +2509,33 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
                 if ( pCursorShell )
                     pCursorShell->SttCursorMove();
 
-                // If there are accrued paints, it's best to simply invalidate
-                // the whole window. Otherwise there would arise paint problems whose
-                // solution would be disproportionally expensive.
                 SwViewShellImp *pViewImp = rSh.Imp();
                 bool bUnlock = false;
                 if ( pViewImp->HasPaintRegion() )
                 {
-                    SAL_INFO("sw.idle", "Disappointing full document invalidation");
-                    pViewImp->DeletePaintRegion();
+                    if (comphelper::COKit::isActive())
+                    {
+                        // In tiled rendering, send the repaint rectangles the
+                        // idle layout collected, so each affected tile is
+                        // invalidated from a bounded rectangle.
+                        std::optional<SwRegionRects> oRegion = pViewImp->TakePaintRegion();
+                        oRegion->LimitToOrigin();
+                        oRegion->Compress( SwRegionRects::CompressFuzzy );
+                        for ( const SwRect& rRect : *oRegion )
+                            rSh.InvalidateWindows( rRect );
+                    }
+                    else
+                    {
+                        // If there are accrued paints, it's best to simply invalidate
+                        // the whole window. Otherwise there would arise paint problems whose
+                        // solution would be disproportionally expensive.
+                        SAL_INFO("sw.idle", "Disappointing full document invalidation");
+                        pViewImp->DeletePaintRegion();
 
-                    // Cause a repaint with virtual device.
-                    rSh.LockPaint(LockPaintReason::SwLayIdle);
-                    bUnlock = true;
+                        // Cause a repaint with virtual device.
+                        rSh.LockPaint(LockPaintReason::SwLayIdle);
+                        bUnlock = true;
+                    }
                 }
 
                 if ( pCursorShell )
