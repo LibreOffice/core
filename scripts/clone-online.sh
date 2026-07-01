@@ -308,7 +308,7 @@ fi
 
 info "Repo location: $TARGET_DIR"
 info "The document engine (core) lives at: $TARGET_DIR/engine"
-info "Build instructions: $TARGET_DIR/docs/building.md"
+info "Build instructions: $TARGET_DIR/README.md"
 
 # ---------------------------------------------------------------------------
 # Step 6: Decide whether to build
@@ -319,7 +319,7 @@ say "Step 6: Build the project?"
 if [ "$BUILD_MODE" = "no" ]; then
     info "--no-build was passed. Stopping here."
     info "To build later, re-run this script with --build, or follow"
-    info "$TARGET_DIR/docs/building.md manually."
+    info "$TARGET_DIR/README.md manually."
     exit 0
 fi
 
@@ -441,4 +441,4 @@ fi
 say "Done"
 info "Repo:   $ONLINE_DIR"
 info "Engine: $ENGINE_DIR"
-info "See $ONLINE_DIR/docs/building.md for how to run coolwsd."
+info "See $ONLINE_DIR/README.md for how to run coolwsd."

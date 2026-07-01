@@ -176,7 +176,7 @@ After a successful run with `--build`:
 - Online build artifacts are produced inside `<target>/`.
 
 For how to actually start coolwsd and load a document, see
-`<target>/docs/building.md` after the clone finishes.
+`<target>/README.md` after the clone finishes.
 
 ## Troubleshooting
 
