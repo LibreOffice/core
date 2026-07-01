@@ -87,6 +87,15 @@ grep -vE \
 mv "$FILELIST.trimmed" "$FILELIST"
 sort -u "$FILELIST" -o "$FILELIST"
 
+# Debian ships the usr-merge aliases /bin, /sbin, /lib, /lib64 as symlinks to
+# /usr/*, and dpkg -L can list them (our -L filter keeps them). The base image
+# has these as real directories, so COPY --from would try to replace a
+# directory with a symlink and fail ("cannot replace to directory ... with
+# file"). Drop the bare aliases; everything real lives under /usr and merges
+# cleanly.
+grep -vE '^/(bin|sbin|lib|lib64)$' "$FILELIST" > "$FILELIST.nomerge"
+mv "$FILELIST.nomerge" "$FILELIST"
+
 echo "=== Verifying the dependency closure ==="
 # Builder-side ldd resolves against the builder (which has everything), so it
 # cannot tell us a library is missing from the base image. Instead, flag any
