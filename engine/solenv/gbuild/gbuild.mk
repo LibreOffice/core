@@ -191,7 +191,7 @@ $(eval $(call gb_Helper_collect_knownlibs))
 gb_Library_DLLPOSTFIX := lo
 gb_RUN_CONFIGURE :=
 
-gb_CONFIGURE_PLATFORMS := --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+gb_CONFIGURE_PLATFORMS := --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) $(if $(CROSS_COMPILING),cross_compiling=yes)
 
 # Include platform/cpu/compiler specific config/definitions
 
