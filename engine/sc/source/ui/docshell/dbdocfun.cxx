@@ -801,7 +801,8 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         ViewShellId nViewShellId(-1);
         if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
             nViewShellId = pViewSh->GetViewShellId();
-        rDocShell.GetUndoManager()->EnterListAction(u""_ustr, u""_ustr, 0, nViewShellId);
+        rDocShell.GetUndoManager()->EnterListAction(ScResId(STR_UNDO_DBDATA),
+                                                    ScResId(STR_UNDO_DBDATA), 0, nViewShellId);
         // First child: restores the cursor on Undo (see AddDBTable), so the
         // header fill/clear below can't drag it to a touched cell.
         if (bHaveCursor)
