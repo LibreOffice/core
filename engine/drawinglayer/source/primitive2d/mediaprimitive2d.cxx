@@ -21,8 +21,11 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <algorithm>
 #include <utility>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/checksum.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
@@ -32,6 +35,58 @@
 
 namespace drawinglayer::primitive2d
 {
+        namespace {
+            // A media object without a captured frame - no player available, or nothing to
+            // grab a frame from - falls back to one of these two fixed-size icons (see
+            // avmedia/inc/bitmaps.hlst). Unlike a real captured video frame, such an icon
+            // must not be stretched across an arbitrarily large media shape, or it turns
+            // into a blurry smear.
+            bool isGenericMediaPlaceholder(const Graphic& rGraphic)
+            {
+                if (GraphicType::Bitmap != rGraphic.GetType())
+                    return false;
+
+                static const BitmapChecksum nEmptyLogoChecksum(
+                    Graphic(Bitmap(u"avmedia/res/avemptylogo.png"_ustr)).GetChecksum());
+                static const BitmapChecksum nAudioLogoChecksum(
+                    Graphic(Bitmap(u"avmedia/res/avaudiologo.png"_ustr)).GetChecksum());
+
+                const BitmapChecksum nChecksum(rGraphic.GetChecksum());
+                return nChecksum == nEmptyLogoChecksum || nChecksum == nAudioLogoChecksum;
+            }
+
+            // Centered, aspect-preserving placement for the fallback icon: up to 3 cm
+            // (in the shape's own 1/100th mm unit) on its longer side, shrunk further if
+            // the shape itself is smaller than that.
+            basegfx::B2DHomMatrix createPlaceholderIconTransform(
+                const basegfx::B2DHomMatrix& rShapeTransform, const Size& rBitmapSizePixel)
+            {
+                basegfx::B2DRange aShapeRange(0.0, 0.0, 1.0, 1.0);
+                aShapeRange.transform(rShapeTransform);
+
+                const double fAspect(rBitmapSizePixel.getHeight()
+                    ? static_cast<double>(rBitmapSizePixel.getWidth()) / rBitmapSizePixel.getHeight()
+                    : 1.0);
+
+                constexpr double fMaxSize(3000.0);
+                double fHeight(std::min(fMaxSize, std::min(aShapeRange.getWidth(), aShapeRange.getHeight())));
+                double fWidth(fHeight * fAspect);
+
+                if (fWidth > aShapeRange.getWidth())
+                {
+                    fWidth = aShapeRange.getWidth();
+                    fHeight = fAspect > 0.0 ? fWidth / fAspect : fWidth;
+                }
+
+                basegfx::B2DHomMatrix aTransform;
+                aTransform.scale(fWidth, fHeight);
+                aTransform.translate(
+                    aShapeRange.getCenterX() - fWidth * 0.5,
+                    aShapeRange.getCenterY() - fHeight * 0.5);
+                return aTransform;
+            }
+        }
+
         Primitive2DReference MediaPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DContainer xRetval;
@@ -51,7 +106,17 @@ namespace drawinglayer::primitive2d
                 const GraphicObject aGraphicObject(maSnapshot);
                 const GraphicAttr aGraphicAttr;
                 xRetval.resize(2);
-                xRetval[1] = new GraphicPrimitive2D(getTransform(), aGraphicObject, aGraphicAttr);
+
+                if (isGenericMediaPlaceholder(maSnapshot))
+                {
+                    xRetval[1] = new GraphicPrimitive2D(
+                        createPlaceholderIconTransform(getTransform(), maSnapshot.GetSizePixel()),
+                        aGraphicObject, aGraphicAttr);
+                }
+                else
+                {
+                    xRetval[1] = new GraphicPrimitive2D(getTransform(), aGraphicObject, aGraphicAttr);
+                }
             }
 
             if(getDiscreteBorder())
