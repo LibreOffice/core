@@ -277,6 +277,11 @@ std::vector<OUString> SfxStyleSheetBase::GetStyleAliases() const
     return {};
 }
 
+bool SfxStyleSheetBase::IsHeadingStyle() const
+{
+    return false;
+}
+
 void SfxStyleSheetBase::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     tools::XmlWriter aWriter(pWriter);

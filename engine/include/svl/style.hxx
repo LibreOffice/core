@@ -185,6 +185,10 @@ public:
     /// than one alias, in the order they were imported.
     virtual std::vector<OUString> GetStyleAliases() const;
 
+    /// Whether this is a heading paragraph style (has an outline level).
+    /// False by default; paragraph style sheets override this.
+    virtual bool IsHeadingStyle() const;
+
     // Spotlight Id, @return -1 for style not in use
     virtual sal_Int32 GetSpotlightId();
 

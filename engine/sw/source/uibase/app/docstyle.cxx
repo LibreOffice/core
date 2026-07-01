@@ -772,6 +772,20 @@ void SwDocStyleSheet::SetStyleAliases(const std::vector<OUString>& rAliases)
     if (pFormat)
         pFormat->SetStyleAliases(rAliases);
 }
+
+bool SwDocStyleSheet::IsHeadingStyle() const
+{
+    if (nFamily != SfxStyleFamily::Para)
+        return false;
+
+    // Reuse the format the sheet already points at, only looking it up by name
+    // when it has not been resolved yet (and then remembering it).
+    SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
+    if (!m_pColl)
+        pThis->m_pColl = m_rDoc.FindTextFormatCollByName(UIName(aName));
+
+    return m_pColl && m_pColl->GetAttrOutlineLevel() > 0;
+}
 // virtual methods
 void SwDocStyleSheet::SetHidden( bool bValue )
 {

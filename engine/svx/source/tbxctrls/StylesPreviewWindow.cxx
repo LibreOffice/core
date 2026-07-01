@@ -619,11 +619,20 @@ OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescrip
 
 namespace
 {
+// The categories of the DOCX style pane format filter (w:stylePaneFormatFilter
+// in word/settings.xml). They select which styles Word shows in its Styles pane;
+// here they drive the paragraph style preview. "Recommended" is bVisibleStyles.
 struct StylePaneFormatFilter
 {
     bool bValid = false;
+    bool bAllStyles = false;
     bool bCustomStyles = false;
+    bool bLatentStyles = false;
     bool bStylesInUse = false;
+    bool bHeadingStyles = false;
+    bool bNumberingStyles = false;
+    bool bTableStyles = false;
+    bool bVisibleStyles = false;
 };
 
 StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
@@ -650,10 +659,22 @@ StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
 
         for (const auto& rProp : aFilterProps)
         {
-            if (rProp.Name == "customStyles")
+            if (rProp.Name == "allStyles")
+                rProp.Value >>= aFilter.bAllStyles;
+            else if (rProp.Name == "customStyles")
                 rProp.Value >>= aFilter.bCustomStyles;
+            else if (rProp.Name == "latentStyles")
+                rProp.Value >>= aFilter.bLatentStyles;
             else if (rProp.Name == "stylesInUse")
                 rProp.Value >>= aFilter.bStylesInUse;
+            else if (rProp.Name == "headingStyles")
+                rProp.Value >>= aFilter.bHeadingStyles;
+            else if (rProp.Name == "numberingStyles")
+                rProp.Value >>= aFilter.bNumberingStyles;
+            else if (rProp.Name == "tableStyles")
+                rProp.Value >>= aFilter.bTableStyles;
+            else if (rProp.Name == "visibleStyles")
+                rProp.Value >>= aFilter.bVisibleStyles;
         }
 
         aFilter.bValid = true;
@@ -709,7 +730,17 @@ void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBas
     if (!pPool)
         return;
 
-    lcl_AppendParaStyles(rAllStyles, pPool, SfxStyleSearchBits::Favourite);
+    // "All styles" shows every visible paragraph style; the other categories
+    // are subsets of it, so there is nothing left to add.
+    if (rFilter.bAllStyles)
+    {
+        lcl_AppendParaStyles(rAllStyles, pPool, SfxStyleSearchBits::AllVisible);
+        return;
+    }
+
+    // "Recommended" (visibleStyles) shows the styles flagged as favourites.
+    if (rFilter.bVisibleStyles)
+        lcl_AppendParaStyles(rAllStyles, pPool, SfxStyleSearchBits::Favourite);
 
     auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::AllVisible);
     for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
@@ -719,10 +750,18 @@ void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBas
             bInclude = true;
         if (rFilter.bStylesInUse && pStyle->IsUsed())
             bInclude = true;
+        if (rFilter.bHeadingStyles && pStyle->IsHeadingStyle())
+            bInclude = true;
 
         if (bInclude)
             lcl_AppendParaStyle(rAllStyles, *pStyle);
     }
+
+    // A paragraph style preview cannot show numbering or table styles. If the
+    // filter selected only those, fall back to the recommended styles so the
+    // control is not left empty.
+    if (rAllStyles.empty())
+        lcl_AppendParaStyles(rAllStyles, pPool, SfxStyleSearchBits::Favourite);
 }
 }
 
