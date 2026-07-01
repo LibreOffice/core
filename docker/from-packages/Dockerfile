@@ -10,7 +10,7 @@
 # manager; drop the '-minimal' suffix for the standard variant, which ships a
 # static busybox useful for debugging. Bump this as new releases appear, see
 # https://gitlab.opencode.de/oci-community/images/zendis/base
-ARG runtime_base="registry.opencode.de/oci-community/images/zendis/base:1.0.0-rc.2-minimal"
+ARG runtime_base="registry.opencode.de/oci-community/images/zendis/base:1.0.0-rc.6-minimal"
 
 # Metadata, applied to the final image (see the runtime stage below).
 ARG author
