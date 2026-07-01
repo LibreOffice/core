@@ -85,6 +85,7 @@
 #include <vector>
 
 #include <dirent.h>
+#include <dlfcn.h>
 #include <openssl/evp.h>
 #include <security/pam_appl.h>
 #include <sys/stat.h>
@@ -120,16 +121,60 @@ int functionConversation(int /*num_msg*/, const struct pam_message** /*msg*/,
     return PAM_SUCCESS;
 }
 
+// coolwsd does not link libpam; it is loaded on demand only when the admin
+// console is configured to use PAM (admin_console.enable_pam). On an image
+// that does not ship libpam (e.g. a hardened container), PAM authentication is
+// simply unavailable and the admin console uses the configured credentials.
+struct PamFunctions
+{
+    int (*start)(const char*, const char*, const struct pam_conv*, pam_handle_t**) = nullptr;
+    int (*authenticate)(pam_handle_t*, int) = nullptr;
+    int (*end)(pam_handle_t*, int) = nullptr;
+    bool loaded() const { return start && authenticate && end; }
+};
+
+const PamFunctions& getPamFunctions()
+{
+    static const PamFunctions functions = []() -> PamFunctions
+    {
+        PamFunctions fns;
+        void* lib = dlopen("libpam.so.0", RTLD_NOW | RTLD_LOCAL);
+        if (!lib)
+        {
+            LOG_ERR("Could not load libpam.so.0 for admin console PAM authentication: "
+                    << dlerror());
+            return fns;
+        }
+
+        fns.start = reinterpret_cast<decltype(fns.start)>(dlsym(lib, "pam_start"));
+        fns.authenticate = reinterpret_cast<decltype(fns.authenticate)>(dlsym(lib, "pam_authenticate"));
+        fns.end = reinterpret_cast<decltype(fns.end)>(dlsym(lib, "pam_end"));
+        if (!fns.loaded())
+            LOG_ERR("libpam.so.0 does not provide the expected symbols.");
+
+        return fns;
+    }();
+
+    return functions;
+}
+
 /// Use PAM to check for user / password.
 bool isPamAuthOk(const std::string& userProvidedUsr, const std::string& userProvidedPwd)
 {
+    const PamFunctions& pam = getPamFunctions();
+    if (!pam.loaded())
+    {
+        LOG_ERR("PAM authentication requested but libpam is not available.");
+        return false;
+    }
+
     struct pam_conv localConversation { functionConversation, nullptr };
     pam_handle_t *localAuthHandle = NULL;
     int retval;
 
     localConversation.appdata_ptr = const_cast<char *>(userProvidedPwd.c_str());
 
-    retval = pam_start("coolwsd", userProvidedUsr.c_str(), &localConversation, &localAuthHandle);
+    retval = pam.start("coolwsd", userProvidedUsr.c_str(), &localConversation, &localAuthHandle);
 
     if (retval != PAM_SUCCESS)
     {
@@ -137,7 +182,7 @@ bool isPamAuthOk(const std::string& userProvidedUsr, const std::string& userProv
         return false;
     }
 
-    retval = pam_authenticate(localAuthHandle, 0);
+    retval = pam.authenticate(localAuthHandle, 0);
 
     if (retval != PAM_SUCCESS)
     {
@@ -154,7 +199,7 @@ bool isPamAuthOk(const std::string& userProvidedUsr, const std::string& userProv
 
     LOG_INF("PAM authentication success for user \"" << userProvidedUsr << "\".");
 
-    retval = pam_end(localAuthHandle, retval);
+    retval = pam.end(localAuthHandle, retval);
 
     if (retval != PAM_SUCCESS)
     {

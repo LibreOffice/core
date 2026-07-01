@@ -1958,11 +1958,13 @@ fi
 AM_CONDITIONAL([ENABLE_SSL], [$ENABLE_SSL])
 AC_SUBST(ENABLE_SSL)
 
+dnl coolwsd does not link libpam; it dlopen's it on demand for the optional
+dnl admin-console PAM auth. Only the header is needed at build time (for the
+dnl PAM types); the library is not required and not linked.
 AS_IF([test "$mobile_app" != "true" -a "$host_os" != "emscripten"],
       [AC_CHECK_HEADERS([security/pam_appl.h],
                         [],
-                        [AC_MSG_ERROR([header security/pam_appl.h not found, install PAM development package])])
-       AC_CHECK_LIB(pam, pam_start, [], [AC_MSG_ERROR([No. Install PAM development package])])])
+                        [AC_MSG_ERROR([header security/pam_appl.h not found, install PAM development package])])])
 
 AC_MSG_CHECKING([whether to build with support public key])
 if test "x$with_support_public_key" != "x"; then
