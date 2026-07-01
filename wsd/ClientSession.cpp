@@ -1899,9 +1899,7 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
     if (!signatureCert.empty() || !signatureKey.empty() || !signatureCa.empty())
     {
         Poco::JSON::Object::Ptr upi;
-        if (!getUserPrivateInfo().empty())
-            JsonUtil::parseJSON(getUserPrivateInfo(), upi);
-        if (!upi)
+        if (getUserPrivateInfo().empty() || !JsonUtil::parseJSON(getUserPrivateInfo(), upi))
             upi = new Poco::JSON::Object();
         upi->set("SignatureCert", signatureCert);
         upi->set("SignatureKey", signatureKey);
