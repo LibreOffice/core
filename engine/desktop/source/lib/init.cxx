@@ -8419,15 +8419,36 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
 
 static bool initialize_uno(const OUString& aAppProgramURL)
 {
+    // Honor explicit overrides so that embedders (e.g. LibreOfficeKit
+    // consumers) can relocate fundamentalrc/unorc outside the install dir.
+    // Check the process environment directly first because initialize_uno is
+    // invoked before the rtl bootstrap has loaded any ini file.
+    const char* pBootstrapEnv = getenv("URE_BOOTSTRAP");
+    const bool bHasBootstrapOverride = pBootstrapEnv && *pBootstrapEnv;
 #ifdef IOS
-    // For iOS we already hardcode the inifile as "rc" in the .app directory.
-    rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("fundamental"));
-    xContext = cppu::defaultBootstrap_InitialComponentContext(aAppProgramURL + "/rc");
+    const char* pUnoIniEnv = getenv("URE_UNO_INI_URI");
+    const bool bHasUnoIniOverride = pUnoIniEnv && *pUnoIniEnv;
+    if (!bHasBootstrapOverride)
+    {
+        rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("fundamental"));
+    }
+    if (bHasUnoIniOverride)
+    {
+        // Fall through to the no-arg overload so that getUnoIniUri() (and
+        // thus the URE_UNO_INI_URI override) is honored.
+        xContext = cppu::defaultBootstrap_InitialComponentContext();
+    }
+    else
+    {
+        xContext = cppu::defaultBootstrap_InitialComponentContext(aAppProgramURL + "/rc");
+    }
 #elif defined MACOSX
-    rtl::Bootstrap::setIniFilename(aAppProgramURL + "/../Resources/" SAL_CONFIGFILE("soffice"));
+    if (!bHasBootstrapOverride)
+        rtl::Bootstrap::setIniFilename(aAppProgramURL + "/../Resources/" SAL_CONFIGFILE("soffice"));
     xContext = cppu::defaultBootstrap_InitialComponentContext();
 #else
-    rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("soffice"));
+    if (!bHasBootstrapOverride)
+        rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("soffice"));
     xContext = cppu::defaultBootstrap_InitialComponentContext();
 #endif
 

@@ -19,6 +19,8 @@
 
 
 #include <algorithm>
+#include <cstdlib>
+#include <cstring>
 #include <vector>
 
 #include <app.hxx>
@@ -69,22 +71,40 @@ static void configureUcb()
 void Desktop::InitApplicationServiceManager()
 {
     Reference<XMultiServiceFactory> sm;
+    // Honor an explicit URE_UNO_INI_URI override so embedders can relocate
+    // unorc outside the install dir. Falls back to the platform-specific
+    // hardcoded path when not set.
+    const char* pUnoIniEnv = getenv("URE_UNO_INI_URI");
+    if (pUnoIniEnv && *pUnoIniEnv)
+    {
+        OUString aUnoRc(pUnoIniEnv, strlen(pUnoIniEnv), RTL_TEXTENCODING_UTF8);
+        sm.set(
+            cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
+            UNO_QUERY_THROW);
+    }
+    else
 #ifdef ANDROID
-    OUString aUnoRc( "file:///assets/program/unorc" );
-    sm.set(
-        cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
-        UNO_QUERY_THROW);
+    {
+        OUString aUnoRc( "file:///assets/program/unorc" );
+        sm.set(
+            cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
+            UNO_QUERY_THROW);
+    }
 #elif defined(IOS)
-    OUString uri( "$APP_DATA_DIR" );
-    rtl_bootstrap_expandMacros( &uri.pData );
-    OUString aUnoRc("file://" + uri  + "/unorc");
-    sm.set(
-           cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
-           UNO_QUERY_THROW);
+    {
+        OUString uri( "$APP_DATA_DIR" );
+        rtl_bootstrap_expandMacros( &uri.pData );
+        OUString aUnoRc("file://" + uri  + "/unorc");
+        sm.set(
+               cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
+               UNO_QUERY_THROW);
+    }
 #else
-    sm.set(
-        cppu::defaultBootstrap_InitialComponentContext()->getServiceManager(),
-        UNO_QUERY_THROW);
+    {
+        sm.set(
+            cppu::defaultBootstrap_InitialComponentContext()->getServiceManager(),
+            UNO_QUERY_THROW);
+    }
 #endif
     comphelper::setProcessServiceFactory(sm);
 #if defined __EMSCRIPTEN__ && HAVE_EMBIND_UNO
