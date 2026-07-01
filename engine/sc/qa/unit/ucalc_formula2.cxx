@@ -349,6 +349,23 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testLambdaOptionalParameterFromOOXML)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testLambdaBuiltInValueFromOOXML)
+{
+    // OOXML passes a built-in function as a value with the _xleta. prefix. The
+    // lambda receives COUNT as a parameter and calls it on the array, so the
+    // result is the count of the elements.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetFormula(
+        ScAddress(0, 0, 0),
+        u"=_xlfn.LAMBDA(_xlpm.f, _xlpm.n, _xlpm.f(_xlpm.n))(_xleta.COUNT, {1,2,3,4})"_ustr,
+        formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testMapPerElementErrorIsolation)
 {
     // MAP gives one result per element, so an element whose lambda errors holds

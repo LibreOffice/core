@@ -3082,7 +3082,13 @@ Label_MaskStateMachine:
 
 bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
 {
-    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName));
+    OUString aName( rName );
+    // A built-in function passed as a value, rather than called in place, is
+    // written with the _xleta. prefix in OOXML. Strip it so the plain function
+    // name resolves.
+    if (mxSymbols->isOOXML() && rName.startsWithIgnoreAsciiCase(u"_xleta."))
+        aName = rName.copy(7);
+    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( aName));
     bool bFound = (iLook != mxSymbols->getHashMap().end());
     if (bFound)
     {
