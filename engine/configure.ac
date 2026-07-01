@@ -6366,6 +6366,25 @@ if test -z "$TARFILE_LOCATION" -a -n "$LODE_HOME" ; then
        TARFILE_LOCATION="$LODE_HOME/ext_tar"
    fi
 fi
+# In a linked git worktree with no explicit tarball location, reuse the main
+# worktree's tarball directory rather than downloading the large external
+# tarballs again for every worktree. The main worktree is the parent of the
+# shared git directory; the tarballs sit at the same subdirectory offset below
+# it that the source root sits below the git top level (the engine subtree in
+# the combined tree, or the top level itself in a standalone checkout).
+if test -z "$TARFILE_LOCATION" && git -C "$SRC_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    tarballs_gitdir=`git -C "$SRC_ROOT" rev-parse --absolute-git-dir 2>/dev/null`
+    tarballs_commondir=`git -C "$SRC_ROOT" rev-parse --path-format=absolute --git-common-dir 2>/dev/null`
+    if test -n "$tarballs_commondir" -a "x$tarballs_gitdir" != "x$tarballs_commondir"; then
+        tarballs_main_root=`dirname "$tarballs_commondir"`
+        tarballs_toplevel=`git -C "$SRC_ROOT" rev-parse --show-toplevel 2>/dev/null`
+        tarballs_offset=${SRC_ROOT#"$tarballs_toplevel"}
+        if test -d "$tarballs_main_root$tarballs_offset/external/tarballs"; then
+            TARFILE_LOCATION="$tarballs_main_root$tarballs_offset/external/tarballs"
+            AC_MSG_NOTICE([reusing main git worktree tarballs at $TARFILE_LOCATION])
+        fi
+    fi
+fi
 if test -z "$TARFILE_LOCATION"; then
     if test -d "$SRC_ROOT/src" ; then
         mv "$SRC_ROOT/src" "$SRC_ROOT/external/tarballs"
