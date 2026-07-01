@@ -421,6 +421,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (instance.isModalPopUp || instance.isDocumentAreaPopup || instance.isSnackbar)
 			window.L.DomUtil.addClass(instance.container, 'modalpopup');
 
+		if (instance.isMessageBox)
+			window.L.DomUtil.addClass(instance.container, 'messagebox');
+
 		if (instance.isAutofilter && !this.isChildAutoFilter(instance))
 			window.L.DomUtil.addClass(instance.container, 'autofilter-popup');
 
@@ -1027,6 +1030,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		instance.isSnackbar = e.data.type === 'snackbar';
 		instance.isDropdown = e.data.type === 'dropdown';
 		instance.isModalPopUp = e.data.type === 'modalpopup' || instance.isDropdown;
+		instance.isMessageBox = e.data.type === 'messagebox';
 		instance.snackbarTimeout = e.data.timeout;
 		instance.isOnlyChild = false;
 		instance.that = this;

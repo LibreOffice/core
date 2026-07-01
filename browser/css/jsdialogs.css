@@ -41,6 +41,11 @@
 	min-width: 400px;
 }
 
+.jsdialog-window.messagebox:not(.modalpopup) .jsdialog-container:not(.snackbar) {
+	min-width: 300px;
+	max-width: 380px;
+}
+
 @media (max-width: 480px) {
 
 	.jsdialog-window:not(.modalpopup) .jsdialog-container:not(.snackbar) {

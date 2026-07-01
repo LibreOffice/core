@@ -119,7 +119,7 @@ JSDialog.pushButton = function (
 	if (customCallback) {
 		pushbutton.onclick = customCallback;
 	} else if (builder._responses[data.id] !== undefined) {
-		pushbutton.onclick = builder.callback.bind(
+		const responseCallback = builder.callback.bind(
 			builder,
 			'responsebutton',
 			'click',
@@ -127,6 +127,11 @@ JSDialog.pushButton = function (
 			builder._responses[data.id],
 			builder,
 		);
+		pushbutton.onclick = function (ev: MouseEvent) {
+			pushbutton.setAttribute('disabled', 'true');
+			pushbutton.setAttribute('aria-disabled', 'true');
+			responseCallback(ev);
+		};
 	} else {
 		pushbutton.onclick = builder.callback.bind(
 			builder,
