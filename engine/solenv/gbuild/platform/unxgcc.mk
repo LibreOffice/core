@@ -233,17 +233,21 @@ endef
 gb_Library_DEFS :=
 gb_Library_SYSPRE := lib
 
+ifeq ($(OS_FOR_BUILD),MACOSX)
+gb_Library_PLAINEXT_FOR_BUILD := .dylib
+else
+gb_Library_PLAINEXT_FOR_BUILD := .so
+endif
+
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 
 gb_Library_PLAINEXT := .a
-gb_Library_PLAINEXT_FOR_BUILD := .so
 gb_Library_DLLEXT := .a
 
 else
 
 gb_Library_TARGETTYPEFLAGS := -shared -Wl,-z,noexecstack
 gb_Library_PLAINEXT := .so
-gb_Library_PLAINEXT_FOR_BUILD := .so
 gb_Library_DLLEXT := .so
 
 endif
