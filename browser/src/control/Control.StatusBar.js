@@ -63,7 +63,7 @@ class StatusBar extends JSDialog.Toolbar {
 		this._updateToolbarsVisibility(event.detail.context);
 	}
 
-	callback(objectType, eventType, object, data, builder) {
+	callback(objectType, eventType, object, data, /*builder*/) {
 		if (object.id === 'search-input' || object.id === 'search') {
 			// its handled by widget itself
 			return;
@@ -102,8 +102,6 @@ class StatusBar extends JSDialog.Toolbar {
 			this._openConfigMenu(targetBtn);
 			return;
 		}
-
-		this.builder._defaultCallbackHandler(objectType, eventType, object, data, builder);
 	}
 
 	onSearch(e) {
