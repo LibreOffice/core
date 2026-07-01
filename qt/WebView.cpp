@@ -52,6 +52,7 @@
 #include <QScreen>
 #include <QShortcut>
 #include <QStandardPaths>
+#include <QTemporaryDir>
 #include <QTimer>
 #include <QUrl>
 #include <QVariant>
@@ -63,7 +64,9 @@
 #include <QWebSocket>
 
 #include <algorithm>
+#include <cctype>
 #include <memory>
+#include <set>
 #include <utility>
 
 std::vector<WebView*> WebView::s_instances;
@@ -836,7 +839,7 @@ std::optional<bool> portalPrefersDark() {
     return std::nullopt;
 }
 
-void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode)
+void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, bool requiresSaveAs)
 {
     if (isStarterMode)
     {
@@ -864,6 +867,8 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode)
 
     assert(_bridge == nullptr);
     _bridge = new Bridge(channel, _document, _mainWindow, _webView.get());
+    if (requiresSaveAs)
+        _bridge->setRequiresSaveAs(true);
     channel->registerObject("bridge", _bridge);
     _webView->page()->setWebChannel(channel);
 
@@ -895,7 +900,9 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode)
 
     if (!isStarterMode)
     {
-        if (!newFile)
+        // A brand new file and a template-based document both open ready to edit;
+        // an existing file opens read-only until the user chooses to edit it.
+        if (!newFile && !requiresSaveAs)
             urlAndQuery.addQueryParameter("startreadonly", "true");
         if (_isWelcome)
             urlAndQuery.addQueryParameter("welcome", "true");
@@ -1032,6 +1039,61 @@ WebView* WebView::createNewDocument(QWebEngineProfile* profile, const std::strin
 
     // Add to recent files
     Application::getRecentFiles().add(newDocumentURI.toString());
+
+    return webViewInstance;
+}
+
+bool WebView::isTemplate(const std::string& fileName)
+{
+    // Document-template extensions across the formats we load: ODF, the older
+    // StarOffice formats, the OOXML templates and the older binary templates.
+    // Opening one of these creates a new document based on it rather than
+    // editing the template itself.
+    static const std::set<std::string> templateExtensions = {
+        // ODF templates
+        "ott", "ots", "otp", "otg", "otm",
+        // StarOffice templates
+        "stw", "stc", "sti", "std",
+        // OOXML templates
+        "dotx", "dotm", "xltx", "xltm", "potx", "potm",
+        // Older binary templates
+        "dot", "xlt", "pot",
+    };
+
+    std::string extension = Poco::Path(fileName).getExtension();
+    std::transform(extension.begin(), extension.end(), extension.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+    return templateExtensions.find(extension) != templateExtensions.end();
+}
+
+WebView* WebView::openTemplateAsNewDocument(QWebEngineProfile* profile,
+                                            const Poco::URI& templateURL)
+{
+    const QString templatePath = QString::fromStdString(templateURL.getPath());
+    const QString templateFileName = QString::fromStdString(Poco::Path(templateURL.getPath()).getFileName());
+
+    // Copy the template into a private temporary directory and load that copy,
+    // so nothing we do can write back to the original template file. The copy
+    // keeps the template's file name so the Save As dialog suggests it.
+    auto workingDir = std::make_unique<QTemporaryDir>();
+    if (!workingDir->isValid())
+    {
+        LOG_ERR("Failed to create a temporary directory for template " << templatePath.toStdString());
+        return nullptr;
+    }
+
+    const QString workingCopyPath = workingDir->filePath(templateFileName);
+    if (!QFile::copy(templatePath, workingCopyPath))
+    {
+        LOG_ERR("Failed to copy template " << templatePath.toStdString()
+                << " to working copy " << workingCopyPath.toStdString());
+        return nullptr;
+    }
+
+    Poco::URI workingCopyURI(Poco::Path(workingCopyPath.toStdString()));
+    WebView* webViewInstance = new WebView(profile, false);
+    webViewInstance->_templateWorkingDir = std::move(workingDir);
+    webViewInstance->load(workingCopyURI, false, false, true);
 
     return webViewInstance;
 }

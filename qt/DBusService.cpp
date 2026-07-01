@@ -13,6 +13,7 @@
 
 #include "DBusService.hpp"
 #include <qt/WebView.hpp>
+#include <qt/CodaConfig.hpp>
 #include <common/Log.hpp>
 #include <COKit/COKit.h>
 #include <qt/qt.hpp>
@@ -24,6 +25,7 @@
 #include <QDBusConnectionInterface>
 #include <QFile>
 #include <QFileInfo>
+#include <QMessageBox>
 #include <sys/xattr.h>
 
 constexpr const char* SERVICE_NAME = "com.collaboraoffice.Office";
@@ -62,6 +64,25 @@ namespace coda
         {
             const QString& file = files[i];
             Poco::URI fileURL(Poco::Path(file.toStdString()));
+
+            // A template opens as a new document based on it, unless the whole
+            // app is forced read-only, in which case there is nothing to save
+            // and we just open the template itself for viewing.
+            if (WebView::isTemplate(file.toStdString())
+                && !CodaConfig::instance().isForcedReadOnly())
+            {
+                WebView* templateDocument =
+                    WebView::openTemplateAsNewDocument(Application::getProfile(), fileURL);
+                if (!templateDocument)
+                {
+                    QMessageBox::warning(
+                        nullptr, QObject::tr("Template Error"),
+                        QObject::tr("Could not create a new document from this template."));
+                }
+                // A template is a source to start from, not a document the user
+                // edited, so it does not belong in the recent files list.
+                continue;
+            }
 
             // if document is already open, just activate it
             WebView* existingDocument = WebView::findOpenDocument(fileURL);

@@ -29,6 +29,7 @@ class QDragEnterEvent;
 class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
+class QTemporaryDir;
 class QUrl;
 
 namespace coda
@@ -110,12 +111,25 @@ public:
     CODAWebEngineView* webEngineView() { return _webView.get(); }
     QMainWindow* mainWindow() { return _mainWindow; }
 
-    void load(const Poco::URI& fileURL = Poco::URI(), bool newFile = false, bool isStarterMode = false);
+    // When requiresSaveAs is true the document opens editable and its first save
+    // is turned into a Save As, so the file at fileURL is never written to.
+    void load(const Poco::URI& fileURL = Poco::URI(), bool newFile = false,
+              bool isStarterMode = false, bool requiresSaveAs = false);
     void loadRemote(std::shared_ptr<coda::RemoteDocInfo> remoteInfo);
 
     // templatePath and basename can be empty strings and are optional.
     static WebView* createNewDocument(QWebEngineProfile* profile, const std::string& templateType,
                                       const std::string& templatePath, const std::string& baseName);
+
+    // True when the file name has a document-template extension (.ott, .xltx, ...).
+    static bool isTemplate(const std::string& fileName);
+
+    // Open a template as a fresh editable document. The template is copied to a
+    // temporary working file that is loaded instead of the original, and the
+    // first save is redirected to Save As. The original template is never
+    // modified. Returns nullptr if the working copy could not be created.
+    static WebView* openTemplateAsNewDocument(QWebEngineProfile* profile,
+                                              const Poco::URI& templateURL);
 
     static WebView* findOpenDocument(const Poco::URI& documentURI);
     static WebView* findStarterScreen();
@@ -166,6 +180,9 @@ private:
     coda::DocumentData _document;
     bool _isWelcome;
     Bridge* _bridge;
+    // Holds the temporary copy of a template while it is open as a new document,
+    // so the copy is removed when the window closes.
+    std::unique_ptr<QTemporaryDir> _templateWorkingDir;
 
     static std::vector<WebView*> s_instances;
 };

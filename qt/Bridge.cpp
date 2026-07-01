@@ -584,6 +584,10 @@ QVariant Bridge::cool(const QString& messageStr)
 
         LOG_TRC_NOFILE("loaddocument: switching to URL: " << newFileUrl);
 
+        // The document is now bound to a real file the user chose, so a plain
+        // save is no longer redirected to Save As.
+        _requiresSaveAs = false;
+
         // A different document gets its own retry budget for the case where it
         // too is still unloading from an earlier use.
         _docUnloadingRetries = 0;
@@ -1239,6 +1243,14 @@ QVariant Bridge::cool(const QString& messageStr)
         if (_window)
             QMetaObject::invokeMethod(
                 _window, "close", Qt::QueuedConnection);
+    }
+    else if (_requiresSaveAs && tokens.equals(0, "save"))
+    {
+        // The document was opened from a template and has no real file yet, so
+        // it loads from a temporary working copy. Turn the save into a Save As
+        // so the user picks a destination and format, and the working copy is
+        // never treated as the saved document.
+        saveDocumentAs();
     }
     else
     {
