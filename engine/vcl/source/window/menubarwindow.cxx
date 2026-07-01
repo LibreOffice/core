@@ -133,7 +133,6 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
 
     m_aCloseBtn->InsertItem(ToolBoxItemId(IID_DOCUMENTCLOSE), m_aCloseBtn->maImage);
     m_aCloseBtn->SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
-    m_aCloseBtn->AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
     m_aCloseBtn->SetQuickHelpText(ToolBoxItemId(IID_DOCUMENTCLOSE), VclResId(SV_HELPTEXT_CLOSEDOCUMENT));
 
     m_aFloatBtn->SetSymbol( SymbolType::FLOAT );
@@ -154,7 +153,6 @@ MenuBarWindow::~MenuBarWindow()
 
 void MenuBarWindow::dispose()
 {
-    m_aCloseBtn->RemoveEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
     RemoveEventListener(LINK(this, MenuBarWindow, ShowHideListener));
 
     mpParentPopup.disposeAndClear();
@@ -225,23 +223,6 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl, ToolBox *, void)
         // this avoids still being in the handler while the DecoToolBox already
         // gets destroyed
         Application::PostUserEvent(m_pMenu->GetCloseButtonClickHdl());
-    }
-}
-
-IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
-{
-    if( ! m_pMenu )
-        return;
-
-    MenuBarButtonCallbackArg aArg;
-    aArg.nId = 0xffff;
-    aArg.bHighlight = (rEvent.GetId() == VclEventId::ToolboxHighlight);
-    if( rEvent.GetId() == VclEventId::ToolboxHighlight )
-        aArg.nId =sal_uInt16(m_aCloseBtn->GetHighlightItemId());
-    else if( rEvent.GetId() == VclEventId::ToolboxHighlightOff )
-    {
-        auto nPos = static_cast<ToolBox::ImplToolItems::size_type>(reinterpret_cast<sal_IntPtr>(rEvent.GetData()));
-        aArg.nId = sal_uInt16(m_aCloseBtn->GetItemId(nPos));
     }
 }
 

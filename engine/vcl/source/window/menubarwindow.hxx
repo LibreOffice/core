@@ -88,7 +88,6 @@ private:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) override;
 
     DECL_LINK( CloseHdl, ToolBox*, void );
-    DECL_LINK( ToolboxEventHdl, VclWindowEvent&, void );
     DECL_LINK( ShowHideListener, VclWindowEvent&, void );
 
     void            StateChanged( StateChangedType nType ) override;
