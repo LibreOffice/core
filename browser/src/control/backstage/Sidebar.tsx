@@ -134,7 +134,9 @@ namespace BackstageTemplates {
             class="backstage-sidebar-icon"
             aria-hidden="true"
             dangerouslySetInnerHTML={
-              svgContent ? { __html: svgContent } : undefined
+              svgContent
+                ? { __html: app.LOUtil.sanitize(svgContent, 'svg') }
+                : undefined
             }
           />
         ) : null}
