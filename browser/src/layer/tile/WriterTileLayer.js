@@ -228,6 +228,13 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 			this._postMouseEvent('buttondown', this._savedCursorPos.center[0], this._savedCursorPos.center[1], 1, 1, 0);
 			this._postMouseEvent('buttonup', this._savedCursorPos.center[0], this._savedCursorPos.center[1], 1, 1, 0);
 			this._savedCursorPos = null;
+			// The full layout is back, so put the view on the saved offset now.
+			// Setting the flag makes the cursor update from the click above
+			// reaffirm this offset as its scroll.
+			if (this._savedScrollPos && app.activeDocument.activeLayout.type !== 'ViewLayoutMultiPage') {
+				this._restoringViewScroll = true;
+				app.activeDocument.activeLayout.scrollTo(this._savedScrollPos.pX1, this._savedScrollPos.pY1);
+			}
 		}
 	},
 });

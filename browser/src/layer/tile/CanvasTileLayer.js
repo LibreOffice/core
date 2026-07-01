@@ -3087,6 +3087,20 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return;
 		}
 
+		// While a reconnect view restore is pending, scroll straight to the
+		// saved offset and clear the pending state. The multipage layout's
+		// scrollTo expects a document point, not a viewport top-left, so there
+		// the normal cursor path below runs instead.
+		if (this._restoringViewScroll && this._savedScrollPos &&
+			app.activeDocument.activeLayout.type !== 'ViewLayoutMultiPage') {
+			app.activeDocument.activeLayout.scrollTo(this._savedScrollPos.pX1, this._savedScrollPos.pY1);
+			this._restoringViewScroll = false;
+			this._savedScrollPos = null;
+			this._updateCursorAndOverlay();
+			TextCursorSection.updateVisibilities();
+			return;
+		}
+
 		if (!app.file.textCursor.visible && !GraphicSelection.hasActiveSelection()) {
 			this._updateCursorAndOverlay();
 			TextCursorSection.updateVisibilities();

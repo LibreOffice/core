@@ -70,6 +70,10 @@ interface DocLayerInterface {
 
 	sheetGeometry?: cool.SheetGeometry;
 	_cellSelectionArea?: cool.SimpleRectangle;
+	// The view scroll offset saved at the start of a reconnect.
+	_savedScrollPos?: cool.SimpleRectangle;
+	// True while that saved offset still needs to be re-applied to the view.
+	_restoringViewScroll?: boolean;
 	scrollToPos(pos: InternPointLike): void;
 
 	_selectedPart: number;

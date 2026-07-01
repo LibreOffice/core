@@ -564,6 +564,12 @@ class Socket {
 		app.idleHandler._serverRecycling = false;
 
 		if (this._map._docLayer) {
+			// Remember the scroll offset before teardown changes the layout,
+			// so a reconnect can put the view back where it was.
+			if (app.activeDocument)
+				this._map._docLayer._savedScrollPos =
+					app.activeDocument.activeLayout.viewedRectangle.clone();
+			this._map._docLayer._restoringViewScroll = false;
 			this._map._docLayer.removeAllViews();
 			this._map._docLayer._resetClientVisArea();
 			if (GraphicSelection.hasActiveSelection())
