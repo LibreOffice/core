@@ -88,10 +88,10 @@ window.L.Control.Tabs = window.L.Control.extend({
 				_image: 'DuplicateSheet',
 			},
 			'.uno:Protect': {
-				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Protect', 'spreadsheet', true), 'Spreadsheet_protected'),
+				name: app.IconUtil.createMenuItemLink(_UNO('.uno:Protect', 'spreadsheet', true), 'Protect'),
 				isHtmlName: true,
 				callback: (this._protectSheet).bind(this),
-				_image: 'Spreadsheet_protected',
+				_image: 'Protect',
 				_checked: function() { return this._isProtectedSheet(this._tabForContextMenu); }.bind(this),
 			},
 			'.uno:SetTabBgColor': {
