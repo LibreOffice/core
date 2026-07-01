@@ -492,7 +492,7 @@ public:
     FormulaToken* AddToken( const FormulaToken& );
 
     FormulaToken* AddString( const svl::SharedString& rStr );
-    FormulaToken* AddStringName( const svl::SharedString& rStr );
+    FormulaToken* AddStringName(const svl::SharedString& rString, bool bOptional = false);
     FormulaToken* AddDPFieldName( const svl::SharedString& rStr );
     FormulaToken* AddDouble( double fVal );
     void          AddExternal( const sal_Unicode* pStr );

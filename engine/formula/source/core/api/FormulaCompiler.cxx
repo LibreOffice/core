@@ -676,6 +676,11 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
         {
             switch (eOp)
             {
+                // The _xlpm. and _xlop. prefixes both introduce a lambda
+                // parameter name. Keep the first spelling for output and
+                // register the rest as recognized aliases for input.
+                case ocStringName:
+                break;
                 // These OpCodes are meant to overwrite and also remove an
                 // existing mapping.
                 case ocCurrency:
@@ -2929,6 +2934,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
 {
     bool bNext = true;
     bool bSpaces = false;
+    bool bCloseOptionalParam = false;
     const FormulaToken* t = pTokenP;
     OpCode eOp = t->GetOpCode();
     if( eOp >= ocAnd && eOp <= ocOr )
@@ -3043,6 +3049,24 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             rBuffer.append(mxSymbols->getSymbol(ocErrRef));
         else if (maArrIterator.PeekNext() && maArrIterator.PeekNext()->GetOpCode() == ocOpen)
             rBuffer.append(mxSymbols->getSymbol(eOp));
+    }
+    else if (eOp == ocStringName)
+    {
+        // A lambda parameter. An optional parameter, whose byte is set, takes
+        // the _xlop. prefix in OOXML and is wrapped in square brackets in the
+        // other grammars. A required parameter or a body reference takes the
+        // grammar's plain prefix, which is _xlpm. for the formats that use one
+        // and empty otherwise.
+        const bool bOptional = static_cast<const FormulaStringOpToken*>(t)->GetByte() != 0;
+        if (bOptional && FormulaGrammar::isOOXML(meGrammar))
+            rBuffer.append(u"_xlop.");
+        else if (bOptional)
+        {
+            rBuffer.append(mxSymbols->getSymbol(ocTableRefOpen));
+            bCloseOptionalParam = true;
+        }
+        else
+            rBuffer.append(mxSymbols->getSymbol(ocStringName));
     }
     else if( static_cast<sal_uInt16>(eOp) < mxSymbols->getSymbolCount())        // Keyword:
         rBuffer.append(mxSymbols->getSymbol(eOp));
@@ -3177,6 +3201,8 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             } // of switch
         }
     }
+    if (bCloseOptionalParam)
+        rBuffer.append(mxSymbols->getSymbol(ocTableRefClose));
     if( bSpaces )
         rBuffer.append( ' ');
     if ( bAllowArrAdvance )

@@ -803,9 +803,9 @@ FormulaToken* FormulaTokenArray::AddString( const svl::SharedString& rStr )
     return Add( new FormulaStringToken( rStr ) );
 }
 
-FormulaToken* FormulaTokenArray::AddStringName( const svl::SharedString& rStr )
+FormulaToken* FormulaTokenArray::AddStringName(const svl::SharedString& rString, bool bOptional)
 {
-    return Add( new FormulaStringNameToken( svStringName, rStr ) );
+    return Add(new FormulaStringNameToken(svStringName, rString, bOptional));
 }
 
 FormulaToken* FormulaTokenArray::AddDPFieldName( const svl::SharedString& rStr )

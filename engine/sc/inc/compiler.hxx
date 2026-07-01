@@ -301,6 +301,8 @@ private:
     bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
     bool        mbRefConventionChartOOXML;  // whether to use special ooxml chart syntax in case of OOXML reference convention,
                                             // when parsing a formula string. [0]!GlobalNamedRange, LocalSheet!LocalNamedRange
+    bool mbOptionalLocalName = false; // true when the local name just resolved was a LAMBDA optional
+                                      // parameter, written with the _xlop. prefix instead of _xlpm.
     std::vector<sal_uInt16> maExternalFiles;
 
     std::vector<OUString> maTabNames;                /// sheet names mangled for the current grammar for output

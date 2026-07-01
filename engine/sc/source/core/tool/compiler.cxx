@@ -3892,8 +3892,18 @@ bool ScCompiler::ParseLocalName( const OUString& aOrg )
     if (!maBindings.empty() && !aOrg.isEmpty())
     {
         OUString aName = aOrg;
+        // A required parameter carries the _xlpm. prefix and an optional one
+        // the _xlop. prefix. The body always uses the _xlpm. prefix. Strip
+        // either so the declaration and body share the bare name, and note if
+        // the parameter is optional.
+        bool bOptional = false;
         if (aOrg.startsWithIgnoreAsciiCase(u"_xlpm."))
             aName = aName.copy(6);
+        else if (aOrg.startsWithIgnoreAsciiCase(u"_xlop."))
+        {
+            aName = aName.copy(6);
+            bOptional = true;
+        }
 
         bool bSearch = true;
         if (mIsInBinding)
@@ -3938,6 +3948,7 @@ bool ScCompiler::ParseLocalName( const OUString& aOrg )
 
         svl::SharedString aSS = rDoc.GetSharedStringPool().intern(aName);
         maRawToken.SetStringName(aSS.getData(), aSS.getDataIgnoreCase());
+        mbOptionalLocalName = bOptional;
         return true;
     }
     return false;
@@ -5413,6 +5424,12 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             }
         }
         FormulaToken* pNewToken = static_cast<ScTokenArray*>(mpArr)->Add( maRawToken.CreateToken(rDoc.GetSheetLimits()));
+        // A lambda parameter written with the _xlop. prefix is optional. Its
+        // byte records that, keeping an optional parameter distinct from a
+        // required _xlpm. one.
+        if (pNewToken && mbOptionalLocalName && pNewToken->GetOpCode() == ocStringName)
+            static_cast<FormulaStringOpToken*>(pNewToken)->SetByte(1);
+        mbOptionalLocalName = false;
         if (!pNewToken && eOp == ocArrayClose && mpArr->OpCodeBefore( mpArr->GetLen()) == ocArrayClose)
         {
             // Nested inline array or non-value/non-string in array. The
@@ -5565,7 +5582,10 @@ ScRangeData* ScCompiler::GetRangeData( const FormulaIndexToken& rToken ) const
 bool ScCompiler::HandleStringName()
 {
     ScTokenArray* pNew = new ScTokenArray(rDoc);
-    pNew->AddStringName(static_cast<FormulaStringToken*>(mpToken.get())->GetString());
+    // The byte carries the optional marker set when an _xlop. lambda parameter
+    // was parsed, so the parameter name keeps that property in the code.
+    const bool bOptional = static_cast<FormulaStringOpToken*>(mpToken.get())->GetByte() != 0;
+    pNew->AddStringName(static_cast<FormulaStringToken*>(mpToken.get())->GetString(), bOptional);
     PushTokenArray(pNew, true);
     return GetToken();
 }

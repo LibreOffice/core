@@ -307,6 +307,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "COM.MICROSOFT.REDUCE" , ocReduce },
     { "COM.MICROSOFT.SCAN" , ocScan },
     { "_xlpm." , ocStringName },
+    { "_xlop." , ocStringName },
     { "ORG.OPENOFFICE.MULTIRANGE" , ocMultiArea }, // legacy for range list (union)
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },
@@ -789,6 +790,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "_xlfn.REDUCE" , ocReduce },
     { "_xlfn.SCAN" , ocScan },
     { "_xlpm." , ocStringName },
+    { "_xlop." , ocStringName },
     { "_xlfn.ORG.OPENOFFICE.MULTIRANGE" , ocMultiArea }, // legacy for range list (union)
     { "OFFSET" , ocOffset },
     { "INDEX" , ocIndex },
