@@ -1811,7 +1811,7 @@ void SwRangeRedline::InvalidateRange(Invalidation const eWhy)
             pNd->TriggerNodeUpdate(sw::UpdateAttrHint(&aHt, &aHt));
 
             // SwUpdateAttr must be handled first, otherwise indexes are off
-            if (GetType() == RedlineType::Delete)
+            if (GetTypeIgnoringAdditonalFormat() == RedlineType::Delete)
             {
                 sal_Int32 const nStart(n == nSttNd ? nSttCnt : 0);
                 sal_Int32 const nLen((n == nEndNd ? nEndCnt : pNd->GetText().getLength()) - nStart);

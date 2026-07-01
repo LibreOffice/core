@@ -1964,6 +1964,49 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testAutocorrectSingleQuoteUndo)
     CPPUNIT_ASSERT_EQUAL(u"ce"_ustr, getText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testHiddenRedlineDeleteWordUndo)
+{
+    // Deleting a word that sits inside an existing tracked formatting change,
+    // with change tracking on but tracked changes hidden, then undoing the
+    // deletion must show the word again in the layout.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwDoc* pDoc = getSwDoc();
+
+    pWrtShell->Insert(u"foo Gegenstand bar"_ustr);
+
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // A tracked formatting change over the whole paragraph, so deleting the
+    // word later splits that change into three parts.
+    pWrtShell->SelAll();
+    dispatchCommand(mxComponent, u".uno:Bold"_ustr, {});
+
+    dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    // Select the word "Gegenstand" ("foo " is 4 characters, the word is 10).
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 10, /*bBasicCall=*/false);
+
+    auto bWordShown = [this]() {
+        return countXPathNodes(parseLayoutDump(), "//*[contains(@portion,'Gegenstand')]") > 0;
+    };
+    CPPUNIT_ASSERT(bWordShown());
+
+    dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
+    // With the tracked deletion hidden, the word is no longer rendered.
+    CPPUNIT_ASSERT(!bWordShown());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    // Undo removes the deletion, so the word is rendered again without having
+    // to toggle the display of tracked changes. Before the fix the merged
+    // paragraph kept its stale extents and the word stayed hidden.
+    CPPUNIT_ASSERT(bWordShown());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
