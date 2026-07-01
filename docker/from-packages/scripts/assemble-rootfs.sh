@@ -52,10 +52,12 @@ BUILD_ONLY="libcap2-bin ca-certificates adduser fontconfig cpio"
 # reads /etc/fonts at runtime, and systemplate copies it into the jail.
 BUNDLED_OR_UNUSED="libfontconfig1 libfreetype6 libpng16-16t64 libexpat1 libbrotli1 openssl libpam-cap fonts-dejavu-core fonts-dejavu-mono"
 
-# Shared libraries the base image is known to provide (glibc and openssl). A
-# needed library matching this is considered covered even if we do not ship it.
-# Everything else (zlib, fontconfig, freetype, ...) must be shipped.
-BASE_LIB_RE='/(ld-linux-x86-64|ld-linux|libc|libm|libdl|libpthread|librt|libresolv|libutil|libnsl|libnss_[a-z]+|libcrypt|libssl|libcrypto)\.so'
+# Shared-library sonames the base image provides (from its
+# /usr/lib/x86_64-linux-gnu). A needed library whose soname matches is covered
+# even if we do not ship it; anything else we must ship (e.g. libstdc++,
+# libcap). Keep this in sync with the base image. This checks only that a
+# library is present, not that it is glibc-ABI-compatible with the base.
+BASE_PROVIDES_RE='^(ld-linux-x86-64|libc|libc_malloc_debug|libm|libmvec|libdl|libpthread|librt|libresolv|libutil|libnsl|libnss_[a-z]+|libanl|libBrokenLocale|libthread_db|libssl|libcrypto|libz|libgcc_s|libzstd)\.so'
 
 echo "=== Working out which packages the Collabora install added ==="
 dpkg-query -W -f '${Package}\n' | sort > /tmp/pkgs.after
@@ -114,34 +116,39 @@ sort -u "$FILELIST" -o "$FILELIST"
 grep -vE '^/(bin|sbin|lib|lib64)$' "$FILELIST" > "$FILELIST.nomerge"
 mv "$FILELIST.nomerge" "$FILELIST"
 
-echo "=== Verifying the dependency closure ==="
-# Builder-side ldd resolves against the builder (which has everything), so it
-# cannot tell us a library is missing from the base image. Instead, flag any
-# needed library that is neither shipped nor known to be base-provided; those
-# are the ones to double-check against the base image.
-uncovered=$(
+echo "=== Verifying the runtime library closure ==="
+# Every shared library our binaries need (via ldd) must be either shipped
+# (present in the file list) or provided by the base image; otherwise it will
+# be missing at runtime on the base (as libpam was: it lives in the Debian
+# builder's base, excluded from the diff, and the base does not carry it).
+# Compare by soname (basename) so /lib vs /usr/lib aliasing does not matter,
+# and fail the build on any gap.
+shipped_sonames=$(sed 's#.*/##' "$FILELIST" | sort -u)
+missing=$(
     while read -r f; do
         case "$f" in
             *.so | *.so.* | */bin/* | */sbin/* | */program/*) ;;
             *) continue ;;
         esac
+        [ -f "$f" ] || continue
         ldd "$f" 2>/dev/null
     done < "$FILELIST" \
-        | awk '/=>/ && $3 ~ /^\// { print $3 }' \
+        | awk '/=>/ { print $1 } /not found/ { print $1 }' \
         | sort -u \
-        | while read -r lib; do
-            grep -qxF "$lib" "$FILELIST" && continue
-            printf '%s\n' "$lib" | grep -Eq "$BASE_LIB_RE" && continue
-            printf '%s\n' "$lib"
-          done
+        | while read -r soname; do
+            case "$soname" in '' | */*) continue ;; esac
+            printf '%s\n' "$shipped_sonames" | grep -qxF "$soname" && continue
+            printf '%s\n' "$soname" | grep -Eq "$BASE_PROVIDES_RE" && continue
+            printf '%s\n' "$soname"
+          done | sort -u
 )
-if [ -n "$uncovered" ]; then
-    echo "WARNING: needed libraries that are neither shipped nor known base-provided:"
-    printf '%s\n' "$uncovered" | sed 's/^/  /'
-    echo "Confirm the base image provides them; otherwise ship their package."
-else
-    echo "OK: every needed library is shipped or provided by the base image."
+if [ -n "$missing" ]; then
+    echo "FATAL: libraries needed at runtime but neither shipped nor provided by the base image:" >&2
+    printf '%s\n' "$missing" | sed 's/^/  /' >&2
+    echo "Ship the providing package, or - if the base image provides it - add the soname to BASE_PROVIDES_RE." >&2
+    exit 1
 fi
+echo "OK: every needed library is shipped or provided by the base image."
 
 echo "=== Copying into $ROOTFS ==="
 # Re-assert the file capabilities on the binaries so the copy carries them.
