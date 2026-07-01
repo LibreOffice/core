@@ -31,23 +31,21 @@
 #include <limits.h>
 #include "file_url.hxx"
 
-static bool getModulePathFromAddress(void * address, rtl_String ** path)
+#include <optional>
+
+static std::optional<OString> getModulePathFromAddress(void* address)
 {
-    bool result = false;
+    std::optional<OString> oPath;
 #if HAVE_UNIX_DLAPI
     Dl_info dl_info;
-
-    result = dladdr(address, &dl_info) != 0;
-
-    if (result)
+    if (dladdr(address, &dl_info) != 0)
     {
-        rtl_string_newFromStr(path, dl_info.dli_fname);
+        oPath = OString(dl_info.dli_fname);
     }
 #else
     (void) address;
-    (void) path;
 #endif
-    return result;
+    return oPath;
 }
 
 #ifndef DISABLE_DYNLOADING
@@ -117,25 +115,17 @@ oslModule osl_loadModuleRelativeAscii(
     if (relativePath[0] == '/') {
         return osl_loadModuleAscii(relativePath, mode);
     }
-    rtl_String * path = nullptr;
-    rtl_String * suffix = nullptr;
     oslModule module;
-    if (!getModulePathFromAddress(
-            reinterpret_cast< void * >(baseModule), &path))
-    {
+    std::optional<OString> oPath = getModulePathFromAddress(reinterpret_cast<void*>(baseModule));
+    if (!oPath.has_value())
         return nullptr;
-    }
-    rtl_string_newFromStr_WithLength(
-        &path, path->buffer,
-        (rtl_str_lastIndexOfChar_WithLength(path->buffer, path->length, '/')
-         + 1));
+
+    OString sPath = oPath->copy(0, oPath->lastIndexOf('/') + 1);
+
         /* cut off everything after the last slash; should the original path
            contain no slash, the resulting path is the empty string */
-    rtl_string_newFromStr(&suffix, relativePath);
-    rtl_string_newConcat(&path, path, suffix);
-    rtl_string_release(suffix);
-    module = osl_loadModuleAscii(path->buffer, mode);
-    rtl_string_release(path);
+    sPath += relativePath;
+    module = osl_loadModuleAscii(sPath.getStr(), mode);
     return module;
 }
 
@@ -250,12 +240,12 @@ osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
 {
     bool result = false;
-    rtl_String * path = nullptr;
-    if (getModulePathFromAddress(addr, &path))
+    std::optional<OString> oPath = getModulePathFromAddress(addr);
+    if (oPath.has_value())
     {
         rtl_string2UString(ppLibraryUrl,
-                           path->buffer,
-                           path->length,
+                           oPath->getStr(),
+                           oPath->getLength(),
                            osl_getThreadTextEncoding(),
                            OSTRING_TO_OUSTRING_CVTFLAGS);
 
@@ -276,7 +266,6 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
                     << OUString::unacquired(ppLibraryUrl) << ") failed with " << e);
             result = false;
         }
-        rtl_string_release(path);
     }
     return result;
 }
