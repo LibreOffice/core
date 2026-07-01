@@ -223,12 +223,20 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexTitleXLSX_paretoLine)
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
+    OString sSeriesBase = "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series"_ostr;
     // A pareto chart from MSO really consists of two subcharts: a pareto line
     // and a clustered column chart.
-    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 2, 0,
-                "layoutId", u"clusteredColumn");
-    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series", 2, 1,
-                "layoutId", u"paretoLine");
+
+    // First series: clusteredColumn with its own dataId, no ownerIdx.
+    assertXPath(pXmlDoc, sSeriesBase, 2, 0, "layoutId", u"clusteredColumn");
+    assertXPathNoAttribute(pXmlDoc, sSeriesBase + "[1]", "ownerIdx");
+    assertXPath(pXmlDoc, sSeriesBase + "[1]/cx:dataId", "val", u"0");
+
+    // Second series: paretoLine sharing the first series's data.
+    assertXPath(pXmlDoc, sSeriesBase, 2, 1, "layoutId", u"paretoLine");
+    assertXPath(pXmlDoc, sSeriesBase + "[2]", "ownerIdx", u"0");
+    assertXPath(pXmlDoc, sSeriesBase + "[2]/cx:dataId", 0);
+
     assertXPathContent(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:tx/cx:txData/cx:v",
                        u"ParetoLine");
 }

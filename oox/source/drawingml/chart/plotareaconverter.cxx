@@ -451,6 +451,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel,
 
                             // There should be one cat axis and one val axis
                             assert((bCatNotVal0 && !bCatNotVal1) || (!bCatNotVal0 && bCatNotVal1));
+
                         } else {
                             // more than two axes: don't know what to do with this
                             assert(false);

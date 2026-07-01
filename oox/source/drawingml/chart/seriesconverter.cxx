@@ -1042,6 +1042,14 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
             comphelper::containerToSequence(mrModel.maAxisIds));
     }
 
+    // Chartex only: preserve cx:series/@ownerIdx so export emits the same
+    // attribute and suppresses cx:dataId for this series.
+    if (mrModel.monOwnerIdx.has_value())
+    {
+        aSeriesProp.setProperty(PROP_ChartexOwnerIdx,
+            mrModel.monOwnerIdx.value());
+    }
+
     return xDataSeries;
 }
 

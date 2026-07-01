@@ -251,6 +251,12 @@ struct SeriesModel
     std::vector<sal_Int32>
                         maAxisIds;          /// List of axis identifiers used
                                             // (Only used by chartex)
+    std::optional<sal_Int32>
+                        monOwnerIdx;        /// cx:series/@ownerIdx (chartex):
+                                            /// zero-based index of the series
+                                            /// in the same plotAreaRegion whose
+                                            /// data this series shares. When
+                                            /// set, no cx:dataId is emitted.
 
     explicit            SeriesModel(bool bMSO2007Doc, sal_Int32 nTypeId = -1);
                         ~SeriesModel();

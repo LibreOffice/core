@@ -4190,7 +4190,28 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
         if( xSource.is())
         {
             FSHelperPtr pFS = GetFS();
-            pFS->startElement(FSNS(XML_cx, XML_series), XML_layoutId, sTypeName);
+
+            // Chartex only: a series may share data with another series in the
+            // same plotAreaRegion via cx:series/@ownerIdx. When present, the
+            // schema requires that no cx:dataId child be emitted.
+            std::optional<sal_Int32> oOwnerIdx;
+            {
+                Reference<beans::XPropertySet> xSeriesProp(rSeries, uno::UNO_QUERY);
+                if (xSeriesProp.is())
+                {
+                    uno::Any aVal = xSeriesProp->getPropertyValue(
+                        u"ChartexOwnerIdx"_ustr);
+                    sal_Int32 nVal = 0;
+                    if (aVal >>= nVal)
+                        oOwnerIdx = nVal;
+                }
+            }
+
+            pFS->startElement(FSNS(XML_cx, XML_series),
+                    XML_layoutId, sTypeName,
+                    XML_ownerIdx, oOwnerIdx.has_value()
+                        ? OString::number(*oOwnerIdx)
+                        : std::optional<OString>());
 
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
@@ -4251,9 +4272,14 @@ void ChartExport::exportSeries_chartex( const Reference<chart2::XChartType>& xCh
             }
 
             // dataId links to the correct data set in the <cx:chartData>. See
-            // DATA_ID_COMMENT
-            pFS->singleElement(FSNS(XML_cx, XML_dataId), XML_val,
-                    OString::number(nSeriesCnt++));
+            // DATA_ID_COMMENT. When the series uses ownerIdx, it shares the
+            // owner series's data and no dataId is emitted; keep nSeriesCnt
+            // aligned with the chartData entries by not incrementing it.
+            if (!oOwnerIdx.has_value())
+            {
+                pFS->singleElement(FSNS(XML_cx, XML_dataId), XML_val,
+                        OString::number(nSeriesCnt++));
+            }
 
             // layoutPr
             // Maybe factor this into another function. TODO
