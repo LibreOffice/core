@@ -55,6 +55,9 @@
 
 #include <math.h>
 #include <memory>
+#include <comphelper/kit.hxx>
+#include <tools/json_writer.hxx>
+#include <COKit/COKitEnums.h>
 
 using namespace formula;
 
@@ -396,6 +399,24 @@ void ScValidationData::DoError(weld::Window* pParent, const OUString& rInput, co
     OUString aMessage = aErrorMessage;
     if (aMessage.isEmpty())
         aMessage = ScResId( STR_VALID_DEFERROR );
+
+    if (eErrorStyle == SC_VALERR_STOP && comphelper::COKit::isActive())
+    {
+        callback(true);
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell)
+        {
+            tools::JsonWriter aJson;
+            aJson.put("commandName", "CalcValidationStop");
+            {
+                const auto aState = aJson.startNode("state");
+                aJson.put("title", aErrorTitle.toUtf8());
+                aJson.put("message", aMessage.toUtf8());
+            }
+            pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aJson.finishAndGetAsOString());
+        }
+        return;
+    }
 
     VclButtonsType eStyle = VclButtonsType::Ok;
     VclMessageType eType = VclMessageType::Error;

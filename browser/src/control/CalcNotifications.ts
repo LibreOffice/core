@@ -18,6 +18,11 @@ interface CalcRefErrorState {
 	cellAddress: string;
 }
 
+interface CalcValidationStopState {
+	title: string; // user-set title from the Error Alert tab; empty string when the user left it blank
+	message: string;
+}
+
 class CalcNotifications {
 	private map: any;
 
@@ -33,6 +38,8 @@ class CalcNotifications {
 			this.map.uiManager.closeSnackbar();
 		} else if (e.commandName === 'CalcExpandRefsSkipped') {
 			this.onCalcExpandRefsSkipped();
+		} else if (e.commandName === 'CalcValidationStop') {
+			this.onCalcValidationStop(e.state);
 		}
 	}
 
@@ -40,6 +47,14 @@ class CalcNotifications {
 		this.map.uiManager.showSnackbar(
 			_('A formula range was not extended to include the inserted cells.'),
 		);
+	}
+
+	private onCalcValidationStop(state: CalcValidationStopState): void {
+		if (!state) return;
+		const label = state.title
+			? state.title + ': ' + state.message
+			: state.message;
+		this.map.uiManager.showSnackbar(label, null, null, 6000, false, true);
 	}
 
 	private onCalcRefError(state: CalcRefErrorState): void {
