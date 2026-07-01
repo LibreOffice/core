@@ -128,8 +128,12 @@ namespace
     {
         const char *varName = "QTWEBENGINE_CHROMIUM_FLAGS";
         std::string val = (getenv(varName) ? getenv(varName) : "");
-        // avoiding a crasher bug around check-box state emission for now cool#14039
-        val = "--disable-renderer-accessibility --force-renderer-accessibility=false " + val;
+        // cool#14039: renderer accessibility triggers a check-box state crash, so
+        // it is disabled unless QT_ACCESSIBILITY=1 (e.g. for screen-reader / Orca
+        // testing).
+        const char *a11y = getenv("QT_ACCESSIBILITY");
+        if (!a11y || std::strcmp(a11y, "1") != 0)
+            val = "--disable-renderer-accessibility --force-renderer-accessibility=false " + val;
         setenv(varName, val.c_str(), 1);
     }
 } // namespace
