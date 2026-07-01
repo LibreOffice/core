@@ -291,7 +291,9 @@ inline std::string_view encodeId(char* buffer, std::size_t size, const std::uint
         buffer[outIndex++] = Hex[nibble];
     }
 
-    while (bits > 0)
+    // Each pass consumes a full byte, so enter only when at least 8 bits
+    // remain. The shift amount below then stays in the range 0 to 56.
+    while (bits >= 8)
     {
         bits -= 8;
         const auto byte = static_cast<unsigned char>((number >> bits) & 0xff);
