@@ -1080,13 +1080,6 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_noto_serif_lao \
 		fonts_reem \
 		fonts_scheherazade \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_agdasima,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_bacasime_antique,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_belanosima,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_caprasimo,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_lugrasimo,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_lumanosimo,) \
-		$(if $(WITH_DOCREPAIR_FONTS),fonts_lunasima,) \
 	) \
 ))
 

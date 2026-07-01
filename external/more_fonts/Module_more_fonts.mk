@@ -36,13 +36,6 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_noto_serif_lao \
 	ExternalPackage_reem \
 	ExternalPackage_scheherazade \
-	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_agdasima,) \
-	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_bacasime_antique,) \
-	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_belanosima,) \
-	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_caprasimo,) \
-	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_lugrasimo,) \
-	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_lumanosimo,) \
-	$(if $(WITH_DOCREPAIR_FONTS),ExternalPackage_lunasima,) \
 	UnpackedTarball_alef \
 	UnpackedTarball_amiri \
 	UnpackedTarball_caladea \
@@ -69,13 +62,6 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_noto_serif_lao \
 	UnpackedTarball_reem \
 	UnpackedTarball_scheherazade \
-	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_agdasima,) \
-	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_bacasime_antique,) \
-	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_belanosima,) \
-	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_caprasimo,) \
-	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_lugrasimo,) \
-	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_lumanosimo,) \
-	$(if $(WITH_DOCREPAIR_FONTS),UnpackedTarball_lunasima,) \
 ))
 
 # vim: set noet sw=4 ts=4:
