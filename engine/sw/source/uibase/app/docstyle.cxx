@@ -726,6 +726,52 @@ void SwDocStyleSheet::GetGrabBagItem(cpo::uno::Any& rVal) const
             break;
     }
 }
+
+std::vector<OUString> SwDocStyleSheet::GetStyleAliases() const
+{
+    // Reuse the format the sheet already points at. Only when it has not been
+    // resolved yet do we look it up by name, and then remember it so repeated
+    // reads on the same sheet do not scan the format table again.
+    SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
+    const SwFormat* pFormat = nullptr;
+    switch (nFamily)
+    {
+        case SfxStyleFamily::Char:
+            if (!m_pCharFormat)
+                pThis->m_pCharFormat = m_rDoc.FindCharFormatByName(UIName(aName));
+            pFormat = m_pCharFormat;
+            break;
+        case SfxStyleFamily::Para:
+            if (!m_pColl)
+                pThis->m_pColl = m_rDoc.FindTextFormatCollByName(UIName(aName));
+            pFormat = m_pColl;
+            break;
+        default:
+            break;
+    }
+    return pFormat ? pFormat->GetStyleAliases() : std::vector<OUString>();
+}
+
+void SwDocStyleSheet::SetStyleAliases(const std::vector<OUString>& rAliases)
+{
+    if (!m_bPhysical)
+        FillStyleSheet(FillPhysical);
+
+    SwFormat* pFormat = nullptr;
+    switch (nFamily)
+    {
+        case SfxStyleFamily::Char:
+            pFormat = m_rDoc.FindCharFormatByName(UIName(aName));
+            break;
+        case SfxStyleFamily::Para:
+            pFormat = m_rDoc.FindTextFormatCollByName(UIName(aName));
+            break;
+        default:
+            break;
+    }
+    if (pFormat)
+        pFormat->SetStyleAliases(rAliases);
+}
 // virtual methods
 void SwDocStyleSheet::SetHidden( bool bValue )
 {

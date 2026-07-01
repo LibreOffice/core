@@ -684,6 +684,7 @@ class SwUINumRuleItem;
 #define FN_UNO_LINEBREAK (FN_EXTRA2 + 131)
 #define FN_UNO_CONTENT_CONTROL (FN_EXTRA2 + 132)
 #define FN_UNO_IS_CONTENT_EMPTY  (FN_EXTRA2 + 133)
+#define FN_UNO_STYLE_ALIASES     (FN_EXTRA2 + 134)
 
 // Area: Help
 // Region: Traveling & Selection

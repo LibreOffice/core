@@ -7178,6 +7178,14 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nSlot);
         pFormat->GetGrabBagItem(aAny);
         oQFormat = pFormat->IsFavourite();
+        // The aliases element carries the alternate names as one
+        // comma-separated list.
+        for (const OUString& rAlias : pFormat->GetStyleAliases())
+        {
+            if (!aAliases.isEmpty())
+                aAliases += ",";
+            aAliases += rAlias;
+        }
     }
     else
     {
@@ -7188,9 +7196,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
 
     for (const auto& rProp : aGrabBag)
     {
-        if (rProp.Name == "aliases")
-            aAliases = rProp.Value.get<OUString>();
-        else if (rProp.Name == "uiPriority")
+        if (rProp.Name == "uiPriority")
             aUiPriority = rProp.Value.get<OUString>();
         else if (rProp.Name == "qFormat")
         {

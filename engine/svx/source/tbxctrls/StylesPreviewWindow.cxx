@@ -665,7 +665,17 @@ StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
     return aFilter;
 }
 
-inline void lcl_AppendParaStyle(StylePreviewList& rAllStyles, const OUString& rName)
+// A style imported from DOCX can carry one or more alternate names. Return the
+// first alias, which is shown in place of the style name, or an empty string
+// when there is none.
+OUString lcl_GetStyleAlias(const SfxStyleSheetBase& rStyle)
+{
+    const std::vector<OUString> aAliases = rStyle.GetStyleAliases();
+    return aAliases.empty() ? OUString() : aAliases.front();
+}
+
+inline void lcl_AppendParaStyle(StylePreviewList& rAllStyles, const OUString& rName,
+                                const OUString& rDisplayName)
 {
     const auto aFound = std::find_if(
         rAllStyles.begin(), rAllStyles.end(), [&rName](const StylePreviewDescriptor& element) {
@@ -673,7 +683,13 @@ inline void lcl_AppendParaStyle(StylePreviewList& rAllStyles, const OUString& rN
         });
 
     if (aFound == rAllStyles.end())
-        rAllStyles.emplace_back<StylePreviewDescriptor>({ rName, rName });
+        rAllStyles.emplace_back<StylePreviewDescriptor>({ rName, rDisplayName });
+}
+
+void lcl_AppendParaStyle(StylePreviewList& rAllStyles, const SfxStyleSheetBase& rStyle)
+{
+    const OUString aAlias = lcl_GetStyleAlias(rStyle);
+    lcl_AppendParaStyle(rAllStyles, rStyle.GetName(), aAlias.isEmpty() ? rStyle.GetName() : aAlias);
 }
 
 void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
@@ -684,7 +700,7 @@ void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* p
 
     auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, eBits);
     for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
-        lcl_AppendParaStyle(rAllStyles, pStyle->GetName());
+        lcl_AppendParaStyle(rAllStyles, *pStyle);
 }
 
 void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
@@ -705,14 +721,14 @@ void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBas
             bInclude = true;
 
         if (bInclude)
-            lcl_AppendParaStyle(rAllStyles, pStyle->GetName());
+            lcl_AppendParaStyle(rAllStyles, *pStyle);
     }
 }
 }
 
-void StylesPreviewWindow_Base::UpdateStylesList()
+StylePreviewList StylesPreviewWindow_Base::GetStyleList(SfxObjectShell* pDocShell,
+                                                        const StylePreviewList& rDefaultStyles)
 {
-    SfxObjectShell* pDocShell = SfxObjectShell::Current();
     SfxStyleSheetBasePool* pStyleSheetPool = nullptr;
     StylePaneFormatFilter aFilter;
 
@@ -722,21 +738,27 @@ void StylesPreviewWindow_Base::UpdateStylesList()
         aFilter = lcl_GetStylePaneFormatFilter(pDocShell);
     }
 
+    StylePreviewList aAllStyles;
     // When the document specifies a style pane filter, skip the hardcoded
     // default styles and let the filter control what is shown.
-    if (aFilter.bValid)
-        m_aAllStyles.clear();
-    else
-        m_aAllStyles = m_aDefaultStyles;
+    if (!aFilter.bValid)
+        aAllStyles = rDefaultStyles;
 
     if (pStyleSheetPool)
     {
         if (aFilter.bValid)
-            lcl_AppendFilteredParaStyles(m_aAllStyles, pStyleSheetPool, aFilter);
+            lcl_AppendFilteredParaStyles(aAllStyles, pStyleSheetPool, aFilter);
         else
-            lcl_AppendParaStyles(m_aAllStyles, pStyleSheetPool,
+            lcl_AppendParaStyles(aAllStyles, pStyleSheetPool,
                                  SfxStyleSearchBits::Favourite | SfxStyleSearchBits::UserDefined);
     }
+
+    return aAllStyles;
+}
+
+void StylesPreviewWindow_Base::UpdateStylesList()
+{
+    m_aAllStyles = GetStyleList(SfxObjectShell::Current(), m_aDefaultStyles);
 
     m_xStylesView->freeze();
     m_xStylesView->clear();

@@ -29,6 +29,7 @@
 #include "names.hxx"
 #include <memory>
 #include <optional>
+#include <vector>
 
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
@@ -67,6 +68,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
                                        at format (UI-side!). */
     bool m_bHidden : 1;
     std::optional<bool> m_bIsFavourite;        ///< Show in the basic UI; unset means unknown
+    std::vector<OUString> m_aStyleAliases; ///< Alternate style names imported from DOCX aliases.
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
     virtual void InvalidateInSwFntCache(sal_uInt16) {};
     virtual void InvalidateInSwFntCache() {};
@@ -194,6 +196,9 @@ public:
 
     std::optional<bool> IsFavourite() const            { return m_bIsFavourite; }
     void SetFavourite(std::optional<bool> oValue)       { m_bIsFavourite = oValue; }
+
+    const std::vector<OUString>& GetStyleAliases() const { return m_aStyleAliases; }
+    void SetStyleAliases(const std::vector<OUString>& rAliases) { m_aStyleAliases = rAliases; }
 
     bool IsHidden() const               { return m_bHidden; }
     void SetHidden( bool bValue )       { m_bHidden = bValue; }

@@ -63,6 +63,7 @@ public:
     OUString m_sNextStyleIdentifier;
     OUString m_sLinkStyleIdentifier;
     OUString m_sStyleName;
+    OUString m_sAliases; ///< Comma-separated alternate names from the DOCX aliases element.
     const tools::SvRef<StyleSheetPropertyMap> m_pProperties;
     OUString m_sConvertedStyleName;
     std::vector<css::beans::PropertyValue> m_aLatentStyles; ///< Attributes of latentStyles

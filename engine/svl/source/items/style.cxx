@@ -272,6 +272,11 @@ std::optional<SfxItemSet> SfxStyleSheetBase::GetItemSetForPreview()
     return GetItemSet();
 }
 
+std::vector<OUString> SfxStyleSheetBase::GetStyleAliases() const
+{
+    return {};
+}
+
 void SfxStyleSheetBase::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     tools::XmlWriter aWriter(pWriter);

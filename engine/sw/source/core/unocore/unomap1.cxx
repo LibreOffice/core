@@ -214,6 +214,7 @@ std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetCharStyleP
         { UNO_NAME_IS_PHYSICAL, FN_UNO_IS_PHYSICAL,     cppu::UnoType<bool>::get(), PropertyAttribute::READONLY, 0},
         { UNO_NAME_HIDDEN, FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
         { UNO_NAME_STYLE_INTEROP_GRAB_BAG, FN_UNO_STYLE_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
+        { UNO_NAME_STYLE_ALIASES, FN_UNO_STYLE_ALIASES, cppu::UnoType< cppu::UnoSequenceType<OUString> >::get(), PROPERTY_NONE, 0},
         { UNO_NAME_DISPLAY_NAME, FN_UNO_DISPLAY_NAME, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
         { UNO_NAME_CHAR_COMBINE_IS_ON, RES_CHRATR_TWO_LINES,          cppu::UnoType<bool>::get(),     PROPERTY_NONE, MID_TWOLINES},
         { UNO_NAME_CHAR_COMBINE_PREFIX, RES_CHRATR_TWO_LINES,             cppu::UnoType<OUString>::get(),    PROPERTY_NONE, MID_START_BRACKET},

@@ -565,6 +565,10 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_trPr:
         break;
         case NS_ooxml::LN_CT_Style_aliases:
+            // Alternate style name. Kept in the style model as a dedicated
+            // field rather than in the interop grab bag.
+            m_pCurrentEntry->m_sAliases = sStringValue;
+        break;
         case NS_ooxml::LN_CT_Style_rsid:
         case NS_ooxml::LN_CT_Style_qFormat:
         case NS_ooxml::LN_CT_Style_semiHidden:
@@ -577,10 +581,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 beans::PropertyValue aValue;
                 switch (nSprmId)
                 {
-                case NS_ooxml::LN_CT_Style_aliases:
-                    aValue.Name = u"aliases"_ustr;
-                    aValue.Value <<= sStringValue;
-                break;
                 case NS_ooxml::LN_CT_Style_rsid:
                 {
                     // We want the rsid as a hex string, but always with the length of 8.
@@ -1501,6 +1501,16 @@ void StyleSheetTable::ApplyStyleSheetsImpl(const FontTablePtr& rFontTable, std::
                     if (aGrabBag.hasElements())
                     {
                         xStyle->setPropertyValue(u"StyleInteropGrabBag"_ustr, cpo::uno::Any(aGrabBag));
+                    }
+
+                    if (!pEntry->m_sAliases.isEmpty() && (bParaStyle || bCharStyle))
+                    {
+                        // The aliases element holds a comma-separated list of
+                        // alternate names; split it into the individual names.
+                        xStyle->setPropertyValue(
+                            u"StyleAliases"_ustr,
+                            cpo::uno::Any(comphelper::string::convertCommaSeparated(
+                                pEntry->m_sAliases)));
                     }
 
                     // Only paragraph styles support automatic updates.

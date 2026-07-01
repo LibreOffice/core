@@ -1612,6 +1612,17 @@ void SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemProp
     SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
 }
 template<>
+void SwXStyle::SetPropertyValue<FN_UNO_STYLE_ALIASES>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const cpo::uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
+{
+    uno::Sequence<OUString> aAliases;
+    if (rValue >>= aAliases)
+    {
+        o_rStyleBase.getNewBase()->GetItemSet();
+        o_rStyleBase.getNewBase()->SetStyleAliases(comphelper::sequenceToContainer<std::vector<OUString>>(aAliases));
+    }
+    SetPropertyValue<HINT_BEGIN>(rEntry, rPropSet, rValue, o_rStyleBase);
+}
+template<>
 void SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const cpo::uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
     cpo::uno::Any aValue(rValue);
@@ -2013,6 +2024,7 @@ void SwXStyle::SetStyleProperty(const SfxItemPropertyMapEntry& rEntry, const Sfx
             // these explicit std::mem_fn() calls shouldn't be needed, but apparently MSVC is currently too stupid for C++11 again
             { FN_UNO_HIDDEN,                 std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_HIDDEN>)                 },
             { FN_UNO_STYLE_INTEROP_GRAB_BAG, std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>) },
+            { FN_UNO_STYLE_ALIASES,          std::mem_fn(&SwXStyle::SetPropertyValue<FN_UNO_STYLE_ALIASES>)          },
             { XATTR_FILLGRADIENT,            std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>)            },
             { XATTR_FILLHATCH,               std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>)            },
             { XATTR_FILLBITMAP,              std::mem_fn(&SwXStyle::SetPropertyValue<sal_uInt16(XATTR_FILLGRADIENT)>)            },
@@ -2168,6 +2180,15 @@ cpo::uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const Sf
     rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     xBase->GetGrabBagItem(aRet);
     return aRet;
+}
+template<>
+cpo::uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_ALIASES>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
+{
+    SfxStyleSheetBase* pBase(GetStyleSheetBase());
+    if(!pBase)
+        return cpo::uno::Any(uno::Sequence<OUString>());
+    rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
+    return cpo::uno::Any(comphelper::containerToSequence(xBase->GetStyleAliases()));
 }
 template<>
 cpo::uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& /*rPropSet*/, SwStyleBase_Impl& rBase)
@@ -2372,6 +2393,7 @@ cpo::uno::Any SwXStyle::GetStyleProperty_Impl(const SfxItemPropertyMapEntry& rEn
             { FN_UNO_IS_PHYSICAL,            std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_IS_PHYSICAL>)            },
             { FN_UNO_HIDDEN,                 std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_HIDDEN>)                 },
             { FN_UNO_STYLE_INTEROP_GRAB_BAG, std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>) },
+            { FN_UNO_STYLE_ALIASES,          std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_STYLE_ALIASES>)          },
             { RES_PAPER_BIN,                 std::mem_fn(&SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>)                 },
             { FN_UNO_NUM_RULES,              std::mem_fn(&SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>)              },
             { RES_PARATR_OUTLINELEVEL,       std::mem_fn(&SwXStyle::GetStyleProperty<sal_uInt16(RES_PARATR_OUTLINELEVEL)>)       },

@@ -35,6 +35,7 @@
 
 #include <memory>
 #include <optional>
+#include <vector>
 
 // This is used as a flags enum in sw/, but only there,
 // so I don't pull in o3tl::typed_flags here
@@ -178,6 +179,11 @@ public:
 
     virtual sal_uInt32 GetHelpId( OUString& rFile );
     virtual void   SetHelpId( const OUString& r, sal_uInt32 nId );
+
+    /// Alternate display names for the style. Empty by default; application
+    /// style sheets that carry aliases override this. A style can hold more
+    /// than one alias, in the order they were imported.
+    virtual std::vector<OUString> GetStyleAliases() const;
 
     // Spotlight Id, @return -1 for style not in use
     virtual sal_Int32 GetSpotlightId();

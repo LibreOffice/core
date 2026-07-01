@@ -20,11 +20,14 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_WINDOW_HXX
 #define INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_WINDOW_HXX
 
+#include <svx/svxdllapi.h>
 #include <vcl/InterimItemWindow.hxx>
 #include <svl/style.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/sfxstatuslistener.hxx>
+
+class SfxObjectShell;
 
 // pair of id and name, name can be translated to other language
 struct StylePreviewDescriptor
@@ -131,6 +134,11 @@ public:
 
     void Select(const OUString& rStyleName);
     void RequestStylesListUpdate();
+    /// Collect the styles shown in the preview for a document, seeded with the
+    /// given default styles. A style that carries an alias is listed with the
+    /// alias as its display name.
+    SVXCORE_DLLPUBLIC static StylePreviewList GetStyleList(SfxObjectShell* pDocShell,
+                                                           const StylePreviewList& rDefaultStyles);
     static Bitmap GetCachedPreview(const StylePreviewDescriptor& rStyle, int nDpiScale = 100);
     static OString GetCachedPreviewJson(const StylePreviewDescriptor& rStyle, int nDpiScale = 100);
 

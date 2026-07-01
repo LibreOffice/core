@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svx_unit, \
 	svx/qa/unit/xml \
 	svx/qa/unit/XTableImportExportTest \
 	svx/qa/unit/ThemeTest \
+	svx/qa/unit/StylesPreviewWindowTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,svx_unit, \

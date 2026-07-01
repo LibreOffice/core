@@ -917,6 +917,7 @@ inline constexpr OUString UNO_NAME_DOC_INTEROP_GRAB_BAG = u"InteropGrabBag"_ustr
 inline constexpr OUString UNO_NAME_FRAME_INTEROP_GRAB_BAG = u"FrameInteropGrabBag"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_HIGHLIGHT = u"CharHighlight"_ustr;
 inline constexpr OUString UNO_NAME_STYLE_INTEROP_GRAB_BAG = u"StyleInteropGrabBag"_ustr;
+inline constexpr OUString UNO_NAME_STYLE_ALIASES = u"StyleAliases"_ustr;
 inline constexpr OUString UNO_NAME_LEVEL_IS_LEGAL = u"IsLegal"_ustr;
 inline constexpr OUString UNO_NAME_CHAR_INTEROP_GRAB_BAG = u"CharInteropGrabBag"_ustr;
 inline constexpr OUString UNO_NAME_TEXT_VERT_ADJUST = u"TextVerticalAdjust"_ustr;

@@ -95,6 +95,9 @@ public:
     void SetGrabBagItem(const cpo::uno::Any& rVal);
     void GetGrabBagItem(cpo::uno::Any& rVal) const;
 
+    virtual std::vector<OUString> GetStyleAliases() const override;
+    void SetStyleAliases(const std::vector<OUString>& rAliases);
+
     /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value false,
      which indicates that the indent attributes at a paragraph style should
      be reset in case that a list style is applied to the paragraph style and

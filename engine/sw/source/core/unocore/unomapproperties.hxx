@@ -550,6 +550,7 @@
                     { UNO_NAME_OUTLINE_LEVEL, RES_PARATR_OUTLINELEVEL,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, 0}, \
                     { UNO_NAME_HIDDEN, FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0}, \
                     { UNO_NAME_STYLE_INTEROP_GRAB_BAG, FN_UNO_STYLE_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0}, \
+                    { UNO_NAME_STYLE_ALIASES, FN_UNO_STYLE_ALIASES, cppu::UnoType< cppu::UnoSequenceType<OUString> >::get(), PROPERTY_NONE, 0}, \
                     { UNO_NAME_PARA_INTEROP_GRAB_BAG, RES_PARATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0}, \
                     { UNO_NAME_PARA_WRITING_MODE_AUTOMATIC, RES_PARATR_AUTOFRAMEDIR, cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID, 0},
 

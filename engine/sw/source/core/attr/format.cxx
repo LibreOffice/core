@@ -77,6 +77,7 @@ SwFormat::SwFormat( const SwFormat& rFormat ) :
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
     m_bIsFavourite = rFormat.m_bIsFavourite;
+    m_aStyleAliases = rFormat.m_aStyleAliases;
     m_bAutoUpdateOnDirectFormat = rFormat.m_bAutoUpdateOnDirectFormat;
 
     if( auto pDerived = rFormat.DerivedFrom() )
@@ -126,6 +127,7 @@ SwFormat &SwFormat::operator=(const SwFormat& rFormat)
     m_bAutoFormat = rFormat.m_bAutoFormat;
     m_bHidden = rFormat.m_bHidden;
     m_bIsFavourite = rFormat.m_bIsFavourite;
+    m_aStyleAliases = rFormat.m_aStyleAliases;
     m_bAutoUpdateOnDirectFormat = rFormat.m_bAutoUpdateOnDirectFormat;
     return *this;
 }
