@@ -580,6 +580,7 @@ class SlideShowNavigator {
 
 	followVideo(info: any) {
 		const slideInfo = this.theMetaPres.getSlideInfoByIndex(info.currentSlide);
+		if (!slideInfo) return;
 		const videoInfo = slideInfo.videos.find(
 			(videoInfo) => info.videoInfoId === videoInfo.id,
 		);
