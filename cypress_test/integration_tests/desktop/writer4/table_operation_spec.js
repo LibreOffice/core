@@ -179,7 +179,17 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 		}
 	});
 
-	function prepareForTableSizeTests() {
+	function prepareForTableSizeTests(parentClass) {
+		// temporary work-around for a notebookbar bug.
+		// https://github.com/CollaboraOnline/online/issues/15981
+		// note: this should be removed once GH#15981 is fixed
+		if (parentClass === '.notebookbar') {
+			for (let i = 0; i < 3; ++i)
+				helper.moveCursor('down');
+			for (let i = 0; i < 3; ++i)
+				helper.moveCursor('up');
+		}
+
 		helper.setDummyClipboardForCopy();
 		// Select full table (3x2)
 		helper.moveCursor('down', 'shift');
@@ -188,7 +198,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	}
 
 	function minimalRowHeightTest(parentClass) {
-		prepareForTableSizeTests();
+		prepareForTableSizeTests(parentClass);
 		cy.cGet(parentClass + ' #rowsizing .unoSetOptimalRowHeight').click();
 		cy.cGet(parentClass + ' #rowsizing .unoSetMinimalRowHeight').click();
 
@@ -199,7 +209,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	}
 
 	function optimalRowHeightTest(parentClass) {
-		prepareForTableSizeTests();
+		prepareForTableSizeTests(parentClass);
 		cy.cGet(parentClass + ' #rowsizing .unoSetOptimalRowHeight').should('not.have.attr','disabled');
 		cy.cGet(parentClass + ' #rowsizing .unoSetOptimalRowHeight').click();
 		selectFullTable();
@@ -218,7 +228,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	}
 
 	function distributeRowsTest(parentClass) {
-		prepareForTableSizeTests();
+		prepareForTableSizeTests(parentClass);
 		cy.cGet(parentClass + ' #rowsizing .unoDistributeRows').should('not.have.attr','disabled');
 		cy.cGet(parentClass + ' #rowsizing .unoDistributeRows').click();
 
@@ -238,7 +248,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	}
 
 	function minimalColumnWidthTest(parentClass) {
-		prepareForTableSizeTests();
+		prepareForTableSizeTests(parentClass);
 		cy.cGet(parentClass + ' #columnsizing .unoSetMinimalColumnWidth').click();
 
 		selectFullTable();
@@ -247,7 +257,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	}
 
 	function optimalColumnWidthTest(parentClass) {
-		prepareForTableSizeTests();
+		prepareForTableSizeTests(parentClass);
 		cy.cGet(parentClass + ' #columnsizing .unoSetOptimalColumnWidth').click();
 
 		selectFullTable();
@@ -257,7 +267,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	}
 
 	function distributeColumnsTest(parentClass) {
-		prepareForTableSizeTests();
+		prepareForTableSizeTests(parentClass);
 		cy.cGet(parentClass + ' #columnsizing .unoDistributeColumns').click();
 
 		selectFullTable();
