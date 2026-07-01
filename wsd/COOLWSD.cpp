@@ -2550,8 +2550,9 @@ void COOLWSD::defineOptions(Poco::Util::OptionSet& optionSet)
                                "https://sdk.collaboraonline.com/docs/installation/"
                                "CODE_Docker_image.html#setting-the-application-configuration-"
                                "dynamically-via-environment-variables to set options. "
-                               "'DONT_GEN_SSL_CERT' is forcibly enabled and 'extra_params' is "
-                               "ignored even when using this option.")
+                               "'extra_params' is ignored by this option; 'DONT_GEN_SSL_CERT' "
+                               "and 'cert_domain' control certificate generation independently "
+                               "of this option.")
                             .required(false)
                             .repeatable(false));
 
