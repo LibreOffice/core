@@ -1565,6 +1565,10 @@ void SwUndo::SetSaveData( SwDoc& rDoc, SwRedlineSaveDatas& rSData )
     for( size_t n = rSData.size(); n; )
         rSData[ --n ].RedlineToDoc( aPam );
 
+    // Restoring the saved redlines can leave two neighbours that belong to the
+    // same tracked change split apart. Merge such combinable neighbours back.
+    rDoc.getIDocumentRedlineAccess().CompressRedlines();
+
 #if OSL_DEBUG_LEVEL > 0
     // check redline count against count saved in RedlineSaveData object
     // except in the case of moved redlines
