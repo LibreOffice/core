@@ -84,8 +84,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
     OUString aCaPath = createFileURL(u"ca.pem");
     std::string aCa;
     aCa = ReadToString(aCaPath);
-    std::vector<std::string> aCerts = KitHelper::extractCertificates(aCa);
-    KitHelper::addCertificates(aCerts);
+    KitHelper::addCertificates(aCa);
     OUString aCertPath = createFileURL(u"cert.pem");
     std::string aCert;
     aCert = ReadToString(aCertPath);

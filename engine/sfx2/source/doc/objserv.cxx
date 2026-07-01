@@ -589,8 +589,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             else
             {
                 // See if a signing cert is passed as a parameter: if so, parse that.
-                std::string aSignatureCert;
-                std::string aSignatureKey;
+                OString aSignatureCert;
+                OString aSignatureKey;
                 const SfxStringItem* pSignatureCert = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
                 if (pSignatureCert)
                 {
@@ -634,7 +634,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if (pViewShell)
                 {
                     svl::crypto::CertificateOrName aCertificateOrName;
-                    if (!aSignatureCert.empty() && !aSignatureKey.empty())
+                    if (!aSignatureCert.isEmpty() && !aSignatureKey.isEmpty())
                     {
                         aCertificateOrName.m_xCertificate = KitHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
                     }

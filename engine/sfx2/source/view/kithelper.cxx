@@ -938,20 +938,18 @@ void KitHelper::notifyLog(const std::ostringstream& stream)
 
 namespace
 {
-std::string extractCertificateWithOffset(const std::string& certificate, size_t& rOffset)
+std::string_view extractCertificateWithOffset(std::string_view certificate, size_t& rOffset)
 {
     static constexpr std::string_view header("-----BEGIN CERTIFICATE-----");
     static constexpr std::string_view footer("-----END CERTIFICATE-----");
 
-    std::string result;
-
     size_t pos1 = certificate.find(header, rOffset);
     if (pos1 == std::string::npos)
-        return result;
+        return {};
 
     size_t pos2 = certificate.find(footer, pos1 + 1);
     if (pos2 == std::string::npos)
-        return result;
+        return {};
 
     pos1 = pos1 + header.length();
     size_t len = pos2 - pos1;
@@ -961,45 +959,26 @@ std::string extractCertificateWithOffset(const std::string& certificate, size_t&
 }
 }
 
-std::string KitHelper::extractCertificate(const std::string & certificate)
+std::string_view KitHelper::extractCertificate(std::string_view certificate)
 {
     size_t nOffset = 0;
     return extractCertificateWithOffset(certificate, nOffset);
 }
 
-std::vector<std::string> KitHelper::extractCertificates(const std::string& rCerts)
-{
-    std::vector<std::string> aRet;
-    size_t nOffset = 0;
-    while (true)
-    {
-        std::string aNext = extractCertificateWithOffset(rCerts, nOffset);
-        if (aNext.empty())
-        {
-            break;
-        }
-
-        aRet.push_back(std::move(aNext));
-    }
-    return aRet;
-}
-
 namespace
 {
-std::string extractKey(const std::string & privateKey)
+std::string_view extractKey(std::string_view privateKey)
 {
     static constexpr std::string_view header("-----BEGIN PRIVATE KEY-----");
     static constexpr std::string_view footer("-----END PRIVATE KEY-----");
 
-    std::string result;
-
     size_t pos1 = privateKey.find(header);
     if (pos1 == std::string::npos)
-        return result;
+        return {};
 
     size_t pos2 = privateKey.find(footer, pos1 + 1);
     if (pos2 == std::string::npos)
-        return result;
+        return {};
 
     pos1 = pos1 + header.length();
     pos2 = pos2 - pos1;
@@ -1008,7 +987,7 @@ std::string extractKey(const std::string & privateKey)
 }
 }
 
-css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificate(const std::string& rCert, const std::string& rKey)
+css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificate(std::string_view rCert, std::string_view rKey)
 {
     const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
@@ -1028,7 +1007,7 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
 
     uno::Sequence<sal_Int8> aCertificateSequence;
 
-    std::string aCertificateBase64String = extractCertificate(rCert);
+    std::string_view aCertificateBase64String = extractCertificate(rCert);
     if (!aCertificateBase64String.empty())
     {
         OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
@@ -1037,11 +1016,11 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
     else
     {
         aCertificateSequence.realloc(rCert.size());
-        std::copy(rCert.c_str(), rCert.c_str() + rCert.size(), aCertificateSequence.getArray());
+        std::copy(rCert.begin(), rCert.end(), aCertificateSequence.getArray());
     }
 
     uno::Sequence<sal_Int8> aPrivateKeySequence;
-    std::string aPrivateKeyBase64String = extractKey(rKey);
+    std::string_view aPrivateKeyBase64String = extractKey(rKey);
     if (!aPrivateKeyBase64String.empty())
     {
         OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String);
@@ -1050,7 +1029,7 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
     else
     {
         aPrivateKeySequence.realloc(rKey.size());
-        std::copy(rKey.c_str(), rKey.c_str() + rKey.size(), aPrivateKeySequence.getArray());
+        std::copy(rKey.begin(), rKey.end(), aPrivateKeySequence.getArray());
     }
 
     uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
@@ -1065,7 +1044,7 @@ uno::Reference<security::XCertificate> KitHelper::addCertificate(
     return xCertificateCreator->addDERCertificateToTheDatabase(rCert, u"TCu,Cu,Tu"_ustr);
 }
 
-void KitHelper::addCertificates(const std::vector<std::string>& rCerts)
+void KitHelper::addCertificates(std::string_view rCerts)
 {
     const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
@@ -1082,10 +1061,15 @@ void KitHelper::addCertificates(const std::vector<std::string>& rCerts)
         return;
     }
 
-    for (const auto& rCert : rCerts)
+    size_t nOffset = 0;
+    while (true)
     {
+        std::string_view aNext = extractCertificateWithOffset(rCerts, nOffset);
+        if (aNext.empty())
+            break;
+
         uno::Sequence<sal_Int8> aCertificateSequence;
-        OUString aBase64OUString = OUString::fromUtf8(rCert);
+        OUString aBase64OUString = OUString::fromUtf8(aNext);
         comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
         addCertificate(xCertificateCreator, aCertificateSequence);
     }

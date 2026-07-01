@@ -739,14 +739,12 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 // format:
                 if (!aSignCertificateCaPem.isEmpty())
                 {
-                    std::string aSignatureCa(aSignCertificateCaPem.toUtf8());
-                    std::vector<std::string> aCerts = KitHelper::extractCertificates(aSignatureCa);
-                    KitHelper::addCertificates(aCerts);
+                    KitHelper::addCertificates(aSignCertificateCaPem.toUtf8());
                 }
                 if (!aSignCertificateCertPem.isEmpty() && !aSignCertificateKeyPem.isEmpty())
                 {
-                    std::string aSignatureCert(aSignCertificateCertPem.toUtf8());
-                    std::string aSignatureKey(aSignCertificateKeyPem.toUtf8());
+                    OString aSignatureCert(aSignCertificateCertPem.toUtf8());
+                    OString aSignatureKey(aSignCertificateKeyPem.toUtf8());
                     aSignCertificate = KitHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
                 }
             }

@@ -3379,8 +3379,8 @@ static bool lo_signDocument(COKit* /*pThis*/,
     if (!xContext.is())
         return false;
 
-    std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeyBinarySize);
+    std::string_view aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
+    std::string_view aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeyBinarySize);
     uno::Reference<security::XCertificate> xCertificate = KitHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
 
     if (!xCertificate.is())
@@ -4863,8 +4863,8 @@ static void doc_initializeForRendering(COKitDocument* pThis,
     {
         doc_iniUnoCommands();
         std::vector<beans::PropertyValue> aArgs = jsonToPropertyValuesVector(pArguments);
-        std::string aSignatureCert;
-        std::string aSignatureKey;
+        OString aSignatureCert;
+        OString aSignatureKey;
         for (const auto& rArg : aArgs)
         {
             if (rArg.Name == ".uno:SignatureCert" && rArg.Value.has<OUString>())
@@ -4877,12 +4877,11 @@ static void doc_initializeForRendering(COKitDocument* pThis,
             }
             else if (rArg.Name == ".uno:SignatureCa" && rArg.Value.has<OUString>())
             {
-                std::string aSignatureCa(rArg.Value.get<OUString>().toUtf8());
-                std::vector<std::string> aCerts = KitHelper::extractCertificates(aSignatureCa);
-                KitHelper::addCertificates(aCerts);
+                OString aSignatureCa(rArg.Value.get<OUString>().toUtf8());
+                KitHelper::addCertificates(aSignatureCa);
             }
         }
-        if (!aSignatureCert.empty() && !aSignatureKey.empty())
+        if (!aSignatureCert.isEmpty() && !aSignatureKey.isEmpty())
         {
             if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
@@ -7907,8 +7906,8 @@ static bool doc_insertCertificate(COKitDocument* pThis,
     if (!pObjectShell)
         return false;
 
-    std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeySize);
+    std::string_view aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
+    std::string_view aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeySize);
     uno::Reference<security::XCertificate> xCertificate = KitHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
     if (!xCertificate.is())
         return false;
@@ -7955,8 +7954,8 @@ static bool doc_addCertificate(COKitDocument* pThis,
 
     uno::Sequence<sal_Int8> aCertificateSequence;
 
-    std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string aCertificateBase64String = KitHelper::extractCertificate(aCertificateString);
+    std::string_view aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
+    std::string_view aCertificateBase64String = KitHelper::extractCertificate(aCertificateString);
     if (!aCertificateBase64String.empty())
     {
         OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);

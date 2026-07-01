@@ -77,22 +77,6 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testReloadPage)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), nPage);
 }
 
-CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperExtractCertificates)
-{
-    std::string signatureCa = R"(-----BEGIN CERTIFICATE-----
-foo
------END CERTIFICATE-----
------BEGIN CERTIFICATE-----
-bar
------END CERTIFICATE-----)";
-
-    std::vector<std::string> aRet = KitHelper::extractCertificates(signatureCa);
-
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aRet.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("\nfoo\n"), aRet[0]);
-    CPPUNIT_ASSERT_EQUAL(std::string("\nbar\n"), aRet[1]);
-}
-
 #ifdef UNX
 CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperAddCertifices)
 {
@@ -105,10 +89,8 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testKitHelperAddCertifices)
     // When trusting the CA:
     OUString aCaUrl = createFileURL(u"ca.pem");
     SvFileStream aCaStream(aCaUrl, StreamMode::READ);
-    std::string aCa;
-    aCa = read_uInt8s_ToOString(aCaStream, aCaStream.remainingSize());
-    std::vector<std::string> aCerts = KitHelper::extractCertificates(aCa);
-    KitHelper::addCertificates(aCerts);
+    OString aCa = read_uInt8s_ToOString(aCaStream, aCaStream.remainingSize());
+    KitHelper::addCertificates(aCa);
 
     // Then make sure the signature state is updated:
     // Without the accompanying fix in place, this test would have failed with:
