@@ -377,9 +377,7 @@ else
 
     (
         cd "$ENGINE_DIR"
-        ./autogen.sh --without-system-nss \
-            '--with-lang=de ja ar en-US en-GB en-ZA br' \
-            --enable-dbgutil
+        ./autogen.sh --with-distro=CPLinux-LOKit-Dev
     ) || {
         err "Engine autogen.sh failed."
         info "Read the error output above and install any missing packages."
@@ -421,10 +419,7 @@ else
 
     (
         cd "$ONLINE_DIR"
-        ./configure --enable-silent-rules \
-            --with-lokit-path="$ENGINE_DIR/include" \
-            --with-lo-path="$ENGINE_DIR/instdir" \
-            --enable-debug --enable-cypress
+        ./configure --enable-developer
     ) || {
         err "Online ./configure failed."
         info "Read the error output above. Make sure the engine has been"
