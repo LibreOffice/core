@@ -32,10 +32,9 @@ BEGIN {
         showincludes_prefix = "Note: including file:"
     }
 
-    # to match especially drive letters in allowlist case insensitive
-    IGNORECASE = 1
+    # tolower to match especially drive letters in allowlist case insensitive
     allowlist = \
-        "^(" ENVIRON["SRCDIR"] "|" ENVIRON["BUILDDIR"] ")"
+        "^(" tolower(ENVIRON["SRCDIR"]) "|" tolower(ENVIRON["BUILDDIR"]) ")"
     firstline = 1
 }
 
@@ -47,7 +46,7 @@ BEGIN {
         sub(/^ */, "")
         gsub(/\\/, "/")
         gsub(/ /, "\\ ")
-        if ($0 ~ allowlist) { # filter out system headers
+        if (tolower($0) ~ allowlist) { # filter out system headers
             if (!($0 in incfiles)) {
                 incfiles[$0]
                 print " " $0 " \\" > tempfile
