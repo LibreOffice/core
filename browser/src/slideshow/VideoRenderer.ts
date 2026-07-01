@@ -215,6 +215,15 @@ class VideoRendererGl extends VideoRenderer {
 	private static _program: WebGLProgram;
 	public static videoProgramInitialized: boolean = false;
 
+	// WebGL reads the raw decoded video frame and ignores any rotation
+	// recorded in the container (for example the display matrix that
+	// phone-recorded videos carry), so a video whose frames are stored
+	// sideways would end up sideways in the texture too. A 2D canvas
+	// context applies that rotation when it draws a video frame, so the
+	// frame is normalized through one before it is uploaded as a texture.
+	private frameCanvas: HTMLCanvasElement;
+	private frameContext: CanvasRenderingContext2D;
+
 	private static getVertexShader(): string {
 		return `#version 300 es
 				in vec4 a_position;
@@ -392,10 +401,35 @@ class VideoRendererGl extends VideoRenderer {
 		);
 	}
 
+	private getOrientedFrame(video: HTMLVideoElement): HTMLCanvasElement {
+		if (!this.frameCanvas) {
+			this.frameCanvas = document.createElement('canvas');
+			this.frameContext = this.frameCanvas.getContext('2d');
+		}
+
+		if (
+			this.frameCanvas.width !== video.videoWidth ||
+			this.frameCanvas.height !== video.videoHeight
+		) {
+			this.frameCanvas.width = video.videoWidth;
+			this.frameCanvas.height = video.videoHeight;
+		}
+
+		this.frameContext.drawImage(video, 0, 0);
+		return this.frameCanvas;
+	}
+
 	private updateTexture(texture: WebGLTexture, video: HTMLVideoElement) {
 		const gl = this._context.getGl();
 		gl.bindTexture(gl.TEXTURE_2D, texture);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
+		gl.texImage2D(
+			gl.TEXTURE_2D,
+			0,
+			gl.RGBA,
+			gl.RGBA,
+			gl.UNSIGNED_BYTE,
+			this.getOrientedFrame(video),
+		);
 	}
 
 	public render() {
