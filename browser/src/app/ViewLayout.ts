@@ -12,6 +12,11 @@
 class ScrollProperties {
 	yOffset: number = 0;
 	verticalScrollLength: number = 0;
+	// Where the vertical scroll bar railway is drawn: the whole document
+	// anchor, unlike yOffset/verticalScrollLength, which stop at the edge of
+	// a frozen pane so the thumb does not travel into it.
+	verticalScrollRailwayOffset: number = 0;
+	verticalScrollRailwayLength: number = 0;
 	verticalScrollSize: number = 0; // Clamped to minimum, used for drawing.
 	verticalScrollSizeForScrolling: number = 0; // Unclamped, used for scroll calculations.
 	minimumVerticalScrollSize: number = 80 * app.roundedDpiScale;
@@ -22,6 +27,11 @@ class ScrollProperties {
 
 	xOffset: number = 0;
 	horizontalScrollLength: number = 0;
+	// Where the horizontal scroll bar railway is drawn: the whole document
+	// anchor, unlike xOffset/horizontalScrollLength, which stop at the edge
+	// of a frozen pane so the thumb does not travel into it.
+	horizontalScrollRailwayOffset: number = 0;
+	horizontalScrollRailwayLength: number = 0;
 	horizontalScrollSize: number = 0; // Clamped to minimum, used for drawing.
 	horizontalScrollSizeForScrolling: number = 0; // Unclamped, used for scroll calculations.
 	minimumHorizontalScrollSize: number = 80 * app.roundedDpiScale;
@@ -213,6 +223,11 @@ class ViewLayoutBase {
 		const canvasWidth: number = documentAnchor.size[0];
 		this.scrollProperties.xOffset = documentAnchor.myTopLeft[0];
 
+		this.scrollProperties.horizontalScrollRailwayOffset =
+			documentAnchor.myTopLeft[0];
+		this.scrollProperties.horizontalScrollRailwayLength =
+			canvasWidth - this.scrollProperties.horizontalScrollRightOffset;
+
 		if (app.map._docLayer._docType === 'spreadsheet') {
 			var splitPanesContext: any = app.map.getSplitPanesContext();
 			var splitPos = { x: 0, y: 0 };
@@ -237,6 +252,10 @@ class ViewLayoutBase {
 	): void {
 		const result: number = documentAnchor.size[1];
 		this.scrollProperties.yOffset = documentAnchor.myTopLeft[1];
+
+		this.scrollProperties.verticalScrollRailwayOffset =
+			documentAnchor.myTopLeft[1];
+		this.scrollProperties.verticalScrollRailwayLength = result;
 
 		if (app.map._docLayer._docType !== 'spreadsheet') {
 			this.scrollProperties.verticalScrollLength = result;

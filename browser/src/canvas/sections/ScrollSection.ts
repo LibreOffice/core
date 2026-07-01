@@ -279,9 +279,9 @@ export class ScrollSection extends CanvasSectionObject {
 			this.context.fillStyle = this.sectionProperties.scrollBarRailwayColor;
 			this.context.fillRect(
 				this.myTopLeft[0] + this.size[0] - scrollProps.edgeOffset - this.sectionProperties.scrollBarRailwayThickness,
-				scrollProps.yOffset,
+				scrollProps.verticalScrollRailwayOffset,
 				this.sectionProperties.scrollBarRailwayThickness,
-				scrollProps.verticalScrollLength
+				scrollProps.verticalScrollRailwayLength
 			);
 		}
 
@@ -321,9 +321,9 @@ export class ScrollSection extends CanvasSectionObject {
 			this.context.globalAlpha = this.sectionProperties.scrollBarRailwayAlpha;
 			this.context.fillStyle = this.sectionProperties.scrollBarRailwayColor;
 			this.context.fillRect(
-				scrollProps.xOffset,
+				scrollProps.horizontalScrollRailwayOffset,
 				this.myTopLeft[1] + this.size[1] - scrollProps.edgeOffset - this.sectionProperties.scrollBarRailwayThickness,
-				scrollProps.horizontalScrollLength,
+				scrollProps.horizontalScrollRailwayLength,
 				this.sectionProperties.scrollBarRailwayThickness
 			);
 		}

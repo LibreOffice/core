@@ -192,4 +192,31 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 			}
 		);
 	});
+
+	it('Horizontal scroll bar spans full width with a frozen column', function() {
+		// Freeze column A, sending the uno command directly so the test
+		// does not depend on which toolbar UI mode is active.
+		cy.then(() => {
+			this.win.app.map.sendUnoCommand('.uno:FreezePanesColumn');
+		});
+		helper.processToIdle(this.win);
+
+		cy.cGet('#document-canvas').should(() => {
+			const layout = this.win.app.activeDocument.activeLayout;
+			const scrollProps = layout.scrollProperties;
+			const documentAnchor = this.win.app.sectionContainer.getDocumentAnchorSection();
+
+			// The railway is drawn across the whole document anchor, so the
+			// frozen column does not leave a gap in it.
+			expect(scrollProps.horizontalScrollRailwayOffset).to.equal(documentAnchor.myTopLeft[0]);
+			expect(scrollProps.horizontalScrollRailwayLength).to.equal(
+				documentAnchor.size[0] - scrollProps.horizontalScrollRightOffset);
+
+			// The thumb still only travels past the frozen column, since that
+			// part of the view never scrolls.
+			expect(scrollProps.xOffset).to.be.greaterThan(documentAnchor.myTopLeft[0]);
+			expect(scrollProps.horizontalScrollLength).to.be.lessThan(
+				scrollProps.horizontalScrollRailwayLength);
+		});
+	});
 });

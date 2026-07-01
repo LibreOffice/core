@@ -160,8 +160,16 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 		const documentAnchor = this.getDocumentAnchorSection();
 		const scrollProps = this.scrollProperties;
 
-		// Start of the scrollable area in canvas coords (after row/col
-		// headers and any frozen/split panes).
+		// The railway is drawn across the whole document anchor, so a frozen
+		// row or column never leaves a gap in it.
+		scrollProps.horizontalScrollRailwayOffset = documentAnchor.myTopLeft[0];
+		scrollProps.horizontalScrollRailwayLength =
+			documentAnchor.size[0] - scrollProps.horizontalScrollRightOffset;
+		scrollProps.verticalScrollRailwayOffset = documentAnchor.myTopLeft[1];
+		scrollProps.verticalScrollRailwayLength = documentAnchor.size[1];
+
+		// The thumb only travels across the scrollable part, past any
+		// frozen/split panes, since that part of the view never moves.
 		scrollProps.xOffset = documentAnchor.myTopLeft[0];
 		scrollProps.yOffset = documentAnchor.myTopLeft[1];
 

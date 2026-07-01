@@ -52,6 +52,17 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		this.scrollProperties.horizontalScrollLength = documentAnchor.size[0];
 		this.scrollProperties.verticalScrollLength = documentAnchor.size[1];
 
+		// This layout never restricts scrolling to less than the whole document
+		// anchor, so the drawn railway matches the scrollable length exactly.
+		this.scrollProperties.horizontalScrollRailwayOffset =
+			this.scrollProperties.xOffset;
+		this.scrollProperties.horizontalScrollRailwayLength =
+			this.scrollProperties.horizontalScrollLength;
+		this.scrollProperties.verticalScrollRailwayOffset =
+			this.scrollProperties.yOffset;
+		this.scrollProperties.verticalScrollRailwayLength =
+			this.scrollProperties.verticalScrollLength;
+
 		// Sizes of the scroll bars.
 		this.calculateTheScrollSizes();
 
