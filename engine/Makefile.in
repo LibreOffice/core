@@ -82,7 +82,7 @@ check-if-root:
 	fi
 
 check-makefile-version:
-	@if awk 'BEGIN {exit ($(MAKE_VERSION) >= 4.0) ;}' ; then \
+	@if test "`echo '$(MAKE_VERSION)' | awk -F. '{ print $$1*10000+$$2*100+$$3 }'`" -lt 40000; then \
 		echo; \
 		echo "Running with make $(MAKE_VERSION) is likely to cause problems, try with $$GNUMAKE instead."; \
 		echo; \
