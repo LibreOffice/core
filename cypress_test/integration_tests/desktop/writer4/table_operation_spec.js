@@ -289,6 +289,30 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 		distributeColumnsTest('.sidebar');
 	});
 
+	it('Notebookbar: Set minimal row height.', function() {
+		minimalRowHeightTest('.notebookbar');
+	});
+
+	it('Notebookbar: Set optimal row height.', function() {
+		optimalRowHeightTest('.notebookbar');
+	});
+
+	it('Notebookbar: Distribute rows.', function() {
+		distributeRowsTest('.notebookbar');
+	});
+
+	it('Notebookbar: Set minimal column width.', function() {
+		minimalColumnWidthTest('.notebookbar');
+	});
+
+	it('Notebookbar: Set optimal column width.', function() {
+		optimalColumnWidthTest('.notebookbar');
+	});
+
+	it('Notebookbar: Distribute columns.', function() {
+		distributeColumnsTest('.notebookbar');
+	});
+
 	it('Split Cells', function() {
 		helper.setDummyClipboardForCopy();
 		helper.typeIntoDocument('{downarrow}');
