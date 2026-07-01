@@ -34,6 +34,24 @@ FILELIST=/tmp/rootfs.files
 #   cpio            - postinst uses it to run coolwsd-systemplate-setup
 BUILD_ONLY="libcap2-bin ca-certificates adduser fontconfig cpio"
 
+# Packages pulled in transitively (mostly by the fontconfig build tool and
+# ca-certificates) that are not needed at runtime, because the engine links its
+# own statically bundled copies or the feature is unused. The dependency-
+# closure check below warns if a shipped binary actually needs one of these.
+#   libfontconfig1 libfreetype6 libpng16-16t64 libexpat1
+#                   - engine builds fontconfig/freetype/libpng/expat internally
+#                     (distro-config --without-system-*)
+#   libbrotli1      - only the system freetype needs it; the bundled freetype
+#                     is built --without-brotli
+#   openssl         - the openssl CLI (pulled by ca-certificates); the engine
+#                     bundles its own OpenSSL
+#   libpam-cap      - the pam_cap.so module; coolwsd links libpam for the admin
+#                     console but its PAM stack does not use pam_cap
+#   fonts-dejavu-*  - the engine bundles its own DejaVu (external/more_fonts)
+# fontconfig-config is deliberately NOT here: the engine's bundled fontconfig
+# reads /etc/fonts at runtime, and systemplate copies it into the jail.
+BUNDLED_OR_UNUSED="libfontconfig1 libfreetype6 libpng16-16t64 libexpat1 libbrotli1 openssl libpam-cap fonts-dejavu-core fonts-dejavu-mono"
+
 # Shared libraries the base image is known to provide (glibc and openssl). A
 # needed library matching this is considered covered even if we do not ship it.
 # Everything else (zlib, fontconfig, freetype, ...) must be shipped.
@@ -42,7 +60,7 @@ BASE_LIB_RE='/(ld-linux-x86-64|ld-linux|libc|libm|libdl|libpthread|librt|libreso
 echo "=== Working out which packages the Collabora install added ==="
 dpkg-query -W -f '${Package}\n' | sort > /tmp/pkgs.after
 comm -13 "$PKGS_BEFORE" /tmp/pkgs.after > "$PKGS_ADDED"
-for p in $BUILD_ONLY; do
+for p in $BUILD_ONLY $BUNDLED_OR_UNUSED; do
     sed -i "/^${p}\$/d" "$PKGS_ADDED"
 done
 echo "Shipping the files of these packages:"
