@@ -132,6 +132,14 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
                 LIBS="$LIBS -latomic"])
 
 # Declare options
+AC_ARG_ENABLE([developer],
+              AS_HELP_STRING([--enable-developer],
+                             [Turn on a bundle of developer-friendly defaults:
+                              a debug build, cypress tests, and unoptimized code
+                              with debug symbols (-O0 -ggdb3). Each piece can
+                              still be overridden by passing the matching option,
+                              for example --disable-cypress.]))
+
 AC_ARG_ENABLE([debug],
               AS_HELP_STRING([--enable-debug],
                              [Enable debugging, link with debugging version of Poco libraries]))
@@ -528,6 +536,22 @@ SERVER_SIGNATURE="false"
 
 # a reasonable default
 NUM_PRESPAWN_CHILDREN=4
+
+AC_MSG_CHECKING([whether to enable a developer build])
+if test "$enable_developer" = "yes"; then
+    AC_MSG_RESULT([yes])
+    dnl Set the defaults only when the matching option was not given, so an
+    dnl explicit --disable-debug / --disable-cypress still wins.
+    test -z "$enable_debug"   && enable_debug=yes
+    test -z "$enable_cypress" && enable_cypress=yes
+    dnl Prepend the debug compiler flags so a user-supplied optimization level
+    dnl (for example CXXFLAGS=-O2) appears later and overrides the -O0. Level 3
+    dnl debug info records macro definitions so they can be expanded in gdb.
+    CFLAGS="-O0 -ggdb3 $CFLAGS"
+    CXXFLAGS="-O0 -ggdb3 $CXXFLAGS"
+else
+    AC_MSG_RESULT([no])
+fi
 
 AC_MSG_CHECKING([whether to enable debug build])
 if test "$enable_debug" = "yes"; then
