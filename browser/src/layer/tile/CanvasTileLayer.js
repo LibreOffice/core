@@ -3984,7 +3984,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_resizeMapElementAndTilesLayer: function(sizeRectangle) {
-		const mapElement = document.getElementById('map'); // map's size = tiles section's size.
+		const mapElement = this._map.getContainer(); // map's size = tiles section's size.
 		mapElement.style.left = sizeRectangle.getPxX1() + 'px';
 		mapElement.style.top = sizeRectangle.getPxY1() + 'px';
 		mapElement.style.width = sizeRectangle.getPxWidth() + 'px';

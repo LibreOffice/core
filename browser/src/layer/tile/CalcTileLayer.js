@@ -418,7 +418,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		];
 		const { newMapSize, newCanvasSize } = this._calculateNewCanvasAndMapSizes(documentContainerSize, availableSpace, marginLeft, marginTop, scrollBarThickness);
 
-		const mapElement = document.getElementById('map'); // map's size = tiles section's size.
+		const mapElement = this._map.getContainer(); // map's size = tiles section's size.
 		const oldMapSize = [mapElement.clientWidth, mapElement.clientHeight];
 		const widthIncreased = oldMapSize[0] < newMapSize[0];
 		const heightIncreased = oldMapSize[1] < newMapSize[1];

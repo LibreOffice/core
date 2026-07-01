@@ -63,7 +63,7 @@ window.L.Clipboard = window.L.Class.extend({
 		div.style.fontSize = '6pt';
 
 		// so we get events to where we want them.
-		var parent = document.getElementById('map');
+		var parent = document.getElementById('document-container');
 		parent.appendChild(div);
 
 		if (window.L.Browser.cypressTest) {
