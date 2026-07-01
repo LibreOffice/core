@@ -152,9 +152,15 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         derived converters may create an external data provider) */
     getChartConverter().createDataProvider( getChartDocument() );
 
+    const ChartType eCT = mrModel.mxPlotArea.is()
+        ? mrModel.mxPlotArea->meCT : ChartType::C_OTHER;
+
     // formatting of the chart background.  The default fill style varies with applications.
     PropertySet aBackPropSet( getChartDocument()->getPageBackground() );
     getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
+
+    if (mrModel.mxPlotArea.is() && mrModel.mxShapeProp.is())
+        aBackPropSet.setProperty(PROP_HasExplicitSpPr, true);
 
     bool bMSO2007Doc = getFilter().isMSO2007Document();
     // convert plot area (container of all chart type groups)
@@ -202,7 +208,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
                 aAutoTitle = OoxResId(STR_DIAGRAM_TITLE);
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
-            aTitleConv.convertFromModel( xTitled, aAutoTitle, OBJECTTYPE_CHARTTITLE );
+            aTitleConv.convertFromModel( xTitled, aAutoTitle, OBJECTTYPE_CHARTTITLE, eCT );
         }
     }
     catch( cpo::uno::Exception& )
@@ -213,7 +219,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     if( xDiagram.is() && mrModel.mxLegend.is() )
     {
         LegendConverter aLegendConv( *this, *mrModel.mxLegend );
-        aLegendConv.convertFromModel( xDiagram );
+        aLegendConv.convertFromModel( xDiagram, eCT );
     }
 
     // treatment of missing values

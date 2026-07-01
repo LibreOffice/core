@@ -55,7 +55,8 @@ enum
     PROP_LEGEND_OVERLAY,
     PROP_LEGEND_REF_PAGE_SIZE,
     PROP_LEGEND_REL_POS,
-    PROP_LEGEND_REL_SIZE
+    PROP_LEGEND_REL_SIZE,
+    PROP_LEGEND_HAS_EXPLICIT_SPPR
 };
 
 void lcl_AddPropertiesToVector(
@@ -103,6 +104,11 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
+    rOutProperties.emplace_back( "HasExplicitSpPr",
+                  PROP_LEGEND_HAS_EXPLICIT_SPPR,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
 }
 
 } // namespace

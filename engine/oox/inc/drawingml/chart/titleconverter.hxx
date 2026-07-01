@@ -59,6 +59,7 @@ private:
 };
 
 
+enum class ChartType : sal_Int32;
 struct TitleModel;
 
 class TitleConverter final : public ConverterBase< TitleModel >
@@ -71,6 +72,7 @@ public:
     void                convertFromModel(
                             const css::uno::Reference< css::chart2::XTitled >& rxTitled,
                             const OUString& rAutoTitle, ObjectType eObjType,
+                            ChartType eCT,
                             sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
 };
 
@@ -85,7 +87,7 @@ public:
 
     /** Creates a legend object and attaches it at the passed diagram. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram );
+                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram, ChartType eCT );
 
 private:
     void                legendEntriesFormatting(const css::uno::Reference<css::chart2::XDiagram>& rxDiagram);

@@ -511,7 +511,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
                 && (mrModel.mnAxisPos == XML_l || mrModel.mnAxisPos == XML_r))
                 mrModel.mxTitle->mnDefaultRotation = 0;
             TitleConverter aTitleConv( *this, *mrModel.mxTitle );
-            aTitleConv.convertFromModel( xTitled, OoxResId(STR_DIAGRAM_AXISTITLE), OBJECTTYPE_AXISTITLE, nAxesSetIdx, nAxisIdx );
+            aTitleConv.convertFromModel( xTitled, OoxResId(STR_DIAGRAM_AXISTITLE), OBJECTTYPE_AXISTITLE, eCT, nAxesSetIdx, nAxisIdx );
         }
 
         // axis data unit label -----------------------------------------------

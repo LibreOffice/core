@@ -23,6 +23,7 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <vector>
@@ -35,11 +36,27 @@ using ::com::sun::star::beans::Property;
 namespace
 {
 
+enum
+{
+    PROP_WALL_HAS_EXPLICIT_SPPR
+};
+
+void lcl_AddPropertiesToVector(
+    std::vector< Property > & rOutProperties )
+{
+    rOutProperties.emplace_back( "HasExplicitSpPr",
+                  PROP_WALL_HAS_EXPLICIT_SPPR,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+}
+
 ::cppu::OPropertyArrayHelper& StaticWallInfoHelper()
 {
     static ::cppu::OPropertyArrayHelper aPropHelper = []()
         {
             std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
             ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
             ::chart::FillProperties::AddPropertiesToVector( aProperties );
             ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );

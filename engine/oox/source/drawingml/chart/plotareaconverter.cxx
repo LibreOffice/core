@@ -616,6 +616,9 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel,
     {
         PropertySet aPropSet( xDiagram->getWall() );
         getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_PLOTAREA2D );
+
+        if (mrModel.meCT == ChartType::CX && mrModel.mxShapeProp.is())
+            aPropSet.setProperty(PROP_HasExplicitSpPr, true);
     }
 }
 

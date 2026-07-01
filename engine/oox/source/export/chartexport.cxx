@@ -1699,7 +1699,7 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
     // TODO: printSettings
     // TODO: text properties
     Reference< XPropertySet > xPropSet = xChartDoc->getArea();
-    if( xPropSet.is() )
+    if( xPropSet.is() && (!bIsChartex || hasExplicitSpPr(xPropSet)) )
         exportShapeProps( xPropSet, nChartNS );
 
     // TODO for chartex
@@ -2619,7 +2619,13 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
         }
 
         // shape properties
-        exportShapeProps( xProp, bIsChartex ? XML_cx : XML_c );
+        if (bIsChartex) {
+            if (hasExplicitSpPr(xProp)) {
+                exportShapeProps( xProp, XML_cx );
+            }
+        } else {
+            exportShapeProps( xProp, XML_c );
+        }
 
         // draw-chart:txPr text properties
         exportTextProps( xProp, bIsChartex );
@@ -2682,8 +2688,9 @@ void ChartExport::exportTitle( const Reference< XShape >& xShape, bool bIsCharte
     }
 
     if (bIsChartex) {
-        // shape properties
-        if( xPropSet.is() )
+        // shape properties - only when the source had an explicit cx:spPr,
+        // since the chartex schema makes spPr optional.
+        if (hasExplicitSpPr(xPropSet))
         {
             exportShapeProps(xPropSet, XML_cx);
         }
@@ -3081,7 +3088,8 @@ void ChartExport::exportPlotArea(const Reference< css::chart::XChartDocument >& 
             {
                 xWallPropSet->setPropertyValue( u"LineStyle"_ustr, cpo::uno::Any(drawing::LineStyle_NONE) );
             }
-            exportShapeProps( xWallPropSet, bIsChartex ? XML_cx : XML_c );
+            if (!bIsChartex || hasExplicitSpPr(xWallPropSet))
+                exportShapeProps( xWallPropSet, bIsChartex ? XML_cx : XML_c );
         }
     }
 
@@ -4742,6 +4750,21 @@ void ChartExport::exportShapeProps( const Reference< XPropertySet >& xPropSet,
     pFS->endElement( FSNS( nNS, XML_spPr ) );
 }
 
+bool ChartExport::hasExplicitSpPr(const Reference<XPropertySet>& xPropSet)
+{
+    if (!xPropSet.is())
+        return false;
+    bool bHasSpPr = false;
+    try
+    {
+        xPropSet->getPropertyValue(u"HasExplicitSpPr"_ustr) >>= bHasSpPr;
+    }
+    catch (const cpo::uno::Exception&)
+    {
+    }
+    return bHasSpPr;
+}
+
 void ChartExport::exportTextProps(const Reference<XPropertySet>& xPropSet,
         bool bIsChartex)
 {
@@ -5618,15 +5641,8 @@ void ChartExport::exportOneAxis_chartex(
         }
         if (!bShow)
             return;
-        bool bHasSpPr = false;
-        try
-        {
-            xGrid->getPropertyValue(u"HasExplicitSpPr"_ustr) >>= bHasSpPr;
-        }
-        catch (const cpo::uno::Exception&)
-        {
-        }
-        if (bHasSpPr)
+
+        if (hasExplicitSpPr(xGrid))
         {
             pFS->startElement(FSNS(XML_cx, nTag));
             exportShapeProps(xGrid, XML_cx);
@@ -5698,10 +5714,7 @@ void ChartExport::exportOneAxis_chartex(
             XML_sourceLinked, bLinkedNumFmt ? "1" : "0");
 
     // ==== spPr (only if the axis had one on import)
-    bool bHasSpPr = false;
-    if (xAxisProp.is())
-        xAxisProp->getPropertyValue(u"HasExplicitSpPr"_ustr) >>= bHasSpPr;
-    if (bHasSpPr)
+    if (hasExplicitSpPr(xAxisProp))
         exportShapeProps( xAxisProp, XML_cx );
 
     // ==== txPr (only if the axis had one on import)

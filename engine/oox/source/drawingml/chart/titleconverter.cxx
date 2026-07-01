@@ -34,6 +34,7 @@
 #include <osl/diagnose.h>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
+#include <drawingml/chart/axismodel.hxx>
 #include <drawingml/chart/datasourceconverter.hxx>
 #include <drawingml/chart/titlemodel.hxx>
 #include <oox/token/properties.hxx>
@@ -187,7 +188,7 @@ TitleConverter::~TitleConverter()
 {
 }
 
-void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, const OUString& rAutoTitle, ObjectType eObjType, sal_Int32 nMainIdx, sal_Int32 nSubIdx )
+void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, const OUString& rAutoTitle, ObjectType eObjType, ChartType eCT, sal_Int32 nMainIdx, sal_Int32 nSubIdx )
 {
     if( !rxTitled.is() )
         return;
@@ -209,6 +210,10 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
         // frame formatting (text formatting already done in TextConverter::createStringSequence())
         PropertySet aPropSet( xTitle );
         getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, eObjType );
+
+        if (eCT == ChartType::CX && mrModel.mxShapeProp.is()) {
+            aPropSet.setProperty(PROP_HasExplicitSpPr, true);
+        }
 
         // frame rotation
         OSL_ENSURE( !mrModel.mxTextProp || !rText.mxTextBody, "TitleConverter::convertFromModel - multiple text properties" );
@@ -232,7 +237,7 @@ LegendConverter::~LegendConverter()
 {
 }
 
-void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
+void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, ChartType eCT )
 {
     if( !rxDiagram.is() )
         return;
@@ -305,6 +310,10 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 
         if (mrModel.maLegendEntries.size() > 0)
             legendEntriesFormatting(rxDiagram);
+
+        if (eCT == ChartType::CX && mrModel.mxShapeProp.is()) {
+            aPropSet.setProperty(PROP_HasExplicitSpPr, true);
+        }
     }
     catch( cpo::uno::Exception& )
     {

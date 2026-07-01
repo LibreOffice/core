@@ -61,7 +61,8 @@ enum
     PROP_TITLE_TEXT_STACKED,
     PROP_TITLE_REL_POS,
 
-    PROP_TITLE_REF_PAGE_SIZE
+    PROP_TITLE_REF_PAGE_SIZE,
+    PROP_TITLE_HAS_EXPLICIT_SPPR
 };
 
 void lcl_AddPropertiesToVector(
@@ -136,6 +137,12 @@ void lcl_AddPropertiesToVector(
     rOutProperties.emplace_back( "ReferencePageSize",
                   PROP_TITLE_REF_PAGE_SIZE,
                   cppu::UnoType<awt::Size>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+
+    rOutProperties.emplace_back( "HasExplicitSpPr",
+                  PROP_TITLE_HAS_EXPLICIT_SPPR,
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 }

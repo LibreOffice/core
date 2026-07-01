@@ -302,6 +302,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPPTX)
                 "layoutId", u"funnel");
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis/cx:catScaling", "gapWidth",
                 u"2.19");
+    // Ensure no fictitious legend shape props gets inserted
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:legend/cx:spPr", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexGapWidth)
@@ -365,6 +367,29 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexNoSpPr)
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series");
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:plotAreaRegion/cx:series/cx:spPr",
                 0);
+
+    // chartSpace, title, and plotArea each take an optional cx:spPr child
+    // in the chartex schema. Make sure we're not making up default values for
+    // these.
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:spPr", 0);
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:spPr", 0);
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:spPr", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexExplicitSpPr)
+{
+    // waterfall2.xlsx has explicit <cx:spPr> on chartSpace and title (but
+    // not plotArea). Make sure these are round-tripping properly (both
+    // existence and nonexistence).
+    loadFromFile(u"xlsx/waterfall2.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:spPr", 1);
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:title/cx:spPr", 1);
+    // The source has no plotArea-level spPr; suppression must hold here too.
+    assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:plotArea/cx:spPr", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxisRoundTrip)
