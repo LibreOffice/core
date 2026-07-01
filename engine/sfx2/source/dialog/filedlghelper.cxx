@@ -2494,10 +2494,6 @@ OUString FileDialogHelper::contextToString(Context context)
             return u"AcceleratorConfig"_ustr;
         case AutoRedact:
             return u"AutoRedact"_ustr;
-        case BaseDataSource:
-            return u"BaseDataSource"_ustr;
-        case BaseSaveAs:
-            return u"BaseSaveAs"_ustr;
         case BasicExportDialog:
             return u"BasicExportDialog"_ustr;
         case BasicExportPackage:
@@ -2524,8 +2520,6 @@ OUString FileDialogHelper::contextToString(Context context)
             return u"CalcXMLSource"_ustr;
         case ExportImage:
             return u"ExportImage"_ustr;
-        case ExtensionManager:
-            return u"ExtensionManager"_ustr;
         case FormsAddInstance:
             return u"FormsAddInstance"_ustr;
         case FormsInsertImage:
@@ -2564,8 +2558,6 @@ OUString FileDialogHelper::contextToString(Context context)
             return u"InsertMedia"_ustr;
         case JavaClassPath:
             return u"JavaClassPath"_ustr;
-        case ReportInsertImage:
-            return u"ReportInsertImage"_ustr;
         case ScreenshotAnnotation:
             return u"ScreenshotAnnotation"_ustr;
         case SignatureLine:
