@@ -1995,7 +1995,7 @@ class SettingIframe {
 				'download', // Use icon key
 				item.uri, // Use URI as title for download link
 				['button--vue-secondary', 'download-icon'],
-				(button) => window.open(item.uri, '_blank'),
+				(button) => window.open(item.uri, '_blank', 'noopener'),
 				true,
 			),
 		);
@@ -2064,7 +2064,7 @@ class SettingIframe {
 		// of letting the embedded webview navigate target=_blank itself.
 		zoteroAccountLink.addEventListener('click', (e: MouseEvent) => {
 			e.preventDefault();
-			window.parent.open(zoteroAccountHref, '_blank');
+			window.parent.open(zoteroAccountHref, '_blank', 'noopener');
 		});
 
 		zoteroDescription.appendChild(zoteroAccountLink);
