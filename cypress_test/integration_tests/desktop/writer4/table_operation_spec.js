@@ -187,10 +187,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 		helper.moveCursor('right', 'shift');
 	}
 
-	function minimalRowHeightTest() {
+	function minimalRowHeightTest(parentClass) {
 		prepareForTableSizeTests();
-		cy.cGet('#rowsizing .unoSetOptimalRowHeight').click();
-		cy.cGet('#rowsizing .unoSetMinimalRowHeight').click();
+		cy.cGet(parentClass + ' #rowsizing .unoSetOptimalRowHeight').click();
+		cy.cGet(parentClass + ' #rowsizing .unoSetMinimalRowHeight').click();
 
 		selectFullTable();
 
@@ -198,10 +198,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 		cy.cGet('#copy-paste-container td').should('not.have.attr', 'height');
 	}
 
-	function optimalRowHeightTest() {
+	function optimalRowHeightTest(parentClass) {
 		prepareForTableSizeTests();
-		cy.cGet('#rowsizing .unoSetOptimalRowHeight').should('not.have.attr','disabled');
-		cy.cGet('#rowsizing .unoSetOptimalRowHeight').click();
+		cy.cGet(parentClass + ' #rowsizing .unoSetOptimalRowHeight').should('not.have.attr','disabled');
+		cy.cGet(parentClass + ' #rowsizing .unoSetOptimalRowHeight').click();
 		selectFullTable();
 
 		// Check new row height
@@ -217,10 +217,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 			});
 	}
 
-	function distributeRowsTest() {
+	function distributeRowsTest(parentClass) {
 		prepareForTableSizeTests();
-		cy.cGet('#rowsizing .unoDistributeRows').should('not.have.attr','disabled');
-		cy.cGet('#rowsizing .unoDistributeRows').click();
+		cy.cGet(parentClass + ' #rowsizing .unoDistributeRows').should('not.have.attr','disabled');
+		cy.cGet(parentClass + ' #rowsizing .unoDistributeRows').click();
 
 		selectFullTable();
 
@@ -237,18 +237,18 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 			});
 	}
 
-	function minimalColumnWidthTest() {
+	function minimalColumnWidthTest(parentClass) {
 		prepareForTableSizeTests();
-		cy.cGet('#columnsizing .unoSetMinimalColumnWidth').click();
+		cy.cGet(parentClass + ' #columnsizing .unoSetMinimalColumnWidth').click();
 
 		selectFullTable();
 
 		cy.cGet('#copy-paste-container td').should('have.attr', 'width', '25');
 	}
 
-	function optimalColumnWidthTest() {
+	function optimalColumnWidthTest(parentClass) {
 		prepareForTableSizeTests();
-		cy.cGet('#columnsizing .unoSetOptimalColumnWidth').click();
+		cy.cGet(parentClass + ' #columnsizing .unoSetOptimalColumnWidth').click();
 
 		selectFullTable();
 
@@ -256,37 +256,37 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 		cy.cGet('#copy-paste-container td:nth-of-type(2n)').should('have.attr', 'width', '10%');
 	}
 
-	function distributeColumnsTest() {
+	function distributeColumnsTest(parentClass) {
 		prepareForTableSizeTests();
-		cy.cGet('#columnsizing .unoDistributeColumns').click();
+		cy.cGet(parentClass + ' #columnsizing .unoDistributeColumns').click();
 
 		selectFullTable();
 
 		cy.cGet('#copy-paste-container td').should('have.attr', 'width', '50%');
 	}
 
-	it('Set minimal row height.', function() {
-		minimalRowHeightTest();
+	it('Sidebar: Set minimal row height.', function() {
+		minimalRowHeightTest('.sidebar');
 	});
 
-	it('Set optimal row height.', function() {
-		optimalRowHeightTest();
+	it('Sidebar: Set optimal row height.', function() {
+		optimalRowHeightTest('.sidebar');
 	});
 
-	it('Distribute rows.', function() {
-		distributeRowsTest();
+	it('Sidebar: Distribute rows.', function() {
+		distributeRowsTest('.sidebar');
 	});
 
-	it('Set minimal column width.', function() {
-		minimalColumnWidthTest();
+	it('Sidebar: Set minimal column width.', function() {
+		minimalColumnWidthTest('.sidebar');
 	});
 
-	it('Set optimal column width.', function() {
-		optimalColumnWidthTest();
+	it('Sidebar: Set optimal column width.', function() {
+		optimalColumnWidthTest('.sidebar');
 	});
 
-	it('Distribute columns.', function() {
-		distributeColumnsTest();
+	it('Sidebar: Distribute columns.', function() {
+		distributeColumnsTest('.sidebar');
 	});
 
 	it('Split Cells', function() {
