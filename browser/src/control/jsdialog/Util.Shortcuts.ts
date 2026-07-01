@@ -34,6 +34,12 @@ const UNO_ALIASES: Record<string, string> = {
 // Non-UNO IDs with explicit shortcuts not from Accelerators.xcu.
 const EXPLICIT_ALIASES: Record<string, string> = {
 	'keyboard-shortcuts': 'Ctrl+Shift+?',
+	// The browser always binds Ctrl+F to open the find bar globally,
+	// regardless of locale (locale-specific additional bindings are extra).
+	// Do not use vnd.sun.star.findbar:FocusToFindbar here: its XCU entry
+	// reflects the desktop shortcut, which differs from the browser binding
+	// in some locales (e.g. German desktop uses Shift+Alt+F).
+	find: 'Ctrl+F',
 };
 
 class ShortcutsUtil {
