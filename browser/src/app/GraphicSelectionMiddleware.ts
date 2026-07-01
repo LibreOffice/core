@@ -135,8 +135,14 @@ class GraphicSelection {
 		}
 
 		const rawWidth = Math.abs(messageJSON[2]);
+		// Calc RTL reports shapes with a negative X as its own sign-encoding convention.
+		// Everywhere else (Impress, Writer, non-RTL Calc), a negative X is an ordinary
+		// coordinate - for example a shape dragged partly off the left edge of a slide -
+		// and must be kept as-is.
 		const rectX =
-			messageJSON[0] < 0 ? Math.abs(messageJSON[0]) - rawWidth : messageJSON[0];
+			app.map._docLayer.isCalcRTL() && messageJSON[0] < 0
+				? Math.abs(messageJSON[0]) - rawWidth
+				: messageJSON[0];
 
 		this.rectangle = new cool.SimpleRectangle(
 			rectX,
