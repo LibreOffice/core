@@ -569,7 +569,9 @@ class NavigatorPanel extends SidebarBase {
 	}
 
 	createSearchBar(wrapper: HTMLElement) {
-		var data = {
+		const findReplaceText = _('Find and Replace');
+
+		const data = {
 			id: '',
 			type: 'container',
 			children: [
@@ -586,13 +588,27 @@ class NavigatorPanel extends SidebarBase {
 					children: [
 						{
 							id: 'navigator-search-button',
-							type: 'pushbutton',
+							type: 'menubutton',
 							text: '',
-							image: 'lc_recsearch.svg',
-							aria: {
-								label: _('Search'),
+							icon: 'lc_recsearch.svg',
+							noLabel: true,
+							aria: { label: _('Search') },
+							applyCallback: () => {
+								this.useSearchCallback(
+									'pushbutton',
+									'activate',
+									{ id: 'navigator-search-button' },
+									this.builder,
+								);
 							},
-						},
+							menu: [
+								{
+									type: 'action',
+									id: 'navigator-find-replace',
+									text: findReplaceText,
+								} as MenuDefinition,
+							],
+						} as MenuButtonWidgetJSON,
 					],
 				},
 			],
@@ -682,6 +698,16 @@ class NavigatorPanel extends SidebarBase {
 		}
 	}
 
+	useFindReplaceCallback(_builder: JSBuilder) {
+		const searchTerm = this.getSearchTerm();
+		if (searchTerm && searchTerm.trim() !== '') {
+			// The FindReplaceDialog modification callback reads this and injects
+			// the term into the search field after the dialog DOM is built.
+			window.JSDialog.pendingFindReplaceSearchTerm = searchTerm;
+		}
+		app.map.sendUnoCommand('.uno:SearchDialog');
+	}
+
 	override callback(
 		objectType: string,
 		eventType: string,
@@ -689,9 +715,16 @@ class NavigatorPanel extends SidebarBase {
 		data: any,
 		builder: JSBuilder,
 	): void {
-		if (!['navigator-search-button', 'navigator-search'].includes(object.id)) {
+		if (
+			objectType === 'menubutton' &&
+			eventType === 'select' &&
+			data === 'navigator-find-replace'
+		) {
+			this.useFindReplaceCallback(builder);
+		} else if (
+			!['navigator-search-button', 'navigator-search'].includes(object.id)
+		) {
 			this.useDefaultCallback(objectType, eventType, object, data, builder);
-			return;
 		} else {
 			this.useSearchCallback(objectType, eventType, object, builder);
 		}

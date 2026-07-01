@@ -69,14 +69,13 @@ function _menubuttonControl (parentContainer, data, builder) {
 		if (!data.command)
 			data.command = menuId;
 
-		var options = {hasDropdownArrow: menuEntries.length > 1};
+		var isSplitButton = !!data.applyCallback;
+		var options = {hasDropdownArrow: menuEntries.length > 1 || isSplitButton};
 		var control = builder._unoToolButton(parentContainer, data, builder, options);
 
 		if (!window.L.DomUtil.hasClass(control.container, 'selected')) {
 			control.button.removeAttribute('aria-pressed');
 		}
-
-		var isSplitButton = !!data.applyCallback;
 		// can be function or string with command identifier
 		const applyCallback =
 			(typeof data.applyCallback === 'function') ?
@@ -135,7 +134,7 @@ function _menubuttonControl (parentContainer, data, builder) {
 				freshMenu[0].id = data.id;
 			}
 
-			if (freshMenu.length === 1) {
+			if (freshMenu.length === 1 && !isSplitButton) {
 				callback(null, 'selected', null, null, freshMenu[0]);
 			} else {
 				JSDialog.OpenDropdown(dropdownId, control.container, freshMenu, callback);

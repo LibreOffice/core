@@ -353,7 +353,9 @@ interface MenuButtonWidgetJSON extends WidgetJSON {
 	applyCallback?: () => void; // split button callback for left part
 	class?: string;
 	image?: string | boolean;
+	icon?: string; // theme-aware icon file name, e.g. 'lc_recsearch.svg'
 	accessKey?: string;
+	noLabel?: boolean; // suppress text label, show icon only
 }
 
 // type: 'buttonbox'

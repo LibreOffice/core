@@ -653,8 +653,12 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 /* search field box */
 #navigator-search-input {
 	height: 24px;
+	padding-inline: 0;
 }
 /* search button */
+#navigator-search-button {
+	margin-left: 4px;
+}
 #navigator-search-button button.ui-pushbutton {
 	background: transparent;
 	border: none;

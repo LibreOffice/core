@@ -24,6 +24,36 @@ const dialogModifications = new Map<string, DialogModificationCallback>();
 dialogModifications.set('FindReplaceDialog', function (instance: any) {
 	if (!instance.container) return;
 
+	// Pre-fill the search field when another component (e.g. Navigator) stored a term.
+	const pendingTerm = JSDialog.pendingFindReplaceSearchTerm as
+		| string
+		| undefined;
+	if (pendingTerm) {
+		JSDialog.pendingFindReplaceSearchTerm = undefined;
+		// The searchterm widget id is defined in srchdlg.cxx. Its DOM input
+		// element has the suffix appended, so anchor the selector to the
+		// known prefix to avoid matching an unrelated widget.
+		const searchInput = instance.container.querySelector(
+			'input[id^="searchterm-input-"]',
+		) as HTMLInputElement;
+		if (searchInput && instance.id !== undefined) {
+			// Set the DOM value immediately so the field is filled before
+			// the server round-trip completes.
+			searchInput.value = pendingTerm;
+			app.socket.sendMessage(
+				'dialogevent ' +
+					instance.id +
+					' ' +
+					JSON.stringify({
+						id: 'searchterm',
+						cmd: 'change',
+						data: pendingTerm,
+						type: 'combobox',
+					}),
+			);
+		}
+	}
+
 	instance.container.addEventListener('keydown', function (e: KeyboardEvent) {
 		if (e.code !== 'Enter') return; // Only handle Enter key
 
