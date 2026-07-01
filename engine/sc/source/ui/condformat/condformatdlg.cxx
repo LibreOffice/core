@@ -360,6 +360,52 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, weld::Button&, void )
     RecalcAll();
 }
 
+IMPL_LINK_NOARG(ScCondFormatList, PreviousBtnHdl, weld::Button&, void)
+{
+    Freeze();
+    size_t index = 0;
+    for (size_t i = 0; i < maEntries.size(); i++)
+    {
+        auto& widget = maEntries[i];
+        if (widget->IsSelected() && i > 0)
+        {
+            widget->SetInactive();
+            index = i - 1;
+            break;
+        }
+    }
+    mpDialogParent->InvalidateRefData();
+    maEntries[index]->SetActive();
+    mpDialogParent->OnSelectionChange(index, maEntries.size());
+    Thaw();
+    RecalcAll();
+}
+
+IMPL_LINK_NOARG(ScCondFormatList, NextBtnHdl, weld::Button&, void)
+{
+    Freeze();
+    size_t index = 0;
+    for (size_t i = 0; i < maEntries.size(); i++)
+    {
+        auto& widget = maEntries[i];
+        if (widget->IsSelected())
+        {
+            index = i;
+            if (i < maEntries.size()-1)
+            {
+                widget->SetInactive();
+                index = i + 1;
+                break;
+            }
+        }
+    }
+    mpDialogParent->InvalidateRefData();
+    maEntries[index]->SetActive();
+    mpDialogParent->OnSelectionChange(index, maEntries.size());
+    Thaw();
+    RecalcAll();
+}
+
 IMPL_LINK_NOARG(ScCondFormatList, UpBtnHdl, weld::Button&, void)
 {
     Freeze();
@@ -446,6 +492,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     , mxBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
     , mxBtnAdd(m_xBuilder->weld_button(u"add"_ustr))
     , mxBtnRemove(m_xBuilder->weld_button(u"delete"_ustr))
+    , mxBtnPrevious(m_xBuilder->weld_button(u"previous"_ustr))
+    , mxBtnNext(m_xBuilder->weld_button(u"next"_ustr))
     , mxBtnUp(m_xBuilder->weld_button(u"up"_ustr))
     , mxBtnDown(m_xBuilder->weld_button(u"down"_ustr))
     , mxBtnCancel(m_xBuilder->weld_button(u"cancel"_ustr))
@@ -493,6 +541,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mxBtnOk->connect_clicked(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mxBtnAdd->connect_clicked( LINK( mxCondFormList.get(), ScCondFormatList, AddBtnHdl ) );
     mxBtnRemove->connect_clicked( LINK( mxCondFormList.get(), ScCondFormatList, RemoveBtnHdl ) );
+    mxBtnPrevious->connect_clicked( LINK( mxCondFormList.get(), ScCondFormatList, PreviousBtnHdl ) );
+    mxBtnNext->connect_clicked( LINK( mxCondFormList.get(), ScCondFormatList, NextBtnHdl ) );
     mxBtnUp->connect_clicked(LINK(mxCondFormList.get(), ScCondFormatList, UpBtnHdl));
     mxBtnDown->connect_clicked(LINK(mxCondFormList.get(), ScCondFormatList, DownBtnHdl));
     mxBtnCancel->connect_clicked( LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
@@ -689,11 +739,17 @@ void ScCondFormatDlg::OnSelectionChange(size_t nIndex, size_t nSize, bool bSelec
     {
         mxBtnUp->set_sensitive(false);
         mxBtnDown->set_sensitive(false);
+        mxBtnPrevious->set_sensitive(false);
+        mxBtnNext->set_sensitive(false);
     }
     else
     {
-        mxBtnUp->set_sensitive(nIndex != 0);
-        mxBtnDown->set_sensitive(nIndex < nSize - 1);
+        bool bFirst = (nIndex == 0);
+        bool bLast = (nIndex >= nSize - 1);
+        mxBtnUp->set_sensitive(!bFirst);
+        mxBtnDown->set_sensitive(!bLast);
+        mxBtnPrevious->set_sensitive(!bFirst);
+        mxBtnNext->set_sensitive(!bLast);
     }
 }
 

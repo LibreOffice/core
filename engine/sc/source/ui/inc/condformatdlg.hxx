@@ -65,6 +65,8 @@ public:
 
     DECL_LINK( AddBtnHdl, weld::Button&, void );
     DECL_LINK( RemoveBtnHdl, weld::Button&, void );
+    DECL_LINK( PreviousBtnHdl, weld::Button&, void );
+    DECL_LINK( NextBtnHdl, weld::Button&, void );
     DECL_LINK( UpBtnHdl, weld::Button&, void );
     DECL_LINK( DownBtnHdl, weld::Button&, void );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry&, void );
@@ -91,6 +93,8 @@ private:
     std::unique_ptr<weld::Button> mxBtnOk;
     std::unique_ptr<weld::Button> mxBtnAdd;
     std::unique_ptr<weld::Button> mxBtnRemove;
+    std::unique_ptr<weld::Button> mxBtnPrevious;
+    std::unique_ptr<weld::Button> mxBtnNext;
     std::unique_ptr<weld::Button> mxBtnUp;
     std::unique_ptr<weld::Button> mxBtnDown;
     std::unique_ptr<weld::Button> mxBtnCancel;
