@@ -39,7 +39,8 @@ namespace
 
 enum
 {
-    PROP_GRID_SHOW
+    PROP_GRID_SHOW,
+    PROP_GRID_HAS_EXPLICIT_SPPR
 };
 
 void lcl_AddPropertiesToVector(
@@ -50,6 +51,16 @@ void lcl_AddPropertiesToVector(
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
+
+    // Chartex round-trip: tracks whether the imported cx:majorGridlines /
+    // cx:minorGridlines carried an explicit <cx:spPr> child. When false or
+    // unset, export must not emit a default spPr, since an empty gridlines
+    // element means "use default formatting".
+    rOutProperties.emplace_back( "HasExplicitSpPr",
+                  PROP_GRID_HAS_EXPLICIT_SPPR,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
 }
 
 const ::chart::tPropertyValueMap & StaticGridDefaults()

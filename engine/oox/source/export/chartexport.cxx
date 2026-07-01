@@ -5037,8 +5037,70 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair, bool bIsChartex)
     }
 
     if (bIsChartex) {
-        exportOneAxis_chartex(xAxisProp, xAxisTitle, xMajorGrid, xMinorGrid, nAxisType,
-                rAxisIdPair);
+        // The XAxisXSupplier / XAxisYSupplier wrappers above always return
+        // the primary axis for AXIS_CATEGORY / AXIS_VALUE entries, which is
+        // wrong for chartex (where each <cx:axis> is one of potentially many
+        // value axes, identified by cx:axisId). Look up the matching chart2
+        // axis directly so chartex-preserved properties on the secondary
+        // value axis don't get masked by the primary axis's values.
+        Reference<XPropertySet> xRealAxisProp = xAxisProp;
+        Reference<XPropertySet> xRealMajorGrid = xMajorGrid;
+        Reference<XPropertySet> xRealMinorGrid = xMinorGrid;
+        try
+        {
+            Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(
+                mxNewDiagram, uno::UNO_QUERY);
+            if (xCooSysCnt.is())
+            {
+                bool bFound = false;
+                const auto aCooSysSeq = xCooSysCnt->getCoordinateSystems();
+                for (const auto& xCooSys : aCooSysSeq)
+                {
+                    if (bFound)
+                        break;
+                    const sal_Int32 nDim = xCooSys->getDimension();
+                    for (sal_Int32 i = 0; i < nDim && !bFound; ++i)
+                    {
+                        const sal_Int32 nMaxAxIdx
+                            = xCooSys->getMaximumAxisIndexByDimension(i);
+                        for (sal_Int32 j = 0; j <= nMaxAxIdx && !bFound; ++j)
+                        {
+                            Reference<chart2::XAxis> xAxis
+                                = xCooSys->getAxisByDimension(i, j);
+                            Reference<XPropertySet> xAxisLookup(xAxis,
+                                uno::UNO_QUERY);
+                            if (!xAxisLookup.is())
+                                continue;
+                            sal_Int32 nStoredId = -1;
+                            try
+                            {
+                                xAxisLookup->getPropertyValue(u"AxisId"_ustr)
+                                    >>= nStoredId;
+                            }
+                            catch (const uno::Exception&)
+                            {
+                                continue;
+                            }
+                            if (nStoredId == rAxisIdPair.nAxisId)
+                            {
+                                xRealAxisProp = xAxisLookup;
+                                xRealMajorGrid = xAxis->getGridProperties();
+                                Sequence<Reference<XPropertySet>> aSubGrids
+                                    = xAxis->getSubGridProperties();
+                                if (aSubGrids.hasElements())
+                                    xRealMinorGrid = aSubGrids[0];
+                                bFound = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (const uno::Exception&)
+        {
+        }
+        exportOneAxis_chartex(xRealAxisProp, xAxisTitle, xRealMajorGrid,
+                xRealMinorGrid, nAxisType, rAxisIdPair);
     } else {
         exportOneAxis_chart(xAxisProp, xAxisTitle, xMajorGrid, xMinorGrid, nAxisType,
                 sAxPos, rAxisIdPair);
@@ -5453,57 +5515,46 @@ void ChartExport::exportOneAxis_chartex(
             break;
         case XML_valAx:
             {
-                bool bAutoMax = false;
-                double dMax = 0;
-                bool bMaxSpecified = false;
-                if(GetProperty( xAxisProp, u"AutoMax"_ustr ) )
-                    mAny >>= bAutoMax;
-
-                if( !bAutoMax && (GetProperty( xAxisProp, u"Max"_ustr ) ) )
+                // Only emit a cx:valScaling attribute when it was explicitly
+                // set on the source. We read the chartex-preserved values
+                // first; if they are unset we treat the attribute as auto and
+                // omit it, rather than synthesizing one from chart2 defaults
+                // (which would inject e.g. minorUnit="0.2" into round-tripped
+                // empty valScaling elements).
+                auto readOptDouble = [&xAxisProp](const OUString& rName)
+                    -> std::optional<double>
                 {
-                    mAny >>= dMax;
-                    bMaxSpecified = true;
-                }
+                    if (!xAxisProp.is())
+                        return std::nullopt;
+                    try
+                    {
+                        cpo::uno::Any aVal = xAxisProp->getPropertyValue(rName);
+                        double d = 0;
+                        if (aVal >>= d)
+                            return d;
+                    }
+                    catch (const uno::Exception&)
+                    {
+                    }
+                    return std::nullopt;
+                };
+                std::optional<double> oMax = readOptDouble(u"ChartexValMax"_ustr);
+                std::optional<double> oMin = readOptDouble(u"ChartexValMin"_ustr);
+                std::optional<double> oMajor = readOptDouble(u"ChartexMajorUnit"_ustr);
+                std::optional<double> oMinor = readOptDouble(u"ChartexMinorUnit"_ustr);
 
-                bool bAutoMin = false;
-                double dMin = 0;
-                bool bMinSpecified = false;
-                if(GetProperty( xAxisProp, u"AutoMin"_ustr ) )
-                    mAny >>= bAutoMin;
-
-                if( !bAutoMin && (GetProperty( xAxisProp, u"Min"_ustr ) ) )
+                auto asAttr = [](std::optional<double> oVal) -> std::optional<OString>
                 {
-                    mAny >>= dMin;
-                    bMinSpecified = true;
-                }
-
-                bool bAutoMajor = false;
-                double dMajorUnit = 0;
-                bool bMajorSpecified = false;
-                if(GetProperty( xAxisProp, u"AutoStepMain"_ustr ) )
-                    mAny >>= bAutoMajor;
-                if( !bAutoMajor && (GetProperty( xAxisProp, u"StepMain"_ustr ) ) )
-                {
-                    mAny >>= dMajorUnit;
-                    bMajorSpecified = true;
-                }
-
-                bool bAutoMinor = false;
-                double dMinorUnit = 0;
-                bool bMinorSpecified = false;
-                if(GetProperty( xAxisProp, u"AutoStepHelp"_ustr ) )
-                    mAny >>= bAutoMinor;
-                if( !bAutoMinor && (GetProperty( xAxisProp, u"StepHelp"_ustr ) ) )
-                {
-                    mAny >>= dMinorUnit;
-                    bMinorSpecified = true;
-                }
+                    if (oVal.has_value())
+                        return OString::number(*oVal);
+                    return std::nullopt;
+                };
 
                 pFS->singleElement(FSNS(XML_cx, XML_valScaling),
-                        XML_max, bMaxSpecified ? OString::number(dMax) : std::optional<OString>(),
-                        XML_min, bMinSpecified ? OString::number(dMin) : std::optional<OString>(),
-                        XML_majorUnit, bMajorSpecified ? OString::number(dMajorUnit) : std::optional<OString>(),
-                        XML_minorUnit, bMinorSpecified ? OString::number(dMinorUnit) : std::optional<OString>());
+                        XML_max, asAttr(oMax),
+                        XML_min, asAttr(oMin),
+                        XML_majorUnit, asAttr(oMajor),
+                        XML_minorUnit, asAttr(oMinor));
             }
             break;
         default:
@@ -5517,47 +5568,77 @@ void ChartExport::exportOneAxis_chartex(
     }
 
     // ==== units
-    if (GetProperty( xAxisProp, u"DisplayUnits"_ustr ) )
+    // Chartex collapses c:dispUnits/c:builtInUnit into a self-closing
+    // cx:units element carrying the unit token on a "unit" attribute. The
+    // chartex-preserved string takes precedence; for axes that never had a
+    // cx:units we fall back to BuiltInUnit (set, for instance, when the
+    // chart was originally a c-namespace chart).
+    OUString aUnitVal;
+    if (xAxisProp.is())
+    {
+        try
+        {
+            xAxisProp->getPropertyValue(u"ChartexUnit"_ustr) >>= aUnitVal;
+        }
+        catch (const uno::Exception&)
+        {
+        }
+    }
+    if (aUnitVal.isEmpty() && GetProperty( xAxisProp, u"DisplayUnits"_ustr ))
     {
         bool bDisplayUnits = false;
         mAny >>= bDisplayUnits;
-        if (bDisplayUnits)
+        if (bDisplayUnits && GetProperty( xAxisProp, u"BuiltInUnit"_ustr ))
+            mAny >>= aUnitVal;
+    }
+    if (!aUnitVal.isEmpty())
+        pFS->singleElement(FSNS(XML_cx, XML_units), XML_unit, aUnitVal);
+
+    // ==== majorGridlines / minorGridlines
+    // Two round-trip concerns:
+    //   1) The gridlines element is emitted only when the imported axis had
+    //      one, signaled by the "Show" flag on the grid property set
+    //      (axisconverter sets Show = mxMajor/MinorGridLines.is()).
+    //   2) When the source gridlines had no <cx:spPr>, we must not emit one
+    //      either; an empty gridlines element means "use default
+    //      formatting" and a synthesized spPr would silently restyle the
+    //      grid on round-trip.
+    auto exportChartexGridLines = [this, pFS](const Reference<XPropertySet>& xGrid,
+            sal_Int32 nTag)
+    {
+        if (!xGrid.is())
+            return;
+        bool bShow = false;
+        try
         {
-            if (GetProperty( xAxisProp, u"BuiltInUnit"_ustr ))
-            {
-                OUString aVal;
-                mAny >>= aVal;
-                if(!aVal.isEmpty())
-                {
-                    pFS->startElement(FSNS(XML_cx, XML_units));
-
-                    pFS->startElement(FSNS(XML_cx, XML_unitsLabel));
-
-                    lcl_writeChartexString(pFS, aVal);
-
-                    pFS->endElement(FSNS(XML_cx, XML_unitsLabel));
-
-                    pFS->endElement( FSNS( XML_cx, XML_units ) );
-                }
-            }
+            xGrid->getPropertyValue(u"Show"_ustr) >>= bShow;
         }
-    }
-
-    // ==== majorGridlines
-    if( xMajorGrid.is())
-    {
-        pFS->startElement(FSNS(XML_cx, XML_majorGridlines));
-        exportShapeProps( xMajorGrid, XML_cx );
-        pFS->endElement( FSNS( XML_cx, XML_majorGridlines ) );
-    }
-
-    // ==== minorGridlines
-    if( xMinorGrid.is())
-    {
-        pFS->startElement(FSNS(XML_cx, XML_minorGridlines));
-        exportShapeProps( xMinorGrid, XML_cx );
-        pFS->endElement( FSNS( XML_cx, XML_minorGridlines ) );
-    }
+        catch (const uno::Exception&)
+        {
+        }
+        if (!bShow)
+            return;
+        bool bHasSpPr = false;
+        try
+        {
+            xGrid->getPropertyValue(u"HasExplicitSpPr"_ustr) >>= bHasSpPr;
+        }
+        catch (const uno::Exception&)
+        {
+        }
+        if (bHasSpPr)
+        {
+            pFS->startElement(FSNS(XML_cx, nTag));
+            exportShapeProps(xGrid, XML_cx);
+            pFS->endElement(FSNS(XML_cx, nTag));
+        }
+        else
+        {
+            pFS->singleElement(FSNS(XML_cx, nTag));
+        }
+    };
+    exportChartexGridLines(xMajorGrid, XML_majorGridlines);
+    exportChartexGridLines(xMinorGrid, XML_minorGridlines);
 
     // ==== majorTickMarks
     if (GetProperty( xAxisProp, u"MajorTickmarks"_ustr ) )

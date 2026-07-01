@@ -60,7 +60,12 @@ ChartExDimType
 ChartExFormula
 ChartExNFormula
 ChartexAxisIds
+ChartexMajorUnit
+ChartexMinorUnit
 ChartexOwnerIdx
+ChartexUnit
+ChartexValMax
+ChartexValMin
 CharBackColor
 CharBackgroundComplexColor
 CharCaseMap

@@ -235,6 +235,28 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
             if (mrModel.mobCatNotVal) {
                 aAxisProp.setProperty(PROP_CatNotVal, mrModel.mobCatNotVal.value());
             }
+            // Chartex only: preserve cx:valScaling attributes verbatim. The
+            // chart2 ScaleData round-trip loses these when the axis is the
+            // secondary value axis of a combined chart (e.g. paretoLine),
+            // because Auto* flags get re-derived from explicit increments.
+            if (mrModel.mofMin.has_value())
+                aAxisProp.setProperty(PROP_ChartexValMin, mrModel.mofMin.value());
+            if (mrModel.mofMax.has_value())
+                aAxisProp.setProperty(PROP_ChartexValMax, mrModel.mofMax.value());
+            if (mrModel.mofMajorUnit.has_value())
+                aAxisProp.setProperty(PROP_ChartexMajorUnit, mrModel.mofMajorUnit.value());
+            if (mrModel.mofMinorUnit.has_value())
+                aAxisProp.setProperty(PROP_ChartexMinorUnit, mrModel.mofMinorUnit.value());
+
+            // Chartex only: preserve cx:units/@unit. AxisDispUnitsConverter
+            // still feeds BuiltInUnit/DisplayUnits, but those don't survive
+            // the trip to the secondary axis on some chart layouts.
+            if (mrModel.mxDispUnits.is()
+                && !mrModel.mxDispUnits->mnBuiltInUnit.isEmpty())
+            {
+                aAxisProp.setProperty(PROP_ChartexUnit,
+                    mrModel.mxDispUnits->mnBuiltInUnit);
+            }
         }
 
         // no X axis line in radar charts
@@ -261,7 +283,13 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         PropertySet aGridProp( xAxis->getGridProperties() );
         aGridProp.setProperty( PROP_Show, mrModel.mxMajorGridLines.is() );
         if( mrModel.mxMajorGridLines.is() )
+        {
             rFormatter.convertFrameFormatting( aGridProp, mrModel.mxMajorGridLines, OBJECTTYPE_MAJORGRIDLINE );
+            // Chartex round-trip: remember whether the imported gridlines
+            // element carried an explicit cx:spPr child.
+            if (eCT == ChartType::CX && mrModel.mbMajorGridLinesHasSpPr)
+                aGridProp.setProperty(PROP_HasExplicitSpPr, true);
+        }
 
         // sub grid
         Sequence< Reference< XPropertySet > > aSubGridPropSeq = xAxis->getSubGridProperties();
@@ -270,7 +298,11 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
             PropertySet aSubGridProp( aSubGridPropSeq[ 0 ] );
             aSubGridProp.setProperty( PROP_Show, mrModel.mxMinorGridLines.is() );
             if( mrModel.mxMinorGridLines.is() )
+            {
                 rFormatter.convertFrameFormatting( aSubGridProp, mrModel.mxMinorGridLines, OBJECTTYPE_MINORGRIDLINE );
+                if (eCT == ChartType::CX && mrModel.mbMinorGridLinesHasSpPr)
+                    aSubGridProp.setProperty(PROP_HasExplicitSpPr, true);
+            }
         }
 
         // axis type and X axis categories ------------------------------------
@@ -445,7 +477,9 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
         // number format ------------------------------------------------------
         if( !mrModel.mbDeleted && aScaleData.AxisType != cssc2::AxisType::SERIES )
         {
-            getFormatter().convertNumberFormat(aAxisProp, mrModel.maNumberFormat, true);
+            if (mrModel.maNumberFormat) {
+                getFormatter().convertNumberFormat(aAxisProp, mrModel.maNumberFormat.value(), true);
+            }
         }
 
         // position of crossing axis ------------------------------------------
