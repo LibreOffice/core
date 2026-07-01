@@ -54,7 +54,9 @@ AxisModel::AxisModel( sal_Int32 nTypeId, enum ChartType eCT) :
     mnTypeId( nTypeId ),
     mbAuto( false ),
     mbDeleted( false ),
-    mbNoMultiLevel( false )
+    mbNoMultiLevel( false ),
+    mbMajorGridLinesHasSpPr( false ),
+    mbMinorGridLinesHasSpPr( false )
 {
 }
 

@@ -381,6 +381,36 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexNoSpPr)
                 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxisRoundTrip)
+{
+    // paretoLine.xlsx has three axes identified by @id:
+    //   id=0 cx:catScaling axis (category)
+    //   id=1 empty cx:valScaling + empty cx:majorGridlines
+    //   id=2 cx:valScaling min="0" max="1" + cx:units unit="percentage"
+    // Round-trip via the chart2 model must preserve all of these.
+    loadFromFile(u"xlsx/paretoLine.xlsx");
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chartEx1.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OString sAxisId1 = "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[@id='1']"_ostr;
+    OString sAxisId2 = "/cx:chartSpace/cx:chart/cx:plotArea/cx:axis[@id='2']"_ostr;
+
+    // axis id=2: cx:valScaling preserves min/max.
+    assertXPath(pXmlDoc, sAxisId2 + "/cx:valScaling", "min", u"0");
+    assertXPath(pXmlDoc, sAxisId2 + "/cx:valScaling", "max", u"1");
+
+    // axis id=2: cx:units uses the flat chartex form with a "unit"
+    // attribute, not a c-namespace style unitsLabel child.
+    assertXPath(pXmlDoc, sAxisId2 + "/cx:units", "unit", u"percentage");
+    assertXPath(pXmlDoc, sAxisId2 + "/cx:units/cx:unitsLabel", 0);
+
+    // axis id=1: source <cx:majorGridlines/> has no cx:spPr; we must not
+    // invent one on export.
+    assertXPath(pXmlDoc, sAxisId1 + "/cx:majorGridlines", 1);
+    assertXPath(pXmlDoc, sAxisId1 + "/cx:majorGridlines/cx:spPr", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexAxisIdPerSeries)
 {
     // Waterfall charts have two axes. Each series should reference both via

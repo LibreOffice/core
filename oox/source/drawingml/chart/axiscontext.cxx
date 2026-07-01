@@ -33,6 +33,36 @@ namespace oox::drawingml::chart {
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::ContextHandler2Helper;
 
+namespace {
+
+// Variant of ShapePrWrapperContext that also records whether a cx:spPr
+// child was actually encountered. Used to round-trip the distinction
+// between <cx:majorGridlines/> (no formatting) and
+// <cx:majorGridlines><cx:spPr>...</cx:spPr></cx:majorGridlines>.
+class ChartexGridLinesContext final : public ContextBase<Shape>
+{
+public:
+    explicit ChartexGridLinesContext(ContextHandler2Helper& rParent,
+            Shape& rModel, bool& rHasSpPr)
+        : ContextBase<Shape>(rParent, rModel), mrHasSpPr(rHasSpPr) {}
+
+    virtual ContextHandlerRef onCreateContext(sal_Int32 nElement,
+            const AttributeList&) override
+    {
+        if (isRootElement() && nElement == CX_TOKEN(spPr))
+        {
+            mrHasSpPr = true;
+            return new ShapePropertiesContext(*this, mrModel);
+        }
+        return nullptr;
+    }
+
+private:
+    bool& mrHasSpPr;
+};
+
+} // anonymous namespace
+
 AxisDispUnitsContext::AxisDispUnitsContext( ContextHandler2Helper& rParent, AxisDispUnitsModel& rModel ) :
     ContextBase< AxisDispUnitsModel >( rParent, rModel )
 {
@@ -126,7 +156,8 @@ ContextHandlerRef AxisContextBase::onCreateContext( sal_Int32 nElement, const At
                     mrModel.mnMinorTickMark = rAttribs.getToken( XML_val, bMSO2007Doc ? XML_none : XML_cross );
                     return nullptr;
                 case C_TOKEN( numFmt ):
-                    mrModel.maNumberFormat.setAttributes( rAttribs );
+                    mrModel.maNumberFormat = NumberFormat();
+                    mrModel.maNumberFormat.value().setAttributes( rAttribs );
                     return nullptr;
                 case C_TOKEN( scaling ):
                     return this;
@@ -326,12 +357,22 @@ ContextHandlerRef CxAxisContext::onCreateContext( sal_Int32 nElement, const Attr
             return new TitleContext( *this, mrModel.mxTitle.create(nDefaultRotation) );
         }
         case CX_TOKEN(units) :
-            // TODO
+            // Chartex flattens c:dispUnits/c:builtInUnit into a single
+            // cx:units element with a "unit" attribute. Map directly onto
+            // the AxisDispUnitsModel so the chart2 axis ends up with the
+            // matching DisplayUnits/BuiltInUnit properties via
+            // AxisDispUnitsConverter.
+            mrModel.mxDispUnits.create().mnBuiltInUnit
+                = rAttribs.getString(XML_unit, OUString());
             return nullptr;
         case CX_TOKEN(majorGridlines):
-            return new ShapePrWrapperContext( *this, mrModel.mxMajorGridLines.create() );
+            return new ChartexGridLinesContext( *this,
+                    mrModel.mxMajorGridLines.create(),
+                    mrModel.mbMajorGridLinesHasSpPr );
         case CX_TOKEN(minorGridlines):
-            return new ShapePrWrapperContext( *this, mrModel.mxMinorGridLines.create() );
+            return new ChartexGridLinesContext( *this,
+                    mrModel.mxMinorGridLines.create(),
+                    mrModel.mbMinorGridLinesHasSpPr );
         case CX_TOKEN(majorTickMarks):
             mrModel.mnMajorTickMark = rAttribs.getToken( XML_type, XML_none );
             return nullptr;
@@ -343,7 +384,8 @@ ContextHandlerRef CxAxisContext::onCreateContext( sal_Int32 nElement, const Attr
             // TODO (contents is only an extLst)
             return nullptr;
         case CX_TOKEN(numFmt):
-            mrModel.maNumberFormat.setAttributes( rAttribs );
+            mrModel.maNumberFormat = NumberFormat();
+            mrModel.maNumberFormat.value().setAttributes( rAttribs );
             return nullptr;
         case CX_TOKEN(spPr):
             return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
