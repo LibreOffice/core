@@ -56,8 +56,7 @@ struct HighlightPortion {
 // lists, C comment flags)
 enum class HighlighterLanguage
 {
-    Basic,
-    SQL
+    Basic
 };
 
 class COMPHELPER_DLLPUBLIC SyntaxHighlighter

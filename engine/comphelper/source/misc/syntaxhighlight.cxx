@@ -185,71 +185,6 @@ const char* const strListBasicKeyWords[] = {
     "xor"
 };
 
-const char* const strListSqlKeyWords[] = {
-    "all",
-    "and",
-    "any",
-    "as",
-    "asc",
-    "avg",
-    "between",
-    "by",
-    "cast",
-    "corresponding",
-    "count",
-    "create",
-    "cross",
-    "delete",
-    "desc",
-    "distinct",
-    "drop",
-    "escape",
-    "except",
-    "exists",
-    "false",
-    "from",
-    "full",
-    "global",
-    "group",
-    "having",
-    "in",
-    "inner",
-    "insert",
-    "intersect",
-    "into",
-    "is",
-    "join",
-    "left",
-    "like",
-    "limit",
-    "local",
-    "match",
-    "max",
-    "min",
-    "natural",
-    "not",
-    "null",
-    "on",
-    "or",
-    "order",
-    "outer",
-    "right",
-    "select",
-    "set",
-    "some",
-    "sum",
-    "table",
-    "temporary",
-    "true",
-    "union",
-    "unique",
-    "unknown",
-    "update",
-    "using",
-    "values",
-    "where"
-};
-
 extern "C" {
 
 static int compare_strings( const void *arg1, const void *arg2 )
@@ -408,80 +343,28 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(std::u16string_view::const_itera
     // only for BASIC '\'' should be a comment, otherwise it is a normal string and handled there
     else if ( testCharFlags( c, CharFlags::Operator ) || ( (c == '\'') && (aLanguage==HighlighterLanguage::Basic)) )
     {
-        // parameters for SQL view
-        if (((c==':') || (c=='?')) && (aLanguage == HighlighterLanguage::SQL))
+        // Apostrophe is Basic comment
+        if (( c == '\'') && (aLanguage == HighlighterLanguage::Basic))
         {
-            if (c!='?')
-            {
-                bool bIdentifierChar;
-                do
-                {
-                    // Get next character
-                    if (pos == end)
-                        break;
-                    c = *pos;
-                    bIdentifierChar = isAlpha(c);
-                    if( bIdentifierChar )
-                        ++pos;
+            // Skip all characters until end of input or end of line:
+            for (;;) {
+                if (pos == end)
+                    break;
+                c = *pos;
+                if (testCharFlags(c, CharFlags::EOL)) {
+                    break;
                 }
-                while( bIdentifierChar );
-            }
-            reType = TokenType::Parameter;
-        }
-        else if ((c=='-') && (aLanguage == HighlighterLanguage::SQL))
-        {
-            if (pos != end && *pos=='-')
-            {
-                // Remove all characters until end of line or EOF
-                while( pos != end && !testCharFlags( *pos, CharFlags::EOL ) )
-                {
-                    ++pos;
-                }
-                reType = TokenType::Comment;
-            }
-            else
-                reType = TokenType::Operator;
-        }
-        else if ((c=='/') && (aLanguage == HighlighterLanguage::SQL))
-        {
-            if (pos != end && *pos=='/')
-            {
-                // Remove all characters until end of line or EOF
-                while( pos != end && !testCharFlags( *pos, CharFlags::EOL ) )
-                {
-                    ++pos;
-                }
-                reType = TokenType::Comment;
-            }
-            else
-                reType = TokenType::Operator;
-        }
-        else
-        {
-            // Apostrophe is Basic comment
-            if (( c == '\'') && (aLanguage == HighlighterLanguage::Basic))
-            {
-                // Skip all characters until end of input or end of line:
-                for (;;) {
-                    if (pos == end)
-                        break;
-                    c = *pos;
-                    if (testCharFlags(c, CharFlags::EOL)) {
-                        break;
-                    }
-                    ++pos;
-                }
-
-                reType = TokenType::Comment;
+                ++pos;
             }
 
-            // The real operator; can be easily used since not the actual
-            // operator (e.g. +=) is concerned, but the fact that it is one
-            if( reType != TokenType::Comment )
-            {
-                reType = TokenType::Operator;
-            }
+            reType = TokenType::Comment;
+        }
 
+        // The real operator; can be easily used since not the actual
+        // operator (e.g. +=) is concerned, but the fact that it is one
+        if( reType != TokenType::Comment )
+        {
+            reType = TokenType::Operator;
         }
     }
 
@@ -713,10 +596,6 @@ SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
         case HighlighterLanguage::Basic:
             m_tokenizer->setKeyWords( strListBasicKeyWords,
                                       std::size( strListBasicKeyWords ));
-            break;
-        case HighlighterLanguage::SQL:
-            m_tokenizer->setKeyWords( strListSqlKeyWords,
-                                      std::size( strListSqlKeyWords ));
             break;
         default:
             assert(false); // this cannot happen
