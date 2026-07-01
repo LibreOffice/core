@@ -2565,6 +2565,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         // Local undo count for View1 is now 1
         CPPUNIT_ASSERT_EQUAL(size_t(1), pView1->getViewLocalUndoManager()->GetUndoActionCount());
 
+        // Each scenario acts on a single shape, so start from an empty
+        // selection. If a shape from an earlier scenario stayed selected,
+        // the MoveShapeHandle call below would resize both selected shapes
+        // together instead of just this one.
+        pView2->UnmarkAllObj();
         // Mark rectangle object
         pView2->MarkObj(pRectangleObject, pView2->GetSdrPageView());
 
@@ -2582,6 +2587,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoManager->GetUndoActionCount());
 
         // Check the object has a new size
+        // Dragging handle 0 moved the top-left corner, so the box grew.
         aRectangle = pRectangleObject->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL(5000L, aRectangle.TopLeft().X());
         CPPUNIT_ASSERT_EQUAL(6000L, aRectangle.TopLeft().Y());
@@ -2638,7 +2644,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         // Local undo count for View1 is now 1
         CPPUNIT_ASSERT_EQUAL(size_t(1), pView1->getViewLocalUndoManager()->GetUndoActionCount());
 
-        // Mark rectangle object
+        // Drop the previous scenario's selection so only the text box is marked here.
+        pView2->UnmarkAllObj();
+        // Mark text box object
         pView2->MarkObj(pTextBoxObject, pView2->GetSdrPageView());
 
         // Check the initial position of the object
@@ -2648,18 +2656,21 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetWidth());
         CPPUNIT_ASSERT_EQUAL(2001L, aRectangle.GetHeight());
 
-        // On View2 - Move handle 0 on the shape to a new position - resize
+        // On View2 - drag handle 0 of the text box. While view1 is editing
+        // this same box, the drag shifts the whole box by the delta instead
+        // of resizing it.
         Point aNewPosition = aRectangle.TopLeft() + Point(-1250, -1000);
         pView2->MoveShapeHandle(0, aNewPosition, -1);
         Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT_EQUAL(size_t(4), pUndoManager->GetUndoActionCount());
 
-        // Check the object has a new size
+        // Check the object has a new position
+        // The box moved by the drag delta and kept its size.
         aRectangle = pTextBoxObject->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL(1000L, aRectangle.TopLeft().X());
         CPPUNIT_ASSERT_EQUAL(1000L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(4990L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(2175L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(2001L, aRectangle.GetHeight());
 
         // View1 is still in text edit mode...
         CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
@@ -2674,8 +2685,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         aRectangle = pTextBoxObject->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL(2000L, aRectangle.TopLeft().X());
         CPPUNIT_ASSERT_EQUAL(3000L, aRectangle.TopLeft().Y());
-        CPPUNIT_ASSERT_EQUAL(4990L, aRectangle.GetWidth());
-        CPPUNIT_ASSERT_EQUAL(2175L, aRectangle.GetHeight());
+        CPPUNIT_ASSERT_EQUAL(4501L, aRectangle.GetWidth());
+        CPPUNIT_ASSERT_EQUAL(2001L, aRectangle.GetHeight());
 
         // View1 is still in text edit mode...
         CPPUNIT_ASSERT_EQUAL(true, pView1->IsTextEdit());
@@ -2711,7 +2722,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeEditInMultipleViews)
         // Local undo count for View1 is now 1
         CPPUNIT_ASSERT_EQUAL(size_t(1), pView1->getViewLocalUndoManager()->GetUndoActionCount());
 
-        // Mark rectangle object
+        // Drop the previous scenario's selection so only the table is marked here.
+        pView2->UnmarkAllObj();
+        // Mark table object
         pView2->MarkObj(pTableObject, pView2->GetSdrPageView());
 
         // Check the initial position of the table

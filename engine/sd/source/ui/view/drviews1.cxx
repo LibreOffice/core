@@ -163,18 +163,18 @@ void DrawViewShell::SelectionHasChanged()
 {
     Invalidate();
 
-    // In Impress, auto-switch to individual handles when a multi-selection is
-    // first formed (like F8 / Toggle Point Edit Mode). Act only on the
-    // transition so a manual toggle stays in effect while the selection holds.
-    if (GetDoc()->GetDocumentType() == DocumentType::Impress)
+    // Auto-switch to individual handles when a multi-selection is first
+    // formed (like F8 / Toggle Point Edit Mode). Only do this the moment
+    // the selection changes between one shape and many. This method runs
+    // on every selection change. If it switched every time, it would
+    // undo the Point Edit Mode setting the user chose while the same
+    // shapes stay selected.
+    const bool bMultiSelection
+        = mpDrawView->GetMarkedObjectList().GetMarkCount() > 1;
+    if (bMultiSelection != mbWasMultiSelection)
     {
-        const bool bMultiSelection
-            = mpDrawView->GetMarkedObjectList().GetMarkCount() > 1;
-        if (bMultiSelection != mbWasMultiSelection)
-        {
-            mpDrawView->SetFrameDragSingles(!bMultiSelection);
-            mbWasMultiSelection = bMultiSelection;
-        }
+        mpDrawView->SetFrameDragSingles(!bMultiSelection);
+        mbWasMultiSelection = bMultiSelection;
     }
 
     //Update3DWindow(); // 3D-Controller
