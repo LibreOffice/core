@@ -179,14 +179,16 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 		}
 	});
 
-	it('Set minimal row height.', function() {
+	function prepareForTableSizeTests() {
 		helper.setDummyClipboardForCopy();
-
 		// Select full table (3x2)
 		helper.moveCursor('down', 'shift');
 		helper.moveCursor('down', 'shift');
 		helper.moveCursor('right', 'shift');
+	}
 
+	it('Set minimal row height.', function() {
+		prepareForTableSizeTests();
 		cy.cGet('#rowsizing .unoSetOptimalRowHeight').click();
 		cy.cGet('#rowsizing .unoSetMinimalRowHeight').click();
 
@@ -197,12 +199,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	});
 
 	it('Set optimal row height.', function() {
-		helper.setDummyClipboardForCopy();
-		// Select full table (3x2)
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('right', 'shift');
-
+		prepareForTableSizeTests();
 		cy.cGet('#rowsizing .unoSetOptimalRowHeight').should('not.have.attr','disabled');
 		cy.cGet('#rowsizing .unoSetOptimalRowHeight').click();
 		selectFullTable();
@@ -221,12 +218,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	});
 
 	it('Distribute rows.', function() {
-		helper.setDummyClipboardForCopy();
-		// Select full table (3x2)
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('right', 'shift');
-
+		prepareForTableSizeTests();
 		cy.cGet('#rowsizing .unoDistributeRows').should('not.have.attr','disabled');
 		cy.cGet('#rowsizing .unoDistributeRows').click();
 
@@ -246,12 +238,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	});
 
 	it('Set minimal column width.', function() {
-		helper.setDummyClipboardForCopy();
-		// Select full table (3x2)
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('right', 'shift');
-
+		prepareForTableSizeTests();
 		cy.cGet('#columnsizing .unoSetMinimalColumnWidth').click();
 
 		selectFullTable();
@@ -260,12 +247,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	});
 
 	it('Set optimal column width.', function() {
-		helper.setDummyClipboardForCopy();
-		// Select full table (3x2)
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('right', 'shift');
-
+		prepareForTableSizeTests();
 		cy.cGet('#columnsizing .unoSetOptimalColumnWidth').click();
 
 		selectFullTable();
@@ -275,12 +257,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', functio
 	});
 
 	it('Distribute columns.', function() {
-		helper.setDummyClipboardForCopy();
-		// Select full table (3x2)
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('down', 'shift');
-		helper.moveCursor('right', 'shift');
-
+		prepareForTableSizeTests();
 		cy.cGet('#columnsizing .unoDistributeColumns').click();
 
 		selectFullTable();
