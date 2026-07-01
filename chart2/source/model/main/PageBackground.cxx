@@ -27,6 +27,7 @@
 #include <svtools/colorcfg.hxx>
 #include <sfx2/viewsh.hxx>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -41,6 +42,21 @@ using ::com::sun::star::beans::Property;
 
 namespace
 {
+
+enum
+{
+    PROP_PAGE_BACKGROUND_HAS_EXPLICIT_SPPR
+};
+
+void lcl_AddPropertiesToVector(
+    std::vector< Property > & rOutProperties )
+{
+    rOutProperties.emplace_back( "HasExplicitSpPr",
+                  PROP_PAGE_BACKGROUND_HAS_EXPLICIT_SPPR,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID );
+}
 
 const ::chart::tPropertyValueMap& StaticPageBackgroundDefaults()
 {
@@ -73,6 +89,7 @@ const ::chart::tPropertyValueMap& StaticPageBackgroundDefaults()
     static ::cppu::OPropertyArrayHelper aPropHelper = []()
         {
             std::vector< css::beans::Property > aProperties;
+            lcl_AddPropertiesToVector( aProperties );
             ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
             ::chart::FillProperties::AddPropertiesToVector( aProperties );
             ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
