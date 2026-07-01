@@ -7170,7 +7170,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     // import-time qFormat state must be preserved on export.
     std::optional<bool> oQFormat;
 
-    OUString aRsid, aUiPriority;
+    OUString aRsid, aUiPriority, aAliases;
     rtl::Reference<FastAttributeList> pStyleAttributeList = FastSerializerHelper::createAttrList();
     cpo::uno::Any aAny;
     if (eType == STYLE_TYPE_PARA || eType == STYLE_TYPE_CHAR)
@@ -7188,7 +7188,9 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
 
     for (const auto& rProp : aGrabBag)
     {
-        if (rProp.Name == "uiPriority")
+        if (rProp.Name == "aliases")
+            aAliases = rProp.Value.get<OUString>();
+        else if (rProp.Name == "uiPriority")
             aUiPriority = rProp.Value.get<OUString>();
         else if (rProp.Name == "qFormat")
         {
@@ -7234,6 +7236,9 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         pStyleAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
     m_pSerializer->startElementNS( XML_w, XML_style, pStyleAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_name, FSNS(XML_w, XML_val), rName);
+
+    if (!aAliases.isEmpty())
+        m_pSerializer->singleElementNS(XML_w, XML_aliases, FSNS(XML_w, XML_val), aAliases);
 
     if ( nBase != 0x0FFF && eType != STYLE_TYPE_LIST)
     {

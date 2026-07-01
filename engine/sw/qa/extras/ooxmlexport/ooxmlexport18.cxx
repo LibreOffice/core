@@ -550,6 +550,19 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
                 "//w:style[@w:styleId='0NUMBERED']/w:pPr/w:suppressLineNumbers", "val", u"0");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testStyleAliases)
+{
+    createSwDoc("styleAliases.docx");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pStylesXml = parseExport(u"word/styles.xml"_ustr);
+    // Without the import and export support the aliases element was dropped.
+    assertXPath(pStylesXml, "//w:style[@w:styleId='Heading3']/w:aliases", "val",
+                u"Testskrift 1");
+    assertXPath(pStylesXml, "//w:style[@w:styleId='Emphasis']/w:aliases", "val",
+                u"Testskrift 2");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf157598)
 {
     createSwDoc("tdf157598.docx");

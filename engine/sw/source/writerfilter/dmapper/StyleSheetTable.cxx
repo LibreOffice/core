@@ -538,7 +538,6 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_next:
             m_pCurrentEntry->m_sNextStyleIdentifier = sStringValue;
             break;
-        case NS_ooxml::LN_CT_Style_aliases:
         case NS_ooxml::LN_CT_Style_hidden:
         case NS_ooxml::LN_CT_Style_personal:
         case NS_ooxml::LN_CT_Style_personalCompose:
@@ -565,6 +564,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         break;
         case NS_ooxml::LN_CT_Style_trPr:
         break;
+        case NS_ooxml::LN_CT_Style_aliases:
         case NS_ooxml::LN_CT_Style_rsid:
         case NS_ooxml::LN_CT_Style_qFormat:
         case NS_ooxml::LN_CT_Style_semiHidden:
@@ -577,6 +577,10 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 beans::PropertyValue aValue;
                 switch (nSprmId)
                 {
+                case NS_ooxml::LN_CT_Style_aliases:
+                    aValue.Name = u"aliases"_ustr;
+                    aValue.Value <<= sStringValue;
+                break;
                 case NS_ooxml::LN_CT_Style_rsid:
                 {
                     // We want the rsid as a hex string, but always with the length of 8.
