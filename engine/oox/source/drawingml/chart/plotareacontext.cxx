@@ -233,8 +233,13 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, [[maybe_
                         mrModel.maTypeGroups.create(nTypeId, false);
                         std::shared_ptr<TypeGroupModel> aTGM =
                             mrModel.maTypeGroups.get(mrModel.maTypeGroups.size() - 1);
+                        SeriesModel& rSeries =
+                            aTGM->maSeries.create(false, nTypeId);
+                        if (rAttribs.hasAttribute(XML_ownerIdx))
+                            rSeries.monOwnerIdx
+                                = rAttribs.getInteger(XML_ownerIdx, 0);
                         return new ChartexSeriesContext(*this,
-                                aTGM->maSeries.create(false, nTypeId), mrModel.mnCurSeriesIdx++);
+                                rSeries, mrModel.mnCurSeriesIdx++);
                     }
                     return nullptr;
                 case CX_TOKEN(plotSurface) :

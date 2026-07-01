@@ -60,6 +60,7 @@ ChartExDimType
 ChartExFormula
 ChartExNFormula
 ChartexAxisIds
+ChartexOwnerIdx
 CharBackColor
 CharBackgroundComplexColor
 CharCaseMap
