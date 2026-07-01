@@ -115,23 +115,27 @@
 	border-bottom: 3px solid var(--tab-color);
 }
 
-#spreadsheet-tab-scroll button.spreadsheet-tab-colored.spreadsheet-tab-selected:hover {
+#spreadsheet-tab-scroll button.spreadsheet-tab-colored.spreadsheet-tab-selected:hover,
+#spreadsheet-tab-scroll button.spreadsheet-tab-colored.spreadsheet-tab-selected:focus-visible {
 	background: color-mix(in srgb, var(--tab-color) 30%, var(--color-main-background)) !important;
 	color: var(--color-main-text) !important;
 }
 
-#spreadsheet-tab-scroll button.spreadsheet-tab-colored:hover {
+#spreadsheet-tab-scroll button.spreadsheet-tab-colored:hover,
+#spreadsheet-tab-scroll button.spreadsheet-tab-colored:focus-visible {
 	background: color-mix(in srgb, var(--tab-color) 88%, black) !important;
 	color: var(--tab-text-color) !important;
 }
 
 
-#spreadsheet-tab-scroll button.spreadsheet-tab-selected:hover {
+#spreadsheet-tab-scroll button.spreadsheet-tab-selected:hover,
+#spreadsheet-tab-scroll button.spreadsheet-tab-selected:focus-visible {
 	background-color: rgba(var(--doc-type)) !important;
 	color: var(--color-primary-text) !important;
 }
 
-.spreadsheet-tab:hover {
+.spreadsheet-tab:hover,
+.spreadsheet-tab:focus-visible {
 	border: 1px solid var(--color-border-darker);
 	background: var(--color-background-darker) !important;
 	color: var(--color-text-darker) !important;
