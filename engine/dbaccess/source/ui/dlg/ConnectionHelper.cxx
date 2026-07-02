@@ -260,7 +260,6 @@ using namespace cpo::uno;
                 if ( !sNewDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sNewDataSource);
-                    SetRoadmapStateValue(true);
                     callModifiedHdl();
                 }
             }
