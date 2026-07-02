@@ -8,7 +8,7 @@
 #
 
 epubgen_patches :=
-epubgen_patches += tdf-120491.patch
+epubgen_patches += tdf-120491.patch tdf-119539.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,libepubgen))
 

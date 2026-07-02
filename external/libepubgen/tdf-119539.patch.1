@@ -1,0 +1,50 @@
+diff -ur libepubgen.org/src/lib/EPUBGenerator.cpp libepubgen/src/lib/EPUBGenerator.cpp
+--- libepubgen.org/src/lib/EPUBGenerator.cpp	2026-07-02 18:46:39.616796632 +0200
++++ libepubgen/src/lib/EPUBGenerator.cpp	2026-07-02 18:50:55.733580395 +0200
+@@ -336,6 +336,29 @@
+   sink.insertCharacters(language);
+   sink.closeElement("dc:language");
+ 
++  const librevenge::RVNGPropertyListVector *coverImages = m_metadata.child("librevenge:cover-images");
++  if (coverImages)
++  {
++    int nCurrentCover = 0;
++    for (size_t i = 0; i < coverImages->count(); ++i)
++    {
++      librevenge::RVNGPropertyList const &propertyList = (*coverImages)[i];
++      if (propertyList["office:binary-data"] && propertyList["librevenge:mime-type"])
++      {
++        ++nCurrentCover;
++
++        std::string strCurrentCover = std::to_string(nCurrentCover);
++        strCurrentCover.insert(0, 4 - strCurrentCover.length(), '0');
++        std::string content = "cover" + strCurrentCover;
++        RVNGPropertyList metaAttrs;
++        metaAttrs.insert("content", content.c_str());
++        metaAttrs.insert("name", "cover");
++        sink.openElement("meta", metaAttrs);
++        sink.closeElement("meta");
++      }
++    }
++  }
++
+   if (m_version >= 30)
+   {
+     RVNGString date;
+diff -ur libepubgen.org/src/lib/EPUBImageManager.cpp libepubgen/src/lib/EPUBImageManager.cpp
+--- libepubgen.org/src/lib/EPUBImageManager.cpp	2026-07-02 18:46:39.615945896 +0200
++++ libepubgen/src/lib/EPUBImageManager.cpp	2026-07-02 18:50:02.905292875 +0200
+@@ -84,7 +84,12 @@
+     const string mime(mimetype.cstr());
+ 
+     std::ostringstream nameBuf;
+-    nameBuf << "image" << std::setw(4) << std::setfill('0') << m_number.next();
++    std::string prefix = "image";
++    if (properties == "cover-image")
++    {
++      prefix = "cover";
++    }
++    nameBuf << prefix << std::setw(4) << std::setfill('0') << m_number.next();
+     const string id = nameBuf.str();
+ 
+     nameBuf << "." << getExtension(mime);
