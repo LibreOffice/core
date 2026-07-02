@@ -5943,7 +5943,7 @@ if test "$cross_compiling" = "yes"; then
     test "$enable_embind_uno" = "yes" && sub_conf_opts="$sub_conf_opts --enable-embind-uno"
     test "${with_system_lockfile+set}" = set && sub_conf_opts="$sub_conf_opts --with-system-lockfile=${with_system_lockfile}"
     test "${enable_fuzzers}" = yes && sub_conf_opts="$sub_conf_opts --without-system-libxml"
-    if test "$_os" = "Emscripten"; then
+    if test "$_os" = "Emscripten" -o "$_os" = "Android" -o "$_os" = "iOS"; then
         sub_conf_opts="$sub_conf_opts --without-system-libxml --without-system-fontconfig --without-system-freetype --without-system-zlib"
     fi
     # windows uses full-internal python and that in turn relies on openssl, so also enable openssl
