@@ -1453,6 +1453,75 @@ img.context-menu-icon {
 	display: none;
 }
 
+/* Where possible (Chromium) make the select widgets use the customizable
+   select (appearance: base-select) so the option list is styleable DOM.
+
+   The plain control's option list is an OS-native menu that cannot be themed,
+   so on macOS its highlighted option can fall below the accessibility contrast
+   guidelines.
+
+   Browsers without base-select keep the plain native control. */
+
+/* stylelint does not know the ::picker pseudo yet. */
+/* stylelint-disable selector-pseudo-element-no-unknown */
+.ui-listbox,
+.ui-listbox::picker(select) {
+	appearance: base-select;
+}
+/* stylelint-enable selector-pseudo-element-no-unknown -- turn the check back on */
+
+@supports (appearance: base-select) {
+	/* base-select lays the closed control out as inline flex, so this centres
+	   the text. Setting display here breaks the picker. */
+	.ui-listbox {
+		align-items: center;
+	}
+
+	/* Make the picker match the combobox dropdown popup, which is a modalpopup dialog. */
+	/* stylelint-disable selector-pseudo-element-no-unknown */
+	.ui-listbox::picker(select) {
+		/* the dialog content surface, from .jsdialog-container .ui-dialog-content */
+		background-color: var(--color-background-lighter);
+		/* the modalpopup frame border, from .jsdialog-window.modalpopup:not(.snackbar) */
+		border: 1px solid var(--color-border-darker);
+		/* the same modalpopup frame corner radius */
+		border-radius: var(--border-radius);
+		/* the same modalpopup frame shadow */
+		box-shadow: var(--shadow-subtle);
+		/* the dropdown content padding, from .modalpopup[id$='-dropdown'] .ui-dialog-content */
+		padding: 0;
+	}
+
+	/* Hide the browser marker; the app's own arrow span shows instead. */
+	.ui-listbox::picker-icon {
+		display: none;
+	}
+	/* stylelint-enable selector-pseudo-element-no-unknown -- see above */
+
+	/* Match the dropdown row text, from .ui-combobox-entry span. */
+	.ui-listbox option {
+		padding: 5px;
+		font-size: var(--default-font-size);
+		font-family: var(--cool-font);
+		color: var(--color-text-dark);
+	}
+
+	/* Match the selected row, .ui-combobox-entry.selected span (background
+	   only). :checked and :focus cover whichever one marks the highlighted
+	   option. */
+	.ui-listbox option:checked,
+	.ui-listbox option:focus {
+		background-color: var(--color-background-darker);
+	}
+
+	/* Match the hovered row, .ui-combobox-entry:hover. It comes after the
+	   selected rule so hover wins on a row that is also selected, like the
+	   combobox. */
+	.ui-listbox option:hover {
+		background-color: var(--color-background-hover);
+	}
+}
+
 /* Draw vector border as downwards arrow. */
 .ui-listbox-arrow {
 	width: auto !important;

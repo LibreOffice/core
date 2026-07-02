@@ -99,6 +99,46 @@ JSDialog.listbox = function (
 			);
 	});
 
+	// base-select draws the option list as page DOM, so its key presses reach
+	// other handlers too. Handle them on the select while the list is open. A
+	// select matches :open while its list shows; the try/catch keeps browsers
+	// without :open working.
+	listbox.addEventListener('keydown', (event: KeyboardEvent) => {
+		let listIsOpen = false;
+		try {
+			listIsOpen = listbox.matches(':open');
+		} catch {
+			listIsOpen = false;
+		}
+		if (!listIsOpen) return;
+
+		const key = event.key;
+		const isArrow =
+			key === 'ArrowLeft' ||
+			key === 'ArrowRight' ||
+			key === 'ArrowUp' ||
+			key === 'ArrowDown';
+		// Stop the keys here so a toolbar around the select does not use them
+		// to move focus.
+		if (isArrow || key === 'Tab') {
+			event.stopPropagation();
+		}
+
+		// Up and down move in the list, Tab closes it: let the browser do those.
+		// Left, right, and up or down with Shift, Ctrl or Cmd would move focus
+		// out of the list, so block them. Alt is not blocked, so Alt+up and
+		// Alt+down still open and close the list.
+		const holdsSelectModifier =
+			event.shiftKey || event.ctrlKey || event.metaKey;
+		if (
+			key === 'ArrowLeft' ||
+			key === 'ArrowRight' ||
+			((key === 'ArrowUp' || key === 'ArrowDown') && holdsSelectModifier)
+		) {
+			event.preventDefault();
+		}
+	});
+
 	let hasSelectedEntry = false;
 	let index: any;
 
