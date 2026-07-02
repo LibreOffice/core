@@ -774,7 +774,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			var max = 0;
 			panels.forEach(function (shown) {
 				panels.forEach(function (p) { p.style.display = (p === shown) ? 'flex' : 'none'; });
-				void grid.offsetWidth; // force layout at this page's size
 				max = Math.max(max, grid.getBoundingClientRect()[dimension]);
 			});
 			return Math.ceil(max);
@@ -786,7 +785,6 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 		panels.forEach(function (p, i) { p.style.display = savedDisplay[i]; });
 		grid.style.minWidth = savedMinWidth;
-		void grid.offsetWidth; // restore layout for the page that stays shown
 
 		return { width: width, height: height };
 	},
