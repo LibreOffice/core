@@ -116,36 +116,73 @@ sort -u "$FILELIST" -o "$FILELIST"
 grep -vE '^/(bin|sbin|lib|lib64)$' "$FILELIST" > "$FILELIST.nomerge"
 mv "$FILELIST.nomerge" "$FILELIST"
 
-echo "=== Verifying the runtime library closure ==="
-# Every shared library our binaries need (via ldd) must be either shipped
-# (present in the file list) or provided by the base image; otherwise it will
-# be missing at runtime on the base (as libpam was: it lives in the Debian
-# builder's base, excluded from the diff, and the base does not carry it).
-# Compare by soname (basename) so /lib vs /usr/lib aliasing does not matter,
-# and fail the build on any gap.
-shipped_sonames=$(sed 's#.*/##' "$FILELIST" | sort -u)
-missing=$(
+echo "=== Resolving the runtime library closure ==="
+# The package diff excludes libraries already present in the Debian builder
+# base, but the hardened base carries far fewer of them (it ships libz and
+# libgcc_s, but NOT libstdc++ or libcap, which every coolwsd binary needs). So
+# any library our binaries link that is neither already shipped nor provided by
+# the base must be pulled in explicitly by shipping the Debian package that
+# owns it. "provided by the base" is decided against the base image itself
+# (copied to HARDENED_ROOT), with the glibc/openssl soname regex as a floor, so
+# this adapts to whatever base image is used.
+
+# Is soname $1 provided by the base image?
+base_has() {
+    printf '%s\n' "$1" | grep -Eq "$BASE_PROVIDES_RE" && return 0
+    [ -n "${HARDENED_ROOT:-}" ] || return 1
+    [ -e "$HARDENED_ROOT/usr/lib/x86_64-linux-gnu/$1" ] ||
+        [ -e "$HARDENED_ROOT/lib/x86_64-linux-gnu/$1" ] ||
+        [ -e "$HARDENED_ROOT/usr/lib/$1" ]
+}
+
+# Resolved shared libraries needed by the shipped ELF binaries. ldd exits
+# non-zero on non-ELF files, so "|| true" keeps the loop alive under set -e.
+needed_libs() {
     while read -r f; do
-        case "$f" in
-            *.so | *.so.* | */bin/* | */sbin/* | */program/*) ;;
-            *) continue ;;
-        esac
+        case "$f" in *.so | *.so.* | */bin/* | */sbin/* | */program/*) ;; *) continue ;; esac
         [ -f "$f" ] || continue
-        ldd "$f" 2>/dev/null
+        ldd "$f" 2>/dev/null || true
     done < "$FILELIST" \
-        | awk '/=>/ { print $1 } /not found/ { print $1 }' \
-        | sort -u \
-        | while read -r soname; do
-            case "$soname" in '' | */*) continue ;; esac
-            printf '%s\n' "$shipped_sonames" | grep -qxF "$soname" && continue
-            printf '%s\n' "$soname" | grep -Eq "$BASE_PROVIDES_RE" && continue
-            printf '%s\n' "$soname"
-          done | sort -u
+        | awk '/=>/ && $3 ~ /^\// { print $3 }' | sort -u
+}
+
+# Pull in the owning packages of needed libraries that are neither shipped nor
+# base-provided, until the set is stable.
+while :; do
+    shipped=$(sed 's#.*/##' "$FILELIST" | sort -u)
+    add_pkgs=$(
+        for lib in $(needed_libs); do
+            soname=${lib##*/}
+            printf '%s\n' "$shipped" | grep -qxF "$soname" && continue
+            base_has "$soname" && continue
+            # ldd resolves to the /lib alias, but dpkg records the /usr/lib
+            # path; query by soname so dpkg-query finds the owning package.
+            dpkg-query -S "$soname" 2>/dev/null | head -1 | cut -d: -f1
+        done | sort -u
+    )
+    [ -z "$add_pkgs" ] && break
+    echo "Pulling in base-missing libraries from: $(echo $add_pkgs)"
+    for pkg in $add_pkgs; do
+        dpkg-query -L "$pkg" 2>/dev/null | while read -r p; do
+            { [ -f "$p" ] || [ -L "$p" ]; } && printf '%s\n' "$p"
+        done
+    done >> "$FILELIST"
+    sort -u "$FILELIST" -o "$FILELIST"
+done
+
+# Safety net: fail the build if anything needed is still unresolved.
+shipped=$(sed 's#.*/##' "$FILELIST" | sort -u)
+missing=$(
+    for lib in $(needed_libs); do
+        soname=${lib##*/}
+        printf '%s\n' "$shipped" | grep -qxF "$soname" && continue
+        base_has "$soname" && continue
+        printf '%s\n' "$soname"
+    done | sort -u
 )
 if [ -n "$missing" ]; then
     echo "FATAL: libraries needed at runtime but neither shipped nor provided by the base image:" >&2
     printf '%s\n' "$missing" | sed 's/^/  /' >&2
-    echo "Ship the providing package, or - if the base image provides it - add the soname to BASE_PROVIDES_RE." >&2
     exit 1
 fi
 echo "OK: every needed library is shipped or provided by the base image."
