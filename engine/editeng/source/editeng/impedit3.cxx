@@ -1769,7 +1769,10 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             ( ( nEnd-nInvalidDiff ) == aSaveLine.GetEnd() ) )
                     {
                         pLine->SetValid();
-                        if (bQuickFormat)
+                        // Block justification must reformat every line, else a
+                        // portion reset to its natural width keeps the next
+                        // line's justification-expanded positions.
+                        if (bQuickFormat && eJustification != SvxAdjust::Block)
                         {
                             bLineBreak = false;
                             rParaPortion.CorrectValuesBehindLastFormattedLine( nLine );
@@ -1777,11 +1780,12 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         }
                     }
                 }
-                else if (bQuickFormat && (nEnd > nInvalidEnd))
+                else if (bQuickFormat && (nEnd > nInvalidEnd) && eJustification != SvxAdjust::Block)
                 {
                     // If the invalid line ends so that the next begins on the
                     // 'same' passage as before, i.e. not wrapped differently,
-                    //  then the text width does not have to be determined anew:
+                    //  then the text width does not have to be determined anew.
+                    // Block justification is excluded, see above.
                     if ( nEnd == ( aSaveLine.GetEnd() + nInvalidDiff ) )
                     {
                         bLineBreak = false;

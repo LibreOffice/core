@@ -146,6 +146,7 @@ public:
     void testTdf151748StaleKashidaArray();
     void testTdf162803StaleKashidaArray();
     void testEscapementNotPreservedOnParaBreak();
+    void testJustifyDeleteOverlap();
 
 #if HAVE_MORE_FONTS
     void testAscentCompressedWithLineSpacing();
@@ -190,6 +191,7 @@ public:
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
+    CPPUNIT_TEST(testJustifyDeleteOverlap);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testAscentCompressedWithLineSpacing);
     CPPUNIT_TEST(testFillColorMaxAscentFraction);
@@ -2360,6 +2362,78 @@ void Test::testMultilineFieldClipInvariance()
 
     // The skipped field no longer pulls the text below it upward.
     CPPUNIT_ASSERT_EQUAL(nReferenceY, nClippedY);
+}
+
+// Backspacing inside a justified, multi-line paragraph must not leave words on
+// the following lines drawn on top of each other.
+void Test::testJustifyDeleteOverlap()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDevice(DeviceFormat::WITHOUT_ALPHA);
+
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetRefDevice(pVirtualDevice.get());
+    // Narrow enough that the single paragraph wraps into several lines.
+    aEditEngine.SetPaperSize(Size(3000, 6000));
+
+    aEditEngine.SetText(u"Lorem ipsum odor amet, consectetuer adipiscing elit. "
+                        "Quisque consectetur nam sem mattis volutpat nam. "
+                        "Ullamcorper massa sodales nostra morbi quam. "
+                        "Morbi accumsan vehicula non mattis molestie dis ornare ad fusce."_ustr);
+
+    SfxItemSet aSet{ aEditEngine.GetParaAttribs(0) };
+    aSet.Put(SvxAdjustItem{ SvxAdjust::Block, EE_PARA_JUST });
+    aEditEngine.SetParaAttribs(0, aSet);
+
+    // The on-screen X of every character, reproduced the way painting derives
+    // it: a portion is placed after the summed widths of the portions before
+    // it, and the portion's own character position array gives the advance
+    // inside it. When two characters land at decreasing X their glyphs overlap.
+    auto bHasOverlap = [&aEditEngine]() -> bool
+    {
+        ParaPortion& rPara = aEditEngine.GetParaPortions().getRef(0);
+        EditLineList& rLines = rPara.GetLines();
+        for (sal_Int32 nL = 0; nL < rLines.Count(); ++nL)
+        {
+            EditLine const& rLine = rLines[nL];
+            KernArray const& rArray = rLine.GetCharPosArray();
+            tools::Long nBaseX = rLine.GetStartPosX();
+            double fPrevAbs = -1.0;
+            for (sal_Int32 nP = rLine.GetStartPortion(); nP <= rLine.GetEndPortion(); ++nP)
+            {
+                TextPortion const& rTP = rPara.GetTextPortions()[nP];
+                sal_Int32 nPortStart = rPara.GetTextPortions().GetStartPos(nP);
+                for (sal_Int32 nChar = 0; nChar < rTP.GetLen(); ++nChar)
+                {
+                    sal_Int32 nArrIdx = nPortStart - rLine.GetStart() + nChar;
+                    if (nArrIdx < 0 || o3tl::make_unsigned(nArrIdx) >= rArray.size())
+                        continue;
+                    double fAbs = nBaseX + rArray[nArrIdx];
+                    if (fAbs + 1 < fPrevAbs)
+                        return true;
+                    fPrevAbs = fAbs;
+                }
+                nBaseX += rTP.GetSize().Width();
+            }
+        }
+        return false;
+    };
+
+    CPPUNIT_ASSERT(!bHasOverlap());
+
+    // Put the cursor right after "quam" and hold backspace, reformatting after
+    // each keystroke the way interactive editing does. As the deletions pull
+    // words up onto earlier lines, a later line stops being reformatted but its
+    // starting portion is reset to its natural width, so without the fix its
+    // justification-expanded positions no longer match and words overlap.
+    sal_Int32 nCursor = aEditEngine.GetText().indexOf(u"quam") + 4;
+    CPPUNIT_ASSERT(nCursor > 4);
+    for (int i = 0; i < 12; ++i)
+    {
+        aEditEngine.QuickDelete(ESelection(0, nCursor - 1, 0, nCursor));
+        aEditEngine.QuickFormatDoc(false);
+        --nCursor;
+        CPPUNIT_ASSERT_MESSAGE("overlapping glyphs after backspace", !bHasOverlap());
+    }
 }
 
 // tdf#151748: Verify that editeng produces an empty kashida array if the line does not have room
