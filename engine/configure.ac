@@ -9763,7 +9763,7 @@ else
                     ;;
                 esac
               ;;
-              darwin* | rhapsody* | nextstep* | openstep* | macos*)
+              darwin* | rhapsody* | nextstep* | openstep* | macos* | ios*)
                 case "$host_cpu" in
                   x86_64)
                     objfmt='Mach-O64'
