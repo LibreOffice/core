@@ -1486,16 +1486,16 @@ class HRuler extends Ruler {
 
 	_moveTabstop(event: any) {
 		var tabstopContainer = null;
-		var pointX = null;
+		var viewportX = null;
 
 		if (event.type === 'panmove') {
 			tabstopContainer = event.target;
-			pointX = event.center.x - event.target.getBoundingClientRect().left;
+			viewportX = event.center.x;
 		} else {
 			// The move listener is on the document, so derive the position
 			// relative to the tab-stop container from the viewport coordinate.
 			tabstopContainer = this._rTSContainer;
-			pointX = event.clientX - this._rTSContainer.getBoundingClientRect().left;
+			viewportX = event.clientX;
 		}
 
 		if (tabstopContainer === null) return;
@@ -1504,6 +1504,7 @@ class HRuler extends Ruler {
 
 		//window.app.console.log('===> _moveTabstop ' + event.type);
 
+		var pointX = viewportX - tabstopContainer.getBoundingClientRect().left;
 		var pixelDiff = pointX - tabstopContainer.tabStopInitialPosiiton;
 		marker.style.left = marker.tabStopLocation.left + pixelDiff + 'px';
 	}
@@ -1512,21 +1513,22 @@ class HRuler extends Ruler {
 		//window.app.console.log('===> _endTabstopDrag ' + event.type);
 
 		var tabstopContainer = null;
-		var pointX = null;
+		var viewportX = null;
 		if (event.type === 'panend') {
 			tabstopContainer = event.target;
-			pointX = event.center.x - event.target.getBoundingClientRect().left;
+			viewportX = event.center.x;
 		} else {
 			// The end listener is on the document, so derive the position
 			// relative to the tab-stop container from the viewport coordinate.
 			tabstopContainer = this._rTSContainer;
-			pointX = event.clientX - this._rTSContainer.getBoundingClientRect().left;
+			viewportX = event.clientX;
 		}
 
 		if (tabstopContainer === null) return;
 		var marker = tabstopContainer.tabStopMarkerBeingDragged;
 		if (marker === null) return;
 
+		var pointX = viewportX - tabstopContainer.getBoundingClientRect().left;
 		var positionTwip = this._pointerToTabTwips(pointX);
 		var params = {
 			Index: {
