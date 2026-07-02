@@ -41,6 +41,7 @@ $(call gb_ExternalProject_get_state_target,libxslt,build):
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
 			$(if $(filter iOS,$(OS)),LIBS="-liconv") \
 			--disable-shared,--disable-static) \
+			$(if $(filter ANDROID,$(OS)),--with-pic) \
 			$(if $(SYSTEM_LIBXML),,--with-libxml-src=$(gb_UnpackedTarball_workdir)/libxml2) \
 		&& chmod 777 xslt-config \
 		&& $(MAKE) \
