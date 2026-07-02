@@ -575,7 +575,7 @@ Admin::Admin()
     std::size_t minHeadroomKb = 1024;
 
     // If we have a manual percentage cap, apply it.
-    const double memLimit = ConfigUtil::getConfigValue<double>("memproportion", 0.0);
+    const double memLimit = ConfigUtil::getConfigValue<double>("memproportion", 80.0);
     if (memLimit > 0.0)
     {
         const double headroom = _totalAvailMemKb * (100. - memLimit) / 100.;
