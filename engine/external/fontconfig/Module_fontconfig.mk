@@ -24,7 +24,10 @@ else
 
 $(eval $(call gb_Module_add_targets,fontconfig,\
 	ExternalProject_fontconfig \
+	$(if $(filter ANDROID,$(OS)),ExternalPackage_fontconfig_data) \
 	$(if $(filter EMSCRIPTEN,$(OS)),ExternalPackage_fontconfig_data) \
+	$(if $(filter iOS,$(OS)),ExternalPackage_fontconfig_data) \
+	$(if $(filter LINUX,$(OS)),ExternalPackage_fontconfig_data) \
 	$(if $(filter MACOSX,$(OS)),ExternalPackage_fontconfig_data) \
 	$(if $(filter FONTCONFIG,$(BUILD_TYPE)),ExternalPackage_fontconfig) \
 ))
