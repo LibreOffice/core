@@ -804,8 +804,8 @@ void AIChatSession::callLLMAPI()
     // Shared completion handler, invoked on the document broker's polling thread.
     // statusCode is an HTTP code or an ai::Http* sentinel; body is the response
     // body (empty when there was no response); reason is the HTTP reason phrase.
-    auto onResponse = [clientSessionPtr, self](int statusCode, const std::string& body,
-                                               const std::string& reason)
+    auto onResponse = [clientSessionPtr = std::move(clientSessionPtr), self](
+        int statusCode, const std::string& body, const std::string& reason)
     {
         self->_activeChatSession.reset();
 
@@ -886,7 +886,7 @@ void AIChatSession::callLLMAPI()
                    r->statusLine().reasonPhrase());
     });
     httpSession->setConnectFailHandler(
-        [onResponse](const std::shared_ptr<http::Session>& /*session*/)
+        [onResponse = std::move(onResponse)](const std::shared_ptr<http::Session>& /*session*/)
     {
         onResponse(ai::HttpConnectFailed, std::string(), std::string());
     });
@@ -894,7 +894,7 @@ void AIChatSession::callLLMAPI()
     http::Request httpRequest(Poco::URI(_toolLoop->requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
     httpRequest.set("Content-Type", "application/json");
-    httpRequest.set("Authorization", authHeader);
+    httpRequest.set("Authorization", std::move(authHeader));
     httpRequest.setBody(std::move(payloadStr), "application/json");
 
     _activeChatSession = httpSession;
@@ -1161,7 +1161,7 @@ bool AIChatSession::executeToolCall(const std::string& toolCallId,
             _toolLoop->pendingSummary = "";
         else if (!target.empty())
         {
-            std::string name = target;
+            std::string name = std::move(target);
             if (const auto bar = name.rfind('|'); bar != std::string::npos)
                 name = name.substr(0, bar);
             _toolLoop->pendingSummary =
@@ -1955,7 +1955,7 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
 
     // Send image result via aichatresult with imageData field
     auto clientSessionPtr = _session.client_from_this();
-    auto sendImageResult = [clientSession = clientSessionPtr, requestId](
+    auto sendImageResult = [clientSession = std::move(clientSessionPtr), requestId](
                                bool success, const std::string& imageData,
                                const std::string& error)
     {
@@ -1975,7 +1975,8 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
     AIChatSession* self = this;
 
     // Shared completion handler, invoked on the document broker's polling thread.
-    auto onResponse = [self, sendImageResult](int statusCode, const std::string& body)
+    auto onResponse = [self, sendImageResult = std::move(sendImageResult)](int statusCode,
+                                                                           const std::string& body)
     {
         self->_activeChatSession.reset();
 
@@ -2005,7 +2006,7 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
         onResponse(static_cast<int>(r->statusLine().statusCode()), r->getBody());
     });
     req.httpSession->setConnectFailHandler(
-        [onResponse](const std::shared_ptr<http::Session>& /*session*/)
+        [onResponse = std::move(onResponse)](const std::shared_ptr<http::Session>& /*session*/)
     {
         onResponse(ai::HttpConnectFailed, std::string());
     });
@@ -2239,8 +2240,8 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
 
         // Shared completion handler, invoked on the document broker's polling thread.
         auto onResponse =
-            [clientSessionPtr, self, docBroker, idx, onImageFail](int statusCode,
-                                                                  const std::string& body)
+            [clientSessionPtr = std::move(clientSessionPtr), self, docBroker, idx,
+             onImageFail = std::move(onImageFail)](int statusCode, const std::string& body)
         {
             self->_activeChatSession.reset();
 
@@ -2324,7 +2325,7 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
             onResponse(static_cast<int>(r->statusLine().statusCode()), r->getBody());
         });
         req.httpSession->setConnectFailHandler(
-            [onResponse](const std::shared_ptr<http::Session>& /*session*/)
+            [onResponse = std::move(onResponse)](const std::shared_ptr<http::Session>& /*session*/)
         {
             onResponse(ai::HttpConnectFailed, std::string());
         });

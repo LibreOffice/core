@@ -76,7 +76,7 @@ bool parseLenientArgs(const std::string& argsJson, Poco::JSON::Object::Ptr& args
             for (const auto& k : keys)
                 merged->set(k, el->get(k));
         }
-        argsObj = merged;
+        argsObj = std::move(merged);
         return true;
     }
     catch (const std::exception& e)
