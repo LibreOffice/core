@@ -45,6 +45,7 @@ $(call gb_ExternalProject_get_state_target,argon2,build):
 		CFLAGS="$(CFLAGS) $(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden) -fPIC" \
 		MAKEFLAGS= $(MAKE) \
 			OPTTARGET=$(if $(filter X86_64,$(CPUNAME)),x86-64,forcefail) \
+			$(if $(filter ANDROID,$(OS)),KERNEL_NAME=Linux) \
 		$(if $(CROSS_COMPILING),,&& $(MAKE) test) \
 	)
 	$(call gb_Trace_EndRange,argon2,EXTERNAL)
