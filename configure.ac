@@ -1377,6 +1377,20 @@ if test "$enable_hardening" = no; then
         [AC_MSG_RESULT([no])])
     LDFLAGS=$save_LDFLAGS
 
+    dnl Drop DT_NEEDED entries for libraries whose symbols are not actually
+    dnl used (e.g. the -lcap that AC_SEARCH_LIBS adds to the global LIBS ends up
+    dnl on every binary, but only the forkit/kit call libcap). This lands in
+    dnl LDFLAGS, ahead of $(LDADD)/$(LIBS) on the link line, so those unused
+    dnl dependencies are pruned. The RHEL7 CI toolchain does not default to it.
+    AC_MSG_CHECKING([whether the linker supports -Wl,--as-needed])
+    save_LDFLAGS=$LDFLAGS
+    LDFLAGS="$LDFLAGS -Wl,--as-needed"
+    AC_LINK_IFELSE(
+        [AC_LANG_PROGRAM(, [[return 0;]])],
+        [AC_MSG_RESULT([yes]); HARDENING_LDFLAGS="$HARDENING_LDFLAGS -Wl,--as-needed"],
+        [AC_MSG_RESULT([no])])
+    LDFLAGS=$save_LDFLAGS
+
     AC_MSG_CHECKING([whether $CC supports -fPIE -pie])
     save_CFLAGS=$CFLAGS
     save_LDFLAGS=$LDFLAGS
