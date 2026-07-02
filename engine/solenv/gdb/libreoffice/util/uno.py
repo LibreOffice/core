@@ -476,7 +476,6 @@ class InterfaceType(Type):
         assert int(type['eTypeClass']) == TypeClass.INTERFACE
         self.typename = self.uno2cpp(self.tag)
         full_type = full_type.cast(gdb.lookup_type('_typelib_InterfaceTypeDescription'))
-        self.uik = full_type['aUik']
         self._type = full_type
 
     class _iterator(six.Iterator):
