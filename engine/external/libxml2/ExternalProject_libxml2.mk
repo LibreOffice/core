@@ -47,6 +47,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 				$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
 				$(call gb_ExternalProject_get_build_flags,libxml2)" \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
+			$(if $(filter ANDROID,$(OS)),--with-pic) \
 		&& $(MAKE) libxml2.la xmllint \
 	)
 	$(call gb_Trace_EndRange,libxml2,EXTERNAL)
