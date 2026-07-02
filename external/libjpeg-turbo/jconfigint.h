@@ -1,8 +1,12 @@
 /* libjpeg-turbo build number */
-#define BUILD  "20261031"
+#define BUILD  "20261102"
 
 /* How to hide global symbols. */
+#if defined _MSC_VER /*LibreOffice tweak*/
+#define HIDDEN
+#else
 #define HIDDEN  __attribute__((visibility("hidden")))
+#endif
 
 /* Compiler's inline keyword */
 #undef inline
@@ -15,13 +19,13 @@
 #endif
 
 /* How to obtain thread-local storage */
-#define THREAD_LOCAL  /*__thread - LibreOffice tweak*/
+#define THREAD_LOCAL /*__thread - LibreOffice tweak*/
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME  "libjpeg-turbo"
 
 /* Version number of package */
-#define VERSION  "3.1.4.1"
+#define VERSION  "3.2.0"
 
 /* The size of `size_t', as computed by sizeof. */
 /*#define SIZEOF_SIZE_T  8 - LibreOffice tweak */
@@ -79,4 +83,8 @@
 /* Use accelerated SIMD routines. */
 /* #undef WITH_SIMD */
 
+/*#define SIMD_ARCHITECTURE  NONE - LibreOffice tweak*/
+
 #endif
+
+/* #undef WITH_PROFILE */

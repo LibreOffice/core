@@ -111,7 +111,7 @@ $(eval $(call gb_StaticLibrary_add_cflags,libjpeg-turbo,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
-    UnpackedTarball/libjpeg-turbo/simd/x86_64/jsimd \
+    UnpackedTarball/libjpeg-turbo/simd/jsimd \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_nasmobjects,libjpeg-turbo,\
@@ -151,14 +151,13 @@ $(eval $(call gb_StaticLibrary_add_cflags,libjpeg-turbo,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_cobjects,libjpeg-turbo,\
-    UnpackedTarball/libjpeg-turbo/simd/i386/jsimd \
+    UnpackedTarball/libjpeg-turbo/simd/jsimd \
 ))
 
 $(eval $(call gb_StaticLibrary_add_generated_nasmobjects,libjpeg-turbo,\
     UnpackedTarball/libjpeg-turbo/simd/i386/jsimdcpu.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jfdctflt-3dn.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jidctflt-3dn.asm \
-    UnpackedTarball/libjpeg-turbo/simd/i386/jquant-3dn.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jccolor-mmx.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jcgray-mmx.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jcsample-mmx.asm \
@@ -170,10 +169,8 @@ $(eval $(call gb_StaticLibrary_add_generated_nasmobjects,libjpeg-turbo,\
     UnpackedTarball/libjpeg-turbo/simd/i386/jidctfst-mmx.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jidctint-mmx.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jidctred-mmx.asm \
-    UnpackedTarball/libjpeg-turbo/simd/i386/jquant-mmx.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jfdctflt-sse.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jidctflt-sse.asm \
-    UnpackedTarball/libjpeg-turbo/simd/i386/jquant-sse.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jccolor-sse2.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jcgray-sse2.asm \
     UnpackedTarball/libjpeg-turbo/simd/i386/jchuff-sse2.asm \
