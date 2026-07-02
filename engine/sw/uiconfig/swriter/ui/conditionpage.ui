@@ -217,6 +217,21 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="filterft">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="conditionpage|filterft">Style _Group</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">filter</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkComboBoxText" id="filter">
                     <property name="visible">True</property>
                     <property name="sensitive">True</property>
@@ -255,7 +270,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>
