@@ -73,6 +73,10 @@ using namespace COOLProtocol;
 static constexpr float TILES_ON_FLY_MIN_UPPER_LIMIT = 10.0;
 static constexpr int SYNTHETIC_COOL_PID_OFFSET = 10000000;
 
+/// Log a warning once the queue of messages waiting to be sent to a client
+/// grows past this many bytes, which usually means the client is not reading.
+static constexpr std::size_t LargeSenderQueueBytes = 200 * 1024 * 1024;
+
 using Poco::Path;
 
 // rotates regularly
@@ -3811,8 +3815,17 @@ void ClientSession::enqueueSendMessage(const std::shared_ptr<Message>& data)
     }
 
     LOG_TRC("Enqueueing client message " << data->id());
+    const std::size_t queueBytesBefore = _senderQueue.bytes();
     TileWireId droppedTileWireId = 0;
     const bool enqueued = _senderQueue.enqueue(data, &droppedTileWireId);
+
+    // Warn as the outgoing queue crosses the large threshold, once per crossing,
+    // so a slow or stalled client that makes messages pile up is visible in the logs.
+    const std::size_t queueBytesAfter = _senderQueue.bytes();
+    if (queueBytesBefore <= LargeSenderQueueBytes && queueBytesAfter > LargeSenderQueueBytes)
+        LOG_WRN("Send queue for session [" << getId() << "] of doc [" << getDocURL()
+                << "] has grown to " << queueBytesAfter
+                << " bytes; the client appears to be reading slowly.");
 
     // If the new tile deduplicated a previously-queued tile, that older tile was
     // counted in _tilesOnFly when first enqueued but will never reach the

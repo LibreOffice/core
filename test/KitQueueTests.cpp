@@ -47,6 +47,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSenderQueueProgress);
     CPPUNIT_TEST(testSenderQueueTileDeduplication);
     CPPUNIT_TEST(testSenderQueueTileDedupReportsDroppedWireId);
+    CPPUNIT_TEST(testSenderQueueByteAccounting);
     CPPUNIT_TEST(testTileCacheKitHangBecomesStale);
 #if ENABLE_STALE_TILE_REISSUE
     CPPUNIT_TEST(testTileCacheStaleRenderIsReissued);
@@ -99,6 +100,7 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testSenderQueueProgress();
     void testSenderQueueTileDeduplication();
     void testSenderQueueTileDedupReportsDroppedWireId();
+    void testSenderQueueByteAccounting();
     void testTileCacheKitHangBecomesStale();
 #if ENABLE_STALE_TILE_REISSUE
     void testTileCacheStaleRenderIsReissued();
@@ -518,7 +520,7 @@ void KitQueueTests::testSenderQueueLog()
         "\t\t\ttype: text: o10 - single one\n"
         "\t\t\ttype: text: o11 - last\n"
         "\t\t\t<repeats 1 times>\n"
-        "\t\tqueue size: 61 bytes\n";
+        "\t\tqueue size: 61 bytes == 61\n";
 
     LOK_ASSERT_EQUAL(result, str.str());
 }
@@ -738,6 +740,70 @@ void KitQueueTests::testSenderQueueTileDedupReportsDroppedWireId()
     LOK_ASSERT_EQUAL_STR(true, q3.enqueue(makeTile(300)));
     LOK_ASSERT_EQUAL_STR(true, q3.enqueue(makeTile(301)));
     LOK_ASSERT_EQUAL(static_cast<size_t>(1), q3.size());
+}
+
+// The queue tracks the total payload bytes it holds, so a slow client that
+// makes messages pile up can be spotted. Every path that changes the queue
+// (enqueue, dequeue, and the erase done by deduplication) must keep that
+// total in step with what is actually queued.
+void KitQueueTests::testSenderQueueByteAccounting()
+{
+    constexpr std::string_view testname = __func__;
+
+    SenderQueue<std::shared_ptr<Message>> queue;
+
+    // A fresh queue holds no bytes.
+    LOK_ASSERT_EQUAL(static_cast<size_t>(0), queue.bytes());
+
+    const std::vector<std::shared_ptr<Message>> items =
+    {
+        std::make_shared<Message>(std::string("message one"), Message::Dir::Out),
+        std::make_shared<Message>(std::string("a longer message two"), Message::Dir::Out),
+        std::make_shared<Message>(std::string("three"), Message::Dir::Out),
+    };
+
+    size_t expected = 0;
+    for (const auto& item : items)
+    {
+        queue.enqueue(item);
+        expected += item->size();
+    }
+
+    // The tracked total is the sum of the queued payload sizes.
+    LOK_ASSERT_EQUAL(expected, queue.bytes());
+
+    // Draining one item drops exactly its own size from the total.
+    std::shared_ptr<Message> popped;
+    LOK_ASSERT_EQUAL_STR(true, queue.dequeue(popped));
+    LOK_ASSERT(popped);
+    expected -= popped->size();
+    LOK_ASSERT_EQUAL(expected, queue.bytes());
+
+    // Draining the rest brings the total back to zero.
+    while (queue.dequeue(popped)) {}
+    LOK_ASSERT_EQUAL(static_cast<size_t>(0), queue.bytes());
+
+    // Two tiles for the same position: the first is erased by deduplication,
+    // so only the surviving tile's bytes remain counted.
+    auto makeSamePosTile = [](int ver)
+    {
+        std::ostringstream oss;
+        oss << "tile: nviewid=0 part=0 width=256 height=256 tileposx=0 tileposy=0"
+               " tilewidth=3840 tileheight=3840 ver=" << ver;
+        return std::make_shared<Message>(oss.str(), Message::Dir::Out);
+    };
+
+    const auto firstTile = makeSamePosTile(1);
+    queue.enqueue(firstTile);
+    LOK_ASSERT_EQUAL(firstTile->size(), queue.bytes());
+
+    const auto secondTile = makeSamePosTile(2);
+    queue.enqueue(secondTile);
+    LOK_ASSERT_EQUAL(static_cast<size_t>(1), queue.size());
+    LOK_ASSERT_EQUAL(secondTile->size(), queue.bytes());
+
+    LOK_ASSERT_EQUAL_STR(true, queue.dequeue(popped));
+    LOK_ASSERT_EQUAL(static_cast<size_t>(0), queue.bytes());
 }
 
 // Reproduces a slow render of a low priority in-flight tile.

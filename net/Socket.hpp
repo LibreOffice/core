@@ -1736,6 +1736,34 @@ public:
             return;
         }
 
+        // Warn as the outgoing buffer crosses the large threshold, once per
+        // crossing, so a peer that has stopped reading and is making data pile
+        // up on our side is visible in the logs.
+        if (_outBuffer.size() > LargeBufferWarnSize)
+        {
+            if (!_warnedLargeOutBuffer)
+            {
+                LOG_WRN("Outgoing buffer for socket #" << getFD() << " has grown to "
+                        << _outBuffer.size() << " bytes; the peer appears to be reading slowly.");
+                _warnedLargeOutBuffer = true;
+            }
+        }
+        else
+            _warnedLargeOutBuffer = false;
+
+        if (checkBufferBloat(now))
+        {
+            LOG_WRN("Socket #" << getFD() << " has kept over " << BufferBloatCloseSize
+                    << " bytes buffered (in: " << _inBuffer.size() << ", out: "
+                    << _outBuffer.size() << ") for more than "
+                    << std::chrono::duration_cast<std::chrono::seconds>(BufferBloatCloseDuration).count()
+                    << " seconds; closing the connection to reclaim the memory.");
+            ensureDisconnected();
+            setShutdown();
+            disposition.setClosed();
+            return;
+        }
+
         if (!events && _inBuffer.empty())
             return;
 
@@ -2051,8 +2079,41 @@ protected:
 #endif
 
 private:
+    friend class NetUtilWhiteBoxTests;
+
+    /// Track lifetime of bloat
+    bool checkBufferBloat(std::chrono::steady_clock::time_point now)
+    {
+        const size_t largestBuffer = std::max(_inBuffer.size(), _outBuffer.size());
+        if (largestBuffer <= BufferBloatCloseSize)
+        {
+            // Reset clock, we're good again
+            _largeBufferSince = std::chrono::steady_clock::time_point();
+            return false;
+        }
+
+        if (_largeBufferSince == std::chrono::steady_clock::time_point())
+        {
+            // First sample over the threshold: start the clock.
+            _largeBufferSince = now;
+            return false;
+        }
+
+        return now - _largeBufferSince >= BufferBloatCloseDuration;
+    }
+
     /// The hostname (or IP) of the peer we are connecting to.
     const std::string _hostname;
+
+    /// Warn once the incoming or outgoing buffer grows past this many bytes.
+    static constexpr size_t LargeBufferWarnSize = 200 * 1024 * 1024;
+
+    /// Close the socket if either buffer stays above this many bytes for too long
+    static size_t BufferBloatCloseSize;
+    static std::chrono::milliseconds BufferBloatCloseDuration;
+
+    /// Continuous time buffer has been above BufferBloatCloseSize, or epoc if not above
+    std::chrono::steady_clock::time_point _largeBufferSince;
 
     Buffer _inBuffer;
     Buffer _outBuffer;
@@ -2073,7 +2134,7 @@ private:
     std::atomic_bool _inputProcessingEnabled;
 
     /// Did we emit the onDisconnect event yet
-    bool _doneDisconnect;
+    bool _doneDisconnect:1;
 
     /// True if owner is in client role, otherwise false (server)
     bool _isClient:1;
@@ -2083,6 +2144,10 @@ private:
 
     /// True if we've received a Continue in response to an Expect: 100-continue
     bool _sentHTTPContinue:1;
+
+    /// True once we have warned that the outgoing buffer grew very large; reset
+    /// when it drains back below the threshold so each episode is logged once.
+    bool _warnedLargeOutBuffer:1 = false;
 
     bool isExternalCountedConnection() const { return !_isClient && isIPType(); }
     static std::atomic<size_t> ExternalConnectionCount; // accepted external TCP IPv4/IPv6 socket count

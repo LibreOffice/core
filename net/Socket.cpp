@@ -105,6 +105,9 @@ std::atomic<size_t> StreamSocket::ExternalConnectionCount = 0;
 net::DefaultValues net::Defaults = { .inactivityTimeout = net::DefaultInactivityTimeout,
                                      .maxExtConnections = net::DefaultMaxExtConnections };
 
+size_t StreamSocket::BufferBloatCloseSize = 100 * 1024 * 1024;
+std::chrono::milliseconds StreamSocket::BufferBloatCloseDuration = std::chrono::minutes(2);
+
 constexpr std::string_view Socket::toString(Type t)
 {
     switch (t)
