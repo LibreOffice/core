@@ -2220,15 +2220,11 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 
     pRdr->m_xRedlineStack->closeall(*pRdr->m_pPaM->GetPoint());
 
-    // ofz#37322 drop m_oLastAnchorPos during RedlineStack dtor and restore it afterwards to the same
-    // place, or somewhere close if that place got destroyed
-    std::shared_ptr<SwUnoCursor> xLastAnchorCursor(pRdr->m_oLastAnchorPos ? pRdr->m_rDoc.CreateUnoCursor(*pRdr->m_oLastAnchorPos) : nullptr);
-    pRdr->m_oLastAnchorPos.reset();
-
-    pRdr->m_xRedlineStack = std::move(mxOldRedlines);
-
-    if (xLastAnchorCursor)
-        pRdr->m_oLastAnchorPos.emplace(*xLastAnchorCursor->GetPoint());
+    {
+        // ofz#37322 the RedlineStack destructor can delete the anchored nodes
+        WW8LastAnchorPosSaver aSaveLastAnchorPos(*pRdr);
+        pRdr->m_xRedlineStack = std::move(mxOldRedlines);
+    }
 
     pRdr->DeleteAnchorStack();
     pRdr->m_xAnchorStck = std::move(mxOldAnchorStck);
@@ -2241,6 +2237,21 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
         pRdr->m_xPlcxMan->RestoreAllPLCFx(maPLCFxSave);
     pRdr->m_aApos.swap(maOldApos);
     pRdr->m_aFieldStack.swap(maOldFieldStack);
+}
+
+WW8LastAnchorPosSaver::WW8LastAnchorPosSaver(SwWW8ImplReader& rReader)
+    : m_rReader(rReader)
+    , m_xLastAnchorCursor(rReader.m_oLastAnchorPos
+          ? rReader.m_rDoc.CreateUnoCursor(*rReader.m_oLastAnchorPos)
+          : nullptr)
+{
+    m_rReader.m_oLastAnchorPos.reset();
+}
+
+WW8LastAnchorPosSaver::~WW8LastAnchorPosSaver()
+{
+    if (m_xLastAnchorCursor)
+        m_rReader.m_oLastAnchorPos.emplace(*m_xLastAnchorCursor->GetPoint());
 }
 
 void SwWW8ImplReader::Read_HdFtFootnoteText( const SwNodeIndex* pSttIdx,
