@@ -9036,14 +9036,19 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     else
     {
 #if defined ANDROID || defined __EMSCRIPTEN__
-        aAppPath = OUString::fromUtf8(lo_get_app_data_dir()) + "/program";
-#else
-        // Fun conversion dance back and forth between URLs and system paths...
-        OUString aAppURL;
-        (void)::osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(lo_initialize),
-                                               aAppURL);
-        osl::FileBase::getSystemPathFromFileURL( aAppURL, aAppPath );
+        if (const char* pAppDataDir = lo_get_app_data_dir())
+        {
+            aAppPath = OUString::fromUtf8(pAppDataDir) + "/program";
+        }
+        else
 #endif
+        {
+            // Fun conversion dance back and forth between URLs and system paths...
+            OUString aAppURL;
+            (void)::osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(lo_initialize),
+                                                   aAppURL);
+            osl::FileBase::getSystemPathFromFileURL( aAppURL, aAppPath );
+        }
 
 #ifdef IOS
         // The above gives something like

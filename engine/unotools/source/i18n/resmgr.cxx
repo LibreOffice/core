@@ -125,22 +125,28 @@ namespace Translate
         gen.characters(boost::locale::char_facet_t::char_f);
         gen.categories(boost::locale::category_t::message | boost::locale::category_t::information);
 #endif
+        OString sPath;
 #if defined(ANDROID) || defined(__EMSCRIPTEN__)
-        OString sPath(OString(lo_get_app_data_dir()) + "/program/resource");
-#else
-        OUString uri(u"$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/"_ustr);
-        rtl::Bootstrap::expandMacros(uri);
-        OUString path;
-        osl::File::getSystemPathFromFileURL(uri, path);
+        if (const char* pAppDataDir = lo_get_app_data_dir())
+        {
+            sPath = OString(pAppDataDir) + "/program/resource";
+        }
+        else
+#endif
+        {
+            OUString uri(u"$BRAND_BASE_DIR/$BRAND_SHARE_RESOURCE_SUBDIR/"_ustr);
+            rtl::Bootstrap::expandMacros(uri);
+            OUString path;
+            osl::File::getSystemPathFromFileURL(uri, path);
 #if defined _WIN32
-        // add_messages_path is documented to treat path string in the *created* locale's encoding
-        // on Windows; creating an UTF-8 encoding, we're lucky to have Unicode path support here.
-        constexpr rtl_TextEncoding eEncoding = RTL_TEXTENCODING_UTF8;
+            // add_messages_path is documented to treat path string in the *created* locale's encoding
+            // on Windows; creating an UTF-8 encoding, we're lucky to have Unicode path support here.
+            constexpr rtl_TextEncoding eEncoding = RTL_TEXTENCODING_UTF8;
 #else
-        const rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
+            const rtl_TextEncoding eEncoding = osl_getThreadTextEncoding();
 #endif
-        OString sPath(OUStringToOString(path, eEncoding));
-#endif
+            sPath = OUStringToOString(path, eEncoding);
+        }
         gen.add_messages_path(std::string(sPath));
 #ifdef HAVE_LIBINTL
         // allow gettext to find these .mo files e.g. so gtk dialogs can use them
