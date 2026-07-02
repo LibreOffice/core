@@ -33,8 +33,14 @@
 
 static bool getModulePathFromAddress(void * address, rtl_String ** path)
 {
+    // dladdr() is part of the POSIX dlfcn API and is available on every Unix
+    // we target (including Android, where the dynamic-loading API itself is
+    // restricted but introspection of already-loaded modules still works).
+    // Keep this function functional even when HAVE_UNIX_DLAPI is 0 so callers
+    // like osl_getModuleURLFromAddress() can still locate the module hosting
+    // a statically-linked function - needed e.g. by LibreOfficeKit embedders
+    // that ship LO as static archives inside their own .so.
     bool result = false;
-#if HAVE_UNIX_DLAPI
     Dl_info dl_info;
 
     result = dladdr(address, &dl_info) != 0;
@@ -43,10 +49,6 @@ static bool getModulePathFromAddress(void * address, rtl_String ** path)
     {
         rtl_string_newFromStr(path, dl_info.dli_fname);
     }
-#else
-    (void) address;
-    (void) path;
-#endif
     return result;
 }
 
