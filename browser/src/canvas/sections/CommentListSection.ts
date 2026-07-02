@@ -2653,10 +2653,10 @@ export class CommentSection extends CanvasSectionObject {
 			const reLayout = this.sectionProperties.reLayout;
 			this.sectionProperties.reLayout = false;
 
+			this.layout(reLayout);
+
 			if (reLayout && app.map._docLayer._docType === 'text')
 				this.updateThreadInfoIndicator();
-
-			this.layout(reLayout);
 		});
 
 		app.sectionContainer.requestReDraw();
