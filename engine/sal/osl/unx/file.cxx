@@ -1092,7 +1092,11 @@ oslFileError openFilePath(const OString& filePath, oslFileHandle* pHandle,
                 return osl_File_E_NOENT;
             }
             AAssetManager* mgr = lo_get_native_assetmgr();
-            AAsset* asset = AAssetManager_open(mgr, cpAssetsPath, AASSET_MODE_BUFFER);
+            // When no AAssetManager has been installed (e.g. an embedder that
+            // does not bootstrap LO through the Java/APK wrapper) treat every
+            // /assets/... path as a regular missing file rather than calling
+            // AAssetManager_open(nullptr, ...), which dereferences NULL.
+            AAsset* asset = mgr ? AAssetManager_open(mgr, cpAssetsPath, AASSET_MODE_BUFFER) : nullptr;
             if (!asset)
             {
                 AndroidFileCache::getMissCache().insert(cpAssetsPath, aData);
