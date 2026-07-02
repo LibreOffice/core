@@ -14,20 +14,10 @@
 	Shape is rendered on the core side. Only the handles are drawn here and modification commands are sent to the core side.
 */
 
-class ShapeHandleScalingSubSection extends CanvasSectionObject {
-	processingOrder: number = app.CSections.DefaultForDocumentObjects.processingOrder;
-	drawingOrder: number = app.CSections.DefaultForDocumentObjects.drawingOrder + 1; // Handle events before the parent section.
-	zIndex: number = app.CSections.DefaultForDocumentObjects.zIndex;
-	documentObject: boolean = true;
-
+class ShapeHandleScalingSubSection extends ShapeHandleSubSection {
 	constructor(parentHandlerSection: ShapeHandlesSection, sectionName: string, size: number[], documentPosition: cool.SimplePoint, ownInfo: any, cropModeEnabled: boolean) {
-		super(sectionName);
+		super(parentHandlerSection, sectionName, size, documentPosition, ownInfo);
 
-		this.size = size;
-		this.sectionProperties.position = documentPosition.clone();
-
-		this.sectionProperties.parentHandlerSection = parentHandlerSection;
-		this.sectionProperties.ownInfo = ownInfo;
 		this.sectionProperties.mousePointerType = null;
 
 		this.sectionProperties.initialAngle = null; // Initial angle of the point (handle) to the center in radians.
@@ -38,21 +28,6 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 		this.setMousePointerType();
 
 		app.events.on('TextCursorVisibility', this.onTextCursorVisibility.bind(this));
-	}
-
-	onInitialize(): void {
-		this.setPosition(this.sectionProperties.position.pX, this.sectionProperties.position.pY);
-	}
-
-	onTextCursorVisibility(event: any): void {
-		if (event.detail.visible) {
-			this.setShowSection(false);
-			this.interactable = false;
-		}
-		else {
-			this.setShowSection(true);
-			this.interactable = true;
-		}
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {

@@ -130,6 +130,7 @@
 /// <reference path="../src/canvas/sections/URLPopUpSection.ts" />
 /// <reference path="../src/canvas/sections/InvalidationRectangleSection.ts" />
 /// <reference path="../src/canvas/sections/ShapeHandlesSection.ts" />
+/// <reference path="../src/canvas/sections/ShapeHandleSubSection.ts" />
 /// <reference path="../src/canvas/sections/ShapeHandleCustomSubSection.ts" />
 /// <reference path="../src/canvas/sections/ShapeHandlePolySubSection.ts" />
 /// <reference path="../src/canvas/sections/ShapeHandleGluePointSubSection.ts" />

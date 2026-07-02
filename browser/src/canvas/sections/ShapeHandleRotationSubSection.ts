@@ -9,35 +9,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
 
-class ShapeHandleRotationSubSection extends CanvasSectionObject {
-	processingOrder: number = app.CSections.DefaultForDocumentObjects.processingOrder;
-	drawingOrder: number = app.CSections.DefaultForDocumentObjects.drawingOrder + 1; // Handle events before the parent section.
-	zIndex: number = app.CSections.DefaultForDocumentObjects.zIndex;
-    documentObject: boolean = true;
-
+class ShapeHandleRotationSubSection extends ShapeHandleSubSection {
 	constructor (parentHandlerSection: ShapeHandlesSection, sectionName: string, size: number[], documentPosition: cool.SimplePoint, ownInfo: any) {
-        super(sectionName);
+		super(parentHandlerSection, sectionName, size, documentPosition, ownInfo);
 
-		this.size = size;
-
-		this.sectionProperties.position = documentPosition.clone();
-        this.sectionProperties.parentHandlerSection = parentHandlerSection;
-		this.sectionProperties.ownInfo = ownInfo;
 		this.sectionProperties.lastDraggingDistance = null;
 		this.sectionProperties.cursorStyle = 'pointer';
 
 		app.events.on('TextCursorVisibility', this.onTextCursorVisibility.bind(this));
-	}
-
-	onTextCursorVisibility(event: any): void {
-		if (event.detail.visible) {
-			this.setShowSection(false);
-			this.interactable = false;
-		}
-		else {
-			this.setShowSection(true);
-			this.interactable = true;
-		}
 	}
 
 	calculateAngle(center: cool.SimplePoint, target: cool.SimplePoint): number {
@@ -53,10 +32,6 @@ class ShapeHandleRotationSubSection extends CanvasSectionObject {
 		angle *= 100; // Core side multiplies degrees with 100.
 
 		return angle;
-	}
-
-	onInitialize(): void {
-		this.setPosition(this.sectionProperties.position.pX, this.sectionProperties.position.pY);
 	}
 
 	onMouseEnter(point: cool.SimplePoint, e: MouseEvent): void {
