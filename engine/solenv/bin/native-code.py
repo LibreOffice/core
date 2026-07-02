@@ -157,6 +157,8 @@ core_constructor_list = [
     "filter_PDFExportInteractionHandler_get_implementation",
     "filter_PDFFilter_get_implementation",
     "filter_PDFDialog_get_implementation",
+# filter/source/graphic/graphicfilter.component
+    "filter_GraphicExportFilter_get_implementation",
 # filter/source/xmlfilterdetect/xmlfd.component
     "filter_XMLFilterDetect_get_implementation",
 # filter/source/xmlfilteradaptor/xmlfa.component
