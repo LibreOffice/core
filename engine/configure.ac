@@ -1140,11 +1140,18 @@ ios*) # iOS
     LINKFLAGSNOUNDEFS=""
 
     # HOST_PLATFORM is used for external projects and their configury typically doesn't like the "ios"
-    # part, so use aarch64-apple-darwin for now.
-    HOST_PLATFORM=aarch64-apple-darwin
-
-    # Apple's Clang uses "arm64"
-    host_cpu_for_clang=arm64
+    # part, so spoof the platform as Darwin.
+    case "$host_cpu" in
+    aarch64|arm64)
+        HOST_PLATFORM=aarch64-apple-darwin
+        # Apple's Clang uses "arm64"
+        host_cpu_for_clang=arm64
+        ;;
+    x86_64)
+        HOST_PLATFORM=x86_64-apple-darwin
+        host_cpu_for_clang=x86_64
+        ;;
+    esac
 ;;
 
 freebsd*)
@@ -5107,17 +5114,22 @@ ios*)
 
     case "$host_cpu" in
     aarch64|arm64)
-        if test "$enable_ios_simulator" = "yes"; then
-            AC_MSG_ERROR([iOS simulator is only available in macOS not iOS])
+        CPUNAME=AARCH64
+        RTL_ARCH=AARCH64
+        PLATFORMID=ios_arm64
+        ;;
+    x86_64)
+        if test "$enable_ios_simulator" != "yes"; then
+            AC_MSG_ERROR([host_cpu x86_64 for host_os ios is only valid for the iOS simulator])
         fi
+        CPUNAME=X86_64
+        RTL_ARCH=X86_64
+        PLATFORMID=ios_x86_64
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
-    CPUNAME=AARCH64
-    RTL_ARCH=AARCH64
-    PLATFORMID=ios_arm64
     ;;
 
 dragonfly*)
