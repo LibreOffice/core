@@ -638,11 +638,19 @@ window.L.Control.LokDialog = window.L.Control.extend({
 			// magic to re-calculate the position in twips to absolute pixel
 			// position inside the #document-container
 			var pixels = this._map._docLayer._twipsToPixels(new cool.Point(leftTwips, topTwips));
-			var origin = this._map.getPixelOrigin();
-			var panePos = this._map._getMapPanePos();
 
-			var left = pixels.x + panePos.x - origin.x;
-			var top = pixels.y + panePos.y - origin.y;
+			var left, top;
+			if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+				// The viewed rectangle's top-left (in CSS pixels) is the same offset, kept current.
+				var viewed = app.activeDocument.activeLayout.viewedRectangle;
+				left = pixels.x - viewed.cX1;
+				top = pixels.y - viewed.cY1;
+			} else {
+				var origin = this._map.getPixelOrigin();
+				var panePos = this._map._getMapPanePos();
+				left = pixels.x + panePos.x - origin.x;
+				top = pixels.y + panePos.y - origin.y;
+			}
 
 			if (left >= 0 && top >= 0) {
 				$(dialogContainer).dialog('option', 'position',

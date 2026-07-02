@@ -49,7 +49,26 @@ window.L.TileSectionManager = window.L.Class.extend({
 
 	// Details of tile areas to render
 	_paintContext: function() {
-		var viewBounds = this._map.getPixelBoundsCore();
+		// Which tiles are drawn, and where, is anchored to viewBounds. Calc
+		// scrolls the layout, not the leaflet map, so map.getPixelBoundsCore()
+		// is stale and would keep painting the initial region. Read the viewed
+		// rectangle (already in core pixels) instead so drawing tracks the
+		// scroll. The map-based value is only relied on by the layouts that
+		// still pan the map: ViewLayoutWriter and the generic ViewLayoutBase
+		// (Impress). The other map-independent layouts (MultiPage,
+		// CompareChanges, FileBased) take their own draw paths in onDraw and do
+		// not consume this viewBounds for tile placement.
+		var layout = app.activeDocument && app.activeDocument.activeLayout;
+		var viewBounds;
+		if (layout && layout.type === 'ViewLayoutCalc') {
+			var r = layout.viewedRectangle;
+			viewBounds = new cool.Bounds(
+				new cool.Point(r.pX1, r.pY1),
+				new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
+			);
+		} else {
+			viewBounds = this._map.getPixelBoundsCore();
+		}
 		var splitPanesContext = this._layer.getSplitPanesContext();
 		var paneBoundsList = splitPanesContext ?
 		    splitPanesContext.getPxBoundList(viewBounds) :
@@ -4018,6 +4037,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const hasVisibleCursor = app.file.textCursor.visible
 			&& this._map._docLayer._cursorMarker && this._map._docLayer._cursorMarker.isDomAttached();
 		if (hasVisibleCursor) {
+			if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+				const cursor = app.file.textCursor.rectangle;
+				const view = app.activeDocument.activeLayout.viewedRectangle;
+				if (!view.containsPoint([cursor.x1, cursor.y2]))
+					app.activeDocument.activeLayout.scrollTo(
+						cursor.pX1 - view.pWidth / 2,
+						cursor.pY2 - view.pHeight / 2);
+				return;
+			}
 			const cursorPos = this._map._docLayer._twipsToIntern({ x: app.file.textCursor.rectangle.x1, y: app.file.textCursor.rectangle.y2 });
 			const cursorPositionInView = this._isInternInView(cursorPos);
 			if (!cursorPositionInView)

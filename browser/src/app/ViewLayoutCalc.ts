@@ -124,6 +124,17 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 		);
 	}
 
+	// The viewed rectangle already tracks the visible area (in twips), so it is
+	// read directly rather than through the map pixel bounds. The bounds stay
+	// correct while scrolling, with no map pane involved.
+	protected override getVisibleAreaBounds(): any {
+		const r = this._viewedRectangle;
+		return new cool.Bounds(
+			new cool.Point(r.x1, r.y1),
+			new cool.Point(r.x2, r.y2),
+		);
+	}
+
 	// Calc needs splitx/splity so the server renders frozen/split panes
 	// correctly, plus the splitter onPositionChange notifications, the
 	// context-toolbar hide, the cache suppression, and the forceUpdate flag.
@@ -302,19 +313,30 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 			this._viewedRectangle.pHeight,
 		]);
 
-		// Keep the leaflet map in sync so map-dependent features (headers,
-		// cursor visibility, context menus, freeze-pane splitters) keep
-		// working. A follow-up will remove this leaflet dependency entirely.
-		(app.map as any).panBy(
-			new cool.Point(
-				(newX - prevX) / app.dpiScale,
-				(newY - prevY) / app.dpiScale,
-			),
-			{ animate: false },
-		);
+		// Row/column headers recompute their visible entries from the viewed
+		// rectangle. They used to do this off the leaflet map 'move' event;
+		// drive it from the layout so scrolling stays correct without the map.
+		this.refreshHeaders();
 
-		this.refreshCurrentCoordList();
+		// The blinking DOM text cursor (only attached while editing a cell)
+		// repositions itself from the viewed rectangle. It also used the map
+		// 'move' event; drive it from the layout instead.
+		this.refreshTextCursor();
+
 		this.sendClientVisibleArea();
+
+		// Request the tiles that cover the new visible area and mark the
+		// already-loaded ones current.
+		this.refreshTiles();
+	}
+
+	// Refresh the visible-tile list from the viewed rectangle and hand it to
+	// the tile manager, which fetches the missing tiles and marks the loaded
+	// ones current. Public so the tile manager can drive it from update() for
+	// invalidation-triggered refetches (see BitmapTileManager.update).
+	public refreshTiles(): void {
+		this.refreshCurrentCoordList();
+		RenderManager.requestVisibleTiles(this.currentCoordList);
 	}
 
 	// pX, pY are absolute view-space positions in canvas (core) pixels.
@@ -322,5 +344,82 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 		const deltaX = pX - this._viewedRectangle.pX1;
 		const deltaY = pY - this._viewedRectangle.pY1;
 		if (deltaX !== 0 || deltaY !== 0) this.scroll(deltaX, deltaY);
+	}
+
+	// Recompute the visible entries of the row and column headers after a
+	// scroll. _updateCanvas() refreshes each header's HeaderInfo from the
+	// current viewed rectangle and requests a redraw; onDraw stays draw-only.
+	private refreshHeaders(): void {
+		const rowHeader = app.sectionContainer.getSectionWithName(
+			app.CSections.RowHeader.name,
+		) as any;
+		const columnHeader = app.sectionContainer.getSectionWithName(
+			app.CSections.ColumnHeader.name,
+		) as any;
+		if (rowHeader) rowHeader._updateCanvas();
+		if (columnHeader) columnHeader._updateCanvas();
+	}
+
+	// Reposition the blinking DOM text cursor after a scroll. update() reads
+	// the text cursor rectangle and viewed rectangle and handles its own
+	// visibility; it is a no-op when no cursor marker is attached.
+	private refreshTextCursor(): void {
+		const cursorMarker = (app.map as any)?._docLayer?._cursorMarker;
+		if (cursorMarker) cursorMarker.update();
+	}
+
+	// Build the list of tiles covering the visible area from the viewed
+	// rectangle. The base version hard-codes part 0; Calc tiles are per-sheet,
+	// so the coordinates must carry the selected part or the visible sheet's
+	// tiles are never fetched. The grid covers exactly the visible tiles (no
+	// margin): checkRequestTiles() marks every listed tile current
+	// (distanceFromView 0), and the coherency-pause resume waits on all such
+	// tiles, so the list holds on-screen tiles only.
+	protected override refreshCurrentCoordList(): void {
+		this.currentCoordList.length = 0;
+
+		const zoom = Math.round(app.map.getZoom());
+		const tileSize = RenderManager.tileSize;
+		const part = app.map._docLayer.getSelectedPart();
+		const r = this._viewedRectangle;
+
+		// With frozen rows/columns the fixed panes show cells at fixed document
+		// positions that lie outside the scrolled rectangle, so the list covers
+		// every split pane on screen, not just the free pane. getPxBoundList
+		// returns the single viewport rectangle when no split is active, and only
+		// ever returns visible pane regions, so the list holds on-screen tiles
+		// only.
+		const docLayer: any = app.map._docLayer;
+		const splitPanesContext = docLayer.getSplitPanesContext();
+		const viewport = new cool.Bounds(
+			new cool.Point(r.pX1, r.pY1),
+			new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
+		);
+		const boundList = splitPanesContext
+			? splitPanesContext.getPxBoundList(viewport)
+			: [viewport];
+
+		const added = new Set<string>();
+		for (const bounds of boundList) {
+			const tl = bounds.getTopLeft();
+			const br = bounds.getBottomRight();
+			const startCol = Math.floor(tl.x / tileSize);
+			const startRow = Math.floor(tl.y / tileSize);
+			// Tile of the last visible pixel; the difference is the inclusive count
+			// pushTileGrid iterates with (<= columnCount / <= rowCount).
+			const endCol = Math.floor((br.x - 1) / tileSize);
+			const endRow = Math.floor((br.y - 1) / tileSize);
+
+			this.pushTileGrid(
+				startCol * tileSize,
+				startRow * tileSize,
+				endCol - startCol,
+				endRow - startRow,
+				zoom,
+				tileSize,
+				part,
+				added,
+			);
+		}
 	}
 }

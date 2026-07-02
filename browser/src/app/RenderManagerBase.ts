@@ -160,6 +160,8 @@ class RenderManagerBase {
 	): TileCoordData[] {
 		return [];
 	}
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	requestVisibleTiles(_currentCoordList: TileCoordData[]): void {}
 
 	// -- message handling --
 	// eslint-disable-next-line @typescript-eslint/no-empty-function

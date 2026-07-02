@@ -188,6 +188,10 @@ class RenderManager {
 		);
 	}
 
+	static requestVisibleTiles(currentCoordList: TileCoordData[]): void {
+		RenderManager.ensureInstance().requestVisibleTiles(currentCoordList);
+	}
+
 	static updateFileBasedView(
 		checkOnly: boolean = false,
 		zoomFrameBounds: any = null,

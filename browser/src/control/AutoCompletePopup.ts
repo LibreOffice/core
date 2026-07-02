@@ -130,15 +130,15 @@ abstract class AutoCompletePopup {
 			return new cool.Point(caretRect.left, caretRect.bottom);
 		}
 
-		const currPos = {
-			x: app.file.textCursor.rectangle.cX1,
-			y: app.file.textCursor.rectangle.cY2,
-		};
-		const origin = this.map.getPixelOrigin();
-		const panePos = this.map._getMapPanePos();
+		// Cursor position relative to the top-left of the viewed area, in CSS
+		// pixels. This used the leaflet map pane (pixelOrigin - mapPanePos),
+		// which equals the viewed rectangle's top-left; read it from the layout
+		// so it stays correct without moving the map pane.
+		const cursorRect = app.file.textCursor.rectangle;
+		const viewed = app.activeDocument.activeLayout.viewedRectangle;
 		return new cool.Point(
-			Math.round(currPos.x + panePos.x - origin.x),
-			Math.round(currPos.y + panePos.y - origin.y),
+			Math.round(cursorRect.cX1 - viewed.cX1),
+			Math.round(cursorRect.cY2 - viewed.cY1),
 		);
 	}
 

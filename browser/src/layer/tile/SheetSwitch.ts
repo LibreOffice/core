@@ -20,7 +20,8 @@ export class SheetSwitchViewRestore {
 	private map: any;
 	private docLayer: any;
 
-	// centerOfSheet maps from sheet id to center of sheet view.
+	// centerOfSheet maps from sheet id to that sheet's last viewed rectangle.
+	// Store and restore the layout's viewed rectangle.
 	private centerOfSheet: Map<number, any>;
 	private mayRestore: boolean;
 	private restorePart: number;
@@ -42,8 +43,10 @@ export class SheetSwitchViewRestore {
 	}
 
 	public save (toPart: number): void {
+		Util.ensureValue(app.activeDocument);
+
 		if (!this.currentSheetIndexReassigned) {
-			this.centerOfSheet.set(this.docLayer._selectedPart as number, this.map.getCenter());
+			this.centerOfSheet.set(this.docLayer._selectedPart as number, app.activeDocument.activeLayout.viewedRectangle.clone());
 		} else {
 			this.currentSheetIndexReassigned = false;
 		}
@@ -86,8 +89,10 @@ export class SheetSwitchViewRestore {
 		if (index < 0)
 			return;
 
+		Util.ensureValue(app.activeDocument);
+
 		// when insert a sheet
-		this.centerOfSheet.set(this.docLayer._selectedPart as number, this.map.getCenter());
+		this.centerOfSheet.set(this.docLayer._selectedPart as number, app.activeDocument.activeLayout.viewedRectangle.clone());
 
 		const numberOfSheets: number = this.map.getNumberOfParts();
 		for (let i = numberOfSheets; i > index; --i) {
@@ -102,7 +107,7 @@ export class SheetSwitchViewRestore {
 		const currentSheetNumber: number = this.map.getCurrentPartNumber();
 		this.currentSheetIndexReassigned = index <= currentSheetNumber;
 		if (this.currentSheetIndexReassigned) {
-			this.centerOfSheet.set(currentSheetNumber + 1, this.map.getCenter());
+			this.centerOfSheet.set(currentSheetNumber + 1, app.activeDocument.activeLayout.viewedRectangle.clone());
 		}
 	}
 
@@ -119,10 +124,12 @@ export class SheetSwitchViewRestore {
 				this.centerOfSheet.delete(i);
 		}
 
+		Util.ensureValue(app.activeDocument);
+
 		const currentSheetNumber: number = this.map.getCurrentPartNumber();
 		this.currentSheetIndexReassigned = index <= currentSheetNumber;
 		if (index < currentSheetNumber) {
-			this.centerOfSheet.set(currentSheetNumber - 1, this.map.getCenter());
+			this.centerOfSheet.set(currentSheetNumber - 1, app.activeDocument.activeLayout.viewedRectangle.clone());
 		}
 	}
 
@@ -146,7 +153,9 @@ export class SheetSwitchViewRestore {
 			return;
 		}
 
-		this.map._resetView(center, this.map._zoom);
+		Util.ensureValue(app.activeDocument);
+
+		app.activeDocument.activeLayout.scrollTo(center.pX1, center.pY1);
 
 		// Keep restoring view for every cell-cursor messages until we get this
 		// call after receiving cell-cursor msg after setpart incoming msg.

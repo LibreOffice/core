@@ -424,6 +424,11 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		const heightIncreased = oldMapSize[1] < newMapSize[1];
 		const sizeChanged = oldMapSize[0] !== newMapSize[0] || oldMapSize[1] !== newMapSize[1];
 
+		// The size update below rebuilds the viewed rectangle; remember the
+		// scroll position so it can be restored afterwards.
+		const scrollX = app.activeDocument.activeLayout.viewedRectangle.pX1;
+		const scrollY = app.activeDocument.activeLayout.viewedRectangle.pY1;
+
 		// Early exit. If there is no need to update the size, return here.
 		if (sizeChanged || force) {
 			this._resizeMapElementAndTilesLayer(mapElement, marginLeft, marginTop, newMapSize);
@@ -435,8 +440,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._mobileChecksAfterResizeEvent(heightIncreased);
 		}
 
-		// Center the view w.r.t the new map-pane position using the current zoom.
-		this._map.setView(this._map.getCenter());
+		// Restore the scroll position kept from before the size update.
+		app.activeDocument.activeLayout.scrollTo(scrollX, scrollY);
 
 		if (sizeChanged || force) {
 			// We want to keep cursor visible when we show the keyboard on mobile device or tablet

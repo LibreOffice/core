@@ -529,8 +529,21 @@ class BitmapTileManager extends RenderManagerBase {
 			updated = true;
 		}
 
-		const center = app.map.getCenter();
-		const pixelBounds = app.map.getPixelBoundsCore(center, this._zoom);
+		// Calc scrolls the layout, not the leaflet map, so map.getCenter() is
+		// stale. Read the viewed rectangle (already in core pixels) directly so
+		// prefetch and split-pane borders track the real viewport.
+		const layout = app.activeDocument.activeLayout;
+		let pixelBounds;
+		if (layout.type === 'ViewLayoutCalc') {
+			const r = layout.viewedRectangle;
+			pixelBounds = new cool.Bounds(
+				new cool.Point(r.pX1, r.pY1),
+				new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
+			);
+		} else {
+			const center = app.map.getCenter();
+			pixelBounds = app.map.getPixelBoundsCore(center, this._zoom);
+		}
 		if (!this._pixelBounds || !pixelBounds.equals(this._pixelBounds)) {
 			this._pixelBounds = pixelBounds;
 			updated = true;
@@ -1835,7 +1848,20 @@ class BitmapTileManager extends RenderManagerBase {
 		if (size.x === 0 || size.y === 0) return 0;
 
 		var zoom = Math.round(app.map.getZoom());
-		var pixelBounds = app.map.getPixelBoundsCore(app.map.getCenter(), zoom);
+
+		Util.ensureValue(app.activeDocument);
+
+		// Calc scrolls the layout, read the viewed rectangle (already in core pixels).
+		var pixelBounds;
+		if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+			const r = app.activeDocument.activeLayout.viewedRectangle;
+			pixelBounds = new cool.Bounds(
+				new cool.Point(r.pX1, r.pY1),
+				new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
+			);
+		} else {
+			pixelBounds = app.map.getPixelBoundsCore(app.map.getCenter(), zoom);
+		}
 
 		var queue = this.getMissingTiles(pixelBounds, zoom);
 
@@ -1923,6 +1949,19 @@ class BitmapTileManager extends RenderManagerBase {
 			return;
 		} else if (app.activeDocument.activeLayout.type === 'ViewLayoutMultiPage')
 			return;
+		else if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+			// Calc drives scrolling from the layout, not the leaflet map, so
+			// map.getCenter() is stale. Let the layout compute the visible
+			// tiles from its viewed rectangle and hand them to us. This path is
+			// reached both on scroll and on invalidation-triggered refetches
+			// (_requestNewTiles -> update).
+			app.map._docLayer._sendClientZoom();
+			const layout = app.activeDocument.activeLayout as ViewLayoutCalc;
+			layout.sendClientVisibleArea();
+			layout.refreshTiles();
+			this.initPreFetchAdjacentTiles();
+			return;
+		}
 
 		if (!center) {
 			center = map.getCenter();
@@ -2077,6 +2116,13 @@ class BitmapTileManager extends RenderManagerBase {
 		if (!this.checkPointers() || app.map._docLayer._documentInfo === '') {
 			return;
 		}
+
+		// Let the layout request the tiles covering its viewed rectangle.
+		if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+			(app.activeDocument.activeLayout as ViewLayoutCalc).refreshTiles();
+			return;
+		}
+
 		var center = app.map.getCenter();
 		var zoom = Math.round(app.map.getZoom());
 
@@ -2144,6 +2190,20 @@ class BitmapTileManager extends RenderManagerBase {
 		if (sendTileCombine) this.sendTileCombineRequest(tileCombineQueue);
 
 		return tileCombineQueue;
+	}
+
+	// Refresh distances for the current view, then request the visible tiles.
+	// Refreshing distances first is essential: it clears distanceFromView on
+	// tiles that scrolled out of view. checkRequestTiles() calls
+	// makeTileCurrent() which can pause drawing for coherency; drawing resumes
+	// once visibleTilesReady() is satisfied, and that predicate scans every tile
+	// with distanceFromView === 0. The refresh keeps that scan to the tiles that
+	// are really in view, so drawing resumes as soon as they arrive.
+	public requestVisibleTiles(currentCoordList: TileCoordData[]): void {
+		this.updateAllTileDistances();
+		this.beginTransaction();
+		this.checkRequestTiles(currentCoordList);
+		this.endTransaction(null);
 	}
 
 	public updateFileBasedView(
