@@ -1077,7 +1077,7 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
         HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
         return true;
     }
-    auto const subPath = rest.size() > extensionsSegment.size()
+    auto const& subPath = rest.size() > extensionsSegment.size()
         ? rest.substr(extensionsSegment.size()) : std::string();
 
     // On-disk root: <ChildRoot>/tmp/sharedpresets/<configId>/extensions/
@@ -1097,7 +1097,7 @@ bool FileServerRequestHandler::serveBrowserPresetExtensionFile(
                     if (!it->isDirectory()) {
                         continue;
                     }
-                    auto const name = it.name();
+                    auto const& name = it.name();
                     // Hide the ~new/~old swap-rename siblings that the unpack in asyncInstallPreset
                     // transiently creates:
                     if (name.ends_with("~new") || name.ends_with("~old")) {
