@@ -53,16 +53,7 @@ export class CornerGroup extends GroupBase {
 	}
 
 	onClick(): void {
-		this._map.wholeRowSelected = true;
-		this._map.wholeColumnSelected = true;
-		this._map.sendUnoCommand('.uno:SelectAll');
-		// Row and column selections trigger updatecursor: message
-		// and eventually _updateCursorAndOverlay function is triggered and focus will be at the map
-		// thus the keyboard shortcuts like delete will work again.
-		// selecting whole page does not trigger that and the focus will be lost.
-		const docLayer = this._map._docLayer;
-		if (docLayer)
-			docLayer._updateCursorAndOverlay();
+		selectAllAndRestoreFocus(this._map);
 	}
 
 	onMouseEnter(): void {

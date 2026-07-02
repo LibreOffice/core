@@ -36,6 +36,20 @@ export interface GroupEntryStrings {
 
 type GroupColors = { backgroundColor: string, borderColor: string, textColor?: string, strokeColor?: string };
 
+// Selects the whole sheet and restores focus to the map so keyboard shortcuts keep working.
+export function selectAllAndRestoreFocus(map: any): void {
+	map.wholeRowSelected = true;
+	map.wholeColumnSelected = true;
+	map.sendUnoCommand('.uno:SelectAll');
+	// Row and column selections trigger updatecursor: message
+	// and eventually _updateCursorAndOverlay function is triggered and focus will be at the map
+	// thus the keyboard shortcuts like delete will work again.
+	// selecting whole page does not trigger that and the focus will be lost.
+	const docLayer = map._docLayer;
+	if (docLayer)
+		docLayer._updateCursorAndOverlay();
+}
+
 export abstract class GroupBase extends CanvasSectionObject {
 	_map: any;
 	_textColor: string;
