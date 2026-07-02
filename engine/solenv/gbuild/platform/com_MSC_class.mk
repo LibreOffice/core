@@ -67,6 +67,10 @@ endef
 # JSON, keeps working when an old and a new build share one build directory.
 # clang-cl has no /sourceDependencies, so it writes the deps by piping
 # -showIncludes through filter-showIncludes.awk.
+# cl echoes the source file name and prints its warnings and errors to stdout.
+# The MSVC path sends that output to a per-object .clout file and prints it to
+# stderr only when the compile fails, so a successful build stays quiet but
+# error messages are still seen.
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,compiler)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
@@ -95,7 +99,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Fd$(PDBFILE) \
 		-c $(3) \
 		-Fo$(1)) \
-		$(if $(COMPILER_TEST),,$(if $(COM_IS_CLANG),$(call gb_create_deps,$(4),$(1),$(3))))
+		$(if $(COMPILER_TEST),,$(if $(COM_IS_CLANG),$(call gb_create_deps,$(4),$(1),$(3)),> $(1).clout 2>&1 || { cat $(1).clout >&2; exit 1; }))
 endef
 
 # PrecompiledHeader class
