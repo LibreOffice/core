@@ -18,11 +18,17 @@ $(eval $(call gb_Executable_add_defs,soffice_bin,\
     $(if $(DISABLE_DYNLOADING),$(if $(SYSTEM_LIBXML),,-DNOTEST_xmlCleanupParser)) \
 ))
 
+ifeq ($(UNITEDLIBS),)
 $(eval $(call gb_Executable_use_libraries,soffice_bin,\
     $(if $(ENABLE_RUST_UNO),rust_uno-cpp) \
     sal \
     sofficeapp \
 ))
+else # UNITEDLIBS
+$(eval $(call gb_Executable_use_libraries,soffice_bin,\
+    united \
+))
+endif # UNITEDLIBS
 
 $(eval $(call gb_Executable_add_cobjects,soffice_bin,\
     desktop/source/app/main \

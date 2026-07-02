@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <config_features.h>
+#include <config_options.h>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <config_skia.h>
 #if HAVE_FEATURE_SKIA
@@ -44,7 +45,12 @@
 // plugin factory function
 extern "C"
 {
+// need to rename this to prevent duplicate symbols when in unitedlibs mode
+#if ENABLE_UNITEDLIBS
+    SAL_DLLPUBLIC_EXPORT SalInstance* create_SalInstanceGen()
+#else
     VCLPLUG_GEN_PUBLIC SalInstance* create_SalInstance()
+#endif
     {
         /* #i92121# workaround deadlocks in the X11 implementation
         */

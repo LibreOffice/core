@@ -72,6 +72,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	vcldemo \
 	svdemo \
 	minvcl \
+	$(if $(UNITEDLIBS),unitedlibs-link-map-generator) \
 	svptest \
 	tiledrendering \
 	mtfdemo \
@@ -330,6 +331,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	lng \
 	$(if $(filter $(OS),MACOSX),macbe1) \
 	$(if $(MERGELIBS),merged) \
+	$(if $(UNITEDLIBS),united) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,mozbootstrap) \
 	msfilter \
 	$(call gb_Helper_optional,SCRIPTING,msforms) \

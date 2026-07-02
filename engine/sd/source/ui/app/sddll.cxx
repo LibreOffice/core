@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_options.h>
 
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
@@ -268,7 +269,11 @@ void SdDLL::Init()
 #ifndef DISABLE_DYNLOADING
 
 extern "C" SAL_DLLPUBLIC_EXPORT
+#if ENABLE_UNITEDLIBS
+void kit_preload_hook_sd()
+#else
 void kit_preload_hook()
+#endif
 {
     SdAbstractDialogFactory::Create();
 }

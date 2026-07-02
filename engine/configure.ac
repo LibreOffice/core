@@ -1636,6 +1636,12 @@ libo_FUZZ_ARG_ENABLE(mergelibs,
         [Merge several of the smaller libraries into one big "merged" library.])
 )
 
+libo_FUZZ_ARG_ENABLE(unitedlibs,
+    AS_HELP_STRING([--enable-unitedlibs=yes/no],
+        [Merge all of the libraries into a single large library,
+         This option is mutually exclusive with --enable-mergelibs=yes.])
+)
+
 AC_ARG_ENABLE(fetch-external,
     AS_HELP_STRING([--disable-fetch-external],
         [Disables fetching external tarballs from web sources.])
@@ -13509,6 +13515,32 @@ CXX=$save_CXX
 LIB=$save_LIB
 CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
+
+# ===================================================================
+# Creating bigger shared library to link against, containing almost all internal code
+# ===================================================================
+AC_MSG_CHECKING([whether to create unitedlibs])
+UNITEDLIBS=
+
+if test $_os = iOS -o $_os = Android; then
+    # Android and iOS have their own different approach for doing this.
+    enable_unitedlibs=no
+fi
+
+if test -n "$enable_unitedlibs" -a "$enable_unitedlibs" != "no"; then
+    if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
+        AC_MSG_ERROR([cannot use --enable-mergelibs=yes and --enable-unitedlibs=yes together])
+    elif test "$enable_unitedlibs" = "yes" -o "$enable_unitedlibs" = ""; then
+        UNITEDLIBS="TRUE"
+        AC_MSG_RESULT([yes])
+        AC_DEFINE(ENABLE_UNITEDLIBS)
+    else
+        AC_MSG_ERROR([unknown value --enable-unitedlibs=$enable_unitedlibs])
+    fi
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST([UNITEDLIBS])
 
 # ===================================================================
 # Creating bigger shared library to link against

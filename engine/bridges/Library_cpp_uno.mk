@@ -303,5 +303,8 @@ $(eval $(call gb_Library_add_cxxobjects,$(CPPU_ENV)_uno,\
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Library_set_plugin_for_nodep,$(CPPU_ENV)_uno,cppu))
 endif
+ifeq ($(UNITEDLIBS),TRUE)
+$(eval $(call gb_Library_set_plugin_for_nodep,$(CPPU_ENV)_uno,cppu))
+endif
 
 # vim: set noet sw=4 ts=4:

@@ -194,6 +194,9 @@ endif
 ifneq (,$$(filter $$(gb_MERGEDLIBS),$(2)))
 $$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter $$(gb_MERGEDLIBS),$(2)) because they are merged.))
 endif
+ifneq (,$$(filter $$(gb_UNITEDLIBS),$(2)))
+$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter $$(gb_UNITEDLIBS),$(2)) because they are part of libunited.))
+endif
 
 $(call gb_ExternalProject_get_preparation_target,$(1)) : \
 	$(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))

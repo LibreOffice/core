@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <config_options.h>
 
 #include <deque>
 #include <optional>
@@ -120,7 +121,12 @@ extern "C"
         pYieldMutex->ThreadsLeave();
     }
 
+// need to rename this to prevent duplicate symbols when in unitedlibs mode
+#if ENABLE_UNITEDLIBS
+    SAL_DLLPUBLIC_EXPORT SalInstance* create_SalInstanceGtk3()
+#else
     VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance()
+#endif
     {
         SAL_INFO(
             "vcl.gtk",

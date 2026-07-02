@@ -5012,6 +5012,20 @@ bool globalPreinit(const std::string &loTemplate)
 #else
     std::string libMerged = loTemplate + "/Contents/Frameworks/libmergedlo.dylib";
 #endif
+#ifndef __APPLE__
+    std::string libUnited = loTemplate + "/program/libunitedlo.so";
+#else
+    std::string libUnited = loTemplate + "/Contents/Frameworks/libunitedlo.dylib";
+#endif
+#ifndef __APPLE__
+    std::string libSofficeapp = loTemplate + "/program/libsofficeapp.so";
+#else
+    std::string libSofficeapp = loTemplate + "/Contents/Frameworks/libsofficeapp.dylib";
+#endif
+
+    assert(!(File(libMerged).exists() && File(libUnited).exists()) && "cannot have both libmerged and libunited, something is wrong");
+
+    // Try the possible library names in sequence
     if (File(libMerged).exists())
     {
         LOG_TRC("dlopen(" << libMerged << ", RTLD_GLOBAL|RTLD_NOW)");
@@ -5023,29 +5037,32 @@ bool globalPreinit(const std::string &loTemplate)
         }
         loadedLibrary = std::move(libMerged);
     }
-    else
+    else if (File(libUnited).exists())
     {
-#ifndef __APPLE__
-        std::string libSofficeapp = loTemplate + "/program/libsofficeapp.so";
-#else
-        std::string libSofficeapp = loTemplate + "/Contents/Frameworks/libsofficeapp.dylib";
-#endif
-        if (File(libSofficeapp).exists())
+        LOG_TRC("dlopen(" << libUnited << ", RTLD_GLOBAL|RTLD_NOW)");
+        handle = dlopen(libUnited.c_str(), RTLD_GLOBAL|RTLD_NOW);
+        if (!handle)
         {
-            LOG_TRC("dlopen(" << libSofficeapp << ", RTLD_GLOBAL|RTLD_NOW)");
-            handle = dlopen(libSofficeapp.c_str(), RTLD_GLOBAL|RTLD_NOW);
-            if (!handle)
-            {
-                LOG_FTL("Failed to load " << libSofficeapp << ": " << dlerror());
-                return false;
-            }
-            loadedLibrary = std::move(libSofficeapp);
-        }
-        else
-        {
-            LOG_FTL("Neither " << libSofficeapp << " or " << libMerged << " exist.");
+            LOG_FTL("Failed to load " << libUnited << ": " << dlerror());
             return false;
         }
+        loadedLibrary = std::move(libUnited);
+    }
+    else if (File(libSofficeapp).exists())
+    {
+        LOG_TRC("dlopen(" << libSofficeapp << ", RTLD_GLOBAL|RTLD_NOW)");
+        handle = dlopen(libSofficeapp.c_str(), RTLD_GLOBAL|RTLD_NOW);
+        if (!handle)
+        {
+            LOG_FTL("Failed to load " << libSofficeapp << ": " << dlerror());
+            return false;
+        }
+        loadedLibrary = std::move(libSofficeapp);
+    }
+    else
+    {
+        LOG_FTL("Neither " << libSofficeapp << " nor " << libMerged << " nor " << libUnited << " exist.");
+        return false;
     }
 
     CokHookPreInit2* preInit = reinterpret_cast<CokHookPreInit2 *>(dlsym(handle, "cok_preinit_2"));

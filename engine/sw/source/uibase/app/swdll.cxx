@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_options.h>
 #include <memory>
 
 #include <svx/svdobj.hxx>
@@ -176,7 +177,11 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
 #ifndef DISABLE_DYNLOADING
 
 extern "C" SAL_DLLPUBLIC_EXPORT
+#if ENABLE_UNITEDLIBS
+void kit_preload_hook_sw()
+#else
 void kit_preload_hook()
+#endif
 {
     // swui
     SwAbstractDialogFactory::Create();

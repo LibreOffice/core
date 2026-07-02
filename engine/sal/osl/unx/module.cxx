@@ -81,6 +81,22 @@ oslModule osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMode)
     return pModule;
 }
 
+#if ENABLE_UNITEDLIBS
+
+static bool g_UnitedLibActive { false };
+
+void osl_setUnitedLibsActive()
+{
+    g_UnitedLibActive = true;
+}
+
+bool osl_isUnitedLibActive()
+{
+    return g_UnitedLibActive;
+}
+
+#endif
+
 /*****************************************************************************/
 /* osl_loadModuleAscii */
 /*****************************************************************************/
@@ -92,19 +108,49 @@ oslModule osl_loadModuleAscii(const char *pModuleName, sal_Int32 nRtldMode)
         ((nRtldMode & SAL_LOADMODULE_LAZY) != 0
          && (nRtldMode & SAL_LOADMODULE_NOW) != 0),
         "sal.osl", "only either LAZY or NOW");
-    if (pModuleName)
-    {
-        int rtld_mode =
-            ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |
-            ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
-        void* pLib = dlopen(pModuleName, rtld_mode);
+    if (!pModuleName)
+        return nullptr;
 
-        SAL_WARN_IF(
-            pLib == nullptr, "sal.osl",
-            "dlopen(" << pModuleName << ", " << rtld_mode << "): "
-                << dlerror());
-        return pLib;
+#if ENABLE_UNITEDLIBS
+    // If we running using libunited and not loading one of the small number of excluded
+    // libraries, we need to load from libunited
+    if (g_UnitedLibActive)
+    {
+//        if (strstr(pModuleName, SAL_MODULENAME("comphelper")) != nullptr
+//            || strstr(pModuleName, SAL_MODULENAME("invocationlo")) != nullptr
+//            || strstr(pModuleName, SAL_MODULENAME("pyuno")) != nullptr
+//            || strstr(pModuleName, SAL_MODULENAME("sallo")) != nullptr
+//            || strstr(pModuleName, SAL_MODULENAME("testunolo")) != nullptr)
+//            ; // fine
+//        else if (strstr(pModuleName, SAL_MODULENAME("unitedlo")) == nullptr)
+//            assert(false);
+//        pModuleName = SAL_MODULENAME("unitedlo");
+#ifndef NDEBUG
+        if(strstr(pModuleName, SAL_MODULENAME("unitedlo")) == nullptr)
+        {
+            SAL_WARN("sal", "we are in unitedlib mode, but something is trying to load stuff from outside unitedlib, " << pModuleName);
+            assert(false && "unitedlib load from outside error");
+        }
+#else
+        // Even in a release build, I would rather have a hard abort than have to debug extremely weird issues
+        // caused by loading libunited and other modules in the same process.
+        if(strstr(pModuleName, SAL_MODULENAME("unitedlo")) == nullptr)
+            std::abort();
+#endif
     }
+#endif
+
+    int rtld_mode =
+        ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |
+        ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
+    void* pLib = dlopen(pModuleName, rtld_mode);
+
+    SAL_WARN_IF(
+        pLib == nullptr, "sal.osl",
+        "dlopen(" << pModuleName << ", " << rtld_mode << "): "
+            << dlerror());
+    return pLib;
+
 #else
     (void) pModuleName;
     (void) nRtldMode;
@@ -182,17 +228,40 @@ void * getSymbol(oslModule module, char const * symbol)
 {
     assert(symbol != nullptr);
 #if HAVE_UNIX_DLAPI
+
+    void * p;
+#if ENABLE_UNITEDLIBS
+    if (g_UnitedLibActive)
+    {
+        // Sanity check - if "libtllo.so" (aka the tools module library) has already been loaded by anthing
+        // else, then things have gone wrong.
+        void* checklib = dlopen(SAL_MODULENAME("tllo"), RTLD_NOLOAD | RTLD_LAZY);
+        if (checklib)
+        {
+            SAL_WARN("sal.osl", "cannot use libunited, we have already loaded one of the libraries that is supposed to be bundled inside libunited");
+            dlclose(checklib);
+            std::abort();
+            return nullptr;
+        }
+        p = dlsym(module, symbol);
+        // this is a warning for now to help me debug problems with --enabled-unitedlibs
+        SAL_WARN_IF(
+            p == nullptr, "sal.osl",
+            "osl_getSymbol() failed, module " << module << " symbol " << symbol << " err " << dlerror());
+        return p;
+    }
+#endif // ENABLE_UNITEDLIBS
     // We do want to use dlsym() also in the DISABLE_DYNLOADING case
     // just to look up symbols in the static executable, I think:
-    void * p = dlsym(module, symbol);
+    p = dlsym(module, symbol);
     SAL_INFO_IF(
         p == nullptr, "sal.osl",
-        "dlsym(" << module << ", " << symbol << "): " << dlerror());
-#else
+        "osl_getSymbol() failed, module " << module << " symbol " << symbol << " err " << dlerror());
+#else // HAVE_UNIX_DLAPI
     (void) module;
     (void) symbol;
     void *p = nullptr;
-#endif
+#endif // HAVE_UNIX_DLAPI
     return p;
 }
 

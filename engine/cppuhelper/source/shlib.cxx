@@ -304,10 +304,15 @@ void cppuhelper::detail::loadSharedLibComponentFactory(
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
 #else
-    osl::Module mod(uri, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
+    OUString dllName = uri;
+#if ENABLE_UNITEDLIBS
+    if (osl_isUnitedLibActive())
+        dllName = u"" SAL_MODULENAME("unitedlo") ""_ustr;
+#endif
+    osl::Module mod(dllName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);
     if (!mod.is()) {
         throw css::loader::CannotActivateFactoryException(
-            "loading component library <" + uri + "> failed",
+            "loading component library <" + dllName + "> failed",
             cpo::uno::Reference<cpo::uno::XInterface>());
     }
     if (constructor.isEmpty()) {

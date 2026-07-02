@@ -21,6 +21,7 @@
 #define INCLUDED_OSL_MODULE_H
 
 #include <sal/config.h>
+#include <config_options.h>
 
 #include <rtl/ustring.h>
 #include <sal/saldllapi.h>
@@ -206,6 +207,20 @@ SAL_DLLPUBLIC bool osl_getModuleURLFromAddress(
 */
 SAL_DLLPUBLIC bool osl_getModuleURLFromFunctionAddress(
         oslGenericFunction pf, rtl_uString **pustrFunctionURL );
+
+#if ENABLE_UNITEDLIBS
+
+/**
+    Tell the dynamic loading code that we are running inside --enable-unitedlibs mode
+    where dynamic loading needs to be done a little differently.
+*/
+SAL_DLLPUBLIC void osl_setUnitedLibsActive();
+/*
+  return true if we compiled with --enable-unitedlibs and that mode is active
+ */
+SAL_DLLPUBLIC bool osl_isUnitedLibActive();
+
+#endif
 
 #ifdef __cplusplus
 }

@@ -148,21 +148,24 @@ static OUString SfxGetSpecialCharsForEdit(weld::Widget* pParent, const vcl::Font
     static const PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = [] {
         PFunc_getSpecialCharsForEdit pfunc = nullptr;
 #ifndef DISABLE_DYNLOADING
-        osl::Module aMod;
-        aMod.loadRelative(
-            &thisModule,
+
 #if ENABLE_MERGELIBS
-            SVLIBRARY("merged")
+        auto pModuleName = SVLIBRARY("merged");
+#elif ENABLE_UNITEDLIBS
+        auto pModuleName = SVLIBRARY("cui");
+        if (osl_isUnitedLibActive())
+            pModuleName = SVLIBRARY("united");
 #else
-            SVLIBRARY("cui")
+        const auto pModuleName = SVLIBRARY("cui");
 #endif
-            );
+        osl::Module aMod;
+        aMod.loadRelative(&thisModule, pModuleName);
 
         // get symbol
         pfunc = reinterpret_cast<PFunc_getSpecialCharsForEdit>(aMod.getFunctionSymbol("GetSpecialCharsForEdit"));
         DBG_ASSERT( pfunc, "GetSpecialCharsForEdit() not found!" );
         aMod.release();
-#else
+#else // #ifndef DISABLE_DYNLOADING
         pfunc = GetSpecialCharsForEdit;
 #endif
         return pfunc;

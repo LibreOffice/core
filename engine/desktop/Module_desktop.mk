@@ -26,6 +26,9 @@ $(eval $(call gb_Module_add_targets,desktop,\
     $(if $(filter-out EMSCRIPTEN MACOSX WNT,$(OS)),Executable_l10ntranslate) \
     Executable_soffice_bin \
     Package_scripts \
+	$(if $(UNITEDLIBS),Executable_unitedlibs-link-map-generator) \
+	$(if $(UNITEDLIBS),CustomTarget_unitedlibs-link-map) \
+	$(if $(UNITEDLIBS),Library_united) \
 ))
 
 ifneq (,$(filter-out EMSCRIPTEN HAIKU MACOSX WNT,$(OS)))

@@ -1474,7 +1474,14 @@ UnoWrapperBase* UnoWrapperBase::GetUnoWrapper( bool bCreateIfNotExist )
     {
 #ifndef DISABLE_DYNLOADING
         osl::Module aTkLib;
+#if ENABLE_UNITEDLIBS
+        if (osl_isUnitedLibActive())
+            aTkLib.loadRelative(&thisModule, SAL_MODULENAME("unitedlo"));
+        else
+            aTkLib.loadRelative(&thisModule, TK_DLL_NAME);
+#else
         aTkLib.loadRelative(&thisModule, TK_DLL_NAME);
+#endif
         if (aTkLib.is())
         {
             FN_TkCreateUnoWrapper fnCreateWrapper = reinterpret_cast<FN_TkCreateUnoWrapper>(aTkLib.getFunctionSymbol("CreateUnoWrapper"));

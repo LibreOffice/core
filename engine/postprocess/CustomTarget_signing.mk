@@ -31,6 +31,7 @@ $(gb_CustomTarget_workdir)/postprocess/signing/signing.done:
 ifeq ($(COM),MSC)
 	EXCLUDELIST=$(shell $(gb_MKTEMP)) && \
 	echo "$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_filename,$(lib)))" | tr ' ' '\n' > $$EXCLUDELIST && \
+	echo "$(foreach lib,$(gb_UNITEDLIBS),$(call gb_Library_get_filename,$(lib)))" | tr ' ' '\n' >> $$EXCLUDELIST && \
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
 			-e $$EXCLUDELIST \
 			-l $(subst .done,_log.txt,$@) \

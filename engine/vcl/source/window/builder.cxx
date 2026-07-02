@@ -1349,6 +1349,9 @@ static ModuleMap g_aModuleMap;
 #if ENABLE_MERGELIBS
 static std::shared_ptr<NoAutoUnloadModule> g_pMergedLib = std::make_shared<NoAutoUnloadModule>();
 #endif
+#if ENABLE_UNITEDLIBS
+static std::shared_ptr<NoAutoUnloadModule> g_pUnitedLib = std::make_shared<NoAutoUnloadModule>();
+#endif
 
 #endif
 
@@ -1360,6 +1363,9 @@ void VclBuilderPreload()
 
 #if ENABLE_MERGELIBS
     g_pMergedLib->loadRelative(&thisModule, SVLIBRARY("merged"));
+#elif ENABLE_UNITEDLIBS
+    if (osl_isUnitedLibActive())
+        g_pUnitedLib->loadRelative(&thisModule, SVLIBRARY("united"));
 #else
 // find -name '*ui*' | xargs grep 'class=".*lo-' |
 //     sed 's/.*class="//' | sed 's/-.*$//' | sort | uniq
@@ -1441,6 +1447,15 @@ VclBuilder::customMakeWidget GetCustomMakeWidget(const OUString& rName)
             if ((pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
                      g_pMergedLib->getFunctionSymbol(sFunction))))
                 pModule = g_pMergedLib;
+#elif ENABLE_UNITEDLIBS
+            if (osl_isUnitedLibActive())
+            {
+                if (!g_pUnitedLib->is())
+                    g_pUnitedLib->loadRelative(&thisModule, SVLIBRARY("united"));
+                if ((pFunction = reinterpret_cast<VclBuilder::customMakeWidget>(
+                         g_pUnitedLib->getFunctionSymbol(sFunction))))
+                    pModule = g_pUnitedLib;
+            }
 #endif
             if (!pFunction)
             {

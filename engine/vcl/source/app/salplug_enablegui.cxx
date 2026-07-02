@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <svdata.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/svlibrary.h>
 
 #if USING_X11
 #define UNIX_DESKTOP_DETECT 1
@@ -80,6 +81,7 @@ oslModule pCloseModule = nullptr;
 
 extern "C" typedef SalInstance* (*salFactoryProc)();
 
+#if !ENABLE_UNITEDLIBS
 SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
 #if ENABLE_HEADLESS
@@ -139,6 +141,7 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
     // coverity[leaked_storage] - this is on purpose
     return pInst;
 }
+#endif // !ENABLE_UNITEDLIBS
 #endif // !STATIC_SAL_INSTANCE
 
 // HACK to obtain Application::IsHeadlessModeEnabled early on, before
@@ -186,6 +189,34 @@ SalInstance *CreateSalInstance()
 #else // !STATIC_SAL_INSTANCE
     SalInstance *pInst = nullptr;
 
+#if ENABLE_UNITEDLIBS
+    if (osl_isUnitedLibActive())
+    {
+#if ENABLE_GTK3
+        if (aUsePlugin.isEmpty() || aUsePlugin == "gtk3")
+        {
+            auto fpCreateInst = reinterpret_cast<salFactoryProc>(osl::Module(SVLIBRARY("united")).getFunctionSymbol("create_SalInstanceGtk3"));
+            pInst = fpCreateInst();
+        }
+#endif
+#if ENABLE_GEN
+        if (!pInst && (aUsePlugin.isEmpty() || aUsePlugin == "gen"))
+        {
+            auto fpCreateInst = reinterpret_cast<salFactoryProc>(osl::Module(SVLIBRARY("united")).getFunctionSymbol("create_SalInstanceGen"));
+            pInst = fpCreateInst();
+        }
+#endif
+        assert(pInst && "no working window system found");
+        if (!pInst)
+        {
+            std::fprintf( stderr, "no working vcl plugin found, exiting.\n" );
+            _exit( 1 );
+        }
+        return pInst;
+    }
+
+#else
+
     if( !aUsePlugin.isEmpty() )
         pInst = tryInstance( aUsePlugin, true );
 
@@ -214,6 +245,7 @@ SalInstance *CreateSalInstance()
         _exit( 1 );
     }
 
+#endif  // ENABLE_UNITEDLIBS
     return pInst;
 #endif // !STATIC_SAL_INSTANCE
 }

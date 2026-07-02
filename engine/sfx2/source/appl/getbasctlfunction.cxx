@@ -39,14 +39,16 @@ oslGenericFunction sfx2::getBasctlFunction(char const* name)
     osl::Module aMod;
 
     // load basctl module
-    auto const ok = aMod.loadRelative(
-        &thisModule,
 #if ENABLE_MERGELIBS
-        SVLIBRARY("merged")
+    auto pModuleName = SVLIBRARY("merged");
+#elif ENABLE_UNITEDLIBS
+    auto pModuleName = SVLIBRARY("basctl");
+    if (osl_isUnitedLibActive())
+        pModuleName = SVLIBRARY("united");
 #else
-        SVLIBRARY("basctl")
+    const auto pModuleName = SVLIBRARY("basctl");
 #endif
-        );
+    auto const ok = aMod.loadRelative(&thisModule, pModuleName);
     assert(ok);
     (void) ok;
 

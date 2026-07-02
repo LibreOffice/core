@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_options.h>
 
 #include <o3tl/safeint.hxx>
 #include <utility>
@@ -189,11 +190,21 @@ namespace
         // osl_getAsciiFunctionSymbol(), i.e. GetProcAddress(), and
         // have it look through all modules loaded, like dlsym() does.
         // Instead, we "know" that FT_Done_MM_Var will wither be in
-        // mergedlo.dll or vcllo.dll.
+        // mergedlo.dll or unitedlo.dll or vcllo.dll.
         void(*func)(FT_Library, FT_MM_Var*) = nullptr;
+        OUString sModuleName;
+#if ENABLE_MERGELIBS
+        sModuleName = u"mergedlo.dll"_ustr;
+#elif ENABLE_UNITEDLIBS
+        if (osl_isUnitedLibActive())
+            sModuleName = u"unitedlo.dll"_ustr;
+        else
+            sModuleName = u"vcllo.dll"_ustr;
+#else
+        sModuleName = u"vcllo.dll"_ustr;
+#endif
         oslModule module;
-        if (osl_getModuleHandle((u"mergedlo.dll"_ustr).pData, &module) ||
-            osl_getModuleHandle((u"vcllo.dll"_ustr).pData, &module))
+        if (osl_getModuleHandle(sModuleName.pData, &module))
             func = reinterpret_cast<void(*)(FT_Library, FT_MM_Var*)>(
                 osl_getAsciiFunctionSymbol(module, "FT_Done_MM_Var"));
         // If FT_Done_MM_Var is not found, we will crash or something,

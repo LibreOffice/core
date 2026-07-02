@@ -20,6 +20,7 @@
 /* make Python.h go first as a hack to work around _POSIX_C_SOURCE redefinition
    warnings: */
 #include <Python.h>
+#include <config_options.h>
 
 #include <sal/config.h>
 
@@ -53,8 +54,13 @@ static void * load(void const * address, char const * symbol) {
         abort();
     }
     len = slash - dl_info.dli_fname + 1;
+#if ENABLE_UNITEDLIBS
+    const char pLibName[] = SAL_DLLPREFIX "unitedlo" SAL_DLLEXTENSION;
+#else
+    const char pLibName[] = SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION;
+#endif
     libname = malloc(
-        len + RTL_CONSTASCII_LENGTH(SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION)
+        len + RTL_CONSTASCII_LENGTH(pLibName)
         + 1);
     if (libname == NULL) {
         abort();

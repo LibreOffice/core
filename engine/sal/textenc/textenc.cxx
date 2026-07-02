@@ -376,7 +376,16 @@ void thisModule() {}
 class FullTextEncodingData {
 public:
     FullTextEncodingData() {
-        if (!module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenclo")))
+        bool bLoadSucceeded;
+#if ENABLE_UNITEDLIBS
+        if (osl_isUnitedLibActive())
+            bLoadSucceeded = module_.loadRelative(&thisModule, SAL_MODULENAME("unitedlo"));
+        else
+            bLoadSucceeded = module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenclo"));
+#else
+        bLoadSucceeded = module_.loadRelative(&thisModule, SAL_MODULENAME("sal_textenclo"));
+#endif
+        if (!bLoadSucceeded)
         {
             SAL_WARN( "sal.textenc", "Loading sal_textenc library failed" );
             std::abort();

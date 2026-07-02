@@ -574,7 +574,16 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
             }
             // Library not loaded, load it and add it to the list.
             std::unique_ptr<osl::Module> module(new osl::Module());
-            if ( module->loadRelative(&thisModule, getLibraryName(i.pLib)) )
+            bool bLoadSucceeded;
+#if ENABLE_UNITEDLIBS
+            if (osl_isUnitedLibActive())
+                bLoadSucceeded = module->loadRelative(&thisModule, SAL_MODULENAME("unitedlo"));
+            else
+                bLoadSucceeded = module->loadRelative(&thisModule, getLibraryName(i.pLib));
+#else
+            bLoadSucceeded = module->loadRelative(&thisModule, getLibraryName(i.pLib));
+#endif
+            if ( bLoadSucceeded )
             {
                 std::unique_lock aGuard( maMutex );
                 auto pTmpModule = module.get();

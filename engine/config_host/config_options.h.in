@@ -24,4 +24,6 @@
 #define IF_MERGELIBS(x)
 #endif
 
+#define ENABLE_UNITEDLIBS 0
+
 #endif

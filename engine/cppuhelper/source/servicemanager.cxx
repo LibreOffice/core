@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_options.h>
 #include <sal/config.h>
 
 #include <algorithm>
@@ -1882,7 +1883,11 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         }
 
         // load component library
+#if ENABLE_UNITEDLIBS
+        osl::Module aModule(SAL_MODULENAME("unitedlo"), SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
+#else
         osl::Module aModule(aUri, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
+#endif
 
         if (!aModule.is())
         {
@@ -1962,6 +1967,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
 
         }
 
+#if !ENABLE_UNITEDLIBS
         // Some libraries use other (non-UNO) libraries requiring preinit
         oslGenericFunction fpPreload = aModule.getFunctionSymbol("kit_preload_hook");
         if (fpPreload)
@@ -1976,10 +1982,38 @@ void cppuhelper::ServiceManager::preloadImplementations() {
                 g.lock();
             }
         }
-
+#endif
         // leak aModule
         aModule.release();
     }
+
+#if ENABLE_UNITEDLIBS
+    osl::Module aModule(SAL_MODULENAME("unitedlo"), SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
+    static const char * aKitPreloadHooks[] {
+        "kit_preload_hook_sc",
+        "kit_preload_hook_sd",
+        "kit_preload_hook_sw"
+    };
+    static std::vector<oslGenericFunction> aPreloaded;
+    for (const auto & s : aKitPreloadHooks)
+    {
+        oslGenericFunction fpPreload = aModule.getFunctionSymbol(s);
+        if (fpPreload)
+        {
+            if (std::find(aPreloaded.begin(), aPreloaded.end(), fpPreload) == aPreloaded.end())
+            {
+                aPreloaded.push_back(fpPreload);
+                // unlock because we may be instantiating some services here
+                g.unlock();
+                fpPreload();
+                g.lock();
+            }
+        }
+    }
+    // leak aModule
+    aModule.release();
+#endif
+
     std::cerr << std::endl;
 
     if (aMissingMsg.getLength() > 0)

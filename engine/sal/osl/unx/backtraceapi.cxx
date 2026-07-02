@@ -8,6 +8,7 @@
  */
 
 #include <sal/config.h>
+#include <config_options.h>
 
 #include <cassert>
 #include <cstdlib>
@@ -72,6 +73,7 @@ typedef o3tl::lru_map<void*, OString> FrameCache;
 std::mutex frameCacheMutex;
 FrameCache frameCache( 256 );
 
+#if !ENABLE_UNITEDLIBS
 void process_file_addr2line( const char* file, std::vector<FrameData>& frameData )
 {
     if(access( file, R_OK ) != 0)
@@ -190,6 +192,7 @@ void process_file_addr2line( const char* file, std::vector<FrameData>& frameData
         }
     }
 }
+#endif
 
 } // namespace
 
@@ -226,11 +229,15 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
             }
         }
     }
+    // disable this when using --enable-unitedlibs, because the addr2line process will soak
+    // up all of your memory and crash your box
+#if !ENABLE_UNITEDLIBS
     for (int i = 0; i != backtraceState->nDepth; ++i)
     {
         if(frameData[ i ].file != nullptr && !frameData[ i ].handled)
             process_file_addr2line( frameData[ i ].file, frameData );
     }
+#endif
     OUStringBuffer b3;
     std::unique_ptr<char*, decltype(free)*> b2{ nullptr, free };
     bool fallbackInitDone = false;

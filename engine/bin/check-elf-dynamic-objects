@@ -149,6 +149,9 @@ local file="$1"
         */libmergedlo.so)
             allowlist="${allowlist} ${x11allowlist} ${gioallowlist} ${kerberosallowlist} ${dconfallowlist} libcups.so.2 libcairo.so.2"
         ;;
+        */libunitedlo.so)
+            allowlist="${allowlist} ${x11allowlist} ${gioallowlist} ${kerberosallowlist} ${dconfallowlist} libcups.so.2 libcairo.so.2"
+        ;;
     esac
     if readelf -d "${file}" &> /dev/null ; then
         rpath=$(readelf -d "${file}" | grep '(\(RPATH\|RUNPATH\))' || true)
