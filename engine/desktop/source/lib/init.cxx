@@ -9099,9 +9099,16 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
     // to use that.
     NSString *bundlePath = [[NSBundle mainBundle] bundlePath];
 
-    int fd = open([[bundlePath stringByAppendingPathComponent:@"ICU.dat"] UTF8String], O_RDONLY);
+    // ...or use the path from LIBREOFFICE_ICU_DATA when the embedder wants ICU.dat to live
+    // outside the app bundle (e.g. inside a framework's resource directory).
+    const char *icuDataEnv = ::getenv("LIBREOFFICE_ICU_DATA");
+    const char *icuDataPath = icuDataEnv
+        ? icuDataEnv
+        : [[bundlePath stringByAppendingPathComponent:@"ICU.dat"] UTF8String];
+
+    int fd = open(icuDataPath, O_RDONLY);
     if (fd == -1)
-        NSLog(@"Could not open ICU data file %s", [[bundlePath stringByAppendingPathComponent:@"ICU.dat"] UTF8String]);
+        NSLog(@"Could not open ICU data file %s", icuDataPath);
     else
     {
         struct stat st;
