@@ -39,7 +39,8 @@ public:
     // the current time. The oldest entry will be dropped if the list had grown larger than the
     // maximum size given when constructing the RecentFiles object. After adding the document, save
     // the list to the same place it was loaded from, or would have been loaded, if it had existed.
-    void add(const std::string& uri);
+    // `displayUri`: when in a flatpak sandbox carries real host location
+    void add(const std::string& uri, const std::string& displayUri = std::string());
 
     // Produces a JSON string of the type that our JS expects.
     std::string serialise();
@@ -51,6 +52,9 @@ private:
     struct Entry
     {
         std::string uri;
+        // Optional user-facing location (real host location),
+        // distinct from the openable uri in a flatpak sandbox.
+        std::string displayUri;
         std::chrono::time_point<std::chrono::system_clock> timestamp;
     };
 

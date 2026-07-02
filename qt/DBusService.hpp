@@ -11,14 +11,20 @@
 
 #pragma once
 
+#include <string>
+
 #include <QObject>
 #include <QStringList>
 #include <QString>
 
 namespace coda
 {
-    void openFiles(const QStringList& files);
+    // displayUris are used in a flatpak sandbox which contains real host locations
+    void openFiles(const QStringList& files, const QStringList& displayUris = {});
     void openNewDocument(const QString& templateType);
+
+    // Returns the host filepath for sandboxed filepaths
+    std::string hostDisplayUriForPath(const QString& path);
 }
 
 class DBusService : public QObject

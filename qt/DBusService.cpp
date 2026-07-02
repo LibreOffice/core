@@ -22,17 +22,45 @@
 #include <QDBusMessage>
 #include <QDBusReply>
 #include <QDBusConnectionInterface>
+#include <QFile>
 #include <QFileInfo>
+#include <sys/xattr.h>
 
 constexpr const char* SERVICE_NAME = "com.collaboraoffice.Office";
 constexpr const char* OBJECT_PATH = "/com/collaboraoffice/Office";
 
 namespace coda
 {
-    void openFiles(const QStringList& files)
+    std::string hostDisplayUriForPath(const QString& path)
     {
-        for (const QString& file : files)
+        // The xdg-document-portal FUSE filesystem exposes the real host location
+        // of an exported file through this extended attribute.
+        constexpr const char* HOST_PATH_XATTR = "user.document-portal.host-path";
+
+        const QByteArray local = QFile::encodeName(path);
+
+        const ssize_t needed = getxattr(local.constData(), HOST_PATH_XATTR, nullptr, 0);
+        if (needed <= 0)
+            return {};
+
+        QByteArray buf(needed, Qt::Uninitialized);
+        const ssize_t len = getxattr(local.constData(), HOST_PATH_XATTR, buf.data(), buf.size());
+        if (len <= 0)
+            return {};
+        buf.resize(len);
+
+        const QString hostPath = QFile::decodeName(buf);
+        if (hostPath.isEmpty())
+            return {};
+
+        return Poco::URI(Poco::Path(hostPath.toStdString())).toString();
+    }
+
+    void openFiles(const QStringList& files, const QStringList& displayUris)
+    {
+        for (int i = 0; i < files.size(); ++i)
         {
+            const QString& file = files[i];
             Poco::URI fileURL(Poco::Path(file.toStdString()));
 
             // if document is already open, just activate it
@@ -48,7 +76,8 @@ namespace coda
 
             QFileInfo fileInfo(file);
             Poco::URI uri(Poco::Path(fileInfo.absoluteFilePath().toStdString()));
-            Application::getRecentFiles().add(uri.toString());
+            const QString displayUri = i < displayUris.size() ? displayUris[i] : QString();
+            Application::getRecentFiles().add(uri.toString(), displayUri.toStdString());
         }
     }
 

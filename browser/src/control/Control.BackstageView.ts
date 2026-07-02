@@ -329,7 +329,9 @@ class BackstageView extends window.L.Class {
 		uri: string;
 	} {
 		const uri = doc.uri || '';
-		const url = new URL(uri);
+		// Stores the real host path in a flatpak sandbox
+		const displayUri = doc.displayUri || uri;
+		const url = new URL(displayUri);
 		let fullPath = url.pathname;
 
 		// On Windows a file: URI for a local file looks like this:

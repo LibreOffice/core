@@ -46,6 +46,13 @@ void RecentFiles::load(const std::string& fileName, int maxFiles)
             std::getline(stream, entry.uri);
             if (stream.bad() || entry.uri == "")
                 break;
+            // A tab separates the openable uri from an optional user-facing displayUri.
+            const std::string::size_type tab = entry.uri.find('\t');
+            if (tab != std::string::npos)
+            {
+                entry.displayUri = entry.uri.substr(tab + 1);
+                entry.uri.erase(tab);
+            }
             std::string line;
             std::getline(stream, line);
             if (stream.bad() || line == "")
@@ -58,7 +65,7 @@ void RecentFiles::load(const std::string& fileName, int maxFiles)
     }
 }
 
-void RecentFiles::add(const std::string& uri)
+void RecentFiles::add(const std::string& uri, const std::string& displayUri)
 {
     assert(_initialised);
 
@@ -69,8 +76,10 @@ void RecentFiles::add(const std::string& uri)
             _mostRecentlyUsed.erase(it);
             break;
         }
-    _mostRecentlyUsed.insert(_mostRecentlyUsed.begin(),
-                { uri, std::chrono::time_point<std::chrono::system_clock>(std::chrono::system_clock::now()) });
+    _mostRecentlyUsed.insert(
+        _mostRecentlyUsed.begin(),
+        { uri, displayUri,
+          std::chrono::time_point<std::chrono::system_clock>(std::chrono::system_clock::now()) });
 
     // Save the list.
     std::ofstream stream;
@@ -81,7 +90,13 @@ void RecentFiles::add(const std::string& uri)
         return;
     }
     for (const auto& i : _mostRecentlyUsed)
-        stream << i.uri << std::endl << i.timestamp.time_since_epoch().count() << std::endl;
+    {
+        // Append the displayUri after a tab when present
+        stream << i.uri;
+        if (!i.displayUri.empty())
+            stream << '\t' << i.displayUri;
+        stream << std::endl << i.timestamp.time_since_epoch().count() << std::endl;
+    }
 }
 
 std::string RecentFiles::serialise()
@@ -123,9 +138,10 @@ std::string RecentFiles::serialiseFiltered(std::set<std::string> dropTheseURIs)
             result += ", ";
         result += "{ "
             "\"uri\": \"" + _mostRecentlyUsed[i].uri + "\", "
-            "\"name\": \"" + JsonUtil::escapeJSONValue(segments.empty() ? uri.getPathEtc() : segments.back()) + "\", "
-            "\"timestamp\": \"" + std::format("{:%FT%TZ}", _mostRecentlyUsed[i].timestamp) + "\""
-            " }";
+            "\"name\": \"" + JsonUtil::escapeJSONValue(segments.empty() ? uri.getPathEtc() : segments.back()) + "\", ";
+        if (!_mostRecentlyUsed[i].displayUri.empty())
+            result += "\"displayUri\": \"" + JsonUtil::escapeJSONValue(_mostRecentlyUsed[i].displayUri) + "\", ";
+        result += "\"timestamp\": \"" + std::format("{:%FT%TZ}", _mostRecentlyUsed[i].timestamp) + "\" }";
         n++;
         if (n == _maxFiles)
             break;

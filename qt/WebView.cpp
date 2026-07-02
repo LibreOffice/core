@@ -455,6 +455,24 @@ QStringList filesFromPortalTransfer(const QMimeData* mimeData)
     return {};
 }
 
+QStringList hostDisplayUris(const QStringList& portalFiles, const QMimeData* mimeData)
+{
+    if (!mimeData || !mimeData->hasUrls())
+        return {};
+
+    QHash<QString, QString> hostUriByName;
+    for (const QUrl& url : mimeData->urls())
+        if (url.isLocalFile())
+            hostUriByName.insert(QFileInfo(url.toLocalFile()).fileName(), url.toString());
+
+    QStringList displayUris;
+    displayUris.reserve(portalFiles.size());
+    for (const QString& file : portalFiles)
+        displayUris << hostUriByName.value(QFileInfo(file).fileName());
+
+    return displayUris;
+}
+
 } // namespace
 
 void CODAWebEngineView::setDropFeedbackVisible(bool bVisible)
@@ -519,7 +537,7 @@ void CODAWebEngineView::dropEvent(QDropEvent* event)
     if (!portalFiles.isEmpty())
     {
         event->acceptProposedAction();
-        coda::openFiles(portalFiles);
+        coda::openFiles(portalFiles, hostDisplayUris(portalFiles, mimeData));
         return;
     }
 

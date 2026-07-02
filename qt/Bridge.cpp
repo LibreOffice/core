@@ -619,8 +619,11 @@ QVariant Bridge::cool(const QString& messageStr)
         if (_window)
             _window->setWindowTitle(windowTitle);
 
-        // Add the new document location to recent files
-        Application::getRecentFiles().add(_document._fileURL.toString());
+        // Add the new document location to recent files.
+        // For flatpak use the host location
+        const std::string hostDisplayUri = coda::hostDisplayUriForPath(
+            QString::fromStdString(_document._fileURL.getPath()));
+        Application::getRecentFiles().add(_document._fileURL.toString(), hostDisplayUri);
 
         LOG_TRC_NOFILE("loaddocument: sent initial message with new appDocId");
         return {};
@@ -893,7 +896,15 @@ QVariant Bridge::cool(const QString& messageStr)
         QObject::connect(dialog, &QFileDialog::filesSelected,
                          [](const QStringList& filePaths)
                          {
-                            coda::openFiles(filePaths);
+                             // Under flatpak the picker returns sandboxed document-portal paths,
+                             // resolve the real host location for the recent-files list.
+                             QStringList displayUris;
+                             displayUris.reserve(filePaths.size());
+                             for (const QString& filePath : filePaths)
+                                 displayUris << QString::fromStdString(
+                                     coda::hostDisplayUriForPath(filePath));
+
+                             coda::openFiles(filePaths, displayUris);
                              // Close starter screen if it exists
                              closeStarterScreen();
                          });
@@ -1096,7 +1107,9 @@ QVariant Bridge::cool(const QString& messageStr)
         }
 
         QString absolutePath = fileInfo.absoluteFilePath();
-        coda::openFiles(QStringList() << absolutePath);
+        const QStringList displayUri{ QString::fromStdString(
+            coda::hostDisplayUriForPath(absolutePath)) };
+        coda::openFiles(QStringList() << absolutePath, displayUri);
 
         LOG_INF("opendoc: opened file: " << absolutePath.toStdString());
         return {};
