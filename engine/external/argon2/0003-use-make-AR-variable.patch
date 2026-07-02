@@ -1,0 +1,11 @@
+--- a/Makefile
++++ b/Makefile
+@@ -182,7 +182,7 @@ $(LIB_SH): 	$(SRC)
+ 		$(CC) $(CFLAGS) $(LIB_CFLAGS) $(LDFLAGS) $(SO_LDFLAGS) $^ -o $@
+
+ $(LIB_ST): 	$(OBJ)
+-		ar rcs $@ $^
++		$(AR) rcs $@ $^
+
+ .PHONY: clean
+ clean:
