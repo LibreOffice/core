@@ -232,16 +232,27 @@ static void* osl_thread_start_Impl (void* pData)
     if (!terminate)
     {
 #ifdef ANDROID
+        // Only attach to a JavaVM when one has actually been registered (e.g.
+        // by an APK-based LO instance). Embedders that don't go through the
+        // Java bootstrap leave lo_get_javavm() returning NULL.
+        JavaVM* vm = lo_get_javavm();
         JNIEnv* env = 0;
-        int res = (*lo_get_javavm()).AttachCurrentThread(&env, NULL);
-        __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "New sal thread started and attached res=%d", res);
+        int res = 0;
+        if (vm)
+        {
+            res = (*vm).AttachCurrentThread(&env, NULL);
+            __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "New sal thread started and attached res=%d", res);
+        }
 #endif
         /* call worker function */
         pImpl->m_WorkerFunction(pImpl->m_pData);
 
 #ifdef ANDROID
-        res = (*lo_get_javavm()).DetachCurrentThread();
-        __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "Detached finished sal thread res=%d", res);
+        if (vm)
+        {
+            res = (*vm).DetachCurrentThread();
+            __android_log_print(ANDROID_LOG_INFO, "LibreOffice", "Detached finished sal thread res=%d", res);
+        }
 #endif
     }
 

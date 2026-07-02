@@ -43,15 +43,23 @@ AndroidSalInstance::AndroidSalInstance( std::unique_ptr<SalYieldMutex> pMutex )
     : SvpSalInstance( std::move(pMutex) )
 {
     // FIXME: remove when uniPoll & runLoop is the only Android entry point.
-    int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
-    LOGI("AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
+    // Embedders that don't go through the Java bootstrap leave
+    // lo_get_javavm() returning NULL; in that case skip the JNI attach.
+    if (JavaVM* vm = lo_get_javavm())
+    {
+        int res = vm->AttachCurrentThread(&m_pJNIEnv, NULL);
+        LOGI("AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
+    }
 }
 
 // This is never called on Android until app exit.
 AndroidSalInstance::~AndroidSalInstance()
 {
-    int res = (lo_get_javavm())->DetachCurrentThread();
-    LOGI("DetachCurrentThread res=%d", res);
+    if (JavaVM* vm = lo_get_javavm())
+    {
+        int res = vm->DetachCurrentThread();
+        LOGI("DetachCurrentThread res=%d", res);
+    }
     LOGI("destroyed Android Sal Instance");
 }
 
@@ -67,15 +75,21 @@ bool AndroidSalInstance::AnyInput( VclInputFlags nType )
 
 void AndroidSalInstance::updateMainThread()
 {
-    int res = (lo_get_javavm())->AttachCurrentThread(&m_pJNIEnv, NULL);
-    LOGI("updateMainThread AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
+    if (JavaVM* vm = lo_get_javavm())
+    {
+        int res = vm->AttachCurrentThread(&m_pJNIEnv, NULL);
+        LOGI("updateMainThread AttachCurrentThread res=%d env=%p", res, m_pJNIEnv);
+    }
     SvpSalInstance::updateMainThread();
 }
 
 void AndroidSalInstance::releaseMainThread()
 {
-    int res = (lo_get_javavm())->DetachCurrentThread();
-    LOGI("releaseMainThread DetachCurrentThread res=%d", res);
+    if (JavaVM* vm = lo_get_javavm())
+    {
+        int res = vm->DetachCurrentThread();
+        LOGI("releaseMainThread DetachCurrentThread res=%d", res);
+    }
 
     SvpSalInstance::releaseMainThread();
 }
