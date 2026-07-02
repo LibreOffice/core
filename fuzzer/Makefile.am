@@ -121,7 +121,11 @@ if !ENABLE_DEBUG
 AM_CPPFLAGS += -DNDEBUG
 endif
 
-AM_LDFLAGS = $(ZLIB_LIBS) $(ZSTD_LIBS) ${PNG_LIBS}
+# In the server build ${PNG_LIBS} / $(ZSTD_LIBS) are the engine's static
+# liblibpng.a / libzstd.a (system shared libraries in the Flatpak and Snap
+# builds).  The static libpng pulls in zlib symbols, so it must precede
+# $(ZLIB_LIBS) on the link line for the linker to resolve them.
+AM_LDFLAGS = ${PNG_LIBS} $(ZSTD_LIBS) $(ZLIB_LIBS)
 if !ENABLE_MACOS
 AM_LDFLAGS += -Wl,-E
 endif

@@ -345,16 +345,16 @@ AC_ARG_WITH([poco-includes],
 
 AC_ARG_WITH([zstd-libs],
             AS_HELP_STRING([--with-zstd-libs=<path>],
-                           [Obsolete and ignored. zstd is taken from the engine's workdir
-                            (or the system, for desktop builds), like the other engine
-                            third-party libraries.]),
+                           [Obsolete and ignored. zstd is taken from the engine when the
+                            engine bundles it, otherwise from the system, like the other
+                            engine third-party libraries.]),
             [AC_MSG_WARN([--with-zstd-libs is obsolete and ignored; zstd is taken from the engine or the system.])])
 
 AC_ARG_WITH([zstd-includes],
             AS_HELP_STRING([--with-zstd-includes=<path>],
-                           [Obsolete and ignored. zstd is taken from the engine's workdir
-                            (or the system, for desktop builds), like the other engine
-                            third-party libraries.]),
+                           [Obsolete and ignored. zstd is taken from the engine when the
+                            engine bundles it, otherwise from the system, like the other
+                            engine third-party libraries.]),
             [AC_MSG_WARN([--with-zstd-includes is obsolete and ignored; zstd is taken from the engine or the system.])])
 
 AC_ARG_WITH([poco-libs],
@@ -371,16 +371,16 @@ AC_ARG_WITH([system-poco],
 
 AC_ARG_WITH([libpng-includes],
             AS_HELP_STRING([--with-libpng-includes=<path>],
-                           [Obsolete and ignored. libpng is taken from the engine's workdir
-                            (or the system, for desktop builds), like the other engine
-                            third-party libraries.]),
+                           [Obsolete and ignored. libpng is taken from the engine when the
+                            engine bundles it, otherwise from the system, like the other
+                            engine third-party libraries.]),
             [AC_MSG_WARN([--with-libpng-includes is obsolete and ignored; libpng is taken from the engine or the system.])])
 
 AC_ARG_WITH([libpng-libs],
             AS_HELP_STRING([--with-libpng-libs=<path>],
-                           [Obsolete and ignored. libpng is taken from the engine's workdir
-                            (or the system, for desktop builds), like the other engine
-                            third-party libraries.]),
+                           [Obsolete and ignored. libpng is taken from the engine when the
+                            engine bundles it, otherwise from the system, like the other
+                            engine third-party libraries.]),
             [AC_MSG_WARN([--with-libpng-libs is obsolete and ignored; libpng is taken from the engine or the system.])])
 
 AC_ARG_WITH([cppunit-includes],
@@ -891,10 +891,12 @@ fi
 
 if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_macosapp" = "yes" \) -o \( "$enable_windowsapp" = "yes" \) -o \( "$enable_androidapp" = "yes" \) -o "$host_os" = "emscripten" ; then
    # POCO, zstd and libpng are built as third-party libraries in the engine and
-   # picked up from its workdir.  For Android there is one engine build tree per
-   # ABI.  macOS builds against the in-tree engine like the desktop build, so its
-   # build dir is --with-lo-builddir (default "engine"), not $LOBUILDDIR (which
-   # is only set for the iOS/Android/Windows/wasm cross builds).
+   # picked up from its workdir; engine_builddir is that engine build tree.
+   # For iOS, Android, Windows and WASM the engine is a separate, out-of-tree
+   # build that must be named explicitly with --with-lo-builddir, captured further
+   # up as $LOBUILDDIR (Android has one such tree per ABI).  The macOS app instead
+   # builds the engine in-tree, like the Linux build, so it reads --with-lo-builddir
+   # directly (default "engine") and $LOBUILDDIR is left empty for it.
    if test "$enable_macosapp" = "yes"; then
       engine_builddir=`readlink -f "${with_lo_builddir:-engine}"`
    else
@@ -939,8 +941,8 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_m
    fi
 
    # zstd comes from the engine workdir too.  The Windows app links it via the
-   # vcxproj (MSVC zstd.lib), so only the other app targets need the configure
-   # variables here.
+   # vcxproj (MSVC zstd.lib), so only the other native app builds need the
+   # configure variables here.
    if test "$enable_windowsapp" != "yes"; then
       AC_MSG_CHECKING([for zstd built in the engine])
       ZSTDINCLUDE="$engine_builddir/workdir/UnpackedTarball/zstd/lib"
@@ -998,11 +1000,11 @@ AC_SUBST([CORE_VERSION_HASH])
 
 AC_DEFINE_UNQUOTED([CORE_VERSION_HASH],[["$CORE_VERSION_HASH"]],[CollaboraOffice core git hash if present])
 
-# libpng comes from the engine workdir for the app targets, like zstd/POCO.
-# Windows links it via the vcxproj, and iOS/Android/wasm reference the engine
-# workdir directly in their own project files, so only macOS needs the configure
-# variables here.  Desktop builds leave these empty and use the system libpng
-# (pkg-config) instead.
+# The native app builds take libpng from the engine (like zstd and POCO):
+# Windows links it via the vcxproj, and iOS/Android/WASM reference the engine
+# workdir directly in their own project files, so only the macOS app needs these
+# configure variables (consumed by macos/coda/Config.xcconfig.in).  The Linux
+# build leaves them empty and instead sets PNG_CFLAGS/PNG_LIBS further down.
 if test "$enable_macosapp" = "yes"; then
    AC_MSG_CHECKING([for libpng built in the engine])
    LIBPNG_INCLUDES="$engine_builddir/workdir/UnpackedTarball/libpng"
@@ -1787,15 +1789,46 @@ AS_IF([test `uname -s` != Darwin],
                       [],
                       [AC_MSG_ERROR([dlopen not found])])])
 
+dnl The Linux build: the coolwsd/coolforkit-ns server, and the Qt front-end used
+dnl for the Flatpak and Snap packages.  (The native app builds - iOS, Android,
+dnl Windows, macOS - and the WASM build take every third-party library from the
+dnl engine via their own project files and are handled further up.)
+dnl
+dnl For each third-party library that the engine can bundle, link the engine's
+dnl own copy when it built one, otherwise fall back to the system copy.  Which of
+dnl the two happens is decided by how the engine was configured: the server build
+dnl (engine/distro-configs/CPLinux-LOKit.conf) bundles libpng and zstd, while the
+dnl Flatpak and Snap builds configure the engine --with-system-libpng and
+dnl --with-system-zstd and rely on the runtime's copies.  This mirrors how POCO
+dnl and OpenSSL are picked up above.
 AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$ENABLE_MACOSAPP" != "true" -a "$host_os" != "emscripten"],
-      [PKG_CHECK_MODULES([PNG], [libpng])
-dnl    deflated HTTP / web-page serving
+      [engine_workdir=`readlink -f "$with_lo_builddir"`/workdir
+dnl    libpng.  The engine builds it as the static liblibpng.a (a double "lib"
+dnl    prefix, hence -llibpng); it pulls in zlib symbols, so it must precede the
+dnl    system zlib on the link line (see the *_LIBS order in Makefile.am).
+       AS_IF([test -f "$engine_workdir/LinkTarget/StaticLibrary/liblibpng.a"],
+             [AC_MSG_NOTICE([using libpng built in the engine])
+              PNG_CFLAGS="-isystem $engine_workdir/UnpackedTarball/libpng"
+              PNG_LIBS="-L$engine_workdir/LinkTarget/StaticLibrary -llibpng"],
+             [AC_MSG_NOTICE([libpng not built in the engine, using the system libpng])
+              PKG_CHECK_MODULES([PNG], [libpng])])
+dnl    zstd (tile compression), same engine-or-system choice as libpng.
+       AS_IF([test -f "$engine_workdir/LinkTarget/StaticLibrary/libzstd.a"],
+             [AC_MSG_NOTICE([using zstd built in the engine])
+              ZSTD_CFLAGS="-isystem $engine_workdir/UnpackedTarball/zstd/lib"
+              ZSTD_LIBS="-L$engine_workdir/LinkTarget/StaticLibrary -lzstd"],
+             [AC_MSG_NOTICE([zstd not built in the engine, using the system zstd])
+              PKG_CHECK_MODULES([ZSTD], [libzstd >= 1.4.0])])
+dnl    zlib (deflated HTTP / web-page serving) always comes from the system; the
+dnl    engine links the system zlib too (--with-system-zlib in every config).
        PKG_CHECK_MODULES([ZLIB], [zlib])
-dnl    tile compression
-       PKG_CHECK_MODULES([ZSTD], [libzstd >= 1.4.0])
 
        PKG_CHECK_MODULES([CPPUNIT], [cppunit])
        ])
+AC_SUBST([PNG_CFLAGS])
+AC_SUBST([PNG_LIBS])
+AC_SUBST([ZSTD_CFLAGS])
+AC_SUBST([ZSTD_LIBS])
 
 AS_IF([test "$ENABLE_WINDOWSAPP" != "true"],
       [# Check if the platform supports Capabilities
