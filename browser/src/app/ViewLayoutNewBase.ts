@@ -230,6 +230,23 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		// Subclasses override to recompute the viewed rectangle.
 	}
 
+	// Recompute the visible area, push it to the server and request the tiles
+	// needed to render it.
+	protected commitVisibleAreaAndRequestTiles(): void {
+		this.refreshVisibleAreaRectangle();
+
+		if (app.map._docLayer?._cursorMarker)
+			app.map._docLayer._cursorMarker.update();
+
+		app.map._docLayer._sendClientZoom();
+		this.sendClientVisibleArea();
+
+		this.refreshCurrentCoordList();
+		RenderManager.beginTransaction();
+		RenderManager.checkRequestTiles(this.currentCoordList);
+		RenderManager.endTransaction(null);
+	}
+
 	// Reset currentCoordList and return the per-frame constants shared by the
 	// tile-queue builders: rounded zoom, tile size and the viewport rectangle.
 	protected beginCoordList(): {

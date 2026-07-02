@@ -244,18 +244,7 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 	}
 
 	protected updateViewData(): void {
-		this.refreshVisibleAreaRectangle();
-
-		if (app.map._docLayer?._cursorMarker)
-			app.map._docLayer._cursorMarker.update();
-
-		app.map._docLayer._sendClientZoom();
-		this.sendClientVisibleArea();
-
-		this.refreshCurrentCoordList();
-		RenderManager.beginTransaction();
-		RenderManager.checkRequestTiles(this.currentCoordList);
-		RenderManager.endTransaction(null);
+		this.commitVisibleAreaAndRequestTiles();
 	}
 
 	public override scroll(pX: number, pY: number): boolean {

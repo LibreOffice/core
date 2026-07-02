@@ -221,18 +221,7 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 	protected updateViewData() {
 		if (!app.file.writer.pageRectangleList.length) return;
 
-		this.refreshVisibleAreaRectangle();
-
-		if (app.map._docLayer?._cursorMarker)
-			app.map._docLayer._cursorMarker.update();
-
-		app.map._docLayer._sendClientZoom();
-		this.sendClientVisibleArea();
-
-		this.refreshCurrentCoordList();
-		RenderManager.beginTransaction();
-		RenderManager.checkRequestTiles(this.currentCoordList);
-		RenderManager.endTransaction(null);
+		this.commitVisibleAreaAndRequestTiles();
 
 		// We most likely scrolled the view. We also need to check ruler position.
 		if (app.UI.horizontalRuler) app.UI.horizontalRuler.fixOffset();

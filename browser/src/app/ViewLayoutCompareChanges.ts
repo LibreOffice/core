@@ -151,18 +151,7 @@ class ViewLayoutCompareChanges extends ViewLayoutNewBase {
 			),
 		]);
 
-		this.refreshVisibleAreaRectangle();
-
-		if (app.map._docLayer?._cursorMarker)
-			app.map._docLayer._cursorMarker.update();
-
-		app.map._docLayer._sendClientZoom();
-		this.sendClientVisibleArea();
-
-		this.refreshCurrentCoordList();
-		RenderManager.beginTransaction();
-		RenderManager.checkRequestTiles(this.currentCoordList);
-		RenderManager.endTransaction(null);
+		this.commitVisibleAreaAndRequestTiles();
 	}
 
 	private getDeflectionX(mode: TileMode): number {
