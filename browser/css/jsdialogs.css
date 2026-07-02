@@ -1545,6 +1545,24 @@ img.context-menu-icon {
 	width: 100%;
 	box-sizing: border-box;
 	line-height: var(--default-height);
+	background-image: url('images/lc_recsearch.svg');
+	background-repeat: no-repeat;
+	background-position: 8px center;
+	background-size: 16px;
+	padding-inline-start: 28px !important;
+}
+
+[data-theme='dark'] .ui-combobox-search-input {
+	background-image: url('images/dark/lc_recsearch.svg');
+}
+
+[dir='rtl'] .ui-combobox-search-input {
+	background-position: right 8px center;
+}
+
+.ui-combobox-search-input::placeholder {
+	color: var(--color-text-dark);
+	opacity: 1;
 }
 
 .ui-combobox-entry {
