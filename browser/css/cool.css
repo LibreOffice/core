@@ -93,6 +93,10 @@ body {
 	user-select: none;
 }
 
+input, button {
+	font-family: var(--cool-font);
+}
+
 #doc-clipboard-container {
 	pointer-events: none;
 }
