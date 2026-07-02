@@ -42,7 +42,9 @@ ANDROID)
     oslibs="$oslibs $WORKDIR/UnpackedTarball/pixman/builddir/pixman/libpixman-1.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/cairo/builddir/src/libcairo-lo.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/libxmlsec1.a"
-    oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/libxmlsec1-nss.a"
+    if [ "$ENABLE_NSS" = "TRUE" ]; then
+        oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/libxmlsec1-nss.a"
+    fi
     # Only libcokit-bootstrap.a ends up here:
     oslibs="$oslibs $WORKDIR/LinkTarget/Library/lib*.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/openssl/*.a"
