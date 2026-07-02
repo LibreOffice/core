@@ -578,6 +578,8 @@ class LOUtil {
 			tabledeletemenu: 'deletetable',
 			insertcalctable: 'inserttable',
 			removecalctable: 'deletetable',
+			// TODO: reusing a similar icon for now; needs a dedicated Resize Table icon
+			resizecalctable: 'tabledesign',
 			calculatedfieldrun: 'functiondialog',
 			databasesettings: 'tabledesign',
 			tracechangemode: 'trackchanges',

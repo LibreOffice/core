@@ -49,6 +49,7 @@ DECL_WRAPPER_WITHID(ScFormulaDlgWrapper)
 DECL_WRAPPER_WITHID(ScHighlightChgDlgWrapper)
 DECL_WRAPPER_WITHID(ScCondFormatDlgWrapper)
 DECL_WRAPPER_WITHID(ScTableLayoutWrapper)
+DECL_WRAPPER_WITHID(ScTableResizeWrapper)
 
 class ScDescriptiveStatisticsDialogWrapper :
     public ChildControllerWrapper<SID_DESCRIPTIVE_STATISTICS_DIALOG>

@@ -840,11 +840,13 @@ ScUndoTableTotals::ScUndoTableTotals(ScDocShell& rNewDocShell, SCTAB nNewTab,
                                      ScDocumentUniquePtr pNewUndoDoc,
                                      std::unique_ptr<ScDBCollection> pNewUndoDB,
                                      std::unique_ptr<ScDBCollection> pNewRedoDB,
+                                     const OUString& rNewName,
                                      bool bInPlace)
     : ScDBFuncUndo(rNewDocShell, ScRange(rNewParam.nCol1, rNewParam.nRow1, nNewTab,
                                          rNewParam.nCol2, rNewParam.nRow2, nNewTab))
     , nTab(nNewTab)
     , aParam(rNewParam)
+    , maName(rNewName)
     , nNewEndRow(nNewEndY)
     , xUndoDoc(std::move(pNewUndoDoc))
     , xUndoDB(std::move(pNewUndoDB))
@@ -923,16 +925,12 @@ void ScUndoTableTotals::Redo()
     if ( nVisTab != nTab )
         pViewShell->SetTabNo( nTab );
 
-    // Find the post-Do DBData by its stored bottom (GetDBAtArea matches exactly): a resize
-    // stored nNewEndRow, a toggle kept aParam.nRow2. Replay with bRecord=false so Redo
-    // re-runs the same tear/overlap checks as Do.
+    // Find the post-Do DBData by its (unchanged) name, not by area: a resize that changed
+    // columns or moved the top-left would miss an area/cursor match made with the old
+    // geometry. Replay with bRecord=false so Redo re-runs the same tear/overlap checks as Do.
     const ScDBData* pDBData = nullptr;
     if (xRedoDB)
-    {
-        const bool bResize = aParam.bReplace && !aParam.bRemoveOnly;
-        const SCROW nLookupRow = bResize ? nNewEndRow : aParam.nRow2;
-        pDBData = xRedoDB->GetDBAtArea(nTab, aParam.nCol1, aParam.nRow1, aParam.nCol2, nLookupRow);
-    }
+        pDBData = xRedoDB->getNamedDBs().findByName(maName);
     if (pDBData)
     {
         // Route through the recording controller (with bRecord=false) so Redo also

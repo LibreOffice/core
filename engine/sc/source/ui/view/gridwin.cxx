@@ -2522,42 +2522,15 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         {
             SCTAB nTab = mrViewData.GetTabNumber();
             ScDBDocFunc aFunc( *mrViewData.GetDocShell() );
-            ScDBData aNewDBData(*pDBData);
             ScRange aNewDBRange(nStartCol, nStartRow, nTab, nFillCol, nFillRow, nTab);
             aNewDBRange.PutInOrder();
-            aNewDBData.SetArea(nTab, aNewDBRange.aStart.Col(), aNewDBRange.aStart.Row(), aNewDBRange.aEnd.Col(), aNewDBRange.aEnd.Row());
-            // Do subtotal if needed
-            ScRange aOldRange;
-            pDBData->GetArea(aOldRange);
-            bool bRefused = false;
-            if (aNewDBData.HasTotals() && (aOldRange.aEnd.Row() != aNewDBRange.aEnd.Row() || aOldRange.aStart.Row() != aNewDBRange.aStart.Row()))
+            // A table must not be dragged over another structure, and a Total Row resize can be
+            // refused for tear/straddle.
+            if (!aFunc.ResizeTable(*pDBData, aNewDBRange))
             {
-                // Subtotals
-                ScSubTotalParam aSubTotalParam;
-                pDBData->GetSubTotalParam(aSubTotalParam);
-                // store current subtotal settings
-                pDBData->CreateTotalRowParam(aSubTotalParam);
-                aNewDBData.SetSubTotalParam(aSubTotalParam);
-                // add/replace total row
-                aSubTotalParam.bRemoveOnly = false;
-                aSubTotalParam.bReplace = true;
-                bRefused = !aFunc.DoTableSubTotals(aNewDBData.GetTab(), aNewDBData, aSubTotalParam, true, false);
+                if (comphelper::COKit::isActive())
+                    UpdateAllOverlays();
             }
-            else if (pDBData->WouldResizeOverlap(rDocument, aNewDBRange))
-            {
-                // A table must not be dragged over another structure; same refusal as the
-                // total-row extend path, here also covering a right-drag.
-                mrViewData.GetDocShell()->ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
-                bRefused = true;
-            }
-            else
-            {
-                aFunc.ModifyDBData(aNewDBData);
-            }
-
-            // In case of refuse, need overlay update.
-            if (bRefused && comphelper::COKit::isActive())
-                UpdateAllOverlays();
         }
     }
     else if (mrViewData.IsAnyFillMode())

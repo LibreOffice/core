@@ -859,6 +859,100 @@ void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
     aModificator.SetDocumentModified();
 }
 
+bool ScDBDocFunc::ResizeTable(const ScDBData& rOldData, const ScRange& rNewArea)
+{
+    ScDocument& rDoc = rDocShell.GetDocument();
+
+    ScRange aNewRange = rNewArea;
+    aNewRange.PutInOrder();
+
+    ScDBData aNewDBData(rOldData);
+    aNewDBData.SetArea(aNewRange.aStart.Tab(), aNewRange.aStart.Col(), aNewRange.aStart.Row(),
+                       aNewRange.aEnd.Col(), aNewRange.aEnd.Row());
+
+    ScRange aOldRange;
+    rOldData.GetArea(aOldRange);
+
+    // Refuse growing over another structure up front, before any change is applied.
+    if (rOldData.WouldResizeOverlap(rDoc, aNewRange))
+    {
+        rDocShell.ErrorMessageAsync(STR_MSSG_TABLE_OVERLAP);
+        return false;
+    }
+
+    // A row-span change on a Total-Row table relocates the total (DoTableSubTotals still
+    // guards straddle/tear); otherwise a plain range change.
+    if (aNewDBData.HasTotals()
+        && (aOldRange.aEnd.Row() != aNewRange.aEnd.Row()
+            || aOldRange.aStart.Row() != aNewRange.aStart.Row()))
+    {
+        const OUString aName = rOldData.GetName();
+        const bool bColumnsChanged = aNewRange.aStart.Col() != aOldRange.aStart.Col()
+                                     || aNewRange.aEnd.Col() != aOldRange.aEnd.Col();
+
+        // One "Resize Table" undo for the whole resize. (The Total Row toggle goes
+        // straight through DoTableSubTotals and keeps its own "Table Total Row" entry.)
+        const bool bGroup = rDoc.IsUndoEnabled();
+        if (bGroup)
+        {
+            ViewShellId nViewShellId(-1);
+            if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+                nViewShellId = pViewSh->GetViewShellId();
+            rDocShell.GetUndoManager()->EnterListAction(ScResId(STR_UNDO_RESIZE_CALCTABLE),
+                                                        ScResId(STR_UNDO_RESIZE_CALCTABLE), 0, nViewShellId);
+        }
+
+        // The column extent, autofilter flags and generated header names are ModifyDBData's
+        // job (with ScUndoDBData undo/redo): apply the column change first, keeping the old
+        // rows, so we don't reimplement (and drift from) that logic here.
+        if (bColumnsChanged)
+        {
+            ScDBData aColData(rOldData);
+            aColData.SetArea(aOldRange.aStart.Tab(), aNewRange.aStart.Col(),
+                             aOldRange.aStart.Row(), aNewRange.aEnd.Col(), aOldRange.aEnd.Row());
+            ModifyDBData(aColData);
+        }
+
+        // Relocate the Total Row to the new row span on the (possibly re-columned) live table.
+        bool bOk = true;
+        if (ScDBData* pLive = rDoc.GetDBCollection()->getNamedDBs().findByName(aName))
+        {
+            ScDBData aRowData(*pLive);
+            aRowData.SetArea(aNewRange.aStart.Tab(), aNewRange.aStart.Col(),
+                             aNewRange.aStart.Row(), aNewRange.aEnd.Col(), aNewRange.aEnd.Row());
+            ScSubTotalParam aSubTotalParam;
+            pLive->GetSubTotalParam(aSubTotalParam);
+            pLive->CreateTotalRowParam(aSubTotalParam);
+            aRowData.SetSubTotalParam(aSubTotalParam);
+            aSubTotalParam.bRemoveOnly = false;
+            aSubTotalParam.bReplace = true;
+            bOk = DoTableSubTotals(aRowData.GetTab(), aRowData, aSubTotalParam, true, false);
+        }
+
+        if (bGroup)
+            rDocShell.GetUndoManager()->LeaveListAction();
+        return bOk;
+    }
+
+    // Same "Resize Table" history entry as the total-row path above; ModifyDBData keeps its
+    // own grouping (range change + any generated header cells) as a child of this list action.
+    const bool bGroup = rDoc.IsUndoEnabled();
+    if (bGroup)
+    {
+        ViewShellId nViewShellId(-1);
+        if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
+            nViewShellId = pViewSh->GetViewShellId();
+        rDocShell.GetUndoManager()->EnterListAction(ScResId(STR_UNDO_RESIZE_CALCTABLE),
+                                                    ScResId(STR_UNDO_RESIZE_CALCTABLE), 0, nViewShellId);
+    }
+
+    ModifyDBData(aNewDBData);
+
+    if (bGroup)
+        rDocShell.GetUndoManager()->LeaveListAction();
+    return true;
+}
+
 void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::vector<ScRange>& rDelAreaList )
 {
     ScDocShellModificator aModificator(rDocShell);
@@ -1224,7 +1318,8 @@ bool ScDBDocFunc::DoTableSubTotals( SCTAB nTab, const ScDBData& rNewData, const 
         ScDBCollection* pDocDB = rDoc.GetDBCollection();
         rDocShell.GetUndoManager()->AddUndoAction(std::make_unique<ScUndoTableTotals>(
             rDocShell, nTab, rParam, aNewParam.nRow2, std::move(pUndoDoc),
-            std::move(pUndoDB), std::make_unique<ScDBCollection>(*pDocDB), bInPlace));
+            std::move(pUndoDB), std::make_unique<ScDBCollection>(*pDocDB), rNewData.GetName(),
+            bInPlace));
     }
 
     if (!bSuccess)

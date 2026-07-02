@@ -83,6 +83,7 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(sc::SearchResultsDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(sc::ConditionalFormatEasyDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScTableLayoutWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScTableResizeWrapper::GetChildWindowId());
 
     GetStaticInterface()->RegisterChildWindow(ScRandomNumberGeneratorDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScSamplingDialogWrapper::GetChildWindowId());

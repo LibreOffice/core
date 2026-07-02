@@ -237,6 +237,7 @@ public:
                       ScDocumentUniquePtr pNewUndoDoc,
                       std::unique_ptr<ScDBCollection> pNewUndoDB,
                       std::unique_ptr<ScDBCollection> pNewRedoDB,
+                      const OUString& rNewName,
                       bool bInPlace = false);
 
     virtual void      Undo() override;
@@ -249,6 +250,7 @@ public:
 private:
     SCTAB           nTab;
     ScSubTotalParam aParam;                         // The original passed parameter
+    OUString        maName;                         // Table name, to re-find it on Redo
     SCROW           nNewEndRow;                     // Size of result
     ScDocumentUniquePtr xUndoDoc;
     std::unique_ptr<ScDBCollection> xUndoDB;

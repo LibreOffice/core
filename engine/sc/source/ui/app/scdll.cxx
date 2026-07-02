@@ -203,6 +203,7 @@ void ScDLL::Init()
     ScColRowNameRangesDlgWrapper::RegisterChildWindow(false, pMod);
     ScFormulaDlgWrapper         ::RegisterChildWindow(false, pMod);
     ScTableLayoutWrapper        ::RegisterChildWindow(false, pMod);
+    ScTableResizeWrapper        ::RegisterChildWindow(false, pMod);
 
     ScRandomNumberGeneratorDialogWrapper::RegisterChildWindow(false, pMod);
     ScSamplingDialogWrapper             ::RegisterChildWindow(false, pMod);

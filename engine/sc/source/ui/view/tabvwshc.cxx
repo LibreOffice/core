@@ -43,6 +43,7 @@
 #include <filtdlg.hxx>
 #include <dbnamdlg.hxx>
 #include <dbtabledlg.hxx>
+#include <dbtableresizedlg.hxx>
 #include <areasdlg.hxx>
 #include <crnrdlg.hxx>
 #include <formula.hxx>
@@ -279,6 +280,10 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
             xResult = std::make_shared<ScDbTableDlg>(pB, pCW, pParent, GetViewData());
             break;
         }
+        case SID_RESIZE_CALCTABLE:
+            // The dialog reads the Table's range from the cursor itself (see Init).
+            xResult = std::make_shared<ScDbTableResizeDlg>(pB, pCW, pParent, GetViewData());
+            break;
         case SID_OPENDLG_EDIT_PRINTAREA:
             xResult = std::make_shared<ScPrintAreasDlg>(pB, pCW, pParent, GetViewData());
             break;

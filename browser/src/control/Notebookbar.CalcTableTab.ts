@@ -66,6 +66,20 @@ class CalcTableTab implements NotebookbarTab {
 				id: 'table-deletecalctable-break',
 				orientation: 'vertical',
 			},
+			// TODO: once .uno:RenameCalcTable exists, add a Rename bigtoolitem and group it
+			// with Resize under a 'Properties' overflowgroup.
+			{
+				id: 'resize-calc-table',
+				type: 'bigtoolitem',
+				text: _UNO('.uno:ResizeCalcTable', 'spreadsheet'),
+				command: '.uno:ResizeCalcTable',
+				accessibility: { focusBack: true, combination: 'RS' },
+			},
+			{
+				type: 'separator',
+				id: 'resize-calc-table-break',
+				orientation: 'vertical',
+			},
 			{
 				type: 'overflowgroup',
 				id: 'table-options',

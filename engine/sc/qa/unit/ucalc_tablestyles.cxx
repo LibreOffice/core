@@ -14,6 +14,7 @@
 #include <attrib.hxx>
 #include <dbdata.hxx>
 #include <dbdocfun.hxx>
+#include <subtotalparam.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
@@ -119,6 +120,11 @@ ScRange getArea(const ScDBData& rData)
     ScRange aRange;
     rData.GetArea(aRange);
     return aRange;
+}
+
+ScDBData* findTestTable(ScDocument* pDoc)
+{
+    return pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TESTTABLE"_ustr);
 }
 
 } // anonymous namespace
@@ -1252,6 +1258,172 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testExpandUndoRedoThenShrink)
                                  m_pDoc->GetString(3, 0, 0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("dropped column E generated header cleared", OUString(),
                                  m_pDoc->GetString(4, 0, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeTotalsColumnsOnly)
+{
+    m_pDoc->InsertTab(0, u"ResizeTotalsCols"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    // Table B2:D11, header row (row 2) + Total Row (row 11).
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 1, 1, 3, 10,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"A"_ustr);
+    m_pDoc->SetString(ScAddress(2, 1, 0), u"B"_ustr);
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"C"_ustr);
+
+    // Widen B2:D11 -> B2:F11 (rows unchanged).
+    ScDBDocFunc(*m_xDocShell).ResizeTable(*pData, ScRange(1, 1, 0, 5, 10, 0));
+
+    ScDBData* pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 5, 10, 0), getArea(*pNow));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new column E header", u"Column4"_ustr,
+                                 m_pDoc->GetString(4, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new column F header", u"Column5"_ustr,
+                                 m_pDoc->GetString(5, 1, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeTotalsRowsOnly)
+{
+    m_pDoc->InsertTab(0, u"ResizeTotalsRows"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 1, 1, 3, 10,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+
+    // Grow B2:D11 -> B2:D27 (rows only): the Total Row moves to the new last row.
+    ScDBDocFunc(*m_xDocShell).ResizeTable(*pData, ScRange(1, 1, 0, 3, 26, 0));
+    ScDBData* pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 3, 26, 0), getArea(*pNow));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeMultiDimNoTotals)
+{
+    m_pDoc->InsertTab(0, u"ResizeMultiNoTotals"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 1, 1, 3, 10,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"A"_ustr);
+    m_pDoc->SetString(ScAddress(2, 1, 0), u"B"_ustr);
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"C"_ustr);
+
+    // Grow B2:D11 -> B2:K26 (columns AND rows).
+    ScDBDocFunc(*m_xDocShell).ResizeTable(*pData, ScRange(1, 1, 0, 10, 25, 0));
+    ScDBData* pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 10, 25, 0), getArea(*pNow));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new column E header", u"Column4"_ustr,
+                                 m_pDoc->GetString(4, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new column K header", u"Column10"_ustr,
+                                 m_pDoc->GetString(10, 1, 0));
+
+    m_xDocShell->GetUndoManager()->Undo();
+    pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 3, 10, 0), getArea(*pNow));
+
+    m_xDocShell->GetUndoManager()->Redo();
+    pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 10, 25, 0), getArea(*pNow));
+    CPPUNIT_ASSERT_EQUAL(u"Column10"_ustr, m_pDoc->GetString(10, 1, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeTotalsMultiDim)
+{
+    m_pDoc->InsertTab(0, u"ResizeTotalsMulti"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 1, 1, 3, 10,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"A"_ustr);
+    m_pDoc->SetString(ScAddress(2, 1, 0), u"B"_ustr);
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"C"_ustr);
+
+    // Grow B2:D11 -> B2:K26 (columns AND rows) with a Total Row present.
+    ScDBDocFunc(*m_xDocShell).ResizeTable(*pData, ScRange(1, 1, 0, 10, 25, 0));
+
+    ScDBData* pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 10, 25, 0), getArea(*pNow));
+
+    // New columns must get generated headers, same as the no-totals case.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new column E header", u"Column4"_ustr,
+                                 m_pDoc->GetString(4, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new column K header", u"Column10"_ustr,
+                                 m_pDoc->GetString(10, 1, 0));
+
+    // This table has autofilter OFF, so the resize must NOT add filter-button flags.
+    CPPUNIT_ASSERT_MESSAGE(
+        "no autofilter flag when the table has autofilter off",
+        !bool(m_pDoc->GetAttr(10, 1, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeTotalsColumnShrink)
+{
+    m_pDoc->InsertTab(0, u"ResizeTotalsShrink"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    // Total-Row table B2:D11 with headers A|B|C; grow it (columns only) to B2:K11 so E..K
+    // get generated Column4..Column10 (routes through ModifyDBData, rows unchanged).
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 1, 1, 3, 10,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"A"_ustr);
+    m_pDoc->SetString(ScAddress(2, 1, 0), u"B"_ustr);
+    m_pDoc->SetString(ScAddress(3, 1, 0), u"C"_ustr);
+    ScDBDocFunc(*m_xDocShell).ResizeTable(*pData, ScRange(1, 1, 0, 10, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Column6"_ustr, m_pDoc->GetString(6, 1, 0)); // G header generated
+
+    // Shrink to B2:F27 (drop G..K) AND change the row span, so the totals branch runs and
+    // must clear the dropped columns' generated names.
+    ScDBData* pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    ScDBDocFunc(*m_xDocShell).ResizeTable(*pNow, ScRange(1, 1, 0, 5, 26, 0));
+
+    pNow = findTestTable(m_pDoc);
+    CPPUNIT_ASSERT(pNow);
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 5, 26, 0), getArea(*pNow));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("kept column F header", u"Column5"_ustr,
+                                 m_pDoc->GetString(5, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("dropped column G generated header cleared", OUString(),
+                                 m_pDoc->GetString(6, 1, 0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("dropped column K generated header cleared", OUString(),
+                                 m_pDoc->GetString(10, 1, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testResizeTotalsAutoFilterFlags)
+{
+    m_pDoc->InsertTab(0, u"ResizeTotalsAutoFilter"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 1, 1, 3, 10,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ true);
+    pData->SetAutoFilter(true);
+    m_pDoc->ApplyFlagsTab(1, 1, 3, 1, 0, ScMF::Auto); // initial filter buttons on header B2:D2
+
+    // Grow B2:D11 -> B2:K26 (columns AND rows): the new header cells get the filter button.
+    ScDBDocFunc(*m_xDocShell).ResizeTable(*pData, ScRange(1, 1, 0, 10, 25, 0));
+
+    CPPUNIT_ASSERT_MESSAGE("new column E autofilter flag",
+                           bool(m_pDoc->GetAttr(4, 1, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
+    CPPUNIT_ASSERT_MESSAGE(
+        "new column K autofilter flag",
+        bool(m_pDoc->GetAttr(10, 1, 0, ATTR_MERGE_FLAG).GetValue() & ScMF::Auto));
 
     m_pDoc->DeleteTab(0);
 }

@@ -60,6 +60,7 @@ sc/uiconfig/scalc/ui/randomnumbergenerator.ui://GtkButton[@id='cell-range-button
 sc/uiconfig/scalc/ui/regressiondialog.ui://GtkButton[@id='variable1-range-button'] button-no-label
 sc/uiconfig/scalc/ui/regressiondialog.ui://GtkButton[@id='variable2-range-button'] button-no-label
 sc/uiconfig/scalc/ui/regressiondialog.ui://GtkButton[@id='output-range-button'] button-no-label
+sc/uiconfig/scalc/ui/resizetablerangedialog.ui://GtkButton[@id='assgnrb'] button-no-label
 sc/uiconfig/scalc/ui/samplingdialog.ui://GtkButton[@id='input-range-button'] button-no-label
 sc/uiconfig/scalc/ui/samplingdialog.ui://GtkButton[@id='output-range-button'] button-no-label
 sc/uiconfig/scalc/ui/showchangesdialog.ui://GtkButton[@id='rangeref'] button-no-label

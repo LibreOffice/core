@@ -45,6 +45,9 @@
 #include <tabvwsh.hxx>
 #include <dbdocfun.hxx>
 #include <dbdata.hxx>
+#include <tablestyle.hxx>
+#include <globstr.hrc>
+#include <scresid.hxx>
 #include <gridwin.hxx>
 #include <sctestviewcallback.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -793,6 +796,214 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTableResizeUndoKeepsCursor)
                                  pViewData->GetCurX());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("redo must keep the cursor on B8", sal_Int32(7),
                                  pViewData->GetCurY());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsRowsOnlyUndoRedo)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // Styled table A1:C11 with header + Total Row (row 11).
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 10,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    auto getTableArea = [&rDoc]() {
+        ScDBData* p = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+        CPPUNIT_ASSERT(p);
+        ScRange aArea;
+        p->GetArea(aArea);
+        return aArea;
+    };
+
+    // Grow A1:C11 -> A1:C27 (rows only): the Total Row relocates.
+    ScDBDocFunc(*pDocShell).ResizeTable(*pData, ScRange(0, 0, 0, 2, 26, 0));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 26, 0), getTableArea());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("resize undo entry", ScResId(STR_UNDO_RESIZE_CALCTABLE),
+                                 pUndoManager->GetUndoActionComment(0));
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 10, 0), getTableArea());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 26, 0), getTableArea());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsColumnsOnlyUndoRedo)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // Styled table A1:C11 with header + Total Row (row 11).
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 10,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    auto getTableArea = [&rDoc]() {
+        ScDBData* p = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+        CPPUNIT_ASSERT(p);
+        ScRange aArea;
+        p->GetArea(aArea);
+        return aArea;
+    };
+
+    // Grow A1:C11 -> A1:E11 (columns only): rows are unchanged, so the Total Row is not
+    // relocated (DoTableSubTotals is not re-entered); ModifyDBData extends the columns and
+    // fills the new header cells.
+    ScDBDocFunc(*pDocShell).ResizeTable(*pData, ScRange(0, 0, 0, 4, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, 10, 0), getTableArea());
+
+    // The new columns got auto-generated header cells...
+    ScDBData* pLive = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pLive);
+    CPPUNIT_ASSERT(pLive->IsGeneratedHeaderName(rDoc.GetString(3, 0, 0)));
+    CPPUNIT_ASSERT(pLive->IsGeneratedHeaderName(rDoc.GetString(4, 0, 0)));
+
+    // ...but no SUBTOTAL was written into their Total Row cells (DoTableSubTotals not re-entered).
+    CPPUNIT_ASSERT(rDoc.GetString(3, 10, 0).isEmpty());
+    CPPUNIT_ASSERT(rDoc.GetString(4, 10, 0).isEmpty());
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("resize undo entry", ScResId(STR_UNDO_RESIZE_CALCTABLE),
+                                 pUndoManager->GetUndoActionComment(0));
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 10, 0), getTableArea());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, 10, 0), getTableArea());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsMultiDimUndoRedo)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // Styled table A1:C11 with header + Total Row (row 11).
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 10,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    auto getTableArea = [&rDoc]() {
+        ScDBData* p = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+        CPPUNIT_ASSERT(p);
+        ScRange aArea;
+        p->GetArea(aArea);
+        return aArea;
+    };
+
+    // Grow A1:C11 -> A1:H26 (columns AND rows).
+    ScDBDocFunc(*pDocShell).ResizeTable(*pData, ScRange(0, 0, 0, 7, 25, 0));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 7, 25, 0), getTableArea());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("resize undo entry", ScResId(STR_UNDO_RESIZE_CALCTABLE),
+                                 pUndoManager->GetUndoActionComment(0));
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 10, 0), getTableArea());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo must reinstate the resized range",
+                                 ScRange(0, 0, 0, 7, 25, 0), getTableArea());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsStartColMoveUndoRedo)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // Styled table A1:C11 with header + Total Row (row 11).
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 10,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    auto getTableArea = [&rDoc]() {
+        ScDBData* p = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+        CPPUNIT_ASSERT(p);
+        ScRange aArea;
+        p->GetArea(aArea);
+        return aArea;
+    };
+
+    // Resize A1:C11 -> B1:E26: the start column moves right AND the rows change.
+    ScDBDocFunc(*pDocShell).ResizeTable(*pData, ScRange(1, 0, 0, 4, 25, 0));
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 0, 0, 4, 25, 0), getTableArea());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 10, 0), getTableArea());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("redo reinstates the resized range after a start-column move",
+                                 ScRange(1, 0, 0, 4, 25, 0), getTableArea());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testResizeTotalsOverlapRefusedNoHalfApply)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    auto pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScUndoManager* pUndoManager = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoManager);
+
+    // Styled table A1:C11 with header + Total Row (row 11)...
+    ScDBData* pData = new ScDBData(u"Table1"_ustr, /*nTab*/ 0, 0, 0, 2, 10,
+                                   /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ true);
+    ScTableStyleParam aStyleParam;
+    aStyleParam.maStyleID = u"TableStyleMedium2"_ustr;
+    pData->SetTableStyleInfo(aStyleParam);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pData)));
+
+    // ...and a second table E1:G11 that a rightward grow would overlap.
+    ScDBData* pOther = new ScDBData(u"Table2"_ustr, /*nTab*/ 0, 4, 0, 6, 10,
+                                    /*bByRow*/ true, /*bHasHeader*/ true, /*bHasTotals*/ false);
+    CPPUNIT_ASSERT(rDoc.GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pOther)));
+
+    auto getTableArea = [&rDoc]() {
+        ScDBData* p = rDoc.GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+        CPPUNIT_ASSERT(p);
+        ScRange aArea;
+        p->GetArea(aArea);
+        return aArea;
+    };
+
+    // A1:C11 -> A1:E26 grows columns (into Table2) AND rows on a Total-Row table. The column
+    // grow overlaps, so the whole resize must be refused up front: no columns extended, no
+    // undo entry - not a half-applied column change that the Total-Row step then backs out of.
+    CPPUNIT_ASSERT(!ScDBDocFunc(*pDocShell).ResizeTable(*pData, ScRange(0, 0, 0, 4, 25, 0)));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 2, 10, 0), getTableArea());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pUndoManager->GetUndoActionCount());
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoExpandUndoKeepsCursor)

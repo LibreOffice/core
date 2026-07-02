@@ -13,16 +13,19 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <sc.hrc>
+#include <scmod.hxx>
 #include <tableshell.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <dbdata.hxx>
 #include <dbdocfun.hxx>
+#include <reffact.hxx>
 #include <editable.hxx>
 #include <subtotalparam.hxx>
 
@@ -65,8 +68,8 @@ bool ScTableShell::IsTableEditable(const ScDBData& rDBData) const
     ScRange aRange;
     rDBData.GetArea(aRange);
     ScEditableTester aTester = ScEditableTester::CreateAndTestBlock(
-        rDoc, aRange.aStart.Tab(), aRange.aStart.Col(), aRange.aStart.Row(),
-        aRange.aEnd.Col(), aRange.aEnd.Row());
+        rDoc, aRange.aStart.Tab(), aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(),
+        aRange.aEnd.Row());
     return aTester.IsEditable();
 }
 
@@ -75,6 +78,10 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
     const SfxItemSet* pSet = rReq.GetArgs();
     ScViewData& rViewData = m_pViewShell->GetViewData();
     SfxBindings& rBindings = rViewData.GetBindings();
+    ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
+    ScModule* pScMod = ScModule::get();
+
+    pTabViewShell->HideListBox();
 
     const ScDBData* pDBData = GetTableDBDataAtCursor();
     if (pDBData && IsTableEditable(*pDBData))
@@ -115,6 +122,15 @@ void ScTableShell::ExecuteDatabaseSettings(const SfxRequest& rReq)
             case SID_REMOVE_CALCTABLE:
                 m_pViewShell->DeleteCalcTable();
                 break;
+            case SID_RESIZE_CALCTABLE:
+            {
+                sal_uInt16 nId = ScTableResizeWrapper::GetChildWindowId();
+                SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = rViewFrm.GetChildWindow(nId);
+
+                pScMod->SetRefDialog(nId, pWnd == nullptr);
+            }
+            break;
             case SID_TABLE_TOTALROW:
             {
                 // Desired value: SfxBoolItem in args if present, else toggle.
@@ -184,6 +200,7 @@ void ScTableShell::GetDatabaseSettings(SfxItemSet& rSet)
             }
             break;
             case SID_REMOVE_CALCTABLE:
+            case SID_RESIZE_CALCTABLE:
                 if (bProtected)
                     rSet.DisableItem(nWhich);
                 break;
