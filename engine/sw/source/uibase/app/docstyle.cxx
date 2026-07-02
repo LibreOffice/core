@@ -727,28 +727,30 @@ void SwDocStyleSheet::GetGrabBagItem(cpo::uno::Any& rVal) const
     }
 }
 
-std::vector<OUString> SwDocStyleSheet::GetStyleAliases() const
+const SwFormat* SwDocStyleSheet::GetCharOrParaFormat() const
 {
     // Reuse the format the sheet already points at. Only when it has not been
     // resolved yet do we look it up by name, and then remember it so repeated
     // reads on the same sheet do not scan the format table again.
     SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
-    const SwFormat* pFormat = nullptr;
     switch (nFamily)
     {
         case SfxStyleFamily::Char:
             if (!m_pCharFormat)
                 pThis->m_pCharFormat = m_rDoc.FindCharFormatByName(UIName(aName));
-            pFormat = m_pCharFormat;
-            break;
+            return m_pCharFormat;
         case SfxStyleFamily::Para:
             if (!m_pColl)
                 pThis->m_pColl = m_rDoc.FindTextFormatCollByName(UIName(aName));
-            pFormat = m_pColl;
-            break;
+            return m_pColl;
         default:
-            break;
+            return nullptr;
     }
+}
+
+std::vector<OUString> SwDocStyleSheet::GetStyleAliases() const
+{
+    const SwFormat* pFormat = GetCharOrParaFormat();
     return pFormat ? pFormat->GetStyleAliases() : std::vector<OUString>();
 }
 
@@ -778,13 +780,15 @@ bool SwDocStyleSheet::IsHeadingStyle() const
     if (nFamily != SfxStyleFamily::Para)
         return false;
 
-    // Reuse the format the sheet already points at, only looking it up by name
-    // when it has not been resolved yet (and then remembering it).
-    SwDocStyleSheet* pThis = const_cast<SwDocStyleSheet*>(this);
-    if (!m_pColl)
-        pThis->m_pColl = m_rDoc.FindTextFormatCollByName(UIName(aName));
+    // For the paragraph family GetCharOrParaFormat returns the m_pColl pointer.
+    const SwTextFormatColl* pColl = static_cast<const SwTextFormatColl*>(GetCharOrParaFormat());
+    return pColl && pColl->GetAttrOutlineLevel() > 0;
+}
 
-    return m_pColl && m_pColl->GetAttrOutlineLevel() > 0;
+bool SwDocStyleSheet::IsSemiHidden() const
+{
+    const SwFormat* pFormat = GetCharOrParaFormat();
+    return pFormat && pFormat->IsSemiHidden();
 }
 // virtual methods
 void SwDocStyleSheet::SetHidden( bool bValue )

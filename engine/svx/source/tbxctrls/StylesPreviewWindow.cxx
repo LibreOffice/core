@@ -724,6 +724,18 @@ void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* p
         lcl_AppendParaStyle(rAllStyles, *pStyle);
 }
 
+// The "Recommended" set: flagged as favourites (qFormat), except semiHidden
+void lcl_AppendRecommendedParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool)
+{
+    if (!pPool)
+        return;
+
+    auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::Favourite);
+    for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
+        if (!pStyle->IsSemiHidden())
+            lcl_AppendParaStyle(rAllStyles, *pStyle);
+}
+
 void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
                                   const StylePaneFormatFilter& rFilter)
 {
@@ -738,9 +750,9 @@ void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBas
         return;
     }
 
-    // "Recommended" (visibleStyles) shows the styles flagged as favourites.
+    // "Recommended" (visibleStyles) shows the recommended styles.
     if (rFilter.bVisibleStyles)
-        lcl_AppendParaStyles(rAllStyles, pPool, SfxStyleSearchBits::Favourite);
+        lcl_AppendRecommendedParaStyles(rAllStyles, pPool);
 
     auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::AllVisible);
     for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
@@ -756,12 +768,6 @@ void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBas
         if (bInclude)
             lcl_AppendParaStyle(rAllStyles, *pStyle);
     }
-
-    // A paragraph style preview cannot show numbering or table styles. If the
-    // filter selected only those, fall back to the recommended styles so the
-    // control is not left empty.
-    if (rAllStyles.empty())
-        lcl_AppendParaStyles(rAllStyles, pPool, SfxStyleSearchBits::Favourite);
 }
 }
 
@@ -777,20 +783,21 @@ StylePreviewList StylesPreviewWindow_Base::GetStyleList(SfxObjectShell* pDocShel
         aFilter = lcl_GetStylePaneFormatFilter(pDocShell);
     }
 
-    StylePreviewList aAllStyles;
-    // When the document specifies a style pane filter, skip the hardcoded
-    // default styles and let the filter control what is shown.
+    // A document with no explicit style pane filter defaults to the "Recommended"
     if (!aFilter.bValid)
-        aAllStyles = rDefaultStyles;
-
-    if (pStyleSheetPool)
     {
-        if (aFilter.bValid)
-            lcl_AppendFilteredParaStyles(aAllStyles, pStyleSheetPool, aFilter);
-        else
-            lcl_AppendParaStyles(aAllStyles, pStyleSheetPool,
-                                 SfxStyleSearchBits::Favourite | SfxStyleSearchBits::UserDefined);
+        aFilter.bValid = true;
+        aFilter.bVisibleStyles = true;
     }
+
+    StylePreviewList aAllStyles;
+    if (pStyleSheetPool)
+        lcl_AppendFilteredParaStyles(aAllStyles, pStyleSheetPool, aFilter);
+
+    // Documents without any recommended styles (for example freshly created or
+    // ODF imported ones) fall back
+    if (aAllStyles.empty())
+        aAllStyles = rDefaultStyles;
 
     return aAllStyles;
 }

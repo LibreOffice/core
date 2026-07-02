@@ -67,6 +67,7 @@ class SW_DLLPUBLIC SwFormat : public sw::BorderCacheOwner, public sw::Broadcasti
     bool   m_bAutoUpdateOnDirectFormat : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
     bool m_bHidden : 1;
+    bool m_bSemiHidden = false;    ///< DOCX semiHidden: keep out of the recommended style list.
     std::optional<bool> m_bIsFavourite;        ///< Show in the basic UI; unset means unknown
     std::vector<OUString> m_aStyleAliases; ///< Alternate style names imported from DOCX aliases.
     std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
@@ -199,6 +200,9 @@ public:
 
     const std::vector<OUString>& GetStyleAliases() const { return m_aStyleAliases; }
     void SetStyleAliases(const std::vector<OUString>& rAliases) { m_aStyleAliases = rAliases; }
+
+    bool IsSemiHidden() const                           { return m_bSemiHidden; }
+    void SetSemiHidden(bool bValue)                     { m_bSemiHidden = bValue; }
 
     bool IsHidden() const               { return m_bHidden; }
     void SetHidden( bool bValue )       { m_bHidden = bValue; }

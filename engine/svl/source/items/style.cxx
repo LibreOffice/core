@@ -282,6 +282,11 @@ bool SfxStyleSheetBase::IsHeadingStyle() const
     return false;
 }
 
+bool SfxStyleSheetBase::IsSemiHidden() const
+{
+    return false;
+}
+
 void SfxStyleSheetBase::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     tools::XmlWriter aWriter(pWriter);

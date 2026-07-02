@@ -75,6 +75,11 @@ class SW_DLLPUBLIC SwDocStyleSheet final : public SfxStyleSheetBase
     SAL_DLLPRIVATE bool FillStyleSheet(FillStyleType eFType,
             std::optional<SfxItemSet> * o_ppFlatSet = nullptr);
 
+    /// Resolve the character or paragraph format this sheet stands for, reusing
+    /// the cached pointer and only looking it up by name once. Returns nullptr
+    /// for other families or when no such format exists.
+    SAL_DLLPRIVATE const SwFormat* GetCharOrParaFormat() const;
+
     virtual ~SwDocStyleSheet() override;
 
 public:
@@ -99,6 +104,7 @@ public:
     void SetStyleAliases(const std::vector<OUString>& rAliases);
 
     virtual bool IsHeadingStyle() const override;
+    virtual bool IsSemiHidden() const override;
 
     /** add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value false,
      which indicates that the indent attributes at a paragraph style should

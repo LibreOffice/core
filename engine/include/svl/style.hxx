@@ -189,6 +189,10 @@ public:
     /// False by default; paragraph style sheets override this.
     virtual bool IsHeadingStyle() const;
 
+    /// Whether the style is kept out of the recommended list (DOCX semiHidden).
+    /// False by default; application style sheets override this.
+    virtual bool IsSemiHidden() const;
+
     // Spotlight Id, @return -1 for style not in use
     virtual sal_Int32 GetSpotlightId();
 

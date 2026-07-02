@@ -80,6 +80,29 @@ CPPUNIT_TEST_FIXTURE(StylesPreviewWindowTest, testStylePaneFilterRecommended)
     CPPUNIT_ASSERT_MESSAGE("Plain custom style should not appear under Recommended",
                            !lcl_HasStyle(aStyles, u"Plain Style"));
 }
+
+// A document with no style pane filter defaults to the Recommended view, and a
+// recommended style that is marked semiHidden is kept out of that list.
+CPPUNIT_TEST_FIXTURE(StylesPreviewWindowTest, testStylePaneFilterAbsentAndSemiHidden)
+{
+    loadFromFile(u"stylePaneAbsentFilter.docx");
+
+    SfxObjectShell* pDocShell = SfxObjectShell::GetShellFromComponent(mxComponent);
+    CPPUNIT_ASSERT(pDocShell);
+
+    const StylePreviewList aStyles
+        = StylesPreviewWindow_Base::GetStyleList(pDocShell, StylePreviewList());
+
+    // No filter in the document, yet the recommended style is shown.
+    CPPUNIT_ASSERT_MESSAGE("Recommended style missing with no filter present",
+                           lcl_HasStyle(aStyles, u"Visible Reco"));
+    // semiHidden keeps a recommended style out of the list.
+    CPPUNIT_ASSERT_MESSAGE("semiHidden style should be hidden from Recommended",
+                           !lcl_HasStyle(aStyles, u"Hidden Reco"));
+    // A non-recommended style is not shown either.
+    CPPUNIT_ASSERT_MESSAGE("Non-recommended style should not appear",
+                           !lcl_HasStyle(aStyles, u"Plain One"));
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
