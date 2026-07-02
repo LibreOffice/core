@@ -36,6 +36,7 @@ LIBS = \
   $(ALL_STATIC_LIBS) \
   -Wl,--end-group
 
+ifeq ($(ENABLE_NSS),TRUE)
 NSSLIBS = freebl3 \
 	nspr4 \
 	nss3 \
@@ -48,6 +49,10 @@ NSSLIBS = freebl3 \
 	softokn3 \
 	sqlite3 \
 	ssl3 \
+
+else
+NSSLIBS =
+endif
 
 WHOLELIBS = \
   -Wl,--whole-archive \
@@ -75,7 +80,7 @@ $(SODEST)/libc++_shared.so : $(ANDROID_TOOLCHAIN)/sysroot/usr/lib/$(ANDROID_SYSR
 	mkdir -p $(SODEST)
 	cp $< $@
 
-link-so: $(SODEST)/liblo-native-code.so $(SODEST)/nss-libraries $(SODEST)/libc++_shared.so
+link-so: $(SODEST)/liblo-native-code.so $(if $(filter TRUE,$(ENABLE_NSS)),$(SODEST)/nss-libraries) $(SODEST)/libc++_shared.so
 
 # If you reinstall an app several times *on the emulator*, even if you
 # uninstall it between, disk space seems to leak that won't get recycled until
