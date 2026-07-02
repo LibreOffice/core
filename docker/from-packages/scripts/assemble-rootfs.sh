@@ -164,6 +164,8 @@ while :; do
     echo "Pulling in base-missing libraries from: $(echo $add_pkgs)"
     for pkg in $add_pkgs; do
         dpkg-query -L "$pkg" 2>/dev/null | while read -r p; do
+            # skip gdb pretty-printer autoload scripts (libstdc++6 ships one)
+            case "$p" in /usr/share/gdb/*) continue ;; esac
             { [ -f "$p" ] || [ -L "$p" ]; } && printf '%s\n' "$p"
         done
     done >> "$FILELIST"
