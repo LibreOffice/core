@@ -401,10 +401,15 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
         fileFilter += formats[i].displayName + QStringLiteral(" (*.") + formats[i].extension + QStringLiteral(")");
     }
 
+    // Under flatpak the file picker is the xdg-desktop-portal FileChooser,
+    // which exports the chosen file to the document portal under the exact
+    // name the user confirms and ignores setDefaultSuffix().
+    const QString suggestedName = baseName + QStringLiteral(".") + formats[0].extension;
+
     QFileDialog* dialog = new QFileDialog(
         _webView,
         QObject::tr("Save Document"),
-        QDir::home().filePath(baseName),
+        QDir::home().filePath(suggestedName),
         fileFilter);
 
     dialog->setAcceptMode(QFileDialog::AcceptSave);
@@ -414,15 +419,18 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
     if (!formats.empty())
         dialog->setDefaultSuffix(formats[0].extension);
 
-    // Update default suffix when user changes the selected filter
+    // Update default suffix and the proposed filename when the user changes
+    // the selected filter, so the name registered by the portal keeps the
+    // extension matching the chosen format.
     QObject::connect(dialog, QOverload<const QString&>::of(&QFileDialog::filterSelected),
-                     [dialog, formats](const QString& selectedFilter)
+                     [dialog, baseName, formats](const QString& selectedFilter)
                      {
                          for (const auto& fmt : formats)
                          {
                              if (selectedFilter.startsWith(fmt.displayName))
                              {
                                  dialog->setDefaultSuffix(fmt.extension);
+                                 dialog->selectFile(baseName + QStringLiteral(".") + fmt.extension);
                                  break;
                              }
                          }
@@ -431,14 +439,15 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
     QObject::connect(dialog, &QFileDialog::fileSelected,
                      [callback, dialog, formats](const QString& destPath)
                      {
-                         // Get the selected filter to determine the format
-                         QString selectedFilter = dialog->selectedNameFilter();
+                         // The format is determined by file name not the
+                         // file format dropdown menu. We can't change the
+                         // file name automatically based on file format
+                         // dropdown.
+                         const QString suffix = QFileInfo(destPath).suffix();
                          QString format;
-
-                         // Extract format from the selected filter (e.g., "ODF text document (*.odt)" -> "odt")
                          for (const auto& fmt : formats)
                          {
-                             if (selectedFilter.startsWith(fmt.displayName))
+                             if (suffix.compare(fmt.extension, Qt::CaseInsensitive) == 0)
                              {
                                  format = fmt.extension;
                                  break;
@@ -450,12 +459,13 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
 
                          // Ensure file ends with the selected format's extension - save-as fails otherwise!
                          QString finalPath = destPath;
+                         const QString runtimeDir = qEnvironmentVariable("XDG_RUNTIME_DIR");
+                         const bool isPortalPath =
+                             !runtimeDir.isEmpty() && destPath.startsWith(runtimeDir);
+
                          const QString currentSuffix = QFileInfo(finalPath).suffix();
-                         if (currentSuffix.compare(format, Qt::CaseInsensitive) != 0)
+                         if (!isPortalPath && currentSuffix.compare(format, Qt::CaseInsensitive) != 0)
                          {
-                             // The flatpak save dialog can return a name with the wrong
-                             // extension (e.g. .odt when saving as docx). Drop it before
-                             // adding the right one so we don't get "file.odt.docx".
                              for (const auto& fmt : formats)
                              {
                                  if (currentSuffix.compare(fmt.extension, Qt::CaseInsensitive) == 0)
