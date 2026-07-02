@@ -13,6 +13,8 @@
 #include <string_view>
 
 #include <sfx2/objsh.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/BitmapReadAccess.hxx>
 
 #include <StylesPreviewWindow.hxx>
 
@@ -33,6 +35,21 @@ bool lcl_HasStyle(const StylePreviewList& rStyles, std::u16string_view rName)
 {
     return std::any_of(rStyles.begin(), rStyles.end(),
                        [&rName](const StylePreviewDescriptor& r) { return r.commonName == rName; });
+}
+
+// Whether the rendered preview contains any non-background pixel, i.e. the
+// sample text was actually drawn.
+bool lcl_HasContent(const Bitmap& rBmp)
+{
+    Bitmap aBmp(rBmp);
+    BitmapScopedReadAccess pAcc(aBmp);
+    if (!pAcc)
+        return false;
+    for (tools::Long y = 0; y < pAcc->Height(); ++y)
+        for (tools::Long x = 0; x < pAcc->Width(); ++x)
+            if (pAcc->GetColor(y, x) != COL_WHITE)
+                return true;
+    return false;
 }
 
 // A paragraph style that carries an alias imported from DOCX is listed in the
@@ -58,6 +75,25 @@ CPPUNIT_TEST_FIXTURE(StylesPreviewWindowTest, testStyleAliasAsPreviewName)
     // Without the fix the display name equalled the style name. With aliases
     // imported and honored, the alias is shown instead.
     CPPUNIT_ASSERT_EQUAL(u"Testskrift 1"_ustr, aHeading3->translatedName);
+
+    // Recommended character styles are surfaced in the preview alongside paragraph
+    // styles, tagged with the character family and their alias as the display name.
+    const auto aEmphasis
+        = std::find_if(aStyles.begin(), aStyles.end(), [](const StylePreviewDescriptor& rStyle) {
+              return rStyle.commonName == "Emphasis";
+          });
+    CPPUNIT_ASSERT_MESSAGE("Character style Emphasis is missing from the preview",
+                           aEmphasis != aStyles.end());
+    CPPUNIT_ASSERT_EQUAL(SfxStyleFamily::Char, aEmphasis->eFamily);
+    // Its alias is used as the display name, just like paragraph styles.
+    CPPUNIT_ASSERT_EQUAL(u"Testskrift 2"_ustr, aEmphasis->translatedName);
+
+    // A character style's preview draws its sample text (it must be looked up in the
+    // character family, and falls back to the document default font when the style
+    // itself sets none).
+    const Bitmap aPreview = StylesPreviewWindow_Base::GetCachedPreview(
+        { u"Emphasis"_ustr, u"Testskrift 2"_ustr, SfxStyleFamily::Char });
+    CPPUNIT_ASSERT_MESSAGE("Character style preview is blank", lcl_HasContent(aPreview));
 }
 
 // The document sets the DOCX style pane filter to "Recommended" (visibleStyles).
@@ -73,12 +109,17 @@ CPPUNIT_TEST_FIXTURE(StylesPreviewWindowTest, testStylePaneFilterRecommended)
     const StylePreviewList aStyles
         = StylesPreviewWindow_Base::GetStyleList(pDocShell, StylePreviewList());
 
-    // The recommended (qFormat) style is shown.
-    CPPUNIT_ASSERT_MESSAGE("Recommended style missing from preview",
+    // The recommended (qFormat) paragraph and character styles are shown.
+    CPPUNIT_ASSERT_MESSAGE("Recommended paragraph style missing from preview",
                            lcl_HasStyle(aStyles, u"Reco Style"));
-    // The plain custom style is not recommended, so it stays hidden.
-    CPPUNIT_ASSERT_MESSAGE("Plain custom style should not appear under Recommended",
+    CPPUNIT_ASSERT_MESSAGE("Recommended character style missing from preview",
+                           lcl_HasStyle(aStyles, u"Reco Char"));
+    // Styles that are not recommended stay hidden, in both families - even the
+    // in-use character style, which the character iterator would otherwise list.
+    CPPUNIT_ASSERT_MESSAGE("Plain paragraph style should not appear under Recommended",
                            !lcl_HasStyle(aStyles, u"Plain Style"));
+    CPPUNIT_ASSERT_MESSAGE("Plain character style should not appear under Recommended",
+                           !lcl_HasStyle(aStyles, u"Plain Char"));
 }
 
 // A document with no style pane filter defaults to the Recommended view, and a

@@ -2993,6 +2993,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         {
             SwCharFormat* pFormat = (*rDoc.GetCharFormats())[ i ];
 
+            if (bFavourite && !pFormat->IsFavourite().value_or(false))
+                continue;
+
             // tdf#159168: default char format should be considered 'applied'/used, even if it apparently is not
             const bool bUsed = bIsSearchUsed && (bOrganizer || pFormat->IsUsed() || pFormat == rDoc.GetDfltCharFormat());
             if( ( !bSearchHidden && pFormat->IsHidden() && !bUsed ) || ( pFormat->IsDefault() && pFormat != rDoc.GetDfltCharFormat() ) )

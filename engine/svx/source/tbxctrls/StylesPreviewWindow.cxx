@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tplpitem.hxx>
@@ -178,7 +179,7 @@ void StylePoolChangeListener::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHi
 }
 
 StyleItemController::StyleItemController(StylePreviewDescriptor aStyleName)
-    : m_eStyleFamily(SfxStyleFamily::Para)
+    : m_eStyleFamily(aStyleName.eFamily)
     , m_aStyleName(std::move(aStyleName))
 {
 }
@@ -331,40 +332,45 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
     else if (nScriptType == css::i18n::ScriptType::COMPLEX)
         nFontSlot = SID_ATTR_CHAR_CTL_FONT;
 
-    const SvxFontItem* const pFontItem = pItemSet->GetItem<SvxFontItem>(nFontSlot);
-    const SvxFontHeightItem* const pFontHeightItem
-        = pItemSet->GetItem<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
+    // Character styles usually leave the font family and size to the paragraph,
+    // so their own item set carries neither. Fall back to the document default
+    // (the pool default) with using Get<>
+    SfxItemPool* pItemPool = pItemSet->GetPool();
 
-    if (pFontItem && pFontHeightItem)
+    const TypedWhichId<SvxFontItem> nFontWhich(pItemPool->GetWhichIDFromSlotID(nFontSlot));
+    const SvxFontItem& rFontItem = pItemSet->Get<SvxFontItem>(nFontWhich);
+
+    const TypedWhichId<SvxFontHeightItem> nHeightWhich
+        = pItemPool->GetWhichIDFromSlotID(SID_ATTR_CHAR_FONTHEIGHT);
+    const SvxFontHeightItem& rFontHeightItem = pItemSet->Get<SvxFontHeightItem>(nHeightWhich);
+
+    Size aFontSize(0, rFontHeightItem.GetHeight());
+    Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
+
+    SvxFont aFont = GetFontFromItems(&rFontItem, aPixelSize, pItemSet);
+    rRenderContext.SetFont(aFont);
+
+    Color aFontCol = GetTextColorFromItemSet(pItemSet);
+    if (aFontCol != COL_AUTO)
+        rRenderContext.SetTextColor(aFontCol);
+
+    aFontHighlight = GetHighlightColorFromItemSet(pItemSet);
+
+    css::drawing::FillStyle style = GetFillStyleFromItemSet(pItemSet);
+
+    switch (style)
     {
-        Size aFontSize(0, pFontHeightItem->GetHeight());
-        Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, MapMode(pShell->GetMapUnit())));
-
-        SvxFont aFont = GetFontFromItems(pFontItem, aPixelSize, pItemSet);
-        rRenderContext.SetFont(aFont);
-
-        Color aFontCol = GetTextColorFromItemSet(pItemSet);
-        if (aFontCol != COL_AUTO)
-            rRenderContext.SetTextColor(aFontCol);
-
-        aFontHighlight = GetHighlightColorFromItemSet(pItemSet);
-
-        css::drawing::FillStyle style = GetFillStyleFromItemSet(pItemSet);
-
-        switch (style)
+        case css::drawing::FillStyle_SOLID:
         {
-            case css::drawing::FillStyle_SOLID:
-            {
-                Color aBackCol = GetBackgroundColorFromItemSet(pItemSet);
-                if (aBackCol != COL_AUTO)
-                    DrawContentBackground(rRenderContext, aContentRect, aBackCol);
-            }
-            break;
-
-            default:
-                break;
-                //TODO Draw the other background styles: gradient, hatching and bitmap
+            Color aBackCol = GetBackgroundColorFromItemSet(pItemSet);
+            if (aBackCol != COL_AUTO)
+                DrawContentBackground(rRenderContext, aContentRect, aBackCol);
         }
+        break;
+
+        default:
+            break;
+            //TODO Draw the other background styles: gradient, hatching and bitmap
     }
 
     if (aFontHighlight != COL_AUTO)
@@ -446,13 +452,41 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     RequestStylesListUpdate();
 }
 
+namespace
+{
+// Programmatic style family name expected by .uno:StyleApply and friends.
+OUString lcl_GetStyleFamilyName(SfxStyleFamily eFamily)
+{
+    return eFamily == SfxStyleFamily::Char ? u"CharacterStyles"_ustr : u"ParagraphStyles"_ustr;
+}
+
+// Find the descriptor for the entry currently selected in the icon view. The id
+// (commonName) and shown text together identify it even across style families.
+const StylePreviewDescriptor* lcl_GetSelectedStyle(const weld::IconView& rIconView,
+                                                   const StylePreviewList& rStyles)
+{
+    const OUString sId = rIconView.get_selected_id();
+    const OUString sText = rIconView.get_selected_text();
+    const auto aFound = std::find_if(
+        rStyles.begin(), rStyles.end(), [&sId, &sText](const StylePreviewDescriptor& element) {
+            return element.commonName == sId && element.translatedName == sText;
+        });
+    return aFound != rStyles.end() ? &*aFound : nullptr;
+}
+}
+
 IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
 {
-    OUString sStyleName = rIconView.get_selected_text();
+    const StylePreviewDescriptor* pStyle = lcl_GetSelectedStyle(rIconView, m_aAllStyles);
+    if (!pStyle)
+        return;
 
+    // Pass the real style name (never the alias) and its family; the slot maps
+    // the name to the localized display name and picks the family up from the
+    // family name string.
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs{
-        comphelper::makePropertyValue(u"Template"_ustr, sStyleName),
-        comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
+        comphelper::makePropertyValue(u"Style"_ustr, pStyle->commonName),
+        comphelper::makePropertyValue(u"FamilyName"_ustr, lcl_GetStyleFamilyName(pStyle->eFamily))
     };
     const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                        css::uno::UNO_QUERY);
@@ -461,11 +495,13 @@ IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
 
 IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, bool)
 {
-    OUString sStyleName = rIconView.get_selected_text();
+    const StylePreviewDescriptor* pStyle = lcl_GetSelectedStyle(rIconView, m_aAllStyles);
+    if (!pStyle)
+        return true;
 
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs{
-        comphelper::makePropertyValue(u"Param"_ustr, sStyleName),
-        comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(SfxStyleFamily::Para))
+        comphelper::makePropertyValue(u"Param"_ustr, pStyle->commonName),
+        comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(pStyle->eFamily))
     };
     const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
                                                                        css::uno::UNO_QUERY);
@@ -482,8 +518,15 @@ IMPL_LINK(StylesPreviewWindow_Base, DoCommand, const CommandEvent&, rPos, bool)
 IMPL_LINK(StylesPreviewWindow_Base, QueryTooltip, const weld::TreeIter&, rIter, OUString)
 {
     const OUString sStyleId = m_xStylesView->get_id(rIter);
-    const OUString sCommand
-        = ".uno:StyleApply?Style:string=" + sStyleId + "&FamilyName:string=ParagraphStyles";
+    const auto aStyle = std::find_if(m_aAllStyles.begin(), m_aAllStyles.end(),
+                                     [&sStyleId](const StylePreviewDescriptor& element) {
+                                         return element.commonName == sStyleId;
+                                     });
+    const SfxStyleFamily eFamily
+        = aStyle != m_aAllStyles.end() ? aStyle->eFamily : SfxStyleFamily::Para;
+
+    const OUString sCommand = ".uno:StyleApply?Style:string=" + sStyleId
+                              + "&FamilyName:string=" + lcl_GetStyleFamilyName(eFamily);
     const OUString sShortcut = vcl::CommandInfoProvider::GetCommandShortcut(sCommand, m_xFrame);
     if (sShortcut.isEmpty())
         return OUString();
@@ -571,7 +614,16 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
         nDpiScale = 100;
     OUString sStyleId(m_xStylesView->get_id(rIter));
     OUString sStyleName(m_xStylesView->get_text(rIter));
-    OString sBase64Png(GetCachedPreviewJson({ sStyleId, sStyleName }, nDpiScale));
+    // Recover the style family for this entry; without it a character style
+    // would be looked up as a paragraph style and its preview would be blank.
+    const auto aStyle = std::find_if(
+        m_aAllStyles.begin(), m_aAllStyles.end(),
+        [&sStyleId, &sStyleName](const StylePreviewDescriptor& element) {
+            return element.commonName == sStyleId && element.translatedName == sStyleName;
+        });
+    const SfxStyleFamily eFamily
+        = aStyle != m_aAllStyles.end() ? aStyle->eFamily : SfxStyleFamily::Para;
+    OString sBase64Png(GetCachedPreviewJson({ sStyleId, sStyleName, eFamily }, nDpiScale));
     if (sBase64Png.isEmpty())
         return false;
 
@@ -584,8 +636,13 @@ IMPL_LINK(StylesPreviewWindow_Base, GetPreviewImage, const weld::encoded_image_q
 Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& rStyle,
                                                   int nDpiScale)
 {
+    // Key by family too: a character and paragraph style can share a display
+    // name (or alias) but must not share a rendered preview.
+    const OUString aKey
+        = OUString::number(static_cast<sal_Int32>(rStyle.eFamily)) + ":" + rStyle.translatedName;
+
     auto& rDpiCache = StylePreviewCache::Get()[nDpiScale];
-    auto aFound = rDpiCache.find(rStyle.translatedName);
+    auto aFound = rDpiCache.find(aKey);
     if (aFound != rDpiCache.end())
         return aFound->second;
 
@@ -598,7 +655,7 @@ Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& 
     StyleItemController aStyleController(rStyle);
     aStyleController.Paint(*pImg);
     Bitmap aBitmap(pImg->GetBitmap(Point(0, 0), aSize));
-    rDpiCache[rStyle.translatedName] = aBitmap;
+    rDpiCache[aKey] = aBitmap;
 
     return aBitmap;
 }
@@ -606,14 +663,17 @@ Bitmap StylesPreviewWindow_Base::GetCachedPreview(const StylePreviewDescriptor& 
 OString StylesPreviewWindow_Base::GetCachedPreviewJson(const StylePreviewDescriptor& rStyle,
                                                        int nDpiScale)
 {
+    const OUString aKey
+        = OUString::number(static_cast<sal_Int32>(rStyle.eFamily)) + ":" + rStyle.translatedName;
+
     auto& rDpiJsonCache = StylePreviewCache::GetJson()[nDpiScale];
-    auto aJsonFound = rDpiJsonCache.find(rStyle.translatedName);
+    auto aJsonFound = rDpiJsonCache.find(aKey);
     if (aJsonFound != rDpiJsonCache.end())
         return aJsonFound->second;
 
     Bitmap aBitmap = GetCachedPreview(rStyle, nDpiScale);
     OString sResult = extractPngString(aBitmap);
-    rDpiJsonCache[rStyle.translatedName] = sResult;
+    rDpiJsonCache[aKey] = sResult;
     return sResult;
 }
 
@@ -695,66 +755,71 @@ OUString lcl_GetStyleAlias(const SfxStyleSheetBase& rStyle)
     return aAliases.empty() ? OUString() : aAliases.front();
 }
 
-inline void lcl_AppendParaStyle(StylePreviewList& rAllStyles, const OUString& rName,
-                                const OUString& rDisplayName)
+inline void lcl_AppendStyle(StylePreviewList& rAllStyles, const OUString& rName,
+                            const OUString& rDisplayName, SfxStyleFamily eFamily)
 {
-    const auto aFound = std::find_if(
-        rAllStyles.begin(), rAllStyles.end(), [&rName](const StylePreviewDescriptor& element) {
-            return element.commonName == rName || element.translatedName == rName;
-        });
+    const auto aFound = std::find_if(rAllStyles.begin(), rAllStyles.end(),
+                                     [&rName, eFamily](const StylePreviewDescriptor& element) {
+                                         return element.eFamily == eFamily
+                                                && (element.commonName == rName
+                                                    || element.translatedName == rName);
+                                     });
 
     if (aFound == rAllStyles.end())
-        rAllStyles.emplace_back<StylePreviewDescriptor>({ rName, rDisplayName });
+        rAllStyles.emplace_back<StylePreviewDescriptor>({ rName, rDisplayName, eFamily });
 }
 
-void lcl_AppendParaStyle(StylePreviewList& rAllStyles, const SfxStyleSheetBase& rStyle)
+void lcl_AppendStyle(StylePreviewList& rAllStyles, const SfxStyleSheetBase& rStyle,
+                     SfxStyleFamily eFamily)
 {
     const OUString aAlias = lcl_GetStyleAlias(rStyle);
-    lcl_AppendParaStyle(rAllStyles, rStyle.GetName(), aAlias.isEmpty() ? rStyle.GetName() : aAlias);
+    lcl_AppendStyle(rAllStyles, rStyle.GetName(), aAlias.isEmpty() ? rStyle.GetName() : aAlias,
+                    eFamily);
 }
 
-void lcl_AppendParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
-                          SfxStyleSearchBits eBits)
+void lcl_AppendStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
+                      SfxStyleFamily eFamily, SfxStyleSearchBits eBits)
 {
     if (!pPool)
         return;
 
-    auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, eBits);
+    auto xIter = pPool->CreateIterator(eFamily, eBits);
     for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
-        lcl_AppendParaStyle(rAllStyles, *pStyle);
+        lcl_AppendStyle(rAllStyles, *pStyle, eFamily);
 }
 
 // The "Recommended" set: flagged as favourites (qFormat), except semiHidden
-void lcl_AppendRecommendedParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool)
+void lcl_AppendRecommendedStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
+                                 SfxStyleFamily eFamily)
 {
     if (!pPool)
         return;
 
-    auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::Favourite);
+    auto xIter = pPool->CreateIterator(eFamily, SfxStyleSearchBits::Favourite);
     for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
         if (!pStyle->IsSemiHidden())
-            lcl_AppendParaStyle(rAllStyles, *pStyle);
+            lcl_AppendStyle(rAllStyles, *pStyle, eFamily);
 }
 
-void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
-                                  const StylePaneFormatFilter& rFilter)
+void lcl_AppendFilteredStyles(StylePreviewList& rAllStyles, SfxStyleSheetBasePool* pPool,
+                              const StylePaneFormatFilter& rFilter, SfxStyleFamily eFamily)
 {
     if (!pPool)
         return;
 
-    // "All styles" shows every visible paragraph style; the other categories
+    // "All styles" shows every visible style of the family; the other categories
     // are subsets of it, so there is nothing left to add.
     if (rFilter.bAllStyles)
     {
-        lcl_AppendParaStyles(rAllStyles, pPool, SfxStyleSearchBits::AllVisible);
+        lcl_AppendStyles(rAllStyles, pPool, eFamily, SfxStyleSearchBits::AllVisible);
         return;
     }
 
     // "Recommended" (visibleStyles) shows the recommended styles.
     if (rFilter.bVisibleStyles)
-        lcl_AppendRecommendedParaStyles(rAllStyles, pPool);
+        lcl_AppendRecommendedStyles(rAllStyles, pPool, eFamily);
 
-    auto xIter = pPool->CreateIterator(SfxStyleFamily::Para, SfxStyleSearchBits::AllVisible);
+    auto xIter = pPool->CreateIterator(eFamily, SfxStyleSearchBits::AllVisible);
     for (SfxStyleSheetBase* pStyle = xIter->First(); pStyle; pStyle = xIter->Next())
     {
         bool bInclude = false;
@@ -766,7 +831,7 @@ void lcl_AppendFilteredParaStyles(StylePreviewList& rAllStyles, SfxStyleSheetBas
             bInclude = true;
 
         if (bInclude)
-            lcl_AppendParaStyle(rAllStyles, *pStyle);
+            lcl_AppendStyle(rAllStyles, *pStyle, eFamily);
     }
 }
 }
@@ -792,7 +857,10 @@ StylePreviewList StylesPreviewWindow_Base::GetStyleList(SfxObjectShell* pDocShel
 
     StylePreviewList aAllStyles;
     if (pStyleSheetPool)
-        lcl_AppendFilteredParaStyles(aAllStyles, pStyleSheetPool, aFilter);
+    {
+        lcl_AppendFilteredStyles(aAllStyles, pStyleSheetPool, aFilter, SfxStyleFamily::Para);
+        lcl_AppendFilteredStyles(aAllStyles, pStyleSheetPool, aFilter, SfxStyleFamily::Char);
+    }
 
     // Documents without any recommended styles (for example freshly created or
     // ODF imported ones) fall back

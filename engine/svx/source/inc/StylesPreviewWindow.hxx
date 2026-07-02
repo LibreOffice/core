@@ -34,6 +34,7 @@ struct StylePreviewDescriptor
 {
     OUString commonName; // English: Heading 1
     OUString translatedName; //  German: Überschrift 1
+    SfxStyleFamily eFamily = SfxStyleFamily::Para; // which style family the entry belongs to
 };
 typedef std::vector<StylePreviewDescriptor> StylePreviewList;
 
@@ -139,7 +140,8 @@ public:
     /// alias as its display name.
     SVXCORE_DLLPUBLIC static StylePreviewList GetStyleList(SfxObjectShell* pDocShell,
                                                            const StylePreviewList& rDefaultStyles);
-    static Bitmap GetCachedPreview(const StylePreviewDescriptor& rStyle, int nDpiScale = 100);
+    SVXCORE_DLLPUBLIC static Bitmap GetCachedPreview(const StylePreviewDescriptor& rStyle,
+                                                     int nDpiScale = 100);
     static OString GetCachedPreviewJson(const StylePreviewDescriptor& rStyle, int nDpiScale = 100);
 
 private:
