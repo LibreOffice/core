@@ -121,6 +121,17 @@ static char* base_dir;
 static char* work_dir;
 static size_t work_dir_len;
 
+/* SRCDIR, BUILDDIR and WORKDIR with every backslash turned into a forward
+   slash. cl /sourceDependencies emits forward-slash-normalised include paths,
+   and these copies let a plain prefix compare decide whether an include lives
+   inside the build tree. build_dir may be NULL if BUILDDIR is not set. */
+static char* src_dir_fwd;
+static size_t src_dir_fwd_len;
+static char* build_dir_fwd;
+static size_t build_dir_fwd_len;
+static char* work_dir_fwd;
+static size_t work_dir_fwd_len;
+
 #ifdef __GNUC__
 #define clz __builtin_clz
 #else
@@ -865,25 +876,39 @@ static char * eat_space_at_end(char * end)
 }
 
 static char* phony_content_buffer;
+/* Write workdir/<rel> into dest and NUL-terminate it, where rel is the path
+   below workdir/Dep/, that is <Class>/<stem>.<ext>. Return a pointer to the
+   last dot in what was written, so the caller can replace the extension, or
+   NULL if there is none. */
+static char* object_target_from_relative(char* dest, const char* rel)
+{
+    char* d;
+    const char* s;
+    char* last_dot = NULL;
+
+    memcpy(dest, work_dir, work_dir_len);
+    d = dest + work_dir_len;
+    *d++ = '/';
+    for(s = rel; *s != 0; ++s, ++d)
+    {
+        *d = *s;
+        if(*d == '.')
+            last_dot = d;
+    }
+    *d = 0;
+    return last_dot;
+}
+
 static char* generate_phony_line(char const * phony_target, char const * extension)
 {
-    char const * src;
-    char* dest;
-    char* last_dot = NULL;
     //fprintf(stderr, "generate_phony_line called with phony_target %s and extension %s\n", phony_target, extension);
-    for(dest = phony_content_buffer+work_dir_len+1, src = phony_target; *src != 0; ++src, ++dest)
-    {
-        *dest = *src;
-        if(*dest == '.')
-        {
-            last_dot = dest;
-        }
-    }
+    char* last_dot = object_target_from_relative(phony_content_buffer, phony_target);
+    char* dest = last_dot + 1;
+    char const * src;
+
     //fprintf(stderr, "generate_phony_line after phony_target copy: %s\n", phony_content_buffer);
-    for(dest = last_dot+1, src = extension; *src != 0; ++src, ++dest)
-    {
+    for(src = extension; *src != 0; ++src, ++dest)
         *dest = *src;
-    }
     //fprintf(stderr, "generate_phony_line after extension add: %s\n", phony_content_buffer);
     strcpy(dest, ": $(gb_Helper_PHONY)\n");
     //fprintf(stderr, "generate_phony_line after phony add: %s\n", phony_content_buffer);
@@ -906,9 +931,318 @@ static int generate_phony_file(char* fn, char const * content)
     return !depfile;
 }
 
+/* Return a malloc'd copy of s with every backslash turned into a forward
+   slash, or NULL if s is NULL. */
+static char* dup_forward_slashes(const char* s)
+{
+    char* out;
+    char* p;
+    size_t n;
+
+    if (!s)
+        return NULL;
+    n = strlen(s);
+    out = (char*)malloc(n + 1);
+    if (out)
+    {
+        memcpy(out, s, n + 1);
+        for (p = out; *p; ++p)
+        {
+            if (*p == '\\')
+                *p = '/';
+        }
+    }
+    return out;
+}
+
+/* Decide whether a forward-slash include path lies inside the source tree, the
+   build tree or the work directory. System headers (for instance under Program
+   Files) live outside all three and are dropped, matching the allowlist that
+   filter-showIncludes.awk applies. On Windows PATHNCMP is case-insensitive, so
+   the lower-cased paths cl emits still match the mixed-case prefixes. */
+static int include_in_build_tree(const char* path, int len)
+{
+    if (src_dir_fwd_len && (size_t)len >= src_dir_fwd_len
+        && PATHNCMP(path, src_dir_fwd, src_dir_fwd_len) == 0)
+        return 1;
+    if (build_dir_fwd_len && (size_t)len >= build_dir_fwd_len
+        && PATHNCMP(path, build_dir_fwd, build_dir_fwd_len) == 0)
+        return 1;
+    if (work_dir_fwd_len && (size_t)len >= work_dir_fwd_len
+        && PATHNCMP(path, work_dir_fwd, work_dir_fwd_len) == 0)
+        return 1;
+    return 0;
+}
+
+/* Map a dependency fragment path workdir/Dep/<Class>/<stem>.d to the object it
+   describes, workdir/<Class>/<stem>.o. Returns a malloc'd string, or NULL if fn
+   is not under workdir/Dep. */
+static char* object_from_dep_path(const char* fn)
+{
+    const char* rel;
+    char* out;
+    char* dot;
+    size_t rel_len;
+
+    if (strncmp(fn, work_dir, work_dir_len) != 0
+        || strncmp(fn + work_dir_len, "/Dep/", 5) != 0)
+        return NULL;
+    rel = fn + work_dir_len + 5;
+    rel_len = strlen(rel);
+    out = (char*)malloc(work_dir_len + 1 + rel_len + 2);
+    if (!out)
+        return NULL;
+    dot = object_target_from_relative(out, rel);
+    if (dot)
+        strcpy(dot, ".o");
+    return out;
+}
+
+static const char* json_skip_ws(const char* p, const char* end)
+{
+    while (p < end && (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r'))
+        ++p;
+    return p;
+}
+
+/* Copy the JSON string that begins at the opening quote *pp into buf (capacity
+   cap), undoing JSON escaping and turning backslashes into forward slashes.
+   NUL-terminates buf and advances *pp past the closing quote. Returns the
+   length written, or -1 if the string is malformed or does not fit. */
+static int json_read_string(const char** pp, const char* end, char* buf, int cap)
+{
+    const char* p = *pp;
+    int n = 0;
+
+    if (p >= end || *p != '"')
+        return -1;
+    ++p;
+    while (p < end && *p != '"')
+    {
+        char c = *p++;
+        if (c == '\\' && p < end)
+        {
+            char e = *p++;
+            switch (e)
+            {
+                case 'n': c = '\n'; break;
+                case 't': c = '\t'; break;
+                case 'r': c = '\r'; break;
+                case 'b': c = '\b'; break;
+                case 'f': c = '\f'; break;
+                case 'u':
+                    /* cl does not put \u escapes in paths. Skip the four hex
+                       digits so the rest of the string stays in step. */
+                    if (p + 4 <= end)
+                        p += 4;
+                    continue;
+                default:  c = e; break; /* covers \\ \" \/ */
+            }
+        }
+        if (c == '\\')
+            c = '/';
+        if (n + 1 >= cap)
+            return -1;
+        buf[n++] = c;
+    }
+    if (p >= end)
+        return -1;
+    ++p;
+    buf[n] = 0;
+    *pp = p;
+    return n;
+}
+
+/* Append path to w, escaping every space with a backslash so make treats the
+   path as a single prerequisite. Returns the new write cursor. */
+static char* emit_path_escaped(char* w, const char* path)
+{
+    const char* s;
+
+    for (s = path; *s; ++s)
+    {
+        if (*s == ' ')
+            *w++ = '\\';
+        *w++ = *s;
+    }
+    return w;
+}
+
+/* Include paths are read into a fixed stack buffer of this size. It is assumed
+   larger than any real path. One that does not fit makes the conversion fail
+   and the build stop, rather than writing a dependency file that is missing
+   headers. */
+#define INCLUDE_PATH_MAX 8192
+
+/* Walk the "Includes" array in json once. For every header inside the build
+   tree, write its make-escaped path into the buffer at *pw, terminate it with a
+   NUL, and advance *pw past it. Return the number of paths written, or -1 if
+   the JSON is malformed or an include path does not fit. */
+static int collect_includes(const char* json, const char* end, char** pw)
+{
+    const char* p = strstr(json, "\"Includes\"");
+    char* w = *pw;
+    char path[INCLUDE_PATH_MAX];
+    int len;
+    int count = 0;
+
+    if (!p)
+        return 0;
+    p += 10;
+    p = json_skip_ws(p, end);
+    if (p >= end || *p != ':')
+        return -1;
+    ++p;
+    p = json_skip_ws(p, end);
+    if (p >= end || *p != '[')
+        return -1;
+    ++p;
+    for (;;)
+    {
+        p = json_skip_ws(p, end);
+        if (p >= end || *p != '"')
+            break;
+        len = json_read_string(&p, end, path, sizeof(path));
+        if (len < 0)
+            return -1;
+        if (len > 0 && include_in_build_tree(path, len))
+        {
+            w = emit_path_escaped(w, path);
+            *w++ = 0;
+            ++count;
+        }
+        p = json_skip_ws(p, end);
+        if (p < end && *p == ',')
+            ++p;
+    }
+    *pw = w;
+    return count;
+}
+
+/* Worst-case growth of the generated make text over the JSON input. Each
+   include path can appear both as a prerequisite and as its own no-dependency
+   rule, and every space in a path becomes two bytes, so budget seven output
+   bytes per input byte plus room for the object line. */
+#define DEP_OUTPUT_GROWTH 7
+/* The scratch buffer holds each escaped include path only once, so it needs
+   only the space-doubling and a NUL after each path. */
+#define DEP_SCRATCH_GROWTH 3
+
+/* Turn a cl /sourceDependencies JSON fragment into the make-syntax dependency
+   text that filter-showIncludes.awk used to produce, so the rest of process()
+   can treat it exactly like a classic .d file. Returns a malloc'd,
+   NUL-terminated buffer and sets *out_size, or NULL on failure. */
+static char* convert_source_deps_json(const char* json, off_t json_size,
+                                      const char* fn, off_t* out_size)
+{
+    const char* end = json + json_size;
+    const char* p;
+    const char* s;
+    char* object;
+    char* out;
+    char* w;
+    char* scratch;
+    char* sw;
+    size_t cap;
+    char path[INCLUDE_PATH_MAX];
+    int len;
+    int n;
+    int i;
+
+    object = object_from_dep_path(fn);
+    if (!object)
+        return NULL;
+
+    cap = (size_t)json_size * DEP_OUTPUT_GROWTH + strlen(object) * 2 + 4096;
+    out = (char*)malloc(cap);
+    if (!out)
+    {
+        free(object);
+        return NULL;
+    }
+    w = out;
+
+    /* target line: "<object> : \" */
+    w = emit_path_escaped(w, object);
+    free(object);
+    *w++ = ' '; *w++ = ':'; *w++ = ' '; *w++ = '\\'; *w++ = '\n';
+
+    /* source as the first prerequisite */
+    p = strstr(json, "\"Source\"");
+    if (p)
+    {
+        p += 8;
+        p = json_skip_ws(p, end);
+        if (p < end && *p == ':')
+        {
+            ++p;
+            p = json_skip_ws(p, end);
+            len = json_read_string(&p, end, path, sizeof(path));
+            if (len < 0)
+            {
+                free(out);
+                return NULL;
+            }
+            if (len > 0)
+            {
+                *w++ = ' ';
+                w = emit_path_escaped(w, path);
+                *w++ = ' '; *w++ = '\\'; *w++ = '\n';
+            }
+        }
+    }
+
+    /* Each in-tree header appears twice: once as a prerequisite of the object
+       and once as its own no-dependency rule (fdo#40099, so a deleted header
+       does not stop make). Collect them once into scratch, escaped and
+       NUL-separated, then write both sections from that instead of walking the
+       JSON twice. */
+    scratch = (char*)malloc((size_t)json_size * DEP_SCRATCH_GROWTH + 64);
+    if (!scratch)
+    {
+        free(out);
+        return NULL;
+    }
+    sw = scratch;
+    n = collect_includes(json, end, &sw);
+    if (n < 0)
+    {
+        free(scratch);
+        free(out);
+        return NULL;
+    }
+
+    /* the rest of the prerequisites, one " <header> \" continuation line each */
+    s = scratch;
+    for (i = 0; i < n; ++i)
+    {
+        *w++ = ' ';
+        while (*s)
+            *w++ = *s++;
+        ++s;
+        *w++ = ' '; *w++ = '\\'; *w++ = '\n';
+    }
+
+    /* a blank line ends the object's rule, then a "<header> :" rule per header */
+    *w++ = '\n';
+    s = scratch;
+    for (i = 0; i < n; ++i)
+    {
+        while (*s)
+            *w++ = *s++;
+        ++s;
+        *w++ = ' '; *w++ = ':'; *w++ = '\n';
+    }
+    free(scratch);
+
+    *w = 0;
+    *out_size = (off_t)(w - out);
+    return out;
+}
+
 static int process(struct hash* dep_hash, char* fn)
 {
-    int rc;
+    int rc = 1;
     char* buffer;
     char* end;
     char* cursor;
@@ -918,11 +1252,62 @@ static int process(struct hash* dep_hash, char* fn)
     char* src_relative;
     int continuation = 0;
     char last_ns = 0;
-    off_t size;
+    off_t size = 0;
 
-    buffer = file_load(fn, &size, &rc);
+    /* cl /sourceDependencies writes the include list as JSON to a file named
+       like the dep-file with an extra .json suffix, and leaves the dep-file
+       alone. Read that JSON when it is there. An older concat-deps opens only
+       the dep-file, never the JSON, so an old and a new build can share one
+       build directory. */
+    int is_json = 0;
+    buffer = NULL;
+    {
+        size_t fn_len = strlen(fn);
+        char* json_name = (char*)malloc(fn_len + sizeof(".json"));
+        if (json_name)
+        {
+            memcpy(json_name, fn, fn_len);
+            memcpy(json_name + fn_len, ".json", sizeof(".json"));
+            buffer = file_load(json_name, &size, &rc);
+            free(json_name);
+            if (!rc)
+                is_json = 1;
+        }
+    }
+    if (!is_json)
+        buffer = file_load(fn, &size, &rc);
     if(!rc)
     {
+        /* The first version of the /sourceDependencies path wrote the JSON into
+           the dep-file itself, so a leading '{' in the dep-file is read as JSON
+           too. A classic .d always starts with a path. */
+        if (!is_json)
+        {
+            const char* probe = buffer;
+            while (*probe == ' ' || *probe == '\t' || *probe == '\n' || *probe == '\r')
+                ++probe;
+            is_json = (*probe == '{');
+        }
+        if (is_json)
+        {
+            off_t converted_size = 0;
+            char* converted = convert_source_deps_json(buffer, size, fn, &converted_size);
+            if (!converted)
+            {
+                fprintf(stderr, "concat-deps: could not convert JSON dependencies in %s\n", fn);
+                return 1;
+            }
+            buffer = converted;
+            size = converted_size;
+#if !ENABLE_RUNTIME_OPTIMIZATIONS
+            /* hash_store keeps pointers into this buffer as keys, so it must
+               live until the end of main. Add it to the file_load buffers,
+               which are all freed there. */
+            if (file_load_buffer_count != 100000)
+                file_load_buffers[file_load_buffer_count++] = converted;
+#endif
+        }
+
         base = cursor_out = cursor = end = buffer;
         end += size;
 
@@ -1174,10 +1559,18 @@ int main(int argc, char** argv)
     if(get_var(&base_dir, "SRCDIR") || get_var(&work_dir, "WORKDIR"))
         return 1;
     work_dir_len = strlen(work_dir);
+
+    /* BUILDDIR is optional here. It only helps keep cl /sourceDependencies deps
+       trimmed to the build tree. The forward-slash copies feed the include
+       allowlist. */
+    build_dir_fwd = dup_forward_slashes(getenv("BUILDDIR"));
+    build_dir_fwd_len = build_dir_fwd ? strlen(build_dir_fwd) : 0;
+    src_dir_fwd = dup_forward_slashes(base_dir);
+    src_dir_fwd_len = src_dir_fwd ? strlen(src_dir_fwd) : 0;
+    work_dir_fwd = dup_forward_slashes(work_dir);
+    work_dir_fwd_len = work_dir_fwd ? strlen(work_dir_fwd) : 0;
     phony_content_buffer = (char*)malloc(PHONY_TARGET_BUFFER);
     assert(phony_content_buffer); // Don't handle OOM conditions
-    strcpy(phony_content_buffer, work_dir);
-    phony_content_buffer[work_dir_len] = '/';
 
     env_str = getenv("SYSTEM_BOOST");
     internal_boost = !env_str || strcmp(env_str,"TRUE");

@@ -60,6 +60,13 @@ define gb_CObject__filter_out_clang_cflags
     $(filter-out $(gb_FilterOutClangCFLAGS),$(1))
 endef
 
+# MSVC cl writes the dependency list itself with /sourceDependencies, as JSON.
+# It goes to a file named like the dep-file with an extra .json suffix, and
+# concat-deps reads that. Writing to the sibling name rather than to the dep-file
+# means an older concat-deps, which reads only the dep-file and does not know the
+# JSON, keeps working when an old and a new build share one build directory.
+# clang-cl has no /sourceDependencies, so it writes the deps by piping
+# -showIncludes through filter-showIncludes.awk.
 # $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins,compiler)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
@@ -81,14 +88,14 @@ $(call gb_Helper_abbreviate_dirs,\
 			$(if $(filter -clr,$(2)),,$(if $(5),$(gb_COMPILER_PLUGINS))) \
 			$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
 			$(PCHFLAGS) \
-			$(if $(COMPILER_TEST),,$(gb_COMPILERDEPFLAGS)) \
+			$(if $(COMPILER_TEST),,$(if $(COM_IS_CLANG),$(gb_COMPILERDEPFLAGS),/sourceDependencies $(4).json)) \
 			$(if $(filter YES,$(LIBRARY_X64)), -U_X86_ -D_AMD64_,) \
 			$(if $(filter YES,$(PE_X86)), -D_X86_ -U_AMD64_,)) \
 		$(INCLUDE) \
 		-Fd$(PDBFILE) \
 		-c $(3) \
 		-Fo$(1)) \
-		$(if $(COMPILER_TEST),,$(call gb_create_deps,$(4),$(1),$(3)))
+		$(if $(COMPILER_TEST),,$(if $(COM_IS_CLANG),$(call gb_create_deps,$(4),$(1),$(3))))
 endef
 
 # PrecompiledHeader class
