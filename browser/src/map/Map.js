@@ -639,8 +639,7 @@ window.L.Map = window.L.Evented.extend({
 			}
 		}
 
-		const viewBounds = this.getPixelBoundsCore();
-		return docLayer._corePixelsToTwips(viewBounds.getCenter());
+		return new cool.Point(...app.activeDocument.activeLayout.viewedRectangle.center);
 	},
 
 	setDesktopCalcViewOnZoom: function (zoom, animate) {

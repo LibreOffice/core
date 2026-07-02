@@ -61,11 +61,18 @@ window.L.TileSectionManager = window.L.Class.extend({
 		var layout = app.activeDocument && app.activeDocument.activeLayout;
 		var viewBounds;
 		if (layout && layout.type === 'ViewLayoutCalc') {
-			var r = layout.viewedRectangle;
-			viewBounds = new cool.Bounds(
-				new cool.Point(r.pX1, r.pY1),
-				new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
-			);
+			if (this._inZoomAnim && this._zoomStartViewBounds) {
+				// During a zoom the viewed rectangle is driven to intermediate
+				// frame values; anchor the frame and final-center computation to
+				// the gesture's starting bounds instead.
+				viewBounds = this._zoomStartViewBounds;
+			} else {
+				var r = layout.viewedRectangle;
+				viewBounds = new cool.Bounds(
+					new cool.Point(r.pX1, r.pY1),
+					new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight),
+				);
+			}
 		} else {
 			viewBounds = this._map.getPixelBoundsCore();
 		}
@@ -4314,6 +4321,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	preZoomAnimation: function (pinchStartCenter) {
 		this._pinchStartCenter = this._map.project(pinchStartCenter).multiplyBy(app.dpiScale); // in core pixels
 		this._painter._offset = new cool.Point(0, 0);
+		// The viewport bounds at the start of the gesture. Zoom frames drive the
+		// viewed rectangle to intermediate values, so the final-center
+		// computation reads this stable snapshot instead of the live bounds.
+		this._painter._zoomStartViewBounds =
+			app.activeDocument.activeLayout.type === 'ViewLayoutCalc'
+				? this._painter._paintContext().viewBounds
+				: null;
 		// Snapshot the starting scale. Each zoom frame drives app.twipsToPixels
 		// to base * _zoomFrameScale (see TilesSection.drawZoomFrame) so vector
 		// document sections scale in lockstep with the tiles.

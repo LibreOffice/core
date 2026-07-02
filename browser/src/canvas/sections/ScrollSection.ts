@@ -209,14 +209,18 @@ export class ScrollSection extends CanvasSectionObject {
 		var vx = 0;
 		var vy = 0;
 
+		const isCalc = app.activeDocument.activeLayout.type === 'ViewLayoutCalc';
+		const topLeftX = isCalc ? app.activeDocument.activeLayout.viewedRectangle.cX1 : e.map._getTopLeftPoint().x;
+		const topLeftY = isCalc ? app.activeDocument.activeLayout.viewedRectangle.cY1 : e.map._getTopLeftPoint().y;
+
 		if (e.pos.y > e.map._size.y - 50) {
 			vy = 50;
-		} else if (e.pos.y < 50 && e.map._getTopLeftPoint().y > 50) {
+		} else if (e.pos.y < 50 && topLeftY > 50) {
 			vy = -50;
 		}
 
 		const mousePosX: number = this.isRTL() ? e.map._size.x - e.pos.x : e.pos.x;
-		const mapLeft: number = this.isRTL() ? e.map._size.x - e.map._getTopLeftPoint().x : e.map._getTopLeftPoint().x;
+		const mapLeft: number = this.isRTL() ? e.map._size.x - topLeftX : topLeftX;
 		if (mousePosX > e.map._size.x - 50) {
 			vx = 50;
 		} else if (mousePosX < 50 && mapLeft > 50) {

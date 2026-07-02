@@ -242,7 +242,8 @@ export class SplitPanesContext {
 	// returns all the pane rectangles for the provided full-map area (all in core pixels).
 	public getPxBoundList(pxBounds?: Bounds): Bounds[] {
 		if (!pxBounds) {
-			pxBounds = this._map.getPixelBoundsCore() as Bounds;
+			const vr = app.activeDocument.activeLayout.viewedRectangle;
+			pxBounds = new Bounds(new Point(vr.pX1, vr.pY1), new Point(vr.pX1 + vr.pWidth, vr.pY1 + vr.pHeight));
 		}
 		var topLeft = pxBounds.getTopLeft();
 		var bottomRight = pxBounds.getBottomRight();
@@ -290,7 +291,8 @@ export class SplitPanesContext {
 	}
 
 	public intersectsVisible(areaPx: Bounds): boolean {
-		var pixBounds = this._map.getPixelBoundsCore() as Bounds;
+		const vr = app.activeDocument.activeLayout.viewedRectangle;
+		var pixBounds = new Bounds(new Point(vr.pX1, vr.pY1), new Point(vr.pX1 + vr.pWidth, vr.pY1 + vr.pHeight));
 		var boundList = this.getPxBoundList(pixBounds);
 		for (var i = 0; i < boundList.length; ++i) {
 			if (areaPx.intersects(boundList[i])) {
