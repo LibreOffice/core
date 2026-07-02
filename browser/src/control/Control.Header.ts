@@ -429,7 +429,8 @@ export class Header extends CanvasSectionObject {
 	}
 
 	_updateColumnHeader(): void {
-		this._map._docLayer.refreshViewData({x: this._map._getTopLeftPoint().x, y: 0, offset: {x: undefined, y: 0}});
+		Util.ensureValue(app.activeDocument);
+		this._map._docLayer.refreshViewData({x: app.activeDocument.activeLayout.viewedRectangle.cX1, y: 0, offset: {x: undefined, y: 0}});
 	}
 
 	_colIndexToAlpha (columnNumber: number): string {

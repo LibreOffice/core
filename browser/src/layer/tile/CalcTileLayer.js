@@ -117,13 +117,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 	_onMessage: function (textMsg, img) {
 		if (textMsg.startsWith('invalidateheader: column')) {
-			this.refreshViewData({x: this._map._getTopLeftPoint().x, y: 0,
+			this.refreshViewData({x: app.activeDocument.activeLayout.viewedRectangle.cX1, y: 0,
 				offset: {x: undefined, y: 0}}, true /* compatDataSrcOnly */);
 		} else if (textMsg.startsWith('invalidateheader: row')) {
-			this.refreshViewData({x: 0, y: this._map._getTopLeftPoint().y,
+			this.refreshViewData({x: 0, y: app.activeDocument.activeLayout.viewedRectangle.cY1,
 				offset: {x: 0, y: undefined}}, true /* compatDataSrcOnly */);
 		} else if (textMsg.startsWith('invalidateheader: all')) {
-			this.refreshViewData({x: this._map._getTopLeftPoint().x, y: this._map._getTopLeftPoint().y,
+			this.refreshViewData({x: app.activeDocument.activeLayout.viewedRectangle.cX1, y: app.activeDocument.activeLayout.viewedRectangle.cY1,
 				offset: {x: undefined, y: undefined}}, true /* compatDataSrcOnly */);
 		} else if (this.options.sheetGeometryDataEnabled &&
 				textMsg.startsWith('invalidatesheetgeometry:')) {
@@ -207,8 +207,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		var isCalcRTL = this._map._docLayer.isCalcRTL();
 		lastCellPixel = isCalcRTL ? lastCellPixel.getBottomRight() : lastCellPixel.getBottomLeft();
 		var lastCellTwips = this._corePixelsToTwips(lastCellPixel);
-		var mapSizeTwips = this._pixelsToTwips(this._map.getSize());
-		var mapPosTwips = this._pixelsToTwips(this._map._getTopLeftPoint());
+		var mapSizeTwips = new cool.Point(app.activeDocument.activeLayout.viewedRectangle.width, app.activeDocument.activeLayout.viewedRectangle.height);
+		var mapPosTwips = new cool.Point(app.activeDocument.activeLayout.viewedRectangle.x1, app.activeDocument.activeLayout.viewedRectangle.y1);
 
 		// margin outside data area we allow to scroll
 		// has to be bigger on mobile to allow scroll
@@ -595,10 +595,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		var sizePx = this._map.getSize();
 
 		if (topLeftPoint.x === undefined) {
-			topLeftPoint.x = this._map._getTopLeftPoint().x;
+			topLeftPoint.x = app.activeDocument.activeLayout.viewedRectangle.cX1;
 		}
 		if (topLeftPoint.y === undefined) {
-			topLeftPoint.y = this._map._getTopLeftPoint().y;
+			topLeftPoint.y = app.activeDocument.activeLayout.viewedRectangle.cY1;
 		}
 
 		var updateRows = true;
@@ -844,8 +844,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		let autoFilterAnchorRow = -1;
 		if (this.sheetGeometry && this.sheetGeometry.autoFilterChanged) {
 			this.sheetGeometry.setViewArea(
-				this._pixelsToTwips(this._map._getTopLeftPoint()),
-				this._pixelsToTwips(this._map.getSize()));
+				new cool.Point(app.activeDocument.activeLayout.viewedRectangle.x1, app.activeDocument.activeLayout.viewedRectangle.y1),
+				new cool.Point(app.activeDocument.activeLayout.viewedRectangle.width, app.activeDocument.activeLayout.viewedRectangle.height));
 			autoFilterAnchorRow = this.sheetGeometry.getViewRowRange().start;
 		}
 
@@ -870,13 +870,13 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			const targetData = this.sheetGeometry.getRowsGeometry().getElementData(autoFilterAnchorRow);
 			if (targetData) {
 				app.activeDocument.activeLayout.scrollTo(
-					this._map._getTopLeftPoint().x,
+					app.activeDocument.activeLayout.viewedRectangle.pX1,
 					targetData.startpos);
 			}
 		} else {
 			this.sheetGeometry.setViewArea(
-				this._pixelsToTwips(this._map._getTopLeftPoint()),
-				this._pixelsToTwips(this._map.getSize()));
+				new cool.Point(app.activeDocument.activeLayout.viewedRectangle.x1, app.activeDocument.activeLayout.viewedRectangle.y1),
+				new cool.Point(app.activeDocument.activeLayout.viewedRectangle.width, app.activeDocument.activeLayout.viewedRectangle.height));
 		}
 
 		this._addRemoveGroupSections();

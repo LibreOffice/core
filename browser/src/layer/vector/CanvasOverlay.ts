@@ -297,6 +297,11 @@ class CanvasOverlay extends CanvasSectionObject {
 	}
 
 	private updateCanvasBounds() {
+		if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+			const r = app.activeDocument.activeLayout.viewedRectangle;
+			this.bounds = new cool.Bounds(new cool.Point(r.pX1, r.pY1), new cool.Point(r.pX1 + r.pWidth, r.pY1 + r.pHeight));
+			return;
+		}
 		var viewBounds: any = this.map.getPixelBoundsCore();
 		this.bounds = new cool.Bounds(new cool.Point(viewBounds.min.x, viewBounds.min.y), new cool.Point(viewBounds.max.x, viewBounds.max.y));
 	}
