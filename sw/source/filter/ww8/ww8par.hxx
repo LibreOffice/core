@@ -1120,6 +1120,7 @@ private:
 friend class WW8RStyle;
 friend class WW8TabDesc;
 friend class WW8ReaderSave;
+friend class WW8LastAnchorPosSaver;
 friend struct WW8FlyPara;
 friend struct WW8SwFlyPara;
 friend class WW8FlySet;
@@ -1958,6 +1959,17 @@ public:     // really private, but can only be done public
     void PostProcessAttrs();
     void ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocShell, struct HyperLinksTable& hlStr);
     void NotifyMacroEventRead();
+};
+
+// Hold m_oLastAnchorPos in an SwUnoCursor across an operation that may delete
+// the nodes it points into, and restore it when this goes out of scope.
+class WW8LastAnchorPosSaver
+{
+    SwWW8ImplReader& m_rReader;
+    std::shared_ptr<SwUnoCursor> m_xLastAnchorCursor;
+public:
+    WW8LastAnchorPosSaver(SwWW8ImplReader& rReader);
+    ~WW8LastAnchorPosSaver();
 };
 
 bool CanUseRemoteLink(const OUString &rGrfName);
