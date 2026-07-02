@@ -1215,6 +1215,8 @@ void AdminModel::doRemove(std::map<std::string, AdminDocument>::iterator& docIt)
 
     // Serialize the history of the expired document.
     _expiredDocumentsHistories.emplace_back(docIt->second.getHistory());
+    if (_expiredDocumentsHistories.size() > 1024)
+        _expiredDocumentsHistories.erase(_expiredDocumentsHistories.begin());
 
     // We have no need for the document anymore.
     _documents.erase(docIt);
