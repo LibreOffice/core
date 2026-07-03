@@ -34,7 +34,6 @@ class CODAWebEngineView : public QWebEngineView
 public:
     CODAWebEngineView(QMainWindow* parent)
         : QWebEngineView(parent)
-        , _mainWindow(parent)
         , _presentationView(nullptr)
         , _presenterConsole(nullptr)
     {
@@ -60,7 +59,6 @@ private:
 
     void claimChildWindow(WebView* child, const QUrl& url);
 
-    QMainWindow* _mainWindow;
     // Given the general inability of wayland based environments
     // to restore a window's position, especially after moving
     // it to another monitor full-screen, the slideshow and the
