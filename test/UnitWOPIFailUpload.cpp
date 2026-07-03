@@ -39,7 +39,6 @@ class UnitWOPIFailUpload : public WOPIUploadConflictCommon
     using Base::OriginalDocContent;
 
     bool _unloadingModifiedDocDetected;
-    bool _putFailed;
 
     static constexpr std::size_t LimitStoreFailures = 2;
     static constexpr bool SaveOnExit = true;
@@ -95,7 +94,6 @@ public:
     UnitWOPIFailUpload()
         : Base("UnitWOPIFailUpload", OriginalDocContent)
         , _unloadingModifiedDocDetected(true)
-        , _putFailed(false)
     {
     }
 
@@ -110,9 +108,6 @@ public:
 
     void onDocBrokerCreate(const std::string& docKey) override
     {
-        // reset for the next document
-        _putFailed = false;
-
         Base::onDocBrokerCreate(docKey);
 
         if (_scenario == Scenario::VerifyOverwrite)
@@ -155,10 +150,11 @@ public:
         const std::string wopiTimestamp = request.get("X-COOL-WOPI-Timestamp", std::string());
         const bool force = wopiTimestamp.empty(); // Without a timestamp we force to always store.
 
-        // We don't expect overwriting by forced uploading.
-        LOK_ASSERT_EQUAL_MESSAGE("Unexpected overwritting the document in storage", _putFailed, force);
+        // We don't expect overwriting by forced uploading. Every upload here,
+        // including the retry after a failure and the always_save_on_exit one,
+        // carries a timestamp so storage can reject a clobber.
+        LOK_ASSERT_EQUAL_MESSAGE("Unexpected overwritting the document in storage", false, force);
 
-        _putFailed = true;
         // Internal Server Error.
         return std::make_unique<http::Response>(http::StatusCode::InternalServerError);
     }
