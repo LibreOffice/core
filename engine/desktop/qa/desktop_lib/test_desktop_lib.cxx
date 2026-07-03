@@ -198,6 +198,7 @@ public:
     void testCommentsCalc();
     void testCommentsImpress();
     void testCommentsImpressCrossDocument();
+    void testDocSizeChangedCrossDocument();
     void testCommentsCallbacksWriter();
     void testCommentsAddEditDeleteDraw();
     void testCommentsInReadOnlyMode();
@@ -284,6 +285,7 @@ public:
     CPPUNIT_TEST(testCommentsCalc);
     CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST(testCommentsImpressCrossDocument);
+    CPPUNIT_TEST(testDocSizeChangedCrossDocument);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
     CPPUNIT_TEST(testCommentsInReadOnlyMode);
@@ -2276,6 +2278,7 @@ public:
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
     int m_nComments = 0;
+    int m_nDocSizeChanged = 0;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
     std::string m_searchTerm;
@@ -2339,6 +2342,10 @@ public:
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
+        case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
+        {
+            ++m_nDocSizeChanged;
+        }
         break;
         case KIT_CALLBACK_CELL_FORMULA:
         {
@@ -2830,6 +2837,44 @@ void DesktopKitTest::testCommentsImpressCrossDocument()
     CPPUNIT_ASSERT_EQUAL(0, aView2.m_nComments);
 
     comphelper::COKit::setTiledAnnotations(true);
+}
+
+void DesktopKitTest::testDocSizeChangedCrossDocument()
+{
+    // Two spreadsheets open in one process, both showing the first sheet.
+    // The two files differ so that the desktop keeps two separate views
+    // instead of reusing one for the same file.
+    std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("empty.ods");
+    pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
+    int nView1 = pDocument1->m_pDocumentClass->getView(pDocument1.get());
+    ViewCallback aView1(pDocument1.get());
+
+    std::unique_ptr<LibLODocument_Impl> pDocument2 = loadDocImpl("search.ods");
+    pDocument2->m_pDocumentClass->initializeForRendering(pDocument2.get(), "{}");
+    ViewCallback aView2(pDocument2.get());
+
+    Scheduler::ProcessEventsToIdle();
+    aView1.m_nDocSizeChanged = 0;
+    aView2.m_nDocSizeChanged = 0;
+
+    // Change a column width in the first spreadsheet. This repaints the column
+    // headers, so the first spreadsheet is told its size changed. Both
+    // spreadsheets show the same sheet number, so a broadcast that matches only
+    // on the sheet without checking the owning document would reach the second
+    // spreadsheet too.
+    pDocument1->m_pDocumentClass->setView(pDocument1.get(), nView1);
+    pDocument1->m_pDocumentClass->postUnoCommand(
+        pDocument1.get(),
+        ".uno:ColumnWidth",
+        "{ \"ColumnWidth\": { \"type\": \"unsigned short\", \"value\": \"4000\" },"
+        " \"Column\": { \"type\": \"unsigned short\", \"value\": \"3\" } }",
+        false);
+    Scheduler::ProcessEventsToIdle();
+
+    // The spreadsheet whose column changed is told its size changed; the other
+    // never is.
+    CPPUNIT_ASSERT(aView1.m_nDocSizeChanged > 0);
+    CPPUNIT_ASSERT_EQUAL(0, aView2.m_nDocSizeChanged);
 }
 
 void DesktopKitTest::testCommentsCallbacksWriter()

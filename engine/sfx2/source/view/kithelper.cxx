@@ -19,6 +19,7 @@
 #include <sfx2/kit/unocommandlist.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
@@ -34,6 +35,7 @@
 #include <vcl/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/ITiledRenderable.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
 #include <sfx2/app.hxx>
@@ -41,6 +43,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/msg.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -102,6 +105,18 @@ bool g_isDefaultTimezoneSet = false;
 OUString g_DefaultTimezone;
 const std::size_t g_logNotifierCacheMaxSize = 50;
 ::std::list<::std::string> g_logNotifierCache;
+
+// Returns the tiled-rendering document a view belongs to, or null when the
+// view has no object shell or its model is not a tiled-rendering document.
+// In CODA one process holds several documents, so a view's document cannot
+// be assumed and has to be read from the view itself.
+const vcl::ITiledRenderable* lcl_getDocForView(SfxViewShell* pViewShell)
+{
+    SfxObjectShell* pObjectShell = pViewShell->GetObjectShell();
+    if (!pObjectShell)
+        return nullptr;
+    return dynamic_cast<const vcl::ITiledRenderable*>(pObjectShell->GetModel().get());
+}
 }
 
 #if !defined NDEBUG
@@ -781,18 +796,14 @@ void KitHelper::notifyDocumentSizeChangedAllViews(vcl::ITiledRenderable* pDoc, b
     if (DisableCallbacks::disabled())
         return;
 
-    // FIXME: Do we know whether it is the views for the document that is in the "current" view that has changed?
-    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
+    // The size change belongs to a single document, so notify only its views.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        // FIXME: What if SfxViewShell::Current() returned null?
-        // Should we then do this for all views of all open documents
-        // or not?
-        if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell-> GetDocId())
+        if (lcl_getDocForView(pViewShell) == pDoc)
         {
             KitHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, bInvalidateAll);
-            bInvalidateAll = false; // we direct invalidations to all views anyway.
+            bInvalidateAll = false; // Invalidations already go to all views.
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
@@ -803,11 +814,11 @@ void KitHelper::notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable
     if (!pDoc || pDoc->isDisposed() || DisableCallbacks::disabled())
         return;
 
-    const SfxViewShell* const pCurrentViewShell = SfxViewShell::Current();
+    // The page resize belongs to a single document, so notify only its views.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pCurrentViewShell == nullptr || pViewShell->GetDocId() == pCurrentViewShell->GetDocId())
+        if (lcl_getDocForView(pViewShell) == pDoc)
         {
             OString aPayload = ".uno:CurrentPageResize"_ostr;
             pViewShell->viewCallback(KIT_CALLBACK_STATE_CHANGED, aPayload);
@@ -821,11 +832,12 @@ void KitHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int n
     if (DisableCallbacks::disabled())
         return;
 
+    // The part-size change belongs to a single document. Part indices are
+    // per-document, so match the owning document as well as the part.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (// FIXME should really filter on pViewShell->GetDocId() too
-            pViewShell->getPart() == nPart)
+        if (lcl_getDocForView(pViewShell) == pDoc && pViewShell->getPart() == nPart)
             KitHelper::notifyDocumentSizeChanged(pViewShell, ""_ostr, pDoc, false);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
