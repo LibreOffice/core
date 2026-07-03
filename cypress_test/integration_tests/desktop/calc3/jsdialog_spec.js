@@ -455,4 +455,59 @@ describe(['tagdesktop'], 'JSDialog unit test', function() {
 			expect(dialog.dialogs['testpopup'], 'entry dropped at once').to.be.undefined;
 		});
 	});
+
+	// A popup that names a close element inside its parent must be positioned
+	// against that element, not against the whole parent. The popup takes the
+	// close element's width and left edge, so a narrow button inside a wide
+	// toolbox anchors the popup to the button.
+	it('Popup anchors to its close element, not the whole parent', function() {
+		cy.getFrameWindow().then(function(win) {
+			var doc = win.document;
+			// a wide parent with a narrow close button offset inside it, both
+			// absolutely placed so their screen rectangles are known
+			var toolbox = doc.createElement('div');
+			toolbox.id = 'anchortoolbox';
+			toolbox.style.cssText = 'position:absolute; left:100px; top:120px; width:400px; height:40px; box-sizing:border-box; padding:0; border:0;';
+			var button = doc.createElement('div');
+			button.id = 'anchorclosebtn';
+			button.style.cssText = 'position:absolute; left:260px; top:120px; width:60px; height:40px; box-sizing:border-box; padding:0; border:0;';
+			toolbox.appendChild(button);
+			doc.body.appendChild(toolbox);
+
+			win.app.map.jsdialog.onJSDialog({data: {
+				id: 'anchorpopup',
+				jsontype: 'dialog',
+				type: 'modalpopup',
+				popupParent: 'anchortoolbox',
+				clickToClose: 'anchorclosebtn',
+				children: [{
+					id: 'anchorcontainer',
+					type: 'container',
+					vertical: 'true',
+					children: [{
+						id: 'anchorlabel',
+						type: 'fixedtext',
+						text: 'anchored popup' }]
+				}]
+			}, callback: function() {}});
+		});
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			var instance = win.app.map.jsdialog.dialogs['anchorpopup'];
+			var buttonWidth = win.document.getElementById('anchorclosebtn').getBoundingClientRect().width;
+			var toolboxWidth = win.document.getElementById('anchortoolbox').getBoundingClientRect().width;
+
+			// the popup is sized from the close button (~60px), not the parent
+			// toolbox (~400px)
+			var minWidth = parseFloat(instance.container.style.minWidth);
+			expect(minWidth, 'popup width tracks the close button').to.be.closeTo(buttonWidth, 2);
+			expect(minWidth, 'popup width is not the whole toolbox').to.be.lessThan(toolboxWidth - 50);
+
+			win.app.map.jsdialog.close('anchorpopup', false);
+			win.document.getElementById('anchortoolbox').remove();
+		});
+	});
 });
