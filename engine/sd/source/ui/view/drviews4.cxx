@@ -68,7 +68,7 @@
 #include <memory>
 
 namespace {
-    void EndTextEditOnPage(sal_uInt16 nPageId)
+    void EndTextEditOnPage(const SdrModel& rModel, sal_uInt16 nPageId)
     {
         SfxViewShell* pShell = SfxViewShell::GetFirst();
         while (pShell)
@@ -78,7 +78,11 @@ namespace {
             {
                 ::sd::ViewShell* pViewSh = pBase->GetMainViewShell().get();
                 ::sd::DrawViewShell* pDrawSh = dynamic_cast<::sd::DrawViewShell*>(pViewSh);
-                if (pDrawSh && pDrawSh->GetDrawView() && pDrawSh->getCurrentPage()->getPageId() == nPageId)
+                // The page belongs to a single presentation; page ids are not
+                // unique across presentations, so match the model as well.
+                if (pDrawSh && pDrawSh->GetDrawView()
+                    && &pDrawSh->getCurrentPage()->getSdrModelFromSdrPage() == &rModel
+                    && pDrawSh->getCurrentPage()->getPageId() == nPageId)
                     pDrawSh->GetDrawView()->SdrEndTextEdit();
             }
 
@@ -121,7 +125,7 @@ void DrawViewShell::DeleteActualPage()
 
             if((bUseSlideSorter && IsSelected(nPageIndex)) || (!bUseSlideSorter && pPage->IsSelected()))
             {
-                EndTextEditOnPage(pPage->getPageId());
+                EndTextEditOnPage(*GetDoc(), pPage->getPageId());
                 Reference< XDrawPage > xPage( xPages->getByIndex( nPageIndex ), UNO_QUERY_THROW );
                 pagesToDelete.push_back(xPage);
             }
