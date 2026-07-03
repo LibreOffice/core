@@ -1823,7 +1823,8 @@ void SvxSearchDialog::EnableControl_Impl(const weld::Widget& rCtrl)
     }
     if (m_xReplaceBtn.get() == &rCtrl && (SearchOptionFlags::REPLACE & m_nOptions))
     {
-        m_xReplaceBtn->set_sensitive(true);
+        // 'Replace' (in Writer) is unpredictable when 'Current selection only' is on: so disable it
+        m_xReplaceBtn->set_sensitive(!m_bWriter || !m_xSelectionBtn->get_active());
         return;
     }
     if (m_xReplaceAllBtn.get() == &rCtrl && (SearchOptionFlags::REPLACE_ALL & m_nOptions))

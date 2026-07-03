@@ -91,6 +91,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Replace Dialog Tests', { t
         helper.copy();
         cy.cGet('#copy-paste-container').should('not.contain.text', 'replaced');
 
+        // Collapse the selection, so a replace is possible.
+        helper.typeIntoDocument('{ctrl}{home}');
+
         helper.typeIntoDocument('{ctrl}h');
         findHelper.waitForFindReplaceDialog(this.win);
 
