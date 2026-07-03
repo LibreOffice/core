@@ -26,7 +26,12 @@
 	.ui-tabs-content .unobutton > img,
 	.unotoolbutton.notebookbar .unobutton > img,
 	.unotoolbutton.notebookbar .unobutton, 
-	.lokdialog_container .ui-dialog-titlebar-close {
+	.ui-dialog-titlebar-close,
+	.unotoolbutton img,
+	.formulabar.ui-pushbutton,
+	.formulabar .unobutton,
+	#formulabar-buttons-toolbox .unobutton,
+	.close-navigation-button {
 		forced-color-adjust: none;
 		background-color: #e9e9ed !important;
 	}
@@ -100,7 +105,12 @@
 	[data-theme='dark'] .unotoolbutton.notebookbar .unobutton,
 	[data-theme='dark'] .StyleListPanel #TemplatePanel [id] button,
 	[data-theme='dark'] .ui-overflow-group-popup .unobutton > img,
-	[data-theme='dark'] .lokdialog_container .ui-dialog-titlebar-close {
+	[data-theme='dark'] .ui-dialog-titlebar-close,
+	[data-theme='dark'] .unotoolbutton img,
+	[data-theme='dark'] .formulabar.ui-pushbutton,
+	[data-theme='dark'] .formulabar .unobutton,
+	[data-theme='dark'] #formulabar-buttons-toolbox .unobutton,
+	[data-theme='dark'] .close-navigation-button {
 		background-color: #1E1E1E !important;
 	}
 
