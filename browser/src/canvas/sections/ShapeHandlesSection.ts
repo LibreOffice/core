@@ -543,6 +543,12 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		document.getElementById('canvas-container').appendChild(this.sectionProperties.svg);
 		this.sectionProperties.svg.style.zIndex = 11; // Update z-index or video buttons are unreachable.
 
+		if (!app.map.isEditMode()) {
+			this.sectionProperties.svg.style.opacity = 1;
+			this.sectionProperties.svg.style.pointerEvents = '';
+			this.hideSubSections();
+		}
+
 		if (!this.sectionProperties.svg.innerHTML.includes('foreignObject')) {
 			console.error('Failed to parse svg for embedded video');
 			return;

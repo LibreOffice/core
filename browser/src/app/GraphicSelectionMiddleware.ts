@@ -207,7 +207,8 @@ class GraphicSelection {
 				// graphic selection.
 				editMode = this.extraInfo && this.extraInfo.isSignature;
 			}
-			if (!editMode) {
+
+			if (!editMode && !this.extraInfo?.url) {
 				return;
 			}
 
@@ -234,7 +235,7 @@ class GraphicSelection {
 				app.activeDocument.tableMiddleware.hasTableSelection(); // scaleSouthAndEastOnly
 
 			this.handlesSection.refreshInfo(this.extraInfo);
-			this.handlesSection.setShowSection(true);
+			this.handlesSection.setShowSection(editMode);
 			app.sectionContainer.requestReDraw();
 		} else if (
 			this.handlesSection &&
