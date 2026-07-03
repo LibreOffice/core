@@ -20,6 +20,7 @@
 /// <reference path="../src/docstatefunctions.js" />
 /// <reference path="../src/docdispatcher.ts" />
 /// <reference path="../src/core/geometry.ts" />
+/// <reference path="../src/core/DPIChangeListener.ts" />
 /// <reference path="../src/app/TileCoordData.ts" />
 /// <reference path="../src/app/PaneBorder.ts" />
 /// <reference path="../src/app/Tile.ts" />

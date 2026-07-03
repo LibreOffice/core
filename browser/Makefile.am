@@ -343,6 +343,7 @@ COOL_JS_LST =\
 	src/app/TableStylesService.ts \
 	src/core/geometry.ts \
 	src/core/TimerRegistry.ts \
+	src/core/DPIChangeListener.ts \
 	src/app/GraphicSelectionMiddleware.ts \
 	src/app/TextSelectionMiddleware.ts \
 	src/app/CellSelectionMarkerMiddleware.ts \

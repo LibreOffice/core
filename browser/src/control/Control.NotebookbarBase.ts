@@ -17,8 +17,10 @@ class NotebookbarBase extends JSDialogComponent {
 	/// reference to old JS Notebookbar
 	impl: any = null;
 
-	/// media query that fires when the display density changes
-	private dpiMediaQuery: MediaQueryList | null = null;
+	/// rebuilds the style box at the new density so the previews are re-rendered
+	private dpiListener: DPIChangeListener = new DPIChangeListener(() => {
+		this.reloadStylesView();
+	});
 
 	constructor(map: any, impl: any) {
 		super(map, 'Notebookbar', 'notebookbar');
@@ -44,7 +46,7 @@ class NotebookbarBase extends JSDialogComponent {
 			);
 		}
 
-		this.registerDPIChangeListener();
+		this.dpiListener.start();
 	}
 
 	// when we hide the UI
@@ -57,38 +59,9 @@ class NotebookbarBase extends JSDialogComponent {
 			);
 		}
 
-		this.unregisterDPIChangeListener();
+		this.dpiListener.stop();
 
 		if (this.impl) this.impl.onRemove();
-	}
-
-	// The style previews are bitmaps converted by core at a fixed pixel
-	// density. A density change leaves the cached images blurry until they
-	// are re-rendered, so listen for it and rebuild the style box. The query
-	// matches a single density value, so it is re-registered after each
-	// change to track the new density.
-	private onDPIChange = () => {
-		this.reloadStylesView();
-		this.registerDPIChangeListener();
-	};
-
-	private registerDPIChangeListener() {
-		if (!window.matchMedia) return;
-		if (this.dpiMediaQuery)
-			this.dpiMediaQuery.removeEventListener('change', this.onDPIChange);
-		this.dpiMediaQuery = window.matchMedia(
-			'(resolution: ' + window.devicePixelRatio + 'dppx)',
-		);
-		this.dpiMediaQuery.addEventListener('change', this.onDPIChange, {
-			once: true,
-		});
-	}
-
-	private unregisterDPIChangeListener() {
-		if (this.dpiMediaQuery) {
-			this.dpiMediaQuery.removeEventListener('change', this.onDPIChange);
-			this.dpiMediaQuery = null;
-		}
 	}
 
 	public onCallback(
