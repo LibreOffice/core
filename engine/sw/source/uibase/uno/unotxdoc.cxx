@@ -3981,14 +3981,10 @@ void SwXTextDocument::initializeForTiledRendering(const cpo::uno::Sequence<css::
 
     if (!sAuthor.isEmpty() && sAuthor != sOrigAuthor)
     {
-        SwView* pFirstView = static_cast<SwView*>(SfxViewShell::GetFirst());
-        if (pFirstView && SfxViewShell::GetNext(*pFirstView) == nullptr)
-        {
-            if (SwEditShell* pShell = &pFirstView->GetWrtShell())
-            {
-                pShell->SwViewShell::UpdateFields(true, /*bSetModified=*/false);
-            }
-        }
+        // Update fields on this document's own shell; in CODA the process
+        // holds several documents and the first view may be another one.
+        if (SwEditShell* pShell = m_pDocShell->GetWrtShell())
+            pShell->SwViewShell::UpdateFields(true, /*bSetModified=*/false);
     }
 
     // Set the initial zoom value to 1; usually it is set in setClientZoom and

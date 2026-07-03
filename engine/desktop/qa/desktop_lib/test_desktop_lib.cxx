@@ -14,6 +14,7 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
@@ -200,6 +201,7 @@ public:
     void testCommentsImpressCrossDocument();
     void testDocSizeChangedCrossDocument();
     void testViewSelectionCrossDocument();
+    void testAuthorFieldUpdateCrossDocument();
     void testCommentsCallbacksWriter();
     void testCommentsAddEditDeleteDraw();
     void testCommentsInReadOnlyMode();
@@ -288,6 +290,7 @@ public:
     CPPUNIT_TEST(testCommentsImpressCrossDocument);
     CPPUNIT_TEST(testDocSizeChangedCrossDocument);
     CPPUNIT_TEST(testViewSelectionCrossDocument);
+    CPPUNIT_TEST(testAuthorFieldUpdateCrossDocument);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
     CPPUNIT_TEST(testCommentsInReadOnlyMode);
@@ -2913,6 +2916,66 @@ void DesktopKitTest::testViewSelectionCrossDocument()
 
     // The other spreadsheet never receives the first one's view selection.
     CPPUNIT_ASSERT_EQUAL(0, aView2.m_nTextViewSelection);
+}
+
+namespace
+{
+/// Returns the rendered text of the first field found in a Writer document's first paragraph.
+OUString getAuthorFieldText(LibLODocument_Impl* pDocument)
+{
+    uno::Reference<text::XTextDocument> xTextDocument(pDocument->mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(
+        xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphEnumeration
+        = xParagraphEnumerationAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphEnumeration->nextElement(),
+                                                              uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xTextPortionEnumeration
+        = xParagraph->createEnumeration();
+    while (xTextPortionEnumeration->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xTextPortion(xTextPortionEnumeration->nextElement(),
+                                                          uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+        if (aPortionType == "TextField")
+        {
+            uno::Reference<text::XTextField> xTextField(
+                xTextPortion->getPropertyValue(u"TextField"_ustr), uno::UNO_QUERY);
+            return xTextField->getPresentation(false);
+        }
+    }
+
+    CPPUNIT_FAIL("no field found in the first paragraph");
+    return OUString();
+}
+}
+
+void DesktopKitTest::testAuthorFieldUpdateCrossDocument()
+{
+    // Two Writer documents open in one process, each with an author field.
+    // The two files differ so that the desktop keeps two separate views
+    // instead of reusing one for the same file.
+    std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("author-field-1.fodt");
+    pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
+
+    std::unique_ptr<LibLODocument_Impl> pDocument2 = loadDocImpl("author-field-2.fodt");
+    pDocument2->m_pDocumentClass->initializeForRendering(pDocument2.get(), "{}");
+
+    // Record the second document's author field text before touching the first
+    // document, so a later change to it would show up as a difference here.
+    OUString sDocument2AuthorBefore = getAuthorFieldText(pDocument2.get());
+
+    // Change the author on the first document while the second stays open.
+    // Both documents' views are alive at this point, matching a process that
+    // hosts several documents at once.
+    pDocument1->m_pDocumentClass->initializeForRendering(
+        pDocument1.get(), "{\".uno:Author\":{\"type\":\"string\",\"value\":\"New Author\"}}");
+
+    // The first document's field picks up the new author...
+    CPPUNIT_ASSERT_EQUAL(u"New Author"_ustr, getAuthorFieldText(pDocument1.get()));
+    // ...and the second document's field is untouched.
+    CPPUNIT_ASSERT_EQUAL(sDocument2AuthorBefore, getAuthorFieldText(pDocument2.get()));
 }
 
 void DesktopKitTest::testCommentsCallbacksWriter()
