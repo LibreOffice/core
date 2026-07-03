@@ -1,6 +1,7 @@
 /* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
+var calcHelper = require('../../common/calc_helper');
 
 // When the integrator forces a UI theme (ui_defaults UITheme=dark with
 // SavedUIState=false, which debug.html sets from &UITheme), that default has to
@@ -62,5 +63,15 @@ describe(['tagdesktop'], 'Integrator theme overrides a contradicting saved setti
 				expect(String(win.prefs._userBrowserSetting.darkTheme)).to.eq('true');
 			});
 		});
+	});
+
+	it('Formula bar caret uses the theme cursor colour in dark mode', function() {
+		assertThemeIs('dark');
+		// Put the custom caret on screen by typing into the formula bar.
+		calcHelper.typeIntoFormulabar('=1');
+		// The caret must match the in-cell text cursor colour (white in dark
+		// mode), not the old hardcoded black that was invisible on dark canvas.
+		cy.cGet('#sc_input_window.formulabar .ui-custom-textarea-cursor-layer span.cursor:not(.hidden)')
+			.should('have.css', 'border-left-color', 'rgb(255, 255, 255)');
 	});
 });
