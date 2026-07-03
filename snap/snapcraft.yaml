@@ -331,6 +331,9 @@ parts:
       - libexpat1
       - libfontconfig1
       - libfreetype6
+      # Qt's xcb platform plugin needs libxcb-cursor0 at runtime; the
+      # kde-neon-6 content snap no longer provides it, so stage it here.
+      - libxcb-cursor0
       # libharfbuzz/libgraphite2 deliberately NOT staged: the engine is
       # configured --without-system-harfbuzz --without-system-graphite, so
       # it builds and bundles its own copies in instdir/program/. Qt picks
