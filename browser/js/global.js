@@ -463,7 +463,13 @@ class BrowserInitializer extends InitializerBase {
 		window.geolocationSetup = element.dataset.geolocationSetup.toLowerCase().trim() === "true";
 		window.canvasSlideshowEnabled = element.dataset.canvasSlideshowEnabled.toLowerCase().trim() === "true";
 		window.wopiSettingBaseUrl = element.dataset.wopiSettingBaseUrl;
-		window.wopiHostId = element.dataset.wopiHostId;
+		// The value is percent-encoded server-side (see FileServer.cpp) before
+		// being embedded in the data attribute, so decode it back for display.
+		try {
+			window.wopiHostId = decodeURIComponent(element.dataset.wopiHostId);
+		} catch (e) {
+			window.wopiHostId = element.dataset.wopiHostId;
+		}
 		window.vendor = element.dataset.vendor;
 		window.copyrightYear = element.dataset.copyrightYear;
 	}
