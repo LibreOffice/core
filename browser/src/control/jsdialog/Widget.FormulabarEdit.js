@@ -25,7 +25,7 @@
  * 'enabled' editable field can be temporarily disabled
  */
 
-/* global JSDialog FormulaBarSelectionHandle cool app */
+/* global JSDialog FormulaBarSelectionHandle cool app _ */
 
 var scrollToCursorTimeout = null;
 var startHandle;
@@ -395,6 +395,7 @@ function _formulabarEditControl(parentContainer, data, builder) {
 
 	textLayer.setAttribute('role', 'textbox');
 	textLayer.setAttribute('aria-multiline', 'true');
+	textLayer.setAttribute('aria-label', _('Formula bar'));
 
 	var cursorLayer = window.L.DomUtil.create('div', 'ui-custom-textarea-cursor-layer ' + builder.options.cssClass, wrapper);
 	var handleLayer = window.L.DomUtil.create('div', 'ui-custom-textarea-handle-layer ' + builder.options.cssClass, wrapper);
