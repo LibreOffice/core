@@ -24,6 +24,7 @@
 /// <reference path="./refs/globals.ts" />
 /// <reference path="./sources.ts" />
 /// <reference path="./helper/canvasContainerSetup.ts" />
+/// <reference path="./helper/matchMediaMock.ts" />
 /// <reference path="./helper/rectUtil.ts" />
 /// <reference path="./helper/Events.ts"/>
 /// <reference path="./helper/util.ts"/>
@@ -34,6 +35,7 @@
 /// <reference path="./data/LOUtilTestData.ts"/>
 /// <reference path="./data/SheetGeometryTestData.ts" />
 
+/// <reference path="./DPIChangeListener.test.ts" />
 /// <reference path="./CanvasSectionContainer.test.ts" />
 /// <reference path="./CBounds.test.ts" />
 /// <reference path="./CPointSet.test.ts" />

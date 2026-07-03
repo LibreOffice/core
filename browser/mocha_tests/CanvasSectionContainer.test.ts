@@ -286,4 +286,47 @@ describe('Horizontally packed two section container with -left layout', function
             });
     });
 });
+
+describe('Display density changes', function() {
+
+    afterEach(function () {
+        restoreMatchMedia();
+        setDevicePixelRatio(1);
+    });
+
+    it('re-lays out the container when the display density changes', function () {
+        installFakeMatchMedia();
+        // Construct at the baseline density. onResize during setup syncs
+        // app.dpiScale to it, so the container starts in step with the display.
+        setDevicePixelRatio(1);
+        setupCanvasContainer(canvasWidth, canvasHeight);
+
+        let resizeCalls = 0;
+        app.sectionContainer.onResize = function () { resizeCalls++; };
+
+        // The display density moves; app.dpiScale still holds the old value
+        // until a relayout catches up.
+        setDevicePixelRatio(2);
+
+        // A listener was registered while the container was constructed.
+        nodeassert.ok(fakeMediaQueries.length > 0);
+        fakeMediaQueries[fakeMediaQueries.length - 1].fireChange();
+
+        nodeassert.strictEqual(resizeCalls, 1);
+    });
+
+    it('does not re-lay out when the density has not actually moved', function () {
+        installFakeMatchMedia();
+        setDevicePixelRatio(1);
+        setupCanvasContainer(canvasWidth, canvasHeight);
+
+        let resizeCalls = 0;
+        app.sectionContainer.onResize = function () { resizeCalls++; };
+
+        // A change event fires but the density still matches app.dpiScale.
+        fakeMediaQueries[fakeMediaQueries.length - 1].fireChange();
+
+        nodeassert.strictEqual(resizeCalls, 0);
+    });
+});
 });
