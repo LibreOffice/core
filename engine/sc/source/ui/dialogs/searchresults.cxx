@@ -233,6 +233,10 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl, weld::TreeView&, void )
         pScViewShell->SetCursor(aPos.Col(), aPos.Row());
         pScViewShell->AlignToCursor(aPos.Col(), aPos.Row(), SC_FOLLOW_JUMP);
     }
+
+    // unselect single entry to allow the user to re-select it
+    if (mxList->n_children() == 1)
+        mxList->unselect_all();
 }
 
 IMPL_STATIC_LINK( SearchResultsDlg, OnShowToggled, weld::Toggleable&, rButton, void )
