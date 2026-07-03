@@ -161,7 +161,10 @@ export class Header extends CanvasSectionObject {
 
 		if ((window as any).mode.isSmallScreenDevice()) {
 			(window as any).contextMenuWizard = true;
-			this._map.fire('mobilewizard', {data: this._menuData});
+			const menuData = Object.assign({}, this._menuData);
+			menuData.children = this._menuData.children.filter(
+				(child: any) => this._isHeaderCommandUsable(child.command));
+			this._map.fire('mobilewizard', {data: menuData});
 		}
 		else {
 			const posEl = this._createMenuPositionElement(evt);
@@ -564,9 +567,20 @@ export class Header extends CanvasSectionObject {
 		return this._menuPosEl;
 	}
 
+	// A protected sheet rejects every header command that changes it, so
+	// on such a sheet only the commands that still work there stay in the
+	// menu.
+	_isHeaderCommandUsable(command: string): boolean {
+		if (command === '.uno:FreezePanes')
+			return true;
+		return !(app.calc as any).isPartProtected(this._map._docLayer._selectedPart);
+	}
+
 	private _getDropdownEntries(): any[] {
 		const entries: any[] = [];
 		for (const command of Object.keys(this._menuItem)) {
+			if (!this._isHeaderCommandUsable(command))
+				continue;
 			entries.push({
 				id: command,
 				uno: command,
