@@ -84,6 +84,7 @@ static const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "browser_logging", "false" },
     { "cache_files.path", "cache" },
     { "cache_files.expiry_min", "3000" },
+    { "canvas_slideshow_enabled", "true" },
     { "certificates.database_path", "" },
     { "child_root_path", "jails" },
     { "deepl.api_url", "" },
@@ -137,6 +138,7 @@ static const Util::UnorderedStringMap<std::string> DefAppConfig = {
 #if !MOBILEAPP
     // { "logging.anonymize.anonymize_user_data", "false" }, // Do not set to fallback on filename/username.
     { "logging.anonymize.anonymization_salt", "82589933" },
+    { "logging.anonymize.high_strength", "false" },
     { "logging.color", "true" },
     { "logging.disable_server_audit", "false" },
     { "logging.disabled_areas", "Socket,WebSocket,Admin,Pixel" },
@@ -299,6 +301,7 @@ static const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "storage.wopi.access_token.default_lifetime_mins", "0" },
     { "storage.wopi.access_token.refresh_timeout_secs", "60" },
     { "storage.wopi.alias_groups[@mode]", "first" },
+    { "storage.wopi.internal_zone", "false" },
     { "storage.wopi.is_legacy_server", "false" },
     { "storage.wopi.locking.refresh", "900" },
     { "storage.wopi.max_file_size", "0" },
