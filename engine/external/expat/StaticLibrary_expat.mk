@@ -46,6 +46,10 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,expat,\
 	UnpackedTarball/expat/lib/xmlparse \
 	UnpackedTarball/expat/lib/xmlrole \
 	UnpackedTarball/expat/lib/xmltok \
+	$(if $(filter WNT,$(OS)),UnpackedTarball/expat/lib/random_rand_s) \
+	$(if $(filter MACOSX iOS,$(OS)),UnpackedTarball/expat/lib/random_arc4random_buf) \
+	$(if $(filter LINUX ANDROID,$(OS)),UnpackedTarball/expat/lib/random_getrandom) \
+	$(if $(filter EMSCRIPTEN FREEBSD,$(OS)),UnpackedTarball/expat/lib/random_getentropy) \
 ))
 
 # vim: set noet sw=4 ts=4:

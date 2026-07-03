@@ -17,6 +17,12 @@ $(call gb_ExternalProject_get_state_target,expat,configure) :
 	$(call gb_Trace_StartRange,expat,EXTERNAL)
 	$(call gb_ExternalProject_run,configure,\
 		$(gb_RUN_CONFIGURE) ./configure --without-docbook \
+			--without-arc4random --without-arc4random_buf \
+			--without-dev-urandom --without-getentropy \
+			--without-sys-getrandom --without-getrandom\
+			$(if $(filter LINUX ANDROID,$(OS)),--with-sys-getrandom) \
+			$(if $(filter MACOSX iOS,$(OS)),--with-arc4random_buf) \
+			$(if $(filter EMSCRIPTEN FREEBSD,$(OS)),--with-getentropy) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 	,,expat_configure.log)
