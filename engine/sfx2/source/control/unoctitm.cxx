@@ -1115,7 +1115,7 @@ OString SizePayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateEve
             return OString::number(nInt) + "."
                    + (nFrac < 10 ? "0"_ostr : OString()) + OString::number(nFrac);
         };
-        OString aUnit = eUnit == FieldUnit::INCH ? "\"" : " cm";
+        OString aUnit = eUnit == FieldUnit::INCH ? "\""_ostr : " cm"_ostr;
         aBuffer.append(formatDim(aSize.Width) + aUnit + " x " + formatDim(aSize.Height) + aUnit);
     }
     return aBuffer.makeStringAndClear();
