@@ -211,6 +211,16 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 	_setDescription: function(text) {
 		this._log('setDescription: ' + text);
 		this._textArea.setAttribute('aria-description', text);
+
+		if (window.L.Browser.mac) {
+			// required on macOS as VoiceOver is not triggered by description change only
+			var region = this._a11yLiveRegion;
+			if (region) {
+				region.textContent = '';
+				var t = text;
+				requestAnimationFrame(function () { region.textContent = t; });
+			}
+		}
 	},
 
 	_updateTable: function(outCount, inList, row, col, rowSpan, colSpan) {

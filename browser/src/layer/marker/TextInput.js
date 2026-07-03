@@ -445,6 +445,14 @@ window.L.TextInput = window.L.Layer.extend({
 
 		if (this.hasAccessibilitySupport()) {
 			this._setSelectionFlag(false);
+
+			if (window.L.Browser.mac) {
+				// required for keyboard movement to produce screen reader output on macOS
+				this._a11yLiveRegion = window.L.DomUtil.create('div', 'visuallyhidden', this._container);
+				this._a11yLiveRegion.id = 'a11y-live-region';
+				this._a11yLiveRegion.setAttribute('aria-live', 'assertive');
+				this._a11yLiveRegion.setAttribute('aria-atomic', 'true');
+			}
 		}
 
 		// Prevent automatic line breaks in the textarea. Without this,
