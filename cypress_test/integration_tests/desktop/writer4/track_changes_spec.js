@@ -282,6 +282,47 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Track Changes', function (
 		});
 	});
 
+	it('Redline tooltip is shown when tracked changes are visible', function () {
+		// Given tracked changes are visible in this (normal Writer) view:
+		cy.getFrameWindow().then(function(win) {
+			win.app.map['stateChangeHandler'].setItemValue('.uno:ShowTrackedChanges', 'true');
+
+			// When a redline tooltip message arrives from core:
+			win.app.map.uiManager.showDocumentTooltip({
+				type: 'generaltooltip',
+				text: 'Inserted: LocalUser#0 - 02/11/2026 11:44:56',
+				rectangle: '5785, 2293, 1240, 275',
+				redlineType: 'Insert',
+			});
+		});
+
+		// Then the tooltip is shown. This is the counterpart of the hidden case
+		// below: it proves the faked message really does produce a tooltip, so a
+		// pass in that test means the tooltip was suppressed, not merely absent.
+		cy.cGet('.ui-tooltip').should('exist');
+	});
+
+	it('Redline tooltip is suppressed when tracked changes are hidden', function () {
+		// Given tracked changes are hidden in this (normal Writer) view:
+		cy.getFrameWindow().then(function(win) {
+			win.app.map['stateChangeHandler'].setItemValue('.uno:ShowTrackedChanges', 'false');
+
+			// When a redline tooltip message arrives from core (core reports the
+			// hover regardless of the client-side show/hide state):
+			win.app.map.uiManager.showDocumentTooltip({
+				type: 'generaltooltip',
+				text: 'Inserted: LocalUser#0 - 02/11/2026 11:44:56',
+				rectangle: '5785, 2293, 1240, 275',
+				redlineType: 'Insert',
+			});
+		});
+
+		// Then no tooltip is shown.
+		// Without the accompanying fix in place, the redline tooltip would appear
+		// even though tracked changes are hidden.
+		cy.cGet('.ui-tooltip').should('not.exist');
+	});
+
 	it('Context toolbar position in compare changes mode', function () {
 		// Given a document in compare changes mode with some text:
 		desktopHelper.switchUIToNotebookbar();

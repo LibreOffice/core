@@ -1986,6 +1986,20 @@ class UIManager extends window.L.Control {
 	 * @param tooltipInfo - contains rectangle (position in twips) and text properties.
 	 */
 	showDocumentTooltip(tooltipInfo: any): void {
+		// A redline tooltip (has redlineType) must not appear while tracked
+		// changes are hidden in this view. Core reports the hover regardless of
+		// the client-side show/hide state. Side-by-side compare mode always
+		// shows redline tooltips and manages its own state.
+		if (tooltipInfo.redlineType) {
+			const isSideBySide =
+				app.activeDocument?.activeLayout?.type === 'ViewLayoutCompareChanges';
+			if (
+				!isSideBySide &&
+				this.map['stateChangeHandler'].getItemValue('.uno:ShowTrackedChanges') !== 'true'
+			)
+				return;
+		}
+
 		var split = tooltipInfo.rectangle.split(',');
 
 		// Go via SimplePoint(), which is aware of the active layout.
