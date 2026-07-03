@@ -48,7 +48,7 @@ $(call gb_Helper_abbreviate_dirs,\
 			@$$RESPONSEFILE &&) \
 		rm -f $$RESPONSEFILE &&) \
 		$(if $(MODULAR_JAVA),$(if $(T_MODULENAME),\
-			RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$(1)),\
+			RESPONSEFILE=$(call gb_var2file,$(call gb_TmpFile,$(1).java9),\
 				$(T_JAVA9FILES)) && \
 			$(if $(3),$(call gb_JavaClassSet_JAVACCOMMAND,9) \
 				$(if $(call gb_target_symbols_enabled,$(2)),$(gb_JavaClassSet_JAVACDEBUG)) \
