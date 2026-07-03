@@ -15119,7 +15119,7 @@ public:
         enable_notify_events();
     }
 
-    virtual int iter_n_children(const weld::TreeIter& rIter) const override
+    virtual int do_iter_n_children(const weld::TreeIter& rIter) const override
     {
         const GtkInstanceTreeIter& rGtkIter = static_cast<const GtkInstanceTreeIter&>(rIter);
         return gtk_tree_model_iter_n_children(m_pTreeModel, const_cast<GtkTreeIter*>(&rGtkIter.iter));

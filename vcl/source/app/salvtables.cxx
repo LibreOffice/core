@@ -4085,7 +4085,7 @@ void SalInstanceTreeView::swap(int pos1, int pos2)
     pModel->Move(pEntry1, pEntry2);
 }
 
-int SalInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
+int SalInstanceTreeView::do_iter_n_children(const weld::TreeIter& rIter) const
 {
     const SalInstanceTreeIter& rVclIter = static_cast<const SalInstanceTreeIter&>(rIter);
     return m_xTreeView->GetModel()->GetChildList(rVclIter.iter).size();

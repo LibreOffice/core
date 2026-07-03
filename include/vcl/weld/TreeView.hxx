@@ -145,6 +145,7 @@ protected:
     using weld::ItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) = 0;
     virtual void do_scroll_to_row(const TreeIter& rIter) = 0;
+    virtual int do_iter_n_children(const TreeIter& rIter) const = 0;
     virtual bool do_iter_children(TreeIter& rIter) const = 0;
     virtual void do_set_children_on_demand(const TreeIter& rIter, bool bChildrenOnDemand) = 0;
     virtual void do_remove_selection() = 0;
@@ -340,7 +341,7 @@ public:
     virtual int iter_compare(const TreeIter& rIterA, const TreeIter& rIterB) const;
     bool iter_has_child(const TreeIter& rIter) const;
     // returns the number of direct children rIter has
-    virtual int iter_n_children(const TreeIter& rIter) const = 0;
+    int iter_n_children(const TreeIter& rIter) const;
 
     //visually indent this row as if it was at get_iter_depth() + nIndentLevel
     virtual void set_extra_row_indent(const TreeIter& rIter, int nIndentLevel) = 0;

@@ -246,7 +246,7 @@ int QtInstanceTreeView::get_iter_depth(const weld::TreeIter& rIter) const
     return nDepth;
 }
 
-int QtInstanceTreeView::iter_n_children(const weld::TreeIter& rIter) const
+int QtInstanceTreeView::do_iter_n_children(const weld::TreeIter& rIter) const
 {
     const QtInstanceTreeIter& rQtIter = static_cast<const QtInstanceTreeIter&>(rIter);
     return m_pModel->rowCount(rQtIter.modelIndex());

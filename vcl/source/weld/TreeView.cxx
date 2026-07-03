@@ -161,6 +161,14 @@ bool weld::TreeView::iter_children(TreeIter& rIter) const
     return do_iter_children(rIter);
 }
 
+int weld::TreeView::iter_n_children(const TreeIter& rIter) const
+{
+    if (get_children_on_demand(rIter))
+        return 0;
+
+    return do_iter_n_children(rIter);
+}
+
 int weld::TreeView::iter_compare(const TreeIter& rIterA, const TreeIter& rIterB) const
 {
     if (rIterA.equal(rIterB))

@@ -1656,7 +1656,7 @@ public:
 
     virtual void swap(int pos1, int pos2) override;
 
-    virtual int iter_n_children(const weld::TreeIter& rIter) const override;
+    virtual int do_iter_n_children(const weld::TreeIter& rIter) const override;
 
     using SalInstanceItemView::do_set_cursor;
     virtual void do_set_cursor(int pos) override;

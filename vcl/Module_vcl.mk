@@ -239,6 +239,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
     CppunitTest_vcl_fontvariation \
     CppunitTest_vcl_text \
     CppunitTest_vcl_textlayout \
+    CppunitTest_vcl_treeview \
     CppunitTest_vcl_font_ttf_structure_test \
     CppunitTest_vcl_filters_test \
     CppunitTest_vcl_mnemonic \
