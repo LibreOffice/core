@@ -17,7 +17,7 @@
 window.L.Map.include({
 	// Shared entry guard for the new-comment actions. Looks up the comment
 	// list section and reports whether a fresh insertion may begin.
-	_beginCommentInsertion: function(): { blocked: boolean; commentSection: cool.CommentSection } {
+	_beginCommentInsertion: function(threaded?: boolean): { blocked: boolean; commentSection: cool.CommentSection } {
 		const commentSection = app.sectionContainer.getSectionWithName(
 			app.CSections.CommentList.name
 		) as cool.CommentSection;
@@ -25,9 +25,21 @@ window.L.Map.include({
 		if (this.stateChangeHandler.getItemValue('InsertAnnotation') === 'disabled')
 			return { blocked: true, commentSection };
 		const editingComment = cool.Comment.isAnyEdit();
-		// unsaved comment is already open -> focus it and block
+		// unsaved comment is already open -> block
 		if (commentSection && editingComment) {
-			commentSection.navigateAndFocusComment(editingComment);
+			if (app.map._docLayer._docType === 'spreadsheet'
+				&& threaded !== undefined
+				&& editingComment.sectionProperties.data.id === 'new') {
+				// The user started a comment and then picked the other insert
+				// type (Comment or Note) before saving it. Retype the pending
+				// comment in place and keep it focused, so the choice takes
+				// effect and the view stays where it is instead of scrolling to
+				// the comment.
+				editingComment.sectionProperties.data.threaded = threaded ? 'true' : undefined;
+				editingComment.focus();
+			} else {
+				commentSection.navigateAndFocusComment(editingComment);
+			}
 			return { blocked: true, commentSection };
 		}
 		// Finish any in-progress cell edit before the comment popup opens
@@ -62,7 +74,7 @@ window.L.Map.include({
 	},
 
 	insertComment: function() {
-		const { blocked, commentSection } = this._beginCommentInsertion();
+		const { blocked, commentSection } = this._beginCommentInsertion(false);
 		if (blocked)
 			return;
 
@@ -103,7 +115,7 @@ window.L.Map.include({
 	},
 
 	insertThreadedComment: function() {
-		const { blocked } = this._beginCommentInsertion();
+		const { blocked } = this._beginCommentInsertion(true);
 		if (blocked)
 			return;
 		this._docLayer.newAnnotation(this._newCommentData(true));
