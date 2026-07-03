@@ -10,6 +10,7 @@
 #include <svx/annotation/Annotation.hxx>
 #include <svx/annotation/ObjectAnnotationData.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
 #include <tools/json_writer.hxx>
 #include <sfx2/viewsh.hxx>
 #include <unotools/datetime.hxx>
@@ -72,12 +73,20 @@ void KitCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
     if (!comphelper::COKit::isActive() || comphelper::COKit::isTiledAnnotations())
         return;
 
+    // The comment belongs to a single document. When several documents share
+    // one process (like in case of CODA), other documents may have views on the
+    // global view list, so only notify views whose drawing model is the one that
+    // owns the comment.
+    const SdrModel* pAnnotationModel = rAnnotation.GetModel();
+
     OString aPayload = rAnnotation.ToJSON(nType);
 
     const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        pViewShell->viewCallback(KIT_CALLBACK_COMMENT, aPayload);
+        const SdrView* pDrawView = pViewShell->GetDrawView();
+        if (pDrawView && &pDrawView->GetModel() == pAnnotationModel)
+            pViewShell->viewCallback(KIT_CALLBACK_COMMENT, aPayload);
         pViewShell = SfxViewShell::GetNext(*pViewShell);
     }
 }

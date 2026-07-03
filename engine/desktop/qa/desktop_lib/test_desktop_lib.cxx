@@ -197,6 +197,7 @@ public:
     void testCommentsWriter();
     void testCommentsCalc();
     void testCommentsImpress();
+    void testCommentsImpressCrossDocument();
     void testCommentsCallbacksWriter();
     void testCommentsAddEditDeleteDraw();
     void testCommentsInReadOnlyMode();
@@ -282,6 +283,7 @@ public:
     CPPUNIT_TEST(testCommentsWriter);
     CPPUNIT_TEST(testCommentsCalc);
     CPPUNIT_TEST(testCommentsImpress);
+    CPPUNIT_TEST(testCommentsImpressCrossDocument);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
     CPPUNIT_TEST(testCommentsInReadOnlyMode);
@@ -2273,6 +2275,7 @@ public:
     bool m_stateBold;
     tools::Rectangle m_aOwnCursor;
     boost::property_tree::ptree m_aCommentCallbackResult;
+    int m_nComments = 0;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
     std::string m_searchTerm;
@@ -2329,6 +2332,7 @@ public:
         break;
         case KIT_CALLBACK_COMMENT:
         {
+            ++m_nComments;
             m_aCommentCallbackResult.clear();
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
@@ -2793,6 +2797,37 @@ void DesktopKitTest::testCommentsImpress()
 
     // We checked all the comments
     CPPUNIT_ASSERT_EQUAL(2, nIdx);
+
+    comphelper::COKit::setTiledAnnotations(true);
+}
+
+void DesktopKitTest::testCommentsImpressCrossDocument()
+{
+    // Comment callbacks are emitted only if tiled annotations are off
+    comphelper::COKit::setTiledAnnotations(false);
+
+    // Two presentations open in the same process.
+    std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("blank_presentation.odp");
+    pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
+    int nView1 = pDocument1->m_pDocumentClass->getView(pDocument1.get());
+    ViewCallback aView1(pDocument1.get());
+
+    std::unique_ptr<LibLODocument_Impl> pDocument2 = loadDocImpl("2slides.odp");
+    pDocument2->m_pDocumentClass->initializeForRendering(pDocument2.get(), "{}");
+    ViewCallback aView2(pDocument2.get());
+
+    // Add a comment to the first presentation.
+    pDocument1->m_pDocumentClass->setView(pDocument1.get(), nView1);
+    OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Comment in doc1\" }, \"Author\": { \"type\": \"string\", \"value\": \"Kit User1\" } }"_ostr);
+    pDocument1->pClass->postUnoCommand(pDocument1.get(), ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
+    Scheduler::ProcessEventsToIdle();
+
+    // The comment is delivered to the presentation that owns it.
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Comment in doc1"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+
+    // The other presentation never sees the comment.
+    CPPUNIT_ASSERT_EQUAL(0, aView2.m_nComments);
 
     comphelper::COKit::setTiledAnnotations(true);
 }
