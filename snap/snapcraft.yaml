@@ -331,9 +331,23 @@ parts:
       - libexpat1
       - libfontconfig1
       - libfreetype6
-      # Qt's xcb platform plugin needs libxcb-cursor0 at runtime; the
-      # kde-neon-6 content snap no longer provides it, so stage it here.
+      # Qt's xcb platform plugin (libqxcb.so) links a family of libxcb-*
+      # helper libraries. The kde-neon-6 content snap stopped shipping some
+      # of them (first libxcb-cursor, then libxcb-shape), which makes the
+      # plugin fail to load and the app abort at startup. Stage the whole
+      # leaf set here so the snap no longer depends on the content snap
+      # providing any of them. Core libs (libxcb1, libxkbcommon) are left to
+      # the content snap to avoid version skew.
       - libxcb-cursor0
+      - libxcb-icccm4
+      - libxcb-keysyms1
+      - libxcb-randr0
+      - libxcb-shape0
+      - libxcb-shm0
+      - libxcb-sync1
+      - libxcb-xfixes0
+      - libxcb-xinerama0
+      - libxcb-xkb1
       # libharfbuzz/libgraphite2 deliberately NOT staged: the engine is
       # configured --without-system-harfbuzz --without-system-graphite, so
       # it builds and bundles its own copies in instdir/program/. Qt picks
