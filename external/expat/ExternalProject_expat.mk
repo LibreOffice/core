@@ -16,6 +16,12 @@ $(eval $(call gb_ExternalProject_register_targets,expat,\
 $(call gb_ExternalProject_get_state_target,expat,configure) :
 	$(call gb_ExternalProject_run,configure,\
 		./configure --without-docbook \
+			--without-arc4random --without-arc4random_buf \
+			--without-dev-urandom --without-getentropy \
+			--without-sys-getrandom --without-getrandom\
+			$(if $(filter LINUX ANDROID,$(OS)),--with-sys-getrandom) \
+			$(if $(filter MACOSX iOS,$(OS)),--with-arc4random_buf) \
+			$(if $(filter EMSCRIPTEN FREEBSD,$(OS)),--with-getentropy) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 	,,expat_configure.log)

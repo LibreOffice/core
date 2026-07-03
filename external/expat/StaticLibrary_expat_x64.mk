@@ -28,6 +28,7 @@ $(eval $(call gb_StaticLibrary_add_x64_generated_cobjects,expat_x64,\
 	UnpackedTarball/expat/lib/xmlparse_x64 \
 	UnpackedTarball/expat/lib/xmltok_x64 \
 	UnpackedTarball/expat/lib/xmlrole_x64 \
+	UnpackedTarball/expat/lib/random_rand_s_x64 \
 ))
 
 # vim: set noet sw=4 ts=4:
