@@ -70,6 +70,7 @@ static const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "admin_console.logging.monitor_connect", "true" },
     { "admin_console.password", "" },
     { "admin_console.username", "" },
+    { "ai.allow_user_settings", "true" },
     { "allowed_languages", "de_DE en_GB en_US es_ES fr_FR it nl pt_BR pt_PT ru" },
     { "allow_update_popup", "true" },
     { "browser_logging", "false" },

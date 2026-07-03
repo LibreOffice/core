@@ -1765,20 +1765,29 @@ bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr& viewSe
                                                  bool disableAISettings, bool& viewSettingsMutated,
                                                  std::string& outModel, std::string& outRating)
 {
+    const bool allowUserSettings =
+        ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true);
     auto resolveField = [&](const std::string& vsKey, const std::string& upiKey,
                             const std::string& cfgKey) -> std::string
     {
         std::string value;
-        if (viewSettings)
-            JsonUtil::findJSONValue(viewSettings, vsKey, value);
-        if (value.empty() && userPrivateInfoObj)
+        // When users are locked to the central endpoint, ignore any per-user
+        // View Settings / UserPrivateInfo and use only the coolwsd.xml value,
+        // so a user cannot point AI at their own endpoint via the settings UI,
+        // stale stored settings, or a crafted updateviewsettings request.
+        if (allowUserSettings)
         {
-            JsonUtil::findJSONValue(userPrivateInfoObj, upiKey, value);
-            if (!value.empty() && viewSettings)
+            if (viewSettings)
+                JsonUtil::findJSONValue(viewSettings, vsKey, value);
+            if (value.empty() && userPrivateInfoObj)
             {
-                LOG_INF("Migrating field [" << vsKey << "] from user private info");
-                viewSettings->set(vsKey, value);
-                viewSettingsMutated = true;
+                JsonUtil::findJSONValue(userPrivateInfoObj, upiKey, value);
+                if (!value.empty() && viewSettings)
+                {
+                    LOG_INF("Migrating field [" << vsKey << "] from user private info");
+                    viewSettings->set(vsKey, value);
+                    viewSettingsMutated = true;
+                }
             }
         }
         if (value.empty())
@@ -1810,20 +1819,27 @@ void ClientSession::resolveAndApplyAIImageCredentials(
     Poco::JSON::Object::Ptr& viewSettings, const Poco::JSON::Object::Ptr& userPrivateInfoObj,
     bool& viewSettingsMutated)
 {
+    const bool allowUserSettings =
+        ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true);
     auto resolveField = [&](const std::string& vsKey, const std::string& upiKey,
                             const std::string& cfgKey) -> std::string
     {
         std::string value;
-        if (viewSettings)
-            JsonUtil::findJSONValue(viewSettings, vsKey, value);
-        if (value.empty() && userPrivateInfoObj)
+        // See resolveAndApplyAICredentials: when locked to the central
+        // endpoint, use only the coolwsd.xml value and ignore per-user input.
+        if (allowUserSettings)
         {
-            JsonUtil::findJSONValue(userPrivateInfoObj, upiKey, value);
-            if (!value.empty() && viewSettings)
+            if (viewSettings)
+                JsonUtil::findJSONValue(viewSettings, vsKey, value);
+            if (value.empty() && userPrivateInfoObj)
             {
-                LOG_INF("Migrating field [" << vsKey << "] from user private info");
-                viewSettings->set(vsKey, value);
-                viewSettingsMutated = true;
+                JsonUtil::findJSONValue(userPrivateInfoObj, upiKey, value);
+                if (!value.empty() && viewSettings)
+                {
+                    LOG_INF("Migrating field [" << vsKey << "] from user private info");
+                    viewSettings->set(vsKey, value);
+                    viewSettingsMutated = true;
+                }
             }
         }
         if (value.empty())

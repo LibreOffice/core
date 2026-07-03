@@ -366,6 +366,9 @@ public:
     ///   viewSettings[aiProviderAPIKey|Model|URL]
     ///   -> userPrivateInfoObj[AIProviderAPIKey|Model|URL]
     ///   -> coolwsd.xml ai.api_key / ai.model / ai.api_url
+    /// When ai.allow_user_settings is false the per-user sources are skipped
+    /// and only the coolwsd.xml values are used, locking every user to the
+    /// central endpoint.
     /// Applies the resolved values to this session. If viewSettings is non-null
     /// and a field is filled from userPrivateInfoObj, viewSettings is mutated
     /// (and viewSettingsMutated set to true) so callers can persist the
@@ -386,6 +389,8 @@ public:
     ///   viewSettings[aiImageProviderAPIKey|URL|aiImageModel|aiImageSize]
     ///   -> userPrivateInfoObj[AIImageProviderAPIKey|URL|AIImageModel|AIImageSize]
     ///   -> coolwsd.xml ai.image_api_key / ai.image_api_url / ai.image_model / ai.image_size
+    /// As with resolveAndApplyAICredentials, ai.allow_user_settings=false skips
+    /// the per-user sources and uses only the coolwsd.xml values.
     /// Applies the resolved values to this session. If viewSettings is non-null
     /// and a field is filled from userPrivateInfoObj, viewSettings is mutated
     /// (and viewSettingsMutated set to true) so callers can persist the

@@ -2460,13 +2460,16 @@ void FileServerRequestHandler::preprocessIntegratorAdminFile(const HTTPRequest& 
     std::string enableAccessibility = stringifyBoolFromConfig(config, "accessibility.enable", Util::isMobileApp());
     Poco::replaceInPlace(adminFile, std::string("%ENABLE_ACCESSIBILITY%"), enableAccessibility);
 
-    // AI settings are disabled server-wide when ai.enabled is off, or when the
-    // WOPI integrator requests it. Mirror the in-document gate in DocumentBroker
-    // so the standalone settings page (e.g. embedded in a Nextcloud settings
-    // page) respects the ai.enabled master switch too.
+    // AI settings are disabled server-wide when ai.enabled is off, when the
+    // admin has locked users to the central endpoint (ai.allow_user_settings),
+    // or when the WOPI integrator requests it. Mirror the in-document gate in
+    // DocumentBroker so the standalone settings page (e.g. embedded in a
+    // Nextcloud settings page) respects these switches too.
     const std::string disableAIFromWopi = form.get("disable_ai_settings", "false");
     const bool disableAISettings =
-        !ConfigUtil::getConfigValue<bool>("ai.enabled", false) || disableAIFromWopi == "true";
+        !ConfigUtil::getConfigValue<bool>("ai.enabled", false) ||
+        !ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true) ||
+        disableAIFromWopi == "true";
     Poco::replaceInPlace(adminFile, std::string("%DISABLE_AI_SETTINGS%"),
                          std::string(disableAISettings ? "true" : "false"));
 

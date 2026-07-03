@@ -1550,6 +1550,7 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     wopiInfo->set("EnableRemoteAIContent", wopiFileInfo->getEnableRemoteAIContent());
     wopiInfo->set("DisableAISettings",
                   !ConfigUtil::getConfigValue<bool>("ai.enabled", false) ||
+                      !ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true) ||
                       wopiFileInfo->getDisableAISettings());
 
     // Resolve default AI credentials from UserPrivateInfo, falling back to
