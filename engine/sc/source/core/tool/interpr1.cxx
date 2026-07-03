@@ -10067,7 +10067,7 @@ void ScInterpreter::ScLambda()
     // Param names after the first are found at pJump[1] + 1 to pJump[nJumpCount - 2] + 1
     for (nJump = 1; nJump <= nJumpCount - 2; ++nJump)
     {
-        if (auto pToken = dynamic_cast<FormulaStringNameToken*>(pCode[pJump[nJump] + 1]))
+        if (const FormulaStringNameToken* pToken = GetStringNameToken(pCode[pJump[nJump] + 1]))
         {
             aParams[nJump] = pToken->GetString().getString();
             // All optional parameters must appear at the end of the parameter list
@@ -10934,8 +10934,8 @@ void ScInterpreter::ScLet()
 
         aArgs.push_back(PopToken());
         // the param name is one jump before the current one
-        auto pToken = static_cast<const FormulaStringNameToken*>(pCode[pJump[nJump - 1] + 1]);
-        aParams.push_back(pToken->GetString().getString());
+        const FormulaStringNameToken* pToken = GetStringNameToken(pCode[pJump[nJump - 1] + 1]);
+        aParams.push_back(pToken ? pToken->GetString().getString() : OUString());
     }
 
     // the last subformula isn't named

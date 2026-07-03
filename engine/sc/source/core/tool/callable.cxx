@@ -171,7 +171,7 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
         while (!aIter.IsEndOfPath())
         {
             const formula::FormulaToken* pToken = aIter.Next();
-            auto pStringNameToken = dynamic_cast<const formula::FormulaStringNameToken*>(pToken);
+            auto pStringNameToken = formula::GetStringNameToken(pToken);
             if (pStringNameToken)
             {
                 short nNextOp = aIter.GetPC() + 1;
@@ -195,8 +195,8 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
                         case ocLet:
                         {
                             aStartPoints.push(pJump[1]);
-                            auto pSubToken = dynamic_cast<const formula::FormulaStringNameToken*>(
-                                rTokens.GetCode()[aIter.GetPC() - 1]);
+                            auto pSubToken
+                                = formula::GetStringNameToken(rTokens.GetCode()[aIter.GetPC() - 1]);
                             if (!(pSubToken
                                   && pSubToken->GetString().getString().equalsIgnoreAsciiCase(
                                          aStrName)))
@@ -205,9 +205,8 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
                                 for (short nJump = 2; nJump < nJumpCount - 1; nJump += 2)
                                 {
                                     aStartPoints.push(pJump[nJump + 1]);
-                                    pSubToken
-                                        = dynamic_cast<const formula::FormulaStringNameToken*>(
-                                            rTokens.GetCode()[pJump[nJump]]);
+                                    pSubToken = formula::GetStringNameToken(
+                                        rTokens.GetCode()[pJump[nJump]]);
                                     if (pSubToken
                                         && pSubToken->GetString().getString().equalsIgnoreAsciiCase(
                                                aStrName))
@@ -224,16 +223,15 @@ static std::forward_list<short> lcl_FindReplacementPositions(std::u16string_view
                         break;
                         case ocLambda:
                         {
-                            auto pSubToken = dynamic_cast<const formula::FormulaStringNameToken*>(
-                                rTokens.GetCode()[aIter.GetPC() - 1]);
+                            auto pSubToken
+                                = formula::GetStringNameToken(rTokens.GetCode()[aIter.GetPC() - 1]);
                             if (!(pSubToken && pSubToken->GetString().getString() == aStrName))
                             {
                                 bool bFound = false;
                                 for (short nJump = 1; nJump < nJumpCount - 1; ++nJump)
                                 {
-                                    pSubToken
-                                        = dynamic_cast<const formula::FormulaStringNameToken*>(
-                                            rTokens.GetCode()[pJump[nJump]]);
+                                    pSubToken = formula::GetStringNameToken(
+                                        rTokens.GetCode()[pJump[nJump]]);
                                     if (pSubToken && pSubToken->GetString().getString() == aStrName)
                                     {
                                         // this name shadows the one we're looking for, in the body
