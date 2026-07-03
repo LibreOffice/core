@@ -351,7 +351,6 @@ describe('Cross-window slide copy/paste', () => {
 	// read-only deck into one you are editing.
 	it('copies slides from a read-only document into an edit-mode document', async function () {
 		this.timeout(120000);
-		const k = 2;
 
 		// A separate fixture, so opening it gives a new window.
 		const readOnlySource = await openFixture(
@@ -363,19 +362,12 @@ describe('Cross-window slide copy/paste', () => {
 		await waitForIdle();
 		expect(await we().execute(() => app.map.isEditMode())).toBe(false);
 
-		// B is already in edit mode; snapshot its baseline.
-		await switchTo(handleB);
-		await prepareTargetSelection();
-		const beforeParts = await partsCount();
-		const beforeImgs = await previewImgCount();
-
-		await switchTo(readOnlySource);
-		await selectFirstNSlides(k);
-		await copySlides('bridge');
-		await waitCopyAcknowledged();
-
-		await switchTo(handleB);
-		await pasteSlides('bridge', beforeParts);
-		await expectSlidesAdded(beforeParts, beforeImgs, k);
+		await crossDocCopyPaste({
+			source: readOnlySource,
+			target: handleB,
+			n: 2,
+			mechanism: 'bridge',
+			waitAck: true,
+		});
 	});
 });
