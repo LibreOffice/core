@@ -21,7 +21,7 @@ bool RustOptions::initOptions(int argc, char* argv[], bool)
 
     for (int i = 1; i < argc; i++)
     {
-        OString argument = argv[i];
+        OString argument(argv[i]);
 
         if (argument == "-h"_ostr || argument == "--help"_ostr)
         {
@@ -43,7 +43,7 @@ bool RustOptions::initOptions(int argc, char* argv[], bool)
             {
                 if (m_options.count("--types"_ostr) == 0)
                 {
-                    m_options["--types"_ostr] = argv[++i];
+                    m_options["--types"_ostr] = OString(argv[++i]);
                 }
                 else
                 {
@@ -71,7 +71,7 @@ bool RustOptions::initOptions(int argc, char* argv[], bool)
         {
             if (i + 1 < argc)
             {
-                m_options["--cpp-output-dir"_ostr] = argv[++i];
+                m_options["--cpp-output-dir"_ostr] = OString(argv[++i]);
             }
             else
             {
@@ -82,7 +82,7 @@ bool RustOptions::initOptions(int argc, char* argv[], bool)
         {
             if (i + 1 < argc)
             {
-                m_options["--rust-output-dir"_ostr] = argv[++i];
+                m_options["--rust-output-dir"_ostr] = OString(argv[++i]);
             }
             else
             {
