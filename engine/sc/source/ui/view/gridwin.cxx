@@ -6624,6 +6624,8 @@ void ScGridWindow::UpdateKitSelection(const std::vector<tools::Rectangle>& rRect
     {
         if (it == pViewShell)
             continue;
+        if (it->GetDocId() != pViewShell->GetDocId())
+            continue;
         auto pOther = dynamic_cast<const ScTabViewShell *>(it);
         if (!pOther)
             return;
@@ -6656,6 +6658,8 @@ void ScGridWindow::updateOtherKitSelections() const
     {
         auto pOther = dynamic_cast<const ScTabViewShell *>(it);
         if (!pOther)
+            continue;
+        if (it->GetDocId() != pViewShell->GetDocId())
             continue;
 
         // Fetch pixels & convert for each view separately.

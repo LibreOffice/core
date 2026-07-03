@@ -199,6 +199,7 @@ public:
     void testCommentsImpress();
     void testCommentsImpressCrossDocument();
     void testDocSizeChangedCrossDocument();
+    void testViewSelectionCrossDocument();
     void testCommentsCallbacksWriter();
     void testCommentsAddEditDeleteDraw();
     void testCommentsInReadOnlyMode();
@@ -286,6 +287,7 @@ public:
     CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST(testCommentsImpressCrossDocument);
     CPPUNIT_TEST(testDocSizeChangedCrossDocument);
+    CPPUNIT_TEST(testViewSelectionCrossDocument);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testCommentsAddEditDeleteDraw);
     CPPUNIT_TEST(testCommentsInReadOnlyMode);
@@ -2279,6 +2281,7 @@ public:
     boost::property_tree::ptree m_aCommentCallbackResult;
     int m_nComments = 0;
     int m_nDocSizeChanged = 0;
+    int m_nTextViewSelection = 0;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
     std::string m_searchTerm;
@@ -2345,6 +2348,11 @@ public:
         case KIT_CALLBACK_DOCUMENT_SIZE_CHANGED:
         {
             ++m_nDocSizeChanged;
+        }
+        break;
+        case KIT_CALLBACK_TEXT_VIEW_SELECTION:
+        {
+            ++m_nTextViewSelection;
         }
         break;
         case KIT_CALLBACK_CELL_FORMULA:
@@ -2875,6 +2883,36 @@ void DesktopKitTest::testDocSizeChangedCrossDocument()
     // never is.
     CPPUNIT_ASSERT(aView1.m_nDocSizeChanged > 0);
     CPPUNIT_ASSERT_EQUAL(0, aView2.m_nDocSizeChanged);
+}
+
+void DesktopKitTest::testViewSelectionCrossDocument()
+{
+    // Two spreadsheets open in one process, both showing the first sheet.
+    // The two files differ so that the desktop keeps two separate views
+    // instead of reusing one for the same file.
+    std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("empty.ods");
+    pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
+    int nView1 = pDocument1->m_pDocumentClass->getView(pDocument1.get());
+    ViewCallback aView1(pDocument1.get());
+
+    std::unique_ptr<LibLODocument_Impl> pDocument2 = loadDocImpl("search.ods");
+    pDocument2->m_pDocumentClass->initializeForRendering(pDocument2.get(), "{}");
+    ViewCallback aView2(pDocument2.get());
+
+    Scheduler::ProcessEventsToIdle();
+    aView2.m_nTextViewSelection = 0;
+
+    // Select a cell range in the first spreadsheet.
+    pDocument1->m_pDocumentClass->setView(pDocument1.get(), nView1);
+    pDocument1->m_pDocumentClass->postUnoCommand(
+        pDocument1.get(),
+        ".uno:GoToCell",
+        "{ \"ToPoint\": { \"type\": \"string\", \"value\": \"B2:D5\" } }",
+        false);
+    Scheduler::ProcessEventsToIdle();
+
+    // The other spreadsheet never receives the first one's view selection.
+    CPPUNIT_ASSERT_EQUAL(0, aView2.m_nTextViewSelection);
 }
 
 void DesktopKitTest::testCommentsCallbacksWriter()
