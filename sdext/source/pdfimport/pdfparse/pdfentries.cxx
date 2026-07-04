@@ -688,6 +688,12 @@ bool PDFObject::getDeflatedStream( std::unique_ptr<char[]>& rpStream, unsigned i
             pStream++;
         // get the compressed length
         *pBytes = m_pStream->getDictLength( pObjectContainer );
+        unsigned int nAvailable = nOuterStreamLen - static_cast<unsigned int>(pStream - rpStream.get());
+        if (*pBytes > nAvailable)
+        {
+            SAL_WARN("sdext.pdfimport.pdfparse", "stream /Length " << *pBytes << " exceeds " << nAvailable << " available bytes");
+            *pBytes = nAvailable;
+        }
         if( pStream != rpStream.get() )
             memmove( rpStream.get(), pStream, *pBytes );
         if( rContext.m_bDecrypt )
