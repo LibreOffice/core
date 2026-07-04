@@ -13,6 +13,8 @@
 
 /* global app _ */
 
+declare var JSDialog: any;
+
 /*
 	app.dispatcher.dispatch() will be used to call some actions so we can share the code
 	This is mostly used by keyboard shortcuts etc, which need a base (for simplicity) to call actions.
@@ -235,6 +237,14 @@ class Dispatcher {
 			elementToFocus.focus();
 		};
 
+		// F6 steps forward and Shift+F6 back through the on-screen regions.
+		this.actionsMap['focusnextregion'] = () => {
+			this.focusRegion(1);
+		};
+		this.actionsMap['focuspreviousregion'] = () => {
+			this.focusRegion(-1);
+		};
+
 		this.actionsMap['saveas'] = function () {
 			if (app.map && app.map.uiManager.getCurrentMode() === 'notebookbar') {
 				app.map.openSaveAs(); // Opens save as dialog if integrator supports it.
@@ -391,6 +401,173 @@ class Dispatcher {
 				console.warn('A11yValidator not available');
 			}
 		};
+	}
+
+	// Move keyboard focus into the the notebookbar (or the menubar when
+	// the classic interface is in use). Returns false when there is
+	// nothing to focus.
+	private focusTopBar(): boolean {
+		if (app.map.uiManager.getCurrentMode() === 'notebookbar') {
+			this.actionsMap['focustonotebookbar']();
+			return true;
+		}
+		const firstMenu = document.querySelector<HTMLElement>(
+			'#main-menu > li > a[tabindex="0"]',
+		);
+		if (!firstMenu) return false;
+		firstMenu.focus();
+		return true;
+	}
+
+	// The focusable areas of the application, in the order F6 walks through
+	// them.
+	//
+	// focus returns true when it actually moved keyboard focus into the
+	// area, so focusRegion can skip to the next area instead of swallowing
+	// the key press.
+	//
+	// An area defines blur only when it leaves sticky focus state behind that
+	// has to be cleared as focus moves away from it.
+	private getFocusRegions(): Array<{
+		available: () => boolean;
+		hasFocus: () => boolean;
+		focus: () => boolean;
+		blur?: () => void;
+	}> {
+		const contains = (element: HTMLElement | null) =>
+			!!element && element.contains(document.activeElement);
+		const isVisible = (element: HTMLElement | null) =>
+			!!element && element.offsetParent !== null;
+		const docType = app.map._docLayer ? app.map._docLayer._docType : '';
+		const preview = () =>
+			app.map._docLayer && (app.map._docLayer as any)._preview;
+
+		const focusFirstIn = (element: HTMLElement | null) => {
+			const focusables = element && JSDialog.GetFocusableElements(element);
+			if (!focusables || !focusables.length) return false;
+			focusables[0].focus();
+			return true;
+		};
+
+		const topBar = {
+			available: () => true,
+			hasFocus: () =>
+				contains(document.querySelector('.notebookbar-tabs-container')) ||
+				contains(document.getElementById('main-menu')),
+			focus: () => this.focusTopBar(),
+		};
+
+		const formulaBar = {
+			available: () =>
+				!app.isReadOnly() &&
+				isVisible(document.getElementById('sc_input_window')),
+			hasFocus: () => app.map.calcInputBarHasFocus(),
+			focus: () => app.map.formulabar.focus(),
+			blur: () => {
+				if (app.map.formulabar) app.map.onFormulaBarBlur();
+			},
+		};
+
+		const slidePanel = {
+			available: () =>
+				app.map.isPresentationOrDrawing() &&
+				isVisible(document.getElementById('slide-sorter')),
+			hasFocus: () => contains(document.getElementById('navigation-sidebar')),
+			focus: () => {
+				if (!preview()) return false;
+				preview().focusCurrentSlide();
+				preview().partsFocused = true;
+				return true;
+			},
+			blur: () => {
+				if (preview()) preview().partsFocused = false;
+			},
+		};
+
+		const documentArea = {
+			available: () => true,
+			hasFocus: () => app.map.hasFocus() && !app.map.calcInputBarHasFocus(),
+			focus: () => {
+				app.map.focus();
+				return true;
+			},
+		};
+
+		const sidebar = {
+			available: () => !!app.map.sidebar && app.map.sidebar.isVisible(),
+			hasFocus: () => !!app.map.sidebar && contains(app.map.sidebar.wrapper),
+			focus: () => focusFirstIn(app.map.sidebar.wrapper),
+		};
+
+		const statusBar = {
+			available: () => {
+				const bar = document.getElementById('toolbar-down');
+				if (!isVisible(bar)) return false;
+				const focusables = JSDialog.GetFocusableElements(bar);
+				return !!focusables && focusables.length > 0;
+			},
+			hasFocus: () => contains(document.getElementById('toolbar-down')),
+			focus: () => focusFirstIn(document.getElementById('toolbar-down')),
+		};
+
+		const sheetTabs = {
+			available: () =>
+				isVisible(document.getElementById('spreadsheet-toolbar')),
+			hasFocus: () => {
+				const active = document.activeElement;
+				return !!active && active.classList.contains('spreadsheet-tab');
+			},
+			focus: () => {
+				const tab =
+					document.querySelector<HTMLElement>('.spreadsheet-tab-selected') ||
+					document.querySelector<HTMLElement>('.spreadsheet-tab');
+				if (!tab) return false;
+				tab.focus();
+				return true;
+			},
+		};
+
+		const regions = [topBar];
+		if (docType === 'spreadsheet') regions.push(formulaBar);
+		if (docType === 'presentation' || docType === 'drawing')
+			regions.push(slidePanel);
+		regions.push(documentArea);
+		regions.push(sidebar);
+		if (docType === 'spreadsheet') regions.push(sheetTabs);
+		regions.push(statusBar);
+		return regions;
+	}
+
+	private focusRegion(direction: number) {
+		const regions = this.getFocusRegions().filter((region) =>
+			region.available(),
+		);
+		if (!regions.length) return;
+
+		const wrap = (index: number) =>
+			((index % regions.length) + regions.length) % regions.length;
+		const current = regions.findIndex((region) => region.hasFocus());
+
+		// The first region to try is the neighbour in the requested direction.
+		// When nothing is focused yet, start at the near end of the ring.
+		let start;
+		if (current !== -1) start = wrap(current + direction);
+		else start = direction > 0 ? 0 : regions.length - 1;
+
+		// Walk the ring from there, skipping any region that declines
+		// focus, until one takes it. Clear that region's sticky focus
+		// state only when there is another region to move to (so a
+		// ring that has only one region is left unchanged).
+		let blurred = false;
+		for (let step = 0; step < regions.length; step++) {
+			const index = wrap(start + direction * step);
+			if (index === current) break;
+			if (!blurred && current !== -1 && regions[current].blur) {
+				regions[current].blur();
+				blurred = true;
+			}
+			if (regions[index].focus()) return;
+		}
 	}
 
 	private addAICommands() {

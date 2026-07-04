@@ -529,6 +529,20 @@ function testPDFExportWarningDialog(win) {
 		});
 }
 
+/**
+ * Assert that keyboard focus is somewhere inside the element matched by
+ * selector. Retries until it holds, so it is safe to call right after a
+ * focus-moving key press.
+ * @param {string} selector - cGet selector for the container element
+ */
+function assertFocusWithin(selector) {
+	cy.cGet(selector).should(function ($element) {
+		var win = $element[0].ownerDocument.defaultView;
+		expect($element[0].contains(win.document.activeElement)).to.equal(true);
+	});
+}
+
+module.exports.assertFocusWithin = assertFocusWithin;
 module.exports.enableUICoverage = enableUICoverage;
 module.exports.reportUICoverage = reportUICoverage;
 module.exports.resetState = resetState;

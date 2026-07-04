@@ -158,6 +158,7 @@ interface MapInterface extends Evented {
 
 	_cacheSVG: string[];
 	calcInputBarHasFocus(): boolean;
+	hasFocus(): boolean;
 	lockAccessibilityOn(): void;
 	getPixelBounds(center?: InternPointLike, zoom?: number): cool.Bounds;
 	getPixelBoundsCore(center?: InternPointLike, zoom?: number): cool.Bounds;

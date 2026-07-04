@@ -367,6 +367,8 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'N' }),
     new ShortcutDescriptor({ eventType: 'keydown', key: 'F1', dispatchAction: 'showhelp' }),
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.ALT, key: 'F1', dispatchAction: 'focustonotebookbar' }),
+    new ShortcutDescriptor({ eventType: 'keydown', key: 'F6', dispatchAction: 'focusnextregion', showViewModeAttention: false }),
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.SHIFT, key: 'F6', dispatchAction: 'focuspreviousregion', showViewModeAttention: false }),
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'f', dispatchAction: 'home-search' }),
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'p', dispatchAction: 'print' }),
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 's', dispatchAction: 'save', dispatchData: 'keyboard' }),
