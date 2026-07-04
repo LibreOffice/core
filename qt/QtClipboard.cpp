@@ -316,20 +316,19 @@ bool pasteFromClipboard(unsigned dstDocId, int dstFd, const std::string& unoCmd)
 
     // Cross-window paste: defer to the kit thread, where reading the non-active
     // source view is safe.
-    KitSocketPoll* poll = KitSocketPoll::getMainPoll();
-    const bool scheduled = poll
-        && poll->addCallback(
-            [src, dstDocId, dstFd, unoCmd]()
-            {
-                // Either document may have closed between enqueuing this callback
-                // and its execution.
-                if (transferClipboardOnKitThread(src, dstDocId))
-                    fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
-            });
+    const bool scheduled = KitSocketPoll::scheduleOnKitThread(
+        dstDocId,
+        [src, dstDocId, dstFd, unoCmd]()
+        {
+            // Either document may have closed between enqueuing this callback
+            // and its execution.
+            if (transferClipboardOnKitThread(src, dstDocId))
+                fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
+        });
     if (!scheduled)
     {
-        // No live kit poll to defer to (none exists, or its thread has already
-        // finished); paste synchronously so the command is not silently lost.
+        // No live poll serves the destination document, so it has closed;
+        // fall back to a plain paste rather than dropping the command.
         fakeSocketWriteQueue(dstFd, unoCmd.c_str(), unoCmd.size());
         return false;
     }

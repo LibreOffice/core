@@ -3038,6 +3038,34 @@ void KitSocketPoll::dumpGlobalState(std::ostream& oss) // static
         oss << "KitSocketPoll: none\n";
 }
 
+bool KitSocketPoll::scheduleOnKitThread(unsigned mobileAppDocId, const CallbackFn& fn) // static
+{
+#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+    // Several documents share this process, each with a poll in KSPolls.
+    // getMainPoll() tracks only the last-built poll and is cleared by any
+    // poll's destructor, so it can be null while live polls remain. Pick the
+    // document's own poll: the kit thread services every poll in the set, so
+    // the callback still runs on it, and it is dropped only if this document
+    // closes rather than an unrelated one.
+    std::unique_lock<std::mutex> lock(KSPollsMutex);
+    for (const auto& weak : KSPolls)
+    {
+        if (auto p = weak.lock())
+        {
+            const std::shared_ptr<Document>& doc = p->getDocument();
+            if (doc && doc->getMobileAppDocId() == mobileAppDocId)
+                // Holding the shared_ptr keeps the poll alive across addCallback.
+                return p->addCallback(fn);
+        }
+    }
+    return false;
+#else
+    // One document per kit process, so its single poll is the one to use.
+    (void)mobileAppDocId;
+    return mainPoll && mainPoll->addCallback(fn);
+#endif
+}
+
 std::shared_ptr<KitSocketPoll> KitSocketPoll::create() // static
 {
     std::shared_ptr<KitSocketPoll> result(new KitSocketPoll());

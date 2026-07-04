@@ -165,6 +165,11 @@ public:
 
     static KitSocketPoll* getMainPoll() { return mainPoll; }
 
+    /// Queue a callback to run on the kit thread that serves the given
+    /// document. Returns true when it was queued, false when no live poll
+    /// serves that document.
+    static bool scheduleOnKitThread(unsigned mobileAppDocId, const CallbackFn& fn);
+
 #if ENABLE_DEBUG
     struct ReEntrancyGuard
     {
