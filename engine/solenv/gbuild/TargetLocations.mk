@@ -188,7 +188,6 @@ gb_Rdb_get_target = $(WORKDIR)/Rdb/$(1).rdb
 gb_Rdb_get_target_for_build = $(WORKDIR_FOR_BUILD)/Rdb/$(1).rdb
 gb_ResTarget_get_target = $(WORKDIR)/ResTarget/$(1).res
 gb_MoTarget_get_target = $(WORKDIR)/MoTarget/$(1).mo
-gb_ScpMergeTarget_get_target = $(WORKDIR)/ScpMergeTarget/$(1).ulf
 gb_ScpPreprocessTarget_get_target = $(WORKDIR)/ScpPreprocessTarget/$(1).pre
 gb_ScpTarget_get_external_target = $(WORKDIR)/ScpTarget/$(1).external
 gb_ScpTarget_get_target = $(WORKDIR)/ScpTarget/$(1).par
@@ -311,7 +310,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	PythonTest \
 	Rdb \
 	ResTarget \
-	ScpMergeTarget \
 	ScpPreprocessTarget \
 	ScpTarget \
 	ScpTemplateTarget \

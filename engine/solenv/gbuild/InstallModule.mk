@@ -65,16 +65,6 @@ $(call gb_InstallModuleTarget_add_scpfiles,$(1),$(2))
 
 endef
 
-define gb_InstallModule_add_localized_scpfile
-$(call gb_InstallModuleTarget_add_localized_scpfile,$(1),$(2))
-
-endef
-
-define gb_InstallModule_add_localized_scpfiles
-$(call gb_InstallModuleTarget_add_localized_scpfiles,$(1),$(2))
-
-endef
-
 define gb_InstallModule_add_template
 $(call gb_InstallModuleTarget_add_template,$(1),$(2))
 

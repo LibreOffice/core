@@ -72,37 +72,6 @@ $(call gb_ScpPreprocessTarget_get_target,$(1)) :| $(dir $(call gb_ScpPreprocessT
 
 endef
 
-# ScpMergeTarget class
-
-gb_ScpMergeTarget_get_source = $(SRCDIR)/$(1).ulf
-
-$(dir $(call gb_ScpMergeTarget_get_target,%)).dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(dir $(call gb_ScpMergeTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
-$(eval $(call gb_CustomTarget_ulfex_rule,\
-	$(call gb_ScpMergeTarget_get_target,%),\
-	$(call gb_ScpMergeTarget_get_source,%),\
-	$$(SCP_POFILES)))
-
-.PHONY : $(call gb_ScpMergeTarget_get_clean_target,%)
-$(call gb_ScpMergeTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),SUM,1)
-	rm -f $(call gb_ScpMergeTarget_get_target,$*)
-
-# gb_ScpMergeTarget_ScpMergeTarget(<target>)
-define gb_ScpMergeTarget_ScpMergeTarget
-$(call gb_ScpMergeTarget_get_target,$(1)) :| $(dir $(call gb_ScpMergeTarget_get_target,$(1))).dir
-$(call gb_ScpMergeTarget_get_target,$(1)) : \
-	SCP_POFILES := $(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
-$(call gb_ScpMergeTarget_get_target,$(1)) : \
-	$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po)
-$(foreach lang,$(gb_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(1))).po) :
-
-endef
-
 # ScpTarget class
 
 gb_ScpTarget_TARGET := $(SRCDIR)/solenv/bin/pre2par.pl
@@ -144,19 +113,6 @@ $(call gb_ScpPreprocessTarget_get_target,$(1)) : $(call gb_ScpTarget_get_externa
 $(call gb_ScpTarget_get_clean_target,$(1)) : $(call gb_ScpPreprocessTarget_get_clean_target,$(1))
 $(call gb_ScpTarget_get_target,$(1)) : SCP_SOURCE := $(call gb_ScpPreprocessTarget_get_target,$(1))
 $(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(gb_Helper_PHONY)
-
-endef
-
-define gb_ScpTarget_set_localized
-ifneq ($(gb_WITH_LANG),)
-$(call gb_ScpMergeTarget_ScpMergeTarget,$(1))
-$(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(call gb_ScpMergeTarget_get_target,$(1))
-$(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_target,$(1))
-$(call gb_ScpTarget_get_clean_target,$(1)) : $(call gb_ScpMergeTarget_get_clean_target,$(1))
-else
-$(call gb_ScpTarget_get_target,$(1)) : SCP_ULF := $(call gb_ScpMergeTarget_get_source,$(1))
-$(call gb_ScpTarget_get_target,$(1)) : $(call gb_ScpMergeTarget_get_source,$(1))
-endif
 
 endef
 
@@ -253,17 +209,6 @@ endef
 
 define gb_InstallModuleTarget_add_scpfiles
 $(foreach scpfile,$(2),$(call gb_InstallModuleTarget_add_scpfile,$(1),$(scpfile)))
-
-endef
-
-define gb_InstallModuleTarget_add_localized_scpfile
-$(call gb_InstallModuleTarget_add_scpfile,$(1),$(2))
-$(call gb_ScpTarget_set_localized,$(2))
-
-endef
-
-define gb_InstallModuleTarget_add_localized_scpfiles
-$(foreach scpfile,$(2),$(call gb_InstallModuleTarget_add_localized_scpfile,$(1),$(scpfile)))
 
 endef
 
