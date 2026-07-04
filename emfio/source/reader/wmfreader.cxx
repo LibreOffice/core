@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <memory>
 #include <optional>
+#include <comphelper/configuration.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sprintf.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -1338,15 +1339,16 @@ namespace emfio
                                     mpInputStream->ReadBytes(pData.get(), nEscLen);
                                     nCheckSum = rtl_crc32(nCheckSum, pData.get(), nEscLen);
                                 }
-                                if (nCheck == nCheckSum)
+                                if (comphelper::IsFuzzing() || nCheck == nCheckSum)
                                 {
                                     switch (nEsc)
                                     {
                                         case PRIVATE_ESCAPE_UNICODE:
                                         {
                                             // we will use text instead of polygons only if we have the correct font
-                                            if (Application::GetDefaultDevice()->IsFontAvailable(
-                                                    GetFont().GetFamilyName()))
+                                            if (comphelper::IsFuzzing()
+                                                || Application::GetDefaultDevice()->IsFontAvailable(
+                                                       GetFont().GetFamilyName()))
                                             {
                                                 Point aPt;
                                                 sal_uInt32 nStringLen, nDXCount;
