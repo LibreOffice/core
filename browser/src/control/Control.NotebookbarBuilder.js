@@ -176,12 +176,20 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 				if (state === 'true' &&  this.map.saveState) {
 					this.map.saveState.showModifiedStatus();
 					const button = document.querySelector('[id^="file-save"]');
-					if (button) button.classList.add('savemodified');
+					if (button) {
+						button.classList.add('savemodified');
+						const innerButton = button.querySelector('button') || button;
+						innerButton.setAttribute('aria-label', _('Unsaved changes. Save'));
+					}
 				} else {
 					const button = document.querySelector('[id^="save"]');
 					if (button) button.classList.remove('savemodified');
 					const fileButton = document.querySelector('[id^="file-save"]');
-					if (fileButton) fileButton.classList.remove('savemodified');
+					if (fileButton) {
+						fileButton.classList.remove('savemodified');
+						const innerButton = fileButton.querySelector('button') || fileButton;
+						innerButton.setAttribute('aria-label', _('Save'));
+					}
 				}
 			}
 		}
@@ -744,11 +752,14 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 
 			builder.map.on('updatemodificationindicator', function(e) {
 				if (e.lastSaved) {
-					tooltip.textContent = e.lastSaved;
+					var isModified = control.button.parentElement.classList.contains('savemodified');
+					tooltip.textContent = isModified
+						? _('Unsaved changes.') + ' ' + e.lastSaved
+						: e.lastSaved;
+					control.button.setAttribute('aria-label', isModified ? _('Unsaved changes. Save') : _('Save'));
 				}
 			});
 
-			control.button.setAttribute('aria-describedby', tooltip.id);
 			control.label = tooltip;
 		}
 
