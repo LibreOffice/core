@@ -1798,7 +1798,11 @@ private:
 
         _asyncShutdownOnFinish = asyncShutdownOnFinish;
 
-        std::string host = _host;
+        // Bracket an IPv6 literal so the Host header is well-formed, e.g.
+        // "[::1]:9980". _host is a bare host (no scheme, no port), so a colon
+        // in it can only be part of an IPv6 address.
+        const bool isIPv6 = _host.find(':') != std::string::npos;
+        std::string host = isIPv6 ? '[' + _host + ']' : _host;
 
         if (_port != "80" && _port != "443")
         {

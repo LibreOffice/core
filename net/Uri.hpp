@@ -71,7 +71,15 @@ inline bool parseUri(std::string uri, std::string& scheme, std::string& host, st
     else
     {
         const auto itPort = uri.find(':');
-        if (itPort != uri.npos)
+        if (itPort != uri.npos && uri.find(':', itPort + 1) != uri.npos)
+        {
+            // More than one colon and no brackets: a bare IPv6 literal such as
+            // "::1". It carries no port - that would require brackets - so the
+            // whole string is the host.
+            host = std::move(uri);
+            port.clear();
+        }
+        else if (itPort != uri.npos)
         {
             host = uri.substr(0, itPort);
             port = uri.substr(itPort + 1); // Skip the colon.

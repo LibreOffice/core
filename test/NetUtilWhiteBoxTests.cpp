@@ -207,6 +207,18 @@ void NetUtilWhiteBoxTests::testParseUri()
     LOK_ASSERT_EQUAL_STR("2001:db8::1", host);
     LOK_ASSERT_EQUAL_STR("88", port);
 
+    // A bare (unbracketed) IPv6 literal is accepted as a host with no port;
+    // brackets are only needed when a port follows.
+    LOK_ASSERT(net::parseUri("::1", scheme, host, port));
+    LOK_ASSERT(scheme.empty());
+    LOK_ASSERT_EQUAL_STR("::1", host);
+    LOK_ASSERT(port.empty());
+
+    LOK_ASSERT(net::parseUri("2001:db8::1", scheme, host, port));
+    LOK_ASSERT(scheme.empty());
+    LOK_ASSERT_EQUAL_STR("2001:db8::1", host);
+    LOK_ASSERT(port.empty());
+
     // Malformed: an unterminated bracket is rejected.
     LOK_ASSERT(!net::parseUri("[::1", scheme, host, port));
 }

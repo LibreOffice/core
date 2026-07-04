@@ -55,6 +55,7 @@ class HttpRequestTests final : public CPPUNIT_NS::TestFixture
 
     CPPUNIT_TEST(testSslHostname);
     CPPUNIT_TEST(testInvalidURI);
+    CPPUNIT_TEST(testIPv6Host);
     CPPUNIT_TEST(testBadResponse);
     CPPUNIT_TEST(testGoodResponse);
     CPPUNIT_TEST(testSimpleGet);
@@ -75,6 +76,7 @@ class HttpRequestTests final : public CPPUNIT_NS::TestFixture
 
     void testSslHostname();
     void testInvalidURI();
+    void testIPv6Host();
     void testBadResponse();
     void testGoodResponse();
     void testSimpleGet();
@@ -194,6 +196,31 @@ void HttpRequestTests::testInvalidURI()
     {
         // Pass.
     }
+}
+
+void HttpRequestTests::testIPv6Host()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A bracketed IPv6 literal: the session stores the bare address (what
+    // getaddrinfo wants) and keeps the port. Constructing the session also
+    // exercises the debug-only host round-trip assert in Session's ctor.
+    std::shared_ptr<http::Session> session = http::Session::createHttp("[::1]", 9980);
+    LOK_ASSERT(session);
+    LOK_ASSERT_EQUAL_STR("::1", session->host());
+    LOK_ASSERT_EQUAL_STR("9980", session->port());
+
+    // A bare IPv6 literal is accepted too.
+    session = http::Session::createHttp("::1", 9980);
+    LOK_ASSERT(session);
+    LOK_ASSERT_EQUAL_STR("::1", session->host());
+    LOK_ASSERT_EQUAL_STR("9980", session->port());
+
+    // And from a full URI with a bracketed IPv6 authority.
+    session = http::Session::create("http://[::1]:9980");
+    LOK_ASSERT(session);
+    LOK_ASSERT_EQUAL_STR("::1", session->host());
+    LOK_ASSERT_EQUAL_STR("9980", session->port());
 }
 
 void HttpRequestTests::testBadResponse()
