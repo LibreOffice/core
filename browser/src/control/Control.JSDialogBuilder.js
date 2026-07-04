@@ -367,9 +367,17 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 
 		var text = element.textContent;
 		var index = text.indexOf(accessKey);
-			if (index >= 0) {
-					var title = text.replace(accessKey, '<u class="access-key">' + accessKey.replace('~', '') + '</u>');
-					element.innerHTML = title;
+		if (index >= 0) {
+			// Underline the access key by building the label from DOM nodes.
+			var underline = document.createElement('u');
+			underline.className = 'access-key';
+			underline.textContent = accessKey.replace('~', '');
+
+			element.textContent = '';
+			if (index > 0)
+				element.appendChild(document.createTextNode(text.slice(0, index)));
+			element.appendChild(underline);
+			element.appendChild(document.createTextNode(text.slice(index + accessKey.length)));
 		}
 	},
 
@@ -549,7 +557,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		arrowSpan.textContent = '>';
 
 		var updateFunction = function(titleSpan) {
-			titleSpan.innerHTML = data.text;
+			titleSpan.textContent = data.text;
 		};
 
 		updateCallback ? updateCallback(titleSpan) : updateFunction(titleSpan);
@@ -773,11 +781,11 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			app.LOUtil.setImage(icon, iconName, builder.map);
 			icon.alt = '';
 			var titleSpan2 = window.L.DomUtil.create('span', 'menu-entry-with-icon flex-fullwidth', sectionTitle);
-			titleSpan2.innerHTML = title;
+			titleSpan2.textContent = title;
 		}
 		else {
 			var titleSpan = window.L.DomUtil.create('span', 'sub-menu-title', sectionTitle);
-			titleSpan.innerHTML = title;
+			titleSpan.textContent = title;
 		}
 		var arrowSpan = window.L.DomUtil.create('span', 'sub-menu-arrow', sectionTitle);
 		arrowSpan.textContent = '>';
@@ -1888,7 +1896,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		}
 
 		var titleSpan = window.L.DomUtil.create('span', '', menuEntry);
-		titleSpan.innerHTML = title;
+		titleSpan.textContent = title;
 		var paddingClass = icon ? 'menu-entry-with-icon flex-fullwidth' : 'menu-entry-no-icon';
 		window.L.DomUtil.addClass(titleSpan, paddingClass);
 
