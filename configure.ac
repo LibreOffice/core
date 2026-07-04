@@ -89,18 +89,34 @@ if test "$host_os" = "emscripten"; then
     hardcode_libdir_flag_spec_CXX=
 fi
 
+# The macOS, iOS, Android and Windows apps compile their C/C++ with an external
+# toolchain (Xcode, gradle+NDK, MSBuild) that ignores the flags this configure
+# computes; only browser/* (JS) is built through this tree for them. So skip the
+# host C/C++ capability probes (clang detection, -latomic, the hardening flags
+# and the C++20 check) for those builds: they would only force a host C/C++
+# compiler to exist and produce flags nothing here consumes. Qt and the
+# emscripten/wasm build DO compile C++ through this tree, so they are not listed.
+external_toolchain_app=no
+if test "$enable_macosapp" = "yes" -o "$enable_iosapp" = "yes" \
+     -o "$enable_androidapp" = "yes" -o "$enable_windowsapp" = "yes"; then
+    external_toolchain_app=yes
+fi
+
 AC_LANG_PUSH([C++])
 
-AC_MSG_CHECKING([whether $CXX is actually Clang])
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-    #if !defined __clang__
-    #error
-    #endif
-    ]])],
-    [AC_MSG_RESULT([yes])
-     cxx_clang=true],
-    [AC_MSG_RESULT([no])
-     cxx_clang=false])
+cxx_clang=false
+if test "$external_toolchain_app" != "yes"; then
+    AC_MSG_CHECKING([whether $CXX is actually Clang])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+        #if !defined __clang__
+        #error
+        #endif
+        ]])],
+        [AC_MSG_RESULT([yes])
+         cxx_clang=true],
+        [AC_MSG_RESULT([no])
+         cxx_clang=false])
+fi
 AM_CONDITIONAL([CXX_CLANG], [test "$cxx_clang" = true])
 
 # check for python modules
@@ -118,18 +134,20 @@ for MODULE in lxml polib; do
 done
 
 # On some platforms, std::atomic needs a helper library
-AC_MSG_CHECKING([for the need of -latomic])
-AC_LINK_IFELSE([AC_LANG_SOURCE([
-    #include <atomic>
-    #include <cstdint>
-    std::atomic<std::int64_t> v;
-    int main() {
-      return v;
-    }
-    ])],
-               [AC_MSG_RESULT([no])],
-               [AC_MSG_RESULT([yes])
-                LIBS="$LIBS -latomic"])
+if test "$external_toolchain_app" != "yes"; then
+    AC_MSG_CHECKING([for the need of -latomic])
+    AC_LINK_IFELSE([AC_LANG_SOURCE([
+        #include <atomic>
+        #include <cstdint>
+        std::atomic<std::int64_t> v;
+        int main() {
+          return v;
+        }
+        ])],
+                   [AC_MSG_RESULT([no])],
+                   [AC_MSG_RESULT([yes])
+                    LIBS="$LIBS -latomic"])
+fi
 
 # Declare options
 AC_ARG_ENABLE([developer],
@@ -1325,7 +1343,7 @@ CFLAGS="$CFLAGS -Wall -Wextra"
 
 AC_MSG_CHECKING([whether to use extra compiler hardening flags])
 enable_hardening=yes
-if test "$enable_hardening_flags" = no -o "$host_os" = "emscripten" -o "x$with_sanitizer" != "x"; then
+if test "$enable_hardening_flags" = no -o "$host_os" = "emscripten" -o "x$with_sanitizer" != "x" -o "$external_toolchain_app" = "yes"; then
     enable_hardening=no
 fi
 case "$enable_fuzzers" in
@@ -1636,46 +1654,54 @@ fi
 # Check for C++20 support.
 HAVE_CXXSTD=
 CXXFLAGS_CXXSTD=
-AC_MSG_CHECKING([whether $CXX supports C++20])
-for flag in -std=c++20 -std=c++2a ; do
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $flag -Werror"
-    AC_LANG_PUSH([C++])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-        #include <algorithm>
-        #include <functional>
-        #include <vector>
-        void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
-            std::sort(v.begin(), v.end(), fn);
-        }
-        ]])],[CXXFLAGS_CXXSTD=$flag])
-    AC_LANG_POP([C++])
-    CXXFLAGS=$save_CXXFLAGS
-    if test -n "$CXXFLAGS_CXXSTD"; then
-        HAVE_CXXSTD=TRUE
-        break
+if test "$external_toolchain_app" != "yes"; then
+    AC_MSG_CHECKING([whether $CXX supports C++20])
+    for flag in -std=c++20 -std=c++2a ; do
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS $flag -Werror"
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+            #include <algorithm>
+            #include <functional>
+            #include <vector>
+            void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
+                std::sort(v.begin(), v.end(), fn);
+            }
+            ]])],[CXXFLAGS_CXXSTD=$flag])
+        AC_LANG_POP([C++])
+        CXXFLAGS=$save_CXXFLAGS
+        if test -n "$CXXFLAGS_CXXSTD"; then
+            HAVE_CXXSTD=TRUE
+            break
+        fi
+    done
+    if test "$HAVE_CXXSTD" = TRUE; then
+        AC_MSG_RESULT([yes ($CXXFLAGS_CXXSTD)])
+    else
+        AC_MSG_RESULT([no])
+        AC_MSG_ERROR(Compiler doesn't support C++20)
     fi
-done
-if test "$HAVE_CXXSTD" = TRUE; then
-    AC_MSG_RESULT([yes ($CXXFLAGS_CXXSTD)])
-else
-    AC_MSG_RESULT([no])
-    AC_MSG_ERROR(Compiler doesn't support C++20)
 fi
 
 # Check if we have clang, rather than gcc, which
 # doesn't like -pthread on the linker command-line.
 HAVE_CLANG=false
-AC_MSG_CHECKING([whether the compiler is clang])
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-    #if !defined(__clang__)
-    #error not clang
-    #endif
-])],
-                    [AC_MSG_RESULT([yes])
-                    AC_DEFINE([HAVE_CLANG],1,[whether the C++ compiler is clang]) HAVE_CLANG=true],
-                    [AC_MSG_RESULT([no])
-                    AC_DEFINE([HAVE_CLANG],0,[whether the C++ compiler is clang])])
+if test "$external_toolchain_app" != "yes"; then
+    AC_MSG_CHECKING([whether the compiler is clang])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #if !defined(__clang__)
+        #error not clang
+        #endif
+    ])],
+                        [AC_MSG_RESULT([yes])
+                        HAVE_CLANG=true],
+                        [AC_MSG_RESULT([no])])
+fi
+if test "$HAVE_CLANG" = true; then
+    AC_DEFINE([HAVE_CLANG],1,[whether the C++ compiler is clang])
+else
+    AC_DEFINE([HAVE_CLANG],0,[whether the C++ compiler is clang])
+fi
 AM_CONDITIONAL([HAVE_CLANG], [$HAVE_CLANG])
 AC_SUBST(HAVE_CLANG)
 
