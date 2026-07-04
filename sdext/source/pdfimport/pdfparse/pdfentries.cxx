@@ -1352,7 +1352,15 @@ PDFFileImplData* PDFFile::impl_getData() const
                         {
                             PDFNumber* pNum = dynamic_cast<PDFNumber*>(len->second);
                             if( pNum )
-                                m_pData->m_nKeyLength = static_cast<sal_uInt32>(pNum->m_fValue) / 8;
+                            {
+                                sal_uInt32 nKeyLength = static_cast<sal_uInt32>(pNum->m_fValue) / 8;
+                                if (nKeyLength > ENCRYPTION_KEY_LEN)
+                                {
+                                    SAL_WARN("sdext.pdfimport.pdfparse", "entry has length " << nKeyLength << " which is greater than " << ENCRYPTION_KEY_LEN);
+                                    nKeyLength = ENCRYPTION_KEY_LEN;
+                                }
+                                m_pData->m_nKeyLength = nKeyLength;
+                            }
                         }
                         PDFName* pFilter = dynamic_cast<PDFName*>(filter->second);
                         if( pFilter && pFilter->getFilteredName() == "Standard" )
