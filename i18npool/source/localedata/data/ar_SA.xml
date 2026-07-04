@@ -52,7 +52,7 @@
     <TimePM>م</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[⃁-$401]"/>
+  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[$⃁-401]"/>
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="ar_EG"/>
