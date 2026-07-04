@@ -189,6 +189,26 @@ void NetUtilWhiteBoxTests::testParseUri()
     LOK_ASSERT_EQUAL_STR("wss://", scheme);
     LOK_ASSERT_EQUAL_STR("127.0.0.1", host);
     LOK_ASSERT_EQUAL_STR("9999", port);
+
+    // IPv6 literals are bracketed so their colons are not read as a port; the
+    // brackets are stripped from the returned host.
+    LOK_ASSERT(net::parseUri("[::1]", scheme, host, port));
+    LOK_ASSERT(scheme.empty());
+    LOK_ASSERT_EQUAL_STR("::1", host);
+    LOK_ASSERT(port.empty());
+
+    LOK_ASSERT(net::parseUri("[::1]:9980", scheme, host, port));
+    LOK_ASSERT(scheme.empty());
+    LOK_ASSERT_EQUAL_STR("::1", host);
+    LOK_ASSERT_EQUAL_STR("9980", port);
+
+    LOK_ASSERT(net::parseUri("https://[2001:db8::1]:88", scheme, host, port));
+    LOK_ASSERT_EQUAL_STR("https://", scheme);
+    LOK_ASSERT_EQUAL_STR("2001:db8::1", host);
+    LOK_ASSERT_EQUAL_STR("88", port);
+
+    // Malformed: an unterminated bracket is rejected.
+    LOK_ASSERT(!net::parseUri("[::1", scheme, host, port));
 }
 
 void NetUtilWhiteBoxTests::testParseUriUrl()
@@ -264,6 +284,20 @@ void NetUtilWhiteBoxTests::testParseUriUrl()
     LOK_ASSERT_EQUAL_STR("wss://", scheme);
     LOK_ASSERT_EQUAL_STR("127.0.0.1", host);
     LOK_ASSERT_EQUAL_STR("9999", port);
+    LOK_ASSERT_EQUAL_STR("/", pathAndQuery);
+
+    // IPv6 literal with a port and a path.
+    LOK_ASSERT(
+        net::parseUri("https://[2001:db8::1]:88/path/to/file", scheme, host, port, pathAndQuery));
+    LOK_ASSERT_EQUAL_STR("https://", scheme);
+    LOK_ASSERT_EQUAL_STR("2001:db8::1", host);
+    LOK_ASSERT_EQUAL_STR("88", port);
+    LOK_ASSERT_EQUAL_STR("/path/to/file", pathAndQuery);
+
+    LOK_ASSERT(net::parseUri("[::1]:9980/", scheme, host, port, pathAndQuery));
+    LOK_ASSERT(scheme.empty());
+    LOK_ASSERT_EQUAL_STR("::1", host);
+    LOK_ASSERT_EQUAL_STR("9980", port);
     LOK_ASSERT_EQUAL_STR("/", pathAndQuery);
 }
 

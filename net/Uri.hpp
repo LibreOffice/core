@@ -50,17 +50,38 @@ inline bool parseUri(std::string uri, std::string& scheme, std::string& host, st
         pathAndQuery.clear();
     }
 
-    const auto itPort = uri.find(':');
-    if (itPort != uri.npos)
+    // Split the authority into host and optional port. An IPv6 literal is
+    // bracketed - "[::1]" or "[::1]:9980" - so its own colons are not port
+    // separators; return the address itself, without the brackets.
+    if (!uri.empty() && uri.front() == '[')
     {
-        host = uri.substr(0, itPort);
-        port = uri.substr(itPort + 1); // Skip the colon.
+        const auto itClose = uri.find(']');
+        if (itClose == uri.npos)
+            return false; // Malformed: '[' without a closing ']'.
+
+        host = uri.substr(1, itClose - 1); // The bare IPv6 address.
+
+        if (itClose + 1 >= uri.size())
+            port.clear(); // "[::1]" with no port.
+        else if (uri[itClose + 1] == ':')
+            port = uri.substr(itClose + 2); // "[::1]:port" - skip "]:".
+        else
+            return false; // Junk between the ']' and the port.
     }
     else
     {
-        // No port, just hostname.
-        host = std::move(uri);
-        port.clear();
+        const auto itPort = uri.find(':');
+        if (itPort != uri.npos)
+        {
+            host = uri.substr(0, itPort);
+            port = uri.substr(itPort + 1); // Skip the colon.
+        }
+        else
+        {
+            // No port, just hostname.
+            host = std::move(uri);
+            port.clear();
+        }
     }
 
     return !host.empty();
