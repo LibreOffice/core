@@ -37,6 +37,7 @@ class JSDialogMessageRouter {
 			);
 		if (jsontype === 'addressinputfield')
 			return !!app.socket._map.addressInputField;
+		if (jsontype === 'formulabar') return !!app.socket._map.formulabar;
 		return true;
 	}
 
