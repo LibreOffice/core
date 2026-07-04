@@ -2217,7 +2217,6 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_WINDOWSAPP" != "true" -a "$EN
        AC_CHECK_HEADERS([Poco/Net/WebSocket.h],
                         [],
                         [AC_MSG_ERROR([header Poco/Net/WebSocket.h not found; build the engine first (POCO is built there) or install a system POCO])])
-       DISABLE_SECCOMP=
        if test "$enable_seccomp" != "no" -a `uname -s` = "Linux"; then
            AC_CHECK_HEADERS([linux/seccomp.h],
                             [],
@@ -2368,7 +2367,6 @@ AC_CONFIG_COMMANDS_PRE([
 if test "$srcdir" != '.'; then
    dst_dirs="cypress_test/plugins cypress_test/eslint_plugin browser/node_shrinkpack"
    src_dir=
-   dir_name=
    for dst_dir in $dst_dirs
    do
        dirname=`dirname -- "$dst_dir"`
@@ -2381,11 +2379,10 @@ if test "$srcdir" != '.'; then
            src_dir=$srcdir/$dst_dir
            ;;
          *)
-           dir=$(dirname "$dst_dir")
-           if test "$dir" = .; then
+           if test "$dirname" = .; then
              src_dir=$srcdir/$dst_dir
            else
-             src_dir=$(printf %s "$dir" | sed -e 's|[[^/]]*|..|g')/$srcdir/$dst_dir
+             src_dir=$(printf %s "$dirname" | sed -e 's|[[^/]]*|..|g')/$srcdir/$dst_dir
            fi
            ;;
        esac
