@@ -470,6 +470,13 @@ def languagesFromMap(onlineDir):
 def writeTranslations(onlineDir, translationsDir, strings):
     keys = set(strings.keys())
 
+    # The UNO command translations are bundled into window.LOCALIZATIONS next to
+    # the po/ui strings, so apply the same markup check as po2json: reuse
+    # l10n_html_check to warn about and drop any translation that uses HTML not
+    # present in its source string.
+    sys.path.insert(0, onlineDir + '/browser/util')
+    import l10n_html_check
+
     os.makedirs(onlineDir + '/browser/l10n/uno', exist_ok=True)
 
     for lang in sorted(languagesFromMap(onlineDir)):
@@ -490,6 +497,16 @@ def writeTranslations(onlineDir, translationsDir, strings):
                     if command in keys:
                         for text in strings[command]:
                             if text == entry.msgid:
+                                problems = l10n_html_check.check_string(
+                                    entry.msgid, entry.msgstr)
+                                if problems:
+                                    sys.stderr.write(
+                                        "WARNING: dropping UNO translation with "
+                                        "unexpected HTML (%s, .uno:%s): %s\n"
+                                        "  msgid : %r\n  msgstr: %r\n"
+                                        % (lang, command, "; ".join(problems),
+                                           entry.msgid, entry.msgstr))
+                                    continue
                                 translations[entry.msgid] = entry.msgstr
 
         f = open(onlineDir + '/browser/l10n/uno/' +
