@@ -594,8 +594,8 @@ LIBPNG_TARBALL := libpng-1.6.58.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBTIFF_SHA256SUM := b92017489bdc1db3a4c97191aa4b75366673cb746de0dce5d7a749d5954681ba
-LIBTIFF_TARBALL := tiff-4.7.1.tar.xz
+LIBTIFF_SHA256SUM := 4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88
+LIBTIFF_TARBALL := tiff-4.7.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
