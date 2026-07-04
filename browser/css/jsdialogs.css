@@ -1646,6 +1646,22 @@ img.context-menu-icon {
 	filter: contrast(0.5);
 }
 
+/* Orientation menu: split the highlight so the entry background stays on the
+ * selected (first) entry, while the icon border indicates the current page
+ * orientation */
+.ui-combobox-entry.orientation-entry.checked::before {
+	content: none;
+}
+.ui-combobox-entry.orientation-entry.notchecked::before {
+	content: none;
+}
+.ui-combobox-entry.orientation-entry.checked img:not(:hover) {
+	border: 1px solid var(--color-primary);
+}
+.ui-combobox-entry.orientation-entry.selected:not(:hover) span {
+	background-color: var(--color-background-darker);
+}
+
 .ui-combobox-entry.selected:not(.checked):not(.notchecked) img:not(:hover) {
 	border: 1px solid var(--color-primary);
 }

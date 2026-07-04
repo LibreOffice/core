@@ -76,7 +76,14 @@ JSDialog.OpenDropdown = function (
 		if (entries[i].statusCommand) {
 			const items = window.L.Map.THIS['stateChangeHandler'];
 			const val = items.getItemValue(entries[i].statusCommand);
-			if (val) {
+			const uno = entries[i].uno;
+			const boolMatch = uno ? uno.match(/[?&]\w+:bool=(true|false)/) : null;
+			if (val !== undefined && boolMatch) {
+				const target = boolMatch[1] === 'true';
+				const expectedState = target ? 'isLandscape' : 'isPortrait';
+				entries[i].checked =
+					String(val).toLowerCase() === expectedState.toLowerCase();
+			} else if (val) {
 				const index = parseInt(val);
 				if (index === i) {
 					entries[i].selected = true;
@@ -92,6 +99,7 @@ JSDialog.OpenDropdown = function (
 			? !entries.some((entry) => entry.selected === true)
 			: false;
 	let initialSelectedId;
+	let checkedFocusId;
 
 	for (let i = 0; i < entries.length; i++) {
 		const checkedValue =
@@ -181,15 +189,21 @@ JSDialog.OpenDropdown = function (
 					class: entries[i].class,
 				} as ComboBoxEntry;
 				if ((entry as ComboBoxEntry).selected) initialSelectedId = entry.id;
+				if (
+					(entry as ComboBoxEntry).checked &&
+					!(entry as ComboBoxEntry).selected
+				)
+					checkedFocusId = entry.id;
 				break;
 		}
 
 		if (entry && json?.children?.length) json.children[0].children?.push(entry);
 	}
 
-	if (initialSelectedId && json?.children?.length) {
-		json.init_focus_id = initialSelectedId;
-		(json.children[0] as ComboBoxEntry).initialSelectedId = initialSelectedId;
+	const focusId = initialSelectedId || checkedFocusId;
+	if (focusId && json?.children?.length) {
+		json.init_focus_id = focusId;
+		(json.children[0] as ComboBoxEntry).initialSelectedId = focusId;
 	}
 
 	const generateCallback = function (

@@ -1503,12 +1503,16 @@ menuDefinitions.set('MenuOrientation', [
 		img: 'portrait',
 		text: _('Portrait'),
 		uno: '.uno:Orientation?isLandscape:bool=false',
+		statusCommand: '.uno:Orientation',
+		class: 'orientation-entry',
 	},
 	{
 		id: 'landscape',
 		img: 'landscape',
 		text: _('Landscape'),
 		uno: '.uno:Orientation?isLandscape:bool=true',
+		statusCommand: '.uno:Orientation',
+		class: 'orientation-entry',
 	},
 ] as Array<MenuDefinition>);
 
