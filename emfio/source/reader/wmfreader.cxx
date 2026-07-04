@@ -1103,7 +1103,7 @@ namespace emfio
                                                 {
                                                     Point  aPt;
                                                     OUString aString;
-                                                    sal_uInt32  nStringLen, nDXCount;
+                                                    sal_uInt32 nStringLen(0), nDXCount(0);
                                                     std::unique_ptr<long[]> pDXAry;
                                                     SvMemoryStream aMemoryStream( nEscLen );
                                                     aMemoryStream.WriteBytes(pData.get(), nEscLen);
@@ -1120,13 +1120,15 @@ namespace emfio
 
                                                         aString = read_uInt16s_ToOUString(aMemoryStream, nStringLen);
                                                         aMemoryStream.ReadUInt32( nDXCount );
+                                                        if (nDXCount < o3tl::make_unsigned(aString.getLength()))
+                                                            nDXCount = 0;
                                                         if ( ( static_cast< sal_uInt64 >( nDXCount ) * sizeof( sal_Int32 ) ) >= ( nEscLen - aMemoryStream.Tell() ) )
                                                             nDXCount = 0;
                                                         if ( nDXCount )
                                                             pDXAry.reset(new long[ nDXCount ]);
                                                         for  (sal_uInt32 i = 0; i < nDXCount; i++ )
                                                         {
-                                                            sal_Int32 val;
+                                                            sal_Int32 val(0);
                                                             aMemoryStream.ReadInt32( val);
                                                             pDXAry[ i ] = val;
                                                         }
