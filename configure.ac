@@ -160,7 +160,7 @@ AC_ARG_ENABLE([developer],
 
 AC_ARG_ENABLE([debug],
               AS_HELP_STRING([--enable-debug],
-                             [Enable debugging, link with debugging version of Poco libraries]))
+                             [Enable a debugging build]))
 
 AC_ARG_ENABLE([hardening-flags],
               AS_HELP_STRING([--disable-hardening-flags],
@@ -389,11 +389,6 @@ AC_ARG_WITH([poco-libs],
                             third-party libraries and is picked up from the engine's workdir
                             automatically.]),
             [AC_MSG_WARN([--with-poco-libs is obsolete and ignored; POCO is now built in the engine and taken from its workdir.])])
-
-AC_ARG_WITH([system-poco],
-            AS_HELP_STRING([--with-system-poco],
-                           [Link against the system POCO instead of the POCO built in the engine.
-                            For debugging purposes only.]))
 
 AC_ARG_WITH([libpng-includes],
             AS_HELP_STRING([--with-libpng-includes=<path>],
@@ -1784,18 +1779,12 @@ dnl builds, POCOINCLUDE/POCOLIB are not set yet; derive them from the engine
 dnl build tree (the same one --with-lo-builddir points at, defaulting to
 dnl "engine").  Prefer POCO from the engine workdir, and fall back to a system
 dnl POCO if it has not been built there.
-AS_IF([test "$with_system_poco" = "yes"],
-      [AC_MSG_NOTICE([--with-system-poco given, linking against the system POCO])
-       POCOINCLUDE=
-       POCOLIB=],
-      [test -z "$POCOINCLUDE" -a -n "$with_lo_builddir"],
+AS_IF([test -z "$POCOINCLUDE" -a -n "$with_lo_builddir"],
       [poco_engine_builddir=`readlink -f "$with_lo_builddir"`
        POCOINCLUDE="$poco_engine_builddir/workdir/UnpackedTarball/poco/include"
        POCOLIB="$poco_engine_builddir/workdir/LinkTarget/StaticLibrary"])
 
-AS_IF([test "$with_system_poco" = "yes"],
-      [:],
-      [test -n "$POCOINCLUDE" -a -f "$POCOINCLUDE/Poco/Net/WebSocket.h"],
+AS_IF([test -n "$POCOINCLUDE" -a -f "$POCOINCLUDE/Poco/Net/WebSocket.h"],
       [AC_MSG_NOTICE([using POCO built in the engine: $POCOLIB])
        CPPFLAGS="$CPPFLAGS -isystem ${POCOINCLUDE}"
        LDFLAGS="$LDFLAGS -L${POCOLIB}"],
@@ -2123,20 +2112,18 @@ AC_SUBST([POCO_LIBS_HOST])
 # Poco::Dynamic::Var::extract()'s downcast to VarHolderImpl<T> aborts because
 # the object's vtable lives in libPocoUtil.so, which is not in the executable's
 # CFI set. Linking Poco statically puts those vtables in the executable itself,
-# so the checks pass. Probe for the static archives via -print-file-name (this
-# honours any -L${with_poco_libs} already in LDFLAGS as well as the system
-# search path); fall back to the dynamic -lPoco* above when they are missing.
+# so the checks pass. Probe for the static archives via -print-file-name (which
+# searches the compiler's own library dirs and the -L${POCOLIB} added above for
+# the engine workdir); fall back to the dynamic -lPoco* above when missing.
 POCO_FUZZER_STATIC_LIBS=
 if test "$LIBFUZZER" = "1" -a "$host_os" != "emscripten"; then
     poco_static_ok=yes
     poco_static_libs=
     poco_static_missing=
     # Diagnostics: these are the inputs that determine what is searched and
-    # where. The most common reasons a present .a is "not found" are a debug
-    # suffix mismatch (looking for libPoco*d.a vs libPoco*.a) and the archive
-    # living in a directory that is not searched (pass --with-poco-libs=<dir>).
+    # where. The most common reason a present .a is "not found" is a debug
+    # suffix mismatch (looking for libPoco*d.a vs libPoco*.a).
     AC_MSG_NOTICE([static Poco probe: POCO_DEBUG_SUFFIX='${POCO_DEBUG_SUFFIX}' (so archive names are libPoco*${POCO_DEBUG_SUFFIX}.a)])
-    AC_MSG_NOTICE([static Poco probe: --with-poco-libs='${with_poco_libs}'])
     AC_MSG_NOTICE([static Poco probe: CXX='${CXX}'])
     AC_MSG_NOTICE([static Poco probe: LDFLAGS='${LDFLAGS}'])
     # Listed in dependency (topological) order -- dependents before their
@@ -2147,30 +2134,23 @@ if test "$LIBFUZZER" = "1" -a "$host_os" != "emscripten"; then
         poco_archive_name="lib${poco_lib}${POCO_DEBUG_SUFFIX}.a"
         poco_archive_path=
         poco_how=
-        # 1) Prefer an explicit --with-poco-libs directory. -print-file-name
-        #    does NOT search -L directories on all toolchains, so a custom Poco
-        #    location is otherwise invisible to the probe below.
-        if test -n "$with_poco_libs" && test -f "$with_poco_libs/$poco_archive_name"; then
-            poco_archive_path="$with_poco_libs/$poco_archive_name"
-            poco_how="found in --with-poco-libs"
-        else
-            # 2) Otherwise ask the compiler. Returns an absolute path when found
-            #    on its built-in search dirs, else echoes the bare name back.
-            poco_print=`$CXX $LDFLAGS -print-file-name=$poco_archive_name 2>/dev/null`
-            case "$poco_print" in
-                /*)
-                    if test -f "$poco_print"; then
-                        poco_archive_path="$poco_print"
-                        poco_how="found via -print-file-name"
-                    else
-                        poco_how="-print-file-name returned '$poco_print' but no such file"
-                    fi
-                    ;;
-                *)
-                    poco_how="-print-file-name returned bare name '$poco_print' (not on the compiler's search path; pass --with-poco-libs)"
-                    ;;
-            esac
-        fi
+        # Ask the compiler for the archive: -print-file-name returns an absolute
+        # path when the archive is on its search dirs, else echoes the bare name
+        # back.
+        poco_print=`$CXX $LDFLAGS -print-file-name=$poco_archive_name 2>/dev/null`
+        case "$poco_print" in
+            /*)
+                if test -f "$poco_print"; then
+                    poco_archive_path="$poco_print"
+                    poco_how="found via -print-file-name"
+                else
+                    poco_how="-print-file-name returned '$poco_print' but no such file"
+                fi
+                ;;
+            *)
+                poco_how="-print-file-name returned bare name '$poco_print' (not on the compiler's search path)"
+                ;;
+        esac
         if test -n "$poco_archive_path"; then
             AC_MSG_NOTICE([static Poco probe: $poco_archive_name: $poco_how -> $poco_archive_path])
             poco_static_libs="$poco_static_libs $poco_archive_path"
