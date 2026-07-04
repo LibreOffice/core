@@ -34,7 +34,7 @@ $(call gb_MoTarget_get_clean_target,%) :
 
 # wsl1 seems to have issues with writing to stdout/pipes when running with high parallelism
 # so as a workaround run the two statements in a single command run by a shell
-$(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY)
+$(call gb_MoTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_PoCheck_STAMP)
 	$(call gb_Output_announce,$*,$(true),MO ,2)
 	$(call gb_Trace_StartRange,$*,MO )
 	$(call gb_Helper_abbreviate_dirs,mkdir -p $(dir $@)) && \

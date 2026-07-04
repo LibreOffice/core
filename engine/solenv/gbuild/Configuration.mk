@@ -229,7 +229,7 @@ rm -rf $${MERGEINPUT}
 
 endef
 
-$(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXDEPS)
+$(call gb_XcuMergeTarget_get_target,%) : $(gb_XcuMergeTarget_CFGEXDEPS) | $(gb_PoCheck_STAMP)
 	$(call gb_Output_announce,$*,$(true),XCX,1)
 	$(call gb_Trace_StartRange,$*,XCX)
 	$(if $(filter $(words $(POFILES)),$(words $(wildcard $(POFILES)))),\

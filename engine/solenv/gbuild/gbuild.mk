@@ -298,6 +298,11 @@ include $(GBUILDDIR)/Trace.mk
 # shortest stem instead of first match. However, upon introduction this version
 # is not available everywhere by default.
 
+# Stamp for the pocheck run that validates the .po files of the languages we
+# build before any of them is consumed (see the rule after the class includes,
+# and the order-only prerequisites in AllLangMoTarget.mk / Configuration.mk).
+gb_PoCheck_STAMP := $(WORKDIR)/Misc/pocheck.done
+
 include $(foreach class, \
 	ComponentTarget \
 	Postprocess \
@@ -351,6 +356,17 @@ include $(foreach class, \
 	GeneratedPackage \
 	CompilerTest \
 ,$(GBUILDDIR)/$(class).mk)
+
+# Run pocheck over the .po files of the languages we build before any of them is
+# turned into a .mo or merged into an .xcu. It drops strings that would be
+# problematic at runtime (e.g. a translation that adds HTML not in the source).
+# Runs once per build via the stamp; pocheck itself is built by l10ntools.
+$(gb_PoCheck_STAMP) : | $(call gb_Executable_get_runtime_target,pocheck)
+	$(call gb_Output_announce,pocheck,$(true),POC,2)
+	$(call gb_Helper_abbreviate_dirs,\
+		mkdir -p $(dir $@) && \
+		ALL_LANGS="en-US $(filter-out en-US,$(gb_WITH_LANG))" $(call gb_Executable_get_command,pocheck) && \
+		touch $@)
 
 $(eval $(call gb_Helper_process_executable_registrations))
 $(eval $(call gb_Postprocess_make_targets))
