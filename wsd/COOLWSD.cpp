@@ -1478,10 +1478,10 @@ static int probeRunningServer()
     const std::string path = COOLWSD::ServiceRoot + "/";
 
     // Reach the server over the loopback. net.listen (any/loopback) always
-    // includes the loopback, so only the address family matters: use the IPv4
-    // literal, except for an IPv6-only server, where we defer to the resolver
-    // via "localhost" because the HTTP client cannot take an IPv6 literal.
-    const std::string host = (ClientPortProto == Socket::Type::IPv6) ? "localhost" : "127.0.0.1";
+    // includes the loopback, so only the address family matters: the IPv4
+    // literal, or the bracketed IPv6 literal for an IPv6-only server. Both are
+    // literals, so the probe needs no name resolution.
+    const std::string host = (ClientPortProto == Socket::Type::IPv6) ? "[::1]" : "127.0.0.1";
     const std::string target =
         (ssl ? "https://" : "http://") + host + ':' + std::to_string(port) + path;
 
