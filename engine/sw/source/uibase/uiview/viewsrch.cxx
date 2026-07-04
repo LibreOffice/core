@@ -440,7 +440,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
 /*20 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
                 RES_MARGIN_FIRSTLINE,   RES_MARGIN_RIGHT,
                 RES_UL_SPACE,           RES_UL_SPACE,
-/*24 */         SID_ATTR_PARA_MODEL,    SID_ATTR_PARA_KEEP
+                SID_ATTR_PARA_KEEP,     SID_ATTR_PARA_KEEP
             >);
 
             SfxItemSet aSet(m_pWrtShell->GetAttrPool(), aNormalAttr);
@@ -765,10 +765,7 @@ void SwView::Replace()
                 SfxItemSet aReplSet( m_pWrtShell->GetAttrPool(),
                                      aTextFormatCollSetRange );
                 if( s_xReplaceList->Get( aReplSet ).Count() )
-                {
-                    ::SfxToSwPageDescAttr( *m_pWrtShell, aReplSet );
                     m_pWrtShell->SwEditShell::SetAttrSet( aReplSet );
-                }
             }
         }
     }
@@ -813,26 +810,18 @@ sal_Int32 SwView::FUNC_Search(const SwSearchOptions& rOptions)
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-        SID_ATTR_PARA_MODEL, SID_ATTR_PARA_KEEP
+        SID_ATTR_PARA_KEEP, SID_ATTR_PARA_KEEP
         >);
 
     SfxItemSet aSrchSet( m_pWrtShell->GetAttrPool(), aSearchAttrRange);
     if( s_xSearchList && s_xSearchList->Count() )
-    {
         s_xSearchList->Get( aSrchSet );
-
-        // -- Page break with page template
-        ::SfxToSwPageDescAttr( *m_pWrtShell, aSrchSet );
-    }
 
     std::optional<SfxItemSet> xReplSet;
     if( bDoReplace && s_xReplaceList && s_xReplaceList->Count() )
     {
         xReplSet.emplace( m_pWrtShell->GetAttrPool(), aSearchAttrRange );
         s_xReplaceList->Get( *xReplSet );
-
-        // -- Page break with page template
-        ::SfxToSwPageDescAttr( *m_pWrtShell, *xReplSet );
 
         if( !xReplSet->Count() )        // too bad, we don't know
             xReplSet.reset();        // the attributes
