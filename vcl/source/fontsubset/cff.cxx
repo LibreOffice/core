@@ -1472,7 +1472,7 @@ bool CffContext::addHints(bool bVerticalHints)
     if (mnStackIdx & 1)
         --mnStackIdx; //#######
 
-    if ((mnHintSize + mnStackIdx) > 2 * NMAXHINTS)
+    if (o3tl::make_unsigned(mnHintSize + mnStackIdx) > std::size(mnHintStack))
         return false;
 
     ValType nHintOfs = 0;
