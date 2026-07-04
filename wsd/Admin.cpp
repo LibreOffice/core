@@ -1049,7 +1049,7 @@ template <typename T> T clamp(const T& n, const T& lower, const T& upper)
 void Admin::triggerMemoryCleanup(const size_t totalMem)
 {
     // Trigger mem cleanup when we are consuming too much memory (as configured by sysadmin)
-    static const double memLimit = ConfigUtil::getConfigValue<double>("memproportion", 0.0);
+    static const double memLimit = ConfigUtil::getConfigValue<double>("memproportion", 80.0);
     if (memLimit == 0.0 || _totalSysMemKb == 0)
     {
         LOGA_TRC(Admin, "Total memory consumed: " << totalMem <<

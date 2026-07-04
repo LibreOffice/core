@@ -179,6 +179,7 @@ static const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "logging_ui_cmd.merge", "true" },
     { "logging_ui_cmd.merge_display_end_time", "false" },
 #endif
+    { "memproportion", "80.0" },
     { "mount_jail_tree", "true" },
     { "net.connection_timeout_secs", "30" },
     { "net.content_security_policy", "" },
