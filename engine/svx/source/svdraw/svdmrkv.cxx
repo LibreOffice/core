@@ -65,6 +65,7 @@
 #include <sfx2/kit/componenthelpers.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/ipclient.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
 
 #include <drawinglayer/processor2d/textextractor2d.hxx>
@@ -928,18 +929,20 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             if (pWin && pWin->IsChart())
             {
                 bIsChart = true;
+                SfxInPlaceClient* pIPClient = pViewShell->GetIPClient();
                 const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
-                if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
+                if (pIPClient && pIPClient->HasGridOffset())
+                {
+                    // In Calc we need to send all lengths in print units.
+                    // FIXME: Handle RTL case.
+                    tools::Rectangle aArea = pIPClient->GetObjArea(); // This is in print mm100.
+                    Point aChartWinOffset(aArea.Left(), aArea.Top());
+                    addLogicOffset = aChartWinOffset;
+                    aSelection.Move(aChartWinOffset.getX(), aChartWinOffset.getY());
+                }
+                else if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
                 {
                     Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
-                    if (mbNegativeX && AllSettings::GetLayoutRTL())
-                    {
-                        // mbNegativeX is set only for Calc in RTL mode.
-                        // If global RTL flag is set, vcl-window X offset of chart window is
-                        // mirrored w.r.t parent window rectangle. This needs to be reverted.
-                        aOffsetPx.setX(pViewShellWindow->GetOutOffXPixel() + pViewShellWindow->GetSizePixel().Width()
-                            - pWin->GetOutOffXPixel() - pWin->GetSizePixel().Width());
-                    }
                     Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
                     addLogicOffset = aLogicOffset;
                     aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
