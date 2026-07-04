@@ -91,51 +91,21 @@ tools::Rectangle KitChartHelper::GetChartBoundingBox()
     if (mpViewShell)
     {
         SfxInPlaceClient* pIPClient = mpViewShell->GetIPClient();
-        if (pIPClient)
+        vcl::Window* pRootWin = pIPClient ? pIPClient->GetEditWin() : nullptr;
+        if (pRootWin)
         {
-            if (pIPClient->HasGridOffset())
+            tools::Rectangle aArea = pIPClient->GetObjArea();
+            if (pIPClient->HasGridOffset()) // Calc has gridOffset.
             {
                 // FIXME: Handle RTL case.
-                tools::Rectangle aArea = pIPClient->GetObjArea();
                 Point aGridOffset(0, 0);
                 pIPClient->GetGridOffset(aGridOffset);
                 aArea.Move(aGridOffset.X(), aGridOffset.Y());
-                constexpr auto p2 = o3tl::getConversionMulDiv(o3tl::Length::mm100, o3tl::Length::twip);
-                double fFactor = static_cast<double>(p2.first) / p2.second;
-                // Convert position and size to (display) twips.
-                Point aTopLeft = aArea.TopLeft().scale(fFactor, fFactor);;
-                Size aSize = aArea.GetSize().scale(fFactor, fFactor);
-                aBBox = tools::Rectangle(aTopLeft, aSize);
             }
-            else if (vcl::Window* pRootWin = pIPClient->GetEditWin())
-            {
-                vcl::Window* pWindow = GetWindow();
-                if (pWindow)
-                {
-                    // In all cases, the following code fragment
-                    // returns the chart bounding box in twips.
-                    const MapMode& aCWMapMode = pWindow->GetMapMode();
-                    constexpr auto p = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
-                    const double scaleX = aCWMapMode.GetScaleX();
-                    const double scaleY = aCWMapMode.GetScaleY();
-                    const double nX = p.first * scaleX / p.second;
-                    const double nY = p.first * scaleY / p.second;
 
-                    Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);
-                    if (mbNegativeX && AllSettings::GetLayoutRTL())
-                    {
-                        // If global RTL flag is set, vcl-window X offset of chart window is
-                        // mirrored w.r.t parent window rectangle. This needs to be reverted.
-                        aOffset.setX(pRootWin->GetOutOffXPixel() + pRootWin->GetSizePixel().Width()
-                            - pWindow->GetOutOffXPixel() - pWindow->GetSizePixel().Width());
-
-                    }
-
-                    aOffset = aOffset.scale(nX, nY);
-                    Size aSize = pWindow->GetSizePixel().scale(nX, nY);
-                    aBBox = tools::Rectangle(aOffset, aSize);
-                }
-            }
+            if (pRootWin->GetMapMode().GetMapUnit() == MapUnit::Map100thMM)
+                aArea = o3tl::convert(aArea, o3tl::Length::mm100, o3tl::Length::twip);
+            aBBox = aArea;
         }
     }
     return aBBox;
