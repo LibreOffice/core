@@ -9,6 +9,9 @@ import errno
 import re
 import polib
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import l10n_html_check
+
 parser = optparse.OptionParser(usage="usage: %prog [options] pofile...")
 parser.add_option("--quiet",
                   action="store_false",
@@ -50,6 +53,18 @@ for srcfile in args:
                       wrapwidth=-1)
     for entry in po.translated_entries():
         if entry.msgstr == '':
+            continue
+
+        # Some translated strings are rendered as HTML. If a translation uses
+        # HTML markup that its source string does not (see l10n_html_check),
+        # warn and drop just that string - it falls back to the English
+        # original - rather than failing the whole conversion.
+        problems = l10n_html_check.check_string(entry.msgid, entry.msgstr)
+        if problems:
+            sys.stderr.write(
+                "WARNING: dropping translation with unexpected HTML in %s: %s\n"
+                "  msgid : %r\n  msgstr: %r\n"
+                % (srcfile, "; ".join(problems), entry.msgid, entry.msgstr))
             continue
 
         xlate_map[entry.msgid] = entry.msgstr
