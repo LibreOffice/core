@@ -206,6 +206,13 @@ EXPOSE 9980
 # Switch to cool user (use numeric user id to be compatible with Kubernetes Pod Security Policies)
 USER 1001
 
+# Health-check via coolwsd's built-in --probe: it reads this image's config to
+# pick the listening port and the http/https scheme, then checks the loopback
+# endpoint. This needs no curl or shell, so it works in the distroless image.
+# Exit 0 means healthy.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
+    CMD ["/usr/bin/coolwsd", "--probe"]
+
 # Start coolwsd directly, with no shell in between: self-signed certificate
 # generation (unless DONT_GEN_SSL_CERT is set) and arbitrary-UID handling are
 # done inside coolwsd itself. The configuration is still driven dynamically by

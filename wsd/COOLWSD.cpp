@@ -61,6 +61,7 @@
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
 #include <net/AsyncDNS.hpp>
+#include <net/HttpRequest.hpp>
 #include <net/ServerSocket.hpp>
 #if ENABLE_SSL
 #include <net/Ssl.hpp>
@@ -860,6 +861,7 @@ std::string COOLWSD::UserInterface = "default";
 bool COOLWSD::AnonymizeUserData = false;
 bool COOLWSD::CheckCoolUser = true;
 bool COOLWSD::CleanupOnly = false; ///< If we should cleanup and exit.
+bool COOLWSD::ProbeOnly = false; ///< If we should health-check the running server and exit.
 #if ENABLE_DEBUG
 bool COOLWSD::FindFreePort = false; ///< If we should find a free port to listen on.
 #endif
@@ -1459,6 +1461,82 @@ void ensureUserEntry()
 } // namespace
 #endif
 
+#if !MOBILEAPP
+/// Health-check the locally running coolwsd for the --probe option: connect to
+/// the loopback interface on the configured port and scheme, GET the root
+/// ("OK") endpoint, and return EX_OK when the server answers HTTP 200. This
+/// gives the shell-less, distroless container image a self-contained
+/// HEALTHCHECK that needs no curl.
+///
+/// It talks to coolwsd's own socket, so the scheme follows ssl.enable only -
+/// not ssl.termination, which describes the upstream proxy this probe
+/// deliberately bypasses.
+static int probeRunningServer()
+{
+    const bool ssl = ConfigUtil::isSslEnabled();
+    const int port = ClientPortNumber > 0 ? ClientPortNumber : DEFAULT_CLIENT_PORT_NUMBER;
+    const std::string path = COOLWSD::ServiceRoot + "/";
+
+    // Reach the server over the loopback. net.listen (any/loopback) always
+    // includes the loopback, so only the address family matters: use the IPv4
+    // literal, except for an IPv6-only server, where we defer to the resolver
+    // via "localhost" because the HTTP client cannot take an IPv6 literal.
+    const std::string host = (ClientPortProto == Socket::Type::IPv6) ? "localhost" : "127.0.0.1";
+    const std::string target =
+        (ssl ? "https://" : "http://") + host + ':' + std::to_string(port) + path;
+
+#if ENABLE_SSL
+    if (ssl && !ssl::Manager::isClientContextInitialized())
+        ssl::Manager::initializeClientContext(
+            std::string(), std::string(), std::string(),
+            "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH", ssl::CertificateVerification::Disabled);
+#endif
+
+    // The HTTP client resolves via the async DNS subsystem, which the normal
+    // server only starts later in innerMain(); bring it up just for the probe.
+    net::AsyncDNS::startAsyncDNS();
+
+    int exitCode = EX_UNAVAILABLE;
+    std::string error;
+    try
+    {
+        const std::shared_ptr<http::Session> session =
+            ssl ? http::Session::createHttpSsl(host, port) : http::Session::createHttp(host, port);
+        if (!session)
+            error = "could not create a session for " + target;
+        else
+        {
+            const std::shared_ptr<const http::Response> response =
+                session->syncRequest(http::Request(path), std::chrono::seconds(5));
+            if (response && response->state() == http::Response::State::Complete)
+            {
+                // The server answered with a complete HTTP response.
+                if (response->statusCode() == http::StatusCode::OK)
+                    exitCode = EX_OK;
+                else
+                    error = target + " returned HTTP " +
+                            std::to_string(static_cast<int>(response->statusCode()));
+            }
+            else if (response && response->state() == http::Response::State::Timeout)
+                error = "timed out connecting to " + target;
+            else
+                error = "could not connect to " + target;
+        }
+    }
+    catch (const std::exception& ex)
+    {
+        error = "error probing " + target + ": " + ex.what();
+    }
+
+    net::AsyncDNS::stopAsyncDNS();
+
+    if (exitCode != EX_OK)
+        std::cerr << "coolwsd --probe: " << error << std::endl;
+
+    return exitCode;
+}
+#endif // !MOBILEAPP
+
 void COOLWSD::innerInitialize(Poco::Util::Application& self)
 {
 #if !MOBILEAPP
@@ -1861,6 +1939,16 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     LOG_INF("SSL support: SSL is " << (ConfigUtil::isSslEnabled() ? "enabled." : "disabled."));
     LOG_INF("SSL support: termination is "
             << (ConfigUtil::isSSLTermination() ? "enabled." : "disabled."));
+
+    if (ProbeOnly)
+    {
+        const int probeExitCode = probeRunningServer();
+        // Not Util::forcedExit(): its non-zero path logs via LOG_FTL, which
+        // always writes to stderr regardless of log level and so cannot be
+        // silenced. This is forcedExit's own tail without that line.
+        Log::shutdown();
+        std::_Exit(probeExitCode);
+    }
 
     std::string allowedLanguages(config().getString("allowed_languages"));
     setenv("KIT_ALLOWLIST_LANGUAGES", allowedLanguages.c_str(), 1);
@@ -2496,6 +2584,11 @@ void COOLWSD::defineOptions(Poco::Util::OptionSet& optionSet)
                         .required(false)
                         .repeatable(false));
 
+    optionSet.addOption(Option("probe", "", "Health-check the locally running coolwsd over its "
+                                            "configured port and exit 0 if healthy, non-zero otherwise.")
+                        .required(false)
+                        .repeatable(false));
+
     optionSet.addOption(Option("port", "", "Port number to listen to (default: " +
                                std::to_string(DEFAULT_CLIENT_PORT_NUMBER) + "),")
                         .required(false)
@@ -2601,6 +2694,17 @@ void COOLWSD::handleOption(const std::string& optionName,
         ; // ignore for compatibility
     else if (optionName == "cleanup")
         CleanupOnly = true; // Flag for later as we need the config.
+    else if (optionName == "probe")
+    {
+        ProbeOnly = true; // Flag for later as we need the config (port + ssl).
+        // A probe must stay silent: it must neither write to the running
+        // server's log file nor print the usual startup log lines to stderr.
+        // Override logging to none before the config is read.
+        _overrideSettings["logging.file[@enable]"] = "false";
+        _overrideSettings["logging_ui_cmd.file[@enable]"] = "false";
+        _overrideSettings["logging.level"] = "none";
+        _overrideSettings["logging.level_startup"] = "none";
+    }
     else if (optionName == "port")
         ClientPortNumber = NumUtil::stoi(value);
 #if ENABLE_DEBUG

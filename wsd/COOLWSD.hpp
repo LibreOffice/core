@@ -107,6 +107,7 @@ public:
     static bool AnonymizeUserData;
     static bool CheckCoolUser;
     static bool CleanupOnly;
+    static bool ProbeOnly; ///< If we should health-check the running server and exit.
 #if ENABLE_DEBUG
     static bool FindFreePort;
 #endif
