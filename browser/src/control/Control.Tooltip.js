@@ -34,7 +34,6 @@ class Tooltip {
 
 		win.addEventListener('keydown', window.L.bind(this.keyDown, this), {
 			capture: true,
-			passive: true,
 		});
 	}
 
@@ -58,7 +57,7 @@ class Tooltip {
 		if (this._current)
 			this._hideTimeout = win.setTimeout(
 				window.L.bind(this.hide, this, elem),
-				this._options.timeout / 8,
+				this._options.timeout / 2,
 			);
 	}
 
@@ -232,8 +231,16 @@ class Tooltip {
 
 	keyDown(e) {
 		let key = e.key.toUpperCase();
-		if (key === 'ESCAPE') {
-			this.mouseLeave();
+		if (
+			key === 'ESCAPE' &&
+			this._current &&
+			!this._disabled &&
+			this._container.style.visibility === 'visible'
+		) {
+			this._cancel = false;
+			this.hide();
+			e.stopPropagation();
+			if (e.cancelable) e.preventDefault();
 		}
 	}
 
