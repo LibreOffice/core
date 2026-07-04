@@ -146,25 +146,7 @@ COOL_EXTENSIONS_SRC = $(srcdir)/extensions/cool.js
 COOL_EXTENSIONS_DST = $(patsubst $(srcdir)/extensions/%,$(DIST_FOLDER)/extensions/%,$(COOL_EXTENSIONS_SRC))
 
 COOL_ADMIN_SRC = $(shell find $(srcdir)/admin -name '*.html' -or -name '*.css' -or -name '*.ttf' -or -name 'OFL.txt' -or -name '*.svg')
-COOL_ADMIN_ALL = $(shell find $(srcdir)/admin -name '*')
 COOL_ADMIN_DST = $(patsubst $(srcdir)/admin/%,$(DIST_FOLDER)/admin/%,$(COOL_ADMIN_SRC))
-
-define file_target
-$(1): $(2)
-	@mkdir -p $$(dir $$@)
-	@if test -z '$(ENABLE_BROWSERSYNC)'; then \
-		`cp $$< $$@`; \
-	else \
-		`ln -sf ../$$< $$@`; \
-	fi
-
-endef
-
-define file_targets
-$(foreach file,$(1),$(call file_target,\
-	$(DIST_FOLDER)/$(notdir $(file)),\
-	$(file)))
-endef
 
 define css_file_target
 $(1): $(2) $(srcdir)/package.json
@@ -1038,7 +1020,6 @@ build-cool: \
 	$(SETTINGS_L10N_JS) \
 	$(COOL_IMAGES_DST) \
 	$(COOL_IMAGES_CUSTOM_DST) \
-	$(COOL_TEMPLATES_DST) \
 	$(JQUERY_LIGHTNESS_DIST_IMAGES) \
 	$(JQUERY_MINIFIED_DIST_IMAGES) \
 	$(ADMIN_BUNDLE) \
@@ -1344,15 +1325,7 @@ $(DIST_FOLDER)/node_modules/%.js: $(builddir)/node_modules/%.js
 	@mkdir -p $(dir $@)
 	@cp $< $@
 
-$(DIST_FOLDER)/$(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png: $(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png
-	@mkdir -p $(dir $@)
-	@cp $< $@
-
 $(DIST_FOLDER)/images/%.png: $(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png
-	@mkdir -p $(dir $@)
-	@cp $< $@
-
-$(DIST_FOLDER)/$(JQUERY_MINIFIED_IMAGE_PATH)/%.png: $(JQUERY_MINIFIED_IMAGE_PATH)/%.png
 	@mkdir -p $(dir $@)
 	@cp $< $@
 
