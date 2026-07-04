@@ -888,7 +888,8 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
     if( mnStackIdx & 1) --mnStackIdx;//#######
     // TODO: if( !bSubr) assert( mnStackIdx >= 2);
 
-    assert( (mnHintSize + mnStackIdx) <= 2*NMAXHINTS);
+    if (o3tl::make_unsigned(mnHintSize + mnStackIdx) > std::size(mnHintStack))
+        return;
 
     ValType nHintOfs = 0;
     for( int i = 0; i < mnStackIdx; ++i) {
