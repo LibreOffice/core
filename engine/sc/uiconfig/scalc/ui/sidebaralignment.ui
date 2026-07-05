@@ -193,30 +193,57 @@
           </packing>
         </child>
         <child>
-          <object class="GtkToolbar" id="indentbuttons">
+          <object class="GtkBox" id="indentbox">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="toolbar-style">icons</property>
-            <property name="show-arrow">False</property>
-            <property name="icon_size">2</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkToolButton" id=".uno:IncrementIndent">
+              <object class="GtkLabel" id="leftindentlabel">
                 <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="sidebaralignment|leftindentlabel">_Indent:</property>
                 <property name="use-underline">True</property>
+                <property name="mnemonic-widget">leftindent</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id=".uno:DecrementIndent">
+              <object class="GtkToolbar" id="indentbuttons">
                 <property name="visible">True</property>
-                <property name="use-underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="toolbar-style">icons</property>
+                <property name="show-arrow">False</property>
+                <property name="icon_size">2</property>
+                <child>
+                  <object class="GtkToolButton" id=".uno:IncrementIndent">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id=".uno:DecrementIndent">
+                    <property name="visible">True</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="homogeneous">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -381,20 +408,7 @@
             <property name="top-attach">1</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkLabel" id="leftindentlabel">
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="sidebaralignment|leftindentlabel">_Indent:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">leftindent</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">6</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
+
       </object>
       <packing>
         <property name="left-attach">0</property>
