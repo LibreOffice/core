@@ -51,6 +51,7 @@ rtl::Reference<KitClipboard> KitClipboardFactory::getClipboardForCurView()
     }
     rtl::Reference<KitClipboard> xClip(new KitClipboard());
     xClip->setViewId(nViewId);
+    xClip->setDocId(KitHelper::getDocumentIdOfView(nViewId));
     (*gClipboards.get())[nViewId] = xClip;
     SAL_INFO("kit", "Created clip: " << xClip.get() << " for viewId " << nViewId);
     return xClip;
@@ -73,21 +74,29 @@ void KitClipboardFactory::releaseClipboardForView(int nViewId)
 {
     osl::MutexGuard aGuard(gMutex);
 
-    auto& gClipboards = getClipboards();
-    if (nViewId < 0) // clear all
+    auto* pClipboards = getClipboards().get();
+    if (!pClipboards)
+        return;
+
+    auto it = pClipboards->find(nViewId);
+    if (it != pClipboards->end())
     {
-        gClipboards.get()->clear();
-        SAL_INFO("kit", "Released all clipboards on doc destroy\n");
+        SAL_INFO("kit", "Releasing clip: " << it->second.get() << " for destroyed " << nViewId);
+        pClipboards->erase(it);
     }
-    else if (gClipboards.get())
-    {
-        auto it = gClipboards.get()->find(nViewId);
-        if (it != gClipboards.get()->end())
-        {
-            SAL_INFO("kit", "Releasing clip: " << it->second.get() << " for destroyed " << nViewId);
-            gClipboards.get()->erase(it);
-        }
-    }
+}
+
+void KitClipboardFactory::releaseClipboardsForDocument(int nDocId)
+{
+    osl::MutexGuard aGuard(gMutex);
+
+    auto* pClipboards = getClipboards().get();
+    if (!pClipboards)
+        return;
+
+    std::erase_if(*pClipboards,
+                  [nDocId](const auto& rPair) { return rPair.second->getDocId() == nDocId; });
+    SAL_INFO("kit", "Released clipboards for destroyed document " << nDocId);
 }
 
 uno::Reference<uno::XInterface>

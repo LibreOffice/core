@@ -31,6 +31,9 @@ class KitClipboard final
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
     std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
     int m_nViewId = -1;
+    /// The document this view belongs to, cached so the clipboard can be
+    /// released on document destroy even after the view shell is gone.
+    int m_nDocId = -1;
     /**
      * When set, the app does the raw platform clipboard input and output for this
      * view: copies advertise through it and external pastes read through it.
@@ -42,6 +45,8 @@ public:
     ~KitClipboard();
 
     void setViewId(int nViewId) { m_nViewId = nViewId; }
+    void setDocId(int nDocId) { m_nDocId = nDocId; }
+    int getDocId() const { return m_nDocId; }
 
     /**
      * Install (or, with nullptr, remove) the app's platform clipboard backend.
@@ -149,8 +154,12 @@ public:
 
     static rtl::Reference<KitClipboard> getExistingClipboardForView(int nViewId);
 
-    /// Release a clipboard before its document dies, nViewId of -1 clears all.
+    /// Release the clipboard of a single view as that view is destroyed.
     static void releaseClipboardForView(int nViewId);
+
+    /// Release the clipboards of every view of one document as it is destroyed.
+    /// Other documents open in the same engine keep their clipboards.
+    static void releaseClipboardsForDocument(int nDocId);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

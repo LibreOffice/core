@@ -2754,11 +2754,11 @@ static void doc_destroy(COKitDocument *pThis)
 
     SolarMutexGuard aGuard;
 
-#ifndef IOS
-    KitClipboardFactory::releaseClipboardForView(-1);
-#endif
-
     LibLODocument_Impl *pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+#ifndef IOS
+    KitClipboardFactory::releaseClipboardsForDocument(pDocument->mnDocumentId);
+#endif
 
     // Drop any original-document-URL mapping recorded for this document at load.
     // Clear it by the key we captured then, not via xModel->getURL(): the model
