@@ -736,7 +736,8 @@ public:
 private:
     void    convertCharStrings(const sal_GlyphId* pGlyphIds, int nGlyphCount,
                 std::vector<CharString>& rCharStrings);
-    int     convert2Type1Ops( CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops);
+    int     convert2Type1Ops(CffLocal*, const U8* pType2Ops, int nType2Len, U8* pType1Ops,
+                         size_t nType1Cap);
     void    convertOneTypeOp();
     void    convertOneTypeEsc();
     void    callType2Subr( bool bGlobal, int nSubrNumber);
@@ -747,6 +748,11 @@ private:
     // != mpReadEnd post-check so flags as a parse failure.
     void abandonDictParse() { mpReadPtr = mpReadEnd + 1; }
 
+    // Abandon the charstring conversion when the output buffer is full.
+    // callType2Subr does not restore mpWritePtr, so this stays in effect when
+    // the buffer fills inside a subroutine.
+    void abandonConversion() { mpWritePtr = mpWriteEnd + 1; }
+
     const U8* mpBasePtr;
     const U8* mpBaseEnd;
 
@@ -754,6 +760,8 @@ private:
     const U8* mpReadEnd;
 
     U8*     mpWritePtr;
+    U8*     mpWriteEnd;
+    int     mnSubrDepth;
     bool    mbNeedClose;
     bool    mbIgnoreHints;
     sal_Int32 mnCntrMask;
@@ -773,6 +781,9 @@ private:
     bool        getBaseAccent(ValType aBase, ValType aAccent, int* nBase, int* nAccent);
 
     void    read2push();
+    // True if nBytes more fit in the output buffer; otherwise abandon the
+    // conversion and return false so the caller skips the write.
+    bool    hasWriteRoom(int nBytes);
     void    writeType1Val( ValType);
     void    writeTypeOp( int nTypeOp);
     void    writeTypeEsc( int nTypeOp);
@@ -820,6 +831,8 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     , mpReadPtr(nullptr)
     , mpReadEnd(nullptr)
     , mpWritePtr(nullptr)
+    , mpWriteEnd(nullptr)
+    , mnSubrDepth(0)
     , mbNeedClose(false)
     , mbIgnoreHints(false)
     , mnCntrMask(0)
@@ -1048,8 +1061,21 @@ void CffSubsetterContext::read2push()
     push( aVal);
 }
 
+bool CffSubsetterContext::hasWriteRoom(int nBytes)
+{
+    if (mpWritePtr + nBytes <= mpWriteEnd)
+        return true;
+    abandonConversion();
+    return false;
+}
+
 void CffSubsetterContext::writeType1Val( ValType aVal)
 {
+    // Five bytes for the number, plus five more and a two byte "div" escape
+    // when a fractional value is split.
+    if (!hasWriteRoom(12))
+        return;
+
     U8* pOut = mpWritePtr;
 
     // tdf#126242
@@ -1105,11 +1131,15 @@ void CffSubsetterContext::writeType1Val( ValType aVal)
 
 inline void CffSubsetterContext::writeTypeOp( int nTypeOp)
 {
+    if (!hasWriteRoom(1))
+        return;
     *(mpWritePtr++) = static_cast<U8>(nTypeOp);
 }
 
 inline void CffSubsetterContext::writeTypeEsc( int nTypeEsc)
 {
+    if (!hasWriteRoom(2))
+        return;
     *(mpWritePtr++) = TYPE1OP::T1ESC;
     *(mpWritePtr++) = static_cast<U8>(nTypeEsc);
 }
@@ -1590,23 +1620,32 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
         seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
     }
 
-    while( mpReadPtr < mpReadEnd)
+    // The CFF specification limits subroutine call nesting to 10 levels;
+    // deeper nesting would let cyclic subroutines recurse without bound.
+    if (mnSubrDepth >= 10)
+        return;
+    ++mnSubrDepth;
+
+    while (mpReadPtr < mpReadEnd && mpWritePtr <= mpWriteEnd)
         convertOneTypeOp();
+    --mnSubrDepth;
 
     mpReadPtr = pOldReadPtr;
     mpReadEnd = pOldReadEnd;
 }
 
-int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const pT2Ops, int nT2Len, U8* const pT1Ops)
+int CffSubsetterContext::convert2Type1Ops(CffLocal* pCffLocal, const U8* const pT2Ops, int nT2Len,
+                                 U8* const pT1Ops, size_t nT1Cap)
 {
     mpCffLocal = pCffLocal;
 
     // prepare the charstring conversion
     mpWritePtr = pT1Ops;
-    U8 aType1Ops[ MAX_T1OPS_SIZE];
-    if( !pT1Ops)
-        mpWritePtr = aType1Ops;
-    *const_cast<U8**>(&pT1Ops) = mpWritePtr;
+
+    // Remember where the output buffer ends so the write primitives can tell
+    // how much space is left. Start with no subroutine nesting.
+    mpWriteEnd = mpWritePtr + nT1Cap;
+    mnSubrDepth = 0;
 
     // prepend random seed for T1crypt
     *(mpWritePtr++) = 0x48;
@@ -1633,9 +1672,12 @@ int CffSubsetterContext::convert2Type1Ops( CffLocal* pCffLocal, const U8* const 
     mbIgnoreHints = false;
     mnHintSize=mnHorzHintSize=mnStackIdx=0; maCharWidth=-1;//#######
     mnCntrMask = 0;
-    while( mpReadPtr < mpReadEnd)
+    while (mpReadPtr < mpReadEnd && mpWritePtr <= mpWriteEnd)
         convertOneTypeOp();
-    if( maCharWidth != -1 )
+
+    if (mpWritePtr > mpWriteEnd)
+        return -1;
+    if (maCharWidth != -1)
     {
         // overwrite earlier charWidth value, which we only now have
         // parsed out of mpReadPtr buffer (by way of
@@ -2329,7 +2371,8 @@ void CffSubsetterContext::convertCharStrings(const sal_GlyphId* pGlyphIds, int n
         assert(nT2Len > 0);
 
         CharString aCharString;
-        const int nT1Len = convert2Type1Ops(mpCffLocal, mpReadPtr, nT2Len, aCharString.aOps);
+        const int nT1Len = convert2Type1Ops(mpCffLocal, mpReadPtr, nT2Len, aCharString.aOps,
+                                            std::size(aCharString.aOps));
         aCharString.nLen = nT1Len;
         aCharString.nCffGlyphId = nCffGlyphId;
 
