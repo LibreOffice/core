@@ -5009,6 +5009,17 @@ struct ScDependantsCalculator
                 return false;
             }
 
+            if ((p->GetOpCode() == ocSumIf || p->GetOpCode() == ocAverageIf) && p->GetParamCount() >= 3)
+            {
+                // With a separate sum range these functions grow it to the criteria range's shape
+                // when it is smaller, and read cells beyond the sum range's own reference. Those
+                // extra cells are not named by any reference token, so examining the arguments alone
+                // does not capture the true range of dependencies. The two argument form sums the
+                // criteria range itself and stays a candidate for parallelizing.
+                SAL_WARN("sc.core.formulacell", "conditional sum range extension, dropping as candidate for parallelizing");
+                return false;
+            }
+
             switch (p->GetType())
             {
             case svSingleRef:
