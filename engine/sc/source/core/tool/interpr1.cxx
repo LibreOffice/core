@@ -10852,6 +10852,10 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
         }
         else if (xLambdaResult)
             PushTokenRef(xLambdaResult);
+        else if (nGlobalError != FormulaError::NONE)
+            PushError(nGlobalError);
+        else
+            PushNoValue();
     }
     else if (eOpCode == ocMacro)
     {
@@ -10989,6 +10993,8 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
             else
                 PushString( refRes->GetOUString() );
         }
+        else
+            PushError(nGlobalError);      // the arguments could not be built
 
         // prevent cycles from leaking memory
         refArgs->Clear();
