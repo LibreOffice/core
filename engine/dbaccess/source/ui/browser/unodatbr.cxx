@@ -3580,7 +3580,6 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
             xLayoutManager->unlock();
             xLayoutManager->doLayout();
         }
-        onLoadedMenu( xLayoutManager );
     }
 }
 

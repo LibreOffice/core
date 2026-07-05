@@ -374,8 +374,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     {
         if( pNewPage )
         {
-            pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pNewPage));
-            pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PageKind::Notes)));
+            pDrView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pNewPage));
+            pDrView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PageKind::Notes)));
         }
 
         pDrView->EndUndo();

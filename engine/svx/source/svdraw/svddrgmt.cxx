@@ -3465,7 +3465,7 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
 
                     Size aSiz(aCtr1.X()-aCtr0.X(),aCtr1.Y()-aCtr0.Y());
                     if( bUndo )
-                        AddUndo(getSdrDragView().GetModel().GetSdrUndoFactory().CreateUndoMoveObject(*pO,aSiz));
+                        AddUndo(SdrUndoFactory::CreateUndoMoveObject(*pO,aSiz));
                     pO->Move(aSiz);
                 }
             }

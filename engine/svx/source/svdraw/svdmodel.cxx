@@ -1363,7 +1363,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
 
             InsertPage(pPg.get(), nDestNum);
             if (bUndo)
-                AddUndo(GetSdrUndoFactory().CreateUndoCopyPage(*pPg));
+                AddUndo(SdrUndoFactory::CreateUndoCopyPage(*pPg));
             nDestNum++;
         }
         else
@@ -1373,7 +1373,7 @@ void SdrModel::CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
                 nDestNum--;
 
             if(bUndo)
-                AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*GetPage(nPageNum2),nPageNum2,nDestNum));
+                AddUndo(SdrUndoFactory::CreateUndoSetPageNum(*GetPage(nPageNum2),nPageNum2,nDestNum));
 
             pPg=RemovePage(nPageNum2);
             InsertPage(pPg.get(), nDestNum);
@@ -1481,7 +1481,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     MasterPageListChanged();
                     pPg->SetInserted();
                     m_nMasterPageNumsDirtyFrom = std::min(m_nMasterPageNumsDirtyFrom, nDstMasterPageCnt);
-                    if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
+                    if (bUndo) AddUndo(SdrUndoFactory::CreateUndoNewPage(*pPg));
                 } else {
                     OSL_FAIL("SdrModel::Merge(): MasterPage not found in SourceModel.");
                 }
@@ -1508,7 +1508,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
 
             if (pPg!=nullptr) {
                 InsertPage(pPg.get(),nDestPos);
-                if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
+                if (bUndo) AddUndo(SdrUndoFactory::CreateUndoNewPage(*pPg));
 
                 if(pPg->TRG_HasMasterPage())
                 {
@@ -1536,7 +1536,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
 
                             if(bUndo)
                             {
-                                AddUndo(GetSdrUndoFactory().CreateUndoPageChangeMasterPage(*pPg));
+                                AddUndo(SdrUndoFactory::CreateUndoPageChangeMasterPage(*pPg));
                             }
 
                             pPg->TRG_SetMasterPage(*GetMasterPage(nNewNum));

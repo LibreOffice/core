@@ -338,29 +338,11 @@ public:
                                          sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual css::uno::Reference< css::beans::XPropertySet>
-        createAndInsertApplet(
-            const OUString &rName,
-            const OUString &rCode,
-            bool bMayScript,
-            const OUString& rHRef,
-            sal_Int32 nWidth, sal_Int32 nHeight );
-
-    virtual css::uno::Reference< css::beans::XPropertySet>
-        createAndInsertPlugin(
-            const OUString &rMimeType,
-            const OUString& rHRef,
-            sal_Int32 nWidth, sal_Int32 nHeight );
-
-    virtual css::uno::Reference< css::beans::XPropertySet>
         createAndInsertFloatingFrame(
             const OUString &rName,
             const OUString &rHRef,
             const OUString &rStyleName,
             sal_Int32 nWidth, sal_Int32 nHeight );
-
-    virtual void endAppletOrPlugin(
-        const css::uno::Reference< css::beans::XPropertySet> &rPropSet,
-        ::std::map < const OUString, OUString > &rParamMap );
 
     // applet helper methods
     // implemented in sw/filter/xml/txtparai.hxx

@@ -573,7 +573,7 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
 
                     // Create undo
                     if( GetModel().IsUndoEnabled() )
-                        AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pNewCompoundObj));
+                        AddUndo(SdrUndoFactory::CreateUndoNewObject(*pNewCompoundObj));
                 }
             }
         }

@@ -941,11 +941,11 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
             {
                 SdrPage* pPg = GetPage(nPage);
                 if( bUndo )
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, 1));
+                    AddUndo(SdrUndoFactory::CreateUndoSetPageNum(*pPg, nPage, 1));
                 MovePage(nPage, 1);
                 pPg = GetPage(nPage+1);
                 if( bUndo )
-                    AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, 2));
+                    AddUndo(SdrUndoFactory::CreateUndoSetPageNum(*pPg, nPage+1, 2));
                 MovePage(nPage+1, 2);
                 bSomethingHappened = true;
             }
@@ -967,11 +967,11 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
                 {
                     SdrPage* pPg = GetPage(nPage);
                     if( bUndo )
-                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
+                        AddUndo(SdrUndoFactory::CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
                     pPg = GetPage(nPage+1);
                     if( bUndo )
-                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
+                        AddUndo(SdrUndoFactory::CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
                     bSomethingHappened = true;
                 }
@@ -982,11 +982,11 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage, const std::vector<SdPage*
                 {
                     SdrPage* pPg = GetPage(nPage+1);
                     if( bUndo )
-                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
+                        AddUndo(SdrUndoFactory::CreateUndoSetPageNum(*pPg, nPage+1, nTargetPage+1));
                     MovePage(nPage+1, nTargetPage+1);
                     pPg = GetPage(nPage);
                     if( bUndo )
-                        AddUndo(GetSdrUndoFactory().CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
+                        AddUndo(SdrUndoFactory::CreateUndoSetPageNum(*pPg, nPage, nTargetPage));
                     MovePage(nPage, nTargetPage);
                     bSomethingHappened = true;
                 }

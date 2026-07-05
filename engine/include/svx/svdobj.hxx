@@ -396,7 +396,7 @@ public:
     // GrabBagItem for interim interop purposes
     void GetGrabBagItem(cpo::uno::Any& rVal) const;
 
-    virtual void SetGrabBagItem(const cpo::uno::Any& rVal);
+    void SetGrabBagItem(const cpo::uno::Any& rVal);
 
     // Return the position in the navigation order for the called object.
     // Note that this method may update the navigation position of the
@@ -788,7 +788,7 @@ public:
     void DeleteUserData(sal_uInt16 nNum);
 
     // access to the UNO representation of the shape
-    virtual css::uno::Reference< css::drawing::XShape > getUnoShape();
+    css::uno::Reference< css::drawing::XShape > getUnoShape();
 
     static SdrObject* getSdrObjectFromXShape( const css::uno::Reference< css::uno::XInterface >& xInt );
 

@@ -254,7 +254,8 @@ css::uno::Reference< css::beans::XPropertySet > OKeysHelper::appendObject( const
     return createObject( sNewName );
 }
 
-OUString OKeysHelper::getDropForeignKey() const
+// static
+OUString OKeysHelper::getDropForeignKey()
 {
     return u" DROP CONSTRAINT "_ustr;
 }

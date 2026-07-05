@@ -273,7 +273,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             pP->InsertObject(pNewGrafObj.get());
             if( bUndo )
             {
-                AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
+                AddUndo(SdrUndoFactory::CreateUndoNewObject(*pNewGrafObj));
                 AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
             }
             pP->RemoveObject(pPickObj->GetOrdNum());

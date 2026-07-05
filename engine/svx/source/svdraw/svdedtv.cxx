@@ -135,7 +135,7 @@ void SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
     rLA.NewLayer(rName,nPos);
 
     if( GetModel().IsUndoEnabled() )
-        AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewLayer(nPos,rLA, GetModel()));
+        AddUndo(SdrUndoFactory::CreateUndoNewLayer(nPos,rLA, GetModel()));
 
     GetModel().SetChanged();
 }
@@ -282,7 +282,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
 
     if( bUndo )
     {
-        AddUndo(GetModel().GetSdrUndoFactory().CreateUndoDeleteLayer(nLayerNum, rLA, GetModel()));
+        AddUndo(SdrUndoFactory::CreateUndoDeleteLayer(nLayerNum, rLA, GetModel()));
         // coverity[leaked_storage] - ownership transferred to UndoDeleteLayer
         rLA.RemoveLayer(nLayerNum).release();
         EndUndo();
@@ -981,7 +981,7 @@ void SdrEditView::CopyMarkedObj()
             pM->GetPageView()->GetObjList()->InsertObjectThenMakeNameUnique(pO.get(), aNameSet);
 
             if( bUndo )
-                AddUndo(GetModel().GetSdrUndoFactory().CreateUndoCopyObject(*pO));
+                AddUndo(SdrUndoFactory::CreateUndoCopyObject(*pO));
 
             SdrMark aME(*pM);
             aME.SetMarkedSdrObj(pO.get());
@@ -1057,7 +1057,7 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
     {
         bool bDontDeleteReally = true;
         EndTextEditCurrentView(bDontDeleteReally);
-        AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+        AddUndo(SdrUndoFactory::CreateUndoNewObject(*pObj));
     }
 
     if (!(nOptions & SdrInsertFlags::DONTMARK)) {

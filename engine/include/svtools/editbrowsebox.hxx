@@ -82,7 +82,7 @@ namespace svt
         virtual bool MoveAllowed(const KeyEvent& rEvt) const;
         void SetModifyHdl(const Link<LinkParamNone*,void>& rLink) { maModifyHdl = rLink; }
         virtual void ActivatingMouseEvent(const BrowserMouseEvent& rEvt, bool bUp);
-        virtual void callModifyHdl() { maModifyHdl.Call(nullptr); }
+        void callModifyHdl() { maModifyHdl.Call(nullptr); }
     };
 
     typedef tools::SvRef<CellController> CellControllerRef;
@@ -980,7 +980,7 @@ namespace svt
         virtual sal_uInt32 GetTotalCellWidth(sal_Int32 nRow, sal_uInt16 nColId);
         sal_uInt32 GetAutoColumnWidth(sal_uInt16 nColId);
 
-        virtual void PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const;
+        void PaintStatusCell(OutputDevice& rDev, const tools::Rectangle& rRect) const;
         virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect, sal_uInt16 nColId) const = 0;
 
         virtual RowStatus GetRowStatus(sal_Int32 nRow) const;

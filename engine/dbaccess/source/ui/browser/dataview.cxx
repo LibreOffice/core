@@ -44,10 +44,6 @@ namespace dbaui
         m_pAccel = ::svt::AcceleratorExecute::createAcceleratorHelper();
     }
 
-    void ODataView::Construct()
-    {
-    }
-
     ODataView::~ODataView()
     {
         disposeOnce();

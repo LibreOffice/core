@@ -128,7 +128,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     // insert page at the back
                     mrDoc.InsertPage(pSummaryPage.get(), nCount * 2 + 1);
                     if( bUndo )
-                        mpView->AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pSummaryPage));
+                        mpView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pSummaryPage));
 
                     // use MasterPage of the current page
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
@@ -150,7 +150,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     mrDoc.InsertPage(pNotesPage.get(), nCount * 2 + 2);
 
                     if( bUndo )
-                        mpView->AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
+                        mpView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pNotesPage));
 
                     // use MasterPage of the current page
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());

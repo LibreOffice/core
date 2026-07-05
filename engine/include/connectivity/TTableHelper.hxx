@@ -113,7 +113,7 @@ namespace connectivity
         *
         * \return The start of the rename statement.
         */
-        virtual OUString getRenameStart() const;
+        OUString getRenameStart() const;
 
         virtual ~OTableHelper() override;
 
@@ -155,8 +155,6 @@ namespace connectivity
         // helper method to get key properties
         std::shared_ptr<sdbcx::KeyProperties> getKeyProperties(const OUString& _sName) const;
         void addKey(const OUString& _sName,const std::shared_ptr<sdbcx::KeyProperties>& _aKeyProperties);
-
-        virtual OUString getTypeCreatePattern() const;
 
         css::uno::Reference< css::sdb::tools::XTableRename> const &      getRenameService() const;
         css::uno::Reference< css::sdb::tools::XTableAlteration> const &  getAlterService() const;

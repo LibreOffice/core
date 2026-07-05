@@ -617,7 +617,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     // insert (page)
     mrDoc.InsertPage(pPage.get(), static_cast<sal_uInt16>(nTarget) * 2 + 1);
     if( isRecordingUndo() )
-        AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pPage));
+        AddUndo(SdrUndoFactory::CreateUndoNewPage(*pPage));
 
     // assign a master page to the standard page
     pPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
@@ -656,7 +656,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     // insert (notes page)
     mrDoc.InsertPage(pNotesPage.get(), static_cast<sal_uInt16>(nTarget) * 2 + 2);
     if( isRecordingUndo() )
-        AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
+        AddUndo(SdrUndoFactory::CreateUndoNewPage(*pNotesPage));
 
     // assign a master page to the notes page
     pNotesPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
@@ -701,13 +701,13 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner::ParagraphHdlParam, aPa
     sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
     SdrPage* pPage = mrDoc.GetPage(nAbsPos);
     if( isRecordingUndo() )
-        AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+        AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pPage));
     mrDoc.RemovePage(nAbsPos);
 
     nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
     pPage = mrDoc.GetPage(nAbsPos);
     if( isRecordingUndo() )
-        AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+        AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pPage));
     mrDoc.RemovePage(nAbsPos);
 
     // progress display if necessary
@@ -820,13 +820,13 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
         sal_uInt16 nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
         SdrPage* pPage = mrDoc.GetPage(nAbsPos);
         if( isRecordingUndo() )
-            AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+            AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pPage));
         mrDoc.RemovePage(nAbsPos);
 
         nAbsPos = static_cast<sal_uInt16>(nPos) * 2 + 1;
         pPage = mrDoc.GetPage(nAbsPos);
         if( isRecordingUndo() )
-            AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
+            AddUndo(SdrUndoFactory::CreateUndoDeletePage(*pPage));
         mrDoc.RemovePage(nAbsPos);
 
         pPage = GetPageForParagraph( pPara );

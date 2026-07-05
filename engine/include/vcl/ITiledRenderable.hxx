@@ -442,11 +442,6 @@ public:
         return false;
    }
 
-    /** Clean-up slideshow */
-    virtual void postSlideshowCleanup()
-    {
-    }
-
     /** render slideshow layer*/
     virtual bool renderNextSlideLayer(unsigned char* /*pBuffer*/, bool& /*bIsBitmapLayer*/, double& /*rScale*/, OUString& /*rJsonMsg*/)
     {

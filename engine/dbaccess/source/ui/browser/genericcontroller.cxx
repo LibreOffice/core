@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dbaccess/genericcontroller.hxx>
+ #include <dbaccess/genericcontroller.hxx>
 #include <browserids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -138,7 +138,6 @@ bool OGenericUnoController::Construct(vcl::Window* /*pParent*/)
 
     if ( getView() )
     {
-        getView()->Construct();
         getView()->Show();
     }
 
@@ -619,20 +618,6 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     std::erase_if( m_aFeaturesToInvalidate, FindFeatureListener(aListener));
 }
 
-void OGenericUnoController::releaseNumberForComponent()
-{
-    try
-    {
-        Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
-        if ( xUntitledProvider.is() )
-            xUntitledProvider->releaseNumberForComponent(static_cast<XWeak*>(this));
-    }
-    catch( const Exception& )
-    {
-        // NII
-    }
-}
-
 void OGenericUnoController::disposing()
 {
     {
@@ -652,8 +637,6 @@ void OGenericUnoController::disposing()
         m_aAsyncInvalidateAll.CancelCall();
         m_aFeaturesToInvalidate.clear();
     }
-
-    releaseNumberForComponent();
 
     // check out from all the objects we are listening
     // the frame
@@ -854,13 +837,6 @@ void OGenericUnoController::loadMenu(const Reference< XFrame >& _xFrame)
         xLayoutManager->unlock();
         xLayoutManager->doLayout();
     }
-
-    onLoadedMenu( xLayoutManager );
-}
-
-void OGenericUnoController::onLoadedMenu(const Reference< XLayoutManager >& /*_xLayoutManager*/)
-{
-    // not interested in
 }
 
 void OGenericUnoController::closeTask()
@@ -932,9 +908,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw(bool bCreat
 
     if (!m_xTitleHelper.is() && bCreateIfNecessary)
     {
-        Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
-
-        m_xTitleHelper = new ::framework::TitleHelper( m_xContext, Reference< XController >(this), xUntitledProvider );
+        m_xTitleHelper = new ::framework::TitleHelper( m_xContext, Reference< XController >(this), nullptr );
     }
 
     return m_xTitleHelper;

@@ -3356,8 +3356,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
         CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
         CPPUNIT_ASSERT(aJson.isEmpty());
     }
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFields)
@@ -3588,8 +3586,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
         CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
         CPPUNIT_ASSERT(aJson.isEmpty());
     }
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_SlideNumber_Header_DateTime)
@@ -3612,8 +3608,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_SlideNu
     aSlideRendererChecker.checkPageLayer(0, "DrawPage");
 
     aSlideRendererChecker.checkFinalEmptyLayer();
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Background)
@@ -3634,8 +3628,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Ba
     aSlideRendererChecker.checkPageLayer(0, "DrawPage");
 
     aSlideRendererChecker.checkFinalEmptyLayer();
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_MasterPage)
@@ -3654,8 +3646,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Ma
     aSlideRendererChecker.checkPageLayer(0, "DrawPage");
 
     aSlideRendererChecker.checkFinalEmptyLayer();
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Background_And_MasterPage)
@@ -3672,8 +3662,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Ba
     aSlideRendererChecker.checkPageLayer(0, "DrawPage");
 
     aSlideRendererChecker.checkFinalEmptyLayer();
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animated_Shape_Inside_A_Group)
@@ -3691,8 +3679,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
     aSlideRendererChecker.checkPageLayer(0, "DrawPage", /*bIsAnimated=*/ false);
 
     aSlideRendererChecker.checkFinalEmptyLayer();
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animated_Group)
@@ -3712,8 +3698,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
     aSlideRendererChecker.checkPageLayer(1, "DrawPage", /*bIsAnimated=*/ false);
 
     aSlideRendererChecker.checkFinalEmptyLayer();
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animated_Groups)
@@ -3732,8 +3716,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
     aSlideRendererChecker.checkPageLayer(1, "DrawPage", /*bIsAnimated=*/ true);
 
     aSlideRendererChecker.checkFinalEmptyLayer();
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animated_MultiLevel_Group)
@@ -3757,8 +3739,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animate
     aSlideRendererChecker.checkPageLayer(1, "DrawPage", /*bIsAnimated=*/ false);
 
     aSlideRendererChecker.checkFinalEmptyLayer();
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animations)
@@ -3931,8 +3911,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
         CPPUNIT_ASSERT(aJson.isEmpty());
     }
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animations2)
@@ -4190,8 +4168,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
         CPPUNIT_ASSERT(aJson.isEmpty());
     }
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animation_TextBox)
@@ -4357,8 +4333,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
         CPPUNIT_ASSERT(aJson.isEmpty());
     }
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animation_TextBox_SecondParagraphMultipleEffects)
@@ -4464,8 +4438,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
         CPPUNIT_ASSERT(aJson.isEmpty());
     }
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animation_DifferentKindOfTextBox)
@@ -4586,8 +4558,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, dScale, aJson));
         CPPUNIT_ASSERT(aJson.isEmpty());
     }
-
-    pXImpressDocument->postSlideshowCleanup();
 }
 
 namespace {

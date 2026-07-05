@@ -175,22 +175,14 @@ IMPL_LINK_NOARG(OFieldDescControl, FormatClickHdl, weld::Button&, void)
 
     if(bModified)
     {
-        SetModified(true);
         UpdateFormatSample(pActFieldDescr);
     }
-}
-
-void OFieldDescControl::SetModified(bool /*bModified*/)
-{
 }
 
 IMPL_LINK(OFieldDescControl, ChangeHdl, weld::ComboBox&, rListBox, void)
 {
     if (!pActFieldDescr)
         return;
-
-    if (rListBox.get_value_changed_from_saved())
-        SetModified(true);
 
     // Special treatment for Bool fields
     if (m_xRequired && &rListBox == m_xRequired->GetWidget() && m_xBoolDefault)
@@ -850,7 +842,6 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     }
 
     // Enable/disable Controls
-    bool bRead(IsReadOnly());
 
     // Save the values that we loaded so we can detect any changes
     iterateControls([] (OWidgetBase* pWidget)
@@ -860,7 +851,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         return false;
     });
 
-    SetReadOnly( bRead );
+    SetReadOnly( false );
 }
 
 IMPL_LINK(OFieldDescControl, OnControlFocusLost, weld::Widget&, rControl, void )

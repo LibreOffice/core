@@ -518,7 +518,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
             if( bUndo )
             {
-                mpView->AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
+                mpView->AddUndo(SdrUndoFactory::CreateUndoInsertObject(*pTO));
                 mpView->EndUndo();
             }
         }

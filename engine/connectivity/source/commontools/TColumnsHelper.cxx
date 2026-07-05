@@ -167,7 +167,7 @@ css::uno::Reference< css::beans::XPropertySet > OColumnsHelper::appendObject( co
     OUString aSql = "ALTER TABLE " +
         ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::EComposeRule::InTableDefinitions, true ) +
         " ADD " +
-        ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),nullptr,m_pTable->getTypeCreatePattern());
+        ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),nullptr,u"");
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
     if ( xStmt.is() )

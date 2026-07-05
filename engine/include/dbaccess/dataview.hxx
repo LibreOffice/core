@@ -58,8 +58,6 @@ namespace dbaui
         virtual ~ODataView() override;
         virtual void dispose() override;
 
-        /// late construction
-        virtual void Construct();
         // initialize will be called when after the controller finished his initialize method
         // window overridables
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
@@ -76,7 +74,7 @@ namespace dbaui
         virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect ) override;
 
         /// re-arrange all controls, including the toolbox, it's separator, and the "real view"
-        virtual void resizeAll( const tools::Rectangle& _rPlayground );
+        void resizeAll( const tools::Rectangle& _rPlayground );
 
         // re-arrange the controls belonging to the document itself
         virtual void resizeDocumentView( tools::Rectangle& _rPlayground );

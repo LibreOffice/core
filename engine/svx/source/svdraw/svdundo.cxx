@@ -1523,7 +1523,7 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
                     m_pUndoGroup.reset( new SdrUndoGroup(m_rMod) );
                 }
 
-                m_pUndoGroup->AddAction(m_rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
+                m_pUndoGroup->AddAction(SdrUndoFactory::CreateUndoPageRemoveMasterPage(*pDrawPage));
             }
         }
     }
@@ -1766,6 +1766,7 @@ SdrUndoFactory::~SdrUndoFactory(){}
 
 // shapes
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoMoveObject( SdrObject& rObject, const Size& rDist )
 {
     return std::make_unique<SdrUndoMoveObj>( rObject, rDist );
@@ -1782,6 +1783,7 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDiagramModelData( SdrOb
     return std::make_unique<SdrUndoDiagramModelData>( rObject, rStartState );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDiagramDissolveModel( SdrObject& rObject )
 {
     return std::make_unique<SdrUndoDiagramDissolveModel>( rObject );
@@ -1797,6 +1799,7 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoRemoveObject(SdrObject&
     return std::make_unique<SdrUndoRemoveObj>(rObject);
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoInsertObject( SdrObject& rObject, bool bOrdNumDirect )
 {
     return std::make_unique<SdrUndoInsertObj>( rObject, bOrdNumDirect );
@@ -1807,16 +1810,19 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDeleteObject( SdrObject
     return std::make_unique<SdrUndoDelObj>( rObject, bOrdNumDirect );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoNewObject( SdrObject& rObject, bool bOrdNumDirect )
 {
     return std::make_unique<SdrUndoNewObj>( rObject, bOrdNumDirect );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoCopyObject( SdrObject& rObject, bool bOrdNumDirect )
 {
     return std::make_unique<SdrUndoCopyObj>( rObject, bOrdNumDirect );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectOrdNum( SdrObject& rObject, sal_uInt32 nOldOrdNum1, sal_uInt32 nNewOrdNum1)
 {
     return std::make_unique<SdrUndoObjOrdNum>( rObject, nOldOrdNum1, nNewOrdNum1 );
@@ -1832,6 +1838,7 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoReplaceObject( SdrObjec
     return std::make_unique<SdrUndoReplaceObj>( rOldObject, rNewObject );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer )
 {
     return std::make_unique<SdrUndoObjectLayerChange>( rObject, aOldLayer, aNewLayer );
@@ -1858,42 +1865,50 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoObjectDecorative(
 
 
 // layer
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
     return std::make_unique<SdrUndoNewLayer>( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
     return std::make_unique<SdrUndoDelLayer>( nLayerNum, rNewLayerAdmin, rNewModel );
 }
 
 // page
+// static
 std::unique_ptr<SdrUndoAction>  SdrUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
 {
     return std::make_unique<SdrUndoDelPage>(rPage);
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoNewPage(SdrPage& rPage)
 {
     return std::make_unique<SdrUndoNewPage>( rPage );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoCopyPage(SdrPage& rPage)
 {
     return std::make_unique<SdrUndoCopyPage>( rPage );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1)
 {
     return std::make_unique<SdrUndoSetPageNum>( rNewPg, nOldPageNum1, nNewPageNum1 );
 }
     // master page
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoPageRemoveMasterPage(SdrPage& rChangedPage)
 {
     return std::make_unique<SdrUndoPageRemoveMasterPage>( rChangedPage );
 }
 
+// static
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChangedPage)
 {
     return std::make_unique<SdrUndoPageChangeMasterPage>(rChangedPage);

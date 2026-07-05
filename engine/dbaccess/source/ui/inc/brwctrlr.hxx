@@ -216,7 +216,7 @@ namespace dbaui
         virtual void    startFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
         virtual void    stopFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
 
-        virtual css::uno::Reference< css::sdbc::XRowSet >  CreateForm();
+        css::uno::Reference< css::sdbc::XRowSet >  CreateForm();
             // our default implementation simply instantiates a stardiv.one.form.component.Form service
             // (probably this needs not to be overridden, but you may return anything you want as long as it
             // supports the css::form::DatabaseForm service. For instance you may want to create an adapter here which
@@ -250,7 +250,7 @@ namespace dbaui
             // call after "major changes" (e.g. the completion of the async load).
             // invalidates all toolbox slots and all supported features.
 
-        virtual bool LoadForm();
+        bool LoadForm();
             // load the form
             // the default implementation does a direct load or starts a load thread, depending on the multithread capabilities
             // of the data source.

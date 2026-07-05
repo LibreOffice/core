@@ -211,7 +211,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
         if( bUndo )
         {
             AddUndoActions( CreateConnectorUndo( *pO ) );
-            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoMoveObject(*pO,rSiz));
+            AddUndo(SdrUndoFactory::CreateUndoMoveObject(*pO,rSiz));
         }
         pO->Move(rSiz);
     }
@@ -2161,7 +2161,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
                         AddUndo(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
                     }
 
-                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoMoveObject(*pObj,Size(nXMov,nYMov)));
+                    AddUndo(SdrUndoFactory::CreateUndoMoveObject(*pObj,Size(nXMov,nYMov)));
                 }
 
                 pObj->Move(Size(nXMov,nYMov));

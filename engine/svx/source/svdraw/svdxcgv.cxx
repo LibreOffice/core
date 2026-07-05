@@ -346,7 +346,7 @@ bool SdrExchangeView::Paste(
                 pDstLst->InsertObjectThenMakeNameUnique(pNewObj.get(), aNameSet);
 
                 if( bUndo )
-                    AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoNewObject(*pNewObj));
+                    AddUndo(SdrUndoFactory::CreateUndoNewObject(*pNewObj));
 
                 if (bMark) {
                     // Don't already set Markhandles!
@@ -414,7 +414,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     rLst.InsertObject(pObj, SAL_MAX_SIZE);
 
     if( IsUndoEnabled() )
-        AddUndo(getSdrModelFromSdrView().GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+        AddUndo(SdrUndoFactory::CreateUndoNewObject(*pObj));
 
     SdrPageView* pMarkPV=nullptr;
     SdrPageView* pPV = GetSdrPageView();

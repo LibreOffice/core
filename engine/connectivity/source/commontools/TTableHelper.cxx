@@ -582,11 +582,6 @@ void OTableHelper::addKey(const OUString& _sName,const std::shared_ptr<sdbcx::Ke
     m_pImpl->m_aKeys.emplace(_sName,_aKeyProperties);
 }
 
-OUString OTableHelper::getTypeCreatePattern() const
-{
-    return OUString();
-}
-
 Reference< XConnection> const & OTableHelper::getConnection() const
 {
     return m_pImpl->m_xConnection;

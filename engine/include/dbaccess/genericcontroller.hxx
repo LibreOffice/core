@@ -247,13 +247,6 @@ namespace dbaui
         // if getMenu returns a non empty string than this will be dispatched at the frame
         virtual void            loadMenu(const css::uno::Reference< css::frame::XFrame >& _xFrame);
 
-        /** called when our menu has been loaded into our frame, can be used to load sub toolbars
-
-            @param _xLayoutManager
-                The layout manager.
-        */
-        virtual void            onLoadedMenu(const css::uno::Reference< css::frame::XLayoutManager >& _xLayoutManager);
-
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures();
 
@@ -311,15 +304,9 @@ namespace dbaui
         virtual OUString getPrivateTitle() const { return OUString(); }
 
         css::uno::Reference< css::frame::XTitle > impl_getTitleHelper_throw(bool bCreateIfNecessary = true);
-        virtual css::uno::Reference< css::frame::XModel > getPrivateModel() const
-        {
-            return css::uno::Reference< css::frame::XModel >();
-        }
 
         virtual void    startFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame );
         virtual void    stopFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame );
-
-        void releaseNumberForComponent();
 
         virtual ~OGenericUnoController() override;
 

@@ -79,8 +79,6 @@ namespace dbaui
         virtual void GetFocus() override;
         virtual void resizeDocumentView(tools::Rectangle& rRect) override;
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;
-
-        using ODataView::Construct;
     };
 
     class BrowserViewStatusDisplay final

@@ -128,14 +128,12 @@ namespace dbaui
 
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );
-        virtual bool        IsReadOnly() { return false; };
 
         virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const = 0;
 
         virtual css::lang::Locale               GetLocale() const = 0;
 
         virtual void                            CellModified(sal_Int32 nRow, sal_uInt16 nColId ) = 0;
-        virtual void                            SetModified(bool bModified);    // base implementation is empty
 
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos)        = 0;
         virtual const OTypeInfoMap*             getTypeInfo() const  = 0;

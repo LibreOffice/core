@@ -511,7 +511,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
         pMasterPageInDocument = AddMasterPage (rTargetDocument, pMasterPage, nInsertionIndex);
         if( rTargetDocument.IsUndoEnabled() )
                 rTargetDocument.AddUndo(
-                    rTargetDocument.GetSdrUndoFactory().CreateUndoNewPage(*pMasterPageInDocument));
+                    SdrUndoFactory::CreateUndoNewPage(*pMasterPageInDocument));
     }
     else
         pMasterPageInDocument = pMasterPage;
@@ -523,7 +523,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
             = AddMasterPage (rTargetDocument, pNotesMasterPage, nInsertionIndex+1);
         if( rTargetDocument.IsUndoEnabled() )
             rTargetDocument.AddUndo(
-                rTargetDocument.GetSdrUndoFactory().CreateUndoNewPage(*pClonedNotesMasterPage));
+                SdrUndoFactory::CreateUndoNewPage(*pClonedNotesMasterPage));
     }
 
     return pMasterPageInDocument;

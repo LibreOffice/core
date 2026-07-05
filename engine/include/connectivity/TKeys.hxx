@@ -37,7 +37,7 @@ namespace connectivity
         virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
-        virtual OUString getDropForeignKey() const;
+        static OUString getDropForeignKey();
 
     public:
         OKeysHelper(    OTableHelper* _pTable,

@@ -76,8 +76,6 @@ void UnoDataBrowserView::Construct(const Reference< css::awt::XControlModel >& x
 {
     try
     {
-        ODataView::Construct();
-
         // our UNO representation
         m_xMe = VCLUnoHelper::CreateControlContainer(this);
 

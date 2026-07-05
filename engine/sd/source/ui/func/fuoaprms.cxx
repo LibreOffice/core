@@ -716,7 +716,7 @@ void FuObjectAnimationParameters::Finish( const std::shared_ptr<SfxRequest>& xRe
             Size aDistance(aNewCenter.X() - aCurCenter.X(), aNewCenter.Y() - aCurCenter.Y());
             pRunningObj->Move(aDistance);
 
-            pUndoMgr->AddUndoAction(mrDoc.GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
+            pUndoMgr->AddUndoAction(SdrUndoFactory::CreateUndoMoveObject( *pRunningObj, aDistance));
         }
     }
 

@@ -6181,7 +6181,6 @@ static void doc_postSlideshowCleanup(COKitDocument* pThis)
         SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
-    pDoc->postSlideshowCleanup();
 }
 
 static bool doc_renderNextSlideLayer(

@@ -435,7 +435,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 if( IsUndoEnabled() )
                                 {
                                     BegUndo(SdResId(STR_MODIFYLAYER));
-                                    AddUndo(GetModel().GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), nLayer));
+                                    AddUndo(SdrUndoFactory::CreateUndoObjectLayerChange(*pO, pO->GetLayer(), nLayer));
                                     EndUndo();
                                 }
 
@@ -524,7 +524,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                         if( IsUndoEnabled() )
                                         {
                                             BegUndo(SdResId(STR_UNDO_DRAGDROP));
-                                            AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+                                            AddUndo(SdrUndoFactory::CreateUndoNewObject(*pObj));
                                             EndUndo();
                                         }
 
@@ -791,7 +791,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             pWorkPage->InsertObject( pNewObj.get() );
                             if( bUndo )
                             {
-                                AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
+                                AddUndo( SdrUndoFactory::CreateUndoNewObject( *pNewObj ) );
                                 AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoDeleteObject( *pPickObj2 ) );
                             }
                             pWorkPage->RemoveObject( pPickObj2->GetOrdNum() );

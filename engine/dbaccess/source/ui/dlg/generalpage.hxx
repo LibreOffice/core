@@ -69,8 +69,8 @@ namespace dbaui
         virtual void Reset( const SfxItemSet* _rCoreAttrs ) override;
 
         virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) override;
-        virtual OUString getDatasourceName( const SfxItemSet& _rSet );
-        virtual bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
+        OUString getDatasourceName( const SfxItemSet& _rSet );
+        bool approveDatasourceType( ::dbaccess::DATASOURCE_TYPE eType, OUString& _inout_rDisplayName );
 
         // <method>OGenericAdministrationPage::fillControls</method>
         virtual void fillControls(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;

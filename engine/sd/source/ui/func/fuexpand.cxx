@@ -146,7 +146,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 nPos++;
 
                 if( bUndo )
-                    mpView->AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pPage));
+                    mpView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pPage));
 
                 // use MasterPage of the current page
                 pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
@@ -169,7 +169,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 nPos++;
 
                 if( bUndo )
-                    mpView->AddUndo(mrDoc.GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
+                    mpView->AddUndo(SdrUndoFactory::CreateUndoNewPage(*pNotesPage));
 
                 // use MasterPage of the current page
                 pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());

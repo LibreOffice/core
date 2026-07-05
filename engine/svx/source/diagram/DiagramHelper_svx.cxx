@@ -454,7 +454,7 @@ void DiagramHelper_svx::disconnectFromSdrObjGroup(bool bEnableUndo)
         if (bUndo)
         {
             // create undo action for DissolveModel
-            rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramDissolveModel(*pRootObject));
+            rDrawModel.AddUndo(SdrUndoFactory::CreateUndoDiagramDissolveModel(*pRootObject));
         }
 
         // remove locks. Do this before resetting RootShape below, it uses that.
@@ -478,7 +478,7 @@ void DiagramHelper_svx::disconnectFromSdrObjGroup(bool bEnableUndo)
 
                     if (bUndo)
                     {
-                        rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoNewObject(*pFGObject));
+                        rDrawModel.AddUndo(SdrUndoFactory::CreateUndoNewObject(*pFGObject));
                         rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoAttrObject(*pBGObject));
                         rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoAttrObject(*pFGObject));
                     }
@@ -497,7 +497,7 @@ void DiagramHelper_svx::disconnectFromSdrObjGroup(bool bEnableUndo)
                     pRootObject->InsertObject(pBGObject.get());
 
                     if (bUndo)
-                        rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoInsertObject(*pBGObject));
+                        rDrawModel.AddUndo(SdrUndoFactory::CreateUndoInsertObject(*pBGObject));
                 }
             }
             else

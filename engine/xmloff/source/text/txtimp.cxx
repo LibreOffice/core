@@ -2288,24 +2288,6 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOOoLink(
     return xPropSet;
 }
 
-Reference< XPropertySet> XMLTextImportHelper::createAndInsertApplet(
-                                        const OUString& /*rCode*/,
-                                        const OUString& /*rName*/,
-                                        bool /*bMayScript*/,
-                                        const OUString& /*rHRef*/,
-                                        sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/ )
-{
-    Reference< XPropertySet> xPropSet;
-    return xPropSet;
-}
-Reference< XPropertySet> XMLTextImportHelper::createAndInsertPlugin(
-                                        const OUString& /*rMimeType*/,
-                                        const OUString& /*rHRef*/,
-                                        sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/ )
-{
-    Reference< XPropertySet> xPropSet;
-    return xPropSet;
-}
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertFloatingFrame(
                                         const OUString& /*rName*/,
                                         const OUString& /*rHRef*/,
@@ -2316,11 +2298,6 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertFloatingFrame(
     return xPropSet;
 }
 
-void XMLTextImportHelper::endAppletOrPlugin(
-        const Reference < XPropertySet> &,
-        std::map < const OUString, OUString > &)
-{
-}
 // redline helper: dummy implementation to be overridden in sw/filter/xml
 void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
                                       const OUString& /*rId*/,

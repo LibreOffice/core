@@ -484,20 +484,12 @@ void XMLTextFrameContext_Impl::Create()
             break;
         case XML_TEXT_FRAME_APPLET:
         {
-            xPropSet = GetImport().GetTextImport()
-                            ->createAndInsertApplet( sAppletName, sCode,
-                                                     bMayScript, sHRef,
-                                                     nWidth, nHeight);
             break;
         }
         case XML_TEXT_FRAME_PLUGIN:
         {
             if(!sHRef.isEmpty())
                 GetImport().GetAbsoluteReference(sHRef);
-            xPropSet = GetImport().GetTextImport()
-                            ->createAndInsertPlugin( sMimeType, sHRef,
-                                                         nWidth, nHeight);
-
             break;
         }
         case XML_TEXT_FRAME_FLOATING_FRAME:
@@ -1187,9 +1179,6 @@ void XMLTextFrameContext_Impl::endFastElement(sal_Int32 )
     if (mbListContextPushed) {
         GetImport().GetTextImport()->PopListContext();
     }
-
-    if (( nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN ) && xPropSet.is())
-        GetImport().GetTextImport()->endAppletOrPlugin( xPropSet, aParamMap);
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext_Impl::createFastChildContext(
