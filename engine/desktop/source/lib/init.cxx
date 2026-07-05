@@ -74,6 +74,7 @@
 #include <sal/log.hxx>
 #include <utility>
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/dropcache.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/idletask.hxx>
 #include <vcl/kit.hxx>
@@ -6842,6 +6843,44 @@ static char* getLanguages(const char* pCommand)
     return pJson;
 }
 
+namespace
+{
+class FontListCache final : public CacheOwner
+{
+    std::unordered_map<OString, OString> maCache;
+    sal_uInt64 mnGeneration = 0;
+
+public:
+    const OString* find(const OString& rKey)
+    {
+        const sal_uInt64 nGeneration = OutputDevice::GetFontDataGeneration();
+        if (mnGeneration != nGeneration)
+        {
+            maCache.clear();
+            mnGeneration = nGeneration;
+        }
+        const auto it = maCache.find(rKey);
+        return it != maCache.end() ? &it->second : nullptr;
+    }
+
+    void store(const OString& rKey, const OString& rValue) { maCache.emplace(rKey, rValue); }
+
+    bool dropCaches() override
+    {
+        maCache.clear();
+        return true;
+    }
+
+    void dumpState(rtl::OStringBuffer& rState) override
+    {
+        rState.append("\nFontListCache:\t");
+        rState.append(static_cast<sal_Int32>(maCache.size()));
+    }
+
+    OUString getCacheName() const override { return u"FontListCache"_ustr; }
+};
+}
+
 static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
 {
     DBG_TESTSOLARMUTEX();
@@ -6854,20 +6893,11 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
     // of which advance OutputDevice's font-data generation under that
     // same mutex. Drop the cache whenever the generation moves so a stale
     // list is never served.
-    static std::unordered_map<OString, OString> aFontsCache;
-    static sal_uInt64 nCachedFontGeneration = 0;
-
-    const sal_uInt64 nFontGeneration = OutputDevice::GetFontDataGeneration();
-    if (nCachedFontGeneration != nFontGeneration)
-    {
-        aFontsCache.clear();
-        nCachedFontGeneration = nFontGeneration;
-    }
+    static FontListCache aFontsCache;
 
     const OString aCacheKey = OString::Concat(pCommand) + (bBloatWithRepeatedSizes ? "|b" : "|c");
-    const auto it = aFontsCache.find(aCacheKey);
-    if (it != aFontsCache.end())
-        return convertOString(it->second);
+    if (const OString* pHit = aFontsCache.find(aCacheKey))
+        return convertOString(*pHit);
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if (!pDocSh)
@@ -6927,7 +6957,7 @@ static char* getFonts (const char* pCommand, const bool bBloatWithRepeatedSizes)
         aResult = OString(aJsonStr.data(), aJsonStr.size());
     }
 
-    aFontsCache.emplace(aCacheKey, aResult);
+    aFontsCache.store(aCacheKey, aResult);
     return convertOString(aResult);
 }
 
