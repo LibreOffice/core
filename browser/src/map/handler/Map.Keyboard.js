@@ -564,6 +564,21 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			keyEventFn = window.L.bind(docLayer.postKeyboardEvent, docLayer);
 		}
 
+		// Shift+F10 opens the context menu, for keyboards that have no
+		// dedicated Menu key. Post the same context menu key that the
+		// Menu key sends, so both open the menu on the current selection.
+		if (ev.shiftKey && !ev.ctrlKey && !ev.altKey && !ev.metaKey
+			&& ev.keyCode === this.keyCodes.F10) {
+			if (keyEventFn) {
+				if (ev.type === 'keydown')
+					keyEventFn('input', 0, UNOKey.CONTEXTMENU);
+				else if (ev.type === 'keyup')
+					keyEventFn('up', 0, UNOKey.CONTEXTMENU);
+			}
+			ev.preventDefault();
+			return;
+		}
+
 		this.modifier = 0;
 		var shift = ev.shiftKey ? app.UNOModifier.SHIFT : 0;
 		var ctrl = (ev.ctrlKey || ev.metaKey) ? app.UNOModifier.CTRL : 0;

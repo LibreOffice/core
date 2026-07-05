@@ -139,8 +139,8 @@ public:
     SfxViewFrame*       GetFrame() const;
     SfxModule*          GetModule() const;
 
-    void                ExecutePopup( const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr );
-    static void         ExecutePopup( vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
+    void                ExecutePopup( const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr, bool bMouseEvent = true );
+    static void         ExecutePopup( vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr, bool bMouseEvent = true );
 
     bool                IsAppDispatcher() const;
     bool                IsFlushed() const;

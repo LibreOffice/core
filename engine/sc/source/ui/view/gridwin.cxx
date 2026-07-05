@@ -3674,7 +3674,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     if (bDone)
         return;
 
-    SfxDispatcher::ExecutePopup( this, &aMenuPos );
+    SfxDispatcher::ExecutePopup( this, &aMenuPos, bMouse );
 }
 
 void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, SCROW nCellY )

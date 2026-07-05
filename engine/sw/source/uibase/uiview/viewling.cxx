@@ -745,6 +745,7 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
                                 boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(xMenuInterface);
                                 boost::property_tree::ptree aRoot;
                                 aRoot.add_child("menu", aMenu);
+                                aRoot.put("mouse", bIsMouseEvent);
 
                                 std::stringstream aStream;
                                 boost::property_tree::write_json(aStream, aRoot, true);

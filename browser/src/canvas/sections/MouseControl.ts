@@ -129,11 +129,13 @@ class MouseControl extends CanvasSectionObject {
 		}
 	}
 
-	// Gets the mouse position either on browser page or within the
-	// canvas in css pixels.
-	private _getMousePosition(browserPage: boolean): cool.PointLike {
+	// Transforms a point in document coordinates (twips) into a css-pixel
+	// position, either relative to the browser page or within the canvas.
+	private _documentToCssPosition(
+		pagePosition: cool.SimplePoint,
+		browserPage: boolean,
+	): cool.PointLike {
 		Util.ensureValue(app.activeDocument);
-		const pagePosition = this.currentPosition.clone();
 		let docTLx = app.activeDocument.activeLayout.viewedRectangle.pX1;
 		let docTLy = app.activeDocument.activeLayout.viewedRectangle.pY1;
 		if (app.map.getDocType() === 'spreadsheet') {
@@ -161,6 +163,15 @@ class MouseControl extends CanvasSectionObject {
 		};
 	}
 
+	// Gets the mouse position either on browser page or within the
+	// canvas in css pixels.
+	private _getMousePosition(browserPage: boolean): cool.PointLike {
+		return this._documentToCssPosition(
+			this.currentPosition.clone(),
+			browserPage,
+		);
+	}
+
 	// Gets the mouse position on browser page in CSS pixels.
 	public getMousePagePosition() {
 		return this._getMousePosition(true);
@@ -169,6 +180,22 @@ class MouseControl extends CanvasSectionObject {
 	// Gets the mouse position on canvas in CSS pixels.
 	public getMouseCanvasPosition() {
 		return this._getMousePosition(false);
+	}
+
+	// Gets the text caret (Writer, Impress) or active cell (Calc) position on
+	// the canvas in css pixels, or null when there is no visible cursor.
+	public getCursorCanvasPosition(): cool.PointLike | null {
+		let rectangle: cool.SimpleRectangle | null = null;
+		if (app.calc.cellCursorVisible) rectangle = app.calc.cellCursorRectangle;
+		else if (app.file.textCursor.visible)
+			rectangle = app.file.textCursor.rectangle;
+
+		if (!rectangle) return null;
+
+		// Anchor at the bottom-left corner so the menu opens just below the
+		// caret or active cell instead of covering it.
+		const point = new cool.SimplePoint(rectangle.x1, rectangle.y2);
+		return this._documentToCssPosition(point, false);
 	}
 
 	// This is useful when a section handles the event but wants to set the document mouse position.

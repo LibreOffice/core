@@ -107,6 +107,9 @@ class ContextMenuControl extends JSControl {
 	private _onContextMenu(obj: any): void {
 		Util.ensureValue(this._map);
 		const map = this._map;
+
+		const keyboardInvoked = obj.mouse === 'false';
+
 		if (!map.isEditMode()) {
 			return;
 		}
@@ -144,18 +147,26 @@ class ContextMenuControl extends JSControl {
 				);
 			map.fire('mobilewizard', { data: menuData });
 		} else {
-			this._addMenu(contextMenu);
+			this._addMenu(contextMenu, keyboardInvoked);
 			$('#' + this._menuPosID).focus();
 			this.hasContextMenu = true;
 		}
 	}
 
-	private _addMenu(contextMenu: Record<string, CtxtValueType>): void {
+	private _addMenu(
+		contextMenu: Record<string, CtxtValueType>,
+		keyboardInvoked: boolean,
+	): void {
 		Util.ensureValue(this._map);
 		const map = this._map;
 		Util.ensureValue(app.activeDocument);
 		Util.ensureValue(app.activeDocument.mouseControl);
-		const position = app.activeDocument.mouseControl.getMouseCanvasPosition();
+		// A keyboard-opened menu is placed at the caret or active cell, falling
+		// back to the mouse when there is no visible cursor.
+		const position =
+			(keyboardInvoked &&
+				app.activeDocument.mouseControl.getCursorCanvasPosition()) ||
+			app.activeDocument.mouseControl.getMouseCanvasPosition();
 		Util.ensureValue(position);
 		const container = document.getElementById('canvas-container');
 		Util.ensureValue(container);
@@ -223,7 +234,10 @@ class ContextMenuControl extends JSControl {
 			'',
 			false,
 			true /* earlyCallbackCall? */,
-			true /* noDefaultSelection? */,
+			// When opened from the keyboard, select and focus the first entry
+			// so the arrow keys work at once. A right-click opens with no entry
+			// preselected.
+			!keyboardInvoked /* noDefaultSelection? */,
 		);
 	}
 

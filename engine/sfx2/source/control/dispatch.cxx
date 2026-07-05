@@ -1802,7 +1802,7 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
     return false;
 }
 
-void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
+void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos, bool bMouseEvent )
 {
     SfxDispatcher &rDisp = *SfxGetpApp()->GetDispatcher_Impl();
     sal_uInt16 nShLevel = 0;
@@ -1816,7 +1816,7 @@ void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
         const OUString& rResName = pSh->GetInterface()->GetPopupMenuName();
         if ( !rResName.isEmpty() )
         {
-            rDisp.ExecutePopup( rResName, pWin, pPos );
+            rDisp.ExecutePopup( rResName, pWin, pPos, bMouseEvent );
             return;
         }
     }
@@ -1924,7 +1924,7 @@ boost::property_tree::ptree SfxDispatcher::fillPopupMenu(const rtl::Reference<VC
     return ::fillPopupMenu(pVCLMenu);
 }
 
-void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos )
+void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos, bool bMouseEvent )
 {
     cpo::uno::Sequence< cpo::uno::Any > aArgs{
         cpo::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, rResName )),
@@ -1973,6 +1973,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
         boost::property_tree::ptree aMenu = fillPopupMenu(xPopupMenu);
         boost::property_tree::ptree aRoot;
         aRoot.add_child("menu", aMenu);
+        aRoot.put("mouse", bMouseEvent);
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aRoot, true);

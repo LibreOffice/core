@@ -1254,6 +1254,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 boost::property_tree::ptree aMenu = SfxDispatcher::fillPopupMenu(xPopupMenu);
                 boost::property_tree::ptree aRoot;
                 aRoot.add_child("menu", aMenu);
+                aRoot.put("mouse", rCEvt.IsMouseEvent());
 
                 std::stringstream aStream;
                 boost::property_tree::write_json(aStream, aRoot, true);
