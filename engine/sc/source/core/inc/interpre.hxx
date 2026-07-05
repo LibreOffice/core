@@ -977,6 +977,7 @@ public:
     void ScMatRef();
     ScMatrixRef MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef& pMat2);
     void PutMatrixValue(formula::FormulaConstTokenRef pToken, ScMatrixRef xMatrix, SCSIZE nCol, SCSIZE nRow);
+    void PutCellIntoMatrix(const ScAddress& rAdr, const ScMatrixRef& xMatrix, SCSIZE nCol, SCSIZE nRow);
     void ScByCol();
     void ScByRow();
     void ScMakeArray();

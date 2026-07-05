@@ -1267,6 +1267,24 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
     return xResMat;
 }
 
+void ScInterpreter::PutCellIntoMatrix(const ScAddress& rAdr, const ScMatrixRef& xMatrix, SCSIZE nCol, SCSIZE nRow)
+{
+    // A formula cell contributes its computed result; any other cell
+    // contributes its own value. An empty cell becomes an empty entry.
+    if (ScFormulaCell* pCell = mrDoc.GetFormulaCell(rAdr))
+    {
+        PutMatrixValue(pCell->CloneResultToken(), xMatrix, nCol, nRow);
+        return;
+    }
+    ScRefCellValue aCell(mrDoc, rAdr);
+    if (aCell.isEmpty())
+        xMatrix->PutEmpty(nCol, nRow);
+    else if (aCell.hasString())
+        xMatrix->PutString(aCell.getSharedString(mrDoc, mrStrPool), nCol, nRow);
+    else
+        xMatrix->PutDouble(aCell.getValue(), nCol, nRow);
+}
+
 void ScInterpreter::PutMatrixValue(FormulaConstTokenRef pToken, ScMatrixRef xMatrix, SCSIZE nCol, SCSIZE nRow)
 {
     switch (pToken->GetType())
@@ -1285,7 +1303,7 @@ void ScInterpreter::PutMatrixValue(FormulaConstTokenRef pToken, ScMatrixRef xMat
             if (!mrDoc.m_TableOpList.empty())
                 ReplaceCell(aAdr);
 
-            PutMatrixValue(mrDoc.GetFormulaCell(aAdr)->CloneResultToken(), xMatrix, nCol, nRow);
+            PutCellIntoMatrix(aAdr, xMatrix, nCol, nRow);
             break;
         }
         case svDoubleRef:
@@ -1308,7 +1326,7 @@ void ScInterpreter::PutMatrixValue(FormulaConstTokenRef pToken, ScMatrixRef xMat
             if (!mrDoc.m_TableOpList.empty())
                 ReplaceCell(aRange.aStart);
 
-            PutMatrixValue(mrDoc.GetFormulaCell(aRange.aStart)->CloneResultToken(), xMatrix, nCol, nRow);
+            PutCellIntoMatrix(aRange.aStart, xMatrix, nCol, nRow);
             break;
         }
         case svRefList:
@@ -1337,7 +1355,7 @@ void ScInterpreter::PutMatrixValue(FormulaConstTokenRef pToken, ScMatrixRef xMat
             if (!mrDoc.m_TableOpList.empty())
                 ReplaceCell(aRange.aStart);
 
-            PutMatrixValue(mrDoc.GetFormulaCell(aRange.aStart)->CloneResultToken(), xMatrix, nCol, nRow);
+            PutCellIntoMatrix(aRange.aStart, xMatrix, nCol, nRow);
             break;
         }
         case svDouble:
