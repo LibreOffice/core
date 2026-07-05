@@ -1140,7 +1140,11 @@ ios*) # iOS
     enable_coinmp=no
     enable_xmlhelp=no
     with_ppds=no
-    if test "$enable_ios_simulator" = "yes"; then
+    # The simulator ran only on Intel Macs when this was written, so it
+    # forced the host triple to x86_64. On Apple Silicon the simulator is
+    # arm64, and host_cpu already holds the right value, so only rewrite
+    # the triple for the x86_64 simulator and leave arm64 untouched.
+    if test "$enable_ios_simulator" = "yes" -a "$host_cpu" = "x86_64"; then
         host=x86_64-apple-darwin
     fi
     # See "Default values, as such probably valid just for Linux" comment above the case "$host_os"
