@@ -641,8 +641,8 @@ REDLAND_TARBALL := e5be03eda13ef68aabab6e42aa67715e-redland-1.0.17.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-REVENGE_SHA256SUM := 5892ca6796f7a2a93d580832e907e849b19d980b40d326a283b18877ab6de0c5
-REVENGE_VERSION_MICRO := 5
+REVENGE_SHA256SUM := 52a65e904d255dbdd97a8b7bb28d6574e14f999eb01416aff004502406d0904d
+REVENGE_VERSION_MICRO := 6
 REVENGE_TARBALL := librevenge-0.0.$(REVENGE_VERSION_MICRO).tar.bz2
 # three static lines
 # so that git cherry-pick
