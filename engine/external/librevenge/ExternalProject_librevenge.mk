@@ -22,8 +22,7 @@ $(eval $(call gb_ExternalProject_use_externals,librevenge,\
 $(call gb_ExternalProject_get_state_target,librevenge,build) :
 	$(call gb_Trace_StartRange,librevenge,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		export PKG_CONFIG="" \
-		&& $(gb_RUN_CONFIGURE) ./configure \
+		$(gb_RUN_CONFIGURE) ./configure \
 			--with-pic \
 			$(if $(DISABLE_DYNLOADING), \
 				--disable-shared --enable-static, \
