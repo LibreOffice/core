@@ -25,7 +25,7 @@ $(GNUTAR) \
 	-C $(UNPACKED_DIR) \
 	$(STRIP_COMPONENTS)=$(UNPACKED_STRIP_COMPONENTS) \
 	--no-same-owner \
-	-f $(UNPACKED_TARBALL)
+	-f $(call gb_Helper_cyg_path,$(UNPACKED_TARBALL))
 endef
 
 # Prefer bsdtar for zips, about twice as fast as Info-ZIP unzip. Some noto font

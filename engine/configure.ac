@@ -3025,15 +3025,6 @@ for a in $GNUTAR gtar gnutar tar bsdtar /usr/sfw/bin/gtar; do
         break
     fi
 done
-dnl The loop above finds the Cygwin GNU tar. The libarchive tar.exe in the
-dnl Windows system folder is faster and carries the same name, so on a native
-dnl make point GNUTAR at its full path, in Windows form, when it is present.
-if test "$GNUMAKE_WIN_NATIVE" = "TRUE"; then
-    _system_tar=`cygpath -S`/tar.exe
-    if test -f "$_system_tar" && "$_system_tar" --version 2>/dev/null | grep -q bsdtar; then
-        GNUTAR=`cygpath -m "$_system_tar"`
-    fi
-fi
 AC_MSG_RESULT($GNUTAR)
 if test -z "$GNUTAR"; then
     AC_MSG_ERROR([not found. install GNU or BSD tar.])
@@ -11506,15 +11497,6 @@ AC_PATH_PROG(UNZIP, unzip)
 test -z "$UNZIP" && AC_MSG_ERROR([unzip is required])
 
 AC_PATH_PROG(BSDTAR, bsdtar)
-dnl When no Cygwin bsdtar is installed, the libarchive tar.exe in the Windows
-dnl system folder can unpack the .zip externals instead, so use it for BSDTAR
-dnl on a native make, in Windows form, when it is present.
-if test -z "$BSDTAR" -a "$GNUMAKE_WIN_NATIVE" = "TRUE"; then
-    _system_tar=`cygpath -S`/tar.exe
-    if test -f "$_system_tar" && "$_system_tar" --version 2>/dev/null | grep -q bsdtar; then
-        BSDTAR=`cygpath -m "$_system_tar"`
-    fi
-fi
 if test -z "$BSDTAR"; then
     AC_MSG_NOTICE([bsdtar not found - .zip tarballs will be unpacked with unzip. bsdtar unpacks them approx twice as fast.])
 fi

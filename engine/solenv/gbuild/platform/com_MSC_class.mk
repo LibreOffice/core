@@ -681,7 +681,7 @@ gb_Extension_LICENSEFILE_DEFAULT := $(INSTROOT)/license.txt
 
 # UnpackedTarget class
 
-gb_UnpackedTarget_TARFILE_LOCATION := $(shell cygpath -m $(TARFILE_LOCATION))
+gb_UnpackedTarget_TARFILE_LOCATION := $(shell cygpath -u $(TARFILE_LOCATION))
 
 # UIConfig class
 
