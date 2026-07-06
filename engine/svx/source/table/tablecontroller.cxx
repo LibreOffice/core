@@ -38,10 +38,13 @@
 
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itemiter.hxx>
 
 #include <sfx2/request.hxx>
 
 #include <svx/svdotable.hxx>
+#include <svx/xlnclit.hxx>
 #include <sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
@@ -1039,6 +1042,32 @@ void SvxTableController::Execute( SfxRequest& rReq )
             const SfxItemSet* pArgs = rReq.GetArgs();
             if( pArgs )
                 ApplyBorderAttr( *pArgs );
+        }
+        break;
+
+    case SID_ATTR_LINE_COLOR:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            if( pArgs )
+            {
+                // The XLineColorItem's Which-ID depends on the pool's
+                // slot-to-which mapping, not on SID_ATTR_LINE_COLOR itself -
+                // find it by type rather than by an assumed Which-ID.
+                const XLineColorItem* pLineColorItem = nullptr;
+                for( SfxItemIter aIter( *pArgs ); !aIter.IsAtEnd(); aIter.Next() )
+                {
+                    pLineColorItem = dynamic_cast<const XLineColorItem*>( aIter.GetCurItem() );
+                    if( pLineColorItem )
+                        break;
+                }
+
+                if( pLineColorItem )
+                {
+                    SfxItemSetFixed<SID_FRAME_LINECOLOR, SID_FRAME_LINECOLOR> aBorderAttr( *pArgs->GetPool() );
+                    aBorderAttr.Put( SvxColorItem( pLineColorItem->GetColorValue(), SID_FRAME_LINECOLOR ) );
+                    ApplyBorderAttr( aBorderAttr );
+                }
+            }
         }
         break;
 
@@ -2527,12 +2556,12 @@ static void ImplApplyBoxItem( CellPosFlag nCellPosFlags, const SvxBoxItem* pBoxI
 static void ImplSetLineColor( SvxBoxItem& rNewFrame, SvxBoxItemLine nLine, const Color& rColor )
 {
     const SvxBorderLine* pSourceLine = rNewFrame.GetLine( nLine );
-    if( pSourceLine )
-    {
-        SvxBorderLine aLine( *pSourceLine );
-        aLine.SetColor( rColor );
-        rNewFrame.SetLine( &aLine, nLine );
-    }
+    // An edge with no line yet has nothing to recolor - give it a plain
+    // hairline first, so picking a color always produces a visible border.
+    SvxBorderLine aLine( pSourceLine ? *pSourceLine
+                                     : SvxBorderLine( nullptr, SvxBorderLineWidth::Hairline ) );
+    aLine.SetColor( rColor );
+    rNewFrame.SetLine( &aLine, nLine );
 }
 
 
