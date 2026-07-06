@@ -13870,11 +13870,19 @@ if test -z "$with_branding" -o "$with_branding" = "no"; then
     AC_MSG_RESULT([none])
     DEFAULT_BRAND_IMAGES="$brand_files"
 else
+    # A bare relative path is interpreted relative to the source tree, so
+    # that out-of-tree builds can use branding sets shipped in-tree.
+    case "$with_branding" in
+    /* | [[A-Za-z]]:*) ;;
+    *) with_branding="$SRC_ROOT/$with_branding" ;;
+    esac
     if ! test -d $with_branding ; then
         AC_MSG_ERROR([No directory $with_branding, falling back to default branding])
     else
         AC_MSG_RESULT([$with_branding])
-        CUSTOM_BRAND_DIR="$with_branding"
+        # Keep a native path, so that the build system can use it too.
+        PathFormat "$with_branding"
+        CUSTOM_BRAND_DIR="$formatted_path"
         for lfile in $brand_files
         do
             if ! test -f $with_branding/$lfile ; then
