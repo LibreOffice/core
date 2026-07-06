@@ -508,14 +508,14 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 			console.assert(this._viewId >= 0, 'Incorrect viewId received: ' + this._viewId);
 
-			var mapSize = this._map.getSize();
+			var frameSize = app.activeDocument.activeLayout.frameSize;
 			var sizePx = this._twipsToPixels(new cool.Point(app.activeDocument.fileSize.x, app.activeDocument.fileSize.y));
 			var width = sizePx.x;
 			var height = sizePx.y;
 
-			if (width < mapSize.x || height < mapSize.y) {
-				width = Math.max(width, mapSize.x);
-				height = Math.max(height, mapSize.y);
+			if (width < frameSize.cX || height < frameSize.cY) {
+				width = Math.max(width, frameSize.cX);
+				height = Math.max(height, frameSize.cY);
 				var topLeft = this._map.unproject(new cool.Point(0, 0));
 				var bottomRight = this._map.unproject(new cool.Point(width, height));
 				this._map.setMaxBounds(InternBoundsUtil.flexConstruct(topLeft, bottomRight));
@@ -589,7 +589,10 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		var offset = coordinatesData.offset || {};
 
 		var topLeftPoint = new cool.Point(coordinatesData.x, coordinatesData.y);
-		var sizePx = this._map.getSize();
+		// frameSize is a SimplePoint; copy its CSS pixels into a mutable Point
+		// as the code below may zero a component before converting to twips.
+		var frameSize = app.activeDocument.activeLayout.frameSize;
+		var sizePx = new cool.Point(frameSize.cX, frameSize.cY);
 
 		if (topLeftPoint.x === undefined) {
 			topLeftPoint.x = app.activeDocument.activeLayout.viewedRectangle.cX1;

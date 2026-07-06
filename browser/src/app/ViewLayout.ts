@@ -203,6 +203,17 @@ class ViewLayoutBase {
 		this._viewSize = size;
 	}
 
+	// The visible frame the document is rendered into: the document anchor
+	// (tiles) section's on-canvas area. Unlike viewSize, which is the whole
+	// scrollable extent and can be larger than the document, this is the
+	// viewport. Returned as a SimplePoint so callers read core (pX/pY) or CSS
+	// (cX/cY) pixels without a manual dpiScale conversion.
+	public get frameSize(): cool.SimplePoint {
+		const anchor = this.getDocumentAnchorSection();
+		if (!anchor) return new cool.SimplePoint(0, 0);
+		return cool.SimplePoint.fromCorePixels([anchor.size[0], anchor.size[1]]);
+	}
+
 	public get documentAnchorPosition() {
 		return this._documentAnchorPosition.slice();
 	}
