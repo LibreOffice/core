@@ -3736,17 +3736,23 @@ void ScInterpreter::MergeCalcConfig()
 
 namespace {
 
-double applyImplicitIntersection(const sc::RangeMatrix& rMat, const ScAddress& rPos)
+// Reduce a range-carrying matrix to the single value aligned with the
+// formula position. On a hit rSrc receives the spill-range cell the
+// value came from, so the caller can inherit its number format. On a
+// miss the result is NaN and rSrc is left untouched.
+double applyImplicitIntersection(const sc::RangeMatrix& rMat, const ScAddress& rPos, ScAddress& rSrc)
 {
     if (rMat.mnRow1 <= rPos.Row() && rPos.Row() <= rMat.mnRow2 && rMat.mnCol1 == rMat.mnCol2)
     {
         SCROW nOffset = rPos.Row() - rMat.mnRow1;
+        rSrc = ScAddress(rMat.mnCol1, rPos.Row(), rMat.mnTab1);
         return rMat.mpMat->GetDouble(0, nOffset);
     }
 
     if (rMat.mnCol1 <= rPos.Col() && rPos.Col() <= rMat.mnCol2 && rMat.mnRow1 == rMat.mnRow2)
     {
         SCROW nOffset = rPos.Col() - rMat.mnCol1;
+        rSrc = ScAddress(rPos.Col(), rMat.mnRow1, rMat.mnTab1);
         return rMat.mpMat->GetDouble(nOffset, 0);
     }
 
@@ -3827,6 +3833,7 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocNegSub           :
         case ocNeg              : ScNeg();                      break;
         case ocSingleValue      : ScSingleValue();              break;
+        case ocSpill            : ScSpilledRange();             break;
         case ocPercentSign      : ScPercentSign();              break;
         case ocPi               : ScPi();                       break;
         case ocRandom           : ScRandom();                   break;
@@ -4594,14 +4601,27 @@ StackVar ScInterpreter::Interpret()
                     case svMatrix :
                     {
                         sc::RangeMatrix aMat = PopRangeMatrix();
-                        if (aMat.isRangeValid())
+                        // A matrix that carries a source range reduces
+                        // by implicit intersection when the cell
+                        // expects a single value. A matrix-formula
+                        // context (CSE array master) wants the full
+                        // matrix and routes through QueryMatrixType so
+                        // the master can hold and spill the range.
+                        if (aMat.isRangeValid() && !bMatrixFormula)
                         {
                             // This matrix represents a range reference. Apply implicit intersection.
-                            double fVal = applyImplicitIntersection(aMat, aPos);
+                            ScAddress aSrc;
+                            double fVal = applyImplicitIntersection(aMat, aPos, aSrc);
                             if (std::isnan(fVal))
                                 PushNoValue();
                             else
-                                PushInt(fVal);
+                            {
+                                PushDouble(fVal);
+                                // Keep the number format of the spill-range
+                                // cell the value came from, so a spilled date
+                                // or currency value still shows its formatting.
+                                mrDoc.GetNumberFormatInfo(mrContext, nRetTypeExpr, nRetIndexExpr, aSrc);
+                            }
                         }
                         else
                             // This is a normal matrix.

@@ -117,7 +117,10 @@ enum OpCode : sal_uInt16
         ocNegSub            = 70,
         // The @ single-value prefix operator (implicit intersection).
         ocSingleValue       = 71,
-        ocStopUnaryOperators = 72,
+        // The # postfix spilled-range operator: A1# expands to the
+        // spill range of the dynamic-array formula at A1.
+        ocSpill             = 72,
+        ocStopUnaryOperators = 73,
 
         ocStartFunction     = 75,
 
@@ -656,6 +659,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocUnion: return "Union";
     case ocRange: return "Range";
     case ocCall: return "Call";
+    case ocSpill: return "SpilledRange";
     case ocNot: return "Not";
     case ocNeg: return "Neg";
     case ocNegSub: return "NegSub";

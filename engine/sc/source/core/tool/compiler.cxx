@@ -4805,7 +4805,18 @@ bool ScCompiler::NextNewToken( bool bInArray )
 
     if ( (cSymbol[0] == '#' || cSymbol[0] == '$') && cSymbol[1] == 0 &&
             !mbAutoCorrect )
-    {   // special case to speed up broken [$]#REF documents
+    {
+        // A bare # right after a reference or value is the spilled-range
+        // operator. It expands the preceding reference to the dynamic-
+        // array spill range whose origin lives at that cell.
+        if (cSymbol[0] == '#' && (meLastOp == ocColRowName || meLastOp == ocPush
+                || meLastOp == ocClose || meLastOp == ocMatRef
+                || meLastOp == ocPercentSign || meLastOp == ocSpill))
+        {
+            maRawToken.SetOpCode(ocSpill);
+            return true;
+        }
+        // special case to speed up broken [$]#REF documents
         /* FIXME: ISERROR(#REF!) would be valid and true and the formula to
          * be processed as usual. That would need some special treatment,
          * also in NextSymbol() because of possible combinations of

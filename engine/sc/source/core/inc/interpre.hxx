@@ -621,6 +621,7 @@ private:
     void ScNeg();
     void ScSingleValue();
     void ScPercentSign();
+    void ScSpilledRange();
     void ScIntersect();
     void ScRangeFunc();
     void ScUnionFunc();

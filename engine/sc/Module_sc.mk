@@ -58,6 +58,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 	CppunitTest_sc_ucalc_tablestyles \
 	CppunitTest_sc_ucalc_formula \
 	CppunitTest_sc_ucalc_formula2 \
+	CppunitTest_sc_ucalc_spilled_range \
 	CppunitTest_sc_ucalc_parallelism \
 	CppunitTest_sc_ucalc_pivottable \
 	CppunitTest_sc_ucalc_rangelst \

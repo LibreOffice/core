@@ -1636,6 +1636,77 @@ void ScInterpreter::ScPercentSign()
     cPar = nSavePar;
 }
 
+void ScInterpreter::ScSpilledRange()
+{
+    // The # postfix operator expands a master cell's spill range
+    // into a matrix. A plain formula cell falls back to its scalar
+    // value. An empty cell, a number, a string, or a non-master
+    // spill slot yields #REF!, since none of them is a dynamic-array
+    // master.
+    ScAddress aAddress;
+    PopSingleRef(aAddress);
+    if (nGlobalError != FormulaError::NONE)
+    {
+        PushError(nGlobalError);
+        return;
+    }
+
+    ScFormulaCell* pFormulaCell = mrDoc.GetFormulaCell(aAddress);
+    if (!pFormulaCell)
+    {
+        PushError(FormulaError::NoRef);
+        return;
+    }
+    if (pFormulaCell->GetMatrixFlag() == ScMatrixMode::Reference)
+    {
+        PushError(FormulaError::NoRef);
+        return;
+    }
+    if (pFormulaCell->GetMatrixFlag() != ScMatrixMode::Formula)
+    {
+        PushCellResultToken(false, aAddress, nullptr, nullptr);
+        return;
+    }
+
+    // Force the master to interpret if it has not yet, so that its
+    // matrix result is materialized before we read it.
+    pFormulaCell->MaybeInterpret();
+
+    SCCOL nCols = 0;
+    SCROW nRows = 0;
+    pFormulaCell->GetMatColsRows(nCols, nRows);
+    if (nCols <= 1 && nRows <= 1)
+    {
+        PushCellResultToken(false, aAddress, nullptr, nullptr);
+        return;
+    }
+
+    // Push the spill range as a matrix so binary operators and
+    // aggregating functions see all values. Pushing a double reference
+    // would let arithmetic operators fold it to a single value through
+    // implicit intersection. The source range travels with the matrix
+    // through ScMatrixRangeToken so a plain cell receiving the spill
+    // range as its final result can reduce it via implicit
+    // intersection at result-storage time.
+    ScMatrixRef pMatrix = CreateMatrixFromDoubleRef(nullptr,
+        aAddress.Col(), aAddress.Row(), aAddress.Tab(),
+        aAddress.Col() + nCols - 1, aAddress.Row() + nRows - 1, aAddress.Tab());
+    if (pMatrix)
+    {
+        sc::RangeMatrix aRangeMat;
+        aRangeMat.mpMat = std::move(pMatrix);
+        aRangeMat.mnCol1 = aAddress.Col();
+        aRangeMat.mnRow1 = aAddress.Row();
+        aRangeMat.mnTab1 = aAddress.Tab();
+        aRangeMat.mnCol2 = aAddress.Col() + nCols - 1;
+        aRangeMat.mnRow2 = aAddress.Row() + nRows - 1;
+        aRangeMat.mnTab2 = aAddress.Tab();
+        PushMatrix(aRangeMat);
+    }
+    else
+        PushIllegalArgument();
+}
+
 void ScInterpreter::ScNot()
 {
     nFuncFmtType = SvNumFormatType::LOGICAL;
@@ -2784,6 +2855,16 @@ void ScInterpreter::ScIsRef()
             PopExternalDoubleRef(pArray);
             if (nGlobalError == FormulaError::NONE)
                 bRes = true;
+        }
+        break;
+        case svMatrix:
+        {
+            // A spilled-range reference travels as a matrix that
+            // carries its source range. It answers as a reference,
+            // while a plain computed matrix does not.
+            bRes = sp > 0
+                && static_cast<const ScMatrixToken*>(pStack[sp - 1])->IsMatrixRangeToken();
+            Pop();
         }
         break;
         default:

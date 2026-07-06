@@ -1654,6 +1654,11 @@ bool intendsArrayResultInRange(formula::FormulaToken* const* pRpn,
             // left scalar from its operand. The result is scalar even
             // when the operand was an array.
             bResultArray = false;
+        else if (eOp == ocSpill)
+            // The # spilled-range operator expands its operand to the
+            // whole spill range. The result is an array whatever the
+            // operand shape was.
+            bResultArray = true;
         else if (formula::FormulaCompiler::IsMatrixFunction(eOp) || p->IsInForceArray())
             bResultArray = true;
         else if (eOp == ocRange || eOp == ocUnion || eOp == ocIntersect)

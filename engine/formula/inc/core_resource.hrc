@@ -69,6 +69,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF[] =
     { "NEG" , ocNeg },
     { "-" , ocNegSub },
     { "@" , ocSingleValue },
+    { "#" , ocSpill },
     { "PI" , ocPi },
     { "RAND" , ocRandom },
     { "TRUE" , ocTrue },
@@ -552,6 +553,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML[] =
     { "NEG" , ocNeg },
     { "-" , ocNegSub },
     { "@" , ocSingleValue },
+    { "#" , ocSpill },
     { "PI" , ocPi },
     { "RAND" , ocRandom },
     { "TRUE" , ocTrue },
@@ -1039,6 +1041,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF[] =
     { "NEG" , ocNeg },
     { "-" , ocNegSub },
     { "@" , ocSingleValue },
+    { "#" , ocSpill },
     { "PI" , ocPi },
     { "RAND" , ocRandom },
     { "TRUE" , ocTrue },
@@ -1523,6 +1526,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH_API[] =
     { "NEG" , ocNeg },
     { "-" , ocNegSub },
     { "@" , ocSingleValue },
+    { "#" , ocSpill },
     { "PI" , ocPi },
     { "RAND" , ocRandom },
     { "TRUE" , ocTrue },
@@ -2005,6 +2009,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_ENGLISH[] =
     { "NEG" , ocNeg },
     { "-" , ocNegSub },
     { "@" , ocSingleValue },
+    { "#" , ocSpill },
     { "PI" , ocPi },
     { "RAND" , ocRandom },
     { "TRUE" , ocTrue },
@@ -2949,6 +2954,7 @@ const std::pair<const char *, int> RID_STRLIST_FUNCTION_NAMES_SYMBOLS[] =
     { ":" , ocRange  },
     { "-" , ocNegSub  },
     { "@" , ocSingleValue  },
+    { "#" , ocSpill  },
     { nullptr, -1 }
 };
 
