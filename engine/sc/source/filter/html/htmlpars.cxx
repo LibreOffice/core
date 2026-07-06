@@ -1509,6 +1509,8 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     if (aGraphicURL.GetProtocol() == INetProtocol::Data)
     {
         std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
+        if (!pStream)
+            return; // Bad luck - malformed data: URL
         *oGraphic = rFilter.ImportUnloadedGraphic(*pStream);
         pImage->aURL.clear();
     }
