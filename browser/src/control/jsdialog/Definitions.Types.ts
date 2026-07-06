@@ -233,6 +233,7 @@ interface MenuDefinition extends WidgetJSON {
 	items?: Array<any>;
 	selected?: boolean; // selected state for entry
 	statusCommand?: string; // UNO command used to retrieve the status/value of the entry
+	isEnabled?: () => boolean; // when present, evaluated as the menu opens to decide if the entry is enabled
 	pos?: number | string; // identifier of an entry
 	class?: string; // extra CSS class to add to the rendered entry
 	shortcut?: string; // keyboard shortcut to display right-aligned next to the entry

@@ -170,7 +170,8 @@ JSDialog.OpenDropdown = function (
 			// menu and submenu entry
 			case 'action':
 			case 'menu':
-			default:
+			default: {
+				const isEnabled = entries[i].isEnabled;
 				entry = {
 					id: id + '-entry-' + i,
 					type: 'comboboxentry',
@@ -183,6 +184,7 @@ JSDialog.OpenDropdown = function (
 					w2icon: entries[i].icon, // FIXME: DEPRECATED
 					icon: entries[i].img,
 					checked: entries[i].checked || checkedValue,
+					enabled: isEnabled ? isEnabled() : entries[i].enabled,
 					selected:
 						i === 0 && shouldSelectFirstEntry ? true : entries[i].selected,
 					hasSubMenu: !!entries[i].items,
@@ -195,6 +197,7 @@ JSDialog.OpenDropdown = function (
 				)
 					checkedFocusId = entry.id;
 				break;
+			}
 		}
 
 		if (entry && json?.children?.length) json.children[0].children?.push(entry);

@@ -35,6 +35,16 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	entry.setAttribute('tabindex', '-1');
 	entry.setAttribute('data-filter-text', data.text.toLowerCase());
 
+	// A disabled entry is dimmed, announced as disabled, and kept out of
+	// keyboard navigation: the disabled attribute is what excludes it from the
+	// focusable-option lookup.
+	var disabled = data.enabled === false;
+	if (disabled) {
+		window.L.DomUtil.addClass(entry, 'disabled');
+		entry.setAttribute('disabled', '');
+		entry.setAttribute('aria-disabled', 'true');
+	}
+
 	if (data.hasSubMenu)
 		window.L.DomUtil.addClass(entry, 'ui-has-menu');
 
@@ -82,6 +92,8 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	var entryData = data.pos + ';' + data.text;
 
 	var clickFunction = function () {
+		if (disabled)
+			return;
 		builder.callback('combobox', 'selected', {id: data.comboboxId}, entryData, builder);
 	};
 

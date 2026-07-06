@@ -140,6 +140,15 @@ enum UNO_BorderLineStyle {
 	DOUBLE = 3,
 }
 
+// Whether the line color and style of the current selection's border can be
+// changed. Those entries only restyle a border that is already there, so core
+// reports the line style command as disabled while the selection has no
+// border, and enabled once one exists.
+function canStyleCellBorder(): boolean {
+	const items = window.L.Map.THIS['stateChangeHandler'];
+	return !!items && items.getItemValue('.uno:LineStyle') === 'enabled';
+}
+
 function getLineStyleModificationCommand(
 	LineStyle: UNO_BorderLineStyle,
 	nOut: number, // outer line width, maps to SvxBorderLine nOut
@@ -2048,7 +2057,9 @@ menuDefinitions.set('BorderStyleMenu', [
 	},
 	{ type: 'separator' },
 	{
+		id: 'linecolor',
 		text: _('Line color'),
+		isEnabled: canStyleCellBorder,
 		items: [
 			{
 				id: 'colorpickerwidget',
@@ -2059,7 +2070,9 @@ menuDefinitions.set('BorderStyleMenu', [
 		],
 	},
 	{
+		id: 'linestyle',
 		text: _('Line style'),
+		isEnabled: canStyleCellBorder,
 		items: [
 			{
 				text: _('Hairline (0.05 pt)'),

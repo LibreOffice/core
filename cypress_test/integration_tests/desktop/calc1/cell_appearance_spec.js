@@ -222,6 +222,10 @@ describe(['tagdesktop'], 'Change cell appearance.', function() {
 		// Pick the extra thick width from the Line style submenu of the same dropdown.
 		// Hovering the entry opens its submenu.
 		calcHelper.clickOnFirstCell();
+		// The Line style entry is only usable once core reports the line style
+		// command as enabled for the reselected cell, so wait for that before
+		// opening the dropdown.
+		helper.waitForMapState('.uno:LineStyle', 'enabled');
 		cy.cGet('.notebookbar .unoSetBorderStyle .arrowbackground').click();
 		cy.cGet('.ui-dialog-content').should('be.visible');
 		cy.cGet('body').contains('.ui-combobox-entry', 'Line style').trigger('mouseover');
@@ -237,6 +241,32 @@ describe(['tagdesktop'], 'Change cell appearance.', function() {
 				expect(match, 'top border width is present').to.not.be.null;
 				expect(parseInt(match[1], 10)).to.be.greaterThan(1);
 			});
+	});
+
+	it('Line color and style are disabled until a border exists', function() {
+		desktopHelper.switchUIToNotebookbar();
+		calcHelper.clickOnFirstCell();
+
+		// A cell with no border has no line to recolor or restyle, so core
+		// reports the line style command as disabled and both entries stay
+		// disabled.
+		helper.waitForMapState('.uno:LineStyle', 'disabled');
+		cy.cGet('.notebookbar .unoSetBorderStyle .arrowbackground').click();
+		cy.cGet('.ui-dialog-content').should('be.visible');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Line color').should('have.class', 'disabled');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Line style').should('have.class', 'disabled');
+
+		// Give the cell an outer border on every side.
+		helper.getMenuEntry(7).click();
+		cy.cGet('.ui-dialog-content').should('not.exist');
+
+		// Now that a border exists, both entries can be used.
+		calcHelper.clickOnFirstCell();
+		helper.waitForMapState('.uno:LineStyle', 'enabled');
+		cy.cGet('.notebookbar .unoSetBorderStyle .arrowbackground').click();
+		cy.cGet('.ui-dialog-content').should('be.visible');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Line color').should('not.have.class', 'disabled');
+		cy.cGet('body').contains('.ui-combobox-entry', 'Line style').should('not.have.class', 'disabled');
 	});
 
 	it('Apply border color', function() {
