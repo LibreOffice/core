@@ -2970,12 +2970,72 @@ bool lclReportsAsFormula(const ScDocument& rDocument, const ScAddress& rPosition
 
 }
 
+void ScInterpreter::PushIsFormulaMatrix(const ScRange& rRange)
+{
+    ScMatrixRef pResultMatrix = GetNewMat(
+            SCSIZE(rRange.aEnd.Col() - rRange.aStart.Col() + 1),
+            SCSIZE(rRange.aEnd.Row() - rRange.aStart.Row() + 1), true);
+    if (!pResultMatrix)
+    {
+        PushError( FormulaError::MatrixSize);
+        return;
+    }
+
+    /* TODO: we really should have a gap-aware cell iterator. */
+    SCSIZE i = 0, j = 0;
+    ScAddress aAddress( 0, 0, rRange.aStart.Tab());
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        aAddress.SetCol(nCol);
+        for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+        {
+            aAddress.SetRow(nRow);
+            pResultMatrix->PutBoolean(lclReportsAsFormula(mrDoc, aAddress), i, j);
+            ++j;
+        }
+        ++i;
+        j = 0;
+    }
+
+    PushMatrix( pResultMatrix);
+}
+
 void ScInterpreter::ScIsFormula()
 {
     nFuncFmtType = SvNumFormatType::LOGICAL;
     bool bRes = false;
     switch ( GetStackType() )
     {
+        case svMatrix:
+        {
+            // A spilled-range reference carries its source range and
+            // reports ISFORMULA per cell of that range, the same as a
+            // plain range. A plain computed matrix is not a reference
+            // and reports false.
+            if (sp == 0
+                || !static_cast<const ScMatrixToken*>(pStack[sp - 1])->IsMatrixRangeToken())
+            {
+                Pop();
+                break;
+            }
+            const ScComplexRefData& rReference
+                = static_cast<const ScMatrixRangeToken*>(pStack[sp - 1])->GetDoubleRef();
+            ScRange aRange(rReference.Ref1.toAbs(mrDoc, aPos), rReference.Ref2.toAbs(mrDoc, aPos));
+            Pop();
+            if (IsInArrayContext())
+            {
+                PushIsFormulaMatrix(aRange);
+                return;
+            }
+            ScAddress aAddress;
+            if (!DoubleRefToPosSingleRef(aRange, aAddress))
+            {
+                PushError(nGlobalError);
+                return;
+            }
+            bRes = lclReportsAsFormula(mrDoc, aAddress);
+        }
+        break;
         case svDoubleRef :
             if (IsInArrayContext())
             {
@@ -2993,32 +3053,7 @@ void ScInterpreter::ScIsFormula()
                     PushIllegalArgument();
                     return;
                 }
-
-                ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCol2 - nCol1 + 1),
-                        static_cast<SCSIZE>(nRow2 - nRow1 + 1), true);
-                if (!pResMat)
-                {
-                    PushError( FormulaError::MatrixSize);
-                    return;
-                }
-
-                /* TODO: we really should have a gap-aware cell iterator. */
-                SCSIZE i=0, j=0;
-                ScAddress aAdr( 0, 0, nTab1);
-                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-                {
-                    aAdr.SetCol(nCol);
-                    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-                    {
-                        aAdr.SetRow(nRow);
-                        pResMat->PutBoolean(lclReportsAsFormula(mrDoc, aAdr), i, j);
-                        ++j;
-                    }
-                    ++i;
-                    j = 0;
-                }
-
-                PushMatrix( pResMat);
+                PushIsFormulaMatrix(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
                 return;
             }
         [[fallthrough]];

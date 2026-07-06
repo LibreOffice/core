@@ -216,6 +216,50 @@ CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorIsRef)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorIsFormula)
+{
+    // ISFORMULA over a # spilled-range reference reports per cell of the
+    // spill range, the same as over the plain range: the master is a
+    // formula, the cells it spilled into are not.
+    m_pDoc->SetAutoCalc(false);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=1+10"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"=1+20"_ustr);
+    m_pDoc->SetString(ScAddress(0, 2, 0), u"=1+30"_ustr);
+
+    // B2 spills =A1:A3 into B2:B4 as a dynamic-array master.
+    ScAddress aPos(1, 1, 0);
+    ScCompiler aComp(*m_pDoc, aPos, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(u"=A1:A3"_ustr);
+    auto pCell = new ScFormulaCell(*m_pDoc, aPos, std::move(pCode));
+    pCell->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aPos, pCell);
+    m_pDoc->SetAutoCalc(true);
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+
+    // In an array context, ISFORMULA(B2#) gives one formula (the master)
+    // then two non-formula spilled cells, matching ISFORMULA(B2:B4).
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(3, 0, 3, 2, aMark, u"=ISFORMULA(B2#)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(3, 2, 0)));
+
+    // In a plain cell it reduces by implicit intersection to the
+    // row-aligned cell: the master row is a formula, a spilled row is
+    // not.
+    m_pDoc->SetString(ScAddress(5, 1, 0), u"=ISFORMULA(B2#)"_ustr);
+    m_pDoc->SetString(ScAddress(5, 2, 0), u"=ISFORMULA(B2#)"_ustr);
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(5, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestSpilledRange, testSpilledRangeOperatorInheritsFormat)
 {
     // A # reference that collapses to a single value keeps the number

@@ -670,6 +670,9 @@ private:
     void ScIsRef();
     void ScIsValue();
     void ScIsFormula();
+    // Push a boolean matrix that reports, per cell of the range, whether
+    // ISFORMULA counts that cell as a formula.
+    void PushIsFormulaMatrix(const ScRange& rRange);
     void ScFormula();
     void ScRoman();
     void ScArabic();
