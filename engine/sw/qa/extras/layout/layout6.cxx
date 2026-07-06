@@ -2289,6 +2289,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCool15942_tableSplitRowReformat)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(80), oLineContent.getLength());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testCenterInlineTableBesideFloatingTable)
+{
+    createSwDoc("floattable-center-inline-overlap.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    CPPUNIT_ASSERT_EQUAL(1, countXPathNodes(pXmlDoc, "/root/page"));
+
+    // Right edge of the floating table's fly.
+    const sal_Int32 nFlyRight
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "right").toInt32();
+
+    // The inline table's print area (frame left + relative print-area left) must
+    // start at or past the fly's right edge - it sits beside the floating table,
+    // not on top of it.
+    const sal_Int32 nTabFrameLeft
+        = getXPath(pXmlDoc, "/root/page/body/tab/infos/bounds", "left").toInt32();
+    const sal_Int32 nTabPrtLeft
+        = getXPath(pXmlDoc, "/root/page/body/tab/infos/prtBounds", "left").toInt32();
+    CPPUNIT_ASSERT_GREATEREQUAL(nFlyRight, nTabFrameLeft + nTabPrtLeft);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

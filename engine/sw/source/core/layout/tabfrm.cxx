@@ -3842,6 +3842,16 @@ void SwTabFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                                     ( (nRightOffset > 0) ?
                                       std::max( nCenterSpacing, SwTwips(nRightOffset) ) :
                                       nCenterSpacing );
+                    // When a surrounding fly forces the table off-centre on one side, it can no
+                    // longer be centred, give the opposite side the remaining space.
+                    if (nLeftOffset > std::max(SwTwips(0), nCenterSpacing) && nRightOffset <= 0)
+                        nRightSpacing
+                            = nRightLine
+                              + std::max(SwTwips(0), nMax - nWishedTableWidth - nLeftSpacing);
+                    else if (nRightOffset > std::max(SwTwips(0), nCenterSpacing) && nLeftOffset <= 0)
+                        nLeftSpacing
+                            = nLeftLine
+                              + std::max(SwTwips(0), nMax - nWishedTableWidth - nRightSpacing);
                 }
                 break;
             case text::HoriOrientation::FULL:
