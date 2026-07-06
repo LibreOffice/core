@@ -381,9 +381,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		mapElement.style.top = Math.round(marginTop / app.dpiScale) + 'px';
 		mapElement.style.width = newMapSize[0] + 'px';
 		mapElement.style.height = newMapSize[1] + 'px';
-
-		this._container.style.width = newMapSize[0] + 'px';
-		this._container.style.height = newMapSize[1] + 'px';
 	},
 
 	_updateHeaderSections: function() {

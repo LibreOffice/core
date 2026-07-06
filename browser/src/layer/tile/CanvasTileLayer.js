@@ -4015,9 +4015,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		mapElement.style.top = sizeRectangle.getPxY1() + 'px';
 		mapElement.style.width = sizeRectangle.getPxWidth() + 'px';
 		mapElement.style.height = sizeRectangle.getPxHeight() + 'px';
-
-		this._container.style.width = sizeRectangle.getPxWidth() + 'px';
-		this._container.style.height = sizeRectangle.getPxHeight() + 'px';
 	},
 
 	_mobileChecksAfterResizeEvent: function(heightIncreased) {
