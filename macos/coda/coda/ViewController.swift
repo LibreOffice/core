@@ -78,6 +78,85 @@ final class PresentationController: NSWindowController {
     required init?(coder: NSCoder) { fatalError("doesn't seem to matter") }
 }
 
+// A WKWebView that accepts files dragged in from Finder and opens them as documents.
+// Drags that originate inside the web content have a non-nildraggingSource, those are
+// left to WKWebView's own HTML5 drag handling.
+final class CODAWebView: WKWebView {
+    override init(frame frameRect: CGRect, configuration: WKWebViewConfiguration) {
+        super.init(frame: frameRect, configuration: configuration)
+        registerForDraggedTypes([.fileURL])
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        registerForDraggedTypes([.fileURL])
+    }
+
+    private func droppedFileURLs(_ sender: NSDraggingInfo) -> [URL] {
+        let options: [NSPasteboard.ReadingOptionKey: Any] = [.urlReadingFileURLsOnly: true]
+        let urls =
+            sender.draggingPasteboard.readObjects(
+                forClasses: [NSURL.self],
+                options: options) as? [URL]
+        return urls ?? []
+    }
+
+    // Drags from within the page have a non-nil source and are handled by the base class.
+    private func isExternalFileDrop(_ sender: NSDraggingInfo) -> Bool {
+        return sender.draggingSource == nil && !droppedFileURLs(sender).isEmpty
+    }
+
+    private func setDropFeedbackVisible(_ visible: Bool) {
+        // The toggles are registered by the page once its scripts have loaded,
+        // so guard against an early drag before they exist.
+        let method = visible ? "showDropOverlay" : "hideDropOverlay"
+        let js = "window.app && window.app.\(method) && window.app.\(method)();"
+        evaluateJavaScript(js) { (_, error) in
+            if let error {
+                NSLog("Error toggling drop overlay: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+        if isExternalFileDrop(sender) {
+            setDropFeedbackVisible(true)
+            return .copy
+        }
+        return super.draggingEntered(sender)
+    }
+
+    override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
+        if isExternalFileDrop(sender) {
+            return .copy
+        }
+        return super.draggingUpdated(sender)
+    }
+
+    override func draggingExited(_ sender: NSDraggingInfo?) {
+        setDropFeedbackVisible(false)
+        super.draggingExited(sender)
+    }
+
+    override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        if isExternalFileDrop(sender) {
+            return true
+        }
+        return super.prepareForDragOperation(sender)
+    }
+
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        guard isExternalFileDrop(sender) else {
+            return super.performDragOperation(sender)
+        }
+
+        setDropFeedbackVisible(false)
+        let urls = droppedFileURLs(sender)
+        ViewController.openDocuments(urls)
+        return !urls.isEmpty
+    }
+}
+
 class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavigationDelegate, WKUIDelegate {
 
     /// Access to the NSDocument (document loading & saving infrastructure).
@@ -119,7 +198,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         ViewController.allowLocalCrossFrameAccess(config)
 
         // Create the web view
-        webView = WKWebView(frame: .zero, configuration: config)
+        webView = CODAWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = self
         webView.uiDelegate = self
 
@@ -169,6 +248,20 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
         self.document = document
         let permission = document.isWelcome ? "view" : "edit"
         self.document.loadDocumentInWebView(webView: webView, permission: permission, isWelcome: document.isWelcome)
+    }
+
+    /**
+     * Open each file URL as a document, NSDocumentController updates the recent
+     * documents list and activates an already-open window instead of opening a duplicate.
+     */
+    static func openDocuments(_ urls: [URL]) {
+        for url in urls {
+            NSDocumentController.shared.openDocument(withContentsOf: url, display: true) { _, _, error in
+                if let error {
+                    NSLog("openDocument failed for \(url): \(error)")
+                }
+            }
+        }
     }
 
     /**
@@ -692,11 +785,7 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
             }
 
             // Open via NSDocument / NSDocumentController
-            NSDocumentController.shared.openDocument(withContentsOf: url, display: true) { _, _, error in
-                if let error {
-                    NSLog("openDocument failed for \(url): \(error)")
-                }
-            }
+            ViewController.openDocuments([url])
 
             onClose?()
             return (nil, nil)
