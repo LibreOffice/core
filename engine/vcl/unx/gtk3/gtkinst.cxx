@@ -680,7 +680,11 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
                                     strlen(pFinalName),
                                     RTL_TEXTENCODING_UTF8);
 
+#if GTK_CHECK_VERSION(4, 0, 0)
+        m_aMimeTypeToGtkType[aFlavor.MimeType] = OString(targets[i]);
+#else
         m_aMimeTypeToGtkType[aFlavor.MimeType] = targets[i];
+#endif
 
         aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
