@@ -199,5 +199,22 @@ shell TableObjectBar
         ExecMethod = Execute;
     ]
 
+    SID_TABLE_STYLE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    SID_TABLE_STYLE_SETTINGS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    SID_TABLE_STYLE_LIST
+    [
+        StateMethod = GetState;
+    ]
+
 }
 

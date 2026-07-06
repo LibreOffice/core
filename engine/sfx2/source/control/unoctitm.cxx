@@ -1502,6 +1502,10 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"TableTotalRow", { PayloadType::BooleanOrDisabledPayload, true } },
         { u"TableStyles", { PayloadType::StringPayload, true } },
 
+        { u"TableStyle", { PayloadType::StringPayload, true } },
+        { u"TableStyleSettings", { PayloadType::StringPayload, true } },
+        { u"TableStyleList", { PayloadType::StringPayload, true } },
+
         { u"BorderInner", { PayloadType::None, true } },
         { u"BorderOuter", { PayloadType::None, true } },
         { u"ChangeTheme", { PayloadType::None, true } },

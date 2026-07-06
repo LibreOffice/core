@@ -33,7 +33,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/style.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -224,21 +223,6 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         assert(pViewShell!=nullptr);
         SfxBindings& rBindings = pViewShell->GetViewFrame().GetBindings();
         rBindings.Invalidate( SID_INSERT_TABLE, true );
-        break;
-    }
-    case SID_TABLEDESIGN:
-    {
-        // First make sure that the sidebar is visible
-        if (SfxViewFrame* pViewFrame = GetViewFrame())
-        {
-            pViewFrame->ShowChildWindow(SID_SIDEBAR);
-            ::sfx2::sidebar::Sidebar::TogglePanel(
-                u"SdTableDesignPanel",
-                pViewFrame->GetFrame().GetFrameInterface());
-
-            Cancel();
-            rReq.Done ();
-        }
         break;
     }
     default:

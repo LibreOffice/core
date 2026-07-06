@@ -417,6 +417,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/table/tablecolumn \
     svx/source/table/tablecolumns \
     svx/source/table/tablecontroller \
+    svx/source/table/TableDesignPreview \
     svx/source/table/tablehandles \
     svx/source/table/tablelayouter \
     svx/source/table/tablemodel \

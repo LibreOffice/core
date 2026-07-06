@@ -378,8 +378,8 @@ SfxStringItem BackgroundImage SID_GALLERY_BG_BRUSH
 
 
 
-SfxVoidItem TableStyle SID_TABLE_STYLE
-()
+SfxStringItem TableStyle SID_TABLE_STYLE
+(SfxStringItem TableStyle SID_TABLE_STYLE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -398,7 +398,7 @@ SfxVoidItem TableStyle SID_TABLE_STYLE
 
 
 
-SfxVoidItem TableStyleSettings SID_TABLE_STYLE_SETTINGS
+SfxStringItem TableStyleSettings SID_TABLE_STYLE_SETTINGS
 (SfxBoolItem UseFirstRowStyle ID_VAL_USEFIRSTROWSTYLE,
  SfxBoolItem UseLastRowStyle ID_VAL_USELASTROWSTYLE,
  SfxBoolItem UseBandingRowStyle ID_VAL_USEBANDINGROWSTYLE,
@@ -421,22 +421,23 @@ SfxVoidItem TableStyleSettings SID_TABLE_STYLE_SETTINGS
 ]
 
 
-SfxVoidItem TableDesign SID_TABLEDESIGN
+
+SfxStringItem TableStyleList SID_TABLE_STYLE_LIST
 [
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Asynchron;
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Format;
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Table;
 ]
+
 
 SvxColorItem BackgroundColor SID_BACKGROUND_COLOR
 (SvxColorItem BackgroundColor SID_BACKGROUND_COLOR)

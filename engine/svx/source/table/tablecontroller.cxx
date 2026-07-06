@@ -20,10 +20,14 @@
 #include <algorithm>
 
 #include <svx/sdr/table/tablecontroller.hxx>
+#include <svx/sdr/table/TableDesignPreview.hxx>
 #include <tablemodel.hxx>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
@@ -63,6 +67,7 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/unopage.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdtditm.hxx>
 #include "tableundo.hxx"
@@ -76,6 +81,7 @@
 #include <sfx2/viewsh.hxx>
 #include <editeng/editview.hxx>
 #include <tools/UnitConversion.hxx>
+#include <tools/json_writer.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using ::editeng::SvxBorderLine;
@@ -512,6 +518,106 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                     rSet.DisableItem(SID_TABLE_OPTIMAL_ROW_HEIGHT);
                     rSet.DisableItem(SID_TABLE_DISTRIBUTE_ROWS);
                 }
+                break;
+            }
+
+            case SID_TABLE_STYLE:
+            {
+                OUString sStyleName;
+                Reference< XStyle > xCurStyle( rTableObj.getTableStyle(), UNO_QUERY );
+                if( xCurStyle.is() )
+                    sStyleName = xCurStyle->getName();
+                rSet.Put( SfxStringItem( SID_TABLE_STYLE, sStyleName ) );
+                break;
+            }
+
+            case SID_TABLE_STYLE_SETTINGS:
+            {
+                const sdr::table::TableStyleSettings& rSettings( rTableObj.getTableStyleSettings() );
+                tools::JsonWriter aJson;
+                aJson.put("UseFirstRowStyle", rSettings.mbUseFirstRow);
+                aJson.put("UseLastRowStyle", rSettings.mbUseLastRow);
+                aJson.put("UseBandingRowStyle", rSettings.mbUseRowBanding);
+                aJson.put("UseFirstColumnStyle", rSettings.mbUseFirstColumn);
+                aJson.put("UseLastColumnStyle", rSettings.mbUseLastColumn);
+                aJson.put("UseBandingColumnStyle", rSettings.mbUseColumnBanding);
+                OString aStr = aJson.finishAndGetAsOString();
+                rSet.Put( SfxStringItem( SID_TABLE_STYLE_SETTINGS, OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 ) ) );
+                break;
+            }
+
+            case SID_TABLE_STYLE_LIST:
+            {
+                OUString sJson;
+                try
+                {
+                    Reference< XStyleFamiliesSupplier > xSFS( rModel.getUnoModel(), UNO_QUERY_THROW );
+                    Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_SET_THROW );
+                    Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( u"table"_ustr ), UNO_QUERY_THROW );
+
+                    bool bIsPageDark = false;
+                    if( SdrPage* pPage = rTableObj.getSdrPageFromSdrObject() )
+                    {
+                        Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage() );
+                        Reference< XPropertySet > xPageSet( xDrawPage, UNO_QUERY );
+                        if( xPageSet.is() )
+                        {
+                            try
+                            {
+                                xPageSet->getPropertyValue(u"IsBackgroundDark"_ustr) >>= bIsPageDark;
+                            }
+                            catch( cpo::uno::Exception& )
+                            {
+                            }
+                        }
+                    }
+
+                    // Preview each style using the currently selected table's own
+                    // options, so the swatches match what applying them would look
+                    // like - the same behaviour as the sidebar's Table Design panel.
+                    const sdr::table::TableStyleSettings& rTableSettings( rTableObj.getTableStyleSettings() );
+                    sdr::table::TableDesignPreviewSettings aPreviewSettings;
+                    aPreviewSettings.mbUseFirstRow = rTableSettings.mbUseFirstRow;
+                    aPreviewSettings.mbUseLastRow = rTableSettings.mbUseLastRow;
+                    aPreviewSettings.mbUseFirstColumn = rTableSettings.mbUseFirstColumn;
+                    aPreviewSettings.mbUseLastColumn = rTableSettings.mbUseLastColumn;
+                    aPreviewSettings.mbUseRowBanding = rTableSettings.mbUseRowBanding;
+                    aPreviewSettings.mbUseColumnBanding = rTableSettings.mbUseColumnBanding;
+
+                    tools::JsonWriter aJson;
+                    {
+                        auto aArray = aJson.startArray("TableStyles");
+                        for( const OUString& rName : xTableFamilyAccess->getElementNames() )
+                        {
+                            // Render each style's preview independently: a
+                            // failure rendering one style's bitmap must not
+                            // abort the whole list, or the browser gets no
+                            // styles at all instead of just one blank entry.
+                            OString aDataUri;
+                            try
+                            {
+                                Reference< XIndexAccess > xTableStyle( xTableFamilyAccess->getByName( rName ), UNO_QUERY );
+                                if( xTableStyle.is() )
+                                    aDataUri = sdr::table::CreateTableDesignPreviewDataUri( xTableStyle, aPreviewSettings, bIsPageDark );
+                            }
+                            catch( cpo::uno::Exception& )
+                            {
+                                TOOLS_WARN_EXCEPTION("svx.table", "rendering table style preview for " << rName);
+                            }
+
+                            auto aStyleStruct = aJson.startStruct();
+                            aJson.put( "Name", rName );
+                            aJson.put( "Image", OStringToOUString( aDataUri, RTL_TEXTENCODING_UTF8 ) );
+                        }
+                    }
+                    OString aStr = aJson.finishAndGetAsOString();
+                    sJson = OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 );
+                }
+                catch( cpo::uno::Exception& )
+                {
+                    TOOLS_WARN_EXCEPTION("svx.table", "building table style list");
+                }
+                rSet.Put( SfxStringItem( SID_TABLE_STYLE_LIST, sJson ) );
                 break;
             }
 

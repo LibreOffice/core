@@ -70,6 +70,12 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 		return optionsToolItems;
 	},
 
+	onCallback: function(objectType, eventType, object, data, builder) {
+		const consumed
+			= JSDialog.ImpressTableDesignTab.onCallback(objectType, eventType, object, data, builder);
+		return consumed;
+	},
+
 	getTabs: function() {
 		return this._filterExtensionsTab([
 			{
@@ -117,6 +123,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'name': 'Format',
 				'accessibility': { focusBack: false, combination: 'O', de: null }
 			},
+			JSDialog.ImpressTableDesignTab.getEntry(),
 			{
 				'id': 'Table-tab-label',
 				'text': _('Table'),
@@ -184,6 +191,7 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 			this.getSlideshowTab(),
 			this.getReviewTab(),
 			this.getFormatTab(),
+			this.getTableDesignTab(),
 			this.getTableTab(),
 			this.getShapeTab(),
 			this.getPictureTab(),
@@ -2104,6 +2112,11 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 		return this.getTabPage('Review', content);
 	},
 
+	getTableDesignTab: function() {
+		const tab = JSDialog.ImpressTableDesignTab;
+		return this.getTabPage(tab.getName(), tab.getContent());
+	},
+
 	getTableTab: function() {
 		var content = [
 			{
@@ -2398,58 +2411,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				]
 			},
 			{ type: 'separator', id: 'table-justifypara-break', orientation: 'vertical' },
-			{
-				'type': 'overflowgroup',
-				'id': 'table-properties',
-				'name':_('Design'),
-				'accessibility': { focusBack: true, combination: 'SD', de: null },
-				'more': {
-					'command':'.uno:TableDialog',
-					'accessibility': { focusBack: true,	combination: 'MT', de: null },
-				},
-				'children' : [
-					{
-						'id': 'table-table-dialog',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:TableDialog', 'presentation', true),
-						'command': '.uno:TableDialog',
-						'accessibility': { focusBack: false, combination: 'SD', de: null }
-					},
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'table-xline-color:ColorPickerMenu',
-										'type': 'menubutton',
-										'text': _UNO('.uno:XLineColor'),
-										'command': '.uno:XLineColor',
-										'noLabel': true,
-										'accessibility': { focusBack: true, combination: 'LC', de: null }
-									}
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'table-fill-color:ColorPickerMenu',
-										'type': 'menubutton',
-										'text': _UNO('.uno:FillColor'),
-										'command': '.uno:FillColor',
-										'noLabel': true,
-										'accessibility': { focusBack: true, combination: 'FC', de: null }
-									}
-								]
-							}
-						],
-						'vertical': 'true'
-					},
-				]
-			},
-			{ type: 'separator', id: 'table-bigtoolitem-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',
 				'id': 'table-align',

@@ -489,7 +489,6 @@ constexpr auto SidebarList
         { u"modules/simpress/ui/customanimationspanel.ui" },
         { u"modules/simpress/ui/layoutpanel.ui" },
         { u"modules/simpress/ui/sidebarslidebackground.ui" },
-        { u"modules/simpress/ui/tabledesignpanel.ui" },
         // smath
         { u"modules/smath/ui/sidebarelements_math.ui" },
         { u"modules/smath/ui/sidebarproperties_math.ui" },

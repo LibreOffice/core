@@ -88,6 +88,20 @@ TableObjectBar::~TableObjectBar()
     SetRepeatTarget( nullptr );
 }
 
+void TableObjectBar::Activate( bool bMDIActivate )
+{
+    SfxShell::Activate( bMDIActivate );
+
+    // These three slots otherwise only get invalidated as a side effect of executing
+    // SID_TABLE_STYLE or SID_TABLE_STYLE_SETTINGS, so a freshly selected table would
+    // report no style, no style settings, and an empty style list until one of those
+    // commands runs once.
+    SfxBindings& rBindings = mrViewSh.GetViewFrame()->GetBindings();
+    rBindings.Invalidate( SID_TABLE_STYLE );
+    rBindings.Invalidate( SID_TABLE_STYLE_SETTINGS );
+    rBindings.Invalidate( SID_TABLE_STYLE_LIST );
+}
+
 void TableObjectBar::GetState( SfxItemSet& rSet )
 {
     if( mpView )
@@ -223,6 +237,14 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         pBindings->Invalidate( SID_TABLE_VERT_BOTTOM );
         pBindings->Invalidate( SID_TABLE_VERT_CENTER );
         pBindings->Invalidate( SID_TABLE_VERT_NONE );
+        break;
+    }
+    case SID_TABLE_STYLE:
+    case SID_TABLE_STYLE_SETTINGS:
+    {
+        pBindings->Invalidate( SID_TABLE_STYLE );
+        pBindings->Invalidate( SID_TABLE_STYLE_SETTINGS );
+        pBindings->Invalidate( SID_TABLE_STYLE_LIST );
         break;
     }
     }

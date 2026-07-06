@@ -65,6 +65,10 @@ describe(['tagdesktop'], 'Accessibility Impress Notebookbar Tests', { testIsolat
         helper.typeIntoDocument('{ctrl}{home}');
 
         selectAndValidateTab(findTab('Table'));
+
+        // Table Design shares the same context and is visible alongside
+        // the Table tab whenever a table is selected.
+        selectAndValidateTab(findTab('TableDesign'));
     });
 
     it('Notebookbar tab: Shape (context)', function () {

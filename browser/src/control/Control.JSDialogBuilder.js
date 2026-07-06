@@ -560,7 +560,6 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		case 'paperformat':
 		case 'orientation':
 		case 'masterslide':
-		case 'SdTableDesignPanel':
 		case 'ChartTypePanel':
 		case 'rotation':
 			iconURL = 'lc_'+ sectionTitle.id.toLowerCase() +'.svg';

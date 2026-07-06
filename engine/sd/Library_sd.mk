@@ -416,7 +416,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/slidesorter/view/SlsTheme \
 	sd/source/ui/slidesorter/view/SlsToolTip \
 	sd/source/ui/slidesorter/view/SlsViewCacheContext \
-	sd/source/ui/table/TableDesignPane \
 	sd/source/ui/table/tablefunction \
 	sd/source/ui/table/tableobjectbar \
 	sd/source/ui/tools/AsynchronousCall \

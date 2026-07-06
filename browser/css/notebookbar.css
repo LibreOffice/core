@@ -912,6 +912,15 @@ label.notebookbar.ui-checkbox-label {
 	font-weight: 500;
 }
 
+/* Table Design Tab (Impress) */
+
+#table-design-styles.notebookbar,
+#table-design-styles.jsdialog {
+	grid-template-columns: repeat(6, 1fr);
+	grid-gap: 10px;
+	padding: 5px 10px;
+}
+
 /* Draw Tab */
 
 /* other */

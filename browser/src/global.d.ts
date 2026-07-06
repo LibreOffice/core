@@ -235,6 +235,7 @@ interface AppInterface {
 	languages: Array<{ translated: string; neutral: string; iso: string }>;
 	favouriteLanguages: Array<string>;
 	tableStyles: TableStylesService;
+	impressTableStyles: ImpressTableStylesService;
 	colorLastSelection: any;
 	serverAudit: any;
 	events: DocEvents;

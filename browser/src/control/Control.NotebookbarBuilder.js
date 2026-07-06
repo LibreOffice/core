@@ -98,7 +98,6 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 		this._toolitemHandlers['.uno:NextAnnotation'] = function() {};
 		this._toolitemHandlers['.uno:PreviousAnnotation'] = function() {};
 		this._toolitemHandlers['.uno:OptimizeTable'] = function() {};
-		this._toolitemHandlers['.uno:TableDesign'] = function() {};
 		this._toolitemHandlers['.uno:ContourDialog'] = function() {};
 		this._toolitemHandlers['.uno:TextWrap'] = function() {};
 		this._toolitemHandlers['.uno:RedactDoc'] = function() {};

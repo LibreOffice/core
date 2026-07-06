@@ -174,7 +174,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/slidetransitionspanel \
 	sd/uiconfig/simpress/ui/snapmenu \
 	sd/uiconfig/simpress/ui/tabviewbar \
-	sd/uiconfig/simpress/ui/tabledesignpanel \
 	sd/uiconfig/simpress/ui/templatedialog \
 ))
 

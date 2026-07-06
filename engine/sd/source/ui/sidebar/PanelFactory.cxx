@@ -28,7 +28,6 @@
 #include <CustomAnimationPane.hxx>
 #include "NavigatorWrapper.hxx"
 #include <SlideTransitionPane.hxx>
-#include <TableDesignPane.hxx>
 #include "SlideBackground.hxx"
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -110,8 +109,6 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         xControl = CurrentMasterPagesSelector::Create(pParent, *pBase, xSidebar);
     else if (rsUIElementResourceURL.endsWith("/SlideTransitions"))
         xControl = std::make_unique<SlideTransitionPane>(pParent, *pBase);
-    else if (rsUIElementResourceURL.endsWith("/TableDesign"))
-        xControl = std::make_unique<TableDesignPane>(pParent, *pBase);
     else if (rsUIElementResourceURL.endsWith("/NavigatorPanel"))
         xControl = std::make_unique<NavigatorWrapper>(pParent, *pBase, pBindings);
     else if (rsUIElementResourceURL.endsWith("/SlideBackgroundPanel"))

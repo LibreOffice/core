@@ -527,7 +527,6 @@ class XFillGradientItem;
 #define SID_TABLE_INSERT_ROW_DLG                        ( SID_SVX_START + 427 )
 #define SID_TABLE_PARAM_INSERT_AFTER                    TypedWhichId<SfxBoolItem>( SID_SVX_START + 428 )
 
-#define SID_TABLEDESIGN                                 ( SID_SVX_START + 429 )
 #define SID_GENERAL_OPTIONS                             ( SID_SVX_START + 432 )
 #define SID_SW_EDITOPTIONS                              TypedWhichId<SfxUInt16Item>( SID_SVX_START + 433 )
 #define SID_SD_EDITOPTIONS                              ( SID_SVX_START + 434 )
@@ -930,7 +929,7 @@ class XFillGradientItem;
 #define SID_TABLE_DISTRIBUTE_COLUMNS                    ( SID_SVX_START + 1086 )
 #define SID_TABLE_DISTRIBUTE_ROWS                       ( SID_SVX_START + 1087 )
 #define SID_TABLE_STYLE                                 TypedWhichId<SfxStringItem>( SID_SVX_START + 1088 )
-#define SID_TABLE_STYLE_SETTINGS                        ( SID_SVX_START + 1089 )
+#define SID_TABLE_STYLE_SETTINGS                        TypedWhichId<SfxStringItem>( SID_SVX_START + 1089 )
 #define SID_CHAR_DLG_PREVIEW_STRING                     ( SID_SVX_START + 1090 )
 #define SID_RECHECK_DOCUMENT                            ( SID_SVX_START + 1091 )
 // 1092 is used out of order below
@@ -1130,8 +1129,12 @@ class XFillGradientItem;
 
 #define SID_ATTR_PAGE_NO_FIRST                          ( SID_SVX_START + 1261 )
 
+// 1262 collides with SID_ATTR_PARA_AUTOFRAMEDIRECTION in editeng/editids.hrc, so this
+// slot uses the next free number instead.
+#define SID_TABLE_STYLE_LIST                            TypedWhichId<SfxStringItem>( SID_SVX_START + 1263 )
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1262 + 1 )
+#define SID_SVX_FIRSTFREE                               ( SID_SVX_START + 1263 + 1 )
 
 // Overflow check for slot IDs
 #if SID_SVX_FIRSTFREE > SID_SVX_END

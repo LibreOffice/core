@@ -13,7 +13,7 @@
  * window.L.Control.NotebookbarDraw - definition of notebookbar content in Draw
  */
 
-/* global _ _UNO app */
+/* global _ _UNO app JSDialog */
 window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 
 	getShortcutsBarData: function() {
@@ -48,6 +48,12 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'type': 'toolitem',
 			}
 		]);
+	},
+
+	onCallback: function(objectType, eventType, object, data, builder) {
+		const consumed
+			= JSDialog.ImpressTableDesignTab.onCallback(objectType, eventType, object, data, builder);
+		return consumed;
 	},
 
 	getTabs: function() {
@@ -89,6 +95,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 				'name': 'Format',
 				'accessibility': { focusBack: true, combination: 'M', de: null }
 			},
+			JSDialog.ImpressTableDesignTab.getEntry(),
 			{
 				'id': 'Table-tab-label',
 				'text': _('Table'),
@@ -146,6 +153,7 @@ window.L.Control.NotebookbarDraw = window.L.Control.NotebookbarImpress.extend({
 			this.getLayoutTab(),
 			this.getReviewTab(),
 			this.getFormatTab(),
+			this.getTableDesignTab(),
 			this.getTableTab(),
 			this.getShapeTab(),
 			this.getPictureTab(),

@@ -881,13 +881,6 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 	vertical-align: baseline;
 	padding-left: 24px;
 }
-#SdTableDesignPanel + .ui-content div[id^='Use'] {
-	width: 92%;
-	padding-right: 4% !important;
-}
-input[type='checkbox']#UseBandingColumnStyle, input[type='checkbox']#UseLastColumnStyle, input[type='checkbox']#UseFirstColumnStyle, input[type='checkbox']#UseBandingRowStyle, input[type='checkbox']#UseLastRowStyle, input[type='checkbox']#UseFirstRowStyle {
-	margin-right: 0px !important;
-}
 #mobile-wizard #FontworkSameLetterHeights {
 	display: flex;
 	padding: 0px;

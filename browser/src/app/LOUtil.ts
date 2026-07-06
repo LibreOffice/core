@@ -566,7 +566,6 @@ class LOUtil {
 			databasesettings: 'tabledesign',
 			tracechangemode: 'trackchanges',
 			deleteallannotation: 'deleteallnotes',
-			sdtabledesignpanel: 'tabledesign',
 			tableeditpanel: 'tabledesign',
 			tableautofitmenu: 'columnwidth',
 			menucolumnwidth: 'columnwidth',

@@ -43,6 +43,8 @@ public:
     void            GetAttrState( SfxItemSet& rSet );
     void            Execute( SfxRequest& rReq );
 
+    virtual void    Activate( bool bMDIActivate ) override;
+
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
