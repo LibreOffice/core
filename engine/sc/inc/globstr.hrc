@@ -75,6 +75,7 @@
 #define STR_UNDO_DBREMTABLE                     NC_("STR_UNDO_DBTABLE", "Delete table")
 #define STR_UNDO_DBDATA                         NC_("STR_UNDO_DBDATA", "Change Database Range")
 #define STR_UNDO_RESIZE_CALCTABLE               NC_("STR_UNDO_RESIZE_CALCTABLE", "Resize Table")
+#define STR_UNDO_RENAME_CALCTABLE               NC_("STR_UNDO_RENAME_CALCTABLE", "Rename Table")
 #define STR_UNDO_EXPAND_TABLE_AREA              NC_("STR_UNDO_EXPAND_TABLE_AREA", "Auto-Expand Table")
 #define STR_UNDO_IMPORTDATA                     NC_("STR_UNDO_IMPORTDATA", "Importing")
 #define STR_UNDO_REPEATDB                       NC_("STR_UNDO_REPEATDB", "Refresh range")

@@ -332,6 +332,30 @@ private:
     void           DoChange(const bool bUndo);
 };
 
+/// Undo entry for renaming a styled table / named database range. Renames in place (by
+/// name) on undo/redo, so index-based references follow - unlike ScUndoDBData's collection
+/// swap, which recreates objects and would break structured references.
+class ScUndoRenameDBData : public ScSimpleUndo
+{
+public:
+                    ScUndoRenameDBData( ScDocShell& rNewDocShell,
+                            const OUString& rOldName, const OUString& rNewName );
+    virtual         ~ScUndoRenameDBData() override;
+
+    virtual void    Undo() override;
+    virtual void    Redo() override;
+    virtual void    Repeat(SfxRepeatTarget& rTarget) override;
+    virtual bool    CanRepeat(SfxRepeatTarget& rTarget) const override;
+
+    virtual OUString GetComment() const override;
+
+private:
+    OUString  maOldName;
+    OUString  maNewName;
+
+    void DoChange( const OUString& rFrom, const OUString& rTo ) const;
+};
+
 /// Undo entry for the MSO-parity auto-expansion of a styled named DBData
 /// when we add content adjacent to the table area. Recorded as its own
 /// (separate) undo step so the expansion can be undone without losing

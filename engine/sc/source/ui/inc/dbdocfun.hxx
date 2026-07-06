@@ -99,7 +99,7 @@ public:
 
     SC_DLLPUBLIC bool AddDBRange( const OUString& rName, const ScRange& rRange );
     bool DeleteDBRange( const OUString& rName );
-    bool RenameDBRange( const OUString& rOld, const OUString& rNew );
+    SC_DLLPUBLIC bool RenameDBRange( const OUString& rOld, const OUString& rNew );
     SC_DLLPUBLIC void ModifyDBData( const ScDBData& rNewData );  // Name unchanged
     // Resize an existing styled Table to rNewArea: relocates the Total Row when the row
     // span changes, otherwise a plain ModifyDBData. Returns false when refused (overlap).

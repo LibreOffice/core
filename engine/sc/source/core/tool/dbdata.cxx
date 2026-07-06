@@ -355,6 +355,12 @@ bool ScDBData::less::operator() (const std::unique_ptr<ScDBData>& left, const st
     return ScGlobal::GetTransliteration().compareString(left->GetUpperName(), right->GetUpperName()) < 0;
 }
 
+void ScDBData::SetName(const OUString& rName)
+{
+    aName = rName;
+    aUpper = ScGlobal::getCharClass().uppercase(rName);
+}
+
 ScDBData::ScDBData( const OUString& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -2522,6 +2528,22 @@ bool ScDBCollection::NamedDBs::insert(std::unique_ptr<ScDBData> pData)
 ScDBCollection::NamedDBs::iterator ScDBCollection::NamedDBs::erase(const iterator& itr)
 {
     return m_DBs.erase(itr);
+}
+
+bool ScDBCollection::NamedDBs::rename(const OUString& rOldName, const OUString& rNewName)
+{
+    iterator it = findByUpperName2(ScGlobal::getCharClass().uppercase(rOldName));
+    if (it == m_DBs.end())
+        return false;   // source not found
+    // Reject only if a *different* table already has the target name; a case-only
+    // rename ("Foo" -> "FOO") maps to the same entry and must be allowed.
+    ScDBData* pExisting = findByUpperName(ScGlobal::getCharClass().uppercase(rNewName));
+    if (pExisting && pExisting != it->get())
+        return false;
+    auto aNode = m_DBs.extract(it);
+    aNode.value()->SetName(rNewName);
+    m_DBs.insert(std::move(aNode));
+    return true;
 }
 
 bool ScDBCollection::NamedDBs::empty() const

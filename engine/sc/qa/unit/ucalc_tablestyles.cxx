@@ -14,6 +14,7 @@
 #include <attrib.hxx>
 #include <dbdata.hxx>
 #include <dbdocfun.hxx>
+#include <scopetools.hxx>
 #include <subtotalparam.hxx>
 #include <docfunc.hxx>
 #include <docsh.hxx>
@@ -1896,6 +1897,69 @@ CPPUNIT_TEST_FIXTURE(TableStylesTest, testTableStyleBorderEmptyCellOverride)
     CPPUNIT_ASSERT_MESSAGE("table-style wholeTable border must not be masked by empty cell border",
                            pBox->GetTop() || pBox->GetBottom() || pBox->GetLeft()
                                || pBox->GetRight());
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testRenameTableUpdatesStructuredRefs)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"RenameTable"_ustr);
+    m_pDoc->EnableUndo(true);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 1, 3,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+    CPPUNIT_ASSERT(pData);
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"Header1"_ustr);
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"Header2"_ustr);
+    m_pDoc->SetString(ScAddress(0, 1, 0), u"1"_ustr);
+    m_pDoc->SetString(ScAddress(0, 2, 0), u"4"_ustr);
+    m_pDoc->SetString(ScAddress(0, 3, 0), u"16"_ustr);
+
+    m_pDoc->SetString(ScAddress(3, 0, 0), u"=SUM(TestTable[Header1])"_ustr);
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+    CPPUNIT_ASSERT(ScDBDocFunc(*m_xDocShell).RenameDBRange(u"TestTable"_ustr, u"Renamed"_ustr));
+
+    // The structured reference must follow the rename.
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 0, 0).indexOf(u"Renamed[") >= 0);
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 0, 0).indexOf(u"TestTable") < 0);
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+    m_xDocShell->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TESTTABLE"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 0, 0).indexOf(u"TestTable[") >= 0);
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+    m_xDocShell->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"RENAMED"_ustr));
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 0, 0).indexOf(u"Renamed[") >= 0);
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+    // A case-only rename ("Renamed" -> "RENAMED") is allowed, and the structured reference
+    // re-renders with the new case.
+    CPPUNIT_ASSERT(ScDBDocFunc(*m_xDocShell).RenameDBRange(u"Renamed"_ustr, u"RENAMED"_ustr));
+    ScDBData* pCased = m_pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"RENAMED"_ustr);
+    CPPUNIT_ASSERT(pCased);
+    CPPUNIT_ASSERT_EQUAL(u"RENAMED"_ustr, pCased->GetName());
+    CPPUNIT_ASSERT(m_pDoc->GetFormula(3, 0, 0).indexOf(u"RENAMED[") >= 0);
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TableStylesTest, testRenameTableDuplicateRefused)
+{
+    m_pDoc->InsertTab(0, u"RenameDup"_ustr);
+
+    ScDBData* pData = createTestDBData(m_pDoc, u"TableStyleMedium2"_ustr, 0, 0, 1, 3,
+                                       /*bHasHeader*/ true, /*bHasTotals*/ false);
+    CPPUNIT_ASSERT(pData);
+
+    // Renaming into a *different* existing table's name is refused.
+    CPPUNIT_ASSERT(m_pDoc->GetDBCollection()->getNamedDBs().insert(
+        std::unique_ptr<ScDBData>(new ScDBData(u"Other"_ustr, 0, 3, 0, 4, 3, true, true, false))));
+    CPPUNIT_ASSERT(!ScDBDocFunc(*m_xDocShell).RenameDBRange(u"TestTable"_ustr, u"Other"_ustr));
 
     m_pDoc->DeleteTab(0);
 }

@@ -1215,6 +1215,60 @@ bool ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
+ScUndoRenameDBData::ScUndoRenameDBData( ScDocShell& rNewDocShell,
+                                        const OUString& rOldName, const OUString& rNewName ) :
+    ScSimpleUndo( rNewDocShell ),
+    maOldName( rOldName ),
+    maNewName( rNewName )
+{
+}
+
+ScUndoRenameDBData::~ScUndoRenameDBData()
+{
+}
+
+OUString ScUndoRenameDBData::GetComment() const
+{
+    return ScResId( STR_UNDO_RENAME_CALCTABLE );
+}
+
+void ScUndoRenameDBData::DoChange( const OUString& rFrom, const OUString& rTo ) const
+{
+    ScDocument& rDoc = rDocShell.GetDocument();
+    rDoc.GetDBCollection()->getNamedDBs().rename( rFrom, rTo );
+
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );   // Name Box etc.
+    rDocShell.PostPaintGridAll();
+    rDocShell.PostDataChanged();
+
+    // The table name may appear in formulas.
+    if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
+        pViewShell->UpdateInputHandler();
+}
+
+void ScUndoRenameDBData::Undo()
+{
+    BeginUndo();
+    DoChange( maNewName, maOldName );
+    EndUndo();
+}
+
+void ScUndoRenameDBData::Redo()
+{
+    BeginRedo();
+    DoChange( maOldName, maNewName );
+    EndRedo();
+}
+
+void ScUndoRenameDBData::Repeat(SfxRepeatTarget& /* rTarget */)
+{
+}
+
+bool ScUndoRenameDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+{
+    return false;
+}
+
 // change database sections (dialog)
 ScUndoDBData::ScUndoDBData( ScDocShell& rNewDocShell, const OUString& rNewUndoName,
                             std::unique_ptr<ScDBCollection> pNewUndoColl, const OUString& rNewRedoName,

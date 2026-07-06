@@ -152,7 +152,7 @@ private:
     ScDBDataContainerBase* mpContainer;
 
     /// DBParam
-    const OUString aName;
+    OUString aName;
     OUString aUpper;
     OUString        aTableType;
     SCTAB           nTable;
@@ -224,6 +224,8 @@ public:
     bool        operator== (const ScDBData& rData) const;
 
     const OUString& GetName() const { return aName; }
+    // Rename in place; only valid while out of a name-keyed container (see NamedDBs::rename).
+    void            SetName(const OUString& rName);
     const OUString& GetUpperName() const { return aUpper; }
     SCTAB       GetTab() const                  { return nTable; }
     void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
@@ -465,6 +467,10 @@ public:
 
         /** Removes the named database ranges of the sheet. */
         void deleteOnTab(SCTAB nTab);
+
+        /** Rename rOldName to rNewName in place, keeping the same ScDBData object.
+            @return false if rOldName is missing or rNewName already exists. */
+        bool rename(const OUString& rOldName, const OUString& rNewName);
 
         bool empty() const;
         size_t size() const;

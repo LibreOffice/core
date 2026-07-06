@@ -649,49 +649,25 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
 
 bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
 {
-    bool bDone = false;
     ScDocument& rDoc = rDocShell.GetDocument();
-    ScDBCollection* pDocColl = rDoc.GetDBCollection();
-    bool bUndo = rDoc.IsUndoEnabled();
-    ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
-    auto const iterOld = rDBs.findByUpperName2(ScGlobal::getCharClass().uppercase(rOld));
-    const ScDBData* pNew = rDBs.findByUpperName(ScGlobal::getCharClass().uppercase(rNew));
-    if (iterOld != rDBs.end() && !pNew)
-    {
-        ScDocShellModificator aModificator( rDocShell );
+    ScDBCollection::NamedDBs& rDBs = rDoc.GetDBCollection()->getNamedDBs();
 
-        std::unique_ptr<ScDBData> pNewData(new ScDBData(rNew, **iterOld));
-        OUString aUndoName = rOld;
-        std::unique_ptr<ScDBCollection> pUndoColl( new ScDBCollection( *pDocColl ) );
+    ScDocShellModificator aModificator( rDocShell );
 
-        rDoc.PreprocessDBDataUpdate();
-        rDBs.erase(iterOld);
-        bool bInserted = rDBs.insert(std::move(pNewData));
-        if (!bInserted)                             // error -> restore old state
-        {
-            rDoc.SetDBCollection(std::move(pUndoColl));       // belongs to the document then
-        }
+    // Rename in place (keeping the same ScDBData object at its index) so index-based
+    // references - structured refs =Table[col] and plain DB-area refs - follow the new name
+    // automatically, exactly like a sheet rename. A destroy-and-recreate would drop the
+    // binding those references resolve through and corrupt =Table[col] formulas.
+    if (!rDBs.rename(rOld, rNew))
+        return false;
 
-        rDoc.CompileHybridFormula();
+    if (rDoc.IsUndoEnabled())
+        rDocShell.GetUndoManager()->AddUndoAction(
+            std::make_unique<ScUndoRenameDBData>( rDocShell, rOld, rNew ) );
 
-        if (bInserted)                              // insertion worked
-        {
-            if (bUndo)
-            {
-                rDocShell.GetUndoManager()->AddUndoAction(
-                                std::make_unique<ScUndoDBData>( rDocShell, aUndoName, std::move(pUndoColl),
-                                    rNew, std::make_unique<ScDBCollection>( *pDocColl ) ) );
-            }
-            else
-                pUndoColl.reset();
-
-            aModificator.SetDocumentModified();
-            SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
-            bDone = true;
-        }
-    }
-
-    return bDone;
+    aModificator.SetDocumentModified();
+    SfxGetpApp()->Broadcast( SfxHint( SfxHintId::ScDbAreasChanged ) );
+    return true;
 }
 
 void ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
