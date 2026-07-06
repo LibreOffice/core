@@ -671,10 +671,7 @@ static std::wstring get_clipboard_format_name(UINT format)
     wchar_t name[NNAME];
     int nwc = GetClipboardFormatNameW(format, name, NNAME);
     if (nwc)
-    {
-        name[nwc] = 0;
-        return name;
-    }
+        return std::wstring(name, nwc);
     return L"";
 }
 
