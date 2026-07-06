@@ -13,6 +13,8 @@
 #include <filesystem>
 #include <map>
 #include <regex>
+#include <string>
+#include <string_view>
 #include <thread>
 #include <vector>
 
@@ -2288,6 +2290,18 @@ std::string fetchAIModels(const std::string& payload)
 }
 } // namespace
 
+static void free_getClipboard_results(size_t count, char** mimeTypes, size_t* sizes, char** streams)
+{
+    for (size_t i = 0; i < count; i++)
+    {
+        std::free(mimeTypes[i]);
+        std::free(streams[i]);
+    }
+    std::free(mimeTypes);
+    std::free(sizes);
+    std::free(streams);
+}
+
 static HANDLE copyEngineClipboardData(int appDocId, UINT format, const std::string& mimeType)
 {
     DocumentData* docData = DocumentData::getIfExists(appDocId);
@@ -2312,13 +2326,19 @@ static HANDLE copyEngineClipboardData(int appDocId, UINT format, const std::stri
         outCount == 0)
         return 0;
 
+    if (outStreams[0] == nullptr || outSizes[0] == 0)
+    {
+        free_getClipboard_results(outCount, outMimeTypes, outSizes, outStreams);
+        return 0;
+    }
+
     HGLOBAL hMem;
     const void *src;
     size_t size;
     std::wstring temp;
     if (format == CF_UNICODETEXT && mimeType == "text/plain;charset=utf-8")
     {
-        temp = Util::string_to_wide_string(outStreams[0]);
+        temp = Util::string_to_wide_string(std::string_view(outStreams[0], outSizes[0]));
         src = temp.c_str();
         size = (temp.length() + 1) * 2;
     }
@@ -2328,9 +2348,22 @@ static HANDLE copyEngineClipboardData(int appDocId, UINT format, const std::stri
         size = outSizes[0];
     }
     hMem = GlobalAlloc(GMEM_MOVEABLE, size);
+    if (hMem == NULL)
+    {
+        free_getClipboard_results(outCount, outMimeTypes, outSizes, outStreams);
+        return 0;
+    }
     void* dest = GlobalLock(hMem);
+    if (dest == nullptr)
+    {
+        GlobalFree(hMem);
+        free_getClipboard_results(outCount, outMimeTypes, outSizes, outStreams);
+        return 0;
+    }
     std::memcpy(dest, src, size);
     GlobalUnlock(hMem);
+
+    free_getClipboard_results(outCount, outMimeTypes, outSizes, outStreams);
 
     return hMem;
 }
