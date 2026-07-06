@@ -1959,7 +1959,13 @@ namespace cool {
 		}
 
 		private get requestTimeoutMs(): number {
-			return (app.map.aiRequestTimeout ?? 120) * 1000;
+			return (app.map.aiRequestTimeout ?? 300) * 1000;
+		}
+
+		private get timeoutErrorMessage(): string {
+			return _(
+				'The request timed out. You can increase the request timeout in the AI section of the settings.',
+			);
 		}
 
 		private startRequestTimeout(
@@ -1971,7 +1977,7 @@ namespace cool {
 				if (this.isProcessing && this.currentRequestId === requestId) {
 					handler({
 						success: false,
-						error: _('Request timeout'),
+						error: this.timeoutErrorMessage,
 						requestId: requestId,
 					});
 				}
@@ -2126,9 +2132,14 @@ namespace cool {
 			if (data.success) {
 				this.messages.push(buildSuccessMsg(data));
 			} else {
+				let errorText = data.error || defaultError;
+				// Replace the bare timeout report with guidance the user can
+				// act on.
+				if (errorText === 'Request timeout')
+					errorText = this.timeoutErrorMessage;
 				this.messages.push({
 					role: 'assistant',
-					content: _('Error: ') + (data.error || defaultError),
+					content: _('Error: ') + errorText,
 					timestamp: Date.now(),
 					isError: true,
 				});

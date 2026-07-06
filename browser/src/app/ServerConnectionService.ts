@@ -75,7 +75,7 @@ class ServerConnectionService {
 		app.map.isAIConfigured = !!viewSetting.aiConfigured;
 		app.map.aiRequestTimeout = viewSetting.aiRequestTimeout
 			? Math.max(10, Number(viewSetting.aiRequestTimeout))
-			: 120;
+			: 300;
 		app.map.aiModelName = viewSetting.aiModelName || '';
 		app.map.aiEthicalRating = viewSetting.aiEthicalRating || 'U';
 

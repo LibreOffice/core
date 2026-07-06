@@ -335,13 +335,13 @@ public:
     int getAIRequestTimeoutSeconds() const
     {
         if (_aiRequestTimeout.empty())
-            return 120;
+            return 300;
         try {
             int val = std::stoi(_aiRequestTimeout);
             if (val < 10) val = 10;
             return val;
         } catch (...) {
-            return 120;
+            return 300;
         }
     }
 

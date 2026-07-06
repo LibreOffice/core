@@ -2257,7 +2257,7 @@ class SettingIframe {
 			'#aiRequestTimeout',
 		) as HTMLInputElement | null;
 		if (timeoutInput) {
-			timeoutInput.placeholder = '120';
+			timeoutInput.placeholder = '300';
 			timeoutInput.type = 'number';
 			timeoutInput.min = '10';
 		}
