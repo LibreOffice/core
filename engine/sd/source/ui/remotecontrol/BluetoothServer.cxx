@@ -654,7 +654,7 @@ getBluez4BooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
                     if( dbus_message_iter_get_arg_type( &variantIt ) == DBUS_TYPE_BOOLEAN )
                     {
                         dbus_message_iter_get_basic( &variantIt, &bBool );
-                        SAL_INFO( "sdremote.bluetooth", "" << pPropertyName << " is " << bBool );
+                        SAL_INFO( "sdremote.bluetooth", "" << pPropertyName << " is " << +bBool );
                         *pBoolean = bBool;
                         return true;
                     }
@@ -727,7 +727,7 @@ getDBusBooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
         {
             dbus_bool_t bBool = false;
             dbus_message_iter_get_basic( &variantIt, &bBool );
-            SAL_INFO( "sdremote.bluetooth", "" << pPropertyName << " is " << bBool );
+            SAL_INFO( "sdremote.bluetooth", "" << pPropertyName << " is " << +bBool );
             *pBoolean = bBool;
             bRet = true;
         }
