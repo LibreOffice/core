@@ -18,9 +18,10 @@ $(call gb_ExternalProject_get_state_target,expat,configure) :
 	$(call gb_ExternalProject_run,configure,\
 		$(gb_RUN_CONFIGURE) ./configure --without-docbook \
 			--without-arc4random --without-arc4random-buf \
-			$(if $(filter ANDROID,$(OS)),--without-getentropy --with-sys-getrandom --without-getrandom) \
-			$(if $(filter LINUX,$(OS)),--without-getentropy --without-sys-getrandom --with-getrandom) \
-			$(if $(filter EMSCRIPTEN MACOSX,$(OS)),--with-getentropy --without-sys-getrandom --without-getrandom) \
+			--without-dev-urandom --without-getentropy \
+			--without-sys-getrandom --without-getrandom\
+			$(if $(filter LINUX ANDROID,$(OS)),--with-sys-getrandom) \
+			$(if $(filter EMSCRIPTEN MACOSX,$(OS)),--with-getentropy) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 	,,expat_configure.log)
