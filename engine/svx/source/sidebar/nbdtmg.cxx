@@ -136,40 +136,40 @@ sal_uInt16 NBOTypeMgrBase:: IsSingleLevel(sal_uInt16 nCurLevel)
 }
 
 void NBOTypeMgrBase::SetItems(const SfxItemSet* pArg) {
-    pSet = pArg;
-    if ( !pSet )
+    m_pSet = pArg;
+    if ( !m_pSet )
         return;
 
-    SfxAllItemSet aSet(*pSet);
+    SfxAllItemSet aSet(*m_pSet);
 
     const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
     if (pBulletCharFmt)
-        aBulletCharFmtName = pBulletCharFmt->GetValue();
+        m_aBulletCharFmtName = pBulletCharFmt->GetValue();
 
     const SfxStringItem* pNumCharFmt = aSet.GetItem<SfxStringItem>(SID_NUM_CHAR_FMT, false);
     if (pNumCharFmt)
-        aNumCharFmtName = pNumCharFmt->GetValue();
+        m_aNumCharFmtName = pNumCharFmt->GetValue();
 
     const SfxPoolItem* pItem;
-    SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
+    SfxItemState eState = m_pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
     if(eState == SfxItemState::SET)
     {
-        eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
+        m_eCoreUnit = m_pSet->GetPool()->GetMetric(m_pSet->GetPool()->GetWhichIDFromSlotID(SID_ATTR_NUMBERING_RULE));
     } else {
         //sd use different sid for numbering rule
-        eState = pSet->GetItemState(EE_PARA_NUMBULLET, false, &pItem);
+        eState = m_pSet->GetItemState(EE_PARA_NUMBULLET, false, &pItem);
         if(eState == SfxItemState::SET)
         {
-            eCoreUnit = pSet->GetPool()->GetMetric(pSet->GetPool()->GetWhichIDFromSlotID(EE_PARA_NUMBULLET));
+            m_eCoreUnit = m_pSet->GetPool()->GetMetric(m_pSet->GetPool()->GetWhichIDFromSlotID(EE_PARA_NUMBULLET));
         }
     }
 }
 
 void NBOTypeMgrBase::ImplLoad(std::u16string_view filename)
 {
-    bIsLoading = true;
-    MapUnit      eOldCoreUnit=eCoreUnit;
-    eCoreUnit = MapUnit::Map100thMM;
+    m_bIsLoading = true;
+    MapUnit      eOldCoreUnit=m_eCoreUnit;
+    m_eCoreUnit = MapUnit::Map100thMM;
     INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
     std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ ));
@@ -200,14 +200,14 @@ void NBOTypeMgrBase::ImplLoad(std::u16string_view filename)
             }
         }
     }
-    eCoreUnit = eOldCoreUnit;
-    bIsLoading = false;
+    m_eCoreUnit = eOldCoreUnit;
+    m_bIsLoading = false;
 }
 void NBOTypeMgrBase::ImplStore(std::u16string_view filename)
 {
-    if (bIsLoading) return;
-    MapUnit      eOldCoreUnit=eCoreUnit;
-    eCoreUnit = MapUnit::Map100thMM;
+    if (m_bIsLoading) return;
+    MapUnit      eOldCoreUnit=m_eCoreUnit;
+    m_eCoreUnit = MapUnit::Map100thMM;
     INetURLObject aFile( SvtPathOptions().GetUserConfigPath() );
     aFile.Append( filename);
     std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE ));
@@ -229,7 +229,7 @@ void NBOTypeMgrBase::ImplStore(std::u16string_view filename)
         nNumIndex = -1;
         xOStm->WriteInt32( nNumIndex );  //write end flag
     }
-    eCoreUnit = eOldCoreUnit;
+    m_eCoreUnit = eOldCoreUnit;
 }
 
 // Character Bullet Type lib

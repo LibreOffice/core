@@ -111,20 +111,20 @@ class  SVX_DLLPUBLIC OutlineSettings_Impl
 class SVX_DLLPUBLIC NBOTypeMgrBase
 {
     private:
-        const SfxItemSet*   pSet;
-        MapUnit         eCoreUnit;
+        const SfxItemSet*   m_pSet;
+        MapUnit         m_eCoreUnit;
         // store the attributes passed from pSet
-        OUString        aBulletCharFmtName;
-        OUString        aNumCharFmtName;
-        bool    bIsLoading;
+        OUString        m_aBulletCharFmtName;
+        OUString        m_aNumCharFmtName;
+        bool    m_bIsLoading;
 
         NBOTypeMgrBase(const NBOTypeMgrBase&) = delete;
 
     public:
         NBOTypeMgrBase()
-            : pSet(nullptr)
-            , eCoreUnit(MapUnit::MapTwip)
-            , bIsLoading(false)
+            : m_pSet(nullptr)
+            , m_eCoreUnit(MapUnit::MapTwip)
+            , m_bIsLoading(false)
         {}
         virtual ~NBOTypeMgrBase() {}
         virtual void Init()=0;
@@ -137,9 +137,9 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         // store the attributes passed from pSet
         void SetItems(const SfxItemSet* pArg);
     protected:
-        const OUString& GetBulletCharFmtName() const { return aBulletCharFmtName;}
-        const OUString& GetNumCharFmtName() const { return aNumCharFmtName;}
-        MapUnit GetMapUnit() const { return eCoreUnit;}
+        const OUString& GetBulletCharFmtName() const { return m_aBulletCharFmtName;}
+        const OUString& GetNumCharFmtName() const { return m_aNumCharFmtName;}
+        MapUnit GetMapUnit() const { return m_eCoreUnit;}
     protected:
         void    ImplLoad(std::u16string_view filename);
         void    ImplStore(std::u16string_view filename);
