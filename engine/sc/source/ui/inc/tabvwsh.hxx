@@ -278,6 +278,9 @@ public:
 
     weld::Window*   GetDialogParent();
 
+    // Rename the Table at the cursor via a name-input dialog (SID_RENAME_CALCTABLE).
+    void            ExecuteRenameCalcTable();
+
     SC_DLLPUBLIC bool IsRefInputMode() const;
     void            ExecuteInputDirect();
 

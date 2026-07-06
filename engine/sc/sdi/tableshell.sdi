@@ -13,6 +13,7 @@ interface Table
     SID_REMOVE_CALCTABLE  [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_TABLE_TOTALROW    [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
     SID_RESIZE_CALCTABLE  [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
+    SID_RENAME_CALCTABLE  [ ExecMethod = ExecuteDatabaseSettings; StateMethod = GetDatabaseSettings; ]
 }
 
 shell ScTableShell

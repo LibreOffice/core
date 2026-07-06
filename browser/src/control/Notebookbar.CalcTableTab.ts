@@ -66,14 +66,43 @@ class CalcTableTab implements NotebookbarTab {
 				id: 'table-deletecalctable-break',
 				orientation: 'vertical',
 			},
-			// TODO: once .uno:RenameCalcTable exists, add a Rename bigtoolitem and group it
-			// with Resize under a 'Properties' overflowgroup.
 			{
-				id: 'resize-calc-table',
-				type: 'bigtoolitem',
-				text: _UNO('.uno:ResizeCalcTable', 'spreadsheet'),
-				command: '.uno:ResizeCalcTable',
-				accessibility: { focusBack: true, combination: 'RS' },
+				type: 'overflowgroup',
+				id: 'table-properties',
+				name: _('Properties'),
+				accessibility: { focusBack: true, combination: 'PR' },
+				children: [
+					{
+						type: 'container',
+						children: [
+							{
+								type: 'toolbox',
+								children: [
+									{
+										id: 'rename-calc-table',
+										type: 'toolitem',
+										text: _UNO('.uno:RenameCalcTable', 'spreadsheet'),
+										command: '.uno:RenameCalcTable',
+										accessibility: { focusBack: true, combination: 'RN' },
+									},
+								],
+							},
+							{
+								type: 'toolbox',
+								children: [
+									{
+										id: 'resize-calc-table',
+										type: 'toolitem',
+										text: _UNO('.uno:ResizeCalcTable', 'spreadsheet'),
+										command: '.uno:ResizeCalcTable',
+										accessibility: { focusBack: true, combination: 'RS' },
+									},
+								],
+							},
+						],
+						vertical: 'true',
+					},
+				],
 			},
 			{
 				type: 'separator',

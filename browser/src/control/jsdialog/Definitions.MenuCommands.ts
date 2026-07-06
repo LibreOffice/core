@@ -80,7 +80,7 @@ const MenuCommands: MenuCommandsInterface = {
 
 		spreadsheet: ['MergeCells', 'SplitCell', 'InsertCell', 'DeleteCell',
 				  'RecalcPivotTable', 'DataDataPilotRun', 'DeletePivotTable', 'CalculatedFieldRun',
-				  'InsertCalcTable', 'RemoveCalcTable', 'ResizeCalcTable',
+				  'InsertCalcTable', 'RemoveCalcTable', 'ResizeCalcTable', 'RenameCalcTable',
 				  'DatabaseSettings', 'FormatCellDialog', 'DeleteNote', 'SetAnchorToCell', 'SetAnchorToCellResize',
 				  'FormatSparklineMenu', 'InsertSparkline', 'DeleteSparkline', 'DeleteSparklineGroup',
 				  'EditSparklineGroup', 'EditSparkline', 'GroupSparklines', 'UngroupSparklines', 'AutoFill'],

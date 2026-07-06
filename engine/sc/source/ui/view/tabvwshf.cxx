@@ -42,6 +42,9 @@
 #include <helpids.h>
 #include <docsh.hxx>
 #include <document.hxx>
+#include <dbdata.hxx>
+#include <dbdocfun.hxx>
+#include <rangenam.hxx>
 #include <scresid.hxx>
 #include <globstr.hrc>
 #include <strings.hrc>
@@ -1215,6 +1218,51 @@ bool ScTabViewShell::DoAppendOrRenameTableDialog(sal_Int32 nResult, const VclPtr
     }
 
     return !bDone;
+}
+
+void ScTabViewShell::ExecuteRenameCalcTable()
+{
+    ScViewData& rViewData = GetViewData();
+    const ScAddress aPos = rViewData.GetCurPos();
+    const ScDBData* pDBData = rViewData.GetDocument().GetTableDBAtCursor(
+        aPos.Col(), aPos.Row(), aPos.Tab(), ScDBDataPortion::AREA);
+    if (!pDBData)
+        return;
+
+    const OUString aOldName = pDBData->GetName();
+
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    VclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
+        GetFrameWeld(), ScResId(SCSTR_RENAME_CALCTABLE), ScResId(SCSTR_NAME), aOldName,
+        u".uno:RenameCalcTable"_ustr, HID_SC_RENAME_NAME));
+
+    pDlg->StartExecuteAsync(
+        [this, pDlg, aOldName](sal_Int32 nResult)
+        {
+            if (nResult == RET_OK)
+            {
+                const OUString aNewName = pDlg->GetInputString();
+                if (!aNewName.isEmpty() && aNewName != aOldName)
+                {
+                    ScDocShell* pDocSh = GetViewData().GetDocShell();
+                    // Same name rule the Define Database Range dialog enforces.
+                    switch (ScRangeData::IsNameValid(aNewName, GetViewData().GetDocument()))
+                    {
+                        case ScRangeData::IsNameValidType::NAME_INVALID_CELL_REF:
+                            pDocSh->ErrorMessageAsync(STR_ERR_NAME_INVALID_CELL_REF);
+                            break;
+                        case ScRangeData::IsNameValidType::NAME_INVALID_BAD_STRING:
+                            pDocSh->ErrorMessageAsync(STR_ERR_NAME_INVALID);
+                            break;
+                        case ScRangeData::IsNameValidType::NAME_VALID:
+                            if (!ScDBDocFunc(*pDocSh).RenameDBRange(aOldName, aNewName))
+                                pDocSh->ErrorMessageAsync(STR_MSSG_TABLE_RENAME_DUPLICATE);
+                            break;
+                    }
+                }
+            }
+            pDlg->disposeOnce();
+        });
 }
 
 void ScTabViewShell::ExecuteSetTableBackgroundCol(SfxRequest& rReq)

@@ -1399,6 +1399,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"InsertCalcTable", { PayloadType::EnabledPayload, true } },
         { u"RemoveCalcTable", { PayloadType::EnabledPayload, true } },
         { u"ResizeCalcTable", { PayloadType::EnabledPayload, true } },
+        { u"RenameCalcTable", { PayloadType::EnabledPayload, true } },
         { u"InsertSparkline", { PayloadType::EnabledPayload, true } },
         { u"DeleteSparkline", { PayloadType::EnabledPayload, true } },
         { u"DeleteSparklineGroup", { PayloadType::EnabledPayload, true } },

@@ -54,6 +54,7 @@
 #define SCSTR_NAME                                  NC_("SCSTR_NAME", "Name")
 #define SCSTR_APDTABLE                              NC_("SCSTR_APDTABLE", "Append Sheet")
 #define SCSTR_RENAMETAB                             NC_("SCSTR_RENAMETAB", "Rename Sheet")
+#define SCSTR_RENAME_CALCTABLE                      NC_("SCSTR_RENAME_CALCTABLE", "Rename Table")
 #define SCSTR_SET_TAB_BG_COLOR                      NC_("SCSTR_SET_TAB_BG_COLOR", "Tab Color")
 #define SCSTR_NO_TAB_BG_COLOR                       NC_("SCSTR_NO_TAB_BG_COLOR", "Default")
 #define SCSTR_RENAMEOBJECT                          NC_("SCSTR_RENAMEOBJECT", "Name Object")

@@ -239,6 +239,7 @@ constexpr auto ScalcDialogList
         { u"modules/scalc/ui/definetablerangedialog.ui" },
         { u"modules/scalc/ui/printareasdialog.ui" },
         { u"modules/scalc/ui/resizetablerangedialog.ui" },
+        { u"modules/scalc/ui/inputstringdialog.ui" },
     });
 
 constexpr auto SwriterDialogList
@@ -749,6 +750,10 @@ std::vector<OUString> completeCalcDialogList(const o3tl::sorted_vector<OUString>
         // Skip this one for now, it only opens via .uno:ResizeCalcTable on an
         // existing table, which the coverage document doesn't set up.
         else if (entry == u"modules/scalc/ui/resizetablerangedialog.ui")
+            continue;
+        // Skip this shared string-input dialog: it opens via .uno:RenameCalcTable (and other
+        // name prompts), none of which the a11y coverage document triggers.
+        else if (entry == u"modules/scalc/ui/inputstringdialog.ui")
             continue;
         // Skip this one, I think it can only happen on loading
         // an archaic lotus 123 file
