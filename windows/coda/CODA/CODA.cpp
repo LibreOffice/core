@@ -2487,18 +2487,18 @@ static char** clipboardProviderGetMimeTypes(void* pUserData)
     {
         if (format == CF_UNICODETEXT)
         {
-                mimeTypes.push_back(_strdup("text/plain;charset=utf-8"));
-                doneMimeTypes.insert("text/plain;charset=utf-8");
+            mimeTypes.push_back(_strdup("text/plain;charset=utf-8"));
+            doneMimeTypes.insert("text/plain;charset=utf-8");
         }
         else
         {
             auto mimeType = MIME_type_for_clipboard_format(format);
 
             if (mimeType != "" && doneMimeTypes.count(mimeType) == 0)
-                {
-                    doneMimeTypes.insert(mimeType);
-                    mimeTypes.push_back(_strdup(mimeType.c_str()));
-                }
+            {
+                doneMimeTypes.insert(mimeType);
+                mimeTypes.push_back(_strdup(mimeType.c_str()));
+            }
         }
     }
 
