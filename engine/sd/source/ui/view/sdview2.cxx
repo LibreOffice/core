@@ -377,7 +377,16 @@ void View::DoPaste (::sd::Window* pWindow,bool /*bMergeMasterPagesOnly*/)
     }
     else
     {
-        Point aPos = pWindow->GetVisibleCenter();
+        // In a headless kit there is no window, so take the paste position
+        // from the center of the current page instead.
+        Point aPos;
+        if (pWindow)
+            aPos = pWindow->GetVisibleCenter();
+        else if (SdrPageView* pPageView = GetSdrPageView())
+        {
+            if (SdPage* pPage = static_cast<SdPage*>(pPageView->GetPage()))
+                aPos = ::tools::Rectangle(Point(), pPage->GetSize()).Center();
+        }
         DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>( mpDocSh->GetViewShell() );
 
         if (pDrViewSh != nullptr)
