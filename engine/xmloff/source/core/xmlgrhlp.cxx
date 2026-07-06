@@ -115,14 +115,14 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
         return;
 
     const Graphic& aGraphic(aGraphicObject.GetGraphic());
-    const GfxLink aGfxLink(aGraphic.GetGfxLink());
+    const std::shared_ptr<GfxLink>& pGfxLink(aGraphic.GetSharedGfxLink());
     bool bRet = false;
 
-    if (aGfxLink.GetDataSize() && aGfxLink.GetData())
+    if (pGfxLink && pGfxLink->GetDataSize() && pGfxLink->GetData())
     {
         if (rMimeType.isEmpty())
         {
-            pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+            pStream->WriteBytes(pGfxLink->GetData(), pGfxLink->GetDataSize());
             bRet = (pStream->GetError() == ERRCODE_NONE);
         }
         else
@@ -712,14 +712,15 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
 
     if (aGraphicObject.GetType() != GraphicType::NONE)
     {
-        const GfxLink aGfxLink(aGraphic.GetGfxLink());
+        // Get the compressed data, without parsing it.
+        const std::shared_ptr<GfxLink>& pGfxLink(aGraphic.GetSharedGfxLink());
         OUString aExtension;
         bool bUseGfxLink = true;
 
         SAL_INFO("svx", "implSaveGraphic: Type!=None");
-        if (aGfxLink.GetDataSize())
+        if (pGfxLink && pGfxLink->GetDataSize())
         {
-            switch (aGfxLink.GetType())
+            switch (pGfxLink->GetType())
             {
                 case GfxLinkType::EpsBuffer: aExtension = u".eps"_ustr; break;
                 case GfxLinkType::NativeGif: aExtension = u".gif"_ustr; break;
@@ -729,7 +730,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                 case GfxLinkType::NativePng: aExtension = u".png"_ustr; break;
                 case GfxLinkType::NativeTif: aExtension = u".tif"_ustr; break;
                 case GfxLinkType::NativeWmf:
-                    if (aGfxLink.IsEMF())
+                    if (pGfxLink->IsEMF())
                         aExtension = u".emf"_ustr;
                     else
                         aExtension = u".wmf"_ustr;
@@ -848,10 +849,10 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
             xProps->setPropertyValue(u"Compressed"_ustr, Any(bCompressed));
 
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(aStream.xStream));
-            if (bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData())
+            if (bUseGfxLink && pGfxLink && pGfxLink->GetDataSize() && pGfxLink->GetData())
             {
                 SAL_INFO("svx", "implSaveGraphic: link");
-                pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
+                pStream->WriteBytes(pGfxLink->GetData(), pGfxLink->GetDataSize());
                 rOutSavedMimeType = aMimeType;
                 bSuccess = (pStream->GetError() == ERRCODE_NONE);
             }
