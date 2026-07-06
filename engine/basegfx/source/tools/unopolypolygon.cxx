@@ -38,7 +38,7 @@ namespace basegfx::unotools
     {
     }
 
-    void SAL_CALL UnoPolyPolygon::addPolyPolygon(
+    void UnoPolyPolygon::addPolyPolygon(
         const geometry::RealPoint2D&                        position,
         const uno::Reference< rendering::XPolyPolygon2D >&  polyPolygon )
     {
@@ -117,13 +117,13 @@ namespace basegfx::unotools
         maPolyPoly.append( aSrcPoly );
     }
 
-    sal_Int32 SAL_CALL UnoPolyPolygon::getNumberOfPolygons()
+    sal_Int32 UnoPolyPolygon::getNumberOfPolygons()
     {
         std::unique_lock const guard( m_aMutex );
         return maPolyPoly.count();
     }
 
-    sal_Int32 SAL_CALL UnoPolyPolygon::getNumberOfPolygonPoints(
+    sal_Int32 UnoPolyPolygon::getNumberOfPolygonPoints(
         sal_Int32 polygon )
     {
         std::unique_lock const guard( m_aMutex );
@@ -132,13 +132,13 @@ namespace basegfx::unotools
         return maPolyPoly.getB2DPolygon(polygon).count();
     }
 
-    rendering::FillRule SAL_CALL UnoPolyPolygon::getFillRule()
+    rendering::FillRule UnoPolyPolygon::getFillRule()
     {
         std::unique_lock const guard( m_aMutex );
         return meFillRule;
     }
 
-    void SAL_CALL UnoPolyPolygon::setFillRule(
+    void UnoPolyPolygon::setFillRule(
         rendering::FillRule fillRule )
     {
         std::unique_lock const guard( m_aMutex );
@@ -147,7 +147,7 @@ namespace basegfx::unotools
         meFillRule = fillRule;
     }
 
-    bool SAL_CALL UnoPolyPolygon::isClosed(
+    bool UnoPolyPolygon::isClosed(
         sal_Int32 index )
     {
         std::unique_lock const guard( m_aMutex );
@@ -156,7 +156,7 @@ namespace basegfx::unotools
         return maPolyPoly.getB2DPolygon(index).isClosed();
     }
 
-    void SAL_CALL UnoPolyPolygon::setClosed(
+    void UnoPolyPolygon::setClosed(
         sal_Int32 index,
         bool closedState )
     {
@@ -181,7 +181,7 @@ namespace basegfx::unotools
         }
     }
 
-    cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > SAL_CALL UnoPolyPolygon::getPoints(
+    cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > > UnoPolyPolygon::getPoints(
         sal_Int32 nPolygonIndex,
         sal_Int32 nNumberOfPolygons,
         sal_Int32 nPointIndex,
@@ -194,7 +194,7 @@ namespace basegfx::unotools
                                   nNumberOfPoints ) );
     }
 
-    void SAL_CALL UnoPolyPolygon::setPoints(
+    void UnoPolyPolygon::setPoints(
         const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealPoint2D > >& points,
         sal_Int32 nPolygonIndex )
     {
@@ -216,7 +216,7 @@ namespace basegfx::unotools
         }
     }
 
-    geometry::RealPoint2D SAL_CALL UnoPolyPolygon::getPoint(
+    geometry::RealPoint2D UnoPolyPolygon::getPoint(
         sal_Int32 nPolygonIndex,
         sal_Int32 nPointIndex )
     {
@@ -231,7 +231,7 @@ namespace basegfx::unotools
         return unotools::point2DFromB2DPoint( rPoly.getB2DPoint( nPointIndex ) );
     }
 
-    void SAL_CALL UnoPolyPolygon::setPoint(
+    void UnoPolyPolygon::setPoint(
         const geometry::RealPoint2D& point,
         sal_Int32 nPolygonIndex,
         sal_Int32 nPointIndex )
@@ -250,7 +250,7 @@ namespace basegfx::unotools
         maPolyPoly.setB2DPolygon( nPolygonIndex, aPoly );
     }
 
-    cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > SAL_CALL UnoPolyPolygon::getBezierSegments(
+    cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > > UnoPolyPolygon::getBezierSegments(
         sal_Int32 nPolygonIndex,
         sal_Int32 nNumberOfPolygons,
         sal_Int32 nPointIndex,
@@ -263,7 +263,7 @@ namespace basegfx::unotools
                                   nNumberOfPoints ) );
     }
 
-    void SAL_CALL UnoPolyPolygon::setBezierSegments(
+    void UnoPolyPolygon::setBezierSegments(
         const cpo::uno::Sequence< cpo::uno::Sequence< geometry::RealBezierSegment2D > >&  points,
         sal_Int32                                                               nPolygonIndex )
     {
@@ -284,7 +284,7 @@ namespace basegfx::unotools
         }
     }
 
-    geometry::RealBezierSegment2D SAL_CALL UnoPolyPolygon::getBezierSegment( sal_Int32 nPolygonIndex,
+    geometry::RealBezierSegment2D UnoPolyPolygon::getBezierSegment( sal_Int32 nPolygonIndex,
                                                                              sal_Int32 nPointIndex )
     {
         std::unique_lock const guard( m_aMutex );
@@ -308,7 +308,7 @@ namespace basegfx::unotools
                                               aCtrl1.getY() );
     }
 
-    void SAL_CALL UnoPolyPolygon::setBezierSegment( const geometry::RealBezierSegment2D& segment,
+    void UnoPolyPolygon::setBezierSegment( const geometry::RealBezierSegment2D& segment,
                                                          sal_Int32                       nPolygonIndex,
                                                          sal_Int32                       nPointIndex )
     {
@@ -416,17 +416,17 @@ namespace basegfx::unotools
         return aSubsetPoly;
     }
 
-    OUString SAL_CALL UnoPolyPolygon::getImplementationName()
+    OUString UnoPolyPolygon::getImplementationName()
     {
         return u"gfx::internal::UnoPolyPolygon"_ustr;
     }
 
-    bool SAL_CALL UnoPolyPolygon::supportsService( const OUString& ServiceName )
+    bool UnoPolyPolygon::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL UnoPolyPolygon::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > UnoPolyPolygon::getSupportedServiceNames()
     {
         return { u"com.sun.star.rendering.PolyPolygon2D"_ustr };
     }
