@@ -1614,7 +1614,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemProp
 template<>
 void SwXStyle::SetPropertyValue<FN_UNO_STYLE_ALIASES>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, const cpo::uno::Any& rValue, SwStyleBase_Impl& o_rStyleBase)
 {
-    uno::Sequence<OUString> aAliases;
+    cpo::uno::Sequence<OUString> aAliases;
     if (rValue >>= aAliases)
     {
         o_rStyleBase.getNewBase()->GetItemSet();
@@ -2186,7 +2186,7 @@ cpo::uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_ALIASES>(const SfxItemProp
 {
     SfxStyleSheetBase* pBase(GetStyleSheetBase());
     if(!pBase)
-        return cpo::uno::Any(uno::Sequence<OUString>());
+        return cpo::uno::Any(cpo::uno::Sequence<OUString>());
     rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
     return cpo::uno::Any(comphelper::containerToSequence(xBase->GetStyleAliases()));
 }
