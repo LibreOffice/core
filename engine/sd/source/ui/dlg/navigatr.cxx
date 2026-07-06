@@ -447,48 +447,6 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
     return false;
 }
 
-IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl, weld::ComboBox&, void)
-{
-    OUString aStrLb = mxLbDocs->get_active_text();
-    tools::Long   nPos = mxLbDocs->get_active();
-    bool   bFound = false;
-    ::sd::DrawDocShell* pDocShell = nullptr;
-    NavDocInfo* pInfo = GetDocInfo();
-
-    // is it a dragged object?
-    if( mbDocImported && nPos == 0 )
-    {
-        // construct document in TLB
-        InsertFile( aStrLb );
-    }
-    else if (pInfo)
-    {
-        pDocShell = pInfo->mpDocShell;
-
-        bFound = true;
-    }
-
-    if( bFound )
-    {
-        SdDrawDocument* pDoc = pDocShell->GetDoc();
-        if( !mxTlbObjects->IsEqualToDoc( pDoc ) )
-        {
-            SdDrawDocument* pNonConstDoc = pDoc; // const as const can...
-            ::sd::DrawDocShell* pNCDocShell = pNonConstDoc->GetDocSh();
-            OUString aDocName = pNCDocShell->GetMedium()->GetName();
-            mxTlbObjects->clear();
-            mxTlbObjects->Fill( pDoc, false, aDocName ); // only normal pages
-        }
-    }
-
-    // check if link or url is possible
-    if( ( pInfo && !pInfo->HasName() ) || !mxTlbObjects->IsLinkableSelected() || ( meDragType != NAVIGATOR_DRAGTYPE_EMBEDDED ) )
-    {
-        meDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
-        SetDragImage();
-    }
-}
-
 /**
  * Set DrageType and set image accordingly to it.
  */
@@ -552,80 +510,6 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, const OUString&, rIdent, void )
             lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
         }
     }
-}
-
-bool SdNavigatorWin::InsertFile(const OUString& rFileName)
-{
-    INetURLObject   aURL( rFileName );
-
-    if( aURL.GetProtocol() == INetProtocol::NotValid )
-    {
-        OUString aURLStr;
-        osl::FileBase::getFileURLFromSystemPath( rFileName, aURLStr );
-        aURL = INetURLObject( aURLStr );
-    }
-
-    // get adjusted FileName
-    OUString aFileName( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-
-    if (aFileName.isEmpty())
-    {
-        // show actual document again
-        maDropFileName = aFileName;
-    }
-    else
-    {
-        // show dragged-in document
-        std::shared_ptr<const SfxFilter> pFilter;
-        ErrCode nErr = ERRCODE_NONE;
-
-        if (aFileName != maDropFileName)
-        {
-            SfxMedium aMed(aFileName, (StreamMode::READ | StreamMode::SHARE_DENYNONE));
-            SfxFilterMatcher aMatch( u"simpress"_ustr );
-            aMed.UseInteractionHandler( true );
-            nErr = aMatch.GuessFilter(aMed, pFilter);
-        }
-
-        if ((pFilter && !nErr) || aFileName == maDropFileName)
-        {
-            // The medium may be opened with READ/WRITE. Therefore, we first
-            // check if it contains a Storage.
-            std::unique_ptr<SfxMedium> xMedium(new SfxMedium(aFileName,
-                                                StreamMode::READ | StreamMode::NOCREATE));
-
-            if (xMedium->IsStorage())
-            {
-                // Now depending on mode:
-                // mxTlbObjects->set_selection_mode(SelectionMode::Multiple);
-                // handover of ownership of xMedium;
-                SdDrawDocument* pDropDoc = mxTlbObjects->GetBookmarkDoc(xMedium.release());
-
-                if (pDropDoc)
-                {
-                    mxTlbObjects->clear();
-                    maDropFileName = aFileName;
-
-                    if( !mxTlbObjects->IsEqualToDoc( pDropDoc ) )
-                    {
-                        // only normal pages
-                        mxTlbObjects->Fill(pDropDoc, false, maDropFileName);
-                        RefreshDocumentLB( &maDropFileName );
-                    }
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )

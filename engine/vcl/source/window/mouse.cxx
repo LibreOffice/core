@@ -565,19 +565,6 @@ Point Window::GetLastPointerPosPixel()
     return ScreenToOutputPixel( aPos );
 }
 
-void Window::ShowPointer( bool bVisible )
-{
-
-    if ( mpWindowImpl->mbNoPtrVisible != !bVisible )
-    {
-        mpWindowImpl->mbNoPtrVisible = !bVisible;
-
-        // possibly immediately move pointer
-        if ( !mpWindowImpl->mpFrameData->mbInMouseMove && ImplTestMousePointerSet() )
-            mpWindowImpl->mpFrame->SetPointer( ImplGetMousePointer() );
-    }
-}
-
 Window::PointerState Window::GetPointerState()
 {
     PointerState aState;

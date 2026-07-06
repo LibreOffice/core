@@ -126,25 +126,18 @@ namespace cppcanvas::internal
             virtual ~ImplRenderer() override;
 
             virtual bool                draw() const override;
-            virtual bool                drawSubset( sal_Int32   nStartIndex,
-                                                    sal_Int32   nEndIndex ) const override;
-            virtual ::basegfx::B2DRange getSubsetArea( sal_Int32    nStartIndex,
-                                                       sal_Int32    nEndIndex ) const override;
 
 
             // element of the Renderer's action vector. Need to be
             // public, since some functors need it, too.
             struct MtfAction
             {
-                MtfAction( std::shared_ptr<Action>  xAction,
-                           sal_Int32                nOrigIndex ) :
-                    mpAction(std::move( xAction )),
-                    mnOrigIndex( nOrigIndex )
+                MtfAction( std::shared_ptr<Action>  xAction ) :
+                    mpAction(std::move( xAction ))
                 {
                 }
 
                 std::shared_ptr<Action> mpAction;
-                sal_Int32       mnOrigIndex;
             };
 
             // prefetched and prepared canvas actions
@@ -196,11 +189,6 @@ namespace cppcanvas::internal
                                    std::span<const bool>          pKashidaArray,
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
-
-            bool getSubsetIndices( sal_Int32&                    io_rStartIndex,
-                                   sal_Int32&                    io_rEndIndex,
-                                   ActionVector::const_iterator& o_rRangeBegin,
-                                   ActionVector::const_iterator& o_rRangeEnd ) const;
 
             ActionVector maActions;
 

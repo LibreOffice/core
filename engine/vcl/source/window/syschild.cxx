@@ -135,23 +135,11 @@ const SystemEnvData* SystemChildWindow::GetSystemData() const
         return nullptr;
 }
 
-void SystemChildWindow::EnableEraseBackground( bool bEnable )
-{
-    if ( mpWindowImpl->mpSysObj )
-        mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
-}
-
 Size SystemChildWindow::GetOptimalSize() const
 {
     if (mpWindowImpl->mpSysObj)
         return mpWindowImpl->mpSysObj->GetOptimalSize();
     return vcl::Window::GetOptimalSize();
-}
-
-void SystemChildWindow::SetForwardKey( bool bEnable )
-{
-    if ( mpWindowImpl->mpSysObj )
-        mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
 }
 
 sal_IntPtr SystemChildWindow::GetParentWindowHandle() const

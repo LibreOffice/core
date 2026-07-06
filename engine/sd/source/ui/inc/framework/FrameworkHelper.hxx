@@ -246,9 +246,6 @@ public:
     static OUString ResourceIdToString (
         const rtl::Reference<ResourceId>& rxResourceId);
 
-    const rtl::Reference<ConfigurationController>&
-        GetConfigurationController() const { return mxConfigurationController;}
-
 private:
     typedef ::std::map<
         const ViewShellBase*,

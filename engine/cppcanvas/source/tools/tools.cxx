@@ -35,14 +35,6 @@ namespace cppcanvastools
             };
             return aRes;
         }
-
-        cppcanvas::IntSRGBA doubleSequenceToIntSRGBA( const cpo::uno::Sequence< double >& rColor  )
-        {
-            return cppcanvas::makeColor( static_cast<sal_uInt8>( 255*rColor[0] + .5 ),
-                              static_cast<sal_uInt8>( 255*rColor[1] + .5 ),
-                              static_cast<sal_uInt8>( 255*rColor[2] + .5 ),
-                              static_cast<sal_uInt8>( 255*rColor[3] + .5 ) );
-        }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

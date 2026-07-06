@@ -48,38 +48,9 @@ namespace cppcanvas::internal
             ::canvastools::setRenderStateTransform( maRenderState, rMatrix );
         }
 
-        void CanvasGraphicHelper::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
-        {
-            // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
-            maClipPolyPolygon = rClipPoly;
-            maRenderState.Clip.clear();
-        }
-
-        void CanvasGraphicHelper::setClip()
-        {
-            maClipPolyPolygon.reset();
-            maRenderState.Clip.clear();
-        }
-
         const rendering::RenderState& CanvasGraphicHelper::getRenderState() const
         {
-            if( maClipPolyPolygon && !maRenderState.Clip.is() )
-            {
-                uno::Reference< rendering::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
-                if( !xCanvas.is() )
-                    return maRenderState;
-
-                maRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                    xCanvas->getDevice(),
-                    *maClipPolyPolygon );
-            }
-
             return maRenderState;
-        }
-
-        void CanvasGraphicHelper::setCompositeOp( sal_Int8 aOp )
-        {
-            maRenderState.CompositeOperation = aOp;
         }
 
 }

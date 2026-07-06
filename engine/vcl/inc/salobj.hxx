@@ -32,10 +32,9 @@ class VCL_PLUGIN_PUBLIC SalObject
 {
     VclPtr<SystemChildWindow> m_pInst;
     SALOBJECTPROC       m_pCallback;
-    bool                m_bMouseTransparent:1,
-                        m_bEraseBackground:1;
+    bool                m_bMouseTransparent:1;
 public:
-            SalObject() : m_pInst( nullptr ), m_pCallback( nullptr ), m_bMouseTransparent( false ), m_bEraseBackground( true ) {}
+            SalObject() : m_pInst( nullptr ), m_pCallback( nullptr ), m_bMouseTransparent( false ) {}
             virtual ~SalObject();
 
     virtual void                    ResetClipRegion() = 0;
@@ -48,8 +47,6 @@ public:
     virtual void                    Enable( bool /* nEnable */ ) {} // overridden by WinSalObject
     virtual void                    GrabFocus() {}
     virtual void                    Reparent(SalFrame* /*pFrame*/) {}
-
-    virtual void                    SetForwardKey( bool /* bEnable */ ) {}
 
     virtual const SystemEnvData&    GetSystemData() const = 0;
 
@@ -64,11 +61,6 @@ public:
                                         { m_bMouseTransparent = bMouseTransparent; }
     bool                            IsMouseTransparent() const
                                         { return m_bMouseTransparent; }
-
-    void                            EnableEraseBackground( bool bEnable )
-                                        { m_bEraseBackground = bEnable; }
-    bool                            IsEraseBackgroundEnabled() const
-                                        { return m_bEraseBackground; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

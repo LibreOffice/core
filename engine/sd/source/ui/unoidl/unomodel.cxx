@@ -6410,17 +6410,6 @@ rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocumen
     return xRet;
 }
 
-void NotifyDocumentEvent(SdDrawDocument const & rDocument, const OUString& rEventName)
-{
-    rtl::Reference<SdXImpressDocument> xModel(SdXImpressDocument::GetModel(rDocument));
-
-    if (xModel.is())
-    {
-        uno::Reference<uno::XInterface> xSource(static_cast<uno::XWeak*>(xModel.get()));
-        NotifyDocumentEvent(rDocument, rEventName, xSource);
-    }
-}
-
 void NotifyDocumentEvent(SdDrawDocument const & rDocument, const OUString& rEventName, const uno::Reference<uno::XInterface>& xSource)
 {
     rtl::Reference<SdXImpressDocument> xModel(SdXImpressDocument::GetModel(rDocument));

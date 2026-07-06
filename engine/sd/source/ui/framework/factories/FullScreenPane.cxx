@@ -40,12 +40,10 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sd::framework {
 
 FullScreenPane::FullScreenPane (
-    const Reference<XComponentContext>& rxComponentContext,
     const rtl::Reference<ResourceId>& rxPaneId,
     const vcl::Window* pViewShellWindow,
     const DrawDocShell* pDrawDocShell)
-    : FrameWindowPane(rxPaneId,nullptr),
-      mxComponentContext(rxComponentContext)
+    : FrameWindowPane(rxPaneId,nullptr)
 {
     sal_Int32 nScreenNumber = 1;
     bool bFullScreen = true;

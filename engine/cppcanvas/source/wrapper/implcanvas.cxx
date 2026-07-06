@@ -53,40 +53,6 @@ namespace cppcanvas::internal
             ::canvastools::setViewStateTransform( maViewState, rMatrix );
         }
 
-        ::basegfx::B2DHomMatrix ImplCanvas::getTransformation() const
-        {
-            return ::canvastools::getViewStateTransform( maViewState );
-        }
-
-        void ImplCanvas::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
-        {
-            // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
-            maClipPolyPolygon = rClipPoly;
-            maViewState.Clip.clear();
-        }
-
-        void ImplCanvas::setClip()
-        {
-            maClipPolyPolygon.reset();
-            maViewState.Clip.clear();
-        }
-
-        ::basegfx::B2DPolyPolygon const* ImplCanvas::getClip() const
-        {
-            return !maClipPolyPolygon ? nullptr : &(*maClipPolyPolygon);
-        }
-
-        CanvasSharedPtr ImplCanvas::clone() const
-        {
-            return std::make_shared<ImplCanvas>( *this );
-        }
-
-        void ImplCanvas::clear() const
-        {
-            OSL_ENSURE( mxCanvas.is(), "ImplCanvas::clear(): Invalid XCanvas" );
-            mxCanvas->clear();
-        }
-
         uno::Reference< rendering::XCanvas > ImplCanvas::getUNOCanvas() const
         {
             OSL_ENSURE( mxCanvas.is(), "ImplCanvas::getUNOCanvas(): Invalid XCanvas" );
@@ -96,16 +62,6 @@ namespace cppcanvas::internal
 
         rendering::ViewState ImplCanvas::getViewState() const
         {
-            if( maClipPolyPolygon && !maViewState.Clip.is() )
-            {
-                if( !mxCanvas.is() )
-                    return maViewState;
-
-                maViewState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                    mxCanvas->getDevice(),
-                    *maClipPolyPolygon );
-            }
-
             return maViewState;
         }
 

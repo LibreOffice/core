@@ -25,8 +25,6 @@
 namespace cppcanvastools
     {
         cpo::uno::Sequence< double > intSRGBAToDoubleSequence( cppcanvas::IntSRGBA );
-
-        cppcanvas::IntSRGBA doubleSequenceToIntSRGBA( const cpo::uno::Sequence< double >& rColor  );
     }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

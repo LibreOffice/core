@@ -991,35 +991,6 @@ namespace canvastools
                                             ::basegfx::fround( rRange.getHeight() ) ) );
         }
 
-        cpo::uno::Sequence< cpo::uno::Any >& getDeviceInfo( const uno::Reference< rendering::XCanvas >& i_rxCanvas,
-                                                  cpo::uno::Sequence< cpo::uno::Any >&                  o_rxParams )
-        {
-            o_rxParams.realloc( 0 );
-
-            if( !i_rxCanvas.is() )
-                return o_rxParams;
-
-            try
-            {
-                uno::Reference< rendering::XGraphicDevice > xDevice( i_rxCanvas->getDevice(),
-                                                                     uno::UNO_SET_THROW );
-
-                uno::Reference< lang::XServiceInfo >  xServiceInfo( xDevice,
-                                                                    uno::UNO_QUERY_THROW );
-                uno::Reference< beans::XPropertySet > xPropSet( xDevice,
-                                                                uno::UNO_QUERY_THROW );
-
-                o_rxParams = { cpo::uno::Any(xServiceInfo->getImplementationName()),
-                               xPropSet->getPropertyValue( u"DeviceHandle"_ustr ) };
-            }
-            catch( const uno::Exception& )
-            {
-                // ignore, but return empty sequence
-            }
-
-            return o_rxParams;
-        }
-
         awt::Rectangle getAbsoluteWindowRect( const awt::Rectangle&                  rRect,
                                               const uno::Reference< awt::XWindow2 >& xWin  )
         {

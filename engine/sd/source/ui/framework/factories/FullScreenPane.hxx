@@ -51,7 +51,6 @@ public:
             title for the new top-level window.
     */
     FullScreenPane (
-        const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const rtl::Reference<sd::framework::ResourceId>& rxPaneId,
         const vcl::Window* pViewShellWindow,
         const DrawDocShell* pDrawDocShell);
@@ -62,7 +61,6 @@ public:
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
 
 private:
-    css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     VclPtr<WorkWindow> mpWorkWindow;
 
     static void ExtractArguments (

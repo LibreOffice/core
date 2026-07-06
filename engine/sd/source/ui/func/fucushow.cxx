@@ -63,11 +63,8 @@ void FuCustomShowDlg::DoExecute( SfxRequest& )
         // If the custom show is not set by default
         if (!rSettings.mbCustomShow)
         {
-            rSettings.mbStartCustomShow = true;
             rSettings.mbCustomShow = pDlg->IsCustomShow();
         }
-
-        mrViewShell.SetStartShowWithDialog(true);
     }
     if (nRet == RET_OK)
     {

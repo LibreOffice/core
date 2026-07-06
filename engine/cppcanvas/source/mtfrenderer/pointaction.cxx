@@ -60,10 +60,6 @@ namespace cppcanvas::internal
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const override;
-
                 virtual sal_Int32 getActionCount() const override;
 
             private:
@@ -120,31 +116,6 @@ namespace cppcanvas::internal
                     return false;
 
                 return render( rTransformation );
-            }
-
-            ::basegfx::B2DRange PointAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation ) const
-            {
-                rendering::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
-
-                return cppcanvastools::calcDevicePixelBounds( ::basegfx::B2DRange( maPoint.getX()-1,
-                                                                          maPoint.getY()-1,
-                                                                          maPoint.getX()+1,
-                                                                          maPoint.getY()+1 ),
-                                                     mpCanvas->getViewState(),
-                                                     aLocalState );
-            }
-
-            ::basegfx::B2DRange PointAction::getBounds( const ::basegfx::B2DHomMatrix&  rTransformation,
-                                                        const Subset&                   rSubset ) const
-            {
-                // point only contains a single action, empty bounds
-                // if subset requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return ::basegfx::B2DRange();
-
-                return getBounds( rTransformation );
             }
 
             sal_Int32 PointAction::getActionCount() const

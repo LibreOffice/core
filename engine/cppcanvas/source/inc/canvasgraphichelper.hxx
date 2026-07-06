@@ -40,9 +40,6 @@ namespace cppcanvas::internal
 
             // CanvasGraphic implementation
             virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
-            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) override;
-            virtual void                             setClip() override;
-            virtual void                             setCompositeOp( sal_Int8 aOp ) override;
 
         protected:
             // for our clients
@@ -53,7 +50,6 @@ namespace cppcanvas::internal
         private:
             mutable css::rendering::RenderState                                   maRenderState;
 
-            std::optional<basegfx::B2DPolyPolygon>                              maClipPolyPolygon;
             CanvasSharedPtr                                                       mpCanvas;
         };
 

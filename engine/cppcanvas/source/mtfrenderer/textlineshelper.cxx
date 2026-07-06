@@ -75,8 +75,6 @@ void TextLinesHelper::init(double nLineWidth, const cppcanvastools::TextLineInfo
         mxStrikeout = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(xDevice, aStrikeout);
     }
 
-    maOverallSize = basegfx::B2DSize(aRange.getRange().getX(), aRange.getRange().getY());
-
     initLineStyleWaveline(rLineInfo.mnOverlineStyle, mbOverlineWaveline, mbOverlineWavelineBold);
 
     initLineStyleWaveline(rLineInfo.mnUnderlineStyle, mbUnderlineWaveline, mbUnderlineWavelineBold);

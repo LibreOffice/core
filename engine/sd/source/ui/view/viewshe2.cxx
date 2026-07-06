@@ -700,12 +700,6 @@ bool ViewShell::RequestHelp(const HelpEvent& rHEvt)
     return bReturn;
 }
 
-void ViewShell::SetFrameView (FrameView* pNewFrameView)
-{
-    mpFrameView = pNewFrameView;
-    ReadFrameViewData (mpFrameView);
-}
-
 /*************************************************************************
 |*
 |* Read FrameViews data and set actual views data

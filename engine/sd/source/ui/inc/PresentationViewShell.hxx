@@ -40,26 +40,14 @@ public:
                           FrameView* pFrameView);
     virtual ~PresentationViewShell() override;
 
-    /** This method is used by a simple class that passes some
-        arguments from the creator of the new view shell to the new view
-        shell object by waiting for its asynchronous creation.
-        @param pFrameView
-            The frame view that is typically used by the creating object and
-            that shall be shared by the created view shell.
-    */
-    void FinishInitialization(FrameView* pFrameView);
-
 protected:
     virtual VclPtr<SvxRuler> CreateHRuler(::sd::Window* pWin) override;
     virtual VclPtr<SvxRuler> CreateVRuler(::sd::Window* pWin) override;
 
 private:
     ::tools::Rectangle maOldVisArea;
-    ImplSVEvent* mnAbortSlideShowEvent;
 
     virtual void Activate(bool bIsMDIActivate) override;
-
-    DECL_LINK(AbortSlideShowHdl, void*, void);
 };
 
 } // end of namespace sd

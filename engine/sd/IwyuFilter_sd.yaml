@@ -180,10 +180,6 @@ excludelist:
     sd/source/ui/sidebar/PanelFactory.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XUIElementFactory.hpp
-    sd/source/ui/slideshow/slideshowimpl.hxx:
-    # base class has to be a complete type
-    - com/sun/star/presentation/XShapeEventListener.hpp
-    - com/sun/star/presentation/XSlideShowController.hpp
     sd/source/ui/slidesorter/controller/SlsListener.hxx:
     # base class has to be a complete type
     - com/sun/star/document/XEventListener.hpp
@@ -358,9 +354,6 @@ excludelist:
     sd/source/ui/sidebar/MasterPageObserver.cxx:
     # Actually used
     - set
-    sd/source/ui/slideshow/PaneHider.cxx:
-    # Needed for template
-    - com/sun/star/frame/XController.hpp
     sd/source/ui/slidesorter/view/SlsInsertionIndicatorOverlay.cxx:
     # Needed for instantiation of function template specialization
     - Window.hxx

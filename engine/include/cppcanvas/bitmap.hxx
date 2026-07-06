@@ -43,21 +43,6 @@ namespace cppcanvas
     class Bitmap : public virtual CanvasGraphic
     {
     public:
-        /** Render to parent canvas, with global alpha.
-
-            This method renders the content to the parent canvas,
-            i.e. the canvas this object was constructed for.
-
-            @param nAlphaModulation
-            Global alpha value, with which each pixel alpha value gets
-            multiplied. For a normal, opaque bitmap, this will make
-            the bitmap appear transparent with the given alpha value
-            (value must be in the range [0,1]).
-         */
-        virtual void                        drawAlphaModulated( double nAlphaModulation ) const = 0;
-
-        virtual BitmapCanvasSharedPtr       getBitmapCanvas() const = 0;
-
         virtual css::uno::Reference< css::rendering::XBitmap >  getUNOBitmap() const = 0;
     };
 

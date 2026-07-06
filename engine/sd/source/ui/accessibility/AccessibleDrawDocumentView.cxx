@@ -325,28 +325,6 @@ void SAL_CALL
     {
         CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue, -1);
     }
-    else if (rEventObject.PropertyName == "UpdateAcc")
-    {
-        // The current page changed.  Update the children manager accordingly.
-        uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
-        if (xView.is() && mpChildrenManager!=nullptr)
-        {
-            // Inform the children manager to forget all children and give
-            // him the new ones.
-            mpChildrenManager->ClearAccessibleShapeList ();
-            // update the slide show page's accessible info
-            //mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
-            //    xView->getCurrentPage(), uno::UNO_QUERY));
-            rtl::Reference< sd::SlideShow > xSlideshow( sd::SlideShow::GetSlideShow( mpSdViewSh->GetViewShellBase() ) );
-            rtl::Reference<AccessiblePageShape> xPage(CreateDrawPageShape ());
-            if (xPage.is())
-            {
-                xPage->Init();
-                mpChildrenManager->AddAccessibleShape (xPage);
-                mpChildrenManager->Update (false);
-            }
-        }
-    }
     else
     {
         SAL_INFO("sd", "unhandled");

@@ -70,10 +70,8 @@ public:
     virtual OUString    GetHelpText(const OUString& aHelpURL);
 
     static void         EnableContextHelp();
-    static void         DisableContextHelp();
 
     static void         EnableExtHelp();
-    static void         DisableExtHelp();
     static bool         IsExtHelpEnabled();
     static bool         StartExtHelp();
     static bool         EndExtHelp();

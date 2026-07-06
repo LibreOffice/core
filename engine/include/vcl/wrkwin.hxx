@@ -27,28 +27,10 @@
 namespace cpo::uno { class Any; }
 struct SystemParentData;
 
-
-// Presentation Flags
-enum class PresentationFlags
-{
-    NONE           = 0x0000,
-    HideAllApps    = 0x0001,
-};
-
-namespace o3tl
-{
-    template<> struct typed_flags<PresentationFlags> : is_typed_flags<PresentationFlags, 0x0001> {};
-}
-
-
 class VCL_DLLPUBLIC WorkWindow : public SystemWindow
 {
 private:
-    PresentationFlags mnPresentationFlags;
-    bool              mbPresentationMode:1,
-                      mbPresentationVisible:1,
-                      mbPresentationFull:1,
-                      mbFullScreenMode:1;
+    bool              mbFullScreenMode:1;
 
     SAL_DLLPRIVATE void ImplInitWorkWindowData();
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, const cpo::uno::Any& aSystemWorkWindowToken );
@@ -78,15 +60,6 @@ public:
     */
     void            ShowFullScreenMode( bool bFullScreenMode );
     bool            IsFullScreenMode() const { return mbFullScreenMode; }
-
-    void            StartPresentationMode( bool   bPresentation,
-                                           PresentationFlags nFlags,
-                                           sal_Int32  nDisplayScreen );
-    /**
-     @overload void StartPresentationMode( PresentationFlags nFlags, sal_uInt32 nDisplayScreen)
-    */
-    void            StartPresentationMode( PresentationFlags nFlags );
-    bool            IsPresentationMode() const { return mbPresentationMode; }
 
     bool            IsMinimized() const;
 

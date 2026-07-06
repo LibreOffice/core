@@ -43,7 +43,6 @@
 #include <createpresentation.hxx>
 #include <unomodel.hxx>
 #include <slideshow.hxx>
-#include "slideshowimpl.hxx"
 #include <sdattr.hrc>
 #include <sdmod.hxx>
 #include <FactoryIds.hxx>
@@ -60,8 +59,8 @@
 #include <strings.hrc>
 #include <sdresid.hxx>
 #include <ResourceId.hxx>
+#include <drawdoc.hxx>
 
-using ::com::sun::star::presentation::XSlideShowController;
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::awt::XWindow;
 using namespace ::sd;
@@ -103,8 +102,6 @@ static std::span<const SfxItemPropertyMapEntry> ImplGetPresentationPropertyMap()
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
 , mpDoc( pDoc )
-, mpCurrentViewShellBase( nullptr )
-, mpFullScreenViewShellBase( nullptr )
 {
 }
 
@@ -139,20 +136,6 @@ rtl::Reference< SlideShow > SlideShow::GetSlideShow( SdDrawDocument const & rDoc
 rtl::Reference< SlideShow > SlideShow::GetSlideShow( ViewShellBase const & rBase )
 {
     return GetSlideShow( rBase.GetDocument() );
-}
-
-/// returns true if the interactive slideshow mode is activated
-bool SlideShow::IsInteractiveSlideshow(const ViewShellBase& rViewShellBase)
-{
-    rtl::Reference< SlideShow > xSlideShow(GetSlideShow(rViewShellBase));
-    if (!xSlideShow.is())
-        return false;
-    return xSlideShow->IsInteractiveSlideshow();
-}
-
-bool SlideShow::IsInteractiveSlideshow() const
-{
-    return mpDoc->getPresentationSettings().mbInteractive;
 }
 
 // XServiceInfo
@@ -518,67 +501,13 @@ void SAL_CALL SlideShow::removeVetoableChangeListener( const OUString& , const R
 {
 }
 
-WorkWindow *SlideShow::GetWorkWindow()
-{
-    if( !mpFullScreenViewShellBase )
-        return nullptr;
-
-    PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(mpFullScreenViewShellBase->GetMainViewShell().get());
-
-    if( !pShell)
-        return nullptr;
-
-    SfxViewFrame* pFrame = pShell->GetViewFrame();
-    if (!pFrame)
-        return nullptr;
-
-    return dynamic_cast<WorkWindow*>(pFrame->GetFrame().GetWindow().GetParent());
-}
-
-bool SlideShow::IsExitAfterPresenting() const
-{
-    SolarMutexGuard aGuard;
-    ThrowIfDisposed();
-    return mpDoc->IsExitAfterPresenting();
-}
-
-void SlideShow::SetExitAfterPresenting(bool bExit)
-{
-    SolarMutexGuard aGuard;
-    ThrowIfDisposed();
-    mpDoc->SetExitAfterPresenting(bExit);
-}
-
 // XComponent
 
 void SlideShow::disposing(std::unique_lock<std::mutex>&)
 {
     SolarMutexGuard aGuard;
 
-    mpCurrentViewShellBase = nullptr;
-    mpFullScreenViewShellBase = nullptr;
     mpDoc = nullptr;
-}
-
-/// convert configuration setting display concept to real screens
-sal_Int32 SlideShow::GetDisplay()
-{
-    sal_Int32 nDisplay = 0;
-
-    SdOptions* pOptions = SdModule::get()->GetSdOptions(DocumentType::Impress);
-    if( pOptions )
-        nDisplay = pOptions->GetDisplay();
-
-    if( nDisplay < 0 )
-        nDisplay = -1;
-    else if( nDisplay == 0)
-        nDisplay = static_cast<sal_Int32>(Application::GetDisplayExternalScreen());
-    else
-        nDisplay--;
-
-    SAL_INFO("sd", "Presenting on real screen " << nDisplay);
-
-    return nDisplay;
 }
 
 Reference< presentation::XPresentation2 > CreatePresentation( const SdDrawDocument& rDocument )

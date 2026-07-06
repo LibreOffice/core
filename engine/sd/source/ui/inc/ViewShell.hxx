@@ -150,8 +150,7 @@ public:
 
     SAL_RET_MAYBENULL SD_DLLPUBLIC SfxViewFrame* GetViewFrame() const;
 
-    /** The active window is usually the mpContentWindow.  When there is a
-        show running then the active window is a ShowWindow.
+    /** The active window is usually the mpContentWindow.
     */
     ::sd::Window* GetActiveWindow() const { return mpActiveWindow;}
     SD_DLLPUBLIC weld::Window* GetFrameWeld() const;
@@ -220,12 +219,6 @@ public:
     ZoomList* GetZoomList() { return mpZoomList.get();}
 
     FrameView* GetFrameView() { return mpFrameView; }
-    /** Setting a frame view triggers ReadFrameViewData() for the new
-        frame.
-        @param pFrameView
-            The new frame view that replaces the old one.
-    */
-    void SetFrameView (FrameView* pFrameView);
     virtual void  ReadFrameViewData(FrameView* pView);
     virtual void  WriteFrameViewData();
     void  WriteUserData();
@@ -261,9 +254,6 @@ public:
                             bool bScaleAll, Orientation eOrient, sal_uInt16 nPaperBin,
                             bool bBackgroundFullSize );
 
-    void    SetStartShowWithDialog( bool bIn ) { mbStartShowWithDialog = bIn; }
-    bool    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
-
     sal_uInt16 GetPrintedHandoutPageNum() const { return mnPrintedHandoutPageNum; }
     void SetPrintedHandoutPageNum (sal_uInt16 nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
 
@@ -298,9 +288,6 @@ public:
 
     virtual void SwitchViewFireFocus( const css::uno::Reference< css::accessibility::XAccessible >& xAcc );
     void SwitchActiveViewFireFocus( );
-    // Move these two methods from DrawViewShell to enable slide show view
-    void    NotifyAccUpdate();
-    void    fireSwitchCurrentPage(sal_Int32 pageIndex);
     void SetWinViewPos(const Point& rWinPos);
     Point const & GetWinViewPos() const;
     Point const & GetViewOrigin() const;
@@ -377,10 +364,6 @@ public:
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );
 
-    /** Show controls of the UI or hide them, depending on the given flag.
-        As a result the border is adapted.
-    */
-    virtual void ShowUIControls (bool bVisible);
     bool IsPageFlipMode() const;
     bool CanPanAcrossPages() const;
 
@@ -483,7 +466,6 @@ protected:
     Size        maViewSize;
     Size        maScrBarWH;
 
-    bool        mbStartShowWithDialog;    // presentation is started by dialog
     sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
     sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
 

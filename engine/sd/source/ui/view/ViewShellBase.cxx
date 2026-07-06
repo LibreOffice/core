@@ -132,9 +132,6 @@ public:
     */
     ::rtl::Reference<ViewTabBar> mpViewTabBar;
 
-    // contains the complete area of the current view relative to the frame window
-    ::tools::Rectangle maClientArea;
-
     // This is set to true when PrepareClose() is called.
     bool mbIsClosing;
 
@@ -870,19 +867,6 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     }
 }
 
-void ViewShellBase::ShowUIControls (bool bVisible)
-{
-    mpImpl->ShowViewTabBar(bVisible);
-
-    ViewShell* pMainViewShell = GetMainViewShell().get();
-    if (pMainViewShell != nullptr)
-        pMainViewShell->ShowUIControls (bVisible);
-
-    UpdateBorder();
-    if (bVisible)
-        Rearrange();
-}
-
 OUString ViewShellBase::GetInitialViewShellType() const
 {
     OUString sRequestedView (FrameworkHelper::msImpressViewURL);
@@ -958,11 +942,6 @@ std::shared_ptr<sdtools::EventMultiplexer> const & ViewShellBase::GetEventMultip
     OSL_ASSERT(mpImpl->mpEventMultiplexer != nullptr);
 
     return mpImpl->mpEventMultiplexer;
-}
-
-const ::tools::Rectangle& ViewShellBase::getClientRectangle() const
-{
-    return mpImpl->maClientArea;
 }
 
 std::shared_ptr<ToolBarManager> const & ViewShellBase::GetToolBarManager() const
@@ -1301,8 +1280,6 @@ void ViewShellBase::Implementation::ResizePixel (
         rSize.Width() - aBaseBorder.Left() - aBaseBorder.Right(),
         rSize.Height() - aBaseBorder.Top() - aBaseBorder.Bottom());
     mpViewWindow->SetPosSizePixel(aViewWindowPosition, aViewWindowSize);
-
-    maClientArea = ::tools::Rectangle(Point(0,0), aViewWindowSize);
 }
 
 void ViewShellBase::Implementation::SetPaneVisibility (

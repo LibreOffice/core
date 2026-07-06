@@ -50,18 +50,6 @@ namespace cppcanvas
          */
         virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
 
-        /** Set object clipping polygon
-         */
-        virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
-        /** Clear object clipping polygon
-         */
-        virtual void                             setClip() = 0;
-
-        /** Set object composite mode
-         * @see css::rendering::CompositeOperation
-         */
-        virtual void                             setCompositeOp( sal_Int8 aOp ) = 0;
-
         /** Render to parent canvas
 
             This method renders the content to the parent canvas,

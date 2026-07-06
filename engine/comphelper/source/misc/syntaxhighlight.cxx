@@ -610,9 +610,4 @@ void SyntaxHighlighter::getHighlightPortions(std::u16string_view rLine,
     m_tokenizer->getHighlightPortions( rLine, portions );
 }
 
-HighlighterLanguage SyntaxHighlighter::GetLanguage() const
-{
-    return m_tokenizer->aLanguage;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1758,12 +1758,6 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
     }
 }
 
-void DrawViewShell::ShowUIControls (bool bVisible)
-{
-    ViewShell::ShowUIControls (bVisible);
-    maTabControl->Show (bVisible);
-}
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

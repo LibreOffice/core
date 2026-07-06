@@ -54,7 +54,6 @@ namespace sd {
 FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL */)
 :   SdrView(*pDrawDoc, nullptr), // TTTT SdDrawDocument* -> should be reference
     mnRefCount(0),
-    mnPresViewShellId(SID_VIEWSHELL0),
     mbIsNavigatorShowingAllShapes(false)
 {
     EndListening(*pDrawDoc);
@@ -89,31 +88,10 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULL *
                 {
                     nSdViewShellCount++;
 
-                    OUString sViewURL;
                     rtl::Reference<sd::framework::AbstractView> xView (
                         framework::FrameworkHelper::Instance(*pBase)->GetView(
                             new sd::framework::ResourceId(
                                 framework::FrameworkHelper::msCenterPaneURL)));
-                    if (xView.is())
-                        sViewURL = xView->getResourceId()->getResourceURL();
-
-                    switch (framework::FrameworkHelper::GetViewId(sViewURL))
-                    {
-                        default:
-//                        case ViewShell::ST_IMPRESS:
-//                        case ViewShell::ST_NOTES:
-//                        case ViewShell::ST_HANDOUT:
-                            mnPresViewShellId = SID_VIEWSHELL0;
-                            break;
-
-                        case ViewShell::ST_SLIDE_SORTER:
-                            mnPresViewShellId = SID_VIEWSHELL1;
-                            break;
-
-                        case ViewShell::ST_OUTLINE:
-                            mnPresViewShellId = SID_VIEWSHELL2;
-                            break;
-                    }
                 }
 
                 pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, pDocShell);

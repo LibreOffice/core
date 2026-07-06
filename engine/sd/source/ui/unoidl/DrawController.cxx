@@ -419,13 +419,6 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) noexcept
     }
 }
 
-void DrawController::NotifyAccUpdate()
-{
-    sal_Int32 nHandle = PROPERTY_UPDATEACC;
-    Any aNewValue, aOldValue;
-    fire (&nHandle, &aNewValue, &aOldValue, 1, false);
-}
-
 void DrawController::fireChangeLayer( const css::uno::Reference< css::drawing::XLayer>& xNewLayer ) noexcept
 {
     if( xNewLayer != mxCurrentLayer )
@@ -614,11 +607,6 @@ void DrawController::FillPropertyTable (
             PROPERTY_DRAWVIEWMODE,
             ::cppu::UnoType< css::awt::Point>::get(),
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID );
-    // add new property to update current page's acc information
-    rProperties.emplace_back( "UpdateAcc",
-            PROPERTY_UPDATEACC,
-            ::cppu::UnoType<sal_Int16>::get(),
-            beans::PropertyAttribute::BOUND );
     rProperties.emplace_back( "PageChange",
             PROPERTY_PAGE_CHANGE,
             ::cppu::UnoType<sal_Int16>::get(),

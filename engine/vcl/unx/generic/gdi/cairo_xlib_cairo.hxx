@@ -58,36 +58,6 @@ namespace cairo {
     };
 
     typedef std::shared_ptr<X11Pixmap>       X11PixmapSharedPtr;
-
-    class X11Surface : public Surface
-    {
-        const X11SysData      maSysData;
-        X11PixmapSharedPtr    mpPixmap;
-        CairoSurfaceSharedPtr mpSurface;
-
-        X11Surface( const X11SysData& rSysData, X11PixmapSharedPtr aPixmap, CairoSurfaceSharedPtr  pSurface );
-
-    public:
-        /// takes over ownership of passed cairo_surface
-        explicit X11Surface( CairoSurfaceSharedPtr pSurface );
-        /// create surface on subarea of given drawable
-        X11Surface( const X11SysData& rSysData, int x, int y, int width, int height );
-        /// create surface for given bitmap data
-        X11Surface( const X11SysData& rSysData, const BitmapSystemData& rBmpData );
-
-        // Surface interface
-        virtual CairoSharedPtr getCairo() const override;
-        virtual CairoSurfaceSharedPtr getCairoSurface() const override { return mpSurface; }
-        virtual SurfaceSharedPtr getSimilar(int cairo_content_type, int width, int height) const override;
-
-        virtual VclPtr<VirtualDevice> createVirtualDevice() const override;
-
-        virtual bool Resize( int width, int height ) override;
-
-        virtual void flush() const override;
-
-        const X11PixmapSharedPtr& getPixmap() const { return mpPixmap; }
-    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

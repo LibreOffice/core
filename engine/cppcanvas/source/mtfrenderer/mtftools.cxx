@@ -625,19 +625,6 @@ namespace cppcanvastools
             return aTextLinesPolyPoly;
         }
 
-        ::basegfx::B2DRange calcDevicePixelBounds( const ::basegfx::B2DRange&       rBounds,
-                                                   const rendering::ViewState&      viewState,
-                                                   const rendering::RenderState&    renderState )
-        {
-            ::basegfx::B2DHomMatrix aTransform;
-            ::canvastools::mergeViewAndRenderTransform( aTransform,
-                                                          viewState,
-                                                          renderState );
-
-            return  ::canvastools::calcTransformedRectBounds(rBounds,
-                                                               aTransform );
-        }
-
         // create line actions for text such as underline and
         // strikeout
         ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const double&         rStartOffset,

@@ -233,8 +233,6 @@ public:
     vcl::Window*                 GetWindow() const
                             { return pWorkWin; }
     tools::Rectangle               GetFreeArea( bool bAutoHide ) const;
-    void                    SetDockingAllowed(bool bSet)
-                            { bDockingAllowed = bSet; }
     void                    SetInternalDockingAllowed(bool bSet)
                             { bInternalDockingAllowed = bSet; }
     bool                    IsDockingAllowed() const

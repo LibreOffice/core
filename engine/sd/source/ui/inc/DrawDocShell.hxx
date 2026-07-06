@@ -158,10 +158,6 @@ public:
     SfxStyleFamily          GetStyleFamily() const { return mnStyleFamily; }
     void                    SetStyleFamily( SfxStyleFamily nSF ) { mnStyleFamily = nSF; }
 
-    /** executes the SID_OPENDOC slot to let the framework open a document
-        with the given URL and this document as a referer */
-    void                    OpenBookmark( const OUString& rBookmarkURL );
-
     /** checks, if the given name is a valid new name for a slide
 
         <p>This method does not pop up any dialog (like CheckPageName).</p>

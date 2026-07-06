@@ -113,7 +113,6 @@ namespace sd
         bool mbAnimationAllowed;
         sal_Int32 mnPauseTimeout;
         bool mbShowPauseLogo;
-        bool mbStartCustomShow;
         bool mbInteractive;
 
         PresentationSettings();
@@ -379,7 +378,6 @@ private:
     bool                mbOnlineSpell;
     bool                mbSummationOfParagraphs;
     sal_uInt16          mnStartWithPresentation; ///< 1-based starting slide# when presenting via command line parameter --show
-    bool                mbExitAfterPresenting; ///< true if GetStartWithPresentation AND Presentation was shown fully
     LanguageType        meLanguage;
     LanguageType        meLanguageCJK;
     LanguageType        meLanguageCTL;
@@ -647,9 +645,6 @@ public:
 
     SAL_DLLPRIVATE sal_uInt16 GetStartWithPresentation() const { return mnStartWithPresentation; }
     SAL_DLLPRIVATE void SetStartWithPresentation(sal_uInt16 nStartingSlide);
-
-    SAL_DLLPRIVATE bool IsExitAfterPresenting() const { return mbExitAfterPresenting;}
-    SAL_DLLPRIVATE void SetExitAfterPresenting( bool bExitAfterPresenting );
 
     /// load xml-based impress layout definitions into document
     SAL_DLLPRIVATE void InitLayoutVector();

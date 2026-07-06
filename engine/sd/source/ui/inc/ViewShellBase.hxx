@@ -179,22 +179,11 @@ public:
     */
     void UpdateBorder ( bool bForce = false );
 
-    /** With this method the UI controls can be turned on or off.  It is
-        used by the FuSlideShow to hide the UI controls while showing a
-        non-full-screen or in-window presentation in the center pane.
-    */
-    void ShowUIControls (bool bVisible);
-
     /** Return an event multiplexer.  It is a single class that forwards
         events from various sources.  This method must not be called before
         LateInit() has terminated.
     */
     std::shared_ptr<sdtools::EventMultiplexer> const & GetEventMultiplexer() const;
-
-    /** returns the complete area of the current view relative to the frame
-        window
-    */
-    const ::tools::Rectangle& getClientRectangle() const;
 
     std::shared_ptr<ToolBarManager> const & GetToolBarManager() const;
     FormShellManager* GetFormShellManager() const;

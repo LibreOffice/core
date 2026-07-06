@@ -361,14 +361,7 @@ static LRESULT CALLBACK SalSysObjChildWndProcW(HWND hWnd, UINT nMsg, WPARAM wPar
 {
     switch( nMsg )
     {
-        // clear background for plugins
         case WM_ERASEBKGND:
-            if (WinSalObject* pSysObj = GetSalObjWindowPtr(GetParent(hWnd));
-                pSysObj && !pSysObj->IsEraseBackgroundEnabled())
-            {
-                // do not erase background
-                return 1;
-            }
             break;
 
         case WM_PAINT:

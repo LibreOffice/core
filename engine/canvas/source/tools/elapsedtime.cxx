@@ -41,17 +41,6 @@ ElapsedTime::ElapsedTime()
 {
 }
 
-ElapsedTime::ElapsedTime(
-    std::shared_ptr<ElapsedTime> pTimeBase )
-    : m_pTimeBase(std::move( pTimeBase )),
-      m_fLastQueriedTime( 0.0 ),
-      m_fStartTime( getCurrentTime() ),
-      m_fFrozenTime( 0.0 ),
-      m_bInPauseMode( false ),
-      m_bInHoldMode( false )
-{
-}
-
 void ElapsedTime::reset()
 {
     m_fLastQueriedTime = 0.0;
@@ -59,18 +48,6 @@ void ElapsedTime::reset()
     m_fFrozenTime = 0.0;
     m_bInPauseMode = false;
     m_bInHoldMode = false;
-}
-
-void ElapsedTime::adjustTimer( double fOffset )
-{
-    // to make getElapsedTime() become _larger_, have to reduce
-    // m_fStartTime.
-    m_fStartTime -= fOffset;
-
-    // also adjust frozen time, this method must _always_ affect the
-    // value returned by getElapsedTime()!
-    if (m_bInHoldMode || m_bInPauseMode)
-        m_fFrozenTime += fOffset;
 }
 
 double ElapsedTime::getCurrentTime() const
@@ -90,39 +67,6 @@ double ElapsedTime::getElapsedTimeImpl() const
         return m_fFrozenTime;
 
     return getCurrentTime() - m_fStartTime;
-}
-
-void ElapsedTime::pauseTimer()
-{
-    m_fFrozenTime = getElapsedTimeImpl();
-    m_bInPauseMode = true;
-}
-
-void ElapsedTime::continueTimer()
-{
-    m_bInPauseMode = false;
-
-    // stop pausing, time runs again. Note that
-    // getElapsedTimeImpl() honors hold mode, i.e. a
-    // continueTimer() in hold mode will preserve the latter
-    const double fPauseDuration( getElapsedTimeImpl() - m_fFrozenTime );
-
-    // adjust start time, such that subsequent getElapsedTime() calls
-    // will virtually start from m_fFrozenTime.
-    m_fStartTime += fPauseDuration;
-}
-
-void ElapsedTime::holdTimer()
-{
-    // when called during hold mode (e.g. more than once per time
-    // object), the original hold time will be maintained.
-    m_fFrozenTime = getElapsedTimeImpl();
-    m_bInHoldMode = true;
-}
-
-void ElapsedTime::releaseTimer()
-{
-    m_bInHoldMode = false;
 }
 
 } // namespace

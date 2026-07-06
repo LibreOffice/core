@@ -37,8 +37,6 @@ namespace cppcanvas
      */
     class BitmapCanvas : public virtual Canvas
     {
-    public:
-        virtual ::basegfx::B2ISize      getSize() const = 0;
     };
 
 }

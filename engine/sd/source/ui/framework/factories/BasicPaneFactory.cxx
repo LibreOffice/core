@@ -328,11 +328,8 @@ rtl::Reference<AbstractResource> BasicPaneFactory::CreateFrameWindowPane (
 rtl::Reference<AbstractResource> BasicPaneFactory::CreateFullScreenPane(
     const rtl::Reference<ResourceId>& rxPaneId)
 {
-    const Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
-
     rtl::Reference<AbstractResource> xPane (
         new FullScreenPane(
-            xContext,
             rxPaneId,
             mpViewShellBase->GetViewWindow(),
             mpViewShellBase->GetDocShell()));

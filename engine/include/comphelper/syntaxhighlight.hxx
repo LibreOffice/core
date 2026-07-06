@@ -73,8 +73,6 @@ public:
 
     void getHighlightPortions( std::u16string_view rLine,
                                std::vector<HighlightPortion>& pPortions ) const;
-
-    HighlighterLanguage GetLanguage() const;
 };
 
 #endif

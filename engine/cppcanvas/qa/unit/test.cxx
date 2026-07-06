@@ -171,30 +171,13 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
                              pOutputTextAction->GetKashidaArray());
     }
 
-    // Now, test drawSubset
-    {
-        ScopedVclPtrInstance<VirtualDevice> pDev;
-
-        aOutputMetaFile.Clear();
-        aOutputMetaFile.Record(pDev.get());
-
-        auto xCanvas = pDev->GetCanvas();
-        CPPUNIT_ASSERT(xCanvas.is());
-        auto pCanvas = cppcanvas::VCLFactory::createCanvas(xCanvas);
-
-        auto pRenderer = cppcanvas::VCLFactory::createRenderer(pCanvas, aInputMetaFile, {});
-        pRenderer->drawSubset(1, 3);
-
-        aOutputMetaFile.Stop();
-    }
-
     {
         auto pOutputAction = aOutputMetaFile.GetAction(aOutputMetaFile.GetActionSize() - 2);
 
         CPPUNIT_ASSERT_EQUAL(MetaActionType::TEXTARRAY, pOutputAction->GetType());
 
         MetaTextArrayAction* pOutputTextAction = static_cast<MetaTextArrayAction*>(pOutputAction);
-        boost::container::vector<bool> aSubsetKashidaArray({ false, true });
+        boost::container::vector<bool> aSubsetKashidaArray({ true, false, true, false });
 
         CPPUNIT_ASSERT_EQUAL(aSubsetKashidaArray, pOutputTextAction->GetKashidaArray());
     }

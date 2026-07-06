@@ -69,35 +69,6 @@ namespace cppcanvas::internal
             return true;
         }
 
-        void ImplBitmap::drawAlphaModulated( double nAlphaModulation ) const
-        {
-            CanvasSharedPtr pCanvas( getCanvas() );
-
-            OSL_ENSURE( pCanvas && pCanvas->getUNOCanvas().is(),
-                        "ImplBitmap::drawAlphaModulated(): invalid canvas" );
-
-            if( !pCanvas ||
-                !pCanvas->getUNOCanvas().is() )
-            {
-                return;
-            }
-
-            rendering::RenderState aLocalState( getRenderState() );
-            cpo::uno::Sequence<rendering::ARGBColor> aCol { { nAlphaModulation, 1.0, 1.0, 1.0 } };
-            aLocalState.DeviceColor =
-                pCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace()->convertFromARGB(aCol);
-
-            // TODO(P1): implement caching
-            pCanvas->getUNOCanvas()->drawBitmapModulated( mxBitmap,
-                                                          pCanvas->getViewState(),
-                                                          aLocalState );
-        }
-
-        BitmapCanvasSharedPtr ImplBitmap::getBitmapCanvas() const
-        {
-            return mpBitmapCanvas;
-        }
-
         uno::Reference< rendering::XBitmap > ImplBitmap::getUNOBitmap() const
         {
             return mxBitmap;

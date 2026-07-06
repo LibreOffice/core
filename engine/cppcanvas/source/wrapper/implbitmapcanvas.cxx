@@ -43,16 +43,6 @@ namespace cppcanvas::internal
         {
         }
 
-        ::basegfx::B2ISize ImplBitmapCanvas::getSize() const
-        {
-            OSL_ENSURE( mxBitmap.is(), "ImplBitmapCanvas::getSize(): Invalid canvas" );
-            return ::basegfx::unotools::b2ISizeFromIntegerSize2D( mxBitmap->getSize() );
-        }
-
-        CanvasSharedPtr ImplBitmapCanvas::clone() const
-        {
-            return std::make_shared<ImplBitmapCanvas>( *this );
-        }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -108,19 +108,6 @@ namespace anim
         return bVisible;
     }
 
-    inline bool getVisibilityProperty(
-        const css::uno::Reference< css::animations::XAnimate >& xAnimateNode, bool& bReturn)
-    {
-        if (xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility"))
-        {
-            cpo::uno::Any aAny(xAnimateNode->getTo());
-            bReturn = getVisibilityPropertyForAny(aAny);
-            return true;
-        }
-
-        return false;
-    }
-
     inline void convertTarget(OStringBuffer& aStringBuffer, const cpo::uno::Any& rTarget)
     {
         if (!rTarget.hasValue())

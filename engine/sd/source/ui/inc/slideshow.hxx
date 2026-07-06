@@ -64,7 +64,6 @@ class SlideshowImpl;
 class View;
 class ViewShell;
 class ViewShellBase;
-struct PresentationSettingsEx;
 class FrameView;
 
 enum AnimationMode
@@ -86,10 +85,6 @@ public:
     static rtl::Reference< SlideShow > GetSlideShow( SdDrawDocument const & rDocument );
     static rtl::Reference< SlideShow > GetSlideShow( ViewShellBase const & rBase );
 
-    /// returns true if the interactive slideshow mode is activated
-    static bool IsInteractiveSlideshow(const ViewShellBase& rViewShellBase);
-    bool IsInteractiveSlideshow() const;
-
     // uno api
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -108,20 +103,11 @@ public:
     virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
-    // legacy api
-
-    static sal_Int32 GetDisplay();
-
-    bool IsExitAfterPresenting() const;
-    void SetExitAfterPresenting(bool bExit);
-
 private:
     SlideShow( SdDrawDocument* pDoc );
 
     /// @throws css::uno::RuntimeException
     void ThrowIfDisposed() const;
-
-    WorkWindow *GetWorkWindow();
 
     SlideShow(const SlideShow&) = delete;
     SlideShow& operator=( const SlideShow& ) = delete;
@@ -129,11 +115,6 @@ private:
     SvxItemPropertySet  maPropSet;
 
     SdDrawDocument* mpDoc;
-
-    std::shared_ptr< PresentationSettingsEx > mxCurrentSettings;
-
-    ViewShellBase* mpCurrentViewShellBase;
-    ViewShellBase* mpFullScreenViewShellBase;
 };
 
 }

@@ -158,7 +158,6 @@ ViewShell::ViewShell( vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
     ,   mpFrameView(nullptr)
     ,   mpZoomList(new ZoomList( *this ))
     ,   mfLastZoomScale(0)
-    ,   mbStartShowWithDialog(false)
     ,   mnPrintedHandoutPageNum(1)
     ,   mnPrintedHandoutPageCount(0)
     ,   meShellType(ST_NONE)
@@ -1631,27 +1630,6 @@ void ViewShell::Paint (const ::tools::Rectangle&, ::sd::Window* )
 {
 }
 
-void ViewShell::ShowUIControls (bool bVisible)
-{
-    if (mbHasRulers)
-    {
-        if (mpHorizontalRuler)
-            mpHorizontalRuler->Show( bVisible );
-
-        if (mpVerticalRuler)
-            mpVerticalRuler->Show( bVisible );
-    }
-
-    if (mpVerticalScrollBar)
-        mpVerticalScrollBar->Show( bVisible );
-
-    if (mpHorizontalScrollBar)
-        mpHorizontalScrollBar->Show( bVisible );
-
-    if (mpContentWindow)
-        mpContentWindow->Show( bVisible );
-}
-
 bool ViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
 {
     mpParentWindow = pParentWindow;
@@ -1684,15 +1662,6 @@ void ViewShell::SwitchActiveViewFireFocus()
     {
         SwitchViewFireFocus(mpContentWindow->GetAccessible(false));
     }
-}
-// move these two methods from DrawViewShell.
-void ViewShell::fireSwitchCurrentPage(sal_Int32 pageIndex)
-{
-    GetViewShellBase().GetDrawController()->fireSwitchCurrentPage(pageIndex);
-}
-void ViewShell::NotifyAccUpdate( )
-{
-    GetViewShellBase().GetDrawController()->NotifyAccUpdate();
 }
 
 weld::Window* ViewShell::GetFrameWeld() const

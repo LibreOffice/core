@@ -270,18 +270,6 @@ void GtkSalObject::signalDestroy( GtkWidget* pObj, gpointer object )
     }
 }
 
-void GtkSalObjectBase::SetForwardKey( bool bEnable )
-{
-#if !GTK_CHECK_VERSION(4, 0, 0)
-    if( bEnable )
-        gtk_widget_add_events( GTK_WIDGET( m_pSocket ), GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK );
-    else
-        gtk_widget_set_events( GTK_WIDGET( m_pSocket ), ~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK) & gtk_widget_get_events( GTK_WIDGET( m_pSocket ) ) );
-#else
-    (void)bEnable;
-#endif
-}
-
 GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
     : GtkSalObjectBase(pParent)
     , m_pScrolledWindow(nullptr)

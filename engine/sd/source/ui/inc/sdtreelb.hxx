@@ -111,7 +111,6 @@ private:
     ::sd::DrawDocShellRef m_xBookmarkDocShRef; ///< for the loading of bookmarks
     Link<weld::TreeView&, void> m_aChangeHdl;
     Link<weld::TreeView&, bool> m_aRowActivatedHdl;
-    Link<const KeyEvent&, bool> m_aKeyPressHdl;
     Link<const MouseEvent&, bool> m_aMouseReleaseHdl;
     Link<const CommandEvent&, bool> m_aPopupMenuHdl;
 
@@ -219,11 +218,6 @@ public:
     void connect_row_activated(const Link<weld::TreeView&, bool>& rLink)
     {
         m_aRowActivatedHdl = rLink;
-    }
-
-    void connect_key_press(const Link<const KeyEvent&, bool>& rLink)
-    {
-        m_aKeyPressHdl = rLink;
     }
 
     void connect_mouse_release(const Link<const MouseEvent&, bool>& rLink)

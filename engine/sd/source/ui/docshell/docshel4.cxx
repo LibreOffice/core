@@ -1032,19 +1032,6 @@ OutputDevice* DrawDocShell::GetDocumentRefDev()
     return pReferenceDevice;
 }
 
-/** executes the SID_OPENDOC slot to let the framework open a document
-    with the given URL and this document as a referer */
-void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
-{
-    SfxStringItem   aStrItem( SID_FILE_NAME, rBookmarkURL );
-    SfxStringItem   aReferer( SID_REFERER, GetMedium()->GetName() );
-    SfxUInt16Item   aPresentation( SID_DOC_STARTPRESENTATION );
-    const SfxPoolItem* ppArgs[] = { &aStrItem, &aReferer, &aPresentation, nullptr };
-
-    if (SfxViewFrame* pFrame = mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current())
-        pFrame->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
-}
-
 std::shared_ptr<SfxDocumentInfoDialog> DrawDocShell::CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet &rSet)
 {
     std::shared_ptr<SfxDocumentInfoDialog> xDlg = std::make_shared<SfxDocumentInfoDialog>(pParent, rSet);

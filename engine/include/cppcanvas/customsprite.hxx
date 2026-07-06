@@ -31,8 +31,6 @@ namespace cppcanvas
     class CustomSprite : public virtual Sprite
     {
     public:
-
-        virtual CanvasSharedPtr getContentCanvas() const = 0;
     };
 
     typedef std::shared_ptr< ::cppcanvas::CustomSprite > CustomSpriteSharedPtr;

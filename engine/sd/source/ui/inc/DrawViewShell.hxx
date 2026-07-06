@@ -289,12 +289,6 @@ public:
 
     sal_uInt16      GetCurPagePos() const { return maTabControl->GetCurPagePos(); }
 
-    /** Show controls of the UI or hide them, depending on the given flag.
-        Do not call this method directly.  Call the method at ViewShellBase
-        instead.
-    */
-    virtual void    ShowUIControls (bool bVisible) override;
-
     void            ScannerEvent();
 
     bool            IsLayerModeActive() const { return mbIsLayerModeActive;}
@@ -385,8 +379,6 @@ public:
 
     const SdViewOptions& GetViewOptions() const;
     void SetViewOptions(const SdViewOptions& rOptions);
-    //move this method to ViewShell.
-    //void  NotifyAccUpdate();
 
     virtual void RememberCanvasPageVisArea(const ::tools::Rectangle &aRect) override;
 
@@ -511,8 +503,6 @@ private:
     std::unique_ptr<AnnotationManager> mpAnnotationManager;
     std::unique_ptr<ViewOverlayManager> mpViewOverlayManager;
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
-
-    css::uno::Reference<css::presentation::XSlideShow> mxSlideShow;
 
     ::tools::Rectangle  maCanvasPageVisArea;
 };

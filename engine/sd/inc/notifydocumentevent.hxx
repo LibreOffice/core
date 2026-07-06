@@ -25,8 +25,6 @@
 
 class SdDrawDocument;
 
-void NotifyDocumentEvent( SdDrawDocument const & rDocument, const OUString& rEventName );
-
 void NotifyDocumentEvent( SdDrawDocument const & rDocument, const OUString& rEventName, const css::uno::Reference< css::uno::XInterface >& xSource );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,14 +50,9 @@ $(eval $(call gb_Library_add_exception_objects,canvastools,\
 	canvas/source/tools/canvascustomspritehelper \
 	canvas/source/tools/canvastools \
 	canvas/source/tools/elapsedtime \
-	canvas/source/tools/page \
-	canvas/source/tools/pagemanager \
 	canvas/source/tools/parametricpolypolygon \
 	canvas/source/tools/propertysethelper \
 	canvas/source/tools/spriteredrawmanager \
-	canvas/source/tools/surface \
-	canvas/source/tools/surfaceproxy \
-	canvas/source/tools/surfaceproxymanager \
 	canvas/source/tools/verifyinput \
 ))
 

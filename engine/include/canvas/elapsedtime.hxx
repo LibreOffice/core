@@ -42,18 +42,6 @@ namespace canvastools
              */
             ElapsedTime();
 
-            /** Creates a new ElapsedTime object based on another
-                timer.
-
-                The moment of construction starts the time
-                measurement. That means, a subsequent getElapsedTime()
-                call will return the time difference between object
-                creation and getElapsedTime() call. All time values
-                are not taken from the system's time base, but from
-                the provided timer.
-             */
-            ElapsedTime( std::shared_ptr<ElapsedTime> xTimeBase );
-
             /** Reset the time
 
                 The instance of the reset() call starts the time
@@ -74,63 +62,6 @@ namespace canvastools
                 @return the elapsed time in seconds.
              */
             double getElapsedTime() const;
-
-            /** Pauses the running timer.
-
-                This method stops the time, as returned by this
-                object, until continueTimer() is called. During this
-                period, getElapsedTime() will always return the same
-                time value (i.e. the instant when pauseTimer() was
-                called).
-             */
-            void pauseTimer();
-
-            /** Continues the paused timer.
-
-                This method re-enables the time flow, that is, time
-                starts running again for clients calling
-                getElapsedTime(). The (subtle) difference to the
-                holdTimer/releaseTimer() methods below is, that there
-                is no perceived time 'jump' between the pauseTimer()
-                call and the continueTimer() call, i.e. the time
-                starts over with the same value it has stopped on
-                pauseTimer().
-             */
-            void continueTimer();
-
-            /** Adjusts the timer, hold and pause times.
-
-                This method modifies the time as returned by this
-                object by the specified amount. This affects the time
-                as returned by getElapsedTime(), regardless of the
-                mode (e.g. paused, or on hold).
-
-                @param fOffset
-                This value will be added to the current time, i.e. the
-                next call to getElapsedTime() (when performed
-                immediately) will be adjusted by fOffset.
-            */
-            void adjustTimer( double fOffset );
-
-            /** Holds the current time.
-
-                This call makes the timer hold the current time
-                (e.g. getElapsedTime() will return the time when
-                holdTimer() was called), while the underlying time is
-                running on. When releaseTimer() is called, the time
-                will 'jump' to the then-current, underlying time. This
-                is equivalent to pressing the "interim time" button on
-                a stop watch, which shows this stopped time, while the
-                clock keeps running internally.
-            */
-            void holdTimer();
-
-            /** Releases a held timer.
-
-                After this call, the timer again returns the running
-                time on getElapsedTime().
-             */
-            void releaseTimer();
 
         private:
             static double getSystemTime();

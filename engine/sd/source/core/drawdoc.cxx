@@ -127,7 +127,6 @@ PresentationSettings::PresentationSettings()
     mbAnimationAllowed( true ),
     mnPauseTimeout( 0 ),
     mbShowPauseLogo( false ),
-    mbStartCustomShow( false ),
     mbInteractive( true )
 {
 }
@@ -143,7 +142,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mbNewOrLoadCompleted(false)
 , mbOnlineSpell(false)
 , mnStartWithPresentation(0)
-, mbExitAfterPresenting( false )
 , meLanguage( LANGUAGE_SYSTEM )
 , meLanguageCJK( LANGUAGE_SYSTEM )
 , meLanguageCTL( LANGUAGE_SYSTEM )
@@ -1327,11 +1325,6 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
 void SdDrawDocument::SetStartWithPresentation(sal_uInt16 nStartingSlide)
 {
     mnStartWithPresentation = nStartingSlide;
-}
-
-void SdDrawDocument::SetExitAfterPresenting( bool bExitAfterPresenting )
-{
-    mbExitAfterPresenting = bExitAfterPresenting;
 }
 
 void SdDrawDocument::PageListChanged()

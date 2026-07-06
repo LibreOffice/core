@@ -149,10 +149,6 @@ public:
 
     ViewShell::ShellType GetViewShellTypeOnLoad() const { return meViewShellTypeOnLoad;}
 
-    void SetPresentationViewShellId(sal_uInt16 nId)
-                 { mnPresViewShellId = nId; }
-    sal_uInt16 GetPresentationViewShellId() const { return mnPresViewShellId; }
-
     void SetSlidesPerRow(sal_uInt16 nSlides) { mnSlidesPerRow = nSlides; }
     sal_uInt16 GetSlidesPerRow() const { return mnSlidesPerRow; }
 
@@ -190,7 +186,6 @@ private:
     bool                mbQuickEdit;        ///< QuickEdit on/off
     bool                mbDoubleClickTextEdit; ///< text mode after double click
     bool                mbClickChangeRotation; ///< single click switches between selection/rotation mode
-    sal_uInt16          mnPresViewShellId;  ///< ViewShell from which the presentation was started
     sal_uInt16          mnSlidesPerRow;     ///< slides per row on the slide-desk
     DrawModeFlags       mnDrawMode;         ///< draw mode for the normal window
     /** Remember whether the navigator shows all shapes (<TRUE/>) or only

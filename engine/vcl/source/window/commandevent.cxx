@@ -172,22 +172,6 @@ const CommandSelectionChangeData* CommandEvent::GetSelectionChangeData() const
         return nullptr;
 }
 
-const CommandGestureSwipeData* CommandEvent::GetGestureSwipeData() const
-{
-    if( mnCommand == CommandEventId::GestureSwipe )
-        return static_cast<const CommandGestureSwipeData*>(mpData);
-    else
-        return nullptr;
-}
-
-const CommandGestureLongPressData* CommandEvent::GetLongPressData() const
-{
-    if( mnCommand == CommandEventId::GestureLongPress )
-        return static_cast<const CommandGestureLongPressData*>(mpData);
-    else
-        return nullptr;
-}
-
 const CommandGesturePanData* CommandEvent::GetGesturePanData() const
 {
     if (mnCommand == CommandEventId::GesturePan)

@@ -13,7 +13,6 @@
 #include <QtFrame.hxx>
 #include <QtGraphics_Controls.hxx>
 #include <QtSvpGraphics.hxx>
-#include <QtSvpSurface.hxx>
 #include <QtTools.hxx>
 
 #include <QtWidgets/QWidget>

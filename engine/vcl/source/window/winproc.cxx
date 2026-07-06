@@ -1970,13 +1970,13 @@ void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long 
                         // #i42750# presentation wants to be informed about resize
                         // as early as possible
                         WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pWindow->ImplGetWindowImpl()->mpClientWindow.get());
-                        if( ! pWorkWindow || pWorkWindow->IsPresentationMode() )
+                        if( ! pWorkWindow )
                             bStartTimer = false;
                     }
                     else
                     {
                         WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pWindow);
-                        if( ! pWorkWindow || pWorkWindow->IsPresentationMode() )
+                        if( ! pWorkWindow )
                             bStartTimer = false;
                     }
                 }

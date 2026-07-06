@@ -61,10 +61,6 @@ namespace cppcanvas::internal
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const override;
-
                 virtual sal_Int32 getActionCount() const override;
 
             private:
@@ -73,7 +69,6 @@ namespace cppcanvas::internal
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
-                const ::basegfx::B2DRange                           maBounds;
                 const CanvasSharedPtr                               mpCanvas;
 
                 // stroke color is now implicit: the maState.DeviceColor member
@@ -89,7 +84,6 @@ namespace cppcanvas::internal
                                             bool                                bStroke ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( rPolyPoly.getB2DRange() ),
                 mpCanvas( rCanvas )
             {
                 cppcanvastools::initRenderState(maState,rState);
@@ -109,7 +103,6 @@ namespace cppcanvas::internal
                                             int                                 nTransparency ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( rPolyPoly.getB2DRange() ),
                 mpCanvas( rCanvas )
             {
                 cppcanvastools::initRenderState(maState,rState);
@@ -187,32 +180,6 @@ namespace cppcanvas::internal
                 return CachedPrimitiveBase::render( rTransformation );
             }
 
-            ::basegfx::B2DRange PolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation ) const
-            {
-                rendering::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
-
-                return cppcanvastools::calcDevicePixelBounds(
-                    maBounds,
-                    mpCanvas->getViewState(),
-                    aLocalState );
-            }
-
-            ::basegfx::B2DRange PolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                           const Subset&                    rSubset ) const
-            {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
-
-                // polygon only contains a single action, empty bounds
-                // if subset requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return ::basegfx::B2DRange();
-
-                return getBounds( rTransformation );
-            }
-
             sal_Int32 PolyPolyAction::getActionCount() const
             {
                 // TODO(F1): Split up poly-polygon into polygons, or even
@@ -232,10 +199,6 @@ namespace cppcanvas::internal
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const override;
-
                 virtual sal_Int32 getActionCount() const override;
 
             private:
@@ -244,7 +207,6 @@ namespace cppcanvas::internal
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
-                const ::basegfx::B2DRectangle                       maBounds;
                 const CanvasSharedPtr                               mpCanvas;
 
                 // stroke color is now implicit: the maState.DeviceColor member
@@ -258,7 +220,6 @@ namespace cppcanvas::internal
                                                             const rendering::Texture&        rTexture ) :
                 CachedPrimitiveBase( rCanvas, true ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( rPolyPoly.getB2DRange() ),
                 mpCanvas( rCanvas ),
                 maTexture( rTexture )
             {
@@ -298,32 +259,6 @@ namespace cppcanvas::internal
                 return CachedPrimitiveBase::render( rTransformation );
             }
 
-            ::basegfx::B2DRange TexturedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation ) const
-            {
-                rendering::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
-
-                return cppcanvastools::calcDevicePixelBounds(
-                    maBounds,
-                    mpCanvas->getViewState(),
-                    aLocalState );
-            }
-
-            ::basegfx::B2DRange TexturedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                                   const Subset&                    rSubset ) const
-            {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
-
-                // polygon only contains a single action, empty bounds
-                // if subset requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return ::basegfx::B2DRange();
-
-                return getBounds( rTransformation );
-            }
-
             sal_Int32 TexturedPolyPolyAction::getActionCount() const
             {
                 // TODO(F1): Split up poly-polygon into polygons, or even
@@ -343,10 +278,6 @@ namespace cppcanvas::internal
                 virtual bool renderSubset( const ::basegfx::B2DHomMatrix& rTransformation,
                                            const Subset&                  rSubset ) const override;
 
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const override;
-                virtual ::basegfx::B2DRange getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
-                                                       const Subset&                    rSubset ) const override;
-
                 virtual sal_Int32 getActionCount() const override;
 
             private:
@@ -355,7 +286,6 @@ namespace cppcanvas::internal
                                               const ::basegfx::B2DHomMatrix&                 rTransformation ) const override;
 
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
-                const ::basegfx::B2DRectangle                       maBounds;
                 const CanvasSharedPtr                               mpCanvas;
                 rendering::RenderState                              maState;
                 const rendering::StrokeAttributes                   maStrokeAttributes;
@@ -367,7 +297,6 @@ namespace cppcanvas::internal
                                                           rendering::StrokeAttributes           aStrokeAttributes ) :
                 CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( rCanvas->getUNOCanvas()->getDevice(), rPolyPoly) ),
-                maBounds( rPolyPoly.getB2DRange() ),
                 mpCanvas( rCanvas ),
                 maStrokeAttributes(std::move( aStrokeAttributes ))
             {
@@ -404,32 +333,6 @@ namespace cppcanvas::internal
                     return false;
 
                 return CachedPrimitiveBase::render( rTransformation );
-            }
-
-            ::basegfx::B2DRange StrokedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation ) const
-            {
-                rendering::RenderState aLocalState( maState );
-                ::canvastools::prependToRenderState(aLocalState, rTransformation);
-
-                return cppcanvastools::calcDevicePixelBounds(
-                    maBounds,
-                    mpCanvas->getViewState(),
-                    aLocalState );
-            }
-
-            ::basegfx::B2DRange StrokedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation,
-                                                                  const Subset&                 rSubset ) const
-            {
-                // TODO(F1): Split up poly-polygon into polygons, or even
-                // line segments, when subsets are requested.
-
-                // polygon only contains a single action, empty bounds
-                // if subset requests different range
-                if( rSubset.mnSubsetBegin != 0 ||
-                    rSubset.mnSubsetEnd != 1 )
-                    return ::basegfx::B2DRange();
-
-                return getBounds( rTransformation );
             }
 
             sal_Int32 StrokedPolyPolyAction::getActionCount() const

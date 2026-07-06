@@ -41,8 +41,6 @@ public:
     virtual void                    BeginSetClipRegion( sal_uInt32 nRects ) override;
     virtual void                    UnionClipRegion( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
 
-    virtual void                    SetForwardKey( bool bEnable ) override;
-
     virtual const SystemEnvData&    GetSystemData() const override;
 
     virtual Size                    GetOptimalSize() const override;

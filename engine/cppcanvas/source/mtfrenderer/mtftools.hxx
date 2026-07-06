@@ -168,12 +168,6 @@ namespace cppcanvastools
             sal_Int8    mnStrikeoutStyle;
         };
 
-        /** Transform given bounds to device coordinate system.
-         */
-        ::basegfx::B2DRange calcDevicePixelBounds( const ::basegfx::B2DRange&          rBounds,
-                                                   const css::rendering::ViewState&    viewState,
-                                                   const css::rendering::RenderState&  renderState );
-
         /** Generate text underline/strikeout info struct from OutDev
             state.
          */

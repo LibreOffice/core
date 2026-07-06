@@ -52,16 +52,6 @@ namespace cppcanvas
         return static_cast<sal_uInt8>( nCol&0x000000FFU );
     }
 
-    inline IntSRGBA makeColor( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nAlpha )
-    {
-        return (nRed << 24U)|(nGreen << 16U)|(nBlue << 8U)|nAlpha;
-    }
-
-    inline sal_Int32 makeColorARGB( sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
-    {
-        return (nAlpha << 24U)|(nRed << 16U)|(nGreen << 8U)|nBlue;
-    }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

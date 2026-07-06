@@ -401,8 +401,6 @@ void DrawViewShell::PrePaint()
 /**
  * The event is forwarded to the Viewshell and the current function by the
  * window pWin.
- *
- * Remark: pWin==NULL, if Paint() is called from ShowWindow!
  */
 void DrawViewShell::Paint(const ::tools::Rectangle& rRect, ::sd::Window* pWin)
 {

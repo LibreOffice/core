@@ -117,8 +117,6 @@ public:
     void                        RefreshDocumentLB( const OUString* pDocName = nullptr );
     void                        FirstFocus();
 
-    bool                        InsertFile(const OUString& rFileName);
-
     NavigatorDragType           GetNavigatorDragType();
     SD_DLLPUBLIC SdPageObjsTLV& GetObjects();
 
@@ -138,7 +136,6 @@ private:
     VclPtr<SfxNavigator> mxNavigatorDlg;
 
     bool                        mbDocImported;
-    OUString                    maDropFileName;
     NavigatorDragType           meDragType;
     std::vector<NavDocInfo>     maDocList;
     SfxBindings*                mpBindings;
@@ -156,7 +153,6 @@ private:
                                 DECL_DLLPRIVATE_LINK( SelectToolboxHdl, const OUString&, void );
                                 DECL_DLLPRIVATE_LINK( DropdownClickToolBoxHdl, const OUString&, void );
                                 DECL_DLLPRIVATE_LINK( ClickObjectHdl, weld::TreeView&, bool );
-                                DECL_DLLPRIVATE_LINK( SelectDocumentHdl, weld::ComboBox&, void );
                                 DECL_DLLPRIVATE_LINK( MenuSelectHdl, const OUString&, void );
                                 DECL_DLLPRIVATE_LINK( ShapeFilterCallback, const OUString&, void );
     DECL_DLLPRIVATE_STATIC_LINK(SdNavigatorWin, MouseReleaseHdl, const MouseEvent&, bool);

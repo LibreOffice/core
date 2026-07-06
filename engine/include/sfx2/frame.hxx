@@ -80,13 +80,11 @@ public:
     static SfxFrame*    Create( const css::uno::Reference< css::frame::XFrame >& xFrame );
     static css::uno::Reference< css::frame::XFrame >
                         CreateBlankFrame();
-    static SfxFrame*    CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId );
 
     vcl::Window&        GetWindow() const { return *m_pWindow;}
     void                CancelTransfers();
     bool                DoClose();
 
-    void                SetPresentationMode( bool bSet );
     SystemWindow*       GetSystemWindow() const;
 
     SAL_WARN_UNUSED_RESULT static SfxFrame* GetFirst();

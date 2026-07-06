@@ -375,8 +375,7 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
         m_bNavigationGrabsFocus = false;
         return true;
     }
-    bool bRet = m_aKeyPressHdl.Call(rKEvt);
-    return bRet;
+    return false;
 }
 
 IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)

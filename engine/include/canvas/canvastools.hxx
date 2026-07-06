@@ -74,25 +74,6 @@ class OutputDevice;
 
 namespace canvastools
 {
-        /** Compute the next highest power of 2 of a 32-bit value
-
-            Code devised by Sean Anderson, in good ole HAKMEM
-            tradition.
-
-            @return 1 << (lg(x - 1) + 1)
-        */
-        inline sal_uInt32 nextPow2( sal_uInt32 x )
-        {
-            --x;
-            x |= x >> 1;
-            x |= x >> 2;
-            x |= x >> 4;
-            x |= x >> 8;
-            x |= x >> 16;
-
-            return ++x;
-        }
-
         /**
          *
          * Count the number of 1-bits of a n-bit value
@@ -289,28 +270,6 @@ namespace canvastools
             clipped away.
          */
         CANVASTOOLS_DLLPUBLIC ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
-
-        /** Retrieve various internal properties of the actual canvas implementation.
-
-            This method retrieves a bunch of internal, implementation-
-            and platform-dependent values from the canvas
-            implementation. Among them are for example operating
-            system window handles. The actual layout and content of
-            the returned sequence is dependent on the component
-            implementation, undocumented and subject to change.
-
-            @param i_rxCanvas
-            Input parameter, the canvas representation for which the device information
-            is to be retrieved
-
-            @param o_rxParams
-            Output parameter, the sequence of Anys that hold the device parameters. Layout is as described above
-
-            @return A reference to the resulting sequence of parameters
-        */
-        CANVASTOOLS_DLLPUBLIC cpo::uno::Sequence< cpo::uno::Any >& getDeviceInfo(
-            const css::uno::Reference< css::rendering::XCanvas >& i_rxCanvas,
-            cpo::uno::Sequence< cpo::uno::Any >& o_rxParams );
 
         /** Return a color space for a default RGBA integer format
 

@@ -34,11 +34,6 @@
 void WorkWindow::ImplInitWorkWindowData()
 {
     mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow
-
-    mnPresentationFlags     = PresentationFlags::NONE;
-    mbPresentationMode      = false;
-    mbPresentationVisible   = false;
-    mbPresentationFull      = false;
     mbFullScreenMode        = false;
 }
 
@@ -149,52 +144,6 @@ void WorkWindow::ShowFullScreenMode( bool bFullScreenMode, sal_Int32 nDisplayScr
     ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplayScreen );
 }
 
-void WorkWindow::StartPresentationMode( PresentationFlags nFlags )
-{
-    return StartPresentationMode( false/*bPresentation*/, nFlags, GetScreenNumber());
-}
-
-void WorkWindow::StartPresentationMode( bool bPresentation, PresentationFlags nFlags, sal_Int32 nDisplayScreen )
-{
-    if ( !bPresentation == !mbPresentationMode )
-        return;
-
-    if ( bPresentation )
-    {
-        mbPresentationMode      = true;
-        mbPresentationVisible   = IsVisible();
-        mbPresentationFull      = mbFullScreenMode;
-        mnPresentationFlags     = nFlags;
-
-        ShowFullScreenMode( true, nDisplayScreen );
-        if ( !mbSysChild )
-        {
-            if ( mnPresentationFlags & PresentationFlags::HideAllApps )
-                mpWindowImpl->mpFrame->SetAlwaysOnTop( true );
-            ToTop();
-            mpWindowImpl->mpFrame->StartPresentation( true );
-        }
-
-        Show();
-    }
-    else
-    {
-        Show( mbPresentationVisible );
-        if ( !mbSysChild )
-        {
-            mpWindowImpl->mpFrame->StartPresentation( false );
-            if ( mnPresentationFlags & PresentationFlags::HideAllApps )
-                mpWindowImpl->mpFrame->SetAlwaysOnTop( false );
-        }
-        ShowFullScreenMode( mbPresentationFull, nDisplayScreen );
-
-        mbPresentationMode      = false;
-        mbPresentationVisible   = false;
-        mbPresentationFull      = false;
-        mnPresentationFlags     = PresentationFlags::NONE;
-    }
-}
-
 bool WorkWindow::IsMinimized() const
 {
     vcl::WindowData aData;
@@ -206,7 +155,7 @@ bool WorkWindow::IsMinimized() const
 
 void WorkWindow::SetPluginParent( SystemParentData* pParent )
 {
-    SAL_WARN_IF( mbPresentationMode || mbFullScreenMode, "vcl", "SetPluginParent in fullscreen or presentation mode !" );
+    SAL_WARN_IF( mbFullScreenMode, "vcl", "SetPluginParent in fullscreen or presentation mode !" );
 
     bool bWasDnd = Window::ImplStopDnd();
 

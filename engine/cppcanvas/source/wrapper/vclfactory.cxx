@@ -24,7 +24,6 @@
 #include <cppcanvas/vclfactory.hxx>
 
 #include "implbitmapcanvas.hxx"
-#include "implspritecanvas.hxx"
 #include "implbitmap.hxx"
 #include <implrenderer.hxx>
 
@@ -40,17 +39,6 @@ namespace cppcanvas
     BitmapCanvasSharedPtr VCLFactory::createBitmapCanvas( const uno::Reference< rendering::XBitmapCanvas >& xCanvas )
     {
         return std::make_shared<internal::ImplBitmapCanvas>( xCanvas );
-    }
-
-    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const vcl::Window& rVCLWindow )
-    {
-        return std::make_shared<internal::ImplSpriteCanvas>(
-                    rVCLWindow.GetOutDev()->GetSpriteCanvas() );
-    }
-
-    SpriteCanvasSharedPtr VCLFactory::createSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& xCanvas )
-    {
-        return std::make_shared<internal::ImplSpriteCanvas>( xCanvas );
     }
 
     BitmapSharedPtr VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,

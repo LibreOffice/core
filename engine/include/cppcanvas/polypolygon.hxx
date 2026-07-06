@@ -50,24 +50,8 @@ namespace cppcanvas
     {
     public:
 
-        /** Set polygon fill color
-         */
-        virtual void                        setRGBAFillColor( IntSRGBA ) = 0;
-        /** Set polygon line color
-         */
-        virtual void                        setRGBALineColor( IntSRGBA ) = 0;
-        /** Get polygon line color
-         */
-        virtual IntSRGBA                    getRGBALineColor() const = 0;
 
-        virtual void                        setStrokeWidth( const double& rStrokeWidth ) = 0;
-        virtual double                      getStrokeWidth() const = 0;
 
-        virtual css::uno::Reference<
-            css::rendering::XPolyPolygon2D > getUNOPolyPolygon() const = 0;
-
-        virtual void                        setIsFromPreviousSlideshow(const bool& rFlag) = 0;
-        virtual bool                        getIsFromPreviousSlideshow() const = 0;
 
     };
 

@@ -38,8 +38,6 @@ class TextLinesHelper
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxUnderline;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxStrikeout;
 
-    ::basegfx::B2DSize maOverallSize;
-
     bool mbIsOverlineColorSet;
     const cpo::uno::Sequence<double> maOverlineColor;
 
@@ -54,8 +52,6 @@ class TextLinesHelper
 
 public:
     TextLinesHelper(CanvasSharedPtr xCanvas, const OutDevState& rState);
-
-    ::basegfx::B2DSize const& getOverallSize() const { return maOverallSize; }
 
     /** Init textlines with specified linewidth and TextLineInfo.
      */

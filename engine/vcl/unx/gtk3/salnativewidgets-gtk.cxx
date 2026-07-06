@@ -26,7 +26,6 @@
 
 #include "custom-theme.hxx"
 #include <vcl/themecolors.hxx>
-#include "gtkcairo.hxx"
 
 GtkCssProvider*  GtkSalGraphics::mpCustomThemeProvider = nullptr;
 GtkStyleContext* GtkSalGraphics::mpWindowStyle = nullptr;

@@ -220,58 +220,6 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     return xFrame;
 }
 
-SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWindow, SfxInterfaceId nViewId )
-{
-    SfxFrame* pFrame = nullptr;
-    try
-    {
-        // create and initialize new top level frame for this window
-        const Reference < XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-        Reference < XDesktop2 > xDesktop = Desktop::create( xContext );
-        Reference < XFrame2 > xFrame = Frame::create( xContext );
-
-        Reference< awt::XWindow2 > xWin( VCLUnoHelper::GetInterface ( &rWindow ), uno::UNO_QUERY_THROW );
-        xFrame->initialize( xWin );
-        xDesktop->getFrames()->append( xFrame );
-
-        if ( xWin->isActive() )
-            xFrame->activate();
-
-        // create load arguments
-        comphelper::SequenceAsHashMap aArgs = TransformItems(SID_OPENDOC, rDoc.GetMedium()->GetItemSet());
-        aArgs[u"Model"_ustr] <<= rDoc.GetModel();
-        aArgs[u"Hidden"_ustr] <<= true;
-        if ( nViewId != SFX_INTERFACE_NONE )
-            aArgs[u"ViewId"_ustr] <<= static_cast<sal_uInt16>(nViewId);
-
-        // load the doc into that frame
-        Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
-        xLoader->loadComponentFromURL(
-            u"private:object"_ustr,
-            u"_self"_ustr,
-            0,
-            aArgs.getAsConstPropertyValueList()
-        );
-
-        for (   pFrame = SfxFrame::GetFirst();
-                pFrame;
-                pFrame = SfxFrame::GetNext( *pFrame )
-            )
-        {
-            if ( pFrame->GetFrameInterface() == xFrame )
-                break;
-        }
-
-        OSL_ENSURE( pFrame, "SfxFrame::Create: load succeeded, but no SfxFrame was created during this!" );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION("sfx.view");
-    }
-
-    return pFrame;
-}
-
 SfxFrame* SfxFrame::Create( const Reference < XFrame >& i_rFrame )
 {
     // create a new TopFrame to an external XFrame object ( wrap controller )
@@ -301,30 +249,6 @@ SfxFrame::SfxFrame( vcl::Window& i_rContainerWindow )
     // is not done at level of the container window, not at SFX level. Thus, the component window can
     // always be visible.
     m_pWindow->Show();
-}
-
-void SfxFrame::SetPresentationMode( bool bSet )
-{
-    if ( GetCurrentViewFrame() )
-        GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WindowBorderStyle::NOBORDER : WindowBorderStyle::NORMAL );
-
-    Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
-    Reference< css::frame::XLayoutManager > xLayoutManager;
-
-    if ( xPropSet.is() )
-    {
-        Any aValue = xPropSet->getPropertyValue(u"LayoutManager"_ustr);
-        aValue >>= xLayoutManager;
-    }
-
-    if ( xLayoutManager.is() )
-        xLayoutManager->setVisible( !bSet ); // we don't want to have ui in presentation mode
-
-    SetMenuBarOn_Impl( !bSet );
-    if ( GetWorkWindow_Impl() )
-        GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
-    if ( GetCurrentViewFrame() )
-        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( true );
 }
 
 SystemWindow* SfxFrame::GetSystemWindow() const

@@ -60,14 +60,9 @@ $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/mtfrenderer/transparencygroupaction \
 	cppcanvas/source/tools/canvasgraphichelper \
 	cppcanvas/source/tools/tools \
-	cppcanvas/source/wrapper/basegfxfactory \
 	cppcanvas/source/wrapper/implbitmap \
 	cppcanvas/source/wrapper/implbitmapcanvas \
 	cppcanvas/source/wrapper/implcanvas \
-	cppcanvas/source/wrapper/implcustomsprite \
-	cppcanvas/source/wrapper/implpolypolygon \
-	cppcanvas/source/wrapper/implsprite \
-	cppcanvas/source/wrapper/implspritecanvas \
 	cppcanvas/source/wrapper/vclfactory \
 ))
 

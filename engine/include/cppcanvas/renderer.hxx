@@ -40,59 +40,6 @@ namespace cppcanvas
     class Renderer : public virtual CanvasGraphic
     {
     public:
-        /** Render subset of metafile to given canvas
-
-            This method renders the given subset of the content to the
-            associated canvas.
-
-            @param nStartIndex
-            The index of the first action to be rendered (the indices
-            correspond roughly to the action indices of the
-            originating GDIMetaFile. Note, although, that certain
-            actions, e.g. text, accounts for more than one index: a
-            text produces as many addressable indices as it has
-            characters).
-
-            @param nEndIndex
-            The index of the first action _not_ painted anymore,
-            i.e. the action after the last action rendered (the
-            indices correspond roughly to the action indices of the
-            originating GDIMetaFile. Note, although, that certain
-            actions, e.g. text, accounts for more than one index: a
-            text produces as many addressable indices as it has
-            characters).
-
-            @return whether the rendering finished successfully.
-         */
-        virtual bool drawSubset( sal_Int32  nStartIndex,
-                                 sal_Int32  nEndIndex ) const = 0;
-
-        /** Query bounding box of metafile subset
-
-            This method queries the actual bounding box of the given
-            subset, when rendered on the associated canvas.
-
-            @param nStartIndex
-            The index of the first action to be rendered (the indices
-            correspond roughly to the action indices of the
-            originating GDIMetaFile. Note, although, that certain
-            actions, e.g. text, accounts for more than one index: a
-            text produces as many addressable indices as it has
-            characters).
-
-            @param nEndIndex
-            The index of the first action _not_ painted anymore,
-            i.e. the action after the last action rendered (the
-            indices correspond roughly to the action indices of the
-            originating GDIMetaFile. Note, although, that certain
-            actions, e.g. text, accounts for more than one index: a
-            text produces as many addressable indices as it has
-            characters).
-
-            @return the bounding box of the specified subset
-         */
-        virtual ::basegfx::B2DRange getSubsetArea( sal_Int32    nStartIndex,
-                                                   sal_Int32    nEndIndex ) const = 0;
 
         /** Parameters for the Renderer
          */

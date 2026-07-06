@@ -439,7 +439,6 @@ canvas/inc/rendering/icolorbuffer.hxx
 canvas/inc/rendering/irendermodule.hxx
 canvas/inc/rendering/isurface.hxx
 canvas/inc/rendering/isurfaceproxy.hxx
-canvas/inc/rendering/isurfaceproxymanager.hxx
 canvas/inc/spriteredrawmanager.hxx
 canvas/inc/vclwrapper.hxx
 canvas/inc/verifyinput.hxx
@@ -448,18 +447,9 @@ canvas/source/tools/cachedprimitivebase.cxx
 canvas/source/tools/canvascustomspritehelper.cxx
 canvas/source/tools/canvastools.cxx
 canvas/source/tools/elapsedtime.cxx
-canvas/source/tools/page.cxx
-canvas/source/tools/page.hxx
-canvas/source/tools/pagemanager.cxx
-canvas/source/tools/pagemanager.hxx
 canvas/source/tools/parametricpolypolygon.cxx
 canvas/source/tools/propertysethelper.cxx
 canvas/source/tools/spriteredrawmanager.cxx
-canvas/source/tools/surface.cxx
-canvas/source/tools/surface.hxx
-canvas/source/tools/surfaceproxy.cxx
-canvas/source/tools/surfaceproxy.hxx
-canvas/source/tools/surfaceproxymanager.cxx
 canvas/source/tools/surfacerect.hxx
 canvas/source/tools/verifyinput.cxx
 canvas/source/vcl/backbuffer.cxx
@@ -1795,7 +1785,6 @@ cppcanvas/source/mtfrenderer/transparencygroupaction.hxx
 cppcanvas/source/tools/canvasgraphichelper.cxx
 cppcanvas/source/tools/tools.cxx
 cppcanvas/source/uno/uno_mtfrenderer.cxx
-cppcanvas/source/wrapper/basegfxfactory.cxx
 cppcanvas/source/wrapper/implbitmap.cxx
 cppcanvas/source/wrapper/implbitmap.hxx
 cppcanvas/source/wrapper/implbitmapcanvas.cxx
@@ -1806,10 +1795,7 @@ cppcanvas/source/wrapper/implcustomsprite.cxx
 cppcanvas/source/wrapper/implcustomsprite.hxx
 cppcanvas/source/wrapper/implpolypolygon.cxx
 cppcanvas/source/wrapper/implpolypolygon.hxx
-cppcanvas/source/wrapper/implsprite.cxx
-cppcanvas/source/wrapper/implsprite.hxx
 cppcanvas/source/wrapper/implspritecanvas.cxx
-cppcanvas/source/wrapper/implspritecanvas.hxx
 cppcanvas/source/wrapper/vclfactory.cxx
 cppu/qa/any-external.cxx
 cppu/qa/cppumaker/test_cppumaker.cxx
@@ -4419,10 +4405,6 @@ include/connectivity/warningscontainer.hxx
 include/cpo/uno/Any.h
 include/cpo/uno/Any.h
 include/cpo/uno/Any.hxx
-include/cpo/uno/Any.hxx
-include/cpo/uno/Sequence.h
-include/cpo/uno/Sequence.hxx
-include/cppcanvas/basegfxfactory.hxx
 include/cppcanvas/bitmap.hxx
 include/cppcanvas/bitmapcanvas.hxx
 include/cppcanvas/canvas.hxx
@@ -4432,7 +4414,6 @@ include/cppcanvas/customsprite.hxx
 include/cppcanvas/polypolygon.hxx
 include/cppcanvas/renderer.hxx
 include/cppcanvas/sprite.hxx
-include/cppcanvas/spritecanvas.hxx
 include/cppcanvas/vclfactory.hxx
 include/cppu/Enterable.hxx
 include/cppu/EnvGuards.hxx
@@ -8854,11 +8835,7 @@ sd/source/ui/sidebar/RecentlyUsedMasterPages.cxx
 sd/source/ui/sidebar/RecentlyUsedMasterPages.hxx
 sd/source/ui/sidebar/SlideBackground.cxx
 sd/source/ui/sidebar/SlideBackground.hxx
-sd/source/ui/slideshow/showwin.cxx
-sd/source/ui/slideshow/showwindow.hxx
 sd/source/ui/slideshow/slideshow.cxx
-sd/source/ui/slideshow/slideshowimpl.cxx
-sd/source/ui/slideshow/slideshowimpl.hxx
 sd/source/ui/slidesorter/cache/SlsBitmapCache.cxx
 sd/source/ui/slidesorter/cache/SlsBitmapCompressor.cxx
 sd/source/ui/slidesorter/cache/SlsBitmapFactory.cxx

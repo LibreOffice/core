@@ -381,9 +381,7 @@ namespace cppcanvas::internal
 
             if( pPolyAction )
             {
-                maActions.emplace_back(
-                        pPolyAction,
-                        rParms.mrCurrActionIndex );
+                maActions.emplace_back( pPolyAction );
 
                 rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
             }
@@ -678,9 +676,7 @@ namespace cppcanvas::internal
 
                         if( pPolyAction )
                         {
-                            maActions.emplace_back(
-                                    pPolyAction,
-                                    rParms.mrCurrActionIndex );
+                            maActions.emplace_back( pPolyAction );
 
                             rParms.mrCurrActionIndex += pPolyAction->getActionCount()-1;
                         }
@@ -1003,15 +999,11 @@ namespace cppcanvas::internal
             if( !pTextAction )
                 return;
 
-            maActions.emplace_back(
-                    pTextAction,
-                    rParms.mrCurrActionIndex );
+            maActions.emplace_back( pTextAction );
 
             if ( pStrikeoutTextAction )
             {
-                maActions.emplace_back(
-                    pStrikeoutTextAction,
-                    rParms.mrCurrActionIndex );
+                maActions.emplace_back( pStrikeoutTextAction );
             }
 
             rParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
@@ -1735,9 +1727,7 @@ namespace cppcanvas::internal
 
                                     if( pPolyAction )
                                     {
-                                        maActions.emplace_back(
-                                                pPolyAction,
-                                                io_rCurrActionIndex );
+                                        maActions.emplace_back( pPolyAction );
 
                                         io_rCurrActionIndex += pPolyAction->getActionCount()-1;
                                     }
@@ -1789,9 +1779,7 @@ namespace cppcanvas::internal
 
                             if( pPointAction )
                             {
-                                maActions.emplace_back(
-                                        pPointAction,
-                                        io_rCurrActionIndex );
+                                maActions.emplace_back( pPointAction );
 
                                 io_rCurrActionIndex += pPointAction->getActionCount()-1;
                             }
@@ -1814,9 +1802,7 @@ namespace cppcanvas::internal
 
                             if( pPointAction )
                             {
-                                maActions.emplace_back(
-                                        pPointAction,
-                                        io_rCurrActionIndex );
+                                maActions.emplace_back( pPointAction );
 
                                 io_rCurrActionIndex += pPointAction->getActionCount()-1;
                             }
@@ -1852,9 +1838,7 @@ namespace cppcanvas::internal
 
                                 if( pLineAction )
                                 {
-                                    maActions.emplace_back(
-                                            pLineAction,
-                                            io_rCurrActionIndex );
+                                    maActions.emplace_back( pLineAction );
 
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
@@ -1882,9 +1866,7 @@ namespace cppcanvas::internal
 
                                 if( pLineAction )
                                 {
-                                    maActions.emplace_back(
-                                            pLineAction,
-                                            io_rCurrActionIndex );
+                                    maActions.emplace_back( pLineAction );
 
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
@@ -2035,9 +2017,7 @@ namespace cppcanvas::internal
 
                                 if( pLineAction )
                                 {
-                                    maActions.emplace_back(
-                                            pLineAction,
-                                            io_rCurrActionIndex );
+                                    maActions.emplace_back( pLineAction );
 
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
@@ -2060,9 +2040,7 @@ namespace cppcanvas::internal
 
                                 if( pLineAction )
                                 {
-                                    maActions.emplace_back(
-                                            pLineAction,
-                                            io_rCurrActionIndex );
+                                    maActions.emplace_back( pLineAction );
 
                                     io_rCurrActionIndex += pLineAction->getActionCount()-1;
                                 }
@@ -2105,9 +2083,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2128,9 +2104,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2160,9 +2134,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2183,9 +2155,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2208,9 +2178,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2240,9 +2208,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2269,9 +2235,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2300,9 +2264,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2337,9 +2299,7 @@ namespace cppcanvas::internal
 
                         if( pBmpAction )
                         {
-                            maActions.emplace_back(
-                                    pBmpAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pBmpAction );
 
                             io_rCurrActionIndex += pBmpAction->getActionCount()-1;
                         }
@@ -2374,9 +2334,7 @@ namespace cppcanvas::internal
 
                             if( pPolyAction )
                             {
-                                maActions.emplace_back(
-                                        pPolyAction,
-                                        io_rCurrActionIndex );
+                                maActions.emplace_back( pPolyAction );
 
                                 io_rCurrActionIndex += pPolyAction->getActionCount()-1;
                             }
@@ -2409,9 +2367,7 @@ namespace cppcanvas::internal
 
                         if( pFloatTransAction )
                         {
-                            maActions.emplace_back(
-                                    pFloatTransAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pFloatTransAction );
 
                             io_rCurrActionIndex += pFloatTransAction->getActionCount()-1;
                         }
@@ -2488,9 +2444,7 @@ namespace cppcanvas::internal
 
                         if( pPolyAction )
                         {
-                            maActions.emplace_back(
-                                    pPolyAction,
-                                    io_rCurrActionIndex );
+                            maActions.emplace_back( pPolyAction );
 
                             io_rCurrActionIndex += pPolyAction->getActionCount()-1;
                         }
@@ -2608,202 +2562,11 @@ namespace cppcanvas::internal
                     mbRet &= rAction.mpAction->render( maTransformation );
                 }
 
-                void operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction&  rAction,
-                                 const Action::Subset&                                  rSubset )
-                {
-                    // ANDing the result. We want to fail if at least
-                    // one action failed.
-                    mbRet &= rAction.mpAction->renderSubset( maTransformation,
-                                                             rSubset );
-                }
-
             private:
                 ::basegfx::B2DHomMatrix maTransformation;
                 bool                    mbRet;
             };
-
-            class AreaQuery
-            {
-            public:
-                explicit AreaQuery( ::basegfx::B2DHomMatrix aTransformation ) :
-                    maTransformation(std::move( aTransformation ))
-                {
-                }
-
-                static bool result()
-                {
-                    return true; // nothing can fail here
-                }
-
-                void operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rAction )
-                {
-                    maBounds.expand( rAction.mpAction->getBounds( maTransformation ) );
-                }
-
-                void operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction&  rAction,
-                                 const Action::Subset&                                  rSubset )
-                {
-                    maBounds.expand( rAction.mpAction->getBounds( maTransformation,
-                                                                  rSubset ) );
-                }
-
-                const ::basegfx::B2DRange& getBounds() const
-                {
-                    return maBounds;
-                }
-
-            private:
-                ::basegfx::B2DHomMatrix maTransformation;
-                ::basegfx::B2DRange     maBounds;
-            };
-
-            // Doing that via inline class. Compilers tend to not inline free
-            // functions.
-            struct UpperBoundActionIndexComparator
-            {
-                bool operator()( const ::cppcanvas::internal::ImplRenderer::MtfAction& rLHS,
-                                 const ::cppcanvas::internal::ImplRenderer::MtfAction& rRHS )
-                {
-                    const sal_Int32 nLHSCount( rLHS.mpAction ?
-                                               rLHS.mpAction->getActionCount() : 0 );
-                    const sal_Int32 nRHSCount( rRHS.mpAction ?
-                                               rRHS.mpAction->getActionCount() : 0 );
-
-                    // compare end of action range, to have an action selected
-                    // by lower_bound even if the requested index points in
-                    // the middle of the action's range
-                    return rLHS.mnOrigIndex + nLHSCount < rRHS.mnOrigIndex + nRHSCount;
-                }
-            };
-
-            /** Algorithm to apply given functor to a subset range
-
-                @tpl Functor
-
-                Functor to call for each element of the subset
-                range. Must provide the following method signatures:
-                bool result() (returning false if operation failed)
-
-             */
-            template< typename Functor > bool
-                forSubsetRange( Functor&                                            rFunctor,
-                                ImplRenderer::ActionVector::const_iterator          aRangeBegin,
-                                const ImplRenderer::ActionVector::const_iterator&   aRangeEnd,
-                                sal_Int32                                           nStartIndex,
-                                sal_Int32                                           nEndIndex,
-                                const ImplRenderer::ActionVector::const_iterator&   rEnd )
-            {
-                if( aRangeBegin == aRangeEnd )
-                {
-                    // only a single action. Setup subset, and call functor
-                    Action::Subset aSubset;
-                    aSubset.mnSubsetBegin = std::max( sal_Int32( 0 ),
-                                                        nStartIndex - aRangeBegin->mnOrigIndex );
-                    aSubset.mnSubsetEnd   = std::min( aRangeBegin->mpAction->getActionCount(),
-                                                        nEndIndex - aRangeBegin->mnOrigIndex );
-
-                    ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
-                                      "ImplRenderer::forSubsetRange(): Invalid indices" );
-
-                    rFunctor( *aRangeBegin, aSubset );
-                }
-                else
-                {
-                    // more than one action.
-
-                    // render partial first, full intermediate, and
-                    // partial last action
-                    Action::Subset aSubset;
-                    aSubset.mnSubsetBegin = std::max( sal_Int32( 0 ),
-                                                        nStartIndex - aRangeBegin->mnOrigIndex );
-                    aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
-
-                    ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
-                                      "ImplRenderer::forSubsetRange(): Invalid indices" );
-
-                    rFunctor( *aRangeBegin, aSubset );
-
-                    // first action rendered, skip to next
-                    ++aRangeBegin;
-
-                    // render full middle actions
-                    while( aRangeBegin != aRangeEnd )
-                        rFunctor( *aRangeBegin++ );
-
-                    if( aRangeEnd == rEnd ||
-                        aRangeEnd->mnOrigIndex > nEndIndex )
-                    {
-                        // aRangeEnd denotes end of action vector,
-
-                        // or
-
-                        // nEndIndex references something _after_
-                        // aRangeBegin, but _before_ aRangeEnd
-
-                        // either way: no partial action left
-                        return rFunctor.result();
-                    }
-
-                    aSubset.mnSubsetBegin = 0;
-                    aSubset.mnSubsetEnd   = nEndIndex - aRangeEnd->mnOrigIndex;
-
-                    ENSURE_OR_RETURN_FALSE(aSubset.mnSubsetEnd >= 0,
-                                      "ImplRenderer::forSubsetRange(): Invalid indices" );
-
-                    rFunctor( *aRangeEnd, aSubset );
-                }
-
-                return rFunctor.result();
-            }
         }
-
-        bool ImplRenderer::getSubsetIndices( sal_Int32&                     io_rStartIndex,
-                                             sal_Int32&                     io_rEndIndex,
-                                             ActionVector::const_iterator&  o_rRangeBegin,
-                                             ActionVector::const_iterator&  o_rRangeEnd ) const
-        {
-            ENSURE_OR_RETURN_FALSE( io_rStartIndex<=io_rEndIndex,
-                              "ImplRenderer::getSubsetIndices(): invalid action range" );
-
-            ENSURE_OR_RETURN_FALSE( !maActions.empty(),
-                              "ImplRenderer::getSubsetIndices(): no actions to render" );
-
-            const sal_Int32 nMinActionIndex( maActions.front().mnOrigIndex );
-            const sal_Int32 nMaxActionIndex( maActions.back().mnOrigIndex +
-                                             maActions.back().mpAction->getActionCount() );
-
-            // clip given range to permissible values (there might be
-            // ranges before and behind the valid indices)
-            io_rStartIndex = std::max( nMinActionIndex,
-                                         io_rStartIndex );
-            io_rEndIndex = std::min( nMaxActionIndex,
-                                       io_rEndIndex );
-
-            if( io_rStartIndex == io_rEndIndex ||
-                io_rStartIndex > io_rEndIndex )
-            {
-                // empty range, don't render anything. The second
-                // condition e.g. happens if the requested range lies
-                // fully before or behind the valid action indices.
-                return false;
-            }
-
-
-            const ActionVector::const_iterator aBegin( maActions.begin() );
-            const ActionVector::const_iterator aEnd( maActions.end() );
-
-
-            // find start and end action
-            // =========================
-            o_rRangeBegin = std::lower_bound( aBegin, aEnd,
-                                                MtfAction( std::shared_ptr<Action>(), io_rStartIndex ),
-                                                UpperBoundActionIndexComparator() );
-            o_rRangeEnd   = std::lower_bound( aBegin, aEnd,
-                                                MtfAction( std::shared_ptr<Action>(), io_rEndIndex ),
-                                                UpperBoundActionIndexComparator() );
-            return true;
-        }
-
 
         // Public methods
 
@@ -2938,87 +2701,6 @@ namespace cppcanvas::internal
 
         ImplRenderer::~ImplRenderer()
         {
-        }
-
-        bool ImplRenderer::drawSubset( sal_Int32    nStartIndex,
-                                       sal_Int32    nEndIndex ) const
-        {
-            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::drawSubset()" );
-
-            ActionVector::const_iterator aRangeBegin;
-            ActionVector::const_iterator aRangeEnd;
-
-            try
-            {
-                if( !getSubsetIndices( nStartIndex, nEndIndex,
-                                       aRangeBegin, aRangeEnd ) )
-                    return true; // nothing to render (but _that_ was successful)
-
-                // now, aRangeBegin references the action in which the
-                // subset rendering must start, and aRangeEnd references
-                // the action in which the subset rendering must end (it
-                // might also end right at the start of the referenced
-                // action, such that zero of that action needs to be
-                // rendered).
-
-
-                // render subset of actions
-                // ========================
-
-                ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform( getRenderState() );
-
-                ActionRenderer aRenderer( aMatrix );
-
-                return forSubsetRange( aRenderer,
-                                       aRangeBegin,
-                                       aRangeEnd,
-                                       nStartIndex,
-                                       nEndIndex,
-                                       maActions.end() );
-            }
-            catch( uno::Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION("cppcanvas.emf");
-                // convert error to return value
-                return false;
-            }
-        }
-
-        ::basegfx::B2DRange ImplRenderer::getSubsetArea( sal_Int32  nStartIndex,
-                                                         sal_Int32  nEndIndex ) const
-        {
-            SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::ImplRenderer::getSubsetArea()" );
-
-            ActionVector::const_iterator aRangeBegin;
-            ActionVector::const_iterator aRangeEnd;
-
-            if( !getSubsetIndices( nStartIndex, nEndIndex,
-                                   aRangeBegin, aRangeEnd ) )
-                return ::basegfx::B2DRange(); // nothing to render -> empty range
-
-            // now, aRangeBegin references the action in which the
-            // subset querying must start, and aRangeEnd references
-            // the action in which the subset querying must end (it
-            // might also end right at the start of the referenced
-            // action, such that zero of that action needs to be
-            // queried).
-
-
-            // query bounds for subset of actions
-            // ==================================
-
-            ::basegfx::B2DHomMatrix aMatrix = ::canvastools::getRenderStateTransform(
-                                                      getRenderState() );
-
-            AreaQuery aQuery( aMatrix );
-            forSubsetRange( aQuery,
-                            aRangeBegin,
-                            aRangeEnd,
-                            nStartIndex,
-                            nEndIndex,
-                            maActions.end() );
-
-            return aQuery.getBounds();
         }
 
         bool ImplRenderer::draw() const

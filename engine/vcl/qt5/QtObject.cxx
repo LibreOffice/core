@@ -31,7 +31,6 @@
 QtObject::QtObject(QtFrame* pParent, bool bShow)
     : m_pParent(pParent)
     , m_pQWidget(nullptr)
-    , m_bForwardKey(false)
 {
     if (!m_pParent)
         return;
@@ -114,8 +113,6 @@ void QtObject::Show(bool bVisible)
         m_pQWidget->setVisible(bVisible);
 }
 
-void QtObject::SetForwardKey(bool bEnable) { m_bForwardKey = bEnable; }
-
 void QtObject::Reparent(SalFrame* pFrame)
 {
     QtFrame* pNewParent = static_cast<QtFrame*>(pFrame);
@@ -146,31 +143,22 @@ void QtObjectWidget::focusOutEvent(QFocusEvent*)
     m_rParent.CallCallback(SalObjEvent::LoseFocus);
 }
 
-void QtObjectWidget::mousePressEvent(QMouseEvent* pEvent)
+void QtObjectWidget::mousePressEvent(QMouseEvent* )
 {
     SolarMutexGuard aGuard;
     m_rParent.CallCallback(SalObjEvent::ToTop);
-
-    if (m_rParent.forwardKey())
-        pEvent->ignore();
 }
 
 void QtObjectWidget::mouseReleaseEvent(QMouseEvent* pEvent)
 {
-    if (m_rParent.forwardKey())
-        pEvent->ignore();
 }
 
-void QtObjectWidget::keyReleaseEvent(QKeyEvent* pEvent)
+void QtObjectWidget::keyReleaseEvent(QKeyEvent* )
 {
-    if (m_rParent.forwardKey())
-        pEvent->ignore();
 }
 
-void QtObjectWidget::keyPressEvent(QKeyEvent* pEvent)
+void QtObjectWidget::keyPressEvent(QKeyEvent* )
 {
-    if (m_rParent.forwardKey())
-        pEvent->ignore();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -92,8 +92,6 @@ public:
     const CommandDialogData*            GetDialogData() const;
           CommandMediaData*             GetMediaData() const;
     const CommandSelectionChangeData*   GetSelectionChangeData() const;
-    const CommandGestureSwipeData*      GetGestureSwipeData() const;
-    const CommandGestureLongPressData*  GetLongPressData() const;
     const CommandGesturePanData*        GetGesturePanData() const;
     const CommandGestureZoomData*       GetGestureZoomData() const;
     const CommandGestureRotateData*     GetGestureRotateData() const;

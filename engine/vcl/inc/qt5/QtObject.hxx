@@ -43,7 +43,6 @@ class QtObject final : public QObject, public SalObject
     QWidget* m_pQWidget;
 
     QRegion m_pRegion;
-    bool m_bForwardKey;
 
 public:
     QtObject(QtFrame* pParent, bool bShow);
@@ -52,7 +51,6 @@ public:
     QtFrame* frame() const { return m_pParent; }
     inline QWidget* widget() const;
     QWindow* windowHandle() const;
-    bool forwardKey() const { return m_bForwardKey; }
 
     virtual void ResetClipRegion() override;
     virtual void BeginSetClipRegion(sal_uInt32 nRects) override;
@@ -63,8 +61,6 @@ public:
     virtual void SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth,
                             tools::Long nHeight) override;
     virtual void Show(bool bVisible) override;
-
-    virtual void SetForwardKey(bool bEnable) override;
 
     virtual const SystemEnvData& GetSystemData() const override { return m_aSystemData; }
 

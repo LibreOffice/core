@@ -21,7 +21,6 @@
 
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>
-#include <cppcanvas/spritecanvas.hxx>
 #include <cppcanvas/bitmap.hxx>
 #include <cppcanvas/renderer.hxx>
 
@@ -56,9 +55,6 @@ namespace cppcanvas
     public:
         static CanvasSharedPtr   createCanvas( const css::uno::Reference< css::rendering::XCanvas >& xCanvas );
         static BitmapCanvasSharedPtr   createBitmapCanvas( const css::uno::Reference< css::rendering::XBitmapCanvas >& xCanvas );
-
-        static SpriteCanvasSharedPtr   createSpriteCanvas( const vcl::Window& rVCLWindow );
-        static SpriteCanvasSharedPtr   createSpriteCanvas( const css::uno::Reference< css::rendering::XSpriteCanvas >& xCanvas );
 
         /** Create a bitmap from a VCL Bitmap
          */

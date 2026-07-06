@@ -58,7 +58,6 @@ void PresentationViewShell::InitInterface_Impl()
 
 PresentationViewShell::PresentationViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, FrameView* pFrameView)
     : DrawViewShell(rViewShellBase, pParentWindow, PageKind::Standard, pFrameView)
-    , mnAbortSlideShowEvent(nullptr)
 {
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         maOldVisArea = GetDocSh()->GetVisArea( ASPECT_CONTENT );
@@ -67,29 +66,8 @@ PresentationViewShell::PresentationViewShell( ViewShellBase& rViewShellBase, vcl
 
 PresentationViewShell::~PresentationViewShell()
 {
-    if (mnAbortSlideShowEvent)
-        Application::RemoveUserEvent(mnAbortSlideShowEvent);
-
     if( GetDocSh() && GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED && !maOldVisArea.IsEmpty() )
         GetDocSh()->SetVisArea( maOldVisArea );
-}
-
-void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
-{
-    DrawViewShell::Init(true);
-
-    // Use the frame view that comes form the view shell that initiated our
-    // creation.
-    if (pFrameView != nullptr)
-    {
-        GetFrameView()->Disconnect();
-        SetFrameView (pFrameView);
-        pFrameView->Connect();
-    }
-    SetRuler(false);
-    WriteFrameViewData();
-
-    GetActiveWindow()->GrabFocus();
 }
 
 VclPtr<SvxRuler> PresentationViewShell::CreateHRuler(::sd::Window*)
@@ -100,11 +78,6 @@ VclPtr<SvxRuler> PresentationViewShell::CreateHRuler(::sd::Window*)
 VclPtr<SvxRuler> PresentationViewShell::CreateVRuler(::sd::Window*)
 {
     return nullptr;
-}
-
-IMPL_LINK_NOARG(PresentationViewShell, AbortSlideShowHdl, void*, void)
-{
-    mnAbortSlideShowEvent = nullptr;
 }
 
 void PresentationViewShell::Activate( bool bIsMDIActivate )

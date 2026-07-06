@@ -50,15 +50,6 @@ namespace cppcanvas::internal
             ImplCanvas & operator =(ImplCanvas &&) = delete; // due to const mxCanvas
 
             virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
-            virtual ::basegfx::B2DHomMatrix          getTransformation() const override;
-
-            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) override;
-            virtual void                             setClip() override;
-            virtual ::basegfx::B2DPolyPolygon const* getClip() const override;
-
-            virtual CanvasSharedPtr                  clone() const override;
-
-            virtual void                             clear() const override;
 
             virtual css::uno::Reference<
                 css::rendering::XCanvas >            getUNOCanvas() const override;
@@ -67,7 +58,6 @@ namespace cppcanvas::internal
 
         private:
             mutable css::rendering::ViewState                    maViewState;
-            std::optional<basegfx::B2DPolyPolygon>             maClipPolyPolygon;
             const css::uno::Reference< css::rendering::XCanvas > mxCanvas;
         };
 

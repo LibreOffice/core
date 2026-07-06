@@ -42,14 +42,6 @@ namespace canvas
 
         virtual ~IColorBuffer() {}
 
-        /** Get a pointer to the raw memory bits of the pixel
-         */
-        virtual sal_uInt8* lock() const = 0;
-
-        /** unlock previous locked buffer
-        */
-        virtual void unlock() const = 0;
-
         /** Get width in pixel
          */
         virtual sal_uInt32 getWidth() const = 0;
@@ -58,16 +50,6 @@ namespace canvas
          */
         virtual sal_uInt32 getHeight() const = 0;
 
-        /** Offset, in bytes, between consecutive scan lines of the bitmap.
-            If the stride is positive, the bitmap is top-down.
-            If the stride is negative, the bitmap is bottom-up.
-            The returned value is only valid while the buffer is locked.
-         */
-        virtual sal_uInt32 getStride() const = 0;
-
-        /** Get format of the color buffer
-         */
-        virtual Format getFormat() const = 0;
     };
 }
 

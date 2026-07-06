@@ -73,19 +73,6 @@ namespace cppcanvas
         virtual ~Canvas() {}
 
         virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
-        virtual ::basegfx::B2DHomMatrix          getTransformation() const = 0;
-
-        virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
-        virtual void                             setClip() = 0;
-
-        /** Get current clip
-
-            @return NULL, if no clip is set, otherwise the current clip poly-polygon
-         */
-        virtual ::basegfx::B2DPolyPolygon const* getClip() const = 0;
-
-        virtual CanvasSharedPtr                  clone() const = 0;
-        virtual void                             clear() const = 0;
 
         // this should be considered private. if RTTI gets enabled
         // someday, remove that to a separate interface

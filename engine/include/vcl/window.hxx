@@ -1012,7 +1012,6 @@ public:
     SAL_DLLPRIVATE Point                GetLastPointerPosPixel();
     /// Similar to SetPointerPosPixel(), but sets the frame data's last mouse position instead.
     void                                SetLastMousePos(const Point& rPos);
-    void                                ShowPointer( bool bVisible );
     void                                EnterWait();
     void                                LeaveWait();
     bool                                IsWait() const;

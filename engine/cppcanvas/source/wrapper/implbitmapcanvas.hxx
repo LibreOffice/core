@@ -40,10 +40,6 @@ namespace cppcanvas::internal
             ImplBitmapCanvas & operator =(ImplBitmapCanvas const &) = delete; // due to const mxBitmapCanvas
             ImplBitmapCanvas & operator =(ImplBitmapCanvas &&) = delete; // due to const mxBitmapCanvas
 
-            virtual ::basegfx::B2ISize      getSize() const override;
-
-            virtual CanvasSharedPtr         clone() const override;
-
         private:
             const css::uno::Reference< css::rendering::XBitmapCanvas >    mxBitmapCanvas;
             const css::uno::Reference< css::rendering::XBitmap >          mxBitmap;
