@@ -85,9 +85,9 @@ public:
         mbDisposed = bDisposed;
     }
 
-    virtual void SAL_CALL queryClosing( const lang::EventObject& rSource, bool bGetsOwnership ) override;
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& rSource ) override;
-    virtual void SAL_CALL disposing( const lang::EventObject& rSource ) override;
+    virtual void queryClosing( const lang::EventObject& rSource, bool bGetsOwnership ) override;
+    virtual void notifyClosing( const lang::EventObject& rSource ) override;
+    virtual void disposing( const lang::EventObject& rSource ) override;
 
 private:
     StarBASIC&      mrDocBasic;
@@ -161,17 +161,17 @@ void DocBasicItem::stopListening()
     }
 }
 
-void SAL_CALL DocBasicItem::queryClosing( const lang::EventObject& /*rSource*/, bool /*bGetsOwnership*/ )
+void DocBasicItem::queryClosing( const lang::EventObject& /*rSource*/, bool /*bGetsOwnership*/ )
 {
 }
 
-void SAL_CALL DocBasicItem::notifyClosing( const lang::EventObject& /*rEvent*/ )
+void DocBasicItem::notifyClosing( const lang::EventObject& /*rEvent*/ )
 {
     stopListening();
     mbDocClosed = true;
 }
 
-void SAL_CALL DocBasicItem::disposing( const lang::EventObject& /*rEvent*/ )
+void DocBasicItem::disposing( const lang::EventObject& /*rEvent*/ )
 {
     stopListening();
 }

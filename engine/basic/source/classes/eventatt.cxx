@@ -139,11 +139,11 @@ public:
         : maBasicRef( pBasic ), m_xModel( xModel ) {}
 
     // Methods of XAllListener
-    virtual void SAL_CALL firing(const ScriptEvent& aScriptEvent) override;
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& aScriptEvent) override;
+    virtual void firing(const ScriptEvent& aScriptEvent) override;
+    virtual Any approveFiring(const ScriptEvent& aScriptEvent) override;
 
     // Methods of XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) override;
+    virtual void disposing(const EventObject& Source) override;
 };
 
 // Methods XAllListener

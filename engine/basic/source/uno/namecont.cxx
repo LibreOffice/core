@@ -404,13 +404,13 @@ BasicManager* SfxLibraryContainer::getBasicManager()
 }
 
 // Methods XStorageBasedLibraryContainer
-Reference< XStorage > SAL_CALL SfxLibraryContainer::getRootStorage()
+Reference< XStorage > SfxLibraryContainer::getRootStorage()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return mxStorage;
 }
 
-void SAL_CALL SfxLibraryContainer::setRootStorage( const Reference< XStorage >& _rxRootStorage )
+void SfxLibraryContainer::setRootStorage( const Reference< XStorage >& _rxRootStorage )
 {
     LibraryContainerMethodGuard aGuard( *this );
     if ( !_rxRootStorage.is() )
@@ -421,7 +421,7 @@ void SAL_CALL SfxLibraryContainer::setRootStorage( const Reference< XStorage >& 
     onNewRootStorage();
 }
 
-void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XStorage >& _rxRootStorage )
+void SfxLibraryContainer::storeLibrariesToStorage( const Reference< XStorage >& _rxRootStorage )
 {
     LibraryContainerMethodGuard aGuard( *this );
     if ( !_rxRootStorage.is() )
@@ -478,38 +478,38 @@ bool SfxLibraryContainer::isModified()
     return false;
 }
 
-void SAL_CALL SfxLibraryContainer::setModified( bool _bModified )
+void SfxLibraryContainer::setModified( bool _bModified )
 {
     LibraryContainerMethodGuard aGuard( *this );
     maModifiable.setModified(_bModified, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
-void SAL_CALL SfxLibraryContainer::addModifyListener( const Reference< XModifyListener >& _rxListener )
+void SfxLibraryContainer::addModifyListener( const Reference< XModifyListener >& _rxListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
     maModifiable.addModifyListener(_rxListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
-void SAL_CALL SfxLibraryContainer::removeModifyListener( const Reference< XModifyListener >& _rxListener )
+void SfxLibraryContainer::removeModifyListener( const Reference< XModifyListener >& _rxListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
     maModifiable.removeModifyListener(_rxListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 // Methods XPersistentLibraryContainer
-Any SAL_CALL SfxLibraryContainer::getRootLocation()
+Any SfxLibraryContainer::getRootLocation()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return Any( getRootStorage() );
 }
 
-OUString SAL_CALL SfxLibraryContainer::getContainerLocationName()
+OUString SfxLibraryContainer::getContainerLocationName()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return maLibrariesDir;
 }
 
-void SAL_CALL SfxLibraryContainer::storeLibraries(  )
+void SfxLibraryContainer::storeLibraries(  )
 {
     LibraryContainerMethodGuard aGuard( *this );
     try
@@ -2081,7 +2081,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
 
 // Methods XElementAccess
-Type SAL_CALL SfxLibraryContainer::getElementType()
+Type SfxLibraryContainer::getElementType()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return maNameContainer.getElementType();
@@ -2113,7 +2113,7 @@ bool SfxLibraryContainer::hasByName( const OUString& aName )
 }
 
 // Methods XLibraryContainer
-Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const OUString& Name )
+Reference< XNameContainer > SfxLibraryContainer::createLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     return createLibrary_Impl(Name, o3tl::temporary(std::unique_lock(m_aMutex)));
@@ -2137,7 +2137,7 @@ SfxLibraryContainer::createLibrary_Impl(const OUString& Name, std::unique_lock<s
     return pNewLib;
 }
 
-Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
+Reference< XNameAccess > SfxLibraryContainer::createLibraryLink
     ( const OUString& Name, const OUString& StorageURL, bool ReadOnly )
 {
     LibraryContainerMethodGuard aGuard( *this );
@@ -2188,7 +2188,7 @@ SfxLibraryContainer::createLibraryLink_Impl(const OUString& Name, const OUString
     return pNewLib;
 }
 
-void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
+void SfxLibraryContainer::removeLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     std::unique_lock guard(m_aMutex);
@@ -2251,7 +2251,7 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
     }
 }
 
-bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
+bool SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2260,7 +2260,7 @@ bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
 }
 
 
-void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
+void SfxLibraryContainer::loadLibrary( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     return loadLibrary_Impl(Name, o3tl::temporary(std::unique_lock(m_aMutex)));
@@ -2407,7 +2407,7 @@ void SfxLibraryContainer::loadLibrary_Impl(const OUString& Name,
 }
 
 // Methods XLibraryContainer2
-bool SAL_CALL SfxLibraryContainer::isLibraryLink( const OUString& Name )
+bool SfxLibraryContainer::isLibraryLink( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2415,7 +2415,7 @@ bool SAL_CALL SfxLibraryContainer::isLibraryLink( const OUString& Name )
     return bRet;
 }
 
-OUString SAL_CALL SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
+OUString SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2428,7 +2428,7 @@ OUString SAL_CALL SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
     return aRetStr;
 }
 
-bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
+bool SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2436,7 +2436,7 @@ bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
     return bRet;
 }
 
-void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, bool bReadOnly )
+void SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, bool bReadOnly )
 {
     LibraryContainerMethodGuard aGuard( *this );
     std::unique_lock guard(m_aMutex);
@@ -2460,7 +2460,7 @@ void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, boo
     }
 }
 
-void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OUString& NewName )
+void SfxLibraryContainer::renameLibrary( const OUString& Name, const OUString& NewName )
 {
     LibraryContainerMethodGuard aGuard( *this );
     std::unique_lock guard(m_aMutex);
@@ -2589,7 +2589,7 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
 
 // Methods XInitialization
-void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArguments )
+void SfxLibraryContainer::initialize( const Sequence< Any >& _rArguments )
 {
     LibraryContainerMethodGuard aGuard( *this );
     std::unique_lock guard(m_aMutex);
@@ -2666,35 +2666,35 @@ void SfxLibraryContainer::disposing(std::unique_lock<std::mutex>& guard)
 }
 
 // Methods XLibraryContainerPassword
-bool SAL_CALL SfxLibraryContainer::isLibraryPasswordProtected( const OUString& )
+bool SfxLibraryContainer::isLibraryPasswordProtected( const OUString& )
 {
     return false;
 }
 
-bool SAL_CALL SfxLibraryContainer::isLibraryPasswordVerified( const OUString& )
+bool SfxLibraryContainer::isLibraryPasswordVerified( const OUString& )
 {
     throw IllegalArgumentException();
 }
 
-bool SAL_CALL SfxLibraryContainer::verifyLibraryPassword( const OUString&, const OUString& )
+bool SfxLibraryContainer::verifyLibraryPassword( const OUString&, const OUString& )
 {
     throw IllegalArgumentException();
 }
 
-void SAL_CALL SfxLibraryContainer::changeLibraryPassword(const OUString&, const OUString&, const OUString& )
+void SfxLibraryContainer::changeLibraryPassword(const OUString&, const OUString&, const OUString& )
 {
     throw IllegalArgumentException();
 }
 
 // Methods XContainer
-void SAL_CALL SfxLibraryContainer::addContainerListener( const Reference< XContainerListener >& xListener )
+void SfxLibraryContainer::addContainerListener( const Reference< XContainerListener >& xListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
     std::unique_lock guard(m_aMutex);
     maNameContainer.addContainerListener(xListener, guard);
 }
 
-void SAL_CALL SfxLibraryContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
+void SfxLibraryContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
 {
     LibraryContainerMethodGuard aGuard( *this );
     std::unique_lock guard(m_aMutex);
@@ -2702,7 +2702,7 @@ void SAL_CALL SfxLibraryContainer::removeContainerListener( const Reference< XCo
 }
 
 // Methods XLibraryContainerExport
-void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OUString& URL,
+void SfxLibraryContainer::exportLibrary( const OUString& Name, const OUString& URL,
     const Reference< XInteractionHandler >& Handler )
 {
     LibraryContainerMethodGuard aGuard( *this );
@@ -2757,7 +2757,7 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
 }
 
 //XLibraryContainer3
-OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString& Name )
+OUString SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2772,12 +2772,12 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
 
 
 // XVBACompatibility
-bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode()
+bool SfxLibraryContainer::getVBACompatibilityMode()
 {
     return mbVBACompat;
 }
 
-void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( bool _vbacompatmodeon )
+void SfxLibraryContainer::setVBACompatibilityMode( bool _vbacompatmodeon )
 {
     /*  The member variable mbVBACompat must be set first, the following call
         to getBasicManager() may call getVBACompatibilityMode() which returns
@@ -2815,7 +2815,7 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( bool _vbacompatmodeo
     }
 }
 
-void SAL_CALL SfxLibraryContainer::setProjectName( const OUString& _projectname )
+void SfxLibraryContainer::setProjectName( const OUString& _projectname )
 {
     msProjectName = _projectname;
     BasicManager* pBasMgr = getBasicManager();
@@ -2829,23 +2829,23 @@ void SAL_CALL SfxLibraryContainer::setProjectName( const OUString& _projectname 
     }
 }
 
-sal_Int32 SAL_CALL SfxLibraryContainer::getRunningVBAScripts()
+sal_Int32 SfxLibraryContainer::getRunningVBAScripts()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return mnRunningVBAScripts;
 }
 
-void SAL_CALL SfxLibraryContainer::addVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
+void SfxLibraryContainer::addVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
 {
     maVBAScriptListeners.addInterface(o3tl::temporary(std::unique_lock(m_aMutex)), rxListener);
 }
 
-void SAL_CALL SfxLibraryContainer::removeVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
+void SfxLibraryContainer::removeVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
 {
     maVBAScriptListeners.removeInterface(o3tl::temporary(std::unique_lock(m_aMutex)), rxListener);
 }
 
-void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
+void SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
 {
     // own lock for accessing the number of running scripts
     enterMethod();
@@ -2868,12 +2868,12 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
 }
 
 // Methods XPropertySet
-css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SfxLibraryContainer::getPropertySetInfo()
+css::uno::Reference<css::beans::XPropertySetInfo> SfxLibraryContainer::getPropertySetInfo()
 {
     return uno::Reference<beans::XPropertySetInfo>();
 }
 
-void SAL_CALL SfxLibraryContainer::setPropertyValue(const OUString& aPropertyName,
+void SfxLibraryContainer::setPropertyValue(const OUString& aPropertyName,
                                                     const cpo::uno::Any& aValue)
 {
     if (aPropertyName != sVBATextEncodingPropName)
@@ -2881,39 +2881,39 @@ void SAL_CALL SfxLibraryContainer::setPropertyValue(const OUString& aPropertyNam
     aValue >>= meVBATextEncoding;
 }
 
-cpo::uno::Any SAL_CALL SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
+cpo::uno::Any SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
 {
     if (aPropertyName == sVBATextEncodingPropName)
         return cpo::uno::Any(meVBATextEncoding);
     throw UnknownPropertyException(aPropertyName, getXWeak());
 }
 
-void SAL_CALL SfxLibraryContainer::addPropertyChangeListener(
+void SfxLibraryContainer::addPropertyChangeListener(
     const OUString& /* aPropertyName */, const Reference<XPropertyChangeListener>& /* xListener */)
 {
     throw NoSupportException();
 }
 
-void SAL_CALL SfxLibraryContainer::removePropertyChangeListener(
+void SfxLibraryContainer::removePropertyChangeListener(
     const OUString& /* aPropertyName */, const Reference<XPropertyChangeListener>& /* aListener */)
 {
     throw NoSupportException();
 }
 
-void SAL_CALL SfxLibraryContainer::addVetoableChangeListener(
+void SfxLibraryContainer::addVetoableChangeListener(
     const OUString& /* PropertyName */, const Reference<XVetoableChangeListener>& /* aListener */)
 {
     throw NoSupportException();
 }
 
-void SAL_CALL SfxLibraryContainer::removeVetoableChangeListener(
+void SfxLibraryContainer::removeVetoableChangeListener(
     const OUString& /* PropertyName */, const Reference<XVetoableChangeListener>& /* aListener */)
 {
     throw NoSupportException();
 }
 
 // Methods XServiceInfo
-bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServiceName )
+bool SfxLibraryContainer::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -3108,23 +3108,23 @@ void SfxLibrary::removeByName( const OUString& Name )
 }
 
 // Methods XContainer
-void SAL_CALL SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
+void SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
 {
     maNameContainer.addContainerListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
-void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerListener >& xListener )
+void SfxLibrary::removeContainerListener( const Reference< XContainerListener >& xListener )
 {
     maNameContainer.removeContainerListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
 // Methods XChangesNotifier
-void SAL_CALL SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
+void SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
 {
     maNameContainer.addChangesListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
-void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListener >& xListener )
+void SfxLibrary::removeChangesListener( const Reference< XChangesListener >& xListener )
 {
     maNameContainer.removeChangesListener(xListener, o3tl::temporary(std::unique_lock(m_aMutex)));
 }

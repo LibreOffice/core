@@ -103,21 +103,21 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
 public:
     explicit DocObjectWrapper( SbModule* pMod );
 
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override
+    virtual Sequence< sal_Int8 > getImplementationId() override
     {
         return cpo::uno::Sequence<sal_Int8>();
     }
 
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
+    virtual Reference< XIntrospectionAccess > getIntrospection(  ) override;
 
-    virtual Any SAL_CALL invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) override;
-    virtual void SAL_CALL setValue( const OUString& aPropertyName, const Any& aValue ) override;
-    virtual Any SAL_CALL getValue( const OUString& aPropertyName ) override;
-    virtual bool SAL_CALL hasMethod( const OUString& aName ) override;
-    virtual bool SAL_CALL hasProperty( const OUString& aName ) override;
-    virtual  Any SAL_CALL queryInterface( const Type& aType ) override;
+    virtual Any invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) override;
+    virtual void setValue( const OUString& aPropertyName, const Any& aValue ) override;
+    virtual Any getValue( const OUString& aPropertyName ) override;
+    virtual bool hasMethod( const OUString& aName ) override;
+    virtual bool hasProperty( const OUString& aName ) override;
+    virtual  Any queryInterface( const Type& aType ) override;
 
-    virtual Sequence< Type > SAL_CALL getTypes() override;
+    virtual Sequence< Type > getTypes() override;
 };
 
 }
@@ -173,7 +173,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
     osl_atomic_decrement( &m_refCount );
 }
 
-Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
+Sequence< Type > DocObjectWrapper::getTypes()
 {
     if ( !m_Types.hasElements() )
     {
@@ -188,13 +188,13 @@ Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
     return m_Types;
 }
 
-Reference< XIntrospectionAccess > SAL_CALL
+Reference< XIntrospectionAccess >
 DocObjectWrapper::getIntrospection(  )
 {
     return nullptr;
 }
 
-Any SAL_CALL
+Any
 DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasMethod( aFunctionName ) )
@@ -290,7 +290,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
     return aReturn;
 }
 
-void SAL_CALL
+void
 DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue )
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
@@ -302,7 +302,7 @@ DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue )
     unoToSbxValue( pProperty.get(), aValue );
 }
 
-Any SAL_CALL
+Any
 DocObjectWrapper::getValue( const OUString& aPropertyName )
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
@@ -320,7 +320,7 @@ DocObjectWrapper::getValue( const OUString& aPropertyName )
     return aRet;
 }
 
-bool SAL_CALL
+bool
 DocObjectWrapper::hasMethod( const OUString& aName )
 {
     if ( m_xAggInv.is() && m_xAggInv->hasMethod( aName ) )
@@ -328,7 +328,7 @@ DocObjectWrapper::hasMethod( const OUString& aName )
     return getMethod( aName ).is();
 }
 
-bool SAL_CALL
+bool
 DocObjectWrapper::hasProperty( const OUString& aName )
 {
     bool bRes = false;
@@ -338,7 +338,7 @@ DocObjectWrapper::hasProperty( const OUString& aName )
     return bRes;
 }
 
-Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
+Any DocObjectWrapper::queryInterface( const Type& aType )
 {
     Any aRet = DocObjectWrapper_BASE::queryInterface( aType );
     if ( aRet.hasValue() )
@@ -2284,7 +2284,7 @@ public:
         mxModel.clear();
     }
 
-    virtual void SAL_CALL windowOpened( const lang::EventObject& /*e*/ ) override
+    virtual void windowOpened( const lang::EventObject& /*e*/ ) override
     {
         if ( mpUserForm )
         {
@@ -2299,7 +2299,7 @@ public:
     }
 
 
-    virtual void SAL_CALL windowClosing( const lang::EventObject& /*e*/ ) override
+    virtual void windowClosing( const lang::EventObject& /*e*/ ) override
     {
 #ifdef IN_THE_FUTURE
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
@@ -2331,21 +2331,21 @@ public:
     }
 
 
-    virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) override
+    virtual void windowClosed( const lang::EventObject& /*e*/ ) override
     {
         mbOpened = false;
         mbShowing = false;
     }
 
-    virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) override
+    virtual void windowMinimized( const lang::EventObject& /*e*/ ) override
     {
     }
 
-    virtual void SAL_CALL windowNormalized( const lang::EventObject& /*e*/ ) override
+    virtual void windowNormalized( const lang::EventObject& /*e*/ ) override
     {
     }
 
-    virtual void SAL_CALL windowActivated( const lang::EventObject& /*e*/ ) override
+    virtual void windowActivated( const lang::EventObject& /*e*/ ) override
     {
         if ( mpUserForm )
         {
@@ -2358,13 +2358,13 @@ public:
         }
     }
 
-    virtual void SAL_CALL windowDeactivated( const lang::EventObject& /*e*/ ) override
+    virtual void windowDeactivated( const lang::EventObject& /*e*/ ) override
     {
         if ( mpUserForm )
             mpUserForm->triggerDeactivateEvent();
     }
 
-    virtual void SAL_CALL windowResized( const awt::WindowEvent& /*e*/ ) override
+    virtual void windowResized( const awt::WindowEvent& /*e*/ ) override
     {
         if ( mpUserForm )
         {
@@ -2373,21 +2373,21 @@ public:
         }
     }
 
-    virtual void SAL_CALL windowMoved( const awt::WindowEvent& /*e*/ ) override
+    virtual void windowMoved( const awt::WindowEvent& /*e*/ ) override
     {
         if ( mpUserForm )
             mpUserForm->triggerLayoutEvent();
     }
 
-    virtual void SAL_CALL windowShown( const lang::EventObject& /*e*/ ) override
+    virtual void windowShown( const lang::EventObject& /*e*/ ) override
     {
     }
 
-    virtual void SAL_CALL windowHidden( const lang::EventObject& /*e*/ ) override
+    virtual void windowHidden( const lang::EventObject& /*e*/ ) override
     {
     }
 
-    virtual void SAL_CALL documentEventOccured( const document::DocumentEvent& rEvent ) override
+    virtual void documentEventOccured( const document::DocumentEvent& rEvent ) override
     {
         // early disposing on document event "OnUnload", to be sure Basic still exists when calling VBA "UserForm_Terminate"
         if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ) )
@@ -2400,7 +2400,7 @@ public:
         }
     }
 
-    virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) override
+    virtual void disposing( const lang::EventObject& /*Source*/ ) override
     {
         removeListener();
         mbDisposed = true;

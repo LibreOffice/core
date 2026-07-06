@@ -345,7 +345,7 @@ void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
 // Storing with password encryption
 
 // Methods XLibraryContainerPassword
-bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordProtected( const OUString& Name )
+bool SfxScriptLibraryContainer::isLibraryPasswordProtected( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -353,7 +353,7 @@ bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordProtected( const OUStr
     return bRet;
 }
 
-bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OUString& Name )
+bool SfxScriptLibraryContainer::isLibraryPasswordVerified( const OUString& Name )
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -365,7 +365,7 @@ bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OUStri
     return bRet;
 }
 
-bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
+bool SfxScriptLibraryContainer::verifyLibraryPassword
     ( const OUString& Name, const OUString& Password )
 {
     LibraryContainerMethodGuard aGuard( *this );
@@ -407,7 +407,7 @@ bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
     return bSuccess;
 }
 
-void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& Name,
+void SfxScriptLibraryContainer::changeLibraryPassword( const OUString& Name,
                                                                 const OUString& OldPassword,
                                                                 const OUString& NewPassword )
 {
@@ -1077,7 +1077,7 @@ void SfxScriptLibraryContainer::onNewRootStorage()
 {
 }
 
-bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString& Library )
+bool SfxScriptLibraryContainer:: HasExecutableCode( const OUString& Library )
 {
     BasicManager* pBasicMgr = getBasicManager();
     OSL_ENSURE( pBasicMgr, "we need a basicmanager, really we do" );
@@ -1091,12 +1091,12 @@ bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString& Lib
 
 
 // Service
-OUString SAL_CALL SfxScriptLibraryContainer::getImplementationName( )
+OUString SfxScriptLibraryContainer::getImplementationName( )
 {
     return u"com.sun.star.comp.sfx2.ScriptLibraryContainer"_ustr;
 }
 
-Sequence< OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceNames( )
+Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames( )
 {
     return {u"com.sun.star.script.DocumentScriptLibraryContainer"_ustr,
             u"com.sun.star.script.ScriptLibraryContainer"_ustr}; // for compatibility
@@ -1168,7 +1168,7 @@ bool SfxScriptLibrary::isLibraryElementValid(const cpo::uno::Any& rElement) cons
     return SfxScriptLibrary::containsValidModule(rElement);
 }
 
-script::ModuleInfo SAL_CALL SfxScriptLibrary::getModuleInfo( const OUString& ModuleName )
+script::ModuleInfo SfxScriptLibrary::getModuleInfo( const OUString& ModuleName )
 {
     if ( !hasModuleInfo( ModuleName ) )
     {
@@ -1177,12 +1177,12 @@ script::ModuleInfo SAL_CALL SfxScriptLibrary::getModuleInfo( const OUString& Mod
     return mModuleInfo[ ModuleName ];
 }
 
-bool SAL_CALL SfxScriptLibrary::hasModuleInfo( const OUString& ModuleName )
+bool SfxScriptLibrary::hasModuleInfo( const OUString& ModuleName )
 {
     return mModuleInfo.contains(ModuleName);
 }
 
-void SAL_CALL SfxScriptLibrary::insertModuleInfo( const OUString& ModuleName, const script::ModuleInfo& ModuleInfo )
+void SfxScriptLibrary::insertModuleInfo( const OUString& ModuleName, const script::ModuleInfo& ModuleInfo )
 {
     if ( hasModuleInfo( ModuleName ) )
     {
@@ -1191,7 +1191,7 @@ void SAL_CALL SfxScriptLibrary::insertModuleInfo( const OUString& ModuleName, co
     mModuleInfo[ ModuleName ] = ModuleInfo;
 }
 
-void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
+void SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
 {
         // #FIXME add NoSuchElementException to the spec
     if ( mModuleInfo.erase( ModuleName ) == 0 )

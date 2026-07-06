@@ -453,7 +453,7 @@ void SfxDialogLibraryContainer::onNewRootStorage()
     }
 }
 
-bool SAL_CALL
+bool
 SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ )
 {
     return false; // dialog library has no executable code
@@ -461,12 +461,12 @@ SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ )
 
 // Service
 
-OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( )
+OUString SfxDialogLibraryContainer::getImplementationName( )
 {
     return u"com.sun.star.comp.sfx2.DialogLibraryContainer"_ustr;
 }
 
-Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceNames( )
+Sequence< OUString > SfxDialogLibraryContainer::getSupportedServiceNames( )
 {
     return {u"com.sun.star.script.DocumentDialogLibraryContainer"_ustr,
             u"com.sun.star.script.DialogLibraryContainer"_ustr}; // for compatibility
@@ -561,7 +561,7 @@ void SfxDialogLibrary::storeResourcesToStorage( const css::uno::Reference< css::
 
 // XStringResourceSupplier
 Reference< resource::XStringResourceResolver >
-    SAL_CALL SfxDialogLibrary::getStringResource(  )
+    SfxDialogLibrary::getStringResource(  )
 {
     if( !m_xStringResourcePersistence.is() )
         m_xStringResourcePersistence = m_pParent->implCreateStringResource( this );

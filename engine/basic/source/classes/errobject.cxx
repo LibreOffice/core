@@ -45,22 +45,22 @@ public:
     ErrObject();
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getNumber() override;
-    virtual void SAL_CALL setNumber( ::sal_Int32 _number ) override;
-    virtual ::sal_Int32 SAL_CALL getHelpContext() override;
-    virtual void SAL_CALL setHelpContext( ::sal_Int32 _helpcontext ) override;
-    virtual OUString SAL_CALL getHelpFile() override;
-    virtual void SAL_CALL setHelpFile( const OUString& _helpfile ) override;
-    virtual OUString SAL_CALL getDescription() override;
-    virtual void SAL_CALL setDescription( const OUString& _description ) override;
-    virtual OUString SAL_CALL getSource() override;
-    virtual void SAL_CALL setSource( const OUString& _source ) override;
+    virtual ::sal_Int32 getNumber() override;
+    virtual void setNumber( ::sal_Int32 _number ) override;
+    virtual ::sal_Int32 getHelpContext() override;
+    virtual void setHelpContext( ::sal_Int32 _helpcontext ) override;
+    virtual OUString getHelpFile() override;
+    virtual void setHelpFile( const OUString& _helpfile ) override;
+    virtual OUString getDescription() override;
+    virtual void setDescription( const OUString& _description ) override;
+    virtual OUString getSource() override;
+    virtual void setSource( const OUString& _source ) override;
 
     // Methods
-    virtual void SAL_CALL Clear(  ) override;
-    virtual void SAL_CALL Raise( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description, const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext ) override;
+    virtual void Clear(  ) override;
+    virtual void Raise( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description, const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext ) override;
     // XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) override;
+    virtual OUString getDefaultPropertyName(  ) override;
 
     // Helper method
     /// @throws css::uno::RuntimeException
@@ -72,13 +72,13 @@ ErrObject::ErrObject() : m_nNumber(0), m_nHelpContext(0)
 {
 }
 
-sal_Int32 SAL_CALL
+sal_Int32
 ErrObject::getNumber()
 {
     return m_nNumber;
 }
 
-void SAL_CALL
+void
 ErrObject::setNumber( ::sal_Int32 _number )
 {
     GetSbData()->pInst->setErrorVB( _number  );
@@ -86,55 +86,55 @@ ErrObject::setNumber( ::sal_Int32 _number )
     setData( cpo::uno::Any( _number ), cpo::uno::Any(), cpo::uno::Any( _description ), cpo::uno::Any(), cpo::uno::Any() );
 }
 
-::sal_Int32 SAL_CALL
+::sal_Int32
 ErrObject::getHelpContext()
 {
     return m_nHelpContext;
 }
-void SAL_CALL
+void
 ErrObject::setHelpContext( ::sal_Int32 _helpcontext )
 {
     m_nHelpContext = _helpcontext;
 }
 
-OUString SAL_CALL
+OUString
 ErrObject::getHelpFile()
 {
     return m_sHelpFile;
 }
 
-void SAL_CALL
+void
 ErrObject::setHelpFile( const OUString& _helpfile )
 {
     m_sHelpFile = _helpfile;
 }
 
-OUString SAL_CALL
+OUString
 ErrObject::getDescription()
 {
     return m_sDescription;
 }
 
-void SAL_CALL
+void
 ErrObject::setDescription( const OUString& _description )
 {
     m_sDescription = _description;
 }
 
-OUString SAL_CALL
+OUString
 ErrObject::getSource()
 {
     return m_sSource;
 }
 
-void SAL_CALL
+void
 ErrObject::setSource( const OUString& _source )
 {
     m_sSource = _source;
 }
 
 // Methods
-void SAL_CALL
+void
 ErrObject::Clear(  )
 {
     m_sHelpFile.clear();
@@ -144,7 +144,7 @@ ErrObject::Clear(  )
     m_nHelpContext = 0;
 }
 
-void SAL_CALL
+void
 ErrObject::Raise( const cpo::uno::Any& Number, const cpo::uno::Any& Source, const cpo::uno::Any& Description, const cpo::uno::Any& HelpFile, const cpo::uno::Any& HelpContext )
 {
     setData( Number, Source, Description, HelpFile, HelpContext );
@@ -153,7 +153,7 @@ ErrObject::Raise( const cpo::uno::Any& Number, const cpo::uno::Any& Source, cons
 }
 
 // XDefaultProperty
-OUString SAL_CALL
+OUString
 ErrObject::getDefaultPropertyName(  )
 {
     return u"Number"_ustr;

@@ -3772,11 +3772,11 @@ public:
     explicit BasicAllListener_Impl( OUString aPrefixName );
 
     // Methods of XAllListener
-    virtual void SAL_CALL firing(const AllEventObject& Event) override;
-    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) override;
+    virtual void firing(const AllEventObject& Event) override;
+    virtual Any approveFiring(const AllEventObject& Event) override;
 
     // Methods of XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) override;
+    virtual void disposing(const EventObject& Source) override;
 };
 
 }
@@ -3869,12 +3869,12 @@ public:
         const Reference< XAllListener >& AllListener, Any Helper );
 
     // XInvocation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
-    virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
-    virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value) override;
-    virtual Any SAL_CALL getValue(const OUString& PropertyName) override;
-    virtual bool SAL_CALL hasMethod(const OUString& Name) override;
-    virtual bool SAL_CALL hasProperty(const OUString& Name) override;
+    virtual Reference< XIntrospectionAccess > getIntrospection() override;
+    virtual Any invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
+    virtual void setValue(const OUString& PropertyName, const Any& Value) override;
+    virtual Any getValue(const OUString& PropertyName) override;
+    virtual bool hasMethod(const OUString& Name) override;
+    virtual bool hasProperty(const OUString& Name) override;
 
 private:
     Reference< XAllListener >    m_xAllListener;
@@ -3915,13 +3915,13 @@ InvocationToAllListenerMapper::InvocationToAllListenerMapper
 }
 
 
-Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection()
+Reference< XIntrospectionAccess > InvocationToAllListenerMapper::getIntrospection()
 {
     return Reference< XIntrospectionAccess >();
 }
 
 
-Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
+Any InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
     Sequence< sal_Int16 >&, Sequence< Any >&)
 {
     Any aRet;
@@ -3968,24 +3968,24 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 }
 
 
-void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString&, const Any&)
+void InvocationToAllListenerMapper::setValue(const OUString&, const Any&)
 {}
 
 
-Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString&)
+Any InvocationToAllListenerMapper::getValue(const OUString&)
 {
     return Any();
 }
 
 
-bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
+bool InvocationToAllListenerMapper::hasMethod(const OUString& Name)
 {
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( Name );
     return xMethod.is();
 }
 
 
-bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
+bool InvocationToAllListenerMapper::hasProperty(const OUString& Name)
 {
     Reference< XIdlField > xField = m_xListenerType->getField( Name );
     return xField.is();
@@ -4158,21 +4158,21 @@ public:
     ModuleInvocationProxy( std::u16string_view aPrefix, SbxObjectRef const & xScopeObj );
 
     // XInvocation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
-    virtual void SAL_CALL setValue( const OUString& rProperty, const Any& rValue ) override;
-    virtual Any SAL_CALL getValue( const OUString& rProperty ) override;
-    virtual bool SAL_CALL hasMethod( const OUString& rName ) override;
-    virtual bool SAL_CALL hasProperty( const OUString& rProp ) override;
+    virtual Reference< XIntrospectionAccess > getIntrospection() override;
+    virtual void setValue( const OUString& rProperty, const Any& rValue ) override;
+    virtual Any getValue( const OUString& rProperty ) override;
+    virtual bool hasMethod( const OUString& rName ) override;
+    virtual bool hasProperty( const OUString& rProp ) override;
 
-    virtual Any SAL_CALL invoke( const OUString& rFunction,
+    virtual Any invoke( const OUString& rFunction,
                                  const Sequence< Any >& rParams,
                                  Sequence< sal_Int16 >& rOutParamIndex,
                                  Sequence< Any >& rOutParam ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) override;
+    virtual void dispose() override;
+    virtual void addEventListener( const Reference< XEventListener >& xListener ) override;
+    virtual void removeEventListener( const Reference< XEventListener >& aListener ) override;
 };
 
 }
@@ -4184,12 +4184,12 @@ ModuleInvocationProxy::ModuleInvocationProxy( std::u16string_view  aPrefix, SbxO
     m_bProxyIsClassModuleObject = xScopeObj.is() && dynamic_cast<const SbClassModuleObject*>( xScopeObj.get() ) != nullptr;
 }
 
-Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection()
+Reference< XIntrospectionAccess > ModuleInvocationProxy::getIntrospection()
 {
     return Reference< XIntrospectionAccess >();
 }
 
-void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const Any& rValue)
+void ModuleInvocationProxy::setValue(const OUString& rProperty, const Any& rValue)
 {
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
@@ -4226,7 +4226,7 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
 
 }
 
-Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
+Any ModuleInvocationProxy::getValue(const OUString& rProperty)
 {
     if( !m_bProxyIsClassModuleObject )
     {
@@ -4254,17 +4254,17 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
     return aRet;
 }
 
-bool SAL_CALL ModuleInvocationProxy::hasMethod( const OUString& )
+bool ModuleInvocationProxy::hasMethod( const OUString& )
 {
     return false;
 }
 
-bool SAL_CALL ModuleInvocationProxy::hasProperty( const OUString& )
+bool ModuleInvocationProxy::hasProperty( const OUString& )
 {
     return false;
 }
 
-Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
+Any ModuleInvocationProxy::invoke( const OUString& rFunction,
                                             const Sequence< Any >& rParams,
                                             Sequence< sal_Int16 >&,
                                             Sequence< Any >& )
@@ -4328,7 +4328,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
     return aRet;
 }
 
-void SAL_CALL ModuleInvocationProxy::dispose()
+void ModuleInvocationProxy::dispose()
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -4338,13 +4338,13 @@ void SAL_CALL ModuleInvocationProxy::dispose()
     m_xScopeObj = nullptr;
 }
 
-void SAL_CALL ModuleInvocationProxy::addEventListener( const Reference< XEventListener >& xListener )
+void ModuleInvocationProxy::addEventListener( const Reference< XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     m_aListeners.addInterface( aGuard, xListener );
 }
 
-void SAL_CALL ModuleInvocationProxy::removeEventListener( const Reference< XEventListener >& xListener )
+void ModuleInvocationProxy::removeEventListener( const Reference< XEventListener >& xListener )
 {
     std::unique_lock aGuard( m_aMutex );
     m_aListeners.removeInterface( aGuard, xListener );

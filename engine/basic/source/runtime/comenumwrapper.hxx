@@ -38,8 +38,8 @@ public:
     }
 
     // container::XEnumeration
-    virtual bool SAL_CALL hasMoreElements() override;
-    virtual cpo::uno::Any SAL_CALL nextElement() override;
+    virtual bool hasMoreElements() override;
+    virtual cpo::uno::Any nextElement() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

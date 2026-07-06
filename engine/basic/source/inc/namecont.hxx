@@ -349,102 +349,102 @@ public:
     static void leaveMethod();
 
     // Methods XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual css::uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // Methods XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // Members XStorageBasedLibraryContainer
-    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getRootStorage() override;
-    virtual void SAL_CALL setRootStorage( const css::uno::Reference< css::embed::XStorage >& _rootstorage ) override;
-    virtual void SAL_CALL storeLibrariesToStorage( const css::uno::Reference< css::embed::XStorage >& RootStorage ) override;
+    virtual css::uno::Reference< css::embed::XStorage > getRootStorage() override;
+    virtual void setRootStorage( const css::uno::Reference< css::embed::XStorage >& _rootstorage ) override;
+    virtual void storeLibrariesToStorage( const css::uno::Reference< css::embed::XStorage >& RootStorage ) override;
 
     // Methods XModifiable (base of XPersistentLibraryContainer)
-    virtual bool SAL_CALL isModified(  ) override;
-    virtual void SAL_CALL setModified( bool bModified ) override;
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual bool isModified(  ) override;
+    virtual void setModified( bool bModified ) override;
+    virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // Methods XPersistentLibraryContainer (base of XStorageBasedLibraryContainer)
-    virtual cpo::uno::Any SAL_CALL getRootLocation() override;
-    virtual OUString SAL_CALL getContainerLocationName() override;
-    virtual void SAL_CALL storeLibraries(  ) override;
+    virtual cpo::uno::Any getRootLocation() override;
+    virtual OUString getContainerLocationName() override;
+    virtual void storeLibraries(  ) override;
 
     //Methods XLibraryContainer3
-    virtual OUString SAL_CALL getOriginalLibraryLinkURL( const OUString& Name ) override;
+    virtual OUString getOriginalLibraryLinkURL( const OUString& Name ) override;
 
     // Methods XLibraryContainer2 (base of XPersistentLibraryContainer)
-    virtual bool SAL_CALL isLibraryLink( const OUString& Name ) override;
-    virtual OUString SAL_CALL getLibraryLinkURL( const OUString& Name ) override;
-    virtual bool SAL_CALL isLibraryReadOnly( const OUString& Name ) override;
-    virtual void SAL_CALL setLibraryReadOnly( const OUString& Name, bool bReadOnly ) override;
-    virtual void SAL_CALL renameLibrary( const OUString& Name, const OUString& NewName ) override;
+    virtual bool isLibraryLink( const OUString& Name ) override;
+    virtual OUString getLibraryLinkURL( const OUString& Name ) override;
+    virtual bool isLibraryReadOnly( const OUString& Name ) override;
+    virtual void setLibraryReadOnly( const OUString& Name, bool bReadOnly ) override;
+    virtual void renameLibrary( const OUString& Name, const OUString& NewName ) override;
 
     // Methods XLibraryContainer (base of XLibraryContainer2)
-    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL
+    virtual css::uno::Reference< css::container::XNameContainer >
         createLibrary( const OUString& Name ) override;
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL createLibraryLink
+    virtual css::uno::Reference< css::container::XNameAccess > createLibraryLink
         ( const OUString& Name, const OUString& StorageURL, bool ReadOnly ) override;
-    virtual void SAL_CALL removeLibrary( const OUString& Name ) override;
-    virtual bool SAL_CALL isLibraryLoaded( const OUString& Name ) override;
-    virtual void SAL_CALL loadLibrary( const OUString& Name ) override;
+    virtual void removeLibrary( const OUString& Name ) override;
+    virtual bool isLibraryLoaded( const OUString& Name ) override;
+    virtual void loadLibrary( const OUString& Name ) override;
 
     // Methods XInitialization
-    virtual void SAL_CALL initialize( const cpo::uno::Sequence<
+    virtual void initialize( const cpo::uno::Sequence<
         cpo::uno::Any >& aArguments ) override;
 
     // Methods XLibraryContainerPassword
-    virtual bool SAL_CALL isLibraryPasswordProtected( const OUString& Name ) override;
-    virtual bool SAL_CALL isLibraryPasswordVerified( const OUString& Name ) override;
-    virtual bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
-    virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
+    virtual bool isLibraryPasswordProtected( const OUString& Name ) override;
+    virtual bool isLibraryPasswordVerified( const OUString& Name ) override;
+    virtual bool verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
+    virtual void changeLibraryPassword( const OUString& Name,
         const OUString& OldPassword, const OUString& NewPassword ) override;
 
     // Methods XContainer
-    virtual void SAL_CALL addContainerListener( const css::uno::Reference<
+    virtual void addContainerListener( const css::uno::Reference<
         css::container::XContainerListener >& xListener ) override;
-    virtual void SAL_CALL removeContainerListener( const css::uno::Reference<
+    virtual void removeContainerListener( const css::uno::Reference<
         css::container::XContainerListener >& xListener ) override;
 
     // Methods XLibraryContainerExport
-    virtual void SAL_CALL exportLibrary( const OUString& Name, const OUString& URL,
+    virtual void exportLibrary( const OUString& Name, const OUString& URL,
         const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
 
     // Methods XServiceInfo
-    virtual OUString SAL_CALL getImplementationName( ) override = 0;
-    virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override = 0;
+    virtual OUString getImplementationName( ) override = 0;
+    virtual bool supportsService( const OUString& ServiceName ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames( ) override = 0;
     // Methods XVBACompatibility
-    virtual bool SAL_CALL getVBACompatibilityMode() override;
-    virtual void SAL_CALL setVBACompatibilityMode( bool _vbacompatmodeon ) override;
-    virtual OUString SAL_CALL getProjectName() override { return msProjectName; }
-    virtual void SAL_CALL setProjectName( const OUString& _projectname ) override;
-    virtual sal_Int32 SAL_CALL getRunningVBAScripts() override;
-    virtual void SAL_CALL addVBAScriptListener(
+    virtual bool getVBACompatibilityMode() override;
+    virtual void setVBACompatibilityMode( bool _vbacompatmodeon ) override;
+    virtual OUString getProjectName() override { return msProjectName; }
+    virtual void setProjectName( const OUString& _projectname ) override;
+    virtual sal_Int32 getRunningVBAScripts() override;
+    virtual void addVBAScriptListener(
         const css::uno::Reference< css::script::vba::XVBAScriptListener >& Listener ) override;
-    virtual void SAL_CALL removeVBAScriptListener(
+    virtual void removeVBAScriptListener(
         const css::uno::Reference< css::script::vba::XVBAScriptListener >& Listener ) override;
-    virtual void SAL_CALL broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName ) override;
+    virtual void broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName ) override;
 
     // css::beans::XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo>
-        SAL_CALL getPropertySetInfo() override;
-    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
+        getPropertySetInfo() override;
+    virtual void setPropertyValue(const OUString& aPropertyName,
                                            const cpo::uno::Any& aValue) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
-    virtual void SAL_CALL addPropertyChangeListener(
+    virtual cpo::uno::Any getPropertyValue(const OUString& PropertyName) override;
+    virtual void addPropertyChangeListener(
         const OUString& aPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
-    virtual void SAL_CALL removePropertyChangeListener(
+    virtual void removePropertyChangeListener(
         const OUString& aPropertyName,
         const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
-    virtual void SAL_CALL addVetoableChangeListener(
+    virtual void addVetoableChangeListener(
         const OUString& PropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
-    virtual void SAL_CALL removeVetoableChangeListener(
+    virtual void removeVetoableChangeListener(
         const OUString& PropertyName,
         const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
@@ -544,31 +544,31 @@ public:
     );
 
     // Methods XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) override;
-    virtual bool SAL_CALL hasElements(  ) override;
+    virtual css::uno::Type getElementType(  ) override;
+    virtual bool hasElements(  ) override;
 
     // Methods XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames(  ) override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 
     // Methods XContainer
-    virtual void SAL_CALL addContainerListener( const css::uno::Reference<
+    virtual void addContainerListener( const css::uno::Reference<
         css::container::XContainerListener >& xListener ) override;
-    virtual void SAL_CALL removeContainerListener( const css::uno::Reference<
+    virtual void removeContainerListener( const css::uno::Reference<
         css::container::XContainerListener >& xListener ) override;
 
     // Methods XChangesNotifier
-    virtual void SAL_CALL addChangesListener( const css::uno::Reference<
+    virtual void addChangesListener( const css::uno::Reference<
         css::util::XChangesListener >& xListener ) override;
-    virtual void SAL_CALL removeChangesListener( const css::uno::Reference<
+    virtual void removeChangesListener( const css::uno::Reference<
         css::util::XChangesListener >& xListener ) override;
 
 protected:

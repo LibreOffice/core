@@ -48,28 +48,28 @@ public:
     virtual                 ~SbPropertyValues() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
-    virtual void SAL_CALL   setPropertyValue(
+    virtual void   setPropertyValue(
                                 const OUString& aPropertyName,
                                 const cpo::uno::Any& aValue) override;
-    virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL   addPropertyChangeListener(
+    virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
+    virtual void   addPropertyChangeListener(
                                 const OUString& aPropertyName,
                                 const css::uno::Reference< css::beans::XPropertyChangeListener >& ) override;
-    virtual void SAL_CALL   removePropertyChangeListener(
+    virtual void   removePropertyChangeListener(
                                 const OUString& aPropertyName,
                                 const css::uno::Reference< css::beans::XPropertyChangeListener >& ) override;
-    virtual void SAL_CALL   addVetoableChangeListener(
+    virtual void   addVetoableChangeListener(
                                 const OUString& aPropertyName,
                                 const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override;
-    virtual void SAL_CALL   removeVetoableChangeListener(
+    virtual void   removeVetoableChangeListener(
                                 const OUString& aPropertyName,
                                 const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override;
 
     // XPropertyAccess
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getPropertyValues() override;
-    virtual void SAL_CALL setPropertyValues(const cpo::uno::Sequence< css::beans::PropertyValue >& PropertyValues_) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > getPropertyValues() override;
+    virtual void setPropertyValues(const cpo::uno::Sequence< css::beans::PropertyValue >& PropertyValues_) override;
 };
 
 class SbxArray;

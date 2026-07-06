@@ -21,7 +21,7 @@
 
 using namespace ::com::sun::star;
 
-bool SAL_CALL ComEnumerationWrapper::hasMoreElements()
+bool ComEnumerationWrapper::hasMoreElements()
 {
     bool bResult = false;
 
@@ -39,7 +39,7 @@ bool SAL_CALL ComEnumerationWrapper::hasMoreElements()
     return bResult;
 }
 
-cpo::uno::Any SAL_CALL ComEnumerationWrapper::nextElement()
+cpo::uno::Any ComEnumerationWrapper::nextElement()
 {
     try
     {

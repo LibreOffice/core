@@ -46,8 +46,8 @@ public:
 
 // UNO interface
 public:
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() override { return m_lContinuations; }
-    cpo::uno::Any SAL_CALL getRequest() override
+    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override { return m_lContinuations; }
+    cpo::uno::Any getRequest() override
     {
         return m_aRequest;
     }

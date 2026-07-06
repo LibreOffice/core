@@ -120,12 +120,12 @@ public:
 
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
+    virtual void disposing( const lang::EventObject& Source ) override;
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementReplaced( const container::ContainerEvent& Event ) override;
-    virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) override;
+    virtual void elementInserted( const container::ContainerEvent& Event ) override;
+    virtual void elementReplaced( const container::ContainerEvent& Event ) override;
+    virtual void elementRemoved( const container::ContainerEvent& Event ) override;
 };
 
 
@@ -191,12 +191,12 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager const * pM
 // XEventListener
 
 
-void SAL_CALL BasMgrContainerListenerImpl::disposing( const lang::EventObject& ) {}
+void BasMgrContainerListenerImpl::disposing( const lang::EventObject& ) {}
 
 // XContainerListener
 
 
-void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::ContainerEvent& Event )
+void BasMgrContainerListenerImpl::elementInserted( const container::ContainerEvent& Event )
 {
     bool bLibContainer = maLibName.isEmpty();
     OUString aName;
@@ -242,7 +242,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
 }
 
 
-void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::ContainerEvent& Event )
+void BasMgrContainerListenerImpl::elementReplaced( const container::ContainerEvent& Event )
 {
     OUString aName;
     Event.Accessor >>= aName;
@@ -267,7 +267,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
 }
 
 
-void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::ContainerEvent& Event )
+void BasMgrContainerListenerImpl::elementRemoved( const container::ContainerEvent& Event )
 {
     OUString aName;
     Event.Accessor >>= aName;
@@ -1567,11 +1567,11 @@ public:
         : maName(std::move( aName )), maLanguage(std::move( aLanguage)), maSource(std::move( aSource )) {}
 
     // Methods XStarBasicModuleInfo
-    virtual OUString SAL_CALL getName() override
+    virtual OUString getName() override
         { return maName; }
-    virtual OUString SAL_CALL getLanguage() override
+    virtual OUString getLanguage() override
         { return maLanguage; }
-    virtual OUString SAL_CALL getSource() override
+    virtual OUString getSource() override
         { return maSource; }
 };
 
@@ -1586,9 +1586,9 @@ public:
         : maName(std::move( aName )), mData( Data ) {}
 
     // Methods XStarBasicDialogInfo
-    virtual OUString SAL_CALL getName() override
+    virtual OUString getName() override
         { return maName; }
-    virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getData() override
+    virtual cpo::uno::Sequence< sal_Int8 > getData() override
         { return mData; }
 };
 
@@ -1621,17 +1621,17 @@ public:
     {}
 
     // Methods XStarBasicLibraryInfo
-    virtual OUString SAL_CALL getName() override
+    virtual OUString getName() override
         { return maName; }
-    virtual uno::Reference< container::XNameContainer > SAL_CALL getModuleContainer() override
+    virtual uno::Reference< container::XNameContainer > getModuleContainer() override
         { return mxModuleContainer; }
-    virtual uno::Reference< container::XNameContainer > SAL_CALL getDialogContainer() override
+    virtual uno::Reference< container::XNameContainer > getDialogContainer() override
         { return mxDialogContainer; }
-    virtual OUString SAL_CALL getPassword() override
+    virtual OUString getPassword() override
         { return maPassword; }
-    virtual OUString SAL_CALL getExternalSourceURL() override
+    virtual OUString getExternalSourceURL() override
         { return maExternaleSourceURL; }
-    virtual OUString SAL_CALL getLinkTargetURL() override
+    virtual OUString getLinkTargetURL() override
         { return maLinkTargetURL; }
 };
 
@@ -1645,20 +1645,20 @@ public:
         :mpLib( pLib ) {}
 
     // Methods XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // Methods XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 };
 
 }
@@ -1776,20 +1776,20 @@ public:
         :mpLib( pLib ) {}
 
     // Methods XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // Methods XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 };
 
 }
@@ -1915,20 +1915,20 @@ public:
         :mpMgr( pMgr ) {}
 
     // Methods XElementAccess
-    virtual uno::Type SAL_CALL getElementType() override;
-    virtual bool SAL_CALL hasElements() override;
+    virtual uno::Type getElementType() override;
+    virtual bool hasElements() override;
 
     // Methods XNameAccess
-    virtual cpo::uno::Any SAL_CALL getByName( const OUString& aName ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getElementNames() override;
-    virtual bool SAL_CALL hasByName( const OUString& aName ) override;
+    virtual cpo::uno::Any getByName( const OUString& aName ) override;
+    virtual cpo::uno::Sequence< OUString > getElementNames() override;
+    virtual bool hasByName( const OUString& aName ) override;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
-    virtual void SAL_CALL removeByName( const OUString& Name ) override;
+    virtual void insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
+    virtual void removeByName( const OUString& Name ) override;
 };
 
 
@@ -2046,23 +2046,23 @@ public:
 
 public:
     // Methods
-    virtual uno::Reference< container::XNameContainer > SAL_CALL getLibraryContainer() override;
-    virtual void SAL_CALL createLibrary( const OUString& LibName, const OUString& Password,
+    virtual uno::Reference< container::XNameContainer > getLibraryContainer() override;
+    virtual void createLibrary( const OUString& LibName, const OUString& Password,
         const OUString& ExternalSourceURL, const OUString& LinkTargetURL ) override;
-    virtual void SAL_CALL addModule( const OUString& LibraryName, const OUString& ModuleName,
+    virtual void addModule( const OUString& LibraryName, const OUString& ModuleName,
         const OUString& Language, const OUString& Source ) override;
-    virtual void SAL_CALL addDialog( const OUString& LibraryName, const OUString& DialogName,
+    virtual void addDialog( const OUString& LibraryName, const OUString& DialogName,
         const cpo::uno::Sequence< sal_Int8 >& Data ) override;
 };
 
-uno::Reference< container::XNameContainer > SAL_CALL StarBasicAccess_Impl::getLibraryContainer()
+uno::Reference< container::XNameContainer > StarBasicAccess_Impl::getLibraryContainer()
 {
     if( !mxLibContainer.is() )
         mxLibContainer = new LibraryContainer_Impl( mpMgr );
     return mxLibContainer;
 }
 
-void SAL_CALL StarBasicAccess_Impl::createLibrary
+void StarBasicAccess_Impl::createLibrary
 (
     const OUString& LibName,
     const OUString& Password,
@@ -2074,7 +2074,7 @@ void SAL_CALL StarBasicAccess_Impl::createLibrary
     DBG_ASSERT( pLib, "XML Import: Basic library could not be created");
 }
 
-void SAL_CALL StarBasicAccess_Impl::addModule
+void StarBasicAccess_Impl::addModule
 (
     const OUString& LibraryName,
     const OUString& ModuleName,
@@ -2090,7 +2090,7 @@ void SAL_CALL StarBasicAccess_Impl::addModule
     }
 }
 
-void SAL_CALL StarBasicAccess_Impl::addDialog
+void StarBasicAccess_Impl::addDialog
 (
     const OUString&,
     const OUString&,

@@ -67,7 +67,7 @@ public:
     SfxDialogLibraryContainer( const css::uno::Reference< css::embed::XStorage >& xStorage );
 
     // Methods XStorageBasedLibraryContainer
-    virtual void SAL_CALL storeLibrariesToStorage(
+    virtual void storeLibrariesToStorage(
         const css::uno::Reference< css::embed::XStorage >& RootStorage ) override;
 
     // Resource handling
@@ -75,10 +75,10 @@ public:
         implCreateStringResource( class SfxDialogLibrary* pDialog );
 
     // Methods XServiceInfo
-    virtual OUString SAL_CALL getImplementationName( ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
+    virtual OUString getImplementationName( ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames( ) override;
     // XLibraryQueryExecutable
-    virtual bool SAL_CALL HasExecutableCode(const OUString&) override;
+    virtual bool HasExecutableCode(const OUString&) override;
 };
 
 
@@ -120,7 +120,7 @@ public:
 
     // XStringResourceSupplier
     virtual css::uno::Reference< css::resource::XStringResourceResolver >
-        SAL_CALL getStringResource(  ) override;
+        getStringResource(  ) override;
 
     const OUString& getName() const
         { return m_aName; }

@@ -84,16 +84,16 @@ public:
 
 
     // Methods XLibraryContainerPassword
-    virtual bool SAL_CALL isLibraryPasswordProtected( const OUString& Name ) override;
-    virtual bool SAL_CALL isLibraryPasswordVerified( const OUString& Name ) override;
-    virtual bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
-    virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
+    virtual bool isLibraryPasswordProtected( const OUString& Name ) override;
+    virtual bool isLibraryPasswordVerified( const OUString& Name ) override;
+    virtual bool verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
+    virtual void changeLibraryPassword( const OUString& Name,
         const OUString& OldPassword, const OUString& NewPassword ) override;
     // XLibraryQueryExecutable
-    virtual bool SAL_CALL HasExecutableCode(const OUString&) override;
+    virtual bool HasExecutableCode(const OUString&) override;
     // Methods XServiceInfo
-    virtual OUString SAL_CALL getImplementationName( ) override;
-    virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
+    virtual OUString getImplementationName( ) override;
+    virtual cpo::uno::Sequence< OUString > getSupportedServiceNames( ) override;
 
     // Library password handling for 5.0 documents
     void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword );
@@ -138,10 +138,10 @@ public:
     );
 
     // XVBAModuleInfo
-    virtual css::script::ModuleInfo SAL_CALL getModuleInfo( const OUString& ModuleName ) override;
-    virtual bool SAL_CALL hasModuleInfo( const OUString& ModuleName ) override;
-    virtual void SAL_CALL insertModuleInfo( const OUString& ModuleName, const css::script::ModuleInfo& ModuleInfo ) override;
-    virtual void SAL_CALL removeModuleInfo( const OUString& ModuleName ) override;
+    virtual css::script::ModuleInfo getModuleInfo( const OUString& ModuleName ) override;
+    virtual bool hasModuleInfo( const OUString& ModuleName ) override;
+    virtual void insertModuleInfo( const OUString& ModuleName, const css::script::ModuleInfo& ModuleInfo ) override;
+    virtual void removeModuleInfo( const OUString& ModuleName ) override;
 
     static bool containsValidModule( const cpo::uno::Any& _rElement );
 
