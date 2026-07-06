@@ -141,18 +141,14 @@ static std::size_t decodeSomeCharsImpl(cpo::uno::Sequence<sal_Int8>& rOutBuffer,
     if( o3tl::make_unsigned(rOutBuffer.getLength()) < nMinOutBufferLen )
         rOutBuffer.realloc( nMinOutBufferLen );
 
-    const auto *pInBuffer = rInBuffer.data();
     sal_Int8 *pOutBuffer = rOutBuffer.getArray();
     sal_Int8 *pOutBufferStart = pOutBuffer;
-    std::size_t nCharsDecoded = 0;
 
     sal_uInt8 aDecodeBuffer[4];
     sal_Int32 nBytesToDecode = 0;
     sal_Int32 nBytesGotFromDecoding = 3;
-    std::size_t nInBufferPos= 0;
-    while( nInBufferPos < nInBufferLen )
+    for (auto cChar : rInBuffer)
     {
-        auto cChar = *pInBuffer;
         if( cChar >= '+' && cChar <= 'z' )
         {
             sal_uInt8 nByte = aBase64DecodeTable[cChar-'+'];
@@ -178,28 +174,16 @@ static std::size_t decodeSomeCharsImpl(cpo::uno::Sequence<sal_Int8>& rOutBuffer,
                         *pOutBuffer++  = static_cast<sal_Int8>((nOut & 0xff00) >> 8);
                     if( nBytesGotFromDecoding > 2 )
                         *pOutBuffer++  = static_cast<sal_Int8>(nOut & 0xff);
-                    nCharsDecoded = nInBufferPos + 1;
                     nBytesToDecode = 0;
                     nBytesGotFromDecoding = 3;
                 }
             }
-            else
-            {
-                nCharsDecoded++;
-            }
         }
-        else
-        {
-            nCharsDecoded++;
-        }
-
-        nInBufferPos++;
-        pInBuffer++;
     }
     if( (pOutBuffer - pOutBufferStart) != rOutBuffer.getLength() )
         rOutBuffer.realloc( pOutBuffer - pOutBufferStart );
 
-    return nCharsDecoded;
+    return nInBufferLen - nBytesToDecode;
 }
 
 void Base64::decode(cpo::uno::Sequence<sal_Int8>& aBuffer, std::u16string_view sBuffer)
