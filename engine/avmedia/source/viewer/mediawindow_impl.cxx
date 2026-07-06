@@ -185,9 +185,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     //if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
     {
         const OUString sToolkitName = Application::GetToolkitName();
-        if (sToolkitName == "gtk4")
-            xPlayer = createPlayer(rURL, u"com.sun.star.comp.avmedia.Manager_Gtk"_ustr);
-        else if (sToolkitName.startsWith(u"kf6") || sToolkitName.startsWith(u"qt6"))
+        if (sToolkitName.startsWith(u"kf6") || sToolkitName.startsWith(u"qt6"))
             xPlayer = createPlayer(rURL, u"com.sun.star.comp.avmedia.Manager_Qt"_ustr);
         else
             xPlayer = createPlayer(rURL, AVMEDIA_MANAGER_SERVICE_NAME);
