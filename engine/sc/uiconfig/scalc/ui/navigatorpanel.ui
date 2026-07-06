@@ -122,11 +122,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel" id="rowlabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes" context="navigatorpanel|label2">Row:</property>
+                <property name="label" translatable="yes" context="navigatorpanel|rowlabel">Row:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">row</property>
               </object>
