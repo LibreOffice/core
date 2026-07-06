@@ -292,6 +292,11 @@ HARFBUZZ_TARBALL := harfbuzz-14.3.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+HIGHWAY_SHA256SUM := 36f672ab48ddb3c8555e9e89e16fe400cd7d16c6eb455a1a3d0c146a63ababdc
+HIGHWAY_TARBALL := highway-1.4.0.tar.gz
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 HSQLDB_SHA256SUM := d30b13f4ba2e3b6a2d4f020c0dee0a9fb9fc6fbcc2d561f36b78da4bf3802370
 HSQLDB_TARBALL := 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 # three static lines

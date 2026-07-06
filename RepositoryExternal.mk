@@ -514,6 +514,24 @@ else
 endif
 
 
+ifneq ($(filter HIGHWAY,$(BUILD_TYPE)),)
+
+define gb_LinkTarget__use_highway
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(gb_UnpackedTarball_workdir)/highway \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),highway)
+
+endef
+
+define gb_ExternalProject__use_highway
+$(call gb_ExternalProject_use_static_libraries,$(1),highway)
+
+endef
+
+endif # HIGHWAY
+
 ifneq ($(SYSTEM_LIBJPEG),)
 
 define gb_LinkTarget__use_libjpeg

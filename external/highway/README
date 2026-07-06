@@ -1,0 +1,4 @@
+According to the library's own README: "Highway is a C++ library that provides
+portable SIMD/vector intrinsics."
+
+From [https://github.com/google/highway].
