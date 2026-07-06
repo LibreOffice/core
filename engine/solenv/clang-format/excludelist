@@ -5085,6 +5085,7 @@ include/svl/legacyitem.hxx
 include/svl/listener.hxx
 include/svl/lngmisc.hxx
 include/svl/lockfilecommon.hxx
+include/svl/lockfileliveness.hxx
 include/svl/lstner.hxx
 include/svl/macitem.hxx
 include/svl/memberid.h
@@ -8274,6 +8275,7 @@ sc/source/ui/view/spellcheckcontext.cxx
 sc/source/ui/view/spelldialog.cxx
 sc/source/ui/view/spelleng.cxx
 sc/source/ui/view/tabcont.cxx
+sc/source/ui/view/tableshell.cxx
 sc/source/ui/view/tabsplit.cxx
 sc/source/ui/view/tabview.cxx
 sc/source/ui/view/tabview2.cxx
@@ -9639,6 +9641,7 @@ svgio/source/svgreader/svgtspannode.cxx
 svgio/source/svgreader/svgusenode.cxx
 svgio/source/svguno/xsvgparser.cxx
 svl/qa/unit/items/test_IndexedStyleSheets.cxx
+svl/qa/unit/lockfileliveness/test_lockfileliveness.cxx
 svl/qa/unit/svl.cxx
 svl/qa/unit/test_INetContentType.cxx
 svl/qa/unit/test_URIHelper.cxx
@@ -9695,6 +9698,7 @@ svl/source/misc/inethist.cxx
 svl/source/misc/inettype.cxx
 svl/source/misc/lngmisc.cxx
 svl/source/misc/lockfilecommon.cxx
+svl/source/misc/lockfileliveness.cxx
 svl/source/misc/sharecontrolfile.cxx
 svl/source/misc/sharedstring.cxx
 svl/source/misc/strmadpt.cxx
@@ -13226,6 +13230,7 @@ vcl/qa/cppunit/lifecycle.cxx
 vcl/qa/cppunit/svm/svmtest.cxx
 vcl/qa/cppunit/timer.cxx
 vcl/qt5/QtInstance.cxx
+vcl/qt5/QtMenu.cxx
 vcl/quartz/SystemFontList.cxx
 vcl/quartz/salbmp.cxx
 vcl/quartz/salgdi.cxx
