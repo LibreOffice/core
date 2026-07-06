@@ -930,22 +930,20 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             {
                 bIsChart = true;
                 SfxInPlaceClient* pIPClient = pViewShell->GetIPClient();
-                const vcl::Window* pViewShellWindow = GetSfxViewShell()->GetEditWindowForActiveOLEObj();
-                if (pIPClient && pIPClient->HasGridOffset())
+                vcl::Window* pRootWin = pIPClient ? pIPClient->GetEditWin() : nullptr;
+                if (pRootWin)
                 {
-                    // In Calc we need to send all lengths in print units.
-                    // FIXME: Handle RTL case.
-                    tools::Rectangle aArea = pIPClient->GetObjArea(); // This is in print mm100.
+                    // This is in logic units.
+                    tools::Rectangle aArea = pIPClient->GetObjArea();
+                    if (pRootWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
+                    {
+                        // In Calc the logical unit is mm100, in Writer it is twips.
+                        aArea = o3tl::convert(aArea, o3tl::Length::twip, o3tl::Length::mm100);
+                    }
+                    // FIXME: Handle RTL case for calc.
                     Point aChartWinOffset(aArea.Left(), aArea.Top());
                     addLogicOffset = aChartWinOffset;
                     aSelection.Move(aChartWinOffset.getX(), aChartWinOffset.getY());
-                }
-                else if (pViewShellWindow && pViewShellWindow->IsAncestorOf(*pWin))
-                {
-                    Point aOffsetPx = pWin->GetOffsetPixelFrom(*pViewShellWindow);
-                    Point aLogicOffset = pWin->PixelToLogic(aOffsetPx);
-                    addLogicOffset = aLogicOffset;
-                    aSelection.Move(aLogicOffset.getX(), aLogicOffset.getY());
                 }
             }
         }
