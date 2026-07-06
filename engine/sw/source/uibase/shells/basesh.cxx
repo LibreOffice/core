@@ -840,6 +840,22 @@ bool UpdateFieldContents(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     pDoc->GetIDocumentUndoRedo().StartUndo(SwUndoId::UPDATE_FIELDS, nullptr);
     rWrtSh.StartAction();
 
+    // (zotero) Rewriting each field's content moves the shell cursor onto that field.
+    // Remember the caret here and put it back when the function returns, so a bulk
+    // field refresh leaves the caret where the user was editing.
+    rWrtSh.Push();
+
+    // Restore the caret and close the action and the undo grouping when the
+    // function returns, even if a field entry makes the loop throw. The stacked
+    // cursor tracked the content edits, so it still points at the original spot.
+    comphelper::ScopeGuard aGuard(
+        [&rWrtSh]
+        {
+            rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
+            rWrtSh.EndAction();
+            rWrtSh.GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FIELDS, nullptr);
+        });
+
     std::vector<const SwFormatRefMark*> aRefMarks;
     pDoc->GetRefMarks(aRefMarks);
 
@@ -881,8 +897,6 @@ bool UpdateFieldContents(const SfxRequest& rReq, SwWrtShell& rWrtSh)
         pTextRefMark->UpdateFieldContent(pDoc, rWrtSh, aMap[u"Content"_ustr].get<OUString>());
     }
 
-    rWrtSh.EndAction();
-    pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::UPDATE_FIELDS, nullptr);
     return true;
 }
 
@@ -914,8 +928,18 @@ void UpdateFieldContent(const SfxRequest& rReq, SwWrtShell& rWrtSh)
 
     SwPosition& rCursor = *rWrtSh.GetCursor()->GetPoint();
     SwTextNode* pTextNode = rCursor.GetNode().GetTextNode();
+    const sal_Int32 nCursorIndex = rCursor.GetContentIndex();
     std::vector<SwTextAttr*> aAttrs
-        = pTextNode->GetTextAttrsAt(rCursor.GetContentIndex(), RES_TXTATR_REFMARK);
+        = pTextNode->GetTextAttrsAt(nCursorIndex, RES_TXTATR_REFMARK);
+    if (aAttrs.empty() && nCursorIndex > 0)
+    {
+        // A reference mark covers the half-open range from its start up to but not
+        // including its end position, so the caret sitting right after the mark
+        // finds nothing here. Look one position to the left as well, which matches
+        // only a mark that ends exactly at the caret, so a caret placed just behind
+        // a reference mark still updates that mark.
+        aAttrs = pTextNode->GetTextAttrsAt(nCursorIndex - 1, RES_TXTATR_REFMARK);
+    }
     if (aAttrs.empty())
     {
         return;

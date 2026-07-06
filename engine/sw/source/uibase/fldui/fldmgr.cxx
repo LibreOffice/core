@@ -1117,6 +1117,9 @@ bool SwFieldMgr::InsertField(
 
                 if (!bHadMark && !rRefmarkText.isEmpty())
                 {
+                    // The caret ends up after the inserted content, so the user
+                    // continues typing behind the new reference mark.
+                    pCursorPos->Normalize(/*bPointFirst=*/false);
                     pCursorPos->DeleteMark();
                 }
                 pCurShell->EndAction();
