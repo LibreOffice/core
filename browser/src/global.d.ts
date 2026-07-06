@@ -207,6 +207,7 @@ interface AppInterface {
 		editComment: boolean;
 		allowManageRedlines: boolean;
 		readOnly: boolean;
+		modified: boolean;
 		permission: string;
 		viewModeExtensions: string;
 		disableSidebar: boolean;

@@ -30,6 +30,8 @@ class SaveState {
 		this.saveEle = document.querySelector('[id^="save"].unotoolbutton');
 		if (this.saveEle) {
 			this.saveIconEl = this.saveEle.querySelector('img');
+			// Reloading the shortcuts bar on user join can rebuild save icon
+			if (app.file.modified) this.saveEle.classList.add('savemodified');
 		} else {
 			app.console.debug('SaveState: no save icon - might be hidden');
 			this.saveIconEl = null;

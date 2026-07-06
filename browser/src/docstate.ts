@@ -101,6 +101,7 @@
 		allowManageRedlines: false,
 		readOnly: true,
 		permission: 'readonly',
+		modified: false, // Whether the document currently has unsaved changes.
 		disableSidebar: false,
 		textCursor: {
 			visible: false,
