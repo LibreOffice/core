@@ -2372,9 +2372,14 @@ static std::string MIME_type_for_clipboard_format(UINT format)
 
     auto name = get_clipboard_format_name(format);
 
-    if (name == L"text/rtf" || name == L"image/png" || name == L"image/svg+xml")
+    if (name == L"text/markdown" ||
+        name == L"text/rtf" ||
+        name == L"image/png" ||
+        name == L"image/svg+xml")
         // Clipboard format names that are directly MIME types
         return Util::wide_string_to_string(name);
+    else if (name == L"Markdown")
+        return "text/markdown";
     else if (name == L"Star Embed Source (XML)")
         return "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";
     else if (name == L"Star Object Descriptor (XML)")
@@ -2416,6 +2421,8 @@ static std::vector<int> clipboard_formats_for_MIME_type(const char* mimeType)
         result.push_back(RegisterClipboardFormatW(L"Star Embed Source (XML)"));
     else if (std::string(mimeType).starts_with("application/x-openoffice-objectdescriptor-xml;"))
         result.push_back(RegisterClipboardFormatW(L"Star Object Descriptor (XML)"));
+    else if (std::strcmp(mimeType, "image/svg+xml") == 0)
+        result.push_back(RegisterClipboardFormatW(L"image/svg+xml"));
 
     return result;
 }
