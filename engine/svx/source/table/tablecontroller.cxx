@@ -1043,6 +1043,7 @@ void SvxTableController::Execute( SfxRequest& rReq )
         break;
 
     case SID_ATTR_FILL_STYLE:
+    case SID_ATTR_FILL_COLOR:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
             if( pArgs )

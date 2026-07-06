@@ -28,6 +28,11 @@ shell TableObjectBar
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
+    SID_ATTR_FILL_COLOR
+    [
+        ExecMethod = Execute;
+        StateMethod = GetAttrState;
+    ]
     SID_ATTR_BORDER
     [
         ExecMethod = Execute;
