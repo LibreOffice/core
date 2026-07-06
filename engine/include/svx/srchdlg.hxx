@@ -152,7 +152,6 @@ private:
     bool m_bSearch;
     bool m_bFormat;
     bool m_bInitialFocusOnReplace;
-    bool m_bReplaceBackwards;
     SearchOptionFlags m_nOptions;
     bool m_bSet;
     bool m_bConstruct;
