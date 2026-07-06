@@ -167,19 +167,19 @@ private:
     virtual ~Bridge() override;
 
     virtual css::uno::Reference< css::uno::XInterface >
-    SAL_CALL getInstance(OUString const & sInstanceName) override;
+    getInstance(OUString const & sInstanceName) override;
 
-    virtual OUString SAL_CALL getName() override;
+    virtual OUString getName() override;
 
-    virtual OUString SAL_CALL getDescription() override;
+    virtual OUString getDescription() override;
 
-    virtual void SAL_CALL dispose() override;
+    virtual void dispose() override;
 
-    virtual void SAL_CALL addEventListener(
+    virtual void addEventListener(
         css::uno::Reference< css::lang::XEventListener >
             const & xListener) override;
 
-    virtual void SAL_CALL removeEventListener(
+    virtual void removeEventListener(
         css::uno::Reference< css::lang::XEventListener >
             const & aListener) override;
 

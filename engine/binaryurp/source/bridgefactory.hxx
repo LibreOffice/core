@@ -60,29 +60,29 @@ public:
     virtual ~BridgeFactory() override;
 
 private:
-    virtual OUString SAL_CALL getImplementationName() override;
+    virtual OUString getImplementationName() override;
 
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    virtual bool supportsService(OUString const & ServiceName) override;
 
-    virtual cpo::uno::Sequence< OUString > SAL_CALL
+    virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
     virtual css::uno::Reference< css::bridge::XBridge >
-    SAL_CALL createBridge(
+    createBridge(
         OUString const & sName, OUString const & sProtocol,
         css::uno::Reference< css::connection::XConnection > const & aConnection,
         css::uno::Reference< css::bridge::XInstanceProvider > const &
                 anInstanceProvider) override;
 
     virtual css::uno::Reference< css::bridge::XBridge >
-    SAL_CALL getBridge(
+    getBridge(
         OUString const & sName) override;
 
     virtual
     cpo::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
-    SAL_CALL getExistingBridges() override;
+    getExistingBridges() override;
 
-    void SAL_CALL disposing() override;
+    void disposing() override;
 
     typedef
         std::vector< css::uno::Reference< css::bridge::XBridge > >
