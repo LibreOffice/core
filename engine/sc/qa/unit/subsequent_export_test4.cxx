@@ -1302,6 +1302,49 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleOperatorXlsxRoundTrip)
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testSpilledRangeOperatorXlsxExport)
+{
+    // The # spilled-range operator exports as the _xlfn.ANCHORARRAY
+    // wrapper the format uses, not a bare A1# that older readers
+    // reject.
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // A1 spills with SEQUENCE(3) into A1:A3. B1 references the spill
+    // range with the # postfix.
+    pDoc->SetFormula(ScAddress(0, 0, 0), u"=SEQUENCE(3)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    pDoc->SetFormula(ScAddress(1, 0, 0), u"=A1#"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f",
+                       u"_xlfn.ANCHORARRAY(A1)");
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testSingleOnSpilledRangeXlsxExport)
+{
+    // In =@A1# the # binds tighter than @, so the XLSX form nests
+    // as _xlfn.SINGLE(_xlfn.ANCHORARRAY(A1)).
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetFormula(ScAddress(0, 0, 0), u"=SEQUENCE(3)"_ustr,
+                     formula::FormulaGrammar::GRAM_NATIVE);
+    pDoc->SetFormula(ScAddress(1, 0, 0), u"=@A1#"_ustr, formula::FormulaGrammar::GRAM_NATIVE);
+
+    save(TestFilter::XLSX);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f",
+                       u"_xlfn.SINGLE(_xlfn.ANCHORARRAY(A1))");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

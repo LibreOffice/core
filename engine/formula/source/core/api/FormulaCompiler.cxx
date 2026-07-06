@@ -2789,6 +2789,9 @@ void FormulaCompiler::EmitSingleValueOperandOOXML(
         rBuffer.append(u")");
         return;
     }
+    // Capture the splice point so a trailing # postfix can wrap the
+    // operand text we are about to emit with _xlfn.ANCHORARRAY(...).
+    sal_Int32 nOperandStart = rBuffer.getLength();
     // Primary push or function name. Emit the current token first.
     rpToken = CreateStringFromToken(rBuffer, rpToken, true);
     // If the next token is ocOpen, this token was a function name
@@ -2806,10 +2809,30 @@ void FormulaCompiler::EmitSingleValueOperandOOXML(
             {
                 --nDepth;
                 if (nDepth == 0)
-                    return;
+                    break;
             }
         }
     }
+    // A trailing # postfix binds tighter than the surrounding @, so
+    // wrap the operand text we just emitted with the ANCHORARRAY
+    // wrapper before the outer SINGLE closes.
+    if (rpToken && rpToken->GetOpCode() == ocSpill)
+    {
+        rBuffer.insert(nOperandStart, u"_xlfn.ANCHORARRAY(");
+        rBuffer.append(u")");
+        rpToken = maArrIterator.Next();
+    }
+}
+
+static bool lclIsOoxmlFactorSeparator(OpCode eOp)
+{
+    // Tokens that end one factor and start the next at the current
+    // parenthesis depth. The # postfix wraps the most recent factor, so the
+    // tracked position resets after any of these.
+    if (ocStartBinaryOperators <= eOp && eOp < ocStopBinaryOperators)
+        return true;
+    return eOp == ocSep || eOp == ocArrayColSep || eOp == ocArrayRowSep
+        || eOp == ocRange || eOp == ocUnion || eOp == ocIntersect;
 }
 
 void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
@@ -2848,6 +2871,12 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 
     if ( mpArr->IsRecalcModeForced() )
         rBuffer.append( '=');
+
+    // Where the current factor began, one entry per parenthesis
+    // depth. The top is where the ocSpill wrapper splices. Start past
+    // the optional leading '='.
+    std::vector<sal_Int32> aFactorStarts;
+    aFactorStarts.push_back(rBuffer.getLength());
     const FormulaToken* t = maArrIterator.First();
     while( t )
     {
@@ -2911,10 +2940,53 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
             && maArrIterator.PeekNext()
             && maArrIterator.PeekNext()->GetOpCode() != ocOpen)
         {
+            aFactorStarts.back() = rBuffer.getLength();
             rBuffer.append(u"_xlfn.SINGLE(");
             t = maArrIterator.Next();
             EmitSingleValueOperandOOXML(rBuffer, t);
             rBuffer.append(u")");
+            continue;
+        }
+
+        // XLSX writes the # operator as _xlfn.ANCHORARRAY(operand).
+        // The operand is already in the buffer, so wrap it by splicing
+        // the prefix at the factor start and appending the close.
+        if (FormulaGrammar::isOOXML(meGrammar) && t->GetOpCode() == ocSpill)
+        {
+            rBuffer.insert(aFactorStarts.back(), u"_xlfn.ANCHORARRAY(");
+            rBuffer.append(u")");
+            t = maArrIterator.Next();
+            aFactorStarts.back() = rBuffer.getLength();
+            continue;
+        }
+
+        if (FormulaGrammar::isOOXML(meGrammar))
+        {
+            // Track where the current factor begins for the ocSpill
+            // branch. ocOpen pushes a nested scope, ocClose pops it,
+            // and a factor separator starts a fresh factor.
+            const OpCode eOpHere = t->GetOpCode();
+            const bool bSeparator
+                = lclIsOoxmlFactorSeparator(eOpHere);
+            if (eOpHere == ocOpen)
+            {
+                // Leave the outer factor start alone: a grouping '(' is
+                // already marked by the preceding separator, and a
+                // function call must be wrapped from its name.
+                t = CreateStringFromToken(rBuffer, t, true);
+                aFactorStarts.push_back(rBuffer.getLength());
+                continue;
+            }
+            if (eOpHere == ocClose)
+            {
+                t = CreateStringFromToken(rBuffer, t, true);
+                if (aFactorStarts.size() > 1)
+                    aFactorStarts.pop_back();
+                continue;
+            }
+            t = CreateStringFromToken(rBuffer, t, true);
+            if (bSeparator)
+                aFactorStarts.back() = rBuffer.getLength();
             continue;
         }
 

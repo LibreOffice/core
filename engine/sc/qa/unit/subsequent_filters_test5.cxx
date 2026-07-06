@@ -214,17 +214,23 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testPlainScalarStaysWithoutImplicitIntersec
     CPPUNIT_ASSERT_EQUAL(6.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testSpillOperatorXlsxImport)
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testSpillOperatorXlsxRoundTrip)
 {
-    // XLSX stores the # spilled-range operator as the _xlfn.ANCHORARRAY
-    // wrapper. Import rewrites it back to the native # operator, on its
-    // own and composed inside other functions.
+    // The # spilled-range operator survives an XLSX round-trip: a
+    // loaded formula reads as # on its own and inside other
+    // functions, and still does after a save and reload.
     createScDoc("xlsx/SimpleSpillOperatorFixture.xlsx");
-    ScDocument* pDocument = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(u"=B2#"_ustr, pDocument->GetFormula(2, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(u"=UNIQUE(B2#)"_ustr, pDocument->GetFormula(3, 1, 0));
-    CPPUNIT_ASSERT_EQUAL(u"=SUM(B2#)"_ustr, pDocument->GetFormula(4, 1, 0));
+    auto checkSpillFormulas = [this]() {
+        ScDocument* pDocument = getScDoc();
+        CPPUNIT_ASSERT_EQUAL(u"=B2#"_ustr, pDocument->GetFormula(2, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=UNIQUE(B2#)"_ustr, pDocument->GetFormula(3, 1, 0));
+        CPPUNIT_ASSERT_EQUAL(u"=SUM(B2#)"_ustr, pDocument->GetFormula(4, 1, 0));
+    };
+
+    checkSpillFormulas();
+    saveAndReload(TestFilter::XLSX);
+    checkSpillFormulas();
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testDynamicSpillStateExportFODS)
