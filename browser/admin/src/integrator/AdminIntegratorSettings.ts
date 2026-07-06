@@ -678,10 +678,14 @@ class SettingIframe {
 	public async saveAll(): Promise<SaveAllResult> {
 		// The View-tab / AI-sidebar payoff should fire only when the user
 		// actually changed the chat AI configuration in this dialog session (not
-		// on every save that happens to have a key already set). We do not
-		// validate the key - if it is wrong, that surfaces at AI use time.
+		// on every save that happens to already be configured). The key is
+		// optional, so a base URL and a model are what mark a provider
+		// configured. We do not validate the key - if it is wrong, that surfaces
+		// at AI use time.
 		const aiJustConfigured =
-			this._aiConfigDirty && !!this._viewSetting.aiProviderAPIKey;
+			this._aiConfigDirty &&
+			!!this._viewSetting.aiProviderModel &&
+			!!this._viewSetting.aiProviderURL;
 
 		const saves: Promise<void>[] = [];
 
@@ -2265,9 +2269,9 @@ class SettingIframe {
 		this.attachAISettingsAutoFetch(data, container);
 		this.attachAIImageSettingsAutoFetch(data, container);
 
-		if (data.aiProviderAPIKey) {
-			this.scheduleAIModelFetch(data);
-		}
+		// Schedule unconditionally; fetchAIModels decides whether it has enough
+		// to run (a base URL for self-hosted, or a key for a cloud provider).
+		this.scheduleAIModelFetch(data);
 		this.scheduleAIImageModelFetch(data);
 
 		return container;
@@ -2333,6 +2337,14 @@ class SettingIframe {
 		group.appendChild(
 			this.createViewSettingsTextBox('aiProviderAPIKey', data, false, true),
 		);
+		const apiKeyInput = group.querySelector(
+			'#aiProviderAPIKey',
+		) as HTMLInputElement | null;
+		if (apiKeyInput) {
+			apiKeyInput.placeholder = _(
+				'Leave empty if your server does not require one',
+			);
+		}
 
 		const modelField = document.createElement('div');
 		modelField.id = 'aiModelcontainer';
@@ -2711,8 +2723,11 @@ class SettingIframe {
 			data.aiImageProviderAPIKey || data.aiProviderAPIKey || '';
 		const effectiveProviderId = this.getProviderIdFromUrl(effectiveUrl);
 		const provider = this.getProviderById(effectiveProviderId);
+		const isCustom = provider?.isCustom ?? effectiveProviderId === 'custom';
 
-		if (!effectiveKey || !effectiveUrl) {
+		// As for text: a custom (self-hosted) image provider lists models with
+		// just a base URL; the pre-canned cloud providers still need a key.
+		if (!effectiveUrl || (!isCustom && !effectiveKey)) {
 			this.setAIImageStatus('', 'hidden');
 			this.resetAIImageModelSelect();
 			return;
@@ -2817,7 +2832,9 @@ class SettingIframe {
 			: provider.baseUrl;
 		const apiKey = data.aiProviderAPIKey || '';
 
-		if (!apiKey || (isCustom && !baseUrl)) {
+		// A self-hosted (custom) provider can list its models with just a base
+		// URL; the pre-canned cloud providers still need a key to reach theirs.
+		if (isCustom ? !baseUrl : !apiKey) {
 			this.setAIStatus('', 'hidden');
 			this.resetAIModelSelect();
 			return;

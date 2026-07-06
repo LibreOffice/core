@@ -2143,10 +2143,13 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     std::string baseUrl = form.get("baseUrl", std::string());
 
     const std::string& shortMessage = "Failed to fetch AI models";
-    if (provider.empty() || apiKey.empty())
+    // The API key is optional: self-hosted endpoints often list their models
+    // without one. The provider (and, for a custom provider, the base URL
+    // checked below) are what we need to reach the models endpoint.
+    if (provider.empty())
     {
         sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
-                  "Missing provider or apiKey in the payload");
+                  "Missing provider in the payload");
         return;
     }
 
@@ -2191,7 +2194,9 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
 
     const std::string& uriAnonym = Anonymizer::anonymizeUrl(uri.toString());
 
-    Authorization auth(Authorization::Type::Token, apiKey, false);
+    // With an empty key, mark the token as header-less so no Authorization
+    // header (and no bare "Bearer ") is sent to the models endpoint.
+    Authorization auth(Authorization::Type::Token, apiKey, /*noHeader=*/apiKey.empty());
     auto httpRequest = StorageConnectionManager::createHttpRequest(uri, auth);
     httpRequest.setVerb(http::Request::VERB_GET);
     httpRequest.set("Content-Type", "application/json");

@@ -1803,13 +1803,17 @@ bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr& viewSe
     setAIProviderModel(model);
     setAIProviderURL(url);
 
+    // The API key is optional: self-hosted, OpenAI-compatible endpoints
+    // (Ollama, vLLM, LM Studio) often accept requests without one. A provider
+    // is usable once it has a base URL and a model; the key, when present, is
+    // sent as a Bearer token by the chat request path.
     const bool configured =
 #if !MOBILEAPP
         // The desktop apps enable AI per-user via the Options dialog, not the
         // server-wide ai.enabled switch.
         ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
 #endif
-        !disableAISettings && !apiKey.empty() && !model.empty() && !url.empty();
+        !disableAISettings && !model.empty() && !url.empty();
     outModel = configured ? model : std::string{};
     outRating = configured ? computeEthicalRating(model, url) : "U";
     return configured;

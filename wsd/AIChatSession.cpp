@@ -683,7 +683,9 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         return true;
     }
 
-    if (apiKey.empty() || model.empty() || baseUrl.empty())
+    // The API key is optional (self-hosted endpoints often need none); a model
+    // and a base URL are the minimum needed to reach the provider.
+    if (model.empty() || baseUrl.empty())
     {
         sendChatResult(false, "AI settings not configured", requestId);
         return true;
@@ -853,8 +855,11 @@ void AIChatSession::callLLMAPI()
         self->handleLLMResponse(body);
     };
 
-    std::string authHeader = "Bearer ";
-    authHeader.append(_toolLoop->apiKey);
+    // Send the Bearer header only when a key is set; a keyless self-hosted
+    // endpoint gets no Authorization header rather than a bare "Bearer ".
+    std::string authHeader;
+    if (!_toolLoop->apiKey.empty())
+        authHeader = "Bearer " + _toolLoop->apiKey;
 
     LOG_DBG("AIToolLoop: sending request ["
             << _toolLoop->requestId << "] round "
@@ -896,7 +901,8 @@ void AIChatSession::callLLMAPI()
     http::Request httpRequest(Poco::URI(_toolLoop->requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
     httpRequest.set("Content-Type", "application/json");
-    httpRequest.set("Authorization", std::move(authHeader));
+    if (!authHeader.empty())
+        httpRequest.set("Authorization", std::move(authHeader));
     httpRequest.setBody(std::move(payloadStr), "application/json");
 
     _activeChatSession = httpSession;
@@ -1838,7 +1844,8 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     if (baseUrl.empty())
         baseUrl = _session.getAIProviderURL();
 
-    if (req.apiKey.empty() || baseUrl.empty())
+    // The API key is optional, as for chat; a base URL is the minimum needed.
+    if (baseUrl.empty())
     {
         req.error = "AI image settings not configured";
         return req;
@@ -1998,8 +2005,12 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
 
     std::shared_ptr<DocumentBroker> docBroker = _session.getDocumentBroker();
 
+    // Send the Bearer header only when a key is set; a keyless self-hosted
+    // endpoint gets no Authorization header rather than a bare "Bearer ".
+    const std::string authHeader = req.apiKey.empty() ? std::string() : "Bearer " + req.apiKey;
+
 #if MOBILEAPP
-    postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
+    postViaTransport(docBroker, req.requestUrl, authHeader,
                      req.payloadStr, onResponse);
 #else
     req.httpSession->setFinishedHandler(
@@ -2017,7 +2028,8 @@ bool AIChatSession::handleImageGeneration(const std::string& prompt,
     http::Request httpRequest(Poco::URI(req.requestUrl).getPathAndQuery());
     httpRequest.setVerb(http::Request::VERB_POST);
     httpRequest.set("Content-Type", "application/json");
-    httpRequest.set("Authorization", "Bearer " + req.apiKey);
+    if (!authHeader.empty())
+        httpRequest.set("Authorization", authHeader);
     httpRequest.setBody(req.payloadStr, "application/json");
 
     _activeChatSession = req.httpSession;
@@ -2317,8 +2329,13 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
         LOG_DBG("TransformImageGen: generating image " << (idx + 1) << " of " << total
                                                        << ", prompt: " << gen.prompt);
 
+        // Send the Bearer header only when a key is set; a keyless self-hosted
+        // endpoint gets no Authorization header rather than a bare "Bearer ".
+        const std::string authHeader =
+            req.apiKey.empty() ? std::string() : "Bearer " + req.apiKey;
+
 #if MOBILEAPP
-        postViaTransport(docBroker, req.requestUrl, "Bearer " + req.apiKey,
+        postViaTransport(docBroker, req.requestUrl, authHeader,
                          req.payloadStr, onResponse);
 #else
         req.httpSession->setFinishedHandler(
@@ -2336,7 +2353,8 @@ void AIChatSession::generateNextTransformImage(const std::shared_ptr<DocumentBro
         http::Request httpRequest(Poco::URI(req.requestUrl).getPathAndQuery());
         httpRequest.setVerb(http::Request::VERB_POST);
         httpRequest.set("Content-Type", "application/json");
-        httpRequest.set("Authorization", "Bearer " + req.apiKey);
+        if (!authHeader.empty())
+            httpRequest.set("Authorization", authHeader);
         httpRequest.setBody(req.payloadStr, "application/json");
 
         _activeChatSession = req.httpSession;
