@@ -45,12 +45,13 @@ public:
 
     static void encode(OStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int8>& aPass);
 
-    // Decode a base 64 encoded string into a sequence of bytes. The first
-    // version can be used for attribute values only, because it does not
+    // Decode a base 64 encoded string into a sequence of bytes. decode()
+    // can be used for attribute values only, because it does not
     // return any chars left from conversion.
-    // For text submitted through the SAX characters call, the later method
+    // For text submitted through the SAX characters call, decodeSomeChars()
     // must be used!
     static void decode(cpo::uno::Sequence<sal_Int8>& aPass, std::u16string_view sBuffer);
+    static void decode(cpo::uno::Sequence<sal_Int8>& aPass, std::string_view sBuffer);
 
     static std::size_t decodeSomeChars(cpo::uno::Sequence<sal_Int8>& aPass,
                                        std::u16string_view sBuffer);

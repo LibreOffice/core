@@ -61,8 +61,7 @@ namespace XSLT
     void OleHandler::initRootStorageFromBase64(std::string_view content)
     {
         Sequence<sal_Int8> oleData;
-        ::comphelper::Base64::decode(oleData, OStringToOUString(
-            content, RTL_TEXTENCODING_UTF8));
+        ::comphelper::Base64::decode(oleData, content);
         m_rootStream = createTempFile();
         Reference<XOutputStream> xOutput = m_rootStream->getOutputStream();
         xOutput->writeBytes(oleData);
@@ -170,8 +169,7 @@ namespace XSLT
     {
         //decode the base64 string
         Sequence<sal_Int8> oledata;
-        ::comphelper::Base64::decode(oledata,
-                OStringToOUString(content, RTL_TEXTENCODING_ASCII_US));
+        ::comphelper::Base64::decode(oledata, content);
         //create a temp stream to write data to
         Reference<XStream> subStream = createTempFile();
         Reference<XInputStream> xInput = subStream->getInputStream();

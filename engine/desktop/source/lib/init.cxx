@@ -7988,8 +7988,7 @@ static bool doc_addCertificate(COKitDocument* pThis,
     std::string_view aCertificateBase64String = KitHelper::extractCertificate(aCertificateString);
     if (!aCertificateBase64String.empty())
     {
-        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
-        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
+        comphelper::Base64::decode(aCertificateSequence, aCertificateBase64String);
     }
     else
     {

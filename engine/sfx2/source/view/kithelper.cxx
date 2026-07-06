@@ -1017,8 +1017,7 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
     std::string_view aCertificateBase64String = extractCertificate(rCert);
     if (!aCertificateBase64String.empty())
     {
-        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
-        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
+        comphelper::Base64::decode(aCertificateSequence, aCertificateBase64String);
     }
     else
     {
@@ -1030,8 +1029,7 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
     std::string_view aPrivateKeyBase64String = extractKey(rKey);
     if (!aPrivateKeyBase64String.empty())
     {
-        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String);
-        comphelper::Base64::decode(aPrivateKeySequence, aBase64OUString);
+        comphelper::Base64::decode(aPrivateKeySequence, aPrivateKeyBase64String);
     }
     else
     {
@@ -1076,8 +1074,7 @@ void KitHelper::addCertificates(std::string_view rCerts)
             break;
 
         cpo::uno::Sequence<sal_Int8> aCertificateSequence;
-        OUString aBase64OUString = OUString::fromUtf8(aNext);
-        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
+        comphelper::Base64::decode(aCertificateSequence, aNext);
         addCertificate(xCertificateCreator, aCertificateSequence);
     }
 

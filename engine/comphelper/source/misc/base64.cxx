@@ -133,20 +133,15 @@ void Base64::encode(OUStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int
     base64encode(aStrBuffer, aPass);
 }
 
-void Base64::decode(cpo::uno::Sequence<sal_Int8>& aBuffer, std::u16string_view sBuffer)
-{
-    std::size_t nCharsDecoded = decodeSomeChars( aBuffer, sBuffer );
-    OSL_ENSURE( nCharsDecoded == sBuffer.size(), "some bytes left in base64 decoding!" );
-}
-
-std::size_t Base64::decodeSomeChars(cpo::uno::Sequence<sal_Int8>& rOutBuffer, std::u16string_view rInBuffer)
+template <class StringView_t>
+static std::size_t decodeSomeCharsImpl(cpo::uno::Sequence<sal_Int8>& rOutBuffer, StringView_t rInBuffer)
 {
     std::size_t nInBufferLen = rInBuffer.size();
     std::size_t nMinOutBufferLen = (nInBufferLen / 4) * 3;
     if( o3tl::make_unsigned(rOutBuffer.getLength()) < nMinOutBufferLen )
         rOutBuffer.realloc( nMinOutBufferLen );
 
-    const sal_Unicode *pInBuffer = rInBuffer.data();
+    const auto *pInBuffer = rInBuffer.data();
     sal_Int8 *pOutBuffer = rOutBuffer.getArray();
     sal_Int8 *pOutBufferStart = pOutBuffer;
     std::size_t nCharsDecoded = 0;
@@ -157,7 +152,7 @@ std::size_t Base64::decodeSomeChars(cpo::uno::Sequence<sal_Int8>& rOutBuffer, st
     std::size_t nInBufferPos= 0;
     while( nInBufferPos < nInBufferLen )
     {
-        sal_Unicode cChar = *pInBuffer;
+        auto cChar = *pInBuffer;
         if( cChar >= '+' && cChar <= 'z' )
         {
             sal_uInt8 nByte = aBase64DecodeTable[cChar-'+'];
@@ -205,6 +200,24 @@ std::size_t Base64::decodeSomeChars(cpo::uno::Sequence<sal_Int8>& rOutBuffer, st
         rOutBuffer.realloc( pOutBuffer - pOutBufferStart );
 
     return nCharsDecoded;
+}
+
+void Base64::decode(cpo::uno::Sequence<sal_Int8>& aBuffer, std::u16string_view sBuffer)
+{
+    std::size_t nCharsDecoded = decodeSomeCharsImpl(aBuffer, sBuffer);
+    OSL_ENSURE(nCharsDecoded == sBuffer.size(), "some bytes left in base64 decoding!");
+}
+
+void Base64::decode(cpo::uno::Sequence<sal_Int8>& aBuffer, std::string_view sBuffer)
+{
+    std::size_t nCharsDecoded = decodeSomeCharsImpl(aBuffer, sBuffer);
+    OSL_ENSURE(nCharsDecoded == sBuffer.size(), "some bytes left in base64 decoding!");
+}
+
+std::size_t Base64::decodeSomeChars(cpo::uno::Sequence<sal_Int8>& rOutBuffer,
+                                    std::u16string_view rInBuffer)
+{
+    return decodeSomeCharsImpl(rOutBuffer, rInBuffer);
 }
 
 }
