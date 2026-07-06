@@ -746,7 +746,8 @@ run: setup-wsd check-apparmour-namespaces
 	$(ENABLE_NAMESPACE) ./coolwsd $(COMMON_PARAMS) \
 			--o:logging.file[@enable]=${OUTPUT_TO_FILE} --o:logging.level=trace \
 			--o:logging_ui_cmd.file[@enable]=${OUTPUT_TO_FILE} \
-			--o:trace_event[@enable]=true
+			--o:trace_event[@enable]=true \
+			$(RUN_EXTRA)
 
 if ENABLE_DEBUG
 run-one: setup-wsd
