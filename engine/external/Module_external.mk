@@ -36,7 +36,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,FREETYPE,freetype) \
 	$(call gb_Helper_optional,FROZEN,frozen) \
 	$(call gb_Helper_optional,GLM,glm) \
-	$(call gb_Helper_optional,GPGMEPP,gpgmepp) \
 	$(call gb_Helper_optional,GRAPHITE,graphite) \
 	$(call gb_Helper_optional,HARFBUZZ,harfbuzz) \
 	$(call gb_Helper_optional,HUNSPELL,hunspell) \
@@ -47,11 +46,9 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
 	$(call gb_Helper_optional,LIBJPEG_TURBO,libjpeg-turbo) \
 	$(call gb_Helper_optional,LCMS2,lcms2) \
-	$(call gb_Helper_optional,LIBASSUAN,libassuan) \
 	$(call gb_Helper_optional,LIBEOT,libeot) \
 	$(call gb_Helper_optional,LIBEXTTEXTCAT,libexttextcat) \
 	$(call gb_Helper_optional,LIBFFI,libffi) \
-	$(call gb_Helper_optional,LIBGPGERROR,libgpg-error) \
 	$(call gb_Helper_optional,LIBLANGTAG,liblangtag) \
 	$(call gb_Helper_optional,LIBNUMBERTEXT,libnumbertext) \
 	$(call gb_Helper_optional,LIBPNG,libpng) \

@@ -40,7 +40,6 @@ libraryNames = {
     "libe-book": "libe-book",
     "zxcvbn-c": "zxcvbn-c",
     "libjpeg-turbo": "libjpeg-turbo",
-    "libgpg-error": "libgpg-error",
     "tiff": "libtiff",
     "zxing": "zxing-cpp",
     "liborcus": "orcus",

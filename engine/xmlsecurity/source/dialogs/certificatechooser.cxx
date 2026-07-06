@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_gpgme.h>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,7 +36,6 @@
 
 #include <unotools/datetime.hxx>
 #include <unotools/charclass.hxx>
-#include <unotools/useroptions.hxx>
 
 #include <resourcemanager.hxx>
 #include <strings.hrc>
@@ -168,8 +166,6 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
     m_xCertLB->make_unsorted();
     m_xCertLB->freeze();
 
-    SvtUserOptions aUserOpts;
-
     SvtSysLocale aSysLocale;
     const CharClass& rCharClass = aSysLocale.GetCharClass();
     const OUString aSearchStr(rCharClass.uppercase(m_xSearchBox->get_text()));
@@ -179,13 +175,11 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
         case CertificateChooserUserAction::Sign:
             m_xFTSign->show();
             m_xOKBtn->set_label(XsResId(STR_SIGN));
-            msPreferredKey = aUserOpts.GetSigningKey();
             break;
 
         case CertificateChooserUserAction::SelectSign:
             m_xFTSign->show();
             m_xOKBtn->set_label(XsResId(STR_SELECTSIGN));
-            msPreferredKey = aUserOpts.GetSigningKey();
             break;
 
         case CertificateChooserUserAction::Encrypt:
@@ -194,13 +188,11 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             m_xDescriptionED->hide();
             m_xCertLB->set_selection_mode(SelectionMode::Multiple);
             m_xOKBtn->set_label(XsResId(STR_ENCRYPT));
-            msPreferredKey = aUserOpts.GetEncryptionKey();
             break;
 
     }
 
     bool has_x509 = false;
-    bool has_openpgp_gpg = false;
     ::std::optional<int> oSelectRow;
     cpo::uno::Sequence<uno::Reference< security::XCertificate>> xCerts;
     for (auto& secContext : mxSecurityContexts)
@@ -214,7 +206,6 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
         uno::Reference<lang::XServiceInfo> secContextServiceInfo(secContext, uno::UNO_QUERY);
         OUString secContextType = secContextServiceInfo->getImplementationName();
         if (secContextType == "com.sun.star.xml.crypto.XMLSecurityContext") has_x509 = true;
-        else if (secContextType == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl") has_openpgp_gpg = true;
 
         try
         {
@@ -298,27 +289,10 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             m_xCertLB->set_text(nRow, UsageInClearText(xCert->getCertificateUsage()), 4);
             OUString sId(weld::toId(userData.get()));
             m_xCertLB->set_id(nRow, sId);
-
-#if HAVE_FEATURE_GPGME
-            if ( !msPreferredKey.isEmpty() ) {
-                if ( xmlsec::GetHexString(xCert->getSHA1Thumbprint(), "") == msPreferredKey )
-                {
-                    if ( meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign )
-                    {
-                        oSelectRow.emplace(nRow);
-                    }
-                    else if ( meAction == CertificateChooserUserAction::Encrypt &&
-                              aUserOpts.GetEncryptToSelf() )
-                        mxEncryptToSelf = xCert;
-                }
-            }
-#endif
         }
     }
 
     std::vector<OUString> seqLoadedCertsLabels;
-    if (has_openpgp_gpg)
-        seqLoadedCertsLabels.push_back(XsResId(STR_LOADED_CERTS_OPENPGP_GPG));
     if (has_x509)
     {
 #ifdef _WIN32
@@ -376,11 +350,6 @@ cpo::uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateCh
         }
         aRet.push_back( xCert );
     }
-
-#if HAVE_FEATURE_GPGME
-    if ( mxEncryptToSelf.is())
-        aRet.push_back( mxEncryptToSelf );
-#endif
 
     return comphelper::containerToSequence(aRet);
 }

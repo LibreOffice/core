@@ -54,9 +54,7 @@ const ::sal_Int32 FEATURE_IMAGETEMPLATE  =  128;
 const ::sal_Int32 FEATURE_PLAY           =  256;
 const ::sal_Int32 FEATURE_READONLY       =  512;
 const ::sal_Int32 FEATURE_VERSION        = 1024;
-const ::sal_Int32 FEATURE_GPGPASSWORD    = 2048;
 const ::sal_Int32 FEATURE_IMAGEANCHOR    = 4096;
-const ::sal_Int32 FEATURE_GPGSIGN        = 8192;
 
 inline constexpr OUString PROP_PICKER_LISTENER(u"picker_listener"_ustr   ); // [XFilePickerListenert]
 inline constexpr OUString PROP_DIALOG_SHOW_RESULT(u"dialog_show_result"_ustr ); // [bool] true=OK, false=CANCEL

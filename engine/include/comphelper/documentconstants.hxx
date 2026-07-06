@@ -114,7 +114,6 @@ enum class SfxFilterFlags
 
     ENCRYPTION        = 0x01000000,  // password encryption
     PASSWORDTOMODIFY  = 0x02000000,
-    GPGENCRYPTION     = 0x04000000,
     PREFERED          = 0x10000000,
     STARTPRESENTATION = 0x20000000,
     SUPPORTSSIGNING   = 0x40000000,

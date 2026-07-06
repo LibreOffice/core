@@ -552,7 +552,6 @@ core_constructor_list = [
 # xmlsecurity/util/xsec_xmlsec.component
     ("com_sun_star_xml_crypto_NSSInitializer_get_implementation", "#if HAVE_FEATURE_NSS"),
     ("com_sun_star_xml_crypto_SEInitializer_get_implementation", "#if HAVE_FEATURE_NSS"),
-    ("com_sun_star_xml_security_SEInitializer_Gpg_get_implementation", "#if HAVE_FEATURE_GPGME"),
     ("com_sun_star_xml_crypto_SecurityEnvironment_get_implementation", "#if HAVE_FEATURE_NSS"),
     ("com_sun_star_xml_wrapper_XMLDocumentWrapper_get_implementation", "#if HAVE_FEATURE_NSS"),
     ("com_sun_star_xml_wrapper_XMLElementWrapper_get_implementation", "#if HAVE_FEATURE_NSS"),
@@ -857,7 +856,6 @@ print ("""/*
 #include <config_crypto.h>
 #include <config_features.h>
 #include <config_fuzzers.h>
-#include <config_gpgme.h>
 #include <config_locales.h>
 #include <osl/detail/component-mapping.h>
 #include <string.h>

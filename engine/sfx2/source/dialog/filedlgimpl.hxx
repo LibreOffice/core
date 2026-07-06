@@ -76,7 +76,6 @@ namespace sfx2
 
         bool                    mbHasPassword           : 1;  // checkbox is visible
         bool                    mbIsPwdEnabled          : 1;  // password checkbox is not grayed out
-        bool                    mbIsGpgEncrEnabled      : 1;  // GPG checkbox is not grayed out
         bool                    m_bHaveFilterOptions    : 1;
         bool                    mbHasVersions           : 1;
         bool                    mbHasAutoExt            : 1;
@@ -90,12 +89,10 @@ namespace sfx2
         bool                    mbSystemPicker          : 1;
         bool                    mbAsyncPicker           : 1;
         bool                    mbPwdCheckBoxState      : 1;
-        bool                    mbGpgCheckBoxState      : 1;
         bool                    mbSelection             : 1;
         bool                    mbSelectionEnabled      : 1;
         bool                    mbHasSelectionBox       : 1;
         bool                    mbSelectionFltrEnabled  : 1;
-        bool                    mbHasSignByDefault      : 1;
 
     private:
         void                    addFilters( const OUString& rFactory,
@@ -105,11 +102,9 @@ namespace sfx2
                                            const OUString& rExtension );
         void                    addGraphicFilter();
         void                    enablePasswordBox( bool bInit );
-        void                    enableGpgEncrBox( bool bInit );
         void                    updateFilterOptionsBox();
         void                    updateExportButton();
         void                    updateSelectionBox();
-        void                    updateSignByDefault();
         void                    updateVersions();
         void                    updatePreviewState( bool _bUpdatePreviewWindow );
         void                    dispose();

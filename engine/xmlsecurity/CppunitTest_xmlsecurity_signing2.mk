@@ -65,24 +65,9 @@ $(eval $(call gb_CppunitTest_use_rdb,xmlsecurity_signing2,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,xmlsecurity_signing2))
 
-# various hacks to make unit test work on Linux more often
-ifeq ($(OS),LINUX)
-# reset the LD_LIBRARY_PATH for spawned GPG processes
-$(call gb_CppunitTest_get_target,xmlsecurity_signing2): \
-    EXTRA_ENV_VARS += \
-        LIBO_LD_PATH=$$LD_LIBRARY_PATH
-endif
-
 $(eval $(call gb_CppunitTest_use_custom_headers,xmlsecurity_signing2,\
     officecfg/registry \
 ))
-
-ifeq ($(OS),WNT)
-# Initializing DocumentSignatureManager will require gpgme-w32spawn.exe in workdir/LinkTarget/Executable
-$(eval $(call gb_CppunitTest_use_packages,xmlsecurity_signing2,\
-    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
-))
-endif
 
 $(eval $(call gb_CppunitTest_add_arguments,xmlsecurity_signing2, \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \

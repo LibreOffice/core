@@ -44,7 +44,6 @@ namespace com::sun::star {
     }
     namespace lang { class XSingleServiceFactory; }
     namespace uno { class XComponentContext; }
-    namespace awt { class XWindow; }
 }
 namespace cpo::uno { template <typename> class Sequence; }
 
@@ -174,9 +173,6 @@ public:
     static cpo::uno::Sequence< css::beans::NamedValue >
         CreatePackageEncryptionData(
             std::u16string_view aPassword );
-
-    static cpo::uno::Sequence< css::beans::NamedValue >
-    CreateGpgPackageEncryptionData(const css::uno::Reference<css::awt::XWindow>& xParentWindow);
 
     static bool IsValidZipEntryFileName( std::u16string_view aName, bool bSlashAllowed );
 

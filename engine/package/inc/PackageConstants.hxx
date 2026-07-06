@@ -47,16 +47,14 @@ inline constexpr sal_Int32 n_ConstDigestDecrypt = 1056; // 1024 + 32
 #define PKG_MNFST_DERKEYSIZE 11 //DerivedKeySize
 #define PKG_MNFST_KDF 12 // KeyDerivationFunction
 #define PKG_MNFST_ARGON2ARGS 13 // Argon2 arguments
-#define PKG_MNFST_KEYINFO 14 // PGP KeyInfo
 
 #define PKG_SIZE_NOENCR_MNFST 3
-#define PKG_SIZE_ENCR_MNFST 15 // max size
+#define PKG_SIZE_ENCR_MNFST 14 // max size
 
 // the properties related constants
 inline constexpr OUString ENCRYPTION_KEY_PROPERTY = u"EncryptionKey"_ustr;
 inline constexpr OUString STORAGE_ENCRYPTION_KEYS_PROPERTY = u"StorageEncryptionKeys"_ustr;
 inline constexpr OUString ENCRYPTION_ALGORITHMS_PROPERTY = u"EncryptionAlgorithms"_ustr;
-inline constexpr OUString ENCRYPTION_GPG_PROPERTIES = u"EncryptionGpGProperties"_ustr;
 #define HAS_ENCRYPTED_ENTRIES_PROPERTY "HasEncryptedEntries"
 #define HAS_NONENCRYPTED_ENTRIES_PROPERTY "HasNonEncryptedEntries"
 #define IS_INCONSISTENT_PROPERTY "IsInconsistent"

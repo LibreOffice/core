@@ -206,12 +206,9 @@ ErrCode CheckPasswd_Impl
             if ( xStorageProps.is() )
             {
                 bool bIsEncrypted = false;
-                cpo::uno::Sequence< cpo::uno::Sequence< beans::NamedValue > > aGpgProperties;
                 try {
                     xStorageProps->getPropertyValue(u"HasEncryptedEntries"_ustr)
                         >>= bIsEncrypted;
-                    xStorageProps->getPropertyValue(u"EncryptionGpGProperties"_ustr)
-                        >>= aGpgProperties;
                 } catch( uno::Exception& )
                 {
                     // TODO/LATER:
@@ -241,12 +238,6 @@ ErrCode CheckPasswd_Impl
                         const SfxUnoAnyItem* pEncryptionDataItem = rSet.GetItem(SID_ENCRYPTIONDATA, false);
                         if ( pEncryptionDataItem )
                             pEncryptionDataItem->GetValue() >>= aEncryptionData;
-
-                        // try if one of the public key entries is
-                        // decryptable, then extract session key
-                        // from it
-                        if ( !aEncryptionData.hasElements() && aGpgProperties.hasElements() )
-                            aEncryptionData = ::comphelper::DocPasswordHelper::decryptGpgSession(aGpgProperties);
 
                         // tdf#93389: if recovering a document, encryption data should contain
                         // entries for the real filter, not only for recovery ODF, to keep it

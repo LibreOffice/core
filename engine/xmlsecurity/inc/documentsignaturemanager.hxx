@@ -79,8 +79,6 @@ private:
     css::uno::Reference<css::embed::XStorage> mxTempSignatureStorage;
     css::uno::Reference<css::xml::crypto::XSEInitializer> mxSEInitializer;
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxSecurityContext;
-    css::uno::Reference<css::xml::crypto::XSEInitializer> mxGpgSEInitializer;
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxGpgSecurityContext;
     std::shared_ptr<Xmlsec> mpXmlsecLibrary;
 
 public:
@@ -121,9 +119,7 @@ public:
     bool init();
     /// Get the security environment.
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
-    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getGpgSecurityEnvironment();
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getSecurityContext() const;
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getGpgSecurityContext() const;
     void setStore(const css::uno::Reference<css::embed::XStorage>& xStore) { mxStore = xStore; }
     XMLSignatureHelper& getSignatureHelper() { return maSignatureHelper; }
     bool hasPDFSignatureHelper() const { return bool(mpPDFSignatureHelper); }

@@ -1844,7 +1844,6 @@ namespace {
         { SfxFilterFlags::TEMPLATEPATH, FLAGNAME_TEMPLATEPATH },
         { SfxFilterFlags::COMBINED, FLAGNAME_COMBINED },
         { SfxFilterFlags::SUPPORTSSIGNING, FLAGNAME_SUPPORTSSIGNING },
-        { SfxFilterFlags::GPGENCRYPTION, FLAGNAME_GPGENCRYPTION },
         { SfxFilterFlags::EXOTIC, FLAGNAME_EXOTIC },
     };
 }

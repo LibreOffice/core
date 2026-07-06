@@ -94,14 +94,6 @@ $(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
 	) \
 ))
 
-ifeq ($(OS),WNT)
-# gpgme-w32spawn.exe is needed in workdir/LinkTarget/Executable
-$(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
-    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
-))
-endif
-
-
 $(eval $(call gb_CppunitTest_add_arguments,sw_ooxmlexport$(1), \
     -env:arg-env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 ))

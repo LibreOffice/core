@@ -12,7 +12,6 @@ $(eval $(call gb_Library_Library,xsec_xmlsec))
 $(eval $(call gb_Library_set_componentfile,xsec_xmlsec,xmlsecurity/util/xsec_xmlsec,services))
 
 $(eval $(call gb_Library_add_componentimpls,xsec_xmlsec, \
-    $(if $(ENABLE_GPGMEPP),gpg) \
     $(if $(or $(ENABLE_NSS),$(filter WNT,$(OS))),nss_mscrypt) \
     $(if $(ENABLE_NSS),nss) \
 ))
@@ -20,7 +19,6 @@ $(eval $(call gb_Library_add_componentimpls,xsec_xmlsec, \
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/xmlsecurity/inc \
-	-I$(SRCDIR)/xmlsecurity/source/gpg \
 	-I$(SRCDIR)/xmlsecurity/source/xmlsec \
 	-I$(gb_UnpackedTarball_workdir)/xmlsec/include \
 ))
@@ -57,7 +55,6 @@ endif
 
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	boost_headers \
-	$(if $(ENABLE_GPGMEPP),gpgmepp) \
 	libxml2 \
 	xmlsec \
 ))
@@ -72,19 +69,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/xmlsec_init \
 	xmlsecurity/source/xmlsec/xmlstreamio \
 ))
-
-ifeq ($(ENABLE_GPGMEPP),TRUE)
-$(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
-	xmlsecurity/source/gpg/CertificateImpl \
-	xmlsecurity/source/gpg/CipherContext \
-	xmlsecurity/source/gpg/DigestContext \
-	xmlsecurity/source/gpg/SecurityEnvironment \
-	xmlsecurity/source/gpg/SEInitializer \
-	xmlsecurity/source/gpg/XMLEncryption \
-	xmlsecurity/source/gpg/XMLSecurityContext \
-	xmlsecurity/source/gpg/xmlsignature_gpgimpl \
-))
-endif
 
 ifeq ($(OS),WNT)
 

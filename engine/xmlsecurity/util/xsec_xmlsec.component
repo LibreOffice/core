@@ -29,11 +29,6 @@
     <service name="com.sun.star.xml.crypto.SEInitializer"/>
     <optional/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.SEInitializer_Gpg"
-    constructor="com_sun_star_xml_security_SEInitializer_Gpg_get_implementation">
-    <service name="com.sun.star.xml.crypto.GPGSEInitializer"/>
-    <optional/>
-  </implementation>
   <implementation name="com.sun.star.xml.crypto.SecurityEnvironment"
     constructor="com_sun_star_xml_crypto_SecurityEnvironment_get_implementation">
     <service name="com.sun.star.xml.crypto.SecurityEnvironment"/>

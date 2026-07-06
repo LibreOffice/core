@@ -70,7 +70,6 @@ class ZipPackage final : public cppu::WeakImplHelper
 
     cpo::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
     cpo::uno::Sequence< sal_Int8 > m_aEncryptionKey;
-    cpo::uno::Sequence< cpo::uno::Sequence< css::beans::NamedValue > > m_aGpgProps;
 
     FolderHash        m_aRecent;
     OUString   m_aURL;

@@ -50,7 +50,6 @@ constexpr OUString gsDigestAlgProperty            ( u"DigestAlgorithm"_ustr );
 
 ManifestImport::ManifestImport( std::vector < Sequence < PropertyValue > > & rNewManVector )
     : bIgnoreEncryptData    ( false )
-    , bPgpEncryption ( false )
     , nDerivedKeySize( 0 )
     , rManVector ( rNewManVector )
 {
@@ -90,65 +89,6 @@ void ManifestImport::doFileEntry(StringHashMap &rConvertedAttribs)
         aSequence[PKG_MNFST_UCOMPSIZE].Name = gsSizeProperty;
         aSequence[PKG_MNFST_UCOMPSIZE].Value <<= nSize;
     }
-}
-
-void ManifestImport::doEncryptedKey(StringHashMap &)
-{
-    aKeyInfoSequence.clear();
-    aKeyInfoSequence.resize(3);
-}
-
-void ManifestImport::doEncryptionMethod(StringHashMap &rConvertedAttribs,
-                                        const OUString& rAlgoAttrName)
-{
-    OUString aString = rConvertedAttribs[rAlgoAttrName];
-    if ( aKeyInfoSequence.size() != 3
-         || aString != "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" )
-    {
-        bIgnoreEncryptData = true;
-    }
-}
-
-void ManifestImport::doEncryptedCipherValue()
-{
-    if ( aKeyInfoSequence.size() == 3 )
-    {
-        aKeyInfoSequence[2].Name = u"CipherValue"_ustr;
-        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
-        aKeyInfoSequence[2].Value <<= aDecodeBuffer;
-        aCurrentCharacters.setLength(0); // consumed
-    }
-    else
-        bIgnoreEncryptData = true;
-}
-
-void ManifestImport::doEncryptedKeyId()
-{
-    if ( aKeyInfoSequence.size() == 3 )
-    {
-        aKeyInfoSequence[0].Name = u"KeyId"_ustr;
-        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
-        aKeyInfoSequence[0].Value <<= aDecodeBuffer;
-        aCurrentCharacters.setLength(0); // consumed
-    }
-    else
-        bIgnoreEncryptData = true;
-}
-
-void ManifestImport::doEncryptedKeyPacket()
-{
-    if ( aKeyInfoSequence.size() == 3 )
-    {
-        aKeyInfoSequence[1].Name = u"KeyPacket"_ustr;
-        cpo::uno::Sequence < sal_Int8 > aDecodeBuffer;
-        ::comphelper::Base64::decode(aDecodeBuffer, aCurrentCharacters);
-        aKeyInfoSequence[1].Value <<= aDecodeBuffer;
-        aCurrentCharacters.setLength(0); // consumed
-    }
-    else
-        bIgnoreEncryptData = true;
 }
 
 void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
@@ -293,13 +233,6 @@ void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
 
         aSequence[PKG_MNFST_DERKEYSIZE].Name = gsDerivedKeySizeProperty;
         aSequence[PKG_MNFST_DERKEYSIZE].Value <<= nDerivedKeySize;
-    } else if ( bPgpEncryption ) {
-        if (aString == "PGP") {
-            aSequence[PKG_MNFST_KDF].Name = u"KeyDerivationFunction"_ustr;
-            aSequence[PKG_MNFST_KDF].Value <<= xml::crypto::KDFID::PGP_RSA_OAEP_MGF1P;
-        } else {
-            bIgnoreEncryptData = true;
-        }
     } else
         bIgnoreEncryptData = true;
 }
@@ -336,10 +269,6 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     case 2: {
         if (aConvertedName == ELEMENT_FILE_ENTRY) //manifest:file-entry
             doFileEntry(aConvertedAttribs);
-        else if (aConvertedName == ELEMENT_MANIFEST_KEYINFO) //loext:keyinfo
-            ;
-        else if (aConvertedName == ELEMENT_ENCRYPTEDKEY13)   //manifest:encrypted-key
-            doEncryptedKey(aConvertedAttribs);
         else
             aStack.back().m_bValid = false;
         break;
@@ -352,14 +281,6 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             aStack.back().m_bValid = false;
         else if (aConvertedName == ELEMENT_ENCRYPTION_DATA)   //manifest:encryption-data
             doEncryptionData(aConvertedAttribs);
-        else if (aConvertedName == ELEMENT_ENCRYPTEDKEY)   //loext:encrypted-key
-            doEncryptedKey(aConvertedAttribs);
-        else if (aConvertedName == ELEMENT_ENCRYPTIONMETHOD13)   //manifest:encryption-method
-            doEncryptionMethod(aConvertedAttribs, ATTRIBUTE_ALGORITHM13);
-        else if (aConvertedName == ELEMENT_MANIFEST13_KEYINFO) //manifest:keyinfo
-            ;
-        else if (aConvertedName == ELEMENT_CIPHERDATA13)            //manifest:CipherData
-            ;
         else
             aStack.back().m_bValid = false;
         break;
@@ -376,54 +297,6 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             doKeyDerivation(aConvertedAttribs);
         else if (aConvertedName == ELEMENT_START_KEY_GENERATION)   //manifest:start-key-generation
             doStartKeyAlg(aConvertedAttribs);
-        else if (aConvertedName == ELEMENT_ENCRYPTIONMETHOD)   //loext:encryption-method
-            doEncryptionMethod(aConvertedAttribs, ATTRIBUTE_ALGORITHM);
-        else if (aConvertedName == ELEMENT_ENCRYPTED_KEYINFO)            //loext:KeyInfo
-            ;
-        else if (aConvertedName == ELEMENT_CIPHERDATA)            //loext:CipherData
-            ;
-        else if (aConvertedName == ELEMENT_PGPDATA13)   //manifest:PGPData
-            ;
-        else if (aConvertedName == ELEMENT_CIPHERVALUE13) //manifest:CipherValue
-            // ciphervalue action happens on endElement
-            aCurrentCharacters = "";
-        else
-            aStack.back().m_bValid = false;
-        break;
-    }
-    case 5: {
-        ManifestStack::reverse_iterator aIter = aStack.rbegin();
-        ++aIter;
-
-        if (!aIter->m_bValid)
-            aStack.back().m_bValid = false;
-        else if (aConvertedName == ELEMENT_PGPDATA)   //loext:PGPData
-            ;
-        else if (aConvertedName == ELEMENT_CIPHERVALUE) //loext:CipherValue
-            // ciphervalue action happens on endElement
-            aCurrentCharacters = "";
-        else if (aConvertedName == ELEMENT_PGPKEYID13)   //manifest:PGPKeyID
-            // ciphervalue action happens on endElement
-            aCurrentCharacters = "";
-        else if (aConvertedName == ELEMENT_PGPKEYPACKET13) //manifest:PGPKeyPacket
-            // ciphervalue action happens on endElement
-            aCurrentCharacters = "";
-        else
-            aStack.back().m_bValid = false;
-        break;
-    }
-    case 6: {
-        ManifestStack::reverse_iterator aIter = aStack.rbegin();
-        ++aIter;
-
-        if (!aIter->m_bValid)
-            aStack.back().m_bValid = false;
-        else if (aConvertedName == ELEMENT_PGPKEYID)   //loext:PGPKeyID
-            // ciphervalue action happens on endElement
-            aCurrentCharacters = "";
-        else if (aConvertedName == ELEMENT_PGPKEYPACKET) //loext:PGPKeyPacket
-            // ciphervalue action happens on endElement
-            aCurrentCharacters = "";
         else
             aStack.back().m_bValid = false;
         break;
@@ -444,9 +317,7 @@ bool isEmpty(const css::beans::PropertyValue &rProp)
 
 void SAL_CALL ManifestImport::endElement( const OUString& aName )
 {
-    size_t nLevel = aStack.size();
-
-    assert(nLevel >= 1);
+    assert(aStack.size() >= 1);
 
     OUString aConvertedName = ConvertName( aName );
     if ( aStack.empty() || aStack.rbegin()->m_aConvertedName != aConvertedName )
@@ -465,59 +336,12 @@ void SAL_CALL ManifestImport::endElement( const OUString& aName )
             aSequence[PKG_MNFST_VERSION].Name = u"Version"_ustr;
             aSequence[PKG_MNFST_VERSION].Value <<= m_PackageVersion;
         }
-        // the first entry gets KeyInfo element if any, for PGP encryption
-        if (!bIgnoreEncryptData && !aKeys.empty() && rManVector.empty())
-        {
-            aSequence[PKG_MNFST_KEYINFO].Name = u"KeyInfo"_ustr;
-            aSequence[PKG_MNFST_KEYINFO].Value <<= comphelper::containerToSequence(aKeys);
-        }
         std::erase_if(aSequence, isEmpty);
 
         bIgnoreEncryptData = false;
         rManVector.push_back ( comphelper::containerToSequence(aSequence) );
 
         aSequence.clear();
-    }
-    else if ( (aConvertedName == ELEMENT_ENCRYPTEDKEY
-               || aConvertedName == ELEMENT_ENCRYPTEDKEY13)
-              && aStack.back().m_bValid ) {
-        if ( !bIgnoreEncryptData )
-        {
-            aKeys.push_back( comphelper::containerToSequence(aKeyInfoSequence) );
-            bPgpEncryption = true;
-        }
-        aKeyInfoSequence.clear();
-    }
-
-    // end element handling for elements with cdata
-    switch (nLevel) {
-        case 4: {
-            if (aConvertedName == ELEMENT_CIPHERVALUE13) //manifest:CipherValue
-                doEncryptedCipherValue();
-            else
-                aStack.back().m_bValid = false;
-            break;
-        }
-        case 5: {
-            if (aConvertedName == ELEMENT_CIPHERVALUE) //loext:CipherValue
-                doEncryptedCipherValue();
-            else if (aConvertedName == ELEMENT_PGPKEYID13)   //manifest:PGPKeyID
-                doEncryptedKeyId();
-            else if (aConvertedName == ELEMENT_PGPKEYPACKET13) //manifest:PGPKeyPacket
-                doEncryptedKeyPacket();
-            else
-                aStack.back().m_bValid = false;
-            break;
-        }
-        case 6: {
-            if (aConvertedName == ELEMENT_PGPKEYID)   //loext:PGPKeyID
-                doEncryptedKeyId();
-            else if (aConvertedName == ELEMENT_PGPKEYPACKET) //loext:PGPKeyPacket
-                doEncryptedKeyPacket();
-            else
-                aStack.back().m_bValid = false;
-            break;
-        }
     }
 
     aStack.pop_back();

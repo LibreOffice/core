@@ -503,9 +503,6 @@ void DigitalSignaturesDialog::AddButtonHdlImpl()
     {
         maSignatureManager.getSecurityContext()
     };
-    // Gpg signing is only possible with ODF >= 1.2 documents
-    if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.getStore(), m_sODFVersion))
-        xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
     std::shared_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(m_xDialog.get(), m_pViewShell, std::move(xSecContexts), CertificateChooserUserAction::Sign);
     aChooser->BeforeRun();
@@ -825,7 +822,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(const SignatureInformation& rInfo)
 {
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
-    uno::Reference<xml::crypto::XSecurityEnvironment> xGpgSecEnv = maSignatureManager.getGpgSecurityEnvironment();
     uno::Reference<security::XCertificate> xCert;
 
     //First we try to get the certificate which is embedded in the XML Signature
@@ -847,9 +843,6 @@ uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(c
         xCert = xSecEnv->getCertificate(rInfo.GetSigningCertificate()->X509IssuerName,
             xmlsecurity::numericStringToBigInteger(rInfo.GetSigningCertificate()->X509SerialNumber));
     }
-    if (!xCert.is() && xGpgSecEnv.is() && !rInfo.ouGpgKeyID.isEmpty())
-        xCert = xGpgSecEnv->getCertificate( rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger(u"") );
-
     SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );
 
     return xCert;
@@ -859,8 +852,6 @@ uno::Reference<xml::crypto::XSecurityEnvironment> DigitalSignaturesDialog::getSe
 {
     switch(xCert->getCertificateKind())
     {
-        case CertificateKind_OPENPGP:
-            return maSignatureManager.getGpgSecurityEnvironment();
         case CertificateKind_X509:
             return maSignatureManager.getSecurityEnvironment();
         default:

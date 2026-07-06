@@ -17,16 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_gpgme.h>
-
 #include <xsecctl.hxx>
 #include "xsecparser.hxx"
 #include "ooxmlsecparser.hxx"
 #include <biginteger.hxx>
 #include <framework/signatureverifierimpl.hxx>
 #include <framework/saxeventkeeperimpl.hxx>
-#include <gpg/xmlsignature_gpgimpl.hxx>
-#include <gpg/SEInitializer.hxx>
 
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
@@ -114,29 +110,6 @@ void XSecController::setSignatureMethod(svl::crypto::SignatureMethodAlgorithm eA
         return;
 
     m_vInternalSignatureInformations.back().signatureInfor.eAlgorithmID = eAlgorithmID;
-}
-
-void XSecController::switchGpgSignature()
-{
-#if HAVE_FEATURE_GPGME
-    // swap signature verifier for the Gpg one
-    m_xXMLSignature.set(new XMLSignature_GpgImpl());
-    if (m_vInternalSignatureInformations.empty())
-        return;
-
-    SignatureVerifierImpl* pImpl=
-        dynamic_cast<SignatureVerifierImpl*>(
-            m_vInternalSignatureInformations.back().xReferenceResolvedListener.get());
-    if (pImpl)
-    {
-        css::uno::Reference<css::xml::crypto::XSEInitializer> xGpgSEInitializer(
-            new SEInitializerGpg());
-        pImpl->updateSignature(new XMLSignature_GpgImpl(),
-                               xGpgSEInitializer->createSecurityContext(OUString()));
-    }
-#else
-    (void) this;
-#endif
 }
 
 bool XSecController::haveReferenceForId(std::u16string_view rId) const

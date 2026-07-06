@@ -100,15 +100,6 @@
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <config_gpgme.h>
-#if HAVE_FEATURE_GPGME
-# include <com/sun/star/xml/crypto/SEInitializer.hpp>
-# include <com/sun/star/xml/crypto/GPGSEInitializer.hpp>
-# include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
-#endif
-#include <comphelper/xmlsechelper.hxx>
-#include <unotools/useroptions.hxx>
-
 #ifdef UNX
 #include <errno.h>
 #include <sys/stat.h>
@@ -292,9 +283,7 @@ void FileDialogHelper_Impl::handleControlStateChanged( const FilePickerEvent& aE
         case CommonFilePickerElementIds::LISTBOX_FILTER:
             updateFilterOptionsBox();
             enablePasswordBox( false );
-            enableGpgEncrBox( false );
             updateSelectionBox();
-            updateSignByDefault();
             // only use it for export and with our own dialog
             if ( mbExport && !mbSystemPicker )
                 updateExportButton();
@@ -532,17 +521,6 @@ void FileDialogHelper_Impl::updateSelectionBox()
     }
 }
 
-void FileDialogHelper_Impl::updateSignByDefault()
-{
-#if HAVE_FEATURE_GPGME
-    if (!mbHasSignByDefault)
-        return;
-
-    OUString aSigningKey = SvtUserOptions{}.GetSigningKey();
-    updateExtendedControl(ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN, !aSigningKey.isEmpty());
-#endif
-}
-
 void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
 {
     if ( ! mbHasPassword )
@@ -571,37 +549,6 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
         bool bPassWord = false;
         mbPwdCheckBoxState = ( aValue >>= bPassWord ) && bPassWord;
         xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( false ) );
-    }
-}
-
-void FileDialogHelper_Impl::enableGpgEncrBox( bool bInit )
-{
-    if ( ! mbHasPassword )  // CHECKBOX_GPGENCRYPTION is visible if CHECKBOX_PASSWORD is visible
-        return;
-
-    // in case of initialization assume previous state to be false
-    bool bWasEnabled = !bInit && mbIsGpgEncrEnabled;
-
-    std::shared_ptr<const SfxFilter> pCurrentFilter = getCurrentSfxFilter();
-    mbIsGpgEncrEnabled = updateExtendedControl(
-        ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION,
-        pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SfxFilterFlags::GPGENCRYPTION )
-    );
-
-    if( !bWasEnabled && mbIsGpgEncrEnabled )
-    {
-        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-        if( mbGpgCheckBoxState )
-            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0, Any( true ) );
-    }
-    else if( bWasEnabled && !mbIsGpgEncrEnabled )
-    {
-        // remember user settings until checkbox is enabled
-        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-        Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0 );
-        bool bGpgEncryption = false;
-        mbGpgCheckBoxState = ( aValue >>= bGpgEncryption ) && bGpgEncryption;
-        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0, Any( false ) );
     }
 }
 
@@ -958,10 +905,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mpAntiImpl              = _pAntiImpl;
     mbHasAutoExt            = false;
     mbHasPassword           = false;
-    mbHasSignByDefault      = false;
     m_bHaveFilterOptions    = false;
     mbIsPwdEnabled          = true;
-    mbIsGpgEncrEnabled      = true;
     mbHasVersions           = false;
     mbHasPreview            = false;
     mbShowPreview           = false;
@@ -972,7 +917,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbExport                = bool(nFlags & FileDialogFlags::Export);
     mbIsSaveDlg             = false;
     mbPwdCheckBoxState      = false;
-    mbGpgCheckBoxState      = false;
     mbSelection             = false;
     mbSelectionEnabled      = true;
     mbHasSelectionBox       = false;
@@ -1020,7 +964,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 mbHasPassword = true;
                 mbHasAutoExt = true;
                 mbIsSaveDlg = true;
-                mbHasSignByDefault = true;
                 break;
 
             case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
@@ -1037,7 +980,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
                 mbHasAutoExt = true;
                 mbIsSaveDlg = true;
-                mbHasSignByDefault = true;
                 break;
 
             case FILESAVE_AUTOEXTENSION_SELECTION:
@@ -1301,10 +1243,8 @@ void FileDialogHelper_Impl::preExecute()
     implInitializeFileName( );
 
     enablePasswordBox( true );
-    enableGpgEncrBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
-    updateSignByDefault();
 }
 
 void FileDialogHelper_Impl::postExecute( sal_Int16 _nResult )
@@ -1421,7 +1361,6 @@ ErrCode FileDialogHelper_Impl::execute( cpo::uno::Sequence<OUString>& rpURLList,
         if( mbHasPassword )
         {
             const SfxBoolItem* pPassItem = rpSet->GetItem(SID_PASSWORDINTERACTION, false);
-            // TODO: tdf#158839 problem: Is also true if the file is GPG encrypted. (not with a password)
             mbPwdCheckBoxState = ( pPassItem != nullptr && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
@@ -1566,61 +1505,9 @@ ErrCode FileDialogHelper_Impl::execute( cpo::uno::Sequence<OUString>& rpURLList,
             {
                 // ask for a password
                 const OUString& aDocName(rpURLList[0]);
-                // TODO: tdf#158839 problem: Also asks for a password if CHECKBOX_GPGENCRYPTION && CHECKBOX_PASSWORD
-                //       are checked. But only encrypts using GPG and discards the password.
                 ErrCode errCode = RequestPassword(pCurrentFilter, aDocName, &*rpSet, GetFrameInterface());
                 if (errCode != ERRCODE_NONE)
                     return errCode;
-            }
-        }
-        catch( const IllegalArgumentException& ){}
-    }
-    // check, whether or not we have to display a key selection box
-    if ( pCurrentFilter && mbHasPassword && xCtrlAccess.is() )
-    {
-        try
-        {
-            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGENCRYPTION, 0 );
-            bool bGpg = false;
-            if ( ( aValue >>= bGpg ) && bGpg )
-            {
-                cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
-                while(true)
-                {
-                    try
-                    {
-                        // ask for keys
-                        aEncryptionData
-                            = ::comphelper::OStorageHelper::CreateGpgPackageEncryptionData(
-                                GetFrameInterface());
-                        break; // user cancelled or we've some keys now
-                    }
-                    catch( const IllegalArgumentException& )
-                    {
-                        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(mpFrameWeld,
-                                                                                 VclMessageType::Warning, VclButtonsType::Ok,
-                                                                                 SfxResId(RID_SVXSTR_GPG_ENCRYPT_FAILURE)));
-                        xBox->run();
-                    }
-                }
-
-                if ( aEncryptionData.hasElements() )
-                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, cpo::uno::Any( aEncryptionData) ) );
-                else
-                    return ERRCODE_ABORT;
-            }
-        }
-        catch( const IllegalArgumentException& ){}
-    }
-    if ( pCurrentFilter && xCtrlAccess.is() )
-    {
-        try
-        {
-            Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN, 0 );
-            bool bSign = false;
-            if ((aValue >>= bSign) && bSign)
-            {
-                rpSet->Put(SfxBoolItem(SID_GPGSIGN, bSign));
             }
         }
         catch( const IllegalArgumentException& ){}

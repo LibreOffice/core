@@ -22,7 +22,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -52,13 +51,10 @@ typedef ::std::vector< ManifestScopeEntry > ManifestStack;
 
 class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocumentHandler >
 {
-    std::vector< css::beans::NamedValue > aKeyInfoSequence;
-    std::vector< cpo::uno::Sequence< css::beans::NamedValue > > aKeys;
     std::vector< css::beans::PropertyValue > aSequence;
     OUStringBuffer aCurrentCharacters{64};
     ManifestStack aStack;
     bool bIgnoreEncryptData;
-    bool bPgpEncryption;
     sal_Int32 nDerivedKeySize;
     ::std::vector < cpo::uno::Sequence < css::beans::PropertyValue > > & rManVector;
     OUString m_PackageVersion; // on root element
@@ -93,11 +89,6 @@ private:
     void doKeyDerivation(StringHashMap &rConvertedAttribs);
     /// @throws css::uno::RuntimeException
     void doStartKeyAlg(StringHashMap &rConvertedAttribs);
-    void doEncryptedKey(StringHashMap &);
-    void doEncryptionMethod(StringHashMap &, const OUString &);
-    void doEncryptedCipherValue();
-    void doEncryptedKeyId();
-    void doEncryptedKeyPacket();
 };
 #endif
 

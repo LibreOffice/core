@@ -214,12 +214,6 @@ class XSecParser::DsPGPDataContext
         {
         }
 
-        virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
-        {
-            m_rParser.m_pXSecController->switchGpgSignature();
-        }
-
         virtual std::unique_ptr<Context> CreateChildContext(
             std::optional<SvXMLNamespaceMap>&& pOldNamespaceMap,
             sal_uInt16 const nNamespace, OUString const& rName) override

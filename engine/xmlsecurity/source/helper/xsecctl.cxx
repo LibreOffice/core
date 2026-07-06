@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_gpgme.h>
-
 #include <utility>
 #include <xsecctl.hxx>
 #include <documentsignaturehelper.hxx>
 #include <framework/saxeventkeeperimpl.hxx>
 #include <xmlsec/xmldocumentwrapper_xmlsecimpl.hxx>
-#if HAVE_FEATURE_GPGME
-# include <gpg/xmlsignature_gpgimpl.hxx>
-#endif
 
 #include <com/sun/star/xml/crypto/sax/XMissionTaker.hpp>
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
@@ -176,13 +171,7 @@ void XSecController::createXSecComponent( )
 
     css::uno::Reference< css::lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
-#if HAVE_FEATURE_GPGME
-    uno::Reference< lang::XServiceInfo > xServiceInfo( m_xSecurityContext, css::uno::UNO_QUERY );
-    if (xServiceInfo->getImplementationName() == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
-        m_xXMLSignature.set(new XMLSignature_GpgImpl());
-    else // xmlsec or mscrypt
-#endif
-        m_xXMLSignature.set(xMCF->createInstanceWithContext(u"com.sun.star.xml.crypto.XMLSignature"_ustr, mxCtx), css::uno::UNO_QUERY);
+    m_xXMLSignature.set(xMCF->createInstanceWithContext(u"com.sun.star.xml.crypto.XMLSignature"_ustr, mxCtx), css::uno::UNO_QUERY);
 
     bool bSuccess = m_xXMLSignature.is();
     if ( bSuccess )

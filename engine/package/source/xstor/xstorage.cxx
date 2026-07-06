@@ -4172,66 +4172,6 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const cpo::uno::Sequence< beans
     }
 }
 
-void SAL_CALL OStorage::setGpgProperties( const cpo::uno::Sequence< cpo::uno::Sequence< beans::NamedValue > >& aProps )
-{
-    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
-
-    if ( !m_pImpl )
-    {
-        SAL_INFO("package.xstor", "Disposed!");
-        throw lang::DisposedException();
-    }
-
-    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
-        throw uno::RuntimeException(); // the interface must be visible only for package storage
-
-    if ( !aProps.hasElements() )
-        throw uno::RuntimeException( u"Unexpected empty encryption algorithms list!"_ustr );
-
-    SAL_WARN_IF( !m_pImpl->m_bIsRoot, "package.xstor", "setGpgProperties() method is not available for nonroot storages!" );
-    if ( !m_pImpl->m_bIsRoot )
-        return;
-
-    try {
-        m_pImpl->ReadContents();
-    }
-    catch ( const uno::RuntimeException& aRuntimeException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
-        throw;
-    }
-    catch ( const uno::Exception& )
-    {
-        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
-        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
-
-        throw lang::WrappedTargetRuntimeException( u"Can not open package!"_ustr,
-                                            getXWeak(),
-                                            aCaught );
-    }
-
-    uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
-    try
-    {
-        xPackPropSet->setPropertyValue( ENCRYPTION_GPG_PROPERTIES,
-                                        cpo::uno::Any( aProps ) );
-    }
-    catch ( const uno::RuntimeException& aRuntimeException )
-    {
-        SAL_INFO("package.xstor", "Rethrow: " << aRuntimeException.Message);
-        throw;
-    }
-    catch( const uno::Exception& )
-    {
-        cpo::uno::Any aCaught( ::cppu::getCaughtException() );
-        SAL_INFO("package.xstor", "Rethrow: " << exceptionToString(aCaught));
-
-        throw lang::WrappedTargetRuntimeException( u"Can not open package!"_ustr,
-                                            getXWeak(),
-                                            aCaught );
-    }
-}
-
 cpo::uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
 {
     ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
@@ -4353,8 +4293,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const c
                                     || aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
                                     || aPropertyName == IS_INCONSISTENT_PROPERTY
                                     || aPropertyName == "URL"
-                                    || aPropertyName == "RepairPackage"
-                                    || aPropertyName == ENCRYPTION_GPG_PROPERTIES) )
+                                    || aPropertyName == "RepairPackage") )
            || aPropertyName == "IsRoot"
            || aPropertyName == MEDIATYPE_FALLBACK_USED_PROPERTY )
             throw beans::PropertyVetoException();
@@ -4472,7 +4411,6 @@ cpo::uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName
         else if ( m_nStorageType == embed::StorageFormats::PACKAGE
           && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
             || aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
-            || aPropertyName == ENCRYPTION_GPG_PROPERTIES
             || aPropertyName == IS_INCONSISTENT_PROPERTY ) )
         {
             try {

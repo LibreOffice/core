@@ -79,8 +79,6 @@ using namespace cpo::uno;
             { "FilterList",             LISTBOX_FILTER,                 PROPERTY_FLAGS_COMMON                               },
             { "FilterListLabel",        LISTBOX_FILTER_LABEL,           PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "FilterOptionsBox",       CHECKBOX_FILTEROPTIONS,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
-            { "GpgPassword",            CHECKBOX_GPGENCRYPTION,         PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
-            { "GpgSign",                CHECKBOX_GPGSIGN,               PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_CHECKBOX     },
             { "HelpButton",             PUSHBUTTON_HELP,                PROPERTY_FLAGS_COMMON | PropFlags::Text          },
             { "ImageAnchorList",        LISTBOX_IMAGE_ANCHOR,           PROPERTY_FLAGS_COMMON | PROPERTY_FLAGS_LISTBOX      },
             { "ImageAnchorListLabel",   LISTBOX_IMAGE_ANCHOR_LABEL,     PROPERTY_FLAGS_COMMON | PropFlags::Text             },
@@ -399,8 +397,6 @@ using namespace cpo::uno;
                 {
                     case CHECKBOX_AUTOEXTENSION:
                     case CHECKBOX_PASSWORD:
-                    case CHECKBOX_GPGENCRYPTION:
-                    case CHECKBOX_GPGSIGN:
                     case CHECKBOX_FILTEROPTIONS:
                     case CHECKBOX_READONLY:
                     case CHECKBOX_LINK:

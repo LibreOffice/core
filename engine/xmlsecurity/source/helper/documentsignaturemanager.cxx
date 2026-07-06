@@ -18,9 +18,6 @@
  */
 
 #include <documentsignaturemanager.hxx>
-#include <config_gpgme.h>
-
-#include <gpg/SEInitializer.hxx>
 
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -100,28 +97,16 @@ bool DocumentSignatureManager::init()
                 "DocumentSignatureManager::Init - mxSEInitializer already set!");
     SAL_WARN_IF(mxSecurityContext.is(), "xmlsecurity.helper",
                 "DocumentSignatureManager::Init - mxSecurityContext already set!");
-    SAL_WARN_IF(mxGpgSEInitializer.is(), "xmlsecurity.helper",
-                "DocumentSignatureManager::Init - mxGpgSEInitializer already set!");
 
     // xmlsec is needed by both services, so init before those
     mpXmlsecLibrary = XmlsecLibrary::get();
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
-#if HAVE_FEATURE_GPGME
-    mxGpgSEInitializer.set(new SEInitializerGpg());
-#endif
 
     if (mxSEInitializer.is())
         mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 
-#if HAVE_FEATURE_GPGME
-    if (mxGpgSEInitializer.is())
-        mxGpgSecurityContext = mxGpgSEInitializer->createSecurityContext(OUString());
-
-    return mxSecurityContext.is() || mxGpgSecurityContext.is();
-#else
     return mxSecurityContext.is();
-#endif
 }
 
 PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
@@ -332,105 +317,60 @@ bool DocumentSignatureManager::add(
     const Reference<XGraphic>& xInvalidGraphic)
 {
     uno::Reference<security::XCertificate> xCert = rSigningContext.m_xCertificate;
-    uno::Reference<lang::XServiceInfo> xServiceInfo(xSecurityContext, uno::UNO_QUERY);
-    if (!xCert.is()
-        && xServiceInfo->getImplementationName()
-               == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
+
+    if (!mxStore.is())
     {
-        SAL_WARN("xmlsecurity.helper", "no certificate selected");
+        // Something not ZIP based, try PDF.
+        nSecurityId = getPDFSignatureHelper().GetNewSecurityId();
+        getPDFSignatureHelper().SetX509Certificate(rSigningContext);
+        getPDFSignatureHelper().SetDescription(rDescription);
+        uno::Reference<io::XInputStream> xInputStream(mxSignatureStream, uno::UNO_QUERY);
+        if (!getPDFSignatureHelper().Sign(mxModel, xInputStream, bAdESCompliant))
+        {
+            if (rSigningContext.m_xCertificate.is())
+            {
+                SAL_WARN("xmlsecurity.helper", "PDFSignatureHelper::Sign() failed");
+            }
+            return false;
+        }
+        return true;
+    }
+
+    OUString aCertSerial = xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber());
+    if (aCertSerial.isEmpty())
+    {
+        SAL_WARN("xmlsecurity.helper", "Error in Certificate, problem with serial number!");
         return false;
     }
 
-    // GPG or X509 key?
-    if (xServiceInfo->getImplementationName()
-        == "com.sun.star.xml.security.gpg.XMLSecurityContext_GpgImpl")
+    maSignatureHelper.StartMission(xSecurityContext);
+
+    nSecurityId = maSignatureHelper.GetNewSecurityId();
+
+    OUStringBuffer aStrBuffer;
+    comphelper::Base64::encode(aStrBuffer, xCert->getEncoded());
+
+    OUString aCertDigest;
+    svl::crypto::SignatureMethodAlgorithm eAlgorithmID = svl::crypto::SignatureMethodAlgorithm::RSA;
+    if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
     {
-        // GPG keys only really have PGPKeyId and PGPKeyPacket
-        if (!mxStore.is())
-        {
-            SAL_WARN("xmlsecurity.helper", "cannot sign pdfs with GPG keys");
-            return false;
-        }
+        OUStringBuffer aBuffer;
+        comphelper::Base64::encode(aBuffer, pCertificate->getSHA256Thumbprint());
+        aCertDigest = aBuffer.makeStringAndClear();
 
-        maSignatureHelper.StartMission(xSecurityContext);
-
-        nSecurityId = maSignatureHelper.GetNewSecurityId();
-
-        OUStringBuffer aStrBuffer;
-        comphelper::Base64::encode(aStrBuffer, xCert->getEncoded());
-
-        OUString aKeyId;
-        if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
-        {
-            OUStringBuffer aBuffer;
-            comphelper::Base64::encode(aBuffer, pCertificate->getSHA256Thumbprint());
-            aKeyId = aBuffer.makeStringAndClear();
-        }
-        else
-            SAL_WARN("xmlsecurity.helper",
-                     "XCertificate implementation without an xmlsecurity::Certificate one");
-
-        maSignatureHelper.SetGpgCertificate(nSecurityId, aKeyId, aStrBuffer.makeStringAndClear(),
-                                            xCert->getIssuerName());
+        eAlgorithmID = pCertificate->getSignatureMethodAlgorithm();
     }
     else
-    {
-        if (!mxStore.is())
-        {
-            // Something not ZIP based, try PDF.
-            nSecurityId = getPDFSignatureHelper().GetNewSecurityId();
-            getPDFSignatureHelper().SetX509Certificate(rSigningContext);
-            getPDFSignatureHelper().SetDescription(rDescription);
-            uno::Reference<io::XInputStream> xInputStream(mxSignatureStream, uno::UNO_QUERY);
-            if (!getPDFSignatureHelper().Sign(mxModel, xInputStream, bAdESCompliant))
-            {
-                if (rSigningContext.m_xCertificate.is())
-                {
-                    SAL_WARN("xmlsecurity.helper", "PDFSignatureHelper::Sign() failed");
-                }
-                return false;
-            }
-            return true;
-        }
+        SAL_WARN("xmlsecurity.helper",
+                 "XCertificate implementation without an xmlsecurity::Certificate one");
 
-        OUString aCertSerial = xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber());
-        if (aCertSerial.isEmpty())
-        {
-            SAL_WARN("xmlsecurity.helper", "Error in Certificate, problem with serial number!");
-            return false;
-        }
-
-        maSignatureHelper.StartMission(xSecurityContext);
-
-        nSecurityId = maSignatureHelper.GetNewSecurityId();
-
-        OUStringBuffer aStrBuffer;
-        comphelper::Base64::encode(aStrBuffer, xCert->getEncoded());
-
-        OUString aCertDigest;
-        svl::crypto::SignatureMethodAlgorithm eAlgorithmID
-            = svl::crypto::SignatureMethodAlgorithm::RSA;
-        if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
-        {
-            OUStringBuffer aBuffer;
-            comphelper::Base64::encode(aBuffer, pCertificate->getSHA256Thumbprint());
-            aCertDigest = aBuffer.makeStringAndClear();
-
-            eAlgorithmID = pCertificate->getSignatureMethodAlgorithm();
-        }
-        else
-            SAL_WARN("xmlsecurity.helper",
-                     "XCertificate implementation without an xmlsecurity::Certificate one");
-
-        maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial,
-                                             aStrBuffer.makeStringAndClear(), aCertDigest,
-                                             eAlgorithmID);
-    }
+    maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial,
+                                         aStrBuffer.makeStringAndClear(), aCertDigest,
+                                         eAlgorithmID);
 
     const cpo::uno::Sequence<uno::Reference<security::XCertificate>> aCertPath
         = xSecurityContext->getSecurityEnvironment()->buildCertificatePath(xCert);
 
-    OUStringBuffer aStrBuffer;
     for (uno::Reference<security::XCertificate> const& rxCertificate : aCertPath)
     {
         comphelper::Base64::encode(aStrBuffer, rxCertificate->getEncoded());
@@ -719,23 +659,10 @@ uno::Reference<xml::crypto::XSecurityEnvironment> DocumentSignatureManager::getS
                                   : uno::Reference<xml::crypto::XSecurityEnvironment>();
 }
 
-uno::Reference<xml::crypto::XSecurityEnvironment>
-DocumentSignatureManager::getGpgSecurityEnvironment()
-{
-    return mxGpgSecurityContext.is() ? mxGpgSecurityContext->getSecurityEnvironment()
-                                     : uno::Reference<xml::crypto::XSecurityEnvironment>();
-}
-
 uno::Reference<xml::crypto::XXMLSecurityContext> const&
 DocumentSignatureManager::getSecurityContext() const
 {
     return mxSecurityContext;
-}
-
-uno::Reference<xml::crypto::XXMLSecurityContext> const&
-DocumentSignatureManager::getGpgSecurityContext() const
-{
-    return mxGpgSecurityContext;
 }
 
 void DocumentSignatureManager::setModel(const uno::Reference<frame::XModel>& xModel)

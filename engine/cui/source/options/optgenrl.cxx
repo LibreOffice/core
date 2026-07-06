@@ -21,10 +21,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <config_gpgme.h>
-#include <comphelper/xmlsechelper.hxx>
-#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/safeint.hxx>
@@ -215,26 +211,8 @@ SvxGeneralTabPage::SvxGeneralTabPage(weld::Container* pPage, weld::DialogControl
     : SfxTabPage(pPage, pController, u"cui/ui/optuserpage.ui"_ustr, u"OptUserPage"_ustr, &rCoreSet)
     , m_xUseDataCB(m_xBuilder->weld_check_button(u"usefordocprop"_ustr))
     , m_xUseDataImg(m_xBuilder->weld_widget(u"lockusefordocprop"_ustr))
-    , m_xCryptoFrame(m_xBuilder->weld_widget( u"cryptography"_ustr))
-    , m_xSigningKeyLB(m_xBuilder->weld_entry(u"signingkey"_ustr))
-    , m_xSigningKeyFT(m_xBuilder->weld_label(u"signingkeylabel"_ustr))
-    , m_xSigningKeyImg(m_xBuilder->weld_widget(u"locksigningkey"_ustr))
-    , m_xSigningKeyButton(m_xBuilder->weld_button(u"picksigningkey"_ustr))
-    , m_xRemoveSigningKeyButton(m_xBuilder->weld_button(u"removesigningkey"_ustr))
-    , m_xEncryptionKeyLB(m_xBuilder->weld_entry(u"encryptionkey"_ustr))
-    , m_xEncryptionKeyFT(m_xBuilder->weld_label(u"encryptionkeylabel"_ustr))
-    , m_xEncryptionKeyImg(m_xBuilder->weld_widget(u"lockencryptionkey"_ustr))
-    , m_xEncryptionKeyButton(m_xBuilder->weld_button(u"pickencryptionkey"_ustr))
-    , m_xRemoveEncryptionKeyButton(m_xBuilder->weld_button(u"removeencryptionkey"_ustr))
-    , m_xEncryptToSelfCB(m_xBuilder->weld_check_button(u"encrypttoself"_ustr))
-    , m_xEncryptToSelfImg(m_xBuilder->weld_widget(u"lockencrypttoself"_ustr))
 {
     InitControls();
-#if HAVE_FEATURE_GPGME
-    InitCryptography();
-#else
-    m_xCryptoFrame->hide();
-#endif
 
     SetExchangeSupport(); // this page needs ExchangeSupport
     SetLinks();
@@ -298,19 +276,6 @@ void SvxGeneralTabPage::InitControls ()
     }
 }
 
-void SvxGeneralTabPage::InitCryptography()
-{
-#if HAVE_FEATURE_GPGME
-    m_xCryptoFrame->show();
-    m_xSigningKeyButton->connect_clicked(LINK(this, SvxGeneralTabPage, ChooseKeyButtonHdl));
-    m_xEncryptionKeyButton->connect_clicked(LINK(this, SvxGeneralTabPage, ChooseKeyButtonHdl));
-
-    m_xRemoveSigningKeyButton->connect_clicked(LINK(this, SvxGeneralTabPage, RemoveKeyButtonHdl));
-    m_xRemoveEncryptionKeyButton->connect_clicked(LINK(this, SvxGeneralTabPage, RemoveKeyButtonHdl));
-#endif
-
-}
-
 void SvxGeneralTabPage::SetLinks ()
 {
     // link for updating the initials
@@ -333,7 +298,7 @@ OUString SvxGeneralTabPage::GetAllStrings()
         = { u"label1"_ustr,     u"companyft"_ustr,         u"nameft"_ustr,          u"rusnameft"_ustr,
             u"eastnameft"_ustr, u"streetft"_ustr,          u"russtreetft"_ustr,     u"icityft"_ustr,
             u"cityft"_ustr,     u"countryft"_ustr,         u"titleft"_ustr,         u"phoneft"_ustr,
-            u"faxft"_ustr,      u"cryptographylabel"_ustr, u"signingkeylabel"_ustr, u"encryptionkeylabel"_ustr };
+            u"faxft"_ustr };
 
     for (const auto& label : labels)
     {
@@ -341,7 +306,7 @@ OUString SvxGeneralTabPage::GetAllStrings()
             sAllStrings.append(pString->get_label() + " ");
     }
 
-    sAllStrings.append(m_xUseDataCB->get_label() + " " + m_xEncryptToSelfCB->get_label() + " ");
+    sAllStrings.append(m_xUseDataCB->get_label() + " ");
 
     return sAllStrings.toString().replaceAll("_", "");
 }
@@ -442,18 +407,6 @@ bool SvxGeneralTabPage::GetData_Impl()
         }
     }
 
-#if HAVE_FEATURE_GPGME
-    aUserOpt.SetToken( UserOptToken::SigningKey, msCurrentSigningKey );
-    aUserOpt.SetToken( UserOptToken::SigningKeyDisplayName, m_xSigningKeyLB->get_text() );
-    aUserOpt.SetToken( UserOptToken::EncryptionKey, msCurrentEncryptionKey );
-    aUserOpt.SetToken( UserOptToken::EncryptionKeyDisplayName, m_xEncryptionKeyLB->get_text() );
-    aUserOpt.SetBoolValue( UserOptToken::EncryptToSelf, m_xEncryptToSelfCB->get_active() );
-
-    bModified |= m_xSigningKeyLB->get_value_changed_from_saved() ||
-                 m_xEncryptionKeyLB->get_value_changed_from_saved() ||
-                 m_xEncryptToSelfCB->get_state_changed_from_saved();
-#endif
-
     return bModified;
 }
 
@@ -490,30 +443,6 @@ void SvxGeneralTabPage::SetData_Impl()
     bool bEnable = !officecfg::Office::Common::Save::Document::UseUserData::isReadOnly();
     m_xUseDataCB->set_sensitive(bEnable);
     m_xUseDataImg->set_visible(!bEnable);
-
-#if HAVE_FEATURE_GPGME
-    bEnable = !aUserOpt.IsTokenReadonly(UserOptToken::SigningKey);
-    m_xSigningKeyButton->set_sensitive(bEnable);
-    m_xSigningKeyFT->set_sensitive(bEnable);
-    m_xSigningKeyImg->set_visible(!bEnable);
-
-    bEnable = !aUserOpt.IsTokenReadonly(UserOptToken::EncryptionKey);
-    m_xEncryptionKeyButton->set_sensitive(bEnable);
-    m_xEncryptionKeyFT->set_sensitive(bEnable);
-    m_xEncryptionKeyImg->set_visible(!bEnable);
-
-    bEnable = !aUserOpt.IsTokenReadonly(UserOptToken::EncryptToSelf);
-    m_xEncryptToSelfCB->set_sensitive(bEnable);
-    m_xEncryptToSelfImg->set_visible(!bEnable);
-
-    msCurrentSigningKey = aUserOpt.GetToken(UserOptToken::SigningKey);
-    m_xSigningKeyLB->set_text(aUserOpt.GetToken(UserOptToken::SigningKeyDisplayName));
-
-    msCurrentEncryptionKey = aUserOpt.GetToken(UserOptToken::EncryptionKey);
-    m_xEncryptionKeyLB->set_text(aUserOpt.GetToken(UserOptToken::EncryptionKeyDisplayName));
-
-    m_xEncryptToSelfCB->set_active( aUserOpt.GetEncryptToSelf() );
-#endif
 }
 
 

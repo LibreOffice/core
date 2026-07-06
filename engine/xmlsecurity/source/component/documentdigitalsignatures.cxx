@@ -45,7 +45,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/xmlsechelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -176,9 +175,6 @@ public:
                             css::uno::Reference<css::embed::XStorage> const & xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const & xStream) override;
 
-    bool SAL_CALL trustUntrustedCertificate(
-                            css::uno::Reference<css::security::XCertificate> const& xCertificate) override;
-
     bool SAL_CALL signScriptingContentWithCertificate(
                             css::uno::Reference<css::security::XCertificate> const& xCertificate,
                             css::uno::Reference<css::embed::XStorage> const& xStoragexStorage,
@@ -295,13 +291,7 @@ bool DocumentDigitalSignatures::signSignatureLine(
     aSignatureManager.getSignatureHelper().SetStorage(rxStorage, m_sODFVersion);
     aSignatureManager.setSignatureStream(xSignStream);
 
-    Reference<XXMLSecurityContext> xSecurityContext;
-    Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);
-    if (xServiceInfo->getImplementationName()
-        == "com.sun.star.xml.security.gpg.XCertificate_GpgImpl")
-        xSecurityContext = aSignatureManager.getGpgSecurityContext();
-    else
-        xSecurityContext = aSignatureManager.getSecurityContext();
+    Reference<XXMLSecurityContext> xSecurityContext = aSignatureManager.getSecurityContext();
 
     sal_Int32 nSecurityId;
     svl::crypto::SigningContext aSigningContext;
@@ -482,7 +472,6 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     rSignatureHelper.EndMission();
 
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = aSignatureManager.getSecurityEnvironment();
-    uno::Reference<xml::crypto::XSecurityEnvironment> xGpgSecEnv = aSignatureManager.getGpgSecurityEnvironment();
 
     SignatureInformations aSignInfos = rSignatureHelper.GetSignatureInformations();
     int nInfos = aSignInfos.size();
@@ -527,16 +516,6 @@ DocumentDigitalSignatures::ImplVerifySignatures(
                     rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
                 }
             }
-        }
-        else if (!rInfo.ouGpgCertificate.isEmpty() && xGpgSecEnv.is()) // GPG
-        {
-            // TODO not ideal to retrieve cert by keyID, might
-            // collide, or PGPKeyID format might change - can't we
-            // keep the xCert itself in rInfo?
-            rSigInfo.Signer = xGpgSecEnv->getCertificate(
-                rInfo.ouGpgKeyID, xmlsecurity::numericStringToBigInteger(u""));
-            rSigInfo.CertificateStatus = xGpgSecEnv->verifyCertificate(
-                rSigInfo.Signer, Sequence<Reference<css::security::XCertificate>>());
         }
 
         // Time support again (#i38744#)
@@ -655,11 +634,9 @@ DocumentDigitalSignatures::chooseCertificatesImpl(SfxViewShell* pViewShell,
 
     DocumentSignatureManager aSignatureManager(mxCtx, {});
     if (aSignatureManager.init()) {
-        // Include OpenPGP and / or X.509 as requested.
+        // Include X.509 as requested.
         if (certificateKind == CertificateKind_NONE || certificateKind == CertificateKind_X509)
             xSecContexts.push_back(aSignatureManager.getSecurityContext());
-        if (certificateKind == CertificateKind_NONE || certificateKind == CertificateKind_OPENPGP)
-            xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
     std::shared_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(Application::GetFrameWeld(mxParentWindow), pViewShell, std::move(xSecContexts), eAction);
@@ -823,17 +800,6 @@ void DocumentDigitalSignatures::SetSignScriptingContent(
     mxScriptingSignStream = xScriptingSignStream;
 }
 
-bool DocumentDigitalSignatures::trustUntrustedCertificate(
-    css::uno::Reference<css::security::XCertificate> const& xCertificate)
-{
-    OUString aSubjectName(comphelper::xmlsec::GetContentPart(xCertificate->getSubjectName(), xCertificate->getCertificateKind()));
-    OUString aMsg(XsResId(STR_TRUST_UNTRUSTED_PUBKEY));
-    aMsg = aMsg.replaceFirst("%{data}", aSubjectName);
-    std::unique_ptr<weld::MessageDialog> m_xQueryBox(Application::CreateMessageDialog(nullptr, VclMessageType::Warning, VclButtonsType::YesNo, aMsg));
-    m_xQueryBox->set_default_response(RET_NO);
-    return m_xQueryBox->run() == RET_YES;
-}
-
 bool DocumentDigitalSignatures::signScriptingContentWithCertificate(
     css::uno::Reference<css::security::XCertificate> const& xCertificate,
     css::uno::Reference<css::embed::XStorage> const& xStorage,
@@ -865,13 +831,7 @@ bool DocumentDigitalSignatures::signWithCertificateImpl(
     aSignatureManager.setSignatureStream(xStream);
     aSignatureManager.setModel(xModel);
 
-    Reference<XXMLSecurityContext> xSecurityContext;
-    Reference<XServiceInfo> xServiceInfo(rSigningContext.m_xCertificate, UNO_QUERY);
-    if (xServiceInfo.is() && xServiceInfo->getImplementationName()
-        == "com.sun.star.xml.security.gpg.XCertificate_GpgImpl")
-        xSecurityContext = aSignatureManager.getGpgSecurityContext();
-    else
-        xSecurityContext = aSignatureManager.getSecurityContext();
+    Reference<XXMLSecurityContext> xSecurityContext = aSignatureManager.getSecurityContext();
 
     sal_Int32 nSecurityId;
 

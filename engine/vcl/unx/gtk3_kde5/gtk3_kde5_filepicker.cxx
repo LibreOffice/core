@@ -228,9 +228,6 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_SELECTION:
             resId = STR_SVT_FILEPICKER_SELECTION;
             break;
-        case CHECKBOX_GPGENCRYPTION:
-            resId = STR_SVT_FILEPICKER_GPGENCRYPT;
-            break;
         case PUSHBUTTON_PLAY:
             resId = STR_SVT_FILEPICKER_PLAY;
             break;
@@ -263,7 +260,6 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_LINK:
         case CHECKBOX_PREVIEW:
         case CHECKBOX_SELECTION:
-        case CHECKBOX_GPGENCRYPTION:
         {
             // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
             // code, but the checkbox is hidden and ignored
@@ -328,7 +324,6 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const cpo::uno::Sequence<cpo::uno::
         {
             saveDialog = true;
             addCustomControl(CHECKBOX_PASSWORD);
-            addCustomControl(CHECKBOX_GPGENCRYPTION);
             break;
         }
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
@@ -336,7 +331,6 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const cpo::uno::Sequence<cpo::uno::
             saveDialog = true;
             addCustomControl(CHECKBOX_AUTOEXTENSION);
             addCustomControl(CHECKBOX_PASSWORD);
-            addCustomControl(CHECKBOX_GPGENCRYPTION);
             addCustomControl(CHECKBOX_FILTEROPTIONS);
             break;
         }

@@ -73,12 +73,4 @@ ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
 $(eval $(call gb_CppunitTest_set_non_application_font_use,sw_htmlexport2,abort))
 endif
 
-ifeq ($(OS),WNT)
-# Initializing DocumentSignatureManager will require gpgme-w32spawn.exe in workdir/LinkTarget/Executable
-# In fact, it is not even required to complete test successfully, but the dialog would stop execution
-$(eval $(call gb_CppunitTest_use_packages,sw_htmlexport2,\
-    $(call gb_Helper_optional,GPGMEPP,gpgmepp)\
-))
-endif
-
 # vim: set noet sw=4 ts=4:

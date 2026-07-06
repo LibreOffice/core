@@ -33,19 +33,6 @@ private:
     // the "Use data for document properties" checkbox
     std::unique_ptr<weld::CheckButton> m_xUseDataCB;
     std::unique_ptr<weld::Widget> m_xUseDataImg;
-    std::unique_ptr<weld::Widget> m_xCryptoFrame;
-    std::unique_ptr<weld::Entry> m_xSigningKeyLB;
-    std::unique_ptr<weld::Label> m_xSigningKeyFT;
-    std::unique_ptr<weld::Widget> m_xSigningKeyImg;
-    std::unique_ptr<weld::Button> m_xSigningKeyButton;
-    std::unique_ptr<weld::Button> m_xRemoveSigningKeyButton;
-    std::unique_ptr<weld::Entry> m_xEncryptionKeyLB;
-    std::unique_ptr<weld::Label> m_xEncryptionKeyFT;
-    std::unique_ptr<weld::Widget> m_xEncryptionKeyImg;
-    std::unique_ptr<weld::Button> m_xEncryptionKeyButton;
-    std::unique_ptr<weld::Button> m_xRemoveEncryptionKeyButton;
-    std::unique_ptr<weld::CheckButton> m_xEncryptToSelfCB;
-    std::unique_ptr<weld::Widget> m_xEncryptToSelfImg;
     // rows
     struct Row;
     std::vector<std::shared_ptr<Row> > vRows;
@@ -62,7 +49,6 @@ private:
     void                SetData_Impl();
 
     void InitControls ();
-    void InitCryptography();
     void SetLinks ();
 
 protected:

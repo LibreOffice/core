@@ -16620,8 +16620,6 @@ module com {
      published constants ExtendedFilePickerElementIds {
       const short CHECKBOX_AUTOEXTENSION = 100;
       const short CHECKBOX_FILTEROPTIONS = 102;
-      const short CHECKBOX_GPGENCRYPTION = 211;
-      const short CHECKBOX_GPGSIGN = 214;
       const short CHECKBOX_LINK = 104;
       const short CHECKBOX_PASSWORD = 101;
       const short CHECKBOX_PREVIEW = 105;

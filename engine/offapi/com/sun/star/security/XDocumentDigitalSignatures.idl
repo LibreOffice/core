@@ -154,10 +154,6 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     boolean signScriptingContentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
                                                 [in] ::com::sun::star::io::XStream xStream);
-
-    /** queries the user if they want to trust an untrusted certificate.
-    */
-    boolean trustUntrustedCertificate([in] ::com::sun::star::security::XCertificate xCertificate);
 };
 
 } ; } ; } ; } ;

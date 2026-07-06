@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_gpgme.h>
-
 #include <algorithm>
 #include <string_view>
 
@@ -40,12 +38,6 @@
 #include <rtl/random.h>
 #include <rtl/ref.hxx>
 #include <string.h>
-
-#if HAVE_FEATURE_GPGME
-# include <context.h>
-# include <data.h>
-# include <decryptionresult.h>
-#endif
 
 using ::cpo::uno::Sequence;
 using ::com::sun::star::uno::Exception;
@@ -657,85 +649,6 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
     }
 
     return (eResult == DocPasswordVerifierResult::OK) ? aEncData : cpo::uno::Sequence< beans::NamedValue >();
-}
-
-/*static*/ cpo::uno::Sequence< css::beans::NamedValue >
-    DocPasswordHelper::decryptGpgSession(
-        const cpo::uno::Sequence< cpo::uno::Sequence< beans::NamedValue > >& rGpgProperties )
-{
-#if HAVE_FEATURE_GPGME
-    if ( !rGpgProperties.hasElements() )
-        return cpo::uno::Sequence< beans::NamedValue >();
-
-    cpo::uno::Sequence< beans::NamedValue > aEncryptionData;
-    std::unique_ptr<GpgME::Context> ctx;
-    GpgME::initializeLibrary();
-    GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
-    if (err)
-        throw uno::RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
-
-    ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
-    if (ctx == nullptr)
-        throw uno::RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
-    ctx->setArmor(false);
-
-    for (auto& rSequence : rGpgProperties)
-    {
-        if (rSequence.getLength() == 3)
-        {
-            // take CipherValue and try to decrypt that - stop after
-            // the first successful decryption
-
-            // ctx is setup now, let's decrypt the lot!
-            cpo::uno::Sequence < sal_Int8 > aVector;
-            rSequence[2].Value >>= aVector;
-
-            GpgME::Data cipher(
-                reinterpret_cast<const char*>(aVector.getConstArray()),
-                size_t(aVector.getLength()), false);
-            GpgME::Data plain;
-
-            GpgME::DecryptionResult crypt_res = ctx->decrypt(
-                cipher, plain);
-
-            // NO_SECKEY -> skip
-            // BAD_PASSPHRASE -> retry?
-
-            off_t result = plain.seek(0,SEEK_SET);
-            (void) result;
-            assert(result == 0);
-            int len=0, curr=0; char buf;
-            while( (curr=plain.read(&buf, 1)) )
-                len += curr;
-
-            if(crypt_res.error() || !len)
-                continue; // can't use this key, take next one
-
-            cpo::uno::Sequence < sal_Int8 > aKeyValue(len);
-            result = plain.seek(0,SEEK_SET);
-            assert(result == 0);
-            if( plain.read(aKeyValue.getArray(), len) != len )
-                throw uno::RuntimeException(u"The GpgME library failed to read the encrypted value."_ustr);
-
-            SAL_INFO("comphelper.crypto", "Extracted gpg session key of length: " << len);
-
-            aEncryptionData = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, cpo::uno::Any(aKeyValue) } };
-            break;
-        }
-    }
-
-    if ( aEncryptionData.hasElements() )
-    {
-        cpo::uno::Sequence< beans::NamedValue > aContainer{
-            { u"GpgInfos"_ustr, cpo::uno::Any(rGpgProperties) }, { u"EncryptionKey"_ustr, cpo::uno::Any(aEncryptionData) }
-        };
-
-        return aContainer;
-    }
-#else
-    (void)rGpgProperties;
-#endif
-    return cpo::uno::Sequence< beans::NamedValue >();
 }
 
 } // namespace comphelper

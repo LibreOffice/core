@@ -58,8 +58,6 @@ private:
     bool                    mbInitialized;
     CertificateChooserUserAction const meAction;
     SfxViewShell* m_pViewShell;
-    OUString                msPreferredKey;
-    css::uno::Reference<css::security::XCertificate> mxEncryptToSelf;
 
     std::unique_ptr<weld::Label>    m_xFTSign;
     std::unique_ptr<weld::Label>    m_xFTEncrypt;

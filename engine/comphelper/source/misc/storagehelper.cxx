@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_gpgme.h>
-
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -33,13 +31,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
-#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
-#include <com/sun/star/security/XCertificate.hpp>
 
 #include <vector>
 
 #include <rtl/digest.h>
-#include <rtl/random.h>
 #include <sal/log.hxx>
 
 #include <ucbhelper/content.hxx>
@@ -53,16 +48,8 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
-#include <comphelper/xmlsechelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <o3tl/string_view.hxx>
-
-#if HAVE_FEATURE_GPGME
-# include <context.h>
-# include <encryptionresult.h>
-# include <key.h>
-# include <data.h>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -221,17 +208,7 @@ void OStorageHelper::SetCommonStorageEncryptionData(
     if ( !xEncrSet.is() )
         throw io::IOException(u"no XEncryptionProtectedStorage"_ustr); // TODO
 
-    if ( aEncryptionData.getLength() == 2 &&
-         aEncryptionData[0].Name == "GpgInfos" &&
-         aEncryptionData[1].Name == "EncryptionKey" )
-    {
-        xEncrSet->setGpgProperties(
-            aEncryptionData[0].Value.get< cpo::uno::Sequence< cpo::uno::Sequence< beans::NamedValue > > >() );
-        xEncrSet->setEncryptionData(
-            aEncryptionData[1].Value.get< cpo::uno::Sequence< beans::NamedValue > >() );
-    }
-    else
-        xEncrSet->setEncryptionData( aEncryptionData );
+    xEncrSet->setEncryptionData( aEncryptionData );
 }
 
 
@@ -421,144 +398,6 @@ cpo::uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionD
     }
 
     return aEncryptionData;
-}
-
-cpo::uno::Sequence<beans::NamedValue>
-OStorageHelper::CreateGpgPackageEncryptionData(const css::uno::Reference<css::awt::XWindow>&
-#if HAVE_FEATURE_GPGME
-                                                   xParentWindow
-#endif
-)
-{
-#if HAVE_FEATURE_GPGME
-    // generate session key
-    // --------------------
-
-    // get 32 random chars out of it
-    cpo::uno::Sequence < sal_Int8 > aVector(32);
-    rtl_random_getBytes(aVector.getArray(), aVector.getLength());
-
-    std::vector< cpo::uno::Sequence< beans::NamedValue > > aGpgEncryptions;
-
-    uno::Reference< security::XDocumentDigitalSignatures > xSigner(
-        // here none of the version-dependent methods are called
-        security::DocumentDigitalSignatures::createDefault(
-            comphelper::getProcessComponentContext()));
-
-    xSigner->setParentWindow(xParentWindow);
-
-    // fire up certificate chooser dialog - user can multi-select!
-    const cpo::uno::Sequence< uno::Reference< security::XCertificate > > xSignCertificates=
-        xSigner->chooseEncryptionCertificate(css::security::CertificateKind_OPENPGP);
-
-    if (!xSignCertificates.hasElements())
-        return cpo::uno::Sequence< beans::NamedValue >(); // user cancelled
-
-    // generate one encrypted key entry for each recipient
-    // ---------------------------------------------------
-
-    std::unique_ptr<GpgME::Context> ctx;
-    GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
-    if (err)
-        throw uno::RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
-
-    bool bResetContext = true;
-    for (const auto & cert : xSignCertificates)
-    {
-        if (bResetContext)
-        {
-            bResetContext = false;
-            ctx.reset( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
-            if (ctx == nullptr)
-                throw uno::RuntimeException(u"The GpgME library failed to initialize for the OpenPGP protocol."_ustr);
-            ctx->setArmor(false);
-        }
-
-        OString aKeyID;
-        if (cert.is())
-        {
-            aKeyID
-                = OUStringToOString(comphelper::xmlsec::GetHexString(cert->getSHA1Thumbprint(), ""),
-                                    RTL_TEXTENCODING_UTF8);
-        }
-
-        std::vector<GpgME::Key> keys{ ctx->key(aKeyID.getStr(), err, false) };
-
-        // ctx is setup now, let's encrypt the lot!
-        GpgME::Data plain(
-            reinterpret_cast<const char*>(aVector.getConstArray()),
-            size_t(aVector.getLength()), false);
-        GpgME::Data cipher;
-
-        GpgME::EncryptionResult crypt_res = ctx->encrypt(
-            keys, plain,
-            cipher, GpgME::Context::NoCompress);
-
-        // tdf#160184 ask user if they want to trust an untrusted certificate
-        // gpgme contexts uses the "auto" trust model by default which only
-        // allows encrypting with keys that have their trust level set to
-        // "Ultimate". The gpg command, however, gives the user the option
-        // to encrypt with a certificate that has a lower trust level so
-        // emulate that behavior by asking the user if they want to trust
-        // the certificate for just this operation only.
-        if (crypt_res.error().code() == GPG_ERR_UNUSABLE_PUBKEY)
-        {
-            if (xSigner->trustUntrustedCertificate(cert))
-            {
-                // Reset the trust model back to "auto" before processing
-                // the next certificate
-                bResetContext = true;
-
-                ctx->setFlag("trust-model", "tofu+pgp");
-                ctx->setFlag("tofu-default-policy", "unknown");
-                crypt_res = ctx->encrypt(
-                    keys, plain,
-                    cipher, GpgME::Context::NoCompress);
-            }
-        }
-
-        off_t result = cipher.seek(0,SEEK_SET);
-        (void) result;
-        assert(result == 0);
-        int len=0, curr=0; char buf;
-        while( (curr=cipher.read(&buf, 1)) )
-            len += curr;
-
-        if(crypt_res.error() || !len)
-            throw lang::IllegalArgumentException(
-                u"Not a suitable key, or failed to encrypt."_ustr,
-                css::uno::Reference<css::uno::XInterface>(), -1);
-
-        cpo::uno::Sequence < sal_Int8 > aCipherValue(len);
-        result = cipher.seek(0,SEEK_SET);
-        assert(result == 0);
-        if( cipher.read(aCipherValue.getArray(), len) != len )
-            throw uno::RuntimeException(u"The GpgME library failed to read the encrypted value."_ustr);
-
-        SAL_INFO("comphelper.crypto", "Generated gpg crypto of length: " << len);
-
-        cpo::uno::Sequence<sal_Int8> aKeyIdSequence
-            = comphelper::arrayToSequence<sal_Int8>(aKeyID.getStr(), aKeyID.getLength() + 1);
-        cpo::uno::Sequence<beans::NamedValue> aGpgEncryptionEntry{
-            { u"KeyId"_ustr, cpo::uno::Any(aKeyIdSequence) },
-            { u"KeyPacket"_ustr, cpo::uno::Any(aKeyIdSequence) },
-            { u"CipherValue"_ustr, cpo::uno::Any(aCipherValue) }
-        };
-
-        aGpgEncryptions.push_back(aGpgEncryptionEntry);
-    }
-
-    cpo::uno::Sequence<beans::NamedValue> aEncryptionData
-        = { { PACKAGE_ENCRYPTIONDATA_SHA256UTF8, cpo::uno::Any(aVector) } };
-
-    cpo::uno::Sequence<beans::NamedValue> aContainer
-        = { { u"GpgInfos"_ustr, cpo::uno::Any(comphelper::containerToSequence(aGpgEncryptions)) },
-            { u"EncryptionKey"_ustr, cpo::uno::Any(aEncryptionData) } };
-
-    return aContainer;
-#else
-    return cpo::uno::Sequence< beans::NamedValue >();
-#endif
 }
 
 bool OStorageHelper::IsValidZipEntryFileName( std::u16string_view aName, bool bSlashAllowed )

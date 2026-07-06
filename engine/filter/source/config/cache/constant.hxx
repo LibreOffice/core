@@ -98,7 +98,6 @@ inline constexpr OUString FLAGNAME_CONSULTSERVICE = u"CONSULTSERVICE"_ustr;
 inline constexpr OUString FLAGNAME_DEFAULT = u"DEFAULT"_ustr;
 inline constexpr OUString FLAGNAME_ENCRYPTION = u"ENCRYPTION"_ustr;
 inline constexpr OUString FLAGNAME_EXPORT = u"EXPORT"_ustr;
-inline constexpr OUString FLAGNAME_GPGENCRYPTION = u"GPGENCRYPTION"_ustr;
 inline constexpr OUString FLAGNAME_IMPORT = u"IMPORT"_ustr;
 inline constexpr OUString FLAGNAME_INTERNAL = u"INTERNAL"_ustr;
 inline constexpr OUString FLAGNAME_NOTINFILEDIALOG = u"NOTINFILEDIALOG"_ustr;

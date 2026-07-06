@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_gpgme.h>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
@@ -187,18 +186,10 @@ void ControlHelper::initialize( sal_Int16 nTemplateId )
         case FILESAVE_AUTOEXTENSION_PASSWORD:
             m_bToggleVisibility[AUTOEXTENSION] = true;
             m_bToggleVisibility[PASSWORD] = true;
-            m_bToggleVisibility[GPGENCRYPTION] = true;
-#if HAVE_FEATURE_GPGME
-            m_bToggleVisibility[GPGSIGN] = true;
-#endif
             break;
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
             m_bToggleVisibility[AUTOEXTENSION] = true;
             m_bToggleVisibility[PASSWORD] = true;
-            m_bToggleVisibility[GPGENCRYPTION] = true;
-#if HAVE_FEATURE_GPGME
-            m_bToggleVisibility[GPGSIGN] = true;
-#endif
             m_bToggleVisibility[FILTEROPTIONS] = true;
             break;
         case FILESAVE_AUTOEXTENSION_SELECTION:
@@ -618,8 +609,6 @@ int ControlHelper::getControlElementName(const Class aClazz, const int nControlI
         switch (nControlId) {
             TOGGLE_ELEMENT( AUTOEXTENSION );
             TOGGLE_ELEMENT( PASSWORD );
-            TOGGLE_ELEMENT( GPGENCRYPTION );
-            TOGGLE_ELEMENT( GPGSIGN );
             TOGGLE_ELEMENT( FILTEROPTIONS );
             TOGGLE_ELEMENT( READONLY );
             TOGGLE_ELEMENT( LINK );
@@ -743,8 +732,6 @@ case ExtendedFilePickerElementIds::LISTBOX_##elem##_LABEL: \
     {
             MAP_TOGGLE( AUTOEXTENSION );
             MAP_TOGGLE( PASSWORD );
-            MAP_TOGGLE( GPGENCRYPTION );
-            MAP_TOGGLE( GPGSIGN );
             MAP_TOGGLE( FILTEROPTIONS );
             MAP_TOGGLE( READONLY );
             MAP_TOGGLE( LINK );

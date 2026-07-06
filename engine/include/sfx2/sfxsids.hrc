@@ -297,7 +297,6 @@ class SvxZoomItem;
 #define FN_CHANGE_THEME                     (SID_SFX_START + 1745)
 #define FN_PARAM_NEW_THEME                  TypedWhichId<SfxStringItem>(SID_SFX_START + 1746)
 #define SID_OPTIONS_PAGEID                  TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1747)
-#define SID_GPGSIGN                         TypedWhichId<SfxBoolItem>(SID_SFX_START + 1748)
 #define FN_INVERT_BACKGROUND                (SID_SFX_START + 1749)
 #define SID_MACROMANAGER                    (SID_SFX_START + 1750)
 #define SID_EXPORTDIRECTORY                 TypedWhichId<SfxStringItem>(SID_SFX_START + 1751)

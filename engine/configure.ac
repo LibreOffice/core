@@ -1082,7 +1082,6 @@ cygwin*|wsl*)
 
     if test "$host_cpu" = "aarch64"; then
         build_skia=yes
-        enable_gpgmepp=no
         enable_coinmp=no
     fi
     ;;
@@ -1135,7 +1134,6 @@ ios*) # iOS
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
     fi
-    enable_gpgmepp=no
     _os=iOS
     enable_mpl_subset=yes
     disable_database_connectivity_dependencies
@@ -2446,16 +2444,6 @@ AC_ARG_WITH(system-openjpeg,
         [Use the OpenJPEG library already on system.]),,
     [with_system_openjpeg="$with_system_libs"])
 
-libo_FUZZ_ARG_ENABLE(gpgmepp,
-    AS_HELP_STRING([--disable-gpgmepp],
-        [Disable building gpgmepp. Do not use in normal cases unless you want to fix potential problems it causes.])
-)
-
-AC_ARG_WITH(system-gpgmepp,
-    AS_HELP_STRING([--with-system-gpgmepp],
-        [Use gpgmepp already on system]),,
-    [with_system_gpgmepp="$with_system_libs"])
-
 AC_ARG_WITH(system-jfreereport,
     AS_HELP_STRING([--with-system-jfreereport],
         [Use JFreeReport already on system.]),,
@@ -3107,7 +3095,6 @@ if test "$enable_wasm_strip" = "yes"; then
     test "${enable_dynamic_loading+set}" = set -o "$_os" != Emscripten || enable_dynamic_loading=no
     enable_extensions=no
     enable_gio=no
-    enable_gpgmepp=no
     enable_nss=no
     enable_opencl=no
     enable_pdfimport=no
@@ -4685,11 +4672,6 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     else
         with_system_hunspell=no
     fi
-    if test "$with_system_gpgmepp" = "yes"; then
-        AC_MSG_ERROR([--with-system-gpgmepp conflicts with --enable-dbgutil])
-    else
-        with_system_gpgmepp=no
-    fi
     if test "$with_system_zxing" = "yes"; then
         AC_MSG_ERROR([--with-system-zxing conflicts with --enable-dbgutil])
     else
@@ -6029,7 +6011,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-cairo-canvas \
         --disable-cups \
         --disable-customtarget-components \
-        --disable-gpgmepp \
         --disable-gtk3 \
         --disable-gtk4 \
         --disable-libcmis \
@@ -12449,101 +12430,6 @@ AC_SUBST(LO_CLANG_VERSION)
 AC_SUBST(CLANG_USE_LD)
 AC_SUBST([HAVE_LO_CLANG_DLLEXPORTINLINES])
 
-SYSTEM_GPGMEPP=
-
-AC_MSG_CHECKING([whether to enable gpgmepp])
-if test "$enable_gpgmepp" = no; then
-    AC_MSG_RESULT([no])
-elif test "$enable_mpl_subset" = "yes"; then
-    AC_MSG_RESULT([no (MPL only)])
-elif test "$enable_fuzzers" = "yes"; then
-    AC_MSG_RESULT([no (oss-fuzz)])
-elif test \( \( "$_os" = "Linux" -o "$_os" = "Darwin" \) -a "$ENABLE_NSS" = TRUE \) -o "$_os" = "WINNT" ; then
-    AC_MSG_RESULT([yes])
-    dnl ===================================================================
-    dnl Check for system gpgme
-    dnl ===================================================================
-    AC_MSG_CHECKING([which gpgmepp to use])
-    if test "$with_system_gpgmepp" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_GPGMEPP=TRUE
-
-        # C++ library doesn't come with fancy gpgmepp-config, check for headers the old-fashioned way
-        AC_CHECK_HEADER(gpgme++/gpgmepp_version.h, [ GPGMEPP_CFLAGS=-I/usr/include/gpgme++ ],
-            [AC_MSG_ERROR([gpgmepp headers not found, install gpgmepp >= 1.14 development package])], [])
-        AC_CHECK_HEADER(gpgme.h, [],
-            [AC_MSG_ERROR([gpgme headers not found, install gpgme development package])], [])
-        AC_CHECK_LIB(gpgmepp, main, [],
-            [AC_MSG_ERROR(gpgmepp not found or not functional)], [])
-        GPGMEPP_LIBS=-lgpgmepp
-    else
-        AC_MSG_RESULT([internal])
-        BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGMEPP"
-
-        GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
-        LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
-        if test "$_os" != "WINNT"; then
-            GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
-            LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
-        fi
-    fi
-    ENABLE_GPGMEPP=TRUE
-    AC_DEFINE([HAVE_FEATURE_GPGME])
-    AC_PATH_PROG(GPG, gpg)
-    # TODO: Windows's cygwin gpg does not seem to work with our gpgme,
-    # so let's exclude that manually for the moment
-    if test -n "$GPG" -a "$_os" != "WINNT"; then
-        # make sure we not only have a working gpgme, but a full working
-        # gpg installation to run OpenPGP signature verification
-        AC_DEFINE([HAVE_FEATURE_GPGVERIFY])
-    fi
-    if test "$_os" = "Linux"; then
-      uid=`id -u`
-      AC_MSG_CHECKING([for /run/user/$uid])
-      if test -d /run/user/$uid; then
-        AC_MSG_RESULT([yes])
-        AC_PATH_PROG(GPGCONF, gpgconf)
-
-        # Older versions of gpgconf are not working as expected, since
-        # `gpgconf --remove-socketdir` fails to exit any gpg-agent daemon operating
-        # on that socket dir that has (indirectly) been started by the tests in xmlsecurity/qa/unit/signing/signing.cxx
-        # (see commit message of f0305ec0a7d199e605511844d9d6af98b66d4bfd%5E )
-        AC_MSG_CHECKING([whether version of gpgconf is suitable ... ])
-        GPGCONF_VERSION=`"$GPGCONF" --version | "$AWK" '/^gpgconf \(GnuPG\)/{print $3}'`
-        GPGCONF_NUMVER=`echo $GPGCONF_VERSION | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-        if test "$GPGCONF_VERSION" = "2.2_OOo" -o "$GPGCONF_NUMVER" -ge "020200"; then
-          AC_MSG_RESULT([yes, $GPGCONF_VERSION])
-          AC_MSG_CHECKING([for gpgconf --create-socketdir... ])
-          if $GPGCONF --dump-options > /dev/null ; then
-            if $GPGCONF --dump-options | grep -q create-socketdir ; then
-              AC_MSG_RESULT([yes])
-              AC_DEFINE([HAVE_GPGCONF_SOCKETDIR])
-              AC_DEFINE_UNQUOTED([GPGME_GPGCONF], ["$GPGCONF"])
-            else
-              AC_MSG_RESULT([no])
-            fi
-          else
-            AC_MSG_RESULT([no. missing or broken gpgconf?])
-          fi
-        else
-          AC_MSG_RESULT([no, $GPGCONF_VERSION])
-        fi
-      else
-        AC_MSG_RESULT([no])
-     fi
-   fi
-else
-    AC_MSG_RESULT([no (unsupported OS or missing NSS)])
-fi
-AC_SUBST(ENABLE_GPGMEPP)
-AC_SUBST(SYSTEM_GPGMEPP)
-AC_SUBST(GPG_ERROR_CFLAGS)
-AC_SUBST(GPG_ERROR_LIBS)
-AC_SUBST(LIBASSUAN_CFLAGS)
-AC_SUBST(LIBASSUAN_LIBS)
-AC_SUBST(GPGMEPP_CFLAGS)
-AC_SUBST(GPGMEPP_LIBS)
-
 AC_ARG_WITH(system-java-websocket,
     AS_HELP_STRING([--with-system-java-websocket],
         [Use Java-WebSocket already on system.]),,
@@ -14867,7 +14753,6 @@ AC_CONFIG_HEADERS([config_host/config_fonts.h])
 AC_CONFIG_HEADERS([config_host/config_fuzzers.h])
 AC_CONFIG_HEADERS([config_host/config_gio.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
-AC_CONFIG_HEADERS([config_host/config_gpgme.h])
 AC_CONFIG_HEADERS([config_host/config_java.h])
 AC_CONFIG_HEADERS([config_host/config_langs.h])
 AC_CONFIG_HEADERS([config_host/config_lgpl.h])

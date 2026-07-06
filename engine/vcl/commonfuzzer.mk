@@ -21,7 +21,6 @@ fuzzer_externals = \
     cairo \
     fontconfig \
     freetype \
-    gpgmepp \
     icui18n \
     icuuc \
     icudata \

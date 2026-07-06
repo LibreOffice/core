@@ -42,9 +42,8 @@ struct ImportedAlgorithms
     sal_Int32 nImportedEncryptionAlgorithm;
     // optional because it is not used with AEAD
     ::std::optional<sal_Int32> oImportedChecksumAlgorithm;
-    // GPG encrypted ODF does not have this in the file, but don't use optional
-    // here because it depends on the nImportedEncryptionAlgorithm of the same
-    // entry, so theoretically it could be different for different entries.
+    // always has a value; it depends on the nImportedEncryptionAlgorithm of the
+    // same entry, so theoretically it could be different for different entries.
     sal_Int32 nImportedDerivedKeySize;
 };
 

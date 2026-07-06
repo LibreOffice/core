@@ -32,7 +32,6 @@ $(eval $(call gb_Library_add_defs,comphelper,\
 ))
 
 $(eval $(call gb_Library_use_externals,comphelper,\
-	gpgmepp \
     boost_headers \
     frozen \
     icuuc \

@@ -9,7 +9,6 @@
 
 #include <config_crypto.h>
 #include <config_features.h>
-#include <config_gpgme.h>
 
 #include <sal/config.h>
 
@@ -77,18 +76,15 @@ protected:
 public:
     SigningTest();
     virtual void setUp() override;
-    virtual void tearDown() override;
     void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx) override;
 
 protected:
     uno::Reference<security::XCertificate>
     getCertificate(DocumentSignatureManager& rSignatureManager,
                    svl::crypto::SignatureMethodAlgorithm eAlgo);
-#if HAVE_FEATURE_GPGVERIFY
     SfxObjectShell* assertDocument(const ::CppUnit::SourceLine aSrcLine, TestFilter eFilterName,
                                    const SignatureState nDocSign, const SignatureState nMacroSign,
                                    const OUString& sVersion);
-#endif
 };
 
 SigningTest::SigningTest()
@@ -101,7 +97,6 @@ void SigningTest::setUp()
     UnoApiXmlTest::setUp();
 
     MacrosTest::setUpX509(m_directories, u"xmlsecurity_signing"_ustr);
-    MacrosTest::setUpGpg(m_directories, std::u16string_view(u"xmlsecurity_signing"));
 
     // Initialize crypto after setting up the environment variables.
     mxSEInitializer = xml::crypto::SEInitializer::create(m_xContext);
@@ -115,13 +110,6 @@ void SigningTest::setUp()
     NSS_OptionSet(NSS_RSA_MIN_KEY_SIZE, 1024);
 #endif
 #endif
-}
-
-void SigningTest::tearDown()
-{
-    MacrosTest::tearDownGpg();
-
-    UnoApiXmlTest::tearDown();
 }
 
 uno::Reference<security::XCertificate>
@@ -1282,37 +1270,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testCool15956)
     CPPUNIT_ASSERT(eAfter == SignatureState::OK || eAfter == SignatureState::NOTVALIDATED);
 }
 
-#if HAVE_FEATURE_GPGVERIFY
-/// Test a typical ODF where all streams are GPG-signed.
-CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)
-{
-    loadFromFile(u"goodGPG.odt");
-    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-    CPPUNIT_ASSERT(pBaseModel);
-    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
-    CPPUNIT_ASSERT(pObjectShell);
-    // Our local gpg config fully trusts the signing cert, so in
-    // contrast to the X509 test we can fail on NOTVALIDATED here
-    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
-                                 SignatureState::OK, nActual);
-}
-
-/// Test a typical ODF where all streams are GPG-signed, but we don't trust the signature.
-CPPUNIT_TEST_FIXTURE(SigningTest, testODFUntrustedGoodGPG)
-{
-    loadFromFile(u"untrustedGoodGPG.odt");
-    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-    CPPUNIT_ASSERT(pBaseModel);
-    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
-    CPPUNIT_ASSERT(pObjectShell);
-    // Our local gpg config does _not_ trust the signing cert, so in
-    // contrast to the X509 test we can fail everything but
-    // NOTVALIDATED here
-    SignatureState nActual = pObjectShell->GetDocumentSignatureState();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE((OString::number(o3tl::to_underlying(nActual)).getStr()),
-                                 SignatureState::NOTVALIDATED, nActual);
-}
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testInvalidZIP)
 {
@@ -1339,59 +1296,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testInvalidZIP)
                          static_cast<int>(pObjectShell->GetDocumentSignatureState()));
 }
 
-/// Test a typical broken ODF signature where one stream is corrupted.
-CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenStreamGPG)
-{
-    loadFromFile(u"badStreamGPG.odt");
-    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-    CPPUNIT_ASSERT(pBaseModel);
-    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
-    CPPUNIT_ASSERT(pObjectShell);
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN),
-                         static_cast<int>(pObjectShell->GetDocumentSignatureState()));
-}
-
-/// Test a typical broken ODF signature where the XML dsig hash is corrupted.
-CPPUNIT_TEST_FIXTURE(SigningTest, testODFBrokenDsigGPG)
-{
-    loadFromFile(u"badDsigGPG.odt");
-    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-    CPPUNIT_ASSERT(pBaseModel);
-    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
-    CPPUNIT_ASSERT(pObjectShell);
-    CPPUNIT_ASSERT_EQUAL(static_cast<int>(SignatureState::BROKEN),
-                         static_cast<int>(pObjectShell->GetDocumentSignatureState()));
-}
-
-#if HAVE_GPGCONF_SOCKETDIR
-
-/// Test loading an encrypted ODF document
-CPPUNIT_TEST_FIXTURE(SigningTest, testODFEncryptedGPG)
-{
-    // ODF1.2 + loext flavour
-    loadFromFile(u"encryptedGPG.odt");
-    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-    CPPUNIT_ASSERT(pBaseModel);
-    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
-    CPPUNIT_ASSERT(pObjectShell);
-
-    // ODF1.3 flavour
-    loadFromFile(u"encryptedGPG_odf13.odt");
-    pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-    CPPUNIT_ASSERT(pBaseModel);
-    pObjectShell = pBaseModel->GetObjectShell();
-    CPPUNIT_ASSERT(pObjectShell);
-
-    // export and import again
-    saveAndReload(TestFilter::ODT);
-
-    pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-    CPPUNIT_ASSERT(pBaseModel);
-    pObjectShell = pBaseModel->GetObjectShell();
-    CPPUNIT_ASSERT(pObjectShell);
-}
-
-#endif
 
 SfxObjectShell* SigningTest::assertDocument(const ::CppUnit::SourceLine aSrcLine,
                                             TestFilter eFilterName, const SignatureState nDocSign,
@@ -1592,8 +1496,6 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                        SignatureState::NOTVALIDATED, OUString());
     }
 }
-
-#endif
 
 void SigningTest::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
 {

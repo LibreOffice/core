@@ -454,7 +454,6 @@ public:
     //  XEncryptionProtectedStorage
 
     virtual void SAL_CALL setEncryptionAlgorithms( const cpo::uno::Sequence< css::beans::NamedValue >& aAlgorithms ) override;
-    virtual void SAL_CALL setGpgProperties( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::NamedValue > >& aCryptProps ) override;
 
     virtual cpo::uno::Sequence< css::beans::NamedValue > SAL_CALL getEncryptionAlgorithms() override;
 
