@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include <common/Common.hpp>
 #include <common/Session.hpp>
 #include <common/StateEnum.hpp>
 #include <common/ThreadPool.hpp>
@@ -199,7 +200,7 @@ public:
     static bool pushToMainThread(COKitCallback callback, int type, const char* p,
                                  void* data);
 
-#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#if DOCS_SHARE_PROCESS
     static std::mutex KSPollsMutex;
     static std::condition_variable KSPollsCV;
     static std::vector<std::weak_ptr<KitSocketPoll>> KSPolls;

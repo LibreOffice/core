@@ -16,6 +16,15 @@
 
 // Default values and other shared data between processes.
 
+// One kit process hosts several open documents at once, each identified by its
+// mobileAppDocId. True for iOS and the CODA desktop apps.
+// The plain server and Android instead run one document per process.
+#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#define DOCS_SHARE_PROCESS 1
+#else
+#define DOCS_SHARE_PROCESS 0
+#endif
+
 constexpr int DEFAULT_CLIENT_PORT_NUMBER = 9980;
 
 // define to wrap strace around the forkit

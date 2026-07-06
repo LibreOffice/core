@@ -852,7 +852,7 @@ Document::~Document()
         session.second->resetDocManager();
     }
 
-#if defined(IOS) || defined(MACOS) || defined(_WIN32) || defined(QTAPP)
+#if DOCS_SHARE_PROCESS
     DocumentData::deallocate(_mobileAppDocId);
 #endif
 
@@ -2127,7 +2127,7 @@ std::shared_ptr<kit::Document> Document::load(const std::shared_ptr<ChildSession
         const auto duration = std::chrono::steady_clock::now() - start;
         const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
         LOG_DBG("Returned lokit::documentLoad(" << anonymizeUrl(url) << ") in " << elapsed);
-#if defined(IOS) || defined(MACOS) || defined(_WIN32) || defined(QTAPP)
+#if DOCS_SHARE_PROCESS
         DocumentData::get(_mobileAppDocId).loKitDocument = _loKitDocument.get();
         {
             std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex);
@@ -3009,7 +3009,7 @@ std::shared_ptr<DocumentBroker> getDocumentBrokerForAndroidOnly()
 
 KitSocketPoll::KitSocketPoll() : SocketPoll("kit")
 {
-#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#if DOCS_SHARE_PROCESS
     termination = std::make_shared<KitSocketPoll::TerminationData>();
     termination->flag = false;
 #endif
@@ -3040,7 +3040,7 @@ void KitSocketPoll::dumpGlobalState(std::ostream& oss) // static
 
 bool KitSocketPoll::scheduleOnKitThread(unsigned mobileAppDocId, const CallbackFn& fn) // static
 {
-#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#if DOCS_SHARE_PROCESS
     // Several documents share this process, each with a poll in KSPolls.
     // getMainPoll() tracks only the last-built poll and is cleared by any
     // poll's destructor, so it can be null while live polls remain. Pick the
@@ -3070,7 +3070,7 @@ std::shared_ptr<KitSocketPoll> KitSocketPoll::create() // static
 {
     std::shared_ptr<KitSocketPoll> result(new KitSocketPoll());
 
-#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#if DOCS_SHARE_PROCESS
     {
         std::unique_lock<std::mutex> lock(KSPollsMutex);
         KSPolls.push_back(result);
@@ -3224,7 +3224,7 @@ bool pushToMainThread(COKitCallback cb, int type, const char *p, void *data)
     return KitSocketPoll::pushToMainThread(cb, type, p, data);
 }
 
-#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#if DOCS_SHARE_PROCESS
 
 std::mutex KitSocketPoll::KSPollsMutex;
 std::condition_variable KitSocketPoll::KSPollsCV;
@@ -3250,7 +3250,7 @@ int pollCallback([[maybe_unused]] void* data, int timeoutUs)
 
     if (timeoutUs < 0)
         timeoutUs = SocketPoll::DefaultPollTimeoutMicroS.count();
-#if !defined(IOS) && !defined(QTAPP) && !defined(MACOS) && !defined(_WIN32)
+#if !DOCS_SHARE_PROCESS
     if (!data)
         return 0;
     else
@@ -3306,7 +3306,7 @@ bool anyInputCallback(void* data, int mostUrgentPriority)
 } // namespace
 
 bool KitSocketPoll::kitHasAnyInput([[maybe_unused]] int mostUrgentPriority) {
-#if !defined(IOS) && !defined(QTAPP) && !defined(MACOS) && !defined(_WIN32)
+#if !DOCS_SHARE_PROCESS
     const std::shared_ptr<Document>& document = getDocument();
 
     if (document)
@@ -3444,7 +3444,7 @@ void downloadAsFileSaveDialogCallback(const char* suggestedURI, char* result, si
 } // namespace
 
 void KitSocketPoll::kitWakeup() {
-#if !defined(IOS) && !defined(QTAPP) && !defined(MACOS) && !defined(_WIN32)
+#if !DOCS_SHARE_PROCESS
     wakeup();
 #else
     std::unique_lock<std::mutex> lock(KitSocketPoll::KSPollsMutex);
@@ -4240,7 +4240,7 @@ void lokit_main(
         auto mainKit = KitSocketPoll::create();
         mainKit->runOnClientThread(); // We will do the polling on this thread.
 
-#if MOBILEAPP && !defined(IOS) && !defined(QTAPP) && !defined(MACOS) && !defined(_WIN32)
+#if MOBILEAPP && !DOCS_SHARE_PROCESS
         // For iOS we call it in -[AppDelegate application: didFinishLaunchingWithOptions:]
         // For QTAPP/MACOS/_WIN32 it is called in initKitRunLoopThread()
         setupKitEnvironment(userInterface);
@@ -4325,7 +4325,7 @@ void lokit_main(
         Log::setDisabledAreas(LogDisabledAreas);
 #endif
 
-#if !defined(IOS) && !defined(QTAPP) && !defined(MACOS) && !defined(_WIN32)
+#if !DOCS_SHARE_PROCESS
         startMainLoop(kit, loKit, mainKit);
 
         // Trap the signal handler, if invoked,
@@ -4334,7 +4334,7 @@ void lokit_main(
 
         // Let forkit handle the jail cleanup.
 
-#else // IOS or QTAPP or MACOS or _WIN32
+#else // DOCS_SHARE_PROCESS
         auto const termination = mainKit->termination;
 #if defined(QTAPP) || defined(MACOS) || defined(_WIN32)
         // Release the mainKit KitSocketPoll instance early here, so that its destructor will
@@ -4350,7 +4350,7 @@ void lokit_main(
             std::unique_lock<std::mutex> lock(termination->mutex);
             termination->cv.wait(lock,[&]{ return termination->flag; } );
         }
-#endif // !defined(IOS) && !defined(QTAPP) && !defined(MACOS) && !defined(_WIN32)
+#endif // !DOCS_SHARE_PROCESS
     }
     catch (const Exception& exc)
     {

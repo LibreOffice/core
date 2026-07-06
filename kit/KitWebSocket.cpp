@@ -96,7 +96,7 @@ void KitWebSocketHandler::handleMessage(const std::vector<char>& data)
 
         if (!_document)
         {
-#if !defined(IOS) && !defined(QTAPP) && !defined(MACOS) && !defined(_WIN32)
+#if !DOCS_SHARE_PROCESS
             ProcUtil::setThreadName("kit" SHARED_DOC_THREADNAME_SUFFIX + docId);
 #endif
             _document = std::make_shared<Document>(
@@ -136,7 +136,7 @@ void KitWebSocketHandler::handleMessage(const std::vector<char>& data)
         }
         else
         {
-#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#if DOCS_SHARE_PROCESS
             LOG_INF("Setting our KitSocketPoll's termination flag due to 'exit' command.");
             std::unique_lock<std::mutex> lock(_ksPoll->termination->mutex);
             _ksPoll->termination->flag = true;
@@ -217,7 +217,7 @@ void KitWebSocketHandler::onDisconnect()
                 << "] connection lost without exit arriving from wsd. Setting TerminationFlag");
         SigUtil::setTerminationFlag();
     }
-#if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
+#if DOCS_SHARE_PROCESS
     {
         std::unique_lock<std::mutex> lock(_ksPoll->termination->mutex);
         _ksPoll->termination->flag = true;
