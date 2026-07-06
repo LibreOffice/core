@@ -47,6 +47,61 @@ describe(['taglighthouse'], 'Accessibility Calc Sidebar Tests', { testIsolation:
 		runA11yValidation(win);
 	});
 
+	it('reports a sidebar control whose only label is hidden', function () {
+		helper.processToIdle(win);
+
+		cy.then(() => {
+			const container = win.app.map.sidebar.getContainer();
+			const allInputs = container.querySelectorAll('input, select');
+			const target = Array.prototype.find.call(allInputs, function (el) {
+				if (!el.id) return false;
+				if (el.hasAttribute('aria-labelledby')) return true;
+				return !!win.document.querySelector('label[for="' + el.id + '"]');
+			});
+			expect(target, 'a labelled sidebar form control').to.exist;
+
+			// Hide every label the control points at, keeping the associations intact.
+			const labelEls = [];
+			const labelFor = win.document.querySelector('label[for="' + target.id + '"]');
+			if (labelFor) labelEls.push(labelFor);
+			const labelledBy = target.getAttribute('aria-labelledby');
+			if (labelledBy) {
+				labelledBy.trim().split(/\s+/).forEach(function (id) {
+					const el = win.document.getElementById(id);
+					if (el) labelEls.push(el);
+				});
+			}
+			expect(labelEls.length, 'resolvable label elements for ' + target.id).to.be.greaterThan(0);
+
+			const originalDisplays = labelEls.map(function (el) {
+				return el.style.display;
+			});
+			labelEls.forEach(function (el) {
+				el.style.display = 'none';
+			});
+
+			let matchedCount = 0;
+			try {
+				const spy = Cypress.sinon.spy(win.console, 'error');
+				win.app.dispatcher.dispatch('validatesidebara11y');
+
+				const prefix = win.app.A11yValidatorException.PREFIX;
+				matchedCount = spy.getCalls().filter(function (call) {
+					const s = String(call.args[0]);
+					return s.includes(prefix) &&
+						s.includes("'" + target.id + "'") &&
+						s.includes('missing a visible label');
+				}).length;
+				spy.restore();
+			} finally {
+				labelEls.forEach(function (el, i) {
+					el.style.display = originalDisplays[i];
+				});
+			}
+			expect(matchedCount, 'hidden-label violation for ' + target.id).to.be.greaterThan(0);
+		});
+	});
+
 	it('PropertyDeck: Graphic Context', function () {
 		cy.viewport(1920, 1080);
 

@@ -165,6 +165,7 @@ describe('A11yValidator', function () {
 			const label = document.createElement('label');
 			label.setAttribute('for', 'decimalplaces');
 			label.textContent = 'Decimal places';
+			label.getClientRects = () => [{}] as any;
 			sidebar.appendChild(label);
 			nodeassert.deepStrictEqual(missingLabelReports(), []);
 		});
@@ -173,6 +174,7 @@ describe('A11yValidator', function () {
 			const label = document.createElement('span');
 			label.id = 'decimalplaces-label';
 			label.textContent = 'Decimal places';
+			label.getClientRects = () => [{}] as any;
 			sidebar.appendChild(label);
 			shownInput('decimalplaces').setAttribute(
 				'aria-labelledby',

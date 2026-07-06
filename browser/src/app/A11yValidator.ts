@@ -425,10 +425,21 @@ class A11yValidator {
 				if (excludedInputTypes.has(inputType)) return;
 			}
 
-			const hasLabelFor = !!document.querySelector(`label[for="${htmlEl.id}"]`);
-			const hasAriaLabelledBy = htmlEl.hasAttribute('aria-labelledby');
+			// A hidden label keeps its association, so the association alone is not enough.
+			const labelEls: HTMLElement[] = [];
+			const labelFor = document.querySelector(`label[for="${htmlEl.id}"]`);
+			if (labelFor instanceof HTMLElement) labelEls.push(labelFor);
+			const labelledBy = htmlEl.getAttribute('aria-labelledby');
+			if (labelledBy) {
+				for (const id of labelledBy.trim().split(/\s+/)) {
+					const target = document.getElementById(id);
+					if (target) labelEls.push(target);
+				}
+			}
 
-			if (!hasLabelFor && !hasAriaLabelledBy) {
+			const hasVisibleLabel = labelEls.some((label) => this.isVisible(label));
+
+			if (!hasVisibleLabel) {
 				console.error(
 					new A11yValidatorException(
 						`In sidebar at '${this.getElementPath(htmlEl)}': ${el.tagName.toLowerCase()} element '${htmlEl.id}' is missing a visible label. Sidebar form controls should have a <label> or aria-labelledby association, not just aria-label.`,
