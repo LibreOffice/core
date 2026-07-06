@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
 #include <tools/debug.hxx>
@@ -1204,6 +1205,9 @@ cpo::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
             aAny >>= nValue;
             aAny <<= static_cast<sal_Int16>(nValue);
         }
+        else if( pEntry->aType == ::cppu::UnoType<css::table::BorderLine>::get()
+                 && aAny.getValueType() == ::cppu::UnoType<css::table::BorderLine2>::get() )
+            ; // do not warn for valid case
         else
         {
             SAL_WARN_IF(aAny.hasValue(), "sd", "SvxShape::GetAnyForItem() Return value has wrong type, expected "
