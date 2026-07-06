@@ -23,6 +23,8 @@
 #include <comphelper/configuration.hxx>
 
 #include <svx/svdpage.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/request.hxx>
 
 #include <editeng/brushitem.hxx>
 #include <hintids.hxx>
@@ -843,6 +845,42 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testHeaderFlyClickInBody)
     CPPUNIT_ASSERT_MESSAGE(
         "image anchored in header should be selected by click when editing header",
         pWrtShell->GetSelectedFlyFrame() != nullptr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf36181_findReplaceParaStyle)
+{
+    // given a document with various paragraph styles
+
+    createSwDoc("tdf36181_findReplaceParaStyle.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView& rView = pWrtShell->GetView();
+
+    // initialize find/replace static environment
+    SfxItemSet aSet(rView.GetPool(), svl::Items<SID_SEARCH_ITEM, SID_SEARCH_ITEM>);
+    rView.StateSearch(aSet); // initializes SwView::GetSearchItem
+    SvxSearchItem& rInit = *SwView::GetSearchItem();
+    rInit.SetSearchString(u"Body Text"_ustr);
+    rInit.SetReplaceString(u"Caption"_ustr);
+    rInit.SetPattern(true); // paragraph styles replacement
+    rInit.SetSelection(true); // only search inside of the current selection
+    rInit.SetCommand(SvxSearchCmd::REPLACE);
+
+    // pre-select something - that is what the bug is about...
+    dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+
+    // Execute 'Replace' one instance
+    SfxItemSet aFn(rView.GetPool(), svl::Items<FN_REPEAT_SEARCH, FN_REPEAT_SEARCH>);
+    SfxRequest aRequest(FN_REPEAT_SEARCH, SfxCallMode::SYNCHRON, aFn);
+    rView.ExecSearch(aRequest);
+
+    // Without the fix, the Title style was also replaced by the Caption style
+    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Caption"_ustr,
+                         getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
+    // Without the fix, all of the selection applied the Caption style
+    CPPUNIT_ASSERT_EQUAL(u"Text body indent"_ustr,
+                         getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
 }
 
 } // end of anonymous namespace

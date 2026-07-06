@@ -682,75 +682,74 @@ void SwView::Replace()
     SwWait aWait( *GetDocShell(), true );
 
     m_pWrtShell->StartAllAction();
+    const bool bReplaceParagraphStyle = s_pSrchItem->GetPattern();
 
-    if( s_pSrchItem->GetPattern() ) // Templates?
+    if (!bReplaceParagraphStyle && GetPostItMgr()->HasActiveSidebarWin())
+        GetPostItMgr()->Replace(s_pSrchItem);
+
+    bool bReqReplace = true;
+
+    if (m_pWrtShell->HasSelection())
     {
-        SwRewriter aRewriter;
-        aRewriter.AddRule(UndoArg1, s_pSrchItem->GetSearchString());
-        aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
-        aRewriter.AddRule(UndoArg3, s_pSrchItem->GetReplaceString());
+        /* check that the selection match the search string */
+        //save state
+        SwPosition aStartPos = *m_pWrtShell->GetCursor()->Start();
+        SwPosition aEndPos = *m_pWrtShell->GetCursor()->End();
+        const bool bHasSelection = s_pSrchItem->GetSelection();
+        const SvxSearchCmd nOldCmd = s_pSrchItem->GetCommand();
 
-        m_pWrtShell->StartUndo(SwUndoId::UI_REPLACE_STYLE, &aRewriter);
+        //set state for checking if current selection has a match
+        s_pSrchItem->SetCommand(SvxSearchCmd::FIND);
+        s_pSrchItem->SetSelection(true);
 
-        m_pWrtShell->SetTextFormatColl( m_pWrtShell->GetParaStyle(
-                            UIName(s_pSrchItem->GetReplaceString()),
-                            SwWrtShell::GETSTYLE_CREATESOME ));
-
-        m_pWrtShell->EndUndo();
-    }
-    else
-    {
-        if (GetPostItMgr()->HasActiveSidebarWin())
-            GetPostItMgr()->Replace(s_pSrchItem);
-
-        bool bReqReplace = true;
-
-        if(m_pWrtShell->HasSelection())
+        //check if it matches
+        SwSearchOptions aOpts(m_pWrtShell.get(), s_pSrchItem->GetBackward());
+        if (!FUNC_Search(aOpts))
         {
-            /* check that the selection match the search string*/
-            //save state
-            SwPosition aStartPos = * m_pWrtShell->GetCursor()->Start();
-            SwPosition aEndPos = * m_pWrtShell->GetCursor()->End();
-            bool   bHasSelection = s_pSrchItem->GetSelection();
-            SvxSearchCmd nOldCmd = s_pSrchItem->GetCommand();
+            // no matching therefore should not replace selection
+            // => remove selection
 
-            //set state for checking if current selection has a match
-            s_pSrchItem->SetCommand( SvxSearchCmd::FIND );
-            s_pSrchItem->SetSelection(true);
-
-            //check if it matches
-            SwSearchOptions aOpts( m_pWrtShell.get(), s_pSrchItem->GetBackward() );
-            if( ! FUNC_Search(aOpts) )
+            if (!s_pSrchItem->GetBackward())
             {
-
-                //no matching therefore should not replace selection
-                // => remove selection
-
-                if(! s_pSrchItem->GetBackward() )
-                {
-                    (* m_pWrtShell->GetCursor()->Start()) = std::move(aStartPos);
-                    (* m_pWrtShell->GetCursor()->End()) = std::move(aEndPos);
-                }
-                else
-                {
-                    (* m_pWrtShell->GetCursor()->Start()) = std::move(aEndPos);
-                    (* m_pWrtShell->GetCursor()->End()) = std::move(aStartPos);
-                }
-                bReqReplace = false;
+                (*m_pWrtShell->GetCursor()->Start()) = std::move(aStartPos);
+                (*m_pWrtShell->GetCursor()->End()) = std::move(aEndPos);
             }
-
-            //set back old search state
-            s_pSrchItem->SetCommand( nOldCmd );
-            s_pSrchItem->SetSelection(bHasSelection);
+            else
+            {
+                (*m_pWrtShell->GetCursor()->Start()) = std::move(aEndPos);
+                (*m_pWrtShell->GetCursor()->End()) = std::move(aStartPos);
+            }
+            bReqReplace = false;
         }
-        /*
-         * remove current selection
-         * otherwise it is always replaced
-         * no matter if the search string exists or not in the selection
-         * Now the selection is removed and the next matching string is selected
-         */
 
-        if( bReqReplace )
+        // set back old search state
+        s_pSrchItem->SetCommand(nOldCmd);
+        s_pSrchItem->SetSelection(bHasSelection);
+    }
+    /*
+        * remove current selection
+        * otherwise it is always replaced
+        * no matter if the search string exists or not in the selection
+        * Now the selection is removed and the next matching string is selected
+        */
+
+    if (bReqReplace)
+    {
+        if (bReplaceParagraphStyle)
+        {
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UndoArg1, s_pSrchItem->GetSearchString());
+            aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
+            aRewriter.AddRule(UndoArg3, s_pSrchItem->GetReplaceString());
+
+            m_pWrtShell->StartUndo(SwUndoId::UI_REPLACE_STYLE, &aRewriter);
+
+            m_pWrtShell->SetTextFormatColl(m_pWrtShell->GetParaStyle(
+                UIName(s_pSrchItem->GetReplaceString()), SwWrtShell::GETSTYLE_CREATESOME));
+
+            m_pWrtShell->EndUndo();
+        }
+        else
         {
             bool bReplaced = true;
             // Replace selection (Not if only attributes should be replaced)
