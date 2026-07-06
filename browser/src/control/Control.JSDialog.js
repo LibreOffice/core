@@ -719,8 +719,19 @@ window.L.Control.JSDialog = window.L.Control.extend({
 
 				if (instance.content.clientWidth > window.innerWidth)
 					instance.container.style.maxWidth = (window.innerWidth - instance.posx - 20) + 'px';
-				else if (instance.posx + instance.content.clientWidth > window.innerWidth)
-					instance.posx -= instance.posx + instance.content.clientWidth + 10 - window.innerWidth;
+				else if (instance.posx + instance.content.clientWidth > window.innerWidth) {
+					if (instance.isDropdown && instance.isSubmenu && !isRTL) {
+						// Flip to the left side of the parent entry rather than
+						// nudging leftward. Nudging lands the submenu on top of the
+						// parent dropdown, blocking access to other entries.
+						const leftPos = parent.getBoundingClientRect().left
+							- instance.content.clientWidth;
+						instance.posx = leftPos >= 0 ? leftPos
+							: instance.posx - (instance.posx + instance.content.clientWidth + 10 - window.innerWidth);
+					} else {
+						instance.posx -= instance.posx + instance.content.clientWidth + 10 - window.innerWidth;
+					}
+				}
 
 				if (instance.content.clientHeight > window.innerHeight)
 					instance.container.style.maxHeight = (window.innerHeight - instance.posy - 20) + 'px';
