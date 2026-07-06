@@ -6701,6 +6701,64 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testAutoSpillFromChooseAndLet)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testDynamicArrayIsFormula)
+{
+    // ISFORMULA is true for the master of a dynamic-array spill and
+    // false for the cells it spilled into, even though the spilled
+    // data came from formulas. The same input entered as a classic
+    // array formula keeps every cell a formula.
+    m_pDoc->SetAutoCalc(false);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"=1+10"_ustr);
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"=1+20"_ustr);
+    m_pDoc->SetString(ScAddress(1, 2, 0), u"=1+30"_ustr);
+
+    // A1 spills =B1:B3 into A1:A3 as a dynamic-array master.
+    ScAddress aPos(0, 0, 0);
+    ScCompiler aComp(*m_pDoc, aPos, m_pDoc->GetGrammar(), false, false);
+    std::unique_ptr<ScTokenArray> pCode = aComp.CompileString(u"=B1:B3"_ustr);
+    auto pCell = new ScFormulaCell(*m_pDoc, aPos, std::move(pCode));
+    pCell->SetAutoDynamicArrayEligible(true);
+    m_pDoc->SetFormulaCell(aPos, pCell);
+    m_pDoc->SetAutoCalc(true);
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT(pCell->IsDynamicArrayMaster());
+
+    // A source cell is a real formula, but the cells the master
+    // spilled into are not.
+    m_pDoc->SetString(ScAddress(6, 0, 0), u"=ISFORMULA(B1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(6, 0, 0)));
+
+    m_pDoc->SetString(ScAddress(4, 0, 0), u"=ISFORMULA(A1)"_ustr);
+    m_pDoc->SetString(ScAddress(4, 1, 0), u"=ISFORMULA(A2)"_ustr);
+    m_pDoc->SetString(ScAddress(4, 2, 0), u"=ISFORMULA(A3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(4, 2, 0)));
+
+    // The range form agrees cell by cell: ISFORMULA over A1:A3 gives
+    // true, false, false across H1:H3.
+    ScMarkData aMark(m_pDoc->GetSheetLimits());
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(7, 0, 7, 2, aMark, u"=ISFORMULA(A1:A3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(7, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(7, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(ScAddress(7, 2, 0)));
+
+    // The same =B1:B3 entered as a classic array formula at D1:D3
+    // keeps every cell a formula.
+    m_pDoc->InsertMatrixFormula(3, 0, 3, 2, aMark, u"=B1:B3"_ustr);
+    m_pDoc->SetString(ScAddress(5, 0, 0), u"=ISFORMULA(D1)"_ustr);
+    m_pDoc->SetString(ScAddress(5, 1, 0), u"=ISFORMULA(D2)"_ustr);
+    m_pDoc->SetString(ScAddress(5, 2, 0), u"=ISFORMULA(D3)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(5, 2, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
