@@ -516,7 +516,9 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
         break;
         case NS_ooxml::LN_CT_Spacing_before:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"before"_ustr, OUString::number(nIntValue));
-            if (m_pImpl->GetTopContext())
+            // `w:before` is defined by ST_TwipsMeasure,
+            // it can't be negative ([22.9.2.14] ISO-IEC-29500-1 2016)
+            if (m_pImpl->GetTopContext() && nIntValue >= 0)
                 // Don't overwrite NS_ooxml::LN_CT_Spacing_beforeAutospacing.
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_TOP_MARGIN,
@@ -532,7 +534,9 @@ void DomainMapper::lcl_attribute(Id nName, const Value & val)
             break;
         case NS_ooxml::LN_CT_Spacing_after:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, u"after"_ustr, OUString::number(nIntValue));
-            if (m_pImpl->GetTopContext())
+            // `w:after` is defined by ST_TwipsMeasure,
+            // it can't be negative ([22.9.2.14] ISO-IEC-29500-1 2016)
+            if (m_pImpl->GetTopContext() && nIntValue >= 0)
             {
                 // Don't overwrite NS_ooxml::LN_CT_Spacing_afterAutospacing.
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::Any( ConversionHelper::convertTwipToMm100_Limited( nIntValue ) ), false);
