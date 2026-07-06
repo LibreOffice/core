@@ -1078,10 +1078,6 @@
                         <property name="hexpand">True</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
-                        <accessibility>
-                          <relation type="label-for" target="lbcopyarea"/>
-                          <relation type="label-for" target="edcopyarea"/>
-                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="copyresult-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|copyresult">Select the check box, and then select the cell range where you want to display the filter results.</property>
@@ -1131,12 +1127,9 @@
                       <object class="GtkComboBoxText" id="lbcopyarea">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="copyresult"/>
-                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="lbcopyarea-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|lbcopyarea-atkobject">Copy results to</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|lbcopyarea-atkobject">Copy results to named range</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|lbcopyarea">Select the check box, and then select the cell range where you want to display the filter results.</property>
                           </object>
                         </child>
@@ -1154,12 +1147,9 @@
                         <property name="hexpand">True</property>
                         <property name="width-chars">30</property>
                         <property name="truncate-multiline">True</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="copyresult"/>
-                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="edcopyarea-atkobject">
-                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|edcopyarea-atkobject">Copy results to</property>
+                            <property name="AtkObject::accessible-name" translatable="yes" context="standardfilterdialog|edcopyarea-atkobject">Copy results to cell range</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|edcopyarea">Select the check box, and then select the cell range where you want to display the filter results.</property>
                           </object>
                         </child>
