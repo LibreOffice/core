@@ -30,13 +30,11 @@ private:
     SfxViewShell* mpViewShell;
     mutable css::uno::Reference<css::frame::XController> mxController;
     VclPtr<vcl::Window> mpWindow;
-    bool mbNegativeX;
 
 public:
-    KitChartHelper(SfxViewShell* pViewShell, bool bNegativeX = false)
+    KitChartHelper(SfxViewShell* pViewShell)
         : mpViewShell(pViewShell)
         , mpWindow(nullptr)
-        , mbNegativeX(bNegativeX)
     {}
 
     css::uno::Reference<css::frame::XController>& GetXController() const;
@@ -47,7 +45,7 @@ public:
     void Dispatch(const OUString& cmd, const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) const;
 
     bool Hit(const Point& aPos);
-    static bool HitAny(const Point& aPos, bool bNegativeX = false);
+    static bool HitAny(const Point& aPos);
     void PaintTile(VirtualDevice& rRenderContext, const tools::Rectangle& rTileRect);
     static void PaintAllChartsOnTile(VirtualDevice& rDevice,
                                      int nOutputWidth, int nOutputHeight,

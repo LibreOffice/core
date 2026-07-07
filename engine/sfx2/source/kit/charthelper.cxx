@@ -97,7 +97,10 @@ tools::Rectangle KitChartHelper::GetChartBoundingBox()
             tools::Rectangle aArea = pIPClient->GetObjArea();
             if (pIPClient->HasGridOffset()) // Calc has gridOffset.
             {
-                // FIXME: Handle RTL case.
+                // In RTL Calc both the object area and the grid offset are
+                // already in the mirrored negative X draw space, which matches
+                // the tile and mouse coordinates the bounding box is compared
+                // against, so no extra mirroring is needed here.
                 Point aGridOffset(0, 0);
                 pIPClient->GetGridOffset(aGridOffset);
                 aArea.Move(aGridOffset.X(), aGridOffset.Y());
@@ -137,7 +140,7 @@ bool KitChartHelper::Hit(const Point& aPos)
     return false;
 }
 
-bool KitChartHelper::HitAny(const Point& aPos, bool bNegativeX)
+bool KitChartHelper::HitAny(const Point& aPos)
 {
     SfxViewShell* pCurView = SfxViewShell::Current();
     int nPartForCurView = pCurView ? pCurView->getPart() : -1;
@@ -146,7 +149,7 @@ bool KitChartHelper::HitAny(const Point& aPos, bool bNegativeX)
     {
         if (pCurView && pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
-            KitChartHelper aChartHelper(pViewShell, bNegativeX);
+            KitChartHelper aChartHelper(pViewShell);
             if (aChartHelper.Hit(aPos))
                 return true;
         }
@@ -229,7 +232,7 @@ void KitChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     {
         if (pCurView && pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
-            KitChartHelper aChartHelper(pViewShell, bNegativeX);
+            KitChartHelper aChartHelper(pViewShell);
             aChartHelper.PaintTile(rDevice, aTileRect);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);

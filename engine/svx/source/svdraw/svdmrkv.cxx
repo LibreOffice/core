@@ -55,6 +55,7 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/string_view.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -940,8 +941,19 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                         // In Calc the logical unit is mm100, in Writer it is twips.
                         aArea = o3tl::convert(aArea, o3tl::Length::twip, o3tl::Length::mm100);
                     }
-                    // FIXME: Handle RTL case for calc.
                     Point aChartWinOffset(aArea.Left(), aArea.Top());
+                    if (mbNegativeX && AllSettings::GetLayoutRTL())
+                    {
+                        // In RTL Calc the object area is in the mirrored negative
+                        // X draw space, and the chart content itself is not
+                        // mirrored. Mirror the sub-element rect about the origin
+                        // and anchor it at the object's near (right) edge. The
+                        // whole selection is negated back to positive X document
+                        // coordinates at the end of this function.
+                        aSelection = tools::Rectangle(-aSelection.Right(), aSelection.Top(),
+                                                      -aSelection.Left(), aSelection.Bottom());
+                        aChartWinOffset.setX(aArea.Right());
+                    }
                     addLogicOffset = aChartWinOffset;
                     aSelection.Move(aChartWinOffset.getX(), aChartWinOffset.getY());
                 }

@@ -1501,7 +1501,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
         nX = -nX;
 
     // check if the user hit a chart/math object which is being edited by this view
-    if (KitChartHelper aChartHelper(pViewShell, bNegativeX);
+    if (KitChartHelper aChartHelper(pViewShell);
         aChartHelper.postMouseEvent(nType, nX, nY, nCount, nButtons, nModifier, fScaleX, fScaleY))
         return true;
 
@@ -1513,7 +1513,7 @@ bool KitHelper::testInPlaceComponentMouseEventHit(SfxViewShell* pViewShell, int 
     // and, if so, skip current mouse event
     if (nType != KIT_MOUSEEVENT_MOUSEMOVE)
     {
-        if (KitChartHelper::HitAny({nX, nY}, bNegativeX))
+        if (KitChartHelper::HitAny({nX, nY}))
             return true;
     }
 
