@@ -156,6 +156,13 @@
 	gap: var(--spacing-l);
 }
 
+/* Push a short transcript to the bottom so the newest message stays next to
+   the reply input. In a flex column an auto top margin absorbs the spare
+   room, and collapses once the content overflows, leaving scrolling intact. */
+#aichat-messages-list:not(:has(#aichat-empty-state)) {
+	margin-top: auto;
+}
+
 #aichat-messages-list:has(#aichat-empty-state) {
 	flex: 1;
 	align-items: center;
