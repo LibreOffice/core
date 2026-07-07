@@ -411,7 +411,7 @@ void XMLConfigItemContext::endFastElement(sal_Int32 )
     {
         std::u16string_view sChars = o3tl::trim(maCharBuffer);
         if( !sChars.empty() )
-            ::comphelper::Base64::decodeSomeChars( aDecoded, sChars );
+            ::comphelper::Base64::decode(aDecoded, sChars);
         maCharBuffer.setLength(0);
     }
     else

@@ -45,11 +45,13 @@ public:
 
     static void encode(OStringBuffer& aStrBuffer, const cpo::uno::Sequence<sal_Int8>& aPass);
 
-    // Decode a base 64 encoded string into a sequence of bytes. decode()
-    // can be used for attribute values only, because it does not
-    // return any chars left from conversion.
-    // For text submitted through the SAX characters call, decodeSomeChars()
-    // must be used!
+    // Decode a base 64 encoded string into a sequence of bytes. The two differ
+    // only in the return value. decode() returns nothing and logs a warning if
+    // any input is left unconsumed; use it for a complete value (an attribute,
+    // or element content buffered in full). decodeSomeChars() returns the
+    // number of characters consumed, so a caller decoding incrementally (e.g.
+    // per SAX characters() call) can carry an unconsumed trailing partial group
+    // to the next call.
     static void decode(cpo::uno::Sequence<sal_Int8>& aPass, std::u16string_view sBuffer);
     static void decode(cpo::uno::Sequence<sal_Int8>& aPass, std::string_view sBuffer);
 

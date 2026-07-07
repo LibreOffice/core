@@ -48,7 +48,7 @@ void XMLBase64ImportContext::endFastElement(sal_Int32 )
     if( !sChars.empty() )
     {
         Sequence< sal_Int8 > aBuffer( (sChars.size() / 4) * 3 );
-        ::comphelper::Base64::decodeSomeChars( aBuffer, sChars );
+        ::comphelper::Base64::decode(aBuffer, sChars);
         m_xOut->writeBytes( aBuffer );
     }
     maCharBuffer.setLength(0);
