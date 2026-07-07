@@ -923,6 +923,24 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
 
    if test "$enable_windowsapp" = "yes" ; then
       LOBUILDDIR_WINDOWS=`cd "$LOBUILDDIR" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
+
+      # The Windows app's C++ projects build with the clang-cl (ClangCL)
+      # platform toolset. Confirm Visual Studio has both the Clang compiler
+      # and the clang-cl MSBuild toolset up front, otherwise the msbuild step
+      # later fails with a cryptic "error MSB8020: The build tools for ClangCL
+      # (Platform Toolset = 'ClangCL') cannot be found". vswhere lives at a
+      # fixed location regardless of where VS itself is installed.
+      AC_MSG_CHECKING([for the Visual Studio clang-cl (ClangCL) toolset])
+      # Resolve vswhere to a WSL path and run the .exe directly: going through
+      # cmd.exe mangles the quotes the spaced path needs, so it would not run.
+      VSWHERE_DIR=`cmd.exe /c 'echo %ProgramFiles(x86)%' 2>/dev/null | tr -d '\r'`
+      VSWHERE=`wslpath -u "$VSWHERE_DIR" 2>/dev/null`/"Microsoft Visual Studio/Installer/vswhere.exe"
+      CLANGCL_VS=`"$VSWHERE" -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Llvm.Clang Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset -property installationPath 2>/dev/null | tr -d '\r'`
+      if test -n "$CLANGCL_VS"; then
+         AC_MSG_RESULT([$CLANGCL_VS])
+      else
+         AC_MSG_ERROR([the clang-cl toolset was not found in any Visual Studio installation. The Windows app builds with PlatformToolset=ClangCL, so msbuild would fail with MSB8020. Install both "C++ Clang Compiler for Windows" (Microsoft.VisualStudio.Component.VC.Llvm.Clang) and "MSBuild support for LLVM (clang-cl) toolset" (Microsoft.VisualStudio.Component.VC.Llvm.ClangToolset), for example by applying windows/.config/2026.vsconfig through the Visual Studio Installer.])
+      fi
    fi
 fi
 
