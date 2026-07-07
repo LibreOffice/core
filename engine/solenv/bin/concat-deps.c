@@ -931,6 +931,44 @@ static int generate_phony_file(char* fn, char const * content)
     return !depfile;
 }
 
+/* Write the per-object dep-file as a single phony rule, picking the object
+   class from the path. Returns the phony line, a pointer into a shared buffer
+   that stays valid until the next call, or NULL when the path is not a known
+   per-object dep-file or the file could not be written. */
+static char* write_phony_dep_file(char* fn)
+{
+    char* src_relative;
+    char* created_line;
+    if(strncmp(fn, work_dir, work_dir_len) != 0)
+        return NULL;
+    if(strncmp(fn+work_dir_len, "/Dep/", 5) != 0)
+        return NULL;
+    src_relative = fn+work_dir_len+5;
+    /* cases ordered by frequency */
+    if(   strncmp(src_relative, "CxxObject/", 10) == 0
+       || strncmp(src_relative, "GenCxxObject/", 13) == 0
+       || strncmp(src_relative, "CObject/", 8) == 0
+       || strncmp(src_relative, "GenCObject/", 11) == 0
+       || strncmp(src_relative, "SdiObject/", 10) == 0
+       || strncmp(src_relative, "AsmObject/", 10) == 0
+       || strncmp(src_relative, "ObjCxxObject/", 13) == 0
+       || strncmp(src_relative, "ObjCObject/", 11) == 0
+       || strncmp(src_relative, "GenObjCxxObject/", 16) == 0
+       || strncmp(src_relative, "GenObjCObject/", 14) == 0
+       || strncmp(src_relative, "GenAsmObject/", 13) == 0
+       || strncmp(src_relative, "GenNasmObject/", 14) == 0
+       || strncmp(src_relative, "CxxClrObject/", 13) == 0
+       || strncmp(src_relative, "GenCxxClrObject/", 16) == 0)
+    {
+        created_line = generate_phony_line(src_relative, "o");
+        if(generate_phony_file(fn, created_line))
+            return NULL;
+        return created_line;
+    }
+    fprintf(stderr, "no magic for %s(%s) in %s\n", fn, src_relative, work_dir);
+    return NULL;
+}
+
 /* Return a malloc'd copy of s with every backslash turned into a forward
    slash, or NULL if s is NULL. */
 static char* dup_forward_slashes(const char* s)
@@ -1249,7 +1287,6 @@ static int process(struct hash* dep_hash, char* fn)
     char* cursor_out;
     char* base;
     char* created_line = NULL;
-    char* src_relative;
     int continuation = 0;
     char last_ns = 0;
     off_t size = 0;
@@ -1306,6 +1343,17 @@ static int process(struct hash* dep_hash, char* fn)
             if (file_load_buffer_count != 100000)
                 file_load_buffers[file_load_buffer_count++] = converted;
 #endif
+            /* Leave a per-object dep-file behind so make finds the
+               prerequisite and stops re-reading the included dep-files. Only
+               a phony rule, and only when nothing is there yet: the real
+               header list already goes to the aggregated dep-file this run
+               writes, and a phony file makes an old or stale concat-deps
+               rebuild the object rather than trust a list it cannot read. */
+            {
+                struct stat probe;
+                if(stat(fn, &probe) != 0)
+                    write_phony_dep_file(fn);
+            }
         }
 
         base = cursor_out = cursor = end = buffer;
@@ -1426,91 +1474,11 @@ static int process(struct hash* dep_hash, char* fn)
     }
     else
     {
-        if(strncmp(fn, work_dir, work_dir_len) == 0)
+        created_line = write_phony_dep_file(fn);
+        if(created_line)
         {
-            if(strncmp(fn+work_dir_len, "/Dep/", 5) == 0)
-            {
-                src_relative = fn+work_dir_len+5;
-                // cases ordered by frequency
-                if(strncmp(src_relative, "CxxObject/", 10) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "GenCxxObject/", 13) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "CObject/", 8) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "GenCObject/", 11) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "SdiObject/", 10) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "AsmObject/", 10) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "ObjCxxObject/", 13) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "ObjCObject/", 11) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "GenObjCxxObject/", 16) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "GenObjCObject/", 14) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "GenAsmObject/", 13) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "GenNasmObject/", 14) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "CxxClrObject/", 13) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else if(strncmp(src_relative, "GenCxxClrObject/", 16) == 0)
-                {
-                    created_line = generate_phony_line(src_relative, "o");
-                    rc = generate_phony_file(fn, created_line);
-                }
-                else
-                {
-                    fprintf(stderr, "no magic for %s(%s) in %s\n", fn, src_relative, work_dir);
-                }
-            }
-            if(!rc)
-            {
-                puts(created_line);
-            }
+            rc = 0;
+            puts(created_line);
         }
     }
     /* Note: yes we are going to leak 'buffer'
