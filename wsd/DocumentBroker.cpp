@@ -424,12 +424,13 @@ void DocumentBroker::pollThread()
         }
 
         const auto now = std::chrono::steady_clock::now();
-#if !MOBILEAPP
+#if !MOBILEAPP || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
         // a tile's data is ~8k, a 4k screen is ~256 256x256 tiles -
         // so double that - 4Mb per view.
         if (_tileCache)
             _tileCache->setMaxCacheSize(8 * 1024 * 256 * 2 * _sessions.size());
-
+#endif
+#if !MOBILEAPP
         // The stale-render sweep runs every COMMAND_TIMEOUT_MS. It always drops
         // entries whose subscribers are gone; re-issuing the remaining stale
         // tiles to the kit is compiled in only when ENABLE_STALE_TILE_REISSUE is
