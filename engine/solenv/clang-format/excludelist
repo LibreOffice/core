@@ -28,11 +28,13 @@ avmedia/source/framework/soundhandler.cxx
 avmedia/source/framework/soundhandler.hxx
 avmedia/source/gstreamer/gstwindow.cxx
 avmedia/source/gstreamer/gstwindow.hxx
+avmedia/source/gtk/gtkplayer.hxx
 avmedia/source/macavf/framegrabber.hxx
 avmedia/source/macavf/macavfcommon.hxx
 avmedia/source/macavf/manager.hxx
 avmedia/source/macavf/player.hxx
 avmedia/source/macavf/window.hxx
+avmedia/source/qt6/QtPlayer.hxx
 avmedia/source/viewer/mediaevent_impl.cxx
 avmedia/source/viewer/mediaevent_impl.hxx
 avmedia/source/viewer/mediawindow.cxx
@@ -6181,6 +6183,7 @@ oox/inc/drawingml/textrun.hxx
 oox/inc/drawingml/textspacing.hxx
 oox/inc/drawingml/transform2dcontext.hxx
 oox/qa/token/tokenmap-test.cxx
+oox/qa/unit/drawingml.cxx
 oox/qa/unit/vba_compression.cxx
 oox/source/core/binarycodec.cxx
 oox/source/core/contexthandler.cxx
