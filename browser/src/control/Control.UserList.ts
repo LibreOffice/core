@@ -49,6 +49,7 @@ class UserList extends window.L.Control {
 		nUsers?: string;
 		oneUser?: string;
 		noUser?: string;
+		dropdownId: string;
 	} = {
 		userLimitHeader: 6,
 		userLimitHeaderWhenFollowing: 3,
@@ -62,6 +63,7 @@ class UserList extends window.L.Control {
 		nUsers: undefined,
 		oneUser: undefined,
 		noUser: undefined,
+		dropdownId: 'userlist',
 	};
 
 	users: Map<number, User> = new Map();
@@ -218,7 +220,7 @@ class UserList extends window.L.Control {
 		const userListSummary = document.getElementById(
 			'userListSummaryBackground',
 		);
-		const userListPopover = document.getElementById('userlist-dropdown');
+		const userListPopover = JSDialog.GetDropdown(this.options.dropdownId);
 		// checking case ''(empty string) is because when element loads first time it does not have any inline display style
 		const canShowDropdown =
 			!userListPopover &&
@@ -226,10 +228,12 @@ class UserList extends window.L.Control {
 			userListSummary.style.display !== 'none';
 		if (canShowDropdown) {
 			JSDialog.OpenDropdown(
-				'userlist',
+				this.options.dropdownId,
 				document.getElementById('userListSummaryButton'),
 				JSDialog.MenuDefinitions.get('UsersListMenu'),
 			);
+		} else {
+			app.console.debug('UserList: already opened');
 		}
 	}
 
@@ -430,7 +434,9 @@ class UserList extends window.L.Control {
 	renderAll() {
 		this.updateUserListCount();
 		this.renderHeaderAvatars();
-		const popoverElement = document.getElementById('userlist-entries');
+		const popoverElement = document.getElementById(
+			JSDialog.CreateDropdownEntriesId(this.options.dropdownId),
+		);
 		if (popoverElement) this.renderHeaderAvatarPopover(popoverElement);
 		this.renderFollowingChip();
 	}
@@ -542,7 +548,7 @@ class UserList extends window.L.Control {
 			listItem.appendChild(userLabelContainer);
 			const activate = () => {
 				this.followUser(viewId);
-				JSDialog.CloseDropdown('userlist');
+				JSDialog.CloseDropdown(this.options.dropdownId);
 			};
 			listItem.addEventListener('click', activate);
 			listItem.addEventListener('keydown', (e: KeyboardEvent) => {
