@@ -710,6 +710,23 @@ if test "$build_os" = "cygwin" -o -n "$WSL_ONLY_AS_HELPER"; then
             A windows version of pkgconf is required to build harfbuzz.
             Add PKG_CONFIG=/path/to/pkgconf-2.4.3.exe to autogen.input or put it in PATH])
     fi
+
+    # Some bundled tarballs (e.g. pixman) contain symlinks that tar has to
+    # recreate while unpacking; without the privilege to create symbolic links
+    # the unpack aborts deep into the build. Test the operation directly rather
+    # than probing a particular enabling mechanism, so that Developer Mode (or
+    # any future arrangement that grants the privilege) passes.
+    AC_MSG_CHECKING([whether symbolic links can be created])
+    rm -f conftest.symlink conftest.symtarget
+    echo conftest > conftest.symtarget
+    cmd.exe /c "mklink conftest.symlink conftest.symtarget" >/dev/null 2>&1
+    symlink_ok=$?
+    rm -f conftest.symlink conftest.symtarget
+    if test "$symlink_ok" = 0; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_ERROR([cannot create symbolic links. Some bundled tarballs (such as pixman) contain symlinks that tar must recreate while unpacking, which fails without the privilege to create them. Enable Developer Mode (Settings > System > For developers), then re-run autogen.sh.])
+    fi
 else
     case "$build_os" in
         darwin*)
