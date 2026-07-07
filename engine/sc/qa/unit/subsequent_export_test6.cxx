@@ -741,6 +741,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest6, testTableStyleDefaultExportXLSX)
     // totalsRowShown is unnecessary and should not be exported
     assertXPathNoAttribute(pTable, "/x:table", "totalsRowShown");
 
+    // The autoFilter must exclude the totals row (row 10)
+    assertXPath(pTable, "/x:table/x:autoFilter", "ref", u"A1:C9");
+
     // Verify column definitions
     assertXPath(pTable, "/x:table/x:tableColumns/x:tableColumn[1]", "name", u"A");
     assertXPath(pTable, "/x:table/x:tableColumns/x:tableColumn[3]", "name", u"C");

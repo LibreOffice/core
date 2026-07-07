@@ -255,8 +255,6 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
     if (rData.HasAutoFilter())
     {
-        /* TODO: does this need to exclude totals row? */
-
         /* TODO: in OOXML  12.3.21 Table Definition Part  has information
          * that an applied autoFilter has child elements
          * <af:filterColumn><af:filters><af:filter>.
