@@ -1009,9 +1009,13 @@ endif
 
 TEMPLATE_MANIFEST = $(DIST_FOLDER)/templates/templates.js
 
-$(TYPESCRIPT_JS_DIR)/%.js: $(srcdir)/%.ts
-	@mkdir -p $(dir $@)
-	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --outFile $@ $<
+admin-tsc.done: $(patsubst %,$(srcdir)/%,$(COOL_ADMIN_TS))
+	@mkdir -p $(TYPESCRIPT_JS_DIR)
+	$(QUIET_TSC) $(NODE) $(builddir)/node_modules/typescript/bin/tsc --outDir $(TYPESCRIPT_JS_DIR) --rootDir $(srcdir) $^
+	@touch $@
+
+$(COOL_ADMIN_TS_JS): admin-tsc.done
+	@:
 
 build-cool: \
 	eslint.done \
@@ -1578,7 +1582,7 @@ clean-local:
 		$(srcdir)/l10n/uno-localizations.json
 	@test ! -d "$(ENGINE_UI_XCU_DIR)" || rm -rf $(srcdir)/l10n/uno
 
-CLEANFILES = tscompile.done tsc-emit.done tsc-strict.done $(DIST_FOLDER)/strict.tsbuildinfo eslint.done prettier.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
+CLEANFILES = tscompile.done tsc-emit.done tsc-strict.done admin-tsc.done $(DIST_FOLDER)/strict.tsbuildinfo eslint.done prettier.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js admin/adminIntegratorSettings.html
 
 $(abs_srcdir)/jsconfig.json:
 	@printf "{\n \
