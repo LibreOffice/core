@@ -108,12 +108,27 @@ describe(['tagdesktop'], 'Backstage View Tests', function() {
 
 	it('Closes via the header close button', function() {
 		cy.then(() => {
+			// The header close button only appears when closing the
+			// document is enabled for this session.
+			this.win.L.Params.closeButtonEnabled = true;
 			ensureBackstage(this.win).show();
 		});
 
 		cy.cGet('.backstage-view').should('not.have.class', 'hidden');
 		cy.cGet('.backstage-header-close').click();
 		cy.cGet('.backstage-view').should('have.class', 'hidden');
+	});
+
+	it('Omits the header close button when closing the document is disabled', function() {
+		cy.then(() => {
+			this.win.L.Params.closeButtonEnabled = false;
+			ensureBackstage(this.win).show();
+		});
+
+		cy.cGet('.backstage-view').should('not.have.class', 'hidden');
+		cy.cGet('.backstage-header-close').should('not.exist');
+		// The sidebar back button still returns to the document.
+		cy.cGet('.backstage-sidebar-back').should('be.visible');
 	});
 
 	it('Closes via the sidebar back button', function() {

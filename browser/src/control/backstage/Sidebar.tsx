@@ -20,6 +20,7 @@
 namespace BackstageTemplates {
   interface HeaderProps {
     isStarterMode: boolean;
+    closeButtonEnabled: boolean;
     onClose: () => void;
   }
 
@@ -33,6 +34,7 @@ namespace BackstageTemplates {
 
   export interface ShellProps {
     isStarterMode: boolean;
+    closeButtonEnabled: boolean;
     tabs: BackstageTabConfig[];
     onTabClick: (config: BackstageTabConfig) => void;
     onClose: () => void;
@@ -50,6 +52,7 @@ namespace BackstageTemplates {
       <div class={containerClass} id="backstage-view">
         {header({
           isStarterMode: props.isStarterMode,
+          closeButtonEnabled: props.closeButtonEnabled,
           onClose: props.onClose,
         })}
         <div class="backstage-main-wrapper">
@@ -70,7 +73,9 @@ namespace BackstageTemplates {
     return (
       <div class="backstage-header">
         <span class="backstage-header-title">Collabora Office</span>
-        {props.isStarterMode ? null : closeButton(props.onClose)}
+        {props.isStarterMode || !props.closeButtonEnabled
+          ? null
+          : closeButton(props.onClose)}
       </div>
     );
   }

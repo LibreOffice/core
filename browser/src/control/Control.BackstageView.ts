@@ -68,6 +68,7 @@ class BackstageView extends window.L.Class {
 	private createContainer(): HTMLElement {
 		const container = BackstageTemplates.shell({
 			isStarterMode: this.isStarterMode,
+			closeButtonEnabled: !!window.L.Params.closeButtonEnabled,
 			tabs: this.getTabsConfig(),
 			onTabClick: (cfg) => this.onTabClick(cfg),
 			onClose: () => this.hide(),
