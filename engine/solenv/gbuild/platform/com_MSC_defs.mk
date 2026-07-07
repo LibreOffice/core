@@ -32,6 +32,9 @@ gb_AWK := awk
 gb_CLASSPATHSEP := ;
 gb_RC := rc
 
+# cl.exe reads this and skips starting its vctip.exe telemetry helper.
+export VSCMD_SKIP_SENDTELEMETRY := 1
+
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
 gb_CC := $(CC)
