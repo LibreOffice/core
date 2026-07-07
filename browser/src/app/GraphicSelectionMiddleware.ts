@@ -208,7 +208,11 @@ class GraphicSelection {
 				editMode = this.extraInfo && this.extraInfo.isSignature;
 			}
 
-			if (!editMode && !this.extraInfo?.url) {
+			if (
+				!editMode &&
+				!this.extraInfo.mimeType?.startsWith('video/') &&
+				!this.extraInfo.mimeType?.startsWith('audio/')
+			) {
 				return;
 			}
 
@@ -456,7 +460,10 @@ class GraphicSelection {
 
 		if (msgData && msgData.length > 5) {
 			var extraInfo = msgData[5];
-			if (extraInfo.url !== undefined) {
+			if (
+				extraInfo.mimeType?.startsWith('video/') ||
+				extraInfo.mimeType?.startsWith('audio/')
+			) {
 				this.onEmbeddedVideoContent(JSON.stringify(extraInfo));
 			}
 		}
