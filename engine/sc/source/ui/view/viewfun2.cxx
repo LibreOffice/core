@@ -79,6 +79,7 @@
 #include <prnsave.hxx>
 #include <searchresults.hxx>
 #include <tokenarray.hxx>
+#include <dbdata.hxx>
 #include <rowheightcontext.hxx>
 #include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
@@ -839,6 +840,38 @@ bool ScViewFunc::AutoSum( const ScRange& rRange, bool bSubTotal, bool bSetCursor
     return true;
 }
 
+// If the auto-sum target is in a table's totals row, add a structured reference
+// Table[Column] for rRange's column instead of a plain range (false if not applicable).
+static bool lcl_AddTableColumnRef( ScTokenArray& rArray, const ScDocument& rDoc,
+                                   const ScRange& rRange, const ScAddress& rAddr )
+{
+    const ScDBCollection* pColl = rDoc.GetDBCollection();
+    const ScDBData* pDB = pColl ? pColl->GetDBAtCursor(
+        rAddr.Col(), rAddr.Row(), rAddr.Tab(), ScDBDataPortion::AREA) : nullptr;
+    if (!pDB || !pDB->HasTotals())
+        return false;
+
+    ScRange aArea;
+    pDB->GetArea(aArea);
+
+    // The target must be in the totals row (the last area row), and rRange must be
+    // that column's data body (headers and totals row excluded).
+    const SCROW nDataStart = aArea.aStart.Row() + (pDB->HasHeader() ? 1 : 0);
+    const SCROW nDataEnd = aArea.aEnd.Row() - 1;
+    if (rAddr.Row() != aArea.aEnd.Row()
+        || rRange.aStart.Col() != rAddr.Col() || rRange.aEnd.Col() != rAddr.Col()
+        || rRange.aStart.Row() != nDataStart || rRange.aEnd.Row() != nDataEnd)
+        return false;
+
+    ScSingleRefData aColRef;
+    aColRef.InitAddress(ScAddress(rAddr.Col(), nDataStart, rAddr.Tab()));
+    rArray.AddTableRef(pDB->GetIndex());
+    rArray.AddOpCode(ocTableRefOpen);
+    rArray.AddSingleReference(aColRef);
+    rArray.AddOpCode(ocTableRefClose);
+    return true;
+}
+
 OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr , const OpCode eCode)
 {
     ScViewData& rViewData = GetViewData();
@@ -862,6 +895,8 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
             const ScRange & r = rRangeList[i];
             if (i != 0)
                 aArray.AddOpCode(ocSep);
+            if (bSubTotal && lcl_AddTableColumnRef(aArray, rDoc, r, rAddr))
+                continue;
             ScComplexRefData aRef;
             aRef.InitRangeRel(rDoc, r, rAddr);
             aArray.AddDoubleReference(aRef);
