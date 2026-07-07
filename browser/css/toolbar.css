@@ -186,6 +186,7 @@
 	bottom: 0;
 	z-index: 1000;
 	border-top: 1px solid var(--color-border);
+	display: none;
 }
 
 #toolbar-down .ToolbarStatusInactive {
