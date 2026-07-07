@@ -1374,7 +1374,10 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			var lastKey = dialogs[dialogs.length - 1];
 			var dialogInfo = this.dialogs[lastKey];
 			if (dialogInfo.isPopup) {
-				this.close(lastKey, true);
+				// online-only must remove the DOM here
+				// instead of waiting for a server round-trip that never comes
+				// TODO: use helpers here
+				this.close(lastKey, !dialogInfo.isDropdown);
 				this.map.focus();
 			}
 		}
