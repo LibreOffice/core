@@ -277,6 +277,48 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureTransformExtractSlide
     CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureExtractSlideText)
+{
+    // The text filter returns the slide text as markdown, read from the live
+    // document so that text still being typed is included.
+    createSdImpressDoc();
+
+    // Type into the title placeholder and keep the edit session open: the
+    // typed text lives only in the editing outliner at this point.
+    insertStringToObject(0, u"Typed while editing", /*bUseEscape*/ false);
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    {
+        tools::JsonWriter aJsonWriter;
+        pImpressDocument->getCommandValues(aJsonWriter,
+                                           ".uno:ExtractDocumentStructure?filter=text");
+        const OString aJson = aJsonWriter.finishAndGetAsOString();
+
+        CPPUNIT_ASSERT(aJson.indexOf("\"BodyText\"") >= 0);
+        CPPUNIT_ASSERT(aJson.indexOf("\"format\": \"markdown\"") >= 0);
+        CPPUNIT_ASSERT(aJson.indexOf("\"truncated\": false") >= 0);
+        // The body has one markdown section per slide.
+        CPPUNIT_ASSERT(aJson.indexOf("## Slide 1: ") >= 0);
+        // The open edit session's text is included.
+        CPPUNIT_ASSERT(aJson.indexOf("Typed while editing") >= 0);
+        // The untouched content placeholder shows only its prompt text, which
+        // is not document content.
+        CPPUNIT_ASSERT(aJson.indexOf("Click to add") < 0);
+    }
+
+    // The committed text is still returned once the edit session is closed.
+    typeKey(pImpressDocument, KEY_ESCAPE);
+    {
+        tools::JsonWriter aJsonWriter;
+        pImpressDocument->getCommandValues(aJsonWriter,
+                                           ".uno:ExtractDocumentStructure?filter=text");
+        const OString aJson = aJsonWriter.finishAndGetAsOString();
+
+        CPPUNIT_ASSERT(aJson.indexOf("Typed while editing") >= 0);
+        CPPUNIT_ASSERT(aJson.indexOf("Click to add") < 0);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUnoCommand)
 {
     // 1. Create a document;

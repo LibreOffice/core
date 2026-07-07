@@ -113,6 +113,7 @@
 #include <svtools/unoimap.hxx>
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
+#include <editeng/editobj.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/datetime.hxx>
 #include <sax/tools/converter.hxx>
@@ -1650,6 +1651,26 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
     }
 }
 
+/// Returns a snapshot of one SdrText's paragraphs. Text that is still being
+/// typed lives in the object's editing outliner rather than in the stored
+/// paragraph object, so an active edit session is snapshotted from there.
+/// An empty result means the text carries no paragraphs.
+std::optional<OutlinerParaObject> getTextParagraphSnapshot(const SdrTextObj* pTextObj,
+                                                           const SdrText* pText)
+{
+    if (!pText)
+        return std::nullopt;
+    if (pTextObj->IsInEditMode() && pText == pTextObj->getActiveText())
+    {
+        if (std::optional<OutlinerParaObject> oEdited = pTextObj->CreateEditOutlinerParaObject())
+            return oEdited;
+    }
+    const OutlinerParaObject* pStored = pText->GetOutlinerParaObject();
+    if (!pStored)
+        return std::nullopt;
+    return *pStored;
+}
+
 void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDocument* pDoc,
                            const std::map<OUString, OUString>& rArguments)
 {
@@ -1729,19 +1750,20 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDoc
                             {
                                 auto aTextNode
                                     = rJsonWriter.startNode("Text " + std::to_string(nTId));
-                                SdrText* pSdrTxt = pSdrTxtObj->getText(nTId);
-                                OutlinerParaObject* pOutlinerParaObject
-                                    = pSdrTxt->GetOutlinerParaObject();
+                                std::optional<OutlinerParaObject> oParagraphs
+                                    = getTextParagraphSnapshot(pSdrTxtObj,
+                                                               pSdrTxtObj->getText(nTId));
+                                if (!oParagraphs)
+                                    continue;
 
-                                sal_Int32 nParaCount
-                                    = pOutlinerParaObject->GetTextObject().GetParagraphCount();
+                                const EditTextObject& rTextObject = oParagraphs->GetTextObject();
+                                sal_Int32 nParaCount = rTextObject.GetParagraphCount();
 
                                 rJsonWriter.put("ParaCount", nParaCount);
                                 auto aParasNode = rJsonWriter.startArray("Paragraphs");
                                 for (int nParaId = 0; nParaId < nParaCount; nParaId++)
                                 {
-                                    OUString aParaStr(
-                                        pOutlinerParaObject->GetTextObject().GetText(nParaId));
+                                    OUString aParaStr(rTextObject.GetText(nParaId));
 
                                     rJsonWriter.putSimpleValue(aParaStr);
                                 }
@@ -1752,6 +1774,89 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDoc
             }
         }
     }
+}
+
+/// Writes the text of every slide as markdown into a "BodyText" node, one
+/// "## Slide N: <name>" section per slide. Reads the live document, so
+/// unsaved edits and text still being typed are reflected. Whole slides are
+/// appended until the size cap is reached, so a truncated result ends at a
+/// slide boundary.
+void GetDocStructureSlidesText(::tools::JsonWriter& rJsonWriter, const SdXImpressDocument* pDoc)
+{
+    auto aBodyNode = rJsonWriter.startNode("BodyText");
+    rJsonWriter.put("format", "markdown");
+
+    SdDrawDocument* pDrawDoc = pDoc->GetDoc();
+    const sal_uInt16 nPageCount = pDrawDoc ? pDrawDoc->GetSdPageCount(PageKind::Standard) : 0;
+
+    OUStringBuffer aBody;
+    bool bTruncated = false;
+    sal_uInt16 nIncludedSlides = 0;
+    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+    {
+        SdPage* pPageStandard = pDrawDoc->GetSdPage(nPage, PageKind::Standard);
+
+        OUStringBuffer aSlideBuffer("## Slide " + OUString::number(nPage + 1) + ": "
+                                    + pPageStandard->GetName() + "\n");
+        const int nObjCount = pPageStandard->GetObjCount();
+        for (int nObj = 0; nObj < nObjCount; ++nObj)
+        {
+            SdrTextObj* pTextObj = DynCastSdrTextObj(pPageStandard->GetObj(nObj));
+            if (!pTextObj || !pTextObj->HasText())
+                continue;
+            // An empty presentation object shows only its placeholder prompt
+            // (like "Click to add Title"), not document content. One with an
+            // active edit session is kept: the flag is cleared only when the
+            // edit ends, while the typed text already lives in the editing
+            // outliner.
+            if (pTextObj->IsEmptyPresObj() && !pTextObj->IsInEditMode())
+                continue;
+
+            const sal_Int32 nTextCount = pTextObj->getTextCount();
+            for (sal_Int32 nText = 0; nText < nTextCount; ++nText)
+            {
+                std::optional<OutlinerParaObject> oParagraphs
+                    = getTextParagraphSnapshot(pTextObj, pTextObj->getText(nText));
+                if (!oParagraphs)
+                    continue;
+
+                const EditTextObject& rTextObject = oParagraphs->GetTextObject();
+                const sal_Int32 nParaCount = rTextObject.GetParagraphCount();
+                aSlideBuffer.append("\n");
+                for (sal_Int32 nPara = 0; nPara < nParaCount; ++nPara)
+                    aSlideBuffer.append(rTextObject.GetText(nPara) + "\n");
+            }
+        }
+
+        const OUString aSlideText = aSlideBuffer.makeStringAndClear();
+        if (aBody.getLength() + aSlideText.getLength() > KitHelper::AIBodyTextMaxChars)
+        {
+            bTruncated = true;
+            // A single slide can exceed the cap on its own; a hard-cut head
+            // of that slide is more useful than an empty result.
+            if (nIncludedSlides == 0)
+            {
+                aBody.append(aSlideText.subView(0, KitHelper::AIBodyTextMaxChars));
+                ++nIncludedSlides;
+            }
+            break;
+        }
+        aBody.append(aSlideText + "\n");
+        ++nIncludedSlides;
+    }
+
+    // Emit the truncation flag and an explicit instruction before the text,
+    // so the model acts on it rather than overlooking a flag buried after a
+    // large body of markdown.
+    rJsonWriter.put("truncated", bTruncated);
+    if (bTruncated)
+        rJsonWriter.put("note",
+                        "The presentation is large, so only the first "
+                            + OUString::number(nIncludedSlides) + " of "
+                            + OUString::number(nPageCount)
+                            + " slides are included here. Tell the user the summary covers only "
+                              "those slides.");
+    rJsonWriter.put("text", aBody.makeStringAndClear());
 }
 
 } // end anonymous namespace
@@ -2255,7 +2360,8 @@ private:
 
 bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
-    if (rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics")
+    if (rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics"
+        || rCommand == u"ExtractDocumentStructure")
         return true;
     return false;
 }
@@ -2268,8 +2374,15 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
 
     if (o3tl::starts_with(rCommand, ".uno:ExtractDocumentStructure"))
     {
-        auto commentsNode = rJsonWriter.startNode("DocStructure");
-        GetDocStructureSlides(rJsonWriter, this, aMap);
+        OUString aFilter;
+        if (auto it = aMap.find(u"filter"_ustr); it != aMap.end())
+            aFilter = it->second;
+
+        auto aStructureNode = rJsonWriter.startNode("DocStructure");
+        if (aFilter == "text" || aFilter.startsWith("text,"))
+            GetDocStructureSlidesText(rJsonWriter, this);
+        else
+            GetDocStructureSlides(rJsonWriter, this, aMap);
     }
     else if (o3tl::starts_with(rCommand, ".uno:VectorRenderingGraphics"))
     {
