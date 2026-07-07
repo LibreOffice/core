@@ -905,7 +905,8 @@ endef
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,%) : $(call gb_Executable_get_runtime_dependencies,concat-deps)
-	$(call gb_LinkTarget__command_dep,$@,$*)
+	$(call gb_LinkTarget__command_dep,$@.tmp,$*)
+	mv $@.tmp $@
 
 $(dir $(call gb_LinkTarget_get_dep_target,%))/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
