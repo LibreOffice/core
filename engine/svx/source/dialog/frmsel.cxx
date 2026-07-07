@@ -308,8 +308,16 @@ void FrameSelectorImpl::InitColors()
     svtools::ColorConfig aColorConfig;
     maBackCol = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
     mbHCMode = rSettings.GetHighContrastMode();
-    maArrowCol = aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor;
-    maMarkCol = aColorConfig.GetColorValue(svtools::TABLEBOUNDARIES).nColor;
+
+    if (maBackCol.IsDark())
+    {
+        maArrowCol = Color(0xC8, 0xC8, 0xC8);
+    }
+    else
+    {
+        maArrowCol = Color(0x80, 0x80, 0x80);
+    }
+    maMarkCol = maArrowCol;
     maHCLineCol = COL_BLACK;
 }
 
