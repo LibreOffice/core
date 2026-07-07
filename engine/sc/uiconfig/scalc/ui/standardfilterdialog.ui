@@ -1135,7 +1135,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">0</property>
+                        <property name="left-attach">1</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
@@ -1155,7 +1155,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left-attach">1</property>
+                        <property name="left-attach">3</property>
                         <property name="top-attach">0</property>
                       </packing>
                     </child>
@@ -1172,6 +1172,35 @@
                             <property name="AtkObject::accessible-description" translatable="yes" context="standardfilterdialog|extended_tip|rbcopyarea">Click the Shrink icon to reduce the dialog to the size of the input field. It is then easier to mark the required reference in the sheet. The icons then automatically convert to the Maximize icon. Click it to restore the dialog to its original size.</property>
                           </object>
                         </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">4</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="lblNamedRange">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|lblNamedRange">Named range:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">lbcopyarea</property>
+                        <property name="margin-end">6</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="lblReference">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="standardfilterdialog|lblReference">Cell range:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">edcopyarea</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">6</property>
                       </object>
                       <packing>
                         <property name="left-attach">2</property>
