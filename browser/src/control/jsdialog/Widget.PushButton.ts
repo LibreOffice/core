@@ -127,11 +127,15 @@ JSDialog.pushButton = function (
 			builder._responses[data.id],
 			builder,
 		);
-		pushbutton.onclick = function (ev: MouseEvent) {
-			pushbutton.setAttribute('disabled', 'true');
-			pushbutton.setAttribute('aria-disabled', 'true');
-			responseCallback(ev);
-		};
+		if (builder.options.isMessageBox) {
+			pushbutton.onclick = function (ev: MouseEvent) {
+				pushbutton.setAttribute('disabled', 'true');
+				pushbutton.setAttribute('aria-disabled', 'true');
+				responseCallback(ev);
+			};
+		} else {
+			pushbutton.onclick = responseCallback;
+		}
 	} else {
 		pushbutton.onclick = builder.callback.bind(
 			builder,

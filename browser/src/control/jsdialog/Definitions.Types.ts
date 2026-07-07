@@ -46,6 +46,7 @@ interface JSBuilderOptions {
 	mobileWizard: JSDialogComponent; // reference to the parent component FIXME: rename
 	useSetTabs?: boolean; // custom tabs placement handled by the parent container
 	useScrollAnimation?: boolean; // do we use animation for scrollIntoView
+	isMessageBox?: boolean; // when the dialog is a message box
 
 	// modifiers
 	noLabelsForUnoButtons?: boolean; // create only icon without label

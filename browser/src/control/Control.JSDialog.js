@@ -449,6 +449,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 				cssClass: 'jsdialog' + (instance.isAutoPopup ? ' autofilter' : '') + (instance.isOnlyChild ? ' one-child-popup' : ''),
 				callback: instance.callback,
 				suffix: 'dialog',
+				isMessageBox: instance.isMessageBox,
 			});
 
 		instance.builder.build(instance.content, [instance]);
@@ -1198,6 +1199,7 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			cssClass: 'jsdialog',
 			callback: e.callback,
 			suffix: 'dialog',
+			isMessageBox: this.dialogs[data.id].builder && this.dialogs[data.id].builder.options.isMessageBox,
 		});
 
 		builder.updateWidget(dialog, data.control);
