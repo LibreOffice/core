@@ -1,0 +1,19 @@
+libjxl is a library for encoding and decoding JPEG XL images, from
+[https://github.com/libjxl/libjxl].
+
+How to update the extra headers:
+================================
+
+The extra header files (jxl_cms_export.h, jxl_export.h, jxl_threads_export.h,
+version.h) can be generated with:
+
+(cd workdir/UnpackedTarball/libjxl/ && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF)
+
+If new header files are generated in this way, they will be placed in
+workdir/UnpackedTarball/libjxl/lib/include/jxl/.
+
+There are more detailed build instructions in
+workdir/UnpackedTarball/libjxl/BUILDING.md (for Linux) and
+workdir/UnpackedTarball/libjxl/developing_in_windows_vcpkg.md (for Windows). (A
+full build isn't necessary to generate the headers, only the first cmake
+command without --build.)

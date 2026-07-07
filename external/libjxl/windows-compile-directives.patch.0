@@ -1,0 +1,81 @@
+--- lib/include/jxl/jxl_cms_export.h	2026-08-21 18:50:38.834365872 +0200
++++ lib/include/jxl/jxl_cms_export.h	2026-08-21 18:50:38.834365872 +0200
+@@ -9,20 +9,20 @@
+ #  ifndef JXL_CMS_EXPORT
+ #    ifdef jxl_cms_EXPORTS
+         /* We are building this library */
+-#      define JXL_CMS_EXPORT __attribute__((visibility("default")))
++#      define JXL_CMS_EXPORT __declspec(dllexport)
+ #    else
+         /* We are using this library */
+-#      define JXL_CMS_EXPORT __attribute__((visibility("default")))
++#      define JXL_CMS_EXPORT __declspec(dllimport)
+ #    endif
+ #  endif
+ 
+ #  ifndef JXL_CMS_NO_EXPORT
+-#    define JXL_CMS_NO_EXPORT __attribute__((visibility("hidden")))
++#    define JXL_CMS_NO_EXPORT
+ #  endif
+ #endif
+ 
+ #ifndef JXL_CMS_DEPRECATED
+-#  define JXL_CMS_DEPRECATED __attribute__ ((__deprecated__))
++#  define JXL_CMS_DEPRECATED __declspec(deprecated)
+ #endif
+ 
+ #ifndef JXL_CMS_DEPRECATED_EXPORT
+--- lib/include/jxl/jxl_export.h	2026-08-21 18:50:38.834365872 +0200
++++ lib/include/jxl/jxl_export.h	2026-08-21 18:50:38.834365872 +0200
+@@ -9,20 +9,20 @@
+ #  ifndef JXL_EXPORT
+ #    ifdef JXL_INTERNAL_LIBRARY_BUILD
+         /* We are building this library */
+-#      define JXL_EXPORT __attribute__((visibility("default")))
++#      define JXL_EXPORT __declspec(dllexport)
+ #    else
+         /* We are using this library */
+-#      define JXL_EXPORT __attribute__((visibility("default")))
++#      define JXL_EXPORT __declspec(dllimport)
+ #    endif
+ #  endif
+ 
+ #  ifndef JXL_NO_EXPORT
+-#    define JXL_NO_EXPORT __attribute__((visibility("hidden")))
++#    define JXL_NO_EXPORT
+ #  endif
+ #endif
+ 
+ #ifndef JXL_DEPRECATED
+-#  define JXL_DEPRECATED __attribute__ ((__deprecated__))
++#  define JXL_DEPRECATED __declspec(deprecated)
+ #endif
+ 
+ #ifndef JXL_DEPRECATED_EXPORT
+--- lib/include/jxl/jxl_threads_export.h	2026-08-21 18:50:38.834365872 +0200
++++ lib/include/jxl/jxl_threads_export.h	2026-08-21 18:50:38.834365872 +0200
+@@ -9,20 +9,20 @@
+ #  ifndef JXL_THREADS_EXPORT
+ #    ifdef JXL_THREADS_INTERNAL_LIBRARY_BUILD
+         /* We are building this library */
+-#      define JXL_THREADS_EXPORT __attribute__((visibility("default")))
++#      define JXL_THREADS_EXPORT __declspec(dllexport)
+ #    else
+         /* We are using this library */
+-#      define JXL_THREADS_EXPORT __attribute__((visibility("default")))
++#      define JXL_THREADS_EXPORT __declspec(dllimport)
+ #    endif
+ #  endif
+ 
+ #  ifndef JXL_THREADS_NO_EXPORT
+-#    define JXL_THREADS_NO_EXPORT __attribute__((visibility("hidden")))
++#    define JXL_THREADS_NO_EXPORT
+ #  endif
+ #endif
+ 
+ #ifndef JXL_THREADS_DEPRECATED
+-#  define JXL_THREADS_DEPRECATED __attribute__ ((__deprecated__))
++#  define JXL_THREADS_DEPRECATED __declspec(deprecated)
+ #endif
+ 
+ #ifndef JXL_THREADS_DEPRECATED_EXPORT

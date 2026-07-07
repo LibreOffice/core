@@ -2603,6 +2603,11 @@ AC_ARG_WITH(system-expat,
         [Use expat already on system.]),,
     [with_system_expat="$with_system_libs"])
 
+AC_ARG_WITH(system-libjxl,
+    AS_HELP_STRING([--with-system-libjxl],
+        [Use libjxl already on system.]),,
+    [with_system_libjxl="$with_system_libs"])
+
 AC_ARG_WITH(system-libxml,
     AS_HELP_STRING([--with-system-libxml],
         [Use libxml/libxslt already on system.]),,
@@ -15037,6 +15042,16 @@ fi
 AC_SUBST(ENABLE_MSVC_ANALYZE)
 
 dnl ===================================================================
+dnl Test whether to build libjxl or rely on the system version
+dnl highway and brotli libraries are only built with internal libjxl
+dnl ===================================================================
+
+if test "$with_system_libjxl" != "yes"; then
+    BUILD_TYPE="$BUILD_TYPE HIGHWAY BROTLI"
+fi
+
+libo_CHECK_SYSTEM_MODULE([libjxl],[LIBJXL],[libjxl])
+
 dnl Test whether to use liblangtag
 dnl ===================================================================
 SYSTEM_LIBLANGTAG=

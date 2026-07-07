@@ -584,6 +584,48 @@ endef
 
 endif # SYSTEM_LIBJPEG
 
+ifneq ($(SYSTEM_LIBJXL),)
+
+define gb_LinkTarget__use_libjxl
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(LIBJXL_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBJXL_LIBS))
+
+endef
+
+gb_ExternalProject__use_libjxl :=
+
+else # !SYSTEM_LIBJXL
+
+define gb_LinkTarget__use_libjxl
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DJXL_INTERNAL_LIBRARY_BUILD \
+	-DJXL_THREADS_INTERNAL_LIBRARY_BUILD \
+	-Djxl_cms_EXPORTS \
+)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(gb_UnpackedTarball_workdir)/libjxl/lib/include \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),libjxl)
+$(call gb_LinkTarget_use_externals,$(1),\
+	highway \
+	brotli \
+	lcms2 \
+)
+
+endef
+
+define gb_ExternalProject__use_libjxl
+$(call gb_ExternalProject_use_static_libraries,$(1),libjxl)
+
+endef
+
+endif # SYSTEM_LIBJXL
+
 ifneq ($(SYSTEM_MYTHES),)
 
 define gb_LinkTarget__use_mythes

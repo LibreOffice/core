@@ -3626,6 +3626,10 @@ external/fontconfig/configs/wnt_fontconfig_fcstdint.h
 external/libjpeg-turbo/jconfig.h
 external/libjpeg-turbo/jconfigint.h
 external/libjpeg-turbo/jversion.h
+external/libjxl/jxl_cms_export.h
+external/libjxl/jxl_export.h
+external/libjxl/jxl_threads_export.h
+external/libjxl/version.h
 external/mariadb-connector-c/configs/linux_my_config.h
 external/mariadb-connector-c/configs/mac_my_config.h
 external/mariadb-connector-c/configs/mariadb_version.h
