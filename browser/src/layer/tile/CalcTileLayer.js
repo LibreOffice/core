@@ -263,8 +263,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 		this._map.fire('scrolllimits', newSizePx.clone());
 
-		if (!this._syncTileContainerSize() && (limitWidth || limitHeight || extendedLimit))
-			app.sectionContainer.requestReDraw();
+		this._syncTileContainerSize();
 	},
 
 	// While the document size is frozen, the scrollable area does not grow or
@@ -349,40 +348,6 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		return { marginLeft, marginTop, scrollBarThickness };
 	},
 
-	_calculateNewCanvasAndMapSizes: function(documentContainerSize, availableSpace, marginLeft, marginTop, scrollBarThickness) {
-		let newMapSize = availableSpace.slice();
-		let newCanvasSize = documentContainerSize.slice();
-
-		const fileSizePixels = app.activeDocument.fileSize.pToArray();
-
-		// If we don't need that much space.
-		if (fileSizePixels[0] < availableSpace[0]) {
-			newMapSize[0] = fileSizePixels[0];
-			newCanvasSize[0] = fileSizePixels[0] + marginLeft + scrollBarThickness;
-			this.widthShrinked = true;
-		}
-		else this.widthShrinked = false;
-
-		if (fileSizePixels[1] < availableSpace[1]) {
-			newMapSize[1] = fileSizePixels[1];
-			newCanvasSize[1] = fileSizePixels[1] + marginTop + scrollBarThickness;
-			this.heightShrinked = true;
-		}
-		else this.heightShrinked = false;
-
-		newMapSize = [Math.round(newMapSize[0] / app.dpiScale), Math.round(newMapSize[1] / app.dpiScale)];
-		newCanvasSize = [Math.round(newCanvasSize[0] / app.dpiScale), Math.round(newCanvasSize[1] / app.dpiScale)];
-
-		return { newMapSize, newCanvasSize };
-	},
-
-	_resizeMapElementAndTilesLayer: function(mapElement, marginLeft, marginTop, newMapSize) {
-		mapElement.style.left = Math.round(marginLeft / app.dpiScale) + 'px';
-		mapElement.style.top = Math.round(marginTop / app.dpiScale) + 'px';
-		mapElement.style.width = newMapSize[0] + 'px';
-		mapElement.style.height = newMapSize[1] + 'px';
-	},
-
 	_updateHeaderSections: function() {
 		if (app.sectionContainer.doesSectionExist(app.CSections.RowHeader.name)) {
 			app.sectionContainer.getSectionWithName(app.CSections.RowHeader.name)._updateCanvas();
@@ -390,75 +355,82 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		}
 	},
 
-	_syncTileContainerSize: function(force = false) {
-		if (!this._map) return false;
+	// Size the layout spacers so the tiles (document-anchor) section shrinks to
+	// the content when the document is smaller than the frame. We no longer
+	// resize the canvas or map element here; the canvas fills the document
+	// container automatically and the tiles section expands into it, stopping at
+	// whichever spacer has a non-zero size. The spacer spans the full canvas on
+	// its cross axis so the layout engine's hit test always finds it.
+	_updateSpacerSizes: function() {
+		const rightSpacer = app.sectionContainer.getSectionWithName(app.CSections.RightSpacer.name);
+		const bottomSpacer = app.sectionContainer.getSectionWithName(app.CSections.BottomSpacer.name);
+		if (!rightSpacer || !bottomSpacer)
+			return;
 
-		if (!this._container) return false;
-
-		// Document container size is up to date as of now.
 		const documentContainerSize = this._getDocumentContainerSize();
-		documentContainerSize[0] *= app.dpiScale;
-		documentContainerSize[1] *= app.dpiScale;
+		const canvasWidth = Math.round(documentContainerSize[0] * app.dpiScale);
+		const canvasHeight = Math.round(documentContainerSize[1] * app.dpiScale);
 
-		// Size has changed. Our map and canvas are not resized yet.
-		// But the row header, row group, column header and column group sections don't need to be resized.
-		// We can get their width and height from the sections' properties.
+		// Row/column headers, groups and the scrollbars take space the tiles
+		// section cannot use.
 		const { marginLeft, marginTop, scrollBarThickness } = this._getMarginPropertiesForTheMap();
+		const availableWidth = canvasWidth - marginLeft - scrollBarThickness;
+		const availableHeight = canvasHeight - marginTop - scrollBarThickness;
 
-		// Available for tiles section.
-		// In mobile, the margins and the scroll bar can take more space than the document container
-		// when the on-screen keyboard is enabled in landscape mode. Clamp to zero so the map element
-		// gets a valid CSS size and the next resize is detected as a real size change.
-		const availableSpace = [
-			Math.max(0, documentContainerSize[0] - marginLeft - scrollBarThickness),
-			Math.max(0, documentContainerSize[1] - marginTop - scrollBarThickness)
-		];
-		const { newMapSize, newCanvasSize } = this._calculateNewCanvasAndMapSizes(documentContainerSize, availableSpace, marginLeft, marginTop, scrollBarThickness);
+		// The scrollable area (in core pixels). Smaller than the frame => leftover.
+		// On mobile in landscape with the on-screen keyboard up, the margins and the scroll bar can
+		// take more space than the document container, so the available size goes negative. Clamp
+		// the leftover to zero to keep the spacer sizes valid.
+		const viewSize = app.activeDocument.activeLayout.viewSize;
+		const leftoverX = Math.max(0, availableWidth - viewSize.pX);
+		const leftoverY = Math.max(0, availableHeight - viewSize.pY);
 
-		const mapElement = this._map.getContainer(); // map's size = tiles section's size.
-		const oldMapSize = [mapElement.clientWidth, mapElement.clientHeight];
-		const widthIncreased = oldMapSize[0] < newMapSize[0];
-		const heightIncreased = oldMapSize[1] < newMapSize[1];
-		const sizeChanged = oldMapSize[0] !== newMapSize[0] || oldMapSize[1] !== newMapSize[1];
+		this.widthShrinked = leftoverX > 0;
+		this.heightShrinked = leftoverY > 0;
 
-		// The size update below rebuilds the viewed rectangle; remember the
-		// scroll position so it can be restored afterwards.
+		// In RTL Calc the content is anchored to the right edge, so the leftover
+		// horizontal space (and therefore the spacer) sits on the left.
+		rightSpacer.anchor = this.isCalcRTL() ? ['top', 'left'] : ['top', 'right'];
+
+		rightSpacer.size = [leftoverX, canvasHeight];
+		bottomSpacer.size = [canvasWidth, leftoverY];
+	},
+
+	_syncTileContainerSize: function() {
+		// Remember the frame size and scroll position across the relayout.
+		const oldFrame = app.activeDocument.activeLayout.frameSize;
 		const scrollX = app.activeDocument.activeLayout.viewedRectangle.pX1;
 		const scrollY = app.activeDocument.activeLayout.viewedRectangle.pY1;
 
-		// Early exit. If there is no need to update the size, return here.
-		if (sizeChanged || force) {
-			this._resizeMapElementAndTilesLayer(mapElement, marginLeft, marginTop, newMapSize);
+		// Size the spacers, then let the canvas match the document container
+		// automatically: onResize(0, 0) reads the container's own size. Calc no
+		// longer computes or imposes a canvas/map size here; the tiles section
+		// shrinks to the content via the spacers during the relayout.
+		this._updateSpacerSizes();
+		app.sectionContainer.onResize(0, 0);
+		this._updateHeaderSections();
 
-			this._map.invalidateSize(false, new cool.Point(oldMapSize[0], oldMapSize[1]));
-			app.sectionContainer.onResize(newCanvasSize[0], newCanvasSize[1]); // Canvas's size = documentContainer's size.
-			this._updateHeaderSections();
-
-			this._mobileChecksAfterResizeEvent(heightIncreased);
-		}
-
-		// The viewed rectangle spans the visible frame. Now that the frame size
-		// is known, rebuild it at that size (twips at the current zoom) and
-		// re-apply the scroll position. _syncTilePanePos no longer maintains the
-		// viewed rectangle for Calc, so establishing it here is what makes the
-		// document draw on load and after a resize.
+		// The viewed rectangle spans the visible frame (the tiles section). Now
+		// that the layout has settled, rebuild it at that size (twips at the
+		// current zoom) and re-apply the scroll position. _syncTilePanePos no
+		// longer maintains the viewed rectangle for Calc, so establishing it here
+		// is what makes the document draw on load and after a resize.
 		const frame = app.activeDocument.activeLayout.frameSize;
 		app.activeDocument.activeLayout.viewedRectangle = cool.SimpleRectangle.fromCorePixels(
 			[scrollX, scrollY, frame.pX, frame.pY]);
 		app.activeDocument.activeLayout.scrollTo(scrollX, scrollY);
 
-		if (sizeChanged || force) {
-			// We want to keep cursor visible when we show the keyboard on mobile device or tablet
-			this._nonDesktopChecksAfterResizeEvent(heightIncreased);
+		const widthIncreased = oldFrame.pX < frame.pX;
+		const heightIncreased = oldFrame.pY < frame.pY;
 
-			if (heightIncreased || widthIncreased) {
-				app.sectionContainer.requestReDraw();
-				this._map.fire('sizeincreased');
-				return true;
-			}
-		}
+		this._mobileChecksAfterResizeEvent(heightIncreased);
+		this._nonDesktopChecksAfterResizeEvent(heightIncreased);
 
-		return false;
+		app.sectionContainer.requestReDraw();
+
+		// A larger frame exposes area whose tiles may not be cached yet.
+		if (heightIncreased || widthIncreased)
+			this._map.fire('sizeincreased');
 	},
 
 	_onStatusMsg: function (textMsg) {

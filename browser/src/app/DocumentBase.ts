@@ -96,6 +96,16 @@ class DocumentBase {
 		) {
 			app.sectionContainer.addSection(new cool.RulerSpacerSection());
 		}
+
+		// Layout spacers that let the tiles (document-anchor) section shrink to
+		// the content size when the document is smaller than the frame. Only
+		// spreadsheets get them, because only Calc sizes them, and even a
+		// zero-sized spacer takes a pixel from a tiles section anchored at the
+		// canvas edge.
+		if (app.map._docLayer._docType === 'spreadsheet') {
+			app.sectionContainer.addSection(new cool.SpacerSection('right'));
+			app.sectionContainer.addSection(new cool.SpacerSection('bottom'));
+		}
 	}
 
 	public get fileSize(): cool.SimplePoint {

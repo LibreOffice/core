@@ -3915,17 +3915,20 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_syncTilePanePos: function () {
+		// Calc renders on the section-container canvas and drives its viewed
+		// rectangle from the layout (on scroll) and from _resetView via
+		// ViewLayoutCalc.setViewRectangleFromPointAndScale (on zoom). It needs
+		// nothing from the map pane here: repositioning the tile-pane container
+		// or deriving the viewed rectangle would reintroduce the map-element
+		// dependency. So this is a no-op for Calc.
+		if (app.activeDocument && app.activeDocument.activeLayout
+			&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc')
+			return;
+
 		if (this._container) {
 			var mapPanePos = this._map._getMapPanePos();
 			window.L.DomUtil.setPosition(this._container, new cool.Point(-mapPanePos.x , -mapPanePos.y));
 		}
-		// For Calc the viewed rectangle is set directly: by the layout on scroll,
-		// and by _resetView via ViewLayoutCalc.setViewRectangleFromPointAndScale
-		// on zoom. Deriving it from the map pane here would reintroduce the
-		// map-element dependency.
-		if (app.activeDocument && app.activeDocument.activeLayout
-			&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc')
-			return;
 		var documentBounds = this._map.getPixelBoundsCore();
 		var documentPos = documentBounds.min;
 		var documentEndPos = documentBounds.max;

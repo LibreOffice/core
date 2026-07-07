@@ -129,7 +129,7 @@ interface DocLayerInterface {
 	_ySplitter: any;
 	_xSplitter: any;
 	_cursorMarker?: Cursor;
-	_syncTileContainerSize(force?: boolean): boolean;
+	_syncTileContainerSize(force?: boolean): void;
 	_postSelectTextEvent(type: string, x: number, y: number): void;
 	_viewId: number;
 	_openCommentWizard(annotation?: cool.Comment): void;

@@ -174,6 +174,7 @@
 /// <reference path="../src/layer/vector/CDarkOverlay.ts" />
 /// <reference path="../src/layer/SplitPanesContext.ts" />
 /// <reference path="../src/layer/CalcSplitPanesContext.ts" />
+/// <reference path="../src/canvas/sections/SpacerSection.ts" />
 /// <reference path="../src/canvas/sections/CursorHeaderSection.ts" />
 /// <reference path="../src/canvas/sections/CursorHandler.ts" />
 /// <reference path="../src/canvas/sections/TableInsertMarkerSection.ts" />
