@@ -2206,6 +2206,12 @@ class Menubar extends window.L.Control {
 						itemState = this._map['stateChangeHandler'].getItemValue('transitiondeck');
 						if (itemState === 'true') $(aItem).addClass(constChecked);
 						else $(aItem).removeClass(constChecked);
+					} else if (id === 'presentation-in-console') {
+						if (this._map.uiManager.shouldShowPresenterConsole()) {
+							$(aItem).addClass(constChecked);
+						} else {
+							$(aItem).removeClass(constChecked);
+						}
 					} else {
 						$(aItem).removeClass('disabled');
 					}
