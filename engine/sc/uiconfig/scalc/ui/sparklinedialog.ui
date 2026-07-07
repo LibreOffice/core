@@ -116,11 +116,9 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="lbInputRange"/>
-                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="btnInputRange-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="sparklinedialog|btnInputRange-atkobject">Shrink input range</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|btnInputRange">Shrink</property>
                           </object>
                         </child>
@@ -158,11 +156,9 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="lbOutputRange"/>
-                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="btnOutputRange-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="sparklinedialog|btnOutputRange-atkobject">Shrink output range</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|btnOutputRange">Shrink</property>
                           </object>
                         </child>
@@ -203,7 +199,6 @@
                         <property name="use-underline">True</property>
                         <property name="xalign">0</property>
                         <accessibility>
-                          <relation type="label-for" target="btnInputRange"/>
                           <relation type="label-for" target="edInputRange"/>
                         </accessibility>
                       </object>
@@ -220,7 +215,6 @@
                         <property name="use-underline">True</property>
                         <property name="xalign">0</property>
                         <accessibility>
-                          <relation type="label-for" target="btnOutputRange"/>
                           <relation type="label-for" target="edOutputRange"/>
                         </accessibility>
                       </object>
