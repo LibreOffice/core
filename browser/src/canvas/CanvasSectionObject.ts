@@ -84,6 +84,7 @@ class CanvasSectionObject {
 	onMouseEnter(point: cool.SimplePoint, e: MouseEvent): void { return; }
 	onMouseLeave(point: cool.SimplePoint, e: MouseEvent): void { return; }
 	onClick(point: cool.SimplePoint, e: MouseEvent): void { return; }
+	onMiddleClick(point: cool.SimplePoint, e: MouseEvent): void { return; }
 	onDoubleClick(point: cool.SimplePoint, e: MouseEvent): void { return; }
 	onContextMenu(point: cool.SimplePoint, e: MouseEvent): void { return; }
 	onMouseWheel(point: cool.SimplePoint, delta: Array<number>, e: WheelEvent): void { return; }

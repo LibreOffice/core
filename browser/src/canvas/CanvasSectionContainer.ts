@@ -216,6 +216,13 @@ class CanvasSectionContainer {
 
 	private dpiMediaQuery: MediaQueryList = null;
 
+	// True between a middle-button press on the canvas and its release.
+	private middleButtonDownOnCanvas: boolean = false;
+
+	// True when the mouse was over a hyperlink at the last middle-button
+	// press on the canvas.
+	private middleClickOnHyperlink: boolean = false;
+
 	constructor (canvasDOMElement: HTMLCanvasElement, disableDrawing?: boolean) {
 		this.canvas = canvasDOMElement;
 		this.context = canvasDOMElement.getContext('2d', { alpha: false });
@@ -224,6 +231,7 @@ class CanvasSectionContainer {
 		this.canvas.onmousedown = this.onMouseDown.bind(this);
 		document.addEventListener('mouseup', this.onMouseUp.bind(this));
 		this.canvas.onclick = this.onClick.bind(this);
+		this.canvas.onauxclick = this.onAuxClick.bind(this);
 		this.canvas.ondblclick = this.onDoubleClick.bind(this);
 		this.canvas.oncontextmenu = this.onContextMenu.bind(this);
 		this.canvas.onwheel = this.onMouseWheel.bind(this);
@@ -793,29 +801,41 @@ class CanvasSectionContainer {
 		}
 	}
 
-	private propagateOnClick(section: CanvasSectionObject, position: Array<number>, e: MouseEvent) {
+	// Deliver a click-like event to the window sections and then to the bound
+	// sections of the target, honouring the same interactable and propagation
+	// stopping rules for every kind of click. The deliver callback picks which
+	// section handler receives the event, for example onClick or onMiddleClick.
+	private propagateClickLike(section: CanvasSectionObject, position: Array<number>, e: MouseEvent, deliver: (target: CanvasSectionObject, point: cool.SimplePoint, ev: MouseEvent) => void) {
 		this.targetSection = section.name;
 
-		var propagate: boolean = true;
-		var windowPosition: cool.SimplePoint = position ? cool.SimplePoint.fromCorePixels([position[0] + section.myTopLeft[0], position[1] + section.myTopLeft[1]]): null;
-		for (var j: number = 0; j < this.windowSectionList.length; j++) {
-			var windowSection = this.windowSectionList[j];
+		let propagate: boolean = true;
+		const windowPosition: cool.SimplePoint = position ? cool.SimplePoint.fromCorePixels([position[0] + section.myTopLeft[0], position[1] + section.myTopLeft[1]]): null;
+		for (let j: number = 0; j < this.windowSectionList.length; j++) {
+			const windowSection = this.windowSectionList[j];
 			if (windowSection.interactable)
-				windowSection.onClick(windowPosition, e);
+				deliver(windowSection, windowPosition, e);
 
 			if (this.lowestPropagatedBoundSection === windowSection.name)
 				propagate = false; // Window sections can not stop the propagation of the event for other window sections.
 		}
 
 		if (propagate) {
-			for (var i: number = section.boundsList.length - 1; i > -1; i--) {
+			for (let i: number = section.boundsList.length - 1; i > -1; i--) {
 				if (section.boundsList[i].interactable)
-					section.boundsList[i].onClick((position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), e);
+					deliver(section.boundsList[i], (position ? cool.SimplePoint.fromCorePixels([position[0], position[1]]): null), e);
 
 				if (section.boundsList[i].name === this.lowestPropagatedBoundSection)
 					break; // Stop propagation.
 			}
 		}
+	}
+
+	private propagateOnClick(section: CanvasSectionObject, position: Array<number>, e: MouseEvent) {
+		this.propagateClickLike(section, position, e, (target, point, ev) => target.onClick(point, ev));
+	}
+
+	private propagateOnMiddleClick(section: CanvasSectionObject, position: Array<number>, e: MouseEvent) {
+		this.propagateClickLike(section, position, e, (target, point, ev) => target.onMiddleClick(point, ev));
 	}
 
 	private propagateOnDoubleClick(section: CanvasSectionObject, position: Array<number>, e: MouseEvent) {
@@ -1180,6 +1200,38 @@ class CanvasSectionContainer {
 		this.clearMousePositions();
 	}
 
+	// The engine reports the shape of the mouse pointer for the position it
+	// last saw. The 'pointer' shape is the hand it shows over a hyperlink.
+	private isPointerOverHyperlink(): boolean {
+		return app.map && app.map._docLayer
+			&& app.map._docLayer._coreMousePointer === 'pointer';
+	}
+
+	public onAuxClick (e: MouseEvent) {
+		// Only the middle button is handled here. The right button opens the
+		// context menu through its own path.
+		if (e.button !== 1)
+			return;
+
+		// A middle click that did not land on a hyperlink is left to the
+		// browser, so pasting the primary selection keeps working.
+		if (!this.middleClickOnHyperlink)
+			return;
+		this.middleClickOnHyperlink = false;
+
+		// Consume the click; on some platforms the primary-selection paste
+		// is the default action of this event.
+		e.preventDefault();
+		e.stopPropagation();
+
+		const mousePosition = this.convertPositionToCanvasLocale(e);
+		const section: CanvasSectionObject = this.findSectionContainingPoint(mousePosition);
+		if (section) {
+			this.propagateOnMiddleClick(section, this.convertPositionToSectionLocale(section, mousePosition), e);
+		}
+		this.clearMousePositions();
+	}
+
 	public onDoubleClick (e: MouseEvent) {
 		this.positionOnDoubleClick = this.convertPositionToCanvasLocale(e);
 
@@ -1268,6 +1320,22 @@ class CanvasSectionContainer {
 	}
 
 	public onMouseDown (e: MouseEvent) { // Ignore this event, just rely on this.draggingSomething variable.
+		if (e.button === 1) {
+			this.middleButtonDownOnCanvas = true;
+			// The engine shows the hand pointer while the mouse is over a
+			// hyperlink. Only then does the middle button act as a click
+			// that opens the link: consume the press here, before the
+			// browser would start the autoscroll. A middle-button press
+			// anywhere else is left to the browser, so pasting the primary
+			// selection keeps working.
+			this.middleClickOnHyperlink = this.isPointerOverHyperlink();
+			if (this.middleClickOnHyperlink) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+			return;
+		}
+
 		if (e.button === 0 && !this.touchEventInProgress) {
 			// canvas.onmousedown only fires when the pointer is on the canvas,
 			// so by definition the mouse is inside.
@@ -1284,6 +1352,21 @@ class CanvasSectionContainer {
 	}
 
 	private onMouseUp (e: MouseEvent) { // Should be ignored unless this.draggingSomething = true.
+		if (e.button === 1) {
+			if (this.middleButtonDownOnCanvas) {
+				this.middleButtonDownOnCanvas = false;
+				// The browser pastes the primary selection when the middle
+				// button is released. For a press that landed on a
+				// hyperlink, consume the release, so the click only opens
+				// the link.
+				if (this.middleClickOnHyperlink) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+			}
+			return;
+		}
+
 		// Early exit. If mouse down position is not inside the canvas area, we have nothing to check further.
 		if (!this.positionOnMouseDown) {
 			this.clearMousePositions();

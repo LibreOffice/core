@@ -630,6 +630,33 @@ class MouseControl extends CanvasSectionObject {
 		);
 	}
 
+	// The middle button opens a hyperlink under the pointer, the same as
+	// Ctrl+Click. Send a single left-button click carrying the platform's
+	// link modifier so core reports the hyperlink. On macOS the link
+	// modifier is the command key; elsewhere it is the control key.
+	public onMiddleClick(point: cool.SimplePoint, e: MouseEvent): void {
+		this.refreshPosition(point);
+
+		const modifier = window.L.Browser.mac
+			? app.UNOModifier.CTRLMAC
+			: app.UNOModifier.CTRL;
+
+		this.sendClick(
+			{
+				sendingPosition: this.currentPosition.clone(),
+				buttons: app.LOButtons.left,
+				modifier: modifier,
+			},
+			1,
+		);
+
+		app.map.focus(
+			(<any>window).mode.isDesktop()
+				? undefined
+				: this.getMobileKeyboardVisibility(),
+		);
+	}
+
 	// Send the deferred multi-click immediately and cancel the pending timer.
 	private flushPendingClick(): void {
 		if (this.clickTimer) {
