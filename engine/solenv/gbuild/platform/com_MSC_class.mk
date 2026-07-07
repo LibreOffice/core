@@ -278,7 +278,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(PCHOBJS) $(NATIVERES)) && \
 		$(if $(filter $(call gb_Library__get_workdir_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
 	unset INCLUDE && \
-	$(gb_LINK) \
+	$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_LINK),$(gb_LINK_DLLEXE)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),-LIB) \
 		-nologo \

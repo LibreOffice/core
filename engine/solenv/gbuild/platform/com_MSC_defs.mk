@@ -23,6 +23,10 @@ include $(GBUILDDIR)/platform/windows.mk
 gb_CC := cl
 gb_CXX := cl
 gb_LINK := link
+# Linker for DLLs and executables: lld-link when --enable-ld selected it,
+# else link.exe. Static libraries always use gb_LINK, since lld-link has no
+# librarian mode.
+gb_LINK_DLLEXE := $(or $(LLD_LINK),$(gb_LINK))
 gb_DUMPBIN := dumpbin
 gb_AWK := awk
 gb_CLASSPATHSEP := ;

@@ -1995,7 +1995,10 @@ AC_ARG_ENABLE(ld,
          By default tries to use the best linker possible, use --disable-ld to use the default linker.
          If <linker> contains any ':', the part before the first ':' is used as the value of
          -fuse-ld, while the part after the first ':' is used as the value of --ld-path (which is
-         needed for Clang 12).]),
+         needed for Clang 12).
+         On Windows only 'lld' is available: it links DLLs and executables with LLVM's lld-link
+         instead of MSVC link.exe. There the part after a ':' is taken as a full path to
+         lld-link.exe.]),
 ,)
 
 AC_ARG_ENABLE(cpdb,
@@ -4841,12 +4844,48 @@ if test "$enable_ld" != "no"; then
                 add_warning "The default GNU linker is slow, consider using lld or mold."
             fi
         fi
-    else
-        if test "$enable_ld" = "yes"; then
-            AC_MSG_ERROR([--enable-ld not supported])
-        fi
+    elif test "$_os" = "WINNT"; then
+        # Windows links by calling the linker binary directly, not through a
+        # compiler driver, so -fuse-ld does not apply; --enable-ld selects
+        # lld-link, which ships beside clang-cl in the Visual Studio LLVM
+        # toolchain.
+        case "$enable_ld" in
+        "")
+            dnl no --enable-ld: keep link.exe
+            ;;
+        yes|lld)
+            AC_MSG_CHECKING([for lld-link])
+            if test "$WIN_BUILD_ARCH" = "x64" -a -x "$VC_PRODUCT_DIR/Tools/Llvm/x64/bin/lld-link.exe"; then
+                LLD_LINK=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/x64/bin/lld-link.exe"`
+            elif test "$WIN_BUILD_ARCH" = "arm64" -a -x "$VC_PRODUCT_DIR/Tools/Llvm/ARM64/bin/lld-link.exe"; then
+                LLD_LINK=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/ARM64/bin/lld-link.exe"`
+            elif test -x "$VC_PRODUCT_DIR/Tools/Llvm/bin/lld-link.exe"; then
+                LLD_LINK=`win_short_path_for_make "$VC_PRODUCT_DIR/Tools/Llvm/bin/lld-link.exe"`
+            elif test -n "$PROGRAMFILES" -a -x "$(cygpath -u "$PROGRAMFILES/LLVM/bin/lld-link.exe")"; then
+                LLD_LINK=`win_short_path_for_make "$PROGRAMFILES/LLVM/bin/lld-link.exe"`
+            elif test -x "$(cygpath -u "c:/Program Files/LLVM/bin/lld-link.exe")"; then
+                LLD_LINK=`win_short_path_for_make "c:/Program Files/LLVM/bin/lld-link.exe"`
+            fi
+            if test -n "$LLD_LINK"; then
+                AC_MSG_RESULT([$LLD_LINK])
+            else
+                AC_MSG_ERROR([lld-link not found; needed for --enable-ld=lld])
+            fi
+            ;;
+        lld:*)
+            LLD_LINK=`win_short_path_for_make "${enable_ld#lld:}"`
+            AC_MSG_CHECKING([for lld-link])
+            AC_MSG_RESULT([$LLD_LINK])
+            ;;
+        *)
+            AC_MSG_ERROR([--enable-ld=$enable_ld is not supported on Windows; only lld (lld-link) is available])
+            ;;
+        esac
+    elif test "$enable_ld" = "yes"; then
+        AC_MSG_ERROR([--enable-ld not supported])
     fi
 fi
+AC_SUBST(LLD_LINK)
 AC_SUBST(USE_LD)
 AC_SUBST(LD)
 
