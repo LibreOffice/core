@@ -21,6 +21,7 @@
 
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <sdr/properties/itemsettools.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
 #include <vector>
@@ -40,11 +41,13 @@ namespace sdr::properties
 
         DefaultProperties::DefaultProperties(SdrObject& rObj)
         :   BaseProperties(rObj)
+        ,   m_itemPoolHolder(&rObj.getSdrModelFromSdrObject().GetItemPool())
         {
         }
 
         DefaultProperties::DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj)
         :   BaseProperties(rObj)
+        ,   m_itemPoolHolder(&rObj.getSdrModelFromSdrObject().GetItemPool())
         {
             if(!rProps.moItemSet)
                 return;
