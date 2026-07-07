@@ -10,6 +10,8 @@
     <IncludePath>$(MSBuildThisFileDirectory);$(OnlineBuildDir);@POCOINCLUDE_WINDOWS@;@LOINCLUDE_WINDOWS@;@LOBUILDDIR_WINDOWS@/workdir/UnpackedTarball/zlib;@LOBUILDDIR_WINDOWS@/workdir/UnpackedTarball/zstd/lib;@LOBUILDDIR_WINDOWS@/workdir/UnpackedTarball/libpng;$(IncludePath)</IncludePath>
     <LibraryPath>@POCOLIB_WINDOWS@;$(LibraryPath)</LibraryPath>
     <EngineLibDir>@LOBUILDDIR_WINDOWS@/workdir/LinkTarget/StaticLibrary</EngineLibDir>
+    <!-- Keep build intermediates out of the source tree for out-of-tree builds. -->
+    <IntDir>$(SolutionDir)$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
     <LO_PATH>@LO_PATH@</LO_PATH>
     <APP_NAME>@APP_NAME@</APP_NAME>
     <APP_VENDOR>@VENDOR@</APP_VENDOR>
