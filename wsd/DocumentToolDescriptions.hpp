@@ -156,13 +156,13 @@ Prefer SlideCommands operations (SetText, ChangeLayout, EditTextObject) over raw
 Example - create a 5-slide presentation from a blank ODP:
 {"Transforms":{"SlideCommands":[{"ChangeLayoutByName":"AUTOLAYOUT_TITLE"},{"SetText.0":"Quarterly Report"},{"SetText.1":"Q1 2026"},{"RenameSlide":"Title"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:CenterPara"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Revenue"},{"SetText.1":"Revenue grew 15% year over year\nNew markets contributed 30% of growth\nCustomer retention at 95%"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_2CONTENT"},{"SetText.0":"Strengths & Risks"},{"SetText.1":"Strong brand recognition\nGrowing user base\nHigh retention rate"},{"SetText.2":"Supply chain delays\nRegulatory changes\nCompetitor pricing"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"EditTextObject.2":[{"SelectText":[]},{"UnoCommand":".uno:DefaultBullet"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_CONTENT"},{"SetText.0":"Roadmap"},{"SetText.1":"Phase 1: Research\nPhase 2: Development\nPhase 3: Launch"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"}]},{"EditTextObject.1":[{"SelectText":[]},{"UnoCommand":".uno:DefaultNumbering"},{"SelectParagraph":0},{"UnoCommand":".uno:Bold"}]},{"InsertMasterSlide":0},{"ChangeLayoutByName":"AUTOLAYOUT_TITLE_ONLY"},{"SetText.0":"Thank You"},{"EditTextObject.0":[{"SelectText":[]},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:CenterPara"}]},{"JumpToSlide":1},{"EditTextObject.1":[{"SelectParagraph":0},{"InsertText":"Revenue grew 15% YoY"},{"UnoCommand":".uno:Bold"},{"UnoCommand":".uno:Italic"}]}]}})";
 
-/// Writer/Calc content-control transform documentation.
-inline constexpr const char* TRANSFORM_WRITER_CALC =
+/// Writer content-control transform documentation.
+inline constexpr const char* TRANSFORM_WRITER =
     R"(
 
---- Writer/Calc Content Controls ---
+--- Writer Content Controls ---
 
-For Writer/Calc, address content control items by selector:
+For Writer, address content control items by selector:
 {"Transforms": {"ContentControls.ByIndex.0": {"content": "new value"}}}
 Selectors: ContentControls.ByIndex.N, ContentControls.ByTag.tagname, ContentControls.ByAlias.aliasname. Use extract_document_structure with filter="contentcontrol" first to discover available controls.
 

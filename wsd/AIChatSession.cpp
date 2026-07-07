@@ -175,9 +175,9 @@ std::string transformDescription(const std::string& docType)
     if (isImpress || unknownType)
         desc += DocumentToolDescriptions::TRANSFORM_IMPRESS;
 
-    // Writer (text/drawing), Calc, and unknown types use content controls.
+    // Writer (text/drawing) and unknown types use content controls.
     if (!isImpress)
-        desc += DocumentToolDescriptions::TRANSFORM_WRITER_CALC;
+        desc += DocumentToolDescriptions::TRANSFORM_WRITER;
 
     return desc;
 }
@@ -349,19 +349,21 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
                             "Omit to read the whole body." } } },
             {})));
 
-    // transform_document_structure - modify the open document. The DSL is
-    // scoped to the open document type so a Writer/Calc doc does not carry the
-    // large Impress slide grammar, and vice versa.
-    tools->add(makeAITool(
-        std::string(AIToolNames::TransformDocumentStructure),
-        transformDescription(docType),
-        makeParamSchema(
-            {{"transform", {"string", "JSON transformation commands"}},
-             {"summary", {"string",
-                "Markdown summary of the changes for the user to review before "
-                "approving. List each slide with its title and "
-                "key content points."}}},
-            {"transform"})));
+    // transform_document_structure - modify the open document. Not offered for
+    // Calc: a spreadsheet has no handler for it, so a call would silently do
+    // nothing. The DSL is scoped to the open document type so a Writer doc does
+    // not carry the large Impress slide grammar, and vice versa.
+    if (!isCalc)
+        tools->add(makeAITool(
+            std::string(AIToolNames::TransformDocumentStructure),
+            transformDescription(docType),
+            makeParamSchema(
+                {{"transform", {"string", "JSON transformation commands"}},
+                 {"summary", {"string",
+                    "Markdown summary of the changes for the user to review before "
+                    "approving. List each slide with its title and "
+                    "key content points."}}},
+                {"transform"})));
 
     // extract_link_targets - Writer/Impress navigation (not relevant to Calc)
     if (!isCalc)
@@ -517,7 +519,11 @@ bool AIChatSession::handleAction(const std::string& firstLine)
             " 'formulas' array parameter to batch all cells into one operation."
             " Before inserting formulas with set_cell_formula, call evaluate_formula first"
             " to verify the result is correct. If the result is unexpected, fix the formula"
-            " and evaluate again before inserting.";
+            " and evaluate again before inserting."
+            " You can set cell contents and formulas with set_cell_formula, but you cannot"
+            " change cell formatting (bold, italic, colors, number formats, borders) yet."
+            " If the user asks to format a cell, say briefly that formatting is not supported"
+            " yet and offer to change the cell content or a formula instead.";
 
     if (docType == "presentation")
         systemPrompt +=
