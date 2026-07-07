@@ -46,6 +46,26 @@ JSDialog.fixedtextControl = function (
 	const accKey = builder._getAccessKeyFromText(data.text);
 	builder._stressAccessKey(fixedtext, accKey);
 
+	const isElementVisible = function (element: HTMLElement) {
+		if (getComputedStyle(element).visibility === 'hidden') return false;
+
+		return element.getClientRects().length > 0;
+	};
+
+	// A dialog and a sidebar deck can hold widgets with the same id, and the
+	// lookups here are document wide, so the element found may belong to
+	// another widget tree than the label.
+	const isInSameWidgetTree = function (
+		label: HTMLElement,
+		labelledControl: HTMLElement,
+	) {
+		const root = label.closest(
+			'.jsdialog-container, .jsdialog-window, #sidebar-panel',
+		);
+
+		return root ? root.contains(labelledControl) : true;
+	};
+
 	const updateLabelForAttribute = function (
 		label: HTMLLabelElement,
 		labelledControl: any,
@@ -56,15 +76,25 @@ JSDialog.fixedtextControl = function (
 		const isHiddenInput =
 			labelledControl.nodeName === 'INPUT' && labelledControl.type === 'hidden';
 
-		// For labelable element always use htmlFor
 		if (isLabelable && !isHiddenInput) {
-			labelledControl.removeAttribute('aria-labelledby');
-			labelledControl.removeAttribute('aria-label');
 			label.htmlFor = labelledControl.id;
+			const isLabelHidden =
+				isInSameWidgetTree(label, labelledControl) &&
+				!isElementVisible(label) &&
+				isElementVisible(labelledControl);
+			if (isLabelHidden) {
+				const hasOtherLabel = Array.from(
+					document.querySelectorAll(`label[for="${labelledControl.id}"]`),
+				).some((other) => other !== label);
+				if (!hasOtherLabel)
+					labelledControl.setAttribute('aria-labelledby', label.id);
+			} else {
+				labelledControl.removeAttribute('aria-labelledby');
+				labelledControl.removeAttribute('aria-label');
+			}
 			return;
 		}
 
-		// For non-labelable element or hidden input always use aria-labelledby
 		labelledControl.setAttribute('aria-labelledby', label.id);
 		label.removeAttribute('for');
 	};
