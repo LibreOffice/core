@@ -74,6 +74,7 @@ app.CSections.CalcValidityDropDown =  { name: 'calc validity dropdown', zIndex: 
 app.CSections.FormulaErrorHelpButton = { name: 'formula error help button', zIndex: 11 };
 
 app.CSections.Scroll =				{ name: 'scroll'			, zIndex: 13 };
+app.CSections.ZoomControl =		{ name: 'zoom control'	, zIndex: 13 };
 
 /*
     zIndex = 5. z-index of tiles.
@@ -163,5 +164,7 @@ app.CSections.HeaderFooterBoundary.drawingOrder =	3; // Writer.
 
 /* zIndex = 13 */
 app.CSections.Scroll.processingOrder = 				1; // Writer & Impress & Calc.
+app.CSections.ZoomControl.processingOrder =		2; // Calc. After scroll; captures zoom gestures over the tiles area.
 
 app.CSections.Scroll.drawingOrder = 					1; // Writer & Impress & Calc.
+app.CSections.ZoomControl.drawingOrder =			2; // Calc. Draws nothing; ordering only.

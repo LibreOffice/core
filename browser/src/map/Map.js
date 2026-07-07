@@ -760,6 +760,20 @@ window.L.Map = window.L.Evented.extend({
 
 		var curCenter = this.getCenter();
 		if (this._docLayer && this._docLayer._docType === 'spreadsheet') {
+			// Calc zooms through the ZoomControl section, not the map. Other doc
+			// types (and any non-ViewLayoutCalc case) keep the map path below.
+			// The old map calls are left in place; they will be removed once the
+			// other apps move to ZoomControl too.
+			if (app.activeDocument && app.activeDocument.activeLayout
+				&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+				var zoomControl = app.sectionContainer.getSectionWithName(app.CSections.ZoomControl.name);
+				if (zoomControl) {
+					// Match the old semantics: only the 3rd arg means "animate"
+					// (callers passing {animate:false} in options leave it undefined).
+					zoomControl.zoomTo(this._limitZoom(zoom), undefined, !!animate);
+					return this;
+				}
+			}
 			// for spreadsheets, when the document is smaller than the viewing area
 			// we want it to be glued to the row/column headers instead of being centered
 			this._docLayer._checkSpreadSheetBounds(zoom);

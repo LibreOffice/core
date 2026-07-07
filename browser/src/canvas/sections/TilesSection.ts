@@ -721,7 +721,7 @@ export class TilesSection extends CanvasSectionObject {
 	private zoomLevelWithMaxContentInArea(area: any,
 		areaZoom: number, part: PartNumber, mode: number, ctx: any): number {
 
-		var frameScale = this.sectionProperties.tsManager._zoomFrameScale;
+		var frameScale = this.sectionProperties.tsManager.zoomFrameScale();
 		var docLayer = this.sectionProperties.docLayer;
 		var targetZoom = Math.round(this.map.getScaleZoom(frameScale, areaZoom));
 		var bestZoomLevel = targetZoom;
@@ -938,7 +938,10 @@ export class TilesSection extends CanvasSectionObject {
 		if (!tsManager._inZoomAnim)
 			return;
 
-		var scale = tsManager._zoomFrameScale;
+		// The zoom-frame scale is owned by ZoomControl for Calc (published via the
+		// tiles section) and by the painter otherwise; zoomFrameScale() picks the
+		// right source.
+		var scale = tsManager.zoomFrameScale();
 		if (!scale || !tsManager._newCenter)
 			return;
 

@@ -188,6 +188,9 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		this._map.fire('zoomchanged');
 		this.refreshViewData();
 		this._replayPrintTwipsMsgs(false);
+		// refreshViewData above fetches the row and column headers and the sheet
+		// geometry; the tiles for the new zoom are requested here.
+		app.activeDocument.activeLayout.refreshTiles();
 	},
 
 	_restrictDocumentSize: function () {
@@ -230,16 +233,12 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		if (limitHeight)
 			newDocHeight = lastCellTwips.y + limitMargin.y;
 
-		var extendedLimit = false;
-
 		if (!limitWidth && maxDocSize.x > app.activeDocument.fileSize.x) {
 			newDocWidth = Math.min(app.activeDocument.fileSize.x + mapSizeTwips.x, maxDocSize.x);
-			extendedLimit = true;
 		}
 
 		if (!limitHeight && maxDocSize.y > app.activeDocument.fileSize.y) {
 			newDocHeight = Math.min(app.activeDocument.fileSize.y + mapSizeTwips.y, maxDocSize.y);
-			extendedLimit = true;
 		}
 
 		var shouldRestrict = (newDocWidth !== app.activeDocument.fileSize.x ||

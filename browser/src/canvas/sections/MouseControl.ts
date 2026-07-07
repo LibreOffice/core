@@ -692,10 +692,22 @@ class MouseControl extends CanvasSectionObject {
 		this.clickCount = 0;
 	}
 
+	// Calc drives pinch zoom through ZoomControl (a window section that receives
+	// the same multi-touch events), so the map-based pinch here is bypassed.
+	private zoomHandledByZoomControl(): boolean {
+		return !!(
+			app.activeDocument &&
+			app.activeDocument.activeLayout &&
+			app.activeDocument.activeLayout.type === 'ViewLayoutCalc'
+		);
+	}
+
 	onMultiTouchStart(e: TouchEvent): void {
 		if (this.inSwipeAction) this.containerObject.stopAnimating();
 
 		if (e.touches.length !== 2) return;
+
+		if (this.zoomHandledByZoomControl()) return;
 
 		const centerX = Math.round(
 			(e.touches[0].clientX + e.touches[1].clientX) * 0.5,
@@ -724,6 +736,8 @@ class MouseControl extends CanvasSectionObject {
 		dragDistance: number,
 		e: TouchEvent,
 	): void {
+		if (this.zoomHandledByZoomControl()) return;
+
 		const centerX = Math.round(
 			(e.touches[0].clientX + e.touches[1].clientX) * 0.5,
 		);
@@ -763,6 +777,8 @@ class MouseControl extends CanvasSectionObject {
 	}
 
 	onMultiTouchEnd(e: TouchEvent): void {
+		if (this.zoomHandledByZoomControl()) return;
+
 		var oldZoom = app.map.getZoom();
 		var zoomDelta = this.zoom - oldZoom;
 		var finalZoom = app.map._limitZoom(

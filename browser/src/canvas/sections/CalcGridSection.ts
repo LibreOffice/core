@@ -42,8 +42,8 @@ class CalcGridSection extends CanvasSectionObject {
 		this.context.strokeStyle = this.sectionProperties.strokeStyle;
 		this.context.lineWidth = 1.0;
 		var scale = 1.0;
-		if (tsManager._inZoomAnim && tsManager._zoomFrameScale)
-			scale = tsManager._zoomFrameScale;
+		if (tsManager._inZoomAnim)
+			scale = tsManager.zoomFrameScale();
 
 		var ctx = tsManager._paintContext();
 		var isRTL = this.sectionProperties.docLayer.isCalcRTL();

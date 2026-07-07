@@ -886,7 +886,7 @@ export class HeaderInfo {
 			const viewBounds = ctx.viewBounds;
 			const freePaneBounds = new cool.Bounds(viewBounds.min.add(ctx.splitPos), viewBounds.max);
 
-			scale = tsManager._zoomFrameScale;
+			scale = tsManager.zoomFrameScale();
 
 			const zoomPos = tsManager._getZoomDocPos(
 				tsManager._newCenter,

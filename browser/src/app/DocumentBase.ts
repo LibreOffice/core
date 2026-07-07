@@ -105,6 +105,11 @@ class DocumentBase {
 		if (app.map._docLayer._docType === 'spreadsheet') {
 			app.sectionContainer.addSection(new cool.SpacerSection('right'));
 			app.sectionContainer.addSection(new cool.SpacerSection('bottom'));
+
+			// Owns zooming for Calc, replacing the map's zoomIn/zoomOut/setZoom
+			// (see ViewLayoutCalc zoom methods). General-purpose class; added for
+			// spreadsheets first, the other layouts can adopt it later.
+			app.sectionContainer.addSection(new ZoomControl());
 		}
 	}
 

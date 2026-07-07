@@ -429,6 +429,7 @@ COOL_JS_LST =\
 	src/canvas/sections/AnimatedGifSection.ts \
 	src/canvas/sections/RulerSpacerSection.ts \
 	src/canvas/sections/SpacerSection.ts \
+	src/canvas/sections/ZoomControl.ts \
 	src/canvas/sections/CompareChangesLabelSection.ts \
 	src/canvas/sections/CommentMarkerSubSection.ts \
 	src/canvas/sections/CommentAnchorAreaSubSection.ts \

@@ -329,7 +329,7 @@ class CanvasOverlay extends CanvasSectionObject {
 			// at the current frame's zoom level.
 
 			var splitPos = this.tsManager.getSplitPos();
-			var scale = this.tsManager._zoomFrameScale;
+			var scale = this.tsManager.zoomFrameScale();
 
 			const docPos = this.tsManager._getZoomDocPos(
 				this.tsManager._newCenter,
@@ -369,7 +369,7 @@ class CanvasOverlay extends CanvasSectionObject {
 
 		} else if (this.tsManager._inZoomAnim && fixed) {
 
-			var scale = this.tsManager._zoomFrameScale;
+			var scale = this.tsManager.zoomFrameScale();
 			transform.scale(scale, scale);
 
 			if (clipArea) {

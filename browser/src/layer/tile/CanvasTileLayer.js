@@ -282,6 +282,18 @@ window.L.TileSectionManager = window.L.Class.extend({
 		return this._layer._map.zoomToFactor(zoom - origZoom + this._layer._map.options.zoom);
 	},
 
+	// The current zoom-frame scale (frame twips->px relative to the zoom start).
+	// For Calc this is owned by ZoomControl, which publishes the effective and
+	// base twips->px into the tiles section; other doc types still use the
+	// painter-computed _zoomFrameScale. Consumers should read this, not the
+	// _zoomFrameScale field, so the source can differ per doc type.
+	zoomFrameScale: function () {
+		var props = this._tilesSection && this._tilesSection.sectionProperties;
+		if (props && props.effectiveTwipsToPixels && props.zoomBaseTwipsToPixels)
+			return props.effectiveTwipsToPixels / props.zoomBaseTwipsToPixels;
+		return this._zoomFrameScale;
+	},
+
 	_calcZoomFrameParams: function (zoom, newCenter) {
 		this._zoomFrameScale = this._calcZoomFrameScale(zoom);
 		this._newCenter = this._layer._map.project(newCenter).multiplyBy(app.dpiScale); // in core pixels
@@ -4325,8 +4337,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._painter.zoomStepEnd(zoom, newCenter, mapUpdater, runAtFinish, noGap);
 	},
 
-	preZoomAnimation: function (pinchStartCenter) {
-		this._pinchStartCenter = this._map.project(pinchStartCenter).multiplyBy(app.dpiScale); // in core pixels
+	preZoomAnimation: function (pinchStartCenter, pinchStartCenterCorePx) {
+		// Calc passes the centre already in core pixels (no intern/CRS round-trip);
+		// the other callers still pass an intern point which we project here.
+		this._pinchStartCenter = pinchStartCenterCorePx
+			? pinchStartCenterCorePx
+			: this._map.project(pinchStartCenter).multiplyBy(app.dpiScale); // in core pixels
 		this._painter._offset = new cool.Point(0, 0);
 		// The viewport bounds at the start of the gesture. Zoom frames drive the
 		// viewed rectangle to intermediate values, so the final-center
