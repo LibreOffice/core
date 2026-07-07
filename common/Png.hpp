@@ -182,16 +182,16 @@ inline bool impl_encodeSubBufferToPNG(unsigned char* pixmap, size_t startX, size
         return false;
     }
 
-    if constexpr (Util::isMobileApp())
-        png_set_compression_level(png_ptr, Z_BEST_SPEED);
-    else
-    {
-        // Level 4 gives virtually identical compression
-        // ratio to level 6, but is between 5-10% faster.
-        // Level 3 runs almost twice as fast, but the
-        // output is typically 2-3x larger.
-        png_set_compression_level(png_ptr, 4);
-    }
+#if MOBILEAPP && !defined(QTAPP) && !defined(MACOS) && !defined(_WIN32)
+    // Trade output size for encoding speed on phone and tablet CPUs.
+    png_set_compression_level(png_ptr, Z_BEST_SPEED);
+#else
+    // Level 4 gives virtually identical compression
+    // ratio to level 6, but is between 5-10% faster.
+    // Level 3 runs almost twice as fast, but the
+    // output is typically 2-3x larger.
+    png_set_compression_level(png_ptr, 4);
+#endif
 
     png_set_IHDR(png_ptr, info_ptr, width, height, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
