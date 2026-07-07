@@ -37,6 +37,7 @@ public:
     void testICU();
     void testSearches();
     void testWildcardSearch();
+    void testTdf172646_wildcardBeforeSurrogatePair();
     void testApostropheSearch();
     void testQuotationMarkSearch();
     void testTdf91764_searchArabicDiacritics();
@@ -45,6 +46,7 @@ public:
     CPPUNIT_TEST(testICU);
     CPPUNIT_TEST(testSearches);
     CPPUNIT_TEST(testWildcardSearch);
+    CPPUNIT_TEST(testTdf172646_wildcardBeforeSurrogatePair);
     CPPUNIT_TEST(testApostropheSearch);
     CPPUNIT_TEST(testQuotationMarkSearch);
     CPPUNIT_TEST(testTdf91764_searchArabicDiacritics);
@@ -291,6 +293,55 @@ void TestTextSearch::testWildcardSearch()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), aRes.startOffset[0]);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRes.endOffset[0]);
+}
+
+void TestTextSearch::testTdf172646_wildcardBeforeSurrogatePair()
+{
+    util::SearchOptions2 aOptions;
+    aOptions.AlgorithmType2 = util::SearchAlgorithms2::WILDCARD;
+    aOptions.transliterateFlags = sal_Int32(::css::i18n::TransliterationModules::TransliterationModules_IGNORE_CASE);
+    util::SearchResult aRes;
+
+    // A match ending at a supplementary character (a surrogate pair in
+    // UTF-16) must report the end offset behind the whole pair.
+    OUString aText = u"a\U0001F334"_ustr;
+
+    aOptions.searchString = u"*\U0001F334"_ustr;
+    m_xSearch2->setOptions2( aOptions );
+    // match the whole string, [0,3)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRes.startOffset[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aRes.endOffset[0]);
+    // match the whole string, (3,0]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aRes.startOffset[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRes.endOffset[0]);
+
+    // The same in whole-cell matching mode (as used e.g. by SUMIF), matching
+    // "abc" then the surrogate pair.
+    aText = u"abc\U0001F334"_ustr;
+    aOptions.searchFlag |= util::SearchFlags::WILD_MATCH_SELECTION;
+    m_xSearch2->setOptions2( aOptions );
+    // match the whole string, [0,5)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRes.startOffset[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aRes.endOffset[0]);
+    // match the whole string, (5,0]
+    aRes = m_xSearch2->searchBackward( aText, aText.getLength(), 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aRes.startOffset[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRes.endOffset[0]);
+
+    aOptions.searchString = u"*\U0001F334*"_ustr;
+    m_xSearch2->setOptions2( aOptions );
+    // match the whole string, [0,5)
+    aRes = m_xSearch2->searchForward( aText, 0, aText.getLength());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aRes.subRegExpressions);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aRes.startOffset[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aRes.endOffset[0]);
 }
 
 void TestTextSearch::testApostropheSearch()

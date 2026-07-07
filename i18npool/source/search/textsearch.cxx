@@ -31,6 +31,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -322,6 +323,12 @@ static sal_Int32 FindPosInSeq_Impl( const Sequence <sal_Int32>& rOff, sal_Int32 
     return static_cast<sal_Int32>(std::distance(rOff.begin(), pOff));
 }
 
+static auto nextCodePoint(std::u16string_view rStr, sal_Int32 nPos)
+{
+    o3tl::iterateCodePoints(rStr, &nPos);
+    return nPos;
+}
+
 SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
 {
     std::unique_lock g(m_aMutex);
@@ -391,7 +398,8 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
                 // Result offsets are negative (-1) if a group expression was
                 // not matched.
                 if (nStart >= 0)
-                    sres_startOffsetRange[k] = (nStart < nOffsets ? offset[nStart] : (offset[nOffsets - 1] + 1));
+                    sres_startOffsetRange[k] = (nStart < nOffsets ? offset[nStart]
+                            : nextCodePoint(searchStr, offset[nOffsets - 1]));
                 // JP 20.6.2001: end is ever exclusive and then don't return
                 //               the position of the next character - return the
                 //               next position behind the last found character!
@@ -400,7 +408,8 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
                 if (nStop >= 0)
                 {
                     if (nStop > 0)
-                        sres_endOffsetRange[k] = offset[(nStop <= nOffsets ? nStop : nOffsets) - 1] + 1;
+                        sres_endOffsetRange[k] = nextCodePoint(searchStr,
+                                offset[(nStop <= nOffsets ? nStop : nOffsets) - 1]);
                     else
                         sres_endOffsetRange[k] = offset[0];
                 }
@@ -440,9 +449,9 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         for ( int k = 0; k < sres2.startOffset.getLength(); k++ )
         {
             if (sres2.startOffset[k])
-                sres2_startOffsetRange[k] = offset[sres2.startOffset[k]-1] + 1;
+                sres2_startOffsetRange[k] = nextCodePoint(searchStr, offset[sres2.startOffset[k]-1]);
             if (sres2.endOffset[k])
-                sres2_endOffsetRange[k] = offset[sres2.endOffset[k]-1] + 1;
+                sres2_endOffsetRange[k] = nextCodePoint(searchStr, offset[sres2.endOffset[k]-1]);
         }
 
         // pick first and long one
@@ -515,7 +524,8 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
                 if (nStart >= 0)
                 {
                     if (nStart > 0)
-                        sres_startOffsetRange[k] = offset[(nStart <= nOffsets ? nStart : nOffsets) - 1] + 1;
+                        sres_startOffsetRange[k] = nextCodePoint(searchStr,
+                                offset[(nStart <= nOffsets ? nStart : nOffsets) - 1]);
                     else
                         sres_startOffsetRange[k] = offset[0];
                 }
@@ -525,7 +535,8 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
                 //               "a b c" find "b" must return 2,3 and not 2,4!!!
                 const sal_Int32 nStop = sres.endOffset[k];
                 if (nStop >= 0)
-                    sres_endOffsetRange[k] = (nStop < nOffsets ? offset[nStop] : (offset[nOffsets - 1] + 1));
+                    sres_endOffsetRange[k] = (nStop < nOffsets ? offset[nStop]
+                            : nextCodePoint(searchStr, offset[nOffsets - 1]));
             }
         }
     }
@@ -562,9 +573,9 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         for( int k = 0; k < sres2.startOffset.getLength(); k++ )
         {
             if (sres2.startOffset[k])
-                sres2_startOffsetRange[k] = offset[sres2.startOffset[k]-1]+1;
+                sres2_startOffsetRange[k] = nextCodePoint(searchStr, offset[sres2.startOffset[k]-1]);
             if (sres2.endOffset[k])
-                sres2_endOffsetRange[k] = offset[sres2.endOffset[k]-1]+1;
+                sres2_endOffsetRange[k] = nextCodePoint(searchStr, offset[sres2.endOffset[k]-1]);
         }
 
         // pick last and long one
