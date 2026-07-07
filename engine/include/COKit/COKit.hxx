@@ -399,12 +399,7 @@ public:
      */
     int getSelectionTypeAndText(const char* pMimeType, char** pText, char** pUsedMimeType = NULL)
     {
-        if (COKIT_DOCUMENT_HAS(mpDoc, getSelectionTypeAndText))
-            return mpDoc->pClass->getSelectionTypeAndText(mpDoc, pMimeType, pText, pUsedMimeType);
-        int type = mpDoc->pClass->getSelectionType(mpDoc);
-        if(type == KIT_SELTYPE_TEXT && pText)
-            *pText = mpDoc->pClass->getTextSelection(mpDoc, pMimeType, pUsedMimeType);
-        return type;
+        return mpDoc->pClass->getSelectionTypeAndText(mpDoc, pMimeType, pText, pUsedMimeType);
     }
 
     /**
@@ -454,14 +449,10 @@ public:
      * external paste, pulls only the single format it chose from the platform.
      * Pass nullptr to remove the provider and fall back to the plain
      * getClipboard()/setClipboard() handling.
-     *
-     * No-op when running against an engine that predates this entry point, so
-     * the caller keeps whatever clipboard handling it had.
      */
     void installClipboardProvider(const COKitClipboardProvider* pProvider)
     {
-        if (COKIT_DOCUMENT_HAS(mpDoc, installClipboardProvider))
-            mpDoc->pClass->installClipboardProvider(mpDoc, pProvider);
+        mpDoc->pClass->installClipboardProvider(mpDoc, pProvider);
     }
 
     /**
@@ -575,10 +566,7 @@ public:
      */
     int createView(const char* pOptions = nullptr)
     {
-        if (COKIT_DOCUMENT_HAS(mpDoc, createViewWithOptions))
-            return mpDoc->pClass->createViewWithOptions(mpDoc, pOptions);
-        else
-            return mpDoc->pClass->createView(mpDoc);
+        return mpDoc->pClass->createViewWithOptions(mpDoc, pOptions);
     }
 
     /**
@@ -626,10 +614,7 @@ public:
                           int *pFontHeight,
                           int pOrientation=0)
     {
-        if (COKIT_DOCUMENT_HAS(mpDoc, renderFontOrientation))
-            return mpDoc->pClass->renderFontOrientation(mpDoc, pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
-        else
-            return mpDoc->pClass->renderFont(mpDoc, pFontName, pChar, pFontWidth, pFontHeight);
+        return mpDoc->pClass->renderFontOrientation(mpDoc, pFontName, pChar, pFontWidth, pFontHeight, pOrientation);
     }
 
     /**
@@ -1028,12 +1013,7 @@ public:
      */
     Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)
     {
-        COKitDocument* pDoc = NULL;
-
-        if (COKIT_HAS(mpThis, documentLoadWithOptions))
-            pDoc = mpThis->pClass->documentLoadWithOptions(mpThis, pUrl, pFilterOptions);
-        else
-            pDoc = mpThis->pClass->documentLoad(mpThis, pUrl);
+        COKitDocument* pDoc = mpThis->pClass->documentLoadWithOptions(mpThis, pUrl, pFilterOptions);
 
         if (pDoc == NULL)
             return NULL;
@@ -1460,7 +1440,7 @@ public:
 inline Office* kit_cpp_init(const char* pInstallPath, const char* pUserProfileUrl = NULL)
 {
     COKit* pThis = cok_init_2(pInstallPath, pUserProfileUrl);
-    if (pThis == NULL || pThis->pClass->nSize == 0)
+    if (pThis == NULL)
         return NULL;
     return new ::kit::Office(pThis);
 }

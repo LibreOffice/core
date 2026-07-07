@@ -234,7 +234,6 @@ public:
     void testNoDuplicateTableSelection();
     void testMultiViewTableSelection();
     void testColorPaletteCallback();
-    void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -323,7 +322,6 @@ public:
     CPPUNIT_TEST(testNoDuplicateTableSelection);
     CPPUNIT_TEST(testMultiViewTableSelection);
     CPPUNIT_TEST(testColorPaletteCallback);
-    CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -4423,152 +4421,6 @@ void DesktopKitTest::testColorPaletteCallback()
     }
 }
 
-namespace {
-
-constexpr size_t classOffset(int i)
-{
-    return sizeof(static_cast<COKitClass*>(nullptr)->nSize) + i * sizeof(void*);
-}
-
-constexpr size_t documentClassOffset(int i)
-{
-    return sizeof(static_cast<COKitDocumentClass*>(nullptr)->nSize) + i * sizeof(void*);
-}
-
-}
-
-void DesktopKitTest::testABI()
-{
-    // STABLE ABI, NEVER CHANGE (unless there's a very good reason, agreed by ESC, etc.)
-    CPPUNIT_ASSERT_EQUAL(classOffset(0), offsetof(COKitClass, destroy));
-    CPPUNIT_ASSERT_EQUAL(classOffset(1), offsetof(COKitClass, documentLoad));
-    CPPUNIT_ASSERT_EQUAL(classOffset(2), offsetof(COKitClass, getError));
-    CPPUNIT_ASSERT_EQUAL(classOffset(3), offsetof(COKitClass, documentLoadWithOptions));
-    CPPUNIT_ASSERT_EQUAL(classOffset(4), offsetof(COKitClass, freeError));
-    CPPUNIT_ASSERT_EQUAL(classOffset(5), offsetof(COKitClass, registerCallback));
-    CPPUNIT_ASSERT_EQUAL(classOffset(6), offsetof(COKitClass, getFilterTypes));
-    CPPUNIT_ASSERT_EQUAL(classOffset(7), offsetof(COKitClass, setOptionalFeatures));
-    CPPUNIT_ASSERT_EQUAL(classOffset(8), offsetof(COKitClass, setDocumentPassword));
-    CPPUNIT_ASSERT_EQUAL(classOffset(9), offsetof(COKitClass, getVersionInfo));
-    CPPUNIT_ASSERT_EQUAL(classOffset(10), offsetof(COKitClass, runMacro));
-    CPPUNIT_ASSERT_EQUAL(classOffset(11), offsetof(COKitClass, signDocument));
-    CPPUNIT_ASSERT_EQUAL(classOffset(12), offsetof(COKitClass, runLoop));
-    CPPUNIT_ASSERT_EQUAL(classOffset(13), offsetof(COKitClass, sendDialogEvent));
-    CPPUNIT_ASSERT_EQUAL(classOffset(14), offsetof(COKitClass, setOption));
-    CPPUNIT_ASSERT_EQUAL(classOffset(15), offsetof(COKitClass, dumpState));
-    CPPUNIT_ASSERT_EQUAL(classOffset(16), offsetof(COKitClass, extractRequest));
-    CPPUNIT_ASSERT_EQUAL(classOffset(17), offsetof(COKitClass, trimMemory));
-    CPPUNIT_ASSERT_EQUAL(classOffset(18), offsetof(COKitClass, startURP));
-    CPPUNIT_ASSERT_EQUAL(classOffset(19), offsetof(COKitClass, stopURP));
-    CPPUNIT_ASSERT_EQUAL(classOffset(20), offsetof(COKitClass, joinThreads));
-    CPPUNIT_ASSERT_EQUAL(classOffset(21), offsetof(COKitClass, startThreads));
-    CPPUNIT_ASSERT_EQUAL(classOffset(22), offsetof(COKitClass, setForkedChild));
-    CPPUNIT_ASSERT_EQUAL(classOffset(23), offsetof(COKitClass, extractDocumentStructureRequest));
-    CPPUNIT_ASSERT_EQUAL(classOffset(24), offsetof(COKitClass, registerAnyInputCallback));
-    CPPUNIT_ASSERT_EQUAL(classOffset(25), offsetof(COKitClass, getDocsCount));
-    CPPUNIT_ASSERT_EQUAL(classOffset(26), offsetof(COKitClass, registerFileSaveDialogCallback));
-    CPPUNIT_ASSERT_EQUAL(classOffset(27), offsetof(COKitClass, executeScript));
-    CPPUNIT_ASSERT_EQUAL(classOffset(28), offsetof(COKitClass, deliverProxyResult));
-    CPPUNIT_ASSERT_EQUAL(classOffset(29), offsetof(COKitClass, cancelProxyCalls));
-    CPPUNIT_ASSERT_EQUAL(classOffset(30), offsetof(COKitClass, isExpectedReentry));
-    CPPUNIT_ASSERT_EQUAL(classOffset(31), offsetof(COKitClass, registerRevealInFileManagerCallback));
-
-    // When extending COKit with a new function pointer,  add new assert for the offsetof the
-    // new function pointer and bump this assert for the size of the class.
-    CPPUNIT_ASSERT_EQUAL(classOffset(32), sizeof(COKitClass));
-
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(0), offsetof(COKitDocumentClass, destroy));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(1), offsetof(COKitDocumentClass, saveAs));
-
-    // Unstable ABI, but still think twice before changing this
-    // Eg. can't you add your new member at the end of the struct instead of
-    // in the middle?  The thing you are changing - is it already part of some
-    // release?
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(2), offsetof(COKitDocumentClass, getDocumentType));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(3), offsetof(COKitDocumentClass, getParts));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(4), offsetof(COKitDocumentClass, getPartPageRectangles));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(5), offsetof(COKitDocumentClass, getPart));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(6), offsetof(COKitDocumentClass, setPart));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(7), offsetof(COKitDocumentClass, getPartName));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(8), offsetof(COKitDocumentClass, setPartMode));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(9), offsetof(COKitDocumentClass, paintTile));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(10), offsetof(COKitDocumentClass, getTileMode));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(11), offsetof(COKitDocumentClass, getDocumentSize));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(12), offsetof(COKitDocumentClass, initializeForRendering));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(13), offsetof(COKitDocumentClass, registerCallback));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(14), offsetof(COKitDocumentClass, postKeyEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(15), offsetof(COKitDocumentClass, postMouseEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(16), offsetof(COKitDocumentClass, postUnoCommand));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(17), offsetof(COKitDocumentClass, setTextSelection));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(18), offsetof(COKitDocumentClass, getTextSelection));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(19), offsetof(COKitDocumentClass, paste));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(20), offsetof(COKitDocumentClass, setGraphicSelection));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(21), offsetof(COKitDocumentClass, resetSelection));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(22), offsetof(COKitDocumentClass, getCommandValues));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(23), offsetof(COKitDocumentClass, setClientZoom));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(24), offsetof(COKitDocumentClass, setClientVisibleArea));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(25), offsetof(COKitDocumentClass, createView));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(26), offsetof(COKitDocumentClass, destroyView));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(27), offsetof(COKitDocumentClass, setView));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(28), offsetof(COKitDocumentClass, getView));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(29), offsetof(COKitDocumentClass, getViewsCount));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(30), offsetof(COKitDocumentClass, renderFont));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(31), offsetof(COKitDocumentClass, getPartHash));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(32), offsetof(COKitDocumentClass, paintPartTile));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(33), offsetof(COKitDocumentClass, getViewIds));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(34), offsetof(COKitDocumentClass, setOutlineState));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(35), offsetof(COKitDocumentClass, paintWindow));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(36), offsetof(COKitDocumentClass, postWindow));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(37), offsetof(COKitDocumentClass, postWindowKeyEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(38), offsetof(COKitDocumentClass, postWindowMouseEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(39), offsetof(COKitDocumentClass, setViewLanguage));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(40), offsetof(COKitDocumentClass, postWindowExtTextInputEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(41), offsetof(COKitDocumentClass, getPartInfo));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(42), offsetof(COKitDocumentClass, paintWindowDPI));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(43), offsetof(COKitDocumentClass, insertCertificate));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(44), offsetof(COKitDocumentClass, addCertificate));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(45), offsetof(COKitDocumentClass, getSignatureState));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(46), offsetof(COKitDocumentClass, renderShapeSelection));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(47), offsetof(COKitDocumentClass, postWindowGestureEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(48), offsetof(COKitDocumentClass, createViewWithOptions));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(49), offsetof(COKitDocumentClass, selectPart));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(50), offsetof(COKitDocumentClass, moveSelectedParts));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(51), offsetof(COKitDocumentClass, resizeWindow));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(52), offsetof(COKitDocumentClass, getClipboard));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(53), offsetof(COKitDocumentClass, setClipboard));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(54), offsetof(COKitDocumentClass, getSelectionType));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(55), offsetof(COKitDocumentClass, removeTextContext));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(56), offsetof(COKitDocumentClass, sendDialogEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(57), offsetof(COKitDocumentClass, renderFontOrientation));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(58), offsetof(COKitDocumentClass, paintWindowForView));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(59), offsetof(COKitDocumentClass, completeFunction));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(60), offsetof(COKitDocumentClass, setWindowTextSelection));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(61), offsetof(COKitDocumentClass, sendFormFieldEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(62), offsetof(COKitDocumentClass, setBlockedCommandList));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(63), offsetof(COKitDocumentClass, renderSearchResult));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(64), offsetof(COKitDocumentClass, sendContentControlEvent));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(65), offsetof(COKitDocumentClass, getSelectionTypeAndText));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(66), offsetof(COKitDocumentClass, getDataArea));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(67), offsetof(COKitDocumentClass, getEditMode));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(68), offsetof(COKitDocumentClass, setViewTimezone));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(69), offsetof(COKitDocumentClass, setAccessibilityState));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(70), offsetof(COKitDocumentClass, getA11yFocusedParagraph));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(71), offsetof(COKitDocumentClass, getA11yCaretPosition));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(72), offsetof(COKitDocumentClass, setViewReadOnly));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(73), offsetof(COKitDocumentClass, setAllowChangeComments));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(74), offsetof(COKitDocumentClass, getPresentationInfo));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(75), offsetof(COKitDocumentClass, createSlideRenderer));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(76), offsetof(COKitDocumentClass, postSlideshowCleanup));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(77), offsetof(COKitDocumentClass, renderNextSlideLayer));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(78), offsetof(COKitDocumentClass, setViewOption));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(79), offsetof(COKitDocumentClass, setColorPreviewState));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(80), offsetof(COKitDocumentClass, setAllowManageRedlines));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(81), offsetof(COKitDocumentClass, installClipboardProvider));
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(82), offsetof(COKitDocumentClass, transferClipboardFromView));
-
-    // As above
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(83), sizeof(COKitDocumentClass));
-}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);
 

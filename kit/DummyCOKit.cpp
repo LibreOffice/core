@@ -130,11 +130,6 @@ static void doc_setView(COKitDocument* self, int id);
 static int doc_getView(COKitDocument* self);
 static int doc_getViewsCount(COKitDocument* self);
 static bool doc_getViewIds(COKitDocument* self, int* array, size_t size);
-static unsigned char* doc_renderFont(COKitDocument* self,
-                          const char *fontName,
-                          const char *character,
-                          int* fontWidth,
-                          int* fontHeight);
 static unsigned char* doc_renderFontOrientation(COKitDocument* self,
                           const char *fontName,
                           const char *character,
@@ -190,7 +185,6 @@ LibLODocument_Impl::LibLODocument_Impl()
         m_pDocumentClass->getViewsCount = doc_getViewsCount;
         m_pDocumentClass->getViewIds = doc_getViewIds;
 
-        m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->renderFontOrientation = doc_renderFontOrientation;
         m_pDocumentClass->getPartHash = doc_getPartHash;
 
@@ -550,20 +544,6 @@ static bool doc_getViewIds(COKitDocument* /*self*/, int* array, size_t size)
 
     // TODO Should we return something here?
     return true;
-}
-
-unsigned char* doc_renderFont(COKitDocument* /*self*/,
-                    const char* fontName,
-                    const char* character,
-                    int* fontWidth,
-                    int* fontHeight)
-{
-    (void) fontName;
-    (void) character;
-    (void) fontWidth;
-    (void) fontHeight;
-
-    return nullptr;
 }
 
 unsigned char* doc_renderFontOrientation(COKitDocument* /*self*/,

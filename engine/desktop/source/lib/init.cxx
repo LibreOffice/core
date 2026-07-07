@@ -1292,11 +1292,6 @@ static unsigned char* doc_renderFontOrientation(COKitDocument* pThis,
                           int* pFontWidth,
                           int* pFontHeight,
                           int pOrientation);
-static unsigned char* doc_renderFont(COKitDocument* pThis,
-                          const char *pFontName,
-                          const char *pChar,
-                          int* pFontWidth,
-                          int* pFontHeight);
 static char* doc_getPartHash(COKitDocument* pThis, int nPart);
 
 static void doc_paintWindow(COKitDocument* pThis, unsigned nKitWindowId, unsigned char* pBuffer,
@@ -1523,8 +1518,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
     {
         m_pDocumentClass = std::make_shared<COKitDocumentClass>();
 
-        m_pDocumentClass->nSize = sizeof(COKitDocumentClass);
-
         m_pDocumentClass->destroy = doc_destroy;
         m_pDocumentClass->saveAs = doc_saveAs;
         m_pDocumentClass->getDocumentType = doc_getDocumentType;
@@ -1576,7 +1569,6 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
         m_pDocumentClass->getViewsCount = doc_getViewsCount;
         m_pDocumentClass->getViewIds = doc_getViewIds;
 
-        m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->renderFontOrientation = doc_renderFontOrientation;
         m_pDocumentClass->getPartHash = doc_getPartHash;
 
@@ -2859,7 +2851,6 @@ LibCO_Impl::LibCO_Impl()
 {
     if(!m_pOfficeClass) {
         m_pOfficeClass = std::make_shared<COKitClass>();
-        m_pOfficeClass->nSize = sizeof(COKitClass);
 
         m_pOfficeClass->destroy = lo_destroy;
         m_pOfficeClass->documentLoad = lo_documentLoad;
@@ -7677,15 +7668,6 @@ static void doc_setViewLanguage(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/, i
     OUString sLanguage = OStringToOUString(language, RTL_TEXTENCODING_UTF8);
     KitHelper::setViewLanguage(nId, sLanguage);
     KitHelper::setViewLocale(nId, sLanguage);
-}
-
-unsigned char* doc_renderFont(COKitDocument* pThis,
-                              const char* pFontName,
-                              const char* pChar,
-                              int* pFontWidth,
-                              int* pFontHeight)
-{
-    return doc_renderFontOrientation(pThis, pFontName, pChar, pFontWidth, pFontHeight, 0);
 }
 
 unsigned char* doc_renderFontOrientation(SAL_UNUSED_PARAMETER COKitDocument* /*pThis*/,

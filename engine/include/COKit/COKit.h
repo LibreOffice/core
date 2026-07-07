@@ -38,12 +38,6 @@ typedef struct COKitClassStruct COKitClass;
 typedef struct COKitDocumentStruct COKitDocument;
 typedef struct COKitDocumentClassStruct COKitDocumentClass;
 
-// Do we have an extended member in this struct ?
-#define COKIT_HAS_MEMBER(strct,member,nSize) \
-    (offsetof(strct, member) < (nSize))
-
-#define COKIT_HAS(pKit,member) COKIT_HAS_MEMBER(COKitClass,member,(pKit)->pClass->nSize)
-
 struct COKitStruct
 {
     COKitClass* pClass;
@@ -51,8 +45,6 @@ struct COKitStruct
 
 struct COKitClassStruct
 {
-    size_t  nSize;
-
     void (*destroy) (COKit* pThis);
 
     COKitDocument* (*documentLoad) (COKit* pThis,
@@ -187,8 +179,6 @@ struct COKitClassStruct
             COKitRevealInFileManagerCallback pCallback);
 };
 
-#define COKIT_DOCUMENT_HAS(pDoc,member) COKIT_HAS_MEMBER(COKitDocumentClass,member,(pDoc)->pClass->nSize)
-
 struct COKitDocumentStruct
 {
     COKitDocumentClass* pClass;
@@ -196,8 +186,6 @@ struct COKitDocumentStruct
 
 struct COKitDocumentClassStruct
 {
-    size_t  nSize;
-
     void (*destroy) (COKitDocument* pThis);
 
     int (*saveAs) (COKitDocument* pThis,
@@ -327,13 +315,6 @@ struct COKitDocumentClassStruct
     int (*getView) (COKitDocument* pThis);
     /// @see kit::Document::getViewsCount().
     int (*getViewsCount) (COKitDocument* pThis);
-
-    /// @see kit::Document::renderFont().
-    unsigned char* (*renderFont) (COKitDocument* pThis,
-                       const char* pFontName,
-                       const char* pChar,
-                       int* pFontWidth,
-                       int* pFontHeight);
 
     /// @see kit::Document::getPartHash().
     char* (*getPartHash) (COKitDocument* pThis,

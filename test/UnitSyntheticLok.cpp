@@ -217,8 +217,8 @@ extern "C" {
         // chain to parent
         COKitDocument *doc = GlobalUnitKit->_kitClassClean->documentLoadWithOptions(pThis, url, options);
 
-        GlobalUnitKit->_docClass = reinterpret_cast<COKitDocumentClass *>(memdup(doc->pClass, doc->pClass->nSize));
-        GlobalUnitKit->_docClassClean = reinterpret_cast<COKitDocumentClass *>(memdup(doc->pClass, doc->pClass->nSize));
+        GlobalUnitKit->_docClass = reinterpret_cast<COKitDocumentClass *>(memdup(doc->pClass, sizeof(*doc->pClass)));
+        GlobalUnitKit->_docClassClean = reinterpret_cast<COKitDocumentClass *>(memdup(doc->pClass, sizeof(*doc->pClass)));
         doc->pClass = GlobalUnitKit->_docClass;
 
         GlobalUnitKit->_docClass->registerCallback = syn_registerCallback;
@@ -250,8 +250,8 @@ COKit *UnitKitSyntheticLok::cok_init(const char *instdir,
     if (!_kit || !_kit->pClass)
         LOK_ASSERT_FAIL("Failed to get kit initialized");
 
-    _kitClass = reinterpret_cast<COKitClass *>(memdup(_kit->pClass, _kit->pClass->nSize));
-    _kitClassClean = reinterpret_cast<COKitClass *>(memdup(_kit->pClass, _kit->pClass->nSize));
+    _kitClass = reinterpret_cast<COKitClass *>(memdup(_kit->pClass, sizeof(*_kit->pClass)));
+    _kitClassClean = reinterpret_cast<COKitClass *>(memdup(_kit->pClass, sizeof(*_kit->pClass)));
 
     // switch to our vtable
     _kit->pClass = _kitClass;

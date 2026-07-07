@@ -3475,13 +3475,9 @@ void startMainLoop(const COKit* kit, const std::shared_ptr<kit::Office>& loKit, 
     // engine handle here, before the poll loop runs, so kitPoll's reentry guard can reach
     // isExpectedReentry().
     loKitPtr = const_cast<COKit*>(kit);
+#else
+    (void) kit;
 #endif
-    if (!COKIT_HAS(kit, runLoop))
-    {
-        LOG_FTL("Kit is missing Unipoll API");
-        std::cout << "Fatal: out of date COKit - no Unipoll API\n";
-        Util::forcedExit(EX_SOFTWARE);
-    }
 
     loKit->registerAnyInputCallback(anyInputCallback, mainKit.get());
 #if defined(_WIN32)
