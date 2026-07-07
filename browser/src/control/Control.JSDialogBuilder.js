@@ -248,6 +248,11 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 	},
 
 	_defaultCallbackHandlerSendMessage: function(objectType, eventType, object, data, builder) {
+		if (!builder) {
+			app.console.error('JSDialogBuilder: default callback without builder');
+			return;
+		}
+
 		switch (typeof data) {
 		case 'string':
 			// escape backspaces, quotes, newlines, and so on; remove added quotes
@@ -257,21 +262,14 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			data = encodeURIComponent(JSON.stringify(data));
 			break;
 		}
-		var hasOwnWindow = builder && builder.windowId !== null && builder.windowId !== undefined;
-		var windowId = hasOwnWindow ? builder.windowId :
-			(window.mobileDialogId !== undefined ? window.mobileDialogId :
-				(window.sidebarId !== undefined ? window.sidebarId : -1));
+		const windowId = JSDialog.resolveWindowId(builder);
 
 		if (typeof windowId !== 'number') {
 			window.app.console.error('JSDialog: windowId "' + windowId + '" is not valid. Use a number.');
 			return; // core will fail parsing the command, it is a mistake most probably
 		}
 
-		const isBrowserOnlyWindow = !hasOwnWindow
-			&& window.sidebarId === undefined
-			&& window.mobileDialogId === undefined;
-
-		if (objectType === 'popover' && object.id === '__POPOVER__' && isBrowserOnlyWindow) {
+		if (objectType === 'popover' && object.id === '__POPOVER__' && JSDialog.isBrowserOnlyWindow(builder)) {
 			app.console.warn('That only makes sense for engine-backed windows. Check used builder and WindowId');
 			return;
 		}

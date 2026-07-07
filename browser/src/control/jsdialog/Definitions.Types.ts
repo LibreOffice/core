@@ -41,7 +41,7 @@ interface WidgetJSON {
 
 interface JSBuilderOptions {
 	cssClass: string; // class added to every widget root
-	windowId: number; // window id to be sent with dialogevent
+	windowId?: WindowId | number; // window id to be sent with dialogevent for engine
 	map: MapInterface; // reference to map
 	mobileWizard: JSDialogComponent; // reference to the parent component FIXME: rename
 	useSetTabs?: boolean; // custom tabs placement handled by the parent container

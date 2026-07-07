@@ -385,6 +385,7 @@ interface Window {
 	pageMobileWizard: boolean;
 	protocolDebug: boolean;
 	routeToken: string;
+	mobileDialogId?: number;
 	sidebarId: number;
 	userInterfaceMode: string;
 	ThisIsAMobileApp: boolean;

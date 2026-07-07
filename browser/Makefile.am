@@ -598,6 +598,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Util.ScrollIntoView.ts \
 	src/control/jsdialog/Util.SnackbarController.ts \
 	src/control/jsdialog/Util.StateChange.ts \
+	src/control/jsdialog/Util.WindowId.ts \
 	src/control/jsdialog/Widget.ButtonBox.ts \
 	src/control/jsdialog/Widget.Checkbox.ts \
 	src/control/jsdialog/Widget.Calendar.js \
