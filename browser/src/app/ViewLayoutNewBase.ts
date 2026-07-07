@@ -29,6 +29,12 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		super();
 	}
 
+	// The new-structure layouts (Calc, MultiPage, FileBased, CompareChanges)
+	// are off-map and zoom through ZoomControl.
+	public override usesZoomControl(): boolean {
+		return true;
+	}
+
 	public sendClientVisibleArea() {
 		const visibleAreaCommand =
 			'clientvisiblearea x=' +

@@ -670,10 +670,10 @@ window.L.Map = window.L.Evented.extend({
 			animate = false;
 
 		var curCenter = this.getCenter();
-		// Calc zooms through the ZoomControl section, not the map.
-		if (this._docLayer && this._docLayer._docType === 'spreadsheet'
-			&& app.activeDocument && app.activeDocument.activeLayout
-			&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+		// New-structure layouts (Calc, MultiPage, FileBased, CompareChanges) zoom
+		// through the ZoomControl section, not the map.
+		if (app.activeDocument && app.activeDocument.activeLayout
+			&& app.activeDocument.activeLayout.usesZoomControl()) {
 			var zoomControl = app.sectionContainer.getSectionWithName(app.CSections.ZoomControl.name);
 			if (zoomControl) {
 				// Match the old semantics: only the 3rd arg means "animate"
@@ -1350,7 +1350,7 @@ window.L.Map = window.L.Evented.extend({
 		// the map pane in _syncTilePanePos.
 		if ((zoomChanged || loading)
 			&& app.activeDocument && app.activeDocument.activeLayout
-			&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+			&& app.activeDocument.activeLayout.usesZoomControl()) {
 			var centerCore = this.project(center, zoom).multiplyBy(app.dpiScale);
 			var centerPoint = cool.SimplePoint.fromCorePixels(
 				[Math.round(centerCore.x), Math.round(centerCore.y)]);

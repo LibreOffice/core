@@ -97,6 +97,13 @@ class DocumentBase {
 			app.sectionContainer.addSection(new cool.RulerSpacerSection());
 		}
 
+		// Owns zooming for the new-structure (off-map) layouts, replacing the
+		// map's zoomIn/zoomOut/setZoom. Added for every doc type; it stays inert
+		// (its handlers early-return) while the active layout is still map-coupled
+		// (usesZoomControl() === false), and activates when swapped to an off-map
+		// layout.
+		app.sectionContainer.addSection(new ZoomControl());
+
 		// Layout spacers that let the tiles (document-anchor) section shrink to
 		// the content size when the document is smaller than the frame. Only
 		// spreadsheets get them, because only Calc sizes them, and even a
@@ -105,11 +112,6 @@ class DocumentBase {
 		if (app.map._docLayer._docType === 'spreadsheet') {
 			app.sectionContainer.addSection(new cool.SpacerSection('right'));
 			app.sectionContainer.addSection(new cool.SpacerSection('bottom'));
-
-			// Owns zooming for Calc, replacing the map's zoomIn/zoomOut/setZoom
-			// (see ViewLayoutCalc zoom methods). General-purpose class; added for
-			// spreadsheets first, the other layouts can adopt it later.
-			app.sectionContainer.addSection(new ZoomControl());
 		}
 	}
 

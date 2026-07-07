@@ -698,7 +698,7 @@ class MouseControl extends CanvasSectionObject {
 		return !!(
 			app.activeDocument &&
 			app.activeDocument.activeLayout &&
-			app.activeDocument.activeLayout.type === 'ViewLayoutCalc'
+			app.activeDocument.activeLayout.usesZoomControl()
 		);
 	}
 

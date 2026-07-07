@@ -60,7 +60,7 @@ window.L.TileSectionManager = window.L.Class.extend({
 		// not consume this viewBounds for tile placement.
 		var layout = app.activeDocument && app.activeDocument.activeLayout;
 		var viewBounds;
-		if (layout && layout.type === 'ViewLayoutCalc') {
+		if (layout && layout.usesZoomControl()) {
 			if (this._inZoomAnim && this._zoomStartViewBounds) {
 				// During a zoom the viewed rectangle is driven to intermediate
 				// frame values; anchor the frame and final-center computation to
@@ -3900,7 +3900,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// or deriving the viewed rectangle would reintroduce the map-element
 		// dependency. So this is a no-op for Calc.
 		if (app.activeDocument && app.activeDocument.activeLayout
-			&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc')
+			&& app.activeDocument.activeLayout.usesZoomControl())
 			return;
 
 		if (this._container) {
@@ -4029,7 +4029,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		const hasVisibleCursor = app.file.textCursor.visible
 			&& this._map._docLayer._cursorMarker && this._map._docLayer._cursorMarker.isDomAttached();
 		if (hasVisibleCursor) {
-			if (app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+			if (app.activeDocument.activeLayout.usesZoomControl()) {
 				const cursor = app.file.textCursor.rectangle;
 				const view = app.activeDocument.activeLayout.viewedRectangle;
 				if (!view.containsPoint([cursor.x1, cursor.y2]))
@@ -4314,7 +4314,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// viewed rectangle to intermediate values, so the final-center
 		// computation reads this stable snapshot instead of the live bounds.
 		this._painter._zoomStartViewBounds =
-			app.activeDocument.activeLayout.type === 'ViewLayoutCalc'
+			app.activeDocument.activeLayout.usesZoomControl()
 				? this._painter._paintContext().viewBounds
 				: null;
 		// Snapshot the starting scale. Each zoom frame drives app.twipsToPixels

@@ -156,7 +156,8 @@ class ZoomControl extends CanvasSectionObject {
 		e: WheelEvent,
 	): void {
 		void delta;
-		if (!e.ctrlKey || !this.layout || !this.inDocumentArea(point)) return;
+		if (!e.ctrlKey || !this.layout || !this.layout.usesZoomControl()) return;
+		if (!this.inDocumentArea(point)) return;
 
 		// Wheel up (deltaY < 0) zooms in.
 		const step = e.deltaY < 0 ? 1 : -1;
@@ -190,7 +191,8 @@ class ZoomControl extends CanvasSectionObject {
 		e: TouchEvent,
 	): void {
 		void e;
-		if (!this.layout || !this.inDocumentArea(point)) return;
+		if (!this.layout || !this.layout.usesZoomControl()) return;
+		if (!this.inDocumentArea(point)) return;
 
 		// First move fixes the start distance and the anchor under the pinch.
 		if (this.pinchStartDistance === null) {

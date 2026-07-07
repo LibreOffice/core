@@ -110,6 +110,24 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 		app.sectionContainer.requestReDraw();
 	}
 
+	// A zoom keeps the cell the user works in on screen: the anchor is the top
+	// left corner of the cell cursor, or the middle of a cell selection when
+	// there is no cell cursor in view. With neither on screen the middle of the
+	// view (the base class anchor) is kept.
+	public override zoomAnchorPoint(): cool.SimplePoint {
+		const cursor = app.calc.cellCursorRectangle;
+		if (cursor && this._viewedRectangle.containsPoint([cursor.x1, cursor.y1]))
+			return new cool.SimplePoint(cursor.x1, cursor.y1);
+
+		const selection = app.map._docLayer._cellSelectionArea;
+		if (selection && this._viewedRectangle.containsPoint(selection.center)) {
+			const center = selection.center;
+			return new cool.SimplePoint(center[0], center[1]);
+		}
+
+		return super.zoomAnchorPoint();
+	}
+
 	// Push the current viewed rectangle into the sheet geometry's view limits,
 	// which feed the in-view row and column range and group collection. The
 	// rectangle is authoritative even mid-scroll, before the map catches up.
@@ -344,155 +362,6 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 		const deltaX = pX - this._viewedRectangle.pX1;
 		const deltaY = pY - this._viewedRectangle.pY1;
 		if (deltaX !== 0 || deltaY !== 0) this.scroll(deltaX, deltaY);
-	}
-
-	// Rebuild the viewed rectangle for a new zoom: centre it on the given
-	// document-space point and size it to the current frame at the given scale.
-	// point is in twips, scale is the twips-to-core-pixel factor for the new
-	// zoom. Map._resetView calls this so the zoom position is driven by the
-	// layout (from the canvas frame) instead of the leaflet map element.
-	public setViewRectangleFromPointAndScale(
-		point: cool.SimplePoint,
-		scale: number,
-	): void {
-		if (!scale) return;
-		const frame = this.frameSize;
-		const widthTwips = Math.round(frame.pX / scale);
-		const heightTwips = Math.round(frame.pY / scale);
-
-		// Centre on the point, but clamp the top-left to the scrollable range
-		// [0, viewSize - frame] just like scroll() does. Without this an anchor
-		// near the top/left edge produces a negative top-left, which shifts the
-		// content and leaves a blank gap on that side.
-		const maxX = Math.max(0, this._viewSize.x - widthTwips);
-		const maxY = Math.max(0, this._viewSize.y - heightTwips);
-		const x = Math.min(maxX, Math.max(0, Math.round(point.x - widthTwips / 2)));
-		const y = Math.min(
-			maxY,
-			Math.max(0, Math.round(point.y - heightTwips / 2)),
-		);
-
-		this.viewedRectangle = new cool.SimpleRectangle(
-			x,
-			y,
-			widthTwips,
-			heightTwips,
-		);
-	}
-
-	// ---- Zoom (driven by ZoomControl) ----------------------------------
-	// These replace the map's role in zooming. The controller calls them; the
-	// data (scale, viewed rectangle, tile requests) lives here so the map is
-	// not involved. Implemented incrementally: P1b fills applyZoom (the
-	// non-animated commit), P2 fills begin/step/endZoom (the animation).
-
-	// The document-space point (twips) a zoom should keep fixed on screen.
-	// Defaults to the current viewport centre; callers (cursor/cell/pointer)
-	// may pass their own anchor.
-	public zoomAnchorPoint(): cool.SimplePoint {
-		const c = this._viewedRectangle.center;
-		return new cool.SimplePoint(c[0], c[1]);
-	}
-
-	// Start a zoom-frame animation pivoted on anchorTwips. Snapshots the start
-	// state (preZoomAnimation) and switches the tiles section into zoom-frame
-	// drawing. The animation is then driven frame by frame by ZoomControl
-	// through the section container's animation loop - NOT the tile painter's
-	// own requestAnimationFrame, which never starts for Calc zoom. The scale for
-	// each frame comes from stepZoom.
-	public beginZoom(anchorTwips: cool.SimplePoint): void {
-		const docLayer: any = app.map._docLayer; // _painter is not on the typed interface.
-		const painter = docLayer._painter;
-
-		// The anchor is already in core pixels (SimplePoint.pX/pY) - no intern/CRS
-		// round-trip needed. This is both the pinch pivot and the frame centre.
-		const centerCorePx = new cool.Point(anchorTwips.pX, anchorTwips.pY);
-
-		// Snapshot the starting scale / view bounds and hide the cursor.
-		docLayer.preZoomAnimation(null, centerCorePx);
-
-		painter._newCenter = centerCorePx;
-		painter._inZoomAnim = true;
-
-		// Publish the scale the tiles section uses for the zoom frame, decoupled
-		// from the painter's _zoomFrameScale: the base twips->px it started from
-		// and the effective (animated) one. drawZoomFrame derives its bitmap
-		// ratio from these; stepZoom updates the effective value each frame.
-		const tiles: any = app.sectionContainer.getSectionWithName(
-			app.CSections.Tiles.name,
-		);
-		if (tiles) {
-			tiles.sectionProperties.zoomBaseTwipsToPixels = app.twipsToPixels;
-			tiles.sectionProperties.effectiveTwipsToPixels = app.twipsToPixels;
-		}
-
-		app.sectionContainer.setInZoomAnimation(true);
-	}
-
-	// One animation frame: `scale` is the factor relative to the zoom start.
-	// TilesSection.drawZoomFrame reads it while the container redraws this frame
-	// (and updates app.twipsToPixels + the intermediate viewed rectangle there).
-	public stepZoom(scale: number): void {
-		// The effective twips->px the tiles section renders this frame at. All
-		// Calc zoom-frame consumers (tiles, grid, headers, overlay) read the
-		// ratio from this via tsManager.zoomFrameScale(); the painter's
-		// _zoomFrameScale is no longer used for Calc.
-		const tiles: any = app.sectionContainer.getSectionWithName(
-			app.CSections.Tiles.name,
-		);
-		if (tiles && tiles.sectionProperties.zoomBaseTwipsToPixels)
-			tiles.sectionProperties.effectiveTwipsToPixels =
-				tiles.sectionProperties.zoomBaseTwipsToPixels * scale;
-	}
-
-	// Finish the animation: leave zoom-frame mode, commit the final zoom
-	// map-free and restore the cursor.
-	public endZoom(targetZoom: number, anchorTwips: cool.SimplePoint): void {
-		const docLayer: any = app.map._docLayer;
-		const painter = docLayer._painter;
-
-		painter._inZoomAnim = false;
-
-		const tiles: any = app.sectionContainer.getSectionWithName(
-			app.CSections.Tiles.name,
-		);
-		if (tiles) tiles.sectionProperties.effectiveTwipsToPixels = undefined;
-
-		app.sectionContainer.setInZoomAnimation(false);
-
-		this.applyZoom(targetZoom, anchorTwips);
-		docLayer.postZoomAnimation();
-	}
-
-	// Commit the final integral zoom: set the new scale, rebuild the viewed
-	// rectangle around anchorTwips at that scale, and refresh tiles/headers.
-	// Used by both the animated end (P2) and the non-animated path (P1b).
-	// Map-free: the scale is applied via _updateTileTwips (not _resetView) and
-	// the existing 'zoomend' listeners do the rest of the post-zoom work
-	// (client zoom, document-size restrict, view data/tiles, status-bar %).
-	public applyZoom(targetZoom: number, anchorTwips: cool.SimplePoint): void {
-		// The zoom internals used here (_zoom, _clientZoom, _tileZoom,
-		// _updateTileTwips) are not on the typed interfaces; cast for now while
-		// the map is still being removed from the zoom path.
-		const map: any = app.map;
-		const docLayer: any = map._docLayer;
-		const zoom = map._limitZoom(targetZoom);
-
-		map._zoom = zoom;
-		map._clientZoom = zoom; // fallback used when setZoom(0) is called later.
-		docLayer._tileZoom = Math.round(zoom);
-
-		// Recompute app.twipsToPixels for the new zoom (no map pane involved) and
-		// re-sync the canvas/spacers, then rebuild the viewed rectangle around the
-		// anchor at that scale.
-		docLayer._updateTileTwips();
-		this.setViewRectangleFromPointAndScale(anchorTwips, app.twipsToPixels);
-
-		// Reuse the proven post-zoom chain: _onZoomRowColumns (client zoom,
-		// _restrictDocumentSize, refreshViewData/tiles), the status-bar
-		// percentage (Control.StatusBar.onZoomEnd) and cursor follow all run off
-		// 'zoomend'.
-		map.fire('zoomend');
 	}
 
 	// Recompute the visible entries of the row and column headers after a
