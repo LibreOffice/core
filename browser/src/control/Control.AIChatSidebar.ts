@@ -408,14 +408,24 @@ namespace cool {
 		}
 
 		private appendMessage(msg: ChatMessage, index: number): void {
-			const messagesList = document.getElementById('aichat-messages-list');
-			if (!messagesList) {
-				this.updateMessagesArea();
-				return;
-			}
-			this.builder.build(messagesList, [this.getMessageJSON(msg, index)], true);
-			this.applyStyleForMessage(index);
-			this.scrollToBottom();
+			// Full rebuilds of the messages area run as queued layouting
+			// tasks. Appending through the same queue keeps this message
+			// ordered after a rebuild that is still pending, even when the
+			// server answers within milliseconds.
+			app.layoutingService.appendLayoutingTask(() => {
+				const messagesList = document.getElementById('aichat-messages-list');
+				if (!messagesList) {
+					this.updateMessagesArea();
+					return;
+				}
+				this.builder.build(
+					messagesList,
+					[this.getMessageJSON(msg, index)],
+					true,
+				);
+				this.applyStyleForMessage(index);
+				this.scrollToBottom();
+			});
 		}
 
 		private updateLoadingDots(): void {

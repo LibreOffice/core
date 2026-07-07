@@ -183,9 +183,8 @@ std::string transformDescription(const std::string& docType)
 }
 
 /// Compose the extract_document_structure description for the open document
-/// type, advertising only the filters that work for it. filter="text" is only
-/// implemented for Writer and Calc, so it is omitted for Impress. Unknown type
-/// gets every fragment (previous all-types behaviour).
+/// type, advertising only the filters that work for it. Unknown type gets
+/// every fragment (previous all-types behaviour).
 std::string extractDescription(const std::string& docType)
 {
     std::string desc = DocumentToolDescriptions::EXTRACT_INTRO;
@@ -333,7 +332,8 @@ Poco::JSON::Array::Ptr AIChatSession::buildToolDefinitions(const std::string& do
             { { "filter",
                 { "string", "Filter results to a specific structure type. "
                             "Use 'text' to read the document body as markdown (Writer: the "
-                            "full prose; Calc: the active sheet) for summarizing or answering "
+                            "full prose; Calc: the active sheet; Impress: the text of every "
+                            "slide) for summarizing or answering "
                             "questions about the content. "
                             "For Impress: 'slides'. For Writer: 'contentcontrol'. "
                             "Omit to get the full structure." } },
@@ -544,6 +544,9 @@ bool AIChatSession::handleAction(const std::string& firstLine)
             " or make text more concise, and they have provided selected text, reply"
             " with the rewritten text directly in your message. Do NOT call"
             " transform_document_structure for these requests."
+            " If they have not selected text, first read the slide text by calling"
+            " extract_document_structure with filter=\"text\", then reply with the"
+            " rewritten or summarized text directly in your message."
             " Only call transform_document_structure when the user explicitly asks to"
             " insert, add, create, replace, edit, modify, or delete slides or slide"
             " content. Never emit transform JSON, tool names, or .uno: commands in"
@@ -598,7 +601,8 @@ bool AIChatSession::handleAction(const std::string& firstLine)
                     " Use transform_document_structure to make changes."
                     " To summarize or answer questions about the document's content, call"
                     " extract_document_structure with filter=\"text\" to read the body text"
-                    " (Writer prose, or the active Calc sheet) as markdown."
+                    " (Writer prose, the active Calc sheet, or the text of every slide) as"
+                    " markdown."
                     " If a Writer whole-body read returns no text and instead carries"
                     " link_targets and an instruction, the document is too large to read"
                     " in full: show the headings and sections from link_targets to the"

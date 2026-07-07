@@ -949,7 +949,7 @@ extractdocumentstructure url=<documentURL> filter=<filterType>
 
     - url=<documentURL> : Specifies the document location.
 
-    - filter=<filterType> : (Optional) Limits extraction to specific elements (e.g., contentcontrol, charts, docprops, slides). If omitted, all available data is extracted.
+    - filter=<filterType> : (Optional) Limits extraction to specific elements (e.g., text, contentcontrol, charts, docprops, slides). If omitted, all available data is extracted.
 
     This command retrieves structured document data for further processing.
 

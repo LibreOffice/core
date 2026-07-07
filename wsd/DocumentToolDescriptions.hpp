@@ -60,8 +60,10 @@ inline constexpr const char* EXTRACT_CALC =
     "about the data.";
 
 inline constexpr const char* EXTRACT_IMPRESS =
-    " With filter=\"slides\" it returns slide names, per-slide object names, and "
-    "slide text.";
+    " For a presentation, filter=\"text\" returns the text of every slide as "
+    "markdown, one section per slide, for summarizing or answering questions "
+    "about the content. With filter=\"slides\" it returns slide names, per-slide "
+    "object names, and slide text.";
 
 /// Shared intro for the transform parameter, valid for every document type.
 inline constexpr const char* TRANSFORM_INTRO =

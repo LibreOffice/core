@@ -405,10 +405,9 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         std::string json;
         // TODO: route every filter through the live document (the branch below),
         // not just text, so structure and text reflect the same unsaved state.
-        // Needs: add ExtractDocumentStructure to SdXImpressDocument::supportsCommand,
-        // confirm the trackchanges/slides extractors are side-effect-free on the
-        // live doc, and re-test each filter. The reload path stays for the HTTP
-        // /cool/extract-document-structure endpoint, which has no live session.
+        // Needs: confirm the trackchanges/slides extractors are side-effect-free
+        // on the live doc, and re-test each filter. The reload path stays for the
+        // HTTP /cool/extract-document-structure endpoint, which has no live session.
         if (filter.starts_with("text"))
         {
             // The body-text filter reads the live in-memory document so it
