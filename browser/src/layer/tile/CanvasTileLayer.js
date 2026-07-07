@@ -699,36 +699,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._syncTileContainerSize();
 	},
 
-	_checkSpreadSheetBounds: function (newZoom) {
-		// for spreadsheets, when the document is smaller than the viewing area
-		// we want it to be glued to the row/column headers instead of being centered
-		// In the future we probably want to remove this and set the bonds only on the
-		// left/upper side of the spreadsheet so that we can have an 'infinite' number of
-		// cells downwards and to the right, like we have on desktop
-		var frameSize = app.activeDocument.activeLayout.frameSize;
-		var scale = this._map.getZoomScale(newZoom);
-		var width = app.activeDocument.fileSize.x / app.tile.size.x * RenderManager.tileSize * scale;
-		var height = app.activeDocument.fileSize.y / app.tile.size.y * RenderManager.tileSize * scale;
-		if (width < frameSize.cX || height < frameSize.cY) {
-			// if after zoomimg the document becomes smaller than the viewing area
-			width = Math.max(width, frameSize.cX);
-			height = Math.max(height, frameSize.cY);
-			if (!this._map.options._origMaxBounds) {
-				this._map.options._origMaxBounds = this._map.options.maxBounds;
-			}
-			scale = InternPointUtil.scale(1);
-			this._map.setMaxBounds(InternBoundsUtil.flexConstruct(
-				this._map.unproject(new cool.Point(0, 0)),
-				this._map.unproject(new cool.Point(width * scale, height * scale))));
-		}
-		else if (this._map.options._origMaxBounds) {
-			// if after zoomimg the document becomes larger than the viewing area
-			// we need to restore the initial bounds
-			this._map.setMaxBounds(this._map.options._origMaxBounds);
-			this._map.options._origMaxBounds = null;
-		}
-	},
-
 	_moveStart: function () {
 		RenderManager.resetPreFetching();
 		this._moveInProgress = true;
@@ -3253,10 +3223,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		this._updateCursorAndOverlay();
 
 		TextCursorSection.updateVisibilities();
-	},
-
-	activateCursor: function () {
-		this._replayPrintTwipsMsg('invalidatecursor');
 	},
 
 	// enable or disable blinking cursor and the cursor overlay depending on

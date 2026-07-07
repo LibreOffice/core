@@ -618,95 +618,6 @@ window.L.Map = window.L.Evented.extend({
 		return Math.pow(InternPointUtil.SCALE, (zoom - this.options.zoom));
 	},
 
-	getDesktopCalcZoomCenter: function() {
-		const docLayer = this._docLayer;
-
-		if (app.calc.cellCursorRectangle) {
-			const twipsTopLeft = [app.calc.cellCursorRectangle.x1, app.calc.cellCursorRectangle.y1];
-			const cursorInBounds = app.activeDocument.activeLayout.viewedRectangle.containsPoint(twipsTopLeft);
-
-			if (cursorInBounds) {
-				return new cool.Point(...twipsTopLeft);
-			}
-		}
-
-		if (docLayer._cellSelectionArea) {
-			const twipsCenter = docLayer._cellSelectionArea.center;
-			const selectionInBounds = app.activeDocument.activeLayout.viewedRectangle.containsPoint(twipsCenter);
-
-			if (selectionInBounds) {
-				return new cool.Point(...twipsCenter);
-			}
-		}
-
-		return new cool.Point(...app.activeDocument.activeLayout.viewedRectangle.center);
-	},
-
-	setDesktopCalcViewOnZoom: function (zoom, animate) {
-		zoom = this._limitZoom(zoom);
-
-		if (zoom === this.getZoom()) {
-			return;
-		}
-
-		const docLayer = this._docLayer;
-		if (!docLayer.options.sheetGeometryDataEnabled || !docLayer.sheetGeometry)
-			return false;
-
-		const typing = app.file.textCursor.visible;
-
-		const tsManager = docLayer._painter;
-
-		const ctx = tsManager._paintContext();
-		const splitPos = ctx.splitPos;
-		const viewBounds = ctx.viewBounds;
-		const freePaneBounds = new cool.Bounds(viewBounds.min.add(splitPos), viewBounds.max);
-
-		const zoomCenter = docLayer._twipsToCorePixels(this.getDesktopCalcZoomCenter());
-
-		tsManager._offset = new cool.Point(0, 0);
-		const docPos = docLayer._painter._getZoomDocPos(
-			zoomCenter,
-			zoomCenter,
-			freePaneBounds,
-			{ freezeX: false, freezeY: false },
-			splitPos,
-			this.getZoomScale(zoom),
-			true
-		);
-
-		const newCenterIntern = this.unproject(docPos.center.divideBy(app.dpiScale), zoom);
-
-		this._ignoreCursorUpdate = true;
-
-		const mapUpdater = (animationCalculatedNewCenter) => {
-			if (animationCalculatedNewCenter) {
-				this._resetView(InternPointUtil.flexConstruct(animationCalculatedNewCenter), zoom);
-				return;
-			}
-
-			this._resetView(InternPointUtil.flexConstruct(newCenterIntern), zoom);
-		};
-		const runAtFinish = () => {
-			this._ignoreCursorUpdate = false;
-			if (typing) {
-				docLayer.activateCursor();
-			}
-		};
-
-		if (animate) {
-			this._docLayer.runZoomAnimation(
-				zoom,
-				this.unproject(zoomCenter.divideBy(app.dpiScale), this.getZoom()),
-				mapUpdater,
-				runAtFinish);
-			return;
-		}
-
-		mapUpdater(newCenterIntern);
-		runAtFinish();
-	},
-
 	ignoreCursorUpdate: function () {
 		return this._ignoreCursorUpdate;
 	},
@@ -759,26 +670,16 @@ window.L.Map = window.L.Evented.extend({
 			animate = false;
 
 		var curCenter = this.getCenter();
-		if (this._docLayer && this._docLayer._docType === 'spreadsheet') {
-			// Calc zooms through the ZoomControl section, not the map. Other doc
-			// types (and any non-ViewLayoutCalc case) keep the map path below.
-			// The old map calls are left in place; they will be removed once the
-			// other apps move to ZoomControl too.
-			if (app.activeDocument && app.activeDocument.activeLayout
-				&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
-				var zoomControl = app.sectionContainer.getSectionWithName(app.CSections.ZoomControl.name);
-				if (zoomControl) {
-					// Match the old semantics: only the 3rd arg means "animate"
-					// (callers passing {animate:false} in options leave it undefined).
-					zoomControl.zoomTo(this._limitZoom(zoom), undefined, !!animate);
-					return this;
-				}
-			}
-			// for spreadsheets, when the document is smaller than the viewing area
-			// we want it to be glued to the row/column headers instead of being centered
-			this._docLayer._checkSpreadSheetBounds(zoom);
-			if (window.mode.isDesktop()) {
-				return this.setDesktopCalcViewOnZoom(zoom, animate);
+		// Calc zooms through the ZoomControl section, not the map.
+		if (this._docLayer && this._docLayer._docType === 'spreadsheet'
+			&& app.activeDocument && app.activeDocument.activeLayout
+			&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+			var zoomControl = app.sectionContainer.getSectionWithName(app.CSections.ZoomControl.name);
+			if (zoomControl) {
+				// Match the old semantics: only the 3rd arg means "animate"
+				// (callers passing {animate:false} in options leave it undefined).
+				zoomControl.zoomTo(this._limitZoom(zoom), undefined, !!animate);
+				return this;
 			}
 		}
 
