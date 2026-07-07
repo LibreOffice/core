@@ -30,7 +30,7 @@ L10N_MAPS_STAMP = $(DIST_FOLDER)/.l10n-maps.stamp
 # from Langs.conf when the engine is present, else from the shipped map.
 L10N_LANGS = $(shell if test -f "$(LANGS_CONF)"; then sed -n 's/^--with-lang=//p' "$(LANGS_CONF)" | tr ' ' '\n' | grep -vx en-US | tr '-' '_'; else sed -n 's@.*/ui-\([A-Za-z_]*\)\.json.*@\1@p' "$(srcdir)/l10n/localizations.json" 2>/dev/null | sort -u; fi)
 
-export NODE_PATH=$(abs_builddir)/node_module
+export NODE_PATH=$(abs_builddir)/node_modules
 
 if !ENABLE_MOBILEAPP
 # Only convert the po files for languages in Langs.conf (and only when a po
