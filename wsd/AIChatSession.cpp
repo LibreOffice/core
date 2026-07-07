@@ -775,7 +775,9 @@ void AIChatSession::callLLMAPI()
     {
         LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
                 << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
-        sendChatResult(false, "Target host is not in the allowed host list, contact your administrator",
+        sendChatResult(false,
+                       "Target host \"" + uri.getHost() +
+                           "\" is not in the allowed host list, contact your administrator",
                        _toolLoop->requestId);
         _toolLoop.reset();
         return;
@@ -1851,7 +1853,8 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     Poco::URI uri(req.requestUrl);
     if (HostUtil::isForbiddenKitHost(uri.getHost()))
     {
-        req.error = "Target host is not in the allowed host list, contact your administrator";
+        req.error = "Target host \"" + uri.getHost() +
+                    "\" is not in the allowed host list, contact your administrator";
         return req;
     }
 #endif
