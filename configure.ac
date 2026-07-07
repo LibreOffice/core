@@ -924,6 +924,12 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
    if test "$enable_windowsapp" = "yes" ; then
       LOBUILDDIR_WINDOWS=`cd "$LOBUILDDIR" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
 
+      # $LOBUILDDIR/include may be a symlink (e.g. a WSL/DrvFs symlink left by an
+      # out-of-tree engine build) that native msbuild/clang-cl cannot follow. cd
+      # resolves it at the OS level, so cmd.exe reports the real target as a
+      # plain native path that the Windows app build can traverse.
+      LOINCLUDE_WINDOWS=`cd "$LOBUILDDIR/include" && cmd.exe /c cd | tr '\\\\' '/' | tr -d '\r'`
+
       # The Windows app's C++ projects build with the clang-cl (ClangCL)
       # platform toolset. Confirm Visual Studio has both the Clang compiler
       # and the clang-cl MSBuild toolset up front, otherwise the msbuild step
@@ -1027,6 +1033,7 @@ fi
 AC_SUBST(LOSOURCEDIR)
 AC_SUBST(LOBUILDDIR)
 AC_SUBST(LOBUILDDIR_WINDOWS)
+AC_SUBST(LOINCLUDE_WINDOWS)
 AC_SUBST(ANDROID_ABI)
 AC_SUBST(ANDROID_ABI_SPLIT)
 AC_SUBST(LOBUILDDIR_ARM64_V8A)
