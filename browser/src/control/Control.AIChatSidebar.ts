@@ -710,6 +710,10 @@ namespace cool {
 			};
 		}
 
+		private looksLikeQuestion(text: string): boolean {
+			return /\?\s*$/.test(text);
+		}
+
 		private getMessageJSON(msg: ChatMessage, index: number): any {
 			const isUser = msg.role === 'user';
 			const children: any[] = [];
@@ -757,9 +761,12 @@ namespace cool {
 					});
 				}
 
-				// Action buttons for text assistant messages (skip approval messages)
+				// Action buttons for text assistant messages (skip approval messages).
+				// A reply that reads as a question is not document content, so it
+				// gets Copy but no Insert.
 				if (!isUser && !msg.isError && !msg.isApproval) {
-					children.push(this.getActionsJSON(index, true));
+					const showInsert = !this.looksLikeQuestion(displayText);
+					children.push(this.getActionsJSON(index, showInsert));
 				}
 
 				// Retry button for error messages
