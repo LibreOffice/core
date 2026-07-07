@@ -39,7 +39,9 @@ m4_ifelse(IOSAPP,[true],
   License, v. 2.0. If a copy of the MPL was not distributed with this
   file, You can obtain one at http://mozilla.org/MPL/2.0/.
 -->
-<title>Online Editor</title>
+m4_ifelse(MOBILEAPP, [true],
+[<title>MOBILEAPPNAME</title>],
+[<title>Online Editor</title>])
 <meta charset="utf-8">
 m4_ifelse(MOBILEAPP, [true],
 [
