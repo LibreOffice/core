@@ -1593,7 +1593,11 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			this.sectionProperties.clickTimer = null;
 		}
 
-		point.pX += this.position[0];
+		if (app.map._docLayer.isCalcRTL()) {
+			point.pX = (-point.pX + this.position[0]);
+		} else {
+			point.pX += this.position[0];
+		}
 		point.pY += this.position[1];
 		app.map._docLayer._postMouseEvent('buttondown', point.x, point.y, 2, 1, 0);
 		app.map._docLayer._postMouseEvent('buttonup', point.x, point.y, 2, 1, 0);
