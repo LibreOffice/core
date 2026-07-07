@@ -127,7 +127,7 @@ ref class TypeEmitter
     ::System::Reflection::Emit::CustomAttributeBuilder^ get_iface_method_exception_attribute(
         const css::uno::Reference< css::reflection::XInterfaceMethodTypeDescription >& xMethod );
     ::System::Reflection::Emit::CustomAttributeBuilder^ get_exception_attribute(
-        const css::uno::Sequence<css::uno::Reference<
+        const cpo::uno::Sequence<css::uno::Reference<
         css::reflection::XCompoundTypeDescription > >& seq_exceptionsTd );
 /* Creates ::System::Type object for UNO exceptions. The UNO exceptions are
        obtained by
@@ -144,7 +144,7 @@ ref class TypeEmitter
        does not contain elements.
     */
     ::System::Collections::ArrayList ^ get_service_ctor_method_exceptions_reduced(
-        const css::uno::Sequence<
+        const cpo::uno::Sequence<
         css::uno::Reference<css::reflection::XCompoundTypeDescription> > & seqExceptionsTd);
 
 
