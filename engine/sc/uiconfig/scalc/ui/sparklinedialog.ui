@@ -840,6 +840,7 @@
                         <property name="adjustment">adjustment-custom-min</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="seMinAxis-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="sparklinedialog|seMinAxis-atkobject">Vertical minimum value</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|seMinAxis">Spin or enter number to set the minimum value for the Y axis.</property>
                           </object>
                         </child>
@@ -880,6 +881,7 @@
                         <property name="adjustment">adjustment-custom-max</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="seMaxAxis-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="sparklinedialog|seMaxAxis-atkobject">Vertical maximum value</property>
                             <property name="AtkObject::accessible-description" translatable="yes" context="sparklinedialog|extended_tip|seMaxAxis">Spin or enter number to set the maximum value for the Y axis.</property>
                           </object>
                         </child>
