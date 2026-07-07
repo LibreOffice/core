@@ -31,6 +31,8 @@
 
 #include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>
+#include <svx/svditer.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/unopage.hxx>
@@ -1039,15 +1041,59 @@ void SdDrawDocument::renameObjectStylesIfNeeded(sal_uInt32 nInsertPos,
         try {
             for (sal_uInt32 p = nInsertPos; p < nInsertPos + nBMSdPageCount ; p++)
             {
-                if (SdPage* pPage = static_cast<SdPage*>(GetPage(p))) {
-                    for (const rtl::Reference<SdrObject>& pObj : *pPage)
+                if (SdPage* pPage = static_cast<SdPage*>(GetPage(p)))
+                {
+                    // iterate over ALL SdrObjects, including GroupContent
+                    SdrObjListIter aObjIter(pPage);
+
+                    for (SdrObject* pObject(aObjIter.Next()); pObject; pObject = aObjIter.Next())
                     {
-                        if (pObj->GetStyleSheet())
+                        if (pObject->GetStyleSheet())
                         {
-                            OUString aStyleName = pObj->GetStyleSheet()->GetName();
-                            SfxStyleSheet* pSheet = lcl_findStyle(rStyleContext.aGraphicStyles, Concat2View(aStyleName + rStyleContext.aRenameString));
+                            const OUString& rStyleName(pObject->GetStyleSheet()->GetName());
+                            SfxStyleSheet* pSheet = lcl_findStyle(rStyleContext.aGraphicStyles, Concat2View(rStyleName + rStyleContext.aRenameString));
+
                             if (pSheet)
-                                pObj->SetStyleSheet(pSheet, true);
+                            {
+                                // for whatever reason this change of StyleSheet *changes* the look of SdrObjects,
+                                // which is not wanted. I am not sure if these are just the 'wrong' StyleSheets that
+                                // got copied or something else. It may happen when slides from more than two sources
+                                // get copied to a document: The newly imported styles get 'extended' names following
+                                // a naming scheme. When pasting from a 2nd document, the *same* names for slides get
+                                // created using that naming scheme, so before these were re-used here assuming they
+                                // have the same content - which is wrong.
+                                // To just *ensure* that the objects look will not change, compare previous ItemValues
+                                // with those ItemValues after changing the style, that guarantees equal look - for the
+                                // cost of some more hard-set attributes, but less StyleSheets.
+                                // i see that these corrections *are* done, so that is a clear hint that re-setting
+                                // these Styles in this whole import has basic errors, I have to correct the values.
+
+                                // To do so: create a copy of the current state of all Items with the original
+                                // state, as hard attribute, in a temporary SfxItemSet, using deep-detection (bParent == true)
+                                SfxItemSet aCopyOfOrig(*pObject->GetMergedItemSet().GetPool(), pObject->GetMergedItemSet().GetRanges());
+                                SfxWhichIter aWhichIter(pObject->GetMergedItemSet());
+                                for (sal_uInt16 nWhich = aWhichIter.FirstWhich(); nWhich; nWhich = aWhichIter.NextWhich())
+                                    aCopyOfOrig.Put(pObject->GetMergedItem(nWhich));
+
+                                // set new style
+                                pObject->SetStyleSheet(pSheet, true);
+
+                                // iterate over Items after StyleSheet change, also deep-detection (bParent == true)
+                                for (sal_uInt16 nWhich = aWhichIter.FirstWhich(); nWhich; nWhich = aWhichIter.NextWhich())
+                                {
+                                    const SfxPoolItem& rOld(aCopyOfOrig.Get(nWhich));
+                                    const SfxPoolItem& rNew(pObject->GetMergedItem(nWhich));
+
+                                    // if that Item *changed* from the SdrObject's perspective
+                                    // *including* the newly applied Style, it is wrong.
+                                    // Set that Item to original as hard/direct Item to get that
+                                    // value reliably back.
+                                    // NOTE: When looking at some cases this needed to be done for
+                                    // about eight to twelve Items, not too much
+                                    if (!SfxPoolItem::areSame(rOld, rNew))
+                                        pObject->SetMergedItem(rOld);
+                                }
+                            }
                         }
                     }
                 }
