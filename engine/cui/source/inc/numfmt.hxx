@@ -127,6 +127,7 @@ private:
     OUString  GetExpColorString( const Color*& rpPreviewColor, const OUString& aFormatStr, short nTmpCatPos );
     void    MakePreviewText( const OUString& rFormat );
     void    ChangePreviewText( sal_uInt16 nPos );
+    void    ApplyWCAGColorForRed( const Color*& rpPreviewColor, Color& rWCAGColor, const OUString& rFormat );
     void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect);
     bool    Click_Impl(const weld::Button& rIB);
     // Handler

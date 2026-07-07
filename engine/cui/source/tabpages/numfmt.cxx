@@ -1668,6 +1668,10 @@ void SvxNumberFormatTabPage::MakePreviewText( const OUString& rFormat )
     OUString aPreviewString;
     const Color* pPreviewColor = nullptr;
     pNumFmtShell->MakePreviewString( rFormat, aPreviewString, pPreviewColor );
+
+    Color aWCAGColor;
+    ApplyWCAGColorForRed( pPreviewColor, aWCAGColor, rFormat );
+
     m_aWndPreview.NotifyChange( aPreviewString, pPreviewColor );
 }
 
@@ -1676,7 +1680,31 @@ void SvxNumberFormatTabPage::ChangePreviewText( sal_uInt16 nPos )
     OUString aPreviewString;
     const Color* pPreviewColor = nullptr;
     pNumFmtShell->FormatChanged( nPos, aPreviewString, pPreviewColor );
+
+    OUString aFormat = pNumFmtShell->GetFormat4Entry( nPos );
+
+    Color aWCAGColor;
+    ApplyWCAGColorForRed( pPreviewColor, aWCAGColor, aFormat );
+
     m_aWndPreview.NotifyChange( aPreviewString, pPreviewColor );
+}
+
+void SvxNumberFormatTabPage::ApplyWCAGColorForRed( const Color*& rpPreviewColor, Color& rWCAGColor, const OUString& rFormat )
+{
+    if (rpPreviewColor && *rpPreviewColor == COL_LIGHTRED && pNumFmtShell->GetValNum() < 0)
+    {
+        bool bThousand = false, bNegRed = false;
+        sal_uInt16 nPrecision = 0, nLeadingZeroes = 0, nCatLbPos = 0;
+        pNumFmtShell->GetOptions( rFormat, bThousand, bNegRed, nPrecision, nLeadingZeroes, nCatLbPos );
+
+        if (bNegRed || !pNumFmtShell->FindEntry( rFormat ))
+        {
+            svtools::ColorConfig aColorConfig;
+            Color aBgColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+            rWCAGColor = aBgColor.IsDark() ? Color(0xFF5555) : Color(0x9F282B);
+            rpPreviewColor = &rWCAGColor;
+        }
+    }
 }
 
 void SvxNumberFormatTabPage::FillCurrencyBox()

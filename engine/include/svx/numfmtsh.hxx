@@ -152,6 +152,8 @@ public:
     void                ValidateNewEntries() { m_bUndoAddList = false; }
     std::vector<sal_uInt32> const & GetUpdateData() const;
 
+    double              GetValNum() const { return m_nValNum; }
+
     void                SetCurNumFmtKey( sal_uInt32 nNew )  { m_nCurFormatKey = nNew; }
     sal_uInt32          GetCurNumFmtKey() const             { return m_nCurFormatKey; }
     LanguageType        GetCurLanguage() const              { return m_eCurLanguage; }
