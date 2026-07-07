@@ -143,6 +143,7 @@ public:
     void testCreateLines();
     void testTdf154248MultilineFieldWrapping();
     void testMultilineFieldClipInvariance();
+    void testMultilineFieldSublineSpacing();
     void testTdf151748StaleKashidaArray();
     void testTdf162803StaleKashidaArray();
     void testEscapementNotPreservedOnParaBreak();
@@ -155,6 +156,15 @@ public:
 
     /// Test pasting a URL over selected text creates a hyperlink field
     void testPasteURLOverSelection();
+
+    // Fills rOutliner's edit engine so that paragraph 0 holds one URL field
+    // long enough to wrap onto several sublines, with rTailText supplying
+    // the paragraphs after it, and formats the document.
+    static EditEngine& prepareWrappedFieldDocument(Outliner& rOutliner, const OUString& rTailText);
+
+    // Asserts that the field in paragraph 0 wrapped onto several sublines
+    // and returns its portion info.
+    static const ExtraPortionInfo* getWrappedFieldInfo(EditEngine& rEditEngine);
 
     DECL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, void);
 
@@ -188,6 +198,7 @@ public:
     CPPUNIT_TEST(testCreateLines);
     CPPUNIT_TEST(testTdf154248MultilineFieldWrapping);
     CPPUNIT_TEST(testMultilineFieldClipInvariance);
+    CPPUNIT_TEST(testMultilineFieldSublineSpacing);
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
     CPPUNIT_TEST(testTdf162803StaleKashidaArray);
     CPPUNIT_TEST(testEscapementNotPreservedOnParaBreak);
@@ -2277,16 +2288,24 @@ void Test::testTdf154248MultilineFieldWrapping()
     }
 }
 
-// Records the document Y position of each stripped text portion so a test can
-// look up where a given piece of text was drawn.
+// Records where each stripped text portion was drawn so a test can look up
+// the document position of a given piece of text.
 class PortionPositionCollector : public StripPortionsHelper
 {
 public:
-    std::vector<std::pair<OUString, tools::Long>> maPortions;
+    struct Portion
+    {
+        OUString maText;
+        sal_Int32 mnPara;
+        sal_Int32 mnTextStart;
+        tools::Long mnY;
+    };
+    std::vector<Portion> maPortions;
 
     void processDrawPortionInfo(const DrawPortionInfo& rInfo) override
     {
-        maPortions.emplace_back(rInfo.maText, rInfo.mrStartPos.Y());
+        maPortions.push_back(
+            { rInfo.maText, rInfo.mnPara, rInfo.mnTextStart, rInfo.mrStartPos.Y() });
     }
     void processDrawBulletInfo(const DrawBulletInfo&) override {}
     void directlyAddB2DPrimitive(const drawinglayer::primitive2d::Primitive2DReference&) override {}
@@ -2295,11 +2314,55 @@ public:
     tools::Long findTextY(std::u16string_view rNeedle) const
     {
         for (const auto& rPortion : maPortions)
-            if (rPortion.first.indexOf(rNeedle) >= 0)
-                return rPortion.second;
+            if (rPortion.maText.indexOf(rNeedle) >= 0)
+                return rPortion.mnY;
+        return -1;
+    }
+
+    // Document Y of the first portion of paragraph nPara that starts at
+    // nTextStart, or -1 if absent.
+    tools::Long findPortionY(sal_Int32 nPara, sal_Int32 nTextStart) const
+    {
+        for (const auto& rPortion : maPortions)
+            if (rPortion.mnPara == nPara && rPortion.mnTextStart == nTextStart)
+                return rPortion.mnY;
         return -1;
     }
 };
+
+EditEngine& Test::prepareWrappedFieldDocument(Outliner& rOutliner, const OUString& rTailText)
+{
+    rOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
+
+    EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
+    rEditEngine.SetPaperSize(Size(2000, 5000));
+    rEditEngine.SetText(rTailText);
+
+    SvxURLField aURLField(
+        u"http://not.a.real.link"_ustr,
+        u"A hyperlink long enough to wrap over several lines no matter the paper width"_ustr,
+        SvxURLFormat::Repr);
+    SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
+
+    ContentNode* pNode = rEditEngine.GetEditDoc().GetObject(0);
+    EditSelection aSel(EditPaM(pNode, 0), EditPaM(pNode, 0));
+    rEditEngine.InsertField(aSel, aField);
+
+    rEditEngine.QuickFormatDoc(false);
+    CPPUNIT_ASSERT_EQUAL(true, rEditEngine.IsFormatted());
+    return rEditEngine;
+}
+
+const ExtraPortionInfo* Test::getWrappedFieldInfo(EditEngine& rEditEngine)
+{
+    ParaPortion const& rFieldPara = rEditEngine.GetParaPortions().getRef(0);
+    const TextPortion& rFieldPortion = rFieldPara.GetTextPortions()[0];
+    CPPUNIT_ASSERT_EQUAL(PortionKind::FIELD, rFieldPortion.GetKind());
+    const ExtraPortionInfo* pExtraInfo = rFieldPortion.GetExtraInfos();
+    CPPUNIT_ASSERT(pExtraInfo);
+    CPPUNIT_ASSERT_GREATER(size_t(1), pExtraInfo->lineBreaksList.size());
+    return pExtraInfo;
+}
 
 void Test::testMultilineFieldClipInvariance()
 {
@@ -2309,42 +2372,19 @@ void Test::testMultilineFieldClipInvariance()
     // below the field's first subline, the way edit mode clips a shape into
     // tile-sized bands.
     Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
-    aOutliner.SetCalcFieldValueHdl(LINK(nullptr, Test, CalcFieldValueHdl));
-
-    EditEngine& aEditEngine = const_cast<EditEngine&>(aOutliner.GetEditEngine());
-    aEditEngine.SetPaperSize(Size(2000, 5000));
 
     // Paragraph 0 holds only the wrapping field, paragraph 1 the marker text
     // whose position is measured.
-    aEditEngine.SetText(u"\nBELOWFIELDMARKER"_ustr);
-
-    SvxURLField aURLField(
-        u"http://not.a.real.link"_ustr,
-        u"A hyperlink long enough to wrap over several lines no matter the paper width"_ustr,
-        SvxURLFormat::Repr);
-    SvxFieldItem aField(aURLField, EE_FEATURE_FIELD);
-
-    EditDoc& rDoc = aEditEngine.GetEditDoc();
-    ContentNode* pNode = rDoc.GetObject(0);
-    EditSelection aSel(EditPaM(pNode, 0), EditPaM(pNode, 0));
-    aEditEngine.InsertField(aSel, aField);
-
-    aEditEngine.QuickFormatDoc(false);
-    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
+    EditEngine& rEditEngine = prepareWrappedFieldDocument(aOutliner, u"\nBELOWFIELDMARKER"_ustr);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rEditEngine.GetParagraphCount());
 
     // The field must actually wrap, otherwise the bug cannot occur.
-    ParaPortion const& rFieldPara = aEditEngine.GetParaPortions().getRef(0);
-    const TextPortion& rFieldPortion = rFieldPara.GetTextPortions()[0];
-    CPPUNIT_ASSERT_EQUAL(PortionKind::FIELD, rFieldPortion.GetKind());
-    const ExtraPortionInfo* pExtraInfo = rFieldPortion.GetExtraInfos();
-    CPPUNIT_ASSERT(pExtraInfo);
-    CPPUNIT_ASSERT_GREATER(size_t(1), pExtraInfo->lineBreaksList.size());
+    getWrappedFieldInfo(rEditEngine);
 
     // Reference layout: clip rectangle covering everything.
     const tools::Rectangle aFullClip(Point(0, 0), Size(0x7FFFFFFF, 0x7FFFFFFF));
     PortionPositionCollector aFull;
-    aEditEngine.StripPortions(aFull, aFullClip);
+    rEditEngine.StripPortions(aFull, aFullClip);
     const tools::Long nReferenceY = aFull.findTextY(u"BELOWFIELDMARKER");
     CPPUNIT_ASSERT_MESSAGE("marker not drawn in the full render", nReferenceY >= 0);
 
@@ -2352,16 +2392,59 @@ void Test::testMultilineFieldClipInvariance()
     // The first subline ends above this line, so the line-level visibility
     // test once skipped the whole field, while the field paragraph and the
     // marker below it stay inside the rectangle.
-    const tools::Long nFirstSublineHeight = rFieldPara.GetLines()[0].GetHeight();
+    const tools::Long nFirstSublineHeight
+        = rEditEngine.GetParaPortions().getRef(0).GetLines()[0].GetHeight();
     const tools::Rectangle aClip(Point(0, nFirstSublineHeight + 1),
                                  Size(0x7FFFFFFF, 0x7FFFFFFF));
     PortionPositionCollector aClipped;
-    aEditEngine.StripPortions(aClipped, aClip);
+    rEditEngine.StripPortions(aClipped, aClip);
     const tools::Long nClippedY = aClipped.findTextY(u"BELOWFIELDMARKER");
     CPPUNIT_ASSERT_MESSAGE("marker not drawn in the clipped render", nClippedY >= 0);
 
     // The skipped field no longer pulls the text below it upward.
     CPPUNIT_ASSERT_EQUAL(nReferenceY, nClippedY);
+}
+
+void Test::testMultilineFieldSublineSpacing()
+{
+    // A long hyperlink field wraps onto sublines that are not real layout
+    // lines. The vertical distance between two of its sublines must match
+    // the distance between two ordinary wrapped lines of the same font,
+    // otherwise the wrapped link looks compressed and overlaps the line
+    // above it.
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
+
+    // Paragraph 0 holds the wrapping field, paragraph 1 plain text that
+    // wraps over the same paper width and provides the reference spacing.
+    EditEngine& rEditEngine = prepareWrappedFieldDocument(
+        aOutliner,
+        u"\nA plain paragraph long enough to wrap over several lines no matter the paper width"_ustr);
+
+    // The field must actually wrap, otherwise the bug cannot occur.
+    const ExtraPortionInfo* pExtraInfo = getWrappedFieldInfo(rEditEngine);
+
+    // The reference paragraph must wrap as well.
+    ParaPortion const& rPlainPara = rEditEngine.GetParaPortions().getRef(1);
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1), rPlainPara.GetLines().Count());
+
+    const tools::Rectangle aFullClip(Point(0, 0), Size(0x7FFFFFFF, 0x7FFFFFFF));
+    PortionPositionCollector aCollector;
+    rEditEngine.StripPortions(aCollector, aFullClip);
+
+    // The field is drawn once per subline, each draw starting deeper into
+    // the field text; the second subline begins at the field's first break.
+    const tools::Long nFirstSublineY = aCollector.findPortionY(0, 0);
+    const tools::Long nSecondSublineY = aCollector.findPortionY(0, pExtraInfo->lineBreaksList[1]);
+    CPPUNIT_ASSERT_MESSAGE("first subline not drawn", nFirstSublineY >= 0);
+    CPPUNIT_ASSERT_MESSAGE("second subline not drawn", nSecondSublineY >= 0);
+
+    const tools::Long nFirstLineY = aCollector.findPortionY(1, 0);
+    const tools::Long nSecondLineY
+        = aCollector.findPortionY(1, rPlainPara.GetLines()[1].GetStart());
+    CPPUNIT_ASSERT_MESSAGE("first plain line not drawn", nFirstLineY >= 0);
+    CPPUNIT_ASSERT_MESSAGE("second plain line not drawn", nSecondLineY >= 0);
+
+    CPPUNIT_ASSERT_EQUAL(nSecondLineY - nFirstLineY, nSecondSublineY - nFirstSublineY);
 }
 
 // Backspacing inside a justified, multi-line paragraph must not leave words on

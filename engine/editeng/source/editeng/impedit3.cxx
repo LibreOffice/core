@@ -3639,20 +3639,14 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                 adjustYDirectionAware(aTmpPos, pLine->GetMaxAscent() - nLineHeight);
 
                 // A field wrapped onto multiple sublines makes the line
-                // occupy more vertical space than its GetHeight(). The
-                // sublines are advanced by GetMaxAscent() each while painting
-                // the field below, and CalcHeight adds the same amount to the
-                // paragraph height.
+                // occupy more vertical space than its GetHeight().
                 tools::Long nWrappedFieldExtra = 0;
                 for (sal_Int32 nPortion = pLine->GetStartPortion(); nPortion <= pLine->GetEndPortion(); nPortion++)
                 {
                     const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[nPortion];
                     if (rTextPortion.GetKind() == PortionKind::FIELD)
-                    {
-                        const ExtraPortionInfo* pExtraInfo = rTextPortion.GetExtraInfos();
-                        if (pExtraInfo && pExtraInfo->lineBreaksList.size() > 1)
-                            nWrappedFieldExtra += pLine->GetMaxAscent() * (pExtraInfo->lineBreaksList.size() - 1);
-                    }
+                        nWrappedFieldExtra
+                            += GetWrappedFieldExtraHeight(*pLine, rTextPortion.GetExtraInfos());
                 }
 
                 // The position after this line once the field sublines are
@@ -3903,12 +3897,11 @@ void ImpEditEngine::StripAllPortions( OutputDevice& rOutDev, tools::Rectangle aC
                                     {
                                         if( itSubLines != pExtraInfo->lineBreaksList.begin() )
                                         {
-                                            // only use GetMaxAscent(), pLine->GetHeight() will not
-                                            // proceed as needed (see PortionKind::TEXT above and nAdvanceY)
-                                            // what will lead to a compressed look with multiple lines
-                                            const sal_uInt16 nMaxAscent(pLine->GetMaxAscent());
-
-                                            aTmpPos += MoveToNextLine(aStartPos, nMaxAscent, nColumn);
+                                            // Each subline advances by the full line height, the
+                                            // same amount an ordinary wrapped line advances, so
+                                            // the wrapped field parts are spaced like normal lines.
+                                            aTmpPos += MoveToNextLine(aStartPos, pLine->GetHeight(),
+                                                                      nColumn);
                                             adjustXDirectionAware(aTmpPos, -pLine->GetNextLinePosXDiff());
                                         }
                                         std::vector< sal_Int32 >::iterator curIt = itSubLines;

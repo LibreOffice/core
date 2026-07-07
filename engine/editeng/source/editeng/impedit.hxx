@@ -66,6 +66,7 @@
 #include <string_view>
 #include <vector>
 
+struct ExtraPortionInfo;
 class SvxSearchItem;
 class SvxLRSpaceItem;
 struct SvxFontUnitMetrics;
@@ -915,6 +916,8 @@ public:
 
     static bool IsAtMultiLineFieldEnd(const ParaPortion& rPortion, sal_Int32 nIndex);
     bool IsAtMultiLineFieldEnd(const EditPaM& rPaM);
+    static tools::Long GetWrappedFieldExtraHeight(const EditLine& rLine,
+                                                  const ExtraPortionInfo* pExtraInfo);
 
     EditUndoManager& GetUndoManager()
     {

@@ -385,26 +385,22 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf148966)
     {
         createSdImpressDoc("pptx/tdf148966.pptx");
         xmlDocUniquePtr pXmlDoc = parseLayout();
-        // Without the accompanying fix, would fail with:
-        // - Expected: 5952
-        // - Actual  : 7814
-        // i.e. Line break after multiline field should have been ignored.
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
+        // The line break after the multiline field is ignored, so the text
+        // that follows starts on the field's last subline row.
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
     }
     {
         createSdImpressDoc("odp/tdf148966-withflag.odp");
         xmlDocUniquePtr pXmlDoc = parseLayout();
-        // Without the accompanying fix, would fail with:
-        // - Expected: 5952
-        // - Actual  : 7814
-        // i.e. When IgnoreBreakAfterMultilineField flag is set, line break
-        // after multiline field should have been ignored.
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"5952");
+        // When the IgnoreBreakAfterMultilineField flag is set, the line
+        // break after the multiline field is ignored, giving the same layout
+        // as the OOXML document above.
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"6262");
     }
     {
         createSdImpressDoc("odp/tdf148966-withoutflag.odp");
         xmlDocUniquePtr pXmlDoc = parseLayout();
-        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"7814");
+        assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "y", u"8124");
     }
 }
 

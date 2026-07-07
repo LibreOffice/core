@@ -3299,7 +3299,7 @@ tools::Rectangle ImpEditEngine::GetEditCursor(ParaPortion const& rPortion, EditL
                     nX = rLine.GetStartPosX() - rLine.GetNextLinePosXDiff()
                          + pEI->nLastLineTextWidth;
                 }
-                nYShift = rLine.GetMaxAscent() * (pEI->lineBreaksList.size() - 1);
+                nYShift = GetWrappedFieldExtraHeight(rLine, pEI);
             }
         }
     }
@@ -3433,9 +3433,7 @@ void ImpEditEngine::IterateLineAreas(const IterateLinesAreasFunc& f, IterFlag eO
                         ExtraPortionInfo* pExtraInfo = rTextPortion.GetExtraInfos();
                         if (pExtraInfo && pExtraInfo->lineBreaksList.size() > 1)
                         {
-                            // Use the same size calculation as in ImpEditEngine::Paint
-                            const sal_uInt16 nMaxAscent(rLine.GetMaxAscent());
-                            nUrlYJump = nMaxAscent * (pExtraInfo->lineBreaksList.size() - 1);
+                            nUrlYJump = GetWrappedFieldExtraHeight(rLine, pExtraInfo);
                             // if this is not the end of the line ..
                             // if some characters (even a soft-break) follows the link
                             if (nLine + 1 < nLines)
@@ -3553,6 +3551,16 @@ ImpEditEngine::GetPortionAndLine(Point aDocPos)
     IterateLineAreas(FindLastMatchingPortionAndLine, IterFlag::inclILS);
 
     return { pLastPortion, pLastLine, nLineStartX };
+}
+
+tools::Long ImpEditEngine::GetWrappedFieldExtraHeight(const EditLine& rLine,
+                                                      const ExtraPortionInfo* pExtraInfo)
+{
+    // A field wrapped onto multiple sublines occupies one full line height
+    // per subline beyond the height the line itself reports.
+    if (!pExtraInfo || pExtraInfo->lineBreaksList.size() <= 1)
+        return 0;
+    return rLine.GetHeight() * static_cast<tools::Long>(pExtraInfo->lineBreaksList.size() - 1);
 }
 
 bool ImpEditEngine::IsAtMultiLineFieldEnd(const ParaPortion& rPortion, sal_Int32 nIndex)
@@ -4969,9 +4977,7 @@ void ImpEditEngine::CalcHeight(ParaPortion& rPortion)
                 ExtraPortionInfo* pExtraInfo = rTextPortion.GetExtraInfos();
                 if (pExtraInfo && pExtraInfo->lineBreaksList.size() > 1)
                 {
-                    // Use the same size calculation as in ImpEditEngine::Paint
-                    const sal_uInt16 nMaxAscent(rLine.GetMaxAscent());
-                    nUrlYJump = nMaxAscent * (pExtraInfo->lineBreaksList.size() - 1);
+                    nUrlYJump = GetWrappedFieldExtraHeight(rLine, pExtraInfo);
                     rPortion.mnHeight += nUrlYJump;
                 }
             }
