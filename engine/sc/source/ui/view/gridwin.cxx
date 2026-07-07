@@ -5532,6 +5532,8 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
                 //  search backwards so that the last repainted frame is found
                 --i;
                 ScRangeFindData& rData = pRangeFinder->GetObject(i);
+                if ( rData.bTableRef )
+                    continue;   // structured refs are highlight-only; dragging would rewrite them as a plain address
                 if ( rData.aRef.Contains(aAddr) )
                 {
                     if (pIndex)

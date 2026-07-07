@@ -32,9 +32,10 @@ struct ScRangeFindData
     ESelection maSel;
     ScRefFlags nFlags;
     Color      nColor;
+    bool       bTableRef;   ///< structured ref (Table[col]); highlight only, not drag-modifiable
 
-    ScRangeFindData( const ScRange& rR, ScRefFlags nF, const ESelection& rSel ) :
-        aRef(rR), maSel(rSel), nFlags(nF) {}
+    ScRangeFindData( const ScRange& rR, ScRefFlags nF, const ESelection& rSel, bool bTabRef = false ) :
+        aRef(rR), maSel(rSel), nFlags(nF), bTableRef(bTabRef) {}
 };
 
 class ScRangeFindList

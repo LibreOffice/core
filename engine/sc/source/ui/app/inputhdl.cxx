@@ -79,6 +79,7 @@
 #include <patattr.hxx>
 #include <viewdata.hxx>
 #include <document.hxx>
+#include <dbdata.hxx>
 #include <docpool.hxx>
 #include <editutil.hxx>
 #include <appoptio.hxx>
@@ -93,6 +94,7 @@
 #include <funcdesc.hxx>
 #include <markdata.hxx>
 #include <tokenarray.hxx>
+#include <token.hxx>
 #include <gridwin.hxx>
 #include <output.hxx>
 #include <fillinfo.hxx>
@@ -355,6 +357,81 @@ static inline void incPos( const sal_Unicode c, sal_Int32& rPos, ESelection& rSe
     }
 }
 
+// Extend a half-scanned structured (table) reference (Table[Unit Price],
+// Table[[#Data];[Col]]) to its end, so the reference finder highlights the whole specifier.
+// A ' escapes the next character; the depth count handles nested brackets.
+static void lcl_ExtendToStructuredRefEnd( const sal_Unicode* pChar, sal_Int32 nLen,
+                                          sal_Int32 nStart, sal_Int32& rPos, ESelection& rSel )
+{
+    sal_Int32 nBracket = 0;
+    sal_Int32 nEnd = nStart;
+    for (; nEnd < nLen && (nEnd < rPos || nBracket > 0); ++nEnd)
+    {
+        if (pChar[nEnd] == '\'' && nEnd + 1 < nLen)
+            ++nEnd;                             // skip the escaped character (none if ' is last)
+        else if (pChar[nEnd] == '[')
+            ++nBracket;
+        else if (pChar[nEnd] == ']' && nBracket > 0)
+            --nBracket;
+    }
+    while (rPos < nEnd)
+        incPos( pChar[rPos], rPos, rSel );
+}
+
+// Resolve a structured (table) reference - Table[Col], Table[[#Data];[Col]],
+// Table[[Col1]:[Col3]], Table[@Col] - to the range it covers. HandleTableRef folds the
+// whole specifier into one ocTableRef token's area reference, so compiling the string
+// and reading that back gives the exact cells.
+static bool lcl_ResolveTableRef( ScDocument& rDoc, const ScAddress& rPos,
+                                 const OUString& rStr, ScRange& rRange )
+{
+    // No named tables: this cannot be a structured reference, so skip the compile.
+    const ScDBCollection* pDBs = rDoc.GetDBCollection();
+    if ( !pDBs || pDBs->getNamedDBs().empty() )
+        return false;
+
+    // In R1C1 syntax the compiler treats '[' and ']' as reference offsets (R[-1]C[2]),
+    // so Table1[Col] would not tokenize as a table ref. A structured reference has no
+    // cell addresses, so parse it with an A1 convention regardless of the document
+    // syntax; the resolved cells are the same.
+    formula::FormulaGrammar::Grammar eGram = rDoc.GetGrammar();
+    if ( formula::FormulaGrammar::extractRefConvention( eGram )
+            == formula::FormulaGrammar::CONV_XL_R1C1 )
+        eGram = formula::FormulaGrammar::mergeToGrammar( eGram, formula::FormulaGrammar::CONV_XL_A1 );
+
+    ScCompiler aComp( rDoc, rPos, eGram );
+    std::unique_ptr<ScTokenArray> pArr( aComp.CompileString( rStr ) );
+    if ( !pArr || !pArr->HasOpCode( ocTableRef ) )
+        return false;
+
+    aComp.EnableJumpCommandReorder( true );
+    aComp.CompileTokenArray();   // resolves each ocTableRef's inner area reference
+
+    formula::FormulaTokenArrayPlainIterator aIter( *pArr );
+    for ( const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next() )
+    {
+        if ( p->GetOpCode() != ocTableRef )
+            continue;
+        const formula::FormulaToken* pRef =
+            static_cast<const ScTableRefToken*>(p)->GetAreaRefRPN();
+        if ( !pRef )
+            continue;
+        if ( pRef->GetType() == formula::svDoubleRef )
+        {
+            ScComplexRefData aRef( static_cast<const ScDoubleRefToken*>(pRef)->GetDoubleRef() );
+            rRange = aRef.toAbs( rDoc, rPos );
+            return true;
+        }
+        if ( pRef->GetType() == formula::svSingleRef )
+        {
+            ScSingleRefData aRef( static_cast<const ScSingleRefToken*>(pRef)->GetSingleRef() );
+            rRange.aStart = rRange.aEnd = aRef.toAbs( rDoc, rPos );
+            return true;
+        }
+    }
+    return false;
+}
+
 void ScInputHandler::InitRangeFinder( const OUString& rFormula )
 {
     DeleteRangeFinder();
@@ -433,6 +510,10 @@ handle_r1c1:
             goto handle_r1c1;
         }
 
+        // Keep a structured (table) reference in one piece so the whole specifier
+        // reaches the parser below.
+        lcl_ExtendToStructuredRefEnd( pChar, nLen, nStart, nPos, aSel );
+
         if ( nPos > nStart )
         {
             OUString aTest = rFormula.copy( nStart, nPos-nStart );
@@ -462,6 +543,23 @@ handle_r1c1:
                 }
 
                 Color nColor = pRangeFindList->Insert( ScRangeFindData( aRange, nFlags, aSel));
+
+                SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
+                aSet.Put( SvxColorItem( nColor, EE_CHAR_COLOR ) );
+                mpEditEngine->QuickSetAttribs( aSet, aSel );
+                ++nCount;
+            }
+            else if ( aTest.indexOf('[') > 0 && lcl_ResolveTableRef( rDoc, aCursorPos, aTest, aRange ) )
+            {
+                // Structured reference, e.g. =SUM(Table1[Column]). Highlight the
+                // resolved range; the true flag marks it non-draggable.
+                if (!nCount)
+                {
+                    mpEditEngine->SetUpdateLayout( false );
+                    pRangeFindList.reset(new ScRangeFindList( pDocSh->GetTitle() ));
+                }
+
+                Color nColor = pRangeFindList->Insert( ScRangeFindData( aRange, ScRefFlags::VALID, aSel, /*bTableRef*/true ));
 
                 SfxItemSet aSet( mpEditEngine->GetEmptyItemSet() );
                 aSet.Put( SvxColorItem( nColor, EE_CHAR_COLOR ) );
