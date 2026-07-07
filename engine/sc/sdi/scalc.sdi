@@ -2528,7 +2528,7 @@ SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG
 (SfxBoolItem Visible SID_SEARCH_RESULTS_DIALOG)
 [
     AutoUpdate = FALSE,
-    FastCall = FALSE,
+    FastCall = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
