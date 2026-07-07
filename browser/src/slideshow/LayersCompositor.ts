@@ -140,7 +140,7 @@ class LayersCompositor extends SlideCompositor {
 	public getVideoRenderer(
 		slideHash: string,
 		videoInfo: VideoInfo,
-	): VideoRenderer {
+	): AnimatedContentRenderer {
 		return this.layerDrawing.getVideoRenderer(slideHash, videoInfo);
 	}
 

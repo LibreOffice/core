@@ -83,7 +83,7 @@ abstract class SlideCompositor {
 	public abstract getVideoRenderer(
 		slideHash: string,
 		videoInfo: VideoInfo,
-	): VideoRenderer;
+	): AnimatedContentRenderer;
 
 	public abstract deleteResources(): void;
 

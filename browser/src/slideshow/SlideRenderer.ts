@@ -21,6 +21,7 @@ abstract class SlideRenderer {
 	protected _requestAnimationFrameId: number = null;
 	private _activeLayers: Set<string> = new Set();
 	private _playingVideos: Set<string> = new Set();
+	private _playingGifs: Set<string> = new Set();
 
 	protected constructor(canvas: HTMLCanvasElement) {
 		this._canvas = canvas;
@@ -110,6 +111,28 @@ abstract class SlideRenderer {
 	public get isAnyVideoPlaying(): boolean {
 		return this._playingVideos.size > 0;
 	}
+
+	public notifyGifStarted(sId: string) {
+		const wasAnyAnimationPlaying = this.isAnyAnimationPlaying();
+		this._playingGifs.add(sId);
+		if (!wasAnyAnimationPlaying) {
+			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
+		}
+	}
+
+	public notifyGifEnded(sId: string) {
+		this._playingGifs.delete(sId);
+	}
+
+	public get isAnyGifPlaying(): boolean {
+		return this._playingGifs.size > 0;
+	}
+
+	public isAnyAnimationPlaying(): boolean {
+		return (
+			this.isAnyLayerActive() || this.isAnyVideoPlaying || this.isAnyGifPlaying
+		);
+	}
 }
 
 class SlideRenderer2d extends SlideRenderer {
@@ -155,7 +178,7 @@ class SlideRenderer2d extends SlideRenderer {
 
 		canvas2dCtx.setTransform(1, 0, 0, 1, 0, 0);
 
-		if (this.isAnyLayerActive() || this.isAnyVideoPlaying) {
+		if (this.isAnyAnimationPlaying()) {
 			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
 		}
 	}
@@ -307,7 +330,7 @@ class SlideRendererGl extends SlideRenderer {
 		gl.bindVertexArray(this._vao);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-		if (this.isAnyLayerActive() || this.isAnyVideoPlaying)
+		if (this.isAnyAnimationPlaying())
 			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
 	}
 }

@@ -368,6 +368,8 @@ COOL_JS_LST =\
 	src/app/BitmapTileManager.ts \
 	src/app/VectorResourceTracker.ts \
 	src/app/VectorManager.ts \
+	src/app/GifFrameSource.ts \
+	src/app/AnimatedGifManager.ts \
 	src/app/TilesMiddleware.ts \
 	src/app/SearchService.ts \
 	src/app/BaseClass.ts \
@@ -413,6 +415,7 @@ COOL_JS_LST =\
 	src/canvas/CanvasSectionContainer.ts \
 	src/canvas/CanvasSectionObject.ts \
 	src/canvas/sections/HTMLObjectSection.ts \
+	src/canvas/sections/AnimatedGifSection.ts \
 	src/canvas/sections/RulerSpacerSection.ts \
 	src/canvas/sections/CompareChangesLabelSection.ts \
 	src/canvas/sections/CommentMarkerSubSection.ts \
@@ -724,7 +727,9 @@ COOL_JS_LST =\
 	src/slideshow/LayersCompositor.ts \
 	src/slideshow/RenderContext.ts \
 	src/slideshow/VectorCompositor.ts \
+	src/slideshow/AnimatedContentRenderer.ts \
 	src/slideshow/VideoRenderer.ts \
+	src/slideshow/GifRenderer.ts \
 	src/slideshow/SlideRenderer.ts \
 	src/slideshow/SlideshowMiddleware.ts \
 	src/slideshow/SlideShowPresenter.ts \

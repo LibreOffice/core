@@ -106,7 +106,9 @@ class LayerDrawing {
 	private offscreenCanvas: OffscreenCanvas = null;
 	private onSlideRenderingCompleteCallback: VoidFunction = null;
 	private layerRenderer: LayerRenderer;
-	private videoRenderers: Map<string, Array<VideoRenderer>> = new Map();
+	private videoRenderers: Map<string, Array<AnimatedContentRenderer>> =
+		new Map();
+	private gifRenderers: Map<string, Array<AnimatedContentRenderer>> = new Map();
 	private isTransitionActive: boolean = false;
 	private queuedLayers: any[] = [];
 	private isDecompressing: boolean = false;
@@ -146,6 +148,7 @@ class LayerDrawing {
 		this.nextRequestedSlideHash = null;
 		this.nextPrefetchedSlideHash = null;
 		this.deleteVideosResources();
+		this.deleteGifsResources();
 		this.layerRenderer.dispose();
 		this.compressedSlideCache.clear();
 	}
@@ -210,6 +213,7 @@ class LayerDrawing {
 		this.drawTextField(slideHash);
 		this.drawDrawPage(slideHash);
 		this.drawVideos(slideHash);
+		this.drawGifs(slideHash);
 	}
 
 	private handleVideos(slideHash: string) {
@@ -217,13 +221,6 @@ class LayerDrawing {
 		const videosInfo = slideInfo.videos;
 		if (!videosInfo || videosInfo.length === 0) return;
 		this.videoRenderers.set(slideHash, []);
-
-		if (
-			!this.layerRenderer.getRenderContext().is2dGl() &&
-			!VideoRendererGl.videoProgramInitialized
-		) {
-			VideoRendererGl.createProgram(this.layerRenderer.getRenderContext());
-		}
 
 		for (let i = 0; i < videosInfo.length; ++i) {
 			const videoInfo = videosInfo[i];
@@ -242,11 +239,7 @@ class LayerDrawing {
 			this.layerRenderer.getRenderContext(),
 			slideRenderer,
 		);
-		videoRenderer.prepareVideo(
-			videoInfo,
-			metaPres.docWidth,
-			metaPres.docHeight,
-		);
+		videoRenderer.prepare(videoInfo, metaPres.docWidth, metaPres.docHeight);
 
 		this.videoRenderers.get(slideHash).push(videoRenderer);
 	}
@@ -265,7 +258,7 @@ class LayerDrawing {
 		if (!videoRenderers) return;
 
 		for (const videoRenderer of videoRenderers) {
-			videoRenderer.loadVideo();
+			videoRenderer.load();
 		}
 	}
 
@@ -274,7 +267,7 @@ class LayerDrawing {
 		if (!videoRenderers) return;
 
 		for (const videoRenderer of videoRenderers) {
-			videoRenderer.pauseVideo();
+			videoRenderer.pause();
 		}
 	}
 
@@ -283,19 +276,19 @@ class LayerDrawing {
 		if (!videoRenderers) return;
 
 		for (const videoRenderer of videoRenderers) {
-			videoRenderer.playVideo();
+			videoRenderer.play();
 		}
 	}
 
 	public getVideoRenderer(
 		slideHash: string,
 		videoInfo: VideoInfo,
-	): VideoRenderer {
+	): AnimatedContentRenderer {
 		const videoRenderers = this.videoRenderers.get(slideHash);
 		if (!videoRenderers) return null;
 
 		for (const videoRenderer of videoRenderers) {
-			if (videoRenderer.videoInfoId === videoInfo.id) {
+			if (videoRenderer.infoId === videoInfo.id) {
 				return videoRenderer;
 			}
 		}
@@ -307,7 +300,69 @@ class LayerDrawing {
 				videoRenderer.deleteResources();
 			}
 		});
-		VideoRendererGl.deleteProgram(this.layerRenderer.getRenderContext());
+	}
+
+	private handleGifs(slideHash: string) {
+		if (!GifFrameSource.isSupported()) {
+			app.console.warn(
+				'LayerDrawing: ImageDecoder not available, GIFs will not animate',
+			);
+			return;
+		}
+		const slideInfo = this.getSlideInfo(slideHash);
+		const gifsInfo = slideInfo.gifs;
+		if (!gifsInfo || gifsInfo.length === 0) return;
+		this.gifRenderers.set(slideHash, []);
+
+		for (let i = 0; i < gifsInfo.length; ++i) {
+			this.handleGif(i, slideHash, gifsInfo[i]);
+		}
+	}
+
+	private handleGif(index: number, slideHash: string, gifInfo: GifInfo) {
+		if (!GifFrameSource.isSupported()) return;
+		const slideShowPresenter = app.map.slideShowPresenter;
+		const slideRenderer = slideShowPresenter._slideRenderer;
+		const metaPres = slideShowPresenter._metaPresentation;
+
+		const gifId = slideHash + 'gif' + index;
+		const gifRenderer = makeGifRenderer(
+			gifId,
+			this.layerRenderer.getRenderContext(),
+			slideRenderer,
+		);
+		gifRenderer.prepare(gifInfo, metaPres.docWidth, metaPres.docHeight);
+
+		this.gifRenderers.get(slideHash).push(gifRenderer);
+	}
+
+	private drawGifs(slideHash: string) {
+		if (!GifFrameSource.isSupported()) return;
+		const gifRenderers = this.gifRenderers.get(slideHash);
+		if (!gifRenderers) return;
+
+		for (const gifRenderer of gifRenderers) {
+			gifRenderer.render();
+		}
+	}
+
+	public loadGifs(slideHash: string) {
+		if (!GifFrameSource.isSupported()) return;
+		const gifRenderers = this.gifRenderers.get(slideHash);
+		if (!gifRenderers) return;
+
+		for (const gifRenderer of gifRenderers) {
+			gifRenderer.load();
+		}
+	}
+
+	private deleteGifsResources() {
+		if (!GifFrameSource.isSupported()) return;
+		this.gifRenderers.forEach((gifRenderers) => {
+			for (const gifRenderer of gifRenderers) {
+				gifRenderer.deleteResources();
+			}
+		});
 	}
 
 	public getAnimatedLayerInfo(
@@ -1003,6 +1058,11 @@ class LayerDrawing {
 			if (window.ThisIsTheQtApp) {
 				this.playVideos(slideHash);
 			}
+		}
+
+		this.handleGifs(slideHash);
+		if (this.gifRenderers.has(slideHash)) {
+			this.loadGifs(slideHash);
 		}
 	}
 }

@@ -197,7 +197,7 @@ class VectorCompositor extends SlideCompositor {
 	public getVideoRenderer(
 		_slideHash: string,
 		_videoInfo: VideoInfo,
-	): VideoRenderer {
+	): AnimatedContentRenderer {
 		return null;
 	}
 

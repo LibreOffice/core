@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection InternPointUtil InternBoundsUtil */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection CompareChangesLabelSection InternPointUtil InternBoundsUtil AnimatedGifManager */
 
 function clamp(num, min, max)
 {
@@ -4089,6 +4089,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			else
 				window.app.console.warn('The sidebar is set to be shown but it has not been created.');
 		}
+
+		// Plays animated images (for example animated GIFs) over the document.
+		if (!this._animatedGifManager)
+			this._animatedGifManager = new AnimatedGifManager(map);
 
 		/*
 			Because of special handling of delete and backspace chars, we need to know which Writer form is focused.

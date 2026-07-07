@@ -84,6 +84,7 @@ interface SlideInfo {
 	masterPage: string;
 	masterPageObjectsVisibility: boolean;
 	videos: Array<VideoInfo>;
+	gifs?: Array<GifInfo>;
 	interactions: Array<Interaction>;
 	transitionDuration: number;
 	nextSlideDuration: number;
@@ -429,7 +430,7 @@ class SlideShowPresenter {
 	public getVideoRenderer(
 		slideHash: string,
 		videoInfo: VideoInfo,
-	): VideoRenderer {
+	): AnimatedContentRenderer {
 		return this._slideCompositor.getVideoRenderer(slideHash, videoInfo);
 	}
 

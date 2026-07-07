@@ -85,6 +85,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/profilezone.hxx>
+#include <comphelper/base64.hxx>
 
 #include <sal/log.hxx>
 #include <editeng/unofield.hxx>
@@ -112,6 +113,8 @@
 #include <svx/svdsob.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdomedia.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svditer.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -186,6 +189,7 @@
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/gfxlink.hxx>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -5891,6 +5895,42 @@ OString SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                             aJsonWriter.put("width", aRectangle.GetWidth());
                             aJsonWriter.put("height", aRectangle.GetHeight());
                         }
+                    }
+                }
+
+                {
+                    auto aGifList = aJsonWriter.startArray("gifs");
+                    SdrObjListIter aIterator(pPage, SdrIterMode::DeepWithGroups);
+                    while (aIterator.IsMore())
+                    {
+                        auto* pObject = aIterator.Next();
+                        auto* pGraphicObject = dynamic_cast<SdrGrafObj*>(pObject);
+                        if (!pGraphicObject)
+                            continue;
+
+                        const Graphic& rGraphic = pGraphicObject->GetGraphic();
+                        if (!rGraphic.IsAnimated() || !rGraphic.IsGfxLink())
+                            continue;
+
+                        const GfxLink aGfxLink = rGraphic.GetGfxLink();
+                        if (aGfxLink.GetType() != GfxLinkType::NativeGif || aGfxLink.GetDataSize() == 0)
+                            continue;
+
+                        const cpo::uno::Sequence<sal_Int8> aBytes(
+                            reinterpret_cast<const sal_Int8*>(aGfxLink.GetData()),
+                            static_cast<sal_Int32>(aGfxLink.GetDataSize()));
+                        OUStringBuffer aBase64;
+                        comphelper::Base64::encode(aBase64, aBytes);
+
+                        auto aGifNode = aJsonWriter.startStruct();
+                        auto const& rRectangle = pGraphicObject->GetLogicRect();
+                        auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+                        aJsonWriter.put("id", static_cast<sal_Int64>(pGraphicObject->GetUniqueID()));
+                        aJsonWriter.put("url", u"data:image/gif;base64,"_ustr + aBase64.makeStringAndClear());
+                        aJsonWriter.put("x", aRectangle.Left());
+                        aJsonWriter.put("y", aRectangle.Top());
+                        aJsonWriter.put("width", aRectangle.GetWidth());
+                        aJsonWriter.put("height", aRectangle.GetHeight());
                     }
                 }
 
