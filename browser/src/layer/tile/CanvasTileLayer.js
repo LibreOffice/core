@@ -693,14 +693,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// In the future we probably want to remove this and set the bonds only on the
 		// left/upper side of the spreadsheet so that we can have an 'infinite' number of
 		// cells downwards and to the right, like we have on desktop
-		var viewSize = this._map.getSize();
+		var frameSize = app.activeDocument.activeLayout.frameSize;
 		var scale = this._map.getZoomScale(newZoom);
 		var width = app.activeDocument.fileSize.x / app.tile.size.x * RenderManager.tileSize * scale;
 		var height = app.activeDocument.fileSize.y / app.tile.size.y * RenderManager.tileSize * scale;
-		if (width < viewSize.x || height < viewSize.y) {
+		if (width < frameSize.cX || height < frameSize.cY) {
 			// if after zoomimg the document becomes smaller than the viewing area
-			width = Math.max(width, viewSize.x);
-			height = Math.max(height, viewSize.y);
+			width = Math.max(width, frameSize.cX);
+			height = Math.max(height, frameSize.cY);
 			if (!this._map.options._origMaxBounds) {
 				this._map.options._origMaxBounds = this._map.options.maxBounds;
 			}
@@ -3919,6 +3919,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			var mapPanePos = this._map._getMapPanePos();
 			window.L.DomUtil.setPosition(this._container, new cool.Point(-mapPanePos.x , -mapPanePos.y));
 		}
+		// For Calc the viewed rectangle is set directly: by the layout on scroll,
+		// and by _resetView via ViewLayoutCalc.setViewRectangleFromPointAndScale
+		// on zoom. Deriving it from the map pane here would reintroduce the
+		// map-element dependency.
+		if (app.activeDocument && app.activeDocument.activeLayout
+			&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc')
+			return;
 		var documentBounds = this._map.getPixelBoundsCore();
 		var documentPos = documentBounds.min;
 		var documentEndPos = documentBounds.max;

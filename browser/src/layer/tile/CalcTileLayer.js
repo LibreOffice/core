@@ -437,7 +437,14 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 			this._mobileChecksAfterResizeEvent(heightIncreased);
 		}
 
-		// Restore the scroll position kept from before the size update.
+		// The viewed rectangle spans the visible frame. Now that the frame size
+		// is known, rebuild it at that size (twips at the current zoom) and
+		// re-apply the scroll position. _syncTilePanePos no longer maintains the
+		// viewed rectangle for Calc, so establishing it here is what makes the
+		// document draw on load and after a resize.
+		const frame = app.activeDocument.activeLayout.frameSize;
+		app.activeDocument.activeLayout.viewedRectangle = cool.SimpleRectangle.fromCorePixels(
+			[scrollX, scrollY, frame.pX, frame.pY]);
 		app.activeDocument.activeLayout.scrollTo(scrollX, scrollY);
 
 		if (sizeChanged || force) {

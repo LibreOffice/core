@@ -346,6 +346,27 @@ class ViewLayoutCalc extends ViewLayoutNewBase {
 		if (deltaX !== 0 || deltaY !== 0) this.scroll(deltaX, deltaY);
 	}
 
+	// Rebuild the viewed rectangle for a new zoom: centre it on the given
+	// document-space point and size it to the current frame at the given scale.
+	// point is in twips, scale is the twips-to-core-pixel factor for the new
+	// zoom. Map._resetView calls this so the zoom position is driven by the
+	// layout (from the canvas frame) instead of the leaflet map element.
+	public setViewRectangleFromPointAndScale(
+		point: cool.SimplePoint,
+		scale: number,
+	): void {
+		if (!scale) return;
+		const frame = this.frameSize;
+		const widthTwips = Math.round(frame.pX / scale);
+		const heightTwips = Math.round(frame.pY / scale);
+		this.viewedRectangle = new cool.SimpleRectangle(
+			Math.round(point.x - widthTwips / 2),
+			Math.round(point.y - heightTwips / 2),
+			widthTwips,
+			heightTwips,
+		);
+	}
+
 	// Recompute the visible entries of the row and column headers after a
 	// scroll. _updateCanvas() refreshes each header's HeaderInfo from the
 	// current viewed rectangle and requests a redraw; onDraw stays draw-only.

@@ -1427,6 +1427,22 @@ window.L.Map = window.L.Evented.extend({
 			this.fire('load');
 		}
 
+		// For Calc the viewed rectangle, not the map pane, drives what is drawn.
+		// The new zoom scale is now in effect (viewreset updated
+		// app.twipsToPixels), so set it from the post-zoom centre before 'move'
+		// so its listeners see the new position. Hand the layout a document-space
+		// point and the new scale; other layouts still derive the rectangle from
+		// the map pane in _syncTilePanePos.
+		if ((zoomChanged || loading)
+			&& app.activeDocument && app.activeDocument.activeLayout
+			&& app.activeDocument.activeLayout.type === 'ViewLayoutCalc') {
+			var centerCore = this.project(center, zoom).multiplyBy(app.dpiScale);
+			var centerPoint = cool.SimplePoint.fromCorePixels(
+				[Math.round(centerCore.x), Math.round(centerCore.y)]);
+			app.activeDocument.activeLayout.setViewRectangleFromPointAndScale(
+				centerPoint, app.twipsToPixels);
+		}
+
 		this.fire('move');
 
 		if (zoomChanged) {
