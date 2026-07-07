@@ -59,8 +59,7 @@ protected:
 void KitCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell,
                       Annotation& rAnnotation)
 {
-    // callbacks only if tiled annotations are explicitly turned off by COKit client
-    if (!comphelper::COKit::isActive() || comphelper::COKit::isTiledAnnotations())
+    if (!comphelper::COKit::isActive())
         return;
 
     OString aPayload = rAnnotation.ToJSON(nType);
@@ -69,8 +68,7 @@ void KitCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewSh
 
 void KitCommentNotifyAll(CommentNotificationType nType, Annotation& rAnnotation)
 {
-    // callbacks only if tiled annotations are explicitly turned off by COKit client
-    if (!comphelper::COKit::isActive() || comphelper::COKit::isTiledAnnotations())
+    if (!comphelper::COKit::isActive())
         return;
 
     // The comment belongs to a single document. When several documents share
