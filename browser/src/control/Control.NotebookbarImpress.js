@@ -753,7 +753,11 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'command': '.uno:SidebarDeck.PropertyDeck',
 				'accessibility': { focusBack: true, combination: 'SD', de: null }
 			},
-			!this.map['wopi'].DisableAISettings ? {
+			// Show the AI Assistant only to a non-anonymous user who may either
+			// configure AI or already has a configured provider. A guest can do
+			// neither, so they never see it.
+			!this.map['wopi'].IsAnonymousUser &&
+			(!this.map['wopi'].DisableAISettings || this.map['wopi'].AIConfigured) ? {
 				'id': 'view-ai-sidebar',
 				'type': 'bigcustomtoolitem',
 				'text': _('AI Assistant'),

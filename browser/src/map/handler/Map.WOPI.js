@@ -38,6 +38,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	EnableInsertRemoteLink: false,
 	EnableRemoteAIContent: false,
 	DisableAISettings: false,
+	IsAnonymousUser: false,
 	AIConfigured: false,
 	AIModelName: '',
 	EnableShare: false,
@@ -164,6 +165,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 		this.EnableRemoteLinkPicker = !!wopiInfo['EnableRemoteLinkPicker'];
 		this.EnableRemoteAIContent = !!wopiInfo['EnableRemoteAIContent'];
 		this.DisableAISettings = !!wopiInfo['DisableAISettings'];
+		this.IsAnonymousUser = !!wopiInfo['IsAnonymousUser'];
 		this.AIConfigured = !!wopiInfo['AIConfigured'];
 		this.AIModelName = wopiInfo['AIModelName'] || '';
 		this.AIEthicalRating = wopiInfo['AIEthicalRating'] || 'U';

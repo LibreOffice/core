@@ -1582,6 +1582,9 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
                   !ConfigUtil::getConfigValue<bool>("ai.enabled", false) ||
                       !ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true) ||
                       wopiFileInfo->getDisableAISettings());
+    // An anonymous user cannot configure or use AI, so the client hides the
+    // AI entry points for them.
+    wopiInfo->set("IsAnonymousUser", wopiFileInfo->getIsAnonymousUser());
 
     // The AI credential resolution below refuses AI for an anonymous user, so
     // set that flag before it runs rather than only in the block at the end of
