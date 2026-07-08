@@ -41,7 +41,6 @@ protected:
     Reference<css::lang::XComponent> m_xCalcComponent; // keep-alive for FormulaParser
     Reference<css::sheet::XFormulaParser> m_xFormulaParser;
     Reference<XRow> m_xRow;
-    Reference<XResultSet> m_xResultSet;
 
     void exportGroupsExpressionAsFunction(const Reference<XGroups>& _xGroups);
     static OUString getColumnNameString(const Reference<XReportDefinition>& _xReportDefinition);
@@ -49,6 +48,8 @@ protected:
     static Any callFunction(const Sequence<Any>& aArgs, const OUString& sFuncName);
     static sal_Int32 getColumnNum(std::u16string_view sColumnName, Reference<XRow>& xRow);
     bool exportFormula(const OUString& _sFormula);
+    static Reference<XResultSet>
+    getResultSet(const Reference<XReportDefinition>& _xReportDefinition);
     virtual void exportReport(const Reference<XReportDefinition>& _xReportDefinition) override;
     virtual void exportStyleName(XPropertySet* _xProp, comphelper::AttributeList& _rAtt,
                                  const OUString& _sName) override;

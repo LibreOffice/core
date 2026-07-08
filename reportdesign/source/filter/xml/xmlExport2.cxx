@@ -37,6 +37,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
@@ -92,24 +94,38 @@ void ORptExecuteExport::exportReport(const Reference<XReportDefinition>& _xRepor
     if (!_xReportDefinition.is())
         return;
 
-    Reference<XConnection> xConnection = _xReportDefinition->getActiveConnection();
-    Reference<XStatement> xStatement = xConnection->createStatement();
-    OUString sCommand = _xReportDefinition->getCommand();
-
-    // Get a comma delimited list of Column names to use in the SELECT statement
-    // Using SELECT * wasn't allowing the column names to be queried for some reason
-    // This also ensures we have the correct ordering of the columns
-    OUString sColumnNames = getColumnNameString(_xReportDefinition);
-
-    Reference<XResultSet> xResultSet = xStatement->executeQuery(
-        u"SELECT "_ustr + sColumnNames + u" FROM \""_ustr + sCommand + u"\""_ustr);
-    m_xResultSet = xResultSet;
-
     exportFunctions(_xReportDefinition->getFunctions());
     exportGroupsExpressionAsFunction(_xReportDefinition->getGroups());
 
+    if (_xReportDefinition->getReportHeaderOn())
+        exportSection(_xReportDefinition->getReportHeader());
+
+    if (_xReportDefinition->getPageHeaderOn())
+    {
+        OUStringBuffer sValue;
+        sal_Int16 nRet = _xReportDefinition->getPageHeaderOption();
+        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
+        if (SvXMLUnitConverter::convertEnum(sValue, nRet, aXML_EnumMap))
+            AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION, sValue.makeStringAndClear());
+
+        exportSection(_xReportDefinition->getPageHeader(), true);
+    }
+
     // Detail section gets generated
     exportGroup(_xReportDefinition, 0, false);
+
+    if (_xReportDefinition->getPageFooterOn())
+    {
+        OUStringBuffer sValue;
+        sal_Int16 nRet = _xReportDefinition->getPageFooterOption();
+        const SvXMLEnumMapEntry<sal_Int16>* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
+        if (SvXMLUnitConverter::convertEnum(sValue, nRet, aXML_EnumMap))
+            AddAttribute(XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION, sValue.makeStringAndClear());
+
+        exportSection(_xReportDefinition->getPageFooter(), true);
+    }
+    if (_xReportDefinition->getReportFooterOn())
+        exportSection(_xReportDefinition->getReportFooter());
 }
 
 void ORptExecuteExport::exportReportElement(const Reference<XReportControlModel>& _xReportElement)
@@ -170,11 +186,13 @@ void ORptExecuteExport::exportSection(const Reference<XSection>& _xSection, bool
 
     if (_xSection->getName() == u"Detail"_ustr)
     {
-        Reference<XRow> xRow(m_xResultSet, UNO_QUERY);
+        Reference<XResultSet> xResultSet = getResultSet(m_pReportDefinition);
+
+        Reference<XRow> xRow(xResultSet, UNO_QUERY);
         m_xRow = xRow;
 
         exportTableColumns(_xSection);
-        while (m_xResultSet->next())
+        while (xResultSet->next())
         {
             exportContainer(_xSection);
         }
@@ -379,43 +397,12 @@ void ORptExecuteExport::exportGroup(const Reference<XReportDefinition>& _xReport
         }
         else
         {
-            if (xGroup->getSortAscending())
-                AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_ASCENDING, XML_TRUE);
-
-            if (xGroup->getStartNewColumn())
-                AddAttribute(XML_NAMESPACE_REPORT, XML_START_NEW_COLUMN, XML_TRUE);
-            if (xGroup->getResetPageNumber())
-                AddAttribute(XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER, XML_TRUE);
-
-            const OUString sField = xGroup->getExpression();
-            OUString sExpression = sField;
-            if (!sExpression.isEmpty())
-            {
-                sExpression = sExpression.replaceAll(u"\"", u"\"\"");
-
-                TGroupFunctionMap::const_iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
-                if (aGroupFind != m_aGroupFunctionMap.end())
-                    sExpression = aGroupFind->second->getName();
-                sExpression = "rpt:HASCHANGED(\"" + sExpression + "\")";
-            }
-            AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION, sField);
-            AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION, sExpression);
-            sal_Int16 nRet = xGroup->getKeepTogether();
-            OUStringBuffer sValue;
-            const SvXMLEnumMapEntry<sal_Int16>* aXML_KeepTogetherEnumMap
-                = OXMLHelper::GetKeepTogetherOptions();
-            if (SvXMLUnitConverter::convertEnum(sValue, nRet, aXML_KeepTogetherEnumMap))
-                AddAttribute(XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER, sValue.makeStringAndClear());
-
-            SvXMLElementExport aGroup(*this, XML_NAMESPACE_REPORT, XML_GROUP, true, true);
             exportFunctions(xGroup->getFunctions());
             if (xGroup->getHeaderOn())
             {
                 Reference<XSection> xSection = xGroup->getHeader();
                 if (xSection->getRepeatSection())
                     AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION, XML_TRUE);
-                SvXMLElementExport aGroupSection(*this, XML_NAMESPACE_REPORT, XML_GROUP_HEADER,
-                                                 true, true);
                 exportSection(xSection);
             }
             exportGroup(_xReportDefinition, _nPos + 1, _bExportAutoStyle);
@@ -424,8 +411,6 @@ void ORptExecuteExport::exportGroup(const Reference<XReportDefinition>& _xReport
                 Reference<XSection> xSection = xGroup->getFooter();
                 if (xSection->getRepeatSection())
                     AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION, XML_TRUE);
-                SvXMLElementExport aGroupSection(*this, XML_NAMESPACE_REPORT, XML_GROUP_FOOTER,
-                                                 true, true);
                 exportSection(xSection);
             }
         }
@@ -437,8 +422,6 @@ void ORptExecuteExport::exportGroup(const Reference<XReportDefinition>& _xReport
     else
     {
         // Detail section gets exported here
-        // Commenting out for now
-        //SvXMLElementExport aGroupSection(*this,XML_NAMESPACE_REPORT, XML_DETAIL, true, true);
         exportSection(_xReportDefinition->getDetail(), false);
     }
 }
@@ -646,6 +629,81 @@ OUString ORptExecuteExport::getStringFromAny(Any& aAnswer)
     }
     return aRet;
 }
+
+Reference<XResultSet>
+ORptExecuteExport::getResultSet(const Reference<XReportDefinition>& _xReportDefinition)
+{
+    Reference<XConnection> xConnection = _xReportDefinition->getActiveConnection();
+    Reference<XStatement> xStatement = xConnection->createStatement();
+    OUString sCommand = _xReportDefinition->getCommand();
+
+    OUString sColumnNames = getColumnNameString(_xReportDefinition);
+
+    Reference<XGroups> xGroups = _xReportDefinition->getGroups();
+    sal_Int32 nCount = xGroups.is() ? xGroups->getCount() : 0;
+
+    OUString sOrderByStatement;
+
+    if (nCount > 0)
+    {
+        sOrderByStatement = u" ORDER BY "_ustr;
+
+        for (sal_Int32 nPos = 0; nPos < nCount; ++nPos)
+        {
+            Reference<XGroup> xGroup(xGroups->getByIndex(nPos), uno::UNO_QUERY);
+            const OUString sField = xGroup->getExpression();
+
+            OUString sOrder = xGroup->getSortAscending() ? u" ASC"_ustr : u" DESC"_ustr;
+
+            if (nPos > 0)
+                sOrderByStatement += u", "_ustr;
+
+            sOrderByStatement += u"\""_ustr + sField + u"\""_ustr + sOrder;
+        }
+    }
+
+    // The report's command can name a table, a stored query, or be a free-form
+    // SQL statement; each needs different treatment to end up in the FROM
+    // clause of a valid SELECT.
+    OUString sFromClause;
+    switch (_xReportDefinition->getCommandType())
+    {
+        case sdb::CommandType::TABLE:
+        {
+            OUString sCatalog, sSchema, sTable;
+            dbtools::qualifiedNameComponents(xConnection->getMetaData(), sCommand, sCatalog,
+                                             sSchema, sTable,
+                                             dbtools::EComposeRule::InDataManipulation);
+            sFromClause
+                = dbtools::composeTableNameForSelect(xConnection, sCatalog, sSchema, sTable);
+            break;
+        }
+        case sdb::CommandType::QUERY:
+        {
+            OUString sQueryCommand;
+            Reference<sdb::XQueriesSupplier> xQueriesAccess(xConnection, UNO_QUERY);
+            Reference<container::XNameAccess> xQueries(
+                xQueriesAccess.is() ? xQueriesAccess->getQueries() : nullptr);
+            if (xQueries.is() && xQueries->hasByName(sCommand))
+            {
+                Reference<XPropertySet> xQuery(xQueries->getByName(sCommand), UNO_QUERY);
+                if (xQuery.is())
+                    xQuery->getPropertyValue(u"Command"_ustr) >>= sQueryCommand;
+            }
+            sFromClause = u"("_ustr + sQueryCommand + u") AS \"T_ReportSource\""_ustr;
+            break;
+        }
+        default: // sdb::CommandType::COMMAND: sCommand is already a full SQL statement
+            sFromClause = u"("_ustr + sCommand + u") AS \"T_ReportSource\""_ustr;
+            break;
+    }
+
+    Reference<XResultSet> xResultSet = xStatement->executeQuery(
+        u"SELECT "_ustr + sColumnNames + u" FROM "_ustr + sFromClause + sOrderByStatement);
+
+    return xResultSet;
+}
+
 } // rptxml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
