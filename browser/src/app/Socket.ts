@@ -564,9 +564,14 @@ class Socket {
 		app.idleHandler._serverRecycling = false;
 
 		if (this._map._docLayer) {
-			// Remember the scroll offset before teardown changes the layout,
-			// so a reconnect can put the view back where it was.
-			if (app.activeDocument)
+			// Remember the scroll offset before teardown changes the layout, so
+			// a reconnect can put the view back where it was. Save it only on
+			// the first close of a reconnect cycle. A second close can arrive
+			// once teardown has already moved the view, and saving again then
+			// would replace the real offset with that moved-away one. While a
+			// reconnect is already in progress the offset from the first close
+			// is the one to keep.
+			if (app.activeDocument && !this._reconnecting)
 				this._map._docLayer._savedScrollPos =
 					app.activeDocument.activeLayout.viewedRectangle.clone();
 			this._map._docLayer._restoringViewScroll = false;
