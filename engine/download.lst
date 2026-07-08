@@ -644,8 +644,8 @@ SQLITE3_TARBALL := sqlite-amalgamation-3520000.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-STAROFFICE_SHA256SUM := f94fb0ad8216f97127bedef163a45886b43c62deac5e5b0f5e628e234220c8db
-STAROFFICE_VERSION_MICRO := 7
+STAROFFICE_SHA256SUM := bbca92882e96c55bd1527670866d6bc7529ccb12786da55a2398b60a063378da
+STAROFFICE_VERSION_MICRO := 8
 STAROFFICE_TARBALL := libstaroffice-0.0.$(STAROFFICE_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
