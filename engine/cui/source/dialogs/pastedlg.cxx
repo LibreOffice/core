@@ -26,7 +26,9 @@
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <tools/lineend.hxx>
+#include <tools/urlobj.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <comphelper/kit.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 SvPasteObjectDialog::SvPasteObjectDialog(weld::Window* pParent)
@@ -181,16 +183,7 @@ void SvPasteObjectDialog::PreGetFormat( const TransferableDataHelper &rHelper )
     ObjectLB().thaw();
     SelectObject();
 
-    if( !aSourceName.isEmpty() )
-    {
-        if( !aTypeName.isEmpty() )
-            aTypeName += "\n";
-
-        aTypeName += aSourceName;
-        aTypeName = convertLineEnd(aTypeName, GetSystemLineEnd());
-    }
-
-    m_xFtObjectSource->set_label(aTypeName);
+    SetSourceLabel(aTypeName, aSourceName);
 }
 
 SotClipboardFormatId SvPasteObjectDialog::GetFormatOnly()
@@ -303,16 +296,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
     ObjectLB().thaw();
     SelectObject();
 
-    if( !aSourceName.isEmpty() )
-    {
-        if( !aTypeName.isEmpty() )
-            aTypeName += "\n";
-
-        aTypeName += aSourceName;
-        aTypeName = convertLineEnd(aTypeName, GetSystemLineEnd());
-    }
-
-    m_xFtObjectSource->set_label(aTypeName);
+    SetSourceLabel(aTypeName, aSourceName);
 
     if (run() == RET_OK)
     {
@@ -328,6 +312,35 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
     }
 
     return nSelFormat;
+}
+
+void SvPasteObjectDialog::SetSourceLabel(OUString aTypeName, OUString aSourceName)
+{
+    // In the app and online the document is edited through a temporary working
+    // copy, so the source is a long temporary path that means nothing to the
+    // user. Show just the file name of the source in that case.
+    if (comphelper::COKit::isActive() && !aSourceName.isEmpty())
+    {
+        INetURLObject aSourceUrl(aSourceName);
+        if (!aSourceUrl.HasError())
+        {
+            const OUString aName
+                = aSourceUrl.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
+            if (!aName.isEmpty())
+                aSourceName = aName;
+        }
+    }
+
+    if (!aSourceName.isEmpty())
+    {
+        if (!aTypeName.isEmpty())
+            aTypeName += "\n";
+
+        aTypeName += aSourceName;
+        aTypeName = convertLineEnd(aTypeName, GetSystemLineEnd());
+    }
+
+    m_xFtObjectSource->set_label(aTypeName);
 }
 
 void SvPasteObjectDialog::SetObjName( const SvGlobalName & rClass, const OUString & rObjName )

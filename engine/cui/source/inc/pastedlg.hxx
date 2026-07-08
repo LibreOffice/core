@@ -42,6 +42,8 @@ class SvPasteObjectDialog : public weld::GenericDialogController
     weld::TreeView& ObjectLB() { return *m_xLbInsertList; }
 
     void            SelectObject();
+    /// Compose the type and source strings and write them to the source field.
+    void            SetSourceLabel(OUString aTypeName, OUString aSourceName);
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
 
