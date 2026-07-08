@@ -92,14 +92,14 @@ $(call gb_Helper_abbreviate_dirs,\
 			$(if $(filter -clr,$(2)),,$(if $(5),$(gb_COMPILER_PLUGINS))) \
 			$(if $(COMPILER_TEST),-fsyntax-only -ferror-limit=0 -Xclang -verify) \
 			$(PCHFLAGS) \
-			$(if $(COMPILER_TEST),,$(if $(COM_IS_CLANG),$(gb_COMPILERDEPFLAGS),/sourceDependencies $(4).json)) \
+			$(if $(COMPILER_TEST),,$(if $(or $(COM_IS_CLANG),$(T_USE_CLANG)),$(gb_COMPILERDEPFLAGS),/sourceDependencies $(4).json)) \
 			$(if $(filter YES,$(LIBRARY_X64)), -U_X86_ -D_AMD64_,) \
 			$(if $(filter YES,$(PE_X86)), -D_X86_ -U_AMD64_,)) \
 		$(INCLUDE) \
 		-Fd$(PDBFILE) \
 		-c $(3) \
 		-Fo$(1)) \
-		$(if $(COMPILER_TEST),,$(if $(COM_IS_CLANG),$(call gb_create_deps,$(4),$(1),$(3)),> $(1).clout 2>&1 || { cat $(1).clout >&2; exit 1; }))
+		$(if $(COMPILER_TEST),,$(if $(or $(COM_IS_CLANG),$(T_USE_CLANG)),$(call gb_create_deps,$(4),$(1),$(3)),> $(1).clout 2>&1 || { cat $(1).clout >&2; exit 1; }))
 endef
 
 # PrecompiledHeader class
