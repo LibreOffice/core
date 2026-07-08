@@ -142,7 +142,7 @@ CFormatRegistrar::CFormatRegistrar( const Reference< XComponentContext >& rxCont
 void CFormatRegistrar::RegisterFormats(
     const Reference< XTransferable >& aXTransferable, CFormatEtcContainer& aFormatEtcContainer )
 {
-    Sequence< DataFlavor > aFlavorList = aXTransferable->getTransferDataFlavors( );
+    cpo::uno::Sequence< DataFlavor > aFlavorList = aXTransferable->getTransferDataFlavors( );
     sal_Int32  nFlavors                = aFlavorList.getLength( );
     bool   bUnicodeRegistered      = false;
     DataFlavor aFlavor;

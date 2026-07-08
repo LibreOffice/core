@@ -59,11 +59,11 @@ struct METAFILEHEADER
 
 // convert a windows metafile picture to a LibreOffice metafile picture
 
-Sequence< sal_Int8 > WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFilePict )
+cpo::uno::Sequence< sal_Int8 > WinMFPictToOOMFPict( cpo::uno::Sequence< sal_Int8 >& aMetaFilePict )
 {
     OSL_ASSERT( aMetaFilePict.getLength( ) == sizeof( METAFILEPICT ) );
 
-    Sequence< sal_Int8 > mfpictStream;
+    cpo::uno::Sequence< sal_Int8 > mfpictStream;
     METAFILEPICT* pMFPict = reinterpret_cast< METAFILEPICT* >( aMetaFilePict.getArray( ) );
     HMETAFILE hMf = pMFPict->hMF;
     sal_uInt32 nCount = GetMetaFileBitsEx( hMf, 0, nullptr );
@@ -129,9 +129,9 @@ Sequence< sal_Int8 > WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFilePict )
 
 // convert a windows enhanced metafile to a LibreOffice metafile
 
-Sequence< sal_Int8 > WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
+cpo::uno::Sequence< sal_Int8 > WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
 {
-    Sequence< sal_Int8 >    aRet;
+    cpo::uno::Sequence< sal_Int8 >    aRet;
     UINT                    nSize = 0;
 
     if( hEnhMetaFile &&
@@ -148,7 +148,7 @@ Sequence< sal_Int8 > WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
 
 // convert a LibreOffice metafile picture to a windows metafile picture
 
-HMETAFILEPICT OOMFPictToWinMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
+HMETAFILEPICT OOMFPictToWinMFPict( cpo::uno::Sequence< sal_Int8 > const & aOOMetaFilePict )
 {
     HMETAFILE       hMtf = SetMetaFileBitsEx( aOOMetaFilePict.getLength(), reinterpret_cast<unsigned char const *>(aOOMetaFilePict.getConstArray()) );
 
@@ -172,7 +172,7 @@ HMETAFILEPICT OOMFPictToWinMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict 
 
 // convert a LibreOffice metafile picture to a windows enhanced metafile picture
 
-HENHMETAFILE OOMFPictToWinENHMFPict( Sequence< sal_Int8 > const & aOOMetaFilePict )
+HENHMETAFILE OOMFPictToWinENHMFPict( cpo::uno::Sequence< sal_Int8 > const & aOOMetaFilePict )
 {
     HENHMETAFILE hEnhMtf = SetEnhMetaFileBits( aOOMetaFilePict.getLength(), reinterpret_cast<unsigned char const *>(aOOMetaFilePict.getConstArray()) );
 
@@ -181,10 +181,10 @@ HENHMETAFILE OOMFPictToWinENHMFPict( Sequence< sal_Int8 > const & aOOMetaFilePic
 
 // convert a windows device independent bitmap into a LibreOffice bitmap
 
-Sequence< sal_Int8 > WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
+cpo::uno::Sequence< sal_Int8 > WinDIBToOOBMP( const cpo::uno::Sequence< sal_Int8 >& aWinDIB )
 {
     OSL_ENSURE(o3tl::make_unsigned(aWinDIB.getLength()) > sizeof(BITMAPINFOHEADER), "CF_DIBV5/CF_DIB too small (!)");
-    Sequence< sal_Int8 > ooBmpStream(aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER));
+    cpo::uno::Sequence< sal_Int8 > ooBmpStream(aWinDIB.getLength( ) + sizeof(BITMAPFILEHEADER));
 
     const BITMAPINFOHEADER* pBmpInfoHdr = reinterpret_cast< const BITMAPINFOHEADER* >(aWinDIB.getConstArray());
     BITMAPFILEHEADER* pBmpFileHdr = reinterpret_cast< BITMAPFILEHEADER* >(ooBmpStream.getArray());
@@ -213,9 +213,9 @@ Sequence< sal_Int8 > WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB )
 
 // convert a LibreOffice bitmap into a windows device independent bitmap
 
-Sequence< sal_Int8 > OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
+cpo::uno::Sequence< sal_Int8 > OOBmpToWinDIB( cpo::uno::Sequence< sal_Int8 >& aOOBmp )
 {
-    Sequence< sal_Int8 > winDIBStream( aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
+    cpo::uno::Sequence< sal_Int8 > winDIBStream( aOOBmp.getLength( ) - sizeof( BITMAPFILEHEADER ) );
 
     memcpy( winDIBStream.getArray( ),
                     aOOBmp.getArray( )  + sizeof( BITMAPFILEHEADER ),
@@ -245,12 +245,12 @@ const std::string TAG_END_HTML("</html>");
 const std::string TAG_BODY("<body");
 const std::string TAG_END_BODY("</body");
 
-Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
+cpo::uno::Sequence<sal_Int8> TextHtmlToHTMLFormat(cpo::uno::Sequence<sal_Int8> const & aTextHtml)
 {
     OSL_ASSERT(aTextHtml.getLength() > 0);
 
     if (aTextHtml.getLength() <= 0)
-        return Sequence<sal_Int8>();
+        return cpo::uno::Sequence<sal_Int8>();
 
     // fill the buffer with dummy values to calc the exact length
     std::string dummyHtmlHeader = GetHtmlFormatHeader(0, 0, 0, 0);
@@ -271,7 +271,7 @@ Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
     std::string htmlFormat = GetHtmlFormatHeader(nStartHtml, nEndHtml, nStartFragment, nEndFragment);
     htmlFormat += textHtml;
 
-    Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); // space the trailing '\0'
+    cpo::uno::Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); // space the trailing '\0'
     memset(byteSequence.getArray(), 0, byteSequence.getLength());
 
     memcpy(
@@ -335,7 +335,7 @@ static std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
     return target;
 }
 
-typedef Sequence<sal_Int8> ByteSequence_t;
+typedef cpo::uno::Sequence<sal_Int8> ByteSequence_t;
 
 /* Calculate the size required for turning a string list into
    a double '\0' terminated string buffer */
@@ -391,12 +391,12 @@ cpo::uno::Sequence<sal_Int8> CF_HDROPToFileList(HGLOBAL hGlobal)
 
 // convert a windows bitmap handle into a LibreOffice bitmap
 
-Sequence< sal_Int8 > WinBITMAPToOOBMP( HBITMAP aHBMP )
+cpo::uno::Sequence< sal_Int8 > WinBITMAPToOOBMP( HBITMAP aHBMP )
 {
     if (BITMAP bm{}; GetObjectW(aHBMP, sizeof(bm), &bm))
     {
         size_t nDataBytes = ((bm.bmWidth * bm.bmBitsPixel + 31) / 32) * 4 * bm.bmHeight;
-        Sequence< sal_Int8 > aBitmapStream(
+        cpo::uno::Sequence< sal_Int8 > aBitmapStream(
             sizeof(BITMAPINFO) +
             nDataBytes
             );
