@@ -2087,10 +2087,16 @@ img.context-menu-icon {
 	overflow: auto;
 	min-width: 220px;
 	min-height: 200px;
-	max-width: 95vw;
+	max-width: 498px;
 	max-height: 90vh;
 	display: flex;
 	flex-direction: column;
+}
+
+/* Once the user drags the resize handle the browser writes an inline width on
+   .ui-dialog-content; raise the cap so the popup can grow up to the viewport. */
+.autofilter-popup .jsdialog.lokdialog.ui-dialog-content[style*='width'] {
+	max-width: 95vw;
 }
 
 /* Ancestor chain of the check list, made into flex columns so the listbox
@@ -2120,6 +2126,9 @@ img.context-menu-icon {
 	flex: 1 1 auto;
 	max-height: 150px;
 	min-height: 0;
+	/* Count the border and padding into the stretched width, so the list ends
+	   at its container's edge and its vertical scrollbar stays fully visible. */
+	box-sizing: border-box;
 }
 
 /* Once the user drags the resize handle the browser writes an inline height on
