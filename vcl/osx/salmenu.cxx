@@ -974,6 +974,8 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData, NSDictionary *
     mpParentMenu( nullptr ),
     mpSubMenu( nullptr ),
     mpMenuItem( nil ),
+    mpOrigTitle( nil ),
+    mpAltTitle( nil ),
     mpMenuTranslations( [pMenuTranslations retain] )
 {
     if (pItemData->eType == MenuItemType::SEPARATOR)
@@ -1040,6 +1042,9 @@ void AquaSalMenuItem::setTitle(const OUString& i_rText)
     if (aText.endsWith("...", &aText))
         aText += u"\u2026";
 
+    // autorelease on nil should be a noop, but better be safe than sorry
+    if (mpOrigTitle)
+        [mpOrigTitle autorelease];
     mpOrigTitle = CreateNSString( aText );
     if ( !mpOrigTitle )
         return;

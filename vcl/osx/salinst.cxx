@@ -353,7 +353,7 @@ AquaSalInstance::AquaSalInstance()
     mpListNodeCell = [[NSButtonCell alloc] init];
 
     NSString *path = [[[NSBundle mainBundle] pathForResource:@"MenuTranslations" ofType:@"plist"] autorelease];
-    mpMenuTranslations = [NSDictionary dictionaryWithContentsOfFile:path];
+    mpMenuTranslations = [[NSDictionary alloc] initWithContentsOfFile:path];
 
 #if HAVE_FEATURE_SKIA
     AquaSkiaSalGraphicsImpl::prepareSkia();
