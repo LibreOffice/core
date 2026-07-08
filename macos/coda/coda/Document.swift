@@ -258,7 +258,7 @@ class Document: NSDocument {
                 win.standardWindowButton(.documentIconButton)?.image = icon
 
                 // Show the icon at the right side of the tab in the tabbed view too
-                let view = NSImageView(image: icon)
+                let view = PassthroughImageView(image: icon)
                 NSLayoutConstraint.activate([
                     view.widthAnchor.constraint(equalToConstant: 24), // add some breathing space to the left and right, it's centered inside that
                     view.heightAnchor.constraint(equalToConstant: 16),
@@ -621,6 +621,19 @@ class Document: NSDocument {
 
         // Fallback to app icon
         return NSApp.applicationIconImage
+    }
+}
+
+/**
+ * A decorative image view that stays out of mouse event routing.
+ *
+ * Ignore the mouse events, this is just a decoration. When we have the events
+ * enabled, the scrolling using mouse wheel stops any time the mouse pointer
+ * appears over the icon.
+ */
+private class PassthroughImageView: NSImageView {
+    override func hitTest(_ point: NSPoint) -> NSView? {
+        return nil
     }
 }
 
