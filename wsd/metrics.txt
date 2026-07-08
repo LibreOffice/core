@@ -17,6 +17,7 @@ COOLWSD
     coolwsd_cpu_time_seconds – the CPU usage by current coolwsd process.
     coolwsd_memory_used_bytes – the memory used by current coolwsd process: PSS(coolwsd).
     coolwsd_tcp_connections_used - number of used TCP connections.
+    coolwsd_tcp_connections_buffer_closed_bloated - connections force closed due to over resource consumption.
 
 FORKIT
 

@@ -1269,6 +1269,7 @@ void AdminModel::getMetrics(std::ostream& oss) const
     oss << "coolwsd_memory_used_bytes " << ProcUtil::getMemoryUsagePSS(ProcUtil::getProcessId()) * 1024
         << '\n';
     oss << "coolwsd_tcp_connections_used " << StreamSocket::getExternalConnectionCount() << '\n';
+    oss << "coolwsd_tcp_connections_closed_bloated " << StreamSocket::getBufferBloatClosedCount() << '\n';
     oss << '\n';
 
     oss << "forkit_count " << getPidsFromProcName(forkitRe, nullptr) << '\n';

@@ -107,6 +107,7 @@ net::DefaultValues net::Defaults = { .inactivityTimeout = net::DefaultInactivity
 
 size_t StreamSocket::BufferBloatCloseSize = 100 * 1024 * 1024;
 std::chrono::milliseconds StreamSocket::BufferBloatCloseDuration = std::chrono::minutes(2);
+std::atomic<size_t> StreamSocket::BufferBloatClosedCount = 0;
 
 constexpr std::string_view Socket::toString(Type t)
 {

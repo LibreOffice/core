@@ -418,8 +418,10 @@ void NetUtilWhiteBoxTests::testStreamSocketBufferBloatClose()
         LOK_ASSERT_EQUAL(socket->isOpen(), !shouldBeClosed);
     }
 
-    // Once it has stayed bloated past the period, the poll handler closes it.
+    // Once it has stayed bloated past the period, the poll handler closes it
+    // and the buffer-bloat close is counted.
     {
+        const size_t closedBefore = StreamSocket::getBufferBloatClosedCount();
         SocketDisposition disposition(socket);
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         // by now has to be closed
@@ -427,6 +429,7 @@ void NetUtilWhiteBoxTests::testStreamSocketBufferBloatClose()
         LOK_ASSERT_EQUAL(true, disposition.isClosed());
         LOK_ASSERT(!socket->isOpen());
         LOK_ASSERT(socket->isShutdown());
+        LOK_ASSERT_EQUAL(closedBefore + 1, StreamSocket::getBufferBloatClosedCount());
     }
 
     ::close(fds[1]);
