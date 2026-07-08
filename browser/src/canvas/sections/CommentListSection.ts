@@ -227,9 +227,7 @@ export class CommentSection extends CanvasSectionObject {
 		offset: number;
 		width: number;
 		commentWidth: number;
-		collapsedMarginToTheEdge: number;
 		deflectionOfSelectedComment: number;
-		collapsedCommentWidth: number;
 		showSelectedBigger: boolean;
 		commentsAreListed: boolean;
 		show: boolean;
@@ -298,8 +296,6 @@ export class CommentSection extends CanvasSectionObject {
 		this.sectionProperties.scrollAnnotation = null; // For impress, when 1 or more comments exist.
 		this.sectionProperties.commentWidth = CommentSection.getCommentWidth();
 		this.sectionProperties.commentWidthBigger =  588 * app.dpiScale;
-		this.sectionProperties.collapsedCommentWidth = 32 * 1.5 * app.dpiScale;
-		this.sectionProperties.collapsedMarginToTheEdge = 120; // CSS pixels.
 		this.sectionProperties.deflectionOfSelectedComment = 160; // CSS pixels.
 		this.sectionProperties.showSelectedBigger = false;
 		this.sectionProperties.calcCurrentComment = null; // We don't automatically show a Calc comment when cursor is on its cell. But we remember it to show if user presses Alt+C keys.
@@ -1832,8 +1828,7 @@ export class CommentSection extends CanvasSectionObject {
 	public showHideComment (annotation: Comment): void {
 		// This manually shows/hides comments
 		if (!this.sectionProperties.showResolved && app.map._docLayer._docType === 'text') {
-			let hide = annotation.isContainerVisible() && annotation.sectionProperties.data.resolved === 'true';
-			hide = hide || (CommentSection.isMultiColumnLayout() && this.calculateAvailableSpace() < this.sectionProperties.collapsedCommentWidth);
+			const hide = annotation.isContainerVisible() && annotation.sectionProperties.data.resolved === 'true';
 
 			if (hide && annotation.isContainerVisible()) {
 				if (this.sectionProperties.selectedComment == annotation) {
@@ -1847,18 +1842,6 @@ export class CommentSection extends CanvasSectionObject {
 				annotation.update();
 			}
 			this.update();
-		}
-		else if (CommentSection.isMultiColumnLayout()) {
-			const hide = this.calculateAvailableSpace() < this.sectionProperties.collapsedCommentWidth;
-
-			if (hide && annotation.isContainerVisible()) {
-				annotation.show();
-				annotation.update();
-			}
-			else if (!hide && !annotation.isContainerVisible()) {
-				annotation.show();
-				annotation.update();
-			}
 		}
 		else if (app.map._docLayer._docType === 'presentation' || app.map._docLayer._docType === 'drawing') {
 			if (annotation.sectionProperties.partIndex === app.map._docLayer._selectedPart || app.file.fileBasedView) {
