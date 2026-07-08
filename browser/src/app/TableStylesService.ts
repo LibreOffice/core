@@ -187,7 +187,7 @@ class TableStylesService {
 					jsontype: 'notebookbar',
 					action: 'update',
 					control: this.generateTableStylesJSON(),
-				} as JSDialogJSON,
+				} as UpdateData,
 			});
 		} else if (e.commandName === '.uno:DatabaseSettings') {
 			const enabled = e.enabled !== false;
@@ -200,7 +200,7 @@ class TableStylesService {
 						jsontype: 'notebookbar',
 						action: 'update',
 						control: this.generateTableStylesJSON(),
-					} as JSDialogJSON,
+					} as UpdateData,
 				});
 			}
 
@@ -236,7 +236,7 @@ class TableStylesService {
 							position: position,
 						},
 					},
-				} as JSDialogJSON,
+				} as any & { data: ActionData },
 			});
 		}
 	}

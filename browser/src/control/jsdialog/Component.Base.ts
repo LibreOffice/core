@@ -53,8 +53,8 @@ abstract class JSDialogComponent {
 	protected abstract setupContainer(parentContainer?: HTMLElement): void;
 
 	/// handle update message
-	protected onJSUpdate(e: any) {
-		var data = e.data;
+	protected onJSUpdate(e: { data: UpdateData }) {
+		const data = e.data;
 
 		if (data.jsontype !== this.allowedJsonType) return false;
 
@@ -63,7 +63,7 @@ abstract class JSDialogComponent {
 			return false;
 		}
 
-		if (this.model) this.model.widgetUpdate(data);
+		if (this.model) this.model.widgetUpdate(data.control);
 
 		if (!this.container) return false;
 
@@ -81,8 +81,8 @@ abstract class JSDialogComponent {
 	}
 
 	/// handle action message
-	protected onJSAction(e: any) {
-		var data = e.data;
+	protected onJSAction(e: { data: ActionData }) {
+		const data = e.data;
 
 		if (data.jsontype !== this.allowedJsonType) return false;
 

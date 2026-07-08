@@ -144,7 +144,7 @@ class NotebookbarBase extends JSDialogComponent {
 		);
 	}
 
-	protected onJSUpdate(e: any) {
+	protected onJSUpdate(e: { data: UpdateData }) {
 		if (super.onJSUpdate(e)) {
 			this.impl?.setInitialized(true);
 			return true;
@@ -159,7 +159,7 @@ class NotebookbarBase extends JSDialogComponent {
 		if (this.container) this.builder.updateWidget(this.container, widgetData);
 	}
 
-	protected onJSAction(e: any) {
+	protected onJSAction(e: { data: ActionData }) {
 		if (super.onJSAction(e)) {
 			this.impl?.setInitialized(true);
 			return true;

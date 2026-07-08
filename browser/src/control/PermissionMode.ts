@@ -231,12 +231,12 @@ class PermissionViewMode extends JSDialogComponent {
 			this.builder.executeAction(this.viewModeContainer, {
 				control_id: 'readonlyMode',
 				action_type: showReadonly ? 'show' : 'hide',
-			});
+			} as ActionData);
 
 			this.builder.executeAction(this.viewModeContainer, {
 				control_id: 'viewModeDropdownButton',
 				action_type: showDropdown ? 'show' : 'hide',
-			});
+			} as ActionData);
 
 			if (showDropdown) {
 				this.builder.updateWidget(
@@ -251,7 +251,7 @@ class PermissionViewMode extends JSDialogComponent {
 				this.notebookbarBuilder.executeAction(this.shareAsContainer, {
 					control_id: 'shareas',
 					action_type: showReadonly ? 'show' : 'hide',
-				});
+				} as ActionData);
 			}
 		}
 	}

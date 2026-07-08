@@ -76,18 +76,18 @@ class SidebarFromNotebookbarPanel extends Sidebar {
 	}
 
 	/// apply to the cached model too
-	protected onJSUpdate(e: any) {
+	protected onJSUpdate(e: { data: UpdateData }) {
 		var data = e.data;
 
 		if (data.jsontype !== this.allowedJsonType) return false;
 
-		for (const [id, model] of this.models) model.widgetUpdate(data);
+		for (const [id, model] of this.models) model.applyUpdate(data);
 
 		return super.onJSUpdate(e);
 	}
 
 	/// apply to the cached model too
-	protected onJSAction(e: any) {
+	protected onJSAction(e: { data: ActionData }) {
 		var data = e.data;
 
 		if (data.jsontype !== this.allowedJsonType) return false;

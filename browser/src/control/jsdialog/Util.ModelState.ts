@@ -92,7 +92,7 @@ class JSDialogModelState {
 	}
 
 	/// applies widget update to a model
-	public widgetUpdate(data: JSDialogJSON) {
+	public applyUpdate(data: UpdateData) {
 		if (!data || !data.control || !data.control.id) {
 			app.console.error(
 				'JSDialogModelState: bad syntax in widgetUpdate: ' +
@@ -101,12 +101,17 @@ class JSDialogModelState {
 			return;
 		}
 
-		const found = this.getById(data.control.id);
+		this.widgetUpdate(data.control);
+	}
+
+	/// applies widget update to a model
+	public widgetUpdate(widget: WidgetJSON) {
+		const found = this.getById(widget.id);
 		if (found) {
 			const id = found.id;
 			const before = this.safeStringify(found);
 			// data will no longer be used, we don't need deep copy
-			Object.assign(found, data.control);
+			Object.assign(found, widget);
 
 			if (JSDialog.verbose) {
 				app.console.debug(
@@ -122,7 +127,7 @@ class JSDialogModelState {
 	}
 
 	/// applies action to a model
-	public widgetAction(data: JSDialogJSON) {
+	public widgetAction(data: ActionData) {
 		if (!data || !data.data || !data.data.control_id) {
 			app.console.error(
 				'JSDialogModelState: bad syntax in widgetAction: ' +

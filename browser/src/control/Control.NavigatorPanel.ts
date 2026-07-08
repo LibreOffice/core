@@ -342,9 +342,16 @@ class NavigatorPanel extends SidebarBase {
 		);
 	}
 
-	onNavigator(data: FireEvent) {
-		var navigatorData = data.data;
-		this.builder.setWindowId(navigatorData.id);
+	onNavigator(data: { data: JSDialogJSON }) {
+		const navigatorData = data.data;
+		let windowId = 0;
+		try {
+			windowId = parseInt(navigatorData.id);
+		} catch (e) {
+			app.console.warn('Navigator: cannot convert id to number');
+		}
+
+		this.builder.setWindowId(windowId);
 		this.container.innerHTML = '';
 
 		if (navigatorData.action === 'close') {
@@ -390,14 +397,14 @@ class NavigatorPanel extends SidebarBase {
 		this.dirtyWidth = true;
 	}
 
-	onJSUpdate(e: FireEvent) {
+	onJSUpdate(e: { data: UpdateData }) {
 		// Only restore focus to a tree row if focus was actually inside the
 		// content tree. Checking the whole panel would also match the search
 		// box, stealing focus from it after the first typed character.
 		const treeHadFocus =
 			this.container && this.container.contains(document.activeElement);
 		if (this.highlightTerm && this.highlightTerm.trim().length > 0) {
-			e.data.control.highlightTerm = this.highlightTerm;
+			(e.data.control as TreeWidgetJSON).highlightTerm = this.highlightTerm;
 		}
 		const retval = super.onJSUpdate(e);
 		if (treeHadFocus) {

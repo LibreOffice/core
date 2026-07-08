@@ -144,10 +144,11 @@ class Toolbar extends JSDialogComponent {
 		if (this.isItemHidden(command) === !show) return true;
 
 		this.builder.executeAction(this.parentContainer, {
+			jsontype: 'toolbar',
 			control_id: command,
 			control: { id: command },
 			action_type: show ? 'show' : 'hide',
-		});
+		} as ActionData);
 
 		app.layoutingService.appendLayoutingTask(() => {
 			JSDialog.RefreshScrollables();
@@ -163,9 +164,7 @@ class Toolbar extends JSDialogComponent {
 	userHideItem(id: string, hide: boolean): void {
 		if (!id) return;
 
-		this.model.widgetUpdate({
-			control: { id: id, userHidden: hide } as WidgetJSON,
-		} as JSDialogJSON);
+		this.model.widgetUpdate({ id: id, userHidden: hide } as WidgetJSON);
 
 		const el = this.getItemElement(id);
 		if (!el) return;
@@ -187,6 +186,7 @@ class Toolbar extends JSDialogComponent {
 		if (this.isItemDisabled(command) === !enable) return;
 
 		this.builder.executeAction(this.parentContainer, {
+			jsontype: 'toolbar',
 			control_id: command,
 			action_type: enable ? 'enable' : 'disable',
 		});
@@ -196,6 +196,7 @@ class Toolbar extends JSDialogComponent {
 		if (!command) return;
 
 		this.builder.executeAction(this.parentContainer, {
+			jsontype: 'toolbar',
 			control_id: command,
 			action_type: select ? 'select' : 'unselect',
 		});

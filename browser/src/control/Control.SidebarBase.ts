@@ -116,7 +116,7 @@ abstract class SidebarBase extends JSDialogComponent {
 		this.showSidebarImpl(true);
 	}
 
-	protected onJSUpdate(e: FireEvent) {
+	protected onJSUpdate(e: { data: UpdateData }) {
 		// reduce unwanted warnings in console
 		if (e?.data?.control.id === 'addonimage') {
 			window.app.console.log(
@@ -128,7 +128,7 @@ abstract class SidebarBase extends JSDialogComponent {
 		return super.onJSUpdate(e);
 	}
 
-	protected onJSAction(e: FireEvent) {
+	protected onJSAction(e: { data: ActionData }) {
 		const innerData = e?.data?.data;
 		const controlId = innerData?.control_id;
 

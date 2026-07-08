@@ -73,8 +73,8 @@ interface JSBuilder {
 		data: WidgetJSON[],
 		hasVerticalParent: boolean,
 	) => boolean;
-	updateWidget: (parentContainer: Element, updateJSON: any) => void;
-	executeAction: (parentContainer: Element, actionJSON: any) => void;
+	updateWidget: (parentContainer: Element, updateJSON: WidgetJSON) => void;
+	executeAction: (parentContainer: Element, actionJSON: ActionData) => void;
 	callback: JSDialogCallback;
 	_defaultCallbackHandlerSendMessage: JSDialogCallback;
 	_defaultCallbackHandler: JSDialogCallback;
@@ -144,10 +144,17 @@ interface DialogResponse {
 }
 
 interface ActionData {
+	jsontype: string;
 	control_id: string;
 	action_type: string;
-	data: any;
+	data?: any;
 	new_id?: string;
+}
+
+interface UpdateData {
+	id: string;
+	jsontype: string;
+	control: WidgetJSON;
 }
 
 // JSDialog message (full, update or action)

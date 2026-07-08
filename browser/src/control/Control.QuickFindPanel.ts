@@ -30,14 +30,14 @@ class QuickFindPanel extends SidebarBase {
 		this.map.off('quickfind', this.onQuickFind, this);
 	}
 
-	onJSUpdate(e: FireEvent) {
+	onJSUpdate(e: { data: UpdateData }) {
 		var data = e.data;
 
 		if (
 			data.control.id === 'searchfinds' &&
 			data.control.type === 'treelistbox'
 		) {
-			e.data.control.noSearchField = true;
+			(data.control as TreeWidgetJSON).noSearchField = true;
 		}
 
 		if (!super.onJSUpdate(e)) return false;
@@ -129,7 +129,7 @@ class QuickFindPanel extends SidebarBase {
 		return quickFindData;
 	}
 
-	onQuickFind(data: any) {
+	onQuickFind(data: JSDialogJSON) {
 		const quickFindData = data.data;
 
 		if (!this.container) {
