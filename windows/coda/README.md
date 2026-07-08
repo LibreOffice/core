@@ -63,6 +63,42 @@ cd collabora-office
 
 (If you applied `user_steps.winget`, those two git options are already set globally.) For an anonymous read-only clone, use `https://gerrit.collaboraoffice.com/online` in place of the SSH URL.
 
+## Build everything with one command (optional)
+
+Rather than building the engine and the app through the separate steps below,
+`windows/coda/build/` offers a front-end that drives both from a single
+out-of-tree build directory - one `autogen.sh`, one `make`.
+
+From a **Git Bash** terminal, make an empty build directory outside the clone
+and create an `autogen.input` in it with the engine configure flags, then run
+the front-end and build:
+
+```bash
+mkdir C:/co-build && cd C:/co-build
+echo --with-distro=CODAWindows > autogen.input   # add the rest of the flags (see "Build the engine")
+C:/path/to/online.git/windows/coda/build/autogen.sh
+make
+```
+
+`autogen.sh` configures the engine; `make` then builds the engine, configures
+and builds the online part, and builds the Visual Studio solution, dispatching
+the steps that need a Unix environment to WSL automatically. The build is
+incremental, and editing `autogen.input` reconfigures the engine on the next
+`make`. It is out-of-tree only, and the engine configure flags must live in
+`autogen.input` (they are not accepted as command-line arguments).
+
+The build produces a runnable tree in the build directory at
+`online/windows/coda/x64/<Configuration>/program/`, with `Collabora Office.exe`
+next to the engine and browser files copied in beside it.
+
+The app is built in the Debug configuration by default; pass `make CONFIG=Release`
+for a Release build. This has to match the engine: a Debug app needs an engine
+built with `--enable-dbgutil` or `--enable-msvc-debug-runtime`, so choose the
+engine flags in `autogen.input` to suit (see the note under "Build the engine").
+
+The sections below describe the same build done by hand, which you still want
+when running or debugging the pieces individually.
+
 ## Build the engine
 
 If you want a localized (translated) user interface, first clone the translations repository into `engine/translations` from the top of the clone; the engine's `--with-lang` picks up the `.po` files from there:
