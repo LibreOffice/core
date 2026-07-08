@@ -16,26 +16,26 @@ namespace net_uno
 {
 namespace
 {
-void SAL_CALL Mapping_acquire(uno_Mapping* mapping) noexcept
+void Mapping_acquire(uno_Mapping* mapping) noexcept
 {
     Mapping* that = static_cast<Mapping*>(mapping);
     that->m_bridge->acquire();
 }
 
-void SAL_CALL Mapping_release(uno_Mapping* mapping) noexcept
+void Mapping_release(uno_Mapping* mapping) noexcept
 {
     Mapping* that = static_cast<Mapping*>(mapping);
     that->m_bridge->release();
 }
 
-void SAL_CALL Mapping_free(uno_Mapping* mapping) noexcept
+void Mapping_free(uno_Mapping* mapping) noexcept
 {
     Mapping* that = static_cast<Mapping*>(mapping);
     delete that->m_bridge;
 }
 
-void SAL_CALL Mapping_net2uno(uno_Mapping* mapping, void** ppOut, void* pIn,
-                              typelib_InterfaceTypeDescription* pTD) noexcept
+void Mapping_net2uno(uno_Mapping* mapping, void** ppOut, void* pIn,
+                     typelib_InterfaceTypeDescription* pTD) noexcept
 {
     assert(ppOut && pTD && "### null ptr!");
 
@@ -50,8 +50,8 @@ void SAL_CALL Mapping_net2uno(uno_Mapping* mapping, void** ppOut, void* pIn,
     }
 }
 
-void SAL_CALL Mapping_uno2net(uno_Mapping* mapping, void** ppOut, void* pIn,
-                              typelib_InterfaceTypeDescription* pTD) noexcept
+void Mapping_uno2net(uno_Mapping* mapping, void** ppOut, void* pIn,
+                     typelib_InterfaceTypeDescription* pTD) noexcept
 {
     assert(ppOut && pTD && "### null ptr!");
 
