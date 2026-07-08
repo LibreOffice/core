@@ -186,4 +186,24 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 				});
 		});
 	});
+
+	it('Cross-document paste failure shows the reason from the source stub.', function() {
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+
+		cy.intercept('GET', '**/cool/clipboard*', {
+			statusCode: 403,
+			body: '',
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			const clip = win.app.map._clip;
+
+			// Simulate pasting content copied from a document where copying is
+			// disabled: the source stamps that reason into the stub html it
+			// puts on the clipboard instead of the real content.
+			clip._dataTransferDownloadAndPasteAsync(clip.getMetaURL(), clip._getDisabledCopyStubHtml());
+		});
+
+		cy.cGet('#info-modal-label1').should('have.text', 'Copying from the document has been disabled by your administrator');
+	});
 });

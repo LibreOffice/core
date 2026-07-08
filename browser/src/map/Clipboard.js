@@ -164,6 +164,13 @@ window.L.Clipboard = window.L.Class.extend({
 		return text.indexOf(this._getHtmlStubMarker()) > 0;
 	},
 
+	// Returns the human-readable text a stub html carries in its <p>, or
+	// an empty string if none is found.
+	_getStubMessage: function(text) {
+		const match = /<p>([^<]*)<\/p>/.exec(text);
+		return match ? match[1] : '';
+	},
+
 	// wrap some content with our stub magic
 	_originWrapBody: function(body, isStub) {
 		var lang = 'en_US'; // FIXME: l10n
@@ -359,9 +366,12 @@ window.L.Clipboard = window.L.Class.extend({
 				// If it's the stub, avoid pasting.
 				if (this._isStubHtml(fallbackHtml))
 				{
-					// Let the user know they haven't really copied document content.
-					window.app.console.error('Clipboard: failed to download - ' + errorMessage);
-					this._map.uiManager.showInfoModal('data-transfer-warning', '', errorMessage);
+					// The stub carries the reason there is nothing real to paste
+					// (e.g. copying is disabled in the source document), stamped
+					// in by the source when it built the clipboard content.
+					const stubMessage = this._getStubMessage(fallbackHtml) || errorMessage;
+					window.app.console.error('Clipboard: failed to download - ' + stubMessage);
+					this._map.uiManager.showInfoModal('data-transfer-warning', '', stubMessage);
 					return;
 				}
 
