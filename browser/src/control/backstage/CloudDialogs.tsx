@@ -103,7 +103,7 @@ namespace BackstageTemplates {
           <label class="backstage-modal-field">
             <span class="backstage-modal-field-label">{_('Server URL')}</span>
             <input
-              class="backstage-modal-input"
+              class="backstage-modal-input ui-edit"
               type="text"
               required
               placeholder={_('Enter server URL')}
@@ -116,7 +116,7 @@ namespace BackstageTemplates {
           <label class="backstage-modal-field">
             <span class="backstage-modal-field-label">{_('Display name')}</span>
             <input
-              class="backstage-modal-input"
+              class="backstage-modal-input ui-edit"
               type="text"
               required
               maxlength="40"
