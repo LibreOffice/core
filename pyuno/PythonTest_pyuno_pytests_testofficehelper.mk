@@ -12,7 +12,7 @@ $(eval $(call gb_PythonTest_add_modules,pyuno_pytests_testofficehelper,$(SRCDIR)
 ))
 
 $(eval $(call gb_PythonTest_set_defs,pyuno_pytests_testofficehelper,\
-    UNO_PATH="$(INSTDIR)/program" \
+    UNO_PATH="$(INSTROOT)/$(LIBO_BIN_FOLDER)" \
 ))
 
 # vim: set noet sw=4 ts=4:
