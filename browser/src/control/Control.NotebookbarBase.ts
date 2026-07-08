@@ -17,10 +17,6 @@ class NotebookbarBase extends JSDialogComponent {
 	/// reference to old JS Notebookbar
 	impl: any = null;
 
-	/// the most recent style list, kept so the previews can be re-rendered
-	/// when the display density changes
-	private lastStyles: any[] = [];
-
 	/// media query that fires when the display density changes
 	private dpiMediaQuery: MediaQueryList | null = null;
 
@@ -72,7 +68,7 @@ class NotebookbarBase extends JSDialogComponent {
 	// matches a single density value, so it is re-registered after each
 	// change to track the new density.
 	private onDPIChange = () => {
-		if (this.lastStyles.length > 0) this.updateStylesView(this.lastStyles);
+		this.reloadStylesView();
 		this.registerDPIChangeListener();
 	};
 
@@ -156,43 +152,11 @@ class NotebookbarBase extends JSDialogComponent {
 		return false;
 	}
 
-	private updateStylesView(styles: any[]) {
-		this.lastStyles = styles;
-
+	private reloadStylesView() {
 		const widgetData = this.model.getById('stylesview') as IconViewJSON;
 		if (!widgetData || !this.builder) return;
 
-		const entries: any[] = [];
-		styles.forEach((style: any, index: number) => {
-			// The engine sends each style as { text: <localized display name>,
-			// id: <programmatic name> }. Display 'text', apply via 'id'.
-			const progName: string =
-				style && typeof style === 'object' ? style.id : style;
-			let localeStyle: string =
-				style && typeof style === 'object' ? style.text : style;
-			if (typeof progName === 'string' && progName.startsWith('outline')) {
-				const parts = progName.split('outline');
-				const outlineLevel = parts.length > 1 ? parts[1] : '';
-				localeStyle = _('Outline %OutlineLevel%').replace(
-					'%OutlineLevel%',
-					outlineLevel,
-				);
-			}
-			entries.push({
-				text: localeStyle,
-				id: progName,
-				row: index,
-				selected: false,
-				ondemand: true,
-				width: 96,
-				height: 30, // adjust with expected image to not blink
-			});
-		});
-
-		widgetData.entries = entries;
-		if (this.container) {
-			this.builder.updateWidget(this.container, widgetData);
-		}
+		if (this.container) this.builder.updateWidget(this.container, widgetData);
 	}
 
 	protected onJSAction(e: any) {
