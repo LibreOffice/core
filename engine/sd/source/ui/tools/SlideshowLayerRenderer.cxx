@@ -157,6 +157,14 @@ sal_Int32 getFieldType(SdrObject* pObject)
         const EditTextObject& rEditText = pOutlinerParagraphObject->GetTextObject();
         if (rEditText.IsFieldObject() && rEditText.GetField() && rEditText.GetField()->GetField())
             return rEditText.GetField()->GetField()->GetClassId();
+
+        // A page number or page name field can also sit anywhere inside the
+        // text, mixed with plain text or other fields. The text then renders
+        // differently on each slide, so report it as a field.
+        if (rEditText.HasField(text::textfield::Type::PAGE))
+            return text::textfield::Type::PAGE;
+        if (rEditText.HasField(text::textfield::Type::PAGE_NAME))
+            return text::textfield::Type::PAGE_NAME;
     }
     return -2;
 }

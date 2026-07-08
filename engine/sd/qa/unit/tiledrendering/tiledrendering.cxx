@@ -3608,6 +3608,35 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_SlideNu
     aSlideRendererChecker.checkFinalEmptyLayer();
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_PageNumber_In_Master_TextBox)
+{
+    // A plain text box on the master page contains a page number field
+    // mixed with other text ("<number>/<count>"). The page number renders
+    // differently on each slide, so the text box has to be emitted as a
+    // per-slide text field layer plus a placeholder in the master page
+    // layers, and not be baked into the master page bitmap that is cached
+    // and shared by all slides using that master page.
+    SdXImpressDocument* pXImpressDocument
+        = createDoc("SlideRenderingTest_PageNumberInMasterTextBox.fodp");
+    pXImpressDocument->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+
+    for (sal_Int32 nSlide : { 0, 1 })
+    {
+        SlideRendererChecker aSlideRendererChecker(pXImpressDocument, nSlide, 2000, 2000);
+        aSlideRendererChecker.checkSlideSize(2000, 1125);
+
+        aSlideRendererChecker.checkBackgroundLayer();
+
+        aSlideRendererChecker.checkTextFieldLayer(0, "Page");
+
+        aSlideRendererChecker.checkPlaceholderLayer(0, "Page");
+
+        aSlideRendererChecker.checkPageLayer(0, "DrawPage");
+
+        aSlideRendererChecker.checkFinalEmptyLayer();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Skip_Background)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_SlideNumber_Header_DateTime.odp");
