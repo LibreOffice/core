@@ -825,6 +825,35 @@ QVariant Bridge::cool(const QString& messageStr)
             QApplication::quit();
         });
     }
+    else if (tokens.equals(0, "REMOTEBOOTSTRAPFAILED"))
+    {
+        auto const title = QObject::tr("Cannot open remote document");
+        auto const server = _document._remoteInfo ? _document._remoteInfo->coolServer : QString();
+        auto const serverDisplay = server.isEmpty()
+            ? QObject::tr("the Collabora Online server") : server.toHtmlEscaped();
+        auto const err = QString::fromStdString(tokens.substrFromToken(1));
+        auto const html = QStringLiteral(
+            "<!doctype html><html><head><meta charset=\"utf-8\">"
+            "<title>%1</title><style>"
+            "body{font-family:sans-serif;padding:2em;color:#333;"
+            "max-width:36em}"
+            "h1{color:#c00;font-size:1.3em}"
+            "p{line-height:1.5}"
+            "</style></head><body><h1>%1</h1>"
+            "<p>Could not open the document from %2.</p>"
+            "<p>The server did not respond to the collaborative-"
+            "editing connection (%3).</p>"
+            "<p>It may be running a version of Collabora Online that "
+            "does not support remote editing from this app.</p>"
+            "</body></html>")
+            .arg(title, serverDisplay, err.toHtmlEscaped());
+        QTimer::singleShot(0, [this, html]() {
+            if (_webView) {
+                _webView->setHtml(html);
+            }
+            markReadyToClose();
+        });
+    }
     else if (tokens.equals(0, "TEXTCLIPBOARD"))
     {
         QString text = QString::fromStdString(tokens.substrFromToken(1));

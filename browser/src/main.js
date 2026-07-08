@@ -356,8 +356,15 @@ if (window.ThisIsTheEmscriptenApp) {
 					// only and remote-doc paths uniformly.)
 				});
 			}).catch(function(err) {
-				window.app.console.error('CODA-Q: remote bootstrap failed: '
-					+ (err && err.message ? err.message : err));
+				var msg = err && err.message ? err.message : String(err);
+				window.app.console.error(
+					'CODA-Q: remote bootstrap failed: ' + msg);
+				// Surface the failure as a native error dialog on the
+				// doc window rather than just a console message: the
+				// page has no visible affordance to report it, so the
+				// window would otherwise sit on its pre-load screen.
+				window.postMobileMessage(
+					'REMOTEBOOTSTRAPFAILED ' + msg);
 			});
 		});
 	};
