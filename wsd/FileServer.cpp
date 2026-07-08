@@ -39,6 +39,7 @@
 #include <net/HttpHelper.hpp>
 #endif
 #include <wopi/StorageConnectionManager.hpp>
+#include <wsd/AIUtil.hpp>
 #include <wsd/Auth.hpp>
 #include <wsd/COOLWSD.hpp>
 #include <wsd/HostUtil.hpp>
@@ -280,18 +281,6 @@ std::string stringifyBoolFromConfig(const Poco::Util::LayeredConfiguration& conf
                                     const std::string& propertyName, bool defaultValue)
 {
     return config.getBool(propertyName, defaultValue) ? "true" : "false";
-}
-
-/// Returns the canonical base url for a pre-canned AI provider id, or an
-/// empty view if the id is not pre-canned. Keep in sync with AI_PROVIDERS in
-/// browser/admin/src/integrator/AdminIntegratorSettings.ts.
-std::string_view preCannedAIProviderBaseUrl(std::string_view id)
-{
-    if (id == "openai")   return "https://api.openai.com";
-    if (id == "groq")     return "https://api.groq.com/openai";
-    if (id == "together") return "https://api.together.xyz";
-    if (id == "mistral")  return "https://api.mistral.ai";
-    return {};
 }
 
 /// Returns true if the host is allowed, false otherwise.
@@ -2268,7 +2257,7 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     const bool isCustom = provider == "custom";
     if (!isCustom)
     {
-        const std::string_view preCanned = preCannedAIProviderBaseUrl(provider);
+        const std::string_view preCanned = AIUtil::preCannedAIProviderBaseUrl(provider);
         if (preCanned.empty())
         {
             sendError(http::StatusCode::BadRequest, getRequestPath(request), socket, shortMessage,
@@ -2290,7 +2279,10 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
 
     Poco::URI uri(baseUrl);
 
-    if (isCustom && HostUtil::isForbiddenKitHost(uri.getHost()))
+    // A built-in provider's host is a fixed public endpoint and is always
+    // allowed; only a custom host goes through the net.lok_allow allowlist.
+    if (!AIUtil::isPreCannedAIProviderHost(uri.getHost()) &&
+        HostUtil::isForbiddenKitHost(uri.getHost()))
     {
         LOG_WRN("Rejected fetch-models request to host not in KIT allowlist ["
                 << Anonymizer::anonymizeUrl(baseUrl) << ']');

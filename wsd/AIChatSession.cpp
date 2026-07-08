@@ -786,8 +786,11 @@ void AIChatSession::callLLMAPI()
         return;
 
 #if !MOBILEAPP
+    // A built-in provider's host is a fixed public endpoint and is always
+    // allowed; only a custom host goes through the net.lok_allow allowlist.
     Poco::URI uri(_toolLoop->requestUrl);
-    if (HostUtil::isForbiddenKitHost(uri.getHost()))
+    if (!AIUtil::isPreCannedAIProviderHost(uri.getHost()) &&
+        HostUtil::isForbiddenKitHost(uri.getHost()))
     {
         LOG_WRN("Rejected AI chat request to host not in KIT allowlist ["
                 << Anonymizer::anonymizeUrl(_toolLoop->requestUrl) << ']');
@@ -1871,8 +1874,11 @@ ImageGenRequest AIChatSession::createImageGenRequest(const std::string& prompt)
     req.requestUrl = baseUrl + "/v1/images/generations";
 
 #if !MOBILEAPP
+    // A built-in provider's host is a fixed public endpoint and is always
+    // allowed; only a custom host goes through the net.lok_allow allowlist.
     Poco::URI uri(req.requestUrl);
-    if (HostUtil::isForbiddenKitHost(uri.getHost()))
+    if (!AIUtil::isPreCannedAIProviderHost(uri.getHost()) &&
+        HostUtil::isForbiddenKitHost(uri.getHost()))
     {
         req.error = "Target host \"" + uri.getHost() +
                     "\" is not in the allowed host list, contact your administrator";
