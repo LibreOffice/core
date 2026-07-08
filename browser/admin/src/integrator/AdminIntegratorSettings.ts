@@ -97,6 +97,10 @@ interface AIProvider {
 interface SaveAllResult {
 	aiJustConfigured: boolean;
 	aiKeyMissing: boolean;
+	// The view settings as the user entered them, captured before the upload
+	// re-fetch redacts the in-memory copy. Applied to the live session so a
+	// freshly entered secret is not lost.
+	viewSettings: ViewSettings;
 }
 
 // Visual state of an AI model-fetch status line. 'hidden' (or an empty message)
@@ -189,7 +193,10 @@ const onMessage = (e) => {
 						window.parent.postMessage(
 							JSON.stringify({
 								MessageId: 'settings-save-complete',
-								viewSettings: settingIframe.getViewSettings(),
+								// Use the settings as entered (from saveAll), not the
+								// re-fetched copy, so a freshly typed key still reaches
+								// the live session.
+								viewSettings: result.viewSettings,
 								aiJustConfigured: result.aiJustConfigured,
 								aiKeyMissing: result.aiKeyMissing,
 							}),
@@ -731,6 +738,12 @@ class SettingIframe {
 			!!this._viewSetting.aiProviderURL;
 		const aiKeyMissing = !this._viewSetting.aiProviderAPIKey;
 
+		// Snapshot the view settings as entered now. Uploading a file re-fetches
+		// the config, which redacts the in-memory copy, so reading it back after
+		// the uploads would drop a freshly typed key. The live session is
+		// updated from this snapshot.
+		const viewSettings: ViewSettings = { ...this._viewSetting };
+
 		const saves: Promise<void>[] = [];
 
 		// Browser settings
@@ -766,7 +779,7 @@ class SettingIframe {
 
 		await Promise.all(saves);
 
-		return { aiJustConfigured, aiKeyMissing };
+		return { aiJustConfigured, aiKeyMissing, viewSettings };
 	}
 
 	init(): void {
