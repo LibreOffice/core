@@ -3081,7 +3081,7 @@ void ScInputHandler::SetMode(ScInputMode eNewMode, const OUString* pInitText, Sc
     {
         if (eOldMode == SC_INPUT_NONE) // not if switching between modes
         {
-            if (StartTable(0, false, eMode == SC_INPUT_TABLE, pTopEngine, errorHdl))
+            if (StartTable(0, false, eMode == SC_INPUT_TABLE || eMode == SC_INPUT_TOP, pTopEngine, errorHdl))
             {
                 pActiveViewSh->GetViewData().GetDocShell()->PostEditView(*mpEditEngine, aCursorPos);
             }
