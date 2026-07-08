@@ -331,11 +331,19 @@ function insertComment(text = 'some text0', save = true) {
 
 	var mode = Cypress.env('USER_INTERFACE');
 	if (mode === 'notebookbar') {
-		cy.cGet('#Insert-tab-label').then(function($tab) {
-			if (!$tab.hasClass('selected'))
-				cy.wrap($tab).click();
+		cy.cGet('body').invoke('attr', 'data-docType').then(function(docType) {
+			if (docType === 'spreadsheet') {
+				cy.getFrameWindow().then(function(win) {
+					win.app.map.insertComment();
+				});
+			} else {
+				cy.cGet('#Insert-tab-label').then(function($tab) {
+					if (!$tab.hasClass('selected'))
+						cy.wrap($tab).click();
+				});
+				cy.cGet('#Insert .unoInsertAnnotation').click();
+			}
 		});
-		cy.cGet('#Insert .unoInsertAnnotation').click();
 	} else {
 		cy.cGet('#menu-insert').click();
 		cy.cGet('#menu-insertcomment').click();

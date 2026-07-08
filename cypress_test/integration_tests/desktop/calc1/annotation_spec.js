@@ -189,7 +189,6 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		desktopHelper.insertComment();
 		/* comments are hidden in calc by default, so no visibility assert */
 		cy.cGet('#comment-container-1').should('exist')
-		cy.cGet('#Home-tab-label').click();
 
 		calcHelper.enterCellAddressAndConfirm(this.win, 'A150');
 		calcHelper.enterCellAddressAndConfirm(this.win, 'A135');

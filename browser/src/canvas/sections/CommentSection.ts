@@ -1875,30 +1875,40 @@ export class Comment extends CanvasSectionObject {
 
 				var cellSize = this.calcOptimumSizeForCalc();
 				if (cellSize[0] !== 0 && cellSize[1] !== 0) { // don't draw notes in hidden cells
-					// `zoom` represents the current zoom level of the map, retrieved from `this.map.getZoom()`.
-					// `baseSize` is a constant that defines the base size of the square at the initial zoom level.
-					// `squareDim` calculates the dimension of the square, which dynamically adjusts based on the current zoom level.
-					// The dimension increases proportionally to the zoom level by adding `zoom` to `baseSize`.
+					// dim scales the marker with the zoom level.
 					var margin = 1;
 					var baseSize = 2;
 					var zoom = this.map.getZoom();
-					var squareDim = baseSize + zoom;
+					var dim = baseSize + zoom;
 
 					const isRTL = this.isCalcRTL();
 
-					// this.size may currently have an artificially wide size if mouseEnter without moveLeave seen
-					// so fetch the real size.
-					// In RTL the section anchors at the cell's visual-right
-					// edge and extends leftward (per CanvasSectionObject.isHit),
-					// so the visual top-left corner of the cell sits at
-					// section-local x = -cellSize[0].
-					var x = isRTL ? -cellSize[0] + margin : cellSize[0] - squareDim - margin;
-					var commentColor = getComputedStyle(document.body).getPropertyValue('--color-calc-comment');
-					this.context.fillStyle = commentColor;
+					// Anchor at the cell's outer-top corner and grow inward;
+					// in RTL the section is mirrored (see note above).
+					const sign = isRTL ? -1 : 1;
+					const ax = isRTL ? -cellSize[0] + margin : cellSize[0] - margin;
+					const px = (o: number): number => ax - sign * o;
+
+					this.context.fillStyle = getComputedStyle(document.body).getPropertyValue('--color-calc-comment');
 					var region = new Path2D();
-					region.moveTo(x, 0);
-					region.lineTo(x + squareDim, 0);
-					region.lineTo(x + (isRTL ? 0 : squareDim), squareDim);
+					if (this.sectionProperties.data.threaded) {
+						// Threaded comment: a speech-bubble icon with a tail
+						// hanging from the inner-bottom corner.
+						var bodyW = dim * 0.72;
+						var bodyH = dim * 0.52;
+						var tailH = dim * 0.26;
+						var tailW = dim * 0.36;
+						region.moveTo(px(0), 0);
+						region.lineTo(px(bodyW), 0);
+						region.lineTo(px(bodyW), bodyH + tailH);
+						region.lineTo(px(bodyW - tailW), bodyH);
+						region.lineTo(px(0), bodyH);
+					} else {
+						// Plain note: the classic corner triangle.
+						region.moveTo(px(0), 0);
+						region.lineTo(px(dim), 0);
+						region.lineTo(px(0), dim);
+					}
 					region.closePath();
 					this.context.fill(region);
 				}

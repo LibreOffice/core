@@ -2090,13 +2090,6 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 								'icon': 'lc_insertthreadedcomment.svg',
 								'lockUno': '.uno:InsertAnnotation',
 								'accessibility': { focusBack: true,	combination: 'TC', de: null }
-							},
-							{
-								'id': 'insert-insert-annotation',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertAnnotation', 'spreadsheet'),
-								'command': '.uno:InsertAnnotation',
-								'accessibility': { focusBack: true,	combination: 'IA', de: null }
 							}
 						]
 					}
