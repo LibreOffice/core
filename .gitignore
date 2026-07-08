@@ -266,6 +266,9 @@ qt/flatpak/build-dir/
 qt/flatpak/repo/
 qt/translations/*.qm
 
+# po2json.py
+browser/util/__pycache__
+
 # coplugin
 /clang/plugin.so
 
