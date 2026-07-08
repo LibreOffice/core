@@ -248,13 +248,12 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 		var imgClassName = 'preview-img ' + this.options.imageClass;
 		var img = window.L.DomUtil.create('img', imgClassName, frame);
-		img.setAttribute('alt', _('preview of page %1').replace('%1', String(i + 1)));
+		this._setPreviewPositionLabels(img, i);
 		img.setAttribute('role', 'option');
 		img.setAttribute('aria-selected', 'false');
 		// roving tabindex - only the current slide is a tab stop so Tab
 		// enters the list once and the arrow keys move within it
 		img.setAttribute('tabindex', '-1');
-		img.setAttribute('data-cooltip', _('Slide %1').replace('%1', String(i + 1)));
 		window.L.control.attachTooltipEventListener(img, this._map);
 		img.id = 'preview-img-part-' + this._idNum;
 		img.hash = hashCode;
@@ -567,6 +566,24 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this._idNum++;
 
 		return img;
+	},
+
+	// Unlike the visible digit, the alt text and tooltip are plain
+	// attribute strings, so they only ever hold the position they were
+	// given here. Callers that move a preview to a different position
+	// must call this again with the new position.
+	_setPreviewPositionLabels: function (img, i) {
+		img.setAttribute('alt', _('preview of page %1').replace('%1', String(i + 1)));
+		img.setAttribute('data-cooltip', _('Slide %1').replace('%1', String(i + 1)));
+	},
+
+	// Relabels every preview from startIndex onward to match its current
+	// position in _previewTiles, for callers that insert or remove a
+	// preview and thereby shift the position of every one that follows it.
+	_updatePreviewPositionLabelsFrom: function (startIndex) {
+		for (var i = startIndex; i < this._previewTiles.length; i++) {
+			this._setPreviewPositionLabels(this._previewTiles[i], i);
+		}
 	},
 
 	_updateSections: function (e) {
@@ -1337,6 +1354,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 			// insert newPreview to newIndex position
 			this._previewTiles.splice(newIndex, 0, newPreview);
+			// newPreview already carries the right label from _createPreview;
+			// everything after it moved up by one position.
+			this._updatePreviewPositionLabelsFrom(newIndex + 1);
 
 			var newFrame = newPreview.parentNode;
 			if (e.selectedPart >= 0) {
@@ -1359,6 +1379,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			window.L.DomUtil.remove(selectedFrame);
 
 			this._previewTiles.splice(e.selectedPart, 1);
+			// Everything after the removed preview moved down by one position.
+			this._updatePreviewPositionLabelsFrom(e.selectedPart);
 			if (this._map._deletePageFromPreview || this.partsFocused)
 				this.focusCurrentSlide(); // came from focus + Delete key -> keep focus in preview
 			else

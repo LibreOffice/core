@@ -99,6 +99,55 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Slide operations', functio
 		});
 	});
 
+	it('Slide alt text and tooltip track position after insert and delete', function() {
+		function assertPositionLabels(items) {
+			for (var i = 0; i < items.length; i++) {
+				expect(items[i].getAttribute('alt')).to.equal('preview of page ' + (i + 1));
+				expect(items[i].getAttribute('data-cooltip')).to.equal('Slide ' + (i + 1));
+			}
+		}
+
+		// Add two slides.
+		cy.cGet('#presentation-toolbar #insertpage').click();
+		cy.cGet('#presentation-toolbar #insertpage').click();
+
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 3);
+
+		cy.cGet('#slide-sorter .preview-img').should(function(items) {
+			expect(items).to.have.length(3);
+			assertPositionLabels(items);
+		});
+
+		// Delete the first slide: every later slide moves up one position, so
+		// its alt text and tooltip must be relabelled to match, unlike the
+		// visible number, they are plain attributes and do not update on
+		// their own just because the frame moved in the DOM.
+		cy.cGet('#preview-frame-part-0').click();
+
+		cy.cGet('#presentation-toolbar #deletepage').click();
+		cy.cGet('#modal-dialog-deleteslide-modal .button-primary').click();
+
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 2);
+
+		cy.cGet('#slide-sorter .preview-img').should(function(items) {
+			expect(items).to.have.length(2);
+			assertPositionLabels(items);
+		});
+
+		// Insert a slide after the first one: the new last slide must pick
+		// up label 2 even though it was created as label 1 in a different
+		// position earlier in the test.
+		cy.cGet('#preview-frame-part-1').click();
+		cy.cGet('#presentation-toolbar #insertpage').click();
+
+		impressHelper.assertSlidePreviewCountAfterIdle(this.win, 3);
+
+		cy.cGet('#slide-sorter .preview-img').should(function(items) {
+			expect(items).to.have.length(3);
+			assertPositionLabels(items);
+		});
+	});
+
 	it('Check slide sorter focus', function() {
 		cy.cGet('#insertpage-button').click();
 		helper.processToIdle(this.win);
