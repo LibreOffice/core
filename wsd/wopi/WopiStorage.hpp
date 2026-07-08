@@ -62,6 +62,7 @@ public:
         const std::string& getPresentationLeader() const { return _presentationLeader; }
 
         bool getUserCanWrite() const { return _userCanWrite; }
+        bool getIsAnonymousUser() const { return _isAnonymousUser; }
         void setHidePrintOption(bool hidePrintOption) { _hidePrintOption = hidePrintOption; }
         bool getHidePrintOption() const { return _hidePrintOption; }
         bool getHideSaveOption() const { return _hideSaveOption; }
@@ -139,6 +140,9 @@ public:
         std::optional<bool> _isAdminUser = std::nullopt;
         /// If user accessing the file has write permission
         bool _userCanWrite = false;
+        /// True when the host reports the user as anonymous (for example a
+        /// public share-link visitor with no account).
+        bool _isAnonymousUser = false;
         /// Hide print button from UI
         bool _hidePrintOption = false;
         /// Hide save button from UI

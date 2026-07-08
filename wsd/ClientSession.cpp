@@ -1816,6 +1816,10 @@ bool ClientSession::resolveAndApplyAICredentials(Poco::JSON::Object::Ptr& viewSe
         // The key, when present, is sent as a Bearer token by the chat
         // request path. AI is enabled server-wide by the ai.enabled switch.
         ConfigUtil::getConfigValue<bool>("ai.enabled", false) &&
+        // AI is refused for an anonymous user (for example a public share-link
+        // visitor with no account), so a server-wide provider is not spent on
+        // them.
+        !isAnonymousUser() &&
 #else
         // The apps enable AI per-user via the Options dialog, and they fetch
         // the provider's model list natively with a request that

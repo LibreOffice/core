@@ -216,6 +216,7 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
 
     JsonUtil::findJSONValue(object, "WatermarkText", _watermarkText);
     JsonUtil::findJSONValue(object, "UserCanWrite", _userCanWrite);
+    JsonUtil::findJSONValue(object, "IsAnonymousUser", _isAnonymousUser);
     JsonUtil::findJSONValue(object, "PostMessageOrigin", _postMessageOrigin);
     JsonUtil::findJSONValue(object, "HidePrintOption", _hidePrintOption);
     JsonUtil::findJSONValue(object, "HideSaveOption", _hideSaveOption);

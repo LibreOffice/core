@@ -202,6 +202,12 @@ public:
 
     const std::string& getUserId() const { return _userId; }
 
+    /// True when the host reports the user as anonymous (for example a public
+    /// share-link visitor with no account).
+    void setIsAnonymousUser(bool bAnonymous) { _isAnonymousUser = bAnonymous; }
+
+    bool isAnonymousUser() const { return _isAnonymousUser; }
+
     void setWatermarkText(const std::string& watermarkText) { _watermarkText = watermarkText; }
 
     void setIsAdminUser(const std::optional<bool> isAdminUser) { _isAdminUser = isAdminUser; }
@@ -405,6 +411,9 @@ private:
 
     /// Id of the user to whom the session belongs to.
     std::string _userId;
+
+    /// True when the host reports the user as anonymous (public share link).
+    bool _isAnonymousUser = false;
 
     /// Id of the user to whom the session belongs to, anonymized for logging.
     std::string _userIdAnonym;

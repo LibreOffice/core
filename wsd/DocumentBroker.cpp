@@ -1583,6 +1583,11 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
                       !ConfigUtil::getConfigValue<bool>("ai.allow_user_settings", true) ||
                       wopiFileInfo->getDisableAISettings());
 
+    // The AI credential resolution below refuses AI for an anonymous user, so
+    // set that flag before it runs rather than only in the block at the end of
+    // this function.
+    session->setIsAnonymousUser(wopiFileInfo->getIsAnonymousUser());
+
     // Resolve default AI credentials from UserPrivateInfo, falling back to
     // coolwsd.xml. This makes AI usable on integrations that don't implement
     // the UserSettings preset storage (where viewsetting.json would never

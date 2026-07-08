@@ -681,6 +681,14 @@ bool AIChatSession::handleAction(const std::string& firstLine)
         sendChatResult(false, "AI features are disabled by the administrator", requestId);
         return true;
     }
+
+    // AI is refused for an anonymous user (for example a public share-link
+    // visitor), so a server-wide provider is not spent on them.
+    if (_session.isAnonymousUser())
+    {
+        sendChatResult(false, "AI is not available for guests", requestId);
+        return true;
+    }
 #endif
 
     if (_session.isDisableAISettings())
