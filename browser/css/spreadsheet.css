@@ -227,14 +227,7 @@
 	background-color: var(--color-calc-header);
 	font: var(--default-font-size)/1.5 var(--cool-font);
 	color: var(--color-text-dark);
-}
-
-.spreadsheet-header-row {
-	cursor: e-resize;
-}
-
-.spreadsheet-header-column {
-	cursor: s-resize;
+	cursor: pointer;
 }
 
 .spreadsheet-header-row-hover,

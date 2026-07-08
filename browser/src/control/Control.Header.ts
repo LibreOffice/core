@@ -659,7 +659,7 @@ export class Header extends CanvasSectionObject {
 			this._lastMouseOverIndex = this._mouseOverEntry.index; // used by context menu
 			this.containerObject.setPenPosition(this);
 			this.drawHeaderEntry(result.entry);
-			isMouseOverResizeArea = result.hit;
+			isMouseOverResizeArea = result.hit && this._map.isEditMode();
 
 			// cypress mobile emulation sometimes triggers resizing unintentionally.
 			if (window.L.Browser.cypressTest)
