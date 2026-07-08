@@ -22,6 +22,9 @@
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <osl/process.h>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -33,6 +36,10 @@ public:
     void testLoadingAndSaving(const OUString& rFilterName, const OUString& rReportName,
                               const Reference<frame::XComponentLoader>& xComponentLoader,
                               const Reference<XConnection>& xActiveConnection);
+    OUString renderReportText(const OUString& rReportName,
+                              const Reference<frame::XComponentLoader>& xComponentLoader,
+                              const Reference<XConnection>& xActiveConnection,
+                              bool bCppReportBuilder);
 };
 
 CPPUNIT_TEST_FIXTURE(RptBasicTest, roundTripTest)
@@ -113,6 +120,111 @@ CPPUNIT_TEST_FIXTURE(RptBasicTest, multiGroupingSameFieldIntervals)
         if (xClose2.is())
             xClose2->close(true);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(RptBasicTest, nestedGroupBoundary)
+{
+    // Reproduces a bug where the C++ ReportBuilder path (SAL_ENABLE_PENTAHO_FREE_REPORTBUILDER=1)
+    // failed to open a new nested group when an inner group's own value coincidentally repeats
+    // across an outer group's boundary (e.g. Region changes from "North" to "South", but
+    // SaleMonth's value stays 6 on both sides of that boundary). The nested group's header/footer
+    // must still appear at the outer boundary and not silently merge the two groups.
+    //
+    // ODB file: table "Sales" (Region, SaleMonth, Amount), report "Sales" grouped by
+    // Region (outer) then SaleMonth (inner, each-value grouping), with a "SaleMonth" label in
+    // the inner group header. The Java/Pentaho path is treated as the reference/correct output.
+    loadURLCopy(u"nested_group_boundary.odb");
+
+    Reference<frame::XModel> xModel(mxComponent, UNO_QUERY_THROW);
+    Reference<frame::XController> xController(xModel->getCurrentController());
+    Reference<sdb::application::XDatabaseDocumentUI> xUI(xController, UNO_QUERY_THROW);
+
+    xUI->connect();
+    Reference<XConnection> xActiveConnection = xUI->getActiveConnection();
+
+    Reference<XReportDocumentsSupplier> xSupp(xModel, UNO_QUERY_THROW);
+    Reference<container::XNameAccess> xNameAccess = xSupp->getReportDocuments();
+    const Sequence<OUString> aReportNames(xNameAccess->getElementNames());
+    CPPUNIT_ASSERT(aReportNames.hasElements());
+
+    Reference<frame::XComponentLoader> xComponentLoader(xNameAccess, UNO_QUERY_THROW);
+
+    OUString sPentahoText
+        = renderReportText(aReportNames[0], xComponentLoader, xActiveConnection, false);
+    OUString sCppText
+        = renderReportText(aReportNames[0], xComponentLoader, xActiveConnection, true);
+
+    auto countOccurrences = [](const OUString& rText, std::u16string_view rNeedle) {
+        sal_Int32 nCount = 0;
+        sal_Int32 nPos = 0;
+        while ((nPos = rText.indexOf(rNeedle, nPos)) != -1)
+        {
+            ++nCount;
+            nPos += rNeedle.size();
+        }
+        return nCount;
+    };
+
+    sal_Int32 nPentahoHeaders = countOccurrences(sPentahoText, u"SaleMonth");
+    sal_Int32 nCppHeaders = countOccurrences(sCppText, u"SaleMonth");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "C++ ReportBuilder path lost a nested SaleMonth group boundary at a Region change",
+        nPentahoHeaders, nCppHeaders);
+}
+
+OUString RptBasicTest::renderReportText(const OUString& rReportName,
+                                        const Reference<frame::XComponentLoader>& xComponentLoader,
+                                        const Reference<XConnection>& xActiveConnection,
+                                        bool bCppReportBuilder)
+{
+    const OUString sVarName(u"SAL_ENABLE_PENTAHO_FREE_REPORTBUILDER"_ustr);
+    if (bCppReportBuilder)
+        osl_setEnvironment(sVarName.pData, u"1"_ustr.pData);
+    else
+        osl_clearEnvironment(sVarName.pData);
+
+    ::comphelper::NamedValueCollection aLoadArgs;
+    aLoadArgs.put(u"ActiveConnection"_ustr, xActiveConnection);
+
+    Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
+        rReportName, u"_blank"_ustr, 0, aLoadArgs.getPropertyValues());
+
+    osl_clearEnvironment(sVarName.pData);
+
+    Reference<text::XTextDocument> xTextDoc(xComponent, UNO_QUERY_THROW);
+    OUStringBuffer sText(xTextDoc->getText()->getString());
+
+    // Report sections are laid out as Writer tables (one per section instance), not as plain
+    // body-text paragraphs, so the body text alone is empty - collect every table cell's text too.
+    Reference<text::XTextTablesSupplier> xTablesSupp(xComponent, UNO_QUERY);
+    if (xTablesSupp.is())
+    {
+        Reference<container::XNameAccess> xTables(xTablesSupp->getTextTables());
+        if (xTables.is())
+        {
+            const Sequence<OUString> aTableNames = xTables->getElementNames();
+            for (const OUString& rTableName : aTableNames)
+            {
+                Reference<text::XTextTable> xTable(xTables->getByName(rTableName), UNO_QUERY);
+                if (!xTable.is())
+                    continue;
+                const Sequence<OUString> aCellNames = xTable->getCellNames();
+                for (const OUString& rCellName : aCellNames)
+                {
+                    Reference<text::XText> xCellText(xTable->getCellByName(rCellName), UNO_QUERY);
+                    if (xCellText.is())
+                        sText.append(xCellText->getString());
+                }
+            }
+        }
+    }
+
+    Reference<util::XCloseable> xCloseable(xComponent, UNO_QUERY);
+    if (xCloseable.is())
+        xCloseable->close(true);
+
+    return sText.makeStringAndClear();
 }
 
 void RptBasicTest::testLoadingAndSaving(const OUString& rFilterName, const OUString& rReportName,

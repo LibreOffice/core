@@ -50,13 +50,31 @@ protected:
     bool exportFormula(const OUString& _sFormula);
     static Reference<XResultSet>
     getResultSet(const Reference<XReportDefinition>& _xReportDefinition);
+    // _rOuterBoundary marks, per row, whether an already-processed outer group
+    // changed there; a set entry forces this group to also break at that row,
+    // even if its own tracked value happens to coincide with the previous row's.
+    static std::vector<sal_Int32> findSubGroups(const Reference<XGroup>& _xGroup,
+                                                const Reference<XResultSet>& _xResultSet,
+                                                const std::vector<bool>& _rOuterBoundary);
+    template <typename T>
+    static sal_Int32 compare(T& _value, T& _groupOnValue, sal_Int32& _i,
+                             const Reference<XResultSet>& _xResultSet, bool bForceBreak = false);
+    static sal_Int32 compareQuartal(sal_uInt16 _aMonth, sal_uInt16& _aGroupOnMonth, sal_Int32& _i,
+                                    const Reference<XResultSet>& _xResultSet,
+                                    bool bForceBreak = false);
+    // Unrelated to (and does not override) ORptExport::exportGroup() below —
+    // same name because it plays the same conceptual role for the execute
+    // path, but a different signature, since it doesn't need per-group
+    // recursion. The `using` declaration silences -Woverloaded-virtual,
+    // which would otherwise flag this name as hiding the base overload.
+    using ORptExport::exportGroup;
+    void exportGroup(const Reference<XReportDefinition>& _xReportDefinition,
+                     bool _bExportAutoStyle = false);
     virtual void exportReport(const Reference<XReportDefinition>& _xReportDefinition) override;
     virtual void exportStyleName(XPropertySet* _xProp, comphelper::AttributeList& _rAtt,
                                  const OUString& _sName) override;
     virtual void
     exportReportElement(const Reference<XReportControlModel>& _xReportElement) override;
-    virtual void exportGroup(const Reference<XReportDefinition>& _xReportDefinition,
-                             sal_Int32 _nPos, bool _bExportAutoStyle = false) override;
     virtual void exportSection(const Reference<XSection>& _xProp, bool bHeader = false) override;
     virtual void exportComponent(const Reference<XReportComponent>& _xReportComponent) override;
     virtual void handleTextElement(const Reference<XServiceInfo>& xElement, bool bShapeHandled,

@@ -49,6 +49,9 @@
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/sheet/AddressConvention.hpp>
+#include <tools/date.hxx>
+#include <o3tl/safeint.hxx>
+#include <math.h>
 
 namespace rptxml
 {
@@ -57,7 +60,6 @@ using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::report;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 
 ORptExecuteExport::ORptExecuteExport(const Reference<XComponentContext>& _rxContext,
@@ -94,9 +96,6 @@ void ORptExecuteExport::exportReport(const Reference<XReportDefinition>& _xRepor
     if (!_xReportDefinition.is())
         return;
 
-    exportFunctions(_xReportDefinition->getFunctions());
-    exportGroupsExpressionAsFunction(_xReportDefinition->getGroups());
-
     if (_xReportDefinition->getReportHeaderOn())
         exportSection(_xReportDefinition->getReportHeader());
 
@@ -112,7 +111,7 @@ void ORptExecuteExport::exportReport(const Reference<XReportDefinition>& _xRepor
     }
 
     // Detail section gets generated
-    exportGroup(_xReportDefinition, 0, false);
+    exportGroup(_xReportDefinition, false);
 
     if (_xReportDefinition->getPageFooterOn())
     {
@@ -183,25 +182,8 @@ void ORptExecuteExport::exportSection(const Reference<XSection>& _xSection, bool
         SvXMLElementExport aPrintExpr(*this, XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION,
                                       true, false);
     }
-
-    if (_xSection->getName() == u"Detail"_ustr)
-    {
-        Reference<XResultSet> xResultSet = getResultSet(m_pReportDefinition);
-
-        Reference<XRow> xRow(xResultSet, UNO_QUERY);
-        m_xRow = xRow;
-
-        exportTableColumns(_xSection);
-        while (xResultSet->next())
-        {
-            exportContainer(_xSection);
-        }
-    }
-    else
-    {
-        exportTableColumns(_xSection);
-        exportContainer(_xSection);
-    }
+    exportTableColumns(_xSection);
+    exportContainer(_xSection);
 }
 
 void ORptExecuteExport::handleTextElement(const Reference<XServiceInfo>& xElement,
@@ -338,6 +320,8 @@ bool ORptExecuteExport::exportFormula(const OUString& _sFormula)
     {
         // Extract the function name from the actual formula string being evaluated,
         // not from the original (possibly unsubstituted) ReportFormula object
+        //TODO if the functions parameters are not formatted correctly we get an ugly
+        // xml formatting error
         const sal_Int32 nParen = _sFormula.indexOf('(');
         if (nParen != -1)
         {
@@ -348,7 +332,6 @@ bool ORptExecuteExport::exportFormula(const OUString& _sFormula)
             GetTextParagraphExport()->exportCharacterData(aRet, bPrevCharIsSpace);
         }
     }
-
     return bRet;
 }
 
@@ -373,7 +356,7 @@ void ORptExecuteExport::exportStyleName(XPropertySet* _xProp, comphelper::Attrib
 }
 
 void ORptExecuteExport::exportGroup(const Reference<XReportDefinition>& _xReportDefinition,
-                                    sal_Int32 _nPos, bool _bExportAutoStyle)
+                                    bool _bExportAutoStyle)
 {
     if (!_xReportDefinition.is())
         return;
@@ -382,47 +365,136 @@ void ORptExecuteExport::exportGroup(const Reference<XReportDefinition>& _xReport
     if (!xGroups.is())
         return;
 
-    sal_Int32 nCount = xGroups->getCount();
-    if (_nPos >= 0 && _nPos < nCount)
+    Reference<XResultSet> xResultSet = getResultSet(m_pReportDefinition);
+    Reference<XRow> xRow(xResultSet, UNO_QUERY);
+    m_xRow = xRow;
+
+    if (xGroups->getCount() > 0)
     {
-        Reference<XGroup> xGroup(xGroups->getByIndex(_nPos), uno::UNO_QUERY);
-        assert(xGroup.is() && "No Group prepare for GPF");
-        if (_bExportAutoStyle)
+        std::vector<std::vector<sal_Int32>> vSubGroups;
+        // Rows where an already-processed outer group changed; passed to each
+        // subsequent (inner) group so its boundaries are forced to align with
+        // its outer group's, even on a coincidental own-value repeat.
+        std::vector<bool> vOuterBoundary;
+        for (sal_Int32 i = 0; i < xGroups->getCount(); ++i)
         {
-            if (xGroup->getHeaderOn())
-                exportSectionAutoStyle(xGroup->getHeader());
-            exportGroup(_xReportDefinition, _nPos + 1, _bExportAutoStyle);
-            if (xGroup->getFooterOn())
-                exportSectionAutoStyle(xGroup->getFooter());
+            // The database driver sets the ResultSet type, so we can't be sure
+            // that we can set it to SCROLL_XXX, i.e. we can't rewind the ResultSet
+            // so use a second ResultSet here as a workaround
+            Reference<XResultSet> xResultSet2 = getResultSet(_xReportDefinition);
+            Reference<XGroup> xGroup(xGroups->getByIndex(i), uno::UNO_QUERY);
+            std::vector<sal_Int32> vThisGroup = findSubGroups(xGroup, xResultSet2, vOuterBoundary);
+
+            if (vOuterBoundary.empty() && !vThisGroup.empty())
+                vOuterBoundary.assign(vThisGroup.size(), false);
+            for (size_t nRow = 1; nRow < vThisGroup.size(); ++nRow)
+                if (vThisGroup[nRow] != vThisGroup[nRow - 1])
+                    vOuterBoundary[nRow] = true;
+
+            vSubGroups.push_back(std::move(vThisGroup));
         }
-        else
+
+        std::vector<sal_Int32> vPrevSubGroup(vSubGroups.size(), 0);
+        sal_Int32 counter = 0;
+
+        while (xResultSet->next())
         {
-            exportFunctions(xGroup->getFunctions());
-            if (xGroup->getHeaderOn())
+            for (size_t nGroupNum = 0; nGroupNum < vSubGroups.size(); ++nGroupNum)
             {
-                Reference<XSection> xSection = xGroup->getHeader();
-                if (xSection->getRepeatSection())
-                    AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION, XML_TRUE);
-                exportSection(xSection);
+                Reference<XGroup> xGroup(xGroups->getByIndex(nGroupNum), uno::UNO_QUERY);
+
+                // Empty expression, single implicit group: header on first row only
+                if (vSubGroups[nGroupNum].empty())
+                {
+                    if (xResultSet->isFirst() && xGroup->getHeaderOn())
+                    {
+                        if (_bExportAutoStyle)
+                            exportSectionAutoStyle(xGroup->getHeader());
+                        else
+                            exportSection(xGroup->getHeader());
+                    }
+                    continue;
+                }
+
+                if (xResultSet->isFirst())
+                {
+                    if (xGroup->getHeaderOn())
+                    {
+                        if (_bExportAutoStyle)
+                            exportSectionAutoStyle(xGroup->getHeader());
+                        else
+                            exportSection(xGroup->getHeader());
+                    }
+                }
+                else if (vSubGroups[nGroupNum][counter] != vPrevSubGroup[nGroupNum])
+                {
+                    vPrevSubGroup[nGroupNum] = vSubGroups[nGroupNum][counter];
+                    if (xGroup->getHeaderOn())
+                    {
+                        if (_bExportAutoStyle)
+                            exportSectionAutoStyle(xGroup->getHeader());
+                        else
+                            exportSection(xGroup->getHeader());
+                    }
+                }
             }
-            exportGroup(_xReportDefinition, _nPos + 1, _bExportAutoStyle);
-            if (xGroup->getFooterOn())
+
+            exportSection(_xReportDefinition->getDetail());
+
+            for (sal_Int32 nGroupNum = vSubGroups.size() - 1; nGroupNum >= 0; --nGroupNum)
             {
-                Reference<XSection> xSection = xGroup->getFooter();
-                if (xSection->getRepeatSection())
-                    AddAttribute(XML_NAMESPACE_REPORT, XML_REPEAT_SECTION, XML_TRUE);
-                exportSection(xSection);
+                Reference<XGroup> xGroup(xGroups->getByIndex(nGroupNum), uno::UNO_QUERY);
+
+                // Empty expression, single implicit group: footer on last row only
+                if (vSubGroups[nGroupNum].empty())
+                {
+                    if (xResultSet->isLast() && xGroup->getFooterOn())
+                    {
+                        if (_bExportAutoStyle)
+                            exportSectionAutoStyle(xGroup->getFooter());
+                        else
+                            exportSection(xGroup->getFooter());
+                    }
+                    continue;
+                }
+
+                if (xResultSet->isLast())
+                {
+                    if (xGroup->getFooterOn())
+                    {
+                        if (_bExportAutoStyle)
+                            exportSectionAutoStyle(xGroup->getFooter());
+                        else
+                            exportSection(xGroup->getFooter());
+                    }
+                }
+                else if (vSubGroups[nGroupNum][counter + 1] != vPrevSubGroup[nGroupNum])
+                {
+                    if (xGroup->getFooterOn())
+                    {
+                        if (_bExportAutoStyle)
+                            exportSectionAutoStyle(xGroup->getFooter());
+                        else
+                            exportSection(xGroup->getFooter());
+                    }
+                }
             }
+            ++counter;
         }
     }
     else if (_bExportAutoStyle)
     {
-        exportSectionAutoStyle(_xReportDefinition->getDetail());
+        while (xResultSet->next())
+        {
+            exportSectionAutoStyle(_xReportDefinition->getDetail());
+        }
     }
     else
     {
-        // Detail section gets exported here
-        exportSection(_xReportDefinition->getDetail(), false);
+        while (xResultSet->next())
+        {
+            exportSection(_xReportDefinition->getDetail(), false);
+        }
     }
 }
 
@@ -646,19 +718,25 @@ ORptExecuteExport::getResultSet(const Reference<XReportDefinition>& _xReportDefi
 
     if (nCount > 0)
     {
-        sOrderByStatement = u" ORDER BY "_ustr;
-
+        bool bFirst = true;
         for (sal_Int32 nPos = 0; nPos < nCount; ++nPos)
         {
             Reference<XGroup> xGroup(xGroups->getByIndex(nPos), uno::UNO_QUERY);
             const OUString sField = xGroup->getExpression();
 
-            OUString sOrder = xGroup->getSortAscending() ? u" ASC"_ustr : u" DESC"_ustr;
+            if (sField.isEmpty())
+                continue;
 
-            if (nPos > 0)
+            if (bFirst)
+            {
+                sOrderByStatement = u" ORDER BY "_ustr;
+                bFirst = false;
+            }
+            else
                 sOrderByStatement += u", "_ustr;
 
-            sOrderByStatement += u"\""_ustr + sField + u"\""_ustr + sOrder;
+            sOrderByStatement += u"\""_ustr + sField + u"\""_ustr
+                                 + (xGroup->getSortAscending() ? u" ASC"_ustr : u" DESC"_ustr);
         }
     }
 
@@ -702,6 +780,208 @@ ORptExecuteExport::getResultSet(const Reference<XReportDefinition>& _xReportDefi
         u"SELECT "_ustr + sColumnNames + u" FROM "_ustr + sFromClause + sOrderByStatement);
 
     return xResultSet;
+}
+
+template <typename T>
+sal_Int32 ORptExecuteExport::compare(T& _value, T& _groupOnValue, sal_Int32& _i,
+                                     const Reference<XResultSet>& _xResultSet, bool bForceBreak)
+{
+    if (_value != _groupOnValue || bForceBreak)
+    {
+        _groupOnValue = _value;
+        if (!_xResultSet->isFirst())
+            ++_i;
+    }
+    return _i;
+}
+
+sal_Int32 ORptExecuteExport::compareQuartal(sal_uInt16 _aMonth, sal_uInt16& _aGroupOnMonth,
+                                            sal_Int32& _i, const Reference<XResultSet>& _xResultSet,
+                                            bool bForceBreak)
+{
+    sal_uInt16 nQuarter = std::ceil(_aMonth / 3.0);
+    if (_xResultSet->isFirst())
+        _aGroupOnMonth = std::ceil(_aGroupOnMonth / 3.0);
+    return compare(nQuarter, _aGroupOnMonth, _i, _xResultSet, bForceBreak);
+}
+
+std::vector<sal_Int32> ORptExecuteExport::findSubGroups(const Reference<XGroup>& _xGroup,
+                                                        const Reference<XResultSet>& _xResultSet,
+                                                        const std::vector<bool>& _rOuterBoundary)
+{
+    const ::sal_Int16 nGroupOn = _xGroup->getGroupOn();
+
+    OUString sExp = _xGroup->getExpression();
+    if (sExp.isEmpty())
+        return std::vector<sal_Int32>();
+
+    sal_Int32 nInterval = _xGroup->getGroupInterval();
+
+    Reference<XRow> xRow(_xResultSet, UNO_QUERY);
+    OUString sRow;
+    OUString sCurrentGroupOn;
+    std::vector<sal_Int32> vSubGroups = {};
+    sal_Int32 i = 0;
+    sal_Int32 nRepeater = 0;
+    sal_Int32 nRow = 0;
+    css::util::Date aDate;
+    css::util::Date aCurrentGroupOnDate;
+    css::util::DateTime aDateTime;
+    css::util::DateTime aCurrentGroupOnDateTime;
+    sal_uInt16 nGroupOnMonthOfYear = 0;
+
+    while (_xResultSet->next())
+    {
+        // If an outer (already-processed) group changed at this row, this
+        // group must also break here even if its own value is the same as the previous row's.
+        const bool bForceBreak
+            = o3tl::make_unsigned(nRow) < _rOuterBoundary.size() && _rOuterBoundary[nRow];
+
+        // Currently the UI will allow the user to GroupOn date values
+        // (Month, Day, etc.) if the table column is a time value. The
+        // current behavior in this case is to lump all the values into
+        // one group - see each date related case statement for details.
+        switch (nGroupOn)
+        {
+            case report::GroupOn::PREFIX_CHARACTERS:
+            {
+                sRow = xRow->getString(getColumnNum(sExp, xRow)).copy(0, nInterval);
+                vSubGroups.push_back(compare(sRow, sCurrentGroupOn, i, _xResultSet, bForceBreak));
+                break;
+            }
+            case report::GroupOn::DEFAULT:
+            {
+                sRow = xRow->getString(getColumnNum(sExp, xRow));
+                vSubGroups.push_back(compare(sRow, sCurrentGroupOn, i, _xResultSet, bForceBreak));
+                break;
+            }
+            // There is an option to set the interval when
+            // grouping on YEAR in the UI, the GroupOn::YEAR
+            // seems to override the GroupON::PREFIX_CHARACTERS
+            case report::GroupOn::YEAR:
+            {
+                try
+                {
+                    aDate = xRow->getDate(getColumnNum(sExp, xRow));
+                    vSubGroups.push_back(
+                        compare(aDate.Year, aCurrentGroupOnDate.Year, i, _xResultSet, bForceBreak));
+                }
+                catch (const com::sun::star::uno::Exception&)
+                {
+                    vSubGroups.push_back(0);
+                }
+                break;
+            }
+            case report::GroupOn::QUARTAL:
+            {
+                try
+                {
+                    aDate = xRow->getDate(getColumnNum(sExp, xRow));
+                    vSubGroups.push_back(compareQuartal(aDate.Month, aCurrentGroupOnDate.Month, i,
+                                                        _xResultSet, bForceBreak));
+                }
+                catch (const com::sun::star::uno::Exception&)
+                {
+                    vSubGroups.push_back(0);
+                }
+                break;
+            }
+            case report::GroupOn::MONTH:
+            {
+                try
+                {
+                    aDate = xRow->getDate(getColumnNum(sExp, xRow));
+                    vSubGroups.push_back(compare(aDate.Month, aCurrentGroupOnDate.Month, i,
+                                                 _xResultSet, bForceBreak));
+                }
+                catch (const com::sun::star::uno::Exception&)
+                {
+                    vSubGroups.push_back(0);
+                }
+                break;
+            }
+            case report::GroupOn::WEEK:
+            {
+                try
+                {
+                    aDate = xRow->getDate(getColumnNum(sExp, xRow));
+                    Date aD(aDate.Day, aDate.Month, aDate.Year);
+                    sal_uInt16 nMonthOfYear = aD.GetWeekOfYear();
+                    vSubGroups.push_back(
+                        compare(nMonthOfYear, nGroupOnMonthOfYear, i, _xResultSet, bForceBreak));
+                }
+                catch (const com::sun::star::uno::Exception&)
+                {
+                    vSubGroups.push_back(0);
+                }
+                break;
+            }
+            case report::GroupOn::DAY:
+            {
+                try
+                {
+                    aDate = xRow->getDate(getColumnNum(sExp, xRow));
+                    vSubGroups.push_back(
+                        compare(aDate.Day, aCurrentGroupOnDate.Day, i, _xResultSet, bForceBreak));
+                }
+                catch (const com::sun::star::uno::Exception&)
+                {
+                    vSubGroups.push_back(0);
+                }
+                break;
+            }
+            case report::GroupOn::HOUR:
+            {
+                try
+                {
+                    aDateTime = xRow->getTimestamp(getColumnNum(sExp, xRow));
+                    vSubGroups.push_back(compare(aDateTime.Hours, aCurrentGroupOnDateTime.Hours, i,
+                                                 _xResultSet, bForceBreak));
+                }
+                catch (const com::sun::star::uno::Exception&)
+                {
+                    vSubGroups.push_back(0);
+                }
+                break;
+            }
+            case report::GroupOn::MINUTE:
+            {
+                try
+                {
+                    aDateTime = xRow->getTimestamp(getColumnNum(sExp, xRow));
+                    vSubGroups.push_back(compare(aDateTime.Minutes, aCurrentGroupOnDateTime.Minutes,
+                                                 i, _xResultSet, bForceBreak));
+                }
+                catch (const com::sun::star::uno::Exception&)
+                {
+                    vSubGroups.push_back(0);
+                }
+                break;
+            }
+            case report::GroupOn::INTERVAL:
+            {
+                if (nRepeater == nInterval || bForceBreak)
+                {
+                    if (!_xResultSet->isFirst())
+                        ++i;
+                    nRepeater = 0;
+                }
+                vSubGroups.push_back(i);
+                ++nRepeater;
+                // Current default behavior for interval = 0
+                // is for the first row to be one group and
+                // all the other rows are their own group
+                if (nInterval == sal_Int32(0))
+                {
+                    i = 1;
+                    nRepeater = -1;
+                }
+                break;
+            }
+        }
+        ++nRow;
+    }
+    return vSubGroups;
 }
 
 } // rptxml
