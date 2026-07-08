@@ -388,6 +388,7 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 					searchInput.setAttribute('placeholder', _('Search...'));
 					searchInput.setAttribute('aria-label', _('Filter entries'));
 					searchInput.setAttribute('autocomplete', 'off');
+					searchInput.setAttribute('tabindex', '0');
 					searchContainer.appendChild(searchInput);
 
 					grid.insertAdjacentElement('afterbegin', searchContainer);

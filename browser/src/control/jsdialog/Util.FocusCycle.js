@@ -62,6 +62,7 @@ function isFocusable(element) {
 		'button:not([disabled]):not(.hidden)',
 		'textarea:not([disabled]):not(.hidden)',
 		'input[type="text"]:not([disabled]):not(.hidden)',
+		'input[type="search"]:not([disabled]):not(.hidden)',
 		'input:not([type]):not([disabled]):not(.hidden)', // no explicit type defaults to text but the above doesn't catch it
 		'input[type="radio"]:not([disabled]):not(.hidden)',
 		'input[type="checkbox"]:not([disabled]):not(.hidden)',
