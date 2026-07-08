@@ -3092,6 +3092,11 @@ public:
     {
         insert(-1, rId, rStr, nullptr, &rImage, nullptr, TRISTATE_INDET);
     }
+    void append(const OUString& rId, const OUString& rStr,
+                const css::uno::Reference<css::graphic::XGraphic>& rImage)
+    {
+        insert(-1, rId, rStr, nullptr, nullptr, rImage, TRISTATE_INDET);
+    }
 
     // return the number of toplevel nodes
     virtual int n_children() const = 0;

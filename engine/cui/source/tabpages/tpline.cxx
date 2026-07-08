@@ -20,7 +20,6 @@
 #include <memory>
 #include <editeng/sizeitem.hxx>
 #include <o3tl/untaint.hxx>
-#include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
@@ -66,9 +65,8 @@
 #include <svtools/unitconv.hxx>
 #include <comphelper/kit.hxx>
 #include <o3tl/string_view.hxx>
-
-#define MAX_BMP_WIDTH   16
-#define MAX_BMP_HEIGHT  16
+#include <vcl/graph.hxx>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 using namespace com::sun::star;
 
@@ -1408,8 +1406,6 @@ void SvxLineTabPage::FillUserData()
 // #58425# Symbols on a list (e.g. StarChart)
 void SvxLineTabPage::PopulateMenus()
 {
-    ScopedVclPtrInstance< VirtualDevice > pVD;
-
     // Initialize popup
     if (!m_xGalleryMenu)
     {
@@ -1421,15 +1417,16 @@ void SvxLineTabPage::PopulateMenus()
         sal_uInt32 i = 0;
         for (auto const& grfName : m_aGrfNames)
         {
-            const OUString *pUIName = &grfName;
-
-            // Convert URL encodings to UI characters (e.g. %20 for spaces)
-            OUString aPhysicalName;
-            if (osl::FileBase::getSystemPathFromFileURL(grfName, aPhysicalName)
-                == osl::FileBase::E_None)
-            {
-                pUIName = &aPhysicalName;
-            }
+            // Show just the file's base name, dropping the folder path and
+            // the extension, and turn hyphens into spaces so it reads as
+            // words. Fall back to the raw name if there is no base name.
+            INetURLObject aGraphicURL(grfName);
+            OUString aUIName = aGraphicURL.getBase(INetURLObject::LAST_SEGMENT, true,
+                                                   INetURLObject::DecodeMechanism::WithCharset);
+            if (aUIName.isEmpty())
+                aUIName = grfName;
+            aUIName = aUIName.replaceAll(u"-", u" ");
+            const OUString *pUIName = &aUIName;
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
             pInfo->pBrushItem.reset(new SvxBrushItem(grfName, u""_ustr, GPOS_AREA, SID_ATTR_BRUSH));
@@ -1437,27 +1434,12 @@ void SvxLineTabPage::PopulateMenus()
             m_aGalleryBrushItems.emplace_back(pInfo);
             const Graphic* pGraphic = pInfo->pBrushItem->GetGraphic();
 
+            // Hand the gallery graphic to the menu so it can be serialized in
+            // its original vector form (these bullet icons are SVG files).
             if(pGraphic)
-            {
-                Bitmap aBitmap(pGraphic->GetBitmap());
-                Size aSize(aBitmap.GetSizePixel());
-                if(aSize.Width()  > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
-                {
-                    bool bWidth = aSize.Width() > aSize.Height();
-                    double nScale = bWidth ?
-                                        double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
-                                        double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-                    aBitmap.Scale(nScale, nScale);
-
-                }
-                pVD->SetOutputSizePixel(aBitmap.GetSizePixel());
-                pVD->DrawBitmap(Point(), aBitmap);
-                m_xGalleryMenu->append(pInfo->sItemId, *pUIName, *pVD);
-            }
+                m_xGalleryMenu->append(pInfo->sItemId, *pUIName, pGraphic->GetXGraphic());
             else
-            {
                 m_xGalleryMenu->append(pInfo->sItemId, *pUIName);
-            }
             ++i;
         }
 
@@ -1513,7 +1495,6 @@ void SvxLineTabPage::PopulateMenus()
                 pObj->SetMergedItemSet(m_rOutAttrs);
             }
             aView.MarkAll();
-            Bitmap aBitmap(aView.GetMarkedObjBitmap());
             GDIMetaFile aMeta(aView.GetMarkedObjMetaFile());
             aView.UnmarkAll();
             pPage->RemoveObject(1);
@@ -1524,18 +1505,13 @@ void SvxLineTabPage::PopulateMenus()
             pInfo->sItemId = "symbol" + OUString::number(i);
             m_aSymbolBrushItems.emplace_back(pInfo);
 
-            Size aSize(aBitmap.GetSizePixel());
-            if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
-            {
-                bool bWidth = aSize.Width() > aSize.Height();
-                double nScale = bWidth ?
-                                    double(MAX_BMP_WIDTH) / static_cast<double>(aSize.Width()):
-                                    double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
-                aBitmap.Scale(nScale, nScale);
-            }
-            pVD->SetOutputSizePixel(aBitmap.GetSizePixel());
-            pVD->DrawBitmap(Point(), aBitmap);
-            m_xSymbolsMenu->append(pInfo->sItemId, u""_ustr, *pVD);
+            // The symbol has no source file; give the menu its drawn metafile,
+            // which is serialized to SVG rather than a fixed-size bitmap.
+            const Graphic* pSymbolGraphic = pInfo->pBrushItem->GetGraphic();
+            if (pSymbolGraphic)
+                m_xSymbolsMenu->append(pInfo->sItemId, u""_ustr, pSymbolGraphic->GetXGraphic());
+            else
+                m_xSymbolsMenu->append(pInfo->sItemId, u""_ustr);
         }
         pPage->RemoveObject(0);
         pInvisibleSquare.clear();

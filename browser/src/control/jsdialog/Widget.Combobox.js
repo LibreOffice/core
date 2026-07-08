@@ -31,6 +31,10 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	entry.id = data.id;
 	if (data.class)
 		entry.classList.add(data.class);
+	// An icon-only entry (no text) centers its image and shrinks to the
+	// icon width instead of leaving a wide empty row.
+	if (!data.text)
+		window.L.DomUtil.addClass(entry, 'ui-combobox-notext');
 	entry.setAttribute('role', 'option');
 	entry.setAttribute('tabindex', '-1');
 	entry.setAttribute('data-filter-text', data.text.toLowerCase());

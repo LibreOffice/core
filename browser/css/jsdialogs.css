@@ -1780,6 +1780,33 @@ img.context-menu-icon {
 	max-height: 24px; /* required for hidpi*/
 }
 
+/* Icon-only entries: show a 16x16 image centered in both directions and
+ * shrink the row to the icon width so the dropdown does not leave a wide
+ * empty column. */
+.ui-combobox-entry.ui-combobox-notext {
+	width: auto;
+	justify-content: center;
+}
+
+.ui-combobox-entry.ui-combobox-notext > span {
+	display: none;
+}
+
+.ui-combobox-entry.ui-combobox-notext img {
+	width: 16px;
+	height: 16px;
+	max-height: 16px;
+	padding: 16px;
+}
+
+/* This is needed in chart line properties jsdialog.
+ * When every entry in a dropdown is icon-only, drop the parent-derived
+ * minimum width (set inline as the menu button width) so the popup shrinks
+ * to just the icons. */
+.modalpopup[id$='-dropdown']:has(.ui-combobox-entry.ui-combobox-notext):not(:has(.ui-combobox-entry:not(.ui-combobox-notext))) {
+	min-width: 50px !important;
+}
+
 .ui-combobox-entry img:hover {
 	border: 1px solid var(--color-border-darker);
 	filter: contrast(0.5);

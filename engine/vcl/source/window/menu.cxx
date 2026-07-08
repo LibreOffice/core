@@ -51,6 +51,7 @@
 #include "menuitemlist.hxx"
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <vcl/toolkit/unowrap.hxx>
@@ -1038,6 +1039,24 @@ Image Menu::GetItemImage( sal_uInt16 nItemId ) const
         return pData->aImage;
     else
         return Image();
+}
+
+void Menu::SetItemImageGraphic( sal_uInt16 nItemId, const css::uno::Reference<css::graphic::XGraphic>& rGraphic )
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        pData->xImageGraphic = rGraphic;
+}
+
+css::uno::Reference<css::graphic::XGraphic> Menu::GetItemImageGraphic( sal_uInt16 nItemId ) const
+{
+    MenuItemData* pData = pItemList->GetData( nItemId );
+
+    if ( pData )
+        return pData->xImageGraphic;
+    else
+        return {};
 }
 
 void Menu::SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand )

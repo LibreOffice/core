@@ -1315,7 +1315,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 	},
 
 	_isStringCloseToURL : function(str) {
-		return str.indexOf('http') !== -1;
+		return str.indexOf('http') !== -1 || str.indexOf('data:') === 0;
 	},
 
 	// TODO: move to jsdialog/Widget.Toolitem.ts

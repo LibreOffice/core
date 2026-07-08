@@ -866,6 +866,9 @@ sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, const O
     else if (rImage)
     {
         pMenu->SetItemImage(nNewid, Image(rImage));
+        // Keep the original vector graphic alongside the bitmap so the menu
+        // can be serialized as SVG rather than a rasterized icon.
+        pMenu->SetItemImageGraphic(nNewid, rImage);
     }
     return nNewid;
 }

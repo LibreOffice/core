@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/cvtgrf.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/event.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/image.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
@@ -27,8 +30,13 @@
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <comphelper/base64.hxx>
+#include <cpo/uno/Sequence.hxx>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <menutogglebutton.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/stream.hxx>
+#include <algorithm>
 
 namespace
 {
@@ -41,6 +49,83 @@ void collectUIInformation( const OUString& aID, const OUString& aevent , const O
     aDescription.aParent = u"MainWindow"_ustr;
     aDescription.aKeyWord = u"MenuButton"_ustr;
     UITestLogger::getInstance().logEvent(aDescription);
+}
+
+// Encode a menu item image as a PNG data URL so the client can show it
+// directly as the source of an image, rather than resolving an icon name.
+// The bitmap is shrunk to fit within 16 by 16 pixels, keeping its aspect
+// ratio, so the transported data stays small and the icons share one size.
+OString lclImageToDataUrl(const Image& rImage)
+{
+    Bitmap aBitmap = rImage.GetBitmap();
+    Size aSize = aBitmap.GetSizePixel();
+    constexpr double fImgSize = 16.0;
+    if (aSize.Width() > 0 && aSize.Height() > 0)
+    {
+        const double fScale = std::min(fImgSize / aSize.Width(), fImgSize / aSize.Height());
+        aBitmap.Scale(fScale, fScale, BmpScaleFlag::BestQuality);
+    }
+
+    SvMemoryStream aStream;
+    if (GraphicConverter::Export(aStream, aBitmap, ConvertDataFormat::PNG) != ERRCODE_NONE)
+        return OString();
+
+    cpo::uno::Sequence<sal_Int8> aData(static_cast<sal_Int8 const*>(aStream.GetData()),
+                                       aStream.Tell());
+    OStringBuffer aBuffer("data:image/png;base64,");
+    comphelper::Base64::encode(aBuffer, aData);
+    return aBuffer.makeStringAndClear();
+}
+
+// Encode a menu item's vector graphic as an SVG data URL. A graphic that is
+// already an SVG, such as a gallery bullet icon, has its original bytes written
+// unchanged; a drawn graphic such as a metafile symbol is exported to SVG.
+// The client renders the result crisply at any size instead of a fixed bitmap.
+OString lclGraphicToSvgDataUrl(const css::uno::Reference<css::graphic::XGraphic>& rGraphic)
+{
+    if (!rGraphic.is())
+        return OString();
+
+    Graphic aGraphic(rGraphic);
+    SvMemoryStream aStream;
+    if (GraphicConverter::Export(aStream, aGraphic, ConvertDataFormat::SVG) != ERRCODE_NONE)
+        return OString();
+
+    cpo::uno::Sequence<sal_Int8> aData(static_cast<sal_Int8 const*>(aStream.GetData()),
+                                       aStream.Tell());
+    OStringBuffer aBuffer("data:image/svg+xml;base64,");
+    comphelper::Base64::encode(aBuffer, aData);
+    return aBuffer.makeStringAndClear();
+}
+
+// Write the items of rMenu into the JSON array that is currently open.
+// An item with an image gets an "img" data URL so the client shows it. When the
+// item carries a vector graphic the URL is SVG; otherwise the item's bitmap is
+// encoded as PNG. An item that has a submenu gets an "items" array holding that
+// submenu's entries, so nested menus reach the client as nested arrays.
+void lclDumpMenuEntries(tools::JsonWriter& rJsonWriter, const Menu& rMenu)
+{
+    for (sal_uInt16 i = 0; i < rMenu.GetItemCount(); ++i)
+    {
+        auto aEntry = rJsonWriter.startStruct();
+        sal_uInt16 nId = rMenu.GetItemId(i);
+        rJsonWriter.put("id", rMenu.GetItemIdent(nId));
+        rJsonWriter.put("text", rMenu.GetItemText(nId));
+        OString aDataUrl = lclGraphicToSvgDataUrl(rMenu.GetItemImageGraphic(nId));
+        if (aDataUrl.isEmpty())
+        {
+            Image aImage = rMenu.GetItemImage(nId);
+            if (!!aImage)
+                aDataUrl = lclImageToDataUrl(aImage);
+        }
+        if (!aDataUrl.isEmpty())
+            rJsonWriter.put("img", aDataUrl);
+        if (PopupMenu* pSubMenu = rMenu.GetPopupMenu(nId))
+        {
+            auto aItems = rJsonWriter.startArray("items");
+            lclDumpMenuEntries(rJsonWriter, *pSubMenu);
+        }
+    }
 }
 }
 
@@ -244,13 +329,7 @@ void MenuButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     if (mpMenu)
     {
         auto aMenuNode = rJsonWriter.startArray("menu");
-        for (int i = 0; i < mpMenu->GetItemCount(); i++)
-        {
-            auto aEntryNode = rJsonWriter.startStruct();
-            auto sId = mpMenu->GetItemId(i);
-            rJsonWriter.put("id", mpMenu->GetItemIdent(sId));
-            rJsonWriter.put("text", mpMenu->GetItemText(sId));
-        }
+        lclDumpMenuEntries(rJsonWriter, *mpMenu);
     }
 }
 

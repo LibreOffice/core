@@ -56,6 +56,7 @@ struct SystemMenuData;
 enum class VclEventId;
 
 namespace com::sun::star::awt { class XPopupMenu; }
+namespace com::sun::star::graphic { class XGraphic; }
 
 namespace vcl
 {
@@ -302,6 +303,13 @@ public:
 
     void SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image GetItemImage( sal_uInt16 nItemId ) const;
+
+    // Vector source of the item's icon, when one is available. The image set
+    // through SetItemImage stays the bitmap shown natively; this graphic keeps
+    // the original vector form so it can be serialized as SVG. An empty
+    // reference means the item has no vector source.
+    void SetItemImageGraphic( sal_uInt16 nItemId, const css::uno::Reference<css::graphic::XGraphic>& rGraphic );
+    css::uno::Reference<css::graphic::XGraphic> GetItemImageGraphic( sal_uInt16 nItemId ) const;
 
     void SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     OUString GetItemCommand( sal_uInt16 nItemId ) const;

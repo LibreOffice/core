@@ -75,7 +75,7 @@
       <object class="GtkMenuItem" id="none">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="linetabpage|menuitem1">_No Symbol</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem1">No Symbol</property>
         <property name="use-underline">True</property>
       </object>
     </child>
@@ -83,7 +83,7 @@
       <object class="GtkMenuItem" id="automatic">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="linetabpage|menuitem2">_Automatic</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem2">Automatic</property>
         <property name="use-underline">True</property>
       </object>
     </child>
@@ -91,7 +91,7 @@
       <object class="GtkMenuItem" id="file">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="linetabpage|menuitem3">_From file...</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem3">From file...</property>
         <property name="use-underline">True</property>
       </object>
     </child>
@@ -99,7 +99,7 @@
       <object class="GtkMenuItem" id="gallery">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="linetabpage|menuitem4">_Gallery</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem4">Gallery</property>
         <property name="use-underline">True</property>
         <child type="submenu">
           <object class="GtkMenu" id="gallerysubmenu">
@@ -113,7 +113,7 @@
       <object class="GtkMenuItem" id="symbols">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="linetabpage|menuitem5">_Symbols</property>
+        <property name="label" translatable="yes" context="linetabpage|menuitem5">Symbols</property>
         <property name="use-underline">True</property>
         <child type="submenu">
           <object class="GtkMenu" id="symbolssubmenu">
