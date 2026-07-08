@@ -4405,6 +4405,8 @@ include/connectivity/warningscontainer.hxx
 include/cpo/uno/Any.h
 include/cpo/uno/Any.h
 include/cpo/uno/Any.hxx
+include/cpo/uno/Sequence.h
+include/cpo/uno/Sequence.hxx
 include/cppcanvas/bitmap.hxx
 include/cppcanvas/bitmapcanvas.hxx
 include/cppcanvas/canvas.hxx
@@ -6934,12 +6936,14 @@ sc/qa/extras/scnamedrangeobj.cxx
 sc/qa/extras/sctablesheetobj.cxx
 sc/qa/perf/scperfobj.cxx
 sc/qa/unit/NamedSheetViewsImportExportTest.cxx
+sc/qa/unit/RedundantParenthesesStripperTest.cxx
 sc/qa/unit/copy_paste_test.cxx
 sc/qa/unit/filters-test.cxx
 sc/qa/unit/functions_addin.cxx
 sc/qa/unit/functions_array.cxx
 sc/qa/unit/functions_database.cxx
 sc/qa/unit/functions_datetime.cxx
+sc/qa/unit/functions_dynamic_array.cxx
 sc/qa/unit/functions_financial.cxx
 sc/qa/unit/functions_information.cxx
 sc/qa/unit/functions_logical.cxx
@@ -13213,6 +13217,7 @@ vcl/qa/cppunit/svm/svmtest.cxx
 vcl/qa/cppunit/timer.cxx
 vcl/qt5/QtInstance.cxx
 vcl/qt5/QtMenu.cxx
+vcl/qt5/QtObject.cxx
 vcl/quartz/SystemFontList.cxx
 vcl/quartz/salbmp.cxx
 vcl/quartz/salgdi.cxx
