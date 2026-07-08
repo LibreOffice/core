@@ -133,13 +133,15 @@ class URLPopUpSection extends HTMLObjectSection {
 		}
 	}
 
+	openLink() {
+		if (!this.sectionProperties.url.startsWith('#'))
+			app.map.fire('warn', {url: this.sectionProperties.url, map: app.map, cmd: 'openlink'});
+		else
+			app.map.sendUnoCommand('.uno:JumpToMark?Bookmark:string=' + encodeURIComponent(this.sectionProperties.url.substring(1)));
+	}
+
 	setUpCallbacks(linkPosition?: cool.SimplePoint) {
-		this.link.onclick = () => {
-			if (!this.sectionProperties.url.startsWith('#'))
-				app.map.fire('warn', {url: this.sectionProperties.url, map: app.map, cmd: 'openlink'});
-			else
-				app.map.sendUnoCommand('.uno:JumpToMark?Bookmark:string=' + encodeURIComponent(this.sectionProperties.url.substring(1)));
-		};
+		this.link.onclick = () => this.openLink();
 
 		var params: any;
 		if (linkPosition) {
@@ -211,8 +213,12 @@ class URLPopUpSection extends HTMLObjectSection {
 		if (values.title) {
 			// The fetched page title is promoted to the link row (next to the
 			// action buttons) and the raw URL is shown in the preview area.
-			const urlEl = window.L.DomUtil.create('p', '', this.preview);
-			urlEl.innerText = values.url;
+			// The URL stays clickable there, since it is what the user
+			// recognizes as the hyperlink.
+			const urlAnchor = window.L.DomUtil.create('a', '', this.preview) as HTMLAnchorElement;
+			urlAnchor.innerText = values.url;
+			urlAnchor.title = values.url;
+			urlAnchor.onclick = () => this.openLink();
 			this.link.innerText = values.title;
 			URLPopUpSection.resetPosition();
 		}

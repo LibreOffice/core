@@ -227,6 +227,49 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Calc clipboard tests.', fu
 		cy.get('@writeText').should('have.been.calledOnceWith', url);
 	});
 
+	it('URL shown in the pop-up preview area opens the link when clicked', function () {
+		desktopHelper.selectZoomLevel('100', false);
+
+		calcHelper.dblClickOnFirstCell();
+		cy.cGet('.cursor-overlay .blinking-cursor').should('be.visible');
+
+		// Autocorrect turns the typed URL into a hyperlink on enter.
+		const url = 'http://www.example.com/';
+		const title = 'Example Domain';
+		helper.typeIntoDocument('{rightArrow}{backspace}' + url + '{enter}');
+		helper.processToIdle(this.win);
+
+		// The mouse still rests on the cell after the double click, which
+		// pops up the hyperlink popup on its own. Moving the cell cursor
+		// closes it, so the click below opens a fresh popup instead of
+		// landing on the leftover one.
+		helper.typeIntoDocument('{rightArrow}');
+		helper.typeIntoDocument('{leftArrow}');
+		helper.processToIdle(this.win);
+
+		calcHelper.clickOnFirstCell();
+		cy.cGet('.hyperlink-pop-up-container').should('be.visible');
+		cy.cGet('#hyperlink-pop-up').should('have.text', url);
+
+		// Deliver a link preview response for the shown URL. The fetched
+		// page title takes over the link row and the raw URL moves to the
+		// preview area.
+		cy.getFrameWindow().then((win) => {
+			const popup = win.app.sectionContainer.getSectionWithName('URL PopUp');
+			popup.updatePreview({ url: url, title: title });
+		});
+
+		cy.cGet('#hyperlink-pop-up').should('have.text', title);
+		cy.cGet('#hyperlink-pop-up-preview a').should('have.text', url);
+
+		// The URL is what the user recognizes as the hyperlink, so clicking
+		// it in the preview area opens the link the same way the link row
+		// does: the external link confirmation shows the URL about to open.
+		cy.cGet('#hyperlink-pop-up-preview a').click();
+		cy.cGet('#modal-dialog-openlink').should('be.visible');
+		cy.cGet('#info-modal-label2').should('contain.text', url);
+	});
+
 	it('HTML paste falls back to HTML content when server-side clipboard fetch fails', function() {
 		// Copy A1 first so the server registers a valid clipboard tag. The tag is
 		// needed later when the fallback uploads the HTML to the server's own

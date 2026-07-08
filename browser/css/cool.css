@@ -1486,8 +1486,9 @@ input, button {
 	border: 1px solid var(--color-border-darker);
 }
 
-#hyperlink-pop-up-preview p {
-	color: var(--color-main-text);
+#hyperlink-pop-up-preview a {
+	color: var(--color-hyperlink);
+	cursor: pointer;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
