@@ -358,7 +358,13 @@ class OnlineSettingsStorage extends SettingsStorage {
 				'something went wrong shared config response',
 				await response.text(),
 			);
-			throw new Error(`Could not fetch shared config: ${response.statusText}`);
+			const error = new Error(
+				`Could not fetch shared config: ${response.statusText}`,
+			);
+			// Carry the status so the caller can tell "not a signed-in user"
+			// (a client error from the host) from a genuine server failure.
+			(error as any).status = response.status;
+			throw error;
 		}
 
 		return await response.json();
@@ -1013,9 +1019,31 @@ class SettingIframe {
 			await this.populateSharedConfigUI(data);
 			console.debug('Shared config data: ', data);
 		} catch (error: unknown) {
-			SettingIframe.showErrorModal(
-				_('Something went wrong. Please try to refresh the page.'),
-			);
+			// A guest / anonymous session has no per-user settings: the host
+			// rejects the config request with a client error (for example a 400
+			// when there is no user context), or the settings URL and token were
+			// never provided. Say plainly that settings need a signed-in user,
+			// and keep the generic message for server or network failures.
+			const status = (error as any)?.status;
+			const noSettingsStore = !window.wopiSettingBaseUrl || !window.accessToken;
+			const notAuthorized = status === 400 || status === 401 || status === 403;
+			const isGuest = !isCODesktop && (noSettingsStore || notAuthorized);
+			if (isGuest) {
+				// The dialog has nothing to offer a guest, so close it when they
+				// dismiss the message rather than leaving an empty dialog open.
+				SettingIframe.showErrorModal(
+					_('Settings are only available to signed-in users.'),
+					() =>
+						window.parent.postMessage(
+							JSON.stringify({ MessageId: 'settings-cancel' }),
+							parentTargetOrigin(),
+						),
+				);
+			} else {
+				SettingIframe.showErrorModal(
+					_('Something went wrong. Please try to refresh the page.'),
+				);
+			}
 			console.error('Error fetching shared config:', error);
 		}
 
@@ -3655,7 +3683,7 @@ class SettingIframe {
 		return window.iframeType === 'admin';
 	}
 
-	static showErrorModal(message: string): void {
+	static showErrorModal(message: string, onClose?: () => void): void {
 		const modal = document.createElement('div');
 		modal.className = 'modal';
 
@@ -3679,6 +3707,7 @@ class SettingIframe {
 		okButton.classList.add('button', 'button--vue-secondary');
 		okButton.addEventListener('click', () => {
 			document.body.removeChild(modal);
+			onClose?.();
 		});
 
 		buttonContainer.appendChild(okButton);
