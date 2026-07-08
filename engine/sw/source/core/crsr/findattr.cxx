@@ -60,7 +60,13 @@ static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
         return rItem1.StaticWhichCast(RES_CHRATR_FONT).GetFamilyName() == rItem2.StaticWhichCast(RES_CHRATR_FONT).GetFamilyName();
 
     case RES_CHRATR_COLOR:
-        return rItem1.StaticWhichCast(RES_CHRATR_COLOR).GetValue().IsRGBEqual(rItem2.StaticWhichCast(RES_CHRATR_COLOR).GetValue());
+    {
+        ::Color Color1 = rItem1.StaticWhichCast(RES_CHRATR_COLOR).GetValue();
+        ::Color Color2 = rItem2.StaticWhichCast(RES_CHRATR_COLOR).GetValue();
+        if (Color1 == COL_AUTO || Color2 == COL_AUTO)
+            return Color1 == Color2;
+        return Color1.IsRGBEqual(Color2);
+    }
     case RES_PAGEDESC:
         ::std::optional<sal_uInt16> const oNumOffset1 = rItem1.StaticWhichCast(RES_PAGEDESC).GetNumOffset();
         ::std::optional<sal_uInt16> const oNumOffset2 = rItem2.StaticWhichCast(RES_PAGEDESC).GetNumOffset();
