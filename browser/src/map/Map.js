@@ -488,10 +488,6 @@ window.L.Map = window.L.Evented.extend({
 		if (!offset.x && !offset.y)
 			return this;
 
-		if (this._docLayer && this._docLayer._docType === 'text' && offset.x != 0 &&
-			app.activeDocument.activeLayout.type === 'ViewLayoutWriter')
-			offset.x += (app.activeDocument.activeLayout).getDocumentScrollOffset();
-
 		//If we pan too far then chrome gets issues with tiles
 		// and makes them disappear or appear in the wrong place (slightly offset) #2602
 		if (!this.getSize().contains(offset)) {

@@ -14,31 +14,85 @@ type DocumentSpacingInfo = {
 	commentSectionWidth: number;
 };
 
-class ViewLayoutWriter extends ViewLayoutBase {
+class ViewLayoutWriter extends ViewLayoutNewBase {
 	public readonly type: string = 'ViewLayoutWriter';
-	private documentScrollOffset: number = 0;
+
+	// Cached comment-margin shift (canvas pixels) and its dirty flag. The shift is
+	// recomputed only when the comment layout can actually change (annotation
+	// add/remove/import, show/hide, zoom, resize) - never on plain scrolling.
+	// Scrolling rebuilds the viewed rectangle too, so without this cache the
+	// shift would be recomputed against transient comment state mid-scroll and
+	// the page would drift horizontally. Freezing it keeps the post-scroll
+	// placement identical to the initial one.
+	private commentMarginShift = 0;
+	private commentMarginDirty = true;
 
 	constructor() {
 		super();
-		app.map.on('zoomlevelschange', this.documentZoomCallback, this);
-		app.map.on('deleteannotation', this.annotationOperationsCallback, this);
-		app.map.on('insertannotation', this.annotationOperationsCallback, this);
-		app.map.on('importannotations', this.annotationOperationsCallback, this);
-		app.map.on(
-			'showannotationschanged',
-			this.annotationOperationsCallback,
-			this,
-		);
+
+		// On a mid-session swap into this layout (e.g. leaving multi-page or
+		// compare-changes view) the file size is already known, so seed the
+		// scrollable extent from it - the off-map path needs viewSize for
+		// centering and vertical scrolling. On first construction during document
+		// load fileSize is not set yet (optional chaining skips it) and
+		// WriterTileLayer._setNewSize sets it from the first status.
+		if (app.activeDocument?.fileSize?.x)
+			this.viewSize = app.activeDocument.fileSize.clone();
+
+		// The comment column shifts the page horizontally, so the view is rebuilt
+		// whenever the comment set or its visibility changes.
+		app.map.on('zoomlevelschange', this.onCommentLayoutChange, this);
+		app.map.on('deleteannotation', this.onCommentLayoutChange, this);
+		app.map.on('insertannotation', this.onCommentLayoutChange, this);
+		app.map.on('importannotations', this.onCommentLayoutChange, this);
+		app.map.on('showannotationschanged', this.onCommentLayoutChange, this);
+
+		// A resize changes both the frame (base centering) and the side margins
+		// (comment shift), so the shift must be recomputed on the next rebuild.
+		app.events.on('resize', () => {
+			this.commentMarginDirty = true;
+		});
 	}
 
-	public unselectCommentOnScroll() {
-		const commentSection = app.sectionContainer.getSectionWithName(
-			app.CSections.CommentList.name,
-		) as cool.CommentSection;
+	// Writer places one continuous page column with the inherited single-window
+	// machinery, centred horizontally when the page is narrower than the viewport.
+	protected override usesSingleWindowView(): boolean {
+		return true;
+	}
 
-		if (commentSection && commentSection.sectionProperties.selectedComment) {
-			commentSection.unselect();
+	// Horizontal placement of the page: centre it using the stable page width,
+	// then shift it left by the comment margin so the comment column fits on the
+	// right. Vertical centring stays a no-op (the document is taller than the
+	// viewport). Folded into the viewed rectangle on rebuild, so drawing
+	// (documentToViewX) and hit-testing stay consistent from that one source.
+	protected override getCenteringOffset(): number[] {
+		Util.ensureValue(app.activeDocument);
+
+		const frame = this.frameSize;
+		// Centre on fileSize, NOT viewSize: the comment section inflates viewSize
+		// to (page + comment column) so the comment stays scrollable
+		// (CommentListSection.update), which makes viewSize.x toggle and the page
+		// jump on scroll. fileSize is the stable page extent, and it is also what
+		// the comment section anchors the comment column to (fileSize.cX in
+		// CommentListSection.update) - so centring on it keeps the page and the
+		// comment aligned.
+		const content = app.activeDocument.fileSize;
+		if (content.pX <= 0) return [0, 0]; // before the first status
+
+		// Centre the page horizontally, then shift it left by the (cached) comment
+		// margin. Vertical stays a no-op (the document is taller than the viewport).
+		let centerX = Math.max(0, Math.round((frame.pX - content.pX) / 2));
+
+		// Recompute the comment shift only when it may have changed; otherwise
+		// reuse the cached value so scrolling never moves the page horizontally.
+		if (this.commentMarginDirty) {
+			this.commentMarginShift = this.computeDocumentScrollOffset();
+			this.commentMarginDirty = false;
 		}
+		centerX -= this.commentMarginShift;
+
+		const centerY = Math.max(0, Math.round((frame.pY - content.pY) / 2));
+		return [centerX, centerY];
 	}
 
 	private getCommentAndDocumentSpacingInfo(): DocumentSpacingInfo {
@@ -52,26 +106,22 @@ class ViewLayoutWriter extends ViewLayoutBase {
 		} as DocumentSpacingInfo;
 	}
 
-	private documentCanMoveLeft(ignoreDocumentScrollOffset: boolean) {
+	private documentCanMoveLeft(): boolean {
 		const spacingInfo = this.getCommentAndDocumentSpacingInfo();
-		const offset = ignoreDocumentScrollOffset ? 0 : this.documentScrollOffset;
 
 		const commentsWiderThanRightMargin =
-			spacingInfo.documentMarginsWidth + offset <
-			spacingInfo.commentSectionWidth;
+			spacingInfo.documentMarginsWidth < spacingInfo.commentSectionWidth;
 
 		const haveEnoughLeftMarginForMove =
-			spacingInfo.commentSectionWidth -
-				(spacingInfo.documentMarginsWidth + offset) <=
-			spacingInfo.documentMarginsWidth - offset;
+			spacingInfo.commentSectionWidth - spacingInfo.documentMarginsWidth <=
+			spacingInfo.documentMarginsWidth;
 
 		return commentsWiderThanRightMargin && haveEnoughLeftMarginForMove;
 	}
 
-	/*
-		`cool.CommentSection.shouldCollapse()` doesn't need `documentScrollOffset`
-		details to know if it `shouldCollapse` the comments or not.
-	*/
+	// Whether both side margins together are wide enough to show the comment
+	// column at full width without shifting the page. Also read by
+	// CommentSection.shouldCollapse().
 	public viewHasEnoughSpaceToShowFullWidthComments() {
 		const spacingInfo = this.getCommentAndDocumentSpacingInfo();
 		return (
@@ -79,47 +129,35 @@ class ViewLayoutWriter extends ViewLayoutBase {
 		);
 	}
 
-	private documentMoveLeftByOffset(): number {
-		const spacingInfo = this.getCommentAndDocumentSpacingInfo();
-		return (
-			spacingInfo.commentSectionWidth -
-			(spacingInfo.documentMarginsWidth + this.documentScrollOffset)
-		);
-	}
+	// How far to shift the page left so the comment column fits on the right, in
+	// canvas pixels - the unit the comment column width and the side margin are
+	// both measured in. Pure: no scrolling, no selection changes. Called by
+	// getCenteringOffset only when the comment margin is marked dirty.
+	private computeDocumentScrollOffset(): number {
+		// Can run during early load (a rebuild before the comment section exists),
+		// so tolerate a missing section.
+		if (
+			!app.sectionContainer.getSectionWithName(app.CSections.CommentList.name)
+		)
+			return 0;
 
-	// How far the document sits left of centre, in CSS pixels. The widths it is
-	// worked out from are canvas pixels.
-	public getDocumentScrollOffset() {
 		if (this.commentsHiddenOrNotPresent()) return 0;
 		if (!this.viewHasEnoughSpaceToShowFullWidthComments()) return 0;
 
-		if (this.documentCanMoveLeft(true)) {
-			this.documentScrollOffset = 0;
-			this.documentScrollOffset = this.documentMoveLeftByOffset();
-			return this.documentScrollOffset / app.dpiScale;
+		if (this.documentCanMoveLeft()) {
+			const spacingInfo = this.getCommentAndDocumentSpacingInfo();
+			return spacingInfo.commentSectionWidth - spacingInfo.documentMarginsWidth;
 		}
 
 		return 0;
 	}
 
-	private recenterDocument() {
-		if (this.documentScrollOffset == 0) return;
-
-		this.scrollHorizontal(-this.documentScrollOffset, true);
-		this.documentScrollOffset = 0;
-		app.sectionContainer.requestReDraw();
-	}
-
-	private commentsHiddenOrNotPresent() {
+	private commentsHiddenOrNotPresent(): boolean {
 		const commentSection = app.sectionContainer.getSectionWithName(
 			app.CSections.CommentList.name,
 		) as cool.CommentSection;
 
-		if (commentSection.commentsHiddenOrNotPresent()) {
-			this.recenterDocument();
-			return true;
-		}
-		return false;
+		return commentSection.commentsHiddenOrNotPresent();
 	}
 
 	private unselectSelectedCommentIfAny() {
@@ -135,32 +173,13 @@ class ViewLayoutWriter extends ViewLayoutBase {
 		}
 	}
 
-	private adjustDocumentMarginsForComments(onZoom: boolean) {
+	private onCommentLayoutChange(): void {
 		this.unselectSelectedCommentIfAny();
-
-		if (this.commentsHiddenOrNotPresent()) return;
-
-		if (this.documentCanMoveLeft(onZoom)) {
-			if (onZoom) this.documentScrollOffset = 0;
-			this.documentScrollOffset = this.documentMoveLeftByOffset();
-			/*
-			 * we scrollHorizontal by 1 to trigger the layouting tasks in
-			 * the `ScrollSection.doMove` function, which calls `map.panBy`
-			 * to adjust the document center, and there we add the offset
-			 * to the x component to move the document to the left.
-			 * we only do it for the zoom events because for resize,
-			 * the layouting tasks are scheduled automatically by other
-			 * code, like that in CommentListSection.ts (updateDOM)
-			 */
-			this.scrollHorizontal(1, true);
-		}
-	}
-
-	private documentZoomCallback() {
-		this.adjustDocumentMarginsForComments(true);
-	}
-
-	private annotationOperationsCallback() {
-		this.adjustDocumentMarginsForComments(false);
+		// The comment layout changed, so the shift must be recomputed on the next
+		// rebuild; then rebuild the viewed rectangle (which folds in the new offset
+		// through getCenteringOffset) and refresh the visible area / tiles.
+		this.commentMarginDirty = true;
+		this.updateViewData();
+		app.sectionContainer.requestReDraw();
 	}
 }

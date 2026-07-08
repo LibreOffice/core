@@ -48,20 +48,28 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		return true;
 	}
 
+	// The single-window layouts that place one page/slide with the inherited view
+	// machinery (centred when smaller than the viewport): Impress/Draw edit (plain
+	// ViewLayoutNewBase) and Writer. Calc (fills the viewport, own scroll/viewed
+	// rectangle) and the stacked-page subclasses build their own and opt out.
+	protected usesSingleWindowView(): boolean {
+		return this.type === 'ViewLayoutNewBase';
+	}
+
 	// The 'resize' event (a ResizeObserver on the container) can fire before the
 	// document anchor section has been resized, so defer to the layouting phase
 	// where the frame size has settled - otherwise centering would use a stale
 	// frame. Zoom end runs synchronously (no resize in flight, and we want the
 	// centred rectangle committed before the next redraw).
 	private rebuildSingleWindowViewDeferred(): void {
-		if (this.type !== 'ViewLayoutNewBase') return;
+		if (!this.usesSingleWindowView()) return;
 		app.layoutingService.appendLayoutingTask(() =>
 			this.rebuildSingleWindowView(),
 		);
 	}
 
 	private rebuildSingleWindowView(): void {
-		if (this.type !== 'ViewLayoutNewBase') return; // subclasses handle their own
+		if (!this.usesSingleWindowView()) return; // subclasses handle their own
 
 		// applyZoom rebuilds the viewed rectangle around the zoom anchor
 		// (setViewRectangleFromPointAndScale) which may leave a non-negative scroll
@@ -141,10 +149,9 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		this.scrollProperties.horizontalScrollStep = documentAnchor.size[0] / 2;
 	}
 
-	// This is duplicated in ViewLayoutWriter and ViewLayoutNewBase because the
-	// other way would have been to move this to ViewLayoutBase, but that introduces
-	// view jumps in Calc, so code duplication seemed like the obvious choice after
-	// that.
+	// Lives here rather than in ViewLayoutBase: the single-window layouts
+	// (Writer/Impress/Draw) inherit it, while Calc overrides scroll() without
+	// calling it - putting it in the base introduced view jumps in Calc.
 	public unselectCommentOnScroll() {
 		const commentSection = app.sectionContainer.getSectionWithName(
 			app.CSections.CommentList.name,

@@ -227,9 +227,10 @@ class ViewLayoutBase {
 	}
 
 	// New-structure (off-map) layouts drive their own viewed rectangle and zoom
-	// through ZoomControl instead of the leaflet map. The old map-coupled
-	// layouts (ViewLayoutWriter, and the base ViewLayoutBase used by Impress/
-	// Draw) return false until their scroll is migrated off the map too.
+	// through ZoomControl instead of the leaflet map, and override this to return
+	// true (see ViewLayoutNewBase). ViewLayoutBase itself is no longer
+	// instantiated directly - every document layout now extends ViewLayoutNewBase
+	// - so this base value is only a default.
 	public usesZoomControl(): boolean {
 		return false;
 	}
@@ -385,13 +386,6 @@ class ViewLayoutBase {
 			map.fire('zoomend');
 			map.fire('zoomlevelschange');
 		}
-	}
-
-	/// used in Views which can show pages (Writer) to determine left alignment
-	// FIXME: confusing name, should be abstract
-	public getDocumentScrollOffset(): number {
-		app.console.error('not implemented');
-		return 0;
 	}
 
 	private calculateHorizontalScrollLength(
@@ -582,8 +576,8 @@ class ViewLayoutBase {
 		}
 	}
 	/*
-		`ignoreScrollbarLength` constraints while scrolling the document to make some space for the comments.
-		see `ViewLayoutWriter.adjustDocumentMarginsForComments`
+		`ignoreScrollbarLength` relaxes the scrollbar-length constraints while
+		scrolling the document to make some space for the comments.
 	*/
 	protected scrollHorizontal(
 		pX: number,

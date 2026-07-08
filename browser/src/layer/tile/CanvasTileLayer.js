@@ -49,15 +49,13 @@ window.L.TileSectionManager = window.L.Class.extend({
 
 	// Details of tile areas to render
 	_paintContext: function() {
-		// Which tiles are drawn, and where, is anchored to viewBounds. Calc
-		// scrolls the layout, not the leaflet map, so map.getPixelBoundsCore()
-		// is stale and would keep painting the initial region. Read the viewed
-		// rectangle (already in core pixels) instead so drawing tracks the
-		// scroll. The map-based value is only relied on by the layouts that
-		// still pan the map: ViewLayoutWriter and the generic ViewLayoutBase
-		// (Impress). The other map-independent layouts (MultiPage,
-		// CompareChanges, FileBased) take their own draw paths in onDraw and do
-		// not consume this viewBounds for tile placement.
+		// Which tiles are drawn, and where, is anchored to viewBounds. The
+		// off-map layouts scroll the layout, not the leaflet map, so
+		// map.getPixelBoundsCore() is stale and would keep painting the initial
+		// region. Read the viewed rectangle (already in core pixels) instead so
+		// drawing tracks the scroll. All document layouts are now off-map
+		// (usesZoomControl), so the map-based branch below is only a fallback
+		// kept until the leaflet map is fully removed.
 		var layout = app.activeDocument && app.activeDocument.activeLayout;
 		var viewBounds;
 		if (layout && layout.usesZoomControl()) {

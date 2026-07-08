@@ -545,8 +545,8 @@ export class CommentSection extends CanvasSectionObject {
 			the comments section doesn't end up in such layout normally,
 			either the user resized the window, or zoomed in. both of
 			those events are being listened to in ViewLayoutWriter and
-			when that happens, `ViewLayoutWriter` moves the document to
-			the left in function `adjustDocumentMarginsForComments`.
+			when that happens, `ViewLayoutWriter` shifts the document to
+			the left through its `getCenteringOffset` override.
 		*/
 		if (app.activeDocument.activeLayout.viewHasEnoughSpaceToShowFullWidthComments())
 			return false;

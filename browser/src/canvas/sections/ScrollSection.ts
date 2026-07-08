@@ -209,9 +209,10 @@ export class ScrollSection extends CanvasSectionObject {
 		var vx = 0;
 		var vy = 0;
 
-		const isCalc = app.activeDocument.activeLayout.type === 'ViewLayoutCalc';
-		const topLeftX = isCalc ? app.activeDocument.activeLayout.viewedRectangle.cX1 : e.map._getTopLeftPoint().x;
-		const topLeftY = isCalc ? app.activeDocument.activeLayout.viewedRectangle.cY1 : e.map._getTopLeftPoint().y;
+		// Every layout is off-map now, so the top-left comes from the viewed
+		// rectangle (the leaflet map pane is stale/unused).
+		const topLeftX = app.activeDocument.activeLayout.viewedRectangle.cX1;
+		const topLeftY = app.activeDocument.activeLayout.viewedRectangle.cY1;
 
 		if (e.pos.y > e.map._size.y - 50) {
 			vy = 50;
