@@ -197,7 +197,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkScrolledWindow" id="scrolledwindowsearch">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="hexpand">True</property>

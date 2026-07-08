@@ -58,6 +58,11 @@ abstract class JSDialogComponent {
 
 		if (data.jsontype !== this.allowedJsonType) return false;
 
+		if (!data.control.id) {
+			app.console.debug('Missing "control.id" in update message');
+			return false;
+		}
+
 		if (this.model) this.model.widgetUpdate(data);
 
 		if (!this.container) return false;
@@ -80,6 +85,11 @@ abstract class JSDialogComponent {
 		var data = e.data;
 
 		if (data.jsontype !== this.allowedJsonType) return false;
+
+		if (!data.data.control_id) {
+			app.console.debug('Missing "control_id" in action message');
+			return false;
+		}
 
 		if (this.model) this.model.widgetAction(data);
 
