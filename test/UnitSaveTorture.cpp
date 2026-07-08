@@ -605,7 +605,12 @@ public:
                 break;
 
             case Phase::WaitUnmodifiedStatus:
-                if (_stopwatch.elapsed(std::chrono::seconds(5)))
+#if ENABLE_RUNTIME_OPTIMIZATIONS
+                constexpr std::chrono::seconds unmodifiedTimeout(5);
+#else
+                constexpr std::chrono::seconds unmodifiedTimeout(30);
+#endif
+                if (_stopwatch.elapsed(unmodifiedTimeout))
                 {
                     failTest("Timed out waiting for the un-modified state");
                 }
