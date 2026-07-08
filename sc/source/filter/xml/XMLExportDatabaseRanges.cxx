@@ -241,7 +241,12 @@ private:
         // various boolean flags.
         if (rData.HasImportSelection())
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_SELECTION, XML_TRUE);
-        if (rData.HasAutoFilter())
+        // tdf#170902: HasAutoFilter() stays true for the XLSX round-trip even when all buttons
+        // are hidden, so also require the header row to carry the ScMF::Auto flag.
+        if (rData.HasAutoFilter() &&
+            mrDoc.HasAttrib(ScRange(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
+                                    aRange.aEnd.Col(),    aRange.aStart.Row(), aRange.aStart.Tab()),
+                            HasAttrFlags::AutoFilter))
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_FILTER_BUTTONS, XML_TRUE);
         if (rData.IsKeepFmt())
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_STYLES, XML_TRUE);

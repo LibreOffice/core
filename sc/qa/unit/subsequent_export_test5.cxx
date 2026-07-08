@@ -758,6 +758,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testAutofilterShowButton)
     assertXPath(pDocXml, "/x:worksheet/x:autoFilter/x:filterColumn[4]", "hiddenButton", u"1");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest5, testAutofilterHiddenButtonToODS)
+{
+    createScDoc("xlsx/hiddenButton.xlsx");
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    // tdf#170902: all columns have hiddenButton="1", so ODS must not get display-filter-buttons.
+    assertXPathNoAttribute(pDoc, "//table:database-ranges/table:database-range[1]",
+                           "display-filter-buttons");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest5, testShapeStyles)
 {
     createScDoc();
