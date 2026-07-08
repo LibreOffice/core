@@ -1001,14 +1001,23 @@ Reference< XShape > SimpleShape::createPictureObject(const Reference< XShapes >&
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper);
 
-        const sal_Int32 nWrapDistanceLeft = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceLeft, 0, true, true);
-        const sal_Int32 nWrapDistanceRight = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceRight, 0, true, true);
         const sal_Int32 nWrapDistanceTop = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceTop, 0, false, true);
         const sal_Int32 nWrapDistanceBottom = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maWrapDistanceBottom, 0, false, true);
-        aPropSet.setProperty(PROP_LeftMargin, uno::Any(nWrapDistanceLeft));
-        aPropSet.setProperty(PROP_RightMargin, uno::Any(nWrapDistanceRight));
         aPropSet.setProperty(PROP_TopMargin, uno::Any(nWrapDistanceTop));
         aPropSet.setProperty(PROP_BottomMargin, uno::Any(nWrapDistanceBottom));
+
+        // 9pt default left and right wrap distances for Word files
+        const bool bIsMSO = mrDrawing.getFilter().isMSODocument();
+        const OUString aWordWrapDefault = OUString::number(0x0001BE7C);
+        auto decodeOrDefault = [&](const OUString& rVal, bool bPixelX) -> sal_Int32 {
+            if (!rVal.isEmpty())
+                return ConversionHelper::decodeMeasureToHmm(rGraphicHelper, rVal, 0, bPixelX, true);
+            if (bIsMSO)
+                return ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aWordWrapDefault, 0, bPixelX, false);
+            return 0;
+        };
+        aPropSet.setProperty(PROP_LeftMargin,   uno::Any(decodeOrDefault(maTypeModel.maWrapDistanceLeft,   true)));
+        aPropSet.setProperty(PROP_RightMargin,  uno::Any(decodeOrDefault(maTypeModel.maWrapDistanceRight,  true)));
 
         if (maTypeModel.moCropBottom.has_value() || maTypeModel.moCropLeft.has_value() || maTypeModel.moCropRight.has_value() || maTypeModel.moCropTop.has_value())
         {

@@ -205,6 +205,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143475rotatedWord2007image)
     // does not fail without the patch. Therefore no export test.
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf171176WrapDistanceDefault)
+{
+    // Given a docx document with a tightly wrapped VML image that does not specify explicit
+    // wrap distances (no o:wrapdist* attributes on the v:shape).
+    createSwDoc("tight-wrap-fromdoc-C12.docx");
+
+    // Word implicitly assumes a 9pt (318 1/100 mm) wrap distance on left and right sides in this case.
+    // Without the fix, the missing attributes were interpreted as an explicit distance of 0.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(318),
+                                 getProperty<sal_Int32>(getShape(1), u"LeftMargin"_ustr), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(318),
+                                 getProperty<sal_Int32>(getShape(1), u"RightMargin"_ustr), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(0),
+                                 getProperty<sal_Int32>(getShape(1), u"TopMargin"_ustr), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(0),
+                                 getProperty<sal_Int32>(getShape(1), u"BottomMargin"_ustr), 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf143219ContourWrapRotate)
 {
     createSwDoc("tdf143219_ContourWrap_rotate.docx");

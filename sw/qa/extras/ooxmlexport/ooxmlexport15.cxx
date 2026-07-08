@@ -1140,7 +1140,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135660, "tdf135660.docx")
     xOLEProps->getPropertyValue(u"RightMargin"_ustr) >>= nWrapDistanceRight;
     xOLEProps->getPropertyValue(u"TopMargin"_ustr) >>= nWrapDistanceTop;
     xOLEProps->getPropertyValue(u"BottomMargin"_ustr) >>= nWrapDistanceBottom;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Left wrap distance is wrong", static_cast<sal_Int32>(0), nWrapDistanceLeft);
+    // default 318 for Word documents from tdf#171176
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Left wrap distance is wrong", static_cast<sal_Int32>(318), nWrapDistanceLeft);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Right wrap distance is wrong", static_cast<sal_Int32>(400), nWrapDistanceRight);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Top wrap distance is wrong", static_cast<sal_Int32>(300), nWrapDistanceTop);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Bottom wrap distance is wrong", static_cast<sal_Int32>(199), nWrapDistanceBottom);
