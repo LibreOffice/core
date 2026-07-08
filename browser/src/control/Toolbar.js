@@ -829,6 +829,17 @@ window.L.Map.include({
 	},
 	openShare: function () {
 		var map = this;
+		if (!window.WOPIPostmessageReady) {
+			// host advertised EnableShare but never completed the postMessage
+			// handshake, so there is nothing to receive UI_Share
+			var alertOptions = {
+				messages: [
+					_('Unable to share')
+				],
+			};
+			window.JSDialog.showInfoModalWithOptions('unabletoshare', alertOptions);
+			return;
+		}
 		map.fire('postMessage', {msgId: 'UI_Share'});
 	},
 	openSaveAs: function (format) {
