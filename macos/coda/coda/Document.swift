@@ -404,14 +404,17 @@ class Document: NSDocument {
 
         self.tempDirectoryURL = tempDir
 
-        // If fileURL is available (document opened from a file), preserve the original filename.
-        // If not available, use a generic name.
+        // If fileURL is available (document opened from a file), preserve the
+        // original filename. A new document has no name yet, so give it a plain
+        // "Untitled" that reads well wherever the name is shown. The temporary
+        // directory is already unique, so the file name does not need to carry a
+        // unique suffix.
         let fileName: String
         if let fileURL = self.fileURL {
             fileName = fileURL.lastPathComponent
         }
         else {
-            fileName = "Document-\(UUID().uuidString)"
+            fileName = "Untitled"
         }
 
         let tempFile = tempDir.appendingPathComponent(fileName)
