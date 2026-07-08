@@ -360,6 +360,12 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.main-menu-btn:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+	border-radius: var(--border-radius);
+}
+
 /* Hamburger icon */
 
 .main-menu-btn-icon,

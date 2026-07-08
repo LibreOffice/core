@@ -1924,6 +1924,22 @@ class Menubar extends window.L.Control {
 		$(() => {
 			const $mainMenuState = $('#main-menu-state');
 			if ($mainMenuState.length) {
+				// keyboard accessibility for the hamburger button
+				$('#main-menu-btn').off('keydown keyup').on('keydown', function(e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						e.stopPropagation();
+						this.click();
+					}
+				}).on('keyup', function(e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						e.stopPropagation();
+					}
+				});
+
+				document.getElementById('main-menu-btn')?.setAttribute('aria-label', _('Menu'));
+
 				// animate mobile menu
 				$mainMenuState.change((event) => {
 					// This code is invoked when the hamburger menu is opened or closed
@@ -1962,6 +1978,9 @@ class Menubar extends window.L.Control {
 						if (this._map.getDocType() === 'spreadsheet') {
 							$('#formulabar').show();
 						}
+						setTimeout(() => {
+							$('#main-menu-btn').focus();
+						}, 0);
 					}
 				});
 

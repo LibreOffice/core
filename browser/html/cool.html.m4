@@ -145,7 +145,7 @@ m4_ifelse(MOBILEAPP,[true],
     <dialog id="content-keeper">
       <nav class="main-nav" role="navigation">
         <!-- Mobile menu toggle button (hamburger/x icon) -->
-        <input id="main-menu-state" type="checkbox" />
+        <input id="main-menu-state" type="checkbox" tabindex="-1" aria-hidden="true" />
         <ul id="main-menu" class="sm sm-simple lo-menu readonly"></ul>
         <div id="document-titlebar">
           <div class="document-title">
@@ -179,7 +179,7 @@ m4_ifelse(MOBILEAPP,[true],
             <div class="jsdialog ui-spacer"></div>
             <div id="toolbar-up"></div>
             <div id="toolbar-hamburger">
-              <label class="main-menu-btn" for="main-menu-state">
+              <label class="main-menu-btn" for="main-menu-state" id="main-menu-btn" role="button" tabindex="0">
                 <span class="main-menu-btn-icon" id="main-menu-btn-icon"></span>
               </label>
             </div>
