@@ -44,8 +44,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/ECI \
 	UnpackedTarball/zxing/core/src/Error \
 	UnpackedTarball/zxing/core/src/GTIN \
-	UnpackedTarball/zxing/core/src/GenericGF \
-	UnpackedTarball/zxing/core/src/GenericGFPoly \
 	UnpackedTarball/zxing/core/src/GlobalHistogramBinarizer \
 	UnpackedTarball/zxing/core/src/GridSampler \
 	UnpackedTarball/zxing/core/src/HRI \
@@ -55,8 +53,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/MultiFormatWriter \
 	UnpackedTarball/zxing/core/src/PerspectiveTransform \
 	UnpackedTarball/zxing/core/src/ReadBarcode \
-	UnpackedTarball/zxing/core/src/ReedSolomonDecoder \
-	UnpackedTarball/zxing/core/src/ReedSolomonEncoder \
 	UnpackedTarball/zxing/core/src/ResultPoint \
 	UnpackedTarball/zxing/core/src/TextDecoder \
 	UnpackedTarball/zxing/core/src/TextEncoder \
@@ -70,7 +66,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,zxing,\
 	UnpackedTarball/zxing/core/src/maxicode/MCReader \
 	UnpackedTarball/zxing/core/src/oned/ODCodabarReader \
 	UnpackedTarball/zxing/core/src/oned/ODCodabarWriter \
-	UnpackedTarball/zxing/core/src/oned/ODCode128Patterns \
 	UnpackedTarball/zxing/core/src/oned/ODCode128Reader \
 	UnpackedTarball/zxing/core/src/oned/ODCode128Writer \
 	UnpackedTarball/zxing/core/src/oned/ODCode39Reader \
@@ -130,6 +125,7 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,zxing,\
 	UnpackedTarball/zxing/core/src/libzint/rss \
 	UnpackedTarball/zxing/core/src/libzint/stubs \
 	UnpackedTarball/zxing/core/src/libzint/svg \
+	UnpackedTarball/zxing/core/src/libzint/telepen \
 	UnpackedTarball/zxing/core/src/libzint/upcean \
 	UnpackedTarball/zxing/core/src/libzint/vector \
 ))
