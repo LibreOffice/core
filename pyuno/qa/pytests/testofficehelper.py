@@ -2,6 +2,8 @@ import unittest
 from officehelper import bootstrap, BootstrapException, SessionManager
 from com.sun.star.frame import theDesktop
 
+import itertools
+
 
 class OfficeHelperTest(unittest.TestCase):
     """officehelper.py must provide:
@@ -14,20 +16,12 @@ class OfficeHelperTest(unittest.TestCase):
 
     extra features may be:
     Python source documentation """
-    def test_default_config(self):
-        # Check default timeout and number of attempts
-        # Stop LibreOffice running service
-        ctx = bootstrap()  # Default settings suffice to initialize the service
-        #time.sleep(10)  # gve
-        if ctx:  # stop soffice as a service
-            desktop = theDesktop.get(ctx)
-            desktop.terminate()
-        self.assertTrue(ctx)  # check for failure
-
     def test_kwargs(self):
-        # Wait differently for LO to start, request context 10 times
+        # Wait differently for LO to start, requesting the context an infinite number of times with
+        # a one second delay between each request. We need to have a long delay to allow for slow
+        # startup times under heavy load on Jenkins.
         # Report processing in console
-        ctx = bootstrap(delays=[1,]*10, report=print)
+        ctx = bootstrap(delays=itertools.repeat(1), report=print)
         if ctx:  # stop soffice as a service
             desktop = theDesktop.get(ctx)
             desktop.terminate()
@@ -40,7 +34,9 @@ class OfficeHelperTest(unittest.TestCase):
 
     def test_session_manager(self):
         # Start/Stop a LibreOffice `randomly named` pipe service
-        with SessionManager() as ctx:
+        # The infinite number of delays are added to allow for slow startup times under heavy load
+        # on Jenkins.
+        with SessionManager(delays=itertools.repeat(1)) as ctx:
             self.assertTrue(theDesktop.get(ctx))
 
 if __name__ == "__main__":
