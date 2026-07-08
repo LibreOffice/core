@@ -190,9 +190,10 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                     const SwRangeRedline* pRedline = rIDRA.GetRedline( rAnchorPos, nullptr );
                     if( pRedline )
                     {
-                        if( RedlineType::Insert == pRedline->GetType() )
+                        const RedlineType eType = pRedline->GetTypeIgnoringAdditonalFormat();
+                        if( RedlineType::Insert == eType )
                             aRet = INSERTED;
-                        else if( RedlineType::Delete == pRedline->GetType() )
+                        else if( RedlineType::Delete == eType )
                         {
                             bool bDeleted = pAnnotationMark == nullptr;
                             if( !bDeleted )

@@ -73,7 +73,7 @@ namespace sw
                 rTextField.GetStart());
         SwRangeRedline const*const pRedline(rIDRA.GetRedline(pos, &tmp));
         return (pRedline
-            && pRedline->GetType() == RedlineType::Delete
+            && pRedline->GetTypeIgnoringAdditonalFormat() == RedlineType::Delete
             && *pRedline->GetPoint() != *pRedline->GetMark());
     }
 }

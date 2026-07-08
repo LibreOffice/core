@@ -20,6 +20,8 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/configuration.hxx>
 
+#include <editeng/brushitem.hxx>
+#include <hintids.hxx>
 #include <AnnotationWin.hxx>
 #include <cmdid.h>
 #include <docufld.hxx>
@@ -643,6 +645,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testRedlineAutoCorrectInsertOverlap)
     // NOTE: whether the autocorrect replacement itself should be recorded
     // as a tracked change is an open question.
     CPPUNIT_ASSERT_EQUAL(u"tsettest "_ustr, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testCommentDeletionStaysDeletedAfterHighlight)
+{
+    // A comment deleted with change tracking must keep showing as deleted even
+    // after a character highlight is applied on top of the tracked deletion.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    pWrtShell->Insert(u"word"_ustr);
+
+    // anchor a comment to the whole word
+    pWrtShell->SelAll();
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr,
+                    { comphelper::makePropertyValue(u"Text"_ustr, u"a comment"_ustr),
+                      comphelper::makePropertyValue(u"Author"_ustr, u"Author"_ustr) });
+    Scheduler::ProcessEventsToIdle();
+
+    SwView* pView = getSwDocShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+    CPPUNIT_ASSERT(pPostItMgr);
+    auto& aPostItFields = pPostItMgr->GetPostItFields();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPostItFields.size());
+
+    // record changes, so deleting the comment marks it as deleted instead of
+    // removing it outright
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
+
+    CPPUNIT_ASSERT(aPostItFields[0]->mpPostIt);
+    pPostItMgr->SetActiveSidebarWin(aPostItFields[0]->mpPostIt);
+    dispatchCommand(mxComponent, u".uno:DeleteComment"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPostItFields.size());
+    CPPUNIT_ASSERT_EQUAL(SwPostItHelper::SwLayoutStatus::DELETED, aPostItFields[0]->mLayoutStatus);
+
+    // apply a character highlight over the word the comment was anchored to,
+    // which stacks a format redline on top of the delete redline
+    pWrtShell->SelAll();
+    SvxBrushItem aHighlight(COL_YELLOW, RES_CHRATR_HIGHLIGHT);
+    SfxItemSetFixed<RES_CHRATR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT> aSet(pWrtShell->GetAttrPool());
+    aSet.Put(aHighlight);
+    pWrtShell->SetAttrSet(aSet);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix the format redline on top of the delete redline hid the
+    // deletion, so the comment turned back to VISIBLE.
+    CPPUNIT_ASSERT_EQUAL(SwPostItHelper::SwLayoutStatus::DELETED, aPostItFields[0]->mLayoutStatus);
 }
 
 } // end of anonymous namespace
