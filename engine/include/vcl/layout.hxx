@@ -578,12 +578,14 @@ private:
     std::set< VclPtr<vcl::Window> > m_aWindows;
     bool m_bIgnoreHidden;
     VclSizeGroupMode m_eMode;
+    mutable sal_uInt32 m_nId;
 
     void trigger_queue_resize();
 public:
     VclSizeGroup()
         : m_bIgnoreHidden(false)
         , m_eMode(VclSizeGroupMode::Horizontal)
+        , m_nId(0)
     {
     }
     void insert(vcl::Window *pWindow)
@@ -613,6 +615,10 @@ public:
         return m_eMode;
     }
     void set_property(const OUString &rKey, const OUString &rValue);
+
+    // An opaque id, assigned on first use and stable for the lifetime of this size
+    // group, distinct from the group's address.
+    sal_uInt32 get_id() const;
 };
 
 class VCL_DLLPUBLIC VclDrawingArea final : public Control

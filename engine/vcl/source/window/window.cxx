@@ -57,6 +57,7 @@
 #include <salgdi.hxx>
 #include <svdata.hxx>
 #include <window.h>
+#include <vcl/layout.hxx>
 #include <toolbox.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
@@ -3400,6 +3401,21 @@ void Window::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     // would lose it (e.g. an entry shrinking to its default char width).
     if (get_hexpand())
         rJsonWriter.put("hexpand", true);
+
+    {
+        WindowImpl* pGroupImpl = mpWindowImpl->mpBorderWindow
+            ? mpWindowImpl->mpBorderWindow->mpWindowImpl.get()
+            : mpWindowImpl.get();
+        VclSizeGroup* pSizeGroup = pGroupImpl->m_xSizeGroup.get();
+        // A size group with ignore-hidden set excludes a member from the
+        // group's size while that member is not visible, so a widget on an
+        // inactive tab page does not widen the group for its visible peers.
+        bool bExcludedWhileHidden = pSizeGroup && pSizeGroup->get_ignore_hidden() && !IsVisible();
+        if (pSizeGroup && pSizeGroup->get_mode() != VclSizeGroupMode::NONE && !bExcludedWhileHidden)
+        {
+            rJsonWriter.put("sizeGroupId", OUString::number(pSizeGroup->get_id()));
+        }
+    }
 
     if (vcl::Window* pChild = mpWindowImpl->mpFirstChild)
     {

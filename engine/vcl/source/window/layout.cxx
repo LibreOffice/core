@@ -26,6 +26,7 @@
 #endif
 #endif
 
+#include <atomic>
 #include <string_view>
 
 #include <config_features.h>
@@ -2349,6 +2350,14 @@ void VclSizeGroup::set_mode(VclSizeGroupMode eMode)
         trigger_queue_resize();
     }
 
+}
+
+sal_uInt32 VclSizeGroup::get_id() const
+{
+    static std::atomic<sal_uInt32> nNextId(1);
+    if (!m_nId)
+        m_nId = nNextId++;
+    return m_nId;
 }
 
 void VclSizeGroup::set_property(const OUString &rKey, const OUString &rValue)

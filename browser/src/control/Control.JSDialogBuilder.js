@@ -872,6 +872,9 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				}
 			}
 			$(contentDivs[t]).removeClass('hidden');
+			// A size group can have members outside this tab control, so re-run over the
+			// whole dialog when one is known, not just the tab page that changed visibility.
+			builder.equalizeSizeGroups(builder._container || contentDivs[t]);
 			builder.wizard.selectedTab(tabIds[t]);
 		};
 	},
@@ -2364,6 +2367,9 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				control.setAttribute('data-cooltip', this._cleanText(data.tooltip));
 				window.L.control.attachTooltipEventListener(control, this.map);
 			}
+
+			if (data.sizeGroupId)
+				control.dataset.sizeGroupId = data.sizeGroupId;
 		}
 
 		// natural tab-order when using keyboard navigation
@@ -2426,6 +2432,38 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		}
 
 		console.error('It seems widget doesn\'t require overwriting.');
+	},
+
+	// Set equal min-width on all widgets sharing a sizeGroupId (mirrors GTK size groups).
+	// A widget on a currently hidden tab page keeps its layout box (see
+	// .ui-content.hidden in jsdialogs.css), but its width there does not reflect
+	// how it renders once its tab becomes active, so it is left out here and
+	// re-measured through the tab-selection handler once that tab is shown.
+	equalizeSizeGroups: function(container) {
+		var groups = {};
+		container.querySelectorAll('[data-size-group-id]').forEach(function(el) {
+			if (el.closest('.ui-content.hidden'))
+				return;
+			el.style.minWidth = '';
+			var id = el.dataset.sizeGroupId;
+			if (!groups[id])
+				groups[id] = [];
+			groups[id].push(el);
+		});
+		Object.keys(groups).forEach(function(id) {
+			var els = groups[id];
+			// width:max-content avoids measuring the grid-stretched column width. Each
+			// widget's own width (e.g. 100% for a hexpand widget) is restored afterwards
+			// rather than cleared, since that inline value can carry meaning of its own.
+			var origWidths = els.map(function(el) { return el.style.width; });
+			els.forEach(function(el) { el.style.width = 'max-content'; });
+			var maxWidth = els.reduce(function(max, el) {
+				return Math.max(max, el.getBoundingClientRect().width);
+			}, 0);
+			els.forEach(function(el, i) { el.style.width = origWidths[i]; });
+			if (maxWidth > 0)
+				els.forEach(function(el) { el.style.minWidth = maxWidth + 'px'; });
+		});
 	},
 
 	build: function(parent, data, hasVerticalParent) {

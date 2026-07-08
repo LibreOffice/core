@@ -1244,6 +1244,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 					dialogDomParent.append(instance.container);
 				}
 
+				// Equalize widths of widgets in the same GTK size group.
+				instance.builder.equalizeSizeGroups(instance.content);
+
 				// do in task to apply correct focus when already shown
 				this.addHandlers(instance);
 

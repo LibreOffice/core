@@ -29,6 +29,7 @@ interface WidgetJSON {
 	left?: string; // placement in the grid - column
 	width?: string; // inside grid - width in number of columns
 	hexpand?: boolean; // horizontal expand in grid column
+	sizeGroupId?: string; // size group ID; widgets sharing an ID get their min-width equalized
 	halign?: string; // horizontal alignment within the grid cell (start, center, end)
 	valign?: string; // vertical alignment within the grid cell (start, center, end)
 	labelledBy?: string | string[];

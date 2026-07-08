@@ -87,9 +87,11 @@ JSDialog.grid = function (
 		table.setAttribute('tabindex', data.tabIndex);
 
 	const expandCols = new Set<number>();
+	let hasSizeGroup = false;
 	for (const child of data.children || []) {
 		if (child.hexpand && child.left !== undefined)
 			expandCols.add(parseInt(child.left));
+		if (child.sizeGroupId) hasSizeGroup = true;
 	}
 
 	let colTemplate = '';
@@ -102,6 +104,13 @@ JSDialog.grid = function (
 		', auto); grid-template-columns: ' +
 		colTemplate +
 		';' +
+		// With no hexpand column to claim it, leftover width in the grid would
+		// otherwise be divided up between the "auto" columns, so two grids with
+		// the same column content can end up with differently sized columns
+		// depending on how much leftover space each has to share out. A size
+		// group's min-width equalization relies on matching column widths across
+		// grids, so pin columns to their content width for a grid that has one.
+		(expandCols.size === 0 && hasSizeGroup ? ' justify-content: start;' : '') +
 		(data.columnSpacing > 0 ? ' column-gap:' + data.columnSpacing + 'px;' : '');
 
 	table.style = gridRowColStyle;
