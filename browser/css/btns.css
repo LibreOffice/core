@@ -214,7 +214,12 @@ button.jsdialog[disabled] img {
 	background-color: var(--color-background-lighter);
 	color: var(--color-text-darker);
 	border-color: var(--color-border-darker);
-	outline: none;
+}
+
+.button:focus-visible,
+.ui-pushbutton:focus-visible {
+	outline: 2px solid rgb(var(--doc-type, 11, 135, 231));
+	outline-offset: 2px;
 }
 
 .button-primary {
