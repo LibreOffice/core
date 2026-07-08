@@ -25,7 +25,7 @@ RustFile::RustFile(std::string_view directory, std::string_view typeName)
 
 std::string RustFile::getPath() const
 {
-#if defined __cpp_lib_format_path
+#if defined __cpp_lib_format_path && __cpp_lib_format_path >= 202506L
     return m_filePath.display_string();
 #else
     return m_filePath.string<char>();
@@ -461,7 +461,7 @@ CppFile::CppFile(std::string_view directory, std::string_view typeName, std::str
 
 std::string CppFile::getPathString() const
 {
-#if defined __cpp_lib_format_path
+#if defined __cpp_lib_format_path && __cpp_lib_format_path >= 202506L
     return m_filePath.display_string();
 #else
     return m_filePath.string<char>();

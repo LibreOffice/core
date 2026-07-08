@@ -27,7 +27,7 @@ public:
 public:
     std::string getPath() const
     {
-#if defined __cpp_lib_format_path
+#if defined __cpp_lib_format_path && __cpp_lib_format_path >= 202506L
         return m_filePath.display_string();
 #else
         return m_filePath.string<char>();
