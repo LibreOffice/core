@@ -252,54 +252,15 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 		this.commitVisibleAreaAndRequestTiles();
 	}
 
-	public override scroll(pX: number, pY: number): boolean {
-		// pX / pY are document-pixel deltas (legacy ViewLayoutBase semantics).
-		// ViewLayoutNewBase.scroll dampens pY by /20, so callers that pass raw
-		// pixel deltas (page-down, wheel, scrollByPoint) would barely scroll.
-		// Apply the delta directly to viewX/viewY and recompute the scrollbar
-		// position from viewSize, matching the scrollVerticalWithOffset path.
-		this.refreshScrollProperties();
-		const documentAnchor = this.getDocumentAnchorSection();
-		let scrolled = false;
-
-		if (pX !== 0 && this.canScrollHorizontal(documentAnchor)) {
-			const max = Math.max(0, this._viewSize.pX - documentAnchor.size[0]);
-			const newViewX = Math.max(
-				0,
-				Math.min(this.scrollProperties.viewX + pX, max),
-			);
-			if (newViewX !== this.scrollProperties.viewX) {
-				this.scrollProperties.viewX = newViewX;
-				this.scrollProperties.startX = Math.round(
-					(this.scrollProperties.viewX / this._viewSize.pX) *
-						this.scrollProperties.horizontalScrollLength,
-				);
-				scrolled = true;
-			}
-		}
-
-		if (pY !== 0 && this.canScrollVertical(documentAnchor)) {
-			const max = Math.max(0, this._viewSize.pY - documentAnchor.size[1]);
-			const newViewY = Math.max(
-				0,
-				Math.min(this.scrollProperties.viewY + pY, max),
-			);
-			if (newViewY !== this.scrollProperties.viewY) {
-				this.scrollProperties.viewY = newViewY;
-				this.scrollProperties.startY = Math.round(
-					(this.scrollProperties.viewY / this._viewSize.pY) *
-						this.scrollProperties.verticalScrollLength,
-				);
-				scrolled = true;
-			}
-		}
-
-		if (scrolled) {
-			this.updateViewData();
-			app.sectionContainer.requestReDraw();
-			app.map._docLayer._checkSelectedPart();
-		}
-
+	// The direct-delta scroll now lives in ViewLayoutNewBase; here we only add
+	// the file-based follow-up of recomputing which part is selected.
+	public override scroll(
+		pX: number,
+		pY: number,
+		userIsScrolling: boolean = false,
+	): boolean {
+		const scrolled = super.scroll(pX, pY, userIsScrolling);
+		if (scrolled) app.map._docLayer._checkSelectedPart();
 		return scrolled;
 	}
 

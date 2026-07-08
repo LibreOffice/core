@@ -304,22 +304,6 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 		return result;
 	}
 
-	public override scroll(
-		pX: number,
-		pY: number,
-		userIsScrolling: boolean = false,
-	): boolean {
-		if (userIsScrolling) this.unselectCommentOnScroll();
-		const scrolled = super.scroll(pX, pY, userIsScrolling);
-
-		if (scrolled) {
-			this.updateViewData();
-			app.sectionContainer.requestReDraw();
-		}
-
-		return scrolled;
-	}
-
 	public override scrollTo(
 		pX: number,
 		pY: number,

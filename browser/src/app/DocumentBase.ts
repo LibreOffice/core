@@ -38,7 +38,7 @@ class DocumentBase {
 		} else if (app.map._docLayer._docType === 'spreadsheet') {
 			this.activeLayout = new ViewLayoutCalc();
 		} else {
-			this.activeLayout = new ViewLayoutBase();
+			this.activeLayout = new ViewLayoutNewBase();
 		}
 		this._fileSize = new cool.SimplePoint(0, 0);
 		this.tableMiddleware = new TableMiddleware();

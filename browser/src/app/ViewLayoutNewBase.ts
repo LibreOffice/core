@@ -27,12 +27,67 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 
 	constructor() {
 		super();
+
+		// The stacked-page subclasses (MultiPage/FileBased/CompareChanges) install
+		// their own zoomend/resize handlers that rebuild page geometry and request
+		// tiles. The plain single-window layout (Impress/Draw edit) has none, so
+		// without these the viewed rectangle (which carries the centering offset)
+		// is never rebuilt on load/zoom/resize: the slide would not centre and
+		// would go blank after a zoom. Guarded by type so it is a no-op for the
+		// subclasses (they handle their own).
+		app.map.on('zoomend', this.rebuildSingleWindowView.bind(this));
+		app.events.on('resize', this.rebuildSingleWindowViewDeferred.bind(this));
+		app.layoutingService.appendLayoutingTask(() =>
+			this.rebuildSingleWindowView(),
+		);
 	}
 
 	// The new-structure layouts (Calc, MultiPage, FileBased, CompareChanges)
 	// are off-map and zoom through ZoomControl.
 	public override usesZoomControl(): boolean {
 		return true;
+	}
+
+	// The 'resize' event (a ResizeObserver on the container) can fire before the
+	// document anchor section has been resized, so defer to the layouting phase
+	// where the frame size has settled - otherwise centering would use a stale
+	// frame. Zoom end runs synchronously (no resize in flight, and we want the
+	// centred rectangle committed before the next redraw).
+	private rebuildSingleWindowViewDeferred(): void {
+		if (this.type !== 'ViewLayoutNewBase') return;
+		app.layoutingService.appendLayoutingTask(() =>
+			this.rebuildSingleWindowView(),
+		);
+	}
+
+	private rebuildSingleWindowView(): void {
+		if (this.type !== 'ViewLayoutNewBase') return; // subclasses handle their own
+
+		// applyZoom rebuilds the viewed rectangle around the zoom anchor
+		// (setViewRectangleFromPointAndScale) which may leave a non-negative scroll
+		// offset (when zoomed in) or the negative centering origin (when it fits).
+		// Fold only the real (non-negative) scroll back into scrollProperties, then
+		// let refreshVisibleAreaRectangle re-derive and re-centre the rectangle for
+		// the current frame/zoom and request the tiles.
+		this.scrollProperties.viewX = Math.max(0, this._viewedRectangle.pX1);
+		this.scrollProperties.viewY = Math.max(0, this._viewedRectangle.pY1);
+		this.updateViewData();
+	}
+
+	// Centre content (a single slide/page) that is smaller than the viewport.
+	// Returned in core pixels [x, y]; zero on an axis where the content fills or
+	// exceeds the viewport (then normal scrolling applies).
+	protected getCenteringOffset(): number[] {
+		const frame = this.frameSize; // Viewport, core pixels.
+		const content = this._viewSize; // Slide/page size; pX tracks app.twipsToPixels.
+
+		// Before the first status the content size is not known yet - no centering.
+		if (content.pX <= 0 || content.pY <= 0) return [0, 0];
+
+		return [
+			Math.max(0, Math.round((frame.pX - content.pX) / 2)),
+			Math.max(0, Math.round((frame.pY - content.pY) / 2)),
+		];
 	}
 
 	public sendClientVisibleArea() {
@@ -111,56 +166,42 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		let scrolled = false;
 
 		if (pX !== 0 && this.canScrollHorizontal(documentAnchor)) {
-			const max =
-				this.scrollProperties.horizontalScrollLength -
-				this.scrollProperties.horizontalScrollSize;
-			const min = 0;
-			const current = this.scrollProperties.startX + pX;
-			const endPosition = Math.max(min, Math.min(max, current));
-
-			if (endPosition !== this.scrollProperties.startX) {
-				this.scrollProperties.startX = endPosition;
-				const hScrollMultiplier =
-					max > 0
-						? (this.scrollProperties.horizontalScrollLength -
-								this.scrollProperties.horizontalScrollSizeForScrolling) /
-							max
-						: 1;
-				this.scrollProperties.viewX = Math.round(
-					(endPosition / this.scrollProperties.horizontalScrollLength) *
-						this.viewSize.pX *
-						hScrollMultiplier,
+			const max = Math.max(0, this._viewSize.pX - documentAnchor.size[0]);
+			const newViewX = Math.max(
+				0,
+				Math.min(this.scrollProperties.viewX + pX, max),
+			);
+			if (newViewX !== this.scrollProperties.viewX) {
+				this.scrollProperties.viewX = newViewX;
+				this.scrollProperties.startX = Math.round(
+					(this.scrollProperties.viewX / this._viewSize.pX) *
+						this.scrollProperties.horizontalScrollLength,
 				);
 				scrolled = true;
 			}
 		}
 
 		if (pY !== 0 && this.canScrollVertical(documentAnchor)) {
-			pY /= 20;
-
-			const max =
-				this.scrollProperties.verticalScrollLength -
-				this.scrollProperties.verticalScrollSize;
-			const min = 0;
-			const current = this.scrollProperties.startY + pY;
-			const endPosition = Math.max(min, Math.min(max, current));
-
-			if (endPosition !== this.scrollProperties.startY) {
-				this.scrollProperties.startY = endPosition;
-				const vScrollMultiplier =
-					max > 0
-						? (this.scrollProperties.verticalScrollLength -
-								this.scrollProperties.verticalScrollSizeForScrolling) /
-							max
-						: 1;
-				this.scrollProperties.viewY = Math.round(
-					(endPosition / this.scrollProperties.verticalScrollLength) *
-						this.viewSize.pY *
-						vScrollMultiplier,
+			const max = Math.max(0, this._viewSize.pY - documentAnchor.size[1]);
+			const newViewY = Math.max(
+				0,
+				Math.min(this.scrollProperties.viewY + pY, max),
+			);
+			if (newViewY !== this.scrollProperties.viewY) {
+				this.scrollProperties.viewY = newViewY;
+				this.scrollProperties.startY = Math.round(
+					(this.scrollProperties.viewY / this._viewSize.pY) *
+						this.scrollProperties.verticalScrollLength,
 				);
 				scrolled = true;
 			}
 		}
+
+		if (scrolled) {
+			this.updateViewData();
+			app.sectionContainer.requestReDraw();
+		}
+
 		return scrolled;
 	}
 
@@ -169,7 +210,10 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 	}
 
 	public set viewSize(size: cool.SimplePoint) {
-		return; // Disable setting the size externally.
+		// Single-window layouts (Impress/Draw/Writer/Calc) set the scrollable
+		// extent from the document size. Stacked-page layouts compute _viewSize
+		// themselves and do not call this.
+		this._viewSize = size;
 	}
 
 	public get viewedRectangle() {
@@ -177,7 +221,16 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 	}
 
 	public set viewedRectangle(rectangle: cool.SimpleRectangle) {
-		return; // Disable setting the viewed rectangle externally.
+		// Single-window layouts set the viewed rectangle directly (e.g. zoom via
+		// setViewRectangleFromPointAndScale). Stacked-page layouts assign
+		// _viewedRectangle from page geometry in refreshVisibleAreaRectangleImpl
+		// and do not use this setter. The map no longer writes it: _syncTilePanePos
+		// early-returns for usesZoomControl layouts.
+		if (!this._viewedRectangle.equals(rectangle.toArray()))
+			this.lastViewedRectangle = this._viewedRectangle.clone();
+		this._viewedRectangle = rectangle;
+		app.sectionContainer.onNewDocumentTopLeft();
+		app.sectionContainer.requestReDraw();
 	}
 
 	// Shared visible-area computation for the stacked-page layouts
@@ -243,8 +296,68 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 		}
 	}
 
+	// Default single-window viewed rectangle: the frame positioned at the
+	// current scroll offset (scrollProperties.viewX/Y), in twips. Stacked-page
+	// layouts (MultiPage/FileBased/CompareChanges) override to compute it from
+	// page geometry via refreshVisibleAreaRectangleImpl.
 	protected refreshVisibleAreaRectangle(): void {
-		// Subclasses override to recompute the viewed rectangle.
+		const documentAnchor = this.getDocumentAnchorSection();
+		if (!documentAnchor) return;
+
+		// Centre content smaller than the viewport by starting the viewed
+		// rectangle at a negative document offset (the gray margin to the left/top
+		// of the slide). The whole pipeline - drawing (documentToViewX/Y), mouse
+		// hit-testing (MouseControl), tile requests and the zoom anchor - reads
+		// viewedRectangle, so centring stays consistent from this single source.
+		// The scroll offset (scrollProperties.viewX/Y) stays a pure, non-negative
+		// scroll position; the centring is applied on top of it here. This mirrors
+		// the negative-origin viewed rectangle used by ViewLayoutCompareChanges.
+		const centering = this.getCenteringOffset();
+
+		this._viewedRectangle = cool.SimpleRectangle.fromCorePixels([
+			this.scrollProperties.viewX - centering[0],
+			this.scrollProperties.viewY - centering[1],
+			documentAnchor.size[0],
+			documentAnchor.size[1],
+		]);
+
+		app.sectionContainer.onNewDocumentTopLeft();
+		app.sectionContainer.requestReDraw();
+	}
+
+	// Default commit used by scroll(): rebuild the viewed rectangle and fetch
+	// tiles. Stacked-page layouts override with their own (viewSize recompute
+	// etc.).
+	protected updateViewData(): void {
+		this.commitVisibleAreaAndRequestTiles();
+	}
+
+	// Default single-window tile grid: the tiles covering the viewed rectangle
+	// for the currently selected part (slide/page). Writer is a single part (0);
+	// Impress/Draw use the selected slide/page. Stacked-page layouts and Calc
+	// override this.
+	protected override refreshCurrentCoordList(): void {
+		this.currentCoordList.length = 0;
+		const zoom = Math.round(app.map.getZoom());
+		const tileSize = RenderManager.tileSize;
+		const part = app.map._docLayer._selectedPart || 0;
+		const r = this._viewedRectangle;
+
+		const startCol = Math.floor(r.pX1 / tileSize);
+		const startRow = Math.floor(r.pY1 / tileSize);
+		const endCol = Math.floor((r.pX1 + r.pWidth - 1) / tileSize);
+		const endRow = Math.floor((r.pY1 + r.pHeight - 1) / tileSize);
+
+		this.pushTileGrid(
+			startCol * tileSize,
+			startRow * tileSize,
+			endCol - startCol,
+			endRow - startRow,
+			zoom,
+			tileSize,
+			part,
+			new Set<string>(),
+		);
 	}
 
 	// Recompute the visible area, push it to the server and request the tiles
