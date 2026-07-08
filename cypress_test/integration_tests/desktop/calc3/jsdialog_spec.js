@@ -510,4 +510,66 @@ describe(['tagdesktop'], 'JSDialog unit test', function() {
 			win.document.getElementById('anchortoolbox').remove();
 		});
 	});
+
+	// The close element is a node inside the popup's parent, and a later rebuild
+	// of that parent can replace it, leaving the stored reference detached.
+	// Closing must not act on the detached node (which would do nothing and
+	// leave the popup stuck); it must fall through to the builder close so the
+	// popup is dismissed and can be opened again.
+	it('Closing a popup whose close element was replaced still closes it', function() {
+		cy.getFrameWindow().then(function(win) {
+			var doc = win.document;
+			var toolbox = doc.createElement('div');
+			toolbox.id = 'staletoolbox';
+			var button = doc.createElement('div');
+			button.id = 'staleclosebtn';
+			button.className = 'menubutton';
+			toolbox.appendChild(button);
+			doc.body.appendChild(toolbox);
+
+			win.app.map.jsdialog.onJSDialog({data: {
+				id: 'stalepopup',
+				jsontype: 'dialog',
+				type: 'modalpopup',
+				popupParent: 'staletoolbox',
+				clickToClose: 'staleclosebtn',
+				children: [{
+					id: 'stalecontainer',
+					type: 'container',
+					vertical: 'true',
+					children: [{
+						id: 'stalelabel',
+						type: 'fixedtext',
+						text: 'stale close popup' }]
+				}]
+			}, callback: function() {}});
+		});
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			var dialog = win.app.map.jsdialog;
+			var instance = dialog.dialogs['stalepopup'];
+			// the close button was resolved to the element in the parent
+			expect(instance.clickToCloseElement, 'close element resolved').to.equal(
+				win.document.getElementById('staleclosebtn'));
+
+			var staleButton = instance.clickToCloseElement;
+			var clickSpy = cy.spy(staleButton, 'click');
+			var builderSpy = cy.spy(instance.builder, 'callback');
+
+			// the parent rebuilds and drops the button, detaching the reference
+			win.document.getElementById('staletoolbox').replaceChildren();
+			expect(staleButton.isConnected, 'close element now detached').to.be.false;
+
+			// closing does not click the detached node; it closes via the builder
+			dialog.close('stalepopup', true);
+			expect(clickSpy, 'detached close element is not clicked').to.not.be.called;
+			expect(builderSpy, 'closes through the builder instead').to.be.calledWith('popover', 'close');
+
+			dialog.close('stalepopup', false);
+			win.document.getElementById('staletoolbox').remove();
+		});
+	});
 });

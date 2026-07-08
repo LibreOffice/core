@@ -183,6 +183,19 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		var clickToCloseElement = this.dialogs[id].clickToCloseElement;
 		var builder = this.dialogs[id].builder;
 
+		// The element lives in the popup's parent (a toolbar for example) and a
+		// later update can rebuild that parent and replace the node, leaving this
+		// reference detached. Acting on a detached node does nothing, so treat it
+		// as absent and close through the builder instead, which dismisses the
+		// popup and lets its state be cleaned up so it can be opened again.
+		// Re-resolving the id would find a fresh node from the rebuild, but acting
+		// on it is unreliable: a menubutton click is not a plain close (it opens a
+		// menu-driven dropdown, or sends a toggle whose result the server decides),
+		// so the outcome depends on the popup type. The builder close below is a
+		// single close that behaves the same way for every popup.
+		if (clickToCloseElement && !clickToCloseElement.isConnected)
+			clickToCloseElement = null;
+
 		if (sendCloseEvent) {
 			// first try to close the dropdown if exists
 			if (clickToCloseElement && typeof clickToCloseElement.closeDropdown === 'function')
