@@ -190,7 +190,7 @@ nav.hasnotebookbar [id^='save'].saved::after {
 	background: var(--color-background-lighter);
 	padding: 3px 3px 3px 0;
 	white-space: nowrap;
-	z-index: 12;
+	z-index: 1001;
 	display: flex;
 	align-items: center;
 }
