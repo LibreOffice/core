@@ -25,8 +25,6 @@
 
 GraphicID::GraphicID(ImpGraphic const& rGraphic)
 {
-    rGraphic.ensureAvailable();
-
     mnID1 = static_cast<sal_uLong>(rGraphic.getType()) << 28;
     mnID2 = mnID3 = mnID4 = 0;
 
@@ -35,6 +33,8 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
         auto const& rVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
         if (rVectorGraphicDataPtr)
         {
+            rGraphic.ensureAvailable();
+
             const basegfx::B2DRange& rRange = rVectorGraphicDataPtr->getRange();
 
             mnID1 |= rVectorGraphicDataPtr->getBinaryDataContainer().getSize();
@@ -45,6 +45,8 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
         }
         else if (rGraphic.isAnimated())
         {
+            rGraphic.ensureAvailable();
+
             const Animation aAnimation(rGraphic.getAnimation());
 
             mnID1 |= (aAnimation.Count() & 0x0fffffff);
@@ -54,16 +56,20 @@ GraphicID::GraphicID(ImpGraphic const& rGraphic)
         }
         else
         {
-            const Bitmap aBmp(rGraphic.getBitmap(GraphicConversionParameters()));
+            // No need to swap in for this non-vector, non-animation bitmap case, the graphic
+            // metadata has everything we need.
+            const Size aSizePixel(rGraphic.getSizePixel());
 
-            mnID1 |= aBmp.HasAlpha() ? 1 : 0;
-            mnID2 = aBmp.GetSizePixel().Width();
-            mnID3 = aBmp.GetSizePixel().Height();
+            mnID1 |= rGraphic.hasAlpha() ? 1 : 0;
+            mnID2 = aSizePixel.Width();
+            mnID3 = aSizePixel.Height();
             mnID4 = rGraphic.getChecksum();
         }
     }
     else if (rGraphic.getType() == GraphicType::GdiMetafile)
     {
+        rGraphic.ensureAvailable();
+
         const GDIMetaFile& rMtf = rGraphic.getGDIMetaFile();
 
         mnID1 |= (rMtf.GetActionSize() & 0x0fffffff);

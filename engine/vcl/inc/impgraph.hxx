@@ -136,6 +136,8 @@ private:
 
     Size                getSizePixel() const;
 
+    bool                hasAlpha() const;
+
     Size                getPrefSize() const;
     void                setPrefSize( const Size& rPrefSize );
 

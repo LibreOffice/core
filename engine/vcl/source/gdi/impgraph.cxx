@@ -321,6 +321,11 @@ bool ImpGraphic::operator==( const ImpGraphic& rOther ) const
 
 const std::shared_ptr<VectorGraphicData>& ImpGraphic::getVectorGraphicData() const
 {
+    // If the type is clearly a bitmap, we know the vector graphic data will be empty, no need to
+    // swap in.
+    if (mpGfxLink && mpGfxLink->GetType() == GfxLinkType::NativePng)
+        return maVectorGraphicData;
+
     ensureAvailable();
 
     return maVectorGraphicData;
@@ -760,6 +765,14 @@ Size ImpGraphic::getSizePixel() const
         aSize = getBitmap(GraphicConversionParameters()).GetSizePixel();
 
     return aSize;
+}
+
+bool ImpGraphic::hasAlpha() const
+{
+    if (isSwappedOut())
+        return maSwapInfo.mbIsAlpha;
+
+    return getBitmap(GraphicConversionParameters()).HasAlpha();
 }
 
 Size ImpGraphic::getPrefSize() const
