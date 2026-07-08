@@ -281,24 +281,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,gnome, \
     $(if $(ENABLE_GTK4),vclplug_gtk4) \
 ))
 
-gb_haiku_or_kde := $(if $(filter HAIKU,$(OS)),haiku,kde)
-
-$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
-    $(if $(ENABLE_KF5),kf5be1) \
-))
-
-$(eval $(call gb_Helper_register_plugins_for_install,OOOLIBS,$(gb_haiku_or_kde), \
-    $(if $(ENABLE_KF5),vclplug_kf5) \
-    $(if $(ENABLE_KF6),vclplug_kf6) \
-    $(if $(ENABLE_QT5),vclplug_qt5) \
-    $(if $(ENABLE_QT6),vclplug_qt6) \
-    $(if $(ENABLE_GTK3_KDE5),vclplug_gtk3_kde5) \
-))
-
-$(eval $(call gb_Helper_register_executables_for_install,OOO,$(gb_haiku_or_kde), \
-    $(if $(ENABLE_GTK3_KDE5),lo_kde5filepicker) \
-))
-
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 	sm \
 	smd \
@@ -594,7 +576,6 @@ endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
     $(call gb_Helper_optional,AVMEDIA, \
-        $(if $(ENABLE_QT6_MULTIMEDIA),avmediaqt6) \
         $(if $(filter WNT,$(OS)),avmediawin) \
     ) \
 	cached1 \

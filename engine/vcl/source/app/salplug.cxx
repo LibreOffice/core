@@ -105,8 +105,6 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 
     SalInstance* pInst = nullptr;
     OUString aUsedModuleBase(rModuleBase);
-    if (aUsedModuleBase == "kde5")
-        aUsedModuleBase = u"kf5"_ustr;
     OUString aModule(
 #ifdef SAL_DLLPREFIX
             SAL_DLLPREFIX
@@ -135,9 +133,6 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
                  * atk-bridge's atexit handler gets called.
                  */
                 if (aUsedModuleBase == "gtk4" || aUsedModuleBase == "gtk3" ||
-                    aUsedModuleBase == "gtk3_kde5" || aUsedModuleBase == "kf5" ||
-                    aUsedModuleBase == "kf6" ||
-                    aUsedModuleBase == "qt5" || aUsedModuleBase == "qt6" ||
                     aUsedModuleBase == "win")
                 {
                     pCloseModule = nullptr;
@@ -173,12 +168,6 @@ const char* const* autodetect_plugin_list()
 {
     static const char* const pKDEFallbackList[] =
     {
-#if ENABLE_KF5
-        "kf5",
-#endif
-#if ENABLE_GTK3_KDE5
-        "gtk3_kde5",
-#endif
 #if ENABLE_GTK3
         "gtk3",
 #endif
@@ -190,15 +179,6 @@ const char* const* autodetect_plugin_list()
 
     static const char* const pPlasma6FallbackList[] =
     {
-#if ENABLE_KF6
-        "kf6",
-#endif
-#if ENABLE_KF5
-        "kf5",
-#endif
-#if ENABLE_GTK3_KDE5
-        "gtk3_kde5",
-#endif
 #if ENABLE_GTK3
         "gtk3",
 #endif
@@ -320,23 +300,8 @@ SalInstance *CreateSalInstance()
 #if ENABLE_GTK3
         "gtk3",
 #endif
-#if ENABLE_KF5
-        "kf5",
-#endif
-#if ENABLE_GTK3_KDE5
-        "gtk3_kde5",
-#endif
 #if ENABLE_GEN
         "gen",
-#endif
-#if ENABLE_QT5
-        "qt5",
-#endif
-#if ENABLE_KF6
-        "kf6",
-#endif
-#if ENABLE_QT6
-        "qt6",
 #endif
 #endif // !_WIN32 && !MACOSX
         nullptr

@@ -23,9 +23,6 @@ $(eval $(call gb_InstallScript_use_modules,setup_osl,\
 	$(if $(filter TRUE,$(ENABLE_EVOAB2) $(ENABLE_GIO) $(ENABLE_GTK3)),\
 		scp2/gnome \
 	) \
-	$(if $(filter TRUE,$(ENABLE_QT5) $(ENABLE_QT6) $(ENABLE_KF5) $(ENABLE_KF6) $(ENABLE_GTK3_KDE5)),\
-		scp2/kde \
-	) \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
