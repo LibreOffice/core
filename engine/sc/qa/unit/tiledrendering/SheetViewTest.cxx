@@ -467,6 +467,60 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSheetViewAutoFilter)
     CPPUNIT_ASSERT_EQUAL(expectedValues({ u"4", u"5", u"3", u"7" }), getValues(pTabView1, 0, 1, 4));
 }
 
+CPPUNIT_TEST_FIXTURE(SyncTest, testSheetViewHiddenColumnSurvivesCellEdit)
+{
+    // A column hidden only inside a sheet view stays hidden after a cell is
+    // edited below the auto-filter range.
+
+    ScModelObj* pModelObj = createDoc("SheetView_AutoFilterMultiColumn.fods");
+    ScDocShell* pDocShell = dynamic_cast<ScDocShell*>(pModelObj->GetEmbeddedObject());
+    CPPUNIT_ASSERT(pDocShell);
+    ScDocument& rDocument = pDocShell->GetDocument();
+
+    setupViews();
+
+    // Create a sheet view. Layout becomes [Sheet1 (default), Sheet1 (sheet view)].
+    switchToSheetView();
+    createNewSheetViewInCurrentView();
+    Scheduler::ProcessEventsToIdle();
+
+    SCTAB nDefaultViewTab = mpTabViewDefaultView->GetViewData().GetTabNumber();
+    SCTAB nSheetViewTab = mpTabViewSheetView->GetViewData().GetTabNumber();
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), nDefaultViewTab);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(1), nSheetViewTab);
+
+    // The auto-filter covers A1:C5 on both the default view and the sheet view.
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nDefaultViewTab, 2, 4, nDefaultViewTab),
+                         getAutoFilterArea(rDocument, nDefaultViewTab));
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, nSheetViewTab, 2, 4, nSheetViewTab),
+                         getAutoFilterArea(rDocument, nSheetViewTab));
+
+    // Column B is inside the auto-filter range. Hide it only in the sheet view.
+    const SCCOL nHiddenColumn = 1;
+    rDocument.SetColHidden(nHiddenColumn, nHiddenColumn, nSheetViewTab, true);
+
+    // The column is now hidden in the sheet view and still visible in the default view.
+    CPPUNIT_ASSERT(rDocument.ColHidden(nHiddenColumn, nSheetViewTab));
+    CPPUNIT_ASSERT(!rDocument.ColHidden(nHiddenColumn, nDefaultViewTab));
+
+    // Edit a cell in column A below the auto-filter range (A7): outside the
+    // filtered rows but in a filtered column.
+    switchToDefaultView();
+    ScAddress aEditAddress(0, 6, nDefaultViewTab);
+    pDocShell->GetDocFunc().SetStringCell(aEditAddress, u"outside"_ustr, true);
+    Scheduler::ProcessEventsToIdle();
+
+    // The edit reached the default view and synced to the sheet view.
+    CPPUNIT_ASSERT_EQUAL(u"outside"_ustr, rDocument.GetString(ScAddress(0, 6, nDefaultViewTab)));
+    CPPUNIT_ASSERT_EQUAL(u"outside"_ustr, rDocument.GetString(ScAddress(0, 6, nSheetViewTab)));
+
+    // The column hidden in the sheet view must stay hidden after the sync.
+    CPPUNIT_ASSERT_MESSAGE("Column hidden in the sheet view was unhidden by a cell edit",
+                           rDocument.ColHidden(nHiddenColumn, nSheetViewTab));
+    // The default view is unaffected.
+    CPPUNIT_ASSERT(!rDocument.ColHidden(nHiddenColumn, nDefaultViewTab));
+}
+
 CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
 {
     // Create two views, and leave the second one current.

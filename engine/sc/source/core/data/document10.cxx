@@ -1315,8 +1315,27 @@ void ScDocument::SyncSheetViews(SCTAB nDefaultViewTable)
             }
         }
 
+        // Remember which columns are hidden in the sheet view. Overwriting the
+        // content below copies the column flags from the default view, so the
+        // sheet view's own hidden columns are captured here and reapplied
+        // afterwards.
+        std::vector<std::pair<SCCOL, SCCOL>> aSheetViewHiddenColumns;
+        for (SCCOL nColumn = 0; nColumn <= MaxCol();)
+        {
+            SCCOL nLastColumn = nColumn;
+            bool bHidden = ColHidden(nColumn, nSheetViewTab, nullptr, &nLastColumn);
+            if (bHidden)
+                aSheetViewHiddenColumns.emplace_back(nColumn, nLastColumn);
+            nColumn = nLastColumn + 1;
+        }
+
         // Overwrite the content from the default view table
         OverwriteContent(nDefaultViewTable, nSheetViewTab);
+
+        // Restore the sheet view's own hidden columns after the content copy.
+        SetColHidden(0, MaxCol(), nSheetViewTab, false);
+        for (auto const& rHiddenRange : aSheetViewHiddenColumns)
+            SetColHidden(rHiddenRange.first, rHiddenRange.second, nSheetViewTab, true);
 
         // Revert the sorting of the default view table.
         // It can happen that the default view was sorted after the sheet view
