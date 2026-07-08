@@ -77,6 +77,40 @@
 	border-bottom: 20px solid var(--color-primary);
 }
 
+/* Fluid drag-and-drop reordering: while a slide drag is in progress the
+   frames animate size and margin changes, so the remaining slides close
+   the space the dragged slide left and a new insertion gap opens under
+   the pointer. */
+#slide-sorter.dragging-slide .preview-frame {
+	transition: margin 0.15s ease-out, height 0.15s ease-out,
+		width 0.15s ease-out, padding 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+/* A finished drop rearranges the frames in a single step. */
+#slide-sorter.dragging-slide.drag-no-transition .preview-frame {
+	transition: none;
+}
+
+/* The drag ghost: the slide picture with the standard preview border,
+   rendered out of view while the browser takes its snapshot. */
+.slide-drag-ghost {
+	position: absolute;
+	top: -1000px;
+	left: 0;
+	border: 3px solid var(--color-border);
+	background: var(--color-background-lighter);
+}
+
+.slide-drag-ghost img {
+	display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#slide-sorter.dragging-slide .preview-frame {
+		transition: none;
+	}
+}
+
 /* Drop indicator on a section header: drop here to make the dragged slide
    the first slide of this section (visually fills the header). */
 .slide-section-header.slide-section-dropsite {

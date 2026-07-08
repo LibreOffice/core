@@ -3346,12 +3346,24 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		app.activeDocument.activeView.clearTextSelection();
 	},
 
+	// A drag that carries this type is a slide preview being reordered in
+	// the slide sorter; the document area takes no drops from it.
+	_isSlideDrag: function (e) {
+		return e.dataTransfer && e.dataTransfer.types &&
+			Array.prototype.indexOf.call(e.dataTransfer.types, 'application/x-cool-slide') !== -1;
+	},
+
 	_onDragOver: function (e) {
 		e = e.originalEvent;
+		if (this._isSlideDrag(e))
+			return;
 		e.preventDefault();
 	},
 
 	_onDrop: function (e) {
+		if (this._isSlideDrag(e.originalEvent))
+			return;
+
 		// Move the cursor, so that the insert position is as close to the drop coordinates as possible.
 		var intern = e.intern;
 		var docLayer = this._map._docLayer;

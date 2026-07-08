@@ -48,6 +48,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		this.scrollTimer = null;
 		this._menuPosEl = null;
 		this.partsFocusedApplied = false;
+		this._dragState = null;
+		// Part hashes of the preview requests that are under way, keyed by
+		// the part index the request was made with.
+		this._pendingPreviewHashes = {};
 
 		// A click clears the slide sorter focus mode, unless that same click
 		// re-focused a preview.
@@ -106,6 +110,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 				if (!window.L.DomUtil.hasClass(docContainer, 'parts-preview-document'))
 					window.L.DomUtil.addClass(docContainer, 'parts-preview-document');
+
+				this._addContainerDnDHandlers();
 
 				// Add a special frame just as a drop-site for reordering.
 				var frameClass = 'preview-frame ' + this.options.frameClass;
@@ -249,6 +255,10 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		var imgClassName = 'preview-img ' + this.options.imageClass;
 		var img = window.L.DomUtil.create('img', imgClassName, frame);
 		this._setPreviewPositionLabels(img, i);
+		// A drag grabbed on the picture starts from the frame, the nearest
+		// draggable ancestor, so it carries the slide marker data and shows
+		// the framed preview as its ghost.
+		img.draggable = false;
 		img.setAttribute('role', 'option');
 		img.setAttribute('aria-selected', 'false');
 		// roving tabindex - only the current slide is a tab stop so Tab
@@ -746,6 +756,13 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				app.socket.sendMessage(
 					'moveselectedclientparts position=' + position +
 					' intoSection=' + sectionIndex);
+				// The dropped slides become the first slides of the section:
+				// settle them locally in front of its current first slide.
+				const state = that._dragState;
+				if (state) {
+					that._applyDropLocally(startIndex, state.draggedParts, true);
+					that._finishDrag(false);
+				}
 				return false;
 			});
 		}
@@ -1299,13 +1316,37 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			}
 		}
 		else {
-			// update hash code when user click insert slide.
-			for (it = 0; it < app.impress.partList.length; it++) {
-				if (this._previewTiles[it].hash !== app.impress.partList[it].hash) {
-					this._previewTiles[it].hash = app.impress.partList[it].hash;
-					this._map.getPreview(it, it, this.options.maxWidth, this.options.maxHeight, {autoUpdate: this.options.autoUpdate});
+			// The same number of slides with hashes at new indices means the
+			// slides were reordered (or an index holds a new slide). A part's
+			// hash stays the same for its whole lifetime, so the preview
+			// image that already carries it can move to the part's new index
+			// and show up there immediately; only a hash no preview carries
+			// needs a fetch.
+			const previewByHash = {};
+			for (it = 0; it < this._previewTiles.length; it++) {
+				if (this._previewTiles[it].hash) {
+					previewByHash[this._previewTiles[it].hash] = {
+						src: this._previewTiles[it].src,
+						fetched: this._previewTiles[it].fetched
+					};
 				}
 			}
+			for (it = 0; it < app.impress.partList.length; it++) {
+				const newHash = app.impress.partList[it].hash;
+				if (this._previewTiles[it].hash !== newHash) {
+					this._previewTiles[it].hash = newHash;
+					const knownPreview = newHash ? previewByHash[newHash] : undefined;
+					if (knownPreview) {
+						this._previewTiles[it].src = knownPreview.src;
+						this._previewTiles[it].fetched = knownPreview.fetched;
+					} else {
+						this._map.getPreview(it, it, this.options.maxWidth, this.options.maxHeight, {autoUpdate: this.options.autoUpdate});
+					}
+				}
+			}
+			// A moved preview that was never fetched keeps its placeholder;
+			// fetch the ones that are in view now.
+			this._ensureVisiblePreviews();
 		}
 	},
 
@@ -1324,9 +1365,14 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	_beforeRequestPreview: function (e) {
-		if (e.part !== undefined && e.part >= 0 && e.part < this._previewTiles.length &&
-		   this._previewTiles[e.part].src === document.querySelector('meta[name="previewSmile"]').content)
-			this._previewTiles[e.part].src = document.querySelector('meta[name="previewImg"]').content;
+		if (e.part !== undefined && e.part >= 0 && e.part < this._previewTiles.length) {
+			// The response comes back carrying this part index; the hash
+			// remembers which slide that index held when the request went
+			// out, in case the previews get reordered in the meantime.
+			this._pendingPreviewHashes[e.part] = this._previewTiles[e.part].hash;
+			if (this._previewTiles[e.part].src === document.querySelector('meta[name="previewSmile"]').content)
+				this._previewTiles[e.part].src = document.querySelector('meta[name="previewImg"]').content;
+		}
 	},
 
 	_updatePreview: function (e) {
@@ -1339,16 +1385,32 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			this._map._processPreviewQueue();
 			if (!this._previewInitialized)
 				return;
-			if (this._previewTiles[e.id]) {
-				this._previewTiles[e.id].src = e.tile.src;
-				this._previewTiles[e.id].fetched = true;
-				window.app.console.debug('PREVIEW: part fetched : ' + e.id);
+			const partId = parseInt(e.id);
+			let tile = this._previewTiles[partId];
+			const requestHash = this._pendingPreviewHashes[partId];
+			delete this._pendingPreviewHashes[partId];
+			if (requestHash && (!tile || tile.hash !== requestHash)) {
+				// The previews were reordered while the request was under
+				// way; the image belongs to the slide that held this index
+				// when the request went out. Without that slide the image
+				// has no preview to go to.
+				tile = this._previewTiles.find(function (candidate) {
+					return candidate.hash === requestHash;
+				});
+			}
+			if (tile) {
+				tile.src = e.tile.src;
+				tile.fetched = true;
+				window.app.console.debug('PREVIEW: part fetched : ' + partId);
 			}
 		}
 	},
 
 	_insertPreview: function (e) {
 		if (this._map.isPresentationOrDrawing()) {
+			// The frames are about to change; a drag in progress cannot
+			// keep its collapsed frames and gap bookkeeping.
+			this._finishDrag(false);
 			var newIndex = e.selectedPart + 1;
 			var newPreview = this._createPreview(newIndex, (e.hashCode === undefined ? null : e.hashCode));
 
@@ -1375,6 +1437,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	_deletePreview: function (e) {
 		if (this._map.isPresentationOrDrawing()) {
+			// The frames are about to change; a drag in progress cannot
+			// keep its collapsed frames and gap bookkeeping.
+			this._finishDrag(false);
 			var selectedFrame = this._previewTiles[e.selectedPart].parentNode;
 			window.L.DomUtil.remove(selectedFrame);
 
@@ -1429,13 +1494,22 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		if (elem) {
 			elem.setAttribute('draggable', true);
 			elem.addEventListener('dragstart', this._handleDragStart, false);
-			elem.addEventListener('dragenter', this._handleDragEnter, false);
-			elem.addEventListener('dragover', this._handleDragOver, false);
-			elem.addEventListener('dragleave', this._handleDragLeave, false);
-			elem.addEventListener('drop', this._handleDrop, false);
 			elem.addEventListener('dragend', this._handleDragEnd, false);
 			elem.partsPreview = this;
 		}
+	},
+
+	// The insertion point moves with the pointer rather than being tied to
+	// the frame under it, so the drag position and the drop are handled on
+	// the whole sorter.
+	_addContainerDnDHandlers: function () {
+		if (app.file.fileBasedView || this._containerDnDHandlersAdded)
+			return;
+
+		this._partsPreviewCont.addEventListener('dragover', this._handleContainerDragOver.bind(this), false);
+		this._partsPreviewCont.addEventListener('dragleave', this._handleContainerDragLeave.bind(this), false);
+		this._partsPreviewCont.addEventListener('drop', this._handleContainerDrop.bind(this), false);
+		this._containerDnDHandlersAdded = true;
 	},
 
 	_addDnDTouchHandlers: function (e) {
@@ -1524,72 +1598,453 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	},
 
 	_handleDragStart: function (e) {
-		if (!this.partsPreview._map.isEditMode()) {
+		const partsPreview = this.partsPreview;
+		if (!partsPreview._map.isEditMode()) {
 			e.preventDefault();
 			return;
 		}
 		// To avoid having to add a new message to move an arbitrary part, let's select the
 		// slide that is being dragged.
 		const targetNode = (e.target.id.startsWith('preview') ? e.target : e.target.parentNode);
-		var part = this.partsPreview._findClickedPart(targetNode);
-		if (part !== null) {
-			var partId = parseInt(part) - 1; // The first part is just a drop-site for reordering.
-			if (this.partsPreview._map._docLayer && !app.impress.isSlideSelected(partId))
-			{
-				this.partsPreview._map.setPart(partId);
-				this.partsPreview._map.selectPart(partId, 1, false); // And select.
-			}
+		const part = partsPreview._findClickedPart(targetNode);
+		const partId = parseInt(part) - 1; // The first part is just a drop-site for reordering.
+		if (part === -1 || partId < 0) {
+			e.preventDefault();
+			return;
+		}
+		const alreadySelected = app.impress.isSlideSelected(partId);
+		if (partsPreview._map._docLayer && !alreadySelected)
+		{
+			// Same selection change as a plain click on the slide: the
+			// previous selection is dropped on the client and the server
+			// alike, so both agree on which slides the move applies to.
+			partsPreview._map.deselectAll();
+			partsPreview._map.setPart(partId);
+			partsPreview._map.selectPart(partId, 1, false); // And select.
 		}
 		// By default we move when dragging, but can
 		// support duplication with ctrl in the future.
 		e.dataTransfer.effectAllowed = 'move';
+		e.dataTransfer.setData('application/x-cool-slide', String(partId));
+
+		// The drag ghost is the slide picture at its on-screen size with
+		// the standard preview border, held at the grab point.
+		const img = partsPreview._previewTiles[partId];
+		if (img && e.dataTransfer.setDragImage) {
+			const rect = img.getBoundingClientRect();
+			const ghost = document.createElement('div');
+			ghost.className = 'slide-drag-ghost';
+			const ghostImg = document.createElement('img');
+			ghostImg.src = img.src;
+			ghostImg.style.width = rect.width + 'px';
+			ghostImg.style.height = rect.height + 'px';
+			ghost.appendChild(ghostImg);
+			document.body.appendChild(ghost);
+			e.dataTransfer.setDragImage(ghost, e.clientX - rect.left, e.clientY - rect.top);
+			// The snapshot is taken when the dragstart handler returns;
+			// the ghost element itself is no longer needed after that.
+			setTimeout(function () { ghost.remove(); }, 0);
+		}
+
+		partsPreview._beginDrag(partId, alreadySelected);
 	},
 
-	_handleDragOver: function (e) {
-		if (e.preventDefault) {
+	// Collect the slides taking part in the drag and start the drag
+	// visuals: the dragged frames close smoothly, so the remaining slides
+	// move in to take their place.
+	_beginDrag: function (partId, includeSelection) {
+		const draggedParts = [];
+		if (includeSelection) {
+			for (let i = 0; i < this._previewTiles.length; i++) {
+				if (i === partId || app.impress.isSlideSelected(i))
+					draggedParts.push(i);
+			}
+		} else {
+			draggedParts.push(partId);
+		}
+
+		// In the horizontal sorter layout the frames close and the gap
+		// opens along the x axis.
+		const sizeProperty = this._direction === 'x' ? 'width' : 'height';
+		const frames = [];
+		const sizes = [];
+		let gapSize = 0;
+		for (let i = 0; i < draggedParts.length; i++) {
+			const frame = this._previewTiles[draggedParts[i]].parentNode;
+			const size = frame.getBoundingClientRect()[sizeProperty];
+			frames.push(frame);
+			sizes.push(size);
+			gapSize += size;
+		}
+
+		this._dragState = {
+			draggedParts: draggedParts,
+			frames: frames,
+			sizes: sizes,
+			sizeProperty: sizeProperty,
+			gapSize: gapSize,
+			gapFrame: null,
+			gapSide: null,
+			insertIndex: null,
+			pointer: null,
+			autoScrollId: null
+		};
+
+		this._partsPreviewCont.classList.add('dragging-slide');
+
+		// The browser takes its snapshot for the drag ghost when the
+		// dragstart handler returns, so the collapse runs afterwards and
+		// the ghost shows the frame at full size.
+		const state = this._dragState;
+		setTimeout(() => {
+			if (this._dragState !== state)
+				return;
+			for (let i = 0; i < frames.length; i++) {
+				frames[i].style.boxSizing = 'border-box';
+				frames[i].style[sizeProperty] = sizes[i] + 'px';
+				frames[i].style.overflow = 'hidden';
+			}
+			// Give the frames their measured size first, so the change
+			// animates from the real value.
+			void this._partsPreviewCont.offsetHeight;
+			for (let i = 0; i < frames.length; i++) {
+				frames[i].style[sizeProperty] = '0px';
+				frames[i].style.padding = '0px';
+				frames[i].style.opacity = '0';
+			}
+			// Closing the dragged frames pulls slides from below the view
+			// into it; load their previews once the frames have closed.
+			this._schedulePreviewRefresh();
+		}, 0);
+	},
+
+	// Load the previews that a layout change brought into view, once the
+	// size and margin transitions have settled. Debounced, and fetching
+	// stays limited to slides that are visible and have no preview yet.
+	_schedulePreviewRefresh: function () {
+		clearTimeout(this._layoutPreviewTimer);
+		this._layoutPreviewTimer = setTimeout(() => {
+			this._layoutPreviewTimer = null;
+			this._ensureVisiblePreviews();
+		}, 200);
+	},
+
+	_handleContainerDragOver: function (e) {
+		const state = this._dragState;
+		// A drag that did not start on a slide (a file from the desktop,
+		// for example) has no drop target here; refusing it keeps the
+		// browser from opening the file in place of the editor.
+		if (!state) {
 			e.preventDefault();
+			if (e.dataTransfer)
+				e.dataTransfer.dropEffect = 'none';
+			return;
 		}
 
-		// By default we move when dragging, but can
-		// support duplication with ctrl in the future.
-		e.dataTransfer.dropEffect = 'move';
-
-		this.classList.add('preview-img-dropsite');
-		return false;
-	},
-
-	_handleDragEnter: function () {
-	},
-
-	_handleDragLeave: function () {
-		this.classList.remove('preview-img-dropsite');
-	},
-
-	_handleDrop: function (e) {
-		if (e.stopPropagation) {
-			e.stopPropagation();
+		// Over a section header the header itself is the drop target and
+		// shows its own highlight, so no insertion gap. Clearing the
+		// pointer also pauses the edge auto-scroll.
+		if (e.target && e.target.closest && e.target.closest('.slide-section-header')) {
+			this._removeDropGap(state);
+			state.insertIndex = null;
+			state.pointer = null;
+			return;
 		}
 
-		// When dropping on a thumbnail we get an `img` tag as a target, so we need to get the
-		// parent.
-		// Otherwise dropping between slides doesn't work.
-		// See https://github.com/CollaboraOnline/online/issues/6941
-		var target = e.target.classList.contains('preview-img') ? e.target.parentNode : e.target;
+		e.preventDefault();
+		if (e.dataTransfer)
+			e.dataTransfer.dropEffect = 'move';
 
-		var part = this.partsPreview._findClickedPart(target);
-		if (part !== null) {
-			var partId = parseInt(part) - 1; // First frame is a drop-site for reordering.
-			if (partId < 0)
-				partId = -1; // First item is -1.
-			app.socket.sendMessage('moveselectedclientparts position=' + partId);
+		// dragover keeps firing while the pointer rests; the gap only
+		// needs recomputing when the pointer moved.
+		if (state.pointer && state.pointer.x === e.clientX && state.pointer.y === e.clientY)
+			return;
+
+		state.pointer = { x: e.clientX, y: e.clientY };
+		this._updateDropGap();
+		this._ensureAutoScroll();
+	},
+
+	_handleContainerDragLeave: function (e) {
+		const state = this._dragState;
+		if (!state)
+			return;
+		// Moving between children of the sorter also fires dragleave, on
+		// some browsers with a null relatedTarget; the gap only closes
+		// when the pointer really left the sorter area.
+		if (e.relatedTarget && this._partsPreviewCont.contains(e.relatedTarget))
+			return;
+		const rect = this._partsPreviewCont.getBoundingClientRect();
+		if (e.clientX >= rect.left && e.clientX < rect.right &&
+		    e.clientY >= rect.top && e.clientY < rect.bottom)
+			return;
+		this._removeDropGap(state);
+		state.insertIndex = null;
+		state.pointer = null;
+	},
+
+	_handleContainerDrop: function (e) {
+		const state = this._dragState;
+		if (!state) {
+			e.preventDefault();
+			return;
+		}
+		e.preventDefault();
+		e.stopPropagation();
+
+		const insertIndex = state.insertIndex;
+		if (insertIndex === null) {
+			this._finishDrag(true);
+			return;
 		}
 
-		this.classList.remove('preview-img-dropsite');
-		return false;
+		// Insert after the slide preceding the gap; -1 inserts before the
+		// first slide.
+		app.socket.sendMessage('moveselectedclientparts position=' + (insertIndex - 1));
+
+		this._applyDropLocally(insertIndex, state.draggedParts);
+		this._finishDrag(false);
+	},
+
+	// Choose the insertion point from the pointer position and open a
+	// slide-sized gap there. The gap is a margin on the frame the dragged
+	// slides would be inserted before (or after the last frame, when the
+	// pointer is past it), and it moves along with the pointer.
+	_updateDropGap: function () {
+		const state = this._dragState;
+		if (!state || !state.pointer)
+			return;
+
+		const horizontal = this._direction === 'x';
+		const pointerPosition = horizontal ? state.pointer.x : state.pointer.y;
+
+		let insertIndex = this._previewTiles.length;
+		let gapFrame = null;
+		let gapSide = 'before';
+		let lastFrame = null;
+		for (let i = 0; i < this._previewTiles.length; i++) {
+			if (state.draggedParts.indexOf(i) !== -1)
+				continue;
+			const frame = this._previewTiles[i].parentNode;
+			if (frame.classList.contains('section-collapsed'))
+				continue;
+			const rect = frame.getBoundingClientRect();
+			const middle = horizontal ? rect.left + rect.width / 2 : rect.top + rect.height / 2;
+			if (pointerPosition < middle) {
+				insertIndex = i;
+				gapFrame = frame;
+				break;
+			}
+			lastFrame = frame;
+		}
+		if (!gapFrame && lastFrame) {
+			gapFrame = lastFrame;
+			gapSide = 'after';
+		}
+
+		state.insertIndex = insertIndex;
+		if (gapFrame === state.gapFrame && gapSide === state.gapSide)
+			return;
+
+		this._removeDropGap(state);
+		state.gapFrame = gapFrame;
+		state.gapSide = gapSide;
+		if (gapFrame)
+			gapFrame.style[this._gapMarginProperty(gapSide)] = state.gapSize + 'px';
+
+		// A gap move shifts the slides around it; load the previews of the
+		// ones it brought into view.
+		this._schedulePreviewRefresh();
+	},
+
+	_gapMarginProperty: function (side) {
+		if (this._direction === 'x')
+			return side === 'before' ? 'marginLeft' : 'marginRight';
+		return side === 'before' ? 'marginTop' : 'marginBottom';
+	},
+
+	_removeDropGap: function (state) {
+		if (!state || !state.gapFrame)
+			return;
+		state.gapFrame.style[this._gapMarginProperty(state.gapSide)] = '';
+		state.gapFrame = null;
+		state.gapSide = null;
+	},
+
+	// Scroll the sorter when the pointer is near one of its edges during a
+	// drag, so slides outside the visible area can be reached. Runs as an
+	// animation frame loop; the speed grows the closer the pointer is to
+	// the edge, and the loop ends when the pointer moves away from it.
+	_autoScrollStep: function () {
+		const state = this._dragState;
+		if (!state)
+			return;
+		state.autoScrollId = null;
+		if (!state.pointer)
+			return;
+
+		const horizontal = this._direction === 'x';
+		const rect = this._partsPreviewCont.getBoundingClientRect();
+		const zone = 48;
+		const maxSpeed = 14;
+		const pointerPosition = horizontal ? state.pointer.x : state.pointer.y;
+		const start = horizontal ? rect.left : rect.top;
+		const end = horizontal ? rect.right : rect.bottom;
+
+		let speed = 0;
+		if (pointerPosition < start + zone)
+			speed = -maxSpeed * Math.min(1, (start + zone - pointerPosition) / zone);
+		else if (pointerPosition > end - zone)
+			speed = maxSpeed * Math.min(1, (pointerPosition - (end - zone)) / zone);
+		if (!speed)
+			return;
+
+		if (horizontal)
+			this._partsPreviewCont.scrollLeft += speed;
+		else
+			this._partsPreviewCont.scrollTop += speed;
+
+		// Scrolling moved the frames under the pointer.
+		this._updateDropGap();
+
+		state.autoScrollId = requestAnimationFrame(this._autoScrollStep.bind(this));
+	},
+
+	_ensureAutoScroll: function () {
+		const state = this._dragState;
+		if (state && state.autoScrollId === null)
+			state.autoScrollId = requestAnimationFrame(this._autoScrollStep.bind(this));
+	},
+
+	// Rearrange the local previews into the order the server will confirm.
+	// The sorter settles instantly, each preview image travels with its
+	// slide, and the status update that follows finds every preview
+	// already at its part's index. intoSection is true when the slides
+	// become the first slides of the section starting at the insertion
+	// point, and false when they stay outside it.
+	_applyDropLocally: function (insertIndex, draggedParts, intoSection) {
+		const draggedTiles = [];
+		for (let i = 0; i < draggedParts.length; i++)
+			draggedTiles.push(this._previewTiles[draggedParts[i]]);
+		// The frames land in front of the first slide at or after the
+		// insertion point that is not itself being dragged.
+		let anchorIndex = insertIndex;
+		while (anchorIndex < this._previewTiles.length &&
+		       draggedParts.indexOf(anchorIndex) !== -1)
+			anchorIndex++;
+		const anchorTile = anchorIndex < this._previewTiles.length ?
+			this._previewTiles[anchorIndex] : null;
+
+		// The client's part bookkeeping moves along, so selection changes
+		// made before the server confirms the move already address the
+		// parts at their new indices.
+		const parts = app.impress.partList;
+		if (parts && parts.length === this._previewTiles.length) {
+			const draggedEntries = [];
+			for (let i = 0; i < draggedParts.length; i++)
+				draggedEntries.push(parts[draggedParts[i]]);
+			const anchorEntry = anchorIndex < parts.length ? parts[anchorIndex] : null;
+			const remainingEntries = parts.filter(function (entry) {
+				return draggedEntries.indexOf(entry) === -1;
+			});
+			const entriesInsertAt = anchorEntry ?
+				remainingEntries.indexOf(anchorEntry) : remainingEntries.length;
+			Array.prototype.splice.apply(remainingEntries,
+				[entriesInsertAt, 0].concat(draggedEntries));
+			app.impress.partList = remainingEntries;
+		}
+
+		this._previewTiles = this._previewTiles.filter(function (tile) {
+			return draggedTiles.indexOf(tile) === -1;
+		});
+		let anchorNode = anchorTile ? anchorTile.parentNode : null;
+		// When the slides stay outside the section that starts at the
+		// anchor, they also go in front of its header.
+		if (!intoSection && anchorNode) {
+			const nodeBefore = anchorNode.previousElementSibling;
+			if (nodeBefore && nodeBefore.classList.contains('slide-section-header'))
+				anchorNode = nodeBefore;
+		}
+		for (let i = 0; i < draggedTiles.length; i++) {
+			const frame = draggedTiles[i].parentNode;
+			// Moving takes a slide out of its section; when it lands in a
+			// collapsed one, the next sections update hides it again.
+			frame.classList.remove('section-collapsed');
+			this._partsPreviewCont.insertBefore(frame, anchorNode);
+		}
+		const insertAt = anchorTile ?
+			this._previewTiles.indexOf(anchorTile) : this._previewTiles.length;
+		Array.prototype.splice.apply(this._previewTiles, [insertAt, 0].concat(draggedTiles));
+
+		// The slide numbers in the alt text and tooltip are positional,
+		// so renumber every preview after the previews change order.
+		this._updatePreviewPositionLabelsFrom(0);
+	},
+
+	// End the drag visuals. After a completed drop (animate = false) the
+	// dragged frames have just been moved into the gap, so restoring their
+	// size while the gap margin goes away in the same step is not a visible
+	// change. After a cancelled drag (animate = true) the gap closes and
+	// the dragged frames grow back at their original position.
+	_finishDrag: function (animate) {
+		const state = this._dragState;
+		if (!state)
+			return;
+		this._dragState = null;
+
+		if (state.autoScrollId !== null)
+			cancelAnimationFrame(state.autoScrollId);
+
+		const container = this._partsPreviewCont;
+		const restoreFrame = function (frame) {
+			frame.style.width = '';
+			frame.style.height = '';
+			frame.style.padding = '';
+			frame.style.opacity = '';
+			frame.style.overflow = '';
+			frame.style.boxSizing = '';
+		};
+
+		if (!animate)
+			container.classList.add('drag-no-transition');
+
+		this._removeDropGap(state);
+
+		if (!animate) {
+			state.frames.forEach(restoreFrame);
+			void container.offsetHeight;
+			container.classList.remove('drag-no-transition');
+			container.classList.remove('dragging-slide');
+			this._schedulePreviewRefresh();
+			return;
+		}
+
+		// Grow the frames back to their measured size so the change
+		// animates, then drop the inline styles once the transition is over.
+		for (let i = 0; i < state.frames.length; i++) {
+			state.frames[i].style[state.sizeProperty] = state.sizes[i] + 'px';
+			state.frames[i].style.padding = '';
+			state.frames[i].style.opacity = '';
+		}
+		const that = this;
+		setTimeout(function () {
+			// A drag that started during the restore owns the drag visuals:
+			// its frames keep their styles and the container keeps its class.
+			const activeDrag = that._dragState;
+			for (let i = 0; i < state.frames.length; i++) {
+				if (!activeDrag || activeDrag.frames.indexOf(state.frames[i]) === -1)
+					restoreFrame(state.frames[i]);
+			}
+			if (!activeDrag)
+				container.classList.remove('dragging-slide');
+			that._schedulePreviewRefresh();
+		}, 200);
 	},
 
 	_handleDragEnd: function () {
-		this.classList.remove('preview-img-dropsite');
+		// Reached without a drop when the drag was cancelled or released
+		// outside a drop target: put the dragged slides back where they were.
+		this.partsPreview._finishDrag(true);
 		document.querySelectorAll('.slide-section-dropsite').forEach(function (el) {
 			el.classList.remove('slide-section-dropsite');
 		});
