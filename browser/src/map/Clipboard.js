@@ -274,24 +274,25 @@ window.L.Clipboard = window.L.Class.extend({
 
 		return await new Promise((resolve, reject) => {
 			request.onload = () => {
-				this._downloadProgress._onComplete();
-				if (!forClipboard) {
-					this._downloadProgress._onClose();
-				}
-
 				// For some reason 400 error from the server doesn't
 				// invoke onerror callback, but we do get here with
 				// size==0, which signifies no response from the server.
 				// So we check the status code instead.
 				if (request.status == 200) {
+					this._downloadProgress._onComplete();
+					if (!forClipboard) {
+						this._downloadProgress._onClose();
+					}
 					resolve(request.response);
 				} else {
+					// Dismiss the notification without the "complete" success
+					// framing, so a failed request doesn't look like it worked.
+					this._downloadProgress._onClose();
 					reject(request.response);
 				}
 			};
 			request.onerror = (error) => {
 				reject(error);
-				this._downloadProgress._onComplete();
 				this._downloadProgress._onClose();
 			};
 

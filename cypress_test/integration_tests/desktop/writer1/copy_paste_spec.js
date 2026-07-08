@@ -142,4 +142,28 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Clipboard operations.', fu
 		});
 
 	});
+
+	it('Failed clipboard download does not report success.', function() {
+		helper.setupAndLoadDocument('writer/copy_paste.odt');
+
+		cy.intercept('GET', '**/cool/clipboard*', {
+			statusCode: 403,
+			body: '',
+		}).as('clipboardGet');
+
+		cy.getFrameWindow().then(function(win) {
+			const clip = win.app.map._clip;
+
+			return clip._doAsyncDownload('GET', clip.getMetaURL(), null, false, p => p)
+				.then(() => {
+					throw new Error('expected the download to be rejected');
+				})
+				.catch(() => {
+					// A rejected request must not be reported as a completed
+					// download: the progress notification should just close.
+					expect(clip._downloadProgress.isComplete()).to.equal(false);
+					expect(clip._downloadProgress.isClosed()).to.equal(true);
+				});
+		});
+	});
 });
