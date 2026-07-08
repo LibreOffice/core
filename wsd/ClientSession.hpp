@@ -428,6 +428,12 @@ private:
 
     bool handleUpdateViewSettings(const std::string& firstLine);
 
+    /// Put back the secrets the browser asked to keep. A secret the user did not
+    /// change arrives with an empty value and a "<field>Stored": true flag; this
+    /// replaces it with the value the session already holds (or the stored
+    /// settings) and removes the flag, so applying the update does not wipe it.
+    void restoreKeptViewSettingSecrets(Poco::JSON::Object::Ptr& viewSettings);
+
     /// Persist the last-used Impress view mode (Normal/Notes) for the current
     /// document, keyed by docKey, inside the per-user viewsetting.json. The
     /// per-user dimension is implicit in where that file lives; we only add the

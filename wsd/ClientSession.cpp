@@ -34,6 +34,7 @@
 #include <common/Session.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Util.hpp>
+#include <common/ViewSettings.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/HttpServer.hpp>
 #include <wopi/StorageConnectionManager.hpp>
@@ -1868,6 +1869,42 @@ void ClientSession::resolveAndApplyAIImageCredentials(
     setAIImageSize(resolveField("aiImageSize", "AIImageSize", "ai.image_size"));
 }
 
+void ClientSession::restoreKeptViewSettingSecrets(Poco::JSON::Object::Ptr& viewSettings)
+{
+    if (!viewSettings)
+        return;
+
+    const Poco::SharedPtr<Poco::JSON::Object> stored = getViewSettingsJSON();
+
+    // A field the browser left untouched arrives flagged to keep and with an
+    // empty value. Put back the value the session already holds so applying the
+    // settings does not wipe it; fall back to the stored settings for fields
+    // the session has not applied yet (zotero and signature are applied on an
+    // updateviewsettings, not at load). Then drop the transport-only flag. The
+    // fields here must match ViewSettings::SecretFields.
+    auto keep = [&](const std::string& field, const std::string& applied)
+    {
+        const std::string flag = field + std::string(ViewSettings::StoredFlagSuffix);
+        bool wantKeep = false;
+        if (viewSettings->has(flag))
+        {
+            JsonUtil::findJSONValue(viewSettings, flag, wantKeep);
+            viewSettings->remove(flag);
+        }
+        if (!wantKeep)
+            return;
+        std::string value = applied;
+        if (value.empty() && stored)
+            JsonUtil::findJSONValue(stored, field, value);
+        viewSettings->set(field, value);
+    };
+
+    keep("aiProviderAPIKey", getAIProviderAPIKey());
+    keep("aiImageProviderAPIKey", getAIImageProviderAPIKey());
+    keep("zoteroAPIKey", getZoteroAPIKey());
+    keep("signatureKey", getSignatureKey());
+}
+
 bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
 {
     const std::string jsonPayload = firstLine.substr(strlen("updateviewsettings "));
@@ -1878,6 +1915,11 @@ bool ClientSession::handleUpdateViewSettings(const std::string& firstLine)
         LOG_WRN("Failed to parse updateviewsettings JSON");
         return true;
     }
+
+    // The browser never receives stored secrets, so a save it did not change
+    // arrives asking to keep them. Put those back before the settings are
+    // applied, so the session keeps working with its current credentials.
+    restoreKeptViewSettingSecrets(viewSettings);
 
     bool viewSettingsMutated = false;
     std::string resolvedModel, resolvedRating;

@@ -65,7 +65,23 @@ interface ViewSettings {
 	aiImageModel: string;
 	aiImageSize: string;
 	aiRequestTimeout: string;
+	// Companion flags for the secret fields above. True when the server holds a
+	// value it did not send to the browser. Sent back as true to ask that the
+	// stored value be kept unchanged.
+	zoteroAPIKeyStored?: boolean;
+	signatureKeyStored?: boolean;
+	aiProviderAPIKeyStored?: boolean;
+	aiImageProviderAPIKeyStored?: boolean;
 }
+
+// Secret view-setting fields the server never sends to the browser in
+// cleartext. Kept in sync with common/ViewSettings.hpp on the server.
+const SECRET_VIEW_SETTING_FIELDS = [
+	'aiProviderAPIKey',
+	'aiImageProviderAPIKey',
+	'zoteroAPIKey',
+	'signatureKey',
+];
 
 interface AIProvider {
 	id: string;
@@ -247,7 +263,11 @@ const defaultBrowserSetting: Record<string, any> = {
 
 abstract class SettingsStorage {
 	abstract fetchSettingsConfig(): Promise<ConfigData>;
-	abstract uploadSettings(filePath: string, file: File): Promise<void>;
+	abstract uploadSettings(
+		filePath: string,
+		file: File,
+		currentFileUrl?: string,
+	): Promise<void>;
 	abstract fetchSettingFile(fileUrl: string): Promise<string | null>;
 	abstract deleteSettingsConfig(fileId: string): Promise<void>;
 }
@@ -261,6 +281,8 @@ class DesktopSettingsStorage extends SettingsStorage {
 	}
 
 	async uploadSettings(filePath: string, file: File): Promise<void> {
+		// The desktop stores settings locally on the user's own machine, so the
+		// secret round-trip that the server path uses does not apply here.
 		const text = await file.text();
 		(window.parent as any).postMobileMessage(
 			'UPLOADSETTINGS ' +
@@ -342,12 +364,21 @@ class OnlineSettingsStorage extends SettingsStorage {
 		return await response.json();
 	}
 
-	async uploadSettings(filePath: string, file: File): Promise<void> {
+	async uploadSettings(
+		filePath: string,
+		file: File,
+		currentFileUrl?: string,
+	): Promise<void> {
 		const formData = new FormData();
 		formData.append('file', file);
 		formData.append('filePath', filePath);
 		if (window.wopiSettingBaseUrl) {
 			formData.append('wopiSettingBaseUrl', window.wopiSettingBaseUrl);
+		}
+		// The URL of the currently stored file, so the server can read back any
+		// secret the user chose to keep instead of receiving it from the browser.
+		if (currentFileUrl) {
+			formData.append('currentFileUrl', currentFileUrl);
 		}
 
 		const apiUrl = this.getAPIEndpoints().uploadSettings;
@@ -530,6 +561,9 @@ class SettingIframe {
 	private wordbook;
 	private xcuEditor;
 	private _viewSetting!: ViewSettings;
+	// URL of the stored viewsetting.json, remembered when it is fetched so a save
+	// can tell the server where to read back any secret the user chose to keep.
+	private _viewSettingFileUrl = '';
 	// Set when the user edits a chat AI field in this dialog session. Drives the
 	// View-tab / sidebar payoff so it fires on a real change, not on every save
 	// that happens to have a key already set. Set only by user input handlers,
@@ -759,7 +793,11 @@ class SettingIframe {
 		content: string,
 	): Promise<void> {
 		const file = new File([content], filename, { type: 'text/plain' });
-		await this.uploadFile(this.PATH.viewSettingsUpload(), file);
+		await this.uploadFile(
+			this.PATH.viewSettingsUpload(),
+			file,
+			this._viewSettingFileUrl,
+		);
 	}
 
 	private initWindowVariables(): void {
@@ -1923,9 +1961,13 @@ class SettingIframe {
 		return optionDiv;
 	}
 
-	private async uploadFile(filePath: string, file: File): Promise<void> {
+	private async uploadFile(
+		filePath: string,
+		file: File,
+		currentFileUrl?: string,
+	): Promise<void> {
 		try {
-			await this.settingsStorage.uploadSettings(filePath, file);
+			await this.settingsStorage.uploadSettings(filePath, file, currentFileUrl);
 			await this.fetchAndPopulateSharedConfigs();
 		} catch (error: unknown) {
 			const message = error instanceof Error ? error.message : 'Unknown error';
@@ -2344,7 +2386,7 @@ class SettingIframe {
 		const apiKeyInput = group.querySelector(
 			'#aiProviderAPIKey',
 		) as HTMLInputElement | null;
-		if (apiKeyInput) {
+		if (apiKeyInput && !data.aiProviderAPIKeyStored) {
 			apiKeyInput.placeholder = _(
 				'Leave empty if your server does not require one',
 			);
@@ -2374,7 +2416,7 @@ class SettingIframe {
 
 		const modelSelect = this.createSelectInput(
 			'aiProviderModel',
-			[{ value: '', label: _('Fetch models to select') }],
+			this.initialModelOptions(data.aiProviderModel),
 			data.aiProviderModel || '',
 			(selectEl) => {
 				data.aiProviderModel = selectEl.value;
@@ -2477,7 +2519,9 @@ class SettingIframe {
 		) as HTMLInputElement | null;
 		if (imageApiKeyInput) {
 			imageApiKeyInput.type = 'password';
-			imageApiKeyInput.placeholder = _('Leave empty to use Text AI key');
+			if (!data.aiImageProviderAPIKeyStored) {
+				imageApiKeyInput.placeholder = _('Leave empty to use Text AI key');
+			}
 		}
 
 		const modelField = document.createElement('div');
@@ -2492,7 +2536,7 @@ class SettingIframe {
 
 		const modelSelect = this.createSelectInput(
 			'aiImageModel',
-			[{ value: '', label: _('Fetch models to select') }],
+			this.initialModelOptions(data.aiImageModel),
 			data.aiImageModel || '',
 			(selectEl) => {
 				data.aiImageModel = selectEl.value;
@@ -2600,6 +2644,8 @@ class SettingIframe {
 
 		apiKeyInput?.addEventListener('input', () => {
 			data.aiProviderAPIKey = apiKeyInput.value;
+			// The typed value is now authoritative, not the stored one.
+			data.aiProviderAPIKeyStored = false;
 			queueFetch();
 		});
 
@@ -2665,6 +2711,8 @@ class SettingIframe {
 
 		apiKeyInput?.addEventListener('input', () => {
 			data.aiImageProviderAPIKey = apiKeyInput.value;
+			// The typed value is now authoritative, not the stored one.
+			data.aiImageProviderAPIKeyStored = false;
 			queueFetch();
 		});
 
@@ -2733,7 +2781,7 @@ class SettingIframe {
 		// just a base URL; the pre-canned cloud providers still need a key.
 		if (!effectiveUrl || (!isCustom && !effectiveKey)) {
 			this.setAIImageStatus('', 'hidden');
-			this.resetAIImageModelSelect();
+			this.resetAIImageModelSelect(data.aiImageModel);
 			return;
 		}
 
@@ -2818,7 +2866,7 @@ class SettingIframe {
 			const message =
 				error instanceof Error ? error.message : _('Failed to fetch models');
 			this.setAIImageStatus(message, 'error');
-			this.resetAIImageModelSelect();
+			this.resetAIImageModelSelect(data.aiImageModel);
 		}
 	}
 
@@ -2840,7 +2888,7 @@ class SettingIframe {
 		// URL; the pre-canned cloud providers still need a key to reach theirs.
 		if (isCustom ? !baseUrl : !apiKey) {
 			this.setAIStatus('', 'hidden');
-			this.resetAIModelSelect();
+			this.resetAIModelSelect(data.aiProviderModel);
 			return;
 		}
 
@@ -2919,7 +2967,7 @@ class SettingIframe {
 			const message =
 				error instanceof Error ? error.message : _('Failed to fetch models');
 			this.setAIStatus(message, 'error');
-			this.resetAIModelSelect();
+			this.resetAIModelSelect(data.aiProviderModel);
 		}
 	}
 
@@ -2964,34 +3012,49 @@ class SettingIframe {
 		select.disabled = false;
 	}
 
-	private resetAIImageModelSelect(): void {
+	// Seed a model dropdown so a saved model still shows before (or without) a
+	// fresh fetch, which needs a key the browser no longer holds.
+	private initialModelOptions(
+		storedModel: string,
+	): Array<{ value: string; label: string }> {
+		const options = [{ value: '', label: _('Fetch models to select') }];
+		if (storedModel) {
+			options.push({ value: storedModel, label: storedModel });
+		}
+		return options;
+	}
+
+	private fillModelSelect(
+		select: HTMLSelectElement,
+		storedModel: string,
+	): void {
+		select.innerHTML = '';
+		this.initialModelOptions(storedModel).forEach((opt) => {
+			const option = document.createElement('option');
+			option.value = opt.value;
+			option.textContent = opt.label;
+			select.appendChild(option);
+		});
+		select.value = storedModel || '';
+		select.disabled = true;
+	}
+
+	private resetAIImageModelSelect(storedModel: string = ''): void {
 		const select = document.getElementById(
 			'aiImageModel',
 		) as HTMLSelectElement | null;
 		if (!select) return;
-		select.innerHTML = '';
-		const option = document.createElement('option');
-		option.value = '';
-		option.textContent = _('Fetch models to select');
-		select.appendChild(option);
-		select.value = '';
-		select.disabled = true;
+		this.fillModelSelect(select, storedModel);
 	}
 
-	private resetAIModelSelect(): void {
+	private resetAIModelSelect(storedModel: string = ''): void {
 		const modelSelect = document.getElementById(
 			'aiProviderModel',
 		) as HTMLSelectElement | null;
 		if (!modelSelect) {
 			return;
 		}
-		modelSelect.innerHTML = '';
-		const option = document.createElement('option');
-		option.value = '';
-		option.textContent = _('Fetch models to select');
-		modelSelect.appendChild(option);
-		modelSelect.value = '';
-		modelSelect.disabled = true;
+		this.fillModelSelect(modelSelect, storedModel);
 	}
 
 	// Build a concise, user-facing message for a failed model fetch. The raw
@@ -3177,6 +3240,10 @@ class SettingIframe {
 				);
 			} else if (data) {
 				let viewSetting = this.getDefaultViewSettings();
+				this._viewSettingFileUrl =
+					data.viewsetting && data.viewsetting.length > 0
+						? data.viewsetting[0].uri
+						: '';
 				if (data.viewsetting && data.viewsetting.length > 0) {
 					const fetchContent = await this.settingsStorage.fetchSettingFile(
 						data.viewsetting[0].uri,
@@ -3406,25 +3473,45 @@ class SettingIframe {
 			'signatureCa',
 		].includes(key);
 
-		const isSecretField = key === 'aiProviderAPIKey';
+		const isSecretField = SECRET_VIEW_SETTING_FIELDS.includes(key);
+		const storedFlag = `${key}Stored`;
+		const hasStoredSecret = isSecretField && !!(data as any)[storedFlag];
+
+		// A stored secret is never sent down. Show a masked pattern so the field
+		// reads as "a value is saved"; the field stays empty, and leaving it blank
+		// keeps that value.
+		const placeholder = hasStoredSecret
+			? '********'
+			: _('Enter {0}').replace('{0}', label);
+
+		// Once the user edits a secret field, its value is authoritative: clear
+		// the keep flag so the typed value (empty to clear, text to replace) is
+		// what gets saved.
+		const markEdited = () => {
+			if (isSecretField) {
+				(data as any)[storedFlag] = false;
+			}
+		};
 
 		if (isSignatureField) {
 			const textarea = this.createTextArea(
 				key as string,
-				_('Enter {0}').replace('{0}', label),
+				placeholder,
 				value,
 				(textareaElement) => {
 					(data as any)[key] = textareaElement.value;
+					markEdited();
 				},
 			);
 			container.appendChild(textarea);
 		} else {
 			const input = this.createTextInput(
 				key as string,
-				_('Enter {0}').replace('{0}', label),
+				placeholder,
 				value,
 				(inputElement) => {
 					(data as any)[key] = inputElement.value;
+					markEdited();
 				},
 			);
 			if (isSecretField) {
@@ -3506,6 +3593,10 @@ class SettingIframe {
 			aiImageModel: '',
 			aiImageSize: '',
 			aiRequestTimeout: '',
+			zoteroAPIKeyStored: false,
+			signatureKeyStored: false,
+			aiProviderAPIKeyStored: false,
+			aiImageProviderAPIKeyStored: false,
 		};
 	}
 

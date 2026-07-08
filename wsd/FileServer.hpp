@@ -159,6 +159,18 @@ private:
                                        std::istream& message,
                                        const std::shared_ptr<StreamSocket>& socket);
 
+    /// Persist a viewsetting.json upload. Secrets the browser asked to keep are
+    /// restored from the currently stored file (fetched from currentFileUrl)
+    /// before the merged body is written back, so the browser never has to hold
+    /// them. Reports the outcome on the socket.
+    static void handleViewSettingUpload(const std::string& wopiSettingBaseUrl,
+                                        const std::string& fileId, const std::string& accessToken,
+                                        const std::string& currentFileUrl,
+                                        const std::string& uploadedFilePath,
+                                        std::shared_ptr<FileUtil::OwnedFile> uploadedFileOwnership,
+                                        const std::string& requestPath,
+                                        const std::shared_ptr<StreamSocket>& socket);
+
     static void fetchWopiSettingConfigs(const Poco::Net::HTTPRequest& request,
                                         std::istream& message,
                                         const std::shared_ptr<StreamSocket>& socket);
