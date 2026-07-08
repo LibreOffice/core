@@ -674,6 +674,10 @@ public:
     virtual void postBackgroundSaveFork() {}
     virtual void preBackgroundSaveExit() {}
 
+    /// A frame for the background save child to send to its parent just
+    /// before saving. Empty means send nothing.
+    virtual std::string getBackgroundSaveInjectMessage() { return std::string(); }
+
     /// Kit hit drainQueue
     virtual bool filterDrainQueue()
     {

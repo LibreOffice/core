@@ -1665,6 +1665,9 @@ bool Document::forkToSave(const std::function<void()>& childSave, int viewId)
         LOG_TRC("Background save process " << getpid() << " fork took " <<
                 std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count() << "ms");
 
+        if (const std::string inject = UnitKit::get().getBackgroundSaveInjectMessage(); !inject.empty())
+            sendFrame(inject, WSOpCode::Text);
+
         childSave();
 
         SigUtil::addActivity("background save process shutdown");

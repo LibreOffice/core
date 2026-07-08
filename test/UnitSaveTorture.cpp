@@ -365,6 +365,78 @@ public:
     }
 };
 
+// A dialog closing while a background save runs must not abort the save.
+class UnitBgSaveDialogClose : public UnitSaveTortureBase
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitSaveStatus) _phase;
+
+public:
+    UnitBgSaveDialogClose()
+        : UnitSaveTortureBase("UnitBgSaveDialogClose")
+        , _phase(Phase::Load)
+    {
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        // Any foreground save from here on means bgsave was wrongly disabled.
+        createStamp("abortonsyncsave");
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+        modifyDocument();
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("Got: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+        TRANSITION_STATE(_phase, Phase::WaitSaveStatus);
+
+        // Make the bgsave child flush a closing dialog while it saves.
+        createStamp("flushdialogclose");
+
+        forceAutosave();
+        TST_LOG("Sending save request");
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        return true;
+    }
+
+    bool onDocumentSaved(const std::string& message, bool success,
+                         const std::string& result) override
+    {
+        TST_LOG("Save result: " << result << " for " << message);
+        LOK_ASSERT_STATE(_phase, Phase::WaitSaveStatus);
+
+        LOK_ASSERT_MESSAGE("Background save must survive a closing dialog", success);
+        passTest("Background save survived an in-flight dialog close");
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                const std::string docName = "empty.ods";
+                TST_LOG("Loading document: " << docName);
+                connectAndLoadLocalDocument(docName);
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitSaveStatus:
+                break;
+        }
+    }
+};
+
 class UnitSaveTortureOne : public UnitSaveTortureBase
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, WaitFirstModifiedStatus, WaitAfterSaveModifiedStatus,
@@ -610,6 +682,16 @@ public:
         waitWhileStamp("holdsave");
     }
 
+    virtual std::string getBackgroundSaveInjectMessage() override
+    {
+        if (!stampExists("flushdialogclose"))
+            return std::string();
+
+        // A dialog "close" flushed from the child's idle handler.
+        return "client-0000 jsdialog: { \"id\": 13, \"jsontype\": \"dialog\", "
+               "\"action\": \"close\" }";
+    }
+
     virtual void preBackgroundSaveExit() override
     {
         std::cerr << "\n\npre exit of background save process\n\n\n";
@@ -620,7 +702,8 @@ UnitBase** unit_create_wsd_multi(void)
 {
     return new UnitBase* []
     {
-        new UnitBgSaveCrash(), new UnitTileCombineRace(), new UnitModified(),
+        new UnitBgSaveCrash(), new UnitBgSaveDialogClose(), new UnitTileCombineRace(),
+            new UnitModified(),
             new UnitSaveTortureOne("empty.ods", true, false, "simple_load-modify-bgsave"),
             new UnitSaveTortureOne("empty.odt", true, false, "simple_load-modify-bgsave"),
             new UnitSaveTortureOne("empty.ods", true, true,
