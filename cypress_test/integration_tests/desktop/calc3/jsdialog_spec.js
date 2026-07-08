@@ -123,6 +123,45 @@ describe(['tagdesktop'], 'JSDialog unit test', { testIsolation: false }, functio
 		desktopHelper.getDropdown('home-conditional-format-menu').should('not.exist');
 	});
 
+	// A zoom closes content-anchored dropdowns and popups. The snackbar
+	// notification and modal alert dialogs are not anchored to a point in the
+	// document, so they must stay on screen across a zoom.
+	it('Snackbar and alert dialog survive a zoom', function() {
+		cy.getFrameWindow().then(function(win) {
+			// A negative timeout keeps the snackbar up until it is dismissed.
+			win.app.map.uiManager.showSnackbar('persistent notification', null, null, -1);
+			win.app.map.uiManager.showInfoModal(
+				'zoom-survive-alert', 'Alert', 'This alert must survive a zoom', '', 'OK');
+		});
+
+		cy.cGet('#snackbar').should('be.visible');
+		cy.cGet('#modal-dialog-zoom-survive-alert').should('be.visible');
+
+		cy.getFrameWindow().then(function(win) {
+			const closeSpy = cy.spy(win.app.map.jsdialog, 'close');
+			// A zoom ending runs the same code path that closes dropdowns.
+			win.app.map.jsdialog.onZoomEnd();
+			cy.wrap(closeSpy).should(function(spy) {
+				const closedIds = spy.getCalls().map(function(call) { return call.args[0]; });
+				expect(closedIds, 'snackbar is not closed').to.not.include('snackbar');
+				expect(closedIds, 'alert dialog is not closed')
+					.to.not.include('modal-dialog-zoom-survive-alert');
+			});
+		});
+
+		// Both are still on screen after the zoom.
+		cy.cGet('#snackbar').should('be.visible');
+		cy.cGet('#modal-dialog-zoom-survive-alert').should('be.visible');
+
+		// Dismiss them so the shared document is clean for the following tests.
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.closeModal('modal-dialog-zoom-survive-alert');
+			win.app.map.uiManager.closeSnackbar();
+		});
+		cy.cGet('#modal-dialog-zoom-survive-alert').should('not.exist');
+		cy.cGet('#snackbar').should('not.exist');
+	});
+
 	it('JSDialog check enable edit input', function() {
 		cy.cGet('#File-tab-label').click();
 		cy.cGet('#File-container .unodownloadas button').click();

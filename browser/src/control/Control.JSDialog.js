@@ -129,13 +129,21 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	},
 
 	closeAllDropdowns: function() {
-		var dialogs = Object.values(this.dialogs);
-		for (var i = 0; i < dialogs.length; i++) {
-			if (dialogs[i] && !dialogs[i].isDropdown)
+		const dialogs = Object.values(this.dialogs);
+		const dialogKeys = Object.keys(this.dialogs);
+		const hadDialogsOpened = dialogs.length > 0;
+		let closedAny = false;
+		for (let dialog of dialogs) {
+			// We close only content-anchored popups and widget's dropdowns
+			// Keep snackbar or modalpopups (error dialogs) on screen
+			if (dialog && !(dialog.isDropdown || dialog.isDocumentAreaPopup))
 				continue;
-
-			this.close(dialogs[i].id, false);
+			const closed = this.close(dialog.id, !dialog.isDropdown);
+			closedAny = closedAny | closed;
 		}
+
+		if (closedAny)
+			this.focusAfterClose(hadDialogsOpened, dialogKeys);
 	},
 
 	closeDialog: function(id, sendCloseEvent) {
@@ -1440,23 +1448,8 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	},
 
 	onZoomEnd: function () {
-		var dialogs = Object.keys(this.dialogs);
-		if (dialogs.length) {
-			var lastKey = dialogs[dialogs.length - 1];
-			var dialogInfo = this.dialogs[lastKey];
-			// The snackbar is a fixed notification, not anchored to document
-			// content, so it must survive a zoom (e.g. the fit-width zoom during
-			// load); only content-anchored popups need closing here.
-			if (dialogInfo.isPopup && !dialogInfo.isSnackbar) {
-				// online-only must remove the DOM here
-				// instead of waiting for a server round-trip that never comes
-				// TODO: use helpers here
-				this.close(lastKey, !dialogInfo.isDropdown);
-				this.map.focus();
-			}
-		}
-
-	}
+		JSDialog.CloseAllDropdowns();
+	},
 });
 
 window.L.control.jsDialog = function (options) {
