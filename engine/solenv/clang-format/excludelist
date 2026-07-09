@@ -9386,7 +9386,6 @@ shell/source/win32/workbench/TestSysShExec.cxx
 shell/source/win32/zipfile/zipexcptn.cxx
 shell/source/win32/zipfile/zipfile.cxx
 smoketest/smoketest.cxx
-solenv/bin/concat-deps.c
 solenv/gbuildtojson/gbuildtojson.cxx
 solenv/gcc-wrappers/wrapper.cxx
 solenv/lockfile/autoconf.h.in

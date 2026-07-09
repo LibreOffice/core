@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Executable_Executable,concat-deps))
 
-$(eval $(call gb_Executable_add_cobjects,concat-deps,\
+$(eval $(call gb_Executable_add_exception_objects,concat-deps,\
 	solenv/bin/concat-deps, $(gb_COMPILEROPTFLAGS) \
 ))
 
