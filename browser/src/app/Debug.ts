@@ -25,12 +25,20 @@
 
 type TimeoutHdl = ReturnType<typeof setTimeout>;
 
+interface DebugToolInput {
+	value: number;
+	min: number;
+	unit: string;
+	onChange: (value: number) => void;
+}
+
 interface DebugTool {
 	name: string;
 	category: string;
 	startsOn: boolean;
 	onAdd: () => void;
 	onRemove: () => void;
+	input?: DebugToolInput;
 }
 
 interface DebugTimeArray {
@@ -86,6 +94,7 @@ class DebugManager {
 	private logTrace: boolean;
 
 	public messageDelayOn: boolean;
+	private _messageDelayMs: number = 100;
 
 	public eventDelayWatchdog: boolean;
 	private _eventDelayTimeout: TimeoutHdl | null;
@@ -251,6 +260,24 @@ class DebugManager {
 		span.textContent = tool.name;
 		label.appendChild(checkbox);
 		label.appendChild(span);
+		if (tool.input) {
+			const toolInput = tool.input;
+			const numberInput = document.createElement('input');
+			numberInput.type = 'number';
+			numberInput.className = 'debug-panel-number';
+			numberInput.min = String(toolInput.min);
+			numberInput.value = String(toolInput.value);
+			const unit = document.createElement('span');
+			unit.textContent = ' ' + toolInput.unit;
+			label.appendChild(numberInput);
+			label.appendChild(unit);
+			numberInput.addEventListener('change', function () {
+				let value = parseInt(numberInput.value, 10);
+				if (isNaN(value) || value < toolInput.min) value = toolInput.min;
+				numberInput.value = String(value);
+				toolInput.onChange(value);
+			});
+		}
 		fieldset.appendChild(label);
 
 		this._toolEntries.push({ tool, checkbox });
@@ -627,16 +654,28 @@ class DebugManager {
 		});
 
 		this._addDebugTool({
-			name: 'Delay messages 100ms',
+			name: 'Delay messages',
 			category: 'Functionality',
 			startsOn: false,
 			onAdd: function () {
 				self.messageDelayOn = true;
-				app.socket.enableMessageDelay(100);
+				app.socket.enableMessageDelay(self._messageDelayMs);
 			},
 			onRemove: function () {
 				self.messageDelayOn = false;
 				app.socket.disableMessageDelay();
+			},
+			input: {
+				// The delay is applied once on send and once on receive, so
+				// show the round-trip time: twice the per-direction delay.
+				value: this._messageDelayMs * 2,
+				min: 0,
+				unit: 'ms round trip',
+				onChange: function (value: number) {
+					self._messageDelayMs = value / 2;
+					if (self.messageDelayOn)
+						app.socket.setMessageDelay(self._messageDelayMs);
+				},
 			},
 		});
 

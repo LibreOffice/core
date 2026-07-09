@@ -87,6 +87,21 @@ abstract class QueuedSocket implements SockInterface {
 		return this._inner;
 	}
 
+	// Cancel the pending delivery timers and recompute them from the
+	// queue heads with a fresh _nextDelay() value.
+	protected _reschedule(): void {
+		if (this._sendTimer) {
+			clearTimeout(this._sendTimer);
+			this._sendTimer = null;
+			this._scheduleSend();
+		}
+		if (this._recvTimer) {
+			clearTimeout(this._recvTimer);
+			this._recvTimer = null;
+			this._scheduleRecv();
+		}
+	}
+
 	// Delay in ms applied to the head of either queue before delivery.
 	protected abstract _nextDelay(): number;
 

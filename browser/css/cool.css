@@ -1638,3 +1638,4 @@ body.slideshow-presenting-in-window .jsdialog-window.modalpopup {
 
 #debug-panel label { display: block; cursor: pointer; padding: 1px 0; }
 #debug-panel input[type='checkbox'] { margin-right: 5px; }
+#debug-panel .debug-panel-number { width: 5.5em; margin-left: 5px; font: inherit; }

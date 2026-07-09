@@ -167,6 +167,10 @@ class Socket {
 		this.socket = wrapper;
 	}
 
+	public setMessageDelay(delayMs: number): void {
+		if (this.socket instanceof DelaySocket) this.socket.setDelay(delayMs);
+	}
+
 	// Unwrap a previously-installed DelaySocket, restoring the raw socket.
 	// No-op if there is no wrapper.
 	public disableMessageDelay(): void {

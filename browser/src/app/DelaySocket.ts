@@ -20,6 +20,11 @@ class DelaySocket extends QueuedSocket {
 		this._delayMs = delayMs;
 	}
 
+	public setDelay(delayMs: number): void {
+		this._delayMs = delayMs;
+		this._reschedule();
+	}
+
 	protected _nextDelay(): number {
 		return this._delayMs;
 	}
