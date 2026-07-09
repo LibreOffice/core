@@ -1562,18 +1562,8 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
             m_xSearchLB->hide();
             m_xReplaceLB->hide();
 
-            m_xSearchAttrText->set_label( sDesc );
-            m_xReplaceAttrText->set_label( sDesc );
-
-            if(!sDesc.isEmpty())
-            {
-                if (!m_xSearchAttrText->get_visible() || !m_xReplaceAttrText->get_visible())
-                {
-                    m_xSearchAttrText->show();
-                    m_xReplaceAttrText->show();
-                    m_xDialog->resize_to_request();
-                }
-            }
+            m_xSearchAttrText->set_label(u""_ustr);
+            m_xReplaceAttrText->set_label(u""_ustr);
         }
         m_xFormatBtn->set_sensitive(false);
         m_xNoFormatBtn->set_sensitive(false);
