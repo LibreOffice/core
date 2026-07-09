@@ -3531,6 +3531,7 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
 
     char * result = nullptr;
     char * error = nullptr;
+    bool usedLegacyUnoApi = false;
     // Capturing `this` is safe even though the proxy callback can fire long after
     // executeScript has returned, since the callback runs only while the proxy stays
     // attached and ChildSession outlives that:
@@ -3540,7 +3541,8 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
             static_cast<ChildSession *>(data)->sendTextFrame(
                 "proxycall: " + std::string(payload));
         },
-        this);
+        this,
+        &usedLegacyUnoApi);
 
     // Build the response by string concatenation rather than via Poco JSON,
     // because @c result is already a JSON value (whatever JSON.stringify
@@ -3557,6 +3559,10 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
         body += ",\"ok\":";
         body += result;
         std::free(result);
+    }
+    if (usedLegacyUnoApi)
+    {
+        body += ",\"legacyUnoApi\":true";
     }
     // else: the script ran but its value was something JSON.stringify drops
     // (undefined, a function, a symbol).  Emit neither "ok" nor "err" so the

@@ -1256,6 +1256,9 @@ class Socket {
 				app.console.error('Failed to parse proxycall: ' + ex);
 			}
 			return;
+		} else if (textMsg.startsWith('legacyunoapinotice:')) {
+			this._map.fire('legacyunoapinotice');
+			return;
 		} else if (textMsg.startsWith('perm:')) {
 			this._onPermMsg(textMsg);
 			return;

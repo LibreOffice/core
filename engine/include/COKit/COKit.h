@@ -163,7 +163,7 @@ struct COKitClassStruct
     void (*executeScript) (
         char const * script, char ** result, char ** error,
         void (*proxyCallback) (void * data, char const * payload),
-        void * proxyCallbackData);
+        void * proxyCallbackData, bool * usedLegacyUnoApi);
 
     /// @see kit::Office::deliverProxyResult().
     void (*deliverProxyResult) (char const * callId, char const * jsonValue);
@@ -173,6 +173,9 @@ struct COKitClassStruct
 
     /// @see kit::Office::isExpectedReentry().
     int (*isExpectedReentry) (void);
+
+    /// @see kit::Office::takeLegacyUnoApiUseFlag().
+    bool (*takeLegacyUnoApiUseFlag) (void);
 
     /// @see kit::Office::registerRevealInFileManagerCallback()
     void (*registerRevealInFileManagerCallback)(COKit* pThis,

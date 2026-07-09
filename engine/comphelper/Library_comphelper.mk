@@ -115,6 +115,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/hash \
     comphelper/source/misc/instancelocker \
     comphelper/source/misc/interaction \
+    comphelper/source/misc/legacyunoapinotice \
     comphelper/source/misc/logging \
     comphelper/source/misc/kit \
     comphelper/source/misc/mimeconfighelper \

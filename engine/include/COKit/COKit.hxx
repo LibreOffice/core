@@ -1287,12 +1287,15 @@ public:
      * @param error out-param for the error message.
      * @param proxyCallback hook for proxy listener fires; may be null.
      * @param proxyCallbackData opaque pointer passed to @c proxyCallback on each call.
+     * @param usedLegacyUnoApi must be non-null; set to true if the script touched the legacy
+     *        com.sun.star UNO API, not modified otherwise.
      */
     void executeScript(char const * script, char ** result, char ** error,
                        void (*proxyCallback) (void * data, char const * payload) = nullptr,
-                       void * proxyCallbackData = nullptr)
+                       void * proxyCallbackData = nullptr, bool * usedLegacyUnoApi = nullptr)
     {
-        mpThis->pClass->executeScript(script, result, error, proxyCallback, proxyCallbackData);
+        mpThis->pClass->executeScript(
+            script, result, error, proxyCallback, proxyCallbackData, usedLegacyUnoApi);
     }
 
     /**
@@ -1336,6 +1339,18 @@ public:
     bool isExpectedReentry()
     {
         return mpThis->pClass->isExpectedReentry();
+    }
+
+    /**
+     * Returns and clears the process-wide "legacy UNO API use" flag set by the engine's UNO bridges
+     * (Basic, Python, ...) when at runtime a script resolves an identifer in the legacy UNO API.
+     *
+     * @return true if at least one legacy identifier was resolved since the last call; false
+     *         otherwise.
+     */
+    bool takeLegacyUnoApiUseFlag()
+    {
+        return mpThis->pClass->takeLegacyUnoApiUseFlag();
     }
 
     /**

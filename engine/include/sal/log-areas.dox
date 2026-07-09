@@ -640,6 +640,7 @@ certain functionality.
 @li @c helpcompiler
 @li @c idl
 @li @c javaunohelper
+@li @c jsuno
 @li @c jvmaccess
 @li @c lingucomponent
 @li @c linguistic

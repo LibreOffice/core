@@ -31,6 +31,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/weakref.hxx>
 
@@ -2920,6 +2921,7 @@ void RTL_Impl_CreateUnoStruct( SbxArray& rPar )
 
     // get the name of the class of the struct
     OUString aClassName = rPar.Get(1)->GetOUString();
+    comphelper::notifyLegacyUnoApiUse(aClassName);
 
     // try to create Struct with the same name
     SbUnoObjectRef xUnoObj = Impl_CreateUnoStruct( aClassName );
@@ -2943,6 +2945,7 @@ void RTL_Impl_CreateUnoService( SbxArray& rPar )
 
     // get the name of the class of the struct
     OUString aServiceName = rPar.Get(1)->GetOUString();
+    comphelper::notifyLegacyUnoApiUse(aServiceName);
 
     // search for the service and instantiate it
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
@@ -2988,6 +2991,7 @@ void RTL_Impl_CreateUnoServiceWithArguments( SbxArray& rPar )
 
     // get the name of the class of the struct
     OUString aServiceName = rPar.Get(1)->GetOUString();
+    comphelper::notifyLegacyUnoApiUse(aServiceName);
     Any aArgAsAny = sbxToUnoValue(rPar.Get(2),
                 cppu::UnoType<Sequence<Any>>::get() );
     Sequence< Any > aArgs;
@@ -3306,6 +3310,7 @@ SbUnoClass* findUnoClass( const OUString& rName )
     // #105550 Check if module exists
     SbUnoClass* pUnoClass = nullptr;
 
+    comphelper::notifyLegacyUnoApiUse(rName);
     const Reference< XHierarchicalNameAccess >& xTypeAccess = getTypeProvider_Impl();
     if( xTypeAccess->hasByHierarchicalName( rName ) )
     {

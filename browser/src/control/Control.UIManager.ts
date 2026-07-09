@@ -76,6 +76,8 @@ class UIManager extends window.L.Control {
 		this.map.mainMenuTemplate = $('#main-menu')[0].cloneNode(true);
 
 		map.on('infobar', this.showInfoBar, this);
+		map.on('legacyunoapinotice', this.showLegacyUnoApiSnackbarOnce, this);
+		map.on('docloaded', this._onDocLoadedForLegacyUnoApiSnackbar, this);
 		app.events.on('updatepermission', this.onUpdatePermission.bind(this));
 
 		if (window.mode.isSmallScreenDevice()) {
@@ -2121,6 +2123,38 @@ class UIManager extends window.L.Control {
 	 */
 	setSnackbarProgress(value: number, infinite?: boolean): void {
 		JSDialog.SnackbarController.setSnackbarProgress(value, infinite);
+	}
+
+	private _legacyUnoApiSnackbarShown = false;
+	private _legacyUnoApiSnackbarPending = false;
+	private _legacyUnoApiDocLoaded = false;
+
+	showLegacyUnoApiSnackbarOnce(): void {
+		if (this._legacyUnoApiSnackbarShown) return;
+		if (!this._legacyUnoApiDocLoaded) {
+			this._legacyUnoApiSnackbarPending = true;
+			return;
+		}
+		this._legacyUnoApiSnackbarShown = true;
+		this.showSnackbar(
+			_(
+				'An embedded script uses the legacy com.sun.star UNO API, which may be removed in future releases.',
+			),
+			null,
+			null,
+			-1,
+			false,
+			true,
+		);
+	}
+
+	private _onDocLoadedForLegacyUnoApiSnackbar(e: { status?: boolean }): void {
+		if (!e || !e.status) return;
+		this._legacyUnoApiDocLoaded = true;
+		if (this._legacyUnoApiSnackbarPending) {
+			this._legacyUnoApiSnackbarPending = false;
+			this.showLegacyUnoApiSnackbarOnce();
+		}
 	}
 
 	// Modals

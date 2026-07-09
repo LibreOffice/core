@@ -40,6 +40,7 @@
 #include <rtl/bootstrap.hxx>
 
 #include <uno/current_context.hxx>
+#include <comphelper/legacyunoapinotice.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -420,6 +421,7 @@ static PyObject *createUnoStructHelper(
                 if( PyTuple_Check( initializer ) && PyDict_Check ( keywordArgs ) )
                 {
                     OUString typeName( OUString::createFromAscii(PyUnicode_AsUTF8(structName)));
+                    comphelper::notifyLegacyUnoApiUse(typeName);
                     RuntimeCargo *c = runtime.getImpl()->cargo;
                     Reference<XIdlClass> idl_class = c->xCoreReflection->forName (typeName);
                     if (idl_class.is ())
@@ -496,6 +498,7 @@ static PyObject *getTypeByName(
         if (PyArg_ParseTuple (args, "s", &name))
         {
             OUString typeName ( OUString::createFromAscii( name ) );
+            comphelper::notifyLegacyUnoApiUse(typeName);
             TypeDescription typeDesc( typeName );
             if( typeDesc.is() )
             {
@@ -528,6 +531,7 @@ static PyObject *getConstantByName(
         if (PyArg_ParseTuple (args, "s", &name))
         {
             OUString typeName ( OUString::createFromAscii( name ) );
+            comphelper::notifyLegacyUnoApiUse(typeName);
             Runtime runtime;
             css::uno::Reference< css::reflection::XConstantTypeDescription > td;
             if (!(runtime.getImpl()->cargo->xTdMgr->getByHierarchicalName(
@@ -617,7 +621,9 @@ static PyObject *getClass( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     try
     {
         Runtime runtime;
-        PyRef ret = getClass(pyString2ustring(obj), runtime);
+        OUString className = pyString2ustring(obj);
+        comphelper::notifyLegacyUnoApiUse(className);
+        PyRef ret = getClass(className, runtime);
         Py_XINCREF( ret.get() );
         return ret.get();
     }

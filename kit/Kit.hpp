@@ -542,6 +542,8 @@ private:
     std::map<int, std::unique_ptr<CallbackDescriptor>> _viewIdToCallbackDescr;
     SessionMap<ChildSession> _sessions;
 
+    bool _legacyUnoApiSeen = false;
+
     /// The timestamp of the last memory trimming.
     std::chrono::steady_clock::time_point _lastMemTrimTime;
 

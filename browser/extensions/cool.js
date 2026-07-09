@@ -13,16 +13,31 @@
 	// Mapping from proxyId to { on: { method: handler, ... }, detach } objects:
 	const listeners = Object.create(null);
 
-	function attachTrampoline(typeName, proxyId, fnSrc) {
-		const parts = typeName.split('.');
-		let type = uno.idl;
-		for (const p of parts) type = type[p];
-		const proxy = $internal.createProxy(type, proxyId);
-		(0, eval)('(' + fnSrc + ')')(proxy);
+	function attachTrampoline(typeName, proxyId, fnSrc, facade) {
+		$internal.suppressLegacyUnoApiStart();
+		let ended = false;
+		try {
+			const parts = typeName.split('.');
+			let type = uno.idl;
+			for (const p of parts) type = type[p];
+			if (!facade) {
+				$internal.suppressLegacyUnoApiEnd();
+				ended = true;
+			}
+			const proxy = $internal.createProxy(type, proxyId);
+			(0, eval)('(' + fnSrc + ')')(proxy);
+		} finally {
+			if (!ended) $internal.suppressLegacyUnoApiEnd();
+		}
 	}
-	function detachTrampoline(proxyId, fnSrc) {
-		const proxy = $internal.takeProxy(proxyId);
-		(0, eval)('(' + fnSrc + ')')(proxy);
+	function detachTrampoline(proxyId, fnSrc, facade) {
+		if (facade) $internal.suppressLegacyUnoApiStart();
+		try {
+			const proxy = $internal.takeProxy(proxyId);
+			(0, eval)('(' + fnSrc + ')')(proxy);
+		} finally {
+			if (facade) $internal.suppressLegacyUnoApiEnd();
+		}
 	}
 
 	// Takes a function `fn` followed by arguments `args`.  Runs `fn.apply(null, args)` inside a
@@ -66,22 +81,27 @@
 	// as the listener method's return value (only relevant for non-void methods).
 	//
 	// Returns a handle with a `.detach()` method.
-	window.cool.attachListener = function (typeName, spec) {
+	function attachListenerImpl(typeName, spec, facade) {
 		const proxyId = 'p' + (nextProxyId++);
 		listeners[proxyId] = {
 			on: spec.on,
-			detach: spec.detach
+			detach: spec.detach,
+			facade: facade
 		};
-		window.cool.callRemote(attachTrampoline, typeName, proxyId, spec.attach.toString());
+		window.cool.callRemote(
+			attachTrampoline, typeName, proxyId, spec.attach.toString(), facade);
 		return {
 			detach: function () {
 				const entry = listeners[proxyId];
 				if (!entry) return;
 				delete listeners[proxyId];
 				window.cool.callRemote(
-					detachTrampoline, proxyId, entry.detach.toString());
+					detachTrampoline, proxyId, entry.detach.toString(), entry.facade);
 			}
 		};
+	}
+	window.cool.attachListener = function (typeName, spec) {
+		return attachListenerImpl(typeName, spec, false);
 	};
 
 	// Define a property on cool.document that lazily wires a UNO listener of `typeName` to the
@@ -103,11 +123,11 @@
 			set: function (fn) {
 				current = (typeof fn === 'function') ? fn : null;
 				if (current && !handle) {
-					handle = window.cool.attachListener(typeName, {
+					handle = attachListenerImpl(typeName, {
 						attach: attachFn,
 						detach: detachFn,
 						on: on
-					});
+					}, true);
 				} else if (!current && handle) {
 					handle.detach();
 					handle = null;
@@ -162,7 +182,7 @@
 			const entry = listeners[proxyId];
 			delete listeners[proxyId];
 			window.cool.callRemote(
-				detachTrampoline, proxyId, entry.detach.toString());
+				detachTrampoline, proxyId, entry.detach.toString(), entry.facade);
 		}
 	}
 

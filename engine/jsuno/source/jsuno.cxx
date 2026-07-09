@@ -52,6 +52,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cpo/uno/genfunc.hxx>
+#include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -65,6 +66,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <sal/types.h>
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
@@ -272,6 +274,12 @@ struct RuntimeData
 
     // Hook captured by every ProxyInvocation created during this execute() call:
     std::function<void(OUString const&)> proxyCallHook;
+
+    // Set whenever the script touches the legacy UNO API outside a suppression scope:
+    bool usedLegacyUnoApi = false;
+    // Nesting depth of $internal.suppressLegacyUnoApiStart/End bracketing calls; while non-zero,
+    // moduleGetProperty does not flip usedLegacyUnoApi:
+    std::uint64_t legacyUnoApiSuppressionDepth = 0;
 
     AtomRef symbolIteratorAtom;
 
@@ -1219,6 +1227,10 @@ JSValue moduleGetProperty(JSContext* ctx, JSValueConst obj, JSAtom atom, JSValue
     }
     buf.append(OUString::fromUtf8(JS_AtomToCString(ctx, atom)));
     auto const id = buf.makeStringAndClear();
+    if (comphelper::isLegacyUnoApi(id) && getRuntimeData(ctx)->legacyUnoApiSuppressionDepth == 0)
+    {
+        getRuntimeData(ctx)->usedLegacyUnoApi = true;
+    }
     css::uno::Reference<css::container::XHierarchicalNameAccess> mgr(
         comphelper::getProcessComponentContext()->getValueByName(
             u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
@@ -2624,6 +2636,30 @@ JSValue internalTakeProxy(JSContext* ctx, JSValueConst, int argc, JSValueConst* 
     });
 }
 
+JSValue internalSuppressLegacyUnoApiStart(JSContext* ctx, JSValueConst, int, JSValueConst*)
+{
+    auto& depth = getRuntimeData(ctx)->legacyUnoApiSuppressionDepth;
+    if (depth == std::numeric_limits<std::uint64_t>::max())
+    {
+        JS_ThrowRangeError(ctx, "$internal.suppressLegacyUnoApiStart nesting overflow");
+        return JS_EXCEPTION;
+    }
+    ++depth;
+    return JS_UNDEFINED;
+}
+
+JSValue internalSuppressLegacyUnoApiEnd(JSContext* ctx, JSValueConst, int, JSValueConst*)
+{
+    auto& depth = getRuntimeData(ctx)->legacyUnoApiSuppressionDepth;
+    if (depth == 0)
+    {
+        SAL_INFO("jsuno", "spurious $internal.suppressLegacyUnoApiEnd() call");
+        return JS_UNDEFINED;
+    }
+    --depth;
+    return JS_UNDEFINED;
+}
+
 JSValue invokeUno(JSContext* ctx, JSValueConst this_val, int argc, JSValueConst* argv, int,
                   JSValueConst* func_data)
 {
@@ -2767,7 +2803,8 @@ ExceptionData extractExceptionData(JSContext* ctx, ValueRef const& err)
 }
 }
 
-OUString jsuno::execute(OUString const& script, std::function<void(OUString const&)> proxyCallHook)
+OUString jsuno::execute(OUString const& script, std::function<void(OUString const&)> proxyCallHook,
+                        bool* usedLegacyUnoApi)
 {
     auto const rt = JS_NewRuntime();
     JS_SetRuntimeOpaque(rt, new RuntimeData(rt, std::move(proxyCallHook)));
@@ -2887,6 +2924,12 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
                           JS_NewCFunction(ctx, internalCreateProxy, "createProxy", 2));
         JS_SetPropertyStr(ctx, internalObj, "takeProxy",
                           JS_NewCFunction(ctx, internalTakeProxy, "takeProxy", 1));
+        JS_SetPropertyStr(ctx, internalObj, "suppressLegacyUnoApiStart",
+                          JS_NewCFunction(ctx, internalSuppressLegacyUnoApiStart,
+                                          "suppressLegacyUnoApiStart", 0));
+        JS_SetPropertyStr(
+            ctx, internalObj, "suppressLegacyUnoApiEnd",
+            JS_NewCFunction(ctx, internalSuppressLegacyUnoApiEnd, "suppressLegacyUnoApiEnd", 0));
         JS_SetPropertyStr(ctx, global, "$internal", internalObj.release());
         auto const input = script.toUtf8();
         ValueRef const evalRes(
@@ -2923,6 +2966,10 @@ OUString jsuno::execute(OUString const& script, std::function<void(OUString cons
     }
     JS_FreeContext(ctx);
     std::unique_ptr<RuntimeData> data(getRuntimeData(rt));
+    if (usedLegacyUnoApi != nullptr)
+    {
+        *usedLegacyUnoApi = data->usedLegacyUnoApi;
+    }
     data->clear();
     JS_FreeRuntime(rt);
     if (exc)

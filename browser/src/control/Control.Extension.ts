@@ -120,6 +120,8 @@ interface ExtensionScriptResult {
 	id: string;
 	ok?: unknown;
 	err?: string;
+	// Set by the engine when the script touched the legacy UNO API:
+	legacyUnoApi?: boolean;
 }
 
 window.L.Control.Extension = window.L.Control.extend({
@@ -410,6 +412,9 @@ window.L.Control.Extension = window.L.Control.extend({
 				}),
 				'*',
 			);
+		}
+		if (e.legacyUnoApi) {
+			this.map.uiManager.showLegacyUnoApiSnackbarOnce();
 		}
 	},
 });

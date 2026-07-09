@@ -31,9 +31,13 @@ namespace jsuno
 // where `callId` is present iff the proxy's invoke is going to wait for a value back via
 // deliverProxyResult (i.e. the listener method has a non-void return type).
 //
+// If `usedLegacyUnoApi` is non-null, set to true when the script touched the legacy UNO API; not
+// modified otherwise.
+//
 // @throws css.script.provider.ScriptExceptionRaisedException
 LO_DLLPUBLIC_JSUNO OUString execute(OUString const& script,
-                                    std::function<void(OUString const&)> proxyCallHook = {});
+                                    std::function<void(OUString const&)> proxyCallHook = {},
+                                    bool* usedLegacyUnoApi = nullptr);
 
 // Deliver an iframe-side `jsonValue` to a `ProxyInvocation::invoke` blocked in Application::
 // Yield on `callId`; spurious callIds are silently ignored:

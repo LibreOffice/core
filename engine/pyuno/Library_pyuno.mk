@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_api,pyuno,\
 ))
 
 $(eval $(call gb_Library_use_libraries,pyuno,\
+    comphelper \
     cppu \
     cppuhelper \
     sal \

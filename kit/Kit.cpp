@@ -1330,6 +1330,10 @@ bool Document::onLoad(const std::string& sessionId,
     {
         if (load(session, renderOpts))
         {
+            if (_legacyUnoApiSeen)
+            {
+                session->sendTextFrame("legacyunoapinotice:");
+            }
             return true;
         }
     }
@@ -2714,6 +2718,20 @@ void Document::drainQueue()
                 renderTiles(tileCombined);
             }
             // if priority is low - do one render, then process more events.
+        }
+
+        // Forward any "legacy UNO API use" notice set by Basic or Python macros during this drain
+        // to all attached sessions of this document, so every collaborator sees the deprecation
+        // snackbar for a script that runs on the shared document (the sticky _legacyUnoApiSeen bit
+        // lets sessions joining after the notice fired, e.g. a doc's OnLoad macro that runs once
+        // per kit lifetime, still receive the notice, in onLoad below):
+        if (_loKit->takeLegacyUnoApiUseFlag())
+        {
+            _legacyUnoApiSeen = true;
+            for (auto const & [id, session] : _sessions)
+            {
+                session->sendTextFrame("legacyunoapinotice:");
+            }
         }
     }
     catch (const std::exception& exc)
