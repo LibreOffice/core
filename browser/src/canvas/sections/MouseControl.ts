@@ -31,6 +31,13 @@ class MouseControl extends CanvasSectionObject {
 	localPositionOnMouseDown: cool.SimplePoint | null = null;
 	mouseDownSent: boolean = false;
 
+	// The last mouse position during a button-down drag, in canvas-local
+	// coordinates that do not include the scroll offset, together with the
+	// keyboard modifier that was active then. Kept so the drag position can be
+	// recomputed and re-sent when the view scrolls under a stationary mouse.
+	lastDragLocalPoint: cool.SimplePoint | null = null;
+	lastDragModifier: number = 0;
+
 	inSwipeAction: boolean = false;
 	swipeVelocity: number[] = [0, 0];
 	swipeTimeStamp: number = 0;
@@ -395,6 +402,9 @@ class MouseControl extends CanvasSectionObject {
 				viewedRectangle.pY1 - diff.pY,
 			);
 		} else {
+			this.lastDragLocalPoint = point.clone();
+			this.lastDragModifier = modifier;
+
 			if (!this.mouseDownSent && this.positionOnMouseDown) {
 				this.postCoreMouseEvent(
 					'buttondown',
@@ -454,6 +464,24 @@ class MouseControl extends CanvasSectionObject {
 		handles.hideSVG();
 	}
 
+	// Called whenever the document scrolls or pans. During a button-down drag
+	// the mouse can stay still while the view moves, so the mouse now points at
+	// a different document position. Recompute that position from the unchanged
+	// screen point and re-send the drag move so the selection follows the view.
+	public onNewDocumentTopLeft(): void {
+		if (!this.mouseDownSent || !this.lastDragLocalPoint) return;
+
+		this.refreshPosition(this.lastDragLocalPoint);
+
+		this.postCoreMouseEvent(
+			'move',
+			this.currentPosition,
+			1,
+			app.LOButtons.left,
+			this.lastDragModifier,
+		);
+	}
+
 	onMouseDown(point: cool.SimplePoint, e: MouseEvent): void {
 		this.refreshPosition(point);
 		this.positionOnMouseDown = this.currentPosition.clone();
@@ -497,6 +525,7 @@ class MouseControl extends CanvasSectionObject {
 
 		this.positionOnMouseDown = null;
 		this.mouseDownSent = false;
+		this.lastDragLocalPoint = null;
 
 		if (this.containerObject.isDraggingSomething()) app.map.focus();
 	}

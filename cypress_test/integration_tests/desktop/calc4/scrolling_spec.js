@@ -193,6 +193,55 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		);
 	});
 
+	it('Scroll while selecting extends the selection without moving the mouse', function () {
+		cy.cGet(helper.addressInputSelector).should('have.value', 'A2');
+
+		// The end row of the selection, taken from the far corner of the range
+		// shown in the Name Box (for example the 8 in "B4:C8").
+		const endRow = (val) => {
+			const parts = String(val).split(':');
+			return parseInt(parts[parts.length - 1].replace(/[^0-9]/g, ''), 10);
+		};
+
+		// Press and hold on a cell well inside the grid (clear of the row and
+		// column headers), then make one small downward move to begin a
+		// cell-range drag. The pointer stays put after this.
+		cy.cGet('#document-container').realMouseDown({ pointer: 'mouse', button: 'left', x: 250, y: 150, scrollBehavior: false });
+		cy.cGet('#document-container').realMouseMove(250, 260, { position: 'topLeft', scrollBehavior: false });
+		helper.processToIdle(this.win);
+
+		// The selection end row before scrolling, still near the top of the sheet.
+		let rowBeforeScroll;
+		cy.cGet(helper.addressInputSelector).invoke('val').then((val) => {
+			rowBeforeScroll = endRow(val);
+		});
+
+		// Scroll the view down while the button stays held and the pointer does
+		// not move. A mouse wheel or a scrollbar drag reaches core through this
+		// same layout scroll; driving it directly keeps the test free of
+		// wheel-animation timing.
+		const SCROLL_PIXELS = 10000;
+		cy.then(() => {
+			const layout = this.win.app.activeDocument.activeLayout;
+			const beforeTop = layout.viewedRectangle.pY1;
+			layout.scroll(0, SCROLL_PIXELS, true);
+			// The document must really scroll for the test to mean anything.
+			expect(layout.viewedRectangle.pY1).to.be.greaterThan(beforeTop);
+		});
+		helper.processToIdle(this.win);
+
+		cy.cGet('#document-container').realMouseUp({ pointer: 'mouse', button: 'left' });
+		helper.processToIdle(this.win);
+
+		// With the fix, the scroll re-sends the drag position, so the selection
+		// grows to the cell now under the stationary pointer. Without the fix in
+		// place this test would have failed, with the selection still ending near
+		// the row where the pointer last moved.
+		cy.cGet(helper.addressInputSelector).invoke('val').should((val) => {
+			expect(endRow(val)).to.be.greaterThan(rowBeforeScroll + 3);
+		});
+	});
+
 	it('Horizontal scroll bar spans full width with a frozen column', function() {
 		// Freeze column A, sending the uno command directly so the test
 		// does not depend on which toolbar UI mode is active.
