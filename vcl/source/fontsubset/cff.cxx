@@ -1850,12 +1850,12 @@ int CffSubsetterContext::seekIndexData( int nIndexBase, int nDataIndex)
         case 4: nOfs2 = (mpReadPtr[0]<<24) + (mpReadPtr[1]<<16) + (mpReadPtr[2]<<8) + mpReadPtr[3]; break;
     }
 
+    if (nOfs1 < 0 || nOfs2 < nOfs1)
+        return -1;
     mpReadPtr = mpBasePtr + (nIndexBase + 2) + nDataOfsSz * (nDataCount + 1) + nOfs1;
     mpReadEnd = mpReadPtr + (nOfs2 - nOfs1);
-    assert( nOfs1 >= 0);
-    assert( nOfs2 >= nOfs1);
-    assert( mpReadPtr <= mpBaseEnd);
-    assert( mpReadEnd <= mpBaseEnd);
+    if (mpReadPtr > mpBaseEnd || mpReadEnd > mpBaseEnd)
+        return -1;
     return (nOfs2 - nOfs1);
 }
 
