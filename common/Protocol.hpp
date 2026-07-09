@@ -309,7 +309,8 @@ namespace COOLProtocol
                    !tokens.equals(1, ".uno:InvertBackground") &&
                    !tokens.equals(1, ".uno:ChangeTheme") &&
                    !tokens.equals(1, ".uno:ShowRuler") &&
-                   !tokens.equals(1, ".uno:QuickFind");
+                   !tokens.equals(1, ".uno:QuickFind") &&
+                   !tokens.equals(1, ".uno:CopySlide");
         }
 
         return false;
