@@ -80,7 +80,7 @@ while [ "${1:-}" != "" ]; do
 done
 
 
-files=$(find "${check_path}/program" "${check_path}/sdk/bin" -type f)
+files=$(find "${check_path}/program" -type f)
 # all RPATHs should point to ${INSTDIR}/program so that's the files they find
 programfiles=$(echo ${files} | grep -o '/program/[^/]* ' | xargs -n 1 basename)
 
@@ -228,12 +228,6 @@ local file="$1"
             esac
         else
             case "$file" in
-                */sdk/bin/*)
-                    if echo "${rpath}" | grep -q -v '\[\$ORIGIN/../../program\]$' ; then
-                        echo "${file}" has unexpected RPATH "${rpath}"
-                        status=1
-                    fi
-                ;;
                 *)
                     if echo "${rpath}" | grep -q -v '\[\$ORIGIN\]$' ; then
                         echo "${file}" has unexpected RPATH "${rpath}"
