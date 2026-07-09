@@ -1474,7 +1474,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				$(div).addClass('has-label');
 			} else if (builder.options.useInLineLabelsForUnoButtons === true && data.text) {
 				$(div).addClass('inline');
-				span = window.L.DomUtil.create('span', 'ui-content unolabel', div);
+				span = window.L.DomUtil.create('span', 'ui-content unolabel', button);
 				span.textContent = builder._cleanText(data.text);
 
 				controls['label'] = span;

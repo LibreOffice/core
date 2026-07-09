@@ -16,7 +16,7 @@
 }
 
 /* toolbuttons */
-.unotoolbutton .unobutton.selected + .ui-content.unolabel {
+.unotoolbutton.inline .unobutton.selected .ui-content.unolabel {
 	color: var(--color-text-dark);
 }
 #viewMode {

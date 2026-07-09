@@ -475,6 +475,13 @@ label.notebookbar.ui-checkbox-label {
 	align-items: center;
 }
 
+.unotoolbutton.notebookbar.inline .unobutton {
+	width: auto;
+	flex-direction: row;
+	line-height: normal;
+	position: static !important;
+}
+
 #FormatPaintbrush span {
 	display: none;
 }
