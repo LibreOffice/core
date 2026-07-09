@@ -2916,7 +2916,7 @@ AC_SUBST(COMPRESSIONTOOL)
 
 AC_MSG_CHECKING([for GNU or BSD tar])
 for a in $GNUTAR gtar gnutar tar bsdtar /usr/sfw/bin/gtar; do
-    $a --version 2> /dev/null | grep -E "GNU|bsdtar"  2>&1 > /dev/null
+    $a --version 2> /dev/null | grep -E "GNU|bsdtar|busybox"  2>&1 > /dev/null
     if test $? -eq 0;  then
         GNUTAR=$a
         break
@@ -2929,7 +2929,7 @@ fi
 AC_SUBST(GNUTAR)
 
 AC_MSG_CHECKING([for tar's option to strip components])
-$GNUTAR --help 2> /dev/null | grep -E "bsdtar|strip-components" 2>&1 >/dev/null
+$GNUTAR --help 2>&1 | grep -E "bsdtar|strip-components" 2>&1 >/dev/null
 if test $? -eq 0; then
     STRIP_COMPONENTS="--strip-components"
 else
@@ -11422,7 +11422,7 @@ elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null;
     AC_MSG_RESULT([yes])
 else
     case "$build_os" in
-    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*)
+    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*|linux*)
         x_GNUCP=[\#]
         GNUCP=''
         AC_MSG_RESULT([no gnucp found - using the system's cp command])
