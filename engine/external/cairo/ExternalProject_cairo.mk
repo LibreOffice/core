@@ -97,7 +97,7 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 		        $(if $(filter EMSCRIPTEN,$(OS)),-O3 -DCAIRO_NO_MUTEX -Wno-enum-conversion $(gb_EMSCRIPTEN_CPPFLAGS), \
 		        $(CFLAGS))) \
 		    $(gb_LTOFLAGS) $(call gb_ExternalProject_get_build_flags,cairo)" \
-		LDFLAGS="$(gb_LTOFLAGS) $(call gb_ExternalProject_get_link_flags,cairo)" \
+		LDFLAGS="$(gb_LTOFLAGS) $(call gb_ExternalProject_get_link_flags,cairo)$(if $(filter LINUX FREEBSD,$(OS)), -Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\$$ORIGIN)" \
 		$(MESON) setup --wrap-mode nofallback builddir \
 			$(if $(debug),-Dstrip=false,-Dstrip=true) \
 			$(if $(filter -fsanitize=%,$(CC)),-Db_lundef=false) \
@@ -108,9 +108,11 @@ $(call gb_ExternalProject_get_state_target,cairo,build) :
 			-Dgtk_doc=false -Dtests=disabled \
 			$(if $(CROSS_COMPILING),--cross-file cross-file.txt) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
+			$(if $(filter LINUX FREEBSD,$(OS)),--prefix=$(gb_UnpackedTarball_workdir)/cairo/inst --libdir=lib) \
 			$(if $(filter-out $(BUILD_PLATFORM),$(HOST_PLATFORM))$(WSL),--cross-file cross-file.txt) && \
 		$(MESON) compile -C builddir \
 			$(if $(verbose),--verbose) \
+			$(if $(filter LINUX FREEBSD,$(OS)), && $(MESON) install -C builddir) \
 			$(if $(filter MACOSX,$(OS)), \
 				&& install_name_tool -id @__________________________________________________OOO/libcairo-lo.2.dylib \
 					$(gb_UnpackedTarball_workdir)/cairo/builddir/src/libcairo-lo.2.dylib \
