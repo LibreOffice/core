@@ -2423,7 +2423,7 @@ static std::vector<int> clipboard_formats_for_MIME_type(const char* mimeType)
         result.push_back(RegisterClipboardFormatW(L"Star Embed Source (XML)"));
     else if (std::string(mimeType).starts_with("application/x-openoffice-objectdescriptor-xml;"))
         result.push_back(RegisterClipboardFormatW(L"Star Object Descriptor (XML)"));
-    else if (std::strcmp(mimeType, "image/svg+xml") == 0)
+    else if (std::strcmp(mimeType, "image/svg+xml;windows_formatname=\"image/svg+xml\"") == 0)
         result.push_back(RegisterClipboardFormatW(L"image/svg+xml"));
 
     return result;
