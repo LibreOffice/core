@@ -1717,9 +1717,14 @@ void ChartExport::exportChartSpace( const Reference< css::chart::XChartDocument 
 }
 
 void ChartExport::writeChartDim(const sax_fastparser::FSHelperPtr& pFS,
-                         const ChartDimInfo& rInfo)
+                         const ChartDimInfo& rInfo,
+                         bool *bIsCat /* output var: is this category data? */)
 {
     sal_Int32 nDimToken = rInfo.bIsNumeric ? FSNS(XML_cx, XML_numDim) : FSNS(XML_cx, XML_strDim);
+
+    if (bIsCat) {
+        *bIsCat = (rInfo.sDimTypeStr == "cat");
+    }
 
     pFS->startElement(nDimToken, XML_type, rInfo.sDimTypeStr);
 
@@ -1863,6 +1868,7 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                     bool bExportedFromProperties = false;
                     if (GetDocumentType() == DOCUMENT_XLSX)
                     {
+                        bool bCatWritten = false;
                         // Iterate all data sequences and output each dimension
                         // using the stored chartex properties.
                         for (sal_Int32 i = 0; i < aSeqCnt.getLength(); ++i)
@@ -1871,18 +1877,23 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                             ChartDimInfo aInfo = getChartDimInfo(xSeq);
                             if (aInfo.bHasInfo && !aInfo.sFormula.isEmpty())
                             {
-                                writeChartDim(pFS, aInfo);
+                                writeChartDim(pFS, aInfo, &bCatWritten);
                                 bExportedFromProperties = true;
                             }
                         }
-                        // Also check the categories sequence
-                        if (mxCategoriesValues.is())
-                        {
-                            ChartDimInfo aCatInfo = getChartDimInfo(mxCategoriesValues);
-                            if (aCatInfo.bHasInfo && !aCatInfo.sFormula.isEmpty())
+                        // We should write at least one set of category data, so
+                        // if we didn't, also check the categories sequence.
+                        // This again is a bit of a hack, due to the lack of
+                        // consistency in where we store data.
+                        if (!bCatWritten) {
+                            if (mxCategoriesValues.is())
                             {
-                                writeChartDim(pFS, aCatInfo);
-                                bExportedFromProperties = true;
+                                ChartDimInfo aCatInfo = getChartDimInfo(mxCategoriesValues);
+                                if (aCatInfo.bHasInfo && !aCatInfo.sFormula.isEmpty())
+                                {
+                                    writeChartDim(pFS, aCatInfo, nullptr);
+                                    bExportedFromProperties = true;
+                                }
                             }
                         }
                     }
@@ -2034,14 +2045,27 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                             // === Output the categories
                             if (bWriteDateCategories)
                             {
-                                std::vector<double> aDateCategories = lcl_getAllValuesFromSequence(xValueSeq);
+                                // The category values live in the categories
+                                // sequence, not the series values. Fall back to
+                                // the value sequence only when no categories are
+                                // present.
+                                std::vector<double> aDateCategories = lcl_getAllValuesFromSequence(
+                                    mxCategoriesValues.is() ? mxCategoriesValues : xValueSeq);
                                 const sal_Int32 ptCount = aDateCategories.size();
 
                                 pFS->startElement(FSNS(XML_cx, XML_numDim), XML_type, "x"); // is "x" right?
                                 // TODO: check this
 
                                 pFS->startElement(FSNS(XML_cx, XML_f));
-                                pFS->writeEscaped(aCellRange);
+
+                                Reference<chart2::data::XDataSequence> xSeq(aSeqCnt[0]->getValues());
+                                ChartDimInfo aInfo = getChartDimInfo(xSeq);
+                                if (aInfo.bHasInfo && !aInfo.sFormula.isEmpty()) {
+                                    pFS->writeEscaped(aInfo.sFormula);
+                                } else {
+                                    pFS->writeEscaped(aCellRange);
+                                }
+
                                 pFS->endElement(FSNS(XML_cx, XML_f));
 
                                 pFS->startElement(FSNS(XML_cx, XML_lvl),
@@ -2061,8 +2085,14 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                             }
                             else
                             {
+                                // The category labels live in the categories
+                                // sequence, not the series values. Fall back to
+                                // the value sequence only when no categories are
+                                // present.
                                 std::vector<OUString> aCategories;
-                                lcl_fillCategoriesIntoStringVector(xValueSeq, aCategories);
+                                lcl_fillCategoriesIntoStringVector(
+                                    mxCategoriesValues.is() ? mxCategoriesValues : xValueSeq,
+                                    aCategories);
                                 const sal_Int32 ptCount = aCategories.size();
 
                                 // TODO: shouldn't have "cat" hard-coded here:
@@ -2070,7 +2100,14 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                                 pFS->startElement(FSNS(XML_cx, XML_strDim), XML_type, "cat");
 
                                 pFS->startElement(FSNS(XML_cx, XML_f));
-                                pFS->writeEscaped(aCellRange);
+
+                                ChartDimInfo aInfo = getChartDimInfo(mxCategoriesValues.is() ? mxCategoriesValues : xValueSeq);
+                                if (aInfo.bHasInfo && !aInfo.sFormula.isEmpty()) {
+                                    pFS->writeEscaped(aInfo.sFormula);
+                                } else {
+                                    pFS->writeEscaped(aCellRange);
+                                }
+
                                 pFS->endElement(FSNS(XML_cx, XML_f));
 
                                 pFS->startElement(FSNS(XML_cx, XML_lvl), XML_ptCount, OString::number(ptCount));
@@ -2093,7 +2130,16 @@ void ChartExport::exportData_chartex( [[maybe_unused]] const Reference< css::cha
                             // TODO: need to handle XML_multiLvlStrRef according to aCellRange
 
                             pFS->startElement(FSNS(XML_cx, XML_f));
-                            pFS->writeEscaped( aCellRange );
+
+                            // Get the stored formula reference
+                            Reference<chart2::data::XDataSequence> xSeq(aSeqCnt[0]->getValues()); // TODO
+                            ChartDimInfo aInfo = getChartDimInfo(xSeq);
+                            if (aInfo.bHasInfo && !aInfo.sFormula.isEmpty()) {
+                                pFS->writeEscaped(aInfo.sFormula);
+                            } else {
+                                pFS->writeEscaped(aCellRange);
+                            }
+
                             pFS->endElement( FSNS( XML_cx, XML_f ) );
 
                             ::std::vector< double > aValues = lcl_getAllValuesFromSequence( xValueSeq );

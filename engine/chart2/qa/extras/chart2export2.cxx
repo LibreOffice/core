@@ -304,6 +304,21 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexPPTX)
                 u"2.19");
     // Ensure no fictitious legend shape props gets inserted
     assertXPath(pXmlDoc, "/cx:chartSpace/cx:chart/cx:legend/cx:spPr", 0);
+
+    static constexpr OString sCat
+        = "/cx:chartSpace/cx:chartData/cx:data[@id='0']/cx:strDim[@type='cat']"_ostr;
+    static constexpr OString sVal
+        = "/cx:chartSpace/cx:chartData/cx:data[@id='0']/cx:numDim[@type='val']"_ostr;
+    // tdf#165742: the category strDim must contain the category labels, not
+    // the series values.
+    assertXPathContent(pXmlDoc, sCat + "/cx:lvl/cx:pt[@idx='0']", u"Thing 1");
+    assertXPathContent(pXmlDoc, sCat + "/cx:lvl/cx:pt[@idx='1']", u"Thing 2");
+    assertXPathContent(pXmlDoc, sCat + "/cx:lvl/cx:pt[@idx='2']", u"Thing 3");
+    assertXPathContent(pXmlDoc, sCat + "/cx:lvl/cx:pt[@idx='3']", u"Thing 4");
+
+    // Verify the data formulas round-trip properly
+    assertXPathContent(pXmlDoc, sCat + "/cx:f", u"Sheet1!$A$2:$A$5");
+    assertXPathContent(pXmlDoc, sVal + "/cx:f", u"Sheet1!$B$2:$B$5");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testChartexGapWidth)
