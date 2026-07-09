@@ -55,8 +55,6 @@ static bool g_bIdleLayouting(false);
 
 static bool g_bDialogPainting(false);
 
-static bool g_bTiledAnnotations(true);
-
 static bool g_bRangeHeaders(false);
 
 static bool g_bViewIdForVisCursorInvalidation(false);
@@ -228,16 +226,6 @@ void setDPIScale(double fDPIScale)
 double getDPIScale()
 {
     return g_fDPIScale;
-}
-
-void setTiledAnnotations(bool bTiledAnnotations)
-{
-    g_bTiledAnnotations = bTiledAnnotations;
-}
-
-bool isTiledAnnotations()
-{
-    return g_bTiledAnnotations;
 }
 
 void setRangeHeaders(bool bRangeHeaders)

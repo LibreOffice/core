@@ -1443,9 +1443,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShowAndUseGridCallbacks)
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
 {
     // Load the document.
-    // Set the tiled annotations off
-    comphelper::COKit::setTiledAnnotations(false);
-
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
         {".uno:Author", cpo::uno::Any(u"Kit User1"_ustr)},
@@ -1541,8 +1538,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
     CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
     CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
@@ -1550,9 +1545,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
     cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     // Load the document.
-    // Set the tiled annotations off
-    comphelper::COKit::setTiledAnnotations(false);
-
     createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
         {".uno:Author", cpo::uno::Any(u"Kit User1"_ustr)},
@@ -1587,8 +1579,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeImpress)
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 500, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
@@ -1596,9 +1586,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
     cpo::uno::Sequence<beans::PropertyValue> aArgs;
 
     // Load the document.
-    // Set the tiled annotations off
-    comphelper::COKit::setTiledAnnotations(false);
-
     createDoc("dummy.odg", comphelper::InitPropertySequence(
     {
         {".uno:Author", cpo::uno::Any(u"Kit User1"_ustr)},
@@ -1633,8 +1620,6 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentChangeDraw)
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("10, 20, 500, 280"), aView1.m_aCommentCallbackResult.get<std::string>("rectangle"));
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMultiViewInsertDeletePage)

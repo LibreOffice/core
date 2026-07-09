@@ -199,10 +199,6 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentsInMargin)
     doTestCommentsInMargin(true);
     doTestCommentsInMargin(false);
     comphelper::COKit::setActive(true);
-    comphelper::COKit::setTiledAnnotations(true);
-    doTestCommentsInMargin(true);
-    doTestCommentsInMargin(false);
-    comphelper::COKit::setTiledAnnotations(false);
     doTestCommentsInMargin(true);
     doTestCommentsInMargin(false);
 }

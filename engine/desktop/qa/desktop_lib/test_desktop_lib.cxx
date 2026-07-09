@@ -2662,9 +2662,6 @@ void DesktopKitTest::testGetFontSubset()
 
 void DesktopKitTest::testCommentsWriter()
 {
-    // Disable tiled rendering for comments
-    comphelper::COKit::setTiledAnnotations(false);
-
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
     tools::Long nWidth, nHeight;
@@ -2707,16 +2704,11 @@ void DesktopKitTest::testCommentsWriter()
             CPPUNIT_ASSERT_EQUAL(nComment2Id, rComment.second.get<int>("parentId"));
         }
     }
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 
 void DesktopKitTest::testCommentsCalc()
 {
-    // Disable tiled rendering for comments
-    comphelper::COKit::setTiledAnnotations(false);
-
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
 
@@ -2757,16 +2749,11 @@ void DesktopKitTest::testCommentsCalc()
 
     // We checked all the comments
     CPPUNIT_ASSERT_EQUAL(2, nIdx);
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 
 void DesktopKitTest::testCommentsImpress()
 {
-    // Disable tiled rendering for comments
-    comphelper::COKit::setTiledAnnotations(false);
-
     LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
 
@@ -2813,15 +2800,10 @@ void DesktopKitTest::testCommentsImpress()
 
     // We checked all the comments
     CPPUNIT_ASSERT_EQUAL(2, nIdx);
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 void DesktopKitTest::testCommentsImpressCrossDocument()
 {
-    // Comment callbacks are emitted only if tiled annotations are off
-    comphelper::COKit::setTiledAnnotations(false);
-
     // Two presentations open in the same process.
     std::unique_ptr<LibLODocument_Impl> pDocument1 = loadDocImpl("blank_presentation.odp");
     pDocument1->m_pDocumentClass->initializeForRendering(pDocument1.get(), "{}");
@@ -2844,8 +2826,6 @@ void DesktopKitTest::testCommentsImpressCrossDocument()
 
     // The other presentation never sees the comment.
     CPPUNIT_ASSERT_EQUAL(0, aView2.m_nComments);
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 void DesktopKitTest::testDocSizeChangedCrossDocument()
@@ -2978,8 +2958,6 @@ void DesktopKitTest::testAuthorFieldUpdateCrossDocument()
 
 void DesktopKitTest::testCommentsCallbacksWriter()
 {
-    // Comments callback are emitted only if tiled annotations are off
-    comphelper::COKit::setTiledAnnotations(false);
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     ViewCallback aView1(pDocument);
@@ -3082,8 +3060,6 @@ void addParameter(tools::JsonWriter& rJson, const char* sName, std::string_view 
 
 void DesktopKitTest::testCommentsAddEditDeleteDraw()
 {
-    // Comments callback are emitted only if tiled annotations are off
-    comphelper::COKit::setTiledAnnotations(false);
     LibLODocument_Impl* pDocument = loadDoc("BlankDrawDocument.odg");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
     ViewCallback aView1(pDocument);
@@ -3135,8 +3111,6 @@ void DesktopKitTest::testCommentsAddEditDeleteDraw()
 
 void DesktopKitTest::testCommentsInReadOnlyMode()
 {
-    // Comments callback are emitted only if tiled annotations are off
-    comphelper::COKit::setTiledAnnotations(false);
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
 
     int viewId = pDocument->m_pDocumentClass->createView(pDocument);
@@ -4170,8 +4144,6 @@ void DesktopKitTest::testMetricField()
 
 void DesktopKitTest::testJumpCursor()
 {
-    comphelper::COKit::setTiledAnnotations(false);
-
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
 
@@ -4194,8 +4166,6 @@ void DesktopKitTest::testJumpCursor()
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(!aView1.m_bZeroCursor);
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 void DesktopKitTest::testRenderSearchResult_WriterNode()

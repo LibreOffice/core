@@ -972,9 +972,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
 {
-    // Comments callback are emitted only if tiled annotations are off
-    comphelper::COKit::setTiledAnnotations(false);
-
     // FIXME: Hack because previous tests do not destroy ScDocument(with annotations) on exit (?).
     ScPostIt::mnLastPostItId = 1;
 
@@ -1076,7 +1073,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
         CPPUNIT_ASSERT_EQUAL(aCommentId, aView1.m_aCommentCallbackResult.get<std::string>("id"));
         CPPUNIT_ASSERT_EQUAL(aCommentId, aView2.m_aCommentCallbackResult.get<std::string>("id"));
     }
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testUndoLimiting)
@@ -2665,9 +2661,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTextBoxInsert)
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
 {
-    // Comments callback are emitted only if tiled annotations are off
-    comphelper::COKit::setTiledAnnotations(false);
-
     // FIXME: Hack because previous tests do not destroy ScDocument(with annotations) on exit (?).
     ScPostIt::mnLastPostItId = 1;
 
@@ -2752,7 +2745,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCellCopyPaste)
             CPPUNIT_ASSERT_EQUAL(std::string("COKit Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
         }
     }
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidEntrySave)
@@ -4024,11 +4016,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testValidationCellCrash)
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
 {
-    comphelper::COKit::setTiledAnnotations(false);
     // Reset the static counter so the first note gets a predictable id.
     ScPostIt::mnLastPostItId = 1;
 
-    // A scope to destroy ScTestViewCallback objects before setTiledAnnotations(true)
     {
         ScModelObj* pModelObj = createDoc("small.ods");
         ScTestViewCallback aView1;
@@ -4113,14 +4103,12 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentInsertAndResolve)
         CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL(std::string("false"), aView1.m_aCommentCallbackResult.get<std::string>("resolved"));
     }
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo)
 {
     // Before the fix, .uno:InsertThreadedComment manipulated the note model
     // directly and never set the document-modified flag or registered undo.
-    comphelper::COKit::setTiledAnnotations(false);
     ScPostIt::mnLastPostItId = 1;
 
     {
@@ -4237,8 +4225,6 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testThreadedCommentDocModifiedAndUndo
         aUserOpt.SetToken(UserOptToken::FirstName, aSavedFirstName);
         aUserOpt.SetToken(UserOptToken::LastName, aSavedLastName);
     }
-
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 namespace {

@@ -108,12 +108,8 @@ COMPHELPER_DLLPUBLIC void setDialogPainting(bool bDialogPainting);
 COMPHELPER_DLLPUBLIC void setDPIScale(double fDPIScale);
 /// Get the DPI scale for rendering for HiDPI displays.
 COMPHELPER_DLLPUBLIC double getDPIScale();
-/// Set if we want no annotations rendering
-COMPHELPER_DLLPUBLIC void setTiledAnnotations(bool bTiledAnnotations);
-/// Check if annotations rendering is turned off
-COMPHELPER_DLLPUBLIC bool isTiledAnnotations();
 /// Set if we want range based header data
-COMPHELPER_DLLPUBLIC void setRangeHeaders(bool bTiledAnnotations);
+COMPHELPER_DLLPUBLIC void setRangeHeaders(bool bRangeHeaders);
 /// Check if range based header data is enabled
 COMPHELPER_DLLPUBLIC bool isRangeHeaders();
 

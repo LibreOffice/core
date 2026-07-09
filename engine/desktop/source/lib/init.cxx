@@ -8370,8 +8370,6 @@ static void lo_setOptionalFeatures(COKit* pThis, unsigned long long const featur
     pLib->mOptionalFeatures = features;
     if (features & KIT_FEATURE_PART_IN_INVALIDATION_CALLBACK)
         comphelper::COKit::setPartInInvalidation(true);
-    if (features & KIT_FEATURE_NO_TILED_ANNOTATIONS)
-        comphelper::COKit::setTiledAnnotations(false);
     if (features & KIT_FEATURE_RANGE_HEADERS)
         comphelper::COKit::setRangeHeaders(true);
     if (features & KIT_FEATURE_VIEWID_IN_VISCURSOR_INVALIDATION_CALLBACK)

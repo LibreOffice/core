@@ -1681,7 +1681,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentEndTextEdit)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
 {
     // Load a document with an as-char image in it.
-    comphelper::COKit::setTiledAnnotations(false);
     createDoc("image-comment.odt");
     SwView* pView = getSwDocShell()->GetView();
 
@@ -1703,7 +1702,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
     // - Actual  : 1418, 1418, 1024, 1024
     // i.e. the anchor position was a non-empty rectangle.
     CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 0"_ostr, aAnchorPos);
-    comphelper::COKit::setTiledAnnotations(true);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCursorPosition)
@@ -3261,8 +3259,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTablePaintInvalidate)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTableCommentRemoveCallback)
 {
-    comphelper::COKit::setTiledAnnotations(false);
-
     // Load a document with a comment in a table.
     SwXTextDocument* pXTextDocument = createDoc("testTableCommentRemoveCallback.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
