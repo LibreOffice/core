@@ -42,13 +42,13 @@ using namespace cli_uno;
 extern "C"
 {
 
-void SAL_CALL cli_proxy_free( uno_ExtEnvironment * env, void * proxy ) noexcept;
+void cli_proxy_free( uno_ExtEnvironment * env, void * proxy ) noexcept;
 
-void SAL_CALL cli_proxy_acquire( uno_Interface * pUnoI ) noexcept;
+void cli_proxy_acquire( uno_Interface * pUnoI ) noexcept;
 
-void SAL_CALL cli_proxy_release( uno_Interface * pUnoI ) noexcept;
+void cli_proxy_release( uno_Interface * pUnoI ) noexcept;
 
-void SAL_CALL cli_proxy_dispatch(
+void cli_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
     void * uno_ret, void * uno_args[], uno_Any ** uno_exc ) noexcept;
 
@@ -840,7 +840,7 @@ uno_Interface* CliProxy::create(Bridge const * bridge,
 }
 
 
-void SAL_CALL CliProxy::uno_DispatchMethod(
+void CliProxy::uno_DispatchMethod(
         struct _uno_Interface *,
         const struct _typelib_TypeDescription *,
         void *,
@@ -882,7 +882,7 @@ inline void CliProxy::release() const
 
 
 extern "C"
-void SAL_CALL cli_proxy_free( uno_ExtEnvironment *, void * proxy ) noexcept
+void cli_proxy_free( uno_ExtEnvironment *, void * proxy ) noexcept
 {
     cli_uno::CliProxy * cliProxy = reinterpret_cast<
         cli_uno::CliProxy * >( proxy );
@@ -891,14 +891,14 @@ void SAL_CALL cli_proxy_free( uno_ExtEnvironment *, void * proxy ) noexcept
 }
 
 extern "C"
-void SAL_CALL cli_proxy_acquire( uno_Interface * pUnoI ) noexcept
+void cli_proxy_acquire( uno_Interface * pUnoI ) noexcept
 {
     CliProxy const * cliProxy = static_cast< CliProxy const * >( pUnoI );
     cliProxy->acquire();
 }
 
 extern "C"
-void SAL_CALL cli_proxy_release( uno_Interface * pUnoI ) noexcept
+void cli_proxy_release( uno_Interface * pUnoI ) noexcept
 {
     CliProxy * cliProxy = static_cast< CliProxy * >( pUnoI );
     cliProxy->release();
@@ -907,7 +907,7 @@ void SAL_CALL cli_proxy_release( uno_Interface * pUnoI ) noexcept
 
 extern "C"
 
-void SAL_CALL cli_proxy_dispatch(
+void cli_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
     void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) noexcept
 {

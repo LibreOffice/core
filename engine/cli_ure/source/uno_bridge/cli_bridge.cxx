@@ -39,20 +39,20 @@ namespace cli_uno
 
 extern "C"
 {
-void SAL_CALL Mapping_acquire( uno_Mapping * mapping ) noexcept
+void Mapping_acquire( uno_Mapping * mapping ) noexcept
 {
     Mapping const * that = static_cast< Mapping const * >( mapping );
      that->m_bridge->acquire();
 }
 
-void SAL_CALL Mapping_release( uno_Mapping * mapping ) noexcept
+void Mapping_release( uno_Mapping * mapping ) noexcept
 {
     Mapping const * that = static_cast< Mapping const * >( mapping );
     that->m_bridge->release();
 }
 
 
-void SAL_CALL Mapping_cli2uno(
+void Mapping_cli2uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td ) noexcept
 {
@@ -85,7 +85,7 @@ void SAL_CALL Mapping_cli2uno(
     }
 }
 
-void SAL_CALL Mapping_uno2cli(
+void Mapping_uno2cli(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td ) noexcept
 {
@@ -139,7 +139,7 @@ void SAL_CALL Mapping_uno2cli(
 }
 
 
-void SAL_CALL Bridge_free( uno_Mapping * mapping ) noexcept
+void Bridge_free( uno_Mapping * mapping ) noexcept
 {
     Mapping * that = static_cast< Mapping * >( mapping );
     delete that->m_bridge;
@@ -233,13 +233,13 @@ extern "C"
 namespace cli_uno
 {
 
-void SAL_CALL cli_env_disposing( uno_Environment * uno_cli_env ) noexcept
+void cli_env_disposing( uno_Environment * uno_cli_env ) noexcept
 {
     uno_cli_env->pContext = 0;
 }
 
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cli_env ) noexcept
+SAL_DLLPUBLIC_EXPORT void uno_initEnvironment( uno_Environment * uno_cli_env ) noexcept
 {
     //ToDo: remove when compiled with .NET 2
 
@@ -265,7 +265,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cl
     CliEnvHolder::g_cli_env = gcnew Cli_environment();
 }
 
-SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
+SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo ) noexcept
 {
     assert(ppMapping && pFrom && pTo);

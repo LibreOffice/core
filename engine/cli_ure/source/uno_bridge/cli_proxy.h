@@ -278,7 +278,7 @@ struct CliProxy: public uno_Interface
                                   const OUString & usMethodName,
                                   MethodKind mk);
 
-    void SAL_CALL uno_DispatchMethod(
+    void uno_DispatchMethod(
         struct _uno_Interface * pUnoI,
         const struct _typelib_TypeDescription * pMemberType,
         void * pReturn,
