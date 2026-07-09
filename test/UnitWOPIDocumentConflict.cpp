@@ -25,6 +25,8 @@
 
 #include <lokassert.hpp>
 
+using namespace std::literals;
+
 class UnitWOPIDocumentConflict : public WOPIUploadConflictCommon
 {
     using Base = WOPIUploadConflictCommon;
@@ -564,11 +566,128 @@ public:
     }
 };
 
+/// A CheckFileInfo prefetched before our own save carries the older pre-save time.
+/// A joining view served that time must load without a spurious document conflict.
+class UnitWOPIStaleCheckFileInfo : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitViewLoaded, WaitModified, WaitUpload, WaitSecondView, Done)
+    _phase;
+
+    /// The last-modified time reported before the upload, replayed as a stale prefetch.
+    std::string _staleModifiedTime;
+    bool _injectedStale = false;
+    std::size_t _checkFileInfoBeforeSecondView = 0;
+
+public:
+    UnitWOPIStaleCheckFileInfo()
+        : WopiTestServer("UnitWOPIStaleCheckFileInfo")
+        , _phase(Phase::Load)
+    {
+        setTimeout(60s);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        if (_staleModifiedTime.empty())
+        {
+            // The first view's prefetch, before the upload. Remember the time so it can be
+            // replayed later as a result fetched before our own save.
+            _staleModifiedTime = fileInfo->getValue<std::string>("LastModifiedTime");
+        }
+        else if (_phase == Phase::WaitSecondView && !_injectedStale)
+        {
+            // The second view's prefetch. Answer with the pre-upload time, standing in for a
+            // result fetched before our own save moved the stored time on.
+            fileInfo->set("LastModifiedTime", _staleModifiedTime);
+            _injectedStale = true;
+        }
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitViewLoaded);
+        TRANSITION_STATE(_phase, Phase::WaitModified);
+
+        // Modify the first view so the next save uploads and advances the stored time.
+        WSD_CMD_BY_CONNECTION_INDEX(0, "key type=input char=97 key=0");
+        WSD_CMD_BY_CONNECTION_INDEX(0, "key type=up char=0 key=512");
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModified);
+        TRANSITION_STATE(_phase, Phase::WaitUpload);
+
+        WSD_CMD_BY_CONNECTION_INDEX(0, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        return true;
+    }
+
+    void onDocumentUploaded(bool success) override
+    {
+        TST_LOG("onDocumentUploaded: success=" << success);
+        LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+        LOK_ASSERT_MESSAGE("Expected the first view's save to upload", success);
+        TRANSITION_STATE(_phase, Phase::WaitSecondView);
+
+        _checkFileInfoBeforeSecondView = getCountCheckFileInfo();
+
+        // Join a second view. Its prefetch is answered with the stale pre-upload time.
+        TST_LOG("Joining a second view");
+        addWebSocket();
+        WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + getWopiSrc());
+    }
+
+    bool onFilterSendWebSocketMessage(std::string_view data, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        // A stale prefetch reaches the client either as an "error: ... kind=documentconflict"
+        // frame or, when it happens as the view joins, as a "close: documentconflict". Neither
+        // should appear.
+        LOK_ASSERT_MESSAGE("A stale prefetch must not raise a document conflict: [" +
+                               std::string(data) + ']',
+                           data.find("documentconflict") == std::string_view::npos);
+        return false;
+    }
+
+    bool onViewLoaded(const std::string& message) override
+    {
+        TST_LOG("onViewLoaded: [" << message << ']');
+        if (_phase != Phase::WaitSecondView)
+            return false;
+
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        // The stale prefetch is accepted as an earlier time of our own document, so the join
+        // makes only the one prefetch CheckFileInfo request and no second fetch.
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1),
+                         getCountCheckFileInfo() - _checkFileInfoBeforeSecondView);
+
+        passTest("Second view loaded without a spurious conflict");
+        return true;
+    }
+
+    void invokeWSDTest() override
+    {
+        if (_phase == Phase::Load)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitViewLoaded);
+
+            initWebsocket("/wopi/files/0?access_token=anything");
+            WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[5]{ new UnitConflictRecoveryTimeout(), new UnitWOPIDocumentConflict(),
+    return new UnitBase*[6]{ new UnitConflictRecoveryTimeout(), new UnitWOPIDocumentConflict(),
                              new UnitConflictAfterTimeoutSuccess(),
-                             new UnitConflictAfterTimeoutFailure(), nullptr };
+                             new UnitConflictAfterTimeoutFailure(),
+                             new UnitWOPIStaleCheckFileInfo(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

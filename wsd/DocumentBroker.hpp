@@ -37,6 +37,7 @@
 #include <common/MobileApp.hpp>
 #endif // MOBILEAPP
 
+#include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <cstddef>
@@ -46,6 +47,7 @@
 #include <sstream>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include <Poco/JSON/Object.h>
 #include <Poco/SharedPtr.h>
@@ -1471,9 +1473,16 @@ private:
             _lastUploadedFileModifiedLocalTime = modifiedTime;
         }
 
-        /// Set the last modified time of the document.
+        /// Set the last modified time of the document, keeping the old value.
         void setLastModifiedServerTimeString(const std::string& time)
         {
+            if (!_lastModifiedServerTimeString.empty() && _lastModifiedServerTimeString != time)
+            {
+                _earlierModifiedServerTimeStrings.push_back(_lastModifiedServerTimeString);
+                if (_earlierModifiedServerTimeStrings.size() > MaxEarlierModifiedTimes)
+                    _earlierModifiedServerTimeStrings.erase(_earlierModifiedServerTimeStrings.begin());
+            }
+
             _lastModifiedServerTimeString = time;
         }
 
@@ -1481,6 +1490,14 @@ private:
         const std::string& getLastModifiedServerTimeString() const
         {
             return _lastModifiedServerTimeString;
+        }
+
+        /// True if time is one the document had before now.
+        bool isEarlierModifiedServerTimeString(const std::string& time) const
+        {
+            return std::find(_earlierModifiedServerTimeStrings.begin(),
+                             _earlierModifiedServerTimeStrings.end(),
+                             time) != _earlierModifiedServerTimeStrings.end();
         }
 
         /// Set size of the document as we've downloaded it, or after a successful upload.
@@ -1546,6 +1563,13 @@ private:
 
         /// The modified time of the document in storage, as reported by the server.
         std::string _lastModifiedServerTimeString;
+
+        /// How many recent earlier modified times to remember. A prefetched
+        /// CheckFileInfo is only seconds stale, so a few of our own saves is plenty.
+        static constexpr std::size_t MaxEarlierModifiedTimes = 4;
+
+        /// Recent earlier modified times, oldest first.
+        std::vector<std::string> _earlierModifiedServerTimeStrings;
 
         /// The size of the document, as we downloaded from the server,
         /// and after successfully uploading.
