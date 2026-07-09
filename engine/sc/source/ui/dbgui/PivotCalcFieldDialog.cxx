@@ -113,6 +113,16 @@ bool ScPivotCalcFieldDlg::IsExistingField(std::u16string_view rName) const
     return false;
 }
 
+bool ScPivotCalcFieldDlg::IsExistingCalcField(std::u16string_view rName) const
+{
+    for (const auto& pLabelData : maPivotParameters.maLabelArray)
+    {
+        if (pLabelData->mbCalculatedField && pLabelData->maName == rName)
+            return true;
+    }
+    return false;
+}
+
 std::shared_ptr<ScTokenArray> ScPivotCalcFieldDlg::ValidateFormula(const OUString& rFormula,
                                                                    FormulaError* pError)
 {
@@ -396,8 +406,8 @@ bool ScPivotCalcFieldDlg::DoAddMod()
         return false;
     }
 
-    bool bModify = (mxBtnAdd->get_label() == aStrModify);
     OUString aFieldName = mxCalcNames->get_active_text();
+    bool bModify = IsExistingCalcField(aFieldName);
     if (bModify)
     {
         // Modify existing calculated field: find it by name and update its formula
@@ -471,6 +481,7 @@ bool ScPivotCalcFieldDlg::DoAddMod()
     if (nIdx != -1)
         mxCalcNames->set_active(nIdx);
 
+    mxBtnAdd->set_label(aStrModify);
     mxBtnAdd->set_sensitive(false);
     mxBtnDel->set_sensitive(true);
     mxBtnOK->set_can_focus(true);
@@ -530,9 +541,10 @@ IMPL_LINK_NOARG(ScPivotCalcFieldDlg, DeleteClicked, weld::Button&, void)
 
     FillAllFields();
 
-    // Clear the combo box and formula entry, disable Add/Del
+    // Clear the combo box and formula entry, reset label, disable Add/Del
     mxCalcNames->set_entry_text(u""_ustr);
     mxCalculation->set_text(u"= 0"_ustr);
+    mxBtnAdd->set_label(aStrAdd);
     mxBtnAdd->set_sensitive(false);
     mxBtnDel->set_sensitive(false);
 }

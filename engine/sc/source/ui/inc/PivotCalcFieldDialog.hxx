@@ -66,6 +66,7 @@ private:
     void Init();
     void ErrorBox(const OUString& rString);
     bool IsExistingField(std::u16string_view rName) const;
+    bool IsExistingCalcField(std::u16string_view rName) const;
     std::shared_ptr<ScTokenArray> ValidateFormula(const OUString& rFormula,
                                                   FormulaError* pError = nullptr);
     bool DoAddMod();
