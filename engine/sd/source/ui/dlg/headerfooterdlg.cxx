@@ -127,7 +127,7 @@ private:
     std::unique_ptr<weld::Container> mxContainer;
     std::unique_ptr<weld::Label> mxFTIncludeOn;
     std::unique_ptr<weld::CheckButton> mxCBHeader;
-    std::unique_ptr<weld::Widget> mxHeaderBox;
+    std::unique_ptr<weld::Container> mxHeaderBox;
     std::unique_ptr<weld::Entry> mxTBHeader;
     std::unique_ptr<weld::CheckButton> mxCBDateTime;
     std::unique_ptr<weld::RadioButton> mxRBDateTimeFixed;
@@ -137,7 +137,7 @@ private:
     std::unique_ptr<weld::Label> mxFTDateTimeLanguage;
     std::unique_ptr<SvxLanguageBox> mxCBDateTimeLanguage;
     std::unique_ptr<weld::CheckButton> mxCBFooter;
-    std::unique_ptr<weld::Widget> mxFooterBox;
+    std::unique_ptr<weld::Container> mxFooterBox;
     std::unique_ptr<weld::Entry> mxTBFooter;
     std::unique_ptr<weld::CheckButton> mxCBSlideNumber;
     std::unique_ptr<weld::CheckButton> mxCBNotOnTitle;
@@ -372,7 +372,7 @@ HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocumen
     , mxContainer(mxBuilder->weld_container(u"HeaderFooterTab"_ustr))
     , mxFTIncludeOn(mxBuilder->weld_label(u"include_label"_ustr))
     , mxCBHeader(mxBuilder->weld_check_button(u"header_cb"_ustr ))
-    , mxHeaderBox(mxBuilder->weld_widget(u"header_box"_ustr))
+    , mxHeaderBox(mxBuilder->weld_container(u"header_box"_ustr))
     , mxTBHeader(mxBuilder->weld_entry(u"header_text"_ustr))
     , mxCBDateTime(mxBuilder->weld_check_button(u"datetime_cb"_ustr))
     , mxRBDateTimeFixed(mxBuilder->weld_radio_button(u"rb_fixed"_ustr))
@@ -382,7 +382,7 @@ HeaderFooterTabPage::HeaderFooterTabPage(weld::Container* pParent, SdDrawDocumen
     , mxFTDateTimeLanguage(mxBuilder->weld_label(u"language_label"_ustr))
     , mxCBDateTimeLanguage(new SvxLanguageBox(mxBuilder->weld_combo_box(u"language_list"_ustr)))
     , mxCBFooter(mxBuilder->weld_check_button(u"footer_cb"_ustr))
-    , mxFooterBox(mxBuilder->weld_widget(u"footer_box"_ustr ))
+    , mxFooterBox(mxBuilder->weld_container(u"footer_box"_ustr ))
     , mxTBFooter(mxBuilder->weld_entry(u"footer_text"_ustr))
     , mxCBSlideNumber(mxBuilder->weld_check_button(u"slide_number"_ustr))
     , mxCBNotOnTitle(mxBuilder->weld_check_button(u"not_on_title"_ustr))
