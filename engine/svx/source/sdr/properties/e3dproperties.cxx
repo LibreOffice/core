@@ -55,7 +55,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> E3dProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> E3dProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new E3dProperties(*this, rObj));
         }

@@ -27,6 +27,9 @@ namespace sdr::properties
     {
         class OleProperties final : public RectangleProperties
         {
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
             // apply the correct SfyStyleSheet from SdrObject's SdrModel
             virtual void applyDefaultStyleSheetFromSdrModel() override;
 
@@ -39,9 +42,6 @@ namespace sdr::properties
 
             // destructor
             virtual ~OleProperties() override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
         };
 } // end of namespace sdr::properties
 

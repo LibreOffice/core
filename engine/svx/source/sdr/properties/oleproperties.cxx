@@ -56,7 +56,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> OleProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> OleProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new OleProperties(*this, rObj));
         }

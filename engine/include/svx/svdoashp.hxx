@@ -74,10 +74,11 @@ struct SdrCustomShapeInteraction
 
 class SVXCORE_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {
-private:
     // fObjectRotation is containing the object rotation in degrees.
     double m_fObjectRotation;
     bool mbAdjustingTextFrameWidthAndHeight;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
@@ -113,7 +114,6 @@ public:
     // returns the new text rect that corresponds to the current logic rect, the return value can be empty if nothing changed.
     tools::Rectangle ImpCalculateTextFrame( const bool bHgt, const bool bWdt );
 
-public:
     // #i37011#
     const SdrObject* GetSdrObjectFromCustomShape() const;
     const SdrObject* GetSdrObjectShadowFromCustomShape() const;
@@ -209,7 +209,6 @@ public:
     virtual void TakeTextAnchorRect( tools::Rectangle& rAnchorRect ) const override;
     virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

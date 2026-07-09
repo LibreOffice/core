@@ -66,7 +66,6 @@ class SdrGraphicLink;
  */
 class SVXCORE_DLLPUBLIC SdrGrafObj final : public SdrRectObj
 {
-private:
     // to allow sdr::properties::GraphicProperties access to SetXPolyDirty()
     friend class sdr::properties::GraphicProperties;
 
@@ -108,6 +107,8 @@ private:
 
     // protected destructor
     SAL_DLLPRIVATE virtual ~SdrGrafObj() override;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
     SdrGrafObj(SdrModel& rSdrModel);
@@ -166,8 +167,6 @@ public:
 
     SAL_DLLPRIVATE virtual OUString        TakeObjNameSingul() const override;
     SAL_DLLPRIVATE virtual OUString        TakeObjNamePlural() const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     SAL_DLLPRIVATE virtual sal_uInt32 GetHdlCount() const override;
     SAL_DLLPRIVATE virtual void AddToHdlList(SdrHdlList& rHdlList) const override;

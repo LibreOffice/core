@@ -2343,7 +2343,7 @@ SwDrawVirtObj::~SwDrawVirtObj()
 {
 }
 
-rtl::Reference<SdrObject> SwDrawVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SwDrawVirtObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SwDrawVirtObj(rTargetModel, *this);
 }

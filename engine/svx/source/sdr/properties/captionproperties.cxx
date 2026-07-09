@@ -57,7 +57,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> CaptionProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> CaptionProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new CaptionProperties(*this, rObj));
         }

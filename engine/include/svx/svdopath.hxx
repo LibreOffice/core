@@ -41,7 +41,6 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrPathObj final : public SdrTextObj
 {
-private:
     friend class ImpPathForDragAndCreate;
 
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
@@ -60,9 +59,10 @@ private:
     void ImpForceLineAngle();
     ImpPathForDragAndCreate& impGetDAC() const;
 
-private:
     // protected destructor - due to final, make private
     virtual ~SdrPathObj() override;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
     SdrPathObj(
@@ -78,7 +78,6 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

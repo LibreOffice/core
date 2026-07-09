@@ -73,6 +73,8 @@ class SVXCORE_DLLPUBLIC E3dScene final : public E3dObject, public SdrObjList
     void SetDefaultAttributes();
     void ImpCleanup3DDepthMapper();
 
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
 public:
     E3dScene(SdrModel& rSdrModel);
     E3dScene(SdrModel& rSdrModel, E3dScene const &);
@@ -119,8 +121,6 @@ public:
     void SetCamera(const Camera3D& rNewCamera);
     const Camera3D& GetCamera() const { return m_aCamera; }
     void removeAllNonSelectedObjects();
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;

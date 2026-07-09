@@ -67,7 +67,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> MeasureProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> MeasureProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new MeasureProperties(*this, rObj));
         }

@@ -30,6 +30,8 @@ class SVXCORE_DLLPUBLIC SdrVirtObj : public SdrObject
 {
     SdrVirtObj(const SdrVirtObj&) = delete;
 
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
 public:
     virtual sdr::properties::BaseProperties& GetProperties() const override;
 
@@ -81,7 +83,6 @@ public:
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetLastBoundRect() const override;
     virtual void RecalcBoundRect() override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

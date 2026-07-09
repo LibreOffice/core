@@ -209,7 +209,6 @@ public:
     in later headers. */
 class SwDrawVirtObj final : public SdrVirtObj
 {
-    private:
         // data for connection to writer layout
         /** anchored drawing object instance for the
          'virtual' drawing object */
@@ -228,6 +227,8 @@ class SwDrawVirtObj final : public SdrVirtObj
         // protected destructor
         virtual ~SwDrawVirtObj() override;
 
+        virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
     public:
         SwDrawVirtObj(
             SdrModel& rSdrModel,
@@ -238,8 +239,6 @@ class SwDrawVirtObj final : public SdrVirtObj
 
         /// access to offset
         virtual Point GetOffset() const override;
-
-        virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
         /// connection to writer layout
         const SwAnchoredObject& GetAnchoredObj() const { return maAnchoredDrawObj; }

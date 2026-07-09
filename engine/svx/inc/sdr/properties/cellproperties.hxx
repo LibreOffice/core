@@ -61,7 +61,7 @@ public:
     ~CellProperties();
 
     // Clone() operator, normally just calls the local copy constructor
-    std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
+    std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
 
     void ForceDefaultAttributes() override;
 

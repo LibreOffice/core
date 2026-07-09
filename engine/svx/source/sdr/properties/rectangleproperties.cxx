@@ -37,7 +37,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> RectangleProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> RectangleProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new RectangleProperties(*this, rObj));
         }

@@ -439,7 +439,7 @@ void E3dScene::removeAllNonSelectedObjects()
     }
 }
 
-rtl::Reference<SdrObject> E3dScene::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dScene::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dScene(rTargetModel, *this);
 }

@@ -37,7 +37,6 @@ class E3dDefaultAttributes;
 
 class SAL_WARN_UNUSED E3dExtrudeObj final : public E3dCompoundObject
 {
-private:
     // to allow sdr::properties::E3dExtrudeProperties access to SetGeometryValid()
     friend class sdr::properties::E3dExtrudeProperties;
 
@@ -48,9 +47,10 @@ private:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
-private:
     // protected destructor - due to final, make private
     virtual ~E3dExtrudeObj() override;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
     SVXCORE_DLLPUBLIC E3dExtrudeObj(
@@ -94,8 +94,6 @@ public:
         { return GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK).GetValue(); }
 
     virtual SdrObjKind GetObjIdentifier() const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual OUString TakeObjNameSingul() const override;

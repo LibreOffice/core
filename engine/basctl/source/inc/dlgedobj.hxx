@@ -47,14 +47,14 @@ class DlgEdObj: public SdrUnoObj
     friend class DlgEdPropListenerImpl;
     friend class DlgEdForm;
 
-private:
     bool            bIsListening;
     rtl::Reference<DlgEdForm> pDlgEdForm;
     rtl::Reference<DlgEdPropListenerImpl> m_xPropertyChangeListener;
     rtl::Reference<DlgEdEvtContListenerImpl>  m_xContainerListener;
 
-private:
     DlgEditor& GetDialogEditor ();
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;                                          // not working yet
 
 protected:
     DlgEdObj(SdrModel& rSdrModel);
@@ -97,8 +97,6 @@ public:
 
     virtual SdrInventor GetObjInventor() const override;
     virtual SdrObjKind GetObjIdentifier() const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;                                          // not working yet
 
     // FullDrag support
     virtual rtl::Reference<SdrObject> getFullDragClone() const override;

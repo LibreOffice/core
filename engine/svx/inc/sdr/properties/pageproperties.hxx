@@ -28,6 +28,9 @@ namespace sdr::properties
     {
         class PageProperties final : public BaseProperties
         {
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
             // the to be used ItemSet
             mutable std::optional<SfxItemSet> mxEmptyItemSet;
 
@@ -43,9 +46,6 @@ namespace sdr::properties
 
             // create a new object specific itemset with object specific ranges.
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             virtual const SfxItemSet& GetObjectItemSet() const override;
 

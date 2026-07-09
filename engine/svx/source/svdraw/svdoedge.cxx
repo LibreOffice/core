@@ -1719,7 +1719,7 @@ void SdrEdgeObj::Reformat()
     }
 }
 
-rtl::Reference<SdrObject> SdrEdgeObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrEdgeObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrEdgeObj(rTargetModel, *this);
 }

@@ -62,7 +62,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> CircleProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> CircleProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new CircleProperties(*this, rObj));
         }

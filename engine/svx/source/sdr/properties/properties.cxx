@@ -40,6 +40,15 @@ namespace sdr::properties
         {
         }
 
+        void BaseProperties::postProcessAfterCloneToDifferentModel(const SdrObject& /*rSrcObj*/)
+        {
+        }
+
+        std::unique_ptr<BaseProperties> BaseProperties::Clone(SdrObject& rObj) const
+        {
+            return implCloneProperties(rObj);
+        }
+
         const SdrObject& BaseProperties::GetSdrObject() const
         {
             return mrObject;

@@ -38,7 +38,7 @@ public:
 
     void setup();
 
-    rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
+    rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
     SdrObjKind GetObjIdentifier() const override;
     OUString TakeObjNameSingul() const override;

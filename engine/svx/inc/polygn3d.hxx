@@ -39,6 +39,8 @@ class E3dPolygonObj final : public E3dCompoundObject
     // protected destructor
     virtual ~E3dPolygonObj() override;
 
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
 public:
     void SetPolyPolygon3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
     void SetPolyNormals3D(const basegfx::B3DPolyPolygon& rNewPolyPoly3D);
@@ -56,8 +58,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier,
                                                          bool bAddText) const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // LineOnly?
     bool GetLineOnly() const { return bLineOnly; }

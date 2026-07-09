@@ -902,7 +902,7 @@ SdrObjKind DlgEdObj::GetObjIdentifier() const
     }
 }
 
-rtl::Reference<SdrObject> DlgEdObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> DlgEdObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new DlgEdObj(rTargetModel, *this);
 }

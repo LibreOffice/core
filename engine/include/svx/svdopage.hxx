@@ -41,6 +41,8 @@ private:
     // protected destructor
     virtual ~SdrPageObj() override;
 
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
 public:
     SdrPageObj(
         SdrModel& rSdrModel,
@@ -60,7 +62,6 @@ public:
 
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

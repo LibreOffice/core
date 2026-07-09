@@ -72,15 +72,16 @@ namespace sdr::properties
     {
         class SVXCORE_DLLPUBLIC BaseProperties
         {
-        private:
             // the owner of this Properties. Set from constructor and not
             // to be changed in any way.
             SdrObject&                                      mrObject;
 
+            // thje Clone-implementations, overloaded for each derivation
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const = 0;
+
         protected:
             // internal access to SdrObject
             const SdrObject& GetSdrObject() const;
-
             SdrObject& GetSdrObject();
 
         public:
@@ -90,11 +91,17 @@ namespace sdr::properties
             // destructor
             virtual ~BaseProperties();
 
+            // create needed SfxItemSet, overloaded in all derivations as needed
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
+
+            // Regulates Styles/Items between models when a Clone to another model
+            // was done. This is needed to evtl. also clone Styles and/or attributes
+            // to target model
+            virtual void postProcessAfterCloneToDifferentModel(const SdrObject& rSrcObj);
 
             // Clone() operator, normally just calls the local copy constructor,
             // see above.
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const = 0;
+            std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const;
 
             // Get the local ItemSet. This directly returns the local ItemSet of the object. No
             // merging of ItemSets is done for e.g. Group objects.

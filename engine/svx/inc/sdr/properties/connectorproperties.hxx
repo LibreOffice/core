@@ -27,6 +27,9 @@ namespace sdr::properties
     {
         class ConnectorProperties final : public TextProperties
         {
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
             // create a new itemset
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
@@ -42,9 +45,6 @@ namespace sdr::properties
 
             // destructor
             virtual ~ConnectorProperties() override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,

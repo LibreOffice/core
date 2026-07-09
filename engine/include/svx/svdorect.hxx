@@ -37,10 +37,11 @@ namespace sdr::properties {
 /// Rectangle objects (rectangle, circle, ...)
 class SVXCORE_DLLPUBLIC SdrRectObj : public SdrTextObj
 {
-private:
     // to allow sdr::properties::RectangleProperties access to SetXPolyDirty()
     friend class sdr::properties::RectangleProperties;
     friend class SdrTextObj; // Due to SetXPolyDirty for GrowAdjust
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
@@ -48,7 +49,6 @@ protected:
 
     std::optional<XPolygon> mpXPoly;
 
-protected:
     XPolygon ImpCalcXPoly(const tools::Rectangle& rRect1, tools::Long nRad1) const;
     void SetXPolyDirty();
 
@@ -82,7 +82,6 @@ public:
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
 
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void RecalcSnapRect() override;
     virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;

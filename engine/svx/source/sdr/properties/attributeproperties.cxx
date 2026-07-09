@@ -144,74 +144,103 @@ namespace sdr::properties
         :   DefaultProperties(rProps, rObj),
             mpStyleSheet(nullptr)
         {
-            SfxStyleSheet* pTargetStyleSheet(rProps.GetStyleSheet());
+            const bool bModelChange(&rObj.getSdrModelFromSdrObject() != &rProps.GetSdrObject().getSdrModelFromSdrObject());
 
-            if(pTargetStyleSheet)
+            if (bModelChange)
             {
-                const bool bModelChange(&rObj.getSdrModelFromSdrObject() != &rProps.GetSdrObject().getSdrModelFromSdrObject());
-
-                if(bModelChange)
-                {
-                    // tdf#117506
-                    // The error shows that it is definitely necessary to solve this problem.
-                    // Interestingly I already had a note here for 'work needed'.
-                    // Checked in libreoffice-6-0 what happened there. In principle, the whole
-                    // ::Clone of SdrPage and SdrObject happened in the same SdrModel, only
-                    // afterwards a ::SetModel was used at the cloned SdrPage which went through
-                    // all layers. The StyleSheet-problem was solved in
-                    // AttributeProperties::MoveToItemPool at the end. There, a StyleSheet with the
-                    // same name was searched for in the target-SdrModel.
-                    // Start by resetting the current TargetStyleSheet so that nothing goes wrong
-                    // when we do not find a fitting TargetStyleSheet.
-                    // Note: The test for SdrModelChange above was wrong (compared the already set
-                    // new SdrObject), so this never triggered and pTargetStyleSheet was never set to
-                    // nullptr before. This means that a StyleSheet from another SdrModel was used
-                    // what of course is very dangerous. Interestingly did not crash since when that
-                    // other SdrModel was destroyed the ::Notify mechanism still worked reliably
-                    // and de-connected this Properties successfully from the alien-StyleSheet.
-                    pTargetStyleSheet = nullptr;
-
-                    // Check if we have a TargetStyleSheetPool at the target-SdrModel. This *should*
-                    // be the case already (SdrModel::Merge and SdDrawDocument::InsertBookmarkAsPage
-                    // have already cloned the StyleSheets to the target-SdrModel when used in Draw/impress).
-                    // If none is found, ImpGetDefaultStyleSheet will be used to set a 'default'
-                    // StyleSheet as StyleSheet implicitly later (that's what happened in the task,
-                    // thus the FillStyle changed to the 'default' Blue).
-                    // Note: It *may* be necessary to do more for StyleSheets, e.g. clone/copy the
-                    // StyleSheet Hierarchy from the source SdrModel and/or add the Items from there
-                    // as hard attributes. If needed, have a look at the older AttributeProperties::SetModel
-                    // implementation from e.g. libreoffice-6-0.
-                    SfxStyleSheetBasePool* pTargetStyleSheetPool(rObj.getSdrModelFromSdrObject().GetStyleSheetPool());
-
-                    if(nullptr != pTargetStyleSheetPool)
-                    {
-                        // If we have a TargetStyleSheetPool, search for the used StyleSheet
-                        // in the target SdrModel using the Name from the original StyleSheet
-                        // in the source-SdrModel.
-                        pTargetStyleSheet = dynamic_cast< SfxStyleSheet* >(
-                            pTargetStyleSheetPool->Find(
-                                rProps.GetStyleSheet()->GetName(),
-                                rProps.GetStyleSheet()->GetFamily()));
-                    }
-                }
-            }
-
-            if(!pTargetStyleSheet)
-                return;
-
-            if(HasSfxItemSet())
-            {
-                // The SfxItemSet has been cloned and exists,
-                // we can directly set the SfxStyleSheet at it
-                ImpAddStyleSheet(pTargetStyleSheet, true);
+                // use default; will be corrected/handled in call to
+                // postProcessAfterCloneToDifferentModel below. Thus,
+                // also do not yet call ImpAddStyleSheet here
+                mpStyleSheet = GetSdrObject().getSdrModelFromSdrObject().GetDefaultStyleSheet();
             }
             else
             {
-                // No SfxItemSet exists yet (there is none in
-                // the source, so none was cloned). Remember the
-                // SfxStyleSheet to set it when the SfxItemSet
-                // got constructed on-demand
-                mpStyleSheet = pTargetStyleSheet;
+                // copy existing one
+                mpStyleSheet = rProps.GetStyleSheet();
+
+                // add StyleSheet && establish the parent-links in the SfxItemSet
+                ImpAddStyleSheet(mpStyleSheet, true);
+            }
+        }
+
+        void AttributeProperties::postProcessAfterCloneToDifferentModel(const SdrObject& rSrcObj)
+        {
+            SdrModel& rDstModel(GetSdrObject().getSdrModelFromSdrObject());
+            const bool bModelChange(&rSrcObj.getSdrModelFromSdrObject() != &rDstModel);
+
+            if (!bModelChange)
+                return;
+
+            // guarantee SfxItemSet existence
+            DefaultProperties::GetObjectItemSet();
+            const sdr::properties::BaseProperties& rSource(rSrcObj.GetProperties());
+            SfxStyleSheet* pNewStyleSheet(nullptr);
+
+            if (rDstModel.GetStyleSheetPool())
+            {
+                SfxStyleSheet* pSourceStyleSheet(rSource.GetStyleSheet());
+
+                if (pSourceStyleSheet)
+                {
+                    // If we have a TargetStyleSheetPool, search for the used StyleSheet
+                    // in the target SdrModel using the Name from the original StyleSheet
+                    // in the source-SdrModel.
+                    // That will/should work always since Paste from another model will
+                    // in a 1st step copy non-existing StyleSheets to destination model
+                    pNewStyleSheet = dynamic_cast< SfxStyleSheet* >(
+                        rDstModel.GetStyleSheetPool()->Find(
+                            pSourceStyleSheet->GetName(),
+                            pSourceStyleSheet->GetFamily()));
+                }
+            }
+
+            // fallback: every SdrObject *should* have a StyleSheet, use
+            // default from the model
+            if(!pNewStyleSheet)
+                pNewStyleSheet = rDstModel.GetDefaultStyleSheet();
+
+            if(!pNewStyleSheet)
+                // may still have no StyleSheet, was so before, too, but
+                // should not happen since a DefaultStyleSheet should
+                // always be there
+                return;
+
+            // add StyleSheet && establish the parent-links in the SfxItemSet
+            if (GetStyleSheet() != pNewStyleSheet)
+            {
+                ImpRemoveStyleSheet();
+                ImpAddStyleSheet(pNewStyleSheet, true);
+            }
+
+            if (HasSfxItemSet())
+            {
+                // here we have a model change and a StyleSheet set,. but that
+                // StyleSheet was found by looking for name & type. It may
+                // *not* be identical to the StyleSheet from the Source.
+
+                // What to do? We could...
+                // (a) the Style-friendly way:
+                //   - check if StyleSheet is identical
+                //   - if not, create a new in-between StyleSheet hosting missing Items
+                //   - if yes, use, done.
+                // (b) the pragmatic/practical way:
+                // - Just hard-attribute the Items that are detected as different
+                //   similar to what BurnInStyleSheetAttributes does/did, but only
+                //   for differing Items here
+                //
+                // (b)) is the most simple for now, but will lead to more hard
+                // attributes. The other possibilities will be better in the
+                // long term. For now, I will use (b).
+                SfxWhichIter aIter(rSource.GetObjectItemSet());
+
+                for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+                {
+                    const SfxPoolItem& rOld(rSource.GetItem(nWhich));
+                    const SfxPoolItem& rNew(GetItem(nWhich));
+
+                    if (!SfxPoolItem::areSame(rOld, rNew))
+                        SetObjectItemDirect(rOld);
+                }
             }
         }
 
@@ -220,7 +249,7 @@ namespace sdr::properties
             ImpRemoveStyleSheet();
         }
 
-        std::unique_ptr<BaseProperties> AttributeProperties::Clone(SdrObject&) const
+        std::unique_ptr<BaseProperties> AttributeProperties::implCloneProperties(SdrObject&) const
         {
             assert(false && "this class is effectively abstract, should only be instantiating subclasses");
             abort();

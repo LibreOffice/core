@@ -99,7 +99,7 @@ rtl::Reference<SdrObject> E3dSphereObj::DoConvertToPolyObj(bool /*bBezier*/, boo
     return nullptr;
 }
 
-rtl::Reference<SdrObject> E3dSphereObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dSphereObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dSphereObj(rTargetModel, *this);
 }

@@ -27,7 +27,9 @@ namespace sdr::properties
     {
         class CustomShapeProperties final : public TextProperties
         {
-        private:
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
             void UpdateTextFrameStatus(bool bInvalidateRenderGeometry);
 
             // create a new itemset
@@ -71,9 +73,6 @@ namespace sdr::properties
 
             // destructor
             virtual ~CustomShapeProperties() override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             // This is the notifier from SfxListener
             virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;

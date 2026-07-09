@@ -99,7 +99,7 @@ public:
     TableProperties(const TableProperties& rProps, SdrObject& rObj );
 
     // Clone() operator, normally just calls the local copy constructor
-    std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
+    std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
 
     virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 };
@@ -116,7 +116,7 @@ TableProperties::TableProperties(const TableProperties& rProps, SdrObject& rObj)
 {
 }
 
-std::unique_ptr<BaseProperties> TableProperties::Clone(SdrObject& rObj) const
+std::unique_ptr<BaseProperties> TableProperties::implCloneProperties(SdrObject& rObj) const
 {
     return std::unique_ptr<BaseProperties>(new TableProperties(*this, rObj));
 }
@@ -1780,7 +1780,7 @@ OUString SdrTableObj::TakeObjNamePlural() const
 }
 
 
-rtl::Reference<SdrObject> SdrTableObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrTableObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrTableObj(rTargetModel, *this);
 }

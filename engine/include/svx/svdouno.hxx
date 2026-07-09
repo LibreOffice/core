@@ -48,6 +48,8 @@ class SVXCORE_DLLPUBLIC SdrUnoObj : public SdrRectObj
     OUString                    m_aUnoControlModelTypeName;
     OUString                    m_aUnoControlTypeName;
 
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
 protected:
     css::uno::Reference< css::awt::XControlModel > m_xUnoControlModel; // Can also be set from outside
 
@@ -71,7 +73,6 @@ public:
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
 
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
     virtual void NbcSetLayer(SdrLayerID nLayer) override;
 

@@ -61,11 +61,12 @@ public:
 
 class SVXCORE_DLLPUBLIC E3dObject : public SdrAttrObj
 {
-private:
     // Allow everything for E3dObjList and E3dDragMethod
     friend class E3dDragMethod;
 
- protected:
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
+protected:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
     basegfx::B3DRange           maLocalBoundVol;    // surrounding volume of the object (from the geometry generation)
@@ -125,7 +126,6 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual std::unique_ptr<SdrObjGeoData> NewGeoData() const override;
     virtual void          SaveGeoData(SdrObjGeoData& rGeo) const override;
@@ -152,12 +152,13 @@ public:
 
 class SVXCORE_DLLPUBLIC E3dCompoundObject : public E3dObject
 {
-private:
     // to allow sdr::properties::E3dCompoundProperties access to SetGeometryValid()
     friend class sdr::properties::E3dCompoundProperties;
     friend class sdr::properties::E3dExtrudeProperties;
     friend class sdr::properties::E3dLatheProperties;
     friend class sdr::properties::E3dSphereProperties;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 protected:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
@@ -179,8 +180,6 @@ public:
 
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual void RecalcSnapRect() override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 };
 
 #endif // INCLUDED_SVX_OBJ3D_HXX

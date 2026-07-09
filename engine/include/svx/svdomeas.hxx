@@ -43,7 +43,6 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrMeasureObj final : public SdrTextObj
 {
-private:
     // to allow sdr::properties::MeasureProperties access to SetTextDirty()
     friend class sdr::properties::MeasureProperties;
     friend class                SdrMeasureField;
@@ -76,6 +75,8 @@ private:
     SAL_DLLPRIVATE virtual void SaveGeoData(SdrObjGeoData& rGeo) const override;
     SAL_DLLPRIVATE virtual void RestoreGeoData(const SdrObjGeoData& rGeo) override;
 
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
 public:
     SAL_DLLPRIVATE SdrMeasureObj(SdrModel& rSdrModel);
     // Copy constructor
@@ -89,7 +90,6 @@ public:
     SAL_DLLPRIVATE virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     SAL_DLLPRIVATE virtual SdrObjKind GetObjIdentifier() const override;
     virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     SAL_DLLPRIVATE virtual OUString TakeObjNameSingul() const override;
     SAL_DLLPRIVATE virtual OUString TakeObjNamePlural() const override;

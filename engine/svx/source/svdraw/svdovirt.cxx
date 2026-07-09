@@ -200,7 +200,7 @@ void SdrVirtObj::RecalcBoundRect()
     setOutRectangle(aRectangle);
 }
 
-rtl::Reference<SdrObject> SdrVirtObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrVirtObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrVirtObj(rTargetModel, *this);
     // TTTT not sure if the above works - how could SdrObjFactory::MakeNewObject

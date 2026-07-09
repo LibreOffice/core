@@ -31,7 +31,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> EmptyProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> EmptyProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new EmptyProperties(rObj));
         }

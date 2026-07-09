@@ -146,7 +146,7 @@ SdrObjKind SwFlyDrawObj::GetObjIdentifier() const
     return SdrObjKind::SwFlyDrawObjIdentifier;
 }
 
-rtl::Reference<SdrObject> SwFlyDrawObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SwFlyDrawObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SwFlyDrawObj(rTargetModel);
 }

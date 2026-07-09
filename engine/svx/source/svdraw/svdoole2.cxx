@@ -1565,7 +1565,7 @@ OUString SdrOle2Obj::TakeObjNamePlural() const
     return SvxResId(mpImpl->mbFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
-rtl::Reference<SdrObject> SdrOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrOle2Obj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrOle2Obj(rTargetModel, *this);
 }

@@ -59,7 +59,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> ConnectorProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> ConnectorProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new ConnectorProperties(*this, rObj));
         }
