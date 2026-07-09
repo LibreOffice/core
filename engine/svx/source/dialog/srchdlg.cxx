@@ -1522,6 +1522,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
     if (m_bFormat)
         return;
     OUString sDesc;
+    bool bSetOptimalLayoutSize = false;
 
     if ( m_xLayoutBtn->get_active() )
     {
@@ -1584,16 +1585,17 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
         m_xReplaceTmplLB->hide();
 
         m_xSearchAttrText->set_label( BuildAttrText_Impl( sDesc, true ) );
-        m_xReplaceAttrText->set_label( BuildAttrText_Impl( sDesc, false ) );
-
-        if(!sDesc.isEmpty())
+        if (!sDesc.isEmpty() && !m_xSearchAttrText->get_visible())
         {
-            if (!m_xSearchAttrText->get_visible() || !m_xReplaceAttrText->get_visible())
-            {
-                m_xSearchAttrText->show();
-                m_xReplaceAttrText->show();
-                m_xDialog->resize_to_request();
-            }
+            m_xSearchAttrText->show();
+            bSetOptimalLayoutSize = true;
+        }
+
+        m_xReplaceAttrText->set_label( BuildAttrText_Impl( sDesc, false ) );
+        if (!sDesc.isEmpty() && !m_xReplaceAttrText->get_visible())
+        {
+            m_xReplaceAttrText->show();
+            bSetOptimalLayoutSize = true;
         }
 
         EnableControl_Impl(*m_xFormatBtn);
@@ -1606,6 +1608,9 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
     m_pImpl->bSaveToModule = false;
     FlagHdl_Impl(*m_xLayoutBtn);
     m_pImpl->bSaveToModule = true;
+
+    if (bSetOptimalLayoutSize)
+        m_xDialog->resize_to_request();
 }
 
 void SvxSearchDialog::Remember_Impl(bool _bSearch)
