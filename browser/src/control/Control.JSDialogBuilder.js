@@ -334,6 +334,11 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				dispatcher.dispatch('closeapp');
 			}
 			builder._defaultCallbackHandlerSendMessage(objectType, eventType, object, data, builder);
+
+			if (objectType === 'combobox' && eventType === 'selected'
+				&& JSDialog.focusMapUnlessInDialog(builder)) {
+				return 'focusHandled';
+			}
 		}
 	},
 

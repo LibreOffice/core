@@ -81,7 +81,7 @@ class NotebookbarBase extends JSDialogComponent {
 			);
 			if (consumed) return;
 		}
-		this.builder?._defaultCallbackHandler(
+		return this.builder?._defaultCallbackHandler(
 			objectType,
 			eventType,
 			object,

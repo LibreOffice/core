@@ -241,7 +241,7 @@ class FormulaBar {
 			map.userList.followUser(map._docLayer._getViewId(), false);
 		}
 
-		builder._defaultCallbackHandler(objectType, eventType, object, data, builder);
+		return builder._defaultCallbackHandler(objectType, eventType, object, data, builder);
 	}
 
 	focusField() {

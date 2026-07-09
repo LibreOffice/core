@@ -192,7 +192,7 @@ abstract class SidebarBase extends JSDialogComponent {
 		data: any,
 		builder: JSBuilder,
 	) {
-		builder._defaultCallbackHandler(
+		return builder._defaultCallbackHandler(
 			objectType,
 			eventType,
 			object,

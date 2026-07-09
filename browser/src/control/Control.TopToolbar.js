@@ -94,7 +94,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			return;
 		}
 
-		this.builder._defaultCallbackHandler(objectType, eventType, object, data, builder);
+		return this.builder._defaultCallbackHandler(objectType, eventType, object, data, builder);
 	}
 
 	onStyleSelect(e) {

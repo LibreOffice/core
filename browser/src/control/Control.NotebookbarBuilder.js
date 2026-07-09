@@ -24,20 +24,6 @@ window.L.Control.NotebookbarBuilder = window.L.Control.JSDialogBuilder.extend({
 	},
 
 	_overrideHandlers: function() {
-		var builder = this;
-		const comboboxesFocusingDocument = ['fontnamecombobox', 'fontsizecombobox', 'styles'];
-		const originalCallback = builder.callback;
-		this.callback = function(objectType, eventType, object, data, builderArg) {
-			if (eventType === 'selected'
-				&& comboboxesFocusingDocument.indexOf(object.id) >= 0) {
-				builder._defaultCallbackHandler(objectType, eventType, object, data, builderArg);
-				builder.map.focus();
-				return 'focusHandled';
-			}
-			// allow for customization
-			return originalCallback(objectType, eventType, object, data, builderArg);
-		};
-
 		this._controlHandlers['bigtoolitem'] = this._bigtoolitemHandler;
 		this._controlHandlers['combobox'] = this._comboboxControl;
 		this._controlHandlers['exportmenubutton'] = this._exportMenuButton;
