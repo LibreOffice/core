@@ -402,13 +402,11 @@ static unsigned int hash_compute( struct hash const * hash, const char* key, int
     }
 
     /*----------------------------- handle the last (probably partial) block */
-    /* Note: we possibly over-read, which would trigger complaint from VALGRIND
-     * but we mask the undefined stuff if any, so we are still good, thanks
-     * to alignment of memory allocation and tail-memory management overhead
-     * we always can read 3 bytes past the official end without triggering
-     * a segfault -- if you find a platform/compiler couple for which that postulate
-     * is false, then you just need to over-allocate by 2 more bytes in file_load()
-     * file_load already over-allocate by 1 to stick a \0 at the end of the buffer.
+    /* Note: we possibly over-read up to 3 bytes past the official end of the
+     * key. file_load over-allocates its buffer by 3 (one byte for the trailing
+     * NUL, two more so this tail read stays inside the allocation), and any
+     * bytes past the real length are masked off with the MASK_C constants, so
+     * the result is well defined and the read stays in bounds.
      */
     switch(length)
     {
@@ -641,7 +639,10 @@ static char* file_load(const char* name, off_t* size, int* return_rc)
         fd = open(name, FILE_O_RDONLY | FILE_O_BINARY);
         if (!(fd == -1))
         {
-            buffer = (char*)malloc((size_t)(*size + 1));
+            /* over-allocate: one byte for a terminating NUL, and two spare so a
+               four-byte word read that starts at the final byte stays inside
+               the allocation */
+            buffer = (char*)malloc((size_t)(*size + 3));
 #if !ENABLE_RUNTIME_OPTIMIZATIONS
             if (buffer != NULL)
             {
@@ -862,14 +863,14 @@ static void print_fullpaths(char* line)
     }
 }
 
-static char * eat_space_at_end(char * end)
+static char * eat_space_at_end(char * end, char const * base)
 {
     char * real_end;
     assert('\0' == *end);
     real_end = end - 1;
-    while (' ' == *real_end || '\t' == *real_end || '\n' == *real_end
-                || ':' == *real_end)
-    {    /* eat colon and whitespace at end */
+    while (real_end > base && (' ' == *real_end || '\t' == *real_end
+                || '\n' == *real_end || ':' == *real_end))
+    {    /* eat colon and whitespace at end, stopping at the start of the rule */
          --real_end;
     }
     return real_end;
@@ -1410,7 +1411,7 @@ static int process(struct hash* dep_hash, char* fn)
                              * these are the one for which we want to filter
                              * duplicate out
                              */
-                            int key_len = eat_space_at_end(cursor_out) - base;
+                            int key_len = eat_space_at_end(cursor_out, base) - base;
                             if (!elide_dependency(base,key_len + 1, NULL)
                                 && hash_store(dep_hash, base, key_len))
                             {
@@ -1455,9 +1456,14 @@ static int process(struct hash* dep_hash, char* fn)
         /* just in case the file did not end with a \n, there may be a pending rule */
         if(base < cursor_out)
         {
+            /* Terminate the pending rule the way the newline branch above does.
+               After path compaction cursor_out sits before the buffer's own
+               trailing NUL, so without this eat_space_at_end and puts would read
+               stale bytes past the end of the rule. */
+            *cursor_out = 0;
             if(last_ns == ':')
             {
-                int key_len = eat_space_at_end(cursor_out) - base;
+                int key_len = eat_space_at_end(cursor_out, base) - base;
                 if (!elide_dependency(base,key_len + 1, NULL) &&
                     hash_store(dep_hash, base, key_len))
                 {
@@ -1496,7 +1502,6 @@ static void usage(void)
 }
 
 #define kDEFAULT_HASH_SIZE 4096
-#define PHONY_TARGET_BUFFER 4096
 
 static int get_var(char **var, const char *name)
 {
@@ -1537,8 +1542,6 @@ int main(int argc, char** argv)
     src_dir_fwd_len = src_dir_fwd ? strlen(src_dir_fwd) : 0;
     work_dir_fwd = dup_forward_slashes(work_dir);
     work_dir_fwd_len = work_dir_fwd ? strlen(work_dir_fwd) : 0;
-    phony_content_buffer = (char*)malloc(PHONY_TARGET_BUFFER);
-    assert(phony_content_buffer); // Don't handle OOM conditions
 
     env_str = getenv("SYSTEM_BOOST");
     internal_boost = !env_str || strcmp(env_str,"TRUE");
@@ -1546,6 +1549,14 @@ int main(int argc, char** argv)
     in_list = file_load(argv[1], &in_list_size, &rc);
     if(!rc)
     {
+        /* generate_phony_line writes work_dir, a dep-file's own relative path
+           and a fixed suffix into this buffer. No single dep-file name can be
+           longer than the whole list that names them, so the list size plus the
+           work_dir prefix and room for the suffix is a safe upper bound for one
+           such line. */
+        phony_content_buffer = (char*)malloc(work_dir_len + (size_t)in_list_size + 64);
+        assert(phony_content_buffer); // Don't handle OOM conditions
+
         dep_hash = hash_create( kDEFAULT_HASH_SIZE);
         in_list_base = in_list_cursor = in_list;
 
