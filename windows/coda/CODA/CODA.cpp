@@ -1250,6 +1250,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             if (mimeType == "")
                 break;
             HANDLE hData = copyEngineClipboardData(windowData[hWnd].appDocId, format, mimeType);
+            if (!hData)
+                break;
             SetClipboardData(format, hData);
             break;
         }
