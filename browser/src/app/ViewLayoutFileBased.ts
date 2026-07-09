@@ -103,6 +103,32 @@ class ViewLayoutFileBased extends ViewLayoutNewBase {
 			Math.round(cumulativeY * app.twipsToPixels),
 			canvasSize[1],
 		);
+
+		// Comment-free stacked extent; comment overflow is applied on top via
+		// ensureViewSizeCoversComments.
+		this._baseViewSize = this._viewSize.clone();
+	}
+
+	protected override getBaseViewSize(): cool.SimplePoint {
+		return this._baseViewSize;
+	}
+
+	// Total horizontal empty space around the centered page column, used by the
+	// comment section to place comments in the side margin (same model as
+	// ViewLayoutMultiPage). Reads the comment-free base extent so the comment width
+	// decision does not feed back through viewSize.
+	public getTotalSideSpace(): number {
+		const maxX = this.viewRectangles.reduce(
+			(result, current) => Math.max(current.pX2, result),
+			0,
+		);
+		const minX = this.viewRectangles.reduce(
+			(result, current) => Math.min(current.pX1, result),
+			100000,
+		);
+		const width = maxX - minX;
+
+		return this._baseViewSize.pX - width;
 	}
 
 	public reset(): void {

@@ -290,11 +290,43 @@ class ViewLayoutNewBase extends ViewLayoutBase {
 			resultingRectangle.pX1 === Number.POSITIVE_INFINITY ||
 			resultingRectangle.pY1 === Number.POSITIVE_INFINITY
 		) {
-			app.layoutingService.appendLayoutingTask(() => {
-				if (snapAxis === 'x') this.scrollProperties.viewX = 0;
-				else this.scrollProperties.viewY = 0;
-				this.refreshVisibleAreaRectangle();
-			});
+			if (documentRectangles.length === 0) {
+				// No layout yet (transient, e.g. before a part switch finishes): snap
+				// the scroll back to the start of snapAxis and retry once the layout
+				// exists.
+				app.layoutingService.appendLayoutingTask(() => {
+					if (snapAxis === 'x') this.scrollProperties.viewX = 0;
+					else this.scrollProperties.viewY = 0;
+					this.refreshVisibleAreaRectangle();
+				});
+				return;
+			}
+
+			// Pages exist but none intersect the viewport: the view is scrolled into
+			// the region the comment overflow made scrollable beyond the last page.
+			// Do NOT snap the scroll back here - the snap axis need not match the
+			// overflowing axis (MultiPage snaps X while the comment overflow is
+			// vertical), so the retry never recovers and reschedules forever, which
+			// is what froze the tab. Clamp the viewed rectangle to the nearest page
+			// so its tiles stay valid and the scroll position is kept (the bottom
+			// comments there stay reachable); the comment section draws the comments.
+			let nearest = 0;
+			let bestDistance = Number.POSITIVE_INFINITY;
+			for (let i = 0; i < viewRectangles.length; i++) {
+				const vr = viewRectangles[i];
+				const dx = Math.max(vr.pX1 - view.pX2, view.pX1 - vr.pX2, 0);
+				const dy = Math.max(vr.pY1 - view.pY2, view.pY1 - vr.pY2, 0);
+				const distance = dx * dx + dy * dy;
+				if (distance < bestDistance) {
+					bestDistance = distance;
+					nearest = i;
+				}
+			}
+
+			this._viewedRectangle = documentRectangles[nearest].clone();
+
+			app.sectionContainer.onNewDocumentTopLeft();
+			app.sectionContainer.requestReDraw();
 		} else {
 			this._viewedRectangle = resultingRectangle;
 

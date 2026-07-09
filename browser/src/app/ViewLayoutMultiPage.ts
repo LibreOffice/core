@@ -124,6 +124,15 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 		}
 
 		this._viewSize.pY = Math.max(lastY, canvasSize[1]);
+
+		// Capture the comment-free page-layout extent. Comment overflow is applied
+		// on top via ensureViewSizeCoversComments; side-space math reads this base
+		// so it does not feed back into the comment width computation.
+		this._baseViewSize = this._viewSize.clone();
+	}
+
+	protected override getBaseViewSize(): cool.SimplePoint {
+		return this._baseViewSize;
 	}
 
 	// Get the page rectangle or its corresponding view rectangle which contains the given point (document point or view point).
@@ -377,7 +386,9 @@ class ViewLayoutMultiPage extends ViewLayoutNewBase {
 		}, 100000);
 		const width = maxX - minX;
 
-		const sideSpace = this.viewSize.pX - width;
+		// Base extent (no comment overflow) so the comment width decision stays
+		// stable across relayouts instead of feeding back through viewSize.
+		const sideSpace = this._baseViewSize.pX - width;
 
 		return sideSpace;
 	}

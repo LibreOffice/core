@@ -511,14 +511,18 @@ export class CommentSection extends CanvasSectionObject {
 	/// the document content instead of next to the page.
 	private static isMultiColumnLayout(): boolean {
 		const type = app.activeDocument.activeLayout.type;
-		return type === 'ViewLayoutMultiPage' || type === 'ViewLayoutCompareChanges';
+		return (
+			type === 'ViewLayoutMultiPage' ||
+			type === 'ViewLayoutCompareChanges' ||
+			type === 'ViewLayoutFileBased'
+		);
 	}
 
 	// Width of the empty space on one side of the document, in canvas pixels,
 	// the unit the comment column widths and the section coordinates use.
 	public calculateAvailableSpace() {
 		if (CommentSection.isMultiColumnLayout()) {
-			const layout = app.activeDocument.activeLayout as ViewLayoutMultiPage | ViewLayoutCompareChanges;
+			const layout = app.activeDocument.activeLayout as ViewLayoutMultiPage | ViewLayoutCompareChanges | ViewLayoutFileBased;
 			const availableSpace = layout.getTotalSideSpace();
 			return Math.round(availableSpace * 0.5);
 		}
@@ -2636,6 +2640,33 @@ export class CommentSection extends CanvasSectionObject {
 		}
 	}
 
+	// The absolute VIEW-space Y (twips) the lowest comment reaches, used to grow
+	// viewSize.y. `lastY` is the on-screen (scroll-relative) bottom of the comment
+	// stack; converting it to view space needs the on-screen->view offset, which
+	// is exactly what documentToViewY adds on top of a point's view-space Y:
+	//   - Single-window layouts fold the scroll (and centering) into the viewed
+	//     rectangle, and view space == document space, so viewedRectangle.pY1 is
+	//     that offset.
+	//   - The multi-column layouts (MultiPage/Compare/FileBased) keep the scroll in
+	//     scrollProperties.viewY and the canvas anchor in the documentToViewY
+	//     mapping (vY = viewY_of_point - scrollProperties.viewY + anchorThickness),
+	//     so the offset is scrollProperties.viewY minus the anchor thickness.
+	// Either way lastY already carries -offset (through the anchor vY used while the
+	// stack was laid out this same frame), so the offset cancels and the result is
+	// scroll-invariant - it does not run away as viewSize.y grows.
+	private commentStackBottomViewTwips(lastY: number): number {
+		const layout = app.activeDocument.activeLayout;
+
+		if (!CommentSection.isMultiColumnLayout())
+			return (lastY + layout.viewedRectangle.pY1) * app.pixelsToTwips;
+
+		const anchorThickness = app.sectionContainer.getDocumentAnchor()[1];
+		return (
+			(lastY + layout.scrollProperties.viewY - anchorThickness) *
+			app.pixelsToTwips
+		);
+	}
+
 	private layout (relayout: boolean = true): void {
 		if ((<any>window).mode.isSmallScreenDevice() || app.map._docLayer._docType === 'spreadsheet') {
 			if (this.sectionProperties.commentList.length > 0)
@@ -2659,7 +2690,13 @@ export class CommentSection extends CanvasSectionObject {
 			var x = isRTL ? 0 : topRight[0];
 
 			if (CommentSection.isMultiColumnLayout()) {
-				x = topRight[0] - availableSpace;
+				// Follow horizontal scroll like the pages do (documentToViewX also
+				// subtracts viewX), so scrolling right brings the comment column into
+				// view instead of leaving it pinned off-screen.
+				x =
+					topRight[0] -
+					availableSpace -
+					app.activeDocument.activeLayout.scrollProperties.viewX;
 			}
 			else if (isRTL)
 				x = availableSpace - this.sectionProperties.commentWidth;
@@ -2724,18 +2761,29 @@ export class CommentSection extends CanvasSectionObject {
 			}
 		}
 
-		let horizontalScroll = app.activeDocument.fileSize.x;
-		if (availableSpace < this.sectionProperties.commentWidth && !this.isCollapsed)
-			horizontalScroll += this.sectionProperties.commentWidth * app.pixelsToTwips;
+		// Grow the scrollable area to cover the comments. The layout owns viewSize
+		// (ensureViewSizeCoversComments): extra column width (twips) when a comment
+		// does not fit in the margin, and the absolute VIEW-space Y (twips) the
+		// lowest comment reaches (commentStackBottomViewTwips). Assigning viewSize
+		// directly here used to feed back into calculateAvailableSpace / page
+		// positioning and drift the layout. lastY is only computed when comments are
+		// laid out (the block above), so skip the growth otherwise - an undefined
+		// lastY would poison viewSize with NaN and blank the tiles.
+		const noComments = this.commentsHiddenOrNotPresent();
+		const extraWidth =
+			!noComments &&
+			availableSpace < this.sectionProperties.commentWidth &&
+			!this.isCollapsed
+				? this.sectionProperties.commentWidth * app.pixelsToTwips
+				: 0;
+		const commentBottomY = noComments
+			? 0
+			: this.commentStackBottomViewTwips(lastY);
 
-		const checkY = lastY + app.activeDocument.activeLayout.viewedRectangle.pY1;
-
-		if (checkY > app.activeDocument.fileSize.pY) {
-			app.activeDocument.activeLayout.viewSize = new cool.SimplePoint(horizontalScroll, checkY * app.pixelsToTwips);
-			this.containerObject.requestReDraw();
-		}
-		else
-			app.activeDocument.activeLayout.viewSize = new cool.SimplePoint(horizontalScroll, app.activeDocument.fileSize.y);
+		app.activeDocument.activeLayout.ensureViewSizeCoversComments(
+			extraWidth,
+			commentBottomY,
+		);
 
 		this.disableLayoutAnimation = false;
 	}

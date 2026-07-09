@@ -57,7 +57,12 @@ class ViewLayoutBase {
 
 	protected clientVisibleAreaCommand: string = ''; // Last visible area command. Checked to avoid sending the same command multiple times.
 	protected _viewedRectangle: cool.SimpleRectangle; // Currently viewed rectangle.
-	protected _viewSize: cool.SimplePoint; // Scrollable area.
+	protected _viewSize: cool.SimplePoint; // Scrollable area (document extent plus any comment overflow).
+	// Scrollable extent WITHOUT comment overflow - the layout's own document/page
+	// extent. Stacked-page layouts capture it when they recompute their layout;
+	// side-space and page-positioning read this stable value so a comment-inflated
+	// viewSize never feeds back into them. See ViewLayoutNewBase.getBaseViewSize.
+	protected _baseViewSize: cool.SimplePoint;
 	protected _documentAnchorPosition: number[]; // The position of document section on the canvas. Always canvas (core) pixels, no need for SimplePoint class.
 	public scrollProperties: ScrollProperties = new ScrollProperties();
 	protected currentCoordList: Array<TileCoordData> = [];
@@ -66,6 +71,7 @@ class ViewLayoutBase {
 		this._viewedRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
 		this.lastViewedRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
 		this._viewSize = new cool.SimplePoint(0, 0);
+		this._baseViewSize = new cool.SimplePoint(0, 0);
 		this._documentAnchorPosition = [0, 0];
 	}
 
@@ -201,6 +207,48 @@ class ViewLayoutBase {
 
 	public set viewSize(size: cool.SimplePoint) {
 		this._viewSize = size;
+	}
+
+	// The scrollable extent WITHOUT comment overflow. Single-window layouts
+	// (Writer/Impress/Draw edit) use the file size directly; stacked-page layouts
+	// override with the layout extent they captured. Used as the stable base by
+	// ensureViewSizeCoversComments and by side-space / page-positioning math, so a
+	// comment-inflated viewSize never feeds back into them.
+	protected getBaseViewSize(): cool.SimplePoint {
+		if (app.activeDocument) return app.activeDocument.fileSize;
+		else return new cool.SimplePoint(0, 0);
+	}
+
+	// Grow the scrollable area so the comments stay reachable, WITHOUT letting
+	// callers assign viewSize directly (that mutation fed back into
+	// calculateAvailableSpace and made the page drift). extraWidth (twips) is the
+	// extra column width when a comment does not fit (0 otherwise); bottomY (twips)
+	// is the absolute Y the lowest comment reaches. viewSize becomes a pure
+	// function of the base extent plus these.
+	public ensureViewSizeCoversComments(
+		extraWidth: number,
+		bottomY: number,
+	): void {
+		const base = this.getBaseViewSize();
+		if (!base) return;
+
+		// Tolerate missing/invalid inputs (e.g. no comment laid out yet) so a stray
+		// NaN never poisons viewSize and blanks the tiles.
+		const x = base.x + Math.max(0, extraWidth || 0);
+		const y = Math.max(base.y, bottomY || 0);
+
+		// Compare on the rounded values SimplePoint actually stores; otherwise a
+		// fractional x/y never equals the rounded stored value and this reassigns
+		// (churns a new object) every frame.
+		if (
+			this._viewSize.x === Math.round(x) &&
+			this._viewSize.y === Math.round(y)
+		)
+			return;
+
+		// Only the stored size changes here; the redraw comes with the request
+		// that follows, which keeps the comment layout to a single pass.
+		this._viewSize = new cool.SimplePoint(x, y);
 	}
 
 	// The visible frame the document is rendered into: the document anchor

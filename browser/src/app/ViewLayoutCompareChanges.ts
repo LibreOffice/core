@@ -151,14 +151,23 @@ class ViewLayoutCompareChanges extends ViewLayoutNewBase {
 			),
 		]);
 
+		// Comment-free extent. Comment overflow is applied on top via
+		// ensureViewSizeCoversComments; page positioning (getDeflectionX) reads this
+		// base so a comment-inflated viewSize does not shift the pages.
+		this._baseViewSize = this._viewSize.clone();
+
 		this.commitVisibleAreaAndRequestTiles();
+	}
+
+	protected override getBaseViewSize(): cool.SimplePoint {
+		return this._baseViewSize;
 	}
 
 	private getDeflectionX(mode: TileMode): number {
 		Util.ensureValue(app.activeDocument);
 
 		const canvasWidth = this.getDocumentAnchorSection().size[0];
-		const viewXCenter = Math.max(0, this._viewSize.pX - canvasWidth) * 0.5;
+		const viewXCenter = Math.max(0, this._baseViewSize.pX - canvasWidth) * 0.5;
 
 		if (mode === TileMode.LeftSide)
 			return (
