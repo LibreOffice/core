@@ -2287,7 +2287,11 @@ class UIManager extends window.L.Control {
 			'#jsd-context-menu-dropdown-overlay:not([style*="display: none"])',
 		);
 
-		return (jqContextMenu !== null) || (jsdContextMenu !== null);
+		return (
+			(jqContextMenu !== null) ||
+			(jsdContextMenu !== null) ||
+			this.map.jsdialog.hasDropdownOpened()
+		);
 	}
 
 	// TODO: remove and use JSDialog.generateModalId directly
