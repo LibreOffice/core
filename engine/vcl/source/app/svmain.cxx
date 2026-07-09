@@ -280,7 +280,11 @@ bool InitVCL()
     if( pExceptionHandler != nullptr )
         return false;
 
-    EmbeddedFontsManager::clearTemporaryFontFiles();
+    // Under the kit the fonts root is a fresh per-process temporary directory with nothing
+    // stale to clear; resolving it here, before the kit enters its sandbox, would freeze it
+    // to a path the sandboxed kit cannot write to. It is still cleared on shutdown.
+    if (!comphelper::COKit::isActive())
+        EmbeddedFontsManager::clearTemporaryFontFiles();
 
     if( !ImplGetSVData()->mpApp )
     {

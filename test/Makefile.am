@@ -467,7 +467,7 @@ LOG_DRIVER = ${top_builddir}/test/run_unit_standalone.sh
 CLEANFILES = test.log PerformanceMetricsSummary.csv $(srcdir)/data/docStructureTransformed.docx
 MAINTAINERCLEANFILES = Makefile.in
 
-EXTRA_DIST = data/delta-text.png data/delta-text2.png data/delta-graphic.png data/delta-graphic2.png data/hello.odt data/hello.txt $(test_SOURCES) $(unittest_SOURCES) run_unit.sh run_unit_standalone.sh
+EXTRA_DIST = data/delta-text.png data/delta-text2.png data/delta-graphic.png data/delta-graphic2.png data/hello.odt data/hello.txt data/embedded_font.odt $(test_SOURCES) $(unittest_SOURCES) run_unit.sh run_unit_standalone.sh
 
 build-tests: ${all_la_unit_tests}
 	@echo "All test libraries built."

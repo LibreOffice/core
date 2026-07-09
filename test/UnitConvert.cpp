@@ -143,6 +143,36 @@ public:
         return true;
     }
 
+    bool checkEmbeddedFontConvert(std::shared_ptr<http::Session>& session)
+    {
+        http::Request request("/cool/convert-to/pdf", http::Request::VERB_POST);
+        helpers::MultipartFormBody form;
+        form.addFile("data", Poco::Path(TDOC, "embedded_font.odt").toString());
+        form.applyTo(request);
+        _lastResponse = session->syncRequest(request);
+
+        if (!_lastResponse || _lastResponse->state() != http::Response::State::Complete
+            || _lastResponse->statusCode() != http::StatusCode::OK)
+        {
+            TST_LOG("checkEmbeddedFontConvert: bad status");
+            return false;
+        }
+
+        // embedded_font.odt embeds "Caprasimo", which is neither installed in the jail nor a
+        // common (substitutable) font, so its name appears in the output only if the kit
+        // actually extracted and used the embedded font. We look for that name as plain text
+        // in the PDF rather than parsing the file (the exporter writes /BaseFont uncompressed);
+        // this mirrors the substring checks the other cases in this test already do on their
+        // output.
+        if (_lastResponse->getBody().find("Caprasimo") == std::string::npos)
+        {
+            TST_LOG("checkEmbeddedFontConvert: embedded font 'Caprasimo' missing from output; "
+                    "it was substituted rather than extracted and used");
+            return false;
+        }
+        return true;
+    }
+
     void invokeWSDTest() override
     {
         if (_workerStarted)
@@ -205,6 +235,18 @@ public:
                 // Without the accompanying fix in place, this test would have failed with:
                 // checkConvertTo: no old content in output
                 if(!checkConvertTo(/*isTemplate=*/false, /*isCompare=*/true))
+                {
+                    exitTest(TestResult::Failed);
+                    return;
+                }
+
+                // Given a document that embeds a font not installed in the jail:
+                // When converting it to PDF in the sandboxed kit:
+                // Then the embedded font must be used, not substituted.
+                // Without the accompanying fix in place, this test would have failed here:
+                // the embedded fonts directory was resolved during the parent's preinit, so it
+                // pointed outside the kit's sandbox and the font could not be extracted there.
+                if (!checkEmbeddedFontConvert(session))
                 {
                     exitTest(TestResult::Failed);
                     return;
