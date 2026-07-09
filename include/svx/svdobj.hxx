@@ -254,6 +254,9 @@ private:
     friend class                SdrVirtObj;
     friend class                SdrRectObj;
 
+    // Returns a copy of the object. Every inherited class must reimplement this.
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const = 0;
+
     // OperationSmiley: Allow at each SdrObject to set a FillGeometryDefiningShape,
     // so that for SdrObjects where this is set, the definition of a defined FillStyle
     // will use this, but the local geometry will be filled. This allows to fill
@@ -452,8 +455,12 @@ public:
     // means no change of the rotation point (only centered) and no shear allowed
     virtual bool HasLimitedRotation() const;
 
-    // Returns a copy of the object. Every inherited class must reimplement this.
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const = 0;
+    // Returns a copy of the object. Internally uses the virtual and
+    // overridden method implCloneSdrObject that is implemented for each
+    // derivation. If cloned to another SdrModel it will support calling
+    // postProcessAfterCloneToDifferentModel
+    rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const;
+
     // helper, since Clone always return the type of the current subclass
     template<class T>
     static rtl::Reference<T> Clone(T const & rObj, SdrModel& rTargetModel)

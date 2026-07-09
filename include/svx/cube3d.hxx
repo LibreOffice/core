@@ -54,9 +54,10 @@ class SAL_WARN_UNUSED E3dCubeObj final : public E3dCompoundObject
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
-private:
     // protected destructor - due to final, make private
     virtual ~E3dCubeObj() override;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
     SVXCORE_DLLPUBLIC E3dCubeObj(SdrModel& rSdrModel,
@@ -68,8 +69,6 @@ public:
 
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     // Set local parameters with geometry recreation
     void SetCubePos(const basegfx::B3DPoint& rNew);

@@ -37,7 +37,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> E3dLatheProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> E3dLatheProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new E3dLatheProperties(*this, rObj));
         }

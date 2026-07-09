@@ -856,7 +856,7 @@ rtl::Reference<SdrObject> SdrGrafObj::getFullDragClone() const
     return pRetval;
 }
 
-rtl::Reference<SdrObject> SdrGrafObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrGrafObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrGrafObj(rTargetModel, *this);
 }

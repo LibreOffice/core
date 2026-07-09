@@ -223,7 +223,7 @@ rtl::Reference<SdrObject> E3dPolygonObj::DoConvertToPolyObj(bool /*bBezier*/,
     return nullptr;
 }
 
-rtl::Reference<SdrObject> E3dPolygonObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dPolygonObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dPolygonObj(rTargetModel, *this);
 }

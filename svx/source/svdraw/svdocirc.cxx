@@ -370,7 +370,7 @@ OUString SdrCircObj::TakeObjNamePlural() const
     return SvxResId(pID);
 }
 
-rtl::Reference<SdrObject> SdrCircObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrCircObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrCircObj(rTargetModel, *this);
 }

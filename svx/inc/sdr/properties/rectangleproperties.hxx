@@ -27,6 +27,9 @@ namespace sdr::properties
     {
         class RectangleProperties : public TextProperties
         {
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
         protected:
             // react on ItemSet changes
             virtual void ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich, bool bAdjustTextFrameWidthAndHeight = true) override;
@@ -40,9 +43,6 @@ namespace sdr::properties
 
             // destructor
             virtual ~RectangleProperties() override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,

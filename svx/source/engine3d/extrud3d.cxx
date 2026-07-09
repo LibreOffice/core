@@ -112,7 +112,7 @@ SdrObjKind E3dExtrudeObj::GetObjIdentifier() const
     return SdrObjKind::E3D_Extrusion;
 }
 
-rtl::Reference<SdrObject> E3dExtrudeObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dExtrudeObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dExtrudeObj(rTargetModel, *this);
 }

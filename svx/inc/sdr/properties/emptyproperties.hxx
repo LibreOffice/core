@@ -30,12 +30,12 @@ namespace sdr::properties
     {
         class EmptyProperties final : public BaseProperties
         {
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
         public:
             // basic constructor
             explicit EmptyProperties(SdrObject& rObj);
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             // create a new object specific itemset with object specific ranges.
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) override;

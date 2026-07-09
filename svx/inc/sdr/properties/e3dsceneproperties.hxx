@@ -27,6 +27,9 @@ namespace sdr::properties
     {
         class E3dSceneProperties final : public E3dProperties
         {
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
             // Called after ItemChange() is done for all items.
             virtual void PostItemChange(const sal_uInt16 nWhich) override;
 
@@ -39,9 +42,6 @@ namespace sdr::properties
 
             // destructor
             virtual ~E3dSceneProperties() override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             // get merged ItemSet. Normally, this maps directly to GetObjectItemSet(), but may
             // be overridden e.g for group objects to return a merged ItemSet of the object.

@@ -42,7 +42,6 @@ extern SVXCORE_DLLPUBLIC SdrCircKind ToSdrCircKind(SdrObjKind);
 
 class SVXCORE_DLLPUBLIC SdrCircObj final : public SdrRectObj
 {
-private:
     // to allow sdr::properties::CircleProperties access to ImpSetAttrToCircInfo()
     friend class sdr::properties::CircleProperties;
 
@@ -64,9 +63,10 @@ private:
 
     SAL_DLLPRIVATE virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-private:
     // protected destructor - due to final, make private
     SAL_DLLPRIVATE virtual ~SdrCircObj() override;
+
+    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
     SAL_DLLPRIVATE SdrCircObj(
@@ -98,8 +98,6 @@ public:
 
     SAL_DLLPRIVATE virtual OUString TakeObjNameSingul() const override;
     SAL_DLLPRIVATE virtual OUString TakeObjNamePlural() const override;
-
-    SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     SAL_DLLPRIVATE virtual void RecalcSnapRect() override;
     SAL_DLLPRIVATE virtual void NbcSetSnapRect(const tools::Rectangle& rRect) override;

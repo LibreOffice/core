@@ -89,7 +89,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> GraphicProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> GraphicProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new GraphicProperties(*this, rObj));
         }

@@ -27,6 +27,9 @@ namespace sdr::properties
     {
         class E3dProperties : public AttributeProperties
         {
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
         protected:
             // create a new itemset
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
@@ -43,9 +46,6 @@ namespace sdr::properties
 
             // destructor
             virtual ~E3dProperties() override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
         };
 
 } // end of namespace sdr::properties

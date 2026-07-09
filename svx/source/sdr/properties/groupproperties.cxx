@@ -38,7 +38,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> GroupProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> GroupProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new GroupProperties(rObj));
         }

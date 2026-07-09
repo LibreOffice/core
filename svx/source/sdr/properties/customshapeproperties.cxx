@@ -195,7 +195,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> CustomShapeProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> CustomShapeProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new CustomShapeProperties(*this, rObj));
         }

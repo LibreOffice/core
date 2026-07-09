@@ -33,7 +33,6 @@ class SwFrameFormat;
 // DrawObjects for Flys
 class SwFlyDrawObj final : public SdrObject
 {
-private:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     bool mbIsTextBox;
 
@@ -44,11 +43,11 @@ private:
     // protected destructor
     virtual ~SwFlyDrawObj() override;
 
+    // for instantiation of this class while loading (via factory
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
 public:
     SwFlyDrawObj(SdrModel& rSdrModel);
-
-    // for instantiation of this class while loading (via factory
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual SdrInventor GetObjInventor()     const override;
     virtual SdrObjKind GetObjIdentifier()   const override;

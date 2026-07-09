@@ -34,9 +34,10 @@ class SVXCORE_DLLPUBLIC SdrMediaObj final : public SdrRectObj
     friend class sdr::contact::ViewContactOfSdrMediaObj;
     friend class SdrMediaLink;
 
-private:
     // protected destructor - due to final, make private
     SAL_DLLPRIVATE virtual ~SdrMediaObj() override;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
         SAL_DLLPRIVATE SdrMediaObj(SdrModel& rSdrModel);
@@ -53,8 +54,6 @@ public:
 
         SAL_DLLPRIVATE virtual OUString            TakeObjNameSingul() const override;
         SAL_DLLPRIVATE virtual OUString            TakeObjNamePlural() const override;
-
-        virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
         virtual void                AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 

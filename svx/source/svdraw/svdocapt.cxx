@@ -232,7 +232,7 @@ SdrObjKind SdrCaptionObj::GetObjIdentifier() const
     return SdrObjKind::Caption;
 }
 
-rtl::Reference<SdrObject> SdrCaptionObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrCaptionObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrCaptionObj(rTargetModel, *this);
 }

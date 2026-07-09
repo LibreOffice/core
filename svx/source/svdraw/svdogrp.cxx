@@ -268,7 +268,7 @@ const tools::Rectangle& SdrObjGroup::GetSnapRect() const
     }
 }
 
-rtl::Reference<SdrObject> SdrObjGroup::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrObjGroup::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrObjGroup(rTargetModel, *this);
 }

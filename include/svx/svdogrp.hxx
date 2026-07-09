@@ -47,6 +47,8 @@ private:
     // the DiagramHelper if this SdrObjGroup host a Diagram
     std::shared_ptr< svx::diagram::DiagramHelper_svx > mp_DiagramHelper;
 
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
+
 public:
     SdrObjGroup(SdrModel& rSdrModel);
     // Copy constructor
@@ -73,8 +75,6 @@ public:
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetSnapRect() const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;

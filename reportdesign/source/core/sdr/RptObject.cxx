@@ -903,7 +903,7 @@ void OUnoObject::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShap
     releaseUnoShape();
 }
 
-rtl::Reference<SdrObject> OUnoObject::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> OUnoObject::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new OUnoObject(rTargetModel, *this);
 }
@@ -1116,7 +1116,7 @@ static uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider
 }
 
 // Clone() should make a complete copy of the object.
-rtl::Reference<SdrObject> OOle2Obj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> OOle2Obj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new OOle2Obj(rTargetModel, *this);
 }

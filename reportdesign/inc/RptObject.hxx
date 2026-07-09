@@ -182,7 +182,7 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
     // Clone() should make a complete copy of the object.
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
     virtual void initializeOle() override;
 
     void initializeChart( const css::uno::Reference< css::frame::XModel>& _xModel);
@@ -262,7 +262,7 @@ public:
     virtual css::uno::Reference< css::drawing::XShape > getUnoShape() override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrInventor GetObjInventor() const override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 private:
     virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& rxUnoShape ) override;

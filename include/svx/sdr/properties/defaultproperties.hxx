@@ -41,6 +41,9 @@ namespace sdr::properties
             // Make sure the pool outlives any use via moItemSet:
             rtl::Reference<SfxItemPool> m_itemPoolHolder;
 
+            // Clone() operator, normally just calls the local copy constructor
+            SAL_DLLPRIVATE virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
         protected:
             // the to be used ItemSet
             mutable std::optional<SfxItemSet> moItemSet;
@@ -80,9 +83,6 @@ namespace sdr::properties
             SAL_DLLPRIVATE virtual ~DefaultProperties() override;
 
             SAL_DLLPRIVATE void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            SAL_DLLPRIVATE virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             // get itemset
             SAL_DLLPRIVATE virtual const SfxItemSet& GetObjectItemSet() const override;

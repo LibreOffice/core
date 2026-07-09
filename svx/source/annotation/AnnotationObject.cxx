@@ -232,7 +232,7 @@ OUString AnnotationObject::TakeObjNameSingul() const
 
 OUString AnnotationObject::TakeObjNamePlural() const { return u"Annotations"_ustr; }
 
-rtl::Reference<SdrObject> AnnotationObject::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> AnnotationObject::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new AnnotationObject(rTargetModel, *this);
 }

@@ -2788,7 +2788,7 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(std::optional<OutlinerParaObjec
     InvalidateRenderGeometry();
 }
 
-rtl::Reference<SdrObject> SdrObjCustomShape::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrObjCustomShape::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrObjCustomShape(rTargetModel, *this);
 }

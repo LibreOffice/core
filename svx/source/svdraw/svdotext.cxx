@@ -1055,7 +1055,7 @@ OUString SdrTextObj::TakeObjNamePlural() const
     return sName;
 }
 
-rtl::Reference<SdrObject> SdrTextObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrTextObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrTextObj(rTargetModel, *this);
 }

@@ -117,7 +117,7 @@ SdrObjKind E3dLatheObj::GetObjIdentifier() const
     return SdrObjKind::E3D_Lathe;
 }
 
-rtl::Reference<SdrObject> E3dLatheObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> E3dLatheObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new E3dLatheObj(rTargetModel, *this);
 }

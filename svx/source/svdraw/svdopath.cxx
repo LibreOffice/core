@@ -1821,7 +1821,7 @@ SdrObjKind SdrPathObj::GetObjIdentifier() const
     return meKind;
 }
 
-rtl::Reference<SdrObject> SdrPathObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrPathObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrPathObj(rTargetModel, *this);
 }

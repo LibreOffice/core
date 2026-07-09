@@ -134,7 +134,6 @@ public:
 /// Utility class SdrEdgeObj
 class SVXCORE_DLLPUBLIC SdrEdgeObj final : public SdrTextObj
 {
-private:
     // to allow sdr::properties::ConnectorProperties access to ImpSetAttrToEdgeInfo()
     friend class sdr::properties::ConnectorProperties;
 
@@ -168,6 +167,8 @@ private:
     // #i123048# need to remember if layouting was suppressed before to get
     // to a correct state for first real layouting
     bool                        mbSuppressed : 1;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
     // Interface to default connect suppression
@@ -224,7 +225,6 @@ public:
 
     SAL_DLLPRIVATE virtual void RecalcSnapRect() override;
     SAL_DLLPRIVATE virtual void TakeUnrotatedSnapRect(tools::Rectangle& rRect) const override;
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
     SAL_DLLPRIVATE virtual OUString TakeObjNameSingul() const override;
     SAL_DLLPRIVATE virtual OUString TakeObjNamePlural() const override;
 

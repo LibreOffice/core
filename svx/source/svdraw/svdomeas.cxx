@@ -703,7 +703,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(tools::Rectangle& rRect) const
     }
 }
 
-rtl::Reference<SdrObject> SdrMeasureObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrMeasureObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrMeasureObj(rTargetModel, *this);
 }

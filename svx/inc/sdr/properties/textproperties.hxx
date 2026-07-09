@@ -28,9 +28,11 @@ namespace sdr::properties
     {
         class TextProperties : public AttributeProperties
         {
-        private:
             // #i101556# versioning support
             sal_uInt32                  maVersion;
+
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
 
         protected:
             // create a new itemset
@@ -54,9 +56,6 @@ namespace sdr::properties
 
             // destructor
             virtual ~TextProperties() override;
-
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
             // set a new StyleSheet and broadcast
             virtual void SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,

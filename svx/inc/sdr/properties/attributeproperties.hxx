@@ -29,6 +29,12 @@ namespace sdr::properties
     {
         class AttributeProperties : public DefaultProperties, public SfxListener, public svl::StyleSheetUser
         {
+            // Clone() operator, normally just calls the local copy constructor
+            virtual std::unique_ptr<BaseProperties> implCloneProperties(SdrObject& rObj) const override;
+
+            // Regulates Styles/Items between models
+            virtual void postProcessAfterCloneToDifferentModel(const SdrObject& rSrcObj) override;
+
             // core to set parent at SfxItemSet and to execute the hard attribute computations
             void ImpSetParentAtSfxItemSet(bool bDontRemoveHardAttr);
 
@@ -58,9 +64,6 @@ namespace sdr::properties
             AttributeProperties(const AttributeProperties& rProps, SdrObject& rObj);
 
         public:
-            // Clone() operator, normally just calls the local copy constructor
-            virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
-
             // Get the local ItemSet. This directly returns the local ItemSet of the object. No
             // merging of ItemSets is done for e.g. Group objects.
             virtual const SfxItemSet& GetObjectItemSet() const override final;

@@ -34,7 +34,6 @@ class E3dDefaultAttributes;
  */
 class E3dSphereObj final : public E3dCompoundObject
 {
-private:
     basegfx::B3DPoint               m_aCenter;
     basegfx::B3DVector              m_aSize;
 
@@ -42,9 +41,10 @@ private:
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
-private:
     // protected destructor - due to final, make private
     virtual ~E3dSphereObj() override;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
     SVXCORE_DLLPUBLIC E3dSphereObj(
@@ -69,8 +69,6 @@ public:
 
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     const basegfx::B3DPoint& Center() const { return m_aCenter; }
     const basegfx::B3DVector& Size() const { return m_aSize; }

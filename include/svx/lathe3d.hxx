@@ -47,9 +47,10 @@ class E3dLatheObj final : public E3dCompoundObject
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
     void SetDefaultAttributes(const E3dDefaultAttributes& rDefault);
 
-private:
     // protected destructor - due to final, make private
     virtual ~E3dLatheObj() override;
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 public:
     SVXCORE_DLLPUBLIC E3dLatheObj(
@@ -100,8 +101,6 @@ public:
         { return GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK).GetValue(); }
 
     virtual SdrObjKind GetObjIdentifier() const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 

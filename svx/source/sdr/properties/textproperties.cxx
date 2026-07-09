@@ -78,7 +78,7 @@ namespace sdr::properties
         {
         }
 
-        std::unique_ptr<BaseProperties> TextProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> TextProperties::implCloneProperties(SdrObject& rObj) const
         {
             return std::unique_ptr<BaseProperties>(new TextProperties(*this, rObj));
         }

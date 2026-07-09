@@ -274,7 +274,7 @@ OUString SdrUnoObj::TakeObjNamePlural() const
     return SvxResId(STR_ObjNamePluralUno);
 }
 
-rtl::Reference<SdrObject> SdrUnoObj::CloneSdrObject(SdrModel& rTargetModel) const
+rtl::Reference<SdrObject> SdrUnoObj::implCloneSdrObject(SdrModel& rTargetModel) const
 {
     return new SdrUnoObj(rTargetModel, *this);
 }

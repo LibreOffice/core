@@ -45,10 +45,8 @@ class SvxOle2Shape;
 
 class SVXCORE_DLLPUBLIC SdrOle2Obj : public SdrRectObj
 {
-private:
     std::unique_ptr<SdrOle2ObjImpl> mpImpl;
 
-private:
     SVX_DLLPRIVATE void Connect_Impl(SvxOle2Shape* pCreator = nullptr);
     SVX_DLLPRIVATE void Disconnect_Impl();
     SVX_DLLPRIVATE void AddListeners_Impl();
@@ -60,6 +58,8 @@ private:
     SVX_DLLPRIVATE void ImpSetVisAreaSize();
 
     SVX_DLLPRIVATE void Init();
+
+    virtual rtl::Reference<SdrObject> implCloneSdrObject(SdrModel& rTargetModel) const override;
 
 protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
@@ -139,8 +139,6 @@ public:
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual OUString TakeObjNameSingul() const override;
     virtual OUString TakeObjNamePlural() const override;
-
-    virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;
 
     virtual void NbcMove(const Size& rSize) override;
     virtual void NbcResize(const Point& rRef, double xFact, double yFact) override;
