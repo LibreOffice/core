@@ -101,7 +101,7 @@ namespace canvas
         }
 
         // XCanvas: selectively override base's methods here, for opacity tracking
-        virtual void SAL_CALL clear() override
+        virtual void clear() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -111,7 +111,7 @@ namespace canvas
             return BaseType::clear();
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
                         const css::rendering::ViewState&                                   viewState,
                         const css::rendering::RenderState&                                 renderState ) override
@@ -138,7 +138,7 @@ namespace canvas
         // functionality provided at the baseclass.
 
         // XSprite
-        virtual void SAL_CALL setAlpha( double alpha ) override
+        virtual void setAlpha( double alpha ) override
         {
             canvastools::verifyRange( alpha, 0.0, 1.0 );
 
@@ -147,7 +147,7 @@ namespace canvas
             maSpriteHelper.setAlpha( this, alpha );
         }
 
-        virtual void SAL_CALL move( const css::geometry::RealPoint2D&  aNewPos,
+        virtual void move( const css::geometry::RealPoint2D&  aNewPos,
                                     const css::rendering::ViewState&   viewState,
                                     const css::rendering::RenderState& renderState ) override
         {
@@ -160,7 +160,7 @@ namespace canvas
             maSpriteHelper.move( this, aNewPos, viewState, renderState );
         }
 
-        virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) override
+        virtual void transform( const css::geometry::AffineMatrix2D& aTransformation ) override
         {
             canvastools::verifyArgs(aTransformation,
                               __func__,
@@ -171,7 +171,7 @@ namespace canvas
             maSpriteHelper.transform( this, aTransformation );
         }
 
-        virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) override
+        virtual void clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) override
         {
             // NULL xClip explicitly allowed here (to clear clipping)
 
@@ -180,21 +180,21 @@ namespace canvas
             maSpriteHelper.clip( this, aClip );
         }
 
-        virtual void SAL_CALL setPriority( double nPriority ) override
+        virtual void setPriority( double nPriority ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.setPriority( this, nPriority );
         }
 
-        virtual void SAL_CALL show() override
+        virtual void show() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.show( this );
         }
 
-        virtual void SAL_CALL hide() override
+        virtual void hide() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -202,7 +202,7 @@ namespace canvas
         }
 
         // XCustomSprite
-        virtual css::uno::Reference< css::rendering::XCanvas > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCanvas >
             getContentCanvas() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );

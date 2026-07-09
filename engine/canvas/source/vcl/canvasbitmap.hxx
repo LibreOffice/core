@@ -78,9 +78,9 @@ namespace vclcanvas
                       const OutDevProviderSharedPtr&               rOutDevProvider );
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // RepaintTarget interface
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
@@ -103,8 +103,8 @@ namespace vclcanvas
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle (sal_Int64)
         //     3rd the pixmap depth
-        virtual cpo::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const cpo::uno::Any&) override {}
+        virtual cpo::uno::Any getFastPropertyValue(sal_Int32 nHandle) override;
+        virtual void setFastPropertyValue(sal_Int32, const cpo::uno::Any&) override {}
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a

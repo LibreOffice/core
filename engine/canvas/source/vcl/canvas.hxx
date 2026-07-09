@@ -96,11 +96,11 @@ namespace vclcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas,   GraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) override;
+        virtual OUString getServiceName(  ) override;
 
-        OUString SAL_CALL getImplementationName() override;
-        bool SAL_CALL supportsService(OUString const & ServiceName) override;
-        cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+        OUString getImplementationName() override;
+        bool supportsService(OUString const & ServiceName) override;
+        cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,

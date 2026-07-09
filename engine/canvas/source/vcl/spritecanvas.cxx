@@ -121,17 +121,17 @@ namespace vclcanvas
         SpriteCanvasBaseT::disposeThis();
     }
 
-    bool SAL_CALL SpriteCanvas::showBuffer( bool bUpdateAll )
+    bool SpriteCanvas::showBuffer( bool bUpdateAll )
     {
         return updateScreen( bUpdateAll );
     }
 
-    bool SAL_CALL SpriteCanvas::switchBuffer( bool bUpdateAll )
+    bool SpriteCanvas::switchBuffer( bool bUpdateAll )
     {
         return updateScreen( bUpdateAll );
     }
 
-    bool SAL_CALL SpriteCanvas::updateScreen( bool bUpdateAll )
+    bool SpriteCanvas::updateScreen( bool bUpdateAll )
     {
         SolarMutexGuard aGuard;
 
@@ -142,7 +142,7 @@ namespace vclcanvas
                                                                   mbSurfaceDirty);
     }
 
-    OUString SAL_CALL SpriteCanvas::getServiceName(  )
+    OUString SpriteCanvas::getServiceName(  )
     {
         return u"com.sun.star.rendering.SpriteCanvas.VCL"_ustr;
     }

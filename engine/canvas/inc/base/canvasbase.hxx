@@ -131,7 +131,7 @@ namespace canvas
         }
 
         // XCanvas
-        virtual void SAL_CALL clear() override
+        virtual void clear() override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -140,7 +140,7 @@ namespace canvas
             maCanvasHelper.clear();
         }
 
-        virtual void SAL_CALL drawPoint(const css::geometry::RealPoint2D&     aPoint,
+        virtual void drawPoint(const css::geometry::RealPoint2D&     aPoint,
                                         const css::rendering::ViewState&      viewState,
                                         const css::rendering::RenderState&    renderState) override
         {
@@ -153,7 +153,7 @@ namespace canvas
             mbSurfaceDirty = true;
         }
 
-        virtual void SAL_CALL drawLine(const css::geometry::RealPoint2D&  aStartPoint,
+        virtual void drawLine(const css::geometry::RealPoint2D&  aStartPoint,
                                        const css::geometry::RealPoint2D&  aEndPoint,
                                        const css::rendering::ViewState&   viewState,
                                        const css::rendering::RenderState& renderState) override
@@ -169,7 +169,7 @@ namespace canvas
             maCanvasHelper.drawLine( this, aStartPoint, aEndPoint, viewState, renderState );
         }
 
-        virtual void SAL_CALL drawBezier( const css::geometry::RealBezierSegment2D&    aBezierSegment,
+        virtual void drawBezier( const css::geometry::RealBezierSegment2D&    aBezierSegment,
                                           const css::geometry::RealPoint2D&            aEndPoint,
                                           const css::rendering::ViewState&             viewState,
                                           const css::rendering::RenderState&           renderState ) override
@@ -185,7 +185,7 @@ namespace canvas
             maCanvasHelper.drawBezier( this, aBezierSegment, aEndPoint, viewState, renderState );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             drawPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
                             const css::rendering::ViewState&                             viewState,
                             const css::rendering::RenderState&                           renderState) override
@@ -201,7 +201,7 @@ namespace canvas
             return maCanvasHelper.drawPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             strokePolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
                               const css::rendering::ViewState&                               viewState,
                               const css::rendering::RenderState&                             renderState,
@@ -218,7 +218,7 @@ namespace canvas
             return maCanvasHelper.strokePolyPolygon( this, xPolyPolygon, viewState, renderState, strokeAttributes );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             strokeTexturedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&   xPolyPolygon,
                                        const css::rendering::ViewState&                               viewState,
                                        const css::rendering::RenderState&                             renderState,
@@ -236,7 +236,7 @@ namespace canvas
             return maCanvasHelper.strokeTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, strokeAttributes );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             strokeTextureMappedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&  xPolyPolygon,
                                             const css::rendering::ViewState&                              viewState,
                                             const css::rendering::RenderState&                            renderState,
@@ -255,7 +255,7 @@ namespace canvas
             return maCanvasHelper.strokeTextureMappedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes );
         }
 
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D >   SAL_CALL
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D >
             queryStrokeShapes( const css::uno::Reference< css::rendering::XPolyPolygon2D >&                xPolyPolygon,
                                const css::rendering::ViewState&                                            viewState,
                                const css::rendering::RenderState&                                          renderState,
@@ -272,7 +272,7 @@ namespace canvas
             return maCanvasHelper.queryStrokeShapes( this, xPolyPolygon, viewState, renderState, strokeAttributes );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             fillPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >&               xPolyPolygon,
                              const css::rendering::ViewState&                                          viewState,
                              const css::rendering::RenderState&                                        renderState) override
@@ -288,7 +288,7 @@ namespace canvas
             return maCanvasHelper.fillPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             fillTexturedPolyPolygon(const css::uno::Reference< css::rendering::XPolyPolygon2D >& xPolyPolygon,
                                     const css::rendering::ViewState&                             viewState,
                                     const css::rendering::RenderState&                           renderState,
@@ -305,7 +305,7 @@ namespace canvas
             return maCanvasHelper.fillTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             fillTextureMappedPolyPolygon( const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
                                           const css::rendering::ViewState&                                viewState,
                                           const css::rendering::RenderState&                              renderState,
@@ -324,7 +324,7 @@ namespace canvas
         }
 
 
-        virtual css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCanvasFont >
             createFont( const css::rendering::FontRequest&                                     fontRequest,
                         const cpo::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
                         const css::geometry::Matrix2D&                                         fontMatrix ) override
@@ -342,7 +342,7 @@ namespace canvas
         }
 
 
-        virtual cpo::uno::Sequence< css::rendering::FontInfo > SAL_CALL
+        virtual cpo::uno::Sequence< css::rendering::FontInfo >
             queryAvailableFonts( const css::rendering::FontInfo&                          aFilter,
                                  const cpo::uno::Sequence< css::beans::PropertyValue >&   aFontProperties ) override
         {
@@ -356,7 +356,7 @@ namespace canvas
         }
 
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             drawText(const css::rendering::StringContext&                                     text,
                      const css::uno::Reference< css::rendering::XCanvasFont >&                xFont,
                      const css::rendering::ViewState&                                         viewState,
@@ -378,7 +378,7 @@ namespace canvas
         }
 
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             drawTextLayout(const css::uno::Reference< css::rendering::XTextLayout >&               laidOutText,
                             const css::rendering::ViewState&                                       viewState,
                             const css::rendering::RenderState&                                     renderState) override
@@ -395,7 +395,7 @@ namespace canvas
         }
 
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
                         const css::rendering::ViewState&                                   viewState,
                         const css::rendering::RenderState&                                 renderState ) override
@@ -411,7 +411,7 @@ namespace canvas
             return maCanvasHelper.drawBitmap( this, xBitmap, viewState, renderState );
         }
 
-        virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
+        virtual css::uno::Reference< css::rendering::XCachedPrimitive >
             drawBitmapModulated( const css::uno::Reference< css::rendering::XBitmap >&                 xBitmap,
                                  const css::rendering::ViewState&                                      viewState,
                                  const css::rendering::RenderState&                                    renderState ) override
@@ -427,7 +427,7 @@ namespace canvas
             return maCanvasHelper.drawBitmapModulated( this, xBitmap, viewState, renderState );
         }
 
-        virtual css::uno::Reference< css::rendering::XGraphicDevice >   SAL_CALL
+        virtual css::uno::Reference< css::rendering::XGraphicDevice >
             getDevice() override
         {
             MutexType aGuard( BaseType::m_aMutex );

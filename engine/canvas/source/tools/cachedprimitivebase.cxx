@@ -49,7 +49,7 @@ namespace canvas
         mxTarget.clear();
     }
 
-    sal_Int8 SAL_CALL CachedPrimitiveBase::redraw( const rendering::ViewState& aState )
+    sal_Int8 CachedPrimitiveBase::redraw( const rendering::ViewState& aState )
     {
         ::basegfx::B2DHomMatrix aUsedTransformation;
         ::basegfx::B2DHomMatrix aNewTransformation;
@@ -74,17 +74,17 @@ namespace canvas
                          bSameViewTransforms );
     }
 
-    OUString SAL_CALL CachedPrimitiveBase::getImplementationName(  )
+    OUString CachedPrimitiveBase::getImplementationName(  )
     {
         return u"canvas::CachedPrimitiveBase"_ustr;
     }
 
-    bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName )
+    bool CachedPrimitiveBase::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL CachedPrimitiveBase::getSupportedServiceNames(  )
+    cpo::uno::Sequence< OUString > CachedPrimitiveBase::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.rendering.CachedBitmap"_ustr };
     }

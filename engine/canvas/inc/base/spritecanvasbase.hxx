@@ -92,7 +92,7 @@ namespace canvas
         }
 
         // XSpriteCanvas
-        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
+        virtual css::uno::Reference< css::rendering::XAnimatedSprite > createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
         {
             canvastools::verifyArgs(animation,
                               __func__,
@@ -103,7 +103,7 @@ namespace canvas
             return BaseType::maCanvasHelper.createSpriteFromAnimation(animation);
         }
 
-        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const cpo::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
+        virtual css::uno::Reference< css::rendering::XAnimatedSprite > createSpriteFromBitmaps( const cpo::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
                                                                                                                                    sal_Int8                                                                                                           interpolationMode ) override
         {
             canvastools::verifyArgs(animationBitmaps,
@@ -118,7 +118,7 @@ namespace canvas
             return BaseType::maCanvasHelper.createSpriteFromBitmaps(animationBitmaps, interpolationMode);
         }
 
-        virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
+        virtual css::uno::Reference< css::rendering::XCustomSprite > createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
             canvastools::verifySpriteSize(spriteSize,
                                     __func__,
@@ -129,7 +129,7 @@ namespace canvas
             return BaseType::maCanvasHelper.createCustomSprite(spriteSize);
         }
 
-        virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) override
+        virtual css::uno::Reference< css::rendering::XSprite > createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) override
         {
             canvastools::verifyArgs(original,
                               __func__,

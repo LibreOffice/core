@@ -67,17 +67,17 @@ namespace vclcanvas
     }
 
 
-    OUString SAL_CALL CanvasBitmap::getImplementationName(  )
+    OUString CanvasBitmap::getImplementationName(  )
     {
         return u"VCLCanvas.CanvasBitmap"_ustr;
     }
 
-    bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )
+    bool CanvasBitmap::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  )
+    cpo::uno::Sequence< OUString > CanvasBitmap::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.rendering.CanvasBitmap"_ustr };
     }
@@ -105,7 +105,7 @@ namespace vclcanvas
         return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
 
-    cpo::uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
+    cpo::uno::Any CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {
         if( nHandle == 0 ) {
             Bitmap* pBitmap = new Bitmap( getBitmap() );

@@ -59,12 +59,12 @@ namespace canvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XCachedPrimitive
-        virtual ::sal_Int8 SAL_CALL redraw( const css::rendering::ViewState& aState ) override;
+        virtual ::sal_Int8 redraw( const css::rendering::ViewState& aState ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     protected:
         virtual ~CachedPrimitiveBase() override; // we're a ref-counted UNO class. _We_ destroy ourselves.

@@ -53,30 +53,30 @@ namespace vclcanvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XTextLayout
-        virtual cpo::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > SAL_CALL queryTextShapes(  ) override;
-        virtual cpo::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryInkMeasures(  ) override;
-        virtual cpo::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryMeasures(  ) override;
-        virtual cpo::uno::Sequence< double > SAL_CALL queryLogicalAdvancements(  ) override;
-        virtual void SAL_CALL applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements ) override;
-        virtual cpo::uno::Sequence< bool > SAL_CALL queryKashidaPositions(  ) override;
-        virtual void SAL_CALL applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions ) override;
-        virtual css::geometry::RealRectangle2D SAL_CALL queryTextBounds(  ) override;
-        virtual double SAL_CALL justify( double nSize ) override;
-        virtual double SAL_CALL combinedJustify( const cpo::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
-        virtual css::rendering::TextHit SAL_CALL getTextHit( const css::geometry::RealPoint2D& aHitPoint ) override;
-        virtual css::rendering::Caret SAL_CALL getCaret( sal_Int32 nInsertionIndex, bool bExcludeLigatures ) override;
-        virtual sal_Int32 SAL_CALL getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, bool bExcludeLigatures ) override;
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
-        virtual double SAL_CALL getBaselineOffset(  ) override;
-        virtual sal_Int8 SAL_CALL getMainTextDirection(  ) override;
-        virtual css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL getFont(  ) override;
-        virtual css::rendering::StringContext SAL_CALL getText(  ) override;
+        virtual cpo::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > queryTextShapes(  ) override;
+        virtual cpo::uno::Sequence< css::geometry::RealRectangle2D > queryInkMeasures(  ) override;
+        virtual cpo::uno::Sequence< css::geometry::RealRectangle2D > queryMeasures(  ) override;
+        virtual cpo::uno::Sequence< double > queryLogicalAdvancements(  ) override;
+        virtual void applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements ) override;
+        virtual cpo::uno::Sequence< bool > queryKashidaPositions(  ) override;
+        virtual void applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions ) override;
+        virtual css::geometry::RealRectangle2D queryTextBounds(  ) override;
+        virtual double justify( double nSize ) override;
+        virtual double combinedJustify( const cpo::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
+        virtual css::rendering::TextHit getTextHit( const css::geometry::RealPoint2D& aHitPoint ) override;
+        virtual css::rendering::Caret getCaret( sal_Int32 nInsertionIndex, bool bExcludeLigatures ) override;
+        virtual sal_Int32 getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, bool bExcludeLigatures ) override;
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual double getBaselineOffset(  ) override;
+        virtual sal_Int8 getMainTextDirection(  ) override;
+        virtual css::uno::Reference< css::rendering::XCanvasFont > getFont(  ) override;
+        virtual css::rendering::StringContext getText(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         void draw( OutputDevice&                                   rOutDev,
                    const Point&                                    rOutpos,

@@ -89,31 +89,31 @@ namespace canvas
         }
 
         // XGraphicDevice
-        virtual css::uno::Reference< css::rendering::XBufferController > SAL_CALL getBufferController(  ) override
+        virtual css::uno::Reference< css::rendering::XBufferController > getBufferController(  ) override
         {
             return this;
         }
 
         // XBufferController
-        virtual ::sal_Int32 SAL_CALL createBuffers( ::sal_Int32 nBuffers ) override
+        virtual ::sal_Int32 createBuffers( ::sal_Int32 nBuffers ) override
         {
             canvastools::verifyRange( nBuffers, sal_Int32(1) );
 
             return 1;
         }
 
-        virtual void SAL_CALL destroyBuffers(  ) override
+        virtual void destroyBuffers(  ) override
         {
         }
 
-        virtual bool SAL_CALL showBuffer( bool bUpdateAll ) override
+        virtual bool showBuffer( bool bUpdateAll ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maDeviceHelper.showBuffer( mbIsVisible, bUpdateAll );
         }
 
-        virtual bool SAL_CALL switchBuffer( bool bUpdateAll ) override
+        virtual bool switchBuffer( bool bUpdateAll ) override
         {
             MutexType aGuard( BaseType::m_aMutex );
 
@@ -214,24 +214,24 @@ namespace canvas
             BaseType::disposeEventSource(Source);
         }
 
-        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override
+        virtual void windowResized( const css::awt::WindowEvent& e ) override
         {
             boundsChanged( e );
         }
 
-        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) override
+        virtual void windowMoved( const css::awt::WindowEvent& e ) override
         {
             boundsChanged( e );
         }
 
-        virtual void SAL_CALL windowShown( const css::lang::EventObject& ) override
+        virtual void windowShown( const css::lang::EventObject& ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             mbIsVisible = true;
         }
 
-        virtual void SAL_CALL windowHidden( const css::lang::EventObject& ) override
+        virtual void windowHidden( const css::lang::EventObject& ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

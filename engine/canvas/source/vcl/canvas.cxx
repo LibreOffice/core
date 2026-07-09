@@ -92,7 +92,7 @@ namespace vclcanvas
         CanvasBaseT::disposeThis();
     }
 
-    OUString SAL_CALL Canvas::getServiceName(  )
+    OUString Canvas::getServiceName(  )
     {
         return u"com.sun.star.rendering.Canvas.VCL"_ustr;
     }

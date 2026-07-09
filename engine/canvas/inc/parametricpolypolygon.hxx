@@ -94,15 +94,15 @@ namespace canvas
         virtual void disposing(std::unique_lock<std::mutex>&) override;
 
         // XParametricPolyPolygon2D
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL getOutline( double t ) override;
-        virtual cpo::uno::Sequence< double > SAL_CALL getColor( double t ) override;
-        virtual cpo::uno::Sequence< double > SAL_CALL getPointColor( const css::geometry::RealPoint2D& point ) override;
-        virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace() override;
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > getOutline( double t ) override;
+        virtual cpo::uno::Sequence< double > getColor( double t ) override;
+        virtual cpo::uno::Sequence< double > getPointColor( const css::geometry::RealPoint2D& point ) override;
+        virtual css::uno::Reference< css::rendering::XColorSpace > getColorSpace() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
+        virtual OUString getImplementationName(  ) override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         /// Query all defining values of this object atomically
         const Values & getValues() const;

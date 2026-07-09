@@ -69,19 +69,19 @@ namespace canvas
         typedef CanvasBase< Base, CanvasHelper, Mutex, UnambiguousBase >    BaseType;
 
         // XBitmap
-        virtual css::geometry::IntegerSize2D SAL_CALL getSize(  ) override
+        virtual css::geometry::IntegerSize2D getSize(  ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return BaseType::maCanvasHelper.getSize();
         }
 
-        virtual bool SAL_CALL hasAlpha(  ) override
+        virtual bool hasAlpha(  ) override
         {
             return true;
         }
 
-        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize,
+        virtual css::uno::Reference< css::rendering::XBitmap > getScaledBitmap( const css::geometry::RealSize2D& newSize,
                                                                                                                    bool                                      beFast ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
@@ -102,7 +102,7 @@ namespace canvas
 
     public:
         // XBitmapCanvas
-        virtual void SAL_CALL copyRect( const css::uno::Reference< css::rendering::XBitmapCanvas >&   sourceCanvas,
+        virtual void copyRect( const css::uno::Reference< css::rendering::XBitmapCanvas >&   sourceCanvas,
                                         const css::geometry::RealRectangle2D&                                      sourceRect,
                                         const css::rendering::ViewState&                                           sourceViewState,
                                         const css::rendering::RenderState&                                         sourceRenderState,

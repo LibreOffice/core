@@ -86,25 +86,25 @@ public:
     explicit CanvasFactory( Reference<XComponentContext> const & xContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual bool SAL_CALL supportsService( OUString const & serviceName ) override;
-    virtual Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual OUString getImplementationName() override;
+    virtual bool supportsService( OUString const & serviceName ) override;
+    virtual Sequence<OUString> getSupportedServiceNames() override;
 
     // XMultiComponentFactory
-    virtual Sequence<OUString> SAL_CALL getAvailableServiceNames() override;
-    virtual Reference<XInterface> SAL_CALL createInstanceWithContext(
+    virtual Sequence<OUString> getAvailableServiceNames() override;
+    virtual Reference<XInterface> createInstanceWithContext(
         OUString const & name,
         Reference<XComponentContext> const & xContext ) override;
-    virtual Reference<XInterface> SAL_CALL
+    virtual Reference<XInterface>
     createInstanceWithArgumentsAndContext(
         OUString const & name,
         Sequence<Any> const & args,
         Reference<XComponentContext> const & xContext ) override;
 
     // XMultiServiceFactory
-    virtual Reference<XInterface> SAL_CALL createInstance(
+    virtual Reference<XInterface> createInstance(
         OUString const & name ) override;
-    virtual Reference<XInterface> SAL_CALL createInstanceWithArguments(
+    virtual Reference<XInterface> createInstanceWithArguments(
         OUString const & name, Sequence<Any> const & args ) override;
 };
 

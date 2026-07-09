@@ -153,25 +153,25 @@ namespace canvas
         mxDevice.clear();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL ParametricPolyPolygon::getOutline( double /*t*/ )
+    uno::Reference< rendering::XPolyPolygon2D > ParametricPolyPolygon::getOutline( double /*t*/ )
     {
         // TODO(F1): outline NYI
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    cpo::uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getColor( double /*t*/ )
+    cpo::uno::Sequence< double > ParametricPolyPolygon::getColor( double /*t*/ )
     {
         // TODO(F1): color NYI
         return cpo::uno::Sequence< double >();
     }
 
-    cpo::uno::Sequence< double > SAL_CALL ParametricPolyPolygon::getPointColor( const geometry::RealPoint2D& /*point*/ )
+    cpo::uno::Sequence< double > ParametricPolyPolygon::getPointColor( const geometry::RealPoint2D& /*point*/ )
     {
         // TODO(F1): point color NYI
         return cpo::uno::Sequence< double >();
     }
 
-    uno::Reference< rendering::XColorSpace > SAL_CALL ParametricPolyPolygon::getColorSpace()
+    uno::Reference< rendering::XColorSpace > ParametricPolyPolygon::getColorSpace()
     {
         std::unique_lock aGuard( m_aMutex );
 
@@ -179,17 +179,17 @@ namespace canvas
     }
 
 
-    OUString SAL_CALL ParametricPolyPolygon::getImplementationName(  )
+    OUString ParametricPolyPolygon::getImplementationName(  )
     {
         return u"Canvas::ParametricPolyPolygon"_ustr;
     }
 
-    bool SAL_CALL ParametricPolyPolygon::supportsService( const OUString& ServiceName )
+    bool ParametricPolyPolygon::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL ParametricPolyPolygon::getSupportedServiceNames(  )
+    cpo::uno::Sequence< OUString > ParametricPolyPolygon::getSupportedServiceNames(  )
     {
         return { u"com.sun.star.rendering.ParametricPolyPolygon"_ustr };
     }

@@ -100,7 +100,7 @@ namespace vclcanvas
     }
 
     // XTextLayout
-    cpo::uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  )
+    cpo::uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > TextLayout::queryTextShapes(  )
     {
         SolarMutexGuard aGuard;
 
@@ -148,7 +148,7 @@ namespace vclcanvas
         return comphelper::containerToSequence(aOutlineSequence);
     }
 
-    cpo::uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryInkMeasures(  )
+    cpo::uno::Sequence< geometry::RealRectangle2D > TextLayout::queryInkMeasures(  )
     {
         SolarMutexGuard aGuard;
 
@@ -193,20 +193,20 @@ namespace vclcanvas
         return aBoundingBoxes;
     }
 
-    cpo::uno::Sequence< geometry::RealRectangle2D > SAL_CALL TextLayout::queryMeasures(  )
+    cpo::uno::Sequence< geometry::RealRectangle2D > TextLayout::queryMeasures(  )
     {
         // TODO(F1)
         return cpo::uno::Sequence< geometry::RealRectangle2D >();
     }
 
-    cpo::uno::Sequence< double > SAL_CALL TextLayout::queryLogicalAdvancements(  )
+    cpo::uno::Sequence< double > TextLayout::queryLogicalAdvancements(  )
     {
         SolarMutexGuard aGuard;
 
         return maLogicalAdvancements;
     }
 
-    void SAL_CALL TextLayout::applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements )
+    void TextLayout::applyLogicalAdvancements( const cpo::uno::Sequence< double >& aAdvancements )
     {
         SolarMutexGuard aGuard;
 
@@ -216,14 +216,14 @@ namespace vclcanvas
         maLogicalAdvancements = aAdvancements;
     }
 
-    cpo::uno::Sequence< bool > SAL_CALL TextLayout::queryKashidaPositions(  )
+    cpo::uno::Sequence< bool > TextLayout::queryKashidaPositions(  )
     {
         SolarMutexGuard aGuard;
 
         return maKashidaPositions;
     }
 
-    void SAL_CALL TextLayout::applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions )
+    void TextLayout::applyKashidaPositions( const cpo::uno::Sequence< bool >& aPositions )
     {
         SolarMutexGuard aGuard;
 
@@ -233,7 +233,7 @@ namespace vclcanvas
         maKashidaPositions = aPositions;
     }
 
-    geometry::RealRectangle2D SAL_CALL TextLayout::queryTextBounds(  )
+    geometry::RealRectangle2D TextLayout::queryTextBounds(  )
     {
         SolarMutexGuard aGuard;
 
@@ -271,68 +271,68 @@ namespace vclcanvas
         }
     }
 
-    double SAL_CALL TextLayout::justify( double )
+    double TextLayout::justify( double )
     {
         // TODO(F1)
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const cpo::uno::Sequence< uno::Reference< rendering::XTextLayout > >&,
+    double TextLayout::combinedJustify( const cpo::uno::Sequence< uno::Reference< rendering::XTextLayout > >&,
                                                  double )
     {
         // TODO(F1)
         return 0.0;
     }
 
-    rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& )
+    rendering::TextHit TextLayout::getTextHit( const geometry::RealPoint2D& )
     {
         // TODO(F1)
         return rendering::TextHit();
     }
 
-    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32, bool )
+    rendering::Caret TextLayout::getCaret( sal_Int32, bool )
     {
         // TODO(F1)
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32, sal_Int32, bool )
+    sal_Int32 TextLayout::getNextInsertionIndex( sal_Int32, sal_Int32, bool )
     {
         // TODO(F1)
         return 0;
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32, sal_Int32 )
+    uno::Reference< rendering::XPolyPolygon2D > TextLayout::queryVisualHighlighting( sal_Int32, sal_Int32 )
     {
         // TODO(F1)
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32, sal_Int32 )
+    uno::Reference< rendering::XPolyPolygon2D > TextLayout::queryLogicalHighlighting( sal_Int32, sal_Int32 )
     {
         // TODO(F1)
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    double SAL_CALL TextLayout::getBaselineOffset(  )
+    double TextLayout::getBaselineOffset(  )
     {
         // TODO(F1)
         return 0.0;
     }
 
-    sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  )
+    sal_Int8 TextLayout::getMainTextDirection(  )
     {
         return mnTextDirection;
     }
 
-    uno::Reference< rendering::XCanvasFont > SAL_CALL TextLayout::getFont(  )
+    uno::Reference< rendering::XCanvasFont > TextLayout::getFont(  )
     {
         SolarMutexGuard aGuard;
 
         return mpFont;
     }
 
-    rendering::StringContext SAL_CALL TextLayout::getText(  )
+    rendering::StringContext TextLayout::getText(  )
     {
         return maText;
     }
@@ -430,17 +430,17 @@ namespace vclcanvas
         return outputOffsets;
     }
 
-    OUString SAL_CALL TextLayout::getImplementationName()
+    OUString TextLayout::getImplementationName()
     {
         return u"VCLCanvas::TextLayout"_ustr;
     }
 
-    bool SAL_CALL TextLayout::supportsService( const OUString& ServiceName )
+    bool TextLayout::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL TextLayout::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > TextLayout::getSupportedServiceNames()
     {
         return { u"com.sun.star.rendering.TextLayout"_ustr };
     }

@@ -60,16 +60,16 @@ namespace vclcanvas
         virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
         // XCanvasFont
-        virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
-        virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) override;
-        virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) override;
-        virtual cpo::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) override;
-        virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) override;
+        virtual css::uno::Reference< css::rendering::XTextLayout > createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
+        virtual css::rendering::FontRequest getFontRequest(  ) override;
+        virtual css::rendering::FontMetrics getFontMetrics(  ) override;
+        virtual cpo::uno::Sequence< double > getAvailableSizes(  ) override;
+        virtual cpo::uno::Sequence< css::beans::PropertyValue > getExtraFontProperties(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+        virtual OUString getImplementationName() override;
+        virtual bool supportsService( const OUString& ServiceName ) override;
+        virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         vcl::Font const & getVCLFont() const;
 

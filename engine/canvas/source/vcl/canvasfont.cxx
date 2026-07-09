@@ -85,7 +85,7 @@ namespace vclcanvas
         rGuard.lock();
     }
 
-    uno::Reference< rendering::XTextLayout > SAL_CALL  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 )
+    uno::Reference< rendering::XTextLayout >  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 )
     {
         SolarMutexGuard aGuard;
 
@@ -99,12 +99,12 @@ namespace vclcanvas
                                mpOutDevProvider);
     }
 
-    rendering::FontRequest SAL_CALL  CanvasFont::getFontRequest(  )
+    rendering::FontRequest  CanvasFont::getFontRequest(  )
     {
         return maFontRequest;
     }
 
-    rendering::FontMetrics SAL_CALL  CanvasFont::getFontMetrics(  )
+    rendering::FontMetrics  CanvasFont::getFontMetrics(  )
     {
         SolarMutexGuard aGuard;
 
@@ -123,29 +123,29 @@ namespace vclcanvas
             aMetric.GetAscent() / 2.0);
     }
 
-    cpo::uno::Sequence< double > SAL_CALL  CanvasFont::getAvailableSizes(  )
+    cpo::uno::Sequence< double >  CanvasFont::getAvailableSizes(  )
     {
         // TODO(F1)
         return cpo::uno::Sequence< double >();
     }
 
-    cpo::uno::Sequence< beans::PropertyValue > SAL_CALL  CanvasFont::getExtraFontProperties(  )
+    cpo::uno::Sequence< beans::PropertyValue >  CanvasFont::getExtraFontProperties(  )
     {
         // TODO(F1)
         return cpo::uno::Sequence< beans::PropertyValue >();
     }
 
-    OUString SAL_CALL CanvasFont::getImplementationName()
+    OUString CanvasFont::getImplementationName()
     {
         return u"VCLCanvas::CanvasFont"_ustr;
     }
 
-    bool SAL_CALL CanvasFont::supportsService( const OUString& ServiceName )
+    bool CanvasFont::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }
 
-    cpo::uno::Sequence< OUString > SAL_CALL CanvasFont::getSupportedServiceNames()
+    cpo::uno::Sequence< OUString > CanvasFont::getSupportedServiceNames()
     {
         return { u"com.sun.star.rendering.CanvasFont"_ustr };
     }
