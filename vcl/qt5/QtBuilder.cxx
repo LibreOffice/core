@@ -846,11 +846,55 @@ void QtBuilder::applyTabChildProperties(QObject* pParent, const std::vector<OUSt
                                          rProperties.at(u"label"_ustr));
 }
 
+static QMessageBox::ButtonRole getButtonRole(int nResponse)
+{
+    switch (nResponse)
+    {
+        case RET_OK:
+            return QMessageBox::AcceptRole;
+        case RET_YES:
+            return QMessageBox::YesRole;
+        case RET_NO:
+            return QMessageBox::NoRole;
+        case RET_HELP:
+            return QMessageBox::HelpRole;
+        case RET_CANCEL:
+        case RET_CLOSE:
+            return QMessageBox::RejectRole;
+        default:
+            return QMessageBox::NoRole;
+    }
+}
+
 void QtBuilder::set_response(const OUString& rId, int nResponse)
 {
     QPushButton* pPushButton = get<QPushButton>(rId);
     assert(pPushButton);
     pPushButton->setProperty(QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE, nResponse);
+    addButtonToButtonBox(*pPushButton, pPushButton->parentWidget(), getButtonRole(nResponse));
+}
+
+void QtBuilder::addButtonToButtonBox(QAbstractButton& rButton, QWidget* pParentWidget,
+                                     QMessageBox::ButtonRole nRole)
+{
+    QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pParentWidget);
+
+    if (!pButtonBox)
+        return;
+
+    // MessageBox buttons must be added via QMessageBox::addButton() to prevent missing
+    // buttons in platform-specific message boxes
+    if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pParentWidget->window()))
+    {
+        /* Avoid any implicit buttons; use only our own */
+        pMessageBox->setStandardButtons(QMessageBox::NoButton);
+        pMessageBox->addButton(&rButton, nRole);
+    }
+    else
+    {
+        /* Non-QMessageBox buttons can just be added directly to the parent QDialogButtonBox */
+        pButtonBox->addButton(&rButton, static_cast<QDialogButtonBox::ButtonRole>(nRole));
+    }
 }
 
 void QtBuilder::deleteObject(QObject* pObject)
@@ -926,20 +970,8 @@ void QtBuilder::setButtonProperties(QAbstractButton& rButton, stringmap& rProps,
         }
     }
 
-    if (QDialogButtonBox* pButtonBox = qobject_cast<QDialogButtonBox*>(pParentWidget))
-    {
-        // for message boxes, avoid implicit standard buttons in addition to those explicitly added
-        // and add button via QMessageBox API instead of via the button box
-        if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pParentWidget->window()))
-        {
-            pMessageBox->setStandardButtons(QMessageBox::NoButton);
-            pMessageBox->addButton(&rButton, QMessageBox::ButtonRole::NoRole);
-        }
-        else
-        {
-            pButtonBox->addButton(&rButton, QDialogButtonBox::NoRole);
-        }
-    }
+    // The button's role (if any) will be read later and set by ::set_response()
+    addButtonToButtonBox(rButton, pParentWidget, QMessageBox::ButtonRole::NoRole);
 }
 
 void QtBuilder::setCheckButtonProperties(QAbstractButton& rButton, stringmap& rProps,

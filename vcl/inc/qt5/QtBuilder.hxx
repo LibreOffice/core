@@ -104,6 +104,8 @@ private:
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     void setTextViewProperties(QPlainTextEdit& rTextEdit, stringmap& rProps);
     void setToggleButtonProperties(QToolButton& rButton, stringmap& rProps, QWidget* pParentWidget);
+    static void addButtonToButtonBox(QAbstractButton& rButton, QWidget* pParentWidget,
+                                     QMessageBox::ButtonRole nRole);
     static void setWidgetProperties(QWidget& rWidget, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
     static Qt::Alignment getAlignment(stringmap& rProps);
