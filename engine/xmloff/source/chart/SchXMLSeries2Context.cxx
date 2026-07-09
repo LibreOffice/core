@@ -50,6 +50,7 @@
 
 #include <sal/log.hxx>
 #include <utility>
+#include <unordered_map>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/namespacemap.hxx>
@@ -1102,6 +1103,16 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         , const SvXMLImport& rImport
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter )
 {
+    // Data-label styles keyed by parent style name, first match kept, so the
+    // per-point lookup below stays constant time instead of scanning the whole
+    // style vector for every one of what can be hundreds of thousands of points.
+    std::unordered_map<OUString, const DataRowPointStyle*> aLabelStyleByParent;
+    for (auto const& rStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
+    {
+        if (rStyle.meType == DataRowPointStyle::DATA_LABEL_POINT)
+            aLabelStyleByParent.emplace(rStyle.msStyleNameOfParent, &rStyle);
+    }
+
     for (auto const& seriesStyle : rSeriesDefaultsAndStyles.maSeriesStyleVector)
     {
         if( seriesStyle.meType != DataRowPointStyle::DATA_POINT )
@@ -1176,19 +1187,13 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 if (pPropStyleContext)
                 {
                     // Has the point a data-label child element?
-                    auto pItLabel = std::find_if(
-                        rSeriesDefaultsAndStyles.maSeriesStyleVector.begin(),
-                        rSeriesDefaultsAndStyles.maSeriesStyleVector.end(),
-                        [&seriesStyle](const DataRowPointStyle& rStyle) {
-                            return rStyle.meType == DataRowPointStyle::DATA_LABEL_POINT
-                                   && rStyle.msStyleNameOfParent == seriesStyle.msStyleName;
-                        });
-                    if (pItLabel != rSeriesDefaultsAndStyles.maSeriesStyleVector.end())
+                    auto pItLabel = aLabelStyleByParent.find(seriesStyle.msStyleName);
+                    if (pItLabel != aLabelStyleByParent.end())
                     {
                         // Bring the information from the data-label to the point
                         const SvXMLStyleContext* pLabelStyleContext(
                             pStylesCtxt->FindStyleChildContext(
-                                SchXMLImportHelper::GetChartFamilyID(), (*pItLabel).msStyleName));
+                                SchXMLImportHelper::GetChartFamilyID(), pItLabel->second->msStyleName));
                         // note: SvXMLStyleContext::FillPropertySet is not const
                         XMLPropStyleContext* pLabelPropStyleContext
                             = const_cast<XMLPropStyleContext*>(
