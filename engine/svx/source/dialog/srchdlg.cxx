@@ -1003,7 +1003,11 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         if (!comphelper::COKit::isActive())
         {
             if (!(m_pSearchItem->GetSearchString().isEmpty()) && bSetSearch)
+            {
                 m_xSearchLB->set_entry_text(m_pSearchItem->GetSearchString());
+                if (bSetReplace)
+                    m_xReplaceLB->set_entry_text(m_pSearchItem->GetReplaceString());
+            }
             else if (!m_aSearchStrings.empty())
             {
                 bool bAttributes = ((m_pSearchList && m_pSearchList->Count())
