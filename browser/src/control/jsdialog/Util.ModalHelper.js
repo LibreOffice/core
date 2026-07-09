@@ -107,6 +107,35 @@ function isWidgetInModalPopup(widgetData) {
 	return false;
 }
 
+// A dialog window stays open after a widget inside it is activated, unlike a
+// dropdown, snackbar or other popup, which closes immediately and expects
+// focus to move back to the document.
+function isBuilderInPersistentDialog(builder) {
+	if (builder.windowId === undefined)
+		return false;
+
+	var dialogs = builder.map.jsdialog && builder.map.jsdialog.dialogs;
+	var dialog = dialogs ? dialogs[builder.windowId] : undefined;
+
+	return !!(dialog && dialog.nonModal);
+}
+
+// Sends focus back to the document canvas, unless doing so would steal
+// keyboard focus away from a dialog window that is still open. Returns
+// whether it moved focus to the document, so a caller that only handled
+// focus conditionally can leave any other focus-restoration mechanism
+// (e.g. returning to the last focused element) in charge otherwise.
+function focusMapUnlessInDialog(builder) {
+	if (!builder.map)
+		return false;
+
+	if (isBuilderInPersistentDialog(builder))
+		return false;
+
+	builder.map.focus();
+	return true;
+}
+
 JSDialog.generateModalId = generateModalId;
 JSDialog.sendJSON = sendJSON;
 JSDialog.setMessageInModal = setMessageInModal;
@@ -115,3 +144,4 @@ JSDialog.shouldShowAgain = shouldShowAgain;
 JSDialog.setShowAgain = setShowAgain;
 JSDialog.showInfoModalWithOptions = showInfoModalWithOptions;
 JSDialog.isWidgetInModalPopup = isWidgetInModalPopup;
+JSDialog.focusMapUnlessInDialog = focusMapUnlessInDialog;

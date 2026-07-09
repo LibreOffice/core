@@ -191,6 +191,7 @@ function _iconViewEntry(
 					entry.row,
 					builder,
 				);
+				JSDialog.focusMapUnlessInDialog(builder);
 			}
 		});
 
@@ -223,6 +224,7 @@ function _iconViewEntry(
 					entry.row,
 					builder,
 				);
+				JSDialog.focusMapUnlessInDialog(builder);
 			});
 		}
 		builder._preventDocumentLosingFocusOnClick(entryContainer);
@@ -236,14 +238,15 @@ function _iconViewEntry(
 					entry.row,
 					builder,
 				);
-			else if (e.key === 'Enter')
+			else if (e.key === 'Enter') {
 				parentContainer.builderCallback(
 					'iconview',
 					'activate',
 					entry.row,
 					builder,
 				);
-			else if (
+				JSDialog.focusMapUnlessInDialog(builder);
+			} else if (
 				isInNotebookbar &&
 				['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)
 			) {
