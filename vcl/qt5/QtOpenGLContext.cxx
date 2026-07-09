@@ -36,6 +36,7 @@ bool QtOpenGLContext::g_bAnyCurrent = false;
 
 QtOpenGLContext::QtOpenGLContext()
     : m_pWindow(nullptr)
+    , m_pContext(nullptr)
 {
 }
 
