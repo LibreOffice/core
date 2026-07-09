@@ -85,15 +85,36 @@ class ServerConnectionService {
 		if (app.map._aiJustConfigured) {
 			app.map._aiJustConfigured = false;
 			if (app.map.isAIConfigured) {
+				// On the desktop apps the Options dialog opens over the
+				// backstage, which covers the document. Close the backstage
+				// first so the user lands back on the document and sees the
+				// View tab and the AI sidebar.
+				if (app.map.backstageView) app.map.backstageView.hide();
 				const sidebar = JSDialog.getAIChatSidebar();
 				if (sidebar.isVisible()) {
 					sidebar.refreshModelAndRating();
 				} else {
+					// A click on the already-selected tab of an expanded
+					// notebookbar collapses the bar, so click only when it
+					// switches to the View tab or re-expands a collapsed bar.
 					const viewTab = document.getElementById('View-tab-label');
-					if (viewTab) viewTab.click();
+					if (
+						viewTab &&
+						(!viewTab.classList.contains('selected') ||
+							app.map.uiManager.isNotebookbarCollapsed())
+					) {
+						viewTab.click();
+					}
 					sidebar.show();
 				}
 			}
+		}
+
+		// The sidebar needs a configured provider to answer anything, so a
+		// settings change that removed the provider closes a sidebar that is
+		// still open.
+		if (!app.map.isAIConfigured && JSDialog.AIChatSidebar?.isVisible()) {
+			JSDialog.AIChatSidebar.hide();
 		}
 
 		let zoteroPlugin = app.map.zotero;

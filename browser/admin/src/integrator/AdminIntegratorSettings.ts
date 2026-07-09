@@ -76,9 +76,11 @@ interface AIProvider {
 
 // Outcome of saveAll, reported back to the parent. aiJustConfigured means the
 // user configured a chat AI provider in this save, so the View tab / AI sidebar
-// payoff should fire once the settings are applied.
+// payoff should fire once the settings are applied. aiKeyMissing means the
+// saved chat provider has no API key.
 interface SaveAllResult {
 	aiJustConfigured: boolean;
+	aiKeyMissing: boolean;
 }
 
 // Visual state of an AI model-fetch status line. 'hidden' (or an empty message)
@@ -173,6 +175,7 @@ const onMessage = (e) => {
 								MessageId: 'settings-save-complete',
 								viewSettings: settingIframe.getViewSettings(),
 								aiJustConfigured: result.aiJustConfigured,
+								aiKeyMissing: result.aiKeyMissing,
 							}),
 							parentTargetOrigin(),
 						);
@@ -686,6 +689,7 @@ class SettingIframe {
 			this._aiConfigDirty &&
 			!!this._viewSetting.aiProviderModel &&
 			!!this._viewSetting.aiProviderURL;
+		const aiKeyMissing = !this._viewSetting.aiProviderAPIKey;
 
 		const saves: Promise<void>[] = [];
 
@@ -722,7 +726,7 @@ class SettingIframe {
 
 		await Promise.all(saves);
 
-		return { aiJustConfigured };
+		return { aiJustConfigured, aiKeyMissing };
 	}
 
 	init(): void {

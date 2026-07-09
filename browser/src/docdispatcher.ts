@@ -570,14 +570,28 @@ class Dispatcher {
 		}
 	}
 
+	// An AI action was triggered before a provider was configured. On the
+	// desktop app the Options dialog opens right here, over the document,
+	// scrolled to the AI section, so the user sets the provider up in place
+	// and lands back on the document when they save. In a browser the File
+	// menu leads straight to the same dialog, so a snackbar with the path
+	// is enough.
+	private static promptAISetup() {
+		if (window.mode.isCODesktop()) {
+			(app.map as any).settings.showSettingsDialog('ai-section');
+		} else {
+			app.map.uiManager.showSnackbar(
+				_(
+					'AI is not configured. Go to File > Options > View Settings to set it up.',
+				),
+			);
+		}
+	}
+
 	private addAICommands() {
 		this.actionsMap['aichat'] = function () {
 			if (!app.map.isAIConfigured) {
-				app.map.uiManager.showSnackbar(
-					_(
-						'AI is not configured. Go to File > Options > View Settings to set it up.',
-					),
-				);
+				Dispatcher.promptAISetup();
 				return;
 			}
 			const sidebar = JSDialog.getAIChatSidebar();
@@ -586,11 +600,7 @@ class Dispatcher {
 
 		this.actionsMap['helpfixformulaerror'] = function () {
 			if (!app.map.isAIConfigured) {
-				app.map.uiManager.showSnackbar(
-					_(
-						'AI is not configured. Go to File > Options > View Settings to set it up.',
-					),
-				);
+				Dispatcher.promptAISetup();
 				return;
 			}
 			const sidebar = JSDialog.getAIChatSidebar();

@@ -144,6 +144,23 @@ window.L.Map.Settings = window.L.Handler.extend({
 					'updateviewsettings ' + JSON.stringify(data.viewSettings),
 				);
 			}
+			// On the desktop app every provider request authenticates with the
+			// API key, so a provider saved without one cannot answer and the
+			// AI sidebar would only show failing requests. Point at the
+			// missing key instead of opening the sidebar. Self-hosted
+			// providers that accept keyless requests remain reachable through
+			// a server, where the key stays optional.
+			if (
+				window.mode.isCODesktop() &&
+				data.aiJustConfigured &&
+				data.aiKeyMissing
+			) {
+				app.map.uiManager.showSnackbar(
+					_('Settings saved. Add an API key to use the AI assistant.'),
+				);
+				app.map._aiJustConfigured = false;
+				return;
+			}
 			app.map.uiManager.showSnackbar(_('Settings saved'));
 			// Defer the View-tab / AI-sidebar payoff until isAIConfigured is
 			// updated from the viewsetting: reply (see ServerConnectionService).
