@@ -222,6 +222,8 @@ struct SW_DLLPUBLIC SwPasteInfo
     rtl::Reference<SwXTextRange> m_xInsertPosition;
     std::shared_ptr<SwNodeIndex> m_pSttNdIdx;
     std::shared_ptr<SwNodeIndex> m_pSttNdIdx2;
+    /// If the insert position is at the paragraph end.
+    bool m_bStartAtEndOfPara = false;
 
     SwPasteInfo(SwDoc& rDoc, SwPaM& rPam);
 };

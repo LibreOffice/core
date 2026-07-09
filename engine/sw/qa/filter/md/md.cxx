@@ -1037,6 +1037,32 @@ CPPUNIT_TEST_FIXTURE(Test, testPaste)
     CPPUNIT_ASSERT_EQUAL(aABottom, aList2Bottom);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testListPaste)
+{
+    // Given a document with 4 paragraphs (Before, List A, List B, After), where
+    // "List A" and "List B" are list items:
+    createSwDoc("paste-list.docx");
+
+    // When pasting a markdown list at the END of the 2nd paragraph:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->MovePara(GoCurrPara, fnParaEnd);
+    rtl::Reference<TransferDataContainer> xTransferable(new TransferDataContainer);
+    xTransferable->CopyString(SotClipboardFormatId::MARKDOWN, u"- List 1\n- List 2"_ustr);
+    TransferableDataHelper aHelper(xTransferable);
+    SwTransferable::PasteFormat(*pWrtShell, aHelper, SotClipboardFormatId::MARKDOWN);
+
+    // Then make sure the existing "List A" list item isn't joined with the first pasted "List 1"
+    // list item: paragraph 2 should stay "List A", and the new paragraph 3 should be "List 1":
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: List A
+    // - Actual  : List AList 1
+    // i.e. pasting a list item at the end of a list item joined the two.
+    CPPUNIT_ASSERT_EQUAL(u"List A"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"List 1"_ustr, getParagraph(3)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCTLPaste)
 {
     createSwDoc();
